@@ -1,18 +1,20 @@
 <template>
   <div>
-    <div v-if="isUpdate(this)">{{ $t('assets.InAssetDetail') }}</div>
+    <el-link v-if="isUpdate(this)" :underline="false" type="default" @click="goToAssetAccountsPage()">
+      {{ $t('assets.InAssetDetail') }}
+    </el-link>
     <div v-else class="accounts">
       <el-table :data="accounts" style="width: 100%">
-        <el-table-column prop="username" :label="$tc('assets.Username')" width="180" />
-        <el-table-column prop="privileged" :label="$tc('assets.Privileged')">
+        <el-table-column :label="$tc('assets.Username')" prop="username" width="180" />
+        <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
           <template v-slot="scope">
-            <i class="fa text-primary" :class="scope.row['privileged'] ? 'fa-check' : ''" />
+            <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />
           </template>
         </el-table-column>
-        <el-table-column fixed="right" align="right" :label="$tc('common.Actions')" width="135" class-name="buttons">
+        <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
-            <el-button type="danger" icon="el-icon-minus" size="mini" @click="removeAccount(scope.row)" />
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="onEditClick(scope.row)" />
+            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
+            <el-button icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
@@ -25,15 +27,15 @@
         </el-button>
       </div>
       <AddAccountDialog
-        :visible.sync="addAccountDialogVisible"
-        :platform="platform"
         :account="account"
         :accounts="accounts"
+        :platform="platform"
+        :visible.sync="addAccountDialogVisible"
       />
       <AccountTemplateDialog
         v-if="templateDialogVisible"
-        :visible.sync="templateDialogVisible"
         :accounts="accounts"
+        :visible.sync="templateDialogVisible"
       />
     </div>
   </div>
@@ -110,12 +112,22 @@ export default {
       this.templateDialogVisible = true
     },
     onSelectTemplate() {
+    },
+    goToAssetAccountsPage() {
+      const assetId = this.$route.params.id
+      this.$router.push({
+        name: 'AssetDetail',
+        params: { id: assetId },
+        query: {
+          activeTab: 'Account'
+        }
+      })
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .accounts >>> .buttons .cell {
   padding-right: 2px;
 }

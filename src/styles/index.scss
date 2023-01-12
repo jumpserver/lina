@@ -23,9 +23,8 @@
 }
 
 body {
-  height: 100%;
+  height: calc(100% - 50px);
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: auto;
   color: #676a6c;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;

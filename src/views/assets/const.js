@@ -78,7 +78,7 @@ export const assetFieldsMeta = (vm) => {
     },
     accounts: {
       component: AssetAccounts,
-      label: '',
+      label: i18n.t('assets.Accounts'),
       el: {
         platform: {},
         default: []

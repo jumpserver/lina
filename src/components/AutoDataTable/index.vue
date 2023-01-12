@@ -11,8 +11,8 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
-      :total-columns-list="popoverColumns.totalColumnsList"
       :min-columns="popoverColumns.minCols"
+      :total-columns-list="popoverColumns.totalColumnsList"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -132,7 +132,6 @@ export default {
               false: i18n.t('common.Inactive')
             }
           }
-          col.align = 'left'
           col.width = '80px'
           break
         case 'datetime':
@@ -156,7 +155,6 @@ export default {
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.align = 'center'
           col.width = '80px'
           break
         case 'datetime':

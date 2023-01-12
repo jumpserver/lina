@@ -1,6 +1,6 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition mode="out-in" name="fade-transform">
       <keep-alive :include="cachedViews">
         <router-view :key="key" />
       </keep-alive>
@@ -25,7 +25,7 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   background-color: #f3f3f4;
-  min-height: calc(100vh - 0px);
+  min-height: calc(100% - 50px);
   width: 100%;
   position: relative;
   overflow: hidden;

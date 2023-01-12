@@ -174,7 +174,7 @@ export default {
         return
       }
       const platformId = this.asset.platform.id
-      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
+      this.iPlatform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
     },
     setSecretTypeOptions() {
       const choices = [
