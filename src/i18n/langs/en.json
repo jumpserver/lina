@@ -302,6 +302,7 @@
     "PasswordOrToken": "Password / Token"
   },
   "audits": {
+    "OperateRecord": "Operating record",
     "Hosts": "Host",
     "RunUser": "Run user",
     "User": "User",
@@ -321,7 +322,7 @@
   },
   "common": {
     "Activity": "Activity",
-    "Last8": "Last 8 times",
+    "Last30": "Last 30 times",
     "SpecificInfo": "Specific",
     "CollectionSucceed": "Collection succeed",
     "CancelCollection": "Cancel collection",
