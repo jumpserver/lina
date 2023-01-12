@@ -11,19 +11,19 @@
       <template v-for="item in tabIndices">
         <el-tab-pane
           :key="item.name"
+          :disabled="item.disabled"
           :label-content="item.labelContent"
           :name="item.name"
-          :disabled="item.disabled"
         >
           <span slot="label">
-            <i v-if="item.icon" class="fa " :class="item.icon" />
+            <i v-if="item.icon" :class="item.icon" class="fa " />
             {{ item.title }}
-            <slot name="badge" :tab="item.name" />
+            <slot :tab="item.name" name="badge" />
           </span>
         </el-tab-pane>
       </template>
     </el-tabs>
-    <transition name="fade-transform" mode="out-in" appear>
+    <transition appear mode="out-in" name="fade-transform">
       <slot>
         <keep-alive v-if="flag">
           <AutoDataZTree
@@ -33,7 +33,7 @@
             @urlChange="handleUrlChange"
           >
             <div slot="rMenu" slot-scope="{data}">
-              <slot name="rMenu" :data="data" />
+              <slot :data="data" name="rMenu" />
             </div>
           </AutoDataZTree>
         </keep-alive>
@@ -178,5 +178,9 @@ export default {
 }
 .page-submenu >>> .el-tabs__nav-wrap {
   position: static;
+
+  .el-tabs__item.is-active {
+    color:  var(--color-primary);
+  }
 }
 </style>
