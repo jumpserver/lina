@@ -62,7 +62,7 @@ export default {
       },
       cleanFormValue(value) {
         Object.keys(value).forEach((item, index, arr) => {
-          if (['ssh_key', 'token', 'api_key'].includes(item)) {
+          if (['ssh_key', 'token', 'access_key'].includes(item)) {
             value['secret'] = value[item]
             delete value[item]
           }
