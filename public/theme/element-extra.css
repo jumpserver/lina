@@ -478,3 +478,27 @@ td .el-button.el-button--mini {
 .el-step__description.is-finish {
   color: #676a6c;
 }
+
+.el-alert {
+  border: solid 1px #e7eaec;
+}
+
+.el-alert.el-alert--success.is-light {
+  border-color: var(--color-success-light);
+}
+
+.el-alert.el-alert--primary.is-light {
+  border-color: var(--color-primary-light);
+}
+
+.el-alert.el-alert--info.is-light {
+  border-color: var(--color-info-light);
+}
+
+.el-alert.el-alert--warning.is-light {
+  border-color: var(--color-warning-light);
+}
+
+.el-alert.el-alert--error.is-light {
+  border-color: var(--color-danger-light);
+}

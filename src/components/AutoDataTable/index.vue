@@ -233,7 +233,12 @@ export default {
     setDefaultFormatterIfNeed(col) {
       if (!col.formatter) {
         col.formatter = (row, column, cellValue) => {
-          return [undefined, null, ''].indexOf(cellValue) > -1 ? '-' : cellValue
+          const value = cellValue || '-'
+          let padding = '0'
+          if (value === '-') {
+            padding = '6px'
+          }
+          return <span style={{ marginLeft: padding }}>{value}</span>
         }
       }
       return col
