@@ -25,10 +25,10 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   background-color: #f3f3f4;
-  min-height: calc(100% - 50px);
+  height: 100%!important;
   width: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   /*padding: 10px 20px 10px;*/
 }
 .fixed-header+.app-main {

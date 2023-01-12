@@ -33,7 +33,8 @@ export default {
   },
   computed: {
     iOption() {
-      return this.options.concat(this.internalOptions)
+      const options = this.options.concat(this.internalOptions)
+      return _.uniqWith(options, _.isEqual)
     }
   },
   watch: {

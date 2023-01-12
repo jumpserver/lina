@@ -402,6 +402,7 @@
     "PasswordOrToken": "密码 / 令牌"
   },
   "audits": {
+    "OperateRecord": "操作记录",
     "Hosts": "主机",
     "RunUser": "运行用户",
     "User": "用户",
@@ -426,7 +427,7 @@
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",
     "Activity": "活动",
-    "Last8": "最近 8 次",
+    "Last30": "最近 30 次",
     "Version": "版本",
     "Publish": "发布",
     "PublishAllApplets": "发布所有应用",

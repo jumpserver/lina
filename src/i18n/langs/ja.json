@@ -303,6 +303,7 @@
     "PasswordOrToken": "パスワード/トークン"
   },
   "audits": {
+    "OperateRecord": "操作記録です",
     "Hosts": "本体",
     "RunUser": "実行ユーザー",
     "User": "ユーザー",
@@ -324,7 +325,7 @@
   },
   "common": {
     "Activity": "イベント",
-    "Last8": "最近 8 回です",
+    "Last30": "最近 30 回です",
     "SpecificInfo": "特別情報",
     "CollectionSucceed": "コレクション成功",
     "CancelCollection": "収集の取消し",
