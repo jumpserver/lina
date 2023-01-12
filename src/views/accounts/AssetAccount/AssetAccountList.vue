@@ -32,7 +32,8 @@ export default {
       treeSetting: {
         showMenu: false,
         showAssets: true,
-        url: '/api/v1/accounts/accounts/'
+        url: '/api/v1/accounts/accounts/',
+        countResource: 'account'
       }
     }
   }
