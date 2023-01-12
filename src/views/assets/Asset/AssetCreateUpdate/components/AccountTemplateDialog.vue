@@ -11,16 +11,30 @@
     @cancel="handleCancel"
   >
     <template>
-      <el-button
-        type="primary"
-        size="small"
-        style="margin-bottom: 10px;"
-        :disabled="!$hasPerm('accounts.view_accounttemplate')"
-        @click="onAddClick"
-      >
-        {{ $t('common.Add') }}
-      </el-button>
-      <AutoDataTable :config="tableConfig" />
+      <div class="actions">
+        <el-button
+          type="primary"
+          size="small"
+          :disabled="!$hasPerm('accounts.view_accounttemplate')"
+          @click="onAddClick"
+        >
+          {{ $t('common.Add') }}
+        </el-button>
+        <div class="right">
+          <el-button
+            type="text"
+            size="small"
+            @click="refreshTable"
+          >
+            <el-tooltip :content="$tc('common.Refresh')" placement="top">
+              <span>
+                <svg-icon icon-class="refresh" style="font-size: 14px;" />
+              </span>
+            </el-tooltip>
+          </el-button>
+        </div>
+      </div>
+      <AutoDataTable ref="dataTable" :config="tableConfig" />
     </template>
   </Dialog>
 </template>
@@ -84,6 +98,9 @@ export default {
     }
   },
   methods: {
+    refreshTable() {
+      this.$refs.dataTable.$refs.dataTable.getList()
+    },
     handleConfirm() {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
@@ -116,6 +133,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.actions {
+  margin-bottom: 10px;
+  .right {
+    float: right;
+    vertical-align: middle;
+  }
+}
 </style>
