@@ -43,7 +43,7 @@ export default {
           'name', 'category_type', 'charset', 'domain_enabled'
         ]],
         [this.$t('setting.Config'), [
-          'protocols_enabled', 'protocols',
+          'protocols',
           'su_enabled', 'su_method'
         ]],
         [this.$t('common.Automations'), ['automation']],
@@ -96,12 +96,9 @@ export default {
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints
 
-      const fieldsCheck = ['protocols_enabled', 'domain_enabled', 'su_enabled']
+      const fieldsCheck = ['domain_enabled', 'su_enabled']
       for (const field of fieldsCheck) {
-        let disabled = constraints[field] === false
-        if (field === 'protocols_enabled') {
-          disabled = disabled && constraints['protocols'].length === 0
-        }
+        const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }

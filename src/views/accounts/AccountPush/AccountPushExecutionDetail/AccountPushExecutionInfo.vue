@@ -32,12 +32,7 @@ export default {
           key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
           value: this.object.snapshot.node_amount
         },
-        'trigger_display', 'date_start',
-        {
-          key: this.$t('accounts.AccountChangeSecret.MailRecipient'),
-          value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('accounts.AccountChangeSecret.ContainAttachment') : ''}`).join(', ') : ''
-        }
+        'trigger_display', 'date_start'
       ]
     }
   },

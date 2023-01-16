@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'AccountGatherTaskList',
+        activeMenu: 'AccountGatherList',
         submenu: [
           {
             title: this.$t('accounts.AccountGather.AccountGatherTaskList'),

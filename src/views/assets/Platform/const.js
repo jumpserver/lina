@@ -52,11 +52,6 @@ export const platformFieldsMeta = (vm) => {
       }
     },
     charset: {},
-    protocols_enabled: {
-      el: {
-        disabled: false
-      }
-    },
     domain_enabled: {
       el: {
         disabled: false
@@ -67,8 +62,7 @@ export const platformFieldsMeta = (vm) => {
       ...assetMeta.protocols,
       el: {
         choices: []
-      },
-      hidden: (formValue) => !formValue['protocols_enabled']
+      }
     },
     su_method: {
       type: 'select',

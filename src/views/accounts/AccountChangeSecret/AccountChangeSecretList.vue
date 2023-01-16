@@ -18,11 +18,15 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
-        columns: ['name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'],
+        columns: [
+          'name', 'accounts', 'secret_strategy', 'is_periodic',
+          'periodic_display', 'executed_amount', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'
+            'name', 'accounts', 'secret_strategy', 'is_periodic',
+            'periodic_display', 'executed_amount', 'actions'
           ]
         },
         columnsMeta: {
@@ -56,14 +60,19 @@ export default {
             label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: '150px'
           },
-          run_times: {
-            label: vm.$t('accounts.AccountChangeSecret.ExecutionTimes'),
-            width: '87px',
+          executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountChangeSecretDetail',
-              routeQuery: {
-                activeTab: 'ChangeSecretAutomationExecutionList'
+              route: 'AccountGatherList',
+              can: vm.$hasPerm('accounts.view_changesecretexecution'),
+              getRoute({ row }) {
+                return {
+                  name: 'AccountChangeSecretList',
+                  query: {
+                    activeTab: 'AccountChangeSecretExecutionList',
+                    automation_id: row.id
+                  }
+                }
               }
             }
           },

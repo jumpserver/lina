@@ -64,7 +64,7 @@ export default {
           options: [
             {
               label: this.$t('accounts.TaskID'),
-              value: 'automation_id'
+              value: 'plan_id'
             }
           ]
         },

@@ -36,7 +36,7 @@ export default {
   data() {
     const myFields = {
       AccountEnabled: ['su_enabled', 'su_method'],
-      ProtocolsEnabled: ['protocols_enabled', 'protocols']
+      ProtocolsEnabled: ['protocols']
     }
     return {
       visible: false,
