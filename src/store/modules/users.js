@@ -62,7 +62,10 @@ const mutations = {
     state.consoleOrgs.push(org)
   },
   SET_CURRENT_ORG(state, org) {
-    state.preOrg = state.currentOrg
+    console.log('set pre org:  ', state.currentOrg)
+    if (state.currentOrg.name !== 'System') {
+      state.preOrg = state.currentOrg
+    }
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
   },
