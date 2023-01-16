@@ -89,7 +89,7 @@ export default {
           title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            disabled: this.object.source !== 'local' || !vm.$hasPerm('users.change_user'),
+            disabled: this.object.source.value !== 'local' || !vm.$hasPerm('users.change_user'),
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
