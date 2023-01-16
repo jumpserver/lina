@@ -89,7 +89,7 @@ export default {
               customTreeHeaderName: this.$t('assets.BuiltinTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
-              treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource}`,
+              treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               }
