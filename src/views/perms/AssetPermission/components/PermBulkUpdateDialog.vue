@@ -57,7 +57,6 @@ export default {
         users: fieldsManager.users,
         user_groups: fieldsManager.user_groups,
         system_users: fieldsManager.system_users,
-        actions: fieldsManager.actions,
         date_start: fieldsManager.date_start,
         date_expired: fieldsManager.date_expired,
         is_active: fieldsManager.is_active
