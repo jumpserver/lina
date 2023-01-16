@@ -14,7 +14,7 @@
             <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ item.date_created | date }}</small>
-            <div v-dompurify-html="item.body" style="padding-top: 10px;" />
+            <div style="padding-top: 10px;" v-html="item.body" />
           </div>
         </div>
       </div>
