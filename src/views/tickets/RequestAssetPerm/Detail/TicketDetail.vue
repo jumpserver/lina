@@ -97,7 +97,7 @@ export default {
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           }(this.object)),
           transformOption: (item) => {
-            return { label: item.hostname, value: item.id }
+            return { label: `${item.name}(${item.address})`, value: item.id }
           }
         }
       }
