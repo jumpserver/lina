@@ -1,53 +1,64 @@
 <template>
-  <Dialog
-    v-if="iVisible"
-    :title="$tc('assets.SelectTemplate')"
-    :visible.sync="iVisible"
-    :destroy-on-close="true"
-    width="70%"
-    v-bind="$attrs"
-    v-on="$listeners"
-    @confirm="handleConfirm"
-    @cancel="handleCancel"
-  >
-    <template>
-      <div class="actions">
-        <el-button
-          type="primary"
-          size="small"
-          :disabled="!$hasPerm('accounts.view_accounttemplate')"
-          @click="onAddClick"
-        >
-          {{ $t('common.Add') }}
-        </el-button>
-        <div class="right">
+  <div>
+    <Dialog
+      v-if="iVisible"
+      :title="$tc('assets.SelectTemplate')"
+      :visible.sync="iVisible"
+      :destroy-on-close="true"
+      width="70%"
+      :close-on-click-modal="false"
+      v-bind="$attrs"
+      v-on="$listeners"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
+    >
+      <template>
+        <div class="actions">
           <el-button
-            type="text"
+            type="primary"
             size="small"
-            @click="refreshTable"
+            :disabled="!$hasPerm('accounts.view_accounttemplate')"
+            @click="onAddClick"
           >
-            <el-tooltip :content="$tc('common.Refresh')" placement="top">
-              <span>
-                <svg-icon icon-class="refresh" style="font-size: 14px;" />
-              </span>
-            </el-tooltip>
+            {{ $t('common.Add') }}
           </el-button>
+          <div class="right">
+            <el-button
+              type="text"
+              size="small"
+              @click="refreshTable"
+            >
+              <el-tooltip :content="$tc('common.Refresh')" placement="top">
+                <span>
+                  <svg-icon icon-class="refresh" style="font-size: 14px;" />
+                </span>
+              </el-tooltip>
+            </el-button>
+          </div>
         </div>
-      </div>
-      <AutoDataTable ref="dataTable" :config="tableConfig" />
-    </template>
-  </Dialog>
+        <AutoDataTable ref="dataTable" :config="tableConfig" />
+      </template>
+    </Dialog>
+    <CreateAccountTemplateDialog
+      v-if="isShowCreate"
+      :create-visible.sync="isShowCreate"
+      v-on="$listeners"
+      @onPerform="onCreateTemplatePerform"
+    />
+  </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
 import AutoDataTable from '@/components/AutoDataTable'
+import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
 
 export default {
   name: 'AccountTemplateDialog',
   components: {
     Dialog,
-    AutoDataTable
+    AutoDataTable,
+    CreateAccountTemplateDialog
   },
   props: {
     visible: {
@@ -61,10 +72,12 @@ export default {
   },
   data() {
     return {
+      isShowCreate: false,
       accountsSelected: [],
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: ['name', 'username', 'privileged'],
+        hasColumnActions: false,
         columnsMeta: {
           privileged: {
             width: '100px'
@@ -101,6 +114,9 @@ export default {
     refreshTable() {
       this.$refs.dataTable.$refs.dataTable.getList()
     },
+    onCreateTemplatePerform() {
+      this.refreshTable()
+    },
     handleConfirm() {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
@@ -112,7 +128,7 @@ export default {
       this.iVisible = false
     },
     onAddClick() {
-      this.$router.push({ name: 'AccountTemplateList' })
+      this.isShowCreate = true
     },
     hasSelectValue(row) {
       return this.accountsSelected.some(item => item.id === row.id)
