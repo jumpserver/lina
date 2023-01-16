@@ -27,9 +27,7 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
-              routeQuery: {
-                activeTab: 'AssetPermissionDetail'
-              }
+              route: 'AssetPermissionDetail'
             }
           },
           action: {
@@ -55,6 +53,7 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -65,6 +64,7 @@ export default {
             width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -75,6 +75,7 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
@@ -85,6 +86,7 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
@@ -95,6 +97,7 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               getItem(item) {
                 return item
               },

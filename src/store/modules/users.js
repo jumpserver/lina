@@ -63,7 +63,7 @@ const mutations = {
   },
   SET_CURRENT_ORG(state, org) {
     console.log('set pre org:  ', state.currentOrg)
-    if (state.currentOrg.name !== 'System') {
+    if (state.currentOrg?.name !== 'System') {
       state.preOrg = state.currentOrg
     }
     state.currentOrg = org
