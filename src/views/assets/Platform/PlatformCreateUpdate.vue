@@ -52,7 +52,13 @@ export default {
       fieldsMeta: platformFieldsMeta(this),
       url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
+        const query = this.$route.query || {}
+        const automation = values['automation'] || {}
         const category_type = values['category_type']
+
+        if (query.hasOwnProperty('clone_from') && automation.hasOwnProperty('id')) {
+          delete automation['id']
+        }
         values['category'] = category_type[0]
         values['type'] = category_type[1]
         return values
