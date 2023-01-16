@@ -17,11 +17,15 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
-        excludes: ['password_rules', 'type'],
+        columns: [
+          'name', 'accounts', 'secret_strategy', 'is_periodic',
+          'periodic_display', 'executed_amount', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'
+            'name', 'accounts', 'secret_strategy', 'is_periodic',
+            'periodic_display', 'executed_amount', 'actions'
           ]
         },
         columnsMeta: {
@@ -65,14 +69,18 @@ export default {
             width: '220px',
             showOverflowTooltip: true
           },
-          run_times: {
-            label: vm.$t('accounts.AccountChangeSecret.ExecutionTimes'),
-            width: '87px',
+          executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountChangeSecretDetail',
-              routeQuery: {
-                activeTab: 'ChangeSecretAutomationExecutionList'
+              can: vm.$hasPerm('accounts.view_pushaccountexecution'),
+              getRoute({ row }) {
+                return {
+                  name: 'AccountPushList',
+                  query: {
+                    activeTab: 'AccountPushExecutionList',
+                    automation_id: row.id
+                  }
+                }
               }
             }
           },

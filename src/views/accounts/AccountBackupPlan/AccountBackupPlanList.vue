@@ -55,10 +55,15 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountBackupList',
               can: vm.$hasPerm('accounts.view_accountbackupexecution'),
-              routeQuery: {
-                activeTab: 'AccountBackupPlanExecutionList'
+              getRoute({ row }) {
+                return {
+                  name: 'AccountBackupList',
+                  query: {
+                    activeTab: 'AccountBackupPlanExecutionList',
+                    plan_id: row.id
+                  }
+                }
               }
             }
           },
