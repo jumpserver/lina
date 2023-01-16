@@ -85,7 +85,7 @@ export default {
             treeSetting: {
               showRefresh: true,
               showAssets: false,
-              showSearch: true,
+              showSearch: false,
               customTreeHeaderName: this.$t('assets.BuiltinTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
