@@ -24,7 +24,7 @@ export default {
         url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
         columns: [
           'asset_amount', 'node_amount', 'status',
-          'trigger_display', 'date_start', 'actions'
+          'trigger', 'date_start', 'actions'
         ],
         columnsMeta: {
           asset_amount: {
