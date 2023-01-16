@@ -11,7 +11,7 @@
     :show-confirm="false"
     @close="handleImportCancel"
   >
-    <el-form v-if="!showTable" label-position="left">
+    <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
       <el-form-item :label="$tc('common.Import' )" :label-width="'100px'">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
           {{ this.$t('common.Create') }}

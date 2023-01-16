@@ -95,12 +95,12 @@ export default {
   .datepicker {
     width: 233px;
 
-    & > > > .el-range__icon {
+    & >>> .el-range__icon {
       margin-top: 2px;
       margin-right: 3px;
     }
 
-    & > > > .el-range-input {
+    & >>> .el-range-input {
       width: 49%;
     }
   }

@@ -33,11 +33,14 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.object.id}/assets/all/`,
+        hasColumnActions: false,
+        columnsExclude: ['asset'],
+        columnsExtra: ['delete_action'],
         columns: [
           'asset_display', 'delete_action'
         ],
         columnsShow: {
-          min: ['asset_display']
+          min: ['asset_display', 'delete_action']
         },
         columnsMeta: {
           asset_display: {

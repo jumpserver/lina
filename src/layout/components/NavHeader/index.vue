@@ -2,22 +2,22 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.SiteMessageList')">
+        <el-tooltip :content="$tc('route.SiteMessageList')" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.WebTerminal')">
+        <el-tooltip :content="$tc('route.WebTerminal')" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.SystemSetting')">
+        <el-tooltip :content="$tc('route.SystemSetting')" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip effect="dark" :content="$tc('route.Ticket')">
+        <el-tooltip :content="$tc('route.Ticket')" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
@@ -130,10 +130,9 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
-      height: 55px;
-      line-height: 55px;
+      height: 50px;
+      line-height: 50px;
       .header-hover {
-        line-height: 56px!important;
         &:hover {
           background-color: rgba(255, 255, 255, .2);
         }
@@ -191,7 +190,7 @@ export default {
     line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
-    background-color: $--color-primary;
+    background-color: white;
     color: #fff;
     cursor: pointer;
     transition: .2s;
@@ -223,6 +222,11 @@ export default {
   }
   >>> .el-badge__content--primary {
     background-color: #fff;
+  }
+  .organization {
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, .15);
+    padding-left: 10px!important;
   }
 </style>
 

@@ -4,19 +4,38 @@
 
 <script>
 import { ListTable } from '@/components'
+import { openTaskPage } from '@/utils/jms'
+
 export default {
   name: 'AppletHost',
   components: {
     ListTable
   },
   data() {
+    const vm = this
+    const onAction = (row, action) => {
+      let routeAction = action
+      if (action === 'Clone') {
+        routeAction = 'Create'
+      }
+      const routeName = 'AppletHost' + routeAction
+      const route = {
+        name: routeName,
+        params: {},
+        query: {}
+      }
+      if (action === 'Clone') {
+        route.query.clone_from = row.id
+      } else if (action === 'Update') {
+        route.params.id = row.id
+        route.query.platform = row.platform.id
+      }
+      vm.$router.push(route)
+    }
     return {
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
-        columns: [
-          'name', 'address', 'protocols', 'load', 'comment',
-          'date_created', 'date_updated', 'actions'
-        ],
+        columnsExclude: ['info'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -56,13 +75,37 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AppletHostUpdate'
+              onUpdate: ({ row }) => onAction(row, 'Update'),
+              onClone: ({ row }) => onAction(row, 'Clone'),
+              performDelete: ({ row }) => {
+                const id = row.id
+                const url = `/api/v1/terminal/applet-hosts/${id}/`
+                return this.$axios.delete(url)
+              },
+              extraActions: [
+                {
+                  name: 'Test',
+                  title: this.$t('common.Test'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  callback: ({ row }) => {
+                    this.$axios.post(
+                      `/api/v1/assets/assets/${row.id}/tasks/`,
+                      { action: 'refresh' },
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                }
+              ]
             }
           }
         }
       },
       headerActions: {
-        createRoute: 'AppletHostCreate'
+        createRoute: 'AppletHostCreate',
+        hasRefresh: true,
+        hasExport: false,
+        hasImport: false
       }
     }
   }
@@ -70,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host >>> .protocol {
+.applet-host > > > .protocol {
   margin-left: 3px;
 }
 

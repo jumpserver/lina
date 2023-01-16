@@ -30,7 +30,7 @@ export default {
   props: {
     platform: {
       type: Object,
-      default: () => ({})
+      default: () => null
     },
     visible: {
       type: Boolean,

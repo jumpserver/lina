@@ -10,20 +10,18 @@
 import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
-import UserGrantedApplications from './UserGrantedApplications'
-import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
 import UserInfo from './UserInfo'
+import UserActivity from './Activity.vue'
 
 export default {
   components: {
-    GenericDetailPage,
     UserInfo,
+    UserLoginACLList,
+    GenericDetailPage,
     UserGrantedAssets,
     UserAssetPermissionRules,
-    UserGrantedApplications,
-    UserApplicationPermissionRules,
-    UserLoginACLList
+    UserActivity
   },
   data() {
     const vm = this
@@ -50,19 +48,14 @@ export default {
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('users.tabs.grantedApplications'),
-            name: 'UserGrantedApplications',
-            hidden: () => !vm.$hasPerm('perms.view_userapps')
-          },
-          {
-            title: this.$t('users.tabs.ApplicationPermissionRules'),
-            name: 'UserApplicationPermissionRules',
-            hidden: () => !vm.$hasPerm('perms.view_applicationpermission')
-          },
-          {
             title: this.$t('route.UserAclLists'),
             name: 'UserLoginACLList',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
+          },
+          {
+            title: this.$t('common.Activity'),
+            name: 'UserActivity',
+            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('audits.view_userloginlog')
           }
         ]
       }

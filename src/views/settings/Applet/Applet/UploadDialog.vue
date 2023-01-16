@@ -18,6 +18,7 @@
           list-type="text/csv"
           :limit="1"
           :auto-upload="false"
+          upload-files="uploadFiles"
           :on-change="onFileChange"
           :before-upload="beforeUpload"
           accept=".zip"
@@ -75,10 +76,12 @@ export default {
           disableFlashErrorMsg: true
         }
       ).then(res => {
-        this.$message.success('上传成功')
+        this.$message.success(this.$t('terminal.UploadSucceed'))
         this.$emit('update:visible', false)
+        this.$emit('upload-event', res)
       }).catch(err => {
-        this.$message.error(err)
+        const error = err.response.data?.error || this.$t('terminal.UploadFailed')
+        this.$message.error(error)
       })
     }
   }

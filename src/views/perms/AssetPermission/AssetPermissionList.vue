@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <GenericTreeListPage
+  <Page v-bind="$attrs">
+    <AssetTreeTAble
       :table-config="tableConfig"
       :header-actions="headerActions"
       :tree-setting="treeSetting"
@@ -9,25 +9,26 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
-  </div>
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import Page from '@/layout/components/Page'
+import AssetTreeTAble from '@/components/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    GenericTreeListPage,
+    Page,
+    AssetTreeTAble,
     PermBulkUpdateDialog
   },
   data() {
     return {
       treeSetting: {
         showMenu: false,
-        showRefresh: true,
         showAssets: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
@@ -36,12 +37,8 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        columns: [
-          'name', 'users', 'user_groups', 'assets', 'nodes', 'accounts',
-          'date_expired', 'is_valid', 'is_expired', 'is_active',
-          'from_ticket', 'created_by', 'date_created', 'comment',
-          'org_name', 'actions'
-        ],
+        columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -55,8 +52,18 @@ export default {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
               }
-            },
-            showOverflowTooltip: true
+            }
+          },
+          action: {
+            label: this.$t('common.Action'),
+            formatter: function(row) {
+              return row.actions.map(item => { return item.label }).join(', ')
+            }
+          },
+          is_expired: {
+            formatterArgs: {
+              showFalse: false
+            }
           },
           from_ticket: {
             label: this.$t('perms.fromTicket'),
@@ -114,7 +121,7 @@ export default {
                 return item
               },
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                activeTab: 'AssetPermissionAccount'
               }
             }
           },

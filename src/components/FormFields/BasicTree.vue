@@ -1,15 +1,14 @@
 <template>
   <el-tree
-    :data="tree"
+    :data="iTree"
     show-checkbox
     node-key="value"
-    :default-expand-all="false"
+    :default-expand-all="true"
     :default-expanded-keys="iValue"
     :default-checked-keys="iValue"
     :props="defaultProps"
     @check="handleCheckChange"
   />
-
 </template>
 
 <script>
@@ -22,6 +21,10 @@ export default {
     tree: {
       type: Array,
       default: () => []
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -40,6 +43,13 @@ export default {
         }
         return item
       })
+    },
+    iTree() {
+      if (!this.readonly) {
+        return this.tree
+      } else {
+        return this.setTreeReadonly(this.tree)
+      }
     }
   },
   methods: {
@@ -47,10 +57,16 @@ export default {
       const checkedKeys = checkedNodes
         .filter(item => !item.children)
         .map(node => node.value)
-      if (checkedKeys.length !== 0) {
-        checkedKeys.push('connect')
-      }
       this.$emit('input', checkedKeys)
+    },
+    setTreeReadonly(tree) {
+      return tree.map(item => {
+        item.disabled = true
+        if (item.children) {
+          item.children = this.setTreeReadonly(item.children)
+        }
+        return item
+      })
     }
   }
 }

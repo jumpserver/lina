@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import getFields from '@/views/accounts/AccountBackupPlan/fields'
+import getChangeSecretFields from '@/views/accounts/AccountBackupPlan/fields'
 
 export default {
   name: 'AccountBackupPlanUpdate',
@@ -13,13 +13,13 @@ export default {
   },
   data() {
     const vm = this
-    const fields = getFields.bind(this)()
+    const fields = getChangeSecretFields.bind(this)()
     return {
-      url: '/api/v1/assets/account-backup-plans/',
+      url: '/api/v1/accounts/account-backup-plans/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.AccountBackupPlan.Types'), ['types']],
-        [this.$t('xpack.AccountBackupPlan.Backup'), ['recipients']],
+        [this.$t('accounts.AccountBackup.Types'), ['types']],
+        [this.$t('accounts.AccountBackup.Backup'), ['recipients']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -35,7 +35,7 @@ export default {
         recipients: fields.recipients,
         types: {
           component: 'el-cascader',
-          label: this.$t('xpack.AccountBackupPlan.Types'),
+          label: this.$t('accounts.AccountBackup.Types'),
           remote: {
             request: () => vm.$axios.get('/api/v1/assets/categories/')
           },
@@ -53,8 +53,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountBackupPlanIndex' },
-      updateSuccessNextRoute: { name: 'AccountBackupPlanIndex' },
+      createSuccessNextRoute: { name: 'AccountBackupList' },
+      updateSuccessNextRoute: { name: 'AccountBackupList' },
       cleanFormValue(data) {
         if (data['interval'] === '') {
           delete data['interval']

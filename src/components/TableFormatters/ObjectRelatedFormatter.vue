@@ -5,7 +5,7 @@
 <script>
 import BaseFormatter from './base'
 export default {
-  name: 'DisplayFormatter',
+  name: 'ObjectRelatedFormatter',
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -13,7 +13,7 @@ export default {
       default() {
         return {
           displayKey: null,
-          delimiter: ',',
+          delimiter: ', ',
           cls: ''
         }
       }
@@ -26,11 +26,14 @@ export default {
   },
   computed: {
     value() {
+      if (this.cellValue === null || this.cellValue?.length === 0) {
+        return ''
+      }
       let objects = this.cellValue
       if (!Array.isArray(this.cellValue)) {
         objects = [this.cellValue]
       }
-      const values = objects.map(object => object[this.iKey])
+      const values = objects.map(object => object?.[this.iKey]) || []
       return values.join(this.formatterArgs.delimiter)
     },
     iKey() {
@@ -43,8 +46,8 @@ export default {
       } else {
         object = this.cellValue
       }
-      for (const key of ['name', 'value']) {
-        if (object[key]) {
+      for (const key of ['label', 'name', 'value']) {
+        if (object?.[key]) {
           return key
         }
       }

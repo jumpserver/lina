@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ListTable v-bind="$data" />
-    <UploadDialog :visible.sync="uploadDialogVisible" />
+    <ListTable ref="ListTable" v-bind="$data" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
@@ -19,10 +19,6 @@ export default {
       uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/terminal/applets/',
-        columns: [
-          'name', 'version', 'author', 'protocols',
-          'type', 'comment', 'date_created', 'date_updated', 'actions'
-        ],
         columnsShow: {
           min: ['icon', 'name', 'version', 'author', 'protocols', 'actions'],
           default: [
@@ -39,6 +35,9 @@ export default {
             }
           },
           name: {
+            formatter: function(row) {
+              return <span>{row.display_name}</span>
+            },
             formatterArgs: {
               getTitle: ({ row }) => row['display_name'],
               getIcon: ({ row }) => row['icon']
@@ -54,13 +53,21 @@ export default {
             formatter: (row) => {
               return row.protocols.map(tag => <el-tag size='mini'>{tag}</el-tag>)
             }
+          },
+          actions: {
+            formatterArgs: {
+              hasUpdate: false,
+              hasClone: false
+            }
           }
         }
       },
       headerActions: {
         onCreate: () => {
           this.uploadDialogVisible = true
-        }
+        },
+        hasExport: false,
+        hasImport: false
         // moreCreates: {
         //   callback: (option) => {
         //     this.uploadDialogVisible = true
@@ -77,6 +84,11 @@ export default {
         //    ]
         // }
       }
+    }
+  },
+  methods: {
+    handleUpload(res) {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

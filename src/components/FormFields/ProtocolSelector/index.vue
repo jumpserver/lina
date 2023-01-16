@@ -5,8 +5,8 @@
         <el-select
           slot="prepend"
           v-model="item.name"
+          :disabled="cannotDelete(item)"
           class="prepend"
-          :disabled="cannotDisable(item)"
           @change="handleProtocolChange($event, item)"
         >
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
@@ -18,37 +18,38 @@
           @click="onSettingClick(item)"
         />
       </el-input>
-      <div style="display: flex; margin-left: 20px" class="input-button">
+      <div class="input-button" style="display: flex; margin-left: 20px">
         <el-button
-          type="danger"
+          :disabled="cannotDelete(item)"
           icon="el-icon-minus"
-          style="flex-shrink: 0;"
           size="mini"
-          :disabled="cannotDisable(item)"
+          style="flex-shrink: 0;"
+          type="danger"
           @click="handleDelete(index)"
         />
         <el-button
           v-if="index === items.length - 1"
-          type="primary"
-          icon="el-icon-plus"
-          style="flex-shrink: 0;"
-          size="mini"
           :disabled="remainProtocols.length === 0 || !item.port"
+          icon="el-icon-plus"
+          size="mini"
+          style="flex-shrink: 0;"
+          type="primary"
           @click="handleAdd(index)"
         />
       </div>
     </div>
     <ProtocolSettingDialog
       v-if="showDialog"
-      :visible.sync="showDialog"
-      :item="settingItem"
       :disabled="settingReadonly"
+      :item="settingItem"
+      :visible.sync="showDialog"
     />
   </div>
 </template>
 
 <script>
 import ProtocolSettingDialog from './ProtocolSettingDialog'
+
 export default {
   components: {
     ProtocolSettingDialog
@@ -98,10 +99,16 @@ export default {
       } else {
         return this.$t('assets.DefaultPort')
       }
+    },
+    iChoices() {
+      return this.choices.map(item => {
+        delete item?.id
+        return item
+      })
     }
   },
   watch: {
-    choices: {
+    iChoices: {
       handler(value) {
         this.setDefaultItems(value)
       }
@@ -115,9 +122,9 @@ export default {
     }
   },
   mounted() {
-    this.setDefaultItems(this.choices)
-    console.log('Choices: -------------------------------------------', this.choices)
-    console.log('Value: ---------------------------------------------', this.value)
+    this.setDefaultItems(this.iChoices)
+    this.$log.debug('Choices: ', this.choices)
+    this.$log.debug('Value: ', this.value)
   },
   methods: {
     handleDelete(index) {
@@ -125,8 +132,11 @@ export default {
         return i !== index
       })
     },
-    cannotDisable(item) {
-      return item.primary || item.required
+    cannotDelete(item) {
+      const full = this.iChoices.find(choice => {
+        return choice.name === item.name
+      })
+      return full?.primary || full?.required
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
@@ -138,11 +148,30 @@ export default {
     },
     setDefaultItems(choices) {
       if (this.value.length > 0) {
-        this.items = this.value
+        const protocols = []
+        this.value.forEach(item => {
+          // 有默认值的情况下，设置为只读或者有id、有setting是平台
+          if (!this.settingReadonly || (item?.id && item?.setting)) {
+            protocols.push(item)
+          } else {
+            // 获取资产协议配置
+            const assetDefaultItems = this.getAssetDefaultItems(item, choices)
+            protocols.push(...assetDefaultItems)
+          }
+        })
+        this.items = protocols
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
         this.items = defaults
       }
+    },
+    getAssetDefaultItems(item, choices) {
+      const protocols = []
+      const protocol = choices.find(i => i.name === item.name) || item
+      if (protocol) {
+        protocols.push(protocol)
+      }
+      return protocols
     },
     onSettingClick(item) {
       this.settingItem = item
@@ -181,6 +210,7 @@ export default {
   height: 25px;
   padding: 5px;
 }
+
 .el-input-group__append .el-button {
   font-size: 14px;
   color: #1a1a1a;

@@ -11,6 +11,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { AccountShowFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+
 export default {
   components: {
     GenericTreeListPage
@@ -25,7 +26,7 @@ export default {
         url: '/api/v1/perms/users/self/users/assets/',
         nodeUrl: '/api/v1/perms/users/self/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/?cache_policy=2',
+        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/',
         callback: {
           refresh: () => {},
           onSelected: function(event, treeNode) {
@@ -39,7 +40,7 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/self/assets/',
         hasTree: true,
-        columns: ['name', 'address', 'platform', 'category', 'accounts', 'type', 'comment', 'actions'],
+        columnsExclude: ['specific'],
         columnsShow: {
           default: ['name', 'address', 'platform', 'accounts', 'actions'],
           min: ['name', 'address', 'actions']
@@ -49,7 +50,6 @@ export default {
             prop: 'name',
             label: this.$t('assets.Name'),
             formatter: DialogDetailFormatter,
-            showOverflowTooltip: true,
             formatterArgs: {
               getDialogTitle: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
@@ -96,7 +96,6 @@ export default {
             width: '150px'
           },
           accounts: {
-            showOverflowTooltip: true,
             align: 'center',
             label: this.$t('assets.Account'),
             width: '120px',
@@ -111,7 +110,6 @@ export default {
             width: '120px'
           },
           comment: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           actions: {
@@ -173,14 +171,16 @@ export default {
     favor(assetId) {
       const data = { asset: assetId }
       const url = '/api/v1/assets/favorite-assets/'
-      this.$axios.post(url, data).then(
-        () => this.allFavorites.push({ asset: assetId })
-      )
+      this.$axios.post(url, data).then(() => {
+        this.allFavorites.push({ asset: assetId })
+        this.$message.success(this.$i18n.t('common.CollectionSucceed'))
+      })
     },
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
         this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+        this.$message.success(this.$i18n.t('common.CancelCollection'))
       })
     },
     toggleFavorite(assetId) {

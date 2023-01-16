@@ -8,6 +8,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { WeekCronSelect } from '@/components/FormFields'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'AclCreateUpdate',
@@ -61,8 +62,9 @@ export default {
               }
             }
           },
+          rules: [Required],
           hidden: (formValue) => {
-            return formValue.action !== 'confirm'
+            return formValue.action !== 'review'
           }
         },
         rules: {
@@ -134,7 +136,7 @@ export default {
         } else {
           delete value.users
         }
-        if (value.action !== 'confirm') {
+        if (value.action !== 'review') {
           value.reviewers = []
         }
         return value

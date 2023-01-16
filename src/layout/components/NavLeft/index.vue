@@ -3,24 +3,22 @@
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
-        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
+        <ViewSwitcher class="mobile-view-switch" mode="vertical" />
       </div>
-      <div class="nav-title" :class="{'collapsed': isCollapse}">
-        <svg-icon
-          :icon-class="isRouteMeta.icon"
-          style="margin-right: 0;"
-        />
+      <div :class="{'collapsed': isCollapse}" class="nav-title">
         <span
           v-show="!isCollapse"
-          style="margin-left: 10px;"
+          style="margin-left: 5px;"
+          @click="viewShown = !viewShown"
         >
           {{ isRouteMeta.title || '' }}
         </span>
-        <span v-show="!isCollapse" class="switch-view active-switch-view">
+        <span class="switch-view active-switch-view">
           <el-popover
+            v-model="viewShown"
             placement="right-start"
-            width="160"
             trigger="hover"
+            width="160"
           >
             <ViewSwitcher :mode="'vertical'" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
@@ -30,23 +28,23 @@
     </div>
     <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
       <el-menu
-        class="left-menu"
+        :active-text-color="variables['menuActiveText']"
+        :background-color="variables['menuBg']"
+        :collapse="isCollapse"
+        :collapse-transition="false"
         :default-active="activeMenu"
         :default-openeds="defaultOpensMenu"
-        :collapse="isCollapse"
-        :background-color="variables['menuBg']"
         :text-color="variables['menuText']"
         :text-weigth="variables['menuTextWeight']"
-        :active-text-color="variables['menuActiveText']"
         :unique-opened="true"
-        :collapse-transition="false"
+        class="left-menu"
         mode="vertical"
       >
         <sidebar-item
           v-for="route in currentViewRoute.children"
           :key="route.path"
-          :item="route"
           :base-path="route.path"
+          :item="route"
         />
       </el-menu>
     </el-scrollbar>
@@ -72,6 +70,11 @@ export default {
     Hamburger,
     ViewSwitcher,
     Organization
+  },
+  data() {
+    return {
+      viewShown: false
+    }
   },
   computed: {
     ...mapGetters([
@@ -148,6 +151,7 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     background-color: var(--menu-bg);
+    transition: all 0.3s;
 
     .switch-view {
       position: absolute;
@@ -158,17 +162,20 @@ export default {
       padding: 3px;
       line-height: 10px;
       border-radius: 3px;
+
       &:hover {
-        background: var(--menu-hover)!important;
+        background: var(--menu-hover) !important;
       }
 
       .icon {
-        margin-right: 0!important;
+        margin-right: 0 !important;
+
         &:hover {
           color: var(--color-primary);
         }
       }
     }
+
     .active-switch-view {
       display: inline-block;
     }
@@ -216,7 +223,7 @@ export default {
       padding-left: 8px;
       background: transparent;
       color: #fff;
-      border-bottom: 1px solid rgba(31,35,41,.15);
+      border-bottom: 1px solid rgba(31, 35, 41, .15);
     }
 
     & > > > .menu-main {
@@ -226,7 +233,8 @@ export default {
     & > > > .title-label {
       color: white !important;
     }
-    .mobile-view-switch >>> .el-menu-item.is-active {
+
+    .mobile-view-switch > > > .el-menu-item.is-active {
       color: #ffffff;
     }
   }
@@ -236,7 +244,7 @@ export default {
       display: block;
     }
     .active-switch-view {
-      display: none!important;;
+      display: none !important;;
     }
   }
 </style>

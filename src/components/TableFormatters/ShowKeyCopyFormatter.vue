@@ -72,9 +72,9 @@ export default {
     },
     currentValue() {
       if (this.isShow) {
-        return this.cellValue
+        return this.cellValue || '-'
       } else {
-        return '******'
+        return this.cellValue ? '******' : '-'
       }
     }
   },
@@ -116,9 +116,10 @@ export default {
 
     .text {
       flex: 1;
-      line-height: 1.3;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
-      //white-space: nowrap;
+      white-space: nowrap;
       text-overflow: ellipsis;
     }
 

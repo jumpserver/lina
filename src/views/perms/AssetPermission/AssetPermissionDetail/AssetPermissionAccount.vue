@@ -4,22 +4,22 @@
       <AccountListTable
         ref="ListTable"
         :asset="object"
-        :url="url"
-        :columns="columns"
         :has-clone="false"
-        :has-left-actions="false"
-        :has-import="false"
+        :has-column-actions="false"
         :has-export="false"
+        :has-import="false"
+        :has-left-actions="false"
+        :url="url"
       />
     </el-col>
     <el-col :md="9" :sm="24">
-      <IBox type="primary" :title="$tc('assets.Account')">
+      <IBox :title="$tc('assets.Account')" type="primary">
         <table style="width: 100%">
           <tr>
             <td colspan="2">
               <el-input
                 v-model="relation.username"
-                :placeholder="this.$t('perms.AddAccountToPerm')"
+                :placeholder="this.$tc('perms.AddAccountToPerm')"
               />
             </td>
           </tr>
@@ -37,10 +37,10 @@
           </td>
           <td class="item-btn">
             <el-button
-              size="mini"
-              type="danger"
-              style="float: right"
               :disabled="relation.disabled"
+              size="mini"
+              style="float: right"
+              type="danger"
               @click="removeAccount(username)"
             >
               <i class="fa fa-minus" />
@@ -71,10 +71,6 @@ export default {
   data() {
     return {
       url: `/api/v1/perms/asset-permissions/${this.object.id}/accounts/`,
-      columns: [
-        'name', 'asset', 'username', 'version', 'privileged',
-        'secret_type', 'date_created', 'date_updated', 'actions'
-      ],
       relation: {
         disabled: false,
         username: ''

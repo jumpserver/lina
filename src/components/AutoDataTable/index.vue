@@ -11,8 +11,8 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
-      :total-columns-list="popoverColumns.totalColumnsList"
       :min-columns="popoverColumns.minCols"
+      :total-columns-list="popoverColumns.totalColumnsList"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -22,16 +22,13 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
-  ActionsFormatter,
-  ChoicesFormatter,
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
   ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
-import ColumnSettingPopover from './components/ColumnSettingPopover'
 import { newURL } from '@/utils/common'
+import ColumnSettingPopover from './components/ColumnSettingPopover'
+
 export default {
   name: 'AutoDataTable',
   components: {
@@ -64,13 +61,12 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     config: {
-      handler(iNew) {
+      handler: function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found')
+        this.$log.debug('AutoDataTable Config change found: ')
       },
       deep: true
     }
@@ -80,7 +76,9 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenCols() {
-      if (this.config.url === '') { return }
+      if (this.config.url === '') {
+        return
+      }
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         const method = this.method.toUpperCase()
@@ -124,7 +122,6 @@ export default {
               false: i18n.t('common.Invalid')
             }
           }
-          col.align = 'center'
           col.width = '80px'
           break
         case 'is_active':
@@ -135,7 +132,6 @@ export default {
               false: i18n.t('common.Inactive')
             }
           }
-          col.align = 'center'
           col.width = '80px'
           break
         case 'datetime':
@@ -159,7 +155,6 @@ export default {
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.align = 'center'
           col.width = '80px'
           break
         case 'datetime':
@@ -172,6 +167,10 @@ export default {
         case 'm2m_related_field':
           col.formatter = ObjectRelatedFormatter
           break
+        case 'list':
+          col.formatter = ArrayFormatter
+          break
+        case 'json':
         case 'field':
           if (meta.child && meta.child.type === 'nested object') {
             col.formatter = ObjectRelatedFormatter
@@ -190,9 +189,9 @@ export default {
         return (
           <span>{column.label}
             <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTips} />
+              <div slot='content' domPropsInnerHTML={helpTips}/>
               <el-button style='padding: 0'>
-                <i class='fa fa-info-circle' />
+                <i class='fa fa-info-circle'/>
               </el-button>
             </el-tooltip>
           </span>
@@ -234,7 +233,12 @@ export default {
     setDefaultFormatterIfNeed(col) {
       if (!col.formatter) {
         col.formatter = (row, column, cellValue) => {
-          return [undefined, null, ''].indexOf(cellValue) > -1 ? '-' : cellValue
+          const value = cellValue || '-'
+          let padding = '0'
+          if (value === '-') {
+            padding = '6px'
+          }
+          return <span style={{ marginLeft: padding }}>{value}</span>
         }
       }
       return col
@@ -242,7 +246,7 @@ export default {
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-      let col = { prop: name, label: colMeta.label }
+      let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
 
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col, colMeta)
@@ -255,7 +259,20 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      const configColumns = config?.columns || []
+      const allColumns = Object.entries(this.meta)
+        .filter(([name, meta]) => !meta['write_only'])
+        .map(([name, meta]) => name)
+        .concat(config.columnsExtra || [])
+      let configColumns = config.columns || allColumns
+      const columnsExclude = config.columnsExclude || []
+      if (columnsExclude.length > 0) {
+        configColumns = configColumns.filter(item => !columnsExclude.includes(item))
+      }
+      // 解决后端 API 返回字段中包含 actions 的问题;
+      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
+      if (hasColumnActions && !configColumns.includes('actions')) {
+        configColumns.push('actions')
+      }
       if (configColumns.length > 0) {
         for (let col of configColumns) {
           if (typeof col === 'object') {
@@ -266,6 +283,9 @@ export default {
           }
         }
         columns = columns.filter(item => {
+          if (item?.showFullContent) {
+            item.className = 'show-full-content'
+          }
           let has = item.has
           if (has === undefined) {
             has = true
@@ -274,8 +294,6 @@ export default {
           }
           return has
         })
-      } else {
-        columns = Object.keys(this.meta).map(key => this.generateColumn(key))
       }
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns

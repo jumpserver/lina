@@ -4,7 +4,6 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ArrayFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -14,7 +13,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
-        columns: ['name', 'reviewers', 'priority', 'user_display', 'action', 'is_active', 'comment', 'actions'],
+        columnsExclude: ['rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'priority', 'is_active', 'user_display', 'action', 'comment', 'actions']
@@ -27,16 +26,6 @@ export default {
                 user: this.$route.params.id
               }
             }
-          },
-          ip_group: {
-            formatter: ArrayFormatter,
-            showOverflowTooltip: true
-          },
-          action: {
-            prop: 'action_display'
-          },
-          reviewers: {
-            prop: 'reviewers_amount'
           },
           actions: {
             formatterArgs: {

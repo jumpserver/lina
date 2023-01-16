@@ -92,12 +92,10 @@ export default {
         {
           path: 'quick-job',
           name: 'QuickJob',
-          hidden: true,
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('ops.QuickJob'),
-            permissions: [],
-            activeMenu: '/workbench/ops/job'
+            permissions: ['ops.view_job', 'ops.add_job']
           }
         },
         {
@@ -107,7 +105,7 @@ export default {
           redirect: '',
           meta: {
             title: i18n.t('route.JobList'),
-            permissions: []
+            permissions: ['ops.view_job']
           },
           children: [
             {
@@ -116,7 +114,7 @@ export default {
               component: () => import('@/views/ops/Job'),
               meta: {
                 title: i18n.t('route.JobList'),
-                permissions: []
+                permissions: ['ops.view_job']
               }
             },
             {
@@ -126,7 +124,7 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobCreate'),
-                permissions: [],
+                permissions: ['ops.add_job'],
                 activeMenu: '/workbench/ops/job'
               }
             },
@@ -137,7 +135,7 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobUpdate'),
-                permissions: [],
+                permissions: ['ops.change_job'],
                 activeMenu: '/workbench/ops/job'
               }
             },
@@ -148,84 +146,94 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobDetail'),
-                permissions: [],
+                permissions: ['ops.view_job'],
                 activeMenu: '/workbench/ops/job'
               }
             }
           ]
         },
         {
-          path: 'scripts',
-          name: 'ScriptManage',
-          component: () => import('@/views/ops/ScriptManage'),
+          path: 'templates',
+          name: 'Template',
+          component: () => import('@/views/ops/Template'),
           meta: {
-            title: i18n.t('route.ScriptManage'),
-            permissions: []
+            title: i18n.t('route.Template'),
+            permissions: ['ops.view_adhoc', 'ops.view_playbook']
           }
         },
         {
           path: 'executions',
-          name: 'Executions',
-          component: () => import('@/views/ops/Executions'),
+          name: 'Execution',
+          component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('route.Executions'),
-            permissions: []
+            title: i18n.t('route.Execution'),
+            permissions: ['ops.view_jobexecution']
           }
         },
-
+        {
+          path: 'executions/:id',
+          component: () => import('@/views/ops/Execution/ExecutionDetail'),
+          name: 'ExecutionDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('ops.ExecutionDetail'),
+            permissions: ['ops.view_jobexecution'],
+            activeMenu: '/workbench/ops/executions'
+          }
+        },
         {
           path: 'adhoc/:id/update',
           name: 'AdhocUpdate',
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           hidden: true,
           meta: {
             title: i18n.t('route.updateAdhoc'),
-            permissions: [],
-            activeMenu: '/workbench/ops/scripts'
+            permissions: ['ops.change_adhoc'],
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
           path: 'adhoc/create',
           name: 'AdhocCreate',
           hidden: true,
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           meta: {
             title: i18n.t('ops.createAdhoc'),
-            permissions: [],
-            activeMenu: '/workbench/ops/scripts'
+            permissions: ['ops.add_adhoc'],
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
           path: 'adhoc/:id',
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocDetail'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocDetail'),
           name: 'AdhocDetail',
           hidden: true,
           meta: {
             title: i18n.t('route.AdhocDetail'),
-            permissions: [],
-            activeMenu: '/workbench/ops/scripts'
+            permissions: ['ops.view_adhoc'],
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
           path: 'playbook/:id/update',
           name: 'PlaybookUpdate',
           hidden: true,
-          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookUpdate'),
+          component: () => import('@/views/ops/Template/Playbook/PlaybookUpdate'),
           meta: {
             title: i18n.t('ops.PlaybookUpdate'),
-            permissions: [],
-            activeMenu: '/workbench/ops/scripts'
+            permissions: ['ops.change_playbook'],
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
           path: 'playbook/:id',
-          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookDetail'),
+          component: () => import('@/views/ops/Template/Playbook/PlaybookDetail'),
           name: 'PlaybookDetail',
           hidden: true,
           meta: {
             title: i18n.t('ops.PlaybookDetail'),
-            permissions: [],
-            activeMenu: '/workbench/ops/scripts'
+            permissions: ['ops.view_playbook'],
+            activeMenu: '/workbench/ops/templates'
           }
         }
       ]

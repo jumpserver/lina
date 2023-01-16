@@ -48,10 +48,6 @@ export default {
             return 'command'
           }
         },
-        columns: [
-          'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
-          'asset', 'system_user', 'session', 'timestamp'
-        ],
         extraQuery: {
           date_to: dateTo,
           date_from: dateFrom
@@ -75,16 +71,11 @@ export default {
               }
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            width: '140px',
-            showOverflowTooltip: true
+            width: '140px'
           },
           system_user: {
-            width: '140px',
-            showOverflowTooltip: true
+            width: '140px'
           },
           session: {
             label: this.$t('sessions.session'),

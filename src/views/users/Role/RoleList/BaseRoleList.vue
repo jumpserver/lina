@@ -25,13 +25,10 @@ export default {
       scopeRole: scopeRole,
       tableConfig: {
         url: `/api/v1/rbac/${this.scope}-roles/`,
-        columns: [
-          'display_name', 'users_amount', 'builtin', 'created_by',
-          'date_create', 'date_updated', 'comment', 'actions'
-        ],
+        columnsExclude: ['name', 'permissions'],
         columnsShow: {
-          default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions'],
-          min: ['name', 'action']
+          min: ['display_name', 'action'],
+          default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions']
         },
         columnsMeta: {
           display_name: {
@@ -43,7 +40,7 @@ export default {
                 return {
                   name: 'RoleDetail',
                   query: {
-                    scope: row.scope
+                    scope: row.scope.value
                   },
                   params: {
                     id: row.id
@@ -60,10 +57,10 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: ({ row }) => {
-                return this.hasPermNotBuiltin(row, `rbac.change_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.change_${row.scope?.value}role`)
               },
               canDelete: ({ row }) => {
-                return this.hasPermNotBuiltin(row, `rbac.delete_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.delete_${row.scope?.value}role`)
               },
               updateRoute: {
                 name: 'RoleUpdate',

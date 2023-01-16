@@ -18,9 +18,6 @@ export default {
           app: 'acls',
           resource: 'commandgroup'
         },
-        columns: [
-          'name', 'type', 'ignore_case', 'content', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'content', 'actions']
@@ -34,7 +31,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'CommandGroupUpdate'
+              updateRoute: 'CommandGroupUpdate',
+              cloneRoute: 'CommandGroupCreate'
             }
           }
         }

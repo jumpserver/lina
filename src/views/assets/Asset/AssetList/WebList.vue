@@ -16,6 +16,14 @@ export default {
         url: '/api/v1/assets/webs/',
         headerActions: {
           createRoute: 'WebCreate'
+        },
+        tableConfig: {
+          columnsExclude: ['username_selector', 'password_selector', 'submit_selector', 'script'],
+          columnsMeta: {
+            autofill: {
+              width: '100px'
+            }
+          }
         }
       }
     }

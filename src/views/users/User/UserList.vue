@@ -2,12 +2,12 @@
   <div>
     <GenericListPage
       ref="GenericListPage"
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
     />
     <GenericUpdateFormDialog
-      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
+      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
@@ -17,8 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { GenericListPage } from '@/layout/components'
-import { GenericUpdateFormDialog } from '@/layout/components'
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
@@ -46,34 +45,25 @@ export default {
         permissions: {
           resource: 'user'
         },
-        columns: [
-          'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'system_roles', 'org_roles',
-          'source', 'is_active', 'is_valid', 'login_blocked', 'mfa_enabled',
-          'mfa_force_enabled', 'is_expired',
-          'last_login', 'date_joined', 'date_password_last_updated',
-          'comment', 'created_by', 'actions'
+        columnsExclude: [
+          'password', 'password_strategy', 'public_key',
+          'is_otp_secret_key_bound', 'mfa_enabled', 'mfa_force_enabled',
+          'is_service_account', 'avatar_url'
         ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'groups_display', 'total_role_display',
+            'name', 'username', 'email', 'groups', 'system_roles', 'org_roles',
             'source', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
-          username: {
-            showOverflowTooltip: true
-          },
-          email: {
-            showOverflowTooltip: true
-          },
           source: {
             width: '120px'
           },
           system_roles: {
+            width: '100px',
             label: this.$t('users.SystemRoles'),
-            showOverflowTooltip: true,
             formatter: (row) => {
               return row['system_roles_display']
             },
@@ -81,8 +71,8 @@ export default {
             columnKey: 'system_roles'
           },
           org_roles: {
+            width: '100px',
             label: this.$t('users.OrgRoles'),
-            showOverflowTooltip: true,
             formatter: (row) => {
               return row['org_roles_display']
             },
@@ -92,13 +82,25 @@ export default {
               return this.$store.getters.hasValidLicense
             }
           },
-          mfa_enabled: {
-            label: 'MFA',
+          login_blocked: {
+            width: '90px',
             formatterArgs: {
               showFalse: false
             }
           },
-          mfa_force_enabled: {
+          is_first_login: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_public_key_auth: {
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          need_update_password: {
+            width: '100px',
             formatterArgs: {
               showFalse: false
             }
@@ -108,12 +110,12 @@ export default {
               showFalse: false
             }
           },
-          groups_display: {
-            width: '200px',
-            showOverflowTooltip: true
-          },
           actions: {
+            el: {
+              fixed: 'right'
+            },
             formatterArgs: {
+              fixed: 'right',
               hasDelete: hasDelete,
               canUpdate: this.$hasPerm('users.change_user'),
               extraActions: [
@@ -141,7 +143,9 @@ export default {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
             can: () => vm.$hasPerm('users.invite_user'),
-            callback: () => { this.InviteDialogSetting.InviteDialogVisible = true }
+            callback: () => {
+              this.InviteDialogSetting.InviteDialogVisible = true
+            }
           }
         ],
         hasBulkUpdate: true,
@@ -237,7 +241,7 @@ export default {
         }
       }
     },
-    removeUserFromOrg({ row, col, reload }) {
+    removeUserFromOrg({ row, reload }) {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
         reload()

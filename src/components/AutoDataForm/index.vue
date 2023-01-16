@@ -16,7 +16,7 @@
         v-if="!groupHidden(group, i)"
         :group="group"
         :index="i"
-        :line="i !== 0"
+        :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
       />
     </span>
   </DataForm>
@@ -73,6 +73,9 @@ export default {
         // 初始值是 choice 对象
         if (value && typeof value === 'object' && value.label && value.value !== undefined) {
           iForm[key] = value.value
+        } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' &&
+          value[0].label && value[0].value !== undefined) {
+          iForm[key] = value.map(item => item.value)
         } else {
           iForm[key] = value
         }

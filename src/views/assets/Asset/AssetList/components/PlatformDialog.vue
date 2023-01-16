@@ -154,7 +154,8 @@ export default {
       this.iVisible = false
       const query = {
         node: this.$route.query?.node || '',
-        platform: platform.id
+        platform: platform.id,
+        platform_name: platform.name
       }
 
       this.$router.push({ name: route, query })
@@ -167,7 +168,7 @@ export default {
 .platform-item {
   margin: 5px 0;
 
-  & > > > .el-card__body {
+  & >>> .el-card__body {
     padding: 10px
   }
 
@@ -181,5 +182,11 @@ export default {
 .recent {
   font-weight: 500;
   color: #303133;
+}
+>>> .el-collapse {
+  border: none;
+  .el-collapse-item:last-child .el-collapse-item__header {
+    border: none;
+  }
 }
 </style>

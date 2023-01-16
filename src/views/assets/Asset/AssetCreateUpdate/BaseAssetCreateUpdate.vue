@@ -22,6 +22,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    removeFields: {
+      type: [Array, Function],
+      default: () => []
+    },
     createSuccessNextRoute: {
       type: Object,
       default: () => ({ name: 'AssetList' })
@@ -32,7 +36,9 @@ export default {
     },
     updateInitial: {
       type: Function,
-      default: () => {}
+      default: (initial) => {
+        return initial
+      }
     }
   },
   data() {
@@ -47,17 +53,23 @@ export default {
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
-          [this.$t('common.Basic'), ['name', 'address', 'platform']],
-          [this.$t('assets.Network'), ['domain', 'protocols']],
-          [this.$t('assets.Account'), ['accounts']],
-          [this.$t('assets.Node'), ['nodes']],
-          [this.$t('assets.Label'), ['labels']],
-          [this.$t('common.Other'), ['is_active', 'comment']]
+          [this.$t('common.Basic'), ['name', 'address', 'platform', 'nodes']],
+          [this.$t('assets.Account'), ['protocols', 'accounts']],
+          [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
         cleanFormValue(values) {
+          // Update 的时候
           const { id = '' } = this.$route.params
           if (id) delete values['accounts']
+
+          if (values.nodes && values.nodes.length === 0) {
+            delete values['nodes']
+          }
+          if (values.accounts && values.accounts.length !== 0) {
+            values.accounts.forEach(account => { delete account.id })
+          }
+          console.log('values[\'accounts\']', values['accounts'])
           return values
         }
       }
@@ -112,7 +124,7 @@ export default {
         protocols: []
       }
       if (this.updateInitial) {
-        this.updateInitial(initial)
+        await this.updateInitial(initial)
       }
       this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
     },

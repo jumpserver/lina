@@ -1,30 +1,84 @@
 <template>
-  <div id="terminal" ref="terminal" class="xterm" />
+  <div>
+    <div v-if="showToolBar" style="position: absolute;z-index: 999;right: 2%;margin-top: 4px">
+      <div
+        v-for="(item,index) in toolbar"
+        :key="index"
+        style="display: inline-block"
+      >
+        <el-tooltip :content="item.tip">
+          <el-button
+            size="mini"
+            type="default"
+            @click="item.callback()"
+          >
+            <i :class="item.icon" />
+          </el-button>
+        </el-tooltip>
+      </div>
+
+    </div>
+
+    <div id="terminal" ref="terminal" class="xterm" />
+  </div>
 </template>
 
 <script>
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+
 export default {
   name: 'Term',
+  props: {
+    showToolBar: {
+      type: [Boolean, Object],
+      default: () => {
+        return false
+      }
+    }
+  },
   data() {
     return {
-      xterm: ''
+      xterm: new Terminal(
+        {
+          fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+          lineHeight: 1.2,
+          fontSize: 13,
+          rightClickSelectsWord: true,
+          theme: {
+            background: '#fff',
+            foreground: '#000',
+            selection: '#363535'
+          }
+        }),
+      toolbar: [
+        {
+          tip: this.$tc('ops.ScrollToTop'),
+          icon: 'fa fa-upload',
+          callback: () => {
+            this.xterm.scrollToTop()
+          }
+        },
+        {
+          tip: this.$tc('ops.ScrollToBottom'),
+          icon: 'fa fa-download',
+          callback: () => {
+            this.xterm.scrollToBottom()
+          }
+        },
+        {
+          tip: this.$tc('ops.ClearScreen'),
+          icon: 'fa fa-refresh',
+          callback: () => {
+            this.xterm.reset()
+          }
+        }
+      ]
     }
   },
   mounted: function() {
     const terminalContainer = this.$refs.terminal
-    this.xterm = new Terminal(
-      {
-        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-        lineHeight: 1.2,
-        fontSize: 13,
-        rightClickSelectsWord: true,
-        theme: {
-          background: '#1f1b1b'
-        }
-      })
     const fitAddon = new FitAddon()
     this.xterm.loadAddon(fitAddon)
     this.xterm.open(terminalContainer)
@@ -40,11 +94,27 @@ export default {
     },
     write: function(val) {
       this.xterm.write(val)
-    },
-    changeSelectedAssets() {
     }
   }
 
 }
 
 </script>
+
+<style scoped>
+.xterm {
+  padding-left: 5px;
+  background-color: #FFFFFF;
+}
+
+.el-button {
+  border: none;
+  padding: 2px;
+  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  color: #888;
+  background-color: transparent;
+  margin-left: 2px;
+}
+</style>

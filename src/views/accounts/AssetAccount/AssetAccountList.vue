@@ -1,20 +1,24 @@
 <template>
-  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
-    <template #table>
-      <AccountListTable ref="table" v-bind="tableConfig" />
-    </template>
-  </GenericTreeListPage>
+  <Page v-bind="$attrs">
+    <AssetTreeTAble ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
+      <template #table>
+        <AccountListTable ref="table" v-bind="tableConfig" />
+      </template>
+    </AssetTreeTAble>
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import AccountListTable from '@/components/AccountListTable'
-import { setUrlParam, setRouterQuery } from '@/utils/common'
+import Page from '@/layout/components/Page'
+import AssetTreeTAble from '@/components/AssetTreeTable'
+import AccountListTable from '@/components/AccountListTable/AccountList'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    GenericTreeListPage, AccountListTable
+    Page,
+    AssetTreeTAble,
+    AccountListTable
   },
   data() {
     return {
@@ -22,36 +26,15 @@ export default {
       clickedRow: null,
       iShowTree: true,
       tableConfig: {
-        url: '/api/v1/assets/accounts/',
+        url: '/api/v1/accounts/accounts/',
         hasLeftActions: true
       },
       treeSetting: {
         showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        url: '/api/v1/assets/accounts/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
-        callback: {
-          onSelected: (event, treeNode) => this.getAccountsUrl(event, treeNode)
-        }
+        showAssets: true,
+        url: '/api/v1/accounts/accounts/',
+        countResource: 'account'
       }
-    }
-  },
-  methods: {
-    getAccountsUrl(event, treeNode) {
-      let url = '/api/v1/assets/accounts/'
-      if (treeNode.meta.type === 'node') {
-        const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'asset', '')
-        url = setUrlParam(url, 'node', nodeId)
-      } else if (treeNode.meta.type === 'asset') {
-        const assetId = treeNode.meta.data?.id || treeNode?.id
-        url = setUrlParam(url, 'node', '')
-        url = setUrlParam(url, 'asset', assetId)
-      }
-
-      this.$set(this.tableConfig, 'url', url)
-      setRouterQuery(this)
     }
   }
 }
@@ -74,19 +57,6 @@ export default {
         padding: 0;
       }
     }
-  }
-  .mini-button{
-    width: 12px;
-    float: left;
-    margin-right: 10px;
-    text-align: center;
-    padding: 9px 0;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #FFFFFF;
-    border-radius: 5px;
-    line-height: 1.428;
-    cursor:pointer;
   }
   .noDataR{
     width: 100%;

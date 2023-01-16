@@ -8,13 +8,11 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import GroupGrantedAssets from './GroupGrantedAssets'
 import GroupInfo from './GroupInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    GroupGrantedAssets,
     GroupInfo
   },
   data() {
@@ -27,11 +25,6 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'GroupInfo'
-          },
-          {
-            title: this.$t('users.tabs.grantedAssets'),
-            name: 'GroupGrantedAssets',
-            hidden: () => !this.$hasPerm('perms.view_usergroupassets')
           }
         ]
       }
@@ -46,5 +39,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
+>>> table.CardTable {
+  table-layout: auto!important;
+}
 </style>

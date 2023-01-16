@@ -16,12 +16,9 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/tickets/flows/',
-        columns: [
-          'type', 'created_by', 'org_name',
-          'date_created', 'date_updated', 'actions'
-        ],
+        columnsExclude: ['rules'],
         columnsShow: {
-          min: ['actions'],
+          min: ['type', 'actions'],
           default: [
             'type', 'created_by', 'org_name',
             'date_created', 'date_updated', 'actions'
@@ -64,7 +61,6 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasRightActions: false,
         hasSearch: false
       }
     }

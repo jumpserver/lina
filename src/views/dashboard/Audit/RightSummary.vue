@@ -39,13 +39,13 @@ export default {
       },
       chartConfig: {
         datesMetrics: [],
-        secondaryName: this.$t('dashboard.IndexName'),
+        secondaryName: this.$t('dashboard.SessionsNum'),
         secondaryData: [0]
       },
       data: {
-        total_count_online_sessions: 0,
-        total_count_history_sessions: 0,
-        total_count_ftp_logs: 0
+        total_count_jobs: 0,
+        total_count_jobs_unexecuted: 0,
+        total_count_jobs_executed_failed: 0
       }
     }
   },
@@ -56,24 +56,24 @@ export default {
           title: this.$t('route.BatchCommand') + this.$t('dashboard.Num'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_online_sessions,
-            disabled: !this.$hasPerm('terminal.view_command')
+            count: this.data.total_count_jobs,
+            disabled: true
           }
         },
         {
           title: this.$t('dashboard.BatchCommandNotExecuted'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_history_sessions,
-            disabled: !this.$hasPerm('terminal.view_command')
+            count: this.data.total_count_jobs_unexecuted,
+            disabled: true
           }
         },
         {
           title: this.$t('dashboard.ExecuteFailedCommand'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_ftp_logs,
-            disabled: !this.$hasPerm('audits.view_command')
+            count: this.data.total_count_jobs_executed_failed,
+            disabled: true
           }
         }
       ]
@@ -90,13 +90,16 @@ export default {
   methods: {
     async getData() {
       const data = await this.$axios.get(`/api/v1/index/?days=${this.days}
-        &total_count_online_sessions=1
-        &total_count_history_sessions=1
-        &total_count_ftp_logs=1
+        &total_count_jobs=1
+        &total_count_jobs_unexecuted=1
+        &total_count_jobs_executed_failed=1
         &session_dates_metrics=1
       `)
       const totalCountSession = data.dates_metrics_total_count_session
       this.chartConfig.datesMetrics = data.dates_metrics_date
+      this.data.total_count_jobs = data?.total_count_jobs
+      this.data.total_count_jobs_unexecuted = data?.total_count_jobs_unexecuted
+      this.data.total_count_jobs_executed_failed = data?.total_count_jobs_executed_failed
       if (totalCountSession.length > 1) {
         this.chartConfig.secondaryData = totalCountSession
       }

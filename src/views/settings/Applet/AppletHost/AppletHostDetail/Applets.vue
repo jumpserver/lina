@@ -13,6 +13,7 @@
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/TableFormatters'
+
 export default {
   name: 'Publications',
   components: {
@@ -22,12 +23,14 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
     return {
       headerConfig: {
+        hasLeftActions: false,
         hasImport: false
       },
       config: {
@@ -52,12 +55,13 @@ export default {
             label: this.$t('applets.PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                'not_match': 'warning',
-                'published': 'success',
-                'unpublished': 'danger'
+                'pending': 'success',
+                'success': 'primary',
+                'failed': 'danger',
+                'unknown': 'warning'
               }
-              const tp = typeMapper[row.status.value] || 'info'
-              return <el-tag size='mini' type={tp}>{ row.status.label }</el-tag>
+              const tp = typeMapper[row.status.value] || 'warning'
+              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
             }
           },
           date_updated: {
@@ -65,15 +69,19 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AppletPublicationUpdate',
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
               extraActions: [
                 {
                   title: this.$t('common.Deploy'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,
-                      { host: row.host.id,
-                        applet_id: row.applet.id }
+                      {
+                        host: row.host.id,
+                        applet_id: row.applet.id
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -103,7 +111,7 @@ export default {
           }
         },
         {
-          title: '发布所有应用',
+          title: this.$t('common.PublishAllApplets'),
           attrs: {
             type: 'primary',
             label: this.$t('common.Publish')

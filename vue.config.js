@@ -130,6 +130,14 @@ module.exports = {
       .loader('vue-loader')
       .tap(options => {
         options.compilerOptions.preserveWhitespace = true
+        options.compilerOptions.directives = {
+          html(node, directiveMeta) {
+            (node.props || (node.props = [])).push({
+              name: 'innerHTML',
+              value: `$xss.process(_s(${directiveMeta.value}))`
+            })
+          }
+        }
         return options
       })
       .end()

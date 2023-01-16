@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Select2, CronTab } from '@/components'
+import { CronTab, Select2 } from '@/components'
 import rules from '@/components/DataForm/rules'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 
@@ -24,7 +24,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'unix_admin_user', 'windows_admin_user', 'protocols', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'protocols', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -33,7 +33,7 @@ export default {
         account: {
           on: {
             change: ([event], updateForm) => {
-              vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event}`
+              vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event?.pk}`
               updateForm({ regions: '' })
             }
           },
@@ -62,26 +62,17 @@ export default {
             }
           }
         },
-        unix_admin_user: {
-          el: {
-            multiple: false,
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/admin-users/'
-            }
-          }
-        },
-        windows_admin_user: {
-          el: {
-            multiple: false,
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/admin-users/'
-            }
-          }
-        },
         protocols: {
-          component: ProtocolSelector
+          component: ProtocolSelector,
+          el: {
+            showSetting: () => { return false },
+            choices: [
+              { 'name': 'ssh', 'port': 22, 'primary': true, 'default': false, 'required': false },
+              { 'name': 'telnet', 'port': 23, 'primary': false, 'default': false, 'required': false },
+              { 'name': 'vnc', 'port': 5900, 'primary': false, 'default': false, 'required': false },
+              { 'name': 'rdp', 'port': 3306, 'primary': false, 'default': false, 'required': false }
+            ]
+          }
         },
         is_always_update: {
           type: 'switch',
@@ -161,7 +152,7 @@ export default {
     // 更新获取链接
     if (params.id) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
-      this.fieldsMeta.regions.el.ajax.url = form.account ? `/api/v1/xpack/cloud/regions/?account_id=${form.account}` : `/api/v1/xpack/cloud/regions/`
+      this.fieldsMeta.regions.el.ajax.url = form.account?.id ? `/api/v1/xpack/cloud/regions/?account_id=${form.account.id}` : `/api/v1/xpack/cloud/regions/`
     }
   },
   methods: {

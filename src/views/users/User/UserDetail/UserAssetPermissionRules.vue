@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { DetailFormatter } from '@/components/TableFormatters'
+import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
 export default {
   name: 'UserAssetPermission',
   components: {
@@ -17,27 +17,41 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
         hasSelection: false,
         hasTree: true,
-        columns: [
-          'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-          'nodes_amount', 'system_users_amount', 'is_valid', 'actions'
-        ],
+        columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsMeta: {
           name: {
-            formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail'
             }
           },
-          users_amount: {
+          action: {
+            label: this.$t('common.Action'),
+            formatter: function(row) {
+              return row.actions.map(item => { return item.label }).join(', ')
+            }
+          },
+          is_expired: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          from_ticket: {
+            label: this.$t('perms.fromTicket'),
+            width: 100,
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          users: {
             label: this.$t('perms.User'),
-            width: '110px',
-            formatter: DetailFormatter,
+            width: '60px',
+            formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',
               routeQuery: {
@@ -45,14 +59,21 @@ export default {
               }
             }
           },
-          user_groups_amount: {
+          user_groups: {
             label: this.$t('perms.UserGroups'),
-            width: '110px'
+            width: '100px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              route: 'AssetPermissionDetail',
+              routeQuery: {
+                activeTab: 'AssetPermissionUser'
+              }
+            }
           },
-          assets_amount: {
+          assets: {
             label: this.$t('perms.Asset'),
-            width: '110px',
-            formatter: DetailFormatter,
+            width: '60px',
+            formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',
               routeQuery: {
@@ -60,26 +81,37 @@ export default {
               }
             }
           },
-          nodes_amount: {
+          nodes: {
             label: this.$t('perms.Node'),
-            width: '110px'
+            width: '60px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              route: 'AssetPermissionDetail',
+              routeQuery: {
+                activeTab: 'AssetPermissionAsset'
+              }
+            }
           },
-          system_users_amount: {
-            label: this.$t('perms.SystemUser'),
-            width: '110px'
+          accounts: {
+            label: this.$t('perms.Account'),
+            width: '60px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              route: 'AssetPermissionDetail',
+              getItem(item) {
+                return item
+              },
+              routeQuery: {
+                activeTab: 'AssetPermissionAccount'
+              }
+            }
           },
           actions: {
             formatterArgs: {
-              canClone: vm.$hasPerm('perms.add_assetpermission'),
-              cloneRoute: {
-                name: 'AssetPermissionCreate'
-              },
               updateRoute: 'AssetPermissionUpdate',
-              canUpdate: vm.$hasPerm('perms.change_assetpermission'),
-              canDelete: vm.$hasPerm('perms.delete_assetpermission'),
               performDelete: ({ row, col }) => {
                 const id = row.id
-                const url = `/api/v1/perms/asset-permissions/${id}/?user_id=${this.object.id}&draw=1`
+                const url = `/api/v1/perms/asset-permissions/${id}/`
                 return this.$axios.delete(url)
               }
             }

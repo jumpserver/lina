@@ -1,5 +1,3 @@
-import i18n from '@/i18n/i18n'
-
 export const UserAssetAccountFieldInitial = {
   users: {
     username_group: '*'
@@ -42,40 +40,3 @@ export function cleanFormValueForHandleUserAssetAccount(value) {
   }
   return value
 }
-
-export const fieldsMetaListPageForUserAssetAccount = {
-  user_username_group: {
-    prop: 'users.username_group',
-    showOverflowTooltip: true,
-    formatter: function(row) {
-      return row.users.username_group.toString()
-    },
-    label: i18n.t('acl.UserUsername')
-  },
-  asset_name_group: {
-    prop: 'assets.name_group',
-    showOverflowTooltip: true,
-    formatter: function(row) {
-      return row.assets.name_group.toString()
-    },
-    label: i18n.t('acl.AssetName')
-  },
-  asset_address_group: {
-    prop: 'assets.address_group',
-    showOverflowTooltip: true,
-    formatter: function(row) {
-      return row.assets.address_group.toString()
-    },
-    label: i18n.t('acl.AssetAddress')
-  },
-  account_username_group: {
-    prop: 'accounts.username_group',
-    showOverflowTooltip: true,
-    formatter: function(row) {
-      return row.accounts.username_group.toString()
-    },
-    label: i18n.t('acl.AccountUsername')
-  }
-}
-
-export const userAssetAccountFieldNames = Object.keys(fieldsMetaListPageForUserAssetAccount)

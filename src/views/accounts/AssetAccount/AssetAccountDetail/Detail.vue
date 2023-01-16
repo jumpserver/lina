@@ -1,25 +1,23 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :excludes="excludes" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
-      <QuickActions type="success" fa="fa-info-circle" :title="$tc('common.QuickSelect')" :actions="quickActionsSelect" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -37,12 +35,12 @@ export default {
           type: 'switcher',
           attrs: {
             model: vm.object.privileged,
-            disabled: !vm.$hasPerm('assets.change_account')
+            disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             change: (val) => {
               this.$axios.patch(
-                `/api/v1/assets/accounts/${this.object.id}/`,
+                `/api/v1/accounts/accounts/${this.object.id}/`,
                 { name: this.object?.name, privileged: val }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
@@ -60,79 +58,51 @@ export default {
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
-                `/api/v1/assets/accounts/${this.object.id}/verify/`,
+                `/api/v1/accounts/accounts/${this.object.id}/verify/`,
                 { action: 'test' }
               ).then(res => {
                 openTaskPage(res['task'])
               })
             }
           })
-        }
-      ],
-      quickActionsSelect: [
+        },
         {
           title: this.$t('assets.UserSwitchFrom'),
-          type: 'select2',
+          type: 'updateSelect',
           attrs: {
             type: 'primary',
             class: 'su-from-select2',
             multiple: false,
             clearable: true,
-            model: vm.object.su_from,
+            model: vm.object.su_from?.id || '',
+            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
             ajax: {
-              url: `/api/v1/assets/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              url: `/api/v1/accounts/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('assets.change_account')
+            disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             change: (value) => {
-              const relationUrl = `/api/v1/assets/accounts/${this.object.id}/`
+              const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
               return this.$axios.patch(relationUrl, { su_from: value })
             }
           })
         }
+      ],
+      url: `/api/v1/accounts/accounts/${this.object.id}`,
+      excludes: [
+        'asset', 'template', 'privileged', 'secret',
+        'passphrase', 'specific'
       ]
     }
   },
   computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('users.Username'),
-          value: this.object.username
-        },
-        {
-          key: this.$t('assets.SecretType'),
-          value: this.object.secret_type.label
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-  >>> .su-from-select2 .el-input__inner {
-    border-radius: 10px;
-    width: 180px;
-  }
 </style>

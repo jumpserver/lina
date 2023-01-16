@@ -27,7 +27,7 @@ export default {
         visible: false,
         width: '60%',
         tableConfig: {
-          url: `/api/v1/assets/account-secrets/${this.account.id}/histories/`,
+          url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,
           columns: ['secret', 'secret_type', 'version'],
           columnsMeta: {
             secret: {

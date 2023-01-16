@@ -8,7 +8,7 @@
     :show-cancel="false"
     :show-confirm="false"
   >
-    <GenericCreateUpdateForm v-if="ready" v-bind="$data" />
+    <GenericCreateUpdateForm v-if="ready" v-bind="$data" :on-perform-success="onSubmitSuccess" />
   </Dialog>
 </template>
 
@@ -29,11 +29,16 @@ export default {
     args: {
       type: String,
       default: () => ({})
+    },
+    module: {
+      type: String,
+      default: 'shell'
     }
   },
   data() {
     return {
       ready: false,
+      hasSaveContinue: false,
       url: '/api/v1/ops/adhocs/',
       fields: [
         ['', ['name', 'module', 'args']]
@@ -43,9 +48,16 @@ export default {
         args: ''
       },
       fieldsMeta: {
+        module: {
+          hidden: () => {
+            return true
+          }
+        },
         args: {
-          label: 'content',
-          component: CodeEditor
+          component: CodeEditor,
+          hidden: () => {
+            return true
+          }
         }
       }
     }
@@ -61,7 +73,15 @@ export default {
     }
   }, mounted() {
     this.initial.args = this.args
+    this.initial.module = this.module
+    console.log(this.initial)
     this.ready = true
+  },
+  methods: {
+    onSubmitSuccess() {
+      this.$message.success(this.$tc('ops.SaveCommandSuccess'))
+      this.iVisible = false
+    }
   }
 }
 </script>

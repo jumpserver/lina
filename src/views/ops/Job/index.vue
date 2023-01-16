@@ -9,6 +9,7 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -22,13 +23,17 @@ export default {
       showJobRunDialog: false,
       tableConfig: {
         url: '/api/v1/ops/jobs/',
-        columns: [
-          'name', 'type', 'summary', 'average_time_cost', 'asset_amount', 'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type', 'asset_amount', 'average_time_cost', 'summary', 'comment', 'date_last_run', 'actions']
+          default: [
+            'name', 'type', 'asset_amount', 'average_time_cost',
+            'summary', 'comment', 'date_last_run', 'actions'
+          ]
         },
+        columns: [
+          'name', 'type', 'summary', 'average_time_cost', 'asset_amount',
+          'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -36,15 +41,15 @@ export default {
             }
           },
           type: {
+            width: '96px',
             formatter: (row) => {
-              if (row.is_periodic) {
-                return <span>{row.type}&nbsp;
-                  <el-tooltip content={this.$t('ops.ThisPeriodic')}>
-                    <i Class='fa  fa-circle-o text-primary'/>
-                  </el-tooltip>
-                </span>
-              }
-              return <span>{row.type}</span>
+              return row.type.label
+            }
+          },
+          comment: {
+            width: '240px',
+            formatter: (row) => {
+              return row.type.label
             }
           },
           summary: {
@@ -69,6 +74,7 @@ export default {
             }
           },
           date_last_run: {
+            width: '140px',
             label: this.$t('ops.DateLastRun'),
             formatter: DateFormatter
           },
@@ -83,7 +89,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: '执行',
+                  title: this.$t('ops.Run'),
                   name: 'run',
                   type: 'running',
                   can: true,
@@ -103,26 +109,35 @@ export default {
         }
       },
       headerActions: {
-        canCreate: true,
         createRoute: 'JobCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
-        extraActions: [
-          {
-            name: this.$t('ops.QuickJob'),
-            title: this.$t('ops.QuickJob'),
-            has: () => {
-              return true
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({
+              name: 'JobCreate',
+              query: { type: item.name }
+            })
+          },
+          dropdown: [
+            {
+              name: 'adhoc',
+              title: this.$t('ops.Command') + this.$t('ops.Job'),
+              has: true
             },
-            callback: () => {
-              this.$router.push({ name: 'QuickJob' })
+            {
+              name: 'playbook',
+              title: 'Playbook' + this.$t('ops.Job'),
+              has: true
             }
-          }
-        ]
+          ]
+        }
       }
     }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     runJob(row, parameters) {
@@ -131,7 +146,7 @@ export default {
         parameters: parameters
       }).then(() => {
         this.$message.success(this.$tc('ops.TaskDispatch'))
-        this.$router.push({ name: 'Executions' })
+        this.$router.push({ name: 'Execution' })
       })
     }
   }

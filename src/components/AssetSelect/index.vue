@@ -18,10 +18,9 @@
       @confirm="handleConfirm"
       @cancel="handleCancel"
     >
-      <TreeTable
+      <AssetTreeTAble
         ref="ListPage"
         class="tree-table"
-        :tree-setting="treeSetting"
         :table-config="tableConfig"
         :header-actions="headerActions"
       />
@@ -30,14 +29,14 @@
 </template>
 
 <script>
-import TreeTable from '@/components/TreeTable'
+import AssetTreeTAble from '@/components/AssetTreeTable'
 import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'
 
 export default {
   componentName: 'AssetSelect',
-  components: { TreeTable, Select2, Dialog },
+  components: { AssetTreeTAble, Select2, Dialog },
   props: {
     baseUrl: {
       type: String,
@@ -88,15 +87,6 @@ export default {
       initialValue: _.cloneDeep(iValue),
       rowSelected: [],
       initSelection: null,
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        url: this.baseUrl,
-        nodeUrl: this.baseNodeUrl,
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: `${this.baseNodeUrl}/children/tree/?assets=0`
-      },
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
@@ -108,7 +98,6 @@ export default {
             prop: 'name',
             label: this.$t('assets.Name'),
             sortable: true,
-            showOverflowTooltip: true,
             formatter: DialogDetailFormatter,
             formatterArgs: {
               getDialogTitle: function({ col, row }) { this.$t('assets.AssetDetail') }.bind(this),
@@ -187,7 +176,10 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasRightActions: false
+        hasRightActions: false,
+        searchConfig: {
+          getUrlQuery: false
+        }
       }
     }
   },
@@ -211,7 +203,7 @@ export default {
       // 如果select2的options中没有，那么可能无法显示正常的值
       if (selectOptionsHas === undefined) {
         const option = {
-          label: `${row.hostname}(${row.ip})`,
+          label: `${row.name}(${row.address})`,
           value: row.id
         }
         options.push(option)
@@ -249,11 +241,22 @@ export default {
 }
 
 .el-dialog__wrapper ::v-deep .el-dialog__body {
-  padding: 0;
-
+  padding: 0 0 0 3px;
   .tree-table {
+    .search {
+      .el-input__inner {
+        background-color: #f3f3f3;
+      }
+      .el-cascader {
+        background-color: #f3f3f3;
+      }
+    }
     .left {
       padding: 5px;
+
+      .treebox {
+        height: 70vh;
+      }
     }
 
     .mini {

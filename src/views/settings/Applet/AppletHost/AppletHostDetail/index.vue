@@ -32,7 +32,7 @@ export default {
     return {
       host: {},
       config: {
-        url: '/api/v1/terminal/applet-hosts/',
+        url: '/api/v1/terminal/applet-hosts',
         activeMenu: 'Detail',
         submenu: [
           {
@@ -48,7 +48,7 @@ export default {
             'name': 'Applets'
           },
           {
-            'title': this.$t('terminal.Deployments'),
+            'title': this.$t('terminal.HostDeployment'),
             'name': 'Developments'
           }
         ],
@@ -68,7 +68,6 @@ export default {
     }
   },
   mounted() {
-    this.$route.query.oid = 'SYSTEM'
   }
 }
 </script>

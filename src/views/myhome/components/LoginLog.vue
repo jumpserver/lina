@@ -29,18 +29,15 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
+        hasColumnActions: false,
         columns: [
           'city', 'datetime'
         ],
         columnsMeta: {
           city: {
-            showOverflowTooltip: true,
             formatter: (row) => {
               return <span>{ row.city }({ row.ip })</span>
             }
-          },
-          datetime: {
-            showOverflowTooltip: true
           }
         },
         hasSelection: false,

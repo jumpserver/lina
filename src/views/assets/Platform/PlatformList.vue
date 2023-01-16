@@ -30,10 +30,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/assets/platforms/',
-        columns: [
-          'name', 'category', 'type',
-          'comment', 'actions'
-        ],
+        columnsExclude: ['automation'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'category', 'type', 'actions']
@@ -44,6 +41,17 @@ export default {
           },
           category: {
             formatter: ChoicesFormatter
+          },
+          domain_enabled: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          su_enabled: {
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
           },
           base: {
             width: '140px'
@@ -84,6 +92,13 @@ export default {
         createRoute: 'PlatformCreate',
         canCreate: () => {
           return this.$hasPerm('assets.add_platform')
+        },
+        handleImportClick: ({ selectedRows }) => {
+          this.$eventBus.$emit('showImportDialog', {
+            selectedRows,
+            url: '/api/v1/assets/platforms/',
+            name: this?.name
+          })
         },
         moreCreates: {
           callback: (item) => {

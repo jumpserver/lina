@@ -22,13 +22,8 @@ export default {
       helpMessage: this.$t('setting.helpText.ConnectionTokenList'),
       tableConfig: {
         url: ajaxUrl,
-        columns: [
-          'id', 'type_display',
-          'user_display', 'system_user_display', 'asset_display', 'application_display',
-          'date_expired', 'is_valid',
-          'date_created', 'created_by', 'org_name',
-          'actions'
-        ],
+        columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsShow: {
           min: ['id', 'actions'],
           default: [
@@ -40,8 +35,13 @@ export default {
             label: 'Token ID',
             formatter: ShowKeyCopyFormatter
           },
+          action: {
+            label: this.$t('common.Action'),
+            formatter: function(row) {
+              return row.actions.map(item => { return item.label }).join(', ')
+            }
+          },
           actions: {
-            prop: '',
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,

@@ -128,7 +128,7 @@ export default {
     margin-top: 15px;
     margin-bottom: 15px;
 
-    & > > > .el-divider--horizontal {
+    & >>> .el-divider--horizontal {
       margin: 10px 0;
     }
   }
@@ -146,7 +146,7 @@ export default {
       color: #676A6C;
     }
 
-    & > > > .el-col {
+    & >>> .el-col {
       line-height: 24px;
     }
   }

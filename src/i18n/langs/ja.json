@@ -3,7 +3,7 @@
   "accounts": {
     "HistoryPassword": "履歴パスワード",
     "PasswordRecord": "パスワードレコード",
-    "AccountHistableHelpMessage": "現在のアカウントの履歴バージョンを記録する",
+    "AccountHistoryHelpMessage": "現在のアカウントの履歴バージョンを記録する",
     "PleaseClickLeftAssetToViewAssetAccount": "資産のアカウントのリスト、左側の資産をクリックして表示します",
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。"
@@ -109,6 +109,11 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "Secure": "安全である",
+    "LabelInputFormatValidation": "フォーマットが正しくありません：name:value",
+    "IP/Host": "IP/ノア",
+    "OrganizationAsset": "組織資産",
+    "PersonalAsset": "個人資産",
     "AssetAddress": "IP/ホスト名",
     "UserSwitchFrom": "ユーザーは",
     "sshkeyAccount": "SSHキー",
@@ -298,6 +303,7 @@
     "PasswordOrToken": "パスワード/トークン"
   },
   "audits": {
+    "OperateRecord": "操作記録です",
     "Hosts": "本体",
     "RunUser": "実行ユーザー",
     "User": "ユーザー",
@@ -318,6 +324,11 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Activity": "イベント",
+    "Last30": "最近 30 回です",
+    "SpecificInfo": "特別情報",
+    "CollectionSucceed": "コレクション成功",
+    "CancelCollection": "収集の取消し",
     "NoContent": "まだ内容がない",
     "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",
@@ -665,7 +676,7 @@
     "FileTransferNum": "ファイル転送数",
     "LogOfLoginSuccessNum": "ログイン成功ログ数",
     "DangerousCommandNum": "危険命令数",
-    "IndexName": "指標名",
+    "SessionsNum": "セッション数",
     "BatchCommandNotExecuted": "未実行コマンド",
     "ExecuteFailedCommand": "失敗コマンドの実行",
     "SessionTrend": "セッショントレンド",
@@ -679,6 +690,7 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "ManualInput": "手動入力",
     "Execute": "実行",
     "ID": "ID",
     "No": "いいえ",
@@ -976,6 +988,15 @@
   "rbac": {
     "Permissions": "権限",
     "NoPermission": "権限なし"
+  },
+  "terminal": {
+    "UploadSucceed": "アップロード成功",
+    "UploadFailed": "アップロードに失敗しました",
+    "Applets": "リモートアプリケーション",
+    "AppletHosts": "アプリケーションパブリッシャ",
+    "uploadZipTips": "zip形式のファイルをアップロードしてください",
+    "HostDeployment": "パブリッシャーの導入",
+    "TerminalStat": "CPU/メモリ/ディスク"
   },
   "sessions": {
     "SetToDefaultStorage": "デフォルトストレージに設定",
@@ -1349,6 +1370,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
     "FileEncryptionPassword": "ファイル暗号化パスワード",
     "RoleUsers": "承認されたユーザー",

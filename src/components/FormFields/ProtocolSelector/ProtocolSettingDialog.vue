@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { Dialog, AutoDataForm } from '@/components'
+import { AutoDataForm, Dialog } from '@/components'
 
 export default {
   name: 'ProtocolSetting',
@@ -65,21 +65,6 @@ export default {
         url: '',
         fields: [
           [this.$t('common.Basic'), [
-            // {
-            //   id: 'primary',
-            //   label: this.$t('assets.Primary'),
-            //   type: 'switch',
-            //   helpText:  this.$t('assets.PrimaryOnly'),
-            //   on: {
-            //     change: ([event], updateForm) => {
-            //       if (event) {
-            //         updateForm({ required: true })
-            //       } else {
-            //         updateForm({ required: false })
-            //       }
-            //     }
-            //   }
-            // },
             {
               id: 'required',
               label: this.$t('assets.Required'),
@@ -172,12 +157,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-form > > > .el-form-item.form-buttons {
+.data-form >>> .el-form-item.form-buttons {
   padding-top: 10px;
   margin-bottom: 0;
 }
 
-.setting-dialog > > > .el-dialog__body {
+.setting-dialog >>> .el-dialog__body {
   padding-top: 10px;
 }
 

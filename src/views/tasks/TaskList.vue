@@ -4,6 +4,8 @@
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
+import { ActionsFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -14,11 +16,10 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'comment', 'state', 'last_published_time'
+          'name', 'queue', 'count', 'state', 'comment', 'last_published_time', 'actions'
         ],
         columnsMeta: {
           name: {
-            width: '500px',
             formatterArgs: {
               can: true
             }
@@ -45,6 +46,7 @@ export default {
             }
           },
           count: {
+            width: '80px',
             label: `${this.$t('ops.success')}/${this.$t('ops.total')}`,
             formatter: (row) => {
               return <div>
@@ -55,17 +57,36 @@ export default {
           },
           state: {
             label: this.$t('ops.State'),
-            width: '120px',
+            width: '60px',
             align: 'center',
             formatter: (row) => {
               switch (row.state) {
                 case 'green':
-                  return <i Class='fa  fa-circle-o text-primary' />
+                  return <i Class='fa  fa-circle-o text-primary'/>
                 case 'yellow':
-                  return <i Class='fa fa-circle-o text-warning' />
+                  return <i Class='fa fa-circle-o text-warning'/>
                 case 'red':
-                  return <i Class='fa fa-circle-o text-danger' />
+                  return <i Class='fa fa-circle-o text-danger'/>
               }
+            }
+          },
+          actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasClone: false,
+              canDelete: this.$hasPerm('ops.delete_celerytask'),
+              extraActions: [
+                {
+                  name: 'connect',
+                  type: 'primary',
+                  title: this.$t('ops.Execute'),
+                  can: this.$hasPerm('ops.view_celerytaskexecution'),
+                  callback: ({ row }) => {
+                    openTaskPage(row.id)
+                  }
+                }
+              ]
             }
           }
         }

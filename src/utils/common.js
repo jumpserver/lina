@@ -333,4 +333,12 @@ export function downloadText(content, filename) {
   window.URL.revokeObjectURL(url)
 }
 
+export function diffObject(object, base) {
+  return _.transform(object, (result, value, key) => {
+    if (!_.isEqual(value, base[key])) {
+      result[key] = (_.isObject(value) && _.isObject(base[key])) ? diffObject(value, base[key]) : value
+    }
+  })
+}
+
 export { BASE_URL }

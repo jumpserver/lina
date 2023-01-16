@@ -60,7 +60,6 @@ export default {
     }
   },
   mounted() {
-    this.$route.query.oid = 'SYSTEM'
   }
 }
 </script>

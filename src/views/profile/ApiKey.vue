@@ -22,9 +22,10 @@ export default {
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
-        columns: [
-          'id', 'secret', 'is_active', 'date_created', 'actions'
-        ],
+        columnsShow: {
+          min: ['id', 'actions'],
+          default: ['id', 'secret', 'is_active', 'date_created', 'actions']
+        },
         columnsMeta: {
           id: {
             label: 'Access Key'
@@ -35,11 +36,9 @@ export default {
           },
           date_created: {
             label: this.$t('common.DateCreated'),
-            showOverflowTooltip: true,
             formatter: DateFormatter
           },
           actions: {
-            prop: '',
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,

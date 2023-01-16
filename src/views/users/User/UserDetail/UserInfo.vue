@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -11,17 +11,16 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/RelationCard'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'UserInfo',
   components: {
-    DetailCard,
     RelationCard,
-    QuickActions
+    QuickActions,
+    AutoDetailCard
   },
   props: {
     object: {
@@ -90,7 +89,7 @@ export default {
           title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            disabled: this.object.source !== 'local' || !vm.$hasPerm('users.change_user'),
+            disabled: this.object.source.value !== 'local' || !vm.$hasPerm('users.change_user'),
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
@@ -169,6 +168,22 @@ export default {
           }
         }
       ],
+      url: `/api/v1/users/users/${this.object.id}`,
+      detailFields: [
+        'name', 'username', 'email', 'phone', 'wecom_id', 'dingtalk_id', 'feishu_id',
+        {
+          key: this.$t('users.Role'),
+          formatter: (item, val) => {
+            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles)
+            const dom = rolesDisplay.map(item => {
+              return <el-tag size='mini'>{ item.display_name }</el-tag>
+            })
+            return <div>{ dom }</div>
+          }
+        },
+        'mfa_level', 'source', 'created_by', 'date_joined', 'date_expired',
+        'date_password_last_updated', 'last_login', 'comment'
+      ],
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('users.UserGroups'),
@@ -197,79 +212,6 @@ export default {
     }
   },
   computed: {
-    detailItems() {
-      return [
-        {
-          key: this.$t('users.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('users.Username'),
-          value: this.object.username
-        },
-        {
-          key: this.$t('users.Email'),
-          value: this.object.email
-        },
-        {
-          key: this.$t('users.Phone'),
-          value: this.object.phone
-        },
-        {
-          key: this.$t('users.WeCom'),
-          value: this.object.wecom_id
-        },
-        {
-          key: this.$t('users.DingTalk'),
-          value: this.object.dingtalk_id
-        },
-        {
-          key: this.$t('users.FeiShu'),
-          value: this.object.feishu_id
-        },
-        {
-          key: this.$t('users.Role'),
-          formatter: (item, val) => {
-            const org_roles_display = this.object.org_roles_display || ''
-            const system_roles_display = this.object.system_roles_display || ''
-            const roles_display = org_roles_display?.split(', ').concat(system_roles_display?.split(', '))
-            return <span> { roles_display.join(' | ') } </span>
-          }
-        },
-        {
-          key: this.$t('users.MFA'),
-          value: this.object.mfa_level_display
-        },
-        {
-          key: this.$t('users.Source'),
-          value: this.object.source_display
-        },
-        {
-          key: this.$t('common.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('users.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_joined)
-        },
-        {
-          key: this.$t('users.DateExpired'),
-          value: toSafeLocalDateStr(this.object.date_expired)
-        },
-        {
-          key: this.$t('users.DatePasswordUpdated'),
-          value: toSafeLocalDateStr(this.object.date_password_last_updated)
-        },
-        {
-          key: this.$t('users.DateLastLogin'),
-          value: toSafeLocalDateStr(this.object.last_login)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   },
   watch: {
     group(iNew, iOld) {

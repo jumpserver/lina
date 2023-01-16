@@ -48,7 +48,7 @@ export default {
           {
             title: this.$t('perms.permAccount'),
             name: 'AssetPermissionAccount',
-            hidden: () => !this.$hasPerm('assets.view_account') || !this.$hasPerm('perms.change_assetpermission')
+            hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }

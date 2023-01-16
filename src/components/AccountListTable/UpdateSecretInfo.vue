@@ -70,7 +70,7 @@ export default {
         if (this.secretInfo.passphrase) data.passphrase = this.secretInfo.passphrase
       }
       this.$axios.patch(
-        `/api/v1/assets/accounts/${this.account.id}/`,
+        `/api/v1/accounts/accounts/${this.account.id}/`,
         data,
         { disableFlashErrorMsg: true }
       ).then(res => {

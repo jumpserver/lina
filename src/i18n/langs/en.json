@@ -3,7 +3,7 @@
   "accounts": {
     "HistoryPassword": "History password",
     "PasswordRecord": "Password record",
-    "AccountHistableHelpMessage": "Record the historical version of the current account",
+    "AccountHistoryHelpMessage": "Record the historical version of the current account",
     "PleaseClickLeftAssetToViewAssetAccount": "Asset account list,  please click on the assets on the left to view",
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
     "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view"
@@ -103,6 +103,11 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "Secure": "Secure",
+    "LabelInputFormatValidation": "Format error, correct format is：name:value",
+    "IP/Host": "IP/Host",
+    "OrganizationAsset": "Organization asset",
+    "PersonalAsset": "Personal asset",
     "UserSwitchFrom": "User switch from",
     "AssetAddress": "IP/Host",
     "sshkeyAccount": "ssh key account",
@@ -111,6 +116,11 @@
     "InAssetDetail": "Update account information in asset details",
     "SecretType": "Secret type",
     "PrivilegedTemplate": "Privileged",
+    "InitialDeploy": "Initial deploy",
+    "Address": "Address",
+    "PrivateKey": "Private key",
+    "Secret": "Secret",
+    "Network": "Network",
     "All": "All",
     "CloudPlatform": "Cloud platform",
     "RecentlyUsed": "Recently used",
@@ -292,6 +302,7 @@
     "PasswordOrToken": "Password / Token"
   },
   "audits": {
+    "OperateRecord": "Operating record",
     "Hosts": "Host",
     "RunUser": "Run user",
     "User": "User",
@@ -310,6 +321,22 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Activity": "Activity",
+    "Last30": "Last 30 times",
+    "SpecificInfo": "Specific",
+    "CollectionSucceed": "Collection succeed",
+    "CancelCollection": "Cancel collection",
+    "Version": "Version",
+    "Publish": "Publish",
+    "PublishAllApplets": "Publish all applets",
+    "Icon": "Icon",
+    "DisplayName": "Display name",
+    "Automations": "Automation",
+    "Sync": "Sync",
+    "Deploy": "Deploy",
+    "Detail": "Detail",
+    "Selector": "Selector",
+    "NoContent": "No content",
     "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",
@@ -640,7 +667,7 @@
     "FileTransferNum": "File transfer num",
     "LogOfLoginSuccessNum": "Log of login success num",
     "DangerousCommandNum": "Dangerous command num",
-    "IndexName": "Index name",
+    "SessionsNum": "Sessions num",
     "BatchCommandNotExecuted": "Batch command not executed",
     "ExecuteFailedCommand": "Execute failed command",
     "SessionTrend": "Session trend",
@@ -654,6 +681,7 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "ManualInput": "Manual input",
     "Execute": "Execute",
     "ID": "ID",
     "No": "No",
@@ -947,6 +975,15 @@
     "Permissions": "Permissions",
     "NoPermission": "No permission"
   },
+  "terminal": {
+    "UploadSucceed": "Upload succeed",
+    "UploadFailed": "Upload failed",
+    "Applets": "Remote apps",
+    "AppletHosts": "Remote hosts",
+    "uploadZipTips": "Please upload zip file",
+    "HostDeployment": "Remote host deployment",
+    "TerminalStat": "CPU/MEM/DISK"
+  },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",
@@ -1028,6 +1065,7 @@
     }
   },
   "setting": {
+    "Applets": "Applets",
     "EndpointListHelpMessage": "The service endpoint is the address (port) for the user to access the service. When the user connects to the asset, the service endpoint will be selected according to the endpoint rules and asset tags, and the connection will be established as the access entry to realize the distributed connection of assets.",
     "EndpointRuleListHelpMessage": "For the service endpoint selection strategy, two types are currently supported: <br>1. Specify the endpoint according to the endpoint rule (current page); <br>2. Select the endpoint through the asset tag. The tag name is fixed to endpoint, and the value is the name of the `endpoint`. <br>Two methods preferentially use label matching, because the IP segment may conflict, and the label method exists as a supplement to the rules.",
     "EnableKoKoSSHHelpText": "Enabled, connect assets to display SSH Client pull-up method",
@@ -1283,6 +1321,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "Login": "Users login",
     "InviteSuccess": "Invite success",
     "FileEncryptionPassword": "File encryption password",
     "OrgRoles": "Org roles",

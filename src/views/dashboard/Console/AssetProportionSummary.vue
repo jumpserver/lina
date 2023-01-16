@@ -3,7 +3,8 @@
     <div class="head">
       <Title :config="titleConfig" />
     </div>
-    <ProgressChart v-bind="config" />
+    <ProgressChart v-if="config.data.length > 0" v-bind="config" />
+    <div v-else class="no-data">{{ $tc('common.NoData') }}</div>
   </div>
 </template>
 
@@ -48,6 +49,11 @@ export default {
       display: flex;
       justify-content: space-between;
     }
+  }
+  .no-data {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 6px;
   }
 </style>
 

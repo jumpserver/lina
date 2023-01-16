@@ -3,8 +3,8 @@
 </template>
 
 <script type="text/jsx">
-import { DetailFormatter, AccountShowFormatter } from '@/components/TableFormatters'
 import TreeTable from '../TreeTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'GrantedAssets',
@@ -35,7 +35,7 @@ export default {
     getShowUrl: {
       type: Function,
       default({ row, col }) {
-        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/?cache_policy=1`)
+        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
       }
     }
   },
@@ -57,34 +57,19 @@ export default {
       tableConfig: {
         url: this.tableUrl,
         hasTree: true,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
+        columnsExclude: ['specific'],
+        columnShow: {
+          min: ['name', 'address', 'accounts']
+        },
+        hasColumnActions: false,
+        columnsMeta: {
+          name: {
             formatter: DetailFormatter,
-            sortable: true,
             formatterArgs: {
               route: 'AssetDetail'
-            },
-            showOverflowTooltip: true
-          },
-          {
-            prop: 'address',
-            label: this.$t('assets.Address'),
-            width: '140px',
-            sortable: 'custom'
-          },
-          {
-            prop: 'accounts',
-            label: this.$t('assets.Account'),
-            align: 'center',
-            formatter: AccountShowFormatter,
-            formatterArgs: {
-              getUrl: this.getShowUrl.bind(this)
-            },
-            showOverflowTooltip: true
+            }
           }
-        ]
+        }
       },
       headerActions: {
         hasLeftActions: false,

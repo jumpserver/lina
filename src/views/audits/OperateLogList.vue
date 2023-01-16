@@ -2,11 +2,11 @@
   <div>
     <GenericListPage
       v-loading="loading"
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
     />
     <el-dialog
-      :title="this.$t('route.OperateLog')"
+      :title="this.$tc('route.OperateLog')"
       :visible.sync="logDetailVisible"
       width="70%"
     >
@@ -42,17 +42,16 @@ export default {
       loading: false,
       tableConfig: {
         url: '/api/v1/audits/operate-logs/',
-        columns: ['user', 'action_display', 'resource_type_display', 'resource', 'remote_addr', 'datetime', 'actions'],
+        columnsShow: {
+          min: ['user', 'resource'],
+          default: [
+            'user', 'action_display', 'resource_type_display',
+            'resource', 'remote_addr', 'datetime', 'actions'
+          ]
+        },
         columnsMeta: {
-          user: {
-            showOverflowTooltip: true
-          },
           resource_type: {
-            showOverflowTooltip: true,
             width: '180px'
-          },
-          resource: {
-            showOverflowTooltip: true
           },
           datetime: {
             width: '160px'

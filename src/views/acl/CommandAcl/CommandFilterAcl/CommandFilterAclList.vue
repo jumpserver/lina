@@ -5,10 +5,6 @@
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
-import {
-  userAssetAccountFieldNames,
-  fieldsMetaListPageForUserAssetAccount
-} from '../../common'
 
 export default {
   components: {
@@ -22,19 +18,11 @@ export default {
           app: 'acls',
           resource: 'commandfilteracl'
         },
-        columns: [
-          'name',
-          ...userAssetAccountFieldNames,
-          'command_groups', 'action',
-          'date_created', 'created_by', 'org_name',
-          'comment', 'is_active', 'actions'
-        ],
+        columnsExclude: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name',
-            ...userAssetAccountFieldNames,
-            'command_groups', 'priority', 'is_active', 'comment', 'actions'
+            'name', 'command_groups_amount', 'priority', 'is_active', 'comment', 'actions'
           ]
         },
         columnsMeta: {
@@ -42,17 +30,6 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'CommandFilterAclDetail'
-            }
-          },
-          ...fieldsMetaListPageForUserAssetAccount,
-          command_groups: {
-            formatter: function(row) {
-              return <span> { row.command_groups.length }</span>
-            }
-          },
-          reviewers: {
-            formatter: function(row) {
-              return <span> { row.reviewers.length }</span>
             }
           }
         }

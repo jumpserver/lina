@@ -3,6 +3,28 @@ import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components/FormFields'
+import { Message } from '@/utils/Message'
+
+export const filterSelectValues = (values) => {
+  if (!values) return
+  const selects = []
+  values.forEach((item) => {
+    if (item.hasOwnProperty('pk')) {
+      selects.push(item)
+    } else {
+      // 格式校验：不以:开头，不以:结尾
+      const rule = /^(?!:).*(?<!:)$/
+      if (item.name.indexOf(':') > -1 && rule.test(item.name)) {
+        const [name, value] = item.name.split(':')
+        const inputValue = { name, value }
+        selects.push(inputValue)
+      } else {
+        Message.error(i18n.t('assets.LabelInputFormatValidation'))
+      }
+    }
+  })
+  return selects
+}
 
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
@@ -56,7 +78,7 @@ export const assetFieldsMeta = (vm) => {
     },
     accounts: {
       component: AssetAccounts,
-      label: '',
+      label: i18n.t('assets.Accounts'),
       el: {
         platform: {},
         default: []
@@ -81,6 +103,13 @@ export const assetFieldsMeta = (vm) => {
           transformOption: (item) => {
             return { label: `${item.name}:${item.value}`, value: item.id }
           }
+        },
+        allowCreate: true
+      },
+      on: {
+        change: ([event], updateForm) => {
+          const selects = filterSelectValues(event)
+          updateForm({ labels: selects })
         }
       }
     },

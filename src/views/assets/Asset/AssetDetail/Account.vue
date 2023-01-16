@@ -4,6 +4,7 @@
       <el-col :md="16" :sm="24">
         <AccountListTable
           ref="ListTable"
+          v-bind="$attrs"
           :asset="object"
           :url="iUrl"
           :has-import="false"
@@ -44,7 +45,7 @@ export default {
   },
   computed: {
     iUrl() {
-      return this.url || `/api/v1/assets/accounts/?asset=${this.object.id}`
+      return this.url || `/api/v1/accounts/accounts/?asset=${this.object.id}`
     }
   }
 }

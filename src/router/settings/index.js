@@ -1,10 +1,11 @@
-import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+const Setting = () => import('@/views/settings/index')
+
 export default {
   path: '/settings',
-  component: Layout,
+  component: Setting,
   redirect: '/settings/basic',
   name: 'SystemSetting',
   meta: {
@@ -367,7 +368,7 @@ export default {
       component: () => import('@/views/settings/Tools'),
       meta: {
         title: i18n.t('setting.SystemTools'),
-        icon: 'wrench',
+        icon: 'tools',
         permissions: ['settings.view_setting']
       }
     },

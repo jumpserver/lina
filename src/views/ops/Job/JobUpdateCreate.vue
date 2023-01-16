@@ -1,5 +1,6 @@
 <template>
   <div v-if="ready">
+    <VariableHelpDialog :visible.sync="showHelpDialog" />
     <GenericCreateUpdatePage ref="form" v-bind="$data" />
   </div>
 </template>
@@ -8,27 +9,29 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
 import { JsonEditor } from '@/components/FormFields'
-import JobCodeEditor from '@/views/ops/Job/JobCodeEditor'
+import CodeEditor from '@/components/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
+import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdatePage,
+    VariableHelpDialog
   },
   data() {
     return {
       ready: false,
-      showOpenAdhocDialog: false,
+      showHelpDialog: false,
       instantTask: false,
-      jobType: '',
       url: '/api/v1/ops/jobs/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir']],
+        [this.$t('common.Basic'), ['name', 'type', 'instant']],
+        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
         [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
-        [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']]
+        [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']],
+        [this.$t('common.Other'), ['comment']]
       ],
       initial: {
         type: 'adhoc',
@@ -48,19 +51,29 @@ export default {
           }
         },
         comment: {
+          on: {
+            change: (val) => {
+              console.log(val)
+            }
+          },
           hidden: () => {
             return this.instantTask
           }
         },
         type: {
           hidden: () => {
-            return this.instantTask
+            return true
           }
         },
         module: {
           label: this.$t('ops.Module'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
+          },
+          on: {
+            change: ([event], updateForm) => {
+              this.fieldsMeta.args.el.options.mode = event
+            }
           }
         },
         playbook: {
@@ -95,7 +108,26 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },
-          component: JobCodeEditor
+          component: CodeEditor,
+          el: {
+            options: {
+              mode: 'shell'
+            },
+            toolbar: [
+              {
+                type: 'button',
+                icon: 'fa-question-circle',
+                tip: this.$t('ops.SaveCommand'),
+                align: 'right',
+                callback: () => {
+                  this.showHelpDialog = true
+                }
+              }
+            ]
+          }
+        },
+        timeout: {
+          helpText: i18n.t('ops.TimeoutHelpText')
         },
         instant: {
           hidden: () => {
@@ -103,13 +135,14 @@ export default {
           }
         },
         parameters_define: {
-          label: this.$t('ops.Variable'),
+          label: '',
           component: JsonEditor,
           hidden: (formValue) => {
             return !formValue.use_parameter_define
           }
         },
         chdir: {
+          helpText: i18n.t('ops.ChdirHelpText'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           }
@@ -121,6 +154,7 @@ export default {
           }
         },
         use_parameter_define: {
+          label: this.$t('ops.UseParameterDefine'),
           type: 'switch',
           hidden: () => {
             return this.instantTask
@@ -145,22 +179,33 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query && this.$route.query.type && this.$route.query.id) {
+    if (this.$route.query && this.$route.query.type) {
       this.initial.type = 'adhoc'
       switch (this.$route.query.type) {
         case 'adhoc':
           this.initial.type = 'adhoc'
-          this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
-            this.initial.module = data.module
-            this.initial.args = data.args
-            this.initial.instant = true
-            this.initial.runAfterSave = true
-            this.instantTask = true
-            this.createSuccessNextRoute = { name: 'Adhoc' }
+          if (this.$route.query.id) {
+            this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
+              this.initial.module = data.module
+              this.initial.args = data.args
+              this.initial.instant = true
+              this.initial.runAfterSave = true
+              this.instantTask = true
+              this.createSuccessNextRoute = { name: 'Adhoc' }
+              this.ready = true
+            })
+          } else {
             this.ready = true
-          })
+          }
           break
         case 'playbook':
+          this.initial.type = 'playbook'
+          if (this.$route.query.id) {
+            this.initial.playbook = this.$route.query.id
+            this.ready = true
+          } else {
+            this.ready = true
+          }
           break
       }
     } else {

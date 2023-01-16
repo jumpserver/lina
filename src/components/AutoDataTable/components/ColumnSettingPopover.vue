@@ -5,7 +5,7 @@
     :visible.sync="showColumnSettingPopover"
     :destroy-on-close="true"
     :show-cancel="false"
-    width="35%"
+    width="50%"
     top="10%"
     @confirm="handleColumnConfirm()"
   >
@@ -24,23 +24,19 @@
         >
           <el-checkbox
             :label="item.prop"
-            :disabled="
-              item.prop==='id' ||
-                item.prop==='actions' ||
-                minColumns.indexOf(item.prop)!==-1
-            "
+            :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
           >
             {{ item.label }}
           </el-checkbox>
         </el-col>
       </el-row>
-
     </el-checkbox-group>
   </Dialog>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog/index'
+
 export default {
   name: 'ColumnSettingPopover',
   components: {

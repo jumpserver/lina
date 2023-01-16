@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import AssetSelect from '@/components/AssetSelect'
+
 export default {
   name: 'GatewayCreateUpdate',
   components: {
@@ -25,7 +26,7 @@ export default {
           el: {
             value: [],
             canSelect: (row) => {
-              return row.enabled_info.domain_enabled
+              return row.enabled_info?.domain_enabled
             }
           }
         }

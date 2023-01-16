@@ -6,25 +6,29 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
+    <GatewayDialog
+      :port="GatewayPort"
+      :cell="GatewayCell"
+      :visible.sync="GatewayVisible"
+    />
   </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter,
-  DetailFormatter,
-  TagsFormatter,
-  ChoicesFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
+import GatewayDialog from '@/components/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
     ListTable,
+    GatewayDialog,
     PlatformDialog,
     AssetBulkUpdateDialog
   },
@@ -42,14 +46,6 @@ export default {
       default: () => ({})
     },
     headerActions: {
-      type: Object,
-      default: () => ({})
-    },
-    addColumns: {
-      type: Array,
-      default: () => []
-    },
-    addColumnsMeta: {
       type: Object,
       default: () => ({})
     },
@@ -76,19 +72,22 @@ export default {
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
+        route.query.platform_name = row.platform.name
       }
       vm.$router.push(route)
     }
     return {
       showPlatform: false,
+      GatewayPort: 0,
+      GatewayCell: '',
+      GatewayVisible: false,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
-        columns: [
-          'name', 'address', 'category', 'type', 'platform',
-          'protocols', 'is_active', 'connectivity',
-          'created_by', 'date_created', 'comment',
-          'org_name', 'actions'
-        ],
+        permissions: {
+          app: 'assets',
+          resource: 'asset'
+        },
+        columnsExclude: ['specific', 'enabled_info', 'info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -104,24 +103,25 @@ export default {
             formatterArgs: {
               route: 'AssetDetail'
             },
-            showOverflowTooltip: true,
             sortable: true
           },
           platform: {
+            width: '100px',
             sortable: true
           },
           protocols: {
+            showFullContent: true,
             formatter: (row) => {
               const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
-              return <span> {data} </span>
+              return <div> {data} </div>
             }
+          },
+          nodes_display: {
+            formatter: ArrayFormatter
           },
           ip: {
             sortable: 'custom',
             width: '140px'
-          },
-          comment: {
-            showOverflowTooltip: true
           },
           connectivity: connectivityMeta,
           labels_display: {
@@ -143,12 +143,23 @@ export default {
                   title: this.$t('common.Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    if (row.platform.name === 'Gateway') {
+                      this.GatewayVisible = true
+                      const port = row.protocols.find(item => item.name === 'ssh').port
+                      if (!port) {
+                        return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                      } else {
+                        this.GatewayPort = port
+                        this.GatewayCell = row.id
+                      }
+                    } else {
+                      this.$axios.post(
+                        `/api/v1/assets/assets/${row.id}/tasks/`,
+                        { action: 'test' }
+                      ).then(res => {
+                        openTaskPage(res['task'])
+                      })
+                    }
                   }
                 }
               ]
@@ -223,21 +234,10 @@ export default {
   },
   computed: {
     iTableConfig() {
-      const config = _.merge(this.defaultConfig, this.tableConfig, {
+      return _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
         ...(this.category && { category: this.category })
       })
-      if (this.addColumns.length > 0) {
-        config.columns = [
-          ...config.columns.slice(0, 2),
-          ...this.addColumns,
-          ...config.columns.slice(2)
-        ]
-      }
-      if (Object.keys(this.addColumnsMeta).length > 0) {
-        config.columnsMeta = _.merge(config.columnsMeta, this.addColumnsMeta)
-      }
-      return config
     },
     iHeaderActions() {
       const actions = _.merge({}, this.defaultHeaderActions, this.headerActions)

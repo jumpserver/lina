@@ -13,6 +13,7 @@
 
 <script>
 import BaseFormatter from './base'
+
 export default {
   name: 'ChoicesFormatter',
   extends: BaseFormatter,
@@ -88,8 +89,7 @@ export default {
       return true
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

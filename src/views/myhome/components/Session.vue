@@ -18,12 +18,13 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
+        hasColumnActions: false,
         columns: [
-          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol'
+          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol'
         ],
         columnsMeta: {
-          index: {
-            prop: 'index',
+          id: {
+            prop: 'id',
             label: this.$t('sessions.id'),
             align: 'center',
             width: '40px',
@@ -37,19 +38,11 @@ export default {
               }
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            label: this.$t('sessions.target'),
-            showOverflowTooltip: true
+            label: this.$t('sessions.target')
           },
           command_amount: {
             label: this.$t('sessions.command')
-          },
-          system_user: {
-            label: this.$t('acl.system_user'),
-            showOverflowTooltip: true
           },
           remote_addr: {
             label: this.$t('sessions.remoteAddr'),

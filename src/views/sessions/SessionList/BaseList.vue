@@ -28,49 +28,65 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columns: [
-          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-          'command_amount', 'date_start', 'date_end', 'duration',
-          'terminal_display', 'org_name', 'actions'
-        ],
+        columnsExtra: ['index'],
         columnsShow: {
-          min: ['index', 'actions'],
+          min: ['id', 'actions'],
           default: [
-            'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'id', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
             'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
         columnsMeta: {
-          index: {
-            prop: 'index',
-            label: this.$t('sessions.id'),
+          id: {
+            prop: 'id',
+            label: this.$t('common.Number'),
             align: 'center',
-            width: '40px',
+            width: '80px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
               return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
             }
           },
-          user: {
-            showOverflowTooltip: true
+          can_join: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_replay: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_terminate: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          has_command: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          is_finished: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          has_replay: {
+            formatterArgs: {
+              showFalse: false
+            }
           },
           asset: {
-            label: this.$t('sessions.target'),
-            showOverflowTooltip: true
+            label: this.$t('sessions.target')
           },
           command_amount: {
             label: this.$t('sessions.command'),
             width: '90px'
           },
-          system_user: {
-            showOverflowTooltip: true,
-            width: '100px'
-          },
           login_from: {
-            label: this.$t('sessions.loginFrom'),
-            width: '115px',
-            showOverflowTooltip: true
+            width: '115px'
           },
           remote_addr: {
             width: '140px'
@@ -82,11 +98,9 @@ export default {
             formatter: null
           },
           date_start: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           date_end: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           duration: {
@@ -95,9 +109,6 @@ export default {
               return timeOffset(row.date_start, row.date_end)
             },
             width: '80px'
-          },
-          terminal_display: {
-            showOverflowTooltip: true
           },
           actions: {
             prop: 'actions',

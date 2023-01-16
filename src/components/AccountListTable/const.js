@@ -8,12 +8,12 @@ export const connectivityMeta = {
     faChoices: {
       ok: 'fa-check-circle',
       failed: 'fa-times-circle',
-      unknown: ' '
+      unknown: 'fa fa-question-circle'
     },
     classChoices: {
       ok: 'text-primary',
       failed: 'text-danger',
-      unknown: ''
+      unknown: 'fa fa-question-circle'
     },
     textChoices: {
       ok: 'Avail',

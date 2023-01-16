@@ -21,31 +21,37 @@ export default {
         submenu: [
           {
             title: this.$t('assets.All'),
+            icon: 'fa-bars',
             name: 'all',
             component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
           },
           {
             title: this.$t('applications.host'),
+            icon: 'fa-inbox',
             name: 'hosts',
             component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
           },
           {
             title: this.$t('route.Device'),
+            icon: 'fa-microchip',
             name: 'devices',
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
             title: this.$t('route.Database'),
+            icon: 'fa-database',
             name: 'databases',
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
             title: this.$t('assets.Cloud'),
+            icon: 'fa-cloud',
             name: 'clouds',
             component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
             title: 'Web',
+            icon: 'fa-globe',
             name: 'web',
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           }

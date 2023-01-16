@@ -5,24 +5,26 @@
 @import './fonts/font-awesome.min.css';
 
 ::-webkit-scrollbar {
-  width:14px;
+  width: 14px;
 }
+
 ::-webkit-scrollbar-track {
-  border-radius:10px;
+  border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
   box-shadow: 8px 10px 20px #C6C6C6 inset;
   border: 3px solid rgba(0, 0, 0, 0);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   box-shadow: 8px 10px 20px #878787 inset;
 }
 
 body {
-  height: 100%;
+  height: calc(100% - 50px);
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: auto;
   color: #676a6c;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -36,10 +38,6 @@ label {
 html {
   height: 100%;
   box-sizing: border-box;
-}
-
-#app {
-  height: 100%;
 }
 
 *,
@@ -173,15 +171,17 @@ input[type=file] {
 
 .view-switcher {
   .el-menu--popup-bottom-start {
-    margin-top: 0!important;
+    margin-top: 0 !important;
   }
+
   .el-menu--popup {
-    min-width: 70px!important;
+    min-width: 70px !important;
   }
 }
 
 .el-col.el-col-sm-24 .ibox {
   margin-bottom: 10px;
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -194,4 +194,8 @@ input[type=file] {
 .el-table-filter {
   max-height: 60vh;
   overflow: auto;
+}
+
+.el-table .el-table__row .show-full-content > .cell {
+  white-space: normal!important;
 }

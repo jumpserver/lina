@@ -139,10 +139,11 @@ export default {
         }
         if (val && val.constructor === Object && val.value) {
           this.$emit('input', val.value)
+        } else if (val && val.constructor === Object && val.id) {
+          this.$emit('input', val.id)
         } else {
           this.$emit('input', val)
         }
-        console.log('Set value: ', val)
       },
       get() {
         return this.value
@@ -166,6 +167,10 @@ export default {
         return { label: item.name, value: item.id }
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
+      const defaultFilterOption = (item) => {
+        return item
+      }
+      const filterOption = this.ajax.filterOption || defaultFilterOption
       const defaultProcessResults = (data) => {
         let results = []
         let more = false
@@ -179,7 +184,7 @@ export default {
           total = data.count
         }
         results = results.map(transformOption)
-        results = results.filter(Boolean)
+        results = results.filter(filterOption)
         return { results: results, pagination: more, total: total }
       }
       const defaultAjax = {
@@ -359,6 +364,7 @@ export default {
 .select2 {
   width: 100%;
 }
+
 .select2 >>> .el-tag.el-tag--info {
   height: auto;
   white-space: normal;

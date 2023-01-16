@@ -87,6 +87,10 @@ export function changeMenuColor(themeColors) {
 
     if (key.includes('--color')) {
       elementStyle.setProperty(key, currentColor)
+      const lightColor = mix(white, currentColor.replace(/#/g, ''), 70)
+      const darkColor = mix(black, currentColor.replace(/#/g, ''), 20)
+      elementStyle.setProperty(key + '-light', lightColor)
+      elementStyle.setProperty(key + '-dark', darkColor)
     }
   }
 }

@@ -63,8 +63,8 @@ window._ = require('lodash')
 import { Message } from '@/utils/Message'
 Vue.prototype.$message = Message
 
-import VueDOMPurifyHTML from 'vue-dompurify-html'
-Vue.use(VueDOMPurifyHTML)
+import xss from '@/utils/xss'
+Vue.prototype.$xss = xss
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = new Vue()

@@ -21,16 +21,17 @@ export default {
           app: 'xpack',
           resource: 'syncinstancetask'
         },
-        columns: [
-          'name', 'account_display', 'history_count', 'instance_count', 'periodic_display',
-          'date_last_sync', 'comment', 'actions'
-        ],
         columnsMeta: {
+          sync_ip_type: {
+            width: '120px'
+          },
+          hostname_strategy: {
+            width: '120px'
+          },
           account_display: {
             label: this.$t('xpack.Cloud.Account')
           },
           periodic_display: {
-            showOverflowTooltip: true,
             width: '150px'
           },
           actions: {

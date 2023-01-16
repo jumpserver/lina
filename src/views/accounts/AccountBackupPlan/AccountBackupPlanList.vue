@@ -1,28 +1,32 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { GenericListTable } from '@/layout/components'
+import { ArrayFormatter, DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/account-backup-plans/',
-        columns: [
-          'name', 'is_periodic', 'periodic_display', 'org_name', 'comment', 'actions'
-        ],
+        url: '/api/v1/accounts/account-backup-plans/',
+        permissions: {
+          app: 'accounts',
+          resource: 'accountbackupautomation'
+        },
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'org_name', 'is_periodic', 'periodic_display', 'actions']
+          default: [
+            'name', 'org_name', 'is_periodic',
+            'periodic_display', 'executed_amount', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -31,20 +35,37 @@ export default {
               route: 'AccountBackupPlanDetail'
             }
           },
+          types: {
+            formatter: ArrayFormatter
+          },
           is_periodic: {
-            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
-            showOverflowTooltip: true,
+            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: '150px'
           },
           comment: {
             width: '90px'
+          },
+          executed_amount: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: vm.$hasPerm('accounts.view_accountbackupexecution'),
+              getRoute({ row }) {
+                return {
+                  name: 'AccountBackupList',
+                  query: {
+                    activeTab: 'AccountBackupPlanExecutionList',
+                    plan_id: row.id
+                  }
+                }
+              }
+            }
           },
           actions: {
             width: '164px',
@@ -62,7 +83,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/account-backup-plan-executions/`,
+                      `/api/v1/accounts/account-backup-plan-executions/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])
