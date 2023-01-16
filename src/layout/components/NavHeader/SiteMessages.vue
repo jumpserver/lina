@@ -46,7 +46,7 @@
             </el-col>
           </el-row>
           <div class="msg-item-txt">
-            <span v-dompurify-html="msg.message" />
+            <span v-html="msg.message" />
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
           </h5>
         </div>
         <div class="msg-detail-txt">
-          <span v-dompurify-html="currentMsg.message" />
+          <span v-html="currentMsg.message" />
         </div>
       </div>
     </Dialog>
