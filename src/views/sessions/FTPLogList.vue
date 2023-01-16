@@ -17,6 +17,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/ftp-logs/',
+        hasColumnActions: false,
         columnsMeta: {
           remote_addr: {
             width: '140px'
