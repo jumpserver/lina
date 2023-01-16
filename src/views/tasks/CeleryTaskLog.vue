@@ -94,4 +94,7 @@ export default {
   background-color: #1f1b1b;
   padding: 10px
 }
+#terminal.xterm {
+  height: 100vh;
+}
 </style>
