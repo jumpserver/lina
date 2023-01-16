@@ -25,6 +25,10 @@ export default {
       config: {
         activeMenu: 'AccountChangeSecretInfo',
         url: '/api/v1/accounts/change-secret-automations',
+        actions: {
+          canDelete: this.$hasPerm('accounts.delete_changesecretautomation'),
+          canUpdate: this.$hasPerm('accounts.change_changesecretautomation')
+        },
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
