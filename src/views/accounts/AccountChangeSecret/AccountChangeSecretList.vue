@@ -34,7 +34,6 @@ export default {
           },
           accounts: {
             formatter: function(row) {
-              console.log('row', row)
               return <span> { row.accounts.join(', ') } </span>
             }
           },

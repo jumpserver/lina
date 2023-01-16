@@ -343,7 +343,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionList.vue'),
         name: 'AccountBackupPlanExecutionList',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true

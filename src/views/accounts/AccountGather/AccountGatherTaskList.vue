@@ -56,10 +56,10 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountGatherTaskDetail',
+              route: 'AccountGatherTaskList',
               can: vm.$hasPerm('accounts.view_gatheraccountsexecution'),
               routeQuery: {
-                activeTab: 'TaskExecutionList'
+                activeTab: 'AccountGatherTaskExecutionList'
               }
             }
           },
