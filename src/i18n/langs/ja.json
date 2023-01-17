@@ -303,6 +303,7 @@
     "PasswordOrToken": "パスワード/トークン"
   },
   "audits": {
+    "ChangeField": "フィールドを変更します",
     "OperateRecord": "操作記録です",
     "Hosts": "本体",
     "RunUser": "実行ユーザー",

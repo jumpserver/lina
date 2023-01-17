@@ -402,6 +402,7 @@
     "PasswordOrToken": "密码 / 令牌"
   },
   "audits": {
+    "ChangeField": "变更字段",
     "OperateRecord": "操作记录",
     "Hosts": "主机",
     "RunUser": "运行用户",
