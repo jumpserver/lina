@@ -34,3 +34,44 @@ export const STATE_MAP = {
     type: 'warning', title: i18n.t('tickets.StateClosed')
   }
 }
+
+export const treeNodes = [
+  {
+    value: 'all',
+    label: i18n.t('perms.all'),
+    children: [
+      {
+        value: 'connect',
+        label: i18n.t('perms.connect')
+      },
+      {
+        value: 'updownload',
+        label: i18n.t('route.FileTransfer'),
+        children: [
+          {
+            value: 'upload',
+            label: i18n.t('perms.uploadFile')
+          },
+          {
+            value: 'download',
+            label: i18n.t('perms.downloadFile')
+          }
+        ]
+      },
+      {
+        value: 'copy_paste',
+        label: i18n.t('perms.clipboardCopyPaste'),
+        children: [
+          {
+            value: 'copy',
+            label: i18n.t('common.Copy')
+          },
+          {
+            value: 'paste',
+            label: i18n.t('common.Paste')
+          }
+        ]
+      }
+    ]
+  }
+]

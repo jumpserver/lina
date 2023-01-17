@@ -12,7 +12,6 @@ import PasswordInput from './PasswordInput'
 import WeekCronSelect from './WeekCronSelect'
 import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
-import PermissionFormActionField from './PermissionFormActionField'
 
 export default {
   Text,
@@ -28,8 +27,7 @@ export default {
   PasswordInput,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker,
-  PermissionFormActionField
+  DatetimeRangePicker
 }
 
 export {
@@ -46,6 +44,5 @@ export {
   PasswordInput,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker,
-  PermissionFormActionField
+  DatetimeRangePicker
 }

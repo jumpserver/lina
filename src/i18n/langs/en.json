@@ -410,6 +410,8 @@
     "Delete": "Delete",
     "Disable": "Disable",
     "Download": "Download",
+    "ClipBoard": "ClipBoard",
+    "Paste": "Paste",
     "Copy": "Copy",
     "CopySuccess": "Copy success",
     "Enable": "Enable",
