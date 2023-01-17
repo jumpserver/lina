@@ -35,8 +35,9 @@
             />
           </el-form-item>
           <el-form-item :label="$tc('assets.Action')" required>
-            <PermissionFormActionField
+            <BasicTree
               v-model="requestForm.actions"
+              :tree="treeNodes"
               style="width: 30% !important"
             />
 
@@ -50,16 +51,16 @@
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { STATUS_MAP } from '../../const'
+import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
-import PermissionFormActionField from '@/components/FormFields/PermissionFormActionField'
+import BasicTree from '@/components/FormFields/BasicTree'
 import IBox from '@/components/IBox'
 
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, AccountFormatter, PermissionFormActionField },
+  components: { GenericTicketDetail, IBox, Select2, AccountFormatter, BasicTree },
   props: {
     object: {
       type: Object,
@@ -68,6 +69,7 @@ export default {
   },
   data() {
     return {
+      treeNodes,
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       requestForm: {
         nodes: this.object.apply_nodes,
@@ -168,7 +170,7 @@ export default {
         },
         {
           key: this.$tc('perms.Accounts'),
-          value: (rel_snapshot.apply_accounts || []).join(', ')
+          value: (object.apply_accounts || []).join(', ')
         },
         {
           key: this.$tc('assets.Action'),
@@ -190,9 +192,6 @@ export default {
       return this.object.process_map[approval_step - 1].assignees.indexOf(current_user_id) !== -1
     }
   },
-  created() {
-    console.log(this.object, 'this.object-------------------------===============================')
-  },
   methods: {
     formatTime(dateStr) {
       return formatTime(getDateTimeStamp(dateStr))
@@ -207,8 +206,6 @@ export default {
       const nodes = this.requestForm.nodes
       const assets = this.requestForm.assets
       const accounts = this.requestForm.accounts
-      console.log(this.object, '------------------------------------------this.object')
-      console.log('this.requestForm: ===========================================', this.requestForm)
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
           return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
