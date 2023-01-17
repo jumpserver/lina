@@ -302,6 +302,7 @@
     "PasswordOrToken": "Password / Token"
   },
   "audits": {
+    "ChangeField": "Change field",
     "OperateRecord": "Operating record",
     "Hosts": "Host",
     "RunUser": "Run user",
