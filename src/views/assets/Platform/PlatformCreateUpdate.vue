@@ -55,7 +55,8 @@ export default {
         const query = this.$route.query || {}
         const automation = values['automation'] || {}
         const category_type = values['category_type']
-        automation.ansible_config = JSON.parse(automation.ansible_config)
+        const ansibleConfig = automation?.['ansible_config']
+        automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
         if (query.hasOwnProperty('clone_from') && automation.hasOwnProperty('id')) {
           delete automation['id']
