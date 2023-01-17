@@ -33,8 +33,7 @@ export default {
     const dateTo = getDaysFuture(1, now).toISOString()
     return {
       rowObj: {
-        diff: '',
-        title: vm.$t('audits.AfterChange')
+        diff: ''
       },
       logDetailVisible: false,
       loading: false,
