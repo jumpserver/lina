@@ -35,10 +35,11 @@
             />
           </el-form-item>
           <el-form-item :label="$tc('assets.Action')" required>
-            <el-tree
+            <PermissionFormActionField
               v-model="requestForm.actions"
-              :data="requestForm.actions"
+              style="width: 30% !important"
             />
+
           </el-form-item>
         </el-form>
       </template>
@@ -53,11 +54,12 @@ import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
+import PermissionFormActionField from '@/components/FormFields/PermissionFormActionField'
 import IBox from '@/components/IBox'
 
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, AccountFormatter },
+  components: { GenericTicketDetail, IBox, Select2, AccountFormatter, PermissionFormActionField },
   props: {
     object: {
       type: Object,
@@ -188,6 +190,9 @@ export default {
       return this.object.process_map[approval_step - 1].assignees.indexOf(current_user_id) !== -1
     }
   },
+  created() {
+    console.log(this.object, 'this.object-------------------------===============================')
+  },
   methods: {
     formatTime(dateStr) {
       return formatTime(getDateTimeStamp(dateStr))
@@ -202,6 +207,8 @@ export default {
       const nodes = this.requestForm.nodes
       const assets = this.requestForm.assets
       const accounts = this.requestForm.accounts
+      console.log(this.object, '------------------------------------------this.object')
+      console.log('this.requestForm: ===========================================', this.requestForm)
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
           return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
