@@ -801,6 +801,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "SelectCreateMethod": "选择创建方式",
     "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
