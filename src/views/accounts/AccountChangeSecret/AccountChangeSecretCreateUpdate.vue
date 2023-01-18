@@ -19,6 +19,7 @@ export default {
           length: 30
         },
         interval: 24,
+        accounts: [],
         secret_type: 'password',
         secret_strategy: 'specific'
       },
