@@ -802,6 +802,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
     "CreateEndpointRule": "Create endpoint rule",

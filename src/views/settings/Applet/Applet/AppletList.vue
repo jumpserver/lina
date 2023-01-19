@@ -1,17 +1,17 @@
 <template>
   <div>
-    <ListTable ref="ListTable" v-bind="$data" />
+    <CardTable ref="CardTable" v-bind="$data" />
     <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import CardTable from './components/CardTable'
 import UploadDialog from './UploadDialog'
 export default {
   name: 'Applets',
   components: {
-    ListTable,
+    CardTable,
     UploadDialog
   },
   data() {
@@ -19,55 +19,18 @@ export default {
       uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/terminal/applets/',
-        columnsShow: {
-          min: ['icon', 'name', 'version', 'author', 'protocols', 'actions'],
-          default: [
-            'icon', 'name', 'version', 'author', 'protocols',
-            'type', 'comment', 'actions'
-          ]
-        },
-        columnsMeta: {
-          icon: {
-            align: 'center',
-            width: '60px',
-            formatter: (row) => {
-              return <img src={row.icon} width='30' height='30' alt='icon'></img>
-            }
-          },
-          name: {
-            formatter: function(row) {
-              return <span>{row.display_name}</span>
-            },
-            formatterArgs: {
-              getTitle: ({ row }) => row['display_name'],
-              getIcon: ({ row }) => row['icon']
-            }
-          },
-          version: {
-            width: '80px'
-          },
-          type: {
-            width: '80px'
-          },
-          protocols: {
-            formatter: (row) => {
-              return row.protocols.map(tag => <el-tag size='mini'>{tag}</el-tag>)
-            }
-          },
-          actions: {
-            formatterArgs: {
-              hasUpdate: false,
-              hasClone: false
-            }
-          }
-        }
+        deletePerm: 'terminal.delete_applet'
       },
       headerActions: {
         onCreate: () => {
           this.uploadDialogVisible = true
         },
+        detailRoute: 'AppletDetail',
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        hasColumnSetting: false
         // moreCreates: {
         //   callback: (option) => {
         //     this.uploadDialogVisible = true
@@ -88,7 +51,7 @@ export default {
   },
   methods: {
     handleUpload(res) {
-      this.$refs.ListTable.reloadTable()
+      this.$refs.CardTable.reloadTable()
     }
   }
 }

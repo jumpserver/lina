@@ -995,6 +995,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "远程应用",
     "AppletHostDetail": "远程应用发布机详情",
     "AppletHostCreate": "添加远程应用发布机",
     "AppletHostUpdate": "更新远程应用发布机",
