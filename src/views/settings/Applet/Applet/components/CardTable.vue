@@ -164,7 +164,6 @@ export default {
       } else {
         detailRoute = route
       }
-      console.log(detailRoute)
       this.$router.push(detailRoute)
     },
     defaultPerformDelete(obj) {
