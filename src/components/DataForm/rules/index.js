@@ -14,6 +14,19 @@ export const EmailCheck = {
   trigger: ['blur', 'change']
 }
 
+export const IpCheck = {
+  required: true,
+  validator: (rule, value, callback) => {
+    value = value.trim()
+    if (/^[\w://.?]+$/.test(value)) {
+      callback()
+    } else {
+      callback(new Error(i18n.t('common.FormatError')))
+    }
+  },
+  trigger: ['blur', 'change']
+}
+
 export const specialEmojiCheck = {
   validator: (rule, value, callback) => {
     value = value.trim()
@@ -27,6 +40,7 @@ export const specialEmojiCheck = {
 }
 
 export default {
+  IpCheck,
   Required,
   RequiredChange,
   EmailCheck,

@@ -78,7 +78,7 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatterArgs: {
-              updateRoute: 'GatewayUpdate',
+              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id }},
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`

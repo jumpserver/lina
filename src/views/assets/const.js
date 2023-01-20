@@ -30,7 +30,9 @@ export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
   return {
-    address: {},
+    address: {
+      rules: [rules.IpCheck, rules.specialEmojiCheck]
+    },
     protocols: {
       component: ProtocolSelector,
       el: {
