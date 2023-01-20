@@ -7,31 +7,39 @@
       v-bind="headerActions"
     />
     <div style="padding-top: 15px">
-      <el-row :gutter="40">
-        <el-col v-for="(d, index) in totalData" :key="index" :span="4">
+      <el-row :gutter="20">
+        <el-col v-for="(d, index) in totalData" :key="index" :span="6">
           <el-card
             shadow="hover"
             :body-style="{ 'text-align': 'center', 'padding': '10px' }"
             class="my-card"
             @click.native="onView(d)"
           >
-            <span class="closeIcon">
-              <i class="el-icon-close" @click.stop="onDelete(d)" />
-            </span>
-            <!--            <div style="padding-top: 15px">-->
-            <!--              <el-button v-if="$hasPerm(tableConfig.deletePerm)" type="danger" size="mini" @click="onDelete(d)">{{ $tc('common.Delete') }}</el-button>-->
-            <!--            </div>-->
-            <div>
-              <img :src="d.icon" class="image">
-            </div>
-            <div>{{ d.display_name }}</div>
-            <div style="margin: 10px 0" />
-            <el-tag size="mini">{{ d.author }}</el-tag>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <img :src="d.icon" class="image">
+              </el-col>
+              <el-col :span="16" style="text-align: left;">
+                <span class="closeIcon">
+                  <i class="el-icon-close" @click.stop="onDelete(d)" />
+                </span>
+                <div class="one-line">{{ d.display_name }}</div>
+                <el-divider class="my-divider" />
+                <Tooltip :content="d.comment" />
+                <el-tag size="mini">{{ $tc('terminal.Author') }}: {{ d.author }}</el-tag>
+              </el-col>
+            </el-row>
             <el-divider class="my-divider" />
-            <el-tooltip placement="top">
-              <div slot="content">{{ d.comment_i18n }}</div>
-              <div class="line-limit">{{ d.comment_i18n }}</div>
-            </el-tooltip>
+            <div style="text-align: left">
+              <span>{{ $tc('common.DateCreated') }}: {{ convertData(d.date_created) }}</span>
+              <el-tag
+                size="mini"
+                style="float: right"
+                :type="d.is_active ? '': 'danger'"
+              >
+                {{ $tc('common.Active') }}: <span v-html="getIcon(d.is_active)" />
+              </el-tag>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -47,14 +55,16 @@
 
 <script>
 import TableAction from '@/components/ListTable/TableAction'
-import { Pagination } from '@/components'
+import { Pagination, Tooltip } from '@/components'
+import { toSafeLocalDateStr } from '@/utils/common'
 const defaultFirstPage = 1
 
 export default {
   name: 'CardTable',
   components: {
     TableAction,
-    Pagination
+    Pagination,
+    Tooltip
   },
   props: {
     // 定义 table 的配置
@@ -73,9 +83,9 @@ export default {
       totalData: [],
       page: defaultFirstPage,
       extraQuery: {},
-      paginationSize: 12,
+      paginationSize: 8,
       paginationLayout: 'total, sizes, prev, pager, next',
-      paginationSizes: [12, 24, 36, 48, 60, 120],
+      paginationSizes: [8, 12, 20, 36, 52, 120],
       axiosConfig: {
         raw: 1,
         params: {
@@ -95,6 +105,16 @@ export default {
     this.getList()
   },
   methods: {
+    getIcon(status) {
+      let iconClass = 'fa-check-circle'
+      if (status === false) {
+        iconClass = 'fa-times-circle'
+      }
+      return `<i class="fa ${iconClass}" />`
+    },
+    convertData(data) {
+      return toSafeLocalDateStr(data)
+    },
     getPageQuery(currentPage, pageSize) {
       return this.$refs.pagination.getPageQuery(currentPage, pageSize)
     },
@@ -190,18 +210,18 @@ export default {
   width: 60px;
   height: 60px;
   display: block;
-  margin: 0 auto;
+  margin: 50% auto;
 }
 
-.line-limit {
-  line-height: 14px;
-  height: 34px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.one-line {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .closeIcon {
-  text-align: right;
+  float: right;
   display: block;
   visibility: hidden;
   i {

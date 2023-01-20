@@ -1202,6 +1202,7 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "Author": "作者",
     "BasePort": "监听端口",
     "DatabasePort": "数据库协议端口",
     "UploadSucceed": "上传成功",

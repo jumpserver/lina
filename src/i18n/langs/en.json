@@ -980,6 +980,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Author": "Author",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",

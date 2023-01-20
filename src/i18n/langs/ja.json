@@ -994,6 +994,7 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Author": "作者",
     "UploadSucceed": "アップロード成功",
     "UploadFailed": "アップロードに失敗しました",
     "Applets": "リモートアプリケーション",
