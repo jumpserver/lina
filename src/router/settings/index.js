@@ -238,7 +238,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostCreate'),
-            permissions: ['settings.change_terminal'],
+            permissions: ['terminal.add_applethost'],
             activeMenu: '/settings/applets'
           }
         },
@@ -249,7 +249,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostDetail'),
-            permissions: ['settings.change_terminal'],
+            permissions: ['terminal.view_applethost'],
             activeMenu: '/settings/applets'
           }
         },
@@ -260,7 +260,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostUpdate'),
-            permissions: ['settings.change_terminal'],
+            permissions: ['terminal.change_applethost'],
             activeMenu: '/settings/applets'
           }
         }
