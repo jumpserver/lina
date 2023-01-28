@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" v-bind="$data" />
-    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
+    <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
