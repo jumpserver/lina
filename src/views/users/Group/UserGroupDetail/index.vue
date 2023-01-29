@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="group" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="group" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="group" />
     </keep-alive>
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
->>> table.CardTable {
-  table-layout: auto!important;
+> > > table.CardTable {
+  table-layout: auto !important;
 }
 </style>

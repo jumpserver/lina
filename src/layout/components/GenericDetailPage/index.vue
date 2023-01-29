@@ -1,5 +1,5 @@
 <template>
-  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="iActiveMenu" @tab-click="handleTabClick">
+  <TabPage v-if="!loading" :active-menu.sync="iActiveMenu" :submenu="iSubmenu" @tab-click="handleTabClick">
     <template #title>
       <el-button class="go-back" icon="el-icon-back" @click="handleGoBack" />
       <span style="padding-left: 10px">{{ iTitle }}</span>
@@ -19,7 +19,11 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
+import ResourceActivity from '@/components/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
+import Vue from 'vue'
+
+Vue.component('ResourceActivity', ResourceActivity)
 
 export default {
   name: 'GenericDetailPage',
@@ -53,6 +57,10 @@ export default {
     activeMenu: {
       type: String,
       default: () => ''
+    },
+    hasActivity: {
+      type: Boolean,
+      default: () => true
     },
     hasRightSide: {
       type: Boolean,
@@ -101,14 +109,18 @@ export default {
     const defaultActions = {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
-      deleteCallback: function(item) { vm.defaultDelete(item) },
+      deleteCallback: function(item) {
+        vm.defaultDelete(item)
+      },
       deleteApiUrl: detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
       // Update button
       canUpdate: () => {
         return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
-      updateCallback: function(item) { this.defaultUpdate(item) },
+      updateCallback: function(item) {
+        this.defaultUpdate(item)
+      },
       updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
@@ -150,6 +162,17 @@ export default {
       set(item) {
         this.$emit('update:activeMenu', item)
       }
+    },
+    iSubmenu() {
+      if (!this.hasActivity) {
+        return this.submenu
+      }
+      const activity = {
+        title: this.$t('common.Activity'),
+        name: 'ResourceActivity',
+        hidden: () => !this.$hasPerm('audits.view_operatelog')
+      }
+      return [...this.submenu, activity]
     }
   },
   async mounted() {

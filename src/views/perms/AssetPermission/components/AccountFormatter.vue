@@ -4,8 +4,8 @@
       <el-checkbox
         v-for="(i) in checkboxGroup"
         :key="i.label"
-        :label="i.value"
         :disabled="isDisabled(i)"
+        :label="i.value"
         @change="handleItemChange"
       >
         {{ i.label }}
@@ -16,7 +16,6 @@
       :value="customTags"
       @change="handleTagChange"
     />
-    <span v-if="showInput" class="help-text">{{ helpText }}</span>
   </div>
 </template>
 
@@ -31,12 +30,6 @@ export default {
     value: {
       type: [Array],
       default: () => []
-    },
-    helpText: {
-      type: String,
-      default: function() {
-        return this.$t('common.EnterCurrentInput')
-      }
     }
   },
   data() {
@@ -121,6 +114,7 @@ export default {
 .select >>> .el-input.el-input--suffix {
   width: 100px
 }
+
 .help-text {
   font-size: 12px;
   color: #999999;

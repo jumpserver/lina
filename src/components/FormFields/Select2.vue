@@ -4,26 +4,26 @@
     v-model="iValue"
     v-loading="!initialized"
     v-loadmore="loadMore"
+    :clearable="clearable"
+    :disabled="selectDisabled"
+    :multiple="multiple"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
-    :multiple="multiple"
-    :clearable="clearable"
+    class="select2"
     filterable
     popper-append-to-body
-    class="select2"
-    :disabled="selectDisabled"
     v-bind="$attrs"
     @change="onChange"
-    @visible-change="onVisibleChange"
     v-on="$listeners"
+    @visible-change="onVisibleChange"
   >
     <el-option
       v-for="item in iOptions"
       :key="item.value"
+      :disabled="checkDisabled(item)"
       :label="item.label"
       :value="item.value"
-      :disabled="checkDisabled(item)"
     />
   </el-select>
 </template>
@@ -205,10 +205,8 @@ export default {
     },
     value: {
       handler(newValue, oldValue) {
-        console.log('watch Set val: ', newValue)
       },
       deep: true
-      // this.iValue = iNew
     }
   },
   async mounted() {
