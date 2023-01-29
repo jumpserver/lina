@@ -14,9 +14,9 @@
     <TagInput
       v-if="showInput"
       :value="customTags"
+      :placeholder="placeholder"
       @change="handleTagChange"
     />
-    <span v-if="showInput" class="help-text">{{ helpText }}</span>
   </div>
 </template>
 
@@ -32,7 +32,7 @@ export default {
       type: [Array],
       default: () => []
     },
-    helpText: {
+    placeholder: {
       type: String,
       default: function() {
         return this.$t('common.EnterCurrentInput')

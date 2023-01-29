@@ -325,7 +325,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
-    "EnterCurrentInput": "現在の入力をループバックで終了",
+    "EnterCurrentInput": "Enterを押して入力を続行",
     "Activity": "イベント",
     "Last30": "最近 30 回です",
     "SpecificInfo": "特別情報",

@@ -322,7 +322,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
-    "EnterCurrentInput": "Press Enter to end the current input",
+    "EnterCurrentInput": "Press Enter to continue input",
     "Activity": "Activity",
     "Last30": "Last 30 times",
     "SpecificInfo": "Specific",
