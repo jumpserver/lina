@@ -14,7 +14,7 @@
             <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ item.date_created | date }}</small>
-            <div style="padding-top: 10px;" v-html="item.body" />
+            <MarkDown :value="item.body" />
           </div>
         </div>
       </div>
@@ -69,10 +69,11 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
+import MarkDown from '@/components/MarkDown'
 
 export default {
   name: 'Comments',
-  components: { IBox },
+  components: { IBox, MarkDown },
   props: {
     object: {
       type: Object,
