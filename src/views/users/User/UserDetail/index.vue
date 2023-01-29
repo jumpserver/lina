@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="user" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>
@@ -12,7 +12,6 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
 import UserInfo from './UserInfo'
-import UserActivity from './Activity.vue'
 
 export default {
   components: {
@@ -20,8 +19,7 @@ export default {
     UserLoginACLList,
     GenericDetailPage,
     UserGrantedAssets,
-    UserAssetPermissionRules,
-    UserActivity
+    UserAssetPermissionRules
   },
   data() {
     const vm = this
@@ -51,11 +49,6 @@ export default {
             title: this.$t('route.UserAclLists'),
             name: 'UserLoginACLList',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
-          },
-          {
-            title: this.$t('common.Activity'),
-            name: 'UserActivity',
-            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('audits.view_userloginlog')
           }
         ]
       }

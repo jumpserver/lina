@@ -1,11 +1,9 @@
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
 import ElementUI from 'element-ui'
 import locale from 'elementLocale'
 import '@/styles/index.scss' // global css
-
 import App from './App'
 import store from './store'
 import router from './router'
@@ -15,6 +13,14 @@ import '@/icons' // icon
 import '@/guards' // permission control
 import '@/directive'
 import '@/filters'
+// cookie
+import VueCookie from 'vue-cookie'
+import VueLogger from 'vuejs-logger'
+import loggerOptions from './utils/logger'
+import ECharts from 'vue-echarts'
+import service from '@/utils/request'
+import { Message } from '@/utils/Message'
+import xss from '@/utils/xss'
 
 /**
  * If you don't want to use mock-server
@@ -36,8 +42,6 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-// cookie
-import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 window.$cookie = VueCookie
 
@@ -47,23 +51,17 @@ Vue.use(require('vue-moment'), {
   moment
 })
 
-import VueLogger from 'vuejs-logger'
-import loggerOptions from './utils/logger'
 Vue.use(VueLogger, loggerOptions)
 
-import ECharts from 'vue-echarts'
 Vue.component('echarts', ECharts)
 
-import service from '@/utils/request'
 Vue.prototype.$axios = service
 
 window._ = require('lodash')
 // Vue.set(Vue.prototype, '_', _)
 
-import { Message } from '@/utils/Message'
 Vue.prototype.$message = Message
 
-import xss from '@/utils/xss'
 Vue.prototype.$xss = xss
 
 // 注册全局事件总线
