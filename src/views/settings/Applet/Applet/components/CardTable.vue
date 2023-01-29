@@ -1,18 +1,18 @@
 <template>
   <div class="el-card-table">
     <TableAction
-      :table-url="tableUrl"
-      :search-table="search"
       :reload-table="reloadTable"
+      :search-table="search"
+      :table-url="tableUrl"
       v-bind="headerActions"
     />
     <div style="padding-top: 15px">
       <el-row :gutter="20">
         <el-col v-for="(d, index) in totalData" :key="index" :span="6">
           <el-card
-            shadow="hover"
-            :body-style="{ 'text-align': 'center', 'padding': '10px' }"
+            :body-style="{ 'text-align': 'center', 'padding': '20px' }"
             class="my-card"
+            shadow="hover"
             @click.native="onView(d)"
           >
             <el-row :gutter="20">
@@ -20,26 +20,12 @@
                 <img :src="d.icon" class="image">
               </el-col>
               <el-col :span="16" style="text-align: left;">
-                <span class="closeIcon">
-                  <i class="el-icon-close" @click.stop="onDelete(d)" />
-                </span>
-                <div class="one-line">{{ d.display_name }}</div>
+                <div class="one-line"><b>{{ d.display_name }}</b></div>
                 <el-divider class="my-divider" />
                 <Tooltip :content="d.comment" />
-                <el-tag size="mini">{{ $tc('terminal.Author') }}: {{ d.author }}</el-tag>
+                <el-tag v-for="tag of d.tags" :key="tag" size="mini"> {{ tag }}</el-tag>
               </el-col>
             </el-row>
-            <el-divider class="my-divider" />
-            <div style="text-align: left">
-              <span>{{ $tc('common.DateCreated') }}: {{ convertData(d.date_created) }}</span>
-              <el-tag
-                size="mini"
-                style="float: right"
-                :type="d.is_active ? '': 'danger'"
-              >
-                {{ $tc('common.Active') }}: <span v-html="getIcon(d.is_active)" />
-              </el-tag>
-            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -47,8 +33,8 @@
     <Pagination
       ref="pagination"
       v-bind="$data"
-      @sizeChange="handleSizeChange"
       @currentSizeChange="handleCurrentChange"
+      @sizeChange="handleSizeChange"
     />
   </div>
 </template>
@@ -57,6 +43,7 @@
 import TableAction from '@/components/ListTable/TableAction'
 import { Pagination, Tooltip } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 const defaultFirstPage = 1
 
 export default {
@@ -177,7 +164,7 @@ export default {
     },
     onDelete(obj) {
       const msg = `${this.$t('common.deleteWarningMsg')} "${obj.name}" ?`
-      this.$confirm(msg, this.$t('common.Info'), {
+      this.$confirm(msg, this.$tc('common.Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -213,20 +200,25 @@ export default {
 }
 
 .one-line {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .closeIcon {
   float: right;
   display: block;
   visibility: hidden;
+
   i {
     font-size: 20px;
     cursor: pointer;
   }
+}
+
+.my-card:hover {
+  cursor: pointer;
 }
 
 .my-card:hover .closeIcon {

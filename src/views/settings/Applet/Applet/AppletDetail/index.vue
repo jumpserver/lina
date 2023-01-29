@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="applet"
     :active-menu.sync="config.activeMenu"
+    :object.sync="applet"
     v-bind="config"
     v-on="$listeners"
   >
@@ -14,13 +14,15 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
+import Overview from './Overview.vue'
 
 export default {
   name: 'AppletDetail',
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    Overview
   },
   data() {
     return {
@@ -29,6 +31,10 @@ export default {
         url: '/api/v1/terminal/applets',
         activeMenu: 'Detail',
         submenu: [
+          {
+            title: this.$t('common.Overview'),
+            name: 'Overview'
+          },
           {
             'title': this.$t('common.Detail'),
             'name': 'Detail'
@@ -46,7 +52,8 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+  }
 }
 </script>
 
