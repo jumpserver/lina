@@ -804,6 +804,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
     "CreateEndpointRule": "Create endpoint rule",
@@ -981,6 +982,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Author": "Author",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
