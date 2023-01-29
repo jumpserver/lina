@@ -425,6 +425,7 @@
   },
   "common": {
     "Now": "现在",
+    "EnterToContinue": "按回车继续输入",
     "SpecificInfo": "特殊信息",
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",

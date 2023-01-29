@@ -326,6 +326,7 @@
   },
   "common": {
     "Now": "今",
+    "EnterToContinue": "Enter キーを押して続行します了",
     "Activity": "イベント",
     "Last30": "最近 30 回です",
     "SpecificInfo": "特別情報",

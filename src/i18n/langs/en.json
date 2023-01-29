@@ -323,6 +323,7 @@
   },
   "common": {
     "Now": "Now",
+    "EnterToContinue": "Press Enter to continue",
     "Activity": "Activity",
     "Last30": "Last 30 times",
     "SpecificInfo": "Specific",

@@ -5,7 +5,7 @@
         <Organization v-if="$hasLicense()" class="organization" />
         <ViewSwitcher class="mobile-view-switch" mode="vertical" />
       </div>
-      <div :class="{'collapsed': isCollapse}" class="nav-title">
+      <div class="nav-title">
         <span
           v-show="!isCollapse"
           style="margin-left: 5px;"
@@ -143,6 +143,7 @@ export default {
   .nav-title {
     position: relative;
     box-sizing: border-box;
+    height: 50px;
     padding: 14px 0 13px 20px;
     font-size: 16px;
     font-weight: 500;
