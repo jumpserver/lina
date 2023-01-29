@@ -96,10 +96,6 @@ export default {
           value: this.object.protocols.map(i => i.name).join(',')
         },
         'public_ip', 'admin_user_display',
-        {
-          key: this.$t('assets.Domain'),
-          value: this.object.domain?.name || ''
-        },
         'vendor', 'model', 'cpu_model', 'memory', 'disk_info',
         {
           key: this.$t('assets.Platform'),

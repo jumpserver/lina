@@ -57,6 +57,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.dom {
+  white-space: initial;
+  .el-tag {
+    margin-right: 3px;
+  }
+}
 </style>
