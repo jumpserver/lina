@@ -9,7 +9,10 @@
               <el-row>
                 <el-col :md="16" :xs="24" class="content-left">
                   <Session />
-                  <Ticket v-if="$hasLicense() && $hasPerm('tickets.view_ticket')" />
+                  <Ticket
+                    v-if="$hasLicense() && $hasPerm('tickets.view_ticket')"
+                    :url="url"
+                  />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
@@ -31,6 +34,7 @@ import User from './components/User'
 import Ticket from './components/Ticket'
 import Log from './components/LoginLog'
 import Session from './components/Session'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Name',
@@ -41,6 +45,14 @@ export default {
     Ticket,
     Log,
     Session
+  },
+  computed: {
+    url() {
+      return `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+    },
+    ...mapGetters([
+      'currentUser'
+    ])
   }
 }
 
