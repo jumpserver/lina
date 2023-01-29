@@ -50,8 +50,12 @@ export default {
             width: '80px'
           },
           protocols: {
+            showOverflowTooltip: false,
             formatter: (row) => {
-              return row.protocols.map(tag => <el-tag size='mini'>{tag}</el-tag>)
+              const dom = row.protocols.map(tag => {
+                return <el-tag size='mini'>{ tag }</el-tag>
+              })
+              return <div class='dom'> {dom} </div>
             }
           },
           actions: {
@@ -94,6 +98,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.dom {
+  white-space: initial;
+  .el-tag {
+    margin-right: 3px;
+  }
+}
 </style>
