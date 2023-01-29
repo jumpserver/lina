@@ -16,6 +16,7 @@
       :value="customTags"
       @change="handleTagChange"
     />
+    <span v-if="showInput" class="help-text">{{ helpText }}</span>
   </div>
 </template>
 
@@ -30,6 +31,12 @@ export default {
     value: {
       type: [Array],
       default: () => []
+    },
+    helpText: {
+      type: String,
+      default: function() {
+        return this.$t('common.EnterCurrentInput')
+      }
     }
   },
   data() {
@@ -113,5 +120,9 @@ export default {
 <style scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
+}
+.help-text {
+  font-size: 12px;
+  color: #999999;
 }
 </style>
