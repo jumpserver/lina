@@ -83,6 +83,10 @@ export const setAutomations = (vm) => {
   initial['ansible_enabled'] = automation['ansible_enabled']
   initial['ansible_config'] = JSON.stringify(automation['ansible_config'])
 
+  if (initial['ansible_enabled'] === false) {
+    _.set(autoFieldsMeta, `ansible_enabled.el.disabled`, true)
+  }
+
   for (const item of autoFields) {
     const itemEnabledKey = item + '_enabled'
     const itemMethodKey = item + '_method'
