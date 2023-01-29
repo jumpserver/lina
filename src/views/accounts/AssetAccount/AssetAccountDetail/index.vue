@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="TaskDetail"
     :active-menu.sync="config.activeMenu"
+    :object.sync="TaskDetail"
     v-bind="config"
     v-on="$listeners"
   >
@@ -14,14 +14,12 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import AssetActivity from './Activity.vue'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail,
-    AssetActivity
+    Detail
   },
   data() {
     return {
@@ -32,11 +30,6 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
-          },
-          {
-            title: this.$t('common.Activity'),
-            name: 'AssetActivity',
-            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         actions: {

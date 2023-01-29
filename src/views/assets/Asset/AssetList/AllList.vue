@@ -1,10 +1,10 @@
 <template>
   <div>
-    <AssetTreeTAble
-      ref="AssetTreeTAble"
+    <AssetTreeTable
+      ref="AssetTreeTable"
+      :help-message="helpMessage"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
-      :help-message="helpMessage"
     >
       <TreeMenu
         slot="rMenu"
@@ -13,16 +13,16 @@
       />
       <BaseList
         slot="table"
-        v-bind="tableConfig"
-        :header-actions="headerActions"
         :add-extra-more-actions="addExtraMoreActions"
+        :header-actions="headerActions"
+        v-bind="tableConfig"
       />
-    </AssetTreeTAble>
+    </AssetTreeTable>
   </div>
 </template>
 
 <script>
-import { AssetTreeTAble } from '@/components'
+import { AssetTreeTable } from '@/components'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
@@ -31,7 +31,7 @@ import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
   components: {
-    AssetTreeTAble,
+    AssetTreeTable,
     TreeMenu,
     BaseList
   },
@@ -95,7 +95,7 @@ export default {
     ...mapGetters(['currentOrgIsRoot'])
   },
   mounted() {
-    this.treeRef = this.$refs.AssetTreeTAble.$refs.TreeList
+    this.treeRef = this.$refs.AssetTreeTable.$refs.TreeList
   },
   methods: {
     decorateRMenu() {
@@ -112,7 +112,7 @@ export default {
       this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
-      this.$refs.AssetTreeTAble.$refs.TreeList.handleUrlChange(url)
+      this.$refs.AssetTreeTable.$refs.TreeList.handleUrlChange(url)
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'
@@ -140,7 +140,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.asset-select-dialog >>> .transition-box:first-child {
+.asset-select-dialog > > > .transition-box:first-child {
   background-color: #f3f3f3;
 }
 </style>

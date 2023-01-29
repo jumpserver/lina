@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="role"
     :active-menu.sync="config.activeMenu"
+    :object.sync="role"
     v-bind="config"
     v-on="$listeners"
   >

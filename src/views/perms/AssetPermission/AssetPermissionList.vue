@@ -1,8 +1,8 @@
 <template>
   <Page v-bind="$attrs">
-    <AssetTreeTAble
-      :table-config="tableConfig"
+    <AssetTreeTable
       :header-actions="headerActions"
+      :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
     <PermBulkUpdateDialog
@@ -14,7 +14,7 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import AssetTreeTAble from '@/components/AssetTreeTable'
+import AssetTreeTable from '@/components/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
@@ -22,7 +22,7 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     Page,
-    AssetTreeTAble,
+    AssetTreeTable,
     PermBulkUpdateDialog
   },
   data() {
@@ -57,7 +57,9 @@ export default {
           action: {
             label: this.$t('common.Action'),
             formatter: function(row) {
-              return row.actions.map(item => { return item.label }).join(', ')
+              return row.actions.map(item => {
+                return item.label
+              }).join(', ')
             }
           },
           is_expired: {
@@ -224,8 +226,7 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
