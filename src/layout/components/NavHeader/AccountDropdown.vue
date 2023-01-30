@@ -8,23 +8,26 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="profile">
-          <svg-icon icon-class="personal" class="icon" />
+          <svg-icon class="icon" icon-class="personal" />
           {{ $t('common.nav.Profile') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
-          <svg-icon icon-class="key" class="icon" />
+          <svg-icon class="icon" icon-class="key" />
           {{ $t('common.nav.APIKey') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')" command="tempPassword">
-          <svg-icon icon-class="personal" class="icon" />
+        <el-dropdown-item
+          v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')"
+          command="tempPassword"
+        >
+          <svg-icon class="icon" icon-class="personal" />
           {{ $t('common.nav.TempPassword') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" command="connectionToken">
-          <svg-icon icon-class="token" class="icon" />
+          <svg-icon class="icon" icon-class="token" />
           {{ $t('common.nav.ConnectionToken') }}
         </el-dropdown-item>
-        <el-dropdown-item divided command="logout">
-          <svg-icon icon-class="logout" class="icon" />
+        <el-dropdown-item command="logout" divided>
+          <svg-icon class="icon" icon-class="logout" />
           {{ $t('common.nav.Logout') }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -39,7 +42,7 @@ export default {
   name: 'AccountDropdown',
   data() {
     return {
-      avatarUrl: require('@/assets/img/head-portrait.png'),
+      avatarUrl: require('@/assets/img/avatar.png'),
       showApiKey: false
     }
   },
@@ -82,6 +85,7 @@ export default {
       color: #fff;
     }
   }
+
   .header-avatar {
     height: 24px;
     width: 24px;
@@ -89,9 +93,11 @@ export default {
     vertical-align: middle;
     background: white;
   }
+
   .mobile .header-avatar {
     display: none;
   }
+
   .icon {
     font-size: 14px;
   }

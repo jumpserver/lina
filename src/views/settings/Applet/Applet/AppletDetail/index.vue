@@ -14,15 +14,13 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
-import Overview from './Overview.vue'
 
 export default {
   name: 'AppletDetail',
   components: {
     GenericDetailPage,
     TabPage,
-    Detail,
-    Overview
+    Detail
   },
   data() {
     return {
@@ -31,10 +29,6 @@ export default {
         url: '/api/v1/terminal/applets',
         activeMenu: 'Detail',
         submenu: [
-          {
-            title: this.$t('common.Overview'),
-            name: 'Overview'
-          },
           {
             'title': this.$t('common.Detail'),
             'name': 'Detail'

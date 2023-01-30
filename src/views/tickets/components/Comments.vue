@@ -6,8 +6,8 @@
     <template v-if="comments">
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
-          <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" :size="30" class="header-avatar" />
+          <a class="pull-left" href="#">
+            <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
           </a>
           <div class="media-body ">
             <strong>{{ item.user_display }}</strong>
@@ -28,16 +28,16 @@
         <template v-if="hasActionPerm">
           <el-button
             :disabled="object.status.value === 'closed'"
-            type="primary"
             size="small"
+            type="primary"
             @click="handleApprove"
           >
             <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
           </el-button>
           <el-button
             :disabled="object.status.value === 'closed'"
-            type="warning"
             size="small"
+            type="warning"
             @click="handleReject"
           >
             <i class="fa fa-ban" /> {{ $t('tickets.Reject') }}
@@ -46,16 +46,16 @@
         <el-button
           v-if="isSelfTicket"
           :disabled="object.status.value === 'closed'"
-          type="danger"
           size="small"
+          type="danger"
           @click="handleClose"
         >
           <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
           :disabled="object.status.value === 'closed'"
-          type="info"
           size="small"
+          type="info"
           @click="handleComment"
         >
           <i class="fa fa-pencil" /> {{ $t('tickets.reply') }}
@@ -95,7 +95,7 @@ export default {
     return {
       comments: '',
       type_api: '',
-      imageUrl: require('@/assets/img/admin.png'),
+      imageUrl: require('@/assets/img/avatar.png'),
       form: {
         comments: ''
       },

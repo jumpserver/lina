@@ -19,10 +19,10 @@
               <el-col :span="8">
                 <img :src="d.icon" class="image">
               </el-col>
-              <el-col :span="16" style="text-align: left;">
+              <el-col :span="16" style="text-align: left; padding: 5px 0">
                 <div class="one-line"><b>{{ d.display_name }}</b></div>
                 <el-divider class="my-divider" />
-                <Tooltip :content="d.comment" />
+                <Tooltip :content="d.comment" class="comment" />
                 <el-tag v-for="tag of d.tags" :key="tag" size="mini"> {{ tag }}</el-tag>
               </el-col>
             </el-row>
@@ -204,6 +204,10 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.comment {
+  font-size: 12px;
 }
 
 .closeIcon {

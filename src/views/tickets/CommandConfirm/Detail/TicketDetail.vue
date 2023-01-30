@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
-      imageUrl: require('@/assets/img/admin.png'),
+      imageUrl: require('@/assets/img/avatar.png'),
       form: {
         comments: ''
       },
