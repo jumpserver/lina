@@ -228,11 +228,11 @@ export default {
           key: this.$t('users.Name')
         },
         {
-          value: this.object.system_roles_display,
+          value: this.object.system_roles.map(item => item.display_name).join(' ｜ '),
           key: this.$t('users.SystemRoles')
         },
         {
-          value: this.object.org_roles_display,
+          value: this.object.org_roles.map(item => item.display_name).join(' ｜ '),
           key: this.$t('users.OrgRoles')
         },
         {
@@ -253,11 +253,11 @@ export default {
           }
         },
         {
-          value: this.object.mfa_level_display,
+          value: this.object.mfa_level.label,
           key: this.$t('users.MfaLevel')
         },
         {
-          value: this.object.source_display,
+          value: this.object.source.label,
           key: this.$t('users.Source')
         },
         {
@@ -277,7 +277,7 @@ export default {
           key: this.$t('users.DateExpired')
         },
         {
-          value: this.object.groups_display,
+          value: this.object.workbench_orgs.filter(item => !item.is_root).map(item => item.name).join(' ｜ '),
           key: this.$t('users.UserGroups')
         },
         {
