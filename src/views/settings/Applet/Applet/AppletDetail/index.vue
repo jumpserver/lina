@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="applet"
     :active-menu.sync="config.activeMenu"
+    :object.sync="applet"
     v-bind="config"
     v-on="$listeners"
   >
@@ -46,7 +46,8 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+  }
 }
 </script>
 

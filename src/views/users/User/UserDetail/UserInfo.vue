@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
+      <RelationCard style="margin-top: 15px" type="info" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -170,15 +170,22 @@ export default {
       ],
       url: `/api/v1/users/users/${this.object.id}`,
       detailFields: [
-        'name', 'username', 'email', 'phone', 'wecom_id', 'dingtalk_id', 'feishu_id',
+        {
+          key: '',
+          formatter: () => {
+            return <img src={this.object.avatar_url} alt='' height='50'/>
+          }
+        },
+        'name', 'username', 'email', 'phone', 'wecom_id',
+        'dingtalk_id', 'feishu_id',
         {
           key: this.$t('users.Role'),
           formatter: (item, val) => {
             const rolesDisplay = this.object.org_roles.concat(this.object.system_roles)
             const dom = rolesDisplay.map(item => {
-              return <el-tag size='mini'>{ item.display_name }</el-tag>
+              return <el-tag size='mini'>{item.display_name}</el-tag>
             })
-            return <div>{ dom }</div>
+            return <div>{dom}</div>
           }
         },
         'mfa_level', 'source', 'created_by', 'date_joined', 'date_expired',
@@ -211,16 +218,14 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     group(iNew, iOld) {
       this.$log.debug('Group has changed')
       this.relationConfig.hasObjectsId = iNew.users
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

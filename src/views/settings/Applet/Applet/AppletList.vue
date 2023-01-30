@@ -8,6 +8,7 @@
 <script>
 import CardTable from './components/CardTable'
 import UploadDialog from './UploadDialog'
+
 export default {
   name: 'Applets',
   components: {
@@ -31,21 +32,6 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasColumnSetting: false
-        // moreCreates: {
-        //   callback: (option) => {
-        //     this.uploadDialogVisible = true
-        //   },
-        //   dropdown: [
-        //     {
-        //       title: this.$t('common.OfflineUpload'),
-        //       name: 'ByUpload'
-        //     }
-        //     {
-        //       title: this.$t('common.Online'),
-        //       name: 'Online'
-        //     }
-        //    ]
-        // }
       }
     }
   },
@@ -60,6 +46,7 @@ export default {
 <style lang="scss" scoped>
 .dom {
   white-space: initial;
+
   .el-tag {
     margin-right: 3px;
   }

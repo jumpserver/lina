@@ -1,10 +1,11 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
+
 export default {
   name: 'UserAssetPermission',
   components: {
@@ -24,6 +25,13 @@ export default {
         hasTree: true,
         columnsExclude: ['actions'],
         columnsExtra: ['action'],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'users', 'user_groups', 'assets',
+            'nodes', 'accounts', 'is_valid', 'actions'
+          ]
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -33,7 +41,9 @@ export default {
           action: {
             label: this.$t('common.Action'),
             formatter: function(row) {
-              return row.actions.map(item => { return item.label }).join(', ')
+              return row.actions.map(item => {
+                return item.label
+              }).join(', ')
             }
           },
           is_expired: {
