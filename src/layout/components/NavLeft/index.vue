@@ -155,12 +155,12 @@ export default {
     transition: all 0.3s;
 
     .switch-view {
+      padding: 6px;
       position: absolute;
       top: 50%;
       right: 16px;
       transform: translateY(-50%);
       z-index: 1;
-      padding: 3px;
       line-height: 10px;
       border-radius: 3px;
 
