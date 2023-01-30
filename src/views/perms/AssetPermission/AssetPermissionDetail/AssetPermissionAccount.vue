@@ -15,6 +15,7 @@
     <el-col :md="9" :sm="24">
       <IBox :title="$tc('assets.Account')" type="primary">
         <AccountFormatter
+          class="checkbox-accounts"
           :value="object['accounts']"
           @change="updateAccount"
         />
@@ -62,7 +63,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.checkbox-accounts >>> .el-checkbox-group {
+  line-height: 40px;
+}
+
 .item-name {
   width: 100%;
   overflow: hidden;
