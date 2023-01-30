@@ -10,6 +10,7 @@ import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import { mapGetters } from 'vuex'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -144,9 +145,8 @@ export default {
       this.$axios.post('/api/v1/ops/job-executions/', {
         job: row.id,
         parameters: parameters
-      }).then(() => {
-        this.$message.success(this.$tc('ops.TaskDispatch'))
-        this.$router.push({ name: 'Execution' })
+      }).then((resp) => {
+        openTaskPage(resp.task_id)
       })
     }
   }
