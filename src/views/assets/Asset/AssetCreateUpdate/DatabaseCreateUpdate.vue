@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     getAddFields() {
-      const platform = this.$route.query.platform_name
+      const platform = this.$route.query.platform_type
       const baseFields = [[this.$t('common.Basic'), ['db_name']]]
       let tlsParams = ['use_ssl', 'ca_cert']
       switch (platform) {
