@@ -118,7 +118,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
-            disabled: this.$store.state.users.profile.source !== 'local'
+            disabled: this.$store.state.users.profile.source.value !== 'local'
           },
           callbacks: {
             click: function() {
