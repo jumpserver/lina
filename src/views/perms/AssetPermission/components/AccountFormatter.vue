@@ -89,7 +89,7 @@ export default {
       if (val && event.target.defaultValue === '@ALL') {
         this.select = Array.from(new Set([...this.select, ...this.defaultOptions]))
       }
-      this.showInput = this.select.includes('INPUT')
+      this.showInput = !this.select.includes('@ALL') && this.select.includes('INPUT')
       this.setValue()
     },
     handleTagChange(val) {

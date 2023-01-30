@@ -15,6 +15,7 @@ import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 
 export default {
+  name: 'AccountFormatter',
   components: {
     GenericCreateUpdatePage
   },
