@@ -65,7 +65,11 @@ export default {
             width: '100px',
             label: this.$t('users.SystemRoles'),
             formatter: (row) => {
-              return row['system_roles_display']
+              const roles = []
+              row['system_roles'].forEach(item => {
+                roles.push(item['display_name'])
+              })
+              return roles.join()
             },
             filters: [],
             columnKey: 'system_roles'
@@ -74,7 +78,11 @@ export default {
             width: '100px',
             label: this.$t('users.OrgRoles'),
             formatter: (row) => {
-              return row['org_roles_display']
+              const roles = []
+              row['org_roles'].forEach(item => {
+                roles.push(item['display_name'])
+              })
+              return roles.join()
             },
             filters: [],
             columnKey: 'org_roles',
