@@ -5862,6 +5862,11 @@
   dependencies:
     "assert-plus" "^1.0.0"
 
+"github-markdown-css@^5.1.0":
+  "integrity" "sha512-QLtORwHHtUHhPMHu7i4GKfP6Vx5CWZn+NKQXe+cBhslY1HEt0CTEkP4d/vSROKV0iIJSpl4UtlQ16AD8C6lMug=="
+  "resolved" "https://registry.npmjs.org/github-markdown-css/-/github-markdown-css-5.1.0.tgz"
+  "version" "5.1.0"
+
 "glob-base@^0.3.0":
   "integrity" "sha512-ab1S1g1EbO7YzauaJLkgLp7DZVAqj9M/dvKlTt8DkXA2tiOIcSMrlVI2J1RZyB5iJVccEscjGn+kpOG9788MHA=="
   "resolved" "https://registry.npmmirror.com/glob-base/-/glob-base-0.3.0.tgz"
