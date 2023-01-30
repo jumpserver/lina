@@ -47,7 +47,7 @@ export default {
     },
     baseNodeUrl: {
       type: String,
-      default: '/api/v1/assets/nodes/'
+      default: '/api/v1/assets/nodes'
     },
     value: {
       type: Array,
