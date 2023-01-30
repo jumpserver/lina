@@ -47,10 +47,10 @@ export default {
       const baseFields = [[this.$t('common.Basic'), ['db_name']]]
       let tlsParams = ['use_ssl', 'ca_cert']
       switch (platform) {
-        case 'Redis':
+        case 'redis':
           tlsParams = tlsParams.concat(['client_cert', 'client_key'])
           break
-        case 'MongoDB':
+        case 'mongodb':
           tlsParams = tlsParams.concat(['client_key', 'allow_invalid_cert'])
           break
       }
