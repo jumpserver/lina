@@ -15,6 +15,7 @@
       <template>
         <div class="actions">
           <el-button
+            v-if="showCreate"
             type="primary"
             size="small"
             :disabled="!$hasPerm('accounts.view_accounttemplate')"
@@ -68,6 +69,10 @@ export default {
     accounts: {
       type: Array,
       default: () => ([])
+    },
+    showCreate: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -123,6 +128,7 @@ export default {
       const hasIdAccounts = this.accounts.filter(i => i?.id)
       const data = _.xorBy(hasIdAccounts, this.accountsSelected, 'id')
       this.accounts.push(...data)
+      this.$emit('onConfirm', this.accounts)
     },
     handleCancel() {
       this.iVisible = false

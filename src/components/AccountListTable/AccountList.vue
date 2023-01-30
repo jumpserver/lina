@@ -86,6 +86,10 @@ export default {
     columnsMeta: {
       type: Object,
       default: () => {}
+    },
+    headerExtraActions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -256,7 +260,8 @@ export default {
                 vm.showAddDialog = true
               })
             }
-          }
+          },
+          ...this.headerExtraActions
           // {
           //   name: 'autocreate',
           //   title: this.$t('accounts.AutoCreate'),
