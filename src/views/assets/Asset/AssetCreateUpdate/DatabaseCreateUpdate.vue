@@ -39,7 +39,7 @@ export default {
       return baseFields
     },
     getAddFieldsMeta() {
-      const platform = this.$route.query.platform_name
+      const platform = this.$route.query.platform_type
       const fieldsMeta = {
         db_name: [],
         use_ssl: {
