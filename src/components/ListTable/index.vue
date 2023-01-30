@@ -212,6 +212,10 @@ export default {
     max-height: 500px;
     overflow-y: scroll;
   }
+
+  & >>> .el-button-ungroup .el-dropdown > .more-action {
+    height: 24.6px;
+  }
 }
 
 //修改颜色
