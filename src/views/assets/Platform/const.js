@@ -81,7 +81,7 @@ export const setAutomations = (vm) => {
 
   const initial = vm.initial.automation || {}
   initial['ansible_enabled'] = automation['ansible_enabled']
-  initial['ansible_config'] = JSON.stringify(automation['ansible_config'])
+  initial['ansible_config'] = automation['ansible_config']
 
   for (const item of autoFields) {
     const itemEnabledKey = item + '_enabled'

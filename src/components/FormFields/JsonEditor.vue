@@ -38,10 +38,10 @@ export default {
     },
     // 保存
     onJsonSave(value) {
-      this.resultInfo = value
+      this.resultInfo = typeof value === 'string' ? JSON.parse(value) : value
       this.hasJsonFlag = true
       setTimeout(() => {
-        this.$emit('change', JSON.stringify(this.resultInfo))
+        this.$emit('change', this.resultInfo)
       }, 500)
     },
     onError: _.debounce(function(value) {
