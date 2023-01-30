@@ -75,7 +75,7 @@ export default {
           component: UploadKey
         }
       }
-      if (platform === 'MongoDB') {
+      if (platform === 'mongodb') {
         fieldsMeta['db_name']['rules'] = [rules.Required]
       }
       return fieldsMeta
