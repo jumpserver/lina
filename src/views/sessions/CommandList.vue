@@ -48,6 +48,10 @@ export default {
             return 'command'
           }
         },
+        columns: [
+          'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
+          'asset', 'session', 'timestamp'
+        ],
         extraQuery: {
           date_to: dateTo,
           date_from: dateFrom
@@ -74,7 +78,7 @@ export default {
           asset: {
             width: '140px'
           },
-          system_user: {
+          user: {
             width: '140px'
           },
           session: {
