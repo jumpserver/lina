@@ -77,9 +77,9 @@ export default {
       this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
-        this.$message.success(this.$tc('common.createSuccessMsg'))
+        this.$message.success(this.$tc('common.AddSuccessMsg'))
       }).catch(() => {
-        this.$message.error(this.$tc('common.createErrorMsg'))
+        this.$message.error(this.$tc('common.AddFailMsg'))
       })
     }
   }
