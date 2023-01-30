@@ -48,6 +48,7 @@ export default {
             return 'command'
           }
         },
+        hasColumnActions: false,
         columns: [
           'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
           'asset', 'session', 'timestamp'
