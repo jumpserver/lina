@@ -1212,7 +1212,7 @@
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
-    "uploadZipTips": "请上传zip格式的文件",
+    "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘"
   },
