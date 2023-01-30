@@ -71,9 +71,6 @@ export default {
   methods: {
     onConfirm(data) {
       data = data?.map(i => {
-        if (i.hasOwnProperty('id')) {
-          delete i['id']
-        }
         i.asset = this.object.id
         return i
       })
