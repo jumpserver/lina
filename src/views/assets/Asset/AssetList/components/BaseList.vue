@@ -72,7 +72,7 @@ export default {
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
-        route.query.platform_type = row.type.label
+        route.query.platform_type = row.type.value
       }
       vm.$router.push(route)
     }

@@ -155,7 +155,7 @@ export default {
       const query = {
         node: this.$route.query?.node || '',
         platform: platform.id,
-        platform_type: platform.type.label
+        platform_type: platform.type.value
       }
 
       this.$router.push({ name: route, query })
