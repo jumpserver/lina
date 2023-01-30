@@ -1,17 +1,17 @@
 <template>
   <el-tooltip
     v-model="iShowTip"
-    :manual="true"
     :content="tipText"
+    :manual="true"
     class="item"
     effect="dark"
     placement="bottom-start"
   >
     <el-menu
-      :default-active="currentViewRoute.name"
-      class="menu-main"
       :class="mode"
+      :default-active="currentViewRoute.name"
       :mode="mode"
+      class="menu-main"
       @select="handleSelectView"
     >
       <el-menu-item
@@ -19,7 +19,7 @@
         :key="view.name"
         :index="view.name"
       >
-        <svg-icon class="icons" :icon-class="view.meta.icon" />
+        <svg-icon :icon-class="view.meta.icon" class="icons" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-menu>
@@ -122,26 +122,32 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  border-right: none!important;
+  border-right: none !important;
+
   ::v-deep .el-submenu .el-submenu__title {
     height: 40px;
     line-height: 40px;
     border-bottom: none;
   }
+
   &.el-menu--horizontal {
     border-bottom: none;
   }
-  &>>> .el-icon-arrow-down {
+
+  & > > > .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
   }
+
   .el-menu-item {
     height: 36px;
     line-height: 26px;
     padding: 4px 24px;
+
     &:hover {
       background-color: var(--menu-hover);
     }
+
     &:focus {
       background-color: transparent;
     }
@@ -149,49 +155,59 @@ export default {
 }
 
 .el-menu--horizontal .el-menu .el-menu-item {
-  display: inline-block!important;
+  display: inline-block !important;
   padding: 10px 10px;
   text-align: center;
   height: 70px;
+
   &:hover {
     color: inherit;
+
     i {
       color: inherit;
     }
   }
+
   &:first-child {
     margin-left: 16px;
   }
+
   &:last-child {
     margin-right: 16px;
   }
 }
+
 .el-submenu.is-opened {
   background-color: transparent;
 }
+
 .title-label {
   padding-left: 12px;
   font-size: 14px;
   vertical-align: unset;
-  color: #606266!important;
+  color: #606266 !important;
 }
+
 .icons {
-  vertical-align: middle!important;
+  vertical-align: middle !important;
   font-size: 16px;
   text-align: center;
   color: #1F2329;
   margin-right: 10px;
 }
+
 .icons-title {
   display: inline-block;
   font-size: 14px;
 }
+
 .el-menu-item.is-active {
   font-weight: bold;
   color: var(--color-primary);
   border-left: 4px solid var(--color-primary);
 }
-.menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
+
+.menu-main.mobile-view-switch > > > .el-submenu__icon-arrow {
   right: 10px;
 }
 </style>

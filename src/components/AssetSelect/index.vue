@@ -23,6 +23,9 @@
         :header-actions="headerActions"
         :table-config="tableConfig"
         class="tree-table"
+        :url="baseUrl"
+        :node-url="baseNodeUrl"
+        :tree-url="`${baseNodeUrl}/children/tree/`"
       />
     </Dialog>
   </div>

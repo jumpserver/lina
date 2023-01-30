@@ -77,7 +77,7 @@ export function changeMenuColor(themeColors) {
   const colorValue = colors['--color-primary'].replace(/#/g, '')
   const white = 'ffffff'
   const black = '000000'
-  const menuHoverColor = mix(white, colorValue, 96)
+  const menuHoverColor = mix(white, colorValue, 90)
   const navBackgroundColor = mix(black, colorValue, 20)
   elementStyle.setProperty('--menu-hover', menuHoverColor)
   elementStyle.setProperty('--nav-bg', navBackgroundColor)
