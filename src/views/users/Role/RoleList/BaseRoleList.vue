@@ -69,13 +69,13 @@ export default {
                 }
               },
               canClone: ({ row }) => {
-                return this.$hasPerm(`rbac.add_${row.scope}role`)
+                return this.$hasPerm(`rbac.add_${row.scope?.value}role`)
               },
               onClone: ({ row }) => {
                 return vm.$router.push({
                   name: 'RoleCreate',
                   query: {
-                    scope: this.scope,
+                    scope: row.scope?.value,
                     clone_from: row.id
                   }
                 })
