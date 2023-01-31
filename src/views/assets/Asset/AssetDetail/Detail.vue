@@ -5,9 +5,15 @@
       <AutoDetailCard v-if="detailSpecificConfig.show" v-bind="detailSpecificConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" v-perms="'assets.change_asset'" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
-      <LabelCard v-if="$hasPerm('assets.view_label')" type="warning" style="margin-top: 15px" v-bind="labelConfig" />
+      <QuickActions :actions="quickActions" type="primary" />
+      <RelationCard
+        ref="NodeRelation"
+        v-perms="'assets.change_asset'"
+        style="margin-top: 15px"
+        type="info"
+        v-bind="nodeRelationConfig"
+      />
+      <LabelCard v-if="$hasPerm('assets.view_label')" style="margin-top: 15px" type="warning" v-bind="labelConfig" />
     </el-col>
   </el-row>
 </template>
@@ -30,7 +36,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -166,22 +173,19 @@ export default {
         ]
       },
       detailSpecificConfig: {
-        show: this.object['spec_info']?.length > 0,
-        fa: 'fa-podcast',
+        show: Object.keys(this.object['spec_info']).length > 0,
         title: this.$t('common.SpecificInfo'),
-        url: `/api/v1/assets/assets/${this.object.id}/`,
-        object: this.object,
-        fields: ['spec_info'],
+        url: `/api/v1/assets/assets/${this.object.id}/spec-info/`,
+        object: this.object.spec_info,
+        showUndefine: false,
         excludes: ['spec_info.script']
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

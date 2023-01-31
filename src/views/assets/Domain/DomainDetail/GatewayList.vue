@@ -6,8 +6,8 @@
         :table-config="tableConfig"
       />
       <GatewayDialog
-        :port="port"
         :cell="cell"
+        :port="port"
         :visible.sync="visible"
       />
     </el-col>
@@ -36,9 +36,15 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        columnsExclude: [
+          'info', 'spec_info', 'auto_info'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'address', 'protocols', 'nodes_display', 'connectivity', 'comment', 'actions']
+          default: [
+            'name', 'address', 'protocols', 'nodes_display',
+            'connectivity', 'comment', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -131,8 +137,7 @@ export default {
       visible: false
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
