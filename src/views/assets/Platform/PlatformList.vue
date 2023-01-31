@@ -47,11 +47,6 @@ export default {
               showFalse: false
             }
           },
-          protocols_enabled: {
-            formatterArgs: {
-              showFalse: false
-            }
-          },
           su_enabled: {
             width: '100px',
             formatterArgs: {

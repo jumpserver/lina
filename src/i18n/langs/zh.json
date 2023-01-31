@@ -79,7 +79,7 @@
       "Result": "结果",
       "Retry": "重试",
       "Success": "成功",
-      "TaskList": "任务列表",
+      "TaskList": "任务记录",
       "TimeDelta": "运行时间",
       "Timer": "定时执行",
       "TimerPeriod": "定时执行周期",
@@ -196,6 +196,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Secure": "安全",
     "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",
     "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
@@ -401,6 +402,8 @@
     "PasswordOrToken": "密码 / 令牌"
   },
   "audits": {
+    "ChangeField": "变更字段",
+    "OperateRecord": "操作记录",
     "Hosts": "主机",
     "RunUser": "运行用户",
     "User": "用户",
@@ -421,11 +424,14 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Overview": "概览",
+    "Now": "现在",
+    "EnterToContinue": "按回车继续输入",
     "SpecificInfo": "特殊信息",
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",
-    "Activity": "活动",
-    "Last8": "最近 8 次",
+    "Activity": "活动记录",
+    "Last30": "最近 30 次",
     "Version": "版本",
     "Publish": "发布",
     "PublishAllApplets": "发布所有应用",
@@ -491,6 +497,7 @@
     "Task": "任务",
     "UpdateAssetDetail": "配置更多信息",
     "AddSuccessMsg": "添加成功",
+    "AddFailMsg": "添加失败",
     "Auth": "认证",
     "bind": "绑定",
     "unbind": "解绑",
@@ -527,6 +534,8 @@
     "Delete": "删除",
     "Disable": "禁用",
     "Download": "下载",
+    "ClipBoard": "剪切板",
+    "Paste": "粘贴",
     "Copy": "复制",
     "CopySuccess": "复制成功",
     "Enable": "启用",
@@ -801,8 +810,6 @@
     "Weekly": "按周"
   },
   "ops": {
-    "SelectCreateMethod": "选择创建方式",
-    "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
     "RequiredContent": "请输入命令",
@@ -992,6 +999,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "远程应用",
     "AppletHostDetail": "远程应用发布机详情",
     "AppletHostCreate": "添加远程应用发布机",
     "AppletHostUpdate": "更新远程应用发布机",
@@ -1198,13 +1206,14 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "Author": "作者",
     "BasePort": "监听端口",
     "DatabasePort": "数据库协议端口",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
-    "uploadZipTips": "请上传zip格式的文件",
+    "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘"
   },
@@ -1818,7 +1827,7 @@
     "Endpoint": "服务端点",
     "EndpointRule": "端点规则",
     "ServiceRatio": "组件负载统计",
-    "LoadStatus": "组件状态",
+    "LoadStatus": "负载状态",
     "NormalLoad": "正常",
     "HighLoad": "较高",
     "CriticalLoad": "严重",

@@ -1,5 +1,6 @@
 <script type="text/jsx">
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'ItemValue',
   props: {

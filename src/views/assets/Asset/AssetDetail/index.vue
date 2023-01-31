@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="asset"
     :active-menu.sync="config.activeMenu"
+    :object.sync="asset"
     v-bind="config"
     v-on="$listeners"
   >
@@ -62,7 +62,10 @@ export default {
             this.$router.push({
               name: routerName,
               params: { id: this.$route.params.id },
-              query: { platform: this.asset.platform.id }
+              query: {
+                platform: this.asset.platform.id,
+                platform_name: this.asset.platform.name
+              }
             })
           }
         }

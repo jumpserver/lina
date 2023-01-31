@@ -86,6 +86,10 @@ export default {
     columnsMeta: {
       type: Object,
       default: () => {}
+    },
+    headerExtraActions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -257,11 +261,12 @@ export default {
               })
             }
           },
-          {
-            name: 'autocreate',
-            title: this.$t('accounts.AutoCreate'),
-            type: 'default'
-          }
+          ...this.headerExtraActions
+          // {
+          //   name: 'autocreate',
+          //   title: this.$t('accounts.AutoCreate'),
+          //   type: 'default'
+          // }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {

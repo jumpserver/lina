@@ -35,6 +35,8 @@
 import DataTable from '@/components/DataTable'
 import { sleep, getUpdateObjURL } from '@/utils/common'
 import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
+import { encryptPassword } from '@/utils/crypto'
+
 export default {
   name: 'ImportTable',
   components: {
@@ -242,6 +244,12 @@ export default {
       const totalData = []
       tableData.forEach(item => {
         this.$set(item, '@status', 'pending')
+        const encryptFields = ['password', 'private_key']
+        for (const field of encryptFields) {
+          if (item[field]) {
+            item[field] = encryptPassword(item[field])
+          }
+        }
         totalData.push(item)
       })
       return totalData

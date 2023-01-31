@@ -3,23 +3,23 @@
     <el-tag
       v-for="(v, k) in filterTags"
       :key="k"
+      :disable-transitions="true"
+      :type="tagType"
       closable
       size="small"
-      :type="tagType"
-      :disable-transitions="true"
-      @close="handleTagClose(v)"
       @click="handleTagClick(v,k)"
+      @close="handleTagClose(v)"
     >
       {{ v }}
     </el-tag>
     <el-input
       ref="SearchInput"
       v-model.trim="filterValue"
-      :placeholder="placeholder"
+      :placeholder="this.$t('common.EnterToContinue')"
       class="search-input"
       @blur="focus = false"
-      @focus="focus = true"
       @change="handleConfirm"
+      @focus="focus = true"
       @keyup.enter.native="handleConfirm"
     />
   </div>
@@ -79,27 +79,32 @@ export default {
   .el-tag + .el-tag {
     margin-left: 4px;
   }
+
   .filter-field {
     display: flex;
     align-items: center;
     padding-left: 2px;
     border: 1px solid #dcdee2;
     border-radius: 1px;
-    background-color:#fff;
+    background-color: #fff;
+
     &:hover {
       border-color: #C0C4CC;
     }
   }
-  .search-input >>> .el-input__inner {
+
+  .search-input > > > .el-input__inner {
     max-width: 100%;
     border: none;
     padding-left: 5px;
   }
-  .el-input >>> .el-input__inner{
+
+  .el-input > > > .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
-  .filter-field >>> .el-input__inner {
+
+  .filter-field > > > .el-input__inner {
     //height: 32px;
   }
 </style>

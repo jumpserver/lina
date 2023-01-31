@@ -16,7 +16,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => '/api/v1/tickets/tickets/'
+      default: () => `/api/v1/tickets/tickets/`
     }
   },
   data() {
@@ -93,7 +93,7 @@ export default {
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', `${iNew}?applicant=${this.currentUser.id}`)
+      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`)
     }
   }
 }

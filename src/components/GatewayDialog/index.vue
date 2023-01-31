@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    v-if="visible"
+    v-if="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('assets.TestGatewayTestConnection')"
-    :visible.sync="visible"
+    :visible.sync="iVisible"
     top="35vh"
     width="40%"
   >
@@ -62,12 +62,19 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
+    }
+  },
   methods: {
     dialogConfirm() {
-      this.loading = true
-
       if (isNaN(this.port)) {
-        this.loading = false
         return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
       this.$axios.post(
@@ -77,9 +84,7 @@ export default {
         .then((res) => {
           openTaskPage(res['task'])
         }).finally(() => {
-          this.port = 0
-          this.cell = ''
-          this.visible = false
+          this.iVisible = false
         })
     }
   }

@@ -21,7 +21,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
-        columns: ['trigger_display', 'date_start', 'date_finished', 'status', 'actions'],
+        columns: ['trigger', 'date_start', 'date_finished', 'status', 'actions'],
         columnsMeta: {
           timedelta: {
             label: this.$t('ops.timeDelta'),

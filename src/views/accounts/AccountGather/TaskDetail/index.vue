@@ -23,8 +23,9 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        url: '/api/v1/accounts/gather-account-automations/',
+        url: '/api/v1/accounts/gather-account-automations',
         activeMenu: 'Detail',
+        titlePrefix: this.$t('accounts.AccountGather.AccountGatherTaskList'),
         actions: {
           deleteSuccessRoute: 'AccountGatherList',
           canUpdate: 'accounts.change_gatheraccountsautomation',

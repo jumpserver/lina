@@ -32,6 +32,10 @@ export default {
     }
   },
   data() {
+    let privileged = ['privileged', 'su_from']
+    if (this.asset?.type?.value === 'website') {
+      privileged = []
+    }
     return {
       loading: true,
       usernameChanged: false,
@@ -49,7 +53,7 @@ export default {
       form: this.account || {},
       fields: [
         [this.$t('assets.Asset'), ['assets']],
-        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
+        [this.$t('common.Basic'), ['name', 'username', ...privileged]],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
@@ -174,7 +178,7 @@ export default {
         return
       }
       const platformId = this.asset.platform.id
-      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
+      this.iPlatform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
     },
     setSecretTypeOptions() {
       const choices = [

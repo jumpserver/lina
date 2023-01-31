@@ -47,7 +47,7 @@ export default {
         {
           title: this.$t('users.LoginPasswordSetting'),
           name: 'PasswordUpdate',
-          disabled: this.$store.state.users.profile.source !== 'local'
+          disabled: this.$store.state.users.profile.source.value !== 'local'
         },
         {
           title: this.$t('users.SSHKeySetting'),

@@ -36,7 +36,7 @@ export default {
   data() {
     const myFields = {
       AccountEnabled: ['su_enabled', 'su_method'],
-      ProtocolsEnabled: ['protocols_enabled', 'protocols']
+      ProtocolsEnabled: ['protocols']
     }
     return {
       visible: false,
@@ -46,8 +46,8 @@ export default {
       detailFields: [
         'name', 'charset',
         {
-          key: this.$t('assets.Meta'),
-          value: JSON.stringify(this.object.meta)
+          key: this.$t('assets.Type'),
+          value: `${this.object.category?.label}/${this.object.type?.label}`
         },
         'comment'
       ]

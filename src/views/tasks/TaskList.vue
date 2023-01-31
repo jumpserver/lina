@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       tableConfig: {
+        hasColumnActions: false,
         url: '/api/v1/ops/tasks/',
         columns: [
           'name', 'queue', 'count', 'state', 'comment', 'last_published_time'

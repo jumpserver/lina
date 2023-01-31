@@ -31,7 +31,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'CommandGroupUpdate'
+              updateRoute: 'CommandGroupUpdate',
+              cloneRoute: 'CommandGroupCreate'
             }
           }
         }

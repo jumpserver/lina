@@ -154,7 +154,8 @@ export default {
       this.iVisible = false
       const query = {
         node: this.$route.query?.node || '',
-        platform: platform.id
+        platform: platform.id,
+        platform_name: platform.name
       }
 
       this.$router.push({ name: route, query })

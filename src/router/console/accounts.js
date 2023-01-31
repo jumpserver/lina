@@ -119,12 +119,32 @@ export default [
         }
       },
       {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
+        name: 'AccountPushDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
+          permissions: ['accounts.view_pushaccountautomation']
+        }
+      },
+      {
         path: 'executions',
         component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue'),
         name: 'AccountPushExecutionList',
         hidden: true,
         meta: {
           title: i18n.t('xpack.AccountPush.ExecutionList'),
+          permissions: ['accounts.view_pushaccountexecution']
+        }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
+        name: 'AccountPushExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('accounts.AccountChangeSecret.ExecutionDetail'),
           permissions: ['accounts.view_pushaccountexecution']
         }
       }
@@ -323,7 +343,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionList.vue'),
         name: 'AccountBackupPlanExecutionList',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true

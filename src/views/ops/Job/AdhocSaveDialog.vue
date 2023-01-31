@@ -74,6 +74,7 @@ export default {
   }, mounted() {
     this.initial.args = this.args
     this.initial.module = this.module
+    console.log(this.initial)
     this.ready = true
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <GenericTicketDetail :object="object" :detail-card-items="detailCardItems" />
+  <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
 </template>
 
 <script>
@@ -7,6 +7,7 @@ import { STATUS_MAP } from '../const'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+
 export default {
   name: 'TicketDetail',
   components: {
@@ -21,7 +22,7 @@ export default {
   data() {
     return {
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
-      imageUrl: require('@/assets/img/admin.png'),
+      imageUrl: require('@/assets/img/avatar.png'),
       form: {
         comments: ''
       },
@@ -44,7 +45,7 @@ export default {
           key: this.$t('tickets.status'),
           value: object.status,
           formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
+            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
           }
         },
         {

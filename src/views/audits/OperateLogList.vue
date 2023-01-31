@@ -2,15 +2,15 @@
   <div>
     <GenericListPage
       v-loading="loading"
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
     />
     <el-dialog
-      :title="this.$t('route.OperateLog')"
+      :title="this.$tc('route.OperateLog')"
       :visible.sync="logDetailVisible"
-      width="70%"
+      width="80%"
     >
-      <TwoTabFormatter :row="rowObj" />
+      <OperateLogDetail :row="rowObj" />
     </el-dialog>
   </div>
 </template>
@@ -18,13 +18,13 @@
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
-import TwoTabFormatter from '@/components/TableFormatters/TwoTabFormatter'
+import OperateLogDetail from './components/OperateLogDetail'
 import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
     GenericListPage,
-    TwoTabFormatter
+    OperateLogDetail
   },
   data() {
     const vm = this
@@ -33,10 +33,7 @@ export default {
     const dateTo = getDaysFuture(1, now).toISOString()
     return {
       rowObj: {
-        left: '',
-        right: '',
-        leftTitle: vm.$t('audits.BeforeChange'),
-        rightTitle: vm.$t('audits.AfterChange')
+        diff: ''
       },
       logDetailVisible: false,
       loading: false,
@@ -45,8 +42,8 @@ export default {
         columnsShow: {
           min: ['user', 'resource'],
           default: [
-            'user', 'action_display', 'resource_type_display', 'resource', 'remote_addr',
-            'datetime', 'actions'
+            'user', 'action_display', 'resource_type_display',
+            'resource', 'remote_addr', 'datetime', 'actions'
           ]
         },
         columnsMeta: {
@@ -82,8 +79,7 @@ export default {
                     vm.$axios.get(
                       `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`,
                     ).then(res => {
-                      vm.rowObj.left = res.before
-                      vm.rowObj.right = res.after
+                      vm.rowObj.diff = res.diff
                       vm.logDetailVisible = true
                     }).finally(() => {
                       vm.loading = false

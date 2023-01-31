@@ -35,10 +35,12 @@
             />
           </el-form-item>
           <el-form-item :label="$tc('assets.Action')" required>
-            <el-tree
+            <BasicTree
               v-model="requestForm.actions"
-              :data="requestForm.actions"
+              :tree="treeNodes"
+              style="width: 30% !important"
             />
+
           </el-form-item>
         </el-form>
       </template>
@@ -49,15 +51,16 @@
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { STATUS_MAP } from '../../const'
+import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
+import BasicTree from '@/components/FormFields/BasicTree'
 import IBox from '@/components/IBox'
 
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, AccountFormatter },
+  components: { GenericTicketDetail, IBox, Select2, AccountFormatter, BasicTree },
   props: {
     object: {
       type: Object,
@@ -66,6 +69,7 @@ export default {
   },
   data() {
     return {
+      treeNodes,
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       requestForm: {
         nodes: this.object.apply_nodes,
@@ -97,7 +101,7 @@ export default {
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           }(this.object)),
           transformOption: (item) => {
-            return { label: item.hostname, value: item.id }
+            return { label: `${item.name}(${item.address})`, value: item.id }
           }
         }
       }
@@ -166,7 +170,7 @@ export default {
         },
         {
           key: this.$tc('perms.Accounts'),
-          value: (rel_snapshot.apply_accounts || []).join(', ')
+          value: (object.apply_accounts || []).join(', ')
         },
         {
           key: this.$tc('assets.Action'),

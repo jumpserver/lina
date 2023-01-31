@@ -23,7 +23,10 @@ export default {
         },
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'org_name', 'is_periodic', 'periodic_display', 'actions']
+          default: [
+            'name', 'org_name', 'is_periodic',
+            'periodic_display', 'executed_amount', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -48,6 +51,21 @@ export default {
           },
           comment: {
             width: '90px'
+          },
+          executed_amount: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: vm.$hasPerm('accounts.view_accountbackupexecution'),
+              getRoute({ row }) {
+                return {
+                  name: 'AccountBackupList',
+                  query: {
+                    activeTab: 'AccountBackupPlanExecutionList',
+                    plan_id: row.id
+                  }
+                }
+              }
+            }
           },
           actions: {
             width: '164px',

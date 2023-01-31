@@ -8,18 +8,18 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountBackupPlanExecutionInfo from './AccountGatherExecutionInfo'
+import Info from './AccountGatherExecutionInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountBackupPlanExecutionInfo
+    Info
   },
   data() {
     return {
       execution: { id: '' },
       config: {
-        activeMenu: 'AccountGatherExecutionDetail',
+        activeMenu: 'Info',
         actions: {
           detailApiUrl: `/api/v1/accounts/gather-account-executions/${this.$route.params.id}/`,
           hasUpdate: false,
@@ -28,7 +28,7 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'AccountGatherExecutionDetail'
+            name: 'Info'
           }
         ],
         getTitle: this.getExecutionTitle

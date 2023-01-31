@@ -4,8 +4,8 @@
       <el-checkbox
         v-for="(i) in checkboxGroup"
         :key="i.label"
-        :label="i.value"
         :disabled="isDisabled(i)"
+        :label="i.value"
         @change="handleItemChange"
       >
         {{ i.label }}
@@ -89,7 +89,7 @@ export default {
       if (val && event.target.defaultValue === '@ALL') {
         this.select = Array.from(new Set([...this.select, ...this.defaultOptions]))
       }
-      this.showInput = this.select.includes('INPUT')
+      this.showInput = !this.select.includes('@ALL') && this.select.includes('INPUT')
       this.setValue()
     },
     handleTagChange(val) {
@@ -113,5 +113,10 @@ export default {
 <style scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
+}
+
+.help-text {
+  font-size: 12px;
+  color: #999999;
 }
 </style>

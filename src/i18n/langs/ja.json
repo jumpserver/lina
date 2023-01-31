@@ -109,6 +109,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "Secure": "安全である",
     "LabelInputFormatValidation": "フォーマットが正しくありません：name:value",
     "IP/Host": "IP/ノア",
     "OrganizationAsset": "組織資産",
@@ -302,6 +303,8 @@
     "PasswordOrToken": "パスワード/トークン"
   },
   "audits": {
+    "ChangeField": "フィールドを変更します",
+    "OperateRecord": "操作記録です",
     "Hosts": "本体",
     "RunUser": "実行ユーザー",
     "User": "ユーザー",
@@ -322,8 +325,11 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Overview": "概要",
+    "Now": "今",
+    "EnterToContinue": "Enter キーを押して続行します了",
     "Activity": "イベント",
-    "Last8": "最近 8 回です",
+    "Last30": "最近 30 回です",
     "SpecificInfo": "特別情報",
     "CollectionSucceed": "コレクション成功",
     "CancelCollection": "収集の取消し",
@@ -378,6 +384,7 @@
     "TemplateAdd": "テンプレートの追加",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
+    "AddFailMsg": "追加に失敗しました",
     "Auth": "認証",
     "bind": "紐付け",
     "unbind": "バインド解除",
@@ -414,6 +421,8 @@
     "Delete": "削除",
     "Disable": "無効",
     "Download": "ダウンロード",
+    "ClipBoard": "クリップボード",
+    "Paste": "貼り付け",
     "Copy": "コピー",
     "CopySuccess": "コピー成功",
     "Enable": "有効化",
@@ -801,6 +810,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "遠隔応用です",
     "AssignedTicketList": "割り当て済みワークオーダー",
     "CreateEndpoint": "エンドポイントを作成する",
     "UpdateEndpoint": "エンドポイントを更新",
@@ -988,6 +998,7 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Author": "作者",
     "UploadSucceed": "アップロード成功",
     "UploadFailed": "アップロードに失敗しました",
     "Applets": "リモートアプリケーション",
@@ -1685,7 +1696,7 @@
     "Endpoint": "エンドポイント",
     "EndpointRule": "エンドポイントルール",
     "ServiceRatio": "コンポーネント負荷統計",
-    "LoadStatus": "コンポーネントステータス",
+    "LoadStatus": "負荷状態",
     "NormalLoad": "正常",
     "HighLoad": "高い",
     "CriticalLoad": "ひどい",

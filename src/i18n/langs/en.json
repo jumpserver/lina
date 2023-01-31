@@ -103,6 +103,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "Secure": "Secure",
     "LabelInputFormatValidation": "Format error, correct format is：name:value",
     "IP/Host": "IP/Host",
     "OrganizationAsset": "Organization asset",
@@ -301,6 +302,8 @@
     "PasswordOrToken": "Password / Token"
   },
   "audits": {
+    "ChangeField": "Change field",
+    "OperateRecord": "Operating record",
     "Hosts": "Host",
     "RunUser": "Run user",
     "User": "User",
@@ -319,8 +322,11 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Overview": "Overview",
+    "Now": "Now",
+    "EnterToContinue": "Press Enter to continue",
     "Activity": "Activity",
-    "Last8": "Last 8 times",
+    "Last30": "Last 30 times",
     "SpecificInfo": "Specific",
     "CollectionSucceed": "Collection succeed",
     "CancelCollection": "Cancel collection",
@@ -382,6 +388,7 @@
     "TestSelectedSystemUsersConnective": "Test selected system users connective",
     "UpdateAssetDetail": "Update more detail",
     "AddSuccessMsg": "Add success",
+    "AddFailMsg": "Add fail",
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
     "BadRoleErrorMsg": "Bad request, no permission for this operation",
@@ -408,6 +415,8 @@
     "Delete": "Delete",
     "Disable": "Disable",
     "Download": "Download",
+    "ClipBoard": "ClipBoard",
+    "Paste": "Paste",
     "Copy": "Copy",
     "CopySuccess": "Copy success",
     "Enable": "Enable",
@@ -797,6 +806,7 @@
   },
   "route": {
     "": "",
+    "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
     "CreateEndpointRule": "Create endpoint rule",
@@ -974,6 +984,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Author": "Author",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
@@ -1625,7 +1636,7 @@
     "Endpoint": "Endpoint",
     "EndpointRule": "Endpoint rule",
     "ServiceRatio": "Service ratio",
-    "LoadStatus": "Status",
+    "LoadStatus": "Load status",
     "NormalLoad": "Normal",
     "HighLoad": "High",
     "Offline": "Offline",

@@ -22,7 +22,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
+          'timedelta', 'trigger', 'date_start', 'is_success', 'reason', 'actions'
         ],
         columnsMeta: {
           timedelta: {
@@ -64,7 +64,7 @@ export default {
           options: [
             {
               label: this.$t('accounts.TaskID'),
-              value: 'automation_id'
+              value: 'plan_id'
             }
           ]
         },

@@ -43,6 +43,11 @@ export default {
 </script>
 
 <style scoped>
+.page {
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 @media print {
   .disabled-when-print{
     display: none;

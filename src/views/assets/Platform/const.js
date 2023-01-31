@@ -16,6 +16,7 @@ export const platformFieldsMeta = (vm) => {
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
         'change_secret_enabled', 'change_secret_method',
+        'push_account_enabled', 'push_account_method',
         'verify_account_enabled', 'verify_account_method',
         'gather_accounts_enabled', 'gather_accounts_method'
       ],
@@ -51,11 +52,6 @@ export const platformFieldsMeta = (vm) => {
       }
     },
     charset: {},
-    protocols_enabled: {
-      el: {
-        disabled: false
-      }
-    },
     domain_enabled: {
       el: {
         disabled: false
@@ -66,8 +62,7 @@ export const platformFieldsMeta = (vm) => {
       ...assetMeta.protocols,
       el: {
         choices: []
-      },
-      hidden: (formValue) => !formValue['protocols_enabled']
+      }
     },
     su_method: {
       type: 'select',
@@ -86,7 +81,11 @@ export const setAutomations = (vm) => {
 
   const initial = vm.initial.automation || {}
   initial['ansible_enabled'] = automation['ansible_enabled']
-  initial['ansible_config'] = JSON.stringify(automation['ansible_config'])
+  initial['ansible_config'] = automation['ansible_config']
+
+  if (initial['ansible_enabled'] === false) {
+    _.set(autoFieldsMeta, `ansible_enabled.el.disabled`, true)
+  }
 
   for (const item of autoFields) {
     const itemEnabledKey = item + '_enabled'

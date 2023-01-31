@@ -1,23 +1,23 @@
 <template>
   <Page v-bind="$attrs">
-    <AssetTreeTAble ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
+    <AssetTreeTable ref="TreeTablePage" :table-config="tableConfig" :tree-setting="treeSetting">
       <template #table>
         <AccountListTable ref="table" v-bind="tableConfig" />
       </template>
-    </AssetTreeTAble>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
 import Page from '@/layout/components/Page'
-import AssetTreeTAble from '@/components/AssetTreeTable'
+import AssetTreeTable from '@/components/AssetTreeTable'
 import AccountListTable from '@/components/AccountListTable/AccountList'
 
 export default {
   name: 'AssetAccountList',
   components: {
     Page,
-    AssetTreeTAble,
+    AssetTreeTable,
     AccountListTable
   },
   data() {
@@ -32,7 +32,8 @@ export default {
       treeSetting: {
         showMenu: false,
         showAssets: true,
-        url: '/api/v1/accounts/accounts/'
+        url: '/api/v1/accounts/accounts/',
+        countResource: 'account'
       }
     }
   }
@@ -43,21 +44,26 @@ export default {
   .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
   }
+
   .asset-table {
     &:hover {
       cursor: pointer;
     }
-    & >>> .table-content {
+
+    & > > > .table-content {
       margin-left: 21px;
     }
-    & ::v-deep .el-table__row{
+
+    & ::v-deep .el-table__row {
       height: 40px;
-      & > td{
+
+      & > td {
         padding: 0;
       }
     }
   }
-  .noDataR{
+
+  .noDataR {
     width: 100%;
     height: 40vh;
     display: flex;
@@ -65,7 +71,8 @@ export default {
     justify-content: center;
     font-size: 18px;
     flex-direction: column;
-    .hintWrap{
+
+    .hintWrap {
       color: #D4D6E6;
       display: flex;
       align-items: flex-start;
@@ -73,7 +80,8 @@ export default {
       flex-direction: column;
     }
   }
-  .asset-user-table{
+
+  .asset-user-table {
     padding-left: 20px;
   }
 </style>

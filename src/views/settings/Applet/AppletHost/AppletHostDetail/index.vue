@@ -54,11 +54,12 @@ export default {
         ],
         hasRightSide: true,
         actions: {
+          canDelete: this.$hasPerm('terminal.delete_applethost'),
+          canUpdate: this.$hasPerm('terminal.change_applethost'),
+          deleteSuccessRoute: 'Applets',
           updateCallback: () => {
-            const category = this.host.category.value || 'host'
-            const routerName = _.capitalize(category) + 'Update'
             this.$router.push({
-              name: routerName,
+              name: 'Applets',
               params: { id: this.$route.params.id },
               query: { platform: this.host.platform.id }
             })

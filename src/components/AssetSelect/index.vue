@@ -5,38 +5,41 @@
       v-model="select2Config.value"
       v-bind="select2Config"
       @input="onInputChange"
-      @focus.stop="handleFocus"
       v-on="$listeners"
+      @focus.stop="handleFocus"
     />
     <Dialog
       v-if="dialogVisible"
       :title="$tc('assets.Assets')"
       :visible.sync="dialogVisible"
       custom-class="asset-select-dialog"
-      width="80vw"
       top="1vh"
-      @confirm="handleConfirm"
+      width="80vw"
       @cancel="handleCancel"
+      @confirm="handleConfirm"
     >
-      <AssetTreeTAble
+      <AssetTreeTable
         ref="ListPage"
-        class="tree-table"
-        :table-config="tableConfig"
         :header-actions="headerActions"
+        :table-config="tableConfig"
+        class="tree-table"
+        :url="baseUrl"
+        :node-url="baseNodeUrl"
+        :tree-url="`${baseNodeUrl}/children/tree/`"
       />
     </Dialog>
   </div>
 </template>
 
 <script>
-import AssetTreeTAble from '@/components/AssetTreeTable'
+import AssetTreeTable from '@/components/AssetTreeTable'
 import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'
 
 export default {
   componentName: 'AssetSelect',
-  components: { AssetTreeTAble, Select2, Dialog },
+  components: { AssetTreeTable, Select2, Dialog },
   props: {
     baseUrl: {
       type: String,
@@ -44,7 +47,7 @@ export default {
     },
     baseNodeUrl: {
       type: String,
-      default: '/api/v1/assets/nodes/'
+      default: '/api/v1/assets/nodes'
     },
     value: {
       type: Array,
@@ -100,7 +103,9 @@ export default {
             sortable: true,
             formatter: DialogDetailFormatter,
             formatterArgs: {
-              getDialogTitle: function({ col, row }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDialogTitle: function({ col, row }) {
+                this.$t('assets.AssetDetail')
+              }.bind(this),
               getDetailItems: function({ col, row }) {
                 return [
                   {
@@ -242,15 +247,18 @@ export default {
 
 .el-dialog__wrapper ::v-deep .el-dialog__body {
   padding: 0 0 0 3px;
+
   .tree-table {
     .search {
       .el-input__inner {
         background-color: #f3f3f3;
       }
+
       .el-cascader {
         background-color: #f3f3f3;
       }
     }
+
     .left {
       padding: 5px;
 

@@ -77,7 +77,7 @@ export default {
       uploadPlaybook(form).then(res => {
         this.$emit('update:visible', false)
         this.$emit('completed')
-        this.$message.success('terminal.UploadSucceed')
+        this.$message.success('上传成功')
       }).catch(err => {
         console.log(err)
       })
