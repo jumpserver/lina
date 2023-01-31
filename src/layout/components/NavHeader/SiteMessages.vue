@@ -329,4 +329,8 @@ export default {
 >>> :focus {
   outline: 0;
 }
+
+>>> .el-dialog .el-dialog__header {
+  border-bottom: none!important;
+}
 </style>

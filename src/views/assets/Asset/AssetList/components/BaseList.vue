@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ListTable :header-actions="iHeaderActions" :table-config="iTableConfig" />
-    <PlatformDialog :category="category" :visible.sync="showPlatform" />
+    <ListTable ref="ListTable" :table-config="iTableConfig" :header-actions="iHeaderActions" />
+    <PlatformDialog :visible.sync="showPlatform" :category="category" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
@@ -72,7 +72,7 @@ export default {
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
-        route.query.platform_name = row.platform.name
+        route.query.platform_type = row.type.value
       }
       vm.$router.push(route)
     }
@@ -188,6 +188,7 @@ export default {
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$refs.ListTable.reloadTable()
               }).catch(err => {
                 this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
@@ -206,6 +207,7 @@ export default {
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$refs.ListTable.reloadTable()
               }).catch(err => {
                 this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })

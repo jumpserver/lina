@@ -18,7 +18,7 @@
         >
           <div slot="description">
             <div class="processors">
-              <div style="padding-top: 15px">
+              <div class="processors-content">
                 <span v-for="assignee of item.assignees_display" :key="assignee" style="display: block">
                   {{ assignee }}
                 </span>
@@ -102,6 +102,7 @@ export default {
       })
       this.$msgbox({
         title: '相关受理人',
+        customClass: 'acceptance',
         message: h('p', null, content),
         showCancelButton: false,
         showConfirmButton: false
@@ -111,12 +112,26 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style>
+.acceptance .el-message-box__content {
+  overflow-y: auto;
+  max-height: 400px;
+}
+</style>
+
+<style lang='scss' scoped>
 .box {
   margin-bottom: 15px;
 }
 
 .processors {
   margin-bottom: 10px;
+}
+
+.processors-content {
+  overflow-y: auto;
+  max-height: 400px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 </style>

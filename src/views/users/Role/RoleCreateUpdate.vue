@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     getObjectDone(role) {
-      this.config.url = `/api/v1/rbac/${role.scope}-roles/`
+      this.config.url = `/api/v1/rbac/${role.scope?.value}-roles/`
     }
   }
 }

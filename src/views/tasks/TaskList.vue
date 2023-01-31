@@ -4,8 +4,6 @@
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -14,9 +12,10 @@ export default {
   data() {
     return {
       tableConfig: {
+        hasColumnActions: false,
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'comment', 'last_published_time', 'actions'
+          'name', 'queue', 'count', 'state', 'comment', 'last_published_time'
         ],
         columnsMeta: {
           name: {
@@ -68,25 +67,6 @@ export default {
                 case 'red':
                   return <i Class='fa fa-circle-o text-danger'/>
               }
-            }
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false,
-              hasClone: false,
-              canDelete: this.$hasPerm('ops.delete_celerytask'),
-              extraActions: [
-                {
-                  name: 'connect',
-                  type: 'primary',
-                  title: this.$t('ops.Execute'),
-                  can: this.$hasPerm('ops.view_celerytaskexecution'),
-                  callback: ({ row }) => {
-                    openTaskPage(row.id)
-                  }
-                }
-              ]
             }
           }
         }

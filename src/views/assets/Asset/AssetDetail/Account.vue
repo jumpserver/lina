@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="16" :sm="24">
+      <el-col :md="24" :sm="24">
         <AccountListTable
           ref="ListTable"
           v-bind="$attrs"
@@ -71,18 +71,15 @@ export default {
   methods: {
     onConfirm(data) {
       data = data?.map(i => {
-        if (i.hasOwnProperty('id')) {
-          delete i['id']
-        }
         i.asset = this.object.id
         return i
       })
       this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
-        this.$message.success(this.$tc('common.createSuccessMsg'))
+        this.$message.success(this.$tc('common.AddSuccessMsg'))
       }).catch(() => {
-        this.$message.error(this.$tc('common.createErrorMsg'))
+        this.$message.error(this.$tc('common.AddFailMsg'))
       })
     }
   }

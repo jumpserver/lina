@@ -14,39 +14,11 @@
     </el-col>
     <el-col :md="9" :sm="24">
       <IBox :title="$tc('assets.Account')" type="primary">
-        <table style="width: 100%">
-          <tr>
-            <td colspan="2">
-              <el-input
-                v-model="relation.username"
-                :placeholder="this.$tc('perms.AddAccountToPerm')"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <el-button size="small" type="primary" @click="addAccount">
-                {{ $t('common.Add') }}
-              </el-button>
-            </td>
-          </tr>
-        </table>
-        <tr v-for="(username, i) of object['accounts']" :key="i" class="item">
-          <td class="item-name" style="">
-            <b>{{ username }}</b>
-          </td>
-          <td class="item-btn">
-            <el-button
-              :disabled="relation.disabled"
-              size="mini"
-              style="float: right"
-              type="danger"
-              @click="removeAccount(username)"
-            >
-              <i class="fa fa-minus" />
-            </el-button>
-          </td>
-        </tr>
+        <AccountFormatter
+          class="checkbox-accounts"
+          :value="object['accounts']"
+          @change="updateAccount"
+        />
       </IBox>
     </el-col>
   </el-row>
@@ -55,11 +27,13 @@
 <script>
 import { AccountListTable } from '@/components'
 import { IBox } from '@/components'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 
 export default {
   name: 'AssetPermissionAccount',
   components: {
     IBox,
+    AccountFormatter,
     AccountListTable
   },
   props: {
@@ -78,23 +52,10 @@ export default {
     }
   },
   methods: {
-    async removeAccount(username) {
+    async updateAccount(accounts) {
       const url = `/api/v1/perms/asset-permissions/${this.object.id}/`
-      const accounts = (this.object['accounts'] || []).filter(item => item !== username)
       this.$axios.patch(url, { accounts: accounts }).then(() => {
         this.object.accounts = accounts
-        this.$refs.ListTable.refresh()
-      })
-    },
-    async addAccount() {
-      const url = `/api/v1/perms/asset-permissions/${this.object.id}/`
-      if (!this.relation.username) {
-        return
-      }
-      const accounts = this.object['accounts'].concat([this.relation.username])
-      console.log('Accounts: ', accounts)
-      this.$axios.patch(url, { accounts: accounts }).then(() => {
-        this.object.accounts.push(this.relation.username)
         this.$refs.ListTable.refresh()
       })
     }
@@ -102,7 +63,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.checkbox-accounts >>> .el-checkbox-group {
+  line-height: 40px;
+}
+
 .item-name {
   width: 100%;
   overflow: hidden;

@@ -66,9 +66,6 @@ export default {
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          if (values.accounts && values.accounts.length !== 0) {
-            values.accounts.forEach(account => { delete account.id })
-          }
           console.log('values[\'accounts\']', values['accounts'])
           return values
         }

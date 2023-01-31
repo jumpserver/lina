@@ -47,6 +47,7 @@ export default {
           load: {
             label: this.$t('xpack.LoadStatus'),
             filterable: 'custom',
+            sortable: false,
             formatterArgs: {
               classChoices: {
                 offline: 'fa fa-chain-broken text-danger',

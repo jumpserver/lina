@@ -2,15 +2,13 @@
   <div class="content">
     <span class="title">{{ config.title }}</span>
     <el-tooltip
-      v-if="config.tip"
+      v-if="hasTip"
       effect="dark"
       :content="config.tip"
       placement="top"
     >
       <i class="fa fa-exclamation-circle icon" />
     </el-tooltip>
-    <i v-else class="fa fa-exclamation-circle icon" />
-    <span v-if="config.time" class="time">更新时间：{{ config.time }}</span>
   </div>
 </template>
 
@@ -20,6 +18,10 @@ export default {
     config: {
       type: Object,
       default: () => ({})
+    },
+    hasTip: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
