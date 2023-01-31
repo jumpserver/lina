@@ -1827,7 +1827,7 @@
     "Endpoint": "服务端点",
     "EndpointRule": "端点规则",
     "ServiceRatio": "组件负载统计",
-    "LoadStatus": "组件状态",
+    "LoadStatus": "负载状态",
     "NormalLoad": "正常",
     "HighLoad": "较高",
     "CriticalLoad": "严重",
