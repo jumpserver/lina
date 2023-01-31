@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="16" :sm="24">
+      <el-col :md="24" :sm="24">
         <AccountListTable
           ref="ListTable"
           v-bind="$attrs"
