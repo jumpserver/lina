@@ -7,7 +7,12 @@
     :show-cancel="false"
     :show-confirm="false"
   >
-    <GenericCreateUpdateForm ref="createUpdateForm" v-bind="$data" v-on="$listeners" />
+    <GenericCreateUpdateForm
+      ref="createUpdateForm"
+      v-bind="$data"
+      :on-perform-success="onSubmitSuccess"
+      v-on="$listeners"
+    />
 
   </Dialog>
 </template>
@@ -32,7 +37,7 @@ export default {
       hasSaveContinue: false,
       url: '/api/v1/ops/playbooks/',
       fields: [
-        ['', ['create_method', 'name', 'comment']]
+        ['', ['name', 'comment']]
       ],
       createSuccessNextRoute: {
         name: 'Template'
@@ -52,9 +57,12 @@ export default {
       }
     }
   },
-  mounted() {
-  },
-  methods: {}
+  methods: {
+    onSubmitSuccess() {
+      this.iVisible = false
+      this.$emit('completed')
+    }
+  }
 }
 </script>
 
