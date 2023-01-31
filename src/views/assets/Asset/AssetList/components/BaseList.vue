@@ -1,14 +1,14 @@
 <template>
   <div>
-    <ListTable :table-config="iTableConfig" :header-actions="iHeaderActions" />
-    <PlatformDialog :visible.sync="showPlatform" :category="category" />
+    <ListTable :header-actions="iHeaderActions" :table-config="iTableConfig" />
+    <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
     <GatewayDialog
-      :port="GatewayPort"
       :cell="GatewayCell"
+      :port="GatewayPort"
       :visible.sync="GatewayVisible"
     />
   </div>
@@ -87,7 +87,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columnsExclude: ['specific', 'enabled_info', 'info'],
+        columnsExclude: ['spec_info', 'auto_info', 'info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [

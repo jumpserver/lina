@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :initial="initial" :url="url" />
 </template>
 
 <script>
@@ -13,8 +13,7 @@ export default {
   },
   data() {
     return {
-      initial: {
-      },
+      initial: {},
       fields: [
         [this.$t('common.Basic'), ['name', 'assets', 'comment']]
       ],
@@ -24,10 +23,7 @@ export default {
           component: AssetSelect,
           label: this.$t('assets.Assets'),
           el: {
-            value: [],
-            canSelect: (row) => {
-              return row.enabled_info?.domain_enabled
-            }
+            value: []
           }
         }
       },

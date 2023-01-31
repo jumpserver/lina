@@ -25,6 +25,10 @@ export default {
     excludes: {
       type: Array,
       default: null
+    },
+    showUndefine: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -72,7 +76,7 @@ export default {
           continue
         }
         const label = fieldMeta.label
-        if (value === undefined || value === null || value === '') {
+        if (value === null || value === '') {
           value = '-'
         } else if (fieldMeta.type === 'datetime') {
           value = toSafeLocalDateStr(value)
@@ -84,6 +88,14 @@ export default {
           value = value.map(item => item['name']).join(', ')
         } else if (fieldMeta.type === 'boolean') {
           value = value ? this.$t('common.Yes') : this.$t('common.No')
+        }
+
+        if (value === undefined) {
+          if (this.showUndefine) {
+            value = '-'
+          } else {
+            continue
+          }
         }
 
         const item = {

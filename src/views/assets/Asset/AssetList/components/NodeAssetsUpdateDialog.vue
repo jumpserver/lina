@@ -1,34 +1,23 @@
 <template>
   <div class="asset-select-dialog">
-    <Dialog
+    <AssetDialog
       v-if="iVisible"
       :title="$tc('assets.Assets')"
       :visible.sync="iVisible"
-      width="70%"
-      top="1vh"
-      @confirm="assetTreeTableDialogHandleConfirm"
       @cancel="assetTreeTableDialogHandleCancel"
-    >
-      <TreeTable
-        ref="TreeTable"
-        :tree-setting="treeSetting"
-        :table-config="tableConfig"
-        :header-actions="headerActions"
-      />
-    </Dialog>
+      @confirm="assetTreeTableDialogHandleConfirm($event)"
+    />
   </div>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
-import TreeTable from '@/components/TreeTable'
-import { DetailFormatter } from '@/components/TableFormatters'
+import AssetDialog from '@/components/AssetSelect/dialog.vue'
 import $ from '@/utils/jquery-vendor'
+
 export default {
   name: 'NodeAssetsUpdate',
   components: {
-    Dialog,
-    TreeTable
+    AssetDialog
   },
   props: {
     visible: {
@@ -46,53 +35,7 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false,
-      assetsSelected: [],
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        url: '/api/v1/assets/assets/?fields_size=mini',
-        nodeUrl: '/api/v1/assets/nodes/',
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-      },
-      tableConfig: {
-        url: '/api/v1/assets/assets/',
-        hasTree: true,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
-            sortable: true,
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AssetDetail'
-            }
-          },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip'),
-            sortable: 'custom'
-          }
-        ],
-        listeners: {
-          'toggle-row-selection': (isSelected, row) => {
-            if (isSelected) {
-              this.addRowToAssetsSelected(row)
-            } else {
-              this.removeRowFromAssetsSelected(row)
-            }
-          }
-        }
-      },
-      headerActions: {
-        hasLeftActions: false,
-        hasRightActions: false,
-        searchConfig: {
-          getUrlQuery: false
-        }
-      }
+      dialogVisible: false
     }
   },
   computed: {
@@ -107,21 +50,8 @@ export default {
     }
   },
   methods: {
-    addRowToAssetsSelected(row) {
-      const selectValueIndex = this.assetsSelected.indexOf(row.id)
-      if (selectValueIndex === -1) {
-        this.assetsSelected.push(row.id)
-      }
-    },
-    removeRowFromAssetsSelected(row) {
-      const selectValueIndex = this.assetsSelected.indexOf(row.id)
-      if (selectValueIndex > -1) {
-        this.assetsSelected.splice(selectValueIndex, 1)
-      }
-    },
-    assetTreeTableDialogHandleConfirm() {
+    assetTreeTableDialogHandleConfirm(assetsSelected) {
       const currentNode = this.selectNode
-      const assetsSelected = this.assetsSelected
       if (!currentNode || assetsSelected.length === 0) {
         return
       }
@@ -143,7 +73,6 @@ export default {
     },
     assetTreeTableDialogHandleCancel() {
       this.iVisible = false
-      this.assetsSelected = []
     }
   }
 }
