@@ -1635,7 +1635,7 @@
     "Endpoint": "Endpoint",
     "EndpointRule": "Endpoint rule",
     "ServiceRatio": "Service ratio",
-    "LoadStatus": "Status",
+    "LoadStatus": "Load status",
     "NormalLoad": "Normal",
     "HighLoad": "High",
     "Offline": "Offline",

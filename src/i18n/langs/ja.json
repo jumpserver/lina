@@ -1695,7 +1695,7 @@
     "Endpoint": "エンドポイント",
     "EndpointRule": "エンドポイントルール",
     "ServiceRatio": "コンポーネント負荷統計",
-    "LoadStatus": "コンポーネントステータス",
+    "LoadStatus": "負荷状態",
     "NormalLoad": "正常",
     "HighLoad": "高い",
     "CriticalLoad": "ひどい",
