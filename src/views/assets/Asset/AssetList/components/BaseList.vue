@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable :table-config="iTableConfig" :header-actions="iHeaderActions" />
+    <ListTable ref="ListTable" :table-config="iTableConfig" :header-actions="iHeaderActions" />
     <PlatformDialog :visible.sync="showPlatform" :category="category" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -188,6 +188,7 @@ export default {
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$refs.ListTable.reloadTable()
               }).catch(err => {
                 this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
@@ -206,6 +207,7 @@ export default {
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$refs.ListTable.reloadTable()
               }).catch(err => {
                 this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
