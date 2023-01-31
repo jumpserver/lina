@@ -32,10 +32,6 @@ export default {
     }
   },
   data() {
-    let privileged = ['privileged', 'su_from']
-    if (this.asset?.type?.value === 'website') {
-      privileged = []
-    }
     return {
       loading: true,
       usernameChanged: false,
@@ -53,7 +49,7 @@ export default {
       form: this.account || {},
       fields: [
         [this.$t('assets.Asset'), ['assets']],
-        [this.$t('common.Basic'), ['name', 'username', ...privileged]],
+        [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
@@ -209,6 +205,20 @@ export default {
       this.fieldsMeta.secret_type.options = choices.filter(item => {
         return secretTypes.indexOf(item.value) > -1
       })
+    },
+    controlShowField() {
+      let privileged = ['privileged']
+      let suFrom = ['su_from']
+      const asset = this?.asset || {}
+      if (asset?.type?.value === 'website') {
+        privileged = []
+        suFrom = []
+      }
+      if (asset?.category?.value === 'database') {
+        suFrom = []
+      }
+
+      return [...privileged, ...suFrom]
     },
     confirm(form) {
       const secretType = form.secret_type || ''
