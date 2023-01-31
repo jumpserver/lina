@@ -6,37 +6,38 @@
     <template v-if="comments">
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
-          <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" size="30" class="header-avatar" />
+          <a class="pull-left" href="#">
+            <el-avatar :size="30" :src="imageUrl" class="header-avatar" />
           </a>
           <div class="media-body ">
-            <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
+            <strong>{{ item.user_display }}</strong>
+            <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
-            <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <div style="padding-top: 10px;" v-html="item.body" />
+            <small class="text-muted">{{ item.date_created | date }}</small>
+            <MarkDown :value="item.body" />
           </div>
         </div>
       </div>
     </template>
     <slot />
     <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item :label="$t('tickets.reply')">
+      <el-form-item :label="$tc('tickets.reply')">
         <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
       </el-form-item>
       <el-form-item style="float: right">
         <template v-if="hasActionPerm">
           <el-button
-            :disabled="object.status === 'closed'"
-            type="primary"
+            :disabled="object.status.value === 'closed'"
             size="small"
+            type="primary"
             @click="handleApprove"
           >
             <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
           </el-button>
           <el-button
-            :disabled="object.status === 'closed'"
-            type="warning"
+            :disabled="object.status.value === 'closed'"
             size="small"
+            type="warning"
             @click="handleReject"
           >
             <i class="fa fa-ban" /> {{ $t('tickets.Reject') }}
@@ -44,17 +45,17 @@
         </template>
         <el-button
           v-if="isSelfTicket"
-          :disabled="object.status === 'closed'"
-          type="danger"
+          :disabled="object.status.value === 'closed'"
           size="small"
+          type="danger"
           @click="handleClose"
         >
           <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
-          :disabled="object.status === 'closed'"
-          type="info"
+          :disabled="object.status.value === 'closed'"
           size="small"
+          type="info"
           @click="handleComment"
         >
           <i class="fa fa-pencil" /> {{ $t('tickets.reply') }}
@@ -68,9 +69,11 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
+import MarkDown from '@/components/MarkDown'
+
 export default {
   name: 'Comments',
-  components: { IBox },
+  components: { IBox, MarkDown },
   props: {
     object: {
       type: Object,
@@ -93,7 +96,7 @@ export default {
     return {
       comments: '',
       type_api: '',
-      imageUrl: require('@/assets/img/admin.png'),
+      imageUrl: require('@/assets/img/avatar.png'),
       form: {
         comments: ''
       },
@@ -102,22 +105,19 @@ export default {
   },
   computed: {
     hasActionPerm() {
-      return this.object.process_map[this.object.approval_step - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return this.object.process_map[this.object.approval_step.value - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
-      return this.object.applicant === this.$store.state.users.profile.id
+      return this.object.applicant.id === this.$store.state.users.profile.id
     }
   },
   mounted() {
-    switch (this.object.type) {
+    switch (this.object.type.value) {
       case 'login_confirm':
         this.type_api = 'apply-login-tickets'
         break
       case 'apply_asset':
         this.type_api = 'apply-asset-tickets'
-        break
-      case 'apply_application':
-        this.type_api = 'apply-app-tickets'
         break
       case 'login_asset_confirm':
         this.type_api = 'apply-login-asset-tickets'
@@ -156,7 +156,8 @@ export default {
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultReject() {
-      this.createComment(function() {})
+      this.createComment(function() {
+      })
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
@@ -168,7 +169,9 @@ export default {
       const commentText = this.form.comments
       const ticketId = this.object.id
       const commentUrl = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
-      if (!commentText) { return }
+      if (!commentText) {
+        return
+      }
       const body = {
         body: commentText,
         ticket: ticketId
@@ -210,16 +213,20 @@ export default {
 .box {
   margin-bottom: 15px;
 }
+
 .feed-activity-list {
   //padding-top: 20px;
   line-height: 1.5;
 }
+
 .feed-activity-list .feed-element {
   border-bottom: 1px solid #e7eaec;
 }
+
 .feed-element:first-child {
   margin-top: 0;
 }
+
 .feed-element {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -229,13 +236,16 @@ export default {
 .media-body {
   overflow: hidden;
 }
+
 .feed-element > .pull-left {
   margin-right: 10px;
 }
+
 .feed-element .header-avatar {
   width: 38px;
   height: 38px;
 }
+
 .text-muted {
   color: #888888;
 }

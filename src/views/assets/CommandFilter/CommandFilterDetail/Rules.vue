@@ -40,9 +40,6 @@ export default {
           action: {
             width: '90px'
           },
-          content: {
-            showOverflowTooltip: true
-          },
           actions: {
             formatterArgs: {
               hasClone: false,

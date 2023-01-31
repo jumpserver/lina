@@ -62,11 +62,11 @@ export default {
           switch (method) {
             case 'post':
               this.$store.dispatch('users/addAdminOrg', { id: res.id, name: res.name })
-              this.$message.success(this.$t('common.createSuccessMsg'))
+              this.$message.success(this.$tc('common.createSuccessMsg'))
               return this.$router.push({ name: 'OrganizationList' })
             case 'put':
               this.$store.dispatch('users/modifyOrg', { id: res.id, name: res.name })
-              this.$message.success(this.$t('common.updateSuccessMsg'))
+              this.$message.success(this.$tc('common.updateSuccessMsg'))
               return this.$router.push({ name: 'OrganizationList' })
           }
         }

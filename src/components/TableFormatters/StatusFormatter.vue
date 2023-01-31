@@ -20,6 +20,7 @@
 
 <script>
 import BaseFormatter from './base'
+
 export default {
   name: 'StatusFormatter',
   extends: BaseFormatter,
@@ -28,7 +29,7 @@ export default {
       type: Object,
       default() {
         return {
-          iconChoices: {
+          faChoices: {
             true: 'fa-check text-primary',
             false: 'fa-times text-danger'
           },
@@ -50,7 +51,7 @@ export default {
   computed: {
     iconClass() {
       const key = this.formatterArgs.getChoicesKey(this.cellValue)
-      return this.formatterArgs.iconChoices[key] + ' ' + key + 'Status'
+      return this.formatterArgs.faChoices[key] + ' ' + key + 'Status'
     },
     tips() {
       const vm = this

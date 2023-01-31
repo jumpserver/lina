@@ -3,7 +3,7 @@
     <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
     <Dialog
       v-if="visible"
-      :title="$t('setting.SMTP')"
+      :title="$tc('setting.SMTP')"
       :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -63,7 +63,8 @@ export default {
       submitMethod() {
         return 'patch'
       },
-      onConfirm() {},
+      onConfirm() {
+      },
       cleanFormValue(data) {
         if (!data['EMAIL_HOST_PASSWORD']) {
           delete data['EMAIL_HOST_PASSWORD']
@@ -78,8 +79,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

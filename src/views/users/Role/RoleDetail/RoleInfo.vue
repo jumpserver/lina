@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$t('rbac.Permissions')">
+      <IBox :title="$tc('rbac.Permissions')">
         <div style="height: 10%">
           <el-button
             size="small"
@@ -26,7 +26,7 @@
 
 <script>
 import { IBox } from '@/components'
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import AutoDataZTree from '@/components/AutoDataZTree'
 import { toSafeLocalDateStr } from '@/utils/common'
 
@@ -34,7 +34,7 @@ export default {
   name: 'RolePerms',
   components: {
     AutoDataZTree,
-    DetailCard,
+    AutoDetailCard,
     IBox
   },
   props: {
@@ -102,7 +102,7 @@ export default {
         'assets.gateway': ['assets.view_domain'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
-        'assets.view_authbook': ['assets.view_node'],
+        'accounts.view_account': ['assets.view_node'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
         'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],
@@ -139,7 +139,24 @@ export default {
         'xpack.view_applicationchangeauthplan': ['applications.view_application', 'assets.view_systemuser'],
         'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
         'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
-      }
+      },
+      url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
+      detailFields: [
+        'display_name', 'scope_display', 'builtin', 'created_by',
+        {
+          key: this.$t('common.DateCreated'),
+          formatter: (item, val) => {
+            return <span> { toSafeLocalDateStr(this.object.date_created) }</span>
+          }
+        },
+        {
+          key: this.$t('common.DateUpdated'),
+          formatter: (item, val) => {
+            return <span> { toSafeLocalDateStr(this.object.date_updated) }</span>
+          }
+        },
+        'comment'
+      ]
     }
   },
   computed: {
@@ -147,50 +164,18 @@ export default {
       return this.$refs.tree.zTree
     },
     scope() {
-      return this.object.scope
-    },
-    detailItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.display_name
-        },
-        {
-          key: this.$t('common.Scope'),
-          value: this.object['scope_display']
-        },
-        {
-          key: this.$t('common.Builtin'),
-          value: this.object['builtin']
-        },
-        {
-          key: this.$t('common.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('common.DateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('common.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
-      ]
+      return this.object.scope.value
     }
   },
   mounted() {
-    this.setting.treeUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/permissions/tree/`
+    this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
     setTimeout(() => {
       this.loading = false
     })
   },
   methods: {
     setUpdateBtn() {
-      const permRequired = `rbac.change_${this.object.scope}role`
+      const permRequired = `rbac.change_${this.object.scope.value}role`
       if (this.$hasPerm(permRequired)) {
         this.isDisabled = false
       }
@@ -285,14 +270,14 @@ export default {
       const checkedNodes = ztree.getCheckedNodes()
       const permNodes = checkedNodes.filter(node => !node.isParent)
       const permIds = permNodes.map(node => node.id)
-      const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
+      const roleDetailUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/`
       const data = {
         permissions: permIds
       }
       this.$axios.patch(roleDetailUrl, data).then(() => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$message.error(this.$tc('common.updateErrorMsg') + error)
         this.$log.error(error)
       })
     }
@@ -304,15 +289,18 @@ export default {
 .perm-tree >>> .ztree * {
   background: white;
 }
+
 .perm-tree >>> .ztree {
   background: white !important;
 }
+
 .perm-tree >>> .checkbox_true_disable,
 .perm-tree >>> .checkbox_false_disable {
-  cursor: not-allowed!important;
+  cursor: not-allowed !important;
 }
+
 .perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before  {
-  color: #aaaaaa!important;
+.perm-tree >>> .checkbox_false_disable:before {
+  color: #aaaaaa !important;
 }
 </style>

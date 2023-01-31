@@ -3,23 +3,44 @@
     <td>{{ action.title }}:</td>
     <td>
       <span>
-        <component :is="iType" v-model="action.attrs.model" v-bind="action.attrs" v-on="callbacks">{{ label }}</component>
+        <component
+          :is="iType"
+          v-model="action.attrs.model"
+          v-bind="action.attrs"
+          v-on="callbacks"
+        >
+          {{ label }}
+        </component>
       </span>
     </td>
   </tr>
 </template>
 
 <script>
-import Switcher from '../FormFields/Swicher'
+import Switcher from '../FormFields/Switcher'
+import Select2 from '../FormFields/Select2'
+import UpdateSelect from '../FormFields/UpdateSelect'
+
+class Action {
+  constructor() {
+    this.title = ''
+    this.type = ''
+    this.attrs = {}
+    this.callbacks = ''
+  }
+}
+
 export default {
   name: 'ActionItem',
   components: {
-    Switcher
+    Switcher,
+    Select2,
+    UpdateSelect
   },
   props: {
     action: {
-      type: Object,
-      default: () => ({})
+      type: [Action, Object],
+      default: () => ({ title: '' })
     }
   },
   data() {
@@ -30,8 +51,14 @@ export default {
   computed: {
     iType() {
       switch (this.action.type) {
+        case 'switch':
+          return 'Switcher'
         case 'switcher':
           return 'Switcher'
+        case 'select2':
+          return 'Select2'
+        case 'updateSelect':
+          return 'UpdateSelect'
         default:
           return 'el-button'
       }

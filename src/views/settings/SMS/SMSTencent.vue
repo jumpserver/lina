@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$t('setting.TencentCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$tc('setting.TencentCloud')" :config="$data" />
 </template>
 
 <script>
@@ -58,8 +58,7 @@ export default {
       fieldsMeta: {
         TENCENT_VERIFY_SIGN_TMPL: {
           fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {
-          }
+          fieldsMeta: {}
         },
         TENCENT_SECRET_KEY: {
           component: UpdateToken
@@ -70,10 +69,8 @@ export default {
       }
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 

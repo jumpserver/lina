@@ -133,7 +133,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .page-submenu >>> .el-tabs__header {
   background-color: white;
   margin-left: -25px;
@@ -141,6 +141,14 @@ export default {
   margin-right: -25px;
   padding-right: 25px;
   margin-top: -30px;
+
+  .el-tabs__item {
+
+    i {
+      opacity: 0.6;
+    }
+  }
+
 }
 
 .page-submenu >>> .el-tabs__nav-wrap {

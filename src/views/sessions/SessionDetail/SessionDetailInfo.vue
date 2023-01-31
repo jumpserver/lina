@@ -112,7 +112,7 @@ export default {
           value: this.session.user
         },
         {
-          key: this.$t('sessions.asset'),
+          key: this.$t('sessions.host'),
           value: this.session.asset
         },
         {
@@ -132,7 +132,7 @@ export default {
           value: this.session.remote_addr
         },
         {
-          key: this.$t('sessions.dateStart'),
+          key: this.$t('common.DateStart'),
           value: toSafeLocalDateStr(this.session.date_start)
         },
         {

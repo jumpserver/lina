@@ -1,7 +1,7 @@
 <template>
   <div class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
-    <h3>{{ group.title }}</h3>
+    <h3>{{ group['title'] }} </h3>
   </div>
 </template>
 

@@ -1,5 +1,4 @@
 <template>
-
   <div class="filter-field">
     <el-cascader
       v-show="options.length > 0"
@@ -31,6 +30,8 @@
       :placeholder="placeholder"
       class="search-input"
       :class="options.length < 1 ? 'search-input2': ''"
+      :validate-event="false"
+      suffix-icon="el-icon-search"
       @blur="focus = false"
       @focus="focus = true"
       @change="handleConfirm"
@@ -72,9 +73,10 @@ export default {
   },
   computed: {
     keyLabel() {
+      if (!this.filterKey) return ''
       for (const field of this.options) {
         if (field.value === this.filterKey) {
-          return field.label
+          return field?.label
         }
       }
       return ''
@@ -246,11 +248,20 @@ export default {
       return true
     },
     handleConfirm() {
-      if (this.filterValue === '') return
+      if (this.filterValue === '') {
+        this.handleTagClose(this.filterKey)
+        this.filterKey = ''
+        return
+      }
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
-      const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
+      const tag = {
+        key: this.filterKey,
+        label: this.keyLabel,
+        value: this.filterValue,
+        valueLabel: this.valueLabel
+      }
       this.$set(this.filterTags, this.filterKey, tag)
       this.$emit('tagSearch', this.filterMaps)
 
@@ -317,12 +328,17 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 3px;
     background-color:#fff;
+
+  }
+  .search-input  >>> .el-input__suffix {
+    cursor: pointer;
   }
   .search-input2 >>> .el-input__inner {
     text-indent: 5px;
   }
   .search-input >>> .el-input__inner {
     /*max-width:inherit !important;*/
+
     max-width: 200px;
     border: none;
     padding-left: 5px;

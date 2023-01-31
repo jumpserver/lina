@@ -1,7 +1,7 @@
 <template>
   <div>
     <Dialog
-      :title="$t('setting.importLdapUserTitle')"
+      :title="$tc('setting.importLdapUserTitle')"
       v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -18,7 +18,12 @@
       <div slot="footer">
         <el-button size="small" @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
         <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
-        <el-button type="primary" size="small" :loading="dialogLdapUserImportAllLoginStatus" @click="importAllUserClick">{{ $t('common.ImportAll') }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          :loading="dialogLdapUserImportAllLoginStatus"
+          @click="importAllUserClick"
+        >{{ $t('common.ImportAll') }}</el-button>
       </div>
     </Dialog>
   </div>
@@ -71,7 +76,6 @@ export default {
           },
           groups: {
             label: this.$t('users.UserGroups'),
-            showOverflowTooltip: true,
             formatter: function(row) {
               return <span> {row.groups.join(' | ')} </span>
             }
@@ -98,7 +102,7 @@ export default {
         username_list: selectIds
       }
       if (selectIds.length === 0) {
-        this.$message.error(this.$t('setting.unselectedUser'))
+        this.$message.error(this.$tc('setting.unselectedUser'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {

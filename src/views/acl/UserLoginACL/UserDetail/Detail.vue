@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
+
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -43,9 +43,9 @@ export default {
             data.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: data }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
+            this.$message.success(this.$tc('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+            this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
           })
         },
         onAddSuccess: () => {
@@ -55,7 +55,7 @@ export default {
       quickActions: [
         {
           title: this.$t('common.Active'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             model: this.object.is_active
           },
@@ -65,58 +65,31 @@ export default {
                 `/api/v1/acls/login-acls/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
         }
       ],
-      dataVal: []
-    }
-  },
-  computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('acl.name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('acl.username'),
-          value: this.object.user_display
-        },
+      dataVal: [],
+      url: `/api/v1/acls/login-acls/${this.object.id}`,
+      detailFields: [
+        'name', 'user_display',
         {
           key: this.$t('acl.ip_group'),
           value: this.object.rules.ip_group.toString()
         },
-        {
-          key: this.$t('common.time_period'),
-          value: this.dataVal
-        },
-        {
-          key: this.$t('acl.action'),
-          value: this.object.action_display
-        },
-        {
-          key: this.$t('acl.priority'),
-          value: this.object.priority
-        },
-        {
-          key: this.$t('acl.date_created'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('acl.created_by'),
-          value: this.object.created_by
-        },
+        'dataVal', 'action_display', 'priority', 'date_created', 'created_by',
         {
           key: this.$t('acl.login_confirm_user'),
-          value: this.object.action === 'confirm' ? this.object.reviewers_display : ''
+          value: this.object.reviewers.map(item => item.name).join(', ')
         }
       ]
     }
+  },
+  computed: {
   },
   created() {
     const arrs = this.object.rules.time_period

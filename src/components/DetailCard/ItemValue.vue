@@ -1,4 +1,6 @@
 <script type="text/jsx">
+import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'ItemValue',
   props: {
@@ -15,27 +17,60 @@ export default {
       default: null
     }
   },
+  computed: {
+    displayValue() {
+      if ([null, undefined, ''].includes(this.value)) {
+        return '-'
+      }
+      if (typeof this.value === 'boolean') {
+        return this.toChoicesDisplay(this.value)
+      } else if (typeof this.value === 'object') {
+        return this.value
+      } else if (this.value instanceof Array) {
+        return this.value.map(item => {
+          if (typeof item === 'object') {
+            return item.label || item.title
+          } else {
+            return item
+          }
+        }).join(', ')
+      } else if (this.isDatetime(this.value)) {
+        return toSafeLocalDateStr(this.value)
+      } else {
+        return this.value
+      }
+    }
+  },
   methods: {
     toChoicesDisplay(value) {
       if (!value) {
         return this.$t('common.No')
       }
       return this.$t('common.Yes')
+    },
+    isDatetime(value) {
+      if (typeof value !== 'string') {
+        return false
+      }
+      if (value.split(' ').length !== 3) {
+        return false
+      }
+      if (value.split(' ')[1].split(':').length !== 3) {
+        return false
+      }
+      if (isNaN(value) && !isNaN(Date.parse(value))) {
+        return true
+      }
     }
   },
   render(h) {
     if (typeof this.formatter === 'function') {
       return this.formatter(this.item, this.value)
     }
-    if (typeof this.value === 'boolean') {
-      return (
-        <span class='item-value'>{this.toChoicesDisplay(this.value)}</span>
-      )
-    }
     if (this.value instanceof Array) {
       const newArr = this.value || []
       return (
-        <span class='item-value'>
+        <span>
           {
             newArr.map((item, index) => <div key={index}>{item.key}：{item.value} </div>)
           }
@@ -43,15 +78,11 @@ export default {
       )
     }
     return (
-      <span class='item-value'>{this.value}</span>
+      <span>{this.displayValue}</span>
     )
   }
 }
 </script>
 
 <style scoped>
-.item-value {
-  word-break: break-word;
-}
-
 </style>

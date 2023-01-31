@@ -15,7 +15,7 @@
       <Dialog
         :visible.sync="dialogLicenseImport"
         top="20vh"
-        :title="this.$t('setting.ImportLicense')"
+        :title="$tc('setting.ImportLicense')"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >
@@ -45,7 +45,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {

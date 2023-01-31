@@ -18,8 +18,8 @@ export default {
   components: { JsonEditor },
   props: {
     value: {
-      type: String,
-      default: () => ''
+      type: [String, Object, Array],
+      default: () => ({})
     }
   },
   data() {
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.resultInfo = JSON.parse(this.value)
+    this.resultInfo = typeof this.value === 'string' ? JSON.parse(this.value) : this.value
   },
   methods: {
     // 数据改变
@@ -38,14 +38,14 @@ export default {
     },
     // 保存
     onJsonSave(value) {
-      this.resultInfo = value
+      this.resultInfo = typeof value === 'string' ? JSON.parse(value) : value
       this.hasJsonFlag = true
       setTimeout(() => {
-        this.$emit('change', JSON.stringify(this.resultInfo))
+        this.$emit('change', this.resultInfo)
       }, 500)
     },
     onError: _.debounce(function(value) {
-      this.$message.error(this.$t('common.FormatError'))
+      this.$message.error(this.$tc('common.FormatError'))
     }, 1100)
   }
 }
@@ -53,20 +53,25 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   .json-editor {
-    &>>> .jsoneditor {
+    & > > > .jsoneditor {
       border: 1px solid #e5e6e7;
     }
-    &>>> .jsoneditor-compact {
+
+    & > > > .jsoneditor-compact {
       display: none;
     }
-    &>>> .jsoneditor-modes {
+
+    & > > > .jsoneditor-modes {
       display: none;
     }
-    &>>> .jsoneditor-poweredBy {
+
+    & > > > .jsoneditor-poweredBy {
       display: none;
     }
-    &>>> .jsoneditor-menu {
+
+    & > > > .jsoneditor-menu {
       background: var(--color-primary);
       border-bottom: 1px solid var(--color-primary);
     }

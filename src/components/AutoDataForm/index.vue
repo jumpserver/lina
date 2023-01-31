@@ -1,13 +1,24 @@
 <template>
-  <DataForm ref="dataForm" v-loading="loading" :fields="totalFields" :form="iForm" v-bind="$attrs" v-on="$listeners">
-    <FormGroupHeader
+  <DataForm
+    v-if="!loading"
+    ref="dataForm"
+    :fields="totalFields"
+    :form="iForm"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
+    <span
       v-for="(group, i) in groups"
       :slot="'id:'+group.name"
       :key="'group-'+group.name"
-      :group="group"
-      :index="i"
-      :line="i !== 0"
-    />
+    >
+      <FormGroupHeader
+        v-if="!groupHidden(group, i)"
+        :group="group"
+        :index="i"
+        :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+      />
+    </span>
   </DataForm>
 </template>
 
@@ -15,6 +26,7 @@
 import DataForm from '../DataForm'
 import FormGroupHeader from '@/components/FormGroupHeader'
 import { FormFieldGenerator } from '@/components/AutoDataForm/utils'
+
 export default {
   name: 'AutoDataForm',
   components: {
@@ -51,32 +63,52 @@ export default {
       totalFields: [],
       loading: true,
       groups: [],
-      iForm: this.form,
       errors: {}
+    }
+  },
+  computed: {
+    iForm() {
+      const iForm = {}
+      Object.entries(this.form).forEach(([key, value]) => {
+        // 初始值是 choice 对象
+        if (value && typeof value === 'object' && value.label && value.value !== undefined) {
+          iForm[key] = value.value
+        } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === 'object' &&
+          value[0].label && value[0].value !== undefined) {
+          iForm[key] = value.map(item => item.value)
+        } else {
+          iForm[key] = value
+        }
+      })
+      return iForm
     }
   },
   mounted() {
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
-    optionUrlMetaAndGenerateColumns() {
-      this.$store.dispatch('common/getUrlMeta', { url: this.url }).then(data => {
-        this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
-        this.generateColumns()
-        this.cleanFormValue()
-      }).catch(err => {
-        this.$log.error(err)
-      }).finally(() => {
-        this.loading = false
-      })
+    async optionUrlMetaAndGenerateColumns() {
+      let data = { actions: {}}
+      if (this.url) {
+        data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
+      }
+      this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
+      this.$emit('afterRemoteMeta', this.remoteMeta)
+      this.generateColumns()
+      this.$emit('afterGenerateColumns', this.totalFields)
+      this.cleanFormValue()
+      this.loading = false
     },
     generateColumns() {
-      const generator = new FormFieldGenerator()
+      const generator = new FormFieldGenerator(this.$emit)
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
       this.$log.debug('Total fields: ', this.totalFields)
     },
     _cleanFormValue(form, remoteMeta) {
+      if (!form) {
+        form = {}
+      }
       for (const [k, v] of Object.entries(remoteMeta)) {
         let valueSet = form[k]
         if (v.type === 'nested object' && v.children) {
@@ -114,6 +146,18 @@ export default {
       } else {
         field.attrs.error = error
       }
+    },
+    groupHidden(group, i) {
+      for (const field of group.fields) {
+        let hidden = field.hidden
+        if (typeof hidden === 'function') {
+          hidden = hidden(this.iForm)
+        }
+        if (!hidden) {
+          return false
+        }
+      }
+      return true
     }
   }
 }

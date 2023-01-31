@@ -1,5 +1,5 @@
 <template>
-  <GenericTicketDetail :object="object" :detail-card-items="detailCardItems" />
+  <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
 </template>
 
 <script>
@@ -7,6 +7,7 @@ import { STATUS_MAP } from '../const'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+
 export default {
   name: 'TicketDetail',
   components: {
@@ -20,8 +21,8 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
-      imageUrl: require('@/assets/img/admin.png'),
+      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
+      imageUrl: require('@/assets/img/avatar.png'),
       form: {
         comments: ''
       },
@@ -38,25 +39,25 @@ export default {
         },
         {
           key: this.$t('tickets.type'),
-          value: object.type_display
+          value: object.type.lable
         },
         {
           key: this.$t('tickets.status'),
           value: object.status,
           formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
+            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
           }
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: object.process_map[object.approval_step - 1].assignees_display.join(',')
+          value: object.process_map[object.approval_step.value - 1].assignees_display.join(',')
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: object.process_map[object.approval_step - 1].processor_display
+          value: object.process_map[object.approval_step.value - 1].processor_display
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(object.date_created)
         }
       ]

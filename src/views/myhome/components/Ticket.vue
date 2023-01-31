@@ -16,7 +16,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => '/api/v1/tickets/tickets/'
+      default: () => `/api/v1/tickets/tickets/`
     }
   },
   data() {
@@ -28,22 +28,22 @@ export default {
       },
       tableConfig: {
         url: this.url,
-        columns: [
-          {
-            prop: 'title',
+        hasColumnActions: false,
+        columns: ['title', 'applicant', 'type', 'status', 'date_created'],
+        columnsMeta: {
+          title: {
             label: this.$t('tickets.title'),
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: function({ row }) {
-                if (row.type === 'apply_asset') {
+                const type = row.type.value
+                if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
-                } else if (row.type === 'apply_application') {
-                  return 'AppsTicketDetail'
-                } else if (row.type === 'login_asset_confirm') {
+                } else if (type === 'login_asset_confirm') {
                   return 'LoginAssetTicketDetail'
-                } else if (row.type === 'login_confirm') {
+                } else if (type === 'login_confirm') {
                   return 'LoginTicketDetail'
-                } else if (row.type === 'command_confirm') {
+                } else if (type === 'command_confirm') {
                   return 'CommandConfirmDetail'
                 } else {
                   return 'TicketDetail'
@@ -51,20 +51,35 @@ export default {
               }
             }
           },
-          {
-            prop: 'applicant_display',
-            label: this.$t('tickets.user')
+          applicant: {
+            label: this.$t('tickets.user'),
+            formatter: row => {
+              return row.rel_snapshot.applicant
+            }
           },
-          {
-            prop: 'type_display',
-            label: this.$t('tickets.type')
+          type: {
+            label: this.$t('tickets.type'),
+            width: '160px',
+            formatter: row => {
+              return row.type.label
+            }
           },
-          {
-            prop: 'date_created',
+          status: {
+            align: 'center',
+            width: '90px',
+            formatter: row => {
+              if (row.status.value === 'open') {
+                return <el-tag type='primary' size='mini'> {this.$t('tickets.OpenStatus')}</el-tag>
+              } else {
+                return <el-tag type='danger' size='mini'>  {this.$t('tickets.CloseStatus')}</el-tag>
+              }
+            }
+          },
+          date_created: {
             label: this.$t('tickets.date'),
             formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
-        ],
+        },
         hasSelection: false,
         paginationSize: 10
       }
@@ -78,7 +93,7 @@ export default {
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', `${iNew}?applicant=${this.currentUser.id}`)
+      this.$set(this.tableConfig, 'url', `${iNew}?assignees__id=${this.currentUser.id}&state=pending`)
     }
   }
 }

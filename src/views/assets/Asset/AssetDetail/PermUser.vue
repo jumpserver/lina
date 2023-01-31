@@ -18,7 +18,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { GenericListTableDialog } from '@/layout/components'
-import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 import PermUserGroupCard from './components/PermUserGroupCard'
 
 export default {
@@ -57,21 +57,13 @@ export default {
             formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
             formatterArgs: {
               route: 'UserDetail'
-            },
-            showOverflowTooltip: true
-          },
-          username: {
-            showOverflowTooltip: true
-          },
-          email: {
-            showOverflowTooltip: true
+            }
           },
           source: {
             width: '120px'
           },
           total_role_display: {
-            label: this.$t('users.Role'),
-            showOverflowTooltip: true
+            label: this.$t('users.Role')
           },
           mfa_enabled: {
             label: 'MFA',
@@ -90,8 +82,7 @@ export default {
             }
           },
           groups_display: {
-            width: '200px',
-            showOverflowTooltip: true
+            width: '200px'
           },
           actions: {
             formatterArgs: {
@@ -136,8 +127,7 @@ export default {
         tableConfig: {
           url: '',
           columns: [
-            'name',
-            'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
+            'name', 'user_groups_amount', 'assets_amount',
             'is_valid', 'is_active', 'date_expired', 'comment', 'org_name', 'created_by', 'date_created'
           ],
           columnsShow: {
@@ -150,8 +140,7 @@ export default {
             name: {
               formatterArgs: {
                 route: 'AssetPermissionDetail'
-              },
-              showOverflowTooltip: true
+              }
             },
             users_amount: {
               label: this.$t('perms.User'),
@@ -163,16 +152,6 @@ export default {
                   activeTab: 'AssetPermissionUser'
                 }
               }
-            },
-            from_ticket: {
-              width: 100,
-              formatter: ChoicesFormatter,
-              formatterArgs: {
-                showFalse: false
-              }
-            },
-            created_by: {
-              showOverflowTooltip: true
             },
             user_groups_amount: {
               label: this.$t('perms.UserGroups'),
@@ -187,17 +166,6 @@ export default {
             },
             assets_amount: {
               label: this.$t('perms.Asset'),
-              width: '60px',
-              formatter: DetailFormatter,
-              formatterArgs: {
-                route: 'AssetPermissionDetail',
-                routeQuery: {
-                  activeTab: 'AssetPermissionAsset'
-                }
-              }
-            },
-            nodes_amount: {
-              label: this.$t('perms.Node'),
               width: '60px',
               formatter: DetailFormatter,
               formatterArgs: {

@@ -1,7 +1,7 @@
 <template>
   <ElDatableTable
     ref="table"
-    class="el-table"
+    class="el-data-table"
     v-bind="tableConfig"
     @update="onUpdate"
     v-on="iListeners"
@@ -21,7 +21,8 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -47,9 +48,13 @@ export default {
         buttonSize: 'mini',
         tableAttrs: {
           stripe: false, // 斑马纹表格
-          border: true, // 表格边框
+          border: false, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark'
+          tooltipEffect: 'dark',
+          rowClassName: ({ row }) => {
+            const selected = this.dataTable.selected.find(item => item.id === row.id)
+            return selected ? 'selected-row' : ''
+          }
         },
         extraButtons: userTableActions.extraButtons,
         onEdit: (row) => {
@@ -86,40 +91,37 @@ export default {
           }
           return query
         },
-        theRowDefaultIsSelected: (row) => { return false }
+        theRowDefaultIsSelected: (row) => {
+          return false
+        }
       }
     }
   },
   computed: {
+    iListeners() {
+      const defaultListeners = {}
+      return Object.assign(defaultListeners, this.$listeners, this.tableConfig?.listeners)
+    },
+    dataTable() {
+      return this.$refs.table
+    },
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig
-      tableDefaultConfig.paginationSize = _.get(this.globalTableConfig, 'paginationSize', 15)
+      tableDefaultConfig.paginationSize = 15
       let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
         tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
       }
       const config = Object.assign(tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
+      this.$log.debug('elTableConfig', config)
       return config
-    },
-    iListeners() {
-      return Object.assign({}, this.$listeners, this.tableConfig.listeners)
-    },
-    dataTable() {
-      return this.$refs.table
     },
     ...mapGetters({
       'globalTableConfig': 'tableConfig'
     })
   },
-  watch: {
-    config: {
-      handler() {
-        // this.getList()
-      },
-      deep: true
-    }
-  },
+  watch: {},
   methods: {
     getList() {
       this.$refs.table.clearSelection()
@@ -164,37 +166,55 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+  .el-data-table > > > .el-table {
+    .table {
+      margin-top: 15px;
+    }
 
-  .el-table  ::v-deep  .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table  ::v-deep  .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table  ::v-deep  .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+    .el-table__row {
+      &.selected-row {
+        background-color: #f5f7fa;
+      }
 
-  //分页
-  .el-pagination  ::v-deep  .el-pagination__total{
-    float: left;
-  }
+      & > td {
+        line-height: 1.5;
+        padding: 6px 0;
+        font-size: 13px;
 
-  .el-pagination  ::v-deep  .el-pagination__sizes{
-    float: left;
+        * {
+          vertical-align: middle;
+        }
+
+        .el-checkbox {
+          vertical-align: super;
+        }
+
+        & > div > span {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .el-table__header > thead > tr > th {
+      padding: 6px 0;
+      background-color: #ffffff;
+      font-size: 13px;
+      line-height: 1.5;
+
+      .cell {
+        white-space: nowrap !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
-  //修改颜色
-  // .el-button--text{
-  //   color: #409EFF;
-  // }
+  .el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
+    padding: 5px 0;
+    .cell {
+      padding-top: 3px!important;
+    }
+  }
 </style>

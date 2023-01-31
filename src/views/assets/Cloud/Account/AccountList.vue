@@ -20,13 +20,10 @@ export default {
           app: 'xpack',
           resource: 'account'
         },
-        columns: [
-          'name', 'provider', 'validity', 'date_created', 'comment', 'actions'
-        ],
+        columnsExclude: ['attrs'],
         columnsMeta: {
           name: {
             sortable: true,
-            showOverflowTooltip: true,
             formatterArgs: {
               route: 'AccountDetail'
             }
@@ -39,7 +36,7 @@ export default {
               updateRoute: 'AccountUpdate',
               hasClone: false,
               onUpdate: ({ row, col }) => {
-                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider }})
+                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider?.value }})
               },
               extraActions: [
                 {
@@ -48,7 +45,7 @@ export default {
                   can: () => vm.$hasPerm('xpack.test_account'),
                   callback: function(val) {
                     this.$axios.get(`/api/v1/xpack/cloud/accounts/${val.row.id}/test-connective/`).then(res => {
-                      this.$message.success(this.$t('common.TestSuccessMsg'))
+                      this.$message.success(this.$tc('common.TestSuccessMsg'))
                     })
                   }
                 }

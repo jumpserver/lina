@@ -20,18 +20,19 @@ export default {
           app: 'audits',
           resource: 'userloginlog'
         },
+        columnsExclude: ['backend'],
+        hasColumnActions: false,
+        columnsShow: {
+          min: ['username', 'type'],
+          default: [
+            'username', 'type', 'backend_display', 'ip', 'city',
+            'user_agent', 'mfa', 'reason_display', 'status', 'datetime'
+          ]
+        },
         url: '/api/v1/audits/login-logs/',
-        columns: [
-          'username', 'type', 'backend_display', 'ip', 'city',
-          'user_agent', 'mfa', 'reason_display', 'status', 'datetime'
-        ],
         columnsMeta: {
-          username: {
-            showOverflowTooltip: true
-          },
           user_agent: {
-            width: '150px',
-            showOverflowTooltip: true
+            width: '150px'
           },
           ip: {
             width: '140px'
@@ -39,17 +40,7 @@ export default {
           city: {
             width: '90px'
           },
-          status: {
-            width: '85px',
-            formatterArgs: {
-              classChoices: {
-                true: 'text-primary',
-                false: 'text-danger'
-              }
-            }
-          },
           mfa: {
-            label: 'MFA',
             width: '80px'
           },
           type: {
@@ -57,9 +48,6 @@ export default {
           },
           datetime: {
             width: '160px'
-          },
-          reason: {
-            showOverflowTooltip: true
           }
         },
         extraQuery: {

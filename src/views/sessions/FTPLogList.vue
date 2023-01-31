@@ -17,25 +17,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/ftp-logs/',
-        columns: [
-          'user', 'asset', 'system_user', 'remote_addr', 'operate',
-          'filename', 'is_success', 'date_start'
-        ],
+        hasColumnActions: false,
         columnsMeta: {
-          user: {
-            showOverflowTooltip: true
-          },
-          asset: {
-            showOverflowTooltip: true
-          },
-          system_user: {
-            showOverflowTooltip: true
-          },
           remote_addr: {
             width: '140px'
-          },
-          filename: {
-            showOverflowTooltip: true
           },
           operate: {
             width: '100px'

@@ -29,18 +29,18 @@ export default {
       return [
         {
           key: this.$t('tickets.type'),
-          value: this.object.type_display
+          value: this.object.type.label
         },
         {
           key: this.$t('tickets.ApprovalLevel'),
-          value: this.object.approval_level + '级'
+          value: this.object.approval_level + 'level'
         },
         {
           key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
@@ -50,7 +50,6 @@ export default {
       ]
     },
     specialCardItems() {
-      // eslint-disable-next-line no-unused-vars
       const approvalData = [
         {
           key: this.$t('tickets.OneAssigneeType'),
@@ -68,12 +67,12 @@ export default {
           key: this.$t('tickets.TwoAssignee'),
           value: ''
         }]
-      this.object.rules.forEach((item, index) => {
+      this.object.rules.forEach(item => {
         if (item.level === 1) {
-          approvalData[0].value = item.strategy_display
+          approvalData[0].value = item.strategy.label
           approvalData[1].value = item.assignees_display.join(',')
         } else {
-          approvalData[2].value = item.strategy_display
+          approvalData[2].value = item.strategy.label
           approvalData[3].value = item.assignees_display.join(',')
         }
       })

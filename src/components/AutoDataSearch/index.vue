@@ -33,7 +33,8 @@ export default {
   },
   computed: {
     iOption() {
-      return this.options.concat(this.internalOptions)
+      const options = this.options.concat(this.internalOptions)
+      return _.uniqWith(options, _.isEqual)
     }
   },
   watch: {
@@ -67,16 +68,16 @@ export default {
           type: field.type,
           value: name
         }
-        if (field.type === 'choice' && field.choices) {
+        if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
           option.children = field.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { label: item.display_name, value: 'True' }
+                return { label: item.label, value: 'True' }
               } else {
-                return { label: item.display_name, value: 'False' }
+                return { label: item.label, value: 'False' }
               }
             }
-            return { label: item.display_name, value: item.value }
+            return { label: item.label, value: item.value }
           })
         }
         if (field.type === 'boolean') {

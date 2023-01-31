@@ -22,7 +22,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'GenericTreeListPage',
   components: {
-    Page, TreeTable
+    Page,
+    TreeTable
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot'])

@@ -11,6 +11,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import AssetPermissionDetail from './AssetPermissionDetail'
 import AssetPermissionUser from './AssetPermissionUser'
 import AssetPermissionAsset from './AssetPermissionAsset'
+import AssetPermissionAccount from './AssetPermissionAccount'
 
 export default {
   components: {
@@ -18,6 +19,7 @@ export default {
     AssetPermissionDetail,
     AssetPermissionUser,
     AssetPermissionAsset,
+    AssetPermissionAccount,
     TabPage
   },
   data() {
@@ -42,6 +44,11 @@ export default {
             title: this.$t('perms.assetAndNode'),
             name: 'AssetPermissionAsset',
             hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
+          },
+          {
+            title: this.$t('perms.permAccount'),
+            name: 'AssetPermissionAccount',
+            hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }

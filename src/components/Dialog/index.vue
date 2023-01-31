@@ -4,16 +4,18 @@
     :top="top"
     :width="iWidth"
     class="dialog"
+    :append-to-body="true"
+    :modal-append-to-body="true"
     v-bind="$attrs"
-    :append-to-body="false"
-    :modal-append-to-body="false"
     v-on="$listeners"
   >
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <el-button v-if="showCancel" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm" type="primary" size="small" :loading="loadingStatus" @click="onConfirm">{{ confirmTitle }}</el-button>
+        <el-button v-if="showCancel" @click="onCancel">{{ cancelTitle }}</el-button>
+        <el-button v-if="showConfirm" type="primary" :loading="loadingStatus" @click="onConfirm">
+          {{ confirmTitle }}
+        </el-button>
       </slot>
     </div>
   </el-dialog>
@@ -58,11 +60,14 @@ export default {
       default() {
         return this.$t('common.Confirm')
       }
+    },
+    maxWidth: {
+      type: String,
+      default: '1200px'
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     iWidth() {
@@ -81,12 +86,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog >>> .el-dialog__header {
-    /*padding-top: 10px;*/
+  .dialog >>> .el-dialog {
+    border-radius: 0.3em;
+    max-width: 1500px;
+
+    &__header {
+      box-sizing: border-box;
+      padding: 15px 22px;
+      border-bottom: 1px solid #dee2e6;
+      font-weight: 400;
+    }
+
+    &__body {
+      padding: 20px 30px;
+    }
+
+    &__footer {
+      border-top: 1px solid #dee2e6;
+      padding: 16px;
+      justify-content: flex-end;
+    }
   }
 
-  .dialog-footer {
-    padding-right: 20px;
+  .dialog-footer >>> button.el-button {
+    font-size: 13px;
+    padding: 10px 20px;
   }
-
 </style>

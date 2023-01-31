@@ -15,8 +15,8 @@
           <span class="item-value">{{ session.asset }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('tickets.SystemUser') }}：</span>
-          <span class="item-value">{{ session.system_user }}</span>
+          <span class="item-label">{{ $t('tickets.Account') }}：</span>
+          <span class="item-value">{{ session.account }}</span>
         </el-col>
         <el-col>
           <span class="item-label">{{ $t('sessions.UseProtocol') }}：</span>
@@ -62,7 +62,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -74,7 +75,7 @@ export default {
   },
 
   created() {
-    if (this.object.state === 'approved' && this.object.type === 'login_asset_confirm') {
+    if (this.object.state.value === 'approved' && this.object.type.value === 'login_asset_confirm') {
       this.init()
     }
   },
@@ -105,7 +106,7 @@ export default {
       const url = '/api/v1/terminal/tasks/kill-session-for-ticket/'
       const data = [this.session.id] || []
       this.$axios.post(url, data).then(res => {
-        this.$message.success(this.$t('sessions.TerminateTaskSendSuccessMsg'))
+        this.$message.success(this.$tc('sessions.TerminateTaskSendSuccessMsg'))
         this.curTimer = setTimeout(() => {
           this.init()
         }, 50000)
@@ -126,27 +127,34 @@ export default {
   .box {
     margin-top: 15px;
     margin-bottom: 15px;
-    &>>> .el-divider--horizontal {
+
+    & >>> .el-divider--horizontal {
       margin: 10px 0;
     }
   }
+
   .content {
     line-height: 2.5;
     font-size: 13px;
     color: #676A6C;
+
     .item-label {
       font-weight: 700;
     }
+
     .item-value {
       color: #676A6C;
     }
-    &>>> .el-col {
+
+    & >>> .el-col {
       line-height: 24px;
     }
   }
+
   .bottom-btn {
     text-align: right;
   }
+
   .cur-color {
     display: inline-block;
     width: 12px;

@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
-    :title="this.$t('users.InviteUserInOrg')"
+    :title="$tc('users.InviteUserInOrg')"
     :visible.sync="setting.InviteDialogVisible"
     :show-cancel="false"
     :show-confirm="false"
     custom-class="asset-select-dialog"
-    width="70vw"
+    width="50vw"
     top="15vh"
     after
     :destroy-on-close="true"
@@ -23,6 +23,7 @@ import { Select2 } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { mapGetters } from 'vuex'
 import rules from '@/components/DataForm/rules'
+
 export default {
   components: {
     Dialog,
@@ -82,6 +83,7 @@ export default {
   methods: {
     onSubmitSuccess(res) {
       this.setting.InviteDialogVisible = false
+      this.$emit('close', res)
       this.$store.dispatch('users/currentUserJoinNewOrg', res.users)
     }
   }

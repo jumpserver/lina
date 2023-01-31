@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -10,6 +10,7 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import GatewayList from './GatewayList.vue'
+
 export default {
   components: {
     GenericDetailPage,
@@ -28,7 +29,7 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('assets.Gateway'),
+            title: this.$t('assets.GatewayList'),
             name: 'GatewayList',
             hidden: () => !this.$hasPerm('assets.view_gateway')
           }

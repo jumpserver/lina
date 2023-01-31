@@ -1,0 +1,125 @@
+<template>
+  <div>
+    <div class="box">
+      <div class="head">
+        <Title :config="config" />
+      </div>
+      <LineChart v-bind="chartConfig" />
+    </div>
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-16" />
+  </div>
+</template>
+
+<script>
+import Title from '../components/Title.vue'
+import LineChart from '../components/LineChart.vue'
+import SummaryCountCard from '../components/SummaryCountCard.vue'
+
+export default {
+  components: {
+    Title,
+    LineChart,
+    SummaryCountCard
+  },
+  props: {
+    days: {
+      type: [Number, String],
+      default: '7'
+    }
+  },
+  data() {
+    return {
+      config: {
+        title: this.$t('dashboard.SessionTrend'),
+        tip: this.$t('dashboard.SessionTrend')
+      },
+      chartTitleConfig: {
+        title: this.$t('route.BatchCommand'),
+        tip: this.$t('route.BatchCommand')
+      },
+      chartConfig: {
+        datesMetrics: [],
+        secondaryName: this.$t('dashboard.SessionsNum'),
+        secondaryData: [0]
+      },
+      data: {
+        total_count_jobs: 0,
+        total_count_jobs_unexecuted: 0,
+        total_count_jobs_executed_failed: 0
+      }
+    }
+  },
+  computed: {
+    summaryItems() {
+      return [
+        {
+          title: this.$t('route.BatchCommand') + this.$t('dashboard.Num'),
+          body: {
+            route: { name: `CommandList` },
+            count: this.data.total_count_jobs,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('dashboard.BatchCommandNotExecuted'),
+          body: {
+            route: { name: `CommandList` },
+            count: this.data.total_count_jobs_unexecuted,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('dashboard.ExecuteFailedCommand'),
+          body: {
+            route: { name: `CommandList` },
+            count: this.data.total_count_jobs_executed_failed,
+            disabled: true
+          }
+        }
+      ]
+    }
+  },
+  watch: {
+    days() {
+      this.getData()
+    }
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    async getData() {
+      const data = await this.$axios.get(`/api/v1/index/?days=${this.days}
+        &total_count_jobs=1
+        &total_count_jobs_unexecuted=1
+        &total_count_jobs_executed_failed=1
+        &session_dates_metrics=1
+      `)
+      const totalCountSession = data.dates_metrics_total_count_session
+      this.chartConfig.datesMetrics = data.dates_metrics_date
+      this.data.total_count_jobs = data?.total_count_jobs
+      this.data.total_count_jobs_unexecuted = data?.total_count_jobs_unexecuted
+      this.data.total_count_jobs_executed_failed = data?.total_count_jobs_executed_failed
+      if (totalCountSession.length > 1) {
+        this.chartConfig.secondaryData = totalCountSession
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.margin-top-16 {
+  margin-top: 16px;
+}
+.box {
+  margin-top: 16px;
+  padding: 20px;
+  background: #fff;
+  .head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+}
+</style>

@@ -1,0 +1,54 @@
+<template>
+  <div>
+    <CardTable ref="CardTable" v-bind="$data" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
+  </div>
+</template>
+
+<script>
+import CardTable from './components/CardTable'
+import UploadDialog from './UploadDialog'
+
+export default {
+  name: 'Applets',
+  components: {
+    CardTable,
+    UploadDialog
+  },
+  data() {
+    return {
+      uploadDialogVisible: false,
+      tableConfig: {
+        url: '/api/v1/terminal/applets/',
+        deletePerm: 'terminal.delete_applet'
+      },
+      headerActions: {
+        onCreate: () => {
+          this.uploadDialogVisible = true
+        },
+        detailRoute: 'AppletDetail',
+        hasExport: false,
+        hasImport: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        hasColumnSetting: false
+      }
+    }
+  },
+  methods: {
+    handleUpload(res) {
+      this.$refs.CardTable.reloadTable()
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.dom {
+  white-space: initial;
+
+  .el-tag {
+    margin-right: 3px;
+  }
+}
+</style>

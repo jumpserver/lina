@@ -13,7 +13,7 @@
 
 <script>
 import parser from 'cron-parser'
-import moment from 'moment'
+import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'CrontabResult',
   props: {
@@ -46,10 +46,10 @@ export default {
       const rule = 0 + ' ' + this.$options.propsData.ex
       try {
         this.resultList = []
-        var interval = parser.parseExpression(rule)
+        const interval = parser.parseExpression(rule)
         for (let index = 0; index < 5; index++) {
           const cur = interval.next().toString()
-          this.resultList.push(moment(cur).format('YYYY-MM-DD HH:mm:ss'))
+          this.resultList.push(toSafeLocalDateStr(cur))
         }
       } catch (error) {
         this.isShow = false

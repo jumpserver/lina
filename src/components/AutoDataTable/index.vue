@@ -11,8 +11,8 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
-      :total-columns-list="popoverColumns.totalColumnsList"
       :min-columns="popoverColumns.minCols"
+      :total-columns-list="popoverColumns.totalColumnsList"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -22,15 +22,13 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
-  ActionsFormatter,
-  ChoicesFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
+  ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
-import ColumnSettingPopover from './components/ColumnSettingPopover'
 import { newURL } from '@/utils/common'
+import ColumnSettingPopover from './components/ColumnSettingPopover'
+
 export default {
   name: 'AutoDataTable',
   components: {
@@ -63,13 +61,12 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     config: {
-      handler(iNew) {
+      handler: function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found')
+        this.$log.debug('AutoDataTable Config change found: ')
       },
       deep: true
     }
@@ -79,7 +76,9 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenCols() {
-      if (this.config.url === '') { return }
+      if (this.config.url === '') {
+        return
+      }
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         const method = this.method.toUpperCase()
@@ -117,7 +116,22 @@ export default {
         case 'is_valid':
           col.label = i18n.t('common.Validity')
           col.formatter = ChoicesFormatter
-          col.align = 'center'
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Valid'),
+              false: i18n.t('common.Invalid')
+            }
+          }
+          col.width = '80px'
+          break
+        case 'is_active':
+          col.formatter = ChoicesFormatter
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Active'),
+              false: i18n.t('common.Inactive')
+            }
+          }
           col.width = '80px'
           break
         case 'datetime':
@@ -129,21 +143,41 @@ export default {
       }
       return col
     },
-    generateColumnByType(type, col) {
+    generateColumnByType(type, col, meta) {
       switch (type) {
         case 'choice':
           col.sortable = 'custom'
           col.formatter = DisplayFormatter
           break
+        case 'labeled_choice':
+          col.sortable = 'custom'
+          col.formatter = ChoicesFormatter
+          break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.align = 'center'
           col.width = '80px'
           break
         case 'datetime':
           col.formatter = DateFormatter
           col.width = '160px'
+          break
+        case 'object_related_field':
+          col.formatter = ObjectRelatedFormatter
+          break
+        case 'm2m_related_field':
+          col.formatter = ObjectRelatedFormatter
+          break
+        case 'list':
+          col.formatter = ArrayFormatter
+          break
+        case 'json':
+        case 'field':
+          if (meta.child && meta.child.type === 'nested object') {
+            col.formatter = ObjectRelatedFormatter
+          }
+          break
       }
+      // this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
     addHelpTipsIfNeed(col) {
@@ -155,9 +189,9 @@ export default {
         return (
           <span>{column.label}
             <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTips} />
+              <div slot='content' domPropsInnerHTML={helpTips}/>
               <el-button style='padding: 0'>
-                <i class='fa fa-info-circle' />
+                <i class='fa fa-info-circle'/>
               </el-button>
             </el-tooltip>
           </span>
@@ -183,12 +217,12 @@ export default {
           col.filters = column.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { text: item['display_name'], value: 'True' }
+                return { text: item['label'], value: 'True' }
               } else {
-                return { text: item['display_name'], value: 'False' }
+                return { text: item['label'], value: 'False' }
               }
             }
-            return { text: item['display_name'], value: item.value }
+            return { text: item['label'], value: item.value }
           })
           col.sortable = false
           col['column-key'] = col.prop
@@ -196,13 +230,27 @@ export default {
       }
       return col
     },
+    setDefaultFormatterIfNeed(col) {
+      if (!col.formatter) {
+        col.formatter = (row, column, cellValue) => {
+          const value = cellValue || '-'
+          let padding = '0'
+          if (value === '-') {
+            padding = '6px'
+          }
+          return <span style={{ marginLeft: padding }}>{value}</span>
+        }
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-      let col = { prop: name, label: colMeta.label }
+      let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
 
       col = this.generateColumnByName(name, col)
-      col = this.generateColumnByType(colMeta.type, col)
+      col = this.generateColumnByType(colMeta.type, col, colMeta)
+      col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
@@ -211,23 +259,42 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      for (let col of config.columns) {
-        if (typeof col === 'object') {
-          columns.push(col)
-        } else if (typeof col === 'string') {
-          col = this.generateColumn(col)
-          columns.push(col)
-        }
+      const allColumns = Object.entries(this.meta)
+        .filter(([name, meta]) => !meta['write_only'])
+        .map(([name, meta]) => name)
+        .concat(config.columnsExtra || [])
+      let configColumns = config.columns || allColumns
+      const columnsExclude = config.columnsExclude || []
+      if (columnsExclude.length > 0) {
+        configColumns = configColumns.filter(item => !columnsExclude.includes(item))
       }
-      columns = columns.filter(item => {
-        let has = item.has
-        if (has === undefined) {
-          has = true
-        } else if (typeof has === 'function') {
-          has = has()
+      // 解决后端 API 返回字段中包含 actions 的问题;
+      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
+      if (hasColumnActions && !configColumns.includes('actions')) {
+        configColumns.push('actions')
+      }
+      if (configColumns.length > 0) {
+        for (let col of configColumns) {
+          if (typeof col === 'object') {
+            columns.push(col)
+          } else if (typeof col === 'string') {
+            col = this.generateColumn(col)
+            columns.push(col)
+          }
         }
-        return has
-      })
+        columns = columns.filter(item => {
+          if (item?.showFullContent) {
+            item.className = 'show-full-content'
+          }
+          let has = item.has
+          if (has === undefined) {
+            has = true
+          } else if (typeof has === 'function') {
+            has = has()
+          }
+          return has
+        })
+      }
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns

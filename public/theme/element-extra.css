@@ -194,16 +194,15 @@ td .el-button.el-button--mini {
   line-height: 34px;
 }
 
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #606266;
-  background-color: #ddd;
-  font-weight: 400;
-}
-
-.el-select-dropdown__item.hover {
+.option-group .el-select-dropdown__item.hover, .option-group .el-select-dropdown__item.selected {
   background-color: primary;
   color: white;
 }
+
+.option-group:has(.hover) .el-select-dropdown__item.selected {
+  background-color: light-2;
+}
+
 
 .el-select-dropdown__item.is-disabled:hover{
   color:#c0c4cc;
@@ -215,7 +214,7 @@ td .el-button.el-button--mini {
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
   color: white;
-  background-color: primary;
+  background-color: light-4;
 }
 
 .el-tag.el-tag--info {
@@ -331,12 +330,11 @@ td .el-button.el-button--mini {
 }
 
 .el-table .cell,
-.el-table--border td:first-child .cell,
-.el-table--border th:first-child .cell {
+.el-table td:first-child .cell,
+.el-table th:first-child .cell {
   padding-left: 10px;
   padding-right: 14px;
 }
-
 
 .el-tag--default.el-tag--dark {
   background-color: #d1dade;
@@ -453,11 +451,48 @@ td .el-button.el-button--mini {
 
 .el-select-dropdown__item.selected {
   font-weight: 400;
-  color: #606266;
-  background-color: #ddd;
+  color: white;
+  background-color: primary;
 }
 
 .el-input-group__prepend div.el-select .el-input__inner,
 .el-input-group__prepend div.el-select .el-input__inner:hover {
   color: #303133;
+}
+
+.el-input-group__append, .el-input-group__prepend {
+  color: primary
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: $--color-text-primary;
+  cursor: not-allowed;
+}
+
+.el-step__description.is-finish {
+  color: #676a6c;
+}
+
+.el-alert {
+  border: solid 1px #e7eaec;
+}
+
+.el-alert.el-alert--success.is-light {
+  border-color: var(--color-success-light);
+}
+
+.el-alert.el-alert--primary.is-light {
+  border-color: var(--color-primary-light);
+}
+
+.el-alert.el-alert--info.is-light {
+  border-color: var(--color-info-light);
+}
+
+.el-alert.el-alert--warning.is-light {
+  border-color: var(--color-warning-light);
+}
+
+.el-alert.el-alert--error.is-light {
+  border-color: var(--color-danger-light);
 }

@@ -1,15 +1,16 @@
-import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+const Setting = () => import('@/views/settings/index')
+
 export default {
   path: '/settings',
-  component: Layout,
+  component: Setting,
   redirect: '/settings/basic',
   name: 'SystemSetting',
   meta: {
     title: i18n.t('route.Settings'),
-    icon: 'el-icon-s-tools',
+    icon: 'system-setting',
     activeMenu: '/settings',
     view: 'settings',
     type: 'view',
@@ -24,7 +25,7 @@ export default {
       component: () => import('@/views/settings/Basic'),
       meta: {
         title: i18n.t('setting.Basic'),
-        icon: 'gear',
+        icon: 'basic',
         permissions: ['settings.view_setting']
       }
     },
@@ -34,7 +35,7 @@ export default {
       component: () => import('@/views/settings/Email'),
       meta: {
         title: i18n.t('setting.Email'),
-        icon: 'envelope-o',
+        icon: 'email-set',
         permissions: ['settings.change_email']
       }
     },
@@ -44,7 +45,7 @@ export default {
       component: () => import('@/views/settings/Auth'),
       meta: {
         title: i18n.t('setting.Auth'),
-        icon: 'user-circle-o',
+        icon: 'attestation',
         permissions: ['settings.change_auth']
       }
     },
@@ -54,7 +55,7 @@ export default {
       component: () => import('@/views/settings/Message'),
       meta: {
         title: i18n.t('setting.MessageSub'),
-        icon: 'bell-o',
+        icon: 'message',
         permissions: ['settings.change_systemmsgsubscription']
       }
     },
@@ -64,7 +65,7 @@ export default {
       component: () => import('@/views/settings/SMS'),
       meta: {
         title: i18n.t('setting.SMS'),
-        icon: 'mobile-phone fa-lg',
+        icon: 'short-message',
         permissions: ['settings.change_sms'],
         licenseRequired: true
       }
@@ -85,14 +86,14 @@ export default {
           component: () => import('@/views/settings/Terminal'),
           meta: {
             title: i18n.t('setting.Terminal'),
-            icon: 'tasks',
+            icon: 'terminal-set',
             permissions: ['settings.change_terminal']
           }
         },
         {
           path: ':id',
           name: 'TerminalDetail',
-          component: () => import('@/views/settings/Terminal/TerminalDetail'),
+          component: () => import('@/views/settings/Terminal/Component/TerminalDetail'),
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.view_terminal']
@@ -102,7 +103,7 @@ export default {
         {
           path: ':id/update',
           name: 'TerminalUpdate',
-          component: () => import('@/views/settings/Terminal/TerminalUpdate'),
+          component: () => import('@/views/settings/Terminal/Component/TerminalUpdate'),
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.change_terminal']
@@ -200,12 +201,78 @@ export default {
       ]
     },
     {
+      path: '/settings/applets',
+      component: empty,
+      redirect: '',
+      meta: {
+        title: i18n.t('setting.Applets'),
+        app: 'terminal',
+        permissions: ['settings.change_terminal']
+      },
+      children: [
+        {
+          path: '',
+          name: 'Applets',
+          component: () => import('@/views/settings/Applet'),
+          meta: {
+            title: i18n.t('setting.Applets'),
+            icon: 'application',
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
+          path: 'applets/:id',
+          name: 'AppletDetail',
+          component: () => import('@/views/settings/Applet/Applet/AppletDetail/index'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletDetail'),
+            permissions: ['settings.change_terminal'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'hosts/create',
+          name: 'AppletHostCreate',
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostCreate'),
+            permissions: ['terminal.add_applethost'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'hosts/:id',
+          name: 'AppletHostDetail',
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostDetail/index'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostDetail'),
+            permissions: ['terminal.view_applethost'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'hosts/:id/update',
+          name: 'AppletHostUpdate',
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostUpdate'),
+            permissions: ['terminal.change_applethost'],
+            activeMenu: '/settings/applets'
+          }
+        }
+      ]
+    },
+    {
       path: '/settings/security',
       name: 'Security',
       component: () => import('@/views/settings/Security'),
       meta: {
         title: i18n.t('setting.Security'),
-        icon: 'shield',
+        icon: 'security',
         permissions: ['settings.change_security']
       }
     },
@@ -215,7 +282,7 @@ export default {
       component: () => import('@/views/settings/Clean'),
       meta: {
         title: i18n.t('setting.Cleaning'),
-        icon: 'hourglass-2',
+        icon: 'clean',
         permissions: ['settings.change_clean']
       }
     },
@@ -225,7 +292,7 @@ export default {
       component: () => import('@/views/settings/Interface'),
       meta: {
         title: i18n.t('xpack.InterfaceSettings'),
-        icon: 'laptop',
+        icon: 'face',
         licenseRequired: true,
         permissions: ['settings.change_interface']
       }
@@ -247,7 +314,7 @@ export default {
           name: 'OrganizationList',
           meta: {
             title: i18n.t('xpack.Organization.OrganizationList'),
-            icon: 'sitemap',
+            icon: 'organization-set',
             permissions: ['orgs.view_organization']
           }
         },
@@ -291,7 +358,7 @@ export default {
       component: () => import('@/views/settings/Other'),
       meta: {
         title: i18n.t('setting.Other'),
-        icon: 'map-signs',
+        icon: 'other',
         permissions: ['settings.change_other']
       }
     },
@@ -301,7 +368,7 @@ export default {
       component: () => import('@/views/settings/Tools'),
       meta: {
         title: i18n.t('setting.SystemTools'),
-        icon: 'wrench',
+        icon: 'tools',
         permissions: ['settings.view_setting']
       }
     },
@@ -311,7 +378,7 @@ export default {
       component: () => import('@/views/settings/License'),
       meta: {
         title: i18n.t('setting.License'),
-        icon: 'diamond',
+        icon: 'license',
         permissions: ['settings.change_license']
       }
     }

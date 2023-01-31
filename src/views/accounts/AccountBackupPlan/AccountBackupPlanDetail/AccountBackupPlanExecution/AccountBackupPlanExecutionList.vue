@@ -6,34 +6,31 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'AccountBackupPlanExecution',
+  name: 'AccountBackupPlanExecutionList',
   components: {
     GenericListTable
   },
   props: {
     object: {
       type: Object,
-      required: true,
+      required: false,
       default: () => ({})
     }
   },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/assets/account-backup-plan-executions/?plan_id=${this.object.id}`,
+        url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
+          'timedelta', 'trigger', 'date_start', 'is_success', 'reason', 'actions'
         ],
         columnsMeta: {
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
-          },
-          date_start: {
-            showOverflowTooltip: true
           },
           actions: {
             formatterArgs: {
@@ -44,14 +41,14 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  title: this.$t('accounts.AccountChangeSecret.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                  title: this.$t('accounts.AccountChangeSecret.Detail'),
                   type: 'info',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
@@ -63,6 +60,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'plan_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,

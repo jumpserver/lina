@@ -6,7 +6,7 @@
     <div class="content">
       <el-row :gutter="20">
         <el-col :span="5" class="left">
-          <el-avatar fit="fill" class="avatar" :size="40" :src="avatarUrl" />
+          <el-avatar :size="40" :src="avatarUrl" class="avatar" fit="fill" />
         </el-col>
         <el-col :span="18">
           <ul>
@@ -14,7 +14,7 @@
             <li><span class="title">{{ $t('users.Email') }}</span>：<span>{{ users.email }}</span></li>
             <li>
               <span class="title">{{ $t('audits.LoginDate') }}</span>：
-              <span>{{ $moment(users.last_login, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+              <span>{{ users.last_login | date }}</span>
             </li>
           </ul>
         </el-col>
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       users: {},
-      avatarUrl: require('@/assets/img/admin.png')
+      avatarUrl: require('@/assets/img/avatar.png')
     }
   },
   created() {
@@ -45,28 +45,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul,li {
+ul, li {
   padding: 0;
   margin: 0;
   list-style: none
 }
+
 .box-card {
   margin-bottom: 20px;
-  &>>> .el-card__header {
+
+  & > > > .el-card__header {
     padding-top: 20px;
   }
 }
+
 .content {
   overflow: hidden;
+
   .left {
     width: 70px;
     height: 70px;
     text-align: center;
-    &>>> .el-avatar--large {
+
+    & > > > .el-avatar--large {
       width: 100%;
       height: 100%;
     }
   }
+
   li {
     display: block;
     font-size: 13px;
@@ -74,11 +80,13 @@ ul,li {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
     .title {
       color: #303133;
     }
   }
 }
+
 .title {
   font-weight: 500;
 }

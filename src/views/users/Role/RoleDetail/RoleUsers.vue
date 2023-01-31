@@ -31,35 +31,35 @@ export default {
     return {
       loading: true,
       relationConfig: {
-        disabled: !this.$hasPerm(`rbac.add_${this.object.scope}rolebinding`),
+        disabled: !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`),
         icon: 'fa-user',
         title: this.$t('common.Members'),
         objectsAjax: {
-          url: `/api/v1/users/users/?fields_size=mini&order=name${this.object.scope === 'system' ? '&oid=root' : ''}`,
+          url: `/api/v1/users/users/?fields_size=mini&order=name${this.object.scope.value === 'system' ? '&oid=root' : ''}`,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         },
         performAdd: (items) => {
-          const relationUrl = `/api/v1/rbac/${this.object.scope}-role-bindings/`
+          const relationUrl = `/api/v1/rbac/${this.object.scope.value}-role-bindings/`
           const objectId = this.object.id
           const data = items.map(v => {
             return {
               user: v.value,
               role: objectId,
-              scope: this.object.scope
+              scope: this.object.scope.value
             }
           })
           return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: () => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           this.$refs.userRelation.$refs.select2.clearSelected()
         }
       },
       tableConfig: {
-        url: `/api/v1/rbac/${this.object.scope}-role-bindings/?role=${this.object.id}`,
+        url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
         columns: ['user_display', 'org_name', 'actions'],
         columnsShow: {
           min: ['user_display', 'actions']
@@ -70,7 +70,7 @@ export default {
               hasUpdate: false,
               hasClone: false,
               canDelete: ({ row }) => {
-                return this.$hasPerm(`rbac.delete_${row.scope}rolebinding`)
+                return this.$hasPerm(`rbac.delete_${row.scope.value}rolebinding`)
               }
             }
           }

@@ -4,26 +4,26 @@
     v-model="iValue"
     v-loading="!initialized"
     v-loadmore="loadMore"
+    :clearable="clearable"
+    :disabled="selectDisabled"
+    :multiple="multiple"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
-    :multiple="multiple"
-    :clearable="clearable"
+    class="select2"
     filterable
     popper-append-to-body
-    class="select2"
-    :disabled="selectDisabled"
     v-bind="$attrs"
     @change="onChange"
-    @visible-change="onVisibleChange"
     v-on="$listeners"
+    @visible-change="onVisibleChange"
   >
     <el-option
       v-for="item in iOptions"
       :key="item.value"
+      :disabled="checkDisabled(item)"
       :label="item.label"
       :value="item.value"
-      :disabled="checkDisabled(item)"
     />
   </el-select>
 </template>
@@ -78,7 +78,7 @@ export default {
     },
     // 初始化值，也就是选中的值
     value: {
-      type: [Array, String, Number, Boolean],
+      type: [Array, String, Number, Boolean, Object],
       default() {
         return this.multiple ? [] : ''
       }
@@ -137,7 +137,13 @@ export default {
         if (noValue && !this.initialized) {
           return
         }
-        this.$emit('input', val)
+        if (val && val.constructor === Object && val.value) {
+          this.$emit('input', val.value)
+        } else if (val && val.constructor === Object && val.id) {
+          this.$emit('input', val.id)
+        } else {
+          this.$emit('input', val)
+        }
       },
       get() {
         return this.value
@@ -161,6 +167,10 @@ export default {
         return { label: item.name, value: item.id }
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
+      const defaultFilterOption = (item) => {
+        return item
+      }
+      const filterOption = this.ajax.filterOption || defaultFilterOption
       const defaultProcessResults = (data) => {
         let results = []
         let more = false
@@ -174,7 +184,7 @@ export default {
           total = data.count
         }
         results = results.map(transformOption)
-        results = results.filter(Boolean)
+        results = results.filter(filterOption)
         return { results: results, pagination: more, total: total }
       }
       const defaultAjax = {
@@ -189,24 +199,21 @@ export default {
     }
   },
   watch: {
-    // url(newValue, oldValue) {
-    //   this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
-    //   this.iAjax.url = newValue
-    //   this.refresh()
-    // },
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
     },
-    value(iNew) {
-      this.iValue = iNew
+    value: {
+      handler(newValue, oldValue) {
+      },
+      deep: true
     }
   },
   async mounted() {
-    // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
+        this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
       })
@@ -319,13 +326,11 @@ export default {
     addOption(option) {
       this.iOptions.push(option)
     },
-    getOptionsByValues(values) {
-      return this.iOptions.filter((v) => {
-        return values.indexOf(v.value) !== -1
-      })
-    },
     getSelectedOptions() {
-      const values = this.iValue
+      let values = this.iValue
+      if (!Array.isArray(values)) {
+        values = [values]
+      }
       return this.iOptions.filter((v) => {
         return values.indexOf(v.value) !== -1
       })
@@ -338,9 +343,9 @@ export default {
     },
     onChange(values) {
       const options = this.getSelectedOptions()
-      this.$log.debug('Current select options: ', options)
+      this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
-      this.$emit('change', options)
+      // this.$emit('change', options) // 事件重复
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {
@@ -354,11 +359,12 @@ export default {
 </script>
 
 <style scoped>
-  .select2 {
-    width: 100%;
-  }
-  .select2 >>> .el-tag.el-tag--info {
-    height: auto;
-    white-space: normal;
-  }
+.select2 {
+  width: 100%;
+}
+
+.select2 >>> .el-tag.el-tag--info {
+  height: auto;
+  white-space: normal;
+}
 </style>

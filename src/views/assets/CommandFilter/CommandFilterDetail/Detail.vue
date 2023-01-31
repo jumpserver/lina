@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard ref="users" v-bind="userRelationConfig" />
@@ -13,13 +13,12 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import RelationCard from '@/components/RelationCard'
-import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     RelationCard
   },
   props: {
@@ -75,40 +74,17 @@ export default {
         icon: 'fa-info-circle',
         title: this.$t('assets.SystemUser'),
         objectsAjax: {
-          url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s`,
+          url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s,redis,mongodb,clickhouse`,
           transformOption: (item) => defaultTransformOption(item, 'username')
         },
         hasObjectsId: this.object.system_users,
         performAdd: item => this.performAddHandle(item, 'system_users'),
         performDelete: item => this.performDeleteHandle(item, 'system_users')
-      }
+      },
+      url: '/api/v1/assets/cmd-filters/'
     }
   },
   computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('assets.date_joined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('assets.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('assets.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   },
   methods: {
     performAddHandle(item, updateField) {

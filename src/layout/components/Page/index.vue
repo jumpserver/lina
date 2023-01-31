@@ -44,8 +44,9 @@ export default {
 
 <style scoped>
 .page {
-  height: calc(100vh - 55px - 41px);
-  overflow: auto;
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 @media print {
   .disabled-when-print{

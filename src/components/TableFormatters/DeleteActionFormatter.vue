@@ -29,7 +29,7 @@ export default {
         this.$message.success(this.$tc('common.deleteSuccessMsg'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onDelete(col, row, cellValue, reload) {
@@ -43,7 +43,8 @@ export default {
       if (this.col.objects === 'all') {
         return false
       }
-      return this.col.objects.indexOf(this.cellValue) === -1
+      const objectIds = this.col.objects.map(i => i.id)
+      return objectIds.indexOf(this.cellValue) === -1
     }
   }
 }

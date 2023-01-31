@@ -10,7 +10,7 @@
         placement="bottom-start"
         @command="handleDropdownCallback"
       >
-        <el-button :size="size" v-bind="cleanButtonAction(action)">
+        <el-button class="more-action" :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
@@ -28,6 +28,7 @@
               :command="[option, action]"
               v-bind="option"
             >
+              <i v-if="option.fa" :class="'fa ' + option.fa" />
               {{ option.title }}
             </el-dropdown-item>
           </template>
@@ -44,7 +45,11 @@
       >
         <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
           <span>
-            <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
+            <span v-if="action.fa" style="vertical-align: initial;">
+              <i v-if="action.fa.startsWith('fa-')" :class="'fa ' + action.fa" />
+              <svg-icon v-else :icon-class="action.fa" style="font-size: 14px;" />
+            </span>
+            {{ action.title }}
           </span>
         </el-tooltip>
       </el-button>

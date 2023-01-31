@@ -9,7 +9,7 @@
 <script>
 import TabPage from '@/layout/components/TabPage'
 import Basic from './Base'
-import TerminalList from './TerminalList'
+import TerminalList from './Component/TerminalList'
 import ReplayStorage from './Storage/ReplayStorage'
 import CommandStorage from './Storage/CommandStorage'
 import Monitor from './Monitor'

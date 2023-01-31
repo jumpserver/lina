@@ -1,38 +1,27 @@
 <template>
   <el-tooltip
     v-model="iShowTip"
-    :manual="true"
     :content="tipText"
+    :manual="true"
     class="item"
     effect="dark"
     placement="bottom-start"
   >
     <el-menu
-      :default-active="currentViewRoute.name"
-      class="menu-main"
       :class="mode"
+      :default-active="currentViewRoute.name"
       :mode="mode"
+      class="menu-main"
       @select="handleSelectView"
     >
-      <el-submenu
-        index="2"
-        popper-class="view-switcher"
+      <el-menu-item
+        v-for="view of views"
+        :key="view.name"
+        :index="view.name"
       >
-        <template slot="title">
-          <span class="title-label">
-            <i class="fa fa-bars" />
-            <span>{{ $t('common.nav.View') }}</span>
-          </span>
-        </template>
-        <el-menu-item
-          v-for="view of views"
-          :key="view.name"
-          :index="view.name"
-        >
-          <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
-          <span slot="title" class="icons-title">{{ view.meta.title }}</span>
-        </el-menu-item>
-      </el-submenu>
+        <svg-icon :icon-class="view.meta.icon" class="icons" />
+        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+      </el-menu-item>
     </el-menu>
   </el-tooltip>
 </template>
@@ -133,61 +122,92 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  // margin-top: -5px;
+  border-right: none !important;
+
   ::v-deep .el-submenu .el-submenu__title {
-    height: 55px;
-    line-height: 55px;
+    height: 40px;
+    line-height: 40px;
     border-bottom: none;
   }
+
   &.el-menu--horizontal {
     border-bottom: none;
   }
-  &>>> .el-icon-arrow-down {
+
+  & > > > .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
+  }
+
+  .el-menu-item {
+    height: 36px;
+    line-height: 26px;
+    padding: 4px 24px;
+
+    &:hover {
+      background-color: var(--menu-hover);
+    }
+
+    &:focus {
+      background-color: transparent;
+    }
   }
 }
 
 .el-menu--horizontal .el-menu .el-menu-item {
-  display: inline-block!important;
+  display: inline-block !important;
   padding: 10px 10px;
   text-align: center;
   height: 70px;
+
   &:hover {
     color: inherit;
+
     i {
       color: inherit;
     }
   }
+
   &:first-child {
     margin-left: 16px;
   }
+
   &:last-child {
     margin-right: 16px;
   }
 }
+
 .el-submenu.is-opened {
   background-color: transparent;
 }
+
 .title-label {
   padding-left: 12px;
   font-size: 14px;
   vertical-align: unset;
-  color: #606266!important;
+  color: #606266 !important;
 }
+
 .icons {
-  display: block;
-  font-size: 23px;
+  vertical-align: middle !important;
+  font-size: 16px;
   text-align: center;
+  color: #1F2329;
+  margin-right: 10px;
 }
+
 .icons-title {
   display: inline-block;
   font-size: 14px;
 }
+
 .el-menu-item.is-active {
   font-weight: bold;
+  color: var(--color-primary);
+  border-left: 4px solid var(--color-primary);
 }
-.menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
+
+.menu-main.mobile-view-switch > > > .el-submenu__icon-arrow {
   right: 10px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard v-bind="relationConfig" />
@@ -10,14 +10,13 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import RelationCard from '@/components/RelationCard'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'GroupInfo',
   components: {
-    DetailCard,
+    AutoDetailCard,
     RelationCard
   },
   props: {
@@ -55,30 +54,12 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         }
-      }
+      },
+      url: `/api/v1/users/groups/${this.object.id}`,
+      excludes: ['users']
     }
   },
   computed: {
-    detailItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('common.createdBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   },
   watch: {
     group(iNew, iOld) {

@@ -1,21 +1,45 @@
 <template>
   <div class="table-header clearfix" :class="device">
     <slot name="header">
-      <LeftSide v-if="hasLeftActions" class="left-side" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
-      <RightSide v-if="hasRightActions" class="right-side" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <LeftSide
+        v-if="hasLeftActions"
+        class="left-side"
+        :selected-rows="selectedRows"
+        :table-url="tableUrl"
+        v-bind="$attrs"
+        v-on="$listeners"
+      />
+      <RightSide
+        v-if="hasRightActions"
+        class="right-side"
+        :selected-rows="selectedRows"
+        :table-url="tableUrl"
+        v-bind="$attrs"
+        v-on="$listeners"
+      />
       <div class="search" :class="searchClass">
-        <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
-        <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
+        <AutoDataSearch
+          v-if="hasSearch"
+          class="right-side-item action-search"
+          v-bind="iSearchTableConfig"
+          @tagSearch="handleTagSearch"
+        />
+        <DatetimeRangePicker
+          v-if="hasDatePicker"
+          v-bind="datePicker"
+          class="datepicker"
+          @dateChange="handleDateChange"
+        />
       </div>
     </slot>
   </div>
 </template>
 
 <script>
-import AutoDataSearch from '@/components/AutoDataSearch'
 import LeftSide from './LeftSide'
-import DatetimeRangePicker from '@/components/FormFields/DatetimeRangePicker'
 import RightSide from './RightSide'
+import AutoDataSearch from '@/components/AutoDataSearch'
+import DatetimeRangePicker from '@/components/FormFields/DatetimeRangePicker'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
@@ -46,11 +70,13 @@ export default {
     },
     datePick: {
       type: Function,
-      default: (val) => {}
+      default: (val) => {
+      }
     },
     searchTable: {
       type: Function,
-      default: (val) => {}
+      default: (val) => {
+      }
     },
     selectedRows: {
       type: Array,
@@ -135,53 +161,66 @@ export default {
     display: flex;
     padding-left: 10px;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
   }
 
   .table-action-right-side {
     display: flex;
-    justify-content:center;
+    justify-content: center;
   }
 
   .export-item {
     display: block;
     padding: 5px 20px;
   }
-  .datepicker{
+
+  .datepicker {
     margin-left: 10px;
   }
+
   .table-header {
     line-height: 32px;
   }
+
   .left-side {
     float: left;
     display: block;
   }
+
   .right-side {
     float: right;
   }
+
   .search {
     display: flex;
     flex-direction: row;
   }
+
   .mobile .search {
     display: inherit;
   }
+
   .mobile .search .datepicker {
     margin-left: 0;
   }
+
   .search.left {
     float: left;
+    padding: 0 !important;
   }
+
   .search.right {
     float: right;
   }
+
   .mobile .search.right {
     float: none;
   }
+
   .mobile .search.right .action-search {
     width: 100%;
   }
+
   .mobile .right-side {
     padding-top: 5px;
   }

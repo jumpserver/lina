@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import AutoDataTable from '../AutoDataTable'
-import IBox from '../IBox'
-import TableAction from './TableAction'
-import Emitter from '@/mixins/emitter'
 import { getResourceFromApiUrl } from '@/utils/jms'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
+import IBox from '../IBox'
+import TableAction from './TableAction'
+import Emitter from '@/mixins/emitter'
+import AutoDataTable from '../AutoDataTable'
 
 export default {
   name: 'ListTable',
@@ -107,7 +107,7 @@ export default {
       return config
     },
     tableUrl() {
-      return this.tableConfig.url
+      return this.tableConfig.url || ''
     },
     permissions() {
       // 获取 permissions，获取不到通过 url 解析
@@ -197,22 +197,29 @@ export default {
   & >>> .el-card__body {
     padding: 0;
   }
+
   & >>> .el-table__header thead > tr > th {
     background-color: white;
   }
-  &>>> .el-table__row .cell {
+
+  & >>> .el-table__row .cell {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  &>>> .el-table__expanded-cell pre {
+
+  & >>> .el-table__expanded-cell pre {
     max-height: 500px;
     overflow-y: scroll;
+  }
+
+  & >>> .el-button-ungroup .el-dropdown > .more-action {
+    height: 24.6px;
   }
 }
 
 //修改颜色
-// .el-button--text{
-//   color: #409EFF;
-// }
+ .el-button--text{
+   color: #409EFF;
+ }
 </style>

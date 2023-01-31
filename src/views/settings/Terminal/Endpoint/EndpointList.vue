@@ -18,17 +18,14 @@ export default {
       helpMessage: this.$t('setting.EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
-        columns: [
-          'name', 'host',
-          'http_port', 'https_port', 'ssh_port', 'rdp_port',
-          'magnus_listen_port_range',
-          'date_created', 'comment', 'actions'
-        ],
+        columnsExclude: ['magnus_listen_db_port'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'host', 'actions',
-            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'magnus_listen_port_range'
+            'http_port', 'https_port', 'ssh_port', 'rdp_port',
+            'mysql_port', 'mariadb_port', 'postgresql_port',
+            'redis_port', 'oracle_port_range'
           ]
         },
         columnsMeta: {

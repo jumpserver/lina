@@ -1,8 +1,16 @@
 <template>
   <div>
-    <el-link class="detail" :type="col.type || 'success'" @click="dialogVisible=true">{{ iTitle }}</el-link>
-    <Dialog width="60%" :visible.sync="dialogVisible" :title="dialogTitle" :show-cancel="true" :show-confirm="false" @cancel="onCancel">
-      <DetailCard :items="detailCardItems" :title="detailTitle" />
+    <el-link class="detail" :type="col.type || 'success'" @click="dialogVisible=true">
+      {{ iTitle }}
+    </el-link>
+    <Dialog
+      width="60%"
+      :visible.sync="dialogVisible"
+      :title="dialogTitle"
+      :show-cancel="false"
+      @confirm="onCancel"
+    >
+      <DetailCard class="card" :items="detailCardItems" :title="detailTitle" />
     </Dialog>
   </div>
 </template>
@@ -58,6 +66,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.card >>> .el-card__body {
+  padding: 0;
+}
+.el-card {
+  border: 0!important;
+}
 </style>

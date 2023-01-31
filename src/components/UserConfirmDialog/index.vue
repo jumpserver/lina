@@ -14,7 +14,7 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-alert
-            :title="this.$t('auth.ReLoginTitle')"
+            :title="$tc('auth.ReLoginTitle')"
             type="info"
             center
             :closable="false"
@@ -220,11 +220,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog-content >>> .el-dialog__footer{
+  .dialog-content >>> .el-dialog__footer {
     padding: 0;
   }
 
-  .dialog-content >>> .el-dialog{
+  .dialog-content >>> .el-dialog {
     padding: 8px;
   }
 </style>

@@ -35,6 +35,8 @@
 import DataTable from '@/components/DataTable'
 import { sleep, getUpdateObjURL } from '@/utils/common'
 import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
+import { encryptPassword } from '@/utils/crypto'
+
 export default {
   name: 'ImportTable',
   components: {
@@ -176,7 +178,7 @@ export default {
         align: 'center',
         formatter: StatusFormatter,
         formatterArgs: {
-          iconChoices: {
+          faChoices: {
             ok: 'fa-check text-primary',
             error: 'fa-times text-danger',
             pending: 'fa-clock-o'
@@ -225,7 +227,6 @@ export default {
           prop: item[1],
           label: item[0],
           minWidth: colMaxWidth + 'px',
-          showOverflowTooltip: true,
           formatter: EditableInputFormatter,
           formatterArgs: {
             onEnter: ({ row, col, oldValue, newValue }) => {
@@ -243,6 +244,12 @@ export default {
       const totalData = []
       tableData.forEach(item => {
         this.$set(item, '@status', 'pending')
+        const encryptFields = ['password', 'private_key']
+        for (const field of encryptFields) {
+          if (item[field]) {
+            item[field] = encryptPassword(item[field])
+          }
+        }
         totalData.push(item)
       })
       return totalData
@@ -349,7 +356,7 @@ export default {
         this.importTaskStatus = 'done'
       }
       if (this.failedCount > 0) {
-        this.$message.error(this.$t('common.imExport.hasImportErrorItemMsg') + '')
+        this.$message.error(this.$tc('common.imExport.hasImportErrorItemMsg') + '')
       }
     },
     async performUpdateObject(item) {

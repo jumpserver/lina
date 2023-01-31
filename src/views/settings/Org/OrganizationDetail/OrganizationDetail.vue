@@ -1,20 +1,19 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24" />
   </el-row>
 </template>
 
 <script>
-import { DetailCard } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'OrganizationDetail',
   components: {
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -22,20 +21,11 @@ export default {
       default: () => ({})
     }
   },
-  computed: {
-    cardTitle() {
-      return this.object.name
-    },
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('common.createBy'),
-          value: this.object.created_by
-        },
+  data() {
+    return {
+      url: `/api/v1/orgs/orgs/${this.object.id}/`,
+      detailFields: [
+        'name', 'created_by',
         {
           key: this.$t('xpack.Organization.users_amount'),
           value: this.object.resource_statistics.users_amount
@@ -68,15 +58,13 @@ export default {
           key: this.$t('xpack.Organization.app_perms_amount'),
           value: this.object.resource_statistics.app_perms_amount
         },
-        {
-          key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
+        'date_created', 'comment'
       ]
+    }
+  },
+  computed: {
+    cardTitle() {
+      return this.object.name
     }
   }
 }

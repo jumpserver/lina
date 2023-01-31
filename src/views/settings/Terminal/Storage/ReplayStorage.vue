@@ -33,16 +33,14 @@ export default {
           app: 'terminal',
           resource: 'replaystorage'
         },
-        columns: ['name', 'type', 'comment', 'is_default', 'actions'],
+        columnsShow: {
+          min: ['name', 'type', 'actions'],
+          default: ['name', 'type', 'comment', 'is_default', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: function(row) {
               return row.name
-            }
-          },
-          type: {
-            formatter: function(row) {
-              return row.type
             }
           },
           is_default: {
@@ -94,9 +92,9 @@ export default {
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultReplayStorage(row.id).then(data => {
                       vm.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$t('sessions.SetSuccess'))
+                      this.$message.success(this.$tc('sessions.SetSuccess'))
                     }).catch(() => {
-                      this.$message.error(this.$t('sessions.SetFailed'))
+                      this.$message.error(this.$tc('sessions.SetFailed'))
                     })
                   }
                 }

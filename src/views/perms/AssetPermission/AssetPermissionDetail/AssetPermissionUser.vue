@@ -31,9 +31,12 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.object.id}/users/all/`,
-        columns: [
-          'user_display', 'delete_action'
-        ],
+        hasColumnActions: false,
+        columnsExclude: ['user'],
+        columnsExtra: ['delete_action'],
+        columnsShow: {
+          min: ['user_display', 'delete_action']
+        },
         columnsMeta: {
           user_display: {
             label: this.$t('perms.User'),
@@ -88,7 +91,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
       },
@@ -120,7 +123,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         onDeleteSuccess: (obj, that) => {
@@ -131,7 +134,7 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('common.deleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
       }

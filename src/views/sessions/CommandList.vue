@@ -48,9 +48,10 @@ export default {
             return 'command'
           }
         },
+        hasColumnActions: false,
         columns: [
           'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
-          'asset', 'system_user', 'session', 'timestamp'
+          'asset', 'session', 'timestamp'
         ],
         extraQuery: {
           date_to: dateTo,
@@ -75,16 +76,11 @@ export default {
               }
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            width: '140px',
-            showOverflowTooltip: true
+            width: '140px'
           },
-          system_user: {
-            width: '140px',
-            showOverflowTooltip: true
+          user: {
+            width: '140px'
           },
           session: {
             label: this.$t('sessions.session'),
@@ -173,7 +169,7 @@ export default {
               return
             }
             if (!treeNode.valid) {
-              this.$message.error(this.$t('sessions.EsDisabled'))
+              this.$message.error(this.$tc('sessions.EsDisabled'))
               return
             }
             this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`

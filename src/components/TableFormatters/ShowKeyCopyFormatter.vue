@@ -1,53 +1,93 @@
 <template>
   <div class="content">
-    <span>{{ currentValue }}</span>
-    <span class="right">
+    <pre class="text">{{ currentValue }}</pre>
+    <span v-if="cellValue" class="action">
       <el-tooltip
+        v-if="hasShow"
         effect="dark"
         placement="top"
-        :content="this.$t('common.View')"
+        :content="$tc('common.View')"
       >
-        <i class="el-icon-view" @click="onShow()" />
+        <i class="fa" :class="isShow ? 'fa-eye-slash' : 'fa-eye'" @click="onShow()" />
       </el-tooltip>
       <el-tooltip
+        v-if="hasDownload"
         effect="dark"
         placement="top"
-        :content="this.$t('common.Copy')"
+        :content="$tc('common.Download')"
       >
-        <i class="el-icon-copy-document" @click="onCopy()" />
+        <i class="fa fa-download" @click="onDownload()" />
+      </el-tooltip>
+      <el-tooltip
+        v-if="hasCopy"
+        effect="dark"
+        placement="top"
+        :content="$tc('common.Copy')"
+      >
+        <i class="fa fa-clone" @click="onCopy()" />
       </el-tooltip>
     </span>
   </div>
 </template>
 
 <script>
-import BaseFormatter from './base'
+import { downloadText } from '@/utils/common'
+import BaseFormatter from '@/components/TableFormatters/base'
 
 export default {
   name: 'ShowKeyCopyFormatter',
   extends: BaseFormatter,
-  proops: {
-    cellValue: {
-      type: String,
-      default: () => ''
+  props: {
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          name: 'key',
+          hasShow: true,
+          hasDownload: true,
+          hasCopy: true,
+          defaultShow: false
+        }
+      }
     }
   },
   data() {
     return {
-      currentValue: this.switchShowValue()
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
+      isShow: false
     }
   },
-  methods: {
-    switchShowValue() {
-      return '******' + this.cellValue.replace(/[\w-]/g, '')
+  computed: {
+    hasShow: function() {
+      return this.formatterArgs.hasShow
     },
+    hasDownload: function() {
+      return this.formatterArgs.hasDownload
+    },
+    hasCopy: function() {
+      return this.formatterArgs.hasCopy
+    },
+    name: function() {
+      return this.formatterArgs.name
+    },
+    currentValue() {
+      if (this.isShow) {
+        return this.cellValue || '-'
+      } else {
+        return this.cellValue ? '******' : '-'
+      }
+    }
+  },
+  mounted() {
+    this.isShow = this.formatterArgs.defaultShow
+  },
+  methods: {
     onShow() {
-      const { currentValue, cellValue, switchShowValue } = this
-      this.currentValue = currentValue === cellValue ? switchShowValue() : cellValue
+      this.isShow = !this.isShow
     },
     onCopy: _.throttle(function() {
       const inputDom = document.createElement('input')
-      inputDom.id = 'creatInputDom'
+      inputDom.id = 'createInputDom'
       inputDom.value = this.cellValue
       document.body.appendChild(inputDom)
       inputDom.select()
@@ -58,23 +98,42 @@ export default {
         duration: 1400
       })
       document.body.removeChild(inputDom)
-    }, 1800)
+    }, 1800),
+    onDownload() {
+      downloadText(this.cellValue, this.name + '.txt')
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
   .content {
+    display: flex;
     width: 100%;
     overflow: hidden;
-    white-space: nowrap;
+    //white-space: nowrap;
     text-overflow: ellipsis;
-    .right {
+    font-size: 13px;
+
+    .text {
+      flex: 1;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .action {
       float: right;
       font-size: 15px;
       cursor: pointer;
-      .el-icon-view, .el-icon-copy-document {
+      margin-left: 5px;
+
+      .fa {
+        margin-right: 10px;
+
         &:hover {
-          color: #1c84c6;
+          color: var(--color-primary);
         }
       }
     }

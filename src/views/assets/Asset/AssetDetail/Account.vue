@@ -1,56 +1,86 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="16" :sm="24">
-        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" :has-left-actions="true" />
-      </el-col>
-      <el-col :md="8" :sm="24">
-        <QuickActions type="primary" :actions="quickActions" />
+      <el-col :md="24" :sm="24">
+        <AccountListTable
+          ref="ListTable"
+          v-bind="$attrs"
+          :asset="object"
+          :url="iUrl"
+          :has-import="false"
+          :has-clone="false"
+          :has-left-actions="true"
+          :columns="columns"
+          :header-extra-actions="headerExtraActions"
+        />
+        <AccountTemplateDialog
+          v-if="templateDialogVisible"
+          :show-create="false"
+          :visible.sync="templateDialogVisible"
+          @onConfirm="onConfirm"
+        />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import QuickActions from '@/components/QuickActions'
 import { AccountListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms'
+import AccountTemplateDialog from '@/views/assets/Asset/AssetCreateUpdate/components/AccountTemplateDialog'
 
 export default {
   name: 'Detail',
   components: {
     AccountListTable,
-    QuickActions
+    AccountTemplateDialog
   },
   props: {
     object: {
       type: Object,
       default: () => {}
+    },
+    url: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      assetUserUrl: `/api/v1/assets/accounts/?asset=${this.object.id}`,
-      quickActions: [
+      templateDialogVisible: false,
+      columns: [
+        'name', 'username', 'version', 'privileged', 'connectivity',
+        'is_active', 'date_created', 'date_updated', 'actions'
+      ],
+      headerExtraActions: [
         {
-          title: this.$t('assets.TestAssetsConnective'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('assets.Test')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/accounts/tasks/?asset=${this.object.id}`,
-                { action: 'test' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              }
-              )
-            }.bind(this)
+          name: this.$t('route.AccountTemplate'),
+          title: this.$t('route.AccountTemplate'),
+          can: () => this.$hasPerm('accounts.view_accounttemplate'),
+          callback: () => {
+            this.templateDialogVisible = true
           }
         }
       ]
+    }
+  },
+  computed: {
+    iUrl() {
+      return this.url || `/api/v1/accounts/accounts/?asset=${this.object.id}`
+    }
+  },
+  methods: {
+    onConfirm(data) {
+      data = data?.map(i => {
+        i.asset = this.object.id
+        return i
+      })
+      this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
+        this.templateDialogVisible = false
+        this.$refs.ListTable.addAccountSuccess()
+        this.$message.success(this.$tc('common.AddSuccessMsg'))
+      }).catch(() => {
+        this.$message.error(this.$tc('common.AddFailMsg'))
+      })
     }
   }
 }

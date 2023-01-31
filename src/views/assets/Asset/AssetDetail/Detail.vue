@@ -1,7 +1,8 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard v-bind="detailBasicConfig" />
+      <AutoDetailCard v-if="detailSpecificConfig.show" v-bind="detailSpecificConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -12,17 +13,16 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import LabelCard from './components/LabelCard'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions,
     RelationCard,
     LabelCard
@@ -39,7 +39,7 @@ export default {
       quickActions: [
         {
           title: this.$t('assets.IsActive'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             label: this.$t('common.Test'),
             model: this.object.is_active,
@@ -51,9 +51,9 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -106,7 +106,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes,
+        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.NodeRelation.iHasObjects
@@ -135,90 +135,48 @@ export default {
       labelConfig: {
         title: this.$t('assets.Label'),
         labels: this.object.labels
+      },
+      detailBasicConfig: {
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        fields: [
+          'name',
+          {
+            key: this.$t('assets.Category'),
+            value: this.object.category.label
+          },
+          {
+            key: this.$t('assets.Type'),
+            value: this.object.type.label
+          },
+          'address',
+          {
+            key: this.$t('assets.Protocols'),
+            value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
+          },
+          {
+            key: this.$t('assets.Domain'),
+            value: this.object.domain?.name || ''
+          },
+          {
+            key: this.$t('assets.Platform'),
+            value: this.object.platform.name
+          },
+          'is_active', 'date_created', 'created_by', 'comment'
+        ]
+      },
+      detailSpecificConfig: {
+        show: this.object['spec_info']?.length > 0,
+        fa: 'fa-podcast',
+        title: this.$t('common.SpecificInfo'),
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        fields: ['spec_info'],
+        excludes: ['spec_info.script']
       }
     }
   },
   computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('assets.Hostname'),
-          value: this.object.hostname
-        },
-        {
-          key: this.$t('assets.ip'),
-          value: this.object.ip
-        },
-        {
-          key: this.$t('assets.Protocols'),
-          value: this.object.protocols.toString()
-        },
-        {
-          key: this.$t('assets.PublicIp'),
-          value: this.object.public_ip
-        },
-        {
-          key: this.$t('assets.AdminUser'),
-          value: this.object.admin_user_display
-        },
-        {
-          key: this.$t('assets.Domain'),
-          value: this.object.domain_display
-        },
-        {
-          key: this.$t('assets.Vendor'),
-          value: this.object.vendor
-        },
-        {
-          key: this.$t('assets.Model'),
-          value: this.object.model
-        },
-        {
-          key: this.$t('assets.Cpu'),
-          value: this.object.cpu_model
-        },
-        {
-          key: this.$t('assets.Memory'),
-          value: this.object.memory
-        },
-        {
-          key: this.$t('assets.Disk'),
-          value: this.object.disk_info
-        },
-        {
-          key: this.$t('assets.Platform'),
-          value: this.object.platform
-        },
-        {
-          key: this.$t('assets.Os'),
-          value: this.object.os_arch
-        },
-        {
-          key: this.$t('assets.IsActive'),
-          value: this.object.is_active
-        },
-        {
-          key: this.$t('assets.SerialNumber'),
-          value: this.object.sn
-        },
-        {
-          key: this.$t('assets.AssetNumber'),
-          value: this.object.number
-        },
-        {
-          key: this.$t('assets.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('assets.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   },
   mounted() {
   },

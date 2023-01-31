@@ -1,52 +1,40 @@
 <template>
-  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting">
-    <template #table>
-      <AccountListTable ref="table" :url="accountsUrl" :has-left-actions="true" />
-    </template>
-  </GenericTreeListPage>
+  <Page v-bind="$attrs">
+    <AssetTreeTable ref="TreeTablePage" :table-config="tableConfig" :tree-setting="treeSetting">
+      <template #table>
+        <AccountListTable ref="table" v-bind="tableConfig" />
+      </template>
+    </AssetTreeTable>
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import AccountListTable from '@/components/AccountListTable'
-import { setUrlParam } from '@/utils/common'
+import Page from '@/layout/components/Page'
+import AssetTreeTable from '@/components/AssetTreeTable'
+import AccountListTable from '@/components/AccountListTable/AccountList'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    GenericTreeListPage, AccountListTable
+    Page,
+    AssetTreeTable,
+    AccountListTable
   },
   data() {
     return {
       isInit: true,
       clickedRow: null,
       iShowTree: true,
-      accountsUrl: '/api/v1/assets/accounts/',
+      tableConfig: {
+        url: '/api/v1/accounts/accounts/',
+        hasLeftActions: true
+      },
       treeSetting: {
         showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        url: '/api/v1/assets/accounts/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
-        callback: {
-          onSelected: (event, treeNode) => this.getAccountsUrl(event, treeNode)
-        }
+        showAssets: true,
+        url: '/api/v1/accounts/accounts/',
+        countResource: 'account'
       }
-    }
-  },
-  methods: {
-    getAccountsUrl(event, treeNode) {
-      let url = '/api/v1/assets/accounts/'
-      if (treeNode.meta.type === 'node') {
-        const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'asset', '')
-        url = setUrlParam(url, 'node', nodeId)
-      } else if (treeNode.meta.type === 'asset') {
-        const assetId = treeNode.meta.data.id
-        url = setUrlParam(url, 'node', '')
-        url = setUrlParam(url, 'asset', assetId)
-      }
-      this.accountsUrl = url
     }
   }
 }
@@ -56,34 +44,26 @@ export default {
   .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
   }
+
   .asset-table {
     &:hover {
       cursor: pointer;
     }
-    & >>> .table-content {
+
+    & > > > .table-content {
       margin-left: 21px;
     }
-    & ::v-deep .el-table__row{
+
+    & ::v-deep .el-table__row {
       height: 40px;
-      & > td{
+
+      & > td {
         padding: 0;
       }
     }
   }
-  .mini-button{
-    width: 12px;
-    float: left;
-    margin-right: 10px;
-    text-align: center;
-    padding: 9px 0;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #FFFFFF;
-    border-radius: 5px;
-    line-height: 1.428;
-    cursor:pointer;
-  }
-  .noDataR{
+
+  .noDataR {
     width: 100%;
     height: 40vh;
     display: flex;
@@ -91,7 +71,8 @@ export default {
     justify-content: center;
     font-size: 18px;
     flex-direction: column;
-    .hintWrap{
+
+    .hintWrap {
       color: #D4D6E6;
       display: flex;
       align-items: flex-start;
@@ -99,7 +80,8 @@ export default {
       flex-direction: column;
     }
   }
-  .asset-user-table{
+
+  .asset-user-table {
     padding-left: 20px;
   }
 </style>

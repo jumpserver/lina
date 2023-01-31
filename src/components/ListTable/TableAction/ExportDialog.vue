@@ -8,21 +8,33 @@
     />
     <Dialog
       v-if="exportDialogShow"
-      :title="$t('common.Export')"
+      :title="$tc('common.Export')"
       :visible.sync="exportDialogShow"
       :destroy-on-close="true"
       @confirm="handleExportConfirm()"
       @cancel="handleExportCancel()"
     >
-      <el-form label-position="left" style="padding-left: 50px">
-        <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
+      <el-form label-position="left" style="padding-left: 20px">
+        <el-form-item :label="$tc('common.fileType' )" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
-            <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+            <el-radio
+              v-for="option of exportTypeOptions"
+              :key="option.value"
+              style="padding: 10px 20px;"
+              :label="option.value"
+              :disabled="!option.can"
+            >{{ option.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item class="export-form" :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+        <el-form-item class="export-form" :label="$tc('common.imExport.ExportRange')" :label-width="'100px'">
           <el-radio-group v-model="exportOption">
-            <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+            <el-radio
+              v-for="option of exportOptions"
+              :key="option.value"
+              class="export-item"
+              :label="option.value"
+              :disabled="!option.can"
+            >{{ option.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -53,7 +65,8 @@ export default {
     },
     beforeExport: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     mfaVerifyRequired: {
       type: Boolean,
@@ -182,8 +195,8 @@ export default {
       }
       query['format'] = exportTypeOption
       const queryStr =
-          (url.indexOf('?') > -1 ? '&' : '?') +
-          queryUtil.stringify(query, '=', '&')
+        (url.indexOf('?') > -1 ? '&' : '?') +
+        queryUtil.stringify(query, '=', '&')
       return this.downloadCsv(url + queryStr)
     },
     async handleExport() {

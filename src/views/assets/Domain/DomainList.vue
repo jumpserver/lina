@@ -14,20 +14,16 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/domains/',
-        columns: [
-          'name', 'asset_count', 'application_count', 'gateway_count', 'date_created',
-          'comment', 'org_name', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'asset_count', 'application_count', 'gateway_count', 'comment', 'actions']
+          default: ['name', 'asset_count', 'gateway_count', 'comment', 'actions']
         },
         columnsMeta: {
           asset_count: {
-            label: this.$t('assets.Assets')
-          },
-          application_count: {
-            label: this.$t('assets.Applications')
+            label: this.$t('assets.Assets'),
+            formatter: function(row) {
+              return <span> { row.assets.length } </span>
+            }
           },
           gateway_count: {
             label: this.$t('assets.Gateway'),
@@ -36,6 +32,9 @@ export default {
               permissions: 'assets.view_gateway',
               routeQuery: {
                 activeTab: 'GatewayList'
+              },
+              getTitle: function({ row }) {
+                return row.gateways.length
               }
             }
           }

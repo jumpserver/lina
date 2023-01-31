@@ -4,16 +4,18 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    v-bind="$data"
   />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import PermissionFormActionField from '../components/PermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
+import AccountFormatter from './components/AccountFormatter'
 
 export default {
+  name: 'AccountFormatter',
   components: {
     GenericCreateUpdatePage
   },
@@ -37,7 +39,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
-        [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
+        [this.$t('perms.Asset'), ['assets', 'nodes', 'accounts']],
         [this.$t('common.action'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
@@ -83,25 +85,17 @@ export default {
             }
           }
         },
-        system_users: {
-          el: {
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
-              transformOption: (item) => {
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
-              }
-            }
-          }
+        accounts: {
+          type: 'input',
+          label: this.$t('perms.Account'),
+          component: AccountFormatter
         },
         actions: {
           label: this.$t('perms.Actions'),
-          component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips')
         },
         date_start: {
-          label: this.$t('common.dateStart')
+          label: this.$t('common.DateStart')
         },
         date_expired: {
           label: this.$t('common.dateExpired')
@@ -112,6 +106,12 @@ export default {
         is_active: {
           type: 'checkbox'
         }
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.accounts)) {
+          value.accounts = value.accounts ? value.accounts.split(',') : []
+        }
+        return value
       }
     }
   }
