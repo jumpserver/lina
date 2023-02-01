@@ -6,23 +6,23 @@
     <div v-else>
       <el-table
         :data="row.diff"
-        style="width: 100%"
         height="500"
+        style="width: 100%"
       >
         <el-table-column
-          prop="field"
           :label="this.$tc('audits.ChangeField')"
+          prop="field"
+          show-overflow-tooltip
           width="100"
-          show-overflow-tooltip
         />
         <el-table-column
-          prop="before"
           :label="this.$tc('audits.BeforeChange')"
+          prop="before"
           show-overflow-tooltip
         />
         <el-table-column
-          prop="after"
           :label="this.$tc('audits.AfterChange')"
+          prop="after"
           show-overflow-tooltip
         />
       </el-table>
@@ -40,7 +40,6 @@ export default {
       default: () => ({})
     }
   },
-  data() {},
   methods: {
     isEmpty() {
       const content = this.row.diff
@@ -52,9 +51,13 @@ export default {
 </script>
 
 <style scoped>
-  .el-tag{
+  .el-tag {
     width: 100%;
     white-space: normal;
-    height:auto;
-}
+    height: auto;
+  }
+
+  .el-table::before {
+    background-color: inherit;
+  }
 </style>

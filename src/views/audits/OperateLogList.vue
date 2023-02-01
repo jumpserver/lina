@@ -5,18 +5,19 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <el-dialog
+    <Dialog
+      v-if="logDetailVisible"
       :title="this.$tc('route.OperateLog')"
       :visible.sync="logDetailVisible"
-      width="80%"
     >
       <OperateLogDetail :row="rowObj" />
-    </el-dialog>
+    </Dialog>
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import { Dialog } from '@/components'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
 import OperateLogDetail from './components/OperateLogDetail'
 import { ActionsFormatter } from '@/components/TableFormatters'
@@ -24,7 +25,8 @@ import { ActionsFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericListPage,
-    OperateLogDetail
+    OperateLogDetail,
+    Dialog
   },
   data() {
     const vm = this
