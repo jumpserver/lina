@@ -64,7 +64,7 @@ export default {
           name: 'RemoveFromCurrentNode',
           title: this.$t('assets.RemoveFromCurrentNode'),
           can: ({ selectedRows }) => {
-            if (!vm.$route.query.node) {
+            if (!vm.$route.query.node_id) {
               return false
             }
             return selectedRows.length > 0 &&
@@ -76,7 +76,7 @@ export default {
             for (const item of selectedRows) {
               assetsId.push(item.id)
             }
-            const nodeId = this.$route.query.node
+            const nodeId = this.$route.query.node_id
             if (!nodeId) return
             const url = `/api/v1/assets/nodes/${nodeId}/assets/remove/`
             this.$axios.put(url, { assets: assetsId }).then(res => {
