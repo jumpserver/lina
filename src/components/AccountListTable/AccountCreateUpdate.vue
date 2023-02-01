@@ -1,13 +1,13 @@
 <template>
   <Dialog
-    :title="$tc('assets.AddAccount')"
-    :visible.sync="iVisible"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :close-on-click-modal="false"
-    width="70%"
+    :title="$tc('assets.AddAccount')"
+    :visible.sync="iVisible"
     v-bind="$attrs"
+    width="70%"
     v-on="$listeners"
   >
     <AccountCreateUpdateForm
@@ -88,8 +88,6 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.createSuccessMsg'))
-      }).catch(() => {
-        this.$message.error(this.$tc('common.createErrorMsg'))
       })
     },
     editAccount(form) {
