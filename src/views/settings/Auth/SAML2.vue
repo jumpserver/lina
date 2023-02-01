@@ -79,10 +79,6 @@ export default {
           return obj
         },
         cleanFormValue(data) {
-          if (data['SAML2_RENAME_ATTRIBUTES']) {
-            data['SAML2_SP_ADVANCED_SETTINGS'] = JSON.parse(data['SAML2_SP_ADVANCED_SETTINGS'])
-            data['SAML2_RENAME_ATTRIBUTES'] = JSON.parse(data['SAML2_RENAME_ATTRIBUTES'])
-          }
           return data
         }
       }

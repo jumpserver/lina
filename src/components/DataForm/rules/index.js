@@ -52,7 +52,7 @@ export const JsonRequired = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
+      typeof value === 'string' ? JSON.parse(value) : value
       callback()
     } catch (e) {
       callback(new Error(i18n.t('common.InvalidJson')))
@@ -65,8 +65,8 @@ export const JsonRequiredUserNameMapped = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
-      const hasUserName = _.map(JSON.parse(value), (value) => value)
+      const v = typeof value === 'string' ? JSON.parse(value) : value
+      const hasUserName = _.map(v, (value) => value)
       if (!hasUserName.includes('username')) {
         callback(new Error(i18n.t('common.requiredHasUserNameMapped')))
       }

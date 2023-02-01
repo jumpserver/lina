@@ -128,9 +128,6 @@ export default {
           return obj
         },
         cleanFormValue(data) {
-          if (data['AUTH_OPENID_USER_ATTR_MAP']) {
-            data['AUTH_OPENID_USER_ATTR_MAP'] = JSON.parse(data['AUTH_OPENID_USER_ATTR_MAP'])
-          }
           return data
         }
       }

@@ -76,9 +76,6 @@ export default {
         },
         cleanFormValue(data) {
           delete data['AUTH_OAUTH2_LOGO_PATH']
-          if (data['AUTH_OAUTH2_USER_ATTR_MAP']) {
-            data['AUTH_OAUTH2_USER_ATTR_MAP'] = JSON.parse(data['AUTH_OAUTH2_USER_ATTR_MAP'])
-          }
           return data
         }
       }
