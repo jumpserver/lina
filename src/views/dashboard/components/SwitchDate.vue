@@ -67,6 +67,7 @@ export default {
         color: var(--color-primary);
         background-color: #FFF;
         border-radius: 4px;
+        box-shadow: 0 2px 2px rgb(90 97 105 / 31%)!important;
       }
     }
   }
