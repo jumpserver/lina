@@ -277,7 +277,7 @@ export default {
           key: this.$t('users.DateExpired')
         },
         {
-          value: this.object.workbench_orgs.filter(item => !item.is_root).map(item => item.name).join(' ｜ '),
+          value: this.object.groups.map(item => item.name).join(' ｜ '),
           key: this.$t('users.UserGroups')
         },
         {
