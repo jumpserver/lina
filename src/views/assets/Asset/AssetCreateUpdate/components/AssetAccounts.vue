@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      accounts: [],
+      accounts: this.value || [],
       account: {},
       initial: false,
       addAccountDialogVisible: false,
