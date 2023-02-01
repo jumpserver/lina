@@ -61,10 +61,19 @@ export default {
         cleanFormValue(values) {
           // Update 的时候
           const { id = '' } = this.$route.params
+          const accounts = values?.accounts
           if (id) delete values['accounts']
 
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
+          }
+          if (accounts && accounts.length !== 0) {
+            accounts.forEach(i => {
+              if (i.hasOwnProperty('id')) {
+                i.template = true
+              }
+              return i
+            })
           }
           console.log('values[\'accounts\']', values['accounts'])
           return values

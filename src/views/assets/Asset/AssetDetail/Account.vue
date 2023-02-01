@@ -71,6 +71,7 @@ export default {
   methods: {
     onConfirm(data) {
       data = data?.map(i => {
+        i.template = true
         i.asset = this.object.id
         return i
       })
