@@ -18,6 +18,7 @@
       :visible.sync="showAddDialog"
       :asset="iAsset"
       :account="account"
+      :title="accountCreateUpdateTitle"
       @add="addAccountSuccess"
     />
   </div>
@@ -98,6 +99,7 @@ export default {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showAddDialog: false,
+      accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -225,6 +227,7 @@ export default {
                     vm.account = row
                     vm.iAsset = row.asset
                     vm.showAddDialog = false
+                    vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
                     setTimeout(() => {
                       vm.showAddDialog = true
                     })
@@ -246,6 +249,10 @@ export default {
           url: this.exportUrl,
           mfaVerifyRequired: true
         },
+        importOptions: {
+          canImportCreate: this.$hasPerm('accounts.add_account'),
+          canImportUpdate: this.$hasPerm('accounts.change_account')
+        },
         extraActions: [
           {
             name: 'add',
@@ -257,6 +264,7 @@ export default {
             callback: async() => {
               await this.getAssetDetail()
               setTimeout(() => {
+                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
               })
             }

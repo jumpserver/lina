@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    :close-on-click-modal="false"
+    :title="title"
+    :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.AddAccount')"
-    :visible.sync="iVisible"
+    :close-on-click-modal="false"
     v-bind="$attrs"
     width="70%"
     v-on="$listeners"
@@ -42,6 +42,12 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$t('assets.AddAccount')
+      }
     }
   },
   data() {
