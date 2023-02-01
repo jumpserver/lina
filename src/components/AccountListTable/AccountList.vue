@@ -249,6 +249,10 @@ export default {
           url: this.exportUrl,
           mfaVerifyRequired: true
         },
+        importOptions: {
+          canImportCreate: this.$hasPerm('accounts.add_account'),
+          canImportUpdate: this.$hasPerm('accounts.change_account')
+        },
         extraActions: [
           {
             name: 'add',
