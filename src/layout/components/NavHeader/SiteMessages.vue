@@ -246,8 +246,9 @@ export default {
   }
 
   .msg-icon {
-    font-size: 13px;
+    font-size: 13px !important;
     line-height: 13px;
+    color: gray !important;
   }
 
   &.msg-unread {
