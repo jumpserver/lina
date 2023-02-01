@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-badge :value="unreadMsgCount" :hidden="unreadMsgCount === 0" :max="99" size="mini" type="primary">
+    <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="mini" type="primary">
       <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="email-fill" />
       </el-link>
     </el-badge>
     <el-drawer
-      class="drawer"
-      :visible.sync="show"
       :before-close="handleClose"
       :modal="false"
-      :title="$tc('notifications.SiteMessage')"
-      custom-class="site-msg"
       :size="width"
+      :title="$tc('notifications.SiteMessage')"
+      :visible.sync="show"
+      class="drawer"
+      custom-class="site-msg"
       @open="getMessages"
     >
       <div slot="title">
@@ -25,16 +25,16 @@
         <div
           v-for="msg of messages"
           :key="msg.id"
-          class="msg-item"
           :class="msg['has_read'] ? 'msg-read' : 'msg-unread'"
-          @mouseover="hoverMsgId = msg.id"
-          @mouseleave="hoverMsgId = ''"
+          class="msg-item"
           @click="showMsgDetail(msg)"
+          @mouseleave="hoverMsgId = ''"
+          @mouseover="hoverMsgId = msg.id"
         >
           <el-row :gutter="10" class="msg-item-head">
             <el-col :span="15" class="msg-item-head-type">
               <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
-              {{ msg.subject }}
+              {{ msg.content.subject }}
             </el-col>
             <el-col :span="9">
               <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
@@ -46,7 +46,7 @@
             </el-col>
           </el-row>
           <div class="msg-item-txt">
-            <span v-html="msg.message" />
+            <span v-html="msg.content.message" />
           </div>
         </div>
       </div>
@@ -57,22 +57,19 @@
 
     <Dialog
       v-if="msgDetailVisible"
-      :visible.sync="msgDetailVisible"
-      :title="''"
       :close-on-click-modal="false"
       :confirm-title="$tc('notifications.MarkAsRead')"
-      @confirm="markAsRead([currentMsg])"
+      :title="currentMsg.content.subject"
+      :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
+      @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
         <div class="msg-detail-head">
-          <h3>{{ currentMsg.subject }}</h3>
-          <h5>
-            <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-          </h5>
+          <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <span v-html="currentMsg.message" />
+          <span v-html="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>
@@ -116,7 +113,7 @@ export default {
       this.msgDetailVisible = true
     },
     getMessages() {
-      const url = '/api/v1/notifications/site-message/?offset=0&limit=15&has_read=false'
+      const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
       this.$axios.get(url).then(resp => {
         this.messages = [...resp.results]
         this.unreadMsgCount = resp.count
@@ -135,7 +132,7 @@ export default {
       }
     },
     oneClickRead(msgs) {
-      this.$confirm(this.$t('notifications.OneClickReadMsg'), this.$t('common.Info'), {
+      this.$confirm(this.$tc('notifications.OneClickReadMsg'), this.$tc('common.Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -148,7 +145,7 @@ export default {
       })
     },
     markAsReadAll(msgs) {
-      const url = `/api/v1/notifications/site-message/mark-as-read-all/`
+      const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
       this.$axios.patch(url, {}).then(res => {
         this.msgDetailVisible = false
         this.getMessages()
@@ -157,7 +154,7 @@ export default {
       })
     },
     markAsRead(msgs) {
-      const url = `/api/v1/notifications/site-message/mark-as-read/`
+      const url = `/api/v1/notifications/site-messages/mark-as-read/`
       const msgIds = []
       for (const item of msgs) {
         msgIds.push(item.id)
@@ -216,7 +213,7 @@ export default {
   padding: 0 25px 20px;
 }
 
->>> .site-msg {
+> > > .site-msg {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
@@ -309,13 +306,14 @@ export default {
     font-weight: 400;
     font-size: 12px;
     line-height: 1.1;
+    float: right;
   }
 
   .msg-detail-txt {
     margin-bottom: 20px;
     line-height: 25px;
 
-    & >>> a {
+    & > > > a {
       color: var(--color-success) !important;
     }
   }
@@ -326,11 +324,8 @@ export default {
   text-align: center;
 }
 
->>> :focus {
+> > > :focus {
   outline: 0;
 }
 
->>> .el-dialog .el-dialog__header {
-  border-bottom: none!important;
-}
 </style>
