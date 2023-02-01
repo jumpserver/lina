@@ -102,6 +102,7 @@ export function flashErrorMsg({ response, error }) {
 }
 
 let timer = null
+
 function refreshSessionAgeDelay(response) {
   if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
     return
