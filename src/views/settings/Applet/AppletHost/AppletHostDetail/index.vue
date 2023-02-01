@@ -59,7 +59,7 @@ export default {
           deleteSuccessRoute: 'Applets',
           updateCallback: () => {
             this.$router.push({
-              name: 'Applets',
+              name: 'AppletHostUpdate',
               params: { id: this.$route.params.id },
               query: { platform: this.host.platform.id }
             })
