@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="$tc('assets.AddAccount')"
+    :title="title"
     :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
@@ -42,6 +42,12 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$t('assets.AddAccount')
+      }
     }
   },
   data() {
