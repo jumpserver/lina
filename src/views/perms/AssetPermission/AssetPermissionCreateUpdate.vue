@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
     :fields="fields"
-    :initial="initial"
     :fields-meta="fieldsMeta"
+    :initial="initial"
     :url="url"
     v-bind="$data"
   />
@@ -34,7 +34,8 @@ export default {
         date_start: new Date().toISOString(),
         date_expired: getDayFuture(36500, new Date()).toISOString(),
         nodes: nodesInitial,
-        assets: assetsInitial
+        assets: assetsInitial,
+        accounts: ['@ALL']
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -88,7 +89,8 @@ export default {
         accounts: {
           type: 'input',
           label: this.$t('perms.Account'),
-          component: AccountFormatter
+          component: AccountFormatter,
+          helpText: this.$t('perms.AccountsHelp')
         },
         actions: {
           label: this.$t('perms.Actions'),

@@ -941,10 +941,11 @@
   },
   "perms": {
     "": "",
+    "AccountsHelp": "所有账号: 资产上添加的账号; 指定账号：指定账号的用户名；手动输入: 用户名/密码 手动输入; 同名账号: 和账号使用者用户名相同的账号;",
     "AllAccounts": "所有账号",
     "ManualInput": "手动输入",
     "SameAccount": "同名账号",
-    "SpecifyInput": "指定输入",
+    "SpecifyAccounts": "指定账号",
     "Input": "输入",
     "Account": "账号",
     "permAccount": "授权账号",
