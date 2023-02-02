@@ -93,8 +93,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
-          that.$refs.assetSelect.$refs.select2.clearSelected()
+          window.location.reload()
         }
       },
       nodeRelationConfig: {
