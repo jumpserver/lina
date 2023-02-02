@@ -51,13 +51,7 @@ export default {
         category: 'all'
       },
       headerActions: {
-        handleImportClick: ({ selectedRows }) => {
-          this.$eventBus.$emit('showImportDialog', {
-            selectedRows,
-            url: tableUrl,
-            name: this?.name
-          })
-        }
+        hasImport: false
       },
       addExtraMoreActions: [
         {
