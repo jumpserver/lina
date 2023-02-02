@@ -20,16 +20,16 @@
         <div class="transition-box" style="width: calc(100% - 17px);">
           <el-tabs v-model="activeEditorId" :closable="true" @tab-remove="onCloseEditor">
             <el-tab-pane
-              v-for="(item,key) in openedEditor"
+              v-for="(editor,key) in openedEditor"
               :key="key"
-              :label="tabLabel(item)"
+              :label="tabLabel(editor)"
               :name="key"
             >
               <CodeEditor
                 style="margin-bottom: 20px"
                 :options="cmOptions"
                 :toolbar="toolbar"
-                :value.sync="item.value"
+                :value.sync="editor.value"
               />
             </el-tab-pane>
           </el-tabs>
