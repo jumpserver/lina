@@ -147,6 +147,12 @@ export default {
             query: this.$route.query
           }
         },
+        handleImportClick: ({ selectedRows }) => {
+          this.$eventBus.$emit('showImportDialog', {
+            selectedRows,
+            url: '/api/v1/perms/asset-permissions/'
+          })
+        },
         createInNewPage: true,
         searchConfig: {
           url: '',
