@@ -24,7 +24,9 @@
             class="inline-input"
             :fetch-suggestions="item.el.query"
             @select="item.callback(item.value)"
-          />
+          >
+            <template slot="prepend">{{ item.name }}</template>
+          </el-autocomplete>
 
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
