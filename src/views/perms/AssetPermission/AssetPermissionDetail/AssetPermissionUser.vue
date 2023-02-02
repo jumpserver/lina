@@ -90,9 +90,8 @@ export default {
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
-          that.$refs.select2.clearSelected()
           this.$message.success(this.$tc('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
+          window.location.reload()
         }
       },
       groupRelationConfig: {
