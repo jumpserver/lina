@@ -6,7 +6,10 @@ export default [
   {
     path: 'tasks',
     component: empty,
-    meta: { title: i18n.t('route.TaskList') },
+    meta: {
+      title: i18n.t('route.TaskList'),
+      permissions: ['ops.view_celerytask', 'ops.view_taskmonitor']
+    },
     children: [
       {
         path: '',
