@@ -1,4 +1,5 @@
 import AssetSelect from '@/components/AssetSelect'
+import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
   const users = {
@@ -51,19 +52,10 @@ function getFields() {
     }
   }
 
-  const system_users = {
-    label: this.$t('perms.SystemUser'),
-    hidden: () => false,
-    el: {
-      value: [],
-      ajax: {
-        url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
-        transformOption: (item) => {
-          const username = item.username || '*'
-          return { label: item.name + '(' + username + ')', value: item.id }
-        }
-      }
-    }
+  const accounts = {
+    type: 'input',
+    label: this.$t('perms.Account'),
+    component: AccountFormatter
   }
 
   const date_start = {
@@ -101,7 +93,7 @@ function getFields() {
     assets: assets,
     applications: applications,
     nodes: nodes,
-    system_users: system_users,
+    accounts: accounts,
     is_active: is_active,
     date_start: date_start,
     date_expired: date_expired
