@@ -51,7 +51,17 @@ export default {
             hidden: () => false,
             el: {
               ajax: {
-                url: '/api/v1/assets/labels/'
+                url: '/api/v1/assets/labels/',
+                transformOption: (item) => {
+                  return { label: `${item.name}:${item.value}`, value: item.id }
+                }
+              },
+              allowCreate: true
+            },
+            on: {
+              change: ([event], updateForm) => {
+                const selects = this.filterSelectValues(event)
+                updateForm({ labels: selects })
               }
             }
           },
@@ -61,6 +71,28 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    filterSelectValues(values) {
+      if (!values) return
+      const selects = []
+      values.forEach((item) => {
+        if (item.hasOwnProperty('pk')) {
+          selects.push(item)
+        } else {
+          // 格式校验：不以:开头，不以:结尾
+          const rule = /^(?!:).*(?<!:)$/
+          if (item.name.indexOf(':') > -1 && rule.test(item.name)) {
+            const [name, value] = item.name.split(':')
+            const inputValue = { name, value }
+            selects.push(inputValue)
+          } else {
+            this.$message.error(this.$t('assets.LabelInputFormatValidation'))
+          }
+        }
+      })
+      return selects
     }
   }
 }
