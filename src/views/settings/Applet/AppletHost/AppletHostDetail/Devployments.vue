@@ -3,17 +3,21 @@
     <el-col :md="16" :sm="24">
       <ListTable :table-config="config" :header-actions="headerConfig" />
     </el-col>
+    <el-col :md="8" :sm="24">
+      <QuickActions type="primary" :actions="quickActions" />
+    </el-col>
   </el-row>
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Developments',
   components: {
-    ListTable
+    ListTable,
+    QuickActions
   },
   props: {
     object: {
@@ -72,7 +76,26 @@ export default {
             }
           }
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('assets.InitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Deploy')
+          },
+          callbacks: {
+            click: function() {
+              this.$axios.post(
+                `/api/v1/terminal/applet-host-deployments/`,
+                { host: this.object.id }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }.bind(this)
+          }
+        }
+      ]
     }
   }
 }
