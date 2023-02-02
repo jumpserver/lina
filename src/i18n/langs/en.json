@@ -323,6 +323,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "ApproverNumbers": "Approver numbers",
     "Overview": "Overview",
     "Now": "Now",
     "EnterToContinue": "Press Enter to continue",
@@ -1122,6 +1123,7 @@
     "Ldap": "LDAP",
     "License": "License",
     "LicenseFile": "License file",
+    "ExpirationTimeout": "Expiration timeout",
     "PasswordCheckRule": "Password check rule",
     "Security": "Security",
     "SecuritySetting": "Security",
