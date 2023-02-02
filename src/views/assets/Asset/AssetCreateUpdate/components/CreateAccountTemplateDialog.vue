@@ -47,6 +47,7 @@ export default {
         fieldsMeta: {
           ...templateFieldsMeta(this)
         },
+        hasSaveContinue: false,
         cleanFormValue(value) {
           Object.keys(value).forEach((item, index, arr) => {
             if (['ssh_key', 'token', 'access_key'].includes(item)) {
