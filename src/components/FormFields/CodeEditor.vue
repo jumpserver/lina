@@ -17,6 +17,15 @@
             <i :class="item.icon" style="margin-right: 4px;" />{{ item.name }}
           </el-button>
 
+          <el-autocomplete
+            v-if="item.type === 'input' && item.el.autoComplete"
+            v-model="item.value"
+            size="mini"
+            class="inline-input"
+            :fetch-suggestions="item.el.query"
+            @select="item.callback(item.value)"
+          />
+
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
               {{ item.name }}:
@@ -59,7 +68,7 @@
                 class="el-icon-arrow-down el-icon--right"
               />
             </el-button>
-            <el-dropdown-menu slot="dropdown">
+            <el-dropdown-menu v-slot="dropdown">
               <el-dropdown-item v-for="(option,i) in item.options" :key="i" :command="option.value">
                 {{ option.label }}
               </el-dropdown-item>

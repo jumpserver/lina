@@ -104,12 +104,12 @@ export default {
             }
           },
           runas: {
-            type: 'select',
+            type: 'input',
             name: this.$t('ops.runAs'),
             align: 'left',
             value: 'root',
             el: {
-              create: true
+              autoComplete: true
             },
             options: [],
             callback: (option) => {
@@ -163,16 +163,11 @@ export default {
             type: 'select',
             name: this.$t('ops.Timeout'),
             align: 'left',
-            value: -1,
-            el: {
-              create: true
-            },
+            value: 60,
             options: [
-              { label: '无', value: -1 },
               { label: '10', value: 10 },
               { label: '30', value: 30 },
-              { label: '60', value: 60 },
-              { label: this.$t('ops.ManualInput'), value: 'manualInput' }
+              { label: '60', value: 60 }
             ],
             callback: (option) => {
               this.timeout = option
@@ -269,17 +264,12 @@ export default {
     },
     getFrequentUsernames() {
       this.$axios.get('/api/v1/ops/frequent-username').then(data => {
-        this.toolbar.left.runas.options.push({
-          label: 'root', value: 'root'
-        })
-        data.filter((item) => {
-          return item.username !== 'root'
-        }).forEach((item) => {
-          this.toolbar.left.runas.options.push({
-            label: item.username,
-            value: item.username
+        this.toolbar.left.runas.el.query = (query, cb) => {
+          const ns = data.map(item => {
+            return { value: item.username }
           })
-        })
+          cb(ns)
+        }
         this.ready = true
       })
     },
