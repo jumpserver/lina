@@ -101,7 +101,7 @@ export default {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp['specific']['ssh_key_fingerprint']
+        this.sshKeyFingerprint = resp?.spec_info
         this.showSecret = true
       })
     },
