@@ -112,7 +112,6 @@ export default {
       ],
       submitMethod: () => 'patch',
       afterGetFormValue(obj) {
-        obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
         return obj
       },
       cleanFormValue(data) {
