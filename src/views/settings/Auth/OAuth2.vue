@@ -71,7 +71,6 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          obj.AUTH_OAUTH2_USER_ATTR_MAP = JSON.stringify(obj.AUTH_OAUTH2_USER_ATTR_MAP)
           return obj
         },
         cleanFormValue(data) {
