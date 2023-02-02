@@ -264,6 +264,7 @@ export default {
             callback: async() => {
               await this.getAssetDetail()
               setTimeout(() => {
+                vm.account = {}
                 vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
               })
