@@ -30,6 +30,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showAssets: true,
+        notShowBuiltinTree: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
