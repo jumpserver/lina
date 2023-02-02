@@ -141,7 +141,6 @@ export default {
   },
   methods: {
     handleSelectionChange(val) {
-      console.log('handleSelectionChange', val)
       this.selectedRows = val
     },
     reloadTable() {
