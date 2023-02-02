@@ -17,7 +17,7 @@ export const EmailCheck = {
 export const IpCheck = {
   required: true,
   validator: (rule, value, callback) => {
-    value = value.trim()
+    value = value?.trim()
     if (/^[\w://.?]+$/.test(value)) {
       callback()
     } else {
@@ -29,7 +29,7 @@ export const IpCheck = {
 
 export const specialEmojiCheck = {
   validator: (rule, value, callback) => {
-    value = value.trim()
+    value = value?.trim()
     if (/[\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/.test(value)) {
       callback(new Error(i18n.t('common.NotSpecialEmoji')))
     } else {
