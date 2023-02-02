@@ -2,8 +2,8 @@
   <DataActions
     v-if="hasLeftActions"
     :actions="iActions"
-    v-bind="$attrs"
     class="header-action"
+    v-bind="$attrs"
   />
 </template>
 
@@ -44,7 +44,8 @@ export default {
     canBulkUpdate: defaultTrue,
     handleBulkUpdate: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     hasMoreActions: defaultTrue,
     tableUrl: {
@@ -53,7 +54,8 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     performBulkDelete: {
       type: Function,

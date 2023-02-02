@@ -1,23 +1,23 @@
 <template>
-  <div class="table-header clearfix" :class="device">
+  <div :class="device" class="table-header clearfix">
     <slot name="header">
       <LeftSide
         v-if="hasLeftActions"
-        class="left-side"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
+        class="left-side"
         v-bind="$attrs"
         v-on="$listeners"
       />
       <RightSide
         v-if="hasRightActions"
-        class="right-side"
         :selected-rows="selectedRows"
         :table-url="tableUrl"
+        class="right-side"
         v-bind="$attrs"
         v-on="$listeners"
       />
-      <div class="search" :class="searchClass">
+      <div :class="searchClass" class="search">
         <AutoDataSearch
           v-if="hasSearch"
           class="right-side-item action-search"
@@ -26,8 +26,8 @@
         />
         <DatetimeRangePicker
           v-if="hasDatePicker"
-          v-bind="datePicker"
           class="datepicker"
+          v-bind="datePicker"
           @dateChange="handleDateChange"
         />
       </div>
