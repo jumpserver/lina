@@ -37,7 +37,6 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          // obj.CAS_RENAME_ATTRIBUTES = JSON.stringify(obj.CAS_RENAME_ATTRIBUTES)
           return obj
         },
         cleanFormValue(data) {
