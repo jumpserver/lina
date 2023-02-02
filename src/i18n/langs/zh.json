@@ -812,6 +812,18 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Confirm": "确认",
+    "Cancel": "确认",
+    "DeleteFile": "删除文件",
+    "DeleteConfirmMessage": "删除后无法恢复,是否继续?",
+    "CloseConfirm": "确认关闭",
+    "CloseConfirmMessage": "文件发生变化,是否保存?",
+    "SaveSuccess": "保存成功",
+    "DeleteSuccess": "删除成功",
+    "NewFile": "新建文件",
+    "NewDirectory": "新建目录",
+    "Rename": "重命名",
+    "Delete": "删除",
     "SelectCreateMethod": "选择创建方式",
     "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
