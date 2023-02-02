@@ -326,6 +326,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "ApproverNumbers": "承認者数",
     "Overview": "概要",
     "Now": "今",
     "EnterToContinue": "Enter キーを押して続行します了",
@@ -1142,6 +1143,7 @@
     "License": "ライセンス",
     "Senior": "高度",
     "LicenseFile": "ライセンスファイル",
+    "ExpirationTimeout": "期限切れタイムアウト時間",
     "PasswordCheckRule": "パスワード強弱ルール",
     "Security": "セキュリティ設定",
     "SecuritySetting": "セキュリティ設定",

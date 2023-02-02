@@ -79,6 +79,9 @@ export default {
             }
           }
         },
+        VERIFY_CODE_TTL: {
+          label: this.$t('setting.ExpirationTimeout')
+        },
         PasswordRule: {
           label: this.$t('setting.PasswordCheckRule'),
           component: PasswordRule

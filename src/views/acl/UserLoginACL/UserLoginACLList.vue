@@ -27,6 +27,9 @@ export default {
               }
             }
           },
+          reviewers_amount: {
+            label: this.$t('common.ApproverNumbers')
+          },
           actions: {
             formatterArgs: {
               hasClone: false,
