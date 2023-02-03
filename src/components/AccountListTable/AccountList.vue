@@ -224,8 +224,13 @@ export default {
                   title: this.$t('common.Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
+                    console.log('row: ', row.asset)
+                    const data = {
+                      ...this.asset,
+                      ...row.asset
+                    }
                     vm.account = row
-                    vm.iAsset = row.asset
+                    vm.iAsset = data
                     vm.showAddDialog = false
                     vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
                     setTimeout(() => {
@@ -264,6 +269,7 @@ export default {
             callback: async() => {
               await this.getAssetDetail()
               setTimeout(() => {
+                vm.iAsset = this.asset
                 vm.account = {}
                 vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
