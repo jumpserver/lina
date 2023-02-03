@@ -55,6 +55,7 @@ export default {
     setQuickActions() {
       const vm = this
       const { object } = this
+      const suEnabledDisabled = ['database', 'device']
       const quickActions = [
         {
           title: this.$t('assets.DomainEnabled'),
@@ -80,7 +81,8 @@ export default {
             type: 'primary',
             label: this.$t('common.Update'),
             disabled: (
-              object.category.value === 'device' || object.internal || !vm.$hasPerm('assets.change_platform')
+              suEnabledDisabled.includes(object.category?.value) ||
+                object.internal || !vm.$hasPerm('assets.change_platform')
             )
           },
           callbacks: Object.freeze({
