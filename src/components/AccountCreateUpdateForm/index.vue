@@ -209,12 +209,13 @@ export default {
     controlShowField() {
       let privileged = ['privileged']
       let suFrom = ['su_from']
+      const filterSuFrom = ['database', 'device']
       const asset = this?.asset || {}
       if (asset?.type?.value === 'website') {
         privileged = []
         suFrom = []
       }
-      if (asset?.category?.value === 'database') {
+      if (filterSuFrom.includes(asset?.category?.value)) {
         suFrom = []
       }
 

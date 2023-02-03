@@ -5,6 +5,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
+import { UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
 
 export default {
   name: 'UserAssetPermission',
@@ -134,41 +135,7 @@ export default {
         hasImport: false,
         searchConfig: {
           url: '',
-          options: [
-            { label: this.$t('common.Name'), value: 'name' },
-            {
-              label: this.$t('perms.isValid'), value: 'is_valid',
-              children: [
-                {
-                  value: '1',
-                  label: this.$t('common.Yes')
-                },
-                {
-                  value: '0',
-                  label: this.$t('common.No')
-                }
-              ]
-            },
-            { label: this.$t('common.Username'), value: 'username' },
-            { label: this.$t('perms.UserGroups'), value: 'user_group' },
-            { label: this.$t('perms.IP'), value: 'ip' },
-            { label: this.$t('perms.hostName'), value: 'hostname' },
-            { label: this.$t('perms.Node'), value: 'node' },
-            { label: this.$t('perms.SystemUser'), value: 'system_user' },
-            {
-              label: this.$t('perms.Inherit'), value: 'all',
-              children: [
-                {
-                  value: '1',
-                  label: this.$t('perms.Include')
-                },
-                {
-                  value: '0',
-                  label: this.$t('perms.Exclude')
-                }
-              ]
-            }
-          ]
+          options: UserAssetPermissionListPageSearchConfigOptions
         }
       }
     }

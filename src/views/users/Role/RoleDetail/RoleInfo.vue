@@ -169,6 +169,9 @@ export default {
   },
   mounted() {
     this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
+  },
+  activated() {
+    this.loading = true
     setTimeout(() => {
       this.loading = false
     })

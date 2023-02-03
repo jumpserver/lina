@@ -22,7 +22,7 @@ export default [
         component: () => import('@/views/tasks/TaskDetail'),
         name: 'TaskDetail',
         hidden: true,
-        meta: { title: i18n.t('route.TaskDetail'), permissions: [] }
+        meta: { title: i18n.t('route.TaskDetail'), permissions: ['ops.view_celerytask'] }
       }
     ]
   },
