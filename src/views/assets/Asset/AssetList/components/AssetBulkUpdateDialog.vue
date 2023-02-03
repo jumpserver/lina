@@ -44,6 +44,13 @@ export default {
               ajax: {
                 url: '/api/v1/assets/domains/'
               }
+            },
+            on: {
+              change: ([event], updateForm) => {
+                if (!event?.pk) {
+                  updateForm({ domain: '' })
+                }
+              }
             }
           },
           labels: {
