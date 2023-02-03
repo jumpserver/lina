@@ -23,14 +23,8 @@ export default {
         nodes: nodesInitial
       },
       fields: [
-        [this.$t('common.Basic'), [
-          'name', 'ip', 'platform', 'number'
-        ]],
-        [this.$t('assets.Hardware'), [
-          'vendor', 'model', 'sn', 'cpu_model', 'cpu_count', 'cpu_cores',
-          'cpu_vcpus', 'memory', 'disk_total'
-        ]],
-        [this.$t('assets.Os'), ['os', 'os_version', 'os_arch']]
+        [this.$t('common.Basic'), ['name', 'address']],
+        [this.$t('assets.Hardware'), ['info']]
       ],
       fieldsMeta: {
         platform: {
@@ -44,58 +38,15 @@ export default {
             }
           }
         },
-        vendor: {
-          el: {
-            type: `input`
-          }
-        },
-        model: {
-          el: {
-            type: `input`
-          }
-        },
-        cpu_model: {
-          el: {
-            type: `input`
-          }
-        },
-        memory: {
-          el: {
-            type: `input`
-          }
-        },
-        disk_info: {
-          el: {
-            type: `input`
-          }
-        },
-        disk_total: {
-          el: {
-            type: `input`
-          }
-        },
-        sn: {
-          el: {
-            type: `input`
-          }
-        },
-        os: {
-          el: {
-            type: `input`
-          }
-        },
-        os_version: {
-          el: {
-            type: `input`
-          }
-        },
-        os_arch: {
-          el: {
-            type: `input`
-          }
+        info: {
+          fields: [
+            'vendor', 'model', 'sn', 'cpu_model', 'cpu_count',
+            'cpu_cores', 'cpu_vcpus', 'memory', 'disk_total',
+            'distribution', 'distribution_version', 'arch'
+          ]
         }
       },
-      url: '/api/v1/assets/assets/',
+      url: '/api/v1/assets/hosts/',
       updateSuccessNextRoute: { name: 'AssetList' },
       createSuccessNextRoute: { name: 'AssetList' },
       objectDetailRoute: { name: 'AssetDetail' }
