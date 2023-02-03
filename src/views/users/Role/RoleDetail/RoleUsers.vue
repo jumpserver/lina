@@ -70,7 +70,7 @@ export default {
               hasUpdate: false,
               hasClone: false,
               canDelete: ({ row }) => {
-                return this.$hasPerm(`rbac.delete_${row.scope.value}rolebinding`)
+                return this.$hasPerm(`rbac.delete_${row.scope}rolebinding`)
               }
             }
           }
