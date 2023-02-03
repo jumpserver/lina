@@ -5,6 +5,7 @@
 <script>
 import { ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
+import { ProtocolsFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AppletHost',
@@ -67,11 +68,7 @@ export default {
           },
           protocols: {
             label: this.$t('assets.Protocols'),
-            formatter: (row) => {
-              return row.protocols.map((p, i) => {
-                return <el-tag size='mini' class='protocol'>{p.name}/{p.port}</el-tag>
-              })
-            }
+            formatter: ProtocolsFormatter
           },
           actions: {
             formatterArgs: {
