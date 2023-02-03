@@ -15,10 +15,10 @@ export const connectivityMeta = {
       err: 'text-danger'
     },
     getText({ cellValue }) {
-      if (cellValue.value === '-') {
+      if (cellValue?.value === '-') {
         return '-'
       } else {
-        return cellValue.label
+        return cellValue?.label
       }
     }
   },

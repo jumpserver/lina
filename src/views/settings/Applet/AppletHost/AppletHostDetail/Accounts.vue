@@ -18,11 +18,9 @@ export default {
   data() {
     return {
       columnsMeta: {
-        asset: {
+        name: {
           label: this.$t('assets.Asset'),
-          formatter: function(row) {
-            return <span>{row.asset.name}</span>
-          }
+          formatter: (row) => <span>{row.asset.name}</span>
         }
       }
     }
