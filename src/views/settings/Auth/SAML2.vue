@@ -74,8 +74,6 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          obj.SAML2_RENAME_ATTRIBUTES = JSON.stringify(obj.SAML2_RENAME_ATTRIBUTES)
-          obj.SAML2_SP_ADVANCED_SETTINGS = JSON.stringify(obj.SAML2_SP_ADVANCED_SETTINGS)
           return obj
         },
         cleanFormValue(data) {

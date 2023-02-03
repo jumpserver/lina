@@ -54,6 +54,7 @@ export default {
       tableConfig: {
         url: this.baseUrl,
         hasTree: true,
+        hasColumnActions: false,
         canSelect: this.canSelect,
         columns: [
           {

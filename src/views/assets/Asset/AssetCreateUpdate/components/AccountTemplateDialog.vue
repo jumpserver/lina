@@ -84,6 +84,11 @@ export default {
         columns: ['name', 'username', 'privileged'],
         hasColumnActions: false,
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'AccountTemplateDetail'
+            }
+          },
           privileged: {
             width: '100px'
           }

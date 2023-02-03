@@ -124,7 +124,6 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          obj.AUTH_OPENID_USER_ATTR_MAP = JSON.stringify(obj.AUTH_OPENID_USER_ATTR_MAP)
           return obj
         },
         cleanFormValue(data) {

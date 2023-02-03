@@ -3,8 +3,8 @@
     ref="TreeList"
     component="TabTree"
     :table-config="tableConfig"
-    :active-menu.sync="treeTabConfig.activeMenu"
-    :tree-tab-config="treeTabConfig"
+    :active-menu.sync="treeTableConfig.activeMenu"
+    :tree-tab-config="treeTableConfig"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -97,6 +97,15 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    treeTableConfig() {
+      if (this.treeSetting.notShowBuiltinTree) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.treeTabConfig.submenu.splice(1, 1)
+      }
+      return this.treeTabConfig
     }
   },
   mounted() {
