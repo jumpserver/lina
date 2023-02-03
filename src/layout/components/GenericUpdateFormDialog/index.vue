@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    :title="$tc('common.updateSelected')"
-    :visible.sync="iVisible"
-    width="70%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('common.updateSelected')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="70%"
   >
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
