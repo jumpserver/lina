@@ -1,24 +1,25 @@
-import ChoicesFormatter from '@/components/TableFormatters/ChoicesFormatter'
 import i18n from '@/i18n/i18n'
+import { ChoicesFormatter } from '@/components/TableFormatters'
 
 export const connectivityMeta = {
-  label: i18n.t('assets.Reachable'),
+  label: i18n.t('assets.Connectivity'),
   formatter: ChoicesFormatter,
   formatterArgs: {
     faChoices: {
+      '-': '',
       ok: 'fa-check-circle',
-      failed: 'fa-times-circle',
-      unknown: 'fa fa-question-circle'
+      err: 'fa-times-circle'
     },
     classChoices: {
       ok: 'text-primary',
-      failed: 'text-danger',
-      unknown: 'fa fa-question-circle'
+      err: 'text-danger'
     },
-    textChoices: {
-      ok: 'Avail',
-      failed: 'Failed',
-      unknown: '-'
+    getText({ cellValue }) {
+      if (cellValue.value === '-') {
+        return '-'
+      } else {
+        return cellValue.label
+      }
     }
   },
   width: '100px',

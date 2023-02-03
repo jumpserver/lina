@@ -349,7 +349,7 @@
     "PushSystemUserNow": "推送系统用户",
     "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
-    "Reachable": "可连接",
+    "Connectivity": "可连接",
     "Unreachable": "不可连接",
     "Unknown": "未知",
     "Refresh": "刷新",

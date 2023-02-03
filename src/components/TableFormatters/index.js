@@ -13,6 +13,7 @@ import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter'
 import TwoTabFormatter from './TwoTabFormatter'
+import ProtocolsFormatter from './ProtocolsFormatter.vue'
 
 export default {
   DetailFormatter,
@@ -29,7 +30,8 @@ export default {
   StatusFormatter,
   TagsFormatter,
   ObjectRelatedFormatter,
-  TwoTabFormatter
+  TwoTabFormatter,
+  ProtocolsFormatter
 }
 
 export {
@@ -47,5 +49,6 @@ export {
   StatusFormatter,
   TagsFormatter,
   ObjectRelatedFormatter,
-  TwoTabFormatter
+  TwoTabFormatter,
+  ProtocolsFormatter
 }

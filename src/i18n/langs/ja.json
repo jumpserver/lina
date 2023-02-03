@@ -249,7 +249,7 @@
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",
-    "Reachable": "接続可能",
+    "Connectivity": "接続可能",
     "Unreachable": "接続できません",
     "Unknown": "不明",
     "Refresh": "更新",
