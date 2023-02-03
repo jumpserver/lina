@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userRelationConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="groupRelationConfig" />
+      <RelationCard style="margin-top: 15px" type="info" v-bind="groupRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -31,7 +31,6 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.object.id}/users/all/`,
-        hasColumnActions: false,
         columnsExclude: ['user'],
         columnsExtra: ['delete_action'],
         columnsShow: {
@@ -50,6 +49,9 @@ export default {
             objects: this.object.users,
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=`
+          },
+          actions: {
+            has: false
           }
         },
         tableAttrs: {

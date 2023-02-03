@@ -39,13 +39,12 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        columnsExclude: ['actions'],
         columnsExtra: ['action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'users', 'user_groups', 'assets',
-            'nodes', 'accounts', 'is_valid', 'actions'
+            'nodes', 'accounts', 'is_valid'
           ]
         },
         columnsMeta: {

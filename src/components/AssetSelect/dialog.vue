@@ -54,7 +54,6 @@ export default {
       tableConfig: {
         url: this.baseUrl,
         hasTree: true,
-        hasColumnActions: false,
         canSelect: this.canSelect,
         columns: [
           {
@@ -84,6 +83,10 @@ export default {
               return <span> {data} </span>
             },
             label: this.$t('assets.Protocols')
+          },
+          {
+            prop: 'actions',
+            has: false
           }
         ],
         listeners: {

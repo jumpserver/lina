@@ -2,31 +2,31 @@
   <div>
     <Dialog
       v-if="iVisible"
+      :close-on-click-modal="false"
+      :destroy-on-close="true"
       :title="$tc('assets.SelectTemplate')"
       :visible.sync="iVisible"
-      :destroy-on-close="true"
-      width="70%"
-      :close-on-click-modal="false"
       v-bind="$attrs"
-      v-on="$listeners"
-      @confirm="handleConfirm"
+      width="70%"
       @cancel="handleCancel"
+      @confirm="handleConfirm"
+      v-on="$listeners"
     >
       <template>
         <div class="actions">
           <el-button
             v-if="showCreate"
-            type="primary"
-            size="small"
             :disabled="!$hasPerm('accounts.view_accounttemplate')"
+            size="small"
+            type="primary"
             @click="onAddClick"
           >
             {{ $t('common.Add') }}
           </el-button>
           <div class="right">
             <el-button
-              type="text"
               size="small"
+              type="text"
               @click="refreshTable"
             >
               <el-tooltip :content="$tc('common.Refresh')" placement="top">
@@ -43,8 +43,8 @@
     <CreateAccountTemplateDialog
       v-if="isShowCreate"
       :create-visible.sync="isShowCreate"
-      v-on="$listeners"
       @onPerform="onCreateTemplatePerform"
+      v-on="$listeners"
     />
   </div>
 </template>
@@ -82,7 +82,6 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: ['name', 'username', 'privileged'],
-        hasColumnActions: false,
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -91,6 +90,9 @@ export default {
           },
           privileged: {
             width: '100px'
+          },
+          actions: {
+            has: false
           }
         },
         listeners: {
@@ -163,6 +165,7 @@ export default {
 <style lang="scss" scoped>
 .actions {
   margin-bottom: 10px;
+
   .right {
     float: right;
     vertical-align: middle;
