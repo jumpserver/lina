@@ -42,19 +42,14 @@ export default {
             },
             version: {
               width: '100px'
+            },
+            actions: {
+              has: false
             }
-
           }
         },
         headerActions: {
-          hasImport: false,
-          hasExport: false,
-          hasLeftActions: false,
-          hasColumnSetting: false,
-          hasSearch: false,
-          searchConfig: {
-            getUrlQuery: false
-          }
+          has: false
         }
       }
     }

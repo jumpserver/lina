@@ -1,5 +1,5 @@
 <template>
-  <TreeTable :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <TreeTable :header-actions="headerActions" :table-config="tableConfig" :tree-setting="treeSetting" />
 </template>
 
 <script type="text/jsx">
@@ -61,13 +61,15 @@ export default {
         columnShow: {
           min: ['name', 'address', 'accounts']
         },
-        hasColumnActions: false,
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'
             }
+          },
+          actions: {
+            has: false
           }
         }
       },

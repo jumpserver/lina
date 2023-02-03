@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -21,7 +21,6 @@ export default {
           resource: 'userloginlog'
         },
         columnsExclude: ['backend'],
-        hasColumnActions: false,
         columnsShow: {
           min: ['username', 'type'],
           default: [
@@ -33,6 +32,9 @@ export default {
         columnsMeta: {
           user_agent: {
             width: '150px'
+          },
+          actions: {
+            has: false
           },
           ip: {
             width: '140px'

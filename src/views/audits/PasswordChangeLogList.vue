@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -17,7 +17,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/password-change-logs/',
-        hasColumnActions: false,
         columnsShow: {
           min: ['user', 'change_by'],
           default: ['user', 'change_by', 'remote_addr', 'datetime']
@@ -28,6 +27,9 @@ export default {
           },
           datetime: {
             width: '180px'
+          },
+          actions: {
+            has: false
           }
         },
         extraQuery: {

@@ -1,6 +1,7 @@
 <template>
   <div>
     <TableAction
+      v-if="hasActions"
       :date-pick="handleDateChange"
       :reload-table="reloadTable"
       :search-table="search"
@@ -78,6 +79,9 @@ export default {
         defaults[k] = hasPerm
       }
       return Object.assign(defaults, this.headerActions)
+    },
+    hasActions() {
+      return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, {

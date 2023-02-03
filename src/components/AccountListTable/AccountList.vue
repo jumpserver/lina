@@ -1,24 +1,24 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <ViewSecret
       v-if="showViewSecretDialog"
-      :visible.sync="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
     />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
-      :visible.sync="showUpdateSecretDialog"
       :account="account"
+      :visible.sync="showUpdateSecretDialog"
       @updateAuthDone="onUpdateAuthDone"
     />
     <AccountCreateUpdate
       v-if="showAddDialog"
-      :visible.sync="showAddDialog"
-      :asset="iAsset"
       :account="account"
+      :asset="iAsset"
       :title="accountCreateUpdateTitle"
+      :visible.sync="showAddDialog"
       @add="addAccountSuccess"
     />
   </div>
@@ -68,10 +68,6 @@ export default {
       type: Object,
       default: null
     },
-    hasColumnActions: {
-      type: Boolean,
-      default: true
-    },
     columns: {
       type: Array,
       default: () => []
@@ -86,7 +82,8 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     headerExtraActions: {
       type: Array,
@@ -105,7 +102,6 @@ export default {
       secretUrl: '',
       tableConfig: {
         url: this.url,
-        hasColumnActions: this.hasColumnActions,
         permissions: {
           app: 'assets',
           resource: 'account'

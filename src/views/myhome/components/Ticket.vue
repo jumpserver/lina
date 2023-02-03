@@ -1,5 +1,5 @@
 <template>
-  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
+  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
 <script>
@@ -28,7 +28,6 @@ export default {
       },
       tableConfig: {
         url: this.url,
-        hasColumnActions: false,
         columns: ['title', 'applicant', 'type', 'status', 'date_created'],
         columnsMeta: {
           title: {
@@ -50,6 +49,9 @@ export default {
                 }
               }
             }
+          },
+          actions: {
+            has: false
           },
           applicant: {
             label: this.$t('tickets.user'),

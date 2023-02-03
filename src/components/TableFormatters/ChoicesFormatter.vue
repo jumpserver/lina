@@ -91,9 +91,6 @@ export default {
       return true
     }
   },
-  mounted() {
-    console.log('ChoicesFormatter mounted: ', this.formatterArgs)
-  },
   methods: {}
 }
 </script>
