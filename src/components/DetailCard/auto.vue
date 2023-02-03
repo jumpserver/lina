@@ -81,7 +81,7 @@ export default {
         } else if (fieldMeta.type === 'datetime') {
           value = toSafeLocalDateStr(value)
         } else if (fieldMeta.type === 'labeled_choice') {
-          value = value['label']
+          value = value?.['label']
         } else if (fieldMeta.type === 'related_field') {
           value = value['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
