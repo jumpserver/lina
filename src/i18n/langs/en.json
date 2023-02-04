@@ -899,7 +899,7 @@
     "PlaybookManage": "Playbook manage",
     "ChdirHelpText": "The default execution directory is the home directory of the executing user",
     "timeout": "Timeout",
-    "Skip": "跳过",
+    "Skip": "Skip",
     "Reason": "Reason",
     "PrivilegedOnly": "Privileged accounts only",
     "JobType": "Job type",
