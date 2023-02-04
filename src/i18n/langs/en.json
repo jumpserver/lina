@@ -2011,7 +2011,7 @@
     }
   },
   "applets": {
-    "PublishStatus": "发布状态",
+    "PublishStatus": "Publish status",
     "NoPublished": "Unpublished"
   }
 }
