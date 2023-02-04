@@ -399,7 +399,7 @@
     "BadConflictErrorMsg": "更新中です。後で再試行してください。",
     "Basic": "基本",
     "PleaseAgreeToTheTerms": "条項に同意してください",
-    "OpenId": "OpenId設定",
+    "OpenId": "OpenID設定",
     "Radius": "Radius設定",
     "Cas": "Cas設定",
     "other": "その他の設定",
