@@ -2,12 +2,12 @@
   描述: Lina i18n 翻译 检测、更新 工具
 
   两个功能:
-    1. 以 zh.json 文件为基础，检测 en.json 和 ja.json 文件文件，是否有缺失的翻译，如果有会输出到新文件 diff-zh-en.json 和 diff-zh-ja.json 中
+    1. 以 zh.json 文件为基础，检测 en.json 和 ja.json 文件是否有缺失的翻译，如果有会将缺少的翻译信息写入到新文件 diff-zh-en.json 和 diff-zh-ja.json 中
     2. 用户直接修改 diff-zh-en.json 和 diff-zh-ja.json 文件中对应的翻译，然后执行命令，会将修改后的翻译写入到 en.json 和 ja.json 文件中
 
   使用方法:
     1. 生成差异文件: python i18n-util.py diff en ja
-    2. 修改差异文件: diff-zh-en.json 和 diff-zh-ja.json
+    2. 修改差异文件: vi diff-zh-en.json 和 vi diff-zh-ja.json
     3. 更新翻译文件: python i18n-util.py update en ja
 
   依赖包:
@@ -116,12 +116,11 @@ if __name__ == '__main__':
     method = getattr(util, action)
 
     action_display = actions_display_mapper[action]
+    print('-'*100)
     for index, _lang in enumerate(langs):
         lang_display = langs_display_map[_lang]
-        print('-'*100)
         method(_lang)
-        if index == len(langs) - 1:
-            print('-'*100)
+        print('-'*100)
 
     if action == 'diff':
         _langs = ' '.join(langs)
