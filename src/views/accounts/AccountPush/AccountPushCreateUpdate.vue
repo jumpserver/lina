@@ -24,13 +24,6 @@ export default {
       },
       url: '/api/v1/accounts/push-account-automations/',
       fields: [
-        // ['触发方式', ['triggers']],
-        // [this.$t('assets.Account'), [
-        //   'username', 'dynamic_username',
-        //   'secret_type', 'secret_strategy', 'secret',
-        //   'password_rules', 'ssh_key', 'passphrase'
-        // ]],
-        // [this.$t('common.Action'), ['action', 'ssh_key_change_strategy']],
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
         [

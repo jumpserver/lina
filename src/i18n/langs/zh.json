@@ -425,6 +425,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Filename": "文件名",
     "ApproverNumbers": "审批人数量",
     "Overview": "概览",
     "Now": "现在",
@@ -812,7 +813,12 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Add": "新增",
+    "Modify": "修改",
+    "View": "查看",
     "Confirm": "确认",
+    "Delete": "删除",
+    "SuccessfulOperation": "操作成功",
     "Cancel": "取消",
     "DeleteFile": "删除文件",
     "DeleteConfirmMessage": "删除后无法恢复,是否继续?",
@@ -823,7 +829,6 @@
     "NewFile": "新建文件",
     "NewDirectory": "新建目录",
     "Rename": "重命名",
-    "Delete": "删除",
     "SelectCreateMethod": "选择创建方式",
     "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
@@ -858,6 +863,7 @@
     "ScriptDetail": "脚本详情",
     "AssetResultDetail": "资产结果",
     "VariableHelpText": "您可以在命令中使用 {{ key }} 读取内置变量",
+    "BuiltinVariable": "内置变量",
     "ChdirHelpText": "默认执行目录为执行用户的 home 目录",
     "OpenCommand": "打开命令",
     "SaveCommand": "保存命令 ",
@@ -1533,6 +1539,7 @@
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
+    "RelevantAssignees": "相关受理人",
     "OneAssigneeType": "一级受理人类型",
     "OneAssignee": "一级受理人",
     "TwoAssigneeType": "二级受理人类型",
