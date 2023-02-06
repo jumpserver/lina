@@ -49,7 +49,6 @@ export default {
           }
         },
         ANNOUNCEMENT_ENABLED: {
-          // label: '公告',
           component: Announcement
         }
       },

@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    title="离线上传"
+    :title="$tc('common.OfflineUpload')"
     v-bind="$attrs"
     @confirm="onSubmit"
     v-on="$listeners"

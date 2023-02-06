@@ -70,7 +70,7 @@ export default {
             }
           },
           date_updated: {
-            label: '日期'
+            label: this.$t('ops.date')
           },
           actions: {
             formatterArgs: {

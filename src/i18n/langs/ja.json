@@ -747,7 +747,8 @@
     "Task": "タスク",
     "Invalid": "無効",
     "PublishAllApplets": "すべてのアプリを公開する",
-    "Sync": "同期する"
+    "Sync": "同期する",
+    "Filename": "ファイル名"
   },
   "dashboard": {
     "ActiveAsset": "最近ログインされました",
@@ -953,7 +954,12 @@
     "RunasPolicy": "アカウント ポリシー",
     "PrivilegedFirst": "優先特権アカウント",
     "CloseConfirm": "閉じることを確認",
-    "SelectCreateMethod": "作り方を選ぶ"
+    "SelectCreateMethod": "作り方を選ぶ",
+    "View": "チェック",
+    "BuiltinVariable": "組み込み変数",
+    "Add": "追加",
+    "SuccessfulOperation": "成功した操作",
+    "Modify": "改訂"
   },
   "perms": {
     "": "",
@@ -1605,7 +1611,8 @@
     "ApplyRunSystemUser": "実行を申請するシステムユーザー",
     "ApplyRunCommand": "実行を申請するコマンド",
     "ApplyFromSession": "会話",
-    "ApplyFromCMDFilterRule": "コマンドフィルタルール"
+    "ApplyFromCMDFilterRule": "コマンドフィルタルール",
+    "RelevantAssignees": "関連する譲受人"
   },
   "tree": {
     "AddAssetToNode": "ノードにアセットを追加",

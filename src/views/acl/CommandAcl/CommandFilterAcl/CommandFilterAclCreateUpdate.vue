@@ -49,10 +49,6 @@ export default {
         accounts: {
           fields: ['username_group']
         },
-        priority: {
-          // helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
-          // helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
-        },
         action: {
         },
         command_groups: {

@@ -361,28 +361,28 @@ export default {
      */
     newText: {
       type: String,
-      default: '新增'
+      default: this.$t('ops.Add')
     },
     /**
      * 修改按钮文案
      */
     editText: {
       type: String,
-      default: '修改'
+      default: this.$t('ops.Modify')
     },
     /**
      * 查看按钮文案
      */
     viewText: {
       type: String,
-      default: '查看'
+      default: this.$t('ops.View')
     },
     /**
      * 删除按钮文案
      */
     deleteText: {
       type: String,
-      default: '删除'
+      default: this.$t('ops.Delete')
     },
     /**
      * 删除提示语。接受要删除的数据（单个对象或数组）；返回字符串
@@ -392,7 +392,7 @@ export default {
     deleteMessage: {
       type: Function,
       default() {
-        return `确认${this.deleteText}吗?`
+        return this.$t('ops.Confirm') + this.deleteText + '?'
       }
     },
     /**
@@ -451,7 +451,7 @@ export default {
     onSuccess: {
       type: Function,
       default() {
-        return this.$message.success('操作成功')
+        return this.$message.success(this.$t('ops.SuccessfulOperation'))
       }
     },
     /**
@@ -1159,7 +1159,7 @@ export default {
      * @param {object|object[]} - 要删除的数据对象或数组
      */
     onDefaultDelete(data) {
-      this.$confirm(this.deleteMessage(data), '提示', {
+      this.$confirm(this.deleteMessage(data), this.$t('common.Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {

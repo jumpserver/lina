@@ -748,7 +748,8 @@
     "NotSpecialEmoji": "No special emoji allowed",
     "Task": "Task",
     "Cas": "CAS",
-    "Invalid": "Invalid"
+    "Invalid": "Invalid",
+    "Filename": "Filename"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -954,7 +955,12 @@
     "TaskDispatch": "The task was sent successfully",
     "PrivilegedFirst": "Prefer privileged accounts",
     "CloseConfirm": "Confirm close",
-    "SelectCreateMethod": "Choose how to create"
+    "SelectCreateMethod": "Choose how to create",
+    "View": "View",
+    "BuiltinVariable": "Builtin variable",
+    "Add": "Add",
+    "SuccessfulOperation": "Successful operation",
+    "Modify": "Modify"
   },
   "perms": {
     "": "",
@@ -1614,7 +1620,8 @@
     "TwoAssignee": "Secondary Recipient",
     "SuperAdmin": "Super administrator",
     "FlowDetail": "Flow detail",
-    "OneAssignee": "First-level Assignee"
+    "OneAssignee": "First-level Assignee",
+    "RelevantAssignees": "Relevant assignees"
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",

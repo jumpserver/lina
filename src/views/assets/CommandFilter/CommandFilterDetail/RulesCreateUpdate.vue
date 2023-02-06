@@ -64,10 +64,6 @@ export default {
           },
           helpText: ''
         },
-        priority: {
-          // helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
-          // helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
-        },
         reviewers: {
           hidden: (item) => item.action !== 2,
           rules: [rules.RequiredChange],

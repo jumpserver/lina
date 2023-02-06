@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: '内置变量',
+      title: this.$t('ops.BuiltinVariable'),
       variables: {}
     }
   },
