@@ -36,7 +36,6 @@ export default {
     BaseList
   },
   data() {
-    const vm = this
     const tableUrl = '/api/v1/assets/assets/'
     return {
       treeRef: null,
@@ -53,35 +52,7 @@ export default {
       headerActions: {
         hasImport: false
       },
-      addExtraMoreActions: [
-        {
-          name: 'RemoveFromCurrentNode',
-          title: this.$t('assets.RemoveFromCurrentNode'),
-          can: ({ selectedRows }) => {
-            if (!vm.$route.query.node_id) {
-              return false
-            }
-            return selectedRows.length > 0 &&
-              !vm.currentOrgIsRoot &&
-              vm.$hasPerm('assets.change_node')
-          },
-          callback: function({ selectedRows, reloadTable }) {
-            const assetsId = []
-            for (const item of selectedRows) {
-              assetsId.push(item.id)
-            }
-            const nodeId = this.$route.query.node_id
-            if (!nodeId) return
-            const url = `/api/v1/assets/nodes/${nodeId}/assets/remove/`
-            this.$axios.put(url, { assets: assetsId }).then(res => {
-              this.$message.success(this.$t('common.removeSuccessMsg'))
-              reloadTable()
-            }).catch(err => {
-              this.$message.error(this.$t('common.removeErrorMsg' + ' ' + err))
-            })
-          }.bind(this)
-        }
-      ],
+      addExtraMoreActions: [],
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }
   },

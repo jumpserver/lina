@@ -1603,6 +1603,7 @@
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",
+    "RemoveAssetFromNode": "从节点移除资产",
     "CreateNode": "创建节点",
     "DeleteNode": "删除节点",
     "MoveAssetToNode": "移动资产到节点",

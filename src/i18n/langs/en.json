@@ -1326,6 +1326,7 @@
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",
+    "RemoveAssetFromNode": "Remove asset from node",
     "CreateNode": "Create node",
     "DeleteNode": "Delete node",
     "MoveAssetToNode": "move asset to node",

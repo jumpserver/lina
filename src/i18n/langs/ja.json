@@ -1375,6 +1375,7 @@
   },
   "tree": {
     "AddAssetToNode": "ノードにアセットを追加",
+    "RemoveAssetFromNode": "ノードからアセットを削除",
     "CreateNode": "ノードの作成",
     "DeleteNode": "ノードの削除",
     "MoveAssetToNode": "資産をノードに移動する",

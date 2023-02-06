@@ -19,9 +19,9 @@
             <input
               id="searchInput"
               v-model="treeSearchValue"
-              type="text"
               autocomplete="off"
               class="tree-input"
+              type="text"
             >
           </a>
           <span v-if="treeSetting.showRefresh" class="icon-refresh" @click="refresh">
@@ -29,10 +29,10 @@
           </span>
         </span>
       </div>
-      <ul v-show="loading" class="ztree">
+      <ul v-if="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
-      <ul v-show="!loading" :id="iZTreeID" class="ztree" />
+      <ul v-else :id="iZTreeID" class="ztree tree-obj" />
       <div v-if="treeSetting.treeUrl===''" class="tree-empty">
         {{ this.$t('common.tree.Empty') }}
       </div>
@@ -42,10 +42,10 @@
         <el-input
           v-if="treeSetting.showSearch && showTreeSearch"
           v-model="treeSearchValue"
+          :placeholder="$tc('common.Search')"
+          class="fixed-tree-search"
           prefix-icon="fa fa-search"
           size="mini"
-          class="fixed-tree-search"
-          :placeholder="$tc('common.Search')"
           @input="treeSearchHandle"
         >
           <span slot="suffix">
@@ -62,7 +62,7 @@
       <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
-      <ul v-show="!loading" :id="iZTreeID" class="ztree" />
+      <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
       <div v-if="treeSetting.treeUrl===''" class="tree-empty">
         {{ this.$t('common.tree.Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
@@ -123,18 +123,25 @@ export default {
     $.fn.zTree.destroy(this.iZTreeID)
   },
   methods: {
-    initTree: function() {
+    async initTree(refresh = false) {
       const vm = this
       let treeUrl
-      if (this.init) {
-        this.loading = true
-      }
-      if (this.init && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 && this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1) {
-        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1) ? `${this.treeSetting.treeUrl}?rebuild_tree=1` : `${this.treeSetting.treeUrl}&rebuild_tree=1`
+      this.loading = true
+      if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
+        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
+      ) {
+        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
+          ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
+          : `${this.treeSetting.treeUrl}&rebuild_tree=1`
       } else {
         treeUrl = this.treeSetting.treeUrl
       }
-      this.$axios.get(treeUrl, {
+
+      if (refresh) {
+        $.fn.zTree.destroy(this.iZTreeID)
+      }
+
+      let res = await this.$axios.get(treeUrl, {
         'axios-retry': {
           retries: 20,
           retryCondition: e => {
@@ -145,36 +152,29 @@ export default {
             return 5000
           }
         }
-      }).then(res => {
-        if (!res) res = []
-        if (res.length === 0) {
-          res.push({
-            name: this.$t('common.tree.Empty')
-          })
-        }
-        this.treeSetting.treeUrl = treeUrl
-        if (this.init) {
-          vm.zTree.destroy()
-        }
-
-        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
-        if (!this.treeSetting.customTreeHeader) {
-          const rootNode = this.zTree.getNodes()[0]
-          this.rootNodeAddDom(rootNode)
-        }
-        // 手动上报事件, Tree加载完成
-        this.$emit('TreeInitFinish', this.zTree)
-
-        if (this.treeSetting.showMenu) {
-          this.rMenu = $(`#${this.iRMenuID}`)
-        }
-        if (this.treeSetting.otherMenu) {
-          $('.menu-actions').append(this.otherMenu)
-        }
-      }).finally(_ => {
-        vm.loading = false
-        vm.init = true
       })
+      vm.loading = false
+      if (!res) res = []
+      if (res?.length === 0) {
+        res?.push({
+          name: this.$t('common.tree.Empty')
+        })
+      }
+      this.treeSetting.treeUrl = treeUrl
+      vm.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
+      if (!this.treeSetting.customTreeHeader) {
+        const rootNode = this.zTree.getNodes()[0]
+        this.rootNodeAddDom(rootNode)
+      }
+      // 手动上报事件, Tree加载完成
+      this.$emit('TreeInitFinish', this.zTree)
+
+      if (this.treeSetting.showMenu) {
+        this.rMenu = $(`#${this.iRMenuID}`)
+      }
+      if (this.treeSetting?.otherMenu) {
+        $('.menu-actions').append(this.otherMenu)
+      }
     },
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
@@ -187,7 +187,7 @@ export default {
     rootNodeAddDom(rootNode) {
       const { showSearch, showRefresh } = this.treeSetting
       const searchIcon = `
-        <a class="tree-action-btn" onclick="onSearch()">
+        <a class="tree-action-btn" id='search-btn' onclick="onSearch()">
           <i class='fa fa-search tree-banner-icon'></i>
         </a>`
       const refreshIcon = `
@@ -204,16 +204,13 @@ export default {
         $rootNodeRef.after(icons)
       }
     },
-    refresh() {
+    async refresh() {
       this.treeSearchValue = ''
-      const result = this.treeSetting?.callback?.refresh()
-      if (result && result.then) {
-        result.finally(() => {
-          this.initTree()
-        })
-      } else {
-        this.initTree()
+      if (this.treeSetting?.callback?.refresh) {
+        await this.treeSetting.callback.refresh()
       }
+      this.zTree.destroy()
+      setTimeout(() => this.initTree(true), 200)
     },
     treeSearch() {
       const searchIcon = document.getElementById(`searchIcon`)
@@ -374,7 +371,6 @@ export default {
         }
         searchNode.open = true
       })
-      return
     }
   }
 
@@ -455,7 +451,8 @@ export default {
   .treebox {
     height: 70vh;
     background-color: transparent;
-    >>> .ztree {
+
+    > > > .ztree {
       overflow: auto;
       background-color: transparent;
       height: calc(100% - 50px);
@@ -464,7 +461,7 @@ export default {
         background-color: transparent !important;
 
         .button {
-          background-color: rgba(0,0,0,0);
+          background-color: rgba(0, 0, 0, 0);
         }
 
         ul {
@@ -589,21 +586,21 @@ export default {
   .fixed-tree-search {
     margin-bottom: 10px;
 
-    & >>> .el-input__inner {
+    & > > > .el-input__inner {
       border-radius: 4px;
       background: #fafafa;
       padding-right: 32px;
     }
 
-    & >>> .el-input__suffix {
+    & > > > .el-input__suffix {
       padding-right: 8px;
     }
 
-    & >>> .el-input__prefix {
+    & > > > .el-input__prefix {
       padding-left: 6px;
     }
 
-    & >>> .el-input__suffix-inner {
+    & > > > .el-input__suffix-inner {
       line-height: 30px;
     }
   }
