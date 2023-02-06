@@ -48,7 +48,9 @@ class I18NFileUtil(object):
         diff_paths = set(zh_paths) - set(lang_paths)
 
         data = {}
+
         diff_filepath = f'{self.dir_path}/.diff-zh-{lang}.json'
+        
         with open(diff_filepath, 'w', encoding='utf-8') as f:
             for path in diff_paths:
                 value = zh_tree.get(path)
@@ -77,6 +79,7 @@ class I18NFileUtil(object):
             data = json.dumps(data, ensure_ascii=False, indent=2)
             f.write(data)
             print(f'\n翻译文件 {self.dir_path}/{lang}.json 已更新, 总共写入新的翻译 {len(diff_data)} 条.\n')
+            
         # 删除 diff 文件
         os.remove(diff_filepath)
 
