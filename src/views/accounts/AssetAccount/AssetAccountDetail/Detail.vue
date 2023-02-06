@@ -28,6 +28,8 @@ export default {
   },
   data() {
     const vm = this
+    const filterSuFrom = ['database', 'device', 'cloud', 'web']
+
     return {
       quickActions: [
         {
@@ -53,7 +55,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_account')
+            disabled: !vm.$hasPerm('assets.test_account') || filterSuFrom.includes(vm.object?.category?.value)
           },
           callbacks: Object.freeze({
             click: () => {
