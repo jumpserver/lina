@@ -1777,6 +1777,7 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "Cloud": {
+      "LAN": "局域网",
       "CloudSync": "云同步",
       "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",
