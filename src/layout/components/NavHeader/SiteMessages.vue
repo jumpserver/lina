@@ -2,7 +2,7 @@
   <div>
     <el-badge :hidden="unreadMsgCount === 0" :max="99" :value="unreadMsgCount" size="mini" type="primary">
       <el-link style="height: 100%" @click="toggleDrawer">
-        <svg-icon icon-class="email-fill" />
+        <svg-icon icon-class="remind" />
       </el-link>
     </el-badge>
     <el-drawer
