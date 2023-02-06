@@ -33,19 +33,21 @@ langs_display_map = {
 
 
 class I18NFileUtil(object):
+    dir_path = './src/i18n/langs'
+
     def diff(self, lang):
-        zh_json = self.load_json('./zh.json')
+        zh_json = self.load_json(f'{self.dir_path}/zh.json')
         zh_tree = data_tree.Data_tree_node(arg_data=zh_json)
         zh_paths = list(zh_tree.paths(arg_bool_get_paths_as_strings=True))
 
-        lang_json = self.load_json(f'./{lang}.json')
+        lang_json = self.load_json(f'{self.dir_path}/{lang}.json')
         lang_tree = data_tree.Data_tree_node(arg_data=lang_json)
         lang_paths = list(lang_tree.paths(arg_bool_get_paths_as_strings=True))
 
         diff_paths = set(zh_paths) - set(lang_paths)
 
         data = {}
-        diff_filepath = f'./diff-zh-{lang}.json'
+        diff_filepath = f'{self.dir_path}/diff-zh-{lang}.json'
         with open(diff_filepath, 'w', encoding='utf-8') as f:
             for path in diff_paths:
                 value = zh_tree.get(path)
@@ -61,19 +63,19 @@ class I18NFileUtil(object):
             print(msg)
 
     def apply(self, lang):
-        diff_data = self.load_json(f'./diff-zh-{lang}.json')
-        lang_data = self.load_json(f'./{lang}.json')
+        diff_data = self.load_json(f'{self.dir_path}/diff-zh-{lang}.json')
+        lang_data = self.load_json(f'{self.dir_path}/{lang}.json')
 
         lang_pdict = PathDict(lang_data, create_if_not_exists=True)
         for key_path, value in diff_data.items():
             lang_pdict[key_path] = value
 
-        with open(f'./{lang}.json', 'w', encoding='utf-8') as f:
+        with open(f'{self.dir_path}/{lang}.json', 'w', encoding='utf-8') as f:
             data = self.pathdict_to_dict(lang_pdict)
             data = json.dumps(data, ensure_ascii=False, indent=2)
             f.write(data)
 
-            print(f'\n翻译文件 ./{lang}.json 已更新, 总共写入新的翻译 {len(diff_data)} 条.\n')
+            print(f'\n翻译文件 {self.dir_path}/{lang}.json 已更新, 总共写入新的翻译 {len(diff_data)} 条.\n')
 
     def pathdict_to_dict(self, data):
         d = {}
@@ -124,6 +126,6 @@ if __name__ == '__main__':
 
     if action == 'diff':
         _langs = ' '.join(langs)
-        msg = f'\n* Tips: 修改差异文件后, 执行命令 ```python i18n-util.py apply {_langs} ``` 更新翻译文件 *\n'
+        msg = f'\n* Tips: 修改差异文件后, 执行命令 ```npm run apply-i18n ``` 更新翻译文件 *\n'
         print(msg)
 
