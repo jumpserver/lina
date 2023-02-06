@@ -83,6 +83,10 @@ export default {
         const error = err.response.data?.error || this.$t('terminal.UploadFailed')
         this.$message.error(error)
       })
+
+      setTimeout(() => {
+        this.$refs.upload.clearFiles()
+      }, 400)
     }
   }
 }
