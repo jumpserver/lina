@@ -959,7 +959,8 @@
     "BuiltinVariable": "組み込み変数",
     "Add": "追加",
     "SuccessfulOperation": "成功した操作",
-    "Modify": "改訂"
+    "Modify": "改訂",
+    "AdhocUpdate": "更新コマンド"
   },
   "perms": {
     "": "",
