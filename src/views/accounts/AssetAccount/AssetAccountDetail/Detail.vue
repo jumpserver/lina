@@ -55,7 +55,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_account') || filterSuFrom.includes(vm.object?.category?.value)
+            disabled: !vm.$hasPerm('assets.test_account')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -84,7 +84,7 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('accounts.change_account')
+            disabled: !vm.$hasPerm('assets.test_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
           },
           callbacks: Object.freeze({
             change: (value) => {
