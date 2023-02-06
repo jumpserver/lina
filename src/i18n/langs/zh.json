@@ -814,6 +814,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "RunAgain": "再次执行",
     "AdhocUpdate": "更新命令",
     "Add": "新增",
     "Modify": "修改",

@@ -1,5 +1,5 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script type="text/jsx">
@@ -18,6 +18,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         hasSelection: false,
@@ -75,9 +76,19 @@ export default {
                 {
                   name: 'detail',
                   title: this.$t('ops.output'),
-                  type: 'primary',
                   callback: function({ row, tableData }) {
                     openTaskPage(row.id)
+                  }
+                },
+                {
+                  name: 'run',
+                  title: this.$t('ops.RunAgain'),
+                  type: 'primary',
+                  callback: function({ row, tableData }) {
+                    this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {
+                      vm.refreshTable()
+                      openTaskPage(data.task_id)
+                    })
                   }
                 }
               ]
@@ -88,6 +99,11 @@ export default {
       headerActions: {
         hasLeftActions: false
       }
+    }
+  },
+  methods: {
+    refreshTable() {
+      this.$refs.list.reloadTable()
     }
   }
 }
