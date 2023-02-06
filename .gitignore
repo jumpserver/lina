@@ -16,6 +16,3 @@ tests/**/coverage/
 *.njsproj
 *.sln
 .env.development
-
-src/i18n/langs/diff-zh-en.json
-src/i18n/langs/diff-zh-ja.json
