@@ -1926,7 +1926,8 @@
       "DeleteReleasedAssets": "Delete released assets",
       "QcloudLighthouse": "Tencent Cloud (lightweight application server)",
       "KingSoftCloud": "KingSoft Cloud",
-      "CTYunPrivate": "CTYun Private"
+      "CTYunPrivate": "CTYun Private",
+      "LAN": "LAN"
     },
     "Corporation": "Corporation",
     "Edition": "Edition",

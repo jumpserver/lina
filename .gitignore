@@ -16,3 +16,4 @@ tests/**/coverage/
 *.njsproj
 *.sln
 .env.development
+.python-version
