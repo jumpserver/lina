@@ -361,28 +361,36 @@ export default {
      */
     newText: {
       type: String,
-      default: this.$t('ops.Add')
+      default: function() {
+        return this.$t('ops.Add')
+      }
     },
     /**
      * 修改按钮文案
      */
     editText: {
       type: String,
-      default: this.$t('ops.Modify')
+      default: function() {
+        return this.$t('ops.Modify')
+      }
     },
     /**
      * 查看按钮文案
      */
     viewText: {
       type: String,
-      default: this.$t('ops.View')
+      default: function() {
+        return this.$t('ops.View')
+      }
     },
     /**
      * 删除按钮文案
      */
     deleteText: {
       type: String,
-      default: this.$t('ops.Delete')
+      default: function() {
+        return this.$t('ops.Delete')
+      }
     },
     /**
      * 删除提示语。接受要删除的数据（单个对象或数组）；返回字符串
