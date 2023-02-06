@@ -214,7 +214,6 @@ export default {
         showRefresh: true,
         showMenu: false,
         showSearch: true,
-        customTreeHeader: false,
         check: {
           enable: true
         },

@@ -425,6 +425,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Filename": "文件名",
     "ApproverNumbers": "审批人数量",
     "Overview": "概览",
     "Now": "现在",
@@ -512,9 +513,9 @@
     "BadConflictErrorMsg": "正在刷新中，请稍后再试",
     "Basic": "基本",
     "PleaseAgreeToTheTerms": "请同意条款",
-    "OpenId": "OpenId设置",
+    "OpenId": "OpenID设置",
     "Radius": "Radius设置",
-    "Cas": "Cas设置",
+    "Cas": "CAS设置",
     "other": "其它设置",
     "ApplyInfo": "申请信息",
     "Cancel": "取消",
@@ -812,8 +813,14 @@
     "Weekly": "按周"
   },
   "ops": {
+    "AdhocUpdate": "更新命令",
+    "Add": "新增",
+    "Modify": "修改",
+    "View": "查看",
     "Confirm": "确认",
-    "Cancel": "确认",
+    "Delete": "删除",
+    "SuccessfulOperation": "操作成功",
+    "Cancel": "取消",
     "DeleteFile": "删除文件",
     "DeleteConfirmMessage": "删除后无法恢复,是否继续?",
     "CloseConfirm": "确认关闭",
@@ -823,7 +830,6 @@
     "NewFile": "新建文件",
     "NewDirectory": "新建目录",
     "Rename": "重命名",
-    "Delete": "删除",
     "SelectCreateMethod": "选择创建方式",
     "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
@@ -858,6 +864,7 @@
     "ScriptDetail": "脚本详情",
     "AssetResultDetail": "资产结果",
     "VariableHelpText": "您可以在命令中使用 {{ key }} 读取内置变量",
+    "BuiltinVariable": "内置变量",
     "ChdirHelpText": "默认执行目录为执行用户的 home 目录",
     "OpenCommand": "打开命令",
     "SaveCommand": "保存命令 ",
@@ -1533,6 +1540,7 @@
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
+    "RelevantAssignees": "相关受理人",
     "OneAssigneeType": "一级受理人类型",
     "OneAssignee": "一级受理人",
     "TwoAssigneeType": "二级受理人类型",
@@ -1770,6 +1778,7 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "Cloud": {
+      "LAN": "局域网",
       "CloudSync": "云同步",
       "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",

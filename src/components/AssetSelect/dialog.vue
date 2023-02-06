@@ -114,9 +114,11 @@ export default {
   methods: {
     handleConfirm() {
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
+      this.$eventBus.$emit('treeComponentKey')
     },
     handleCancel() {
       this.$emit('cancel')
+      this.$eventBus.$emit('treeComponentKey')
     },
     addRowToSelect(row) {
       const selectValueIndex = this.rowSelected.indexOf(row.id)

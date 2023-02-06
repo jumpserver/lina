@@ -54,7 +54,7 @@ export default {
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {

@@ -10,7 +10,7 @@
   >
 
     <el-form ref="form" label-width="80px">
-      <el-form-item label="文件名">
+      <el-form-item :label="$tc('common.Filename')">
         <el-input v-model="newFileName" />
       </el-form-item>
     </el-form>

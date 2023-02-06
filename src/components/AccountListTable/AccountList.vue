@@ -106,7 +106,7 @@ export default {
           app: 'assets',
           resource: 'account'
         },
-        columnsExclude: ['specific'],
+        columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
@@ -244,7 +244,7 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,
-        hasImport: true,
+        hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
           url: this.exportUrl,

@@ -1,43 +1,6 @@
 <template>
   <div>
-    <div
-      v-if="treeSetting.customTreeHeader"
-      class="tree-header treebox"
-    >
-      <div class="content">
-        <span class="title">
-          {{ treeSetting.customTreeHeaderName }}
-        </span>
-        <span class="tree-banner-icon-zone">
-          <a id="searchIcon" class="tree-search special">
-            <svg-icon
-              :icon-class="'search'"
-              class="tree-banner-icon"
-              style="font-size: 14px;"
-              @click.stop="treeSearch"
-            />
-            <input
-              id="searchInput"
-              v-model="treeSearchValue"
-              autocomplete="off"
-              class="tree-input"
-              type="text"
-            >
-          </a>
-          <span v-if="treeSetting.showRefresh" class="icon-refresh" @click="refresh">
-            <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
-          </span>
-        </span>
-      </div>
-      <ul v-if="loading" class="ztree">
-        {{ this.$t('common.tree.Loading') }}...
-      </ul>
-      <ul v-else :id="iZTreeID" class="ztree tree-obj" />
-      <div v-if="treeSetting.treeUrl===''" class="tree-empty">
-        {{ this.$t('common.tree.Empty') }}
-      </div>
-    </div>
-    <div v-else class="treebox">
+    <div class="treebox">
       <div>
         <el-input
           v-if="treeSetting.showSearch && showTreeSearch"
@@ -162,10 +125,8 @@ export default {
       }
       this.treeSetting.treeUrl = treeUrl
       vm.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
-      if (!this.treeSetting.customTreeHeader) {
-        const rootNode = this.zTree.getNodes()[0]
-        this.rootNodeAddDom(rootNode)
-      }
+      const rootNode = this.zTree.getNodes()[0]
+      this.rootNodeAddDom(rootNode)
       // 手动上报事件, Tree加载完成
       this.$emit('TreeInitFinish', this.zTree)
 
@@ -358,10 +319,8 @@ export default {
         const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
         searchNode = this.zTree.addNodes(null, newNode)[0]
         searchNode.zAsync = true
+        this.rootNodeAddDom(searchNode)
 
-        if (!this.treeSetting.customTreeHeader) {
-          this.rootNodeAddDom(searchNode)
-        }
         const nodesGroupByOrg = this.groupBy(nodes, (node) => {
           return node.meta?.data?.org_name
         })

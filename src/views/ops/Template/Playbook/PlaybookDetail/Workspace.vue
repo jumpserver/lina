@@ -105,7 +105,6 @@ export default {
         showCreate: false,
         showUpdate: false,
         showSearch: false,
-        customTreeHeader: false,
         callback: {
           onSelected: function(event, treeNode) {
             console.log(treeNode)
