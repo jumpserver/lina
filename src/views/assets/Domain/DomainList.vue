@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="notice" />
+  <GenericListPage :header-actions="headerActions" :help-message="notice" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -14,6 +14,8 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/domains/',
+        columnsExclude: ['assets', 'gateway'],
+        columnsExtra: ['asset_count', 'gateway_count'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'asset_count', 'gateway_count', 'comment', 'actions']
@@ -22,7 +24,7 @@ export default {
           asset_count: {
             label: this.$t('assets.Assets'),
             formatter: function(row) {
-              return <span> { row.assets.length } </span>
+              return <span> {row.assets.length} </span>
             }
           },
           gateway_count: {
