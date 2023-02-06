@@ -57,7 +57,7 @@
     "moment": "^2.29.4",
     "moment-parseformat": "^4.0.0",
     "normalize.css": "7.0.0",
-    "npm": "^7.8.0",
+    "npm": "^8.11.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
