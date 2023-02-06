@@ -960,7 +960,8 @@
     "BuiltinVariable": "Builtin variable",
     "Add": "Add",
     "SuccessfulOperation": "Successful operation",
-    "Modify": "Modify"
+    "Modify": "Modify",
+    "AdhocUpdate": "Update Adhoc"
   },
   "perms": {
     "": "",

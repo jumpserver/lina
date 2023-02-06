@@ -8,7 +8,7 @@
   使用方法:
     1. 生成差异文件: python i18n-util.py diff en ja
     2. 修改差异文件: vi diff-zh-en.json 和 vi diff-zh-ja.json
-    3. 更新翻译文件: python i18n-util.py update en ja
+    3. 更新翻译文件: python i18n-util.py apply en ja
 
   依赖包:
     pip install data-tree
@@ -24,7 +24,7 @@ from pathdict import PathDict
 
 actions_display_mapper = {
     'diff': '检测',
-    'update': '更新'
+    'apply': '更新'
 }
 langs_display_map = {
     'en': '英文',
@@ -60,7 +60,7 @@ class I18NFileUtil(object):
                   f'待翻译条目已写入到 {diff_filepath} 文件中. \n'
             print(msg)
 
-    def update(self, lang):
+    def apply(self, lang):
         diff_data = self.load_json(f'./diff-zh-{lang}.json')
         lang_data = self.load_json(f'./{lang}.json')
 
@@ -99,11 +99,11 @@ if __name__ == '__main__':
         Example: \r\n
 
         %(prog)s diff en(ja);
-        %(prog)s update en(ja);
+        %(prog)s apply en(ja);
         """
     )
     parser.add_argument(
-        'action', type=str, choices=("diff", "update"),
+        'action', type=str, choices=("diff", "apply"),
     )
     parser.add_argument(
         'langs', type=str, choices=("en", "ja"), nargs='*'
@@ -124,6 +124,6 @@ if __name__ == '__main__':
 
     if action == 'diff':
         _langs = ' '.join(langs)
-        msg = f'\n* Tips: 修改差异文件后, 执行命令 ```python i18n-util.py update {_langs} ``` 更新翻译文件 *\n'
+        msg = f'\n* Tips: 修改差异文件后, 执行命令 ```python i18n-util.py apply {_langs} ``` 更新翻译文件 *\n'
         print(msg)
 
