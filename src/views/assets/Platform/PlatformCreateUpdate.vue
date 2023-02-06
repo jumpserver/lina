@@ -32,7 +32,7 @@ export default {
       },
       initial: {
         comment: '',
-        charset: 'utf8',
+        charset: 'utf-8',
         category_type: ['host', 'linux'],
         automation: {
           ansible_enabled: true

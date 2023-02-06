@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="iVisible"
-    title="新建文件"
+    :title="$tc('ops.NewFile')"
     :visible.sync="iVisible"
     width="20%"
     top="1vh"
@@ -10,7 +10,7 @@
     @confirm="onConfirm"
   >
     <el-form>
-      <el-form-item label="名称">
+      <el-form-item :label="$tc('common.DisplayName')">
         <el-input v-model="name" />
       </el-form-item>
     </el-form>
