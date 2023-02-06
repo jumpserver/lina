@@ -244,7 +244,7 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,
-        hasImport: true,
+        hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
           url: this.exportUrl,

@@ -19,6 +19,9 @@ export default {
     return {
       columnsMeta: {
         name: {
+          formatter: (row) => <span>{row.name}</span>
+        },
+        asset: {
           label: this.$t('assets.Asset'),
           formatter: (row) => <span>{row.asset.name}</span>
         }
