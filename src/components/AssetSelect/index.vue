@@ -14,6 +14,7 @@
       :value="value"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
+      :base-url="baseUrl"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"

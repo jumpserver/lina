@@ -23,11 +23,11 @@ export default {
           component: AssetSelect,
           label: this.$t('assets.Assets'),
           el: {
-            value: []
+            value: [],
+            baseUrl: '/api/v1/assets/assets/?domain_enabled=true'
           }
         }
       },
-
       url: '/api/v1/assets/domains/'
     }
   }
