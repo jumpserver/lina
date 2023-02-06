@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     hideRMenu() {
-      this.$refs.AutoDataZTree.hideRMenu()
+      this.$refs.AutoDataZTree?.hideRMenu()
     },
     getSelectedNodes: function() {
       return this.$refs.AutoDataZTree.getSelectedNodes()
