@@ -197,6 +197,7 @@
   },
   "assets": {
     "Secure": "安全である",
+    "AssetBulkUpdateTips": "ネットワークデバイス、クラウドサービス、Web、一括更新ネットワークドメインはサポートされていません",
     "LabelInputFormatValidation": "フォーマットが正しくありません：name:value",
     "IP/Host": "IP/ノア",
     "OrganizationAsset": "組織資産",

@@ -3,6 +3,7 @@
     v-if="visible"
     :form-setting="formSetting"
     :selected-rows="selectedRows"
+    :tips="tips"
     :visible="visible"
     v-on="$listeners"
   />
@@ -30,6 +31,7 @@ export default {
   data() {
     const meta = assetFieldsMeta(this)
     return {
+      tips: this.$t('assets.AssetBulkUpdateTips'),
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
