@@ -132,9 +132,9 @@ export default {
     handleConfirm() {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
-      const hasIdAccounts = this.accounts.filter(i => i?.id)
-      const data = _.xorBy(hasIdAccounts, this.accountsSelected, 'id')
-      this.accounts.push(...data)
+      const hasIdAccounts = this.accounts.filter(i => i?.id).map(item => item.id)
+      const newAddAccounts = this.accountsSelected.filter(i => !hasIdAccounts.includes(i.id))
+      this.accounts.push(...newAddAccounts)
       this.$emit('onConfirm', this.accounts)
     },
     handleCancel() {
