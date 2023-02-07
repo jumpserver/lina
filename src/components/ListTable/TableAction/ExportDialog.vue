@@ -5,6 +5,7 @@
       :url="url"
       @UserConfirmDone="showExportDialog"
       @UserConfirmCancel="handleExportCancel"
+      @AuthMFAError="handleAuthMFAError"
     />
     <Dialog
       v-if="exportDialogShow"
@@ -218,6 +219,9 @@ export default {
         vm.exportDialogShow = false
         vm.mfaDialogShow = false
       }, 100)
+    },
+    handleAuthMFAError() {
+      this.mfaDialogShow = false
     }
   }
 }
