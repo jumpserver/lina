@@ -325,6 +325,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "ConvenientOperate": "便利な操作",
     "Overview": "概要",
     "Now": "今",
     "EnterToContinue": "Enter キーを押して続行します了",
