@@ -44,7 +44,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'users', 'user_groups', 'assets',
-            'nodes', 'accounts', 'is_valid'
+            'nodes', 'accounts', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
