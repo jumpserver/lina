@@ -3,7 +3,7 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'login-log',
+    path: 'login-logs',
     name: 'LoginLog',
     component: () => import('@/views/audits/LoginLogList'),
     meta: {
