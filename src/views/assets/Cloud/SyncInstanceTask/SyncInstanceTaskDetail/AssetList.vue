@@ -58,6 +58,10 @@ export default {
             prop: 'date_sync',
             label: this.$t('xpack.Cloud.DateSync'),
             formatter: DateFormatter
+          },
+          {
+            prop: 'actions',
+            has: false
           }
         ]
       }
