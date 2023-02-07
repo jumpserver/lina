@@ -99,6 +99,8 @@ export default {
         'assets.view_asset': ['assets.view_node'],
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
+        'assets.add_gateway': ['assets.view_domain', 'assets.view_platform', 'assets.view_node'],
+        'assets.change_gateway': ['assets.view_domain', 'assets.view_platform', 'assets.view_node'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
         'accounts.view_account': ['assets.view_node'],
