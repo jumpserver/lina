@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
+  <TabPage :active-menu.sync="config.activeMenu" v-bind="config" />
 </template>
 
 <script>
@@ -27,7 +27,10 @@ export default {
             hidden: () => !this.$hasPerm('xpack.view_account'),
             component: () => import('@/views/assets/Cloud/Account/AccountList.vue')
           }
-        ]
+        ],
+        actions: {
+          deleteSuccessRoute: 'AssetList'
+        }
       }
     }
   }

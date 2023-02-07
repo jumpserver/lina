@@ -56,7 +56,7 @@ export default {
   },
   props: {
     value: {
-      type: [Array],
+      type: [String, Array],
       default: () => []
     },
     title: {
@@ -147,7 +147,7 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      if (this.value.length > 0) {
+      if (this.value instanceof Array && this.value.length > 0) {
         const protocols = []
         this.value.forEach(item => {
           // 有默认值的情况下，设置为只读或者有id、有setting是平台
