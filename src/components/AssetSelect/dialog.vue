@@ -12,6 +12,7 @@
   >
     <AssetTreeTable
       ref="ListPage"
+      v-bind="$attrs"
       :header-actions="headerActions"
       :table-config="tableConfig"
       class="tree-table"
