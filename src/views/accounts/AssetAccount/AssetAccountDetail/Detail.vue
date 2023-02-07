@@ -33,6 +33,24 @@ export default {
     return {
       quickActions: [
         {
+          title: this.$t('common.Activate'),
+          type: 'switcher',
+          attrs: {
+            model: vm.object.is_active,
+            disabled: !vm.$hasPerm('accounts.change_account')
+          },
+          callbacks: Object.freeze({
+            change: (val) => {
+              this.$axios.patch(
+                `/api/v1/accounts/accounts/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
+              })
+            }
+          })
+        },
+        {
           title: this.$t('assets.Privileged'),
           type: 'switcher',
           attrs: {
