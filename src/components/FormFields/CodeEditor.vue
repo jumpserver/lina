@@ -1,21 +1,30 @@
 <template>
-  <div style="font-size: 12px" class="code-editor">
+  <div class="code-editor" style="font-size: 12px">
     <div class="toolbar">
       <div
         v-for="(item,index) in toolbar.left"
         :key="index"
         style="display: inline-block; margin: 0 2px"
       >
-        <el-tooltip :content="item.tip" placement="top" :disabled="!item.tip">
+        <el-tooltip :content="item.tip" :disabled="!item.tip" placement="top">
           <el-button
             v-if="item.type ==='button'"
-            size="mini"
-            :type="item.el&&item.el.type"
             :disabled="item.disabled"
+            :type="item.el&&item.el.type"
+            size="mini"
             @click="item.callback()"
           >
             <i :class="item.icon" style="margin-right: 4px;" />{{ item.name }}
           </el-button>
+
+          <el-autocomplete
+            v-if="item.type === 'input' && item.el.autoComplete"
+            v-model="item.value"
+            :fetch-suggestions="item.el.query"
+            class="inline-input"
+            size="mini"
+            @select="item.callback(item.value)"
+          />
 
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
@@ -25,13 +34,13 @@
               v-if="item.type==='select' && item.el && item.el.create"
               :key="index"
               v-model="item.value"
-              class="autoWidth-select"
-              size="mini"
-              default-first-option
-              :multiple="item.el.multiple"
               :allow-create="item.el.create || false"
               :filterable="item.el.create || false"
+              :multiple="item.el.multiple"
               :placeholder="item.name"
+              class="autoWidth-select"
+              default-first-option
+              size="mini"
               @change="item.callback(item.value)"
             >
               <template slot="prefix">
@@ -41,8 +50,8 @@
                 v-for="(option,id) in item.options"
                 :key="id"
                 :label="option.label"
-                :value="option.value"
                 :title="option.value"
+                :value="option.value"
               />
             </el-select>
           </div>
@@ -54,12 +63,12 @@
               item.callback(command)
             }"
           >
-            <el-button type="default" size="mini">
+            <el-button size="mini" type="default">
               <b>{{ item.name }}:</b> {{ getLabel(item.value, item.options) }} <i
                 class="el-icon-arrow-down el-icon--right"
               />
             </el-button>
-            <el-dropdown-menu slot="dropdown">
+            <el-dropdown-menu v-slot="dropdown">
               <el-dropdown-item v-for="(option,i) in item.options" :key="i" :command="option.value">
                 {{ option.label }}
               </el-dropdown-item>
@@ -69,14 +78,14 @@
           <el-switch
             v-if="item.type === 'switch'"
             v-model="item.value"
-            :disabled="item.disabled"
             :active-text="item.name"
+            :disabled="item.disabled"
             @change="item.callback( item.value)"
           />
         </el-tooltip>
       </div>
 
-      <div style="float: right" class="right-side">
+      <div class="right-side" style="float: right">
         <div
           v-for="(item,index) in toolbar.right"
           :key="index"
@@ -85,10 +94,10 @@
           <el-tooltip :content="item.tip">
             <el-button
               v-if="item.type ==='button'"
-              size="mini"
-              type="default"
               :disabled="item.disabled"
+              size="mini"
               style="background-color: transparent"
+              type="default"
               @click="item.callback()"
             >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
@@ -98,7 +107,7 @@
         </div>
       </div>
     </div>
-    <codemirror ref="myCm" v-model="iValue" class="editor" :options="iOptions" />
+    <codemirror ref="myCm" v-model="iValue" :options="iOptions" class="editor" />
   </div>
 </template>
 
@@ -184,7 +193,7 @@ export default {
   line-height: 29px;
   vertical-align: bottom;
   display: inline-block;
-  padding: 3px;
+  padding: 3px 3px 3px 0;
   margin-bottom: 5px;
 }
 

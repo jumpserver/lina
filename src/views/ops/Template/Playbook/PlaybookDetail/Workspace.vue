@@ -1,34 +1,35 @@
 <template>
   <div>
+    <NewNodeDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @confirm="doCreate" />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="rMenu">
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
-          创建文件
+          {{ $tc('ops.NewFile') }}
         </li>
         <li id="m_create_directory" class="rmenu" tabindex="-1" @click="onCreate('directory')">
-          创建文件夹
+          {{ $tc('ops.NewDirectory') }}
         </li>
         <li id="m_rename" class="rmenu" tabindex="-1" @click="onRename">
-          重命名
+          {{ $tc('ops.Rename') }}
         </li>
         <li id="m_delete" class="rmenu" tabindex="-1" @click="onDelete">
-          删除
+          {{ $tc('ops.Delete') }}
         </li>
       </template>
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <el-tabs v-model="activeEditorId" :closable="true" @tab-remove="onCloseEditor">
             <el-tab-pane
-              v-for="(item,key) in openedEditor"
+              v-for="(editor,key) in openedEditor"
               :key="key"
-              :label="tabLabel(item)"
+              :label="tabLabel(editor)"
               :name="key"
             >
               <CodeEditor
                 style="margin-bottom: 20px"
                 :options="cmOptions"
                 :toolbar="toolbar"
-                :value.sync="item.value"
+                :value.sync="editor.value"
               />
             </el-tab-pane>
           </el-tabs>
@@ -43,10 +44,12 @@
 import { TreeTable } from '@/components'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
+import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
 
 export default {
   name: 'CommandExecution',
   components: {
+    NewNodeDialog,
     TreeTable,
     CodeEditor
   },
@@ -58,6 +61,9 @@ export default {
   },
   data() {
     return {
+      newNode: {},
+      createDialogVisible: false,
+      createType: 'directory',
       parentId: '',
       closing: false,
       DataZTree: 0,
@@ -92,16 +98,16 @@ export default {
       },
       treeSetting: {
         async: false,
-        treeUrl: `/api/v1/ops/playbook/${this.object.id}/file`,
+        treeUrl: `/api/v1/ops/playbook/${this.object.id}/file/`,
         showRefresh: true,
         showMenu: true,
         showDelete: false,
         showCreate: false,
         showUpdate: false,
         showSearch: false,
-        customTreeHeader: false,
         callback: {
           onSelected: function(event, treeNode) {
+            console.log(treeNode)
             if (!treeNode.isParent) {
               this.onOpenEditor(treeNode)
             }
@@ -155,6 +161,9 @@ export default {
     this.onOpenEditor({ id: 'main.yml', name: 'main.yml' })
   },
   methods: {
+    refreshEditor(id, name) {
+      this.openedEditor[id].name = name
+    },
     onReset() {
       const editor = this.activeEditor
       editor.value = editor.originValue
@@ -167,27 +176,27 @@ export default {
         if (this.closing) {
           this.remoteTab(editor.key)
         }
-        this.$message.success('保存成功!')
+        this.$message.success(this.$tc('ops.SaveSuccess'))
       })
     },
     onCreate(type) {
       this.dataztree.hideRMenu()
+      this.createDialogVisible = true
+      this.createType = type
+    },
+    doCreate(name) {
       const parentNode = this.zTree.getSelectedNodes()[0]
       if (!parentNode) {
         return
       }
       const parentId = parentNode.isParent ? parentNode.id : parentNode.pId
-
-      this.zTree.expandNode(parentNode, true, false, true, false)
       const req = {
         key: parentId,
-        is_directory: type === 'directory'
+        is_directory: this.createType === 'directory',
+        name: name
       }
       this.$axios.post(`/api/v1/ops/playbook/${this.object.id}/file/`, req).then(data => {
-        const newNode = data
-        this.zTree.addNodes(parentNode, newNode)
-        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.zTree.editName(node)
+        this.refreshTree()
       })
     },
     onDelete() {
@@ -196,19 +205,19 @@ export default {
       if (!node) {
         return
       }
-      this.$confirm('删除操作无法恢复是否继续?', '确认保存', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('DeleteFile'), {
+        confirmButtonText: this.$tc('ops.Confirm'),
+        cancelButtonText: this.$tc('ops.Cancel'),
         type: 'warning'
       }).then(() => {
         this.$axios.delete(`/api/v1/ops/playbook/${this.object.id}/file/?key=${node.id}`).then(() => {
           if (!node.isParent) {
             this.remoteTab(node.id)
           }
-          this.zTree.removeNode(node)
+          this.refreshTree()
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: this.$tc('ops.DeleteSuccess')
           })
         })
       })
@@ -225,19 +234,20 @@ export default {
       this.$set(this.openedEditor, node.id,
         { key: node.id, name: node.name, originValue: '', value: '' })
       this.activeEditorId = node.id
+      this.getFileContent(node.id)
     },
     onCloseEditor(key) {
       const editor = this.openedEditor[key]
       let text = ''
       if (this.hasChange(editor)) {
-        text = '文件发生变化是否保存?'
+        text = this.$tc('ops.CloseConfirmMessage')
       } else {
         this.remoteTab(key)
         return
       }
-      this.$confirm(text, '确认关闭', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(text, this.$tc('ops.CloseConfirm'), {
+        confirmButtonText: this.$tc('ops.Confirm'),
+        cancelButtonText: this.$tc('ops.Cancel'),
         type: 'warning'
       }).then(() => {
         this.closing = true

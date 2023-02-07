@@ -71,14 +71,10 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          obj.AUTH_OAUTH2_USER_ATTR_MAP = JSON.stringify(obj.AUTH_OAUTH2_USER_ATTR_MAP)
           return obj
         },
         cleanFormValue(data) {
           delete data['AUTH_OAUTH2_LOGO_PATH']
-          if (data['AUTH_OAUTH2_USER_ATTR_MAP']) {
-            data['AUTH_OAUTH2_USER_ATTR_MAP'] = JSON.parse(data['AUTH_OAUTH2_USER_ATTR_MAP'])
-          }
           return data
         }
       }

@@ -79,7 +79,9 @@ export default {
       if (this.config.url === '') {
         return
       }
-      const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
+      const url = (this.config.url.indexOf('?') === -1)
+        ? `${this.config.url}?draw=1&display=1`
+        : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         const method = this.method.toUpperCase()
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
@@ -233,10 +235,11 @@ export default {
     setDefaultFormatterIfNeed(col) {
       if (!col.formatter) {
         col.formatter = (row, column, cellValue) => {
-          const value = cellValue || '-'
+          let value = cellValue
           let padding = '0'
-          if (value === '-') {
+          if (!value && value !== 0) {
             padding = '6px'
+            value = '-'
           }
           return <span style={{ marginLeft: padding }}>{value}</span>
         }
@@ -259,42 +262,42 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      const allColumns = Object.entries(this.meta)
+      const allColumnNames = Object.entries(this.meta)
         .filter(([name, meta]) => !meta['write_only'])
         .map(([name, meta]) => name)
         .concat(config.columnsExtra || [])
-      let configColumns = config.columns || allColumns
+
+      let configColumns = config.columns || allColumnNames
       const columnsExclude = config.columnsExclude || []
-      if (columnsExclude.length > 0) {
-        configColumns = configColumns.filter(item => !columnsExclude.includes(item))
-      }
+      configColumns = configColumns.filter(item => !columnsExclude.includes(item))
+
       // 解决后端 API 返回字段中包含 actions 的问题;
-      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
-      if (hasColumnActions && !configColumns.includes('actions')) {
-        configColumns.push('actions')
+      const hasColumnActions = configColumns.findIndex(item => item?.prop === 'actions') !== -1
+      if (!hasColumnActions) {
+        configColumns = [...configColumns.filter(i => i !== 'actions'), 'actions']
       }
-      if (configColumns.length > 0) {
-        for (let col of configColumns) {
-          if (typeof col === 'object') {
-            columns.push(col)
-          } else if (typeof col === 'string') {
-            col = this.generateColumn(col)
-            columns.push(col)
-          }
+
+      for (let col of configColumns) {
+        if (typeof col === 'object') {
+          columns.push(col)
+        } else if (typeof col === 'string') {
+          col = this.generateColumn(col)
+          columns.push(col)
         }
-        columns = columns.filter(item => {
-          if (item?.showFullContent) {
-            item.className = 'show-full-content'
-          }
-          let has = item.has
-          if (has === undefined) {
-            has = true
-          } else if (typeof has === 'function') {
-            has = has()
-          }
-          return has
-        })
       }
+
+      columns = columns.filter(item => {
+        if (item?.showFullContent) {
+          item.className = 'show-full-content'
+        }
+        let has = item.has
+        if (has === undefined) {
+          has = true
+        } else if (typeof has === 'function') {
+          has = has()
+        }
+        return has
+      })
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns

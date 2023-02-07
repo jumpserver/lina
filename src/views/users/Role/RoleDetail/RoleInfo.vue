@@ -53,7 +53,6 @@ export default {
         showMenu: false,
         showRefresh: true,
         showSearch: false,
-        customTreeHeader: false,
         treeUrl: '',
         check: {
           enable: true
@@ -169,6 +168,9 @@ export default {
   },
   mounted() {
     this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
+  },
+  activated() {
+    this.loading = true
     setTimeout(() => {
       this.loading = false
     })

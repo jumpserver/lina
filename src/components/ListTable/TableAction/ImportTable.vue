@@ -432,6 +432,7 @@ export default {
   min-height: 20px;
   height: 100%;
   overflow: auto;
+  max-height: 160px;
 }
 
 </style>

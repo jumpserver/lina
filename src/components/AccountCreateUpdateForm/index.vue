@@ -54,7 +54,7 @@ export default {
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -209,12 +209,12 @@ export default {
     controlShowField() {
       let privileged = ['privileged']
       let suFrom = ['su_from']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web']
       const asset = this?.asset || {}
       if (asset?.type?.value === 'website') {
         privileged = []
-        suFrom = []
       }
-      if (asset?.category?.value === 'database') {
+      if (filterSuFrom.includes(asset?.category?.value)) {
         suFrom = []
       }
 

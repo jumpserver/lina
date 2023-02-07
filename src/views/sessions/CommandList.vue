@@ -2,14 +2,14 @@
   <GenericTreeListPage
     ref="GenericTreeListPage"
     v-loading="loading"
-    :table-config="tableConfig"
     :header-actions="headerActions"
+    :table-config="tableConfig"
     :tree-setting="treeSetting"
     class="command-list-table"
-    @TreeInitFinish="checkFirstNode"
-    @TagSearch="handleTagChange"
-    @TagFilter="handleFilterChange"
     @TagDateChange="handleDateChange"
+    @TagFilter="handleFilterChange"
+    @TagSearch="handleTagChange"
+    @TreeInitFinish="checkFirstNode"
   />
 </template>
 
@@ -48,7 +48,6 @@ export default {
             return 'command'
           }
         },
-        hasColumnActions: false,
         columns: [
           'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
           'asset', 'session', 'timestamp'
@@ -68,13 +67,16 @@ export default {
             label: this.$t('sessions.riskLevel'),
             width: '105px',
             formatter: (row, col, cellValue) => {
-              const display = row['risk_level_display']
+              const display = row['risk_level'].label
               if (cellValue === 0) {
                 return display
               } else {
-                return <span class='text-danger'> { display } </span>
+                return <span class='text-danger'> {display} </span>
               }
             }
+          },
+          actions: {
+            has: false
           },
           asset: {
             width: '140px'
@@ -183,8 +185,7 @@ export default {
       return this.$refs.GenericTreeListPage.$refs.TreeTable
     }
   },
-  watch: {
-  },
+  watch: {},
   methods: {
     checkFirstNode(obj) {
       const ztree = obj
@@ -234,7 +235,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table >>> .risk-command {
+.command-list-table > > > .risk-command {
   background-color: oldlace;
 
   tr {

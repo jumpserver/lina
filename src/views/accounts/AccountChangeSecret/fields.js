@@ -52,6 +52,9 @@ export const getChangeSecretFields = () => {
       rules: [
         { required: false }
       ],
+      el: {
+        baseUrl: '/api/v1/assets/assets/?change_secret_enabled=true'
+      },
       label: i18n.t('xpack.Asset')
     },
     nodes: {

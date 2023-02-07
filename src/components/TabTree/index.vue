@@ -97,10 +97,13 @@ export default {
   },
   async mounted() {
     this.iActiveMenu = await this.getPropActiveTab()
+    this.$eventBus.$on('treeComponentKey', () => {
+      this.componentKey += 1
+    })
   },
   methods: {
     hideRMenu() {
-      this.$refs.AutoDataZTree.hideRMenu()
+      this.$refs.AutoDataZTree?.hideRMenu()
     },
     getSelectedNodes: function() {
       return this.$refs.AutoDataZTree.getSelectedNodes()

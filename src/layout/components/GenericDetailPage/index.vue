@@ -207,7 +207,12 @@ export default {
             this.$message.success(this.$tc('common.deleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+            const errorDetail = error?.response?.data?.detail || ''
+            if (errorDetail) {
+              this.$message.error(errorDetail)
+            } else {
+              this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+            }
           } finally {
             instance.confirmButtonLoading = false
           }

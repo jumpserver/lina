@@ -50,13 +50,13 @@ export default {
       let url
       const fieldsManager = getFields.bind(this)()
       const fields = [
-        'users', 'user_groups', 'system_users',
+        'users', 'user_groups', 'accounts',
         'actions', 'is_active', 'date_start', 'date_expired'
       ]
       const fieldsMeta = {
         users: fieldsManager.users,
         user_groups: fieldsManager.user_groups,
-        system_users: fieldsManager.system_users,
+        accounts: fieldsManager.accounts,
         date_start: fieldsManager.date_start,
         date_expired: fieldsManager.date_expired,
         is_active: fieldsManager.is_active

@@ -2,7 +2,8 @@
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
       <IBox title="README">
-        <vue-markdown :source="object.readme" />
+        <vue-markdown v-if="object.readme" :source="object.readme" />
+        <span v-else>{{ $tc('common.NoData') }}</span>
       </IBox>
     </el-col>
     <el-col :md="10" :sm="24">

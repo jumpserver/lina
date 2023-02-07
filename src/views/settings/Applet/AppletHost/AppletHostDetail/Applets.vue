@@ -45,8 +45,13 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               getIcon: ({ row }) => row.applet?.icon,
-              getTitle: ({ row }) => row.applet.display_name
-            }
+              getTitle: ({ row }) => row.applet.display_name,
+              getRoute: ({ row }) => ({
+                name: 'AppletDetail',
+                params: { id: row.applet.id }
+              })
+            },
+            id: ({ row }) => row.applet.id
           },
           'applet.version': {
             label: this.$t('common.Version')
@@ -65,7 +70,7 @@ export default {
             }
           },
           date_updated: {
-            label: '日期'
+            label: this.$t('ops.date')
           },
           actions: {
             formatterArgs: {

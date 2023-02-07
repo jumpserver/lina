@@ -181,7 +181,10 @@ export default {
           hasImport: false,
           hasExport: false,
           hasLeftActions: false,
-          hasColumnSetting: false
+          hasColumnSetting: false,
+          searchConfig: {
+            getUrlQuery: false
+          }
         }
       }
     }

@@ -17,7 +17,7 @@ export const EmailCheck = {
 export const IpCheck = {
   required: true,
   validator: (rule, value, callback) => {
-    value = value.trim()
+    value = value?.trim()
     if (/^[\w://.?]+$/.test(value)) {
       callback()
     } else {
@@ -29,7 +29,7 @@ export const IpCheck = {
 
 export const specialEmojiCheck = {
   validator: (rule, value, callback) => {
-    value = value.trim()
+    value = value?.trim()
     if (/[\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/.test(value)) {
       callback(new Error(i18n.t('common.NotSpecialEmoji')))
     } else {
@@ -52,7 +52,7 @@ export const JsonRequired = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
+      typeof value === 'string' ? JSON.parse(value) : value
       callback()
     } catch (e) {
       callback(new Error(i18n.t('common.InvalidJson')))
@@ -65,8 +65,8 @@ export const JsonRequiredUserNameMapped = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
-      const hasUserName = _.map(JSON.parse(value), (value) => value)
+      const v = typeof value === 'string' ? JSON.parse(value) : value
+      const hasUserName = _.map(v, (value) => value)
       if (!hasUserName.includes('username')) {
         callback(new Error(i18n.t('common.requiredHasUserNameMapped')))
       }

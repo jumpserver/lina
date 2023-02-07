@@ -58,7 +58,7 @@ export default {
             if (formValue.password_strategy === 'custom') {
               return false
             }
-            return !formValue.update_password
+            return !formValue.update_password || formValue.source !== 'local'
           },
           el: {
             required: false,
@@ -74,8 +74,8 @@ export default {
           },
           options: [
             {
-              label: true,
-              value: this.$t('users.needUpdatePasswordNextLogin')
+              label: '',
+              value: true
             }
           ],
           hidden: (formValue) => {

@@ -5,6 +5,7 @@
     top="1vh"
     v-bind="$attrs"
     width="80vw"
+    @close="handleClose"
     @cancel="handleCancel"
     @confirm="handleConfirm"
     v-on="$listeners"
@@ -83,6 +84,10 @@ export default {
               return <span> {data} </span>
             },
             label: this.$t('assets.Protocols')
+          },
+          {
+            prop: 'actions',
+            has: false
           }
         ],
         listeners: {
@@ -108,11 +113,18 @@ export default {
     }
   },
   methods: {
+    handleClose() {
+      this.$eventBus.$emit('treeComponentKey')
+    },
     handleConfirm() {
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
+      if (this.rowSelected.length > 0) {
+        this.handleClose()
+      }
     },
     handleCancel() {
       this.$emit('cancel')
+      this.handleClose()
     },
     addRowToSelect(row) {
       const selectValueIndex = this.rowSelected.indexOf(row.id)

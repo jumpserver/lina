@@ -112,15 +112,11 @@ export default {
       ],
       submitMethod: () => 'patch',
       afterGetFormValue(obj) {
-        obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
         return obj
       },
       cleanFormValue(data) {
         if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
           delete data['AUTH_LDAP_BIND_PASSWORD']
-        }
-        if (data['AUTH_LDAP_USER_ATTR_MAP']) {
-          data['AUTH_LDAP_USER_ATTR_MAP'] = JSON.parse(data['AUTH_LDAP_USER_ATTR_MAP'])
         }
         return data
       }

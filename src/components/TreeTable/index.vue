@@ -7,45 +7,41 @@
       <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="left">
         <component
           :is="component"
-          ref="AutoDataZTree"
           :key="componentTreeKey"
+          ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
           v-bind="treeTabConfig"
-          v-on="$listeners"
           @urlChange="handleUrlChange"
+          v-on="$listeners"
         >
           <div slot="rMenu" slot-scope="{data}">
-            <slot name="rMenu" :data="data" />
+            <slot :data="data" name="rMenu" />
           </div>
         </component>
       </div>
       <div
-        class="right"
         :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
+        class="right"
       >
         <div v-if="showTree" class="mini">
-          <div class="mini-button" :class="{'is-show': iShowTree}" @click="iShowTree = !iShowTree">
+          <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
             <svg-icon
               :icon-class="'double-left'"
-              class="icon-left"
               :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
+              class="icon-left"
             />
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 7px);">
           <slot name="table">
             <ListTable
-              ref="ListTable"
               :key="componentKey"
-              :table-config="iTableConfig"
+              ref="ListTable"
               :header-actions="headerActions"
+              :table-config="iTableConfig"
               v-on="$listeners"
-            >
-              <template v-slot:left>
-                Hello world
-              </template>
-            </ListTable>
+            />
           </slot>
         </div>
       </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/job-logs/',
-        hasColumnActions: false,
         columnsShow: {
           min: ['material', 'is_success'],
           default: [

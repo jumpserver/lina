@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="iTableConfig" :header-actions="iHeaderActions" />
-    <PlatformDialog :visible.sync="showPlatform" :category="category" />
+    <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
+    <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
@@ -17,7 +17,7 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -111,10 +111,7 @@ export default {
           },
           protocols: {
             showFullContent: true,
-            formatter: (row) => {
-              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
-              return <div> {data} </div>
-            }
+            formatter: ProtocolsFormatter
           },
           nodes_display: {
             formatter: ArrayFormatter

@@ -101,7 +101,7 @@ export default {
         content.push(h('p', null, item),)
       })
       this.$msgbox({
-        title: '相关受理人',
+        title: this.$t('tickets.RelevantAssignees'),
         customClass: 'acceptance',
         message: h('p', null, content),
         showCancelButton: false,

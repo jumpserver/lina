@@ -1,23 +1,24 @@
 <template>
   <Dialog
-    :show-cancel="false"
-    :show-confirm="false"
-    :title="title"
+    v-if="iVisible"
+    :title="$tc('ops.NewFile')"
     :visible.sync="iVisible"
-    width="50%"
+    width="20%"
     top="1vh"
+    :show-cancel="true"
+    :show-confirm="true"
+    @confirm="onConfirm"
   >
-    <p>{{ $t('ops.VariableHelpText') }}</p>
     <el-form>
-      <el-form-item v-for="(val,key,index) in variables" :key="index" :label="key+':'">
-        <span>{{ val }}</span>
+      <el-form-item :label="$tc('common.DisplayName')">
+        <el-input v-model="name" />
       </el-form-item>
     </el-form>
   </Dialog>
 </template>
 
 <script>
-import { Dialog } from '@/components'
+import Dialog from '@/components/Dialog'
 
 export default {
   components: {
@@ -31,8 +32,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('ops.BuiltinVariable'),
-      variables: {}
+      name: ''
     }
   },
   computed: {
@@ -45,14 +45,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$axios.get('/api/v1/ops/variables/help').then((data) => {
-      this.variables = data
-    })
+  mounted() {},
+  methods: {
+    onConfirm() {
+      this.$emit('confirm', this.name)
+      this.iVisible = false
+    }
   }
 }
 </script>
 
-<style scoped>
-
-</style>

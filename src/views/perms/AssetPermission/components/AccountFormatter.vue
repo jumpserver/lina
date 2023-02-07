@@ -1,19 +1,18 @@
 <template>
   <div>
-    <el-checkbox-group v-model="select">
+    <el-checkbox-group v-model="choicesSelected">
       <el-checkbox
-        v-for="(i) in checkboxGroup"
+        v-for="(i) in choices"
         :key="i.label"
-        :disabled="isDisabled(i)"
         :label="i.value"
-        @change="handleItemChange"
+        @change="handleCheckboxCheck(i, $event)"
       >
         {{ i.label }}
       </el-checkbox>
     </el-checkbox-group>
     <TagInput
-      v-if="showInput"
-      :value="customTags"
+      v-if="showSpecAccounts"
+      :value="specAccountsInput"
       @change="handleTagChange"
     />
   </div>
@@ -33,10 +32,16 @@ export default {
     }
   },
   data() {
-    const checkboxGroup = [
+    const ALL = '@ALL'
+    const SPEC = '@SPEC'
+    const choices = [
       {
         label: this.$t('perms.AllAccounts'),
-        value: '@ALL'
+        value: ALL
+      },
+      {
+        label: this.$t('perms.SpecifyAccounts'),
+        value: SPEC
       },
       {
         label: this.$t('perms.ManualInput'),
@@ -45,65 +50,55 @@ export default {
       {
         label: this.$t('perms.SameAccount'),
         value: '@USER'
-      },
-      {
-        label: this.$t('perms.SpecifyInput'),
-        value: 'INPUT'
       }
     ]
     return {
-      checkboxGroup,
-      defaultOptions: ['@ALL', '@INPUT', '@USER'],
-      select: [],
-      customTags: [],
-      showInput: false
+      ALL: ALL,
+      SPEC: SPEC,
+      choices: choices,
+      choicesSelected: [],
+      defaultChoices: [this.ALL],
+      specAccountsInput: [],
+      showSpecAccounts: false
     }
   },
-  computed: {
-    isDisabled() {
-      return (item) => (['@INPUT', '@USER', 'INPUT'].includes(item.value) && this.select.includes('@ALL'))
-    }
-  },
-  created() {
+  mounted() {
     this.init()
-    if (this.customTags.length > 0) {
-      this.select.push('INPUT')
-      this.showInput = true
-    }
   },
   methods: {
     init() {
-      const select = []
-      const customTags = []
-      this.value.filter(i => {
-        if (this.defaultOptions.includes(i)) {
-          select.push(i)
-        } else {
-          customTags.push(i)
-        }
-      })
-      this.select = select
-      this.customTags = customTags
-    },
-    handleItemChange(val, event) {
-      if (val && event.target.defaultValue === '@ALL') {
-        this.select = Array.from(new Set([...this.select, ...this.defaultOptions]))
+      const choicesSelected = this.value.filter(i => i.startsWith('@'))
+      const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
+      if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
+        choicesSelected.push(this.SPEC)
+        this.showSpecAccounts = true
       }
-      this.showInput = !this.select.includes('@ALL') && this.select.includes('INPUT')
-      this.setValue()
+      this.choicesSelected = choicesSelected
+      this.specAccountsInput = specAccountsInput
+    },
+    handleCheckboxCheck(item, checked) {
+      if (item.value === this.SPEC) {
+        this.showSpecAccounts = checked
+      } else if (item.value === this.ALL) {
+        this.showSpecAccounts = !checked
+      }
+
+      if (this.showSpecAccounts) {
+        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
+      } else {
+        this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
+      }
+      this.outputValue()
     },
     handleTagChange(val) {
-      if (this.select.includes('INPUT')) {
-        this.customTags = val
-        this.setValue()
-      }
+      this.specAccountsInput = val
+      this.outputValue()
     },
-    setValue() {
-      const selectValue = this.select.filter(i => i !== 'INPUT')
-      if (this.select.includes('INPUT')) {
-        this.$emit('change', [...selectValue, ...this.customTags])
+    outputValue() {
+      if (this.showSpecAccounts) {
+        this.$emit('change', [...this.choicesSelected, ...this.specAccountsInput])
       } else {
-        this.$emit('change', selectValue)
+        this.$emit('change', this.choicesSelected)
       }
     }
   }

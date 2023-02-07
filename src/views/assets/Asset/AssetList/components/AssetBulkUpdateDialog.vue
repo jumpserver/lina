@@ -1,8 +1,8 @@
 <template>
   <GenericUpdateFormDialog
     v-if="visible"
-    :selected-rows="selectedRows"
     :form-setting="formSetting"
+    :selected-rows="selectedRows"
     :visible="visible"
     v-on="$listeners"
   />
@@ -10,6 +10,7 @@
 
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
+import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
   name: 'AssetBulkUpdateDialog',
@@ -27,33 +28,32 @@ export default {
     }
   },
   data() {
+    const meta = assetFieldsMeta(this)
     return {
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
         initial: {},
         fields: [
-          'domain', 'labels', 'comment'
+          'nodes', 'domain', 'labels',
+          'is_active', 'comment'
         ],
         fieldsMeta: {
+          nodes: {
+            ...meta.nodes,
+            label: this.$t('assets.Node')
+          },
           domain: {
-            label: this.$t('assets.Domain'),
-            hidden: () => false,
-            el: {
-              multiple: false,
-              ajax: {
-                url: '/api/v1/assets/domains/'
-              }
-            }
+            ...meta.domain,
+            label: this.$t('assets.Domain')
           },
           labels: {
-            label: this.$t('assets.Label'),
-            hidden: () => false,
-            el: {
-              ajax: {
-                url: '/api/v1/assets/labels/'
-              }
-            }
+            ...meta.labels,
+            label: this.$t('assets.Label')
+          },
+          is_active: {
+            ...meta.is_active,
+            label: this.$t('common.Active')
           },
           comment: {
             label: this.$t('common.Comment'),

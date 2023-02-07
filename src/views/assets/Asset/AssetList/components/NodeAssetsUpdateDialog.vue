@@ -2,10 +2,11 @@
   <div class="asset-select-dialog">
     <AssetDialog
       v-if="iVisible"
+      :base-url="assetsUrl"
       :title="$tc('assets.Assets')"
       :visible.sync="iVisible"
       @cancel="assetTreeTableDialogHandleCancel"
-      @confirm="assetTreeTableDialogHandleConfirm($event)"
+      @confirm="assetTreeTableDialogHandleConfirm"
     />
   </div>
 </template>
@@ -47,17 +48,37 @@ export default {
       get() {
         return this.visible
       }
+    },
+    assetsUrl() {
+      if (this.action === 'remove') {
+        return '/api/v1/assets/assets/?node_id=' + this.selectNode.meta.data.id
+      } else {
+        return `/api/v1/assets/assets/`
+      }
     }
   },
   methods: {
     assetTreeTableDialogHandleConfirm(assetsSelected) {
+      if (!assetsSelected) {
+        return
+      }
       const currentNode = this.selectNode
       if (!currentNode || assetsSelected.length === 0) {
         return
       }
-      let url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/add/`
-      if (this.action === 'move') {
-        url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/replace/`
+      let url
+      switch (this.action) {
+        case 'add':
+          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/add/`
+          break
+        case 'move':
+          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/replace/`
+          break
+        case 'remove':
+          url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/remove/`
+          break
+        default:
+          return
       }
       this.$axios.put(
         url, { assets: assetsSelected }

@@ -34,14 +34,10 @@ export default {
     }
   },
   data() {
-    const myFields = {
-      AccountEnabled: ['su_enabled', 'su_method'],
-      ProtocolsEnabled: ['protocols']
-    }
     return {
       visible: false,
       fields: ['domain_enabled'],
-      quickActions: this.setQuickActions(myFields),
+      quickActions: this.setQuickActions(),
       url: `/api/v1/assets/platforms/${this.object.id}`,
       detailFields: [
         'name', 'charset',
@@ -56,9 +52,10 @@ export default {
   computed: {
   },
   methods: {
-    setQuickActions(fields = []) {
+    setQuickActions() {
       const vm = this
       const { object } = this
+      const suEnabledDisabled = ['database', 'device']
       const quickActions = [
         {
           title: this.$t('assets.DomainEnabled'),
@@ -72,17 +69,31 @@ export default {
             change: (val) => {
               const data = { domain_enabled: val }
               this.$axios.patch(
-                `/api/v1/assets/platforms/${this.object.id}/`, data).then(res => {
+                `/api/v1/assets/platforms/${object.id}/`, data).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
               })
             }
           })
-        }
-      ]
-
-      for (const [key, value] of Object.entries(fields)) {
-        const option = {
-          title: this.$t(`assets.${key}`),
+        },
+        {
+          title: this.$t(`assets.AccountEnabled`),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update'),
+            disabled: (
+              suEnabledDisabled.includes(object.category?.value) ||
+                object.internal || !vm.$hasPerm('assets.change_platform')
+            )
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.fields = ['su_enabled', 'su_method']
+              this.visible = !this.visible
+            }
+          })
+        },
+        {
+          title: this.$t(`assets.ProtocolsEnabled`),
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
@@ -90,13 +101,12 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.fields = value
+              this.fields = ['protocols']
               this.visible = !this.visible
             }
           })
         }
-        quickActions.push(option)
-      }
+      ]
 
       return quickActions
     }

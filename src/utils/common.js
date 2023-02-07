@@ -234,9 +234,19 @@ export function getDayFuture(days, now) {
 
 export function getErrorResponseMsg(error) {
   let msg = ''
-  const data = error.response && error.response.data || {}
+  const data = error.response && error.response.data || error
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
+  } else if (data && data['non_field_errors']) {
+    msg = data['non_field_errors'].join(', ')
+  } else if (Array.isArray(data)) {
+    msg = data.map((item, i) => {
+      let msg = getErrorResponseMsg(item)
+      if (msg) {
+        msg = `${i + 1}. ${msg}`
+      }
+      return msg
+    }).filter(i => i).join('; ')
   }
   return msg
 }

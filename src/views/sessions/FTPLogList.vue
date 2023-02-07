@@ -1,10 +1,10 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysFuture, getDaysAgo } from '@/utils/common'
+import { getDaysAgo, getDaysFuture } from '@/utils/common'
 
 export default {
   components: {
@@ -17,7 +17,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/ftp-logs/',
-        hasColumnActions: false,
         columnsMeta: {
           remote_addr: {
             width: '140px'
@@ -27,6 +26,9 @@ export default {
           },
           is_success: {
             width: '80px'
+          },
+          actions: {
+            has: false
           }
         },
         extraQuery: {

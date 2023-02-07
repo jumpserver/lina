@@ -8,12 +8,12 @@
       <el-table
         ref="table"
         v-loading="loading"
-        v-bind="tableAttrs"
         :data="data"
         :row-class-name="rowClassName"
+        v-bind="tableAttrs"
+        @select="selectStrategy.onSelect"
         v-on="$listeners"
         @selection-change="selectStrategy.onSelectionChange"
-        @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, canSelect)"
         @sort-change="onSortChange"
       >
@@ -91,28 +91,28 @@
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" :selectable="canSelect" />
+          <el-data-table-column v-if="hasSelection" :align="selectionAlign" :selectable="canSelect" type="selection" />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
-            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
-            :filters="col.filters || null"
-            :filter-multiple="false"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
+            :filter-multiple="false"
+            :filters="col.filters || null"
+            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
             <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
               <div
                 :is="col.formatter"
                 :key="row.id"
-                :table-data="data"
-                :row="row"
+                :cell-value="row[col.prop]"
+                :col="col"
                 :column="column"
                 :index="index"
-                :url="url"
                 :reload="getList"
-                :col="col"
-                :cell-value="row[col.prop]"
+                :row="row"
+                :table-data="data"
+                :url="url"
               />
             </template>
           </el-data-table-column>
@@ -122,12 +122,12 @@
 
       <el-pagination
         v-if="hasPagination"
-        :current-page="page"
-        :page-sizes="paginationSizes"
-        :page-size="size"
-        :total="total"
         :background="paginationBackground"
+        :current-page="page"
         :layout="paginationLayout"
+        :page-size="size"
+        :page-sizes="paginationSizes"
+        :total="total"
         v-bind="extraPaginationAttrs"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -135,18 +135,18 @@
 
       <the-dialog
         ref="dialog"
-        :new-title="dialogNewTitle"
+        :button-size="buttonSize"
+        :dialog-attrs="dialogAttrs"
         :edit-title="dialogEditTitle"
-        :view-title="dialogViewTitle"
         :form="form"
         :form-attrs="formAttrs"
-        :dialog-attrs="dialogAttrs"
-        :button-size="buttonSize"
+        :new-title="dialogNewTitle"
+        :view-title="dialogViewTitle"
         @confirm="onConfirm"
       >
         <template v-slot="scope">
           <!-- @slot 表单作用域插槽。当编辑、查看时传入row；新增时row=null -->
-          <slot name="form" :row="scope.row" />
+          <slot :row="scope.row" name="form" />
         </template>
       </the-dialog>
     </template>
@@ -166,6 +166,7 @@ import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
 import merge from 'deepmerge'
+
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
 
@@ -267,7 +268,8 @@ export default {
      */
     beforeSearch: {
       type: Function,
-      default() {}
+      default() {
+      }
     },
     /**
      * 单选, 适用场景: 不可以批量删除
@@ -359,28 +361,36 @@ export default {
      */
     newText: {
       type: String,
-      default: '新增'
+      default: function() {
+        return this.$t('ops.Add')
+      }
     },
     /**
      * 修改按钮文案
      */
     editText: {
       type: String,
-      default: '修改'
+      default: function() {
+        return this.$t('ops.Modify')
+      }
     },
     /**
      * 查看按钮文案
      */
     viewText: {
       type: String,
-      default: '查看'
+      default: function() {
+        return this.$t('ops.View')
+      }
     },
     /**
      * 删除按钮文案
      */
     deleteText: {
       type: String,
-      default: '删除'
+      default: function() {
+        return this.$t('ops.Delete')
+      }
     },
     /**
      * 删除提示语。接受要删除的数据（单个对象或数组）；返回字符串
@@ -390,7 +400,7 @@ export default {
     deleteMessage: {
       type: Function,
       default() {
-        return `确认${this.deleteText}吗?`
+        return this.$t('ops.Confirm') + this.deleteText + '?'
       }
     },
     /**
@@ -449,7 +459,7 @@ export default {
     onSuccess: {
       type: Function,
       default() {
-        return this.$message.success('操作成功')
+        return this.$message.success(this.$t('ops.SuccessfulOperation'))
       }
     },
     /**
@@ -706,7 +716,8 @@ export default {
     },
     extraPaginationAttrs: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     hasSelection: {
       type: Boolean,
@@ -1036,6 +1047,7 @@ export default {
       } else {
         this.innerQuery = merge(this.innerQuery, attrs)
       }
+      this.selected.splice(0, this.selected.length)
       return this.getList()
     },
     searchDate(attrs) {
@@ -1155,7 +1167,7 @@ export default {
      * @param {object|object[]} - 要删除的数据对象或数组
      */
     onDefaultDelete(data) {
-      this.$confirm(this.deleteMessage(data), '提示', {
+      this.$confirm(this.deleteMessage(data), this.$t('common.Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -1198,7 +1210,9 @@ export default {
         remain === 0 &&
         this.page === lastPage &&
         this.page > defaultFirstPage
-      ) { this.page-- }
+      ) {
+        this.page--
+      }
     },
 
     // 树形table相关

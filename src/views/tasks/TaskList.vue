@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script type="text/jsx">
@@ -12,16 +12,18 @@ export default {
   data() {
     return {
       tableConfig: {
-        hasColumnActions: false,
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'comment', 'last_published_time'
+          'name', 'queue', 'count', 'state', 'comment', 'date_last_publish'
         ],
         columnsMeta: {
           name: {
             formatterArgs: {
               can: true
             }
+          },
+          actions: {
+            has: false
           },
           queue: {
             width: '120px',

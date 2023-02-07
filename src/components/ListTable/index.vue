@@ -1,20 +1,21 @@
 <template>
   <div>
     <TableAction
-      :table-url="tableUrl"
-      :search-table="search"
+      v-if="hasActions"
       :date-pick="handleDateChange"
-      :selected-rows="selectedRows"
       :reload-table="reloadTable"
+      :search-table="search"
+      :selected-rows="selectedRows"
+      :table-url="tableUrl"
       v-bind="iHeaderActions"
     />
     <IBox class="table-content">
       <AutoDataTable
         ref="dataTable"
-        :filter-table="filter"
         :config="iTableConfig"
-        @selection-change="handleSelectionChange"
+        :filter-table="filter"
         v-on="$listeners"
+        @selection-change="handleSelectionChange"
       />
     </IBox>
   </div>
@@ -78,6 +79,9 @@ export default {
         defaults[k] = hasPerm
       }
       return Object.assign(defaults, this.headerActions)
+    },
+    hasActions() {
+      return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, {
@@ -194,32 +198,32 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  & >>> .el-card__body {
+  & > > > .el-card__body {
     padding: 0;
   }
 
-  & >>> .el-table__header thead > tr > th {
+  & > > > .el-table__header thead > tr > th {
     background-color: white;
   }
 
-  & >>> .el-table__row .cell {
+  & > > > .el-table__row .cell {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
-  & >>> .el-table__expanded-cell pre {
+  & > > > .el-table__expanded-cell pre {
     max-height: 500px;
     overflow-y: scroll;
   }
 
-  & >>> .el-button-ungroup .el-dropdown > .more-action {
+  & > > > .el-button-ungroup .el-dropdown > .more-action {
     height: 24.6px;
   }
 }
 
 //修改颜色
- .el-button--text{
-   color: #409EFF;
- }
+.el-button--text {
+  color: #409EFF;
+}
 </style>
