@@ -818,6 +818,7 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "RunAgain": "Run again",
     "ManualInput": "Manual input",
     "Execute": "Execute",
     "ID": "ID",

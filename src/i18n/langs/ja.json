@@ -817,6 +817,7 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "RunAgain": "再実行",
     "ManualInput": "手動入力",
     "Execute": "実行",
     "ID": "ID",
