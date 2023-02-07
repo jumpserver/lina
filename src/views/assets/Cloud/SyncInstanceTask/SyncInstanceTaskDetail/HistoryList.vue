@@ -54,8 +54,8 @@ export default {
             formatter: DateFormatter
           },
           {
-            prop: 'id',
-            label: this.$t('common.Action'),
+            prop: 'actions',
+            label: this.$t('common.Actions'),
             align: 'center',
             formatter: ActionsFormatter,
             formatterArgs: {
