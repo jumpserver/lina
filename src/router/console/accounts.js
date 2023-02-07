@@ -166,7 +166,7 @@ export default [
         name: 'AccountGatherList',
         meta: {
           title: i18n.t('accounts.AccountGather.AccountGatherTaskList'),
-          permissions: ['accounts.view_gatheraccountsautomation']
+          permissions: ['accounts.view_gatheredaccount']
         }
       },
       {
