@@ -27,6 +27,9 @@ export default {
             baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
             treeUrlQuery: {
               domain_enabled: true
+            },
+            canSelect: (row) => {
+              return row.platform?.name !== 'Gateway'
             }
           }
         }
