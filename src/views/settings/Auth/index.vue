@@ -38,19 +38,16 @@ export default {
     OAuth2
   },
   data() {
-    const hasLicense = this.$store.getters.hasValidLicense
     let extraBackends = []
-    if (!this.$store.getters.hasValidLicense) {
+    if (this.$store.getters.hasValidLicense) {
       extraBackends = [
         {
           title: this.$t('setting.OIDC'),
-          name: 'OIDC',
-          hidden: () => !hasLicense
+          name: 'OIDC'
         },
         {
           title: this.$t('setting.SAML2'),
-          name: 'SAML2',
-          hidden: () => !hasLicense
+          name: 'SAML2'
         },
         {
           title: this.$t('setting.OAuth2'),
@@ -92,8 +89,7 @@ export default {
         },
         {
           title: this.$t('setting.CAS'),
-          name: 'CAS',
-          hidden: () => !hasLicense
+          name: 'CAS'
         },
         ...extraBackends
       ]
