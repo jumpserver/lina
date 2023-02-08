@@ -426,6 +426,8 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "About": "关于",
+    "PermissionCompany": "授权公司",
     "Filename": "文件名",
     "ApproverNumbers": "审批人数量",
     "Overview": "概览",
