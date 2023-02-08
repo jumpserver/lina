@@ -237,7 +237,8 @@ export default {
         col.formatter = (row, column, cellValue) => {
           let value = cellValue
           let padding = '0'
-          if (!value && value !== 0) {
+          const excludes = [undefined, null, '']
+          if (excludes.indexOf(value) !== -1) {
             padding = '6px'
             value = '-'
           }

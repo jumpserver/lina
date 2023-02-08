@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -38,29 +38,19 @@ export default {
     OAuth2
   },
   data() {
-    return {
-      loading: true,
-      activeMenu: 'Basic',
-      submenu: [
-        {
-          title: this.$t('common.Basic'),
-          name: 'Basic'
-        },
-        {
-          title: this.$t('setting.Ldap'),
-          name: 'LDAP'
-        },
-        {
-          title: this.$t('setting.CAS'),
-          name: 'CAS'
-        },
+    const hasLicense = this.$store.getters.hasValidLicense
+    let extraBackends = []
+    if (!this.$store.getters.hasValidLicense) {
+      extraBackends = [
         {
           title: this.$t('setting.OIDC'),
-          name: 'OIDC'
+          name: 'OIDC',
+          hidden: () => !hasLicense
         },
         {
           title: this.$t('setting.SAML2'),
-          name: 'SAML2'
+          name: 'SAML2',
+          hidden: () => !hasLicense
         },
         {
           title: this.$t('setting.OAuth2'),
@@ -88,6 +78,26 @@ export default {
         }
       ]
     }
+    return {
+      loading: true,
+      activeMenu: 'Basic',
+      submenu: [
+        {
+          title: this.$t('common.Basic'),
+          name: 'Basic'
+        },
+        {
+          title: this.$t('setting.Ldap'),
+          name: 'LDAP'
+        },
+        {
+          title: this.$t('setting.CAS'),
+          name: 'CAS',
+          hidden: () => !hasLicense
+        },
+        ...extraBackends
+      ]
+    }
   },
   computed: {
     componentData() {
@@ -96,8 +106,7 @@ export default {
   },
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
