@@ -146,7 +146,10 @@ export default {
             width: '70px'
           },
           secret_type: {
-            width: '100px'
+            width: '100px',
+            formatter: function(row) {
+              return row.secret_type.label
+            }
           },
           source: {
             formatter: function(row) {
