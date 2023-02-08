@@ -22,7 +22,6 @@ export default {
       helpMessage: this.$t('setting.helpText.ConnectionTokenList'),
       tableConfig: {
         url: ajaxUrl,
-        columnsExclude: ['actions'],
         columnsExtra: ['action'],
         columnsShow: {
           min: ['id', 'actions'],
@@ -38,7 +37,9 @@ export default {
           action: {
             label: this.$t('common.Action'),
             formatter: function(row) {
-              return row.actions.map(item => { return item.label }).join(', ')
+              return row.actions.map(item => {
+                return item.label
+              }).join(', ')
             }
           },
           actions: {
@@ -51,7 +52,7 @@ export default {
                   name: 'Expired',
                   title: this.$t('setting.Expire'),
                   type: 'info',
-                  can: ({ row }) => row['is_valid'],
+                  can: ({ row }) => !row['is_expired'],
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
