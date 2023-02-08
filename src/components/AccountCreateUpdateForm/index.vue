@@ -1,6 +1,7 @@
 <template>
   <AutoDataForm
     v-if="!loading"
+    ref="AutoDataForm"
     v-bind="$data"
     @submit="confirm"
   />

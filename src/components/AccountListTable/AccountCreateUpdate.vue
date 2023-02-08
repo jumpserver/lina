@@ -12,6 +12,7 @@
   >
     <AccountCreateUpdateForm
       v-if="!loading"
+      ref="form"
       :account="account"
       :asset="asset"
       @add="addAccount"
@@ -94,7 +95,7 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.createSuccessMsg'))
-      })
+      }).catch(error => this.setFieldError(error))
     },
     editAccount(form) {
       const data = { ...form }
@@ -102,7 +103,35 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
-      })
+      }).catch(error => this.setFieldError(error))
+    },
+    setFieldError(error) {
+      const response = error.response
+      const data = response.data
+      const refsAutoDataForm = this.$refs.form.$refs.AutoDataForm
+      if (response.status === 400) {
+        for (const key of Object.keys(data)) {
+          let err = ''
+          let current = key
+          let errorTips = data[current]
+          if (errorTips instanceof Array) {
+            errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
+            for (const i of errorTips) {
+              if (i instanceof Object) {
+                err += i?.port?.join(',')
+              } else {
+                err += errorTips
+              }
+            }
+          } else {
+            err = errorTips
+          }
+          if (current === 'secret') {
+            current = refsAutoDataForm.form.secret_type?.value || key
+          }
+          refsAutoDataForm.setFieldError(current, err)
+        }
+      }
     }
   }
 }
