@@ -151,7 +151,8 @@ export default {
         },
         push_now: {
           hidden: () => {
-            return !this.iPlatform.automation?.['push_account_enabled']
+            const automation = this.iPlatform.automation || {}
+            return !automation.push_account_enabled || !automation.ansible_enabled
           }
         }
       },
