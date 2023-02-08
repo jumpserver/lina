@@ -5,6 +5,7 @@
       :fields="fields"
       :initial="initial"
       :fields-meta="fieldsMeta"
+      :has-detail-in-msg="false"
       :clean-form-value="cleanFormValue"
       :after-get-form-value="afterGetFormValue"
       :after-get-remote-meta="handleAfterGetRemoteMeta"
