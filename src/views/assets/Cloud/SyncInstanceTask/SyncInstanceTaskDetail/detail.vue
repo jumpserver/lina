@@ -64,7 +64,7 @@ export default {
           key: this.$t('assets.Protocols'),
           value: this.object.protocols,
           formatter: (item, val) => {
-            return <div>{val.map((v) => <el-tag size='small'>{v['name']}/{v['port']}</el-tag>)}</div>
+            return <div>{val?.map((v) => <el-tag size='small'>{v['name']}/{v['port']}</el-tag>)}</div>
           }
         },
         {
@@ -85,7 +85,7 @@ export default {
           value: this.object.regions,
           formatter(row, value) {
             return (<div>{
-              value.map((content) => {
+              value?.map((content) => {
                 return <div>{ content }</div>
               })}
             </div>)

@@ -123,9 +123,16 @@ export default {
         return formValue
       },
       cleanFormValue(value) {
-        if (!Array.isArray(value.ip_network_segment_group)) {
-          value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
+        let protocols = ''
+        const ipNetworkSegments = value.ip_network_segment_group
+        if (!Array.isArray(ipNetworkSegments)) {
+          value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
+        if (value.protocols.length > 0) {
+          protocols = value.protocols.map(i => (i.name + '/' + i.port)).join(' ')
+        }
+        value.protocols = protocols
+
         return value
       },
       onPerformError(error, method, vm) {
