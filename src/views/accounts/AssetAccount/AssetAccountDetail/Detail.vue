@@ -97,7 +97,7 @@ export default {
             model: vm.object.su_from?.id || '',
             label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
             ajax: {
-              url: `/api/v1/accounts/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.object.id}&fields_size=mini`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
