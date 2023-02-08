@@ -184,4 +184,7 @@ export default {
 .page ::v-deep .treebox {
   height: inherit !important;
 }
+.asset-select-dialog ::v-deep .el-icon-circle-check {
+  display: none;
+}
 </style>
