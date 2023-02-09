@@ -45,6 +45,7 @@ import { TreeTable } from '@/components'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
 import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
+import { renameFile } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -113,16 +114,17 @@ export default {
             }
           }.bind(this),
           refresh: function(event, treeNode) {
-            // const parentNode = this.zTree.getNodeByParam('id', this.parentId)
-            // this.zTree.expandNode(parentNode, true, false, false, false)
           },
           onRename: function(event, treeId, treeNode, isCancel) {
-            const url = `/api/v1/ops/playbook/${this.object.id}/file/`
             if (isCancel) {
               return
             }
-            this.$axios.patch(url, { key: treeNode.id, new_name: treeNode.name, is_directory: treeNode.isParent })
-              .then(data => {
+            renameFile(this.object.id, {
+              key: treeNode.id,
+              new_name: treeNode.name,
+              is_directory: treeNode.isParent
+            }).then()
+              .finally(() => {
                 this.refreshTree()
               })
           }.bind(this)
