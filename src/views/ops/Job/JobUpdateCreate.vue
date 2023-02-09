@@ -13,6 +13,7 @@ import CodeEditor from '@/components/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   components: {
@@ -95,9 +96,7 @@ export default {
           type: 'assetSelect',
           component: AssetSelect,
           label: this.$t('perms.Asset'),
-          rules: [{
-            required: false
-          }],
+          rules: [Required],
           el: {
             baseUrl: '/api/v1/perms/users/self/assets/',
             baseNodeUrl: '/api/v1/perms/users/self/nodes/',
