@@ -133,7 +133,12 @@ export default {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
       const hasIdAccounts = this.accounts.filter(i => i?.id).map(item => item.id)
-      const newAddAccounts = this.accountsSelected.filter(i => !hasIdAccounts.includes(i.id))
+      const newAddAccounts = this.accountsSelected.filter(i => {
+        if (!hasIdAccounts.includes(i.id)) {
+          i.template = true
+          return i
+        }
+      })
       this.accounts.push(...newAddAccounts)
       this.$emit('onConfirm', this.accounts)
     },
