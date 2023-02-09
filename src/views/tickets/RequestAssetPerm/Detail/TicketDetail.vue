@@ -19,7 +19,7 @@
           <el-form-item :label="$tc('tickets.Asset')">
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
-          <el-form-item :label="$tc('tickets.SystemUser')" :rules="isRequired">
+          <el-form-item :label="$tc('perms.Account')" :rules="isRequired">
             <AccountFormatter v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('common.DateStart')" required>
@@ -119,14 +119,14 @@ export default {
       return [
         {
           key: this.$tc('perms.Node'),
-          value: object.apply_nodes.map(item => item.value).join(', ')
+          value: object.apply_nodes.map(item => item.name).join(', ')
         },
         {
           key: this.$tc('tickets.Asset'),
           value: object.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('assets.Accounts'),
+          key: this.$tc('perms.Account'),
           value: object.apply_accounts.join(', ')
         },
         {
@@ -146,7 +146,6 @@ export default {
     assignedCardItems() {
       const vm = this
       const { object } = this
-      const rel_snapshot = object.rel_snapshot
       return [
         {
           key: this.$tc('tickets.PermissionName'),
@@ -162,14 +161,14 @@ export default {
         },
         {
           key: this.$tc('perms.Node'),
-          value: rel_snapshot.apply_nodes.map(item => item.value).join(', ')
+          value: object.apply_nodes.map(item => item.name).join(', ')
         },
         {
           key: this.$tc('assets.Asset'),
-          value: rel_snapshot.apply_assets.map(item => item.name).join(', ')
+          value: object.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('perms.Accounts'),
+          key: this.$tc('perms.Account'),
           value: (object.apply_accounts || []).join(', ')
         },
         {
