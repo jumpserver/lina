@@ -97,6 +97,7 @@
     }
   },
   "acl": {
+    "apply_login_account": "申请登录账号",
     "IgnoreCase": "忽略大小写",
     "Content": "内容",
     "CommandFilterACL": "命令过滤",

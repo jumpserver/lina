@@ -15,7 +15,7 @@
           <span class="item-value">{{ session.asset }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('tickets.Account') }}：</span>
+          <span class="item-label">{{ $t('assets.Account') }}：</span>
           <span class="item-value">{{ session.account }}</span>
         </el-col>
         <el-col>

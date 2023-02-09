@@ -130,7 +130,8 @@
     "apply_login_system_user": "システムユーザーへのログイン申請",
     "apply_login_user": "ログインユーザーの申請",
     "login_confirm_user": "登録再確認受付者",
-    "RuleDetail": "ルールの詳細"
+    "RuleDetail": "ルールの詳細",
+    "apply_login_account": "ログインアカウントの申請"
   },
   "applications": {
     "": "",
