@@ -68,7 +68,7 @@ export default {
             width: '105px',
             formatter: (row, col, cellValue) => {
               const display = row['risk_level'].label
-              if (cellValue === 0) {
+              if (cellValue?.value === 0) {
                 return display
               } else {
                 return <span class='text-danger'> {display} </span>
