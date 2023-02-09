@@ -34,8 +34,8 @@ export default {
         url: this.url,
         columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
-          min: ['title', 'type', 'state', 'actions'],
-          default: ['title', 'type', 'state', 'status', 'actions']
+          min: ['title', 'serial_num', 'type', 'state', 'date_created'],
+          default: ['title', 'serial_num', 'type', 'state', 'status', 'date_created']
         },
         columnsMeta: {
           serial_num: {
