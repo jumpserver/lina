@@ -39,7 +39,7 @@
         <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="$tc('accounts.PasswordRecord')">
+        <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
           <el-button type="text" @click="onShowPasswordHistory">{{ secretInfo.version }}</el-button>
         </el-form-item>
       </el-form>
@@ -78,6 +78,10 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    showPasswordRecord: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
