@@ -63,7 +63,7 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -77,7 +77,7 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -91,7 +91,7 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
