@@ -40,7 +40,9 @@ export default {
       formConfig: {
         initial: { secret_type: 'password' },
         url: '/api/v1/accounts/account-templates/',
-        getUrl: '/api/v1/accounts/account-templates/',
+        getUrl: function() {
+          return '/api/v1/accounts/account-templates/'
+        },
         needGetObjectDetail: false,
         hasDetailInMsg: false,
         fields: [
