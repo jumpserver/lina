@@ -6,7 +6,6 @@
     :visible.sync="iVisible"
     width="50%"
     top="10%"
-    :close-on-click-modal="false"
     :show-cancel="false"
     :show-confirm="false"
   >
@@ -16,14 +15,11 @@
       </div>
       <div class="text">{{ $tc('ops.version') }}：<strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span></div>
       <div class="text">{{ $tc('common.PermissionCompany') }}：{{ corporation }}</div>
+      <el-divider class="divider" />
       <div class="text">
-        <span @click="onClick('github')">
-          <i class="fa fa-github icon" />github
-        </span>
-      </div>
-      <div class="text">
-        <span @click="onClick('download')">
-          <i class="fa fa-download icon" />{{ $tc('common.Download') }}
+        <span v-for="(i, index) in actions" :key="index" class="text-link" @click="onClick(i.name)">
+          <i class="icon" :class="i.icon" />{{ i.label }}
+          <el-divider v-if="index !== actions.length - 1" direction="vertical" />
         </span>
       </div>
     </div>
@@ -46,7 +42,19 @@ export default {
   },
   data() {
     return {
-      logoTextSrc: require('@/assets/img/logo_text_green.png')
+      logoTextSrc: require('@/assets/img/logo_text_green.png'),
+      actions: [
+        {
+          name: 'github',
+          label: 'github',
+          icon: 'fa fa-github'
+        },
+        {
+          name: 'download',
+          label: this.$tc('common.Download'),
+          icon: 'fa fa-download'
+        }
+      ]
     }
   },
   computed: {
@@ -88,7 +96,7 @@ export default {
   }
   &>>> .el-dialog__body {
     background-color: #FAFBFD;
-    padding: 10px 30px 20px;
+    padding: 10px 40px 20px;
   }
   &>>> .el-dialog__footer {
     padding: 0;
@@ -106,9 +114,11 @@ export default {
       margin-right: 4px;
     }
     span {
-      color: var(--color-info);
       cursor: pointer;
     }
   }
+}
+ >>> .divider.el-divider {
+  margin: 15px 0!important;
 }
 </style>
