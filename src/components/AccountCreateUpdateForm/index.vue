@@ -72,7 +72,9 @@ export default {
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {
-                updateForm({ username: value })
+                if (!this.account?.name) {
+                  updateForm({ username: value })
+                }
                 const maybePrivileged = this.defaultPrivilegedAccounts.includes(value)
                 if (maybePrivileged) {
                   updateForm({ privileged: true })
