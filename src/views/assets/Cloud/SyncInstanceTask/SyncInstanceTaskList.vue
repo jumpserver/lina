@@ -21,15 +21,27 @@ export default {
           app: 'xpack',
           resource: 'syncinstancetask'
         },
+        columnsShow: {
+          min: ['name', 'account', 'hostname_strategy', 'actions'],
+          default: [
+            'name', 'account', 'hostname_strategy', 'protocols', 'is_periodic', 'actions'
+          ]
+        },
         columnsMeta: {
           sync_ip_type: {
             width: '120px'
           },
           hostname_strategy: {
-            width: '120px'
+            width: '150px',
+            formatter: function(row) {
+              return <span>{ row.hostname_strategy.label }</span>
+            }
           },
-          account_display: {
-            label: this.$t('xpack.Cloud.Account')
+          account: {
+            label: this.$t('xpack.Cloud.Account'),
+            formatter: function(row) {
+              return <span>{ row.account.name }</span>
+            }
           },
           periodic_display: {
             width: '150px'
