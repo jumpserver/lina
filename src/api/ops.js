@@ -36,3 +36,11 @@ export function uploadPlaybook(form) {
     data: form
   })
 }
+
+export function renameFile(playbookId, node) {
+  return request({
+    url: `/api/v1/ops/playbook/${playbookId}/file/`,
+    method: 'patch',
+    data: node
+  })
+}
