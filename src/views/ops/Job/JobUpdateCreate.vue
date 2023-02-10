@@ -47,6 +47,7 @@ export default {
       },
       fieldsMeta: {
         name: {
+          rules: [Required],
           hidden: (formValue) => {
             return this.instantTask
           }
@@ -78,6 +79,7 @@ export default {
           }
         },
         playbook: {
+          rules: [Required],
           hidden: (formValue) => {
             return formValue.type !== 'playbook'
           },
@@ -104,6 +106,7 @@ export default {
           }
         },
         args: {
+          rules: [Required],
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },
