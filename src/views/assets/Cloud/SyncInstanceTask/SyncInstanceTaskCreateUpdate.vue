@@ -119,6 +119,10 @@ export default {
       updateSuccessNextRoute: { name: 'CloudCenter' },
       createSuccessNextRoute: { name: 'CloudCenter' },
       afterGetFormValue(formValue) {
+        formValue.protocols = formValue.protocols?.split(' ').map(i => {
+          const [name, port] = i.split('/')
+          return { name, port }
+        })
         formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
         return formValue
       },
