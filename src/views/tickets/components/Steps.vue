@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 540px;">
+    <div>
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.title}`"
