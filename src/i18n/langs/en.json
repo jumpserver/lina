@@ -591,7 +591,7 @@
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
     "bulkRemoveSuccessMsg": "Bulk remove success",
     "SelectAtLeastOneAssetOrNodeErrMsg": "Select at least one asset or node",
-    "RequiredSystemUserErrMsg": "Required systemuser",
+    "RequiredSystemUserErrMsg": "Required account",
     "createBy": "Create by",
     "cloneFrom": "Clone from",
     "createErrorMsg": "Create error",
