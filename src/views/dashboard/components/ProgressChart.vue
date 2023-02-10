@@ -45,7 +45,8 @@ export default {
       const total = _.sumBy(this.data, function(i) { return i.total })
       for (let i = 0, len = this.data.length; i < len; i++) {
         const current = this.data[i]
-        const num = (current.total / total) * 100
+        let num = (current.total / total) * 100
+        num = _.floor(num, 2)
         const color = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
         seriesList.push({
           type: 'bar',
@@ -132,7 +133,7 @@ export default {
         grid: {
           top: '60%',
           containLabel: true,
-          bottom: '0',
+          bottom: '-10',
           left: '0%',
           right: 1
         },
