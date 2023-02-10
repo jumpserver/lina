@@ -1,5 +1,5 @@
 <template>
-  <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
+  <GenericTicketDetail :object="object" />
 </template>
 
 <script>
@@ -28,23 +28,6 @@ export default {
     }
   },
   computed: {
-    specialCardItems() {
-      const { object } = this
-      return object.type === 'login_confirm' ? [] : [
-        {
-          key: this.$t('acl.apply_login_asset'),
-          value: object.rel_snapshot.apply_login_asset
-        },
-        {
-          key: this.$t('acl.apply_login_system_user'),
-          value: object.rel_snapshot.apply_login_system_user
-        },
-        {
-          key: this.$t('acl.apply_login_user'),
-          value: object.rel_snapshot.apply_login_user
-        }
-      ]
-    }
   },
   methods: {}
 }
