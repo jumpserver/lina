@@ -1551,6 +1551,10 @@
     "Applets": "リモート アプリケーション"
   },
   "tickets": {
+    "ApplyAsset": "リソースの適用",
+    "LoginConfirm": "ユーザーログインの確認",
+    "CommandConfirm": "コマンドの確認",
+    "LoginAssetConfirm": "資産ログインの確認",
     "OneAssigneeType": "一次受付者タイプ",
     "OneAssignee": "一級受付者",
     "TwoAssigneeType": "二級受付者タイプ",
