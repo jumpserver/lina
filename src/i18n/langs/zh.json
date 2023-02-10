@@ -1545,6 +1545,10 @@
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
+    "ApplyAsset": "申请资产",
+    "LoginConfirm": "用户登录复合",
+    "CommandConfirm": "命令复合",
+    "LoginAssetConfirm": "资产登录复合",
     "RelevantAssignees": "相关受理人",
     "OneAssigneeType": "一级受理人类型",
     "OneAssignee": "一级受理人",

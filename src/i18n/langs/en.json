@@ -1559,6 +1559,10 @@
     "basicTools": "Basic tool"
   },
   "tickets": {
+    "ApplyAsset": "Apply asset",
+    "LoginConfirm": "User login confirm",
+    "CommandConfirm": "Command confirm",
+    "LoginAssetConfirm": "Asset login confirm",
     "PermissionName": "Permission name",
     "Accept": "Accept",
     "AssignedMe": "Assigned me",
