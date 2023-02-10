@@ -59,6 +59,9 @@ export default {
         if (!fieldMeta) {
           continue
         }
+        if (fieldMeta['write_only']) {
+          continue
+        }
 
         let value = this.object[name]
 
