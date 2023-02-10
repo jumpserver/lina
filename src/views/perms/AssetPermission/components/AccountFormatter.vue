@@ -73,6 +73,9 @@ export default {
         choicesSelected.push(this.SPEC)
         this.showSpecAccounts = true
       }
+      if (this.value.indexOf(this.SPEC) > -1) {
+        this.showSpecAccounts = true
+      }
       this.choicesSelected = choicesSelected
       this.specAccountsInput = specAccountsInput
     },
