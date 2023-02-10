@@ -591,7 +591,7 @@
     "bulkDeleteSuccessMsg": "一括削除に成功しました",
     "bulkRemoveErrorMsg": "一括削除に失敗しました:",
     "SelectAtLeastOneAssetOrNodeErrMsg": "資産またはノードは少なくとも1つを選択します",
-    "RequiredSystemUserErrMsg": "先にシステムユーザーを選択してください",
+    "RequiredSystemUserErrMsg": "必要なアカウント",
     "bulkRemoveSuccessMsg": "一括削除に成功しました",
     "createBy": "作成者",
     "cloneFrom": "クローン",

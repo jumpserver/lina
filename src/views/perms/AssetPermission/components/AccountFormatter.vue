@@ -98,11 +98,12 @@ export default {
       this.outputValue()
     },
     outputValue() {
+      let choicesSelected = this.choicesSelected
       if (this.showSpecAccounts) {
-        this.$emit('change', [...this.choicesSelected, ...this.specAccountsInput])
-      } else {
-        this.$emit('change', this.choicesSelected)
+        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput]
       }
+      this.$emit('input', choicesSelected)
+      this.$emit('change', choicesSelected)
     }
   }
 }
