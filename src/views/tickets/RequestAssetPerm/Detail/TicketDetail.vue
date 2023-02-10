@@ -73,7 +73,7 @@ export default {
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       requestForm: {
         nodes: this.object.apply_nodes,
-        assets: this.object.apply_assets,
+        assets: this.object.apply_assets?.map(i => i.id),
         accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
         apply_date_expired: this.object.apply_date_expired,
