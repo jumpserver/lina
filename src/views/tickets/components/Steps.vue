@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div>
+    <div style="height: 660px;">
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.title}`"
@@ -19,11 +19,11 @@
           <div slot="description">
             <div class="processors">
               <div class="processors-content">
-                <span v-for="assignee of item.assignees_display" :key="assignee" style="display: block">
+                <span v-for="assignee of item.assignees_display.slice(0,4)" :key="assignee" style="display: block">
                   {{ assignee }}
                 </span>
               </div>
-              <el-button v-if="item.assignees.length > 5" type="text" @click="lookOver(item.assignees_display)">
+              <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
                 {{ $tc('tickets.CheckViewAcceptor') }}
               </el-button>
             </div>
