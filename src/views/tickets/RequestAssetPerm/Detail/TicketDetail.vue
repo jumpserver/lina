@@ -72,7 +72,7 @@ export default {
       treeNodes,
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       requestForm: {
-        nodes: this.object.apply_nodes,
+        nodes: this.object.apply_nodes?.map(i => i.id),
         assets: this.object.apply_assets?.map(i => i.id),
         accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
