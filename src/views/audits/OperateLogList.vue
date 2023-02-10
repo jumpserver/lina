@@ -9,6 +9,8 @@
       v-if="logDetailVisible"
       :title="this.$tc('route.OperateLog')"
       :visible.sync="logDetailVisible"
+      :show-cancel="false"
+      :show-confirm="false"
     >
       <OperateLogDetail :row="rowObj" />
     </Dialog>
