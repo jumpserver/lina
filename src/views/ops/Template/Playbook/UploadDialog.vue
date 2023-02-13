@@ -79,7 +79,7 @@ export default {
         this.$emit('completed')
         this.$message.success('terminal.UploadSucceed')
       }).catch(err => {
-        console.log(err)
+        this.$message.error(err)
       })
     }
   }

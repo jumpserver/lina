@@ -24,7 +24,13 @@ export default {
           label: this.$t('assets.Assets'),
           el: {
             value: [],
-            baseUrl: '/api/v1/assets/assets/?domain_enabled=true'
+            baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
+            treeUrlQuery: {
+              domain_enabled: true
+            },
+            canSelect: (row) => {
+              return row.platform?.name !== 'Gateway'
+            }
           }
         }
       },

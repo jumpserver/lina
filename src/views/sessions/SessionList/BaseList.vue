@@ -138,7 +138,8 @@ export default {
           dateStart: dateFrom
         },
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: false,
+          exclude: ['is_finished']
         }
       }
     }

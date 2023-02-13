@@ -48,10 +48,7 @@ export default {
             }
           },
           comment: {
-            width: '240px',
-            formatter: (row) => {
-              return row.type.label
-            }
+            width: '240px'
           },
           summary: {
             label: this.$t('ops.Summary(success/total)'),

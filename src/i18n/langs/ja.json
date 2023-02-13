@@ -130,7 +130,8 @@
     "apply_login_system_user": "システムユーザーへのログイン申請",
     "apply_login_user": "ログインユーザーの申請",
     "login_confirm_user": "登録再確認受付者",
-    "RuleDetail": "ルールの詳細"
+    "RuleDetail": "ルールの詳細",
+    "apply_login_account": "ログインアカウントの申請"
   },
   "applications": {
     "": "",
@@ -197,6 +198,7 @@
   },
   "assets": {
     "Secure": "安全である",
+    "AssetBulkUpdateTips": "ネットワークデバイス、クラウドサービス、Web、一括更新ネットワークドメインはサポートされていません",
     "LabelInputFormatValidation": "フォーマットが正しくありません：name:value",
     "IP/Host": "IP/ノア",
     "OrganizationAsset": "組織資産",
@@ -429,6 +431,8 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "About": "について",
+    "PermissionCompany": "授权公司",
     "ApproverNumbers": "承認者数",
     "ConvenientOperate": "便利な操作",
     "Overview": "概要",
@@ -588,7 +592,7 @@
     "bulkDeleteSuccessMsg": "一括削除に成功しました",
     "bulkRemoveErrorMsg": "一括削除に失敗しました:",
     "SelectAtLeastOneAssetOrNodeErrMsg": "資産またはノードは少なくとも1つを選択します",
-    "RequiredSystemUserErrMsg": "先にシステムユーザーを選択してください",
+    "RequiredSystemUserErrMsg": "必要なアカウント",
     "bulkRemoveSuccessMsg": "一括削除に成功しました",
     "createBy": "作成者",
     "cloneFrom": "クローン",
@@ -818,6 +822,7 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "RunAgain": "再実行",
     "ManualInput": "手動入力",
     "Execute": "実行",
     "ID": "ID",
@@ -1547,6 +1552,10 @@
     "Applets": "リモート アプリケーション"
   },
   "tickets": {
+    "ApplyAsset": "リソースの適用",
+    "LoginConfirm": "ユーザーログインの確認",
+    "CommandConfirm": "コマンドの確認",
+    "LoginAssetConfirm": "資産ログインの確認",
     "OneAssigneeType": "一次受付者タイプ",
     "OneAssignee": "一級受付者",
     "TwoAssigneeType": "二級受付者タイプ",
@@ -1991,13 +2000,13 @@
     "favicon": "Webサイトのアイコン",
     "faviconTip": "ヒント: webサイトのアイコン (推奨画像サイズ: 16px * 16px)",
     "loginImage": "ログインページの画像",
-    "loginImageTip": "ヒント: 企業版ユーザーのログインページに表示されます (推奨画像サイズ: 492 * 472px)",
+    "loginImageTip": "ヒント: エンタープライズ版のユーザーログインページに表示されます (推奨画像サイズ: 492*472px)",
     "loginTitle": "ログインページのタイトル",
     "loginTitleTip": "ヒント: 企業版ユーザーログインページに表示されます",
     "logoIndex": "ロゴ (文字付き)",
     "logoIndexTip": "ヒント: 管理ページの左上に表示されます (推奨画像サイズ: 185px * 55px)",
     "logoLogout": "ロゴ (文字なし)",
-    "logoLogoutTip": "ヒント: 企業版ユーザーの終了ページに表示されます (推奨画像サイズ: 82px * 82px)",
+    "logoLogoutTip": "ヒント: エンタープライズ ユーザーの Web 端末ページに表示されます (推奨画像サイズ: 82px*82px)",
     "restoreDialogMessage": "本当にデフォルトの初期化を再開しますか?",
     "restoreDialogTitle": "確認しますか",
     "technologyConsult": "技術コンサルティング",

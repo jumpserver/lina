@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -38,22 +38,9 @@ export default {
     OAuth2
   },
   data() {
-    return {
-      loading: true,
-      activeMenu: 'Basic',
-      submenu: [
-        {
-          title: this.$t('common.Basic'),
-          name: 'Basic'
-        },
-        {
-          title: this.$t('setting.Ldap'),
-          name: 'LDAP'
-        },
-        {
-          title: this.$t('setting.CAS'),
-          name: 'CAS'
-        },
+    let extraBackends = []
+    if (this.$store.getters.hasValidLicense) {
+      extraBackends = [
         {
           title: this.$t('setting.OIDC'),
           name: 'OIDC'
@@ -88,6 +75,25 @@ export default {
         }
       ]
     }
+    return {
+      loading: true,
+      activeMenu: 'Basic',
+      submenu: [
+        {
+          title: this.$t('common.Basic'),
+          name: 'Basic'
+        },
+        {
+          title: this.$t('setting.Ldap'),
+          name: 'LDAP'
+        },
+        {
+          title: this.$t('setting.CAS'),
+          name: 'CAS'
+        },
+        ...extraBackends
+      ]
+    }
   },
   computed: {
     componentData() {
@@ -96,8 +102,7 @@ export default {
   },
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

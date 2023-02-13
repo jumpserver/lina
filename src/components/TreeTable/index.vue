@@ -50,13 +50,13 @@
 </template>
 
 <script>
-import AutoDataZTree from '../AutoDataZTree'
-import TabTree from '../TabTree'
 import Dialog from '@/components/Dialog'
-import ListTable from '../ListTable'
-import IBox from '../IBox'
 import { setUrlParam } from '@/utils/common'
+import ListTable from '@/components/ListTable/index'
 import FileTree from '@/components/TreeTable/components/FileTree.vue'
+import IBox from '../IBox'
+import TabTree from '../TabTree'
+import AutoDataZTree from '../AutoDataZTree'
 
 export default {
   name: 'TreeTable',

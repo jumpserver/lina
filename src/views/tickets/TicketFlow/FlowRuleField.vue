@@ -6,14 +6,14 @@
         <div slot="header" class="clearfix">
           <span>{{ i + 1 + ' ' + vm.$t('tickets.LevelApproval') }}</span>
         </div>
-        <el-radio-group v-model="item.strategy" @change="onChange()">
+        <el-radio-group v-model="item.strategy.value" @change="onChange()">
           <el-radio label="super_admin">{{ vm.$t('tickets.SuperAdmin') }}</el-radio>
           <el-radio label="org_admin">{{ vm.$t('tickets.OrgAdmin') }}</el-radio>
           <el-radio label="super_org_admin">{{ vm.$t('tickets.SuperOrgAdmin') }}</el-radio>
           <el-radio label="custom_user">{{ vm.$t('tickets.CustomUser') }}</el-radio>
         </el-radio-group>
         <br>
-        <Select2 v-show="item.strategy === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
+        <Select2 v-show="item.strategy.value === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
       </el-card>
     </div>
   </div>

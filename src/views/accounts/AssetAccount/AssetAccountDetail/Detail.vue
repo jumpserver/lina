@@ -33,6 +33,24 @@ export default {
     return {
       quickActions: [
         {
+          title: this.$t('common.Activate'),
+          type: 'switcher',
+          attrs: {
+            model: vm.object.is_active,
+            disabled: !vm.$hasPerm('accounts.change_account')
+          },
+          callbacks: Object.freeze({
+            change: (val) => {
+              this.$axios.patch(
+                `/api/v1/accounts/accounts/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
+              })
+            }
+          })
+        },
+        {
           title: this.$t('assets.Privileged'),
           type: 'switcher',
           attrs: {
@@ -79,7 +97,7 @@ export default {
             model: vm.object.su_from?.id || '',
             label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
             ajax: {
-              url: `/api/v1/accounts/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.object.id}&fields_size=mini`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }

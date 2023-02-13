@@ -130,7 +130,8 @@
     "users": "User",
     "Rules": "Rule",
     "Action": "Action",
-    "ip_group_help_text": "The format is a comma-separated string, * means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64"
+    "ip_group_help_text": "The format is a comma-separated string, * means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "apply_login_account": "Apply login account"
   },
   "applications": {
     "": "",
@@ -197,6 +198,7 @@
   },
   "assets": {
     "Secure": "Secure",
+    "AssetBulkUpdateTips": "device、cloud、web，Batch update of domain is not supported",
     "LabelInputFormatValidation": "Format error, correct format is：name:value",
     "IP/Host": "IP/Host",
     "OrganizationAsset": "Organization asset",
@@ -429,6 +431,8 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "About": "About",
+    "PermissionCompany": "Permission company",
     "ApproverNumbers": "Approver numbers",
     "ConvenientOperate": "Convenient operate",
     "Overview": "Overview",
@@ -588,7 +592,7 @@
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
     "bulkRemoveSuccessMsg": "Bulk remove success",
     "SelectAtLeastOneAssetOrNodeErrMsg": "Select at least one asset or node",
-    "RequiredSystemUserErrMsg": "Required systemuser",
+    "RequiredSystemUserErrMsg": "Required account",
     "createBy": "Create by",
     "cloneFrom": "Clone from",
     "createErrorMsg": "Create error",
@@ -819,6 +823,7 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "RunAgain": "Run again",
     "ManualInput": "Manual input",
     "Execute": "Execute",
     "ID": "ID",
@@ -1555,6 +1560,10 @@
     "basicTools": "Basic tool"
   },
   "tickets": {
+    "ApplyAsset": "Apply asset",
+    "LoginConfirm": "User login confirm",
+    "CommandConfirm": "Command confirm",
+    "LoginAssetConfirm": "Asset login confirm",
     "PermissionName": "Permission name",
     "Accept": "Accept",
     "AssignedMe": "Assigned me",
@@ -1996,13 +2005,13 @@
     "favicon": "Website icon",
     "faviconTip": "Tips: website icon. (suggest image size: 16px*16px)",
     "loginImage": "Image of login page",
-    "loginImageTip": "Tips: This will be displayed on the enterprise user login page. (suggest image size: 492px*472px)",
+    "loginImageTip": "Tips: It will be displayed on the enterprise version user login page (recommended image size: 492*472px)",
     "loginTitle": "Title of login page",
     "loginTitleTip": "Tips: This will be displayed on the enterprise user login page. (eg: Welcome to the JumpServer open source fortress)",
     "logoIndex": "Logo (It contains text)",
     "logoIndexTip": "Tips: This will appear at the top left of the administration page. (suggest image size: 185px*55px)",
     "logoLogout": "Logo (It contains no text)",
-    "logoLogoutTip": "Tips: This will be displayed on the enterprise user logout page. (suggest image size: 82px*82px)",
+    "logoLogoutTip": "Tips: It will be displayed on the web terminal page of enterprise users (recommended image size: 82px*82px)",
     "restoreDialogMessage": "This will restore default Settings of the interface !!!",
     "restoreDialogTitle": "Are you sure?",
     "technologyConsult": "Technology Consult",

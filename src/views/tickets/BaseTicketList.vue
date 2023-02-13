@@ -34,8 +34,8 @@ export default {
         url: this.url,
         columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
-          min: ['title', 'type', 'state', 'actions'],
-          default: ['title', 'type', 'state', 'status', 'actions']
+          min: ['title', 'serial_num', 'type', 'state', 'date_created'],
+          default: ['title', 'serial_num', 'type', 'state', 'status', 'date_created']
         },
         columnsMeta: {
           serial_num: {
@@ -141,7 +141,7 @@ export default {
               valueLabel: this.$t('tickets.Pending')
             }
           },
-          exclude: ['state', 'id', 'title'],
+          exclude: ['state', 'id', 'title', 'type'],
           options: [
             {
               value: 'state',
@@ -160,6 +160,29 @@ export default {
                 {
                   value: REJECT,
                   label: this.$t('tickets.Rejected')
+                }
+              ]
+            },
+            {
+              value: 'type',
+              label: this.$t('assets.Type'),
+              type: 'choice',
+              children: [
+                {
+                  value: 'apply_asset',
+                  label: this.$t('tickets.ApplyAsset')
+                },
+                {
+                  value: 'login_confirm',
+                  label: this.$t('tickets.LoginConfirm')
+                },
+                {
+                  value: 'command_confirm',
+                  label: this.$t('tickets.CommandConfirm')
+                },
+                {
+                  value: 'login_asset_confirm',
+                  label: this.$t('tickets.LoginAssetConfirm')
                 }
               ]
             },

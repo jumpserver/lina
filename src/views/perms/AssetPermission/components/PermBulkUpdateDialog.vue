@@ -59,7 +59,10 @@ export default {
         accounts: fieldsManager.accounts,
         date_start: fieldsManager.date_start,
         date_expired: fieldsManager.date_expired,
-        is_active: fieldsManager.is_active
+        is_active: fieldsManager.is_active,
+        actions: {
+          label: this.$t('common.Action')
+        }
       }
       if (this.permType !== 'asset') {
         url = '/api/v1/perms/application-permissions/'

@@ -18,7 +18,7 @@ export const IpCheck = {
   required: true,
   validator: (rule, value, callback) => {
     value = value?.trim()
-    if (/^[\w://.?]+$/.test(value)) {
+    if (/^[\w://.?-]+$/.test(value)) {
       callback()
     } else {
       callback(new Error(i18n.t('common.FormatError')))

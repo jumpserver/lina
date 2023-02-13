@@ -1,11 +1,13 @@
 <template>
   <div>
-    <UserConfirmDialog
-      v-if="mfaDialogShow"
-      :url="url"
-      @UserConfirmDone="showExportDialog"
-      @UserConfirmCancel="handleExportCancel"
-    />
+    <div v-if="mfaDialogShow">
+      <UserConfirmDialog
+        :url="url"
+        @UserConfirmDone="showExportDialog"
+        @UserConfirmCancel="handleExportCancel"
+        @AuthMFAError="handleAuthMFAError"
+      />
+    </div>
     <Dialog
       v-if="exportDialogShow"
       :title="$tc('common.Export')"
@@ -218,6 +220,9 @@ export default {
         vm.exportDialogShow = false
         vm.mfaDialogShow = false
       }, 100)
+    },
+    handleAuthMFAError() {
+      this.mfaDialogShow = false
     }
   }
 }

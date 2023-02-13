@@ -97,6 +97,7 @@
     }
   },
   "acl": {
+    "apply_login_account": "申请登录账号",
     "IgnoreCase": "忽略大小写",
     "Content": "内容",
     "CommandFilterACL": "命令过滤",
@@ -197,6 +198,7 @@
   },
   "assets": {
     "Secure": "安全",
+    "AssetBulkUpdateTips": "网络设备、云服务、web，不支持批量更新网域",
     "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",
     "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
@@ -425,6 +427,8 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "About": "关于",
+    "PermissionCompany": "授权公司",
     "Filename": "文件名",
     "ApproverNumbers": "审批人数量",
     "ConvenientOperate": "便捷操作",
@@ -600,7 +604,7 @@
     "bulkDeleteSuccessMsg": "批量删除成功",
     "bulkRemoveErrorMsg": "批量移除失败: ",
     "SelectAtLeastOneAssetOrNodeErrMsg": "资产或者节点至少选择一项",
-    "RequiredSystemUserErrMsg": "请先选择系统用户",
+    "RequiredSystemUserErrMsg": "请选择账号",
     "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
     "cloneFrom": "克隆自",
@@ -814,6 +818,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "RunAgain": "再次执行",
     "AdhocUpdate": "更新命令",
     "Add": "新增",
     "Modify": "修改",
@@ -1541,6 +1546,10 @@
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
+    "ApplyAsset": "申请资产",
+    "LoginConfirm": "用户登录复合",
+    "CommandConfirm": "命令复合",
+    "LoginAssetConfirm": "资产登录复合",
     "RelevantAssignees": "相关受理人",
     "OneAssigneeType": "一级受理人类型",
     "OneAssignee": "一级受理人",
@@ -1905,11 +1914,11 @@
     "loginImage": "登录页面图片",
     "loginImageTip": "提示：将会显示在企业版用户登录页面（建议图片大小为: 492*472px）",
     "loginTitle": "登录页面标题",
-    "loginTitleTip": "提示：将会显示在企业版用户登录页面（eg: 欢迎使用JumpServer开源堡垒机)",
+    "loginTitleTip": "提示：将会显示在企业版用户 SSH 登录 KoKo 登录页面（eg: 欢迎使用JumpServer开源堡垒机)",
     "logoIndex": "Logo (带文字)",
     "logoIndexTip": "提示：将会显示在管理页面左上方（建议图片大小为: 185px*55px）",
     "logoLogout": "Logo (不带文字)",
-    "logoLogoutTip": "提示：将会显示在企业版用户退出页面（建议图片大小为：82px*82px）",
+    "logoLogoutTip": "提示：将会显示在企业版用户的 Web 终端页面（建议图片大小为：82px*82px）",
     "restoreDialogMessage": "您确定要恢复默认初始化吗？",
     "restoreDialogTitle": "你确认吗",
     "technologyConsult": "技术咨询",

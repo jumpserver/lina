@@ -1,6 +1,7 @@
 <template>
   <AutoDataForm
     v-if="!loading"
+    ref="AutoDataForm"
     v-bind="$data"
     @submit="confirm"
   />
@@ -71,7 +72,9 @@ export default {
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {
-                updateForm({ username: value })
+                if (!this.account?.name) {
+                  updateForm({ username: value })
+                }
                 const maybePrivileged = this.defaultPrivilegedAccounts.includes(value)
                 if (maybePrivileged) {
                   updateForm({ privileged: true })
@@ -150,7 +153,8 @@ export default {
         },
         push_now: {
           hidden: () => {
-            return !this.iPlatform.automation?.['push_account_enabled']
+            const automation = this.iPlatform.automation || {}
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('assets.push_assetaccount')
           }
         }
       },

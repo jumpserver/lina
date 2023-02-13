@@ -5,7 +5,7 @@
     :visible.sync="iVisible"
     width="20%"
     top="1vh"
-    :show-cancel="true"
+    :show-cancel="false"
     :show-confirm="true"
     @confirm="onConfirm"
   >

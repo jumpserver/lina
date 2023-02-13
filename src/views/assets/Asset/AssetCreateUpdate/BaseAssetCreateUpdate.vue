@@ -61,24 +61,11 @@ export default {
         cleanFormValue(values) {
           // Update 的时候
           const { id = '' } = this.$route.params
-          const accounts = values?.accounts
-          const query = this.$route.query || {}
           if (id) delete values['accounts']
-
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
 
-          if (accounts && accounts.length !== 0) {
-            accounts.forEach(i => {
-              if (i.hasOwnProperty('id')) {
-                // 克隆资产时 template 为 false
-                i.template = !query.hasOwnProperty('clone_from')
-              }
-              return i
-            })
-          }
-          console.log('values[\'accounts\']', values['accounts'])
           return values
         }
       }

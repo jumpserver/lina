@@ -42,23 +42,27 @@ export default {
     options() {
       const seriesList = []
       const labels = this.data.map(item => item.label)
-      for (let i = 0; i < this.data.length; i++) {
+      const total = _.sumBy(this.data, function(i) { return i.total })
+      for (let i = 0, len = this.data.length; i < len; i++) {
         const current = this.data[i]
+        let num = (current.total / total) * 100
+        num = _.floor(num, 2)
+        const color = '#' + Math.floor(Math.random() * (256 * 256 * 256 - 1)).toString(16)
         seriesList.push({
           type: 'bar',
           stack: 'total',
           barWidth: 32,
           name: current.label,
           itemStyle: {
-            borderRadius: 0
-          },
-          data: [{
-            value: current.total,
-            itemStyle: {
-              color: this.colors[i]
+            borderRadius: 0,
+            color: () => {
+              return this.colors[i] || color
             }
-          }],
-          color: this.colors[i]
+          },
+          data: [num],
+          color: () => {
+            return this.colors[i] || color
+          }
         })
       }
       return {
@@ -69,8 +73,9 @@ export default {
           itemHeight: 10,
           textStyle: {
             color: '#000',
-            lineHeight: 30
+            lineHeight: 10
           },
+          bottom: 30,
           data: labels
 
         },
@@ -126,11 +131,11 @@ export default {
           }
         },
         grid: {
-          top: '0%',
+          top: '60%',
           containLabel: true,
-          bottom: '-50%',
+          bottom: '-10',
           left: '0%',
-          right: '0%'
+          right: 1
         },
         series: seriesList,
         xAxis: {

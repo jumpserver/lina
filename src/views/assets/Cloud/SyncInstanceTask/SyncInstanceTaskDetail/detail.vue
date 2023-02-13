@@ -53,19 +53,8 @@ export default {
       detailFields: [
         'name', 'account_display', 'node_display',
         {
-          key: this.$t('xpack.Cloud.LinuxAdminUser'),
-          value: this.object.unix_admin_user?.name
-        },
-        {
-          key: this.$t('xpack.Cloud.WindowsAdminUser'),
-          value: this.object.windows_admin_user?.name
-        },
-        {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols,
-          formatter: (item, val) => {
-            return <div>{val.map((v) => <el-tag size='small'>{v['name']}/{v['port']}</el-tag>)}</div>
-          }
+          value: this.object.protocols
         },
         {
           key: this.$t('xpack.Cloud.IPNetworkSegment'),
@@ -85,7 +74,7 @@ export default {
           value: this.object.regions,
           formatter(row, value) {
             return (<div>{
-              value.map((content) => {
+              value?.map((content) => {
                 return <div>{ content }</div>
               })}
             </div>)

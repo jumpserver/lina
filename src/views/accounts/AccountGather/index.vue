@@ -16,6 +16,12 @@ export default {
         submenu: [
           {
             title: this.$t('accounts.AccountGather.AccountGatherTaskList'),
+            name: 'AccountGatherList',
+            hidden: !this.$hasPerm('accounts.view_gatheredaccount'),
+            component: () => import('@/views/accounts/AccountGather/AccountGatherList.vue')
+          },
+          {
+            title: this.$t('accounts.AccountGather.AccountGatherList'),
             name: 'AccountGatherTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
             component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue')

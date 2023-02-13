@@ -12,6 +12,7 @@
   >
     <AssetTreeTable
       ref="ListPage"
+      v-bind="$attrs"
       :header-actions="headerActions"
       :table-config="tableConfig"
       class="tree-table"
@@ -182,5 +183,8 @@ export default {
 
 .page ::v-deep .treebox {
   height: inherit !important;
+}
+.asset-select-dialog ::v-deep .el-icon-circle-check {
+  display: none;
 }
 </style>

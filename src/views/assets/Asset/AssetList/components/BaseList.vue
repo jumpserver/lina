@@ -69,6 +69,7 @@ export default {
       }
       if (action === 'Clone') {
         route.query.clone_from = row.id
+        route.query.platform = row.platform.id
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id

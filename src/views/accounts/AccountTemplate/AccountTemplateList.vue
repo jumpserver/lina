@@ -1,7 +1,13 @@
 <template>
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
+    <ViewSecret
+      v-if="showViewSecretDialog"
+      :visible.sync="showViewSecretDialog"
+      :url="secretUrl"
+      :account="account"
+      :show-password-record="false"
+    />
   </div>
 </template>
 

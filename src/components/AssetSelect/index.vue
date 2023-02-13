@@ -15,6 +15,7 @@
       :visible.sync="dialogVisible"
       v-bind="$attrs"
       :base-url="baseUrl"
+      :tree-url-query="treeUrlQuery"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"
@@ -33,6 +34,10 @@ export default {
     baseUrl: {
       type: String,
       default: '/api/v1/assets/assets/'
+    },
+    treeUrlQuery: {
+      type: Object,
+      default: () => {}
     },
     value: {
       type: Array,

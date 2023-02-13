@@ -119,13 +119,24 @@ export default {
       updateSuccessNextRoute: { name: 'CloudCenter' },
       createSuccessNextRoute: { name: 'CloudCenter' },
       afterGetFormValue(formValue) {
+        formValue.protocols = formValue.protocols?.split(' ').map(i => {
+          const [name, port] = i.split('/')
+          return { name, port }
+        })
         formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
         return formValue
       },
       cleanFormValue(value) {
-        if (!Array.isArray(value.ip_network_segment_group)) {
-          value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
+        let protocols = ''
+        const ipNetworkSegments = value.ip_network_segment_group
+        if (!Array.isArray(ipNetworkSegments)) {
+          value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
+        if (value.protocols.length > 0) {
+          protocols = value.protocols.map(i => (i.name + '/' + i.port)).join(' ')
+        }
+        value.protocols = protocols
+
         return value
       },
       onPerformError(error, method, vm) {
