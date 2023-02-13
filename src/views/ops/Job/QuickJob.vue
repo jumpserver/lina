@@ -248,10 +248,14 @@ export default {
         getTaskDetail(this.currentTaskId).then(data => {
           getJob(data.job_id).then(res => {
             this.toolbar.left.runas.value = res.runas
+            this.toolbar.left.runas.callback(res.runas)
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
+            this.toolbar.left.runasPolicy.callback(res.runas_policy.value)
             this.toolbar.left.language.value = res.module.value
             this.toolbar.left.language.callback(res.module.value)
             this.toolbar.left.timeout.value = res.timeout
+            this.toolbar.left.timeout.callback(res.timeout)
+
             this.command = res.args
             this.executionInfo.status = data['status']
             this.executionInfo.timeCost = data['time_cost']
