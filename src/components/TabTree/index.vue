@@ -5,6 +5,7 @@
       v-model="iActiveMenu"
       class="page-submenu"
       stretch
+      :class="{ 'only-submenu': tabIndices.length === 1}"
       @tab-click="handleTabClick"
     >
       <template v-for="item in tabIndices">
@@ -183,6 +184,15 @@ export default {
 
   .el-tabs__item.is-active {
     color:  var(--color-primary);
+  }
+}
+.only-submenu  {
+  &>>> .el-tabs__active-bar {
+    transform: none!important;
+  }
+  &>>> .el-tabs__item.is-active {
+    text-align: left;
+    padding: 0 20px;
   }
 }
 </style>
