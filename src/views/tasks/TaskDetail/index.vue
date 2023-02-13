@@ -36,7 +36,8 @@ export default {
             name: 'TaskHistory'
           }
         ],
-        hasRightSide: false
+        hasRightSide: false,
+        hasActivity: false
       }
     }
   }

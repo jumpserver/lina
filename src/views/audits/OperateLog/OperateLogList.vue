@@ -5,30 +5,23 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <Dialog
-      v-if="logDetailVisible"
-      :title="this.$tc('route.OperateLog')"
-      :visible.sync="logDetailVisible"
-      :show-cancel="false"
-      :show-confirm="false"
-    >
-      <OperateLogDetail :row="rowObj" />
-    </Dialog>
+
+    <OperateLogDetailDialog
+      ref="DetailDialog"
+    />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { Dialog } from '@/components'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
-import OperateLogDetail from './components/OperateLogDetail'
+import OperateLogDetailDialog from './OperateLogDetail/DetailDialog'
 import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
     GenericListPage,
-    OperateLogDetail,
-    Dialog
+    OperateLogDetailDialog
   },
   data() {
     const vm = this
@@ -36,6 +29,7 @@ export default {
     const dateFrom = getDaysAgo(7, now).toISOString()
     const dateTo = getDaysFuture(1, now).toISOString()
     return {
+      url: '/api/v1/audits/operate-logs/',
       rowObj: {
         diff: ''
       },
@@ -80,14 +74,8 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true
-                    vm.$axios.get(
-                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`,
-                    ).then(res => {
-                      vm.rowObj.diff = res.diff
-                      vm.logDetailVisible = true
-                    }).finally(() => {
-                      vm.loading = false
-                    })
+                    this.$refs.DetailDialog.show(row.id)
+                    vm.loading = false
                   }
                 }
               ]

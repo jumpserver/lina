@@ -1,8 +1,9 @@
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'login-log',
+    path: 'login-logs',
     name: 'LoginLog',
     component: () => import('@/views/audits/LoginLogList'),
     meta: {
@@ -11,13 +12,34 @@ export default [
     }
   },
   {
-    path: 'operate-log',
-    name: 'OperateLog',
-    component: () => import('@/views/audits/OperateLogList'),
+    path: 'operate-logs',
+    name: '',
+    component: empty,
     meta: {
       title: i18n.t('route.OperateLog'),
       permissions: ['audits.view_operatelog']
-    }
+    },
+    children: [
+      {
+        path: '',
+        name: 'OperateLogList',
+        component: () => import('@/views/audits/OperateLog/OperateLogList'),
+        meta: {
+          title: i18n.t('route.OperateLog'),
+          permissions: ['audits.view_operatelog']
+        }
+      },
+      {
+        path: ':id',
+        name: 'OperateLogDetail',
+        component: () => import('@/views/audits/OperateLog/OperateLogDetail/index'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.OperateLog'),
+          permissions: ['audits.view_operatelog']
+        }
+      }
+    ]
   },
   {
     path: 'password-change-log',

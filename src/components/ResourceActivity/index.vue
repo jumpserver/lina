@@ -12,11 +12,11 @@
             placement="bottom"
           >
             {{ activity.content }}
+            <el-link v-if="activity.detail_url" type="primary" @click.native="onClick(activity.detail_url)">
+              {{ $tc('common.Detail') }}
+            </el-link>
           </el-timeline-item>
         </el-timeline>
-        <div v-if="activities.length < 1">
-          {{ this.$t('common.NoContent') }}
-        </div>
       </IBox>
     </el-col>
   </el-row>
@@ -24,9 +24,10 @@
 
 <script>
 import IBox from '@/components/IBox'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountActivity',
+  name: 'ResourceActivity',
   components: {
     IBox
   },
@@ -59,6 +60,9 @@ export default {
           this.activities.push(res[i])
         }
       })
+    },
+    onClick(taskUrl) {
+      openTaskPage('', 'celery', taskUrl)
     }
   }
 }

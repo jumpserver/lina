@@ -64,6 +64,9 @@ export default {
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo
+        },
+        searchConfig: {
+          getUrlQuery: true
         }
       }
     }

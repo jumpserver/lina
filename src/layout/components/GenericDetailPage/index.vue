@@ -172,7 +172,7 @@ export default {
       const activity = {
         title: this.$t('common.Activity'),
         name: 'ResourceActivity',
-        hidden: () => !this.$hasPerm('audits.view_operatelog')
+        hidden: () => !this.$hasPerm('audits.view_activitylog')
       }
       return [...this.submenu, activity]
     }
