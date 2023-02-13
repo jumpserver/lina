@@ -291,7 +291,7 @@ export default {
     },
     bindOrUNBindUrl() {
       let url = ''
-      if (!this.object[`is_${this.currentEdit}_bound`]) {
+      if (!this.object[`${this.currentEdit}_id`]) {
         url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
       } else {
         url = `/api/v1/authentication/${this.currentEdit}/qr/unbind/`
@@ -324,7 +324,7 @@ export default {
     },
     verifyDone() {
       const url = this.bindOrUNBindUrl
-      if (!this.object[`is_${this.currentEdit}_bound`]) {
+      if (!this.object[`${this.currentEdit}_id`]) {
         window.location.href = url
       } else {
         this.$axios.post(url).then(res => {
