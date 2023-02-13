@@ -1,8 +1,8 @@
 <template>
   <div>
     <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
-    <UploadDialog :visible.sync="uploadDialogVisible" @completed="refreshTable" />
-    <CreatePlaybookDialog :visible.sync="createDialogVisible" @completed="refreshTable" />
+    <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @completed="refreshTable" />
+    <CreatePlaybookDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @completed="refreshTable" />
   </div>
 </template>
 
