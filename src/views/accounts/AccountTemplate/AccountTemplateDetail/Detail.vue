@@ -50,7 +50,7 @@ export default {
         }
       ],
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
-      excludes: ['privileged', 'secret', 'passphrase', 'specific']
+      excludes: ['privileged', 'secret', 'passphrase', 'spec_info']
     }
   },
   computed: {
