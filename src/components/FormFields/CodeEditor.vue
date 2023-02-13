@@ -24,6 +24,7 @@
             class="inline-input"
             size="mini"
             @select="item.callback(item.value)"
+            @change="item.callback(item.value)"
           />
 
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
