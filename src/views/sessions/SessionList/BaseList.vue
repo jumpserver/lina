@@ -32,7 +32,7 @@ export default {
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol', 'login_from',
             'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
