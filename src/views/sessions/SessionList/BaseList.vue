@@ -69,6 +69,7 @@ export default {
             }
           },
           is_finished: {
+            width: '86px',
             formatterArgs: {
               showFalse: false
             }
@@ -98,10 +99,10 @@ export default {
             formatter: null
           },
           date_start: {
-            width: '100px'
+            width: '150px'
           },
           date_end: {
-            width: '100px'
+            width: '150px'
           },
           duration: {
             label: this.$t('sessions.duration'),
