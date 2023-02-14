@@ -71,7 +71,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Refresh'),
-            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo')
+            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo') ||
+              !this.object['auto_info'].gather_facts_enabled ||
+              !this.object['auto_info'].ansible_enabled
           },
           callbacks: {
             click: function() {
@@ -90,7 +92,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_assetconnectivity')
+            disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
+              !this.object['auto_info'].ansible_enabled ||
+              !this.object['auto_info']['ping_enabled']
           },
           callbacks: {
             click: function() {

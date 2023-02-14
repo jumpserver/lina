@@ -119,7 +119,7 @@ export default {
             type: 'primary',
             label: this.$t('common.Update'),
             disabled: (
-              suEnabledDisabled.includes(object.category?.value) ||
+              suEnabledDisabled.includes(object.category?.value) || !object.su_enabled ||
               object.internal || !vm.$hasPerm('assets.change_platform')
             )
           },
