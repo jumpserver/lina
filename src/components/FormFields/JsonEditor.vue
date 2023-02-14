@@ -2,8 +2,8 @@
   <div class="json-editor">
     <JsonEditor
       v-model="resultInfo"
-      :show-btns="false"
       :mode="'code'"
+      :show-btns="false"
       @json-change="onJsonChange"
       @json-save="onJsonSave"
       @has-error="onError"

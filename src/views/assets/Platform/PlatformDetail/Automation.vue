@@ -31,7 +31,7 @@ export default {
         }
       },
       url: `/api/v1/assets/platforms/`,
-      disabled: true,
+      disabled: this.object.internal,
       hasReset: false,
       hasDetailInMsg: false,
       submitMethod: () => 'patch',
