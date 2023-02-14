@@ -22,7 +22,7 @@
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('common.Add') }}
         </el-button>
-        <el-button size="mini" type="success" @click="onAddFromTemplateClick">
+        <el-button size="mini" type="success" :disabled="!$hasPerm('accounts.view_accounttemplate')" @click="onAddFromTemplateClick">
           {{ $t('common.TemplateAdd') }}
         </el-button>
       </div>

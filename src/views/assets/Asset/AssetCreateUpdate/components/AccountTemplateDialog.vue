@@ -16,7 +16,7 @@
         <div class="actions">
           <el-button
             v-if="showCreate"
-            :disabled="!$hasPerm('accounts.view_accounttemplate')"
+            :disabled="!$hasPerm('accounts.add_accounttemplate')"
             size="small"
             type="primary"
             @click="onAddClick"
