@@ -692,6 +692,7 @@
     "time_period": "時間帯",
     "FormatError": "フォーマットエラー",
     "NotSpecialEmoji": "特殊な表情記号の入力は許可されていません",
+    "notAlphanumericUnderscore": "数字、文字、アンダースコアのみ入力可能",
     "WeekCronSelect": {
       "Monday": "月曜日",
       "Tuesday": "火曜日",

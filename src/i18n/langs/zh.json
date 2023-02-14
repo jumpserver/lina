@@ -704,6 +704,7 @@
     "time_period": "时段",
     "FormatError": "格式错误",
     "NotSpecialEmoji": "不允许输入特殊表情符号",
+    "notAlphanumericUnderscore": "只能输入字母、数字、下划线",
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",

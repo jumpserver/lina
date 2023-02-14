@@ -39,12 +39,26 @@ export const specialEmojiCheck = {
   trigger: ['blur', 'change']
 }
 
+// 只能输入字母、数字、下划线
+export const matchAlphanumericUnderscore = {
+  validator: (rule, value, callback) => {
+    value = value?.trim()
+    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      callback(new Error(i18n.t('common.notAlphanumericUnderscore')))
+    } else {
+      callback()
+    }
+  },
+  trigger: ['blur', 'change']
+}
+
 export default {
   IpCheck,
   Required,
   RequiredChange,
   EmailCheck,
-  specialEmojiCheck
+  specialEmojiCheck,
+  matchAlphanumericUnderscore
 }
 
 export const JsonRequired = {
