@@ -112,6 +112,7 @@ export default {
         'accounts.view_accounttemplatesecret': ['accounts.view_accounttemplate'],
         'accounts.change_accounttemplatesecret': ['accounts.view_accounttemplate'],
         'accounts.view_historyaccountsecret': ['accounts.view_account'],
+        'accounts.add_account': ['assets.view_asset'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
         'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],
