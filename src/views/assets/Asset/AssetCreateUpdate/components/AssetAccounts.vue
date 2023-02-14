@@ -92,7 +92,6 @@ export default {
   },
   methods: {
     removeAccount(account) {
-      console.log('>>>>>>', account, this.accounts)
       this.accounts = this.accounts.filter((item) => {
         if (account.id && item.id) {
           return item.id !== account.id
