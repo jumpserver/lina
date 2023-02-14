@@ -73,7 +73,7 @@ export default {
             name: this.$t('setting.Create'),
             title: this.$t('setting.Create'),
             type: 'primary',
-            can: true,
+            can: this.$hasPerm('authentication.add_temptoken'),
             callback: function() {
               this.$axios.post(
                 `/api/v1/authentication/temp-tokens/`
