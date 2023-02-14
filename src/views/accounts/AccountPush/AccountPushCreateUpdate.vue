@@ -25,6 +25,7 @@ export default {
         secret_strategy: 'specific'
       },
       url: '/api/v1/accounts/push-account-automations/',
+      encryptedFields: ['secret'],
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
