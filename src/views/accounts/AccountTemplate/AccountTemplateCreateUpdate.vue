@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { templateFields, templateFieldsMeta } from './const.js'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -29,6 +30,7 @@ export default {
             delete value[item]
           }
         })
+        value['secret'] = encryptPassword(value['secret'])
         return value
       },
       createSuccessNextRoute: { name: 'AccountTemplateList' },

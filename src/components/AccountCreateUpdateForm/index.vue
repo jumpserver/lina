@@ -12,6 +12,7 @@ import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'AccountCreateForm',
@@ -48,6 +49,7 @@ export default {
       },
       url: '/api/v1/accounts/accounts/',
       form: this.account || {},
+      encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
@@ -233,6 +235,7 @@ export default {
         form.secret = form[secretType]
         delete form[secretType]
       }
+      form.secret = encryptPassword(form.secret)
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {
