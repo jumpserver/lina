@@ -108,6 +108,8 @@ export default {
         'accounts.view_accountsecret': ['accounts.view_account'],
         'accounts.change_accountsecret': ['accounts.view_account'],
         'accounts.view_historyaccount': ['accounts.view_account'],
+        'accounts.view_accounttemplatesecret': ['accounts.view_accounttemplate'],
+        'accounts.change_accounttemplatesecret': ['accounts.view_accounttemplate'],
         'accounts.view_historyaccountsecret': ['accounts.view_account'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
