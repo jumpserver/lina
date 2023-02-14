@@ -69,6 +69,9 @@ export default {
           }
         },
         name: {
+          rules: [
+            { required: true }
+          ],
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {

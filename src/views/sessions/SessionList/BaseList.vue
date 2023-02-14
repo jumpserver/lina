@@ -32,7 +32,7 @@ export default {
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol', 'login_from',
             'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
@@ -69,6 +69,7 @@ export default {
             }
           },
           is_finished: {
+            width: '86px',
             formatterArgs: {
               showFalse: false
             }
@@ -98,10 +99,10 @@ export default {
             formatter: null
           },
           date_start: {
-            width: '100px'
+            width: '150px'
           },
           date_end: {
-            width: '100px'
+            width: '150px'
           },
           duration: {
             label: this.$t('sessions.duration'),

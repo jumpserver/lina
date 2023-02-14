@@ -93,7 +93,13 @@ export default {
   methods: {
     removeAccount(account) {
       this.accounts = this.accounts.filter((item) => {
-        return item.id !== account.id
+        if (account.id && item.id) {
+          return item.id !== account.id
+        } else if (account.username && item.username) {
+          return item.username !== account.username
+        } else {
+          return account.name !== item.name
+        }
       })
     },
     onEditClick(account) {
