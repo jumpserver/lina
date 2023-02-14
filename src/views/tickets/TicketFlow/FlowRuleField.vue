@@ -41,7 +41,9 @@ export default {
       vm: this,
       defaultRule: [
         {
-          strategy: 'super_admin',
+          strategy: {
+            value: 'super_admin'
+          },
           assignees_read_only: []
         }
       ],
