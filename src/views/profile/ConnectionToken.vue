@@ -52,7 +52,7 @@ export default {
                   name: 'Expired',
                   title: this.$t('setting.Expire'),
                   type: 'info',
-                  can: ({ row }) => !row['is_expired'],
+                  can: ({ row }) => !row['is_expired'] && this.$hasPerm('authentication.change_connectiontoken'),
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
