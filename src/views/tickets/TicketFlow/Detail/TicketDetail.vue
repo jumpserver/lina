@@ -33,7 +33,7 @@ export default {
         },
         {
           key: this.$t('tickets.ApprovalLevel'),
-          value: this.object.approval_level + 'level'
+          value: this.object.approval_level.label
         },
         {
           key: this.$t('common.CreatedBy'),
