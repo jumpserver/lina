@@ -16,7 +16,10 @@
         @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
-        <el-button size="small" @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
+        <span class="org-select">
+          <span class="label">{{ $tc('common.ImportOrg') }}：</span>
+          <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
+        </span>
         <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
         <el-button
           type="primary"
@@ -24,14 +27,17 @@
           :loading="dialogLdapUserImportAllLoginStatus"
           @click="importAllUserClick"
         >{{ $t('common.ImportAll') }}</el-button>
+        <el-button size="small" @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
       </div>
     </Dialog>
   </div>
 </template>
 
 <script>
+import store from '@/store'
 import ListTable from '@/components/ListTable'
 import Dialog from '@/components/Dialog'
+import Select2 from '@/components/FormFields/Select2'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
 import { getErrorResponseMsg } from '@/utils/common'
 
@@ -39,7 +45,8 @@ export default {
   name: 'ImportDialog',
   components: {
     ListTable,
-    Dialog
+    Dialog,
+    Select2
   },
   data() {
     return {
@@ -88,6 +95,16 @@ export default {
             width: '120px'
           }
         }
+      },
+      select2: {
+        multiple: false,
+        ajax: {
+          url: '/api/v1/orgs/orgs/',
+          transformOption: (item) => {
+            return { label: item.name, value: item.id }
+          }
+        },
+        value: store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_ID
       }
     }
   },
@@ -99,6 +116,7 @@ export default {
         selectIds.push(item.id)
       })
       const data = {
+        org_id: this.select2.value,
         username_list: selectIds
       }
       if (selectIds.length === 0) {
@@ -119,6 +137,7 @@ export default {
     importAllUserClick() {
       this.dialogLdapUserImportAllLoginStatus = true
       const data = {
+        org_id: this.select2.value,
         username_list: ['*']
       }
       importLdapUser(data).then(res => {
@@ -138,6 +157,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .org-select {
+    float: left;
+    width: 300px;
+    display: inline-block;
+    text-align: left;
+    padding-left: 14px;
+    .label {
+      font-weight:bold;
+      width: 100px!important;
+    }
+    .select2 {
+      width: 180px!important;
+    }
+  }
 
 </style>

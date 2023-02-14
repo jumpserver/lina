@@ -432,6 +432,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "ImportOrg": "Import organization",
     "About": "About",
     "PermissionCompany": "Permission company",
     "ApproverNumbers": "Approver numbers",
