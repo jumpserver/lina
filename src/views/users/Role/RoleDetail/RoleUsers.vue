@@ -8,13 +8,14 @@
       />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard ref="userRelation" v-bind="relationConfig" />
+      <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import { ListTable, RelationCard } from '@/components'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -95,6 +96,17 @@ export default {
           ]
         }
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['currentOrg', 'currentOrgIsRoot'])
+  },
+  created() {
+    try {
+      const scope = this.$route.query['scope']
+      this.relationConfig.disabled = !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) || (scope === 'org' && this.currentOrgIsRoot)
+    } finally {
+      this.loading = false
     }
   }
 }
