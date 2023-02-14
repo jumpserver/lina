@@ -431,6 +431,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "ImportOrg": "組織をインポート",
     "About": "について",
     "PermissionCompany": "授权公司",
     "ApproverNumbers": "承認者数",
