@@ -4,7 +4,11 @@
       <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
     </el-col>
     <el-col v-if="hasSummary" :md="10" :sm="24">
-      <IBox type="success" :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` ">
+      <IBox
+        v-if="object.summary.ok"
+        type="success"
+        :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` "
+      >
         <el-collapse>
           <el-collapse-item
             v-for="(item,index) in object.summary.ok"
@@ -32,6 +36,7 @@
         </el-collapse>
       </IBox>
       <IBox
+        v-if="object.summary.failures"
         type="danger"
         :title="`${$tc('ops.FailedAsset')} (${Object.keys(Object.assign(object.summary.failures,object.summary.dark)).length})` "
       >
