@@ -188,7 +188,9 @@ export default {
     hasActionPerm() {
       const approval_step = this.object.approval_step.value
       const current_user_id = this.$store.state.users.profile.id
-      return this.object.process_map[approval_step - 1].assignees.indexOf(current_user_id) !== -1
+      return this.object.process_map.filter(
+        item => item.approval_level === approval_step
+      )[0].assignees.indexOf(current_user_id) !== -1
     }
   },
   methods: {
