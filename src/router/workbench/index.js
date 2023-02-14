@@ -86,7 +86,10 @@ export default {
       meta: {
         title: i18n.t('route.JobCenter'),
         icon: 'task-center',
-        permissions: []
+        permissions: ['ops.view_job'],
+        hidden: () => {
+          return !store.getters.publicSettings['SECURITY_COMMAND_EXECUTION']
+        }
       },
       children: [
         {
