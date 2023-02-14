@@ -21,12 +21,12 @@ export default {
   },
   data() {
     const nodesInitial = []
-    if (this.$route.query['node']) {
-      nodesInitial.push(this.$route.query.node)
+    if (this.$route.query['node_id']) {
+      nodesInitial.push(this.$route.query.node_id)
     }
     const assetsInitial = []
-    if (this.$route.query['asset']) {
-      assetsInitial.push(this.$route.query.asset)
+    if (this.$route.query['asset_id']) {
+      assetsInitial.push(this.$route.query.asset_id)
     }
     return {
       initial: {

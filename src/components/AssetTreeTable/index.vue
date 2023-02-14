@@ -148,10 +148,10 @@ export default {
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node_id', nodeId)
-        url = setUrlParam(url, 'asset', '')
+        url = setUrlParam(url, 'asset_id', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
-        url = setUrlParam(url, 'node', '')
+        url = setUrlParam(url, 'node_id', '')
         url = setUrlParam(url, 'asset_id', assetId)
       } else if (treeNode.meta.type === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
