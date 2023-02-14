@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -37,13 +37,12 @@ export default {
           },
           accounts: {
             formatter: function(row) {
-              console.log('row', row)
-              return <span> { row.accounts.join(', ') } </span>
+              return <span> {row.accounts.join(', ')} </span>
             }
           },
           secret_strategy: {
             formatter: function(row) {
-              return <span> { row.secret_strategy.label } </span>
+              return <span> {row.secret_strategy.label} </span>
             }
           },
           username: {

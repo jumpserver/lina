@@ -18,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -29,14 +30,15 @@ export default {
           ansible_enabled: true
         }
       },
-      disabled: true,
       url: `/api/v1/assets/platforms/`,
+      disabled: true,
       hasReset: false,
       hasDetailInMsg: false,
       submitMethod: () => 'patch',
       fields: [['', ['automation']]],
       fieldsMeta: platformFieldsMeta(this),
       onSubmit: this.submit,
+      canSubmit: !this.object.internal,
       defaultOptions: {}
     }
   },

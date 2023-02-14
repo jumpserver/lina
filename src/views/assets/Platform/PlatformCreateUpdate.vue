@@ -1,14 +1,14 @@
 <template>
   <div v-if="!loading" class="platform-form">
     <GenericCreateUpdatePage
-      :url="url"
-      :fields="fields"
-      :initial="initial"
-      :fields-meta="fieldsMeta"
-      :has-detail-in-msg="false"
-      :clean-form-value="cleanFormValue"
       :after-get-form-value="afterGetFormValue"
       :after-get-remote-meta="handleAfterGetRemoteMeta"
+      :clean-form-value="cleanFormValue"
+      :fields="fields"
+      :fields-meta="fieldsMeta"
+      :has-detail-in-msg="false"
+      :initial="initial"
+      :url="url"
     />
   </div>
 </template>
@@ -44,8 +44,7 @@ export default {
           'name', 'category_type', 'charset', 'domain_enabled'
         ]],
         [this.$t('setting.Config'), [
-          'protocols',
-          'su_enabled', 'su_method'
+          'protocols', 'su_enabled', 'su_method'
         ]],
         [this.$t('common.Automations'), ['automation']],
         [this.$t('common.Other'), ['comment']]
@@ -133,12 +132,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-form >>> {
+.platform-form > > > {
   .el-form-item {
     .el-select:not(.prepend) {
       width: 100%;
     }
   }
+
   .el-cascader {
     width: 100%;
   }

@@ -1,7 +1,13 @@
 <template>
   <div :class="showSetting ? 'show-setting' : 'hide-setting'">
-    <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
-      <el-input v-model="item.port" :placeholder="portPlaceholder" class="input-with-select" v-bind="$attrs">
+    <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
+      <el-input
+        v-model="item.port"
+        :class="readonly ? '' : 'input-with-select'"
+        :placeholder="portPlaceholder"
+        :readonly="readonly"
+        v-bind="$attrs"
+      >
         <el-select
           slot="prepend"
           v-model="item.name"
@@ -18,7 +24,7 @@
           @click="onSettingClick(item)"
         />
       </el-input>
-      <div class="input-button" style="display: flex; margin-left: 20px">
+      <div v-if="!readonly" class="input-button" style="display: flex; margin-left: 20px">
         <el-button
           :disabled="cannotDelete(item)"
           icon="el-icon-minus"
@@ -40,7 +46,7 @@
     </div>
     <ProtocolSettingDialog
       v-if="showDialog"
-      :disabled="settingReadonly"
+      :disabled="settingReadonly || readonly"
       :item="settingItem"
       :visible.sync="showDialog"
     />
@@ -66,6 +72,10 @@ export default {
     choices: {
       type: Array,
       default: () => ([])
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     },
     settingReadonly: {
       type: Boolean,
@@ -199,6 +209,11 @@ export default {
 
 .el-select ::v-deep .el-input__inner {
   width: 110px;
+}
+
+.protocol-item {
+  display: flex;
+  margin: 5px 0;
 }
 
 .input-button {

@@ -1,5 +1,5 @@
 <template>
-  <TreeTable :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
+  <TreeTable :header-actions="headerActions" :table-config="tableConfig" :tree-setting="treeSetting" />
 </template>
 
 <script>
@@ -72,7 +72,6 @@ export default {
                   can: this.$hasPerm('accounts.add_gatheredaccount'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    console.log('row', row.id)
                     this.$axios.post(
                       `/api/v1/accounts/gathered-accounts/${row.id}/sync/`,
                     ).then(res => {
@@ -93,8 +92,7 @@ export default {
         hasExport: false,
         searchConfig: {
           exclude: ['asset'],
-          options: [
-          ]
+          options: []
         }
       }
     }

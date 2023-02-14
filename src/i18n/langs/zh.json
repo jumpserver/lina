@@ -197,6 +197,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "AuthUsername": "使用用户名认证",
     "Secure": "安全",
     "AssetBulkUpdateTips": "网络设备、云服务、web，不支持批量更新网域",
     "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",

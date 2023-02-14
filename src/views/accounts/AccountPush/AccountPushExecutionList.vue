@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -18,7 +18,6 @@ export default {
     }
   },
   data() {
-    console.log('this', this)
     return {
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
@@ -31,14 +30,14 @@ export default {
             label: this.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.asset_amount }</span>
+              return <span>{row.snapshot.asset_amount}</span>
             }
           },
           node_amount: {
             label: this.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.node_amount }</span>
+              return <span>{row.snapshot.node_amount}</span>
             }
           },
           status: {

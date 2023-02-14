@@ -25,8 +25,7 @@ export const platformFieldsMeta = (vm) => {
           component: JsonEditor,
           hidden: (formValue) => !formValue['ansible_enabled']
         },
-        gather_facts_enabled: {
-        },
+        gather_facts_enabled: {},
         ping_method: {},
         gather_facts_method: {},
         push_account_method: {},
