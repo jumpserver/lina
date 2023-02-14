@@ -26,10 +26,10 @@
               :name="key"
             >
               <CodeEditor
-                style="margin-bottom: 20px"
                 :options="cmOptions"
                 :toolbar="toolbar"
                 :value.sync="editor.value"
+                style="margin-bottom: 20px"
               />
             </el-tab-pane>
           </el-tabs>
@@ -57,7 +57,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -108,7 +109,6 @@ export default {
         showSearch: false,
         callback: {
           onSelected: function(event, treeNode) {
-            console.log(treeNode)
             if (!treeNode.isParent) {
               this.onOpenEditor(treeNode)
             }

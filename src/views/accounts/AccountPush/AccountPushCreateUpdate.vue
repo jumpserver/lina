@@ -74,7 +74,6 @@ export default {
           data.secret = data[secretType]
           delete data[secretType]
         }
-        console.log('Data: ', data)
         return data
       }
     }

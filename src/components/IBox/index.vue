@@ -3,7 +3,7 @@
     <template #header>
       <slot name="header">
         <div v-if="title" slot="header" class="clearfix ibox-title">
-          <i v-if="fa" :class="'fa ' + fa" /> {{ title }}
+          <i v-if="fa" :class="'fa ' + fa" /> <h5>{{ title }}</h5>
         </div>
       </slot>
     </template>
@@ -55,11 +55,11 @@ export default {
 
   .ibox-title h5 {
     display: inline-block;
-    font-size: 14px;
+    font-size: 13px;
     margin: 0;
     padding: 0;
     text-overflow: ellipsis;
-    float: left;
+    font-weight: 500;
   }
 
   .ibox-tools a {

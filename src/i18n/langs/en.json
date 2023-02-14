@@ -197,6 +197,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "AuthUsername": "Auth using username",
     "Secure": "Secure",
     "AssetBulkUpdateTips": "device、cloud、web，Batch update of domain is not supported",
     "LabelInputFormatValidation": "Format error, correct format is：name:value",
