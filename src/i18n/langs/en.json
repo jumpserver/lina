@@ -407,7 +407,8 @@
     "AccountDetail": "Account detail",
     "Token": "Token",
     "Category": "Category",
-    "AssetTree": "Asset tree"
+    "AssetTree": "Asset tree",
+    "SSHPort": "SSH Port"
   },
   "audits": {
     "ChangeField": "Change field",

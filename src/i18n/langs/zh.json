@@ -197,6 +197,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",
     "Secure": "安全",
     "AssetBulkUpdateTips": "网络设备、云服务、web，不支持批量更新网域",
