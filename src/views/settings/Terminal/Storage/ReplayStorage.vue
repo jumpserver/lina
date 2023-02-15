@@ -33,9 +33,12 @@ export default {
           app: 'terminal',
           resource: 'replaystorage'
         },
+        columnsExclude: ['meta'],
+        columns: [
+          'name', 'type', 'comment', 'is_default', 'actions'
+        ],
         columnsShow: {
-          min: ['name', 'type', 'actions'],
-          default: ['name', 'type', 'comment', 'is_default', 'actions']
+          min: ['name', 'type', 'actions']
         },
         columnsMeta: {
           name: {
@@ -54,9 +57,8 @@ export default {
             sortable: 'custom'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
-              onUpdate: function({ row, col }) {
+              onUpdate: function({ row }) {
                 this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})
               },
               canUpdate: function({ row }) {

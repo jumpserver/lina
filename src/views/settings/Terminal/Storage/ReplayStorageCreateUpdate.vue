@@ -1,15 +1,12 @@
 <template>
   <GenericCreateUpdatePage
     v-bind="$data"
-    :create-success-next-route="successUrl"
-    :update-success-next-route="successUrl"
-    :has-detail-in-msg="false"
   />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { STORAGE_TYPE_META_MAP } from '../../../sessions/const'
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 import { UpdateToken } from '@/components/FormFields'
 import { encryptPassword } from '@/utils/crypto'
 
@@ -19,8 +16,8 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const storageType = this.$route.query.type || 's3'
-    const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType]
+    const storageType = this.$route.query.type || { 'value': 's3' }
+    const storageTypeMeta = STORAGE_TYPE_META_MAP[[storageType.value]]
     return {
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'RelayStorage' }},
       url: `/api/v1/terminal/replay-storages/`,
@@ -36,7 +33,7 @@ export default {
         if (params.id) {
           url = `${url}${params.id}/`
         }
-        return `${url}?type=${storageType}`
+        return `${url}?type=${storageType.value}`
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
