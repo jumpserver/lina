@@ -1,7 +1,7 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :initial="initial"
+    v-bind="$data"
   />
 </template>
 
@@ -20,6 +20,7 @@ export default {
     const vm = this
     const accountProvider = this.$route.query.provider || aliyun
     const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
+
     function setFieldAttrs() {
       const fieldsObject = {}
       const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file']
@@ -30,6 +31,7 @@ export default {
       }
       return fieldsObject
     }
+
     return {
       initial: {
         attrs: {
@@ -117,7 +119,9 @@ export default {
             continue
           }
           value = value?.split(',') || []
-          value = value.filter((value, index) => { if (value) return true })
+          value = value.filter((value, index) => {
+            if (value) return true
+          })
           attrs[item] = value
         }
         return values
@@ -133,8 +137,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 
 </script>
