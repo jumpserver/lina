@@ -39,10 +39,10 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: true,
+              canUpdate: this.$hasPerm('ops.change_playbook'),
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
-              canDelete: true,
+              canDelete: this.$hasPerm('ops.delete_playbook'),
               hasClone: false
             }
           }

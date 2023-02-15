@@ -827,6 +827,9 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "StatusGreen": "Recently in good condition",
+    "StatusRed": "The last task execution failed",
+    "StatusYellow": "Recent Execution Failures",
     "RunAgain": "Run again",
     "ManualInput": "Manual input",
     "Execute": "Execute",

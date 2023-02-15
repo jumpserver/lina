@@ -26,11 +26,13 @@ export default {
       submenu: [
         {
           title: this.$t('ops.AdhocManage'),
-          name: 'Adhoc'
+          name: 'Adhoc',
+          hidden: () => !this.$hasPerm('ops.view_adhoc')
         },
         {
           title: this.$t('ops.PlaybookManage'),
-          name: 'Playbook'
+          name: 'Playbook',
+          hidden: () => !this.$hasPerm('ops.view_playbook')
         }
       ]
     }

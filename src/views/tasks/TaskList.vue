@@ -4,6 +4,7 @@
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -14,12 +15,20 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'comment', 'date_last_publish'
+          'name', 'queue', 'count', 'state', 'date_last_publish'
         ],
         columnsMeta: {
           name: {
+            formatter: DetailFormatter,
             formatterArgs: {
-              can: true
+              can: this.$hasPerm('ops.view_celerytask'),
+              router: 'TaskDetail',
+              getTitle({ col, row, cellValue }) {
+                if (row.meta && row.meta.comment) {
+                  return row.meta.comment
+                }
+                return cellValue
+              }
             }
           },
           actions: {
@@ -63,11 +72,11 @@ export default {
             formatter: (row) => {
               switch (row.state) {
                 case 'green':
-                  return <i Class='fa  fa-circle-o text-primary'/>
+                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusGreen')} placement={'bottom'}><i Class='fa  fa-circle-o text-primary'/></el-tooltip>
                 case 'yellow':
-                  return <i Class='fa fa-circle-o text-warning'/>
+                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusYellow')} placement={'bottom'}><i Class='fa  fa-circle-o text-warning'/></el-tooltip>
                 case 'red':
-                  return <i Class='fa fa-circle-o text-danger'/>
+                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusRed')} placement={'bottom'}><i Class='fa  fa-circle-o text-danger'/></el-tooltip>
               }
             }
           }
