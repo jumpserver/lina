@@ -5,23 +5,20 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-
-    <OperateLogDetailDialog
-      ref="DetailDialog"
-    />
+    <DiffDetail ref="DetailDialog" :title="this.$tc('route.OperateLog')" />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
-import OperateLogDetailDialog from './OperateLogDetail/DetailDialog'
 import { ActionsFormatter } from '@/components/TableFormatters'
+import DiffDetail from '@/components/Dialog/DiffDetail'
 
 export default {
   components: {
     GenericListPage,
-    OperateLogDetailDialog
+    DiffDetail
   },
   data() {
     const vm = this
@@ -74,8 +71,13 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true
-                    this.$refs.DetailDialog.show(row.id)
-                    vm.loading = false
+                    this.$axios.get(
+                      `api/v1/audits/operate-logs/${row.id}/?type=action_detail`
+                    ).then(res => {
+                      this.$refs.DetailDialog.show(res.diff)
+                    }).finally(() => {
+                      vm.loading = false
+                    })
                   }
                 }
               ]

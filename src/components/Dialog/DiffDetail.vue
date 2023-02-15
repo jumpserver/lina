@@ -1,10 +1,10 @@
 <template>
   <Dialog
-    v-if="logDetailVisible"
+    v-if="detailVisible"
     :show-confirm="false"
     :show-cancel="false"
-    :title="this.$tc('route.OperateLog')"
-    :visible.sync="logDetailVisible"
+    :title="title"
+    :visible.sync="detailVisible"
   >
     <div>
       <div v-if="isEmpty()" style="text-align: center">
@@ -12,24 +12,24 @@
       </div>
       <div v-else>
         <el-table
-          :data="row.diff"
+          :data="diff"
           height="500"
           style="width: 100%"
         >
           <el-table-column
             :label="this.$tc('audits.ChangeField')"
-            prop="field"
+            :prop="fieldName"
             show-overflow-tooltip
             width="100"
           />
           <el-table-column
             :label="this.$tc('audits.BeforeChange')"
-            prop="before"
+            :prop="leftKeyName"
             show-overflow-tooltip
           />
           <el-table-column
             :label="this.$tc('audits.AfterChange')"
-            prop="after"
+            :prop="rightKeyName"
             show-overflow-tooltip
           />
         </el-table>
@@ -39,34 +39,45 @@
 </template>
 
 <script>
-import { Dialog } from '@/components'
+import Dialog from '@/components/Dialog/index'
 
 export default {
-  name: 'DetailDialog',
+  name: 'DiffDetail',
   components: {
     Dialog
   },
-  props: {},
+  props: {
+    title: {
+      type: String,
+      default: () => ''
+    },
+    fieldName: {
+      type: String,
+      default: () => 'field'
+    },
+    leftKeyName: {
+      type: String,
+      default: () => 'before'
+    },
+    rightKeyName: {
+      type: String,
+      default: () => 'after'
+    }
+  },
   data() {
     return {
-      row: {
-        diff: ''
-      },
-      logDetailVisible: false
+      diff: '',
+      detailVisible: false
     }
   },
   methods: {
     isEmpty() {
-      const content = this.row.diff
+      const content = this.diff
       return !content || JSON.stringify(content) === '{}'
     },
-    show(objId) {
-      this.$axios.get(
-        `/api/v1/audits/operate-logs/${objId}/?type=action_detail`,
-      ).then(res => {
-        this.row.diff = res.diff
-        this.logDetailVisible = true
-      })
+    show(data) {
+      this.diff = data
+      this.detailVisible = true
     }
   }
 }
