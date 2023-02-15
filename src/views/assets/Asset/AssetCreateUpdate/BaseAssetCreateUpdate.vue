@@ -5,7 +5,6 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
-import { encryptPassword } from '@/utils/crypto'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -66,11 +65,6 @@ export default {
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          const accounts = values?.accounts || []
-          values.accounts = accounts.map((item) => {
-            item['secret'] = encryptPassword(item['secret'])
-            return item
-          })
 
           return values
         }
