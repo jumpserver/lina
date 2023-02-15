@@ -18,7 +18,7 @@ import AssetTreeTable from '@/components/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
-import { AssetPermissionListPageSearchConfigOptions } from '../const'
+import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
 
 export default {
   components: {
@@ -121,7 +121,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               getItem(item) {
-                return item
+                return AccountLabelMapper[item] || item
               },
               routeQuery: {
                 activeTab: 'AssetPermissionAccount'
