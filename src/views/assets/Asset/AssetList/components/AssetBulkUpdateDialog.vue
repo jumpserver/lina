@@ -26,6 +26,10 @@ export default {
     selectedRows: {
       type: Array,
       default: () => ([])
+    },
+    category: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -36,10 +40,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
         initial: {},
-        fields: [
-          'nodes', 'domain', 'labels',
-          'is_active', 'comment'
-        ],
+        fields: ['nodes', 'domain', 'labels', 'is_active', 'comment'],
         fieldsMeta: {
           nodes: {
             ...meta.nodes,
@@ -47,7 +48,8 @@ export default {
           },
           domain: {
             ...meta.domain,
-            label: this.$t('assets.Domain')
+            label: this.$t('assets.Domain'),
+            disabled: this.category === 'cloud'
           },
           labels: {
             ...meta.labels,

@@ -23,6 +23,7 @@
             :key="name"
             :checked="true"
             :label="name"
+            :disabled="value.disabled"
           >
             {{ value.label }}
           </el-checkbox>

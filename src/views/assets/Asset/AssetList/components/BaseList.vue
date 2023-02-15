@@ -228,6 +228,7 @@ export default {
       },
       updateSelectedDialogSetting: {
         visible: false,
+        category: this.category,
         selectedRows: []
       }
     }
