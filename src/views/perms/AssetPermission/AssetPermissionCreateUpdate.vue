@@ -13,6 +13,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
+import { AllAccount } from '../const'
 
 export default {
   name: 'AccountFormatter',
@@ -35,7 +36,7 @@ export default {
         date_expired: getDayFuture(36500, new Date()).toISOString(),
         nodes: nodesInitial,
         assets: assetsInitial,
-        accounts: ['@ALL']
+        accounts: [AllAccount]
       },
       fields: [
         [this.$t('common.Basic'), ['name']],

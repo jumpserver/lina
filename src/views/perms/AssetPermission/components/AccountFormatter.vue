@@ -20,6 +20,13 @@
 
 <script>
 import { TagInput } from '@/components/FormFields'
+import {
+  AllAccount,
+  SPECAccount,
+  SameUSER,
+  ManualINPUT,
+  AccountLabelMapper
+} from '@/views/perms/const'
 
 export default {
   components: {
@@ -32,29 +39,27 @@ export default {
     }
   },
   data() {
-    const ALL = '@ALL'
-    const SPEC = '@SPEC'
     const choices = [
       {
-        label: this.$t('perms.AllAccounts'),
-        value: ALL
+        label: AccountLabelMapper[AllAccount],
+        value: AllAccount
       },
       {
-        label: this.$t('perms.SpecifyAccounts'),
-        value: SPEC
+        label: AccountLabelMapper[SPECAccount],
+        value: SPECAccount
       },
       {
-        label: this.$t('perms.ManualInput'),
-        value: '@INPUT'
+        label: AccountLabelMapper[ManualINPUT],
+        value: ManualINPUT
       },
       {
-        label: this.$t('perms.SameAccount'),
-        value: '@USER'
+        label: AccountLabelMapper[SameUSER],
+        value: SameUSER
       }
     ]
     return {
-      ALL: ALL,
-      SPEC: SPEC,
+      ALL: AllAccount,
+      SPEC: SPECAccount,
       choices: choices,
       choicesSelected: [],
       defaultChoices: [this.ALL],

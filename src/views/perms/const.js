@@ -40,3 +40,15 @@ export const AssetPermissionListPageSearchConfigOptions = [
     ]
   }
 ]
+
+export const AllAccount = '@ALL'
+export const SPECAccount = '@SPEC'
+export const SameUSER = '@USER'
+export const ManualINPUT = '@INPUT'
+
+export const AccountLabelMapper = {
+  [AllAccount]: i18n.t('perms.AllAccounts'),
+  [SPECAccount]: i18n.t('perms.SpecifyAccounts'),
+  [SameUSER]: i18n.t('perms.SameAccount'),
+  [ManualINPUT]: i18n.t('perms.ManualInput')
+}
