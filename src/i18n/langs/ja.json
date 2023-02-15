@@ -407,7 +407,8 @@
     "GatewayList": "ゲートウェイ一覧",
     "InitialDeploy": "初期展開",
     "PrivateKey": "鍵",
-    "Category": "カテゴリー"
+    "Category": "カテゴリー",
+    "SSHPort": "SSH ポート"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
