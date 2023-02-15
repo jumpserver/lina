@@ -13,23 +13,21 @@
         />
       </el-col>
     </el-row>
-    <OperateLogDetailDialog
-      ref="DetailDialog"
-    />
+    <DiffDetail ref="DetailDialog" :title="this.$tc('route.OperateLog')" />
   </div>
 </template>
 
 <script>
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
-import OperateLogDetailDialog from './DetailDialog'
+import DiffDetail from '@/components/Dialog/DiffDetail'
 
 export default {
   name: 'Detail',
   components: {
     QuickActions,
     AutoDetailCard,
-    OperateLogDetailDialog
+    DiffDetail
   },
   props: {
     object: {
@@ -53,7 +51,11 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$refs.DetailDialog.show(this.object.id)
+              this.$axios.get(
+                `api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
+              ).then(res => {
+                this.$refs.DetailDialog.show(res.diff)
+              })
             }.bind(this)
           }
         }

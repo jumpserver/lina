@@ -5,11 +5,32 @@ export default [
   {
     path: 'login-logs',
     name: 'LoginLog',
-    component: () => import('@/views/audits/LoginLogList'),
+    component: empty,
     meta: {
       title: i18n.t('route.LoginLog'),
       permissions: ['audits.view_userloginlog']
-    }
+    },
+    children: [
+      {
+        path: '',
+        name: 'LoginLogList',
+        component: () => import('@/views/audits/LoginLog/LoginLogList'),
+        meta: {
+          title: i18n.t('route.LoginLog'),
+          permissions: ['audits.view_userloginlog']
+        }
+      },
+      {
+        path: ':id',
+        name: 'LoginLogDetail',
+        component: () => import('@/views/audits/LoginLog/LoginLogDetail/index'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.LoginLog'),
+          permissions: ['audits.view_userloginlog']
+        }
+      }
+    ]
   },
   {
     path: 'operate-logs',
