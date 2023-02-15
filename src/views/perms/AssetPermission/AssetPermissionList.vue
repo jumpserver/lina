@@ -158,42 +158,6 @@ export default {
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions
-          // options: [
-          //   { label: this.$t('common.Name'), value: 'name' },
-          //   { label: this.$t('common.Username'), value: 'username' },
-          //   { label: this.$t('perms.UserGroups'), value: 'user_group' },
-          //   { label: this.$t('perms.AssetName'), value: 'asset_name' },
-          //   { label: this.$t('assets.AssetAddress'), value: 'ip' },
-          //   { label: this.$t('perms.Account'), value: 'accounts' },
-          //   {
-          //     label: this.$t('perms.NodeSearchStrategy'), value: 'all',
-          //     children: [
-          //       { value: '0', label: this.$t('perms.OnlySearchCurrentNodePerm') },
-          //       { value: '1', label: this.$t('perms.SearchAncestorNodePerm') }
-          //     ]
-          //   },
-          //   {
-          //     label: this.$t('perms.isValid'), value: 'is_valid',
-          //     children: [
-          //       { value: '1', label: this.$t('common.Yes') },
-          //       { value: '0', label: this.$t('common.No') }
-          //     ]
-          //   },
-          //   {
-          //     label: this.$t('perms.isEffective'), value: 'is_effective',
-          //     children: [
-          //       { value: '1', label: this.$t('common.Yes') },
-          //       { value: '0', label: this.$t('common.No') }
-          //     ]
-          //   },
-          //   {
-          //     label: this.$t('perms.fromTicket'), value: 'from_ticket',
-          //     children: [
-          //       { value: '1', label: this.$t('common.Yes') },
-          //       { value: '0', label: this.$t('common.No') }
-          //     ]
-          //   }
-          // ]
         },
         hasBulkUpdate: true,
         handleBulkUpdate: ({ selectedRows }) => {
