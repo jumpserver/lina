@@ -80,17 +80,16 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: true,
+              canUpdate: this.$hasPerm('ops.change_job'),
               updateRoute: 'JobUpdate',
               hasDelete: true,
-              canDelete: true,
+              canDelete: this.$hasPerm('ops.delete_job'),
               hasClone: false,
               extraActions: [
                 {
                   title: this.$t('ops.Run'),
                   name: 'run',
-                  type: 'running',
-                  can: true,
+                  can: this.$hasPerm('ops.add_jobexecution'),
                   callback: ({ row }) => {
                     const params = JSON.parse(row.parameters_define)
                     if (Object.keys(params).length > 0) {

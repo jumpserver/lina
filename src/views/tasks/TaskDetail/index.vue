@@ -1,7 +1,13 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :title="getTitle"
+    :object.sync="taskDetail"
+    :active-menu.sync="config.activeMenu"
+    v-bind="config"
+    v-on="$listeners"
+  >
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="taskDetail" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -22,7 +28,7 @@ export default {
   },
   data() {
     return {
-      TaskDetail: {},
+      taskDetail: {},
       config: {
         url: '/api/v1/ops/tasks',
         activeMenu: 'TaskDetail',
@@ -33,12 +39,18 @@ export default {
           },
           {
             title: this.$t('ops.execution'),
-            name: 'TaskHistory'
+            name: 'TaskHistory',
+            hidden: () => !this.$hasPerm('ops.view_celerytaskexecution')
           }
         ],
         hasRightSide: false,
         hasActivity: false
       }
+    }
+  },
+  computed: {
+    getTitle() {
+      return this.taskDetail.meta && this.taskDetail.meta.comment ? this.taskDetail.meta.comment : this.taskDetail.name
     }
   }
 }

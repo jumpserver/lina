@@ -822,6 +822,9 @@
     "Weekly": "按周"
   },
   "ops": {
+    "StatusGreen": "近期状态良好",
+    "StatusRed": "上一次任务执行失败",
+    "StatusYellow": "近期存在在执行失败",
     "RunAgain": "再次执行",
     "AdhocUpdate": "更新命令",
     "Add": "新增",

@@ -53,11 +53,6 @@ export default {
           }
         },
         comment: {
-          on: {
-            change: (val) => {
-              console.log(val)
-            }
-          },
           hidden: () => {
             return this.instantTask
           }

@@ -826,6 +826,9 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "StatusGreen": "最近調子がいい\n",
+    "StatusRed": "最後のタスクの実行に失敗しました",
+    "StatusYellow": "最近の存在の実行に失敗しました",
     "RunAgain": "再実行",
     "ManualInput": "手動入力",
     "Execute": "実行",

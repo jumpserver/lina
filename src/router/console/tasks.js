@@ -8,21 +8,27 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.TaskList'),
-      permissions: ['ops.view_celerytask', 'ops.view_taskmonitor']
+      permissions: ['ops.view_celerytask | ops.view_taskmonitor']
     },
     children: [
       {
         path: '',
         name: 'TaskList',
         component: () => import('@/views/tasks/TaskList'),
-        meta: { title: i18n.t('route.TaskList'), permissions: ['ops.view_celerytask'] }
+        meta: {
+          title: i18n.t('route.TaskList'),
+          permissions: ['ops.view_celerytask']
+        }
       },
       {
         path: ':id',
         component: () => import('@/views/tasks/TaskDetail'),
         name: 'TaskDetail',
         hidden: true,
-        meta: { title: i18n.t('route.TaskDetail'), permissions: ['ops.view_celerytask'] }
+        meta: {
+          title: i18n.t('route.TaskDetail'),
+          permissions: ['ops.view_celerytask']
+        }
       }
     ]
   },
@@ -30,6 +36,9 @@ export default [
     path: `${BASE_URL}/core/flower/?_=${Date.now()}`,
     name: 'TaskMonitor',
     // component: () => window.open(`/core/flower?_=${Date.now()}`),
-    meta: { title: i18n.t('route.TaskMonitor'), permissions: ['ops.view_taskmonitor'] }
+    meta: {
+      title: i18n.t('route.TaskMonitor'),
+      permissions: ['ops.view_taskmonitor']
+    }
   }
 ]

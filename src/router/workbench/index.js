@@ -86,7 +86,7 @@ export default {
       meta: {
         title: i18n.t('route.JobCenter'),
         icon: 'task-center',
-        permissions: ['ops.view_job'],
+        permissions: [],
         hidden: () => {
           return !store.getters.publicSettings['SECURITY_COMMAND_EXECUTION']
         }
@@ -98,7 +98,7 @@ export default {
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('ops.QuickJob'),
-            permissions: ['ops.view_job', 'ops.add_job']
+            permissions: ['ops.view_job', 'ops.add_job', 'ops.add_jobexecution']
           }
         },
         {
@@ -161,7 +161,7 @@ export default {
           component: () => import('@/views/ops/Template'),
           meta: {
             title: i18n.t('route.Template'),
-            permissions: ['ops.view_adhoc', 'ops.view_playbook']
+            permissions: ['ops.view_adhoc|ops.view_playbook']
           }
         },
         {
