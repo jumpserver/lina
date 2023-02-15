@@ -13,6 +13,7 @@ import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
+import { RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -71,9 +72,7 @@ export default {
           }
         },
         name: {
-          rules: [
-            { required: true }
-          ],
+          rules: [RequiredChange],
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {
