@@ -45,17 +45,22 @@ export default {
         columns: [
           'instance_id',
           {
-            prop: 'asset_display',
-            label: this.$t('xpack.Asset')
-          },
-          {
-            prop: 'asset_ip',
+            prop: 'asset',
             label: this.$t('xpack.ip')
           },
           'region',
           {
-            prop: 'status_display',
-            label: this.$t('xpack.Cloud.Status')
+            prop: 'status',
+            label: this.$t('xpack.Cloud.Status'),
+            formatter: row => {
+              const status = {
+                0: this.$t('xpack.Cloud.UnSyncCount'),
+                1: this.$t('xpack.Cloud.SyncedCount'),
+                2: this.$t('xpack.Cloud.NewSyncCount'),
+                3: this.$t('xpack.Cloud.ReleasedCount')
+              }
+              return <el-tag type='primary' size='mini'>{status[row.status]}</el-tag>
+            }
           },
           {
             prop: 'date_sync',

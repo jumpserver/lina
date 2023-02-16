@@ -1854,6 +1854,7 @@
       "NewCount": "新增",
       "UnSyncCount": "未同步",
       "SyncedCount": "已同步",
+      "NewSyncCount": "新同步",
       "ReleasedCount": "已释放",
       "DateSync": "同步日期",
       "Status": "状态",

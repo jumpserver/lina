@@ -40,7 +40,7 @@ export default {
           account: {
             label: this.$t('xpack.Cloud.Account'),
             formatter: function(row) {
-              return <span>{ row.account.name }</span>
+              return <span>{ row.account?.name }</span>
             }
           },
           periodic_display: {

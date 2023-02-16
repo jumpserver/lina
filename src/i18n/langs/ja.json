@@ -1932,6 +1932,7 @@
       "False": "いいえ",
       "NewCount": "新規追加",
       "UnSyncCount": "同期されていない",
+      "NewSyncCount": "新しい同期",
       "SyncedCount": "同期済み",
       "ReleasedCount": "リリース済",
       "DateSync": "同期日",

@@ -1936,6 +1936,7 @@
       "False": "False",
       "NewCount": "New count",
       "UnSyncCount": "Unsync count",
+      "NewSyncCount": "New synced count",
       "SyncedCount": "Synced count",
       "ReleasedCount": "Released count",
       "DateSync": "Date sync",
