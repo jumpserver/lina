@@ -64,13 +64,12 @@ export default {
             width: '100px'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
               },
               onUpdate: function({ row }) {
-                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
+                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
