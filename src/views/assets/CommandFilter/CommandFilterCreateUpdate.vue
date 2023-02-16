@@ -74,7 +74,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s,redis,mongodb,clickhouse`,
+              url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s,redis,mongodb,clickhouse_tcp`,
               transformOption: (item) => {
                 if (this.$route.query.type === 'k8s') {
                   return { label: item.name, value: item.id }

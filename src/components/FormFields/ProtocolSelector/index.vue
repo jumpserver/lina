@@ -208,7 +208,7 @@ export default {
 }
 
 .el-select ::v-deep .el-input__inner {
-  width: 110px;
+  width: 200px;
 }
 
 .protocol-item {
