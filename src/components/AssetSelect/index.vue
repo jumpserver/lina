@@ -14,8 +14,9 @@
       :value="value"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
-      :base-url="baseUrl"
       :tree-url-query="treeUrlQuery"
+      :base-url="baseUrl"
+      :base-node-url="baseNodeUrl"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"
@@ -26,6 +27,7 @@
 <script>
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelectDialog from './dialog.vue'
+import { b } from 'css-color-function/lib/adjusters'
 
 export default {
   componentName: 'AssetSelect',
@@ -34,6 +36,10 @@ export default {
     baseUrl: {
       type: String,
       default: '/api/v1/assets/assets/'
+    },
+    baseNodeUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/'
     },
     treeUrlQuery: {
       type: Object,
@@ -70,6 +76,7 @@ export default {
     }
   },
   methods: {
+    b,
     handleFocus() {
       this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
@@ -110,7 +117,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .el-select {
   width: 100%;
 }
