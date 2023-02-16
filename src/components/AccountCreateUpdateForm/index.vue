@@ -88,6 +88,9 @@ export default {
           }
         },
         username: {
+          el: {
+            disabled: !!this.account?.name
+          },
           on: {
             input: ([value], updateForm) => {
               this.usernameChanged = true
