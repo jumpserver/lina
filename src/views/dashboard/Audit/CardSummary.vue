@@ -48,7 +48,7 @@ export default {
         {
           title: this.$t('dashboard.LoginNum'),
           body: {
-            route: { name: `LoginLog` },
+            route: { name: `LoginLogList` },
             count: this.data.total_count_user_login_logs,
             disabled: !this.$hasPerm('audits.view_userloginlog')
           }
@@ -56,7 +56,7 @@ export default {
         {
           title: this.$t('dashboard.OperationLogNum'),
           body: {
-            route: { name: `OperateLog` },
+            route: { name: `OperateLogList` },
             count: this.data.total_count_operate_logs,
             disabled: !this.$hasPerm('audits.view_operatelog')
           }
