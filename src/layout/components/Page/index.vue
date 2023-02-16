@@ -1,7 +1,10 @@
 <template>
   <div class="page">
     <PageHeading v-if="iTitle || helpMessage" class="disabled-when-print">
-      <slot name="title">{{ iTitle }}</slot>
+      <slot name="title">
+        <el-button :disabled="gobackDisabled" class="go-back" icon="el-icon-back" @click="handleGoBack" />
+        <span style="padding-left: 10px">{{ iTitle }}</span>
+      </slot>
       <template #rightSide>
         <slot name="headingRightSide" />
       </template>
@@ -18,6 +21,7 @@
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
+
 export default {
   name: 'Page',
   components: {
@@ -32,11 +36,25 @@ export default {
     helpMessage: {
       type: String,
       default: ''
+    },
+    goBack: {
+      type: Function,
+      default: function(obj) {
+        return this.$router.back()
+      }
     }
   },
   computed: {
     iTitle() {
       return this.title || this.$route.meta.title
+    },
+    gobackDisabled() {
+      return window.history.length <= 2
+    }
+  },
+  methods: {
+    handleGoBack() {
+      this.goBack.bind(this)()
     }
   }
 }
@@ -48,18 +66,32 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.go-back {
+  border: none;
+  padding: 2px 2px;
+}
+
+.go-back >>> i {
+  font-size: 18px;
+  font-weight: 600;
+}
+
 @media print {
-  .disabled-when-print{
+  .disabled-when-print {
     display: none;
   }
-  .enabled-when-print{
+
+  .enabled-when-print {
     display: inherit !important;
   }
-  .print-margin{
+
+  .print-margin {
     margin-top: 10px;
   }
+
   .announcement-main {
-    word-wrap:break-word;
+    word-wrap: break-word;
     white-space: pre-wrap;
   }
 }

@@ -1,12 +1,5 @@
 <template>
   <TabPage v-if="!loading" :active-menu.sync="iActiveMenu" :submenu="iSubmenu" @tab-click="handleTabClick">
-    <template #title>
-      <slot name="title">
-        <el-button class="go-back" icon="el-icon-back" @click="handleGoBack" />
-        <span style="padding-left: 10px">{{ iTitle }}</span>
-      </slot>
-    </template>
-
     <template #headingRightSide>
       <span v-if="hasRightSide">
         <ActionsGroup slot="headingRightSide" :actions="pageActions" />
@@ -91,13 +84,8 @@ export default {
         }
         return title
       }
-    },
-    goBack: {
-      type: Function,
-      default: function(obj) {
-        return this.$router.back()
-      }
     }
+
   },
   data() {
     const vm = this

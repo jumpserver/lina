@@ -1,8 +1,5 @@
 <template>
   <Page>
-    <template #title>
-      <slot name="title" />
-    </template>
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
@@ -18,19 +15,19 @@
         <template v-for="item in tabIndices">
           <el-tab-pane
             :key="item.name"
+            :disabled="item.disabled"
             :label-content="item.labelContent"
             :name="item.name"
-            :disabled="item.disabled"
           >
             <span slot="label">
-              <i v-if="item.icon" class="fa " :class="item.icon" />
+              <i v-if="item.icon" :class="item.icon" class="fa " />
               {{ item.title }}
-              <slot name="badge" :tab="item.name" />
+              <slot :tab="item.name" name="badge" />
             </span>
           </el-tab-pane>
         </template>
       </el-tabs>
-      <transition name="fade-transform" mode="out-in" appear>
+      <transition appear mode="out-in" name="fade-transform">
         <slot>
           <keep-alive>
             <component :is="computeActiveComponent" />
@@ -134,7 +131,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.page-submenu >>> .el-tabs__header {
+.page-submenu > > > .el-tabs__header {
   background-color: white;
   margin-left: -25px;
   padding-left: 25px;
@@ -151,7 +148,7 @@ export default {
 
 }
 
-.page-submenu >>> .el-tabs__nav-wrap {
+.page-submenu > > > .el-tabs__nav-wrap {
   position: static;
 }
 </style>

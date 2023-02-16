@@ -1,12 +1,13 @@
 <template>
   <Dialog
     v-if="showColumnSettingPopover"
+    :cancel-title="$tc('common.RestoreDefault')"
+    :destroy-on-close="true"
     :title="$tc('common.CustomCol')"
     :visible.sync="showColumnSettingPopover"
-    :destroy-on-close="true"
-    :show-cancel="false"
-    width="50%"
     top="10%"
+    width="50%"
+    @cancel="restoreDefault()"
     @confirm="handleColumnConfirm()"
   >
     <el-alert type="success">
@@ -23,8 +24,8 @@
           style="margin-top:5px;"
         >
           <el-checkbox
-            :label="item.prop"
             :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
+            :label="item.prop"
           >
             {{ item.label }}
           </el-checkbox>
@@ -78,6 +79,10 @@ export default {
     handleColumnConfirm() {
       this.showColumnSettingPopover = false
       this.$emit('columnsUpdate', { columns: this.iCurrentColumns, url: this.url })
+    },
+    restoreDefault() {
+      this.showColumnSettingPopover = false
+      this.$emit('columnsUpdate', { columns: null, url: this.url })
     }
   }
 }

@@ -364,6 +364,9 @@ export default {
     },
     handlePopoverColumnsChange({ columns, url }) {
       this.$log.debug('Columns change: ', columns)
+      if (columns === null) {
+        columns = this.cleanedColumnsShow.default
+      }
       this.popoverColumns.currentCols = columns
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
