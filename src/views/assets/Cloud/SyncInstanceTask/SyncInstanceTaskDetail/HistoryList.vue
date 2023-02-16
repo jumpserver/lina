@@ -23,7 +23,10 @@ export default {
         hasBulkDelete: false,
         hasImport: false,
         hasExport: false,
-        hasSearch: true
+        hasSearch: true,
+        searchConfig: {
+          getUrlQuery: false
+        }
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/history/`,
