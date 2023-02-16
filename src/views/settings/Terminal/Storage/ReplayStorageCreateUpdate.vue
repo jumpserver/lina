@@ -16,8 +16,8 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const storageType = this.$route.query.type || { 'value': 's3' }
-    const storageTypeMeta = STORAGE_TYPE_META_MAP[[storageType.value]]
+    const storageType = this.$route.query.type || 's3'
+    const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType] || {}
     return {
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'RelayStorage' }},
       url: `/api/v1/terminal/replay-storages/`,
@@ -33,7 +33,7 @@ export default {
         if (params.id) {
           url = `${url}${params.id}/`
         }
-        return `${url}?type=${storageType.value}`
+        return `${url}?type=${storageType}`
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
