@@ -48,8 +48,15 @@ export default {
             label: this.$t('xpack.Cloud.ReleasedCount')
           },
           {
-            prop: 'status_display',
-            label: this.$t('xpack.Cloud.Status')
+            prop: 'status',
+            label: this.$t('xpack.Cloud.Status'),
+            formatter: row => {
+              if (row.status === 1) {
+                return <el-tag type='primary' size='mini'>{this.$t('common.Success')}</el-tag>
+              } else {
+                return <el-tag type='danger' size='mini'>{this.$t('common.Failed')}</el-tag>
+              }
+            }
           },
           {
             prop: 'date_sync',
