@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page :help-message="helpText">
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>
@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { IBox, CronTab } from '@/components'
-import { Page, GenericCreateUpdateForm } from '@/layout/components'
+import { CronTab, IBox } from '@/components'
+import { GenericCreateUpdateForm, Page } from '@/layout/components'
 
 export default {
   name: 'Senior',
@@ -21,6 +21,7 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=clean',
       hasDetailInMsg: false,
+      helpText: this.$t('setting.CleanHelpText'),
       fields: [
         [
           this.$t('common.Logging'),

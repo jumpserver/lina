@@ -27,6 +27,7 @@
           </el-tab-pane>
         </template>
       </el-tabs>
+
       <transition appear mode="out-in" name="fade-transform">
         <slot>
           <keep-alive>
