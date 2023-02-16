@@ -67,7 +67,9 @@ export default {
   data() {
     return {
       status: { open: 2, close: 3 },
-      process_map: this.object.process_map || [],
+      process_map: this.object.process_map.sort(
+        (a, b) => { return a.approval_level - b.approval_level }
+      ) || [],
       vm: this,
       statusMap: STATE_MAP
     }
