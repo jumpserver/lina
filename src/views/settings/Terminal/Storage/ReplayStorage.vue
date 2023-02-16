@@ -59,7 +59,7 @@ export default {
           actions: {
             formatterArgs: {
               onUpdate: function({ row }) {
-                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})
+                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canUpdate: function({ row }) {
                 return (
