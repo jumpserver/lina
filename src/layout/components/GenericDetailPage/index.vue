@@ -1,5 +1,11 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="iActiveMenu" :submenu="iSubmenu" @tab-click="handleTabClick">
+  <TabPage
+    v-if="!loading"
+    :active-menu.sync="iActiveMenu"
+    :submenu="iSubmenu"
+    :title="iTitle"
+    @tab-click="handleTabClick"
+  >
     <template #headingRightSide>
       <span v-if="hasRightSide">
         <ActionsGroup slot="headingRightSide" :actions="pageActions" />
@@ -85,7 +91,6 @@ export default {
         return title
       }
     }
-
   },
   data() {
     const vm = this
@@ -241,9 +246,6 @@ export default {
       this.$emit('tab-click', tab, this.iActiveMenu)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
-    },
-    handleGoBack() {
-      return this.goBack.bind(this)(this.object)
     }
   }
 }
@@ -263,15 +265,5 @@ export default {
 
   .page-submenu >>> .el-tabs__nav-wrap {
     position: static;
-  }
-
-  .go-back {
-    border: none;
-    padding: 2px 2px;
-  }
-
-  .go-back >>> i {
-    font-size: 18px;
-    font-weight: 600;
   }
 </style>

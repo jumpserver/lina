@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>

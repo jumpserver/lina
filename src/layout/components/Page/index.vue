@@ -1,8 +1,8 @@
 <template>
   <div class="page">
     <PageHeading v-if="iTitle || helpMessage" class="disabled-when-print">
+      <el-button :disabled="gobackDisabled" class="go-back" icon="el-icon-back" @click="handleGoBack" />
       <slot name="title">
-        <el-button :disabled="gobackDisabled" class="go-back" icon="el-icon-back" @click="handleGoBack" />
         <span style="padding-left: 10px">{{ iTitle }}</span>
       </slot>
       <template #rightSide>
@@ -49,6 +49,9 @@ export default {
       return this.title || this.$route.meta.title
     },
     gobackDisabled() {
+      if (this.$route.path.endsWith('dashboard')) {
+        return true
+      }
       return window.history.length <= 2
     }
   },
