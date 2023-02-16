@@ -51,12 +51,6 @@ export default {
       url: '/api/v1/accounts/accounts/',
       form: this.account || {},
       encryptedFields: ['secret'],
-      cleanFormValue(data) {
-        if (!data['secret']) {
-          delete data['secret']
-        }
-        return data
-      },
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
@@ -241,6 +235,9 @@ export default {
         delete form[secretType]
       }
       form.secret = encryptPassword(form.secret)
+      if (!form.secret) {
+        delete form['secret']
+      }
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {
