@@ -17,6 +17,9 @@ export default {
   data() {
     return {
       url: '/api/v1/terminal/endpoint-rules/',
+      initial: {
+        ip_group: '*'
+      },
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' }},
       fields: [
         [this.$t('common.Basic'), ['name', 'ip_group', 'endpoint', 'priority']],
@@ -44,7 +47,7 @@ export default {
         return value
       },
       afterGetFormValue(formValue) {
-        formValue.ip_group = formValue.ip_group.toString()
+        formValue.ip_group = formValue.ip_group?.toString()
         return formValue
       }
     }
