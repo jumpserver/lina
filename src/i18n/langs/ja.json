@@ -761,6 +761,9 @@
     "Filename": "ファイル名"
   },
   "dashboard": {
+    "TotalJobLog": "ジョブ実行総数",
+    "TotalJobRunning": "実行中のジョブ数",
+    "TotalJobFailed": "実行失敗ジョブ数",
     "ActiveAsset": "最近ログインされました",
     "ActiveUser": "最近ログインしました",
     "ActiveUserAssetsRatioTitle": "占有率統計",
