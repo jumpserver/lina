@@ -235,6 +235,9 @@ export default {
         delete form[secretType]
       }
       form.secret = encryptPassword(form.secret)
+      if (!form.secret) {
+        delete form['secret']
+      }
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {
