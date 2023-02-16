@@ -757,6 +757,9 @@
     }
   },
   "dashboard": {
+    "TotalJobLog": "作业执行总数",
+    "TotalJobRunning": "运行中作业数",
+    "TotalJobFailed": "执行失败作业数",
     "ActiveAsset": "近期被登录过",
     "ActiveUser": "近期登录过",
     "ActiveUserAssetsRatioTitle": "占比统计",
