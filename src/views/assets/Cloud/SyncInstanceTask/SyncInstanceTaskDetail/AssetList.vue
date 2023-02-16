@@ -26,6 +26,9 @@ export default {
         hasCreate: false,
         moreActionsTitle: this.$t('common.MoreActions'),
         moreActionsType: 'primary',
+        searchConfig: {
+          getUrlQuery: false
+        },
         extraMoreActions: [
           {
             name: this.$t('xpack.Cloud.DeleteReleasedAssets'),
