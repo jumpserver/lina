@@ -40,7 +40,14 @@
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
         <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
-          <el-button type="text" @click="onShowPasswordHistory">{{ secretInfo.version }}</el-button>
+          <el-button
+            v-perms="'accounts.view_historyaccountsecret'"
+            type="text"
+            @click="onShowPasswordHistory"
+          >
+            {{ secretInfo.version }}
+          </el-button>
+
         </el-form-item>
       </el-form>
     </Dialog>
