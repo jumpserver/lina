@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    :show-cancel="false"
     :title="$tc('ops.UploadPlaybook')"
     v-bind="$attrs"
-    :show-cancel="false"
     @confirm="onSubmit"
     v-on="$listeners"
   >
@@ -13,14 +13,14 @@
       >
         <el-upload
           ref="upload"
-          drag
-          action="string"
-          list-type="text/csv"
-          :limit="1"
           :auto-upload="false"
-          :on-change="onFileChange"
           :before-upload="beforeUpload"
+          :limit="1"
+          :on-change="onFileChange"
           accept=".zip"
+          action="string"
+          drag
+          list-type="text/csv"
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">
@@ -88,7 +88,7 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  > > > .el-upload {
+  >>> .el-upload {
     width: 100%;
 
     .el-upload-dragger {
