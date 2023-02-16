@@ -15,6 +15,9 @@
       v-bind="$attrs"
       :header-actions="headerActions"
       :table-config="tableConfig"
+      :url="baseUrl"
+      :node-url="baseNodeUrl"
+      :tree-url="`${baseNodeUrl}/children/tree/`"
       class="tree-table"
     />
   </Dialog>
@@ -31,6 +34,10 @@ export default {
     baseUrl: {
       type: String,
       default: '/api/v1/assets/assets/'
+    },
+    baseNodeUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/'
     },
     value: {
       type: Array,
@@ -144,7 +151,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .page ::v-deep .page-heading {
   display: none;
 }
@@ -184,6 +191,7 @@ export default {
 .page ::v-deep .treebox {
   height: inherit !important;
 }
+
 .asset-select-dialog ::v-deep .el-icon-circle-check {
   display: none;
 }
