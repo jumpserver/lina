@@ -33,7 +33,7 @@ export default {
         tip: this.$t('dashboard.SessionData')
       },
       data: {
-        total_count_login_users: 0,
+        total_count_user_login_logs: 0,
         total_count_operate_logs: 0,
         total_count_change_password_logs: 0,
         total_count_online_sessions: 0,
@@ -49,7 +49,7 @@ export default {
           title: this.$t('dashboard.LoginNum'),
           body: {
             route: { name: `LoginLog` },
-            count: this.data.total_count_login_users,
+            count: this.data.total_count_user_login_logs,
             disabled: !this.$hasPerm('audits.view_userloginlog')
           }
         },
@@ -111,7 +111,7 @@ export default {
   methods: {
     async getData() {
       this.data = await this.$axios.get(`/api/v1/index/?days=${this.days}
-        &total_count_login_users=1
+        &total_count_user_login_logs=1
         &total_count_operate_logs=1
         &total_count_change_password_logs=1
         &total_count_online_sessions=1
