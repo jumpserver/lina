@@ -51,6 +51,12 @@ export default {
       url: '/api/v1/accounts/accounts/',
       form: this.account || {},
       encryptedFields: ['secret'],
+      cleanFormValue(data) {
+        if (!data['secret']) {
+          delete data['secret']
+        }
+        return data
+      },
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
