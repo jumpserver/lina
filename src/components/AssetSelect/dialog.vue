@@ -17,7 +17,7 @@
       :table-config="tableConfig"
       :url="baseUrl"
       :node-url="baseNodeUrl"
-      :tree-url="`${baseNodeUrl}/children/tree/`"
+      :tree-url="`${baseNodeUrl}children/tree/`"
       class="tree-table"
     />
   </Dialog>
