@@ -3,9 +3,9 @@
     <el-tabs
       v-if="tabIndices.length > 0"
       v-model="iActiveMenu"
+      :class="{ 'only-submenu': tabIndices.length === 1}"
       class="page-submenu"
       stretch
-      :class="{ 'only-submenu': tabIndices.length === 1}"
       @tab-click="handleTabClick"
     >
       <template v-for="item in tabIndices">
@@ -183,7 +183,7 @@ export default {
   position: static;
 
   .el-tabs__item.is-active {
-    color:  var(--color-primary);
+    color:  var(--menu-text-active);
   }
 }
 .only-submenu  {

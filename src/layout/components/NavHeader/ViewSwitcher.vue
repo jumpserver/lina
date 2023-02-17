@@ -203,8 +203,8 @@ export default {
 
 .el-menu-item.is-active {
   font-weight: bold;
-  color: var(--color-primary);
-  border-left: 4px solid var(--color-primary);
+  color: var(--menu-text-active);
+  border-left: 4px solid var(--menu-text-active);
 }
 
 .menu-main.mobile-view-switch > > > .el-submenu__icon-arrow {
