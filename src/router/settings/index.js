@@ -93,7 +93,7 @@ export default {
         {
           path: ':id',
           name: 'TerminalDetail',
-          component: () => import('@/views/settings/Terminal/Component/TerminalDetail'),
+          component: () => import('@/views/settings/Terminal/Component/TerminalDetail/index'),
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.view_terminal']
