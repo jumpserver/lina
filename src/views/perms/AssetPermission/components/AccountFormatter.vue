@@ -88,13 +88,13 @@ export default {
       if (item.value === this.SPEC) {
         this.showSpecAccounts = checked
       } else if (item.value === this.ALL) {
-        this.showSpecAccounts = !checked
+        this.showSpecAccounts = checked ? false : checked
       }
-
-      if (this.showSpecAccounts) {
-        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
-      } else {
+      if (item.value === this.ALL) {
         this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
+      }
+      if (item.value === this.SPEC) {
+        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
       }
       this.outputValue()
     },
