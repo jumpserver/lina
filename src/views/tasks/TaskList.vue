@@ -4,7 +4,8 @@
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { BASE_URL } from '@/utils/common'
 
 export default {
   components: {
@@ -23,7 +24,7 @@ export default {
             formatterArgs: {
               can: this.$hasPerm('ops.view_celerytask'),
               router: 'TaskDetail',
-              getTitle({ col, row, cellValue }) {
+              getTitle({ row, cellValue }) {
                 if (row.meta && row.meta.comment) {
                   return row.meta.comment
                 }
@@ -69,22 +70,44 @@ export default {
             label: this.$t('ops.State'),
             width: '60px',
             align: 'center',
-            formatter: (row) => {
-              switch (row.state) {
-                case 'green':
-                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusGreen')} placement={'bottom'}><i Class='fa  fa-circle-o text-primary'/></el-tooltip>
-                case 'yellow':
-                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusYellow')} placement={'bottom'}><i Class='fa  fa-circle-o text-warning'/></el-tooltip>
-                case 'red':
-                  return <el-tooltip effect={'dark'} content={this.$tc('ops.StatusRed')} placement={'bottom'}><i Class='fa  fa-circle-o text-danger'/></el-tooltip>
+            formatter: ChoicesFormatter,
+            formatterArgs: {
+              getIcon() {
+                return 'fa-circle-o'
+              },
+              classChoices: {
+                green: 'text-primary',
+                yellow: 'text-warning',
+                red: 'text-danger'
+              },
+              showText: false,
+              hasTips: true,
+              getTips: ({ cellValue }) => {
+                switch (cellValue) {
+                  case 'green':
+                    return this.$t('ops.StatusGreen')
+                  case 'yellow':
+                    return this.$t('ops.StatusYellow')
+                  default:
+                    return this.$t('ops.StatusRed')
+                }
               }
             }
           }
         }
       },
       headerActions: {
-        hasRightActions: false,
-        hasLeftActions: false
+        hasCreate: false,
+        hasMoreActions: false,
+        extraActions: [
+          {
+            title: this.$t('route.TaskMonitor'),
+            type: 'primary',
+            callback: () => {
+              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
+            }
+          }
+        ]
       }
     }
   },

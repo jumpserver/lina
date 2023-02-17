@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { IBox, CronTab } from '@/components'
-import { Page, GenericCreateUpdateForm } from '@/layout/components'
+import { CronTab, IBox } from '@/components'
+import { GenericCreateUpdateForm, Page } from '@/layout/components'
 
 export default {
   name: 'Senior',
@@ -35,12 +35,6 @@ export default {
           this.$t('setting.OTP'),
           [
             'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
-          ]
-        ],
-        [
-          this.$t('setting.Ops'),
-          [
-            'WINDOWS_SSH_DEFAULT_SHELL'
           ]
         ],
         [

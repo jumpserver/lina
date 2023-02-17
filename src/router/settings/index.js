@@ -352,16 +352,7 @@ export default {
         }
       ]
     },
-    {
-      path: '/settings/other',
-      name: 'Other',
-      component: () => import('@/views/settings/Other'),
-      meta: {
-        title: i18n.t('setting.Other'),
-        icon: 'other',
-        permissions: ['settings.change_other']
-      }
-    },
+
     {
       path: '/settings/tools',
       name: 'Tools',
@@ -370,6 +361,47 @@ export default {
         title: i18n.t('setting.SystemTools'),
         icon: 'tools',
         permissions: ['settings.view_setting']
+      }
+    },
+    {
+      path: '/settings/tasks',
+      component: empty,
+      meta: {
+        title: i18n.t('route.TaskList'),
+        icon: 'tools',
+        permissions: ['ops.view_celerytask | ops.view_taskmonitor']
+      },
+      children: [
+        {
+          path: '',
+          name: 'TaskList',
+          component: () => import('@/views/tasks/TaskList'),
+          meta: {
+            title: i18n.t('route.TaskList'),
+            permissions: ['ops.view_celerytask']
+          }
+        },
+        {
+          path: ':id',
+          component: () => import('@/views/tasks/TaskDetail'),
+          name: 'TaskDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('route.TaskDetail'),
+            permissions: ['ops.view_celerytask'],
+            activeMenu: '/settings/tasks'
+          }
+        }
+      ]
+    },
+    {
+      path: '/settings/other',
+      name: 'Other',
+      component: () => import('@/views/settings/Other'),
+      meta: {
+        title: i18n.t('setting.Other'),
+        icon: 'other',
+        permissions: ['settings.change_other']
       }
     },
     {

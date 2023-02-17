@@ -6,7 +6,6 @@ import store from '@/store'
 import UsersRoute from './users'
 import AssetsRoute from './assets'
 import PermsRoute from './perms'
-import TaskRoutes from './tasks'
 import AccountRoutes from './accounts'
 
 export default {
@@ -74,16 +73,6 @@ export default {
         icon: 'permission'
       },
       children: PermsRoute
-    },
-    {
-      path: '/console/tasks',
-      component: empty,
-      name: 'TaskCenter',
-      meta: {
-        title: i18n.t('route.TaskCenter'),
-        icon: 'tasks'
-      },
-      children: TaskRoutes
     }
   ]
 }
