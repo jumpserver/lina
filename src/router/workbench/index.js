@@ -37,7 +37,7 @@ export default {
       name: 'MyAssets',
       component: () => import('@/views/myassets'),
       meta: {
-        icon: 'my-asset',
+        icon: 'assets',
         title: i18n.t('route.MyAssets'),
         permissions: ['perms.view_myassets']
       }
