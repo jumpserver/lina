@@ -105,6 +105,7 @@ export default {
         'assets.change_gateway': ['assets.view_domain', 'assets.view_platform', 'assets.view_node'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
+        'accounts.view_gatheredaccount': ['assets.view_asset', 'assets.view_node'],
         'accounts.view_account': ['assets.view_node'],
         'accounts.view_accountsecret': ['accounts.view_account'],
         'accounts.view_historyaccount': ['accounts.view_account'],
@@ -135,6 +136,9 @@ export default {
         'terminal.view_status': ['settings.change_terminal'],
         'terminal.view_task': ['settings.change_terminal'],
         'terminal.view_terminal': ['settings.change_terminal'],
+        'ops.view_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
+        'ops.change_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
+        'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
@@ -155,13 +159,13 @@ export default {
         {
           key: this.$t('common.DateCreated'),
           formatter: (item, val) => {
-            return <span> { toSafeLocalDateStr(this.object.date_created) }</span>
+            return <span> {toSafeLocalDateStr(this.object.date_created)}</span>
           }
         },
         {
           key: this.$t('common.DateUpdated'),
           formatter: (item, val) => {
-            return <span> { toSafeLocalDateStr(this.object.date_updated) }</span>
+            return <span> {toSafeLocalDateStr(this.object.date_updated)}</span>
           }
         },
         'comment'
@@ -298,21 +302,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree >>> .ztree * {
+.perm-tree > > > .ztree * {
   background: white;
 }
 
-.perm-tree >>> .ztree {
+.perm-tree > > > .ztree {
   background: white !important;
 }
 
-.perm-tree >>> .checkbox_true_disable,
-.perm-tree >>> .checkbox_false_disable {
+.perm-tree > > > .checkbox_true_disable,
+.perm-tree > > > .checkbox_false_disable {
   cursor: not-allowed !important;
 }
 
-.perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before {
+.perm-tree > > > .checkbox_true_disable:before,
+.perm-tree > > > .checkbox_false_disable:before {
   color: #aaaaaa !important;
 }
 </style>
