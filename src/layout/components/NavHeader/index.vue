@@ -122,6 +122,10 @@ export default {
           padding: 0;
         }
 
+        & > > > .svg-icon {
+          color: #FFF !important;
+        }
+
         .nav-logo {
           width: 200px;
         }
