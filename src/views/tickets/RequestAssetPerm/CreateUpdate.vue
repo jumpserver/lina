@@ -36,7 +36,7 @@ export default {
         apply_date_start: date_start,
         apply_assets: [],
         org_id: '',
-        apply_actions: ['all']
+        apply_actions: [this.$t('perms.all')]
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'org_id']],
@@ -118,6 +118,13 @@ export default {
         }
       },
       cleanFormValue(value) {
+        const apply_actions = value['apply_actions'] || []
+        apply_actions.forEach((item, index) => {
+          if (item === this.$t('perms.all')) {
+            apply_actions[index] = 'all'
+          }
+        })
+
         Object.keys(value).forEach((item, index, arr) => {
           if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
             if (value[item].length < 1) {

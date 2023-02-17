@@ -34,7 +34,7 @@
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$tc('assets.Action')" required>
+          <el-form-item :label="$tc('assets.Action')">
             <BasicTree
               v-model="requestForm.actions"
               :tree="treeNodes"
