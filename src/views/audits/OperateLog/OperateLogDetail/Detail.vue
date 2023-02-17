@@ -52,7 +52,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.get(
-                `api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
+                `/api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
               ).then(res => {
                 this.$refs.DetailDialog.show(res.diff)
               })
