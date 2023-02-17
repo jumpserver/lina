@@ -81,6 +81,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
+                  can: this.$hasPerm('accounts.view_accountbackupexecution'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
