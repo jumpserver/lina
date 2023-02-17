@@ -6,13 +6,13 @@
         !item.alwaysShow"
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}" class="submenu-item">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="el-submenu-sidebar submenu-item">
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body class="el-submenu-sidebar">
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
@@ -108,11 +108,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.el-submenu.is-active {
-  &>>> .svg-icon {
-    color: var(--menu-text-active)!important;
-  }
-}
-</style>
