@@ -1,14 +1,11 @@
 <template>
   <GenericDetailPage
-    :url="url"
-    :submenu="submenu"
     :object.sync="sessionData"
-    :active-menu.sync="activeSubMenu"
-    :has-right-side="false"
-    :get-object-name="getSessionName"
+    :active-menu.sync="config.activeMenu"
+    v-bind="config"
   >
     <keep-alive>
-      <component :is="activeSubMenu" :object="sessionData" />
+      <component :is="config.activeMenu" :object="sessionData" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -30,30 +27,32 @@ export default {
   data() {
     return {
       sessionData: {},
-      url: `/api/v1/terminal/sessions`,
-      activeSubMenu: 'SessionDetailInfo',
-      submenu: [
-        {
-          title: this.$t('route.Detail'),
-          name: 'SessionDetailInfo'
-        },
-        {
-          title: this.$t('sessions.command'),
-          name: 'SessionCommands',
-          hidden: () => !this.$hasPerm('terminal.view_command')
-        },
-        {
-          title: this.$t('sessions.Activity'),
-          name: 'SessionJoinRecords',
-          hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
-        }
-      ]
+      config: {
+        url: `/api/v1/terminal/sessions`,
+        activeMenu: 'SessionDetailInfo',
+        submenu: [
+          {
+            title: this.$t('route.Detail'),
+            name: 'SessionDetailInfo'
+          },
+          {
+            title: this.$t('sessions.command'),
+            name: 'SessionCommands',
+            hidden: () => !this.$hasPerm('terminal.view_command')
+          },
+          {
+            title: this.$t('sessions.Activity'),
+            name: 'SessionJoinRecords',
+            hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
+          }
+        ],
+        getObjectName: (obj) => { return obj.id },
+        hasActivity: false,
+        hasRightSide: false
+      }
     }
   },
   methods: {
-    getSessionName() {
-      return this.sessionData.id
-    }
   }
 }
 </script>
