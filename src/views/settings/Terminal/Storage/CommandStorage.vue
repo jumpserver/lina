@@ -1,10 +1,11 @@
 <template>
-  <ListTable ref="ListTable" :table-config="commandTableConfig" :header-actions="commandActions" />
+  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
 import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
+
 export default {
   name: 'CommandStorage',
   components: {
@@ -58,7 +59,8 @@ export default {
           },
           is_default: {
             formatterArgs: {
-              showFalse: false
+              showFalse: false,
+              showText: false
             },
             align: 'center',
             width: '100px'

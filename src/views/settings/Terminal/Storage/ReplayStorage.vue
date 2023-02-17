@@ -1,10 +1,11 @@
 <template>
-  <ListTable ref="ListTable" :table-config="replayTableConfig" :header-actions="replayActions" />
+  <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
 </template>
 <script>
 import ListTable from '@/components/ListTable'
-import { TestReplayStorage, SetToDefaultReplayStorage } from '@/api/sessions'
+import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
 import { getReplayStorageOptions } from '@/views/sessions/const'
+
 export default {
   name: 'ReplayStorage',
   components: {
@@ -48,7 +49,8 @@ export default {
           },
           is_default: {
             formatterArgs: {
-              showFalse: false
+              showFalse: false,
+              showText: false
             },
             align: 'center',
             width: '100px'

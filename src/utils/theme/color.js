@@ -77,6 +77,13 @@ export function changeMenuColor(themeColors) {
   const white = 'ffffff'
   const black = '000000'
 
+  // 后端不用返回 --menu-hover
+  const menuActiveTextColor = colors['--menu-text-active']
+  if (menuActiveTextColor) {
+    const menuHover = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
+    colors['--menu-hover'] = menuHover
+  }
+
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
