@@ -1,6 +1,7 @@
 <template>
   <Dialog
     :title="$tc('common.OfflineUpload')"
+    :show-cancel="false"
     v-bind="$attrs"
     @confirm="onSubmit"
     v-on="$listeners"
