@@ -72,7 +72,7 @@ export default {
                   callback: ({ row }) => {
                     vm.loading = true
                     this.$axios.get(
-                      `api/v1/audits/operate-logs/${row.id}/?type=action_detail`
+                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`
                     ).then(res => {
                       this.$refs.DetailDialog.show(res.diff)
                     }).finally(() => {
