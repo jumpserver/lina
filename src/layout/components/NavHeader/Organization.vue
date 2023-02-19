@@ -1,9 +1,9 @@
 <template>
   <el-select
+    :placeholder="$tc('common.Select')"
     :value="currentOrgId"
     class="org-select organization"
     filterable
-    :placeholder="$tc('common.Select')"
     @change="changeOrg"
   >
     <template slot="prefix">
@@ -20,10 +20,10 @@
       <el-option
         v-for="item in group.options"
         :key="item.id"
-        :selected="item.id === currentOrg.id"
-        :label="item.name"
-        :value="item.id"
         :disabled="item.disabled"
+        :label="item.name"
+        :selected="item.id === currentOrg.id"
+        :value="item.id"
       >
         <span v-if="item.icon" style="font-size: 15px; margin-right: 5px;">
           <svg-icon :icon-class="item.icon" />
@@ -176,10 +176,14 @@ export default {
   }
 }
 
-.option-group >>> .el-select-group__title {
-  color: #909399 !important;
-  padding-left: 15px;
-  font-size: 12px;
-  line-height: 30px;
+.option-group {
+  max-width: 400px;
+
+  & >>> .el-select-group__title {
+    color: #909399 !important;
+    padding-left: 15px;
+    font-size: 12px;
+    line-height: 30px;
+  }
 }
 </style>
