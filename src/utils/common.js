@@ -186,7 +186,7 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  const zoneTime = moment(now).utc().endOf('month').format('YYYY-MM-DD HH:mm:ss')
+  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
   return moment(zoneTime).utc().toDate()
 }
 

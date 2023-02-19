@@ -2,6 +2,7 @@
   <Dialog
     :title="$tc('common.OfflineUpload')"
     v-bind="$attrs"
+    @cancel="onCancel"
     @confirm="onSubmit"
     v-on="$listeners"
   >
@@ -13,15 +14,15 @@
       >
         <el-upload
           ref="upload"
-          drag
-          action="string"
-          list-type="text/csv"
-          :limit="1"
           :auto-upload="false"
-          upload-files="uploadFiles"
-          :on-change="onFileChange"
           :before-upload="beforeUpload"
+          :limit="1"
+          :on-change="onFileChange"
           accept=".zip"
+          action="string"
+          drag
+          list-type="text/csv"
+          upload-files="uploadFiles"
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">
@@ -41,6 +42,7 @@
 
 <script>
 import { Dialog } from '@/components'
+
 export default {
   name: 'UploadDialog',
   components: {
@@ -61,6 +63,9 @@ export default {
       this.file = file
     },
     beforeUpload(file) {
+    },
+    onCancel() {
+      this.$emit('update:visible', false)
     },
     onSubmit() {
       if (!this.file) {
