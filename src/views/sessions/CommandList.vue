@@ -15,7 +15,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { getDaysAgo, getDaysFuture, toSafeLocalDateStr } from '@/utils/common'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/TableFormatters'
 import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
@@ -29,13 +29,12 @@ export default {
   },
   data() {
     const vm = this
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
+    const dateFrom = getDaysAgo(7).toISOString()
+    const dateTo = getDayEnd().toISOString()
     return {
       query: {
-        date_from: getDaysAgo(7, now).toISOString(),
-        date_to: getDaysFuture(1, now).toISOString()
+        date_from: dateFrom,
+        date_to: dateTo
       },
       loading: true,
       tableConfig: {
@@ -116,6 +115,10 @@ export default {
         hasImport: false,
         hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        },
         canExportSelected: true,
         exportOptions: {
           // Todo: 优化这里，和抽象组件重复了
@@ -143,10 +146,6 @@ export default {
             a.click()
             window.URL.revokeObjectURL(url + queryStr)
           }
-        },
-        datePicker: {
-          dateStart: dateFrom,
-          dateEnd: dateTo
         }
       },
       treeSetting: {

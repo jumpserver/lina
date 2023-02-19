@@ -6,7 +6,6 @@
 
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo, getDaysFuture } from '@/utils/common'
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
@@ -15,9 +14,6 @@ export default {
     GenericListPage
   },
   data() {
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
     return {
       tableConfig: {
         url: '/api/v1/audits/job-logs/',
@@ -95,10 +91,6 @@ export default {
           date_start: {
             width: '160px'
           }
-        },
-        extraQuery: {
-          date_to: dateTo,
-          date_from: dateFrom
         }
       },
       headerActions: {
@@ -120,10 +112,6 @@ export default {
               value: 'run_as__username'
             }
           ]
-        },
-        datePicker: {
-          dateStart: dateFrom,
-          dateEnd: dateTo
         }
       }
     }
