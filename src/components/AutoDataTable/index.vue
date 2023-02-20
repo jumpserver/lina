@@ -232,6 +232,16 @@ export default {
       }
       return col
     },
+    addOrderingIfNeed(col) {
+      if (col.prop) {
+        const column = this.meta[col.prop] || {}
+        if (column.order) {
+          col.sortable = 'custom'
+          col['column-key'] = col.prop
+        }
+      }
+      return col
+    },
     setDefaultFormatterIfNeed(col) {
       if (!col.formatter) {
         col.formatter = (row, column, cellValue) => {
@@ -247,6 +257,7 @@ export default {
       }
       return col
     },
+
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -258,6 +269,7 @@ export default {
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
+      col = this.addOrderingIfNeed(col)
       return col
     },
     generateTotalColumns() {

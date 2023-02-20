@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :excludes="excludes" :object="object" />
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
@@ -78,8 +78,29 @@ export default {
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
-                `/api/v1/accounts/accounts/${this.object.id}/verify/`,
-                { action: 'test' }
+                `/api/v1/accounts/accounts/tasks/`,
+                {
+                  action: 'test',
+                  accounts: [this.object.id]
+                }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('assets.PushAccount'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('assets.Push'),
+            disabled: !vm.$hasPerm('accounts.create_account')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.post(
+                `/api/v1/accounts/accounts/tasks/`,
+                { action: 'verify', accounts: [this.object.id] }
               ).then(res => {
                 openTaskPage(res['task'])
               })
@@ -124,5 +145,5 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 </style>
