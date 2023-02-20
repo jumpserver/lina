@@ -45,6 +45,7 @@ export default {
           default: ['name', 'address', 'platform', 'accounts', 'actions'],
           min: ['name', 'address', 'actions']
         },
+        columns: ['name', 'address', 'platform', 'accounts', 'comment', 'actions'],
         columnsMeta: {
           name: {
             prop: 'name',
