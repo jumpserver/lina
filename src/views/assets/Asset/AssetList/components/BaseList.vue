@@ -107,7 +107,6 @@ export default {
             sortable: true
           },
           platform: {
-            width: '100px',
             sortable: true
           },
           protocols: {
