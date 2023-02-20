@@ -90,7 +90,9 @@ export default {
                   can: ({ row }) => {
                     if (this.$store.getters.hasValidLicense) {
                       return true
-                    } else { return !row.applet.xpack }
+                    } else {
+                      return !row.applet.xpack
+                    }
                   },
                   callback: function({ row }) {
                     this.$axios.post(
