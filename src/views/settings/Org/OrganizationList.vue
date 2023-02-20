@@ -76,6 +76,7 @@ export default {
                     instance.confirmButtonLoading = true
                     try {
                       await performDelete.bind(this)({ row: row, col: col })
+                      this.$store.dispatch('users/deleteAdminOrg', { id: row.id, name: row.name })
                       done()
                       reload()
                       this.$message.success(this.$tc('common.deleteSuccessMsg'))
