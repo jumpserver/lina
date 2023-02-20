@@ -64,21 +64,39 @@ export default {
         }
 
         let value = this.object[name]
+        const label = fieldMeta.label
 
         if (Array.isArray(value)) {
-          value.forEach(item => {
-            const fieldName = `${name}.${item.name}`
-            if (excludes.includes(fieldName)) {
-              return
-            }
-            this.items.push({
-              key: item.label,
-              value: item.value
+          if (typeof value[0] === 'object') {
+            value.forEach(item => {
+              const fieldName = `${name}.${item.name}`
+              if (excludes.includes(fieldName)) {
+                return
+              }
+              this.items.push({
+                key: item.label,
+                value: item.value
+              })
             })
-          })
+          } else if (typeof value[0] === 'string') {
+            value.forEach((item, index) => {
+              let data = {}
+              if (index === 0) {
+                data = {
+                  key: label,
+                  value: value[index]
+                }
+              } else {
+                data = {
+                  key: '',
+                  value: value[index]
+                }
+              }
+              this.items.push(data)
+            })
+          }
           continue
         }
-        const label = fieldMeta.label
         if (value === null || value === '') {
           value = '-'
         } else if (fieldMeta.type === 'datetime') {
