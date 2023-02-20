@@ -433,6 +433,8 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "OpenSourceEdition": "OpenSource edition",
+    "EnterpriseEdition": "Enterprise edition",
     "ImportOrg": "Import organization",
     "About": "About",
     "PermissionCompany": "Permission company",

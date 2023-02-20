@@ -37,7 +37,7 @@ export default {
         url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
         columns: [
           'applet.display_name', 'applet.version',
-          'date_updated', 'status', 'actions'
+          'date_updated', 'status', 'applet.xpack', 'actions'
         ],
         columnsMeta: {
           'applet.display_name': {
@@ -55,6 +55,13 @@ export default {
           },
           'applet.version': {
             label: this.$t('common.Version')
+          },
+          'applet.xpack': {
+            label: this.$t('setting.Feature'),
+            formatter: (row) => {
+              const content = row.applet.xpack ? this.$t('common.EnterpriseEdition') : this.$t('common.OpenSourceEdition')
+              return <el-tag size='mini' type='primary'>{content}</el-tag>
+            }
           },
           status: {
             label: this.$t('applets.PublishStatus'),
@@ -80,6 +87,11 @@ export default {
               extraActions: [
                 {
                   title: this.$t('common.Deploy'),
+                  can: ({ row }) => {
+                    if (this.$store.getters.hasValidLicense) {
+                      return true
+                    } else { return !row.applet.xpack }
+                  },
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,
