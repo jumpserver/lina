@@ -80,7 +80,7 @@ export default {
     updateProtocols() {
       const url = `/api/v1/assets/platforms/${this.object.id}/`
       this.$axios.patch(url, { protocols: this.object.protocols }).then(() => {
-        this.$message.success(this.$tc('common.UpdateSuccess'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },
     async getTypeConstraints() {
