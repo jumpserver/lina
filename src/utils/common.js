@@ -168,6 +168,13 @@ export function replaceUUID(s, n) {
   return s.replace(uuidPattern, n)
 }
 
+export function replaceAllUUID(string, replacement = '*') {
+  if (hasUUID(string)) {
+    string = string.replace(/[0-9a-zA-Z\-]{36}/g, replacement)
+  }
+  return string
+}
+
 export function getDaysAgo(days, now) {
   if (!now) {
     now = new Date()
