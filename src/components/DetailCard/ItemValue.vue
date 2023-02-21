@@ -85,4 +85,7 @@ export default {
 </script>
 
 <style scoped>
+a {
+  color: var(--color-success);
+}
 </style>

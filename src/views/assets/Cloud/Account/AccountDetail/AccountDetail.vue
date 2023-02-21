@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :excludes="excludes" :object="object" />
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>

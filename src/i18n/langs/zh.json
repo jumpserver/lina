@@ -197,6 +197,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",
     "Secure": "安全",
