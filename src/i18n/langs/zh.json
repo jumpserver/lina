@@ -1074,6 +1074,7 @@
     "TicketFlowUpdate": "更新审批流",
     "Accounts": "账号管理",
     "AssetAccount": "账号列表",
+    "AssetAccountDetail": "账号详情",
     "AccountTemplate": "账号模版",
     "CreateAccountTemplate": "创建账号模版",
     "UpdateAccountTemplate": "更新账号模版",
