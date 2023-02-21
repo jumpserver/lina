@@ -107,13 +107,10 @@ export default {
           resource: 'account'
         },
         columnsExclude: ['spec_info'],
-        columnsShow: {
-          min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username', 'asset', 'privileged',
-            'secret_type', 'source', 'actions'
-          ]
-        },
+        columns: [
+          'name', 'username', 'asset', 'privileged',
+          'secret_type', 'source', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatter: function(row) {
@@ -185,6 +182,7 @@ export default {
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    // debugger
                     vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
