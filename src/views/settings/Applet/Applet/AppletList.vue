@@ -26,6 +26,10 @@ export default {
         onCreate: () => {
           this.uploadDialogVisible = true
         },
+        searchConfig: {
+          getUrlQuery: false,
+          exclude: ['version']
+        },
         detailRoute: 'AppletDetail',
         hasExport: false,
         hasImport: false,
