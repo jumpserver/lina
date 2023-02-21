@@ -121,6 +121,18 @@ export default {
     },
     goToAssetAccountsPage() {
       const assetId = this.$route.params.id
+      // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
+      // 会跳转到其他组织的资产详情页，而不是发布机详情页
+      if (this.$router.currentRoute.name === 'AppletHostUpdate') {
+        this.$router.push({
+          name: 'AppletHostDetail',
+          params: { id: assetId },
+          query: {
+            activeTab: 'Accounts'
+          }
+        })
+        return
+      }
       this.$router.push({
         name: 'AssetDetail',
         params: { id: assetId },
