@@ -5,6 +5,8 @@
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
+    :extra-action-rules="extraActionRules"
+    :row="row"
   />
 </template>
 
@@ -141,6 +143,7 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
+      extraActionRules: colActions?.extraActionRules || {},
       moreActionsTitle: colActions.moreActionsTitle || this.$t('common.More')
     }
   },

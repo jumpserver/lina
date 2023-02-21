@@ -1,5 +1,5 @@
 <template>
-  <DataActions :actions="iActions" v-bind="$attrs" />
+  <DataActions :actions="iActions" v-bind="$attrs" @dropdownVisibleChange="dropdownVisibleChange" />
 </template>
 
 <script>
@@ -34,7 +34,15 @@ export default {
       // 居中对齐
     }
   },
+  data() {
+    return {
+      defaultMoreActions: this.moreActions
+    }
+  },
   computed: {
+    iRow() {
+      return this.row
+    },
     iActions() {
       const actions = [...this.actions]
       if (this.iMoreAction && this.iMoreAction.dropdown.length > 0) {
@@ -58,6 +66,11 @@ export default {
         btn.title = this.moreActionsTitle
       }
       return btn
+    }
+  },
+  methods: {
+    dropdownVisibleChange(status, action) {
+      this.defaultMoreActions = action?.dropdown
     }
   }
 }

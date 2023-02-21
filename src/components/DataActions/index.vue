@@ -8,28 +8,36 @@
         class="action-item"
         trigger="click"
         placement="bottom-start"
+        @visible-change="(status) => handleDropdownVisibleChange(status, action)"
         @command="handleDropdownCallback"
       >
         <el-button class="more-action" :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
-          <template v-for="option in action.dropdown">
-            <div
-              v-if="option.group"
-              :key="'group:'+option.name"
-              class="dropdown-menu-title"
-              style="width:130px"
-            >
-              {{ option.group }}
-            </div>
-            <el-dropdown-item
-              :key="option.name"
-              :command="[option, action]"
-              v-bind="option"
-            >
-              <i v-if="option.fa" :class="'fa ' + option.fa" />
-              {{ option.title }}
+          <template v-if="loading">
+            <template v-for="option in action.dropdown">
+              <div
+                v-if="option.group"
+                :key="'group:'+option.name"
+                class="dropdown-menu-title"
+                style="width:130px"
+              >
+                {{ option.group }}
+              </div>
+              <el-dropdown-item
+                :key="option.name"
+                :command="[option, action]"
+                v-bind="option"
+              >
+                <i v-if="option.fa" :class="'fa ' + option.fa" />
+                {{ option.title }}
+              </el-dropdown-item>
+            </template>
+          </template>
+          <template v-else>
+            <el-dropdown-item>
+              <i class="el-icon-loading" />
             </el-dropdown-item>
           </template>
         </el-dropdown-menu>
@@ -77,14 +85,49 @@ export default {
     actions: {
       type: Array,
       default: () => []
+    },
+    row: {
+      type: Object,
+      default: () => ({})
+    },
+    extraActionRules: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      loading: true,
+      defaultActions: this.actions || {}
     }
   },
   computed: {
     iActions() {
-      return this.cleanActions(this.actions)
+      return this.cleanActions(this.defaultActions)
     }
   },
   methods: {
+    async handleDropdownVisibleChange(status, action) {
+      console.log('action: --------------------------==========', action)
+      const extraActionRules = this.extraActionRules || {}
+      const disabledRules = extraActionRules?.disabledRules || {}
+      if (status && extraActionRules.hasOwnProperty('url') && Object.keys(disabledRules).length > 0) {
+        this.loading = false
+        const res = await this.$axios.get(extraActionRules.url + this.row.id + '/')
+        const dropdown = action.dropdown
+        this.$nextTick(() => {
+          for (const item of dropdown) {
+            if (disabledRules.hasOwnProperty(item.name)) {
+              const field = disabledRules?.[item.name]
+              item.disabled = !_.get(res, field) || false
+              break
+            }
+          }
+        })
+        this.loading = true
+        this.$emit('dropdownVisibleChange', status, action)
+      }
+    },
     handleDropdownCallback(command) {
       const [option, dropdown] = command
       const defaultCallback = () => this.$log.debug('No callback found: ', option, dropdown)

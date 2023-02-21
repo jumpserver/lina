@@ -134,6 +134,12 @@ export default {
                 const url = `/api/v1/assets/assets/${id}/`
                 return this.$axios.delete(url)
               },
+              extraActionRules: {
+                url: this.url,
+                disabledRules: {
+                  Test: 'auto_info.ping_enabled'
+                }
+              },
               extraActions: [
                 {
                   name: 'Test',
