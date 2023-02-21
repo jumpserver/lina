@@ -78,7 +78,8 @@
     "AccountPush": {
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
-      "AccountPushList": "Account push "
+      "AccountPushUpdate": "Account push update",
+      "AccountPushList": "Account push list"
     },
     "AccountBackup": {
       "IsSuccess": "Is success",

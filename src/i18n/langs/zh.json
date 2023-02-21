@@ -13,6 +13,7 @@
     "AccountPush": {
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
+      "AccountPushUpdate": "账号推送更新",
       "AccountPushExecutionList": "执行列表"
     },
     "AccountBackup": {
