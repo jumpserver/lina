@@ -15,7 +15,7 @@ export default [
       {
         path: '',
         name: 'AssetAccountList',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
+        component: () => import('@/views/accounts/Account/AccountList.vue'),
         meta: {
           title: i18n.t('route.AssetAccount'),
           app: 'accounts',
@@ -24,7 +24,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountDetail/index.vue'),
+        component: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
         name: 'AssetAccountDetail',
         meta: { title: i18n.t('route.AssetAccount') },
         hidden: true

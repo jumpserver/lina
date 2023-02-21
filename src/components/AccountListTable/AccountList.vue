@@ -211,8 +211,8 @@ export default {
                   can: this.$hasPerm('accounts.verify_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/accounts/accounts/${row.id}/verify/`,
-                      { action: 'test' }
+                      `/api/v1/accounts/accounts/tasks/`,
+                      { action: 'verify', accounts: [row.id] }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })

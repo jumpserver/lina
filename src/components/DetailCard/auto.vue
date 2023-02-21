@@ -29,6 +29,10 @@ export default {
     showUndefine: {
       type: Boolean,
       default: true
+    },
+    formatters: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -85,7 +89,7 @@ export default {
           value = toSafeLocalDateStr(value)
         } else if (fieldMeta.type === 'labeled_choice') {
           value = value?.['label']
-        } else if (fieldMeta.type === 'related_field') {
+        } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object') {
           value = value['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
           value = value.map(item => item['name']).join(', ')
@@ -103,7 +107,8 @@ export default {
 
         const item = {
           key: label,
-          value: value
+          value: value,
+          formatter: this.formatters[name]
         }
         this.items.push(item)
       }

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+      <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -133,11 +133,19 @@ export default {
           })
         }
       ],
-      url: `/api/v1/accounts/accounts/${this.object.id}`,
-      excludes: [
-        'asset', 'template', 'privileged', 'secret',
-        'passphrase', 'specific'
-      ]
+      detail: {
+        url: `/api/v1/accounts/accounts/${this.object.id}`,
+        excludes: [
+          'template', 'privileged', 'secret',
+          'passphrase', 'spec_info'
+        ],
+        formatters: {
+          asset: (item, value) => {
+            console.log('Value: ', value)
+            return <a>hello</a>
+          }
+        }
+      }
     }
   },
   computed: {
