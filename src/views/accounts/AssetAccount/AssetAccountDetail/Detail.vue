@@ -115,7 +115,7 @@ export default {
       url: `/api/v1/accounts/accounts/${this.object.id}`,
       excludes: [
         'asset', 'template', 'privileged', 'secret',
-        'passphrase', 'specific'
+        'passphrase', 'specific', 'spec_info'
       ]
     }
   },
