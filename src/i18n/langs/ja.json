@@ -436,6 +436,7 @@
   },
   "common": {
     "RestoreDefault": "デフォルトに戻す",
+    "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
     "About": "について",
     "PermissionCompany": "授权公司",

@@ -4,14 +4,14 @@
       <el-col :md="24" :sm="24">
         <AccountListTable
           ref="ListTable"
-          v-bind="$attrs"
           :asset="object"
-          :url="iUrl"
-          :has-import="false"
-          :has-clone="false"
-          :has-left-actions="true"
           :columns="columns"
+          :has-clone="false"
+          :has-import="false"
+          :has-left-actions="true"
           :header-extra-actions="headerExtraActions"
+          :url="iUrl"
+          v-bind="$attrs"
         />
         <AccountTemplateDialog
           v-if="templateDialogVisible"
@@ -79,8 +79,6 @@ export default {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
         this.$message.success(this.$tc('common.AddSuccessMsg'))
-      }).catch(() => {
-        this.$message.error(this.$tc('common.AddFailMsg'))
       })
     }
   }
