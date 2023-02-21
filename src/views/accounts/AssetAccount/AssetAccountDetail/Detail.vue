@@ -94,13 +94,13 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Push'),
-            disabled: !vm.$hasPerm('accounts.create_account')
+            disabled: !vm.$hasPerm('assets.push_assetaccount')
           },
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
                 `/api/v1/accounts/accounts/tasks/`,
-                { action: 'verify', accounts: [this.object.id] }
+                { action: 'push', accounts: [this.object.id] }
               ).then(res => {
                 openTaskPage(res['task'])
               })
