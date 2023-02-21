@@ -6,31 +6,36 @@
         v-show="action.dropdown.length > 0"
         :key="action.name"
         class="action-item"
-        trigger="click"
         placement="bottom-start"
+        trigger="click"
         @command="handleDropdownCallback"
+        v-on="$listeners"
       >
-        <el-button class="more-action" :size="size" v-bind="cleanButtonAction(action)">
-          {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+        <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)" @click="showDropdown=true">
+          {{ action.title }} <i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
-          <template v-for="option in action.dropdown">
-            <div
-              v-if="option.group"
-              :key="'group:'+option.name"
-              class="dropdown-menu-title"
-              style="width:130px"
-            >
-              {{ option.group }}
-            </div>
-            <el-dropdown-item
-              :key="option.name"
-              :command="[option, action]"
-              v-bind="option"
-            >
-              <i v-if="option.fa" :class="'fa ' + option.fa" />
-              {{ option.title }}
-            </el-dropdown-item>
+          <template v-if="showDropdown">
+            <template v-for="option in action.dropdown">
+              <div
+                v-if="option.group"
+                :key="'group:'+option.name"
+                class="dropdown-menu-title"
+                style="width:130px"
+              >
+                {{ option.group }}
+              </div>
+              <el-dropdown-item
+                v-if="option.has(action)"
+                :key="option.name"
+                :command="[option, action]"
+                :disabled="!option.can(action)"
+                v-bind="option"
+              >
+                <i v-if="option.fa" :class="'fa ' + option.fa" />
+                {{ option.title }}
+              </el-dropdown-item>
+            </template>
           </template>
         </el-dropdown-menu>
       </el-dropdown>
@@ -39,11 +44,11 @@
         v-else
         :key="action.name"
         :size="size"
-        v-bind="cleanButtonAction(action)"
         class="action-item"
+        v-bind="cleanButtonAction(action)"
         @click="handleClick(action)"
       >
-        <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <span>
             <span v-if="action.fa" style="vertical-align: initial;">
               <i v-if="action.fa.startsWith('fa-')" :class="'fa ' + action.fa" />
@@ -79,6 +84,11 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      showDropdown: false
+    }
+  },
   computed: {
     iActions() {
       return this.cleanActions(this.actions)
@@ -97,6 +107,9 @@ export default {
       }
       return callback(option)
     },
+    handleDropdownVisibleChange(val) {
+      this.$emit('dropdownVisibleChange', val)
+    },
     handleClick(action) {
       if (action && action.callback) {
         action.callback(action)
@@ -106,23 +119,25 @@ export default {
       this.$emit('actionClick', action)
     },
     checkItem(item, attr, defaults) {
+      const df = () => true
       if (!item) {
-        return true
+        return df
       }
-      let ok = item[attr]
+      const ok = item[attr]
       if (ok && typeof ok === 'function') {
-        ok = ok(item)
+        return ok
       } else if (ok == null) {
-        ok = defaults === undefined ? true : defaults
+        return () => defaults === undefined ? true : defaults
+      } else {
+        return () => ok
       }
-      return ok
     },
     cleanButtonAction(action) {
       action = _.cloneDeep(action)
       delete action['dropdown']
       delete action['callback']
       delete action['name']
-      delete action['can']
+      // delete action['can']
       return action
     },
     cleanActions(actions) {
@@ -134,17 +149,20 @@ export default {
         }
         const action = Object.assign({}, v)
         // 是否拥有这个action
-        const has = this.checkItem(action, 'has')
-        delete action['has']
-        if (!has) {
-          continue
-        }
+        // const has = this.checkItem(action, 'has')
+        // delete action['has']
+        // if (!has) {
+        //   continue
+        // }
         // 是否有分割线
-        action.divided = this.checkItem(action, 'divided', false)
+        action.has = this.checkItem(action, 'has')
+        action.divided = false
+        // action.divided = this.checkItem(action, 'divided', false)
 
         // 是否是disabled
-        const can = this.checkItem(action, 'can')
-        action.disabled = !can
+        // const can = this.checkItem(action, 'can')
+        // action.disabled = !can
+        action.can = this.checkItem(action, 'can')
 
         if (action.dropdown) {
           // const dropdown = this.cleanActions(action.dropdown)

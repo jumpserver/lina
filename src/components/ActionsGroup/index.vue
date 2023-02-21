@@ -1,9 +1,10 @@
 <template>
-  <DataActions :actions="iActions" v-bind="$attrs" />
+  <DataActions :actions="iActions" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>
 import DataActions from '@/components/DataActions'
+
 export default {
   name: 'ActionsGroup',
   components: {

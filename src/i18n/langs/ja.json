@@ -434,6 +434,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "DownloadCenter": "ダウンロードセンター",
     "RestoreDefault": "デフォルトに戻す",
     "ImportOrg": "組織をインポート",
     "About": "について",

@@ -7,9 +7,9 @@
       v-bind="updateSelectedDialogSetting"
     />
     <GatewayDialog
-      :cell="GatewayCell"
-      :port="GatewayPort"
-      :visible.sync="GatewayVisible"
+      :cell="gatewayCell"
+      :port="gatewayPort"
+      :visible.sync="gatewayVisible"
     />
   </div>
 </template>
@@ -80,9 +80,12 @@ export default {
     }
     return {
       showPlatform: false,
-      GatewayPort: 0,
-      GatewayCell: '',
-      GatewayVisible: false,
+      gatewayPort: 0,
+      gatewayCell: '',
+      gatewayVisible: false,
+      currentCanTestConn: false,
+      canTestConn: {},
+      canTestPromise: null,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         permissions: {
@@ -142,13 +145,13 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
-                      this.GatewayVisible = true
+                      this.gatewayVisible = true
                       const port = row.protocols.find(item => item.name === 'ssh').port
                       if (!port) {
                         return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
                       } else {
-                        this.GatewayPort = port
-                        this.GatewayCell = row.id
+                        this.gatewayPort = port
+                        this.gatewayCell = row.id
                       }
                     } else {
                       this.$axios.post(
@@ -246,6 +249,9 @@ export default {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
       return actions
+    },
+    canTextAsset() {
+      return this.canTestConn
     }
   }
 }

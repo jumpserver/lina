@@ -1,10 +1,11 @@
 <template>
   <ActionsGroup
     v-loading="loadingStatus"
-    :size="'mini'"
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
+    :size="'mini'"
+    @visible-change="handleVisibleChange"
   />
 </template>
 
@@ -101,7 +102,8 @@ export default {
           onUpdate: defaultUpdateCallback,
           onDelete: defaultDeleteCallback,
           onClone: defaultCloneCallback,
-          extraActions: [] // format see defaultActions
+          extraActions: [], // format see defaultActions
+          onDropdownVisibleChange: () => ({})
         }
       }
     }
@@ -158,7 +160,6 @@ export default {
         v.title = this.cleanValue(v, 'title')
         return v
       })
-      actions = actions.filter((v) => v.has)
       actions.sort((a, b) => a.order - b.order)
       return actions
     },
@@ -182,12 +183,12 @@ export default {
     cleanBoolean(item, attr, defaults) {
       const ok = item[attr]
       if (typeof ok !== 'function') {
-        return ok === undefined ? defaults : ok
+        return () => ok === undefined ? defaults : ok
       }
       return this.cleanValue(item, attr)
     },
     cleanCallback(item, attr) {
-      const callback = item[attr]
+      const callback = item[attr] || (() => {})
       const attrs = {
         reload: this.reload,
         row: this.row,
@@ -195,7 +196,9 @@ export default {
         cellValue: this.cellValue,
         tableData: this.tableData
       }
-      return () => { return callback.bind(this)(attrs) }
+      return () => {
+        return callback.bind(this)(attrs)
+      }
     },
     cleanValue(item, attr) {
       const value = item[attr]
@@ -209,7 +212,13 @@ export default {
         cellValue: this.cellValue,
         tableData: this.tableData
       }
-      return value(attrs)
+      return () => {
+        return value.bind(this)(attrs)
+      }
+    },
+    handleVisibleChange(val) {
+      console.log('>>>>>>>>.')
+      this.formatterArgs.onDropdownVisibleChange(val, { row: this.row })
     }
   }
 }
