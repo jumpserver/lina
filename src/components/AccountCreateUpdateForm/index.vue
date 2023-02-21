@@ -32,6 +32,11 @@ export default {
     account: {
       type: Object,
       default: null
+    },
+    // 默认组件密码加密
+    encryptPassword: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -233,7 +238,7 @@ export default {
         form.secret = form[secretType]
         delete form[secretType]
       }
-      form.secret = encryptPassword(form.secret)
+      form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {
         delete form['secret']
       }

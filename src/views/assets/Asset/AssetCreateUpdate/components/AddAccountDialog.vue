@@ -11,6 +11,7 @@
     <AccountCreateForm
       :platform="platform"
       :account="account"
+      :encrypt-password="false"
       @add="addAccount"
       @edit="editAccount"
     />
