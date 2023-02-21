@@ -208,7 +208,9 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('accounts.verify_account'),
+                  can: this.$hasPerm('accounts.change_account') &&
+                    this.asset && this.asset['auto_info'].ansible_enabled &&
+                    this.asset['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/tasks/`,
@@ -223,7 +225,6 @@ export default {
                   title: this.$t('common.Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    console.log('row: ', row.asset)
                     const data = {
                       ...this.asset,
                       ...row.asset
