@@ -141,8 +141,12 @@ export default {
         ],
         formatters: {
           asset: (item, value) => {
-            console.log('Value: ', value)
-            return <a>hello</a>
+            console.log('Item: ', item)
+            const route = {
+              name: 'AssetDetail',
+              params: { id: this.object.asset.id }
+            }
+            return <router-link to={route} >{ value }</router-link>
           }
         }
       }
