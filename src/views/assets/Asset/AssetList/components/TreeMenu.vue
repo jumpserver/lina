@@ -3,7 +3,7 @@
     <li class="divider" />
     <li
       id="m_add_asset_to_node"
-      v-perms="'assets.add_assettonode'"
+      v-perms="'assets.change_assetnodes'"
       class="rmenu"
       tabindex="-1"
       @click="rMenuAddAssetToNode"
@@ -12,7 +12,7 @@
     </li>
     <li
       id="m_move_asset_to_node"
-      v-perms="'assets.move_assettonode'"
+      v-perms="'assets.change_assetnodes'"
       class="rmenu"
       tabindex="-1"
       @click="rMenuMoveAssetToNode"
@@ -21,14 +21,14 @@
     </li>
     <li
       id="m_remove_asset_from_node"
-      v-perms="'assets.move_assettonode'"
+      v-perms="'assets.change_assetnodes'"
       class="rmenu"
       tabindex="-1"
       @click="rMenuRemoveAssetFromNode"
     >
       <i class="fa fa-minus-square-o" />  {{ this.$t('tree.RemoveAssetFromNode') }}
     </li>
-    <li v-if="$hasPerm('assets.move_assettonode | assets.add_assettonode')" class="divider" />
+    <li v-if="$hasPerm('assets.change_assetnodes')" class="divider" />
     <li
       id="m_update_node_asset_hardware_info"
       v-perms="'assets.refresh_assethardwareinfo'"
@@ -47,7 +47,7 @@
     >
       <i class="fa fa-link" />  {{ this.$t('tree.TestNodeAssetConnectivity') }}
     </li>
-    <li v-if="$hasPerm('assets.add_assettonode | assets.test_assetconnectivity')" class="divider" />
+    <li v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')" class="divider" />
     <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetOnlyCurrentNode">
       <i class="fa fa-indent" />  {{ this.$t('tree.ShowAssetOnlyCurrentNode') }}
     </li>

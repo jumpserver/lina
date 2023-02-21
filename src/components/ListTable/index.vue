@@ -55,12 +55,12 @@ export default {
     let extraQuery = {}
     if (this.headerActions.hasDatePicker) {
       extraQuery = {
-        start_time: getDaysAgo(7).toISOString(),
-        end_time: getDayEnd().toISOString()
+        date_from: getDaysAgo(7).toISOString(),
+        date_to: getDayEnd().toISOString()
       }
       this.headerActions.datePicker = Object.assign({
-        dateStart: extraQuery.start_time,
-        dateEnd: extraQuery.end_time
+        dateStart: extraQuery.date_from,
+        dateEnd: extraQuery.date_to
       }, this.headerActions.datePicker)
     }
     return {

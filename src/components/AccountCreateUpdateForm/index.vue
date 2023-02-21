@@ -32,6 +32,11 @@ export default {
     account: {
       type: Object,
       default: null
+    },
+    // 默认组件密码加密
+    encryptPassword: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -161,7 +166,7 @@ export default {
         push_now: {
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('assets.push_assetaccount')
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
           }
         }
       },
@@ -218,17 +223,13 @@ export default {
       })
     },
     controlShowField() {
-      let privileged = ['privileged']
+      const privileged = ['privileged']
       let suFrom = ['su_from']
       const filterSuFrom = ['database', 'device', 'cloud', 'web']
       const asset = this?.asset || {}
-      if (asset?.type?.value === 'website') {
-        privileged = []
-      }
       if (filterSuFrom.includes(asset?.category?.value)) {
         suFrom = []
       }
-
       return [...privileged, ...suFrom]
     },
     confirm(form) {
@@ -237,7 +238,7 @@ export default {
         form.secret = form[secretType]
         delete form[secretType]
       }
-      form.secret = encryptPassword(form.secret)
+      form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {
         delete form['secret']
       }

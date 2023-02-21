@@ -226,7 +226,7 @@ export default {
                 if (i instanceof Object) {
                   err += i?.port?.join(',')
                 } else {
-                  err += errorTips
+                  err += i
                 }
               }
             } else {

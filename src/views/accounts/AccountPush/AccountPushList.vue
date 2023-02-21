@@ -19,13 +19,13 @@ export default {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
           'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'actions'
+          'periodic_display', 'executed_amount', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'periodic_display', 'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -96,7 +96,9 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('accounts.add_pushaccountexecution'),
+                  can: ({ row }) => {
+                    return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
+                  },
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(

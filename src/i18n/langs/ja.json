@@ -78,6 +78,7 @@
     "AccountPush": {
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
+      "AccountPushUpdate": "アカウントプッシュ更新",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
@@ -197,6 +198,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "PushAccount": "アカウント情報をプッシュ",
     "AuthUsername": "ユーザー名を使用した認証",
     "Secure": "安全である",
     "AssetBulkUpdateTips": "ネットワークデバイス、クラウドサービス、Web、一括更新ネットワークドメインはサポートされていません",
@@ -1078,6 +1080,7 @@
     "TicketFlowUpdate": "承認フローの更新",
     "Accounts": "アカウント管理",
     "AssetAccount": "資産アカウント",
+    "AssetAccountDetail": "資産アカウント詳細",
     "AccountTemplate": "アカウントテンプレート",
     "CreateAccountTemplate": "アカウントテンプレートの作成",
     "UpdateAccountTemplate": "アカウントテンプレートの更新",

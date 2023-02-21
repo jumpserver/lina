@@ -1,27 +1,27 @@
 <template>
   <Dialog
-    :title="$tc('setting.SyncSetting')"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    width="50%"
+    :title="$tc('setting.SyncSetting')"
     top="10%"
     v-bind="$attrs"
+    width="50%"
     v-on="$listeners"
   >
     <GenericCreateUpdateForm
-      v-bind="settings"
       :has-detail-in-msg="false"
+      v-bind="settings"
+      @submitSuccess="onSuccess"
     />
   </Dialog>
 </template>
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { Dialog } from '@/components'
+import { CronTab, Dialog } from '@/components'
 import Select2 from '@/components/FormFields/Select2'
 import { Required } from '@/components/DataForm/rules'
-import { CronTab } from '@/components'
 
 export default {
   name: 'SyncSettingDialog',
@@ -66,6 +66,11 @@ export default {
         },
         submitMethod: () => 'patch'
       }
+    }
+  },
+  methods: {
+    onSuccess() {
+      this.$emit('update:visible', false)
     }
   }
 }

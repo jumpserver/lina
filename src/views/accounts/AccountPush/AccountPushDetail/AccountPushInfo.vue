@@ -81,7 +81,7 @@ export default {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
-        'date_created', 'date_updated', 'comment'
+        'date_created', 'date_updated', 'comment', 'is_active'
       ]
     }
   },

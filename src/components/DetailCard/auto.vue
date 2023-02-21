@@ -29,6 +29,10 @@ export default {
     showUndefine: {
       type: Boolean,
       default: true
+    },
+    formatters: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -64,28 +68,46 @@ export default {
         }
 
         let value = this.object[name]
+        const label = fieldMeta.label
 
         if (Array.isArray(value)) {
-          value.forEach(item => {
-            const fieldName = `${name}.${item.name}`
-            if (excludes.includes(fieldName)) {
-              return
-            }
-            this.items.push({
-              key: item.label,
-              value: item.value
+          if (typeof value[0] === 'object') {
+            value.forEach(item => {
+              const fieldName = `${name}.${item.name}`
+              if (excludes.includes(fieldName)) {
+                return
+              }
+              this.items.push({
+                key: item.label,
+                value: item.value
+              })
             })
-          })
+          } else if (typeof value[0] === 'string') {
+            value.forEach((item, index) => {
+              let data = {}
+              if (index === 0) {
+                data = {
+                  key: label,
+                  value: value[index]
+                }
+              } else {
+                data = {
+                  key: '',
+                  value: value[index]
+                }
+              }
+              this.items.push(data)
+            })
+          }
           continue
         }
-        const label = fieldMeta.label
         if (value === null || value === '') {
           value = '-'
         } else if (fieldMeta.type === 'datetime') {
           value = toSafeLocalDateStr(value)
         } else if (fieldMeta.type === 'labeled_choice') {
           value = value?.['label']
-        } else if (fieldMeta.type === 'related_field') {
+        } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object') {
           value = value['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
           value = value.map(item => item['name']).join(', ')
@@ -103,7 +125,8 @@ export default {
 
         const item = {
           key: label,
-          value: value
+          value: value,
+          formatter: this.formatters[name]
         }
         this.items.push(item)
       }

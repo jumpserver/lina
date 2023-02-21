@@ -70,6 +70,7 @@ export default {
       if (action === 'Clone') {
         route.query.clone_from = row.id
         route.query.platform = row.platform.id
+        route.query.platform_type = row.type.value
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
@@ -107,7 +108,6 @@ export default {
             sortable: true
           },
           platform: {
-            width: '100px',
             sortable: true
           },
           protocols: {

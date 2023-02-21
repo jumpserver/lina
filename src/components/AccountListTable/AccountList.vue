@@ -213,8 +213,8 @@ export default {
                     this.asset['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/accounts/accounts/${row.id}/verify/`,
-                      { action: 'test' }
+                      `/api/v1/accounts/accounts/tasks/`,
+                      { action: 'verify', accounts: [row.id] }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })

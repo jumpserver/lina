@@ -1,6 +1,6 @@
 <template>
   <IBox v-if="!loading">
-    <GenericCreateUpdateForm v-bind="$data" />
+    <GenericCreateUpdateForm class="form" v-bind="$data" />
   </IBox>
 </template>
 
@@ -69,5 +69,8 @@ export default {
 </script>
 
 <style scoped>
+.form >>> .el-select {
+  width: 100%;
+}
 
 </style>

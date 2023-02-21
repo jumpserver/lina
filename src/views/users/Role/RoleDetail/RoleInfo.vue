@@ -136,6 +136,8 @@ export default {
         'terminal.view_status': ['settings.change_terminal'],
         'terminal.view_task': ['settings.change_terminal'],
         'terminal.view_terminal': ['settings.change_terminal'],
+        'terminal.add_applethost': ['assets.view_platform'],
+        'terminal.change_applethost': ['assets.view_platform'],
         'ops.view_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.change_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],

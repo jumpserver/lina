@@ -200,6 +200,10 @@ input[type=file] {
   overflow: auto;
 }
 
+.el-table .el-table__row > td > .cell.el-tooltip {
+  width: auto!important;
+}
+
 .el-table .el-table__row .show-full-content > .cell {
   white-space: normal!important;
 }
