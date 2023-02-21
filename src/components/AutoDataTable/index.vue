@@ -26,7 +26,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { newURL } from '@/utils/common'
+import { newURL, replaceAllUUID } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
 
 export default {
@@ -335,7 +335,8 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
+      tableName = replaceAllUUID(tableName)
       const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
@@ -383,7 +384,10 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
+      let tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
+      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用
+      tableName = replaceAllUUID(tableName)
+
       _tableConfig[tableName] = {
         'showColumns': columns
       }

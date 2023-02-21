@@ -26,11 +26,7 @@ export default {
           'resource_statistics.users_amount',
           'resource_statistics.groups_amount',
           'resource_statistics.assets_amount',
-          'resource_statistics.admin_users_amount',
-          'resource_statistics.system_users_amount',
-          'resource_statistics.applications_amount',
           'resource_statistics.asset_perms_amount',
-          'resource_statistics.app_perms_amount',
           'comment', 'actions'],
         columnsMeta: {
           'resource_statistics.users_amount': {
@@ -42,20 +38,8 @@ export default {
           'resource_statistics.assets_amount': {
             label: this.$t('xpack.Organization.assets_amount')
           },
-          'resource_statistics.admin_users_amount': {
-            label: this.$t('xpack.Organization.admin_users_amount')
-          },
-          'resource_statistics.system_users_amount': {
-            label: this.$t('xpack.Organization.system_users_amount')
-          },
-          'resource_statistics.applications_amount': {
-            label: this.$t('xpack.Organization.applications_amount')
-          },
           'resource_statistics.asset_perms_amount': {
             label: this.$t('xpack.Organization.asset_perms_amount')
-          },
-          'resource_statistics.app_perms_amount': {
-            label: this.$t('xpack.Organization.app_perms_amount')
           },
           actions: {
             prop: 'id',
@@ -76,6 +60,7 @@ export default {
                     instance.confirmButtonLoading = true
                     try {
                       await performDelete.bind(this)({ row: row, col: col })
+                      this.$store.dispatch('users/deleteAdminOrg', { id: row.id, name: row.name })
                       done()
                       reload()
                       this.$message.success(this.$tc('common.deleteSuccessMsg'))

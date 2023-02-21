@@ -61,8 +61,10 @@ const mutations = {
   ADD_ORG: (state, org) => {
     state.consoleOrgs.push(org)
   },
+  DELETE_ORG: (state, org) => {
+    state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
+  },
   SET_CURRENT_ORG(state, org) {
-    console.log('set pre org:  ', state.currentOrg)
     if (state.currentOrg?.name !== 'System') {
       state.preOrg = state.currentOrg
     }
@@ -102,6 +104,9 @@ const actions = {
   },
   addAdminOrg({ commit, state }, org) {
     commit('ADD_ORG', org)
+  },
+  deleteAdminOrg({ commit }, org) {
+    commit('DELETE_ORG', org)
   },
   modifyOrg({ commit, state }, org) {
     commit('MODIFY_ORG', org)

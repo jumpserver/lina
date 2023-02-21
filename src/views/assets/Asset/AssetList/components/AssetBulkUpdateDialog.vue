@@ -34,6 +34,7 @@ export default {
   },
   data() {
     const meta = assetFieldsMeta(this)
+    const exclude = ['device', 'cloud', 'web']
     return {
       tips: this.$t('assets.AssetBulkUpdateTips'),
       formSetting: {
@@ -49,7 +50,7 @@ export default {
           domain: {
             ...meta.domain,
             label: this.$t('assets.Domain'),
-            disabled: this.category === 'cloud'
+            disabled: exclude.includes(this.category)
           },
           labels: {
             ...meta.labels,

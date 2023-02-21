@@ -39,24 +39,8 @@ export default {
           value: this.object.resource_statistics.assets_amount
         },
         {
-          key: this.$t('xpack.Organization.admin_users_amount'),
-          value: this.object.resource_statistics.admin_users_amount
-        },
-        {
-          key: this.$t('xpack.Organization.system_users_amount'),
-          value: this.object.resource_statistics.system_users_amount
-        },
-        {
-          key: this.$t('xpack.Organization.applications_amount'),
-          value: this.object.resource_statistics.applications_amount
-        },
-        {
           key: this.$t('xpack.Organization.asset_perms_amount'),
           value: this.object.resource_statistics.asset_perms_amount
-        },
-        {
-          key: this.$t('xpack.Organization.app_perms_amount'),
-          value: this.object.resource_statistics.app_perms_amount
         },
         'date_created', 'comment'
       ]
