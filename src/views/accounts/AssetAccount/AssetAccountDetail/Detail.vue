@@ -73,7 +73,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_account')
+            disabled: !vm.$hasPerm('accounts.verify_account')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -94,7 +94,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Push'),
-            disabled: !vm.$hasPerm('assets.push_assetaccount')
+            disabled: !vm.$hasPerm('accounts.push_account')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -123,7 +123,7 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('assets.test_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
+            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
           },
           callbacks: Object.freeze({
             change: (value) => {

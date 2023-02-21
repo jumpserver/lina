@@ -161,7 +161,7 @@ export default {
         push_now: {
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('assets.push_assetaccount')
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
           }
         }
       },
