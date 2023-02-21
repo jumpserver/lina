@@ -218,17 +218,13 @@ export default {
       })
     },
     controlShowField() {
-      let privileged = ['privileged']
+      const privileged = ['privileged']
       let suFrom = ['su_from']
       const filterSuFrom = ['database', 'device', 'cloud', 'web']
       const asset = this?.asset || {}
-      if (asset?.type?.value === 'website') {
-        privileged = []
-      }
       if (filterSuFrom.includes(asset?.category?.value)) {
         suFrom = []
       }
-
       return [...privileged, ...suFrom]
     },
     confirm(form) {
