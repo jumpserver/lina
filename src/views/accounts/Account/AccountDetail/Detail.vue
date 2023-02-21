@@ -141,7 +141,6 @@ export default {
         ],
         formatters: {
           asset: (item, value) => {
-            console.log('Item: ', item)
             const route = {
               name: 'AssetDetail',
               params: { id: this.object.asset.id }
