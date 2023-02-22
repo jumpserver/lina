@@ -5,6 +5,14 @@
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
+      <ViewSecret
+        v-if="showViewSecretDialog"
+        :account="object"
+        :url="secretUrl"
+        :title="$tc('common.ViewSecret')"
+        :only-show-password="true"
+        :visible.sync="showViewSecretDialog"
+      />
     </el-col>
   </el-row>
 </template>
@@ -12,13 +20,15 @@
 <script>
 import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
+import ViewSecret from '@/components/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
     AutoDetailCard,
-    QuickActions
+    QuickActions,
+    ViewSecret
   },
   props: {
     object: {
@@ -31,6 +41,8 @@ export default {
     const filterSuFrom = ['database', 'device', 'cloud', 'web']
 
     return {
+      secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
+      showViewSecretDialog: false,
       quickActions: [
         {
           title: this.$t('common.Activate'),
@@ -103,6 +115,22 @@ export default {
                 { action: 'push', accounts: [this.object.id] }
               ).then(res => {
                 openTaskPage(res['task'])
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('common.ViewSecret'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.View'),
+            disabled: !vm.$hasPerm('accounts.view_accountsecret')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              vm.showViewSecretDialog = false
+              setTimeout(() => {
+                vm.showViewSecretDialog = true
               })
             }
           })

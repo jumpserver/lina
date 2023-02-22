@@ -2,6 +2,7 @@
   "": "",
   "accounts": {
     "HistoryDate": "历史日期",
+    "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
     "HistoryPassword": "履歴パスワード",
     "PasswordRecord": "パスワードレコード",
     "AccountHistoryHelpMessage": "現在のアカウントの履歴バージョンを記録する",
@@ -437,6 +438,7 @@
   },
   "common": {
     "RestoreDefault": "デフォルトに戻す",
+    "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
     "About": "について",
     "PermissionCompany": "授权公司",
@@ -837,6 +839,8 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "RunasHelpText": "スクリプトを実行するユーザー名を入力",
+    "RunasPolicyHelpText": "現在の資産にこの実行ユーザーが存在しない場合にアカウント選択ポリシーを実行することを示します",
     "StatusGreen": "最近調子がいい\n",
     "StatusRed": "最後のタスクの実行に失敗しました",
     "StatusYellow": "最近の存在の実行に失敗しました",

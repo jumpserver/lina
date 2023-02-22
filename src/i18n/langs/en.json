@@ -2,6 +2,7 @@
   "": "",
   "accounts": {
     "HistoryDate": "History date",
+    "SameTypeAccountTip": "An account with the same user name and key type already exists",
     "HistoryPassword": "History password",
     "PasswordRecord": "Password record",
     "AccountHistoryHelpMessage": "Record the historical version of the current account",
@@ -436,6 +437,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "DownloadCenter": "Download center",
     "ImportOrg": "Import organization",
     "About": "About",
     "PermissionCompany": "Permission company",
@@ -834,6 +836,8 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "RunasHelpText": "Fill in the user name to run the script",
+    "RunasPolicyHelpText": "Indicates the account selection strategy when there is no running user on the current asset",
     "StatusGreen": "Recently in good condition",
     "StatusRed": "The last task execution failed",
     "StatusYellow": "Recent Execution Failures",

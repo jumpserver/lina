@@ -12,6 +12,7 @@
 <script>
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountChangeSecretInfo',
@@ -34,7 +35,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('accounts.AccountChangeSecret.Execute'),
-            disabled: !this.$hasPerm('accounts.add_changesecretexection')
+            disabled: !this.$hasPerm('accounts.add_changesecretexection') || !this.object.is_active
           },
           callbacks: {
             click: function() {
@@ -42,7 +43,7 @@ export default {
                 `/api/v1/accounts/change-secret-executions/`,
                 { automation: this.object.id }
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                openTaskPage(res['task'])
               })
             }.bind(this)
           }

@@ -46,6 +46,9 @@ export default {
         crontab: '0 0 * * *'
       },
       fieldsMeta: {
+        runas_policy: {
+          helpText: this.$tc('ops.RunasPolicyHelpText')
+        },
         name: {
           rules: [Required],
           hidden: (formValue) => {

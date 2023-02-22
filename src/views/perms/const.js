@@ -5,7 +5,7 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('common.Username'), value: 'username' },
   { label: i18n.t('perms.UserGroups'), value: 'user_group' },
   { label: i18n.t('perms.AssetName'), value: 'asset_name' },
-  { label: i18n.t('assets.AssetAddress'), value: 'ip' },
+  { label: i18n.t('assets.AssetAddress'), value: 'address' },
   { label: i18n.t('perms.Account'), value: 'accounts' },
   {
     label: i18n.t('perms.isValid'), value: 'is_valid',
