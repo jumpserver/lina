@@ -60,6 +60,9 @@ export default {
                 this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
+          },
+          actions: {
+            has: false
           }
         },
         tableAttrs: {
