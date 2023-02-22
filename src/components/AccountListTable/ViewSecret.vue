@@ -8,7 +8,7 @@
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="dialogTitle"
+      :title="title"
       :visible.sync="showSecret"
       :width="'50'"
       v-bind="$attrs"
@@ -16,12 +16,14 @@
       v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
-        <el-form-item :label="$tc('assets.Name')">
-          <span>{{ account['name'] }}</span>
-        </el-form-item>
-        <el-form-item :label="$tc('assets.Username')">
-          <span>{{ account['username'] }}</span>
-        </el-form-item>
+        <div v-if="!onlyShowPassword">
+          <el-form-item :label="$tc('assets.Name')">
+            <span>{{ account['name'] }}</span>
+          </el-form-item>
+          <el-form-item :label="$tc('assets.Username')">
+            <span>{{ account['username'] }}</span>
+          </el-form-item>
+        </div>
         <el-form-item :label="secretTypeLabel">
           <ShowKeyCopyFormatter
             :cell-value="secretInfo.secret"
@@ -29,15 +31,6 @@
               name: account['name'],
             }}"
           />
-        </el-form-item>
-        <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('assets.sshKeyFingerprint')">
-          <span>{{ sshKeyFingerprint }}</span>
-        </el-form-item>
-        <el-form-item :label="$tc('common.DateCreated')">
-          <span>{{ account['date_created'] | date }}</span>
-        </el-form-item>
-        <el-form-item :label="$tc('common.DateUpdated')">
-          <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
         <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
           <el-button
@@ -48,6 +41,17 @@
             {{ historyCount }}
           </el-button>
         </el-form-item>
+        <div v-if="!onlyShowPassword">
+          <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('assets.sshKeyFingerprint')">
+            <span>{{ sshKeyFingerprint }}</span>
+          </el-form-item>
+          <el-form-item :label="$tc('common.DateCreated')">
+            <span>{{ account['date_created'] | date }}</span>
+          </el-form-item>
+          <el-form-item :label="$tc('common.DateUpdated')">
+            <span>{{ account['date_updated'] | date }}</span>
+          </el-form-item>
+        </div>
       </el-form>
     </Dialog>
     <PasswordHistoryDialog
@@ -85,14 +89,23 @@ export default {
       type: String,
       default: ''
     },
+    title: {
+      type: String,
+      default: function() {
+        return this.$tc('assets.AccountDetail')
+      }
+    },
     showPasswordRecord: {
       type: Boolean,
       default: true
+    },
+    onlyShowPassword: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      dialogTitle: this.$tc('assets.AccountDetail'),
       secretInfo: {},
       showSecret: false,
       sshKeyFingerprint: '',
