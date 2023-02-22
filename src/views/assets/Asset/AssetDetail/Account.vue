@@ -4,14 +4,14 @@
       <el-col :md="24" :sm="24">
         <AccountListTable
           ref="ListTable"
-          v-bind="$attrs"
           :asset="object"
-          :url="iUrl"
-          :has-import="false"
-          :has-clone="false"
-          :has-left-actions="true"
           :columns="columns"
+          :has-clone="false"
+          :has-import="false"
+          :has-left-actions="true"
           :header-extra-actions="headerExtraActions"
+          :url="iUrl"
+          v-bind="$attrs"
         />
         <AccountTemplateDialog
           v-if="templateDialogVisible"
@@ -48,7 +48,7 @@ export default {
     return {
       templateDialogVisible: false,
       columns: [
-        'name', 'username', 'version', 'privileged', 'connectivity',
+        'name', 'username', 'privileged', 'connectivity',
         'is_active', 'date_created', 'date_updated', 'actions'
       ],
       headerExtraActions: [

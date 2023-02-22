@@ -28,7 +28,7 @@ export default {
         width: '60%',
         tableConfig: {
           url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,
-          columns: ['secret', 'secret_type', 'version'],
+          columns: ['secret', 'secret_type', 'history_date'],
           columnsMeta: {
             secret: {
               formatter: ShowKeyCopyFormatter,
