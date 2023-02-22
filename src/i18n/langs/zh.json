@@ -834,6 +834,8 @@
     "Weekly": "按周"
   },
   "ops": {
+    "RunasHelpText": "填写运行脚本的用户名",
+    "RunasPolicyHelpText": "表示当前资产上没此运行用户时，采取什么账号选择策略",
     "StatusGreen": "近期状态良好",
     "StatusRed": "上一次任务执行失败",
     "StatusYellow": "近期存在在执行失败",

@@ -835,6 +835,8 @@
     "Weekly": "Weekly"
   },
   "ops": {
+    "RunasHelpText": "Fill in the user name to run the script",
+    "RunasPolicyHelpText": "Indicates the account selection strategy when there is no running user on the current asset",
     "StatusGreen": "Recently in good condition",
     "StatusRed": "The last task execution failed",
     "StatusYellow": "Recent Execution Failures",
