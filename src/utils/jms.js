@@ -5,7 +5,7 @@ import { openWindow } from './common'
 export function openTaskPage(taskId, taskType, taskUrl) {
   taskType = taskType || 'celery'
   if (!taskUrl) {
-    taskUrl = `/#/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
+    taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
   openWindow(taskUrl)
 }

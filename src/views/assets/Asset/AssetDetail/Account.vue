@@ -49,7 +49,8 @@ export default {
       templateDialogVisible: false,
       columns: [
         'name', 'username', 'privileged', 'version', 'connectivity',
-        'is_active', 'date_created', 'date_updated', 'actions'
+        'is_active', 'secret_type', 'source', 'date_created',
+        'date_updated', 'actions'
       ],
       headerExtraActions: [
         {
@@ -79,8 +80,6 @@ export default {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
         this.$message.success(this.$tc('common.AddSuccessMsg'))
-      }).catch(() => {
-        this.$message.error(this.$tc('common.AddFailMsg'))
       })
     }
   }

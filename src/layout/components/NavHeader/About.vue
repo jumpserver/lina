@@ -1,24 +1,24 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="''"
-    class="about-dialog"
-    :visible.sync="iVisible"
-    width="50%"
-    top="10%"
     :show-cancel="false"
     :show-confirm="false"
+    :title="''"
+    :visible.sync="iVisible"
+    class="about-dialog"
+    top="10%"
+    width="50%"
   >
     <div class="box">
       <div class="head">
-        <img :src="logoTextSrc" class="sidebar-logo-text" alt="logo">
+        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
       </div>
       <div class="text">{{ $tc('ops.version') }}：<strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span></div>
       <div class="text">{{ $tc('common.PermissionCompany') }}：{{ corporation }}</div>
       <el-divider class="divider" />
       <div class="text">
         <span v-for="(i, index) in actions" :key="index" class="text-link" @click="onClick(i.name)">
-          <i class="icon" :class="i.icon" />{{ i.label }}
+          <i :class="i.icon" class="icon" />{{ i.label }}
           <el-divider v-if="index !== actions.length - 1" direction="vertical" />
         </span>
       </div>
@@ -46,12 +46,12 @@ export default {
       actions: [
         {
           name: 'github',
-          label: 'github',
+          label: 'GitHub',
           icon: 'fa fa-github'
         },
         {
           name: 'download',
-          label: this.$tc('common.Download'),
+          label: this.$tc('common.DownloadCenter'),
           icon: 'fa fa-download'
         }
       ]

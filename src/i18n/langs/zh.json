@@ -2,6 +2,7 @@
   "": "",
   "accounts": {
     "HistoryDate": "日期",
+    "SameTypeAccountTip": "相同用户名、密钥类型的账号已存在",
     "TaskID": "任务 ID",
     "DynamicUsername": "动态用户名",
     "HistoryPassword": "历史密码",
@@ -433,6 +434,7 @@
   },
   "common": {
     "RestoreDefault": "恢复默认",
+    "DownloadCenter": "下载中心",
     "ImportOrg": "导入组织",
     "About": "关于",
     "PermissionCompany": "授权公司",
@@ -833,6 +835,8 @@
     "Weekly": "按周"
   },
   "ops": {
+    "RunasHelpText": "填写运行脚本的用户名",
+    "RunasPolicyHelpText": "表示当前资产上没此运行用户时，采取什么账号选择策略",
     "StatusGreen": "近期状态良好",
     "StatusRed": "上一次任务执行失败",
     "StatusYellow": "近期存在在执行失败",

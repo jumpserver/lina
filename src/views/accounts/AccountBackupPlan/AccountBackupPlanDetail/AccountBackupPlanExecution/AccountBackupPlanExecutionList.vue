@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanExecutionList',
@@ -43,7 +44,7 @@ export default {
                   type: 'primary',
                   title: this.$t('accounts.AccountChangeSecret.Log'),
                   callback: function({ row }) {
-                    window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                    openTaskPage(row['id'])
                   }
                 },
                 {
