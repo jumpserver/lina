@@ -33,7 +33,7 @@ export default {
       host: {},
       config: {
         // 发布机也是资产，通过资产的api获取，可以与资产详情显示保持一致
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/assets/assets',
         activeMenu: 'Detail',
         submenu: [
           {
