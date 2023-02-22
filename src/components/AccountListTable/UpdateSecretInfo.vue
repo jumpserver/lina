@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    width="50"
-    :title="this.$tcc('assets.UpdateAssetUserToken')"
-    :visible.sync="visible"
     :destroy-on-close="true"
-    @confirm="handleConfirm()"
+    :title="$tc('assets.UpdateAssetUserToken')"
+    :visible.sync="visible"
+    width="50"
     @cancel="handleCancel()"
+    @confirm="handleConfirm()"
     v-on="$listeners"
   >
     <el-form label-position="right" label-width="90px">
@@ -75,12 +75,12 @@ export default {
         { disableFlashErrorMsg: true }
       ).then(res => {
         this.authInfo = { password: '', private_key: '' }
-        this.$message.success(this.$tcc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
         this.$emit('updateAuthDone', res)
         this.$emit('update:visible', false)
       }).catch(err => {
         const errMsg = Object.values(err.response.data).join(', ')
-        this.$message.error(this.$tcc('common.updateErrorMsg') + ' ' + errMsg)
+        this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
         this.$emit('update:visible', true)
       })
     },

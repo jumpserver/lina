@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "HistoryDate": "History date",
     "HistoryPassword": "History password",
     "PasswordRecord": "Password record",
     "AccountHistoryHelpMessage": "Record the historical version of the current account",

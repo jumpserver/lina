@@ -1,8 +1,8 @@
 <template>
   <Dialog
     v-if="detailVisible"
-    :show-confirm="false"
     :show-cancel="false"
+    :show-confirm="false"
     :title="title"
     :visible.sync="detailVisible"
   >
@@ -17,18 +17,18 @@
           style="width: 100%"
         >
           <el-table-column
-            :label="this.$tc('audits.ChangeField')"
+            :label="$tc('audits.ChangeField')"
             :prop="fieldName"
             show-overflow-tooltip
             width="100"
           />
           <el-table-column
-            :label="this.$tc('audits.BeforeChange')"
+            :label="$tc('audits.BeforeChange')"
             :prop="leftKeyName"
             show-overflow-tooltip
           />
           <el-table-column
-            :label="this.$tc('audits.AfterChange')"
+            :label="$tc('audits.AfterChange')"
             :prop="rightKeyName"
             show-overflow-tooltip
           />

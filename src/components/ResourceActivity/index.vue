@@ -21,7 +21,7 @@
         </IBox>
       </el-col>
     </el-row>
-    <DiffDetail ref="DetailDialog" :title="this.$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
   </div>
 </template>
 

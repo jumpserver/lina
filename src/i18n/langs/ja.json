@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "HistoryDate": "历史日期",
     "HistoryPassword": "履歴パスワード",
     "PasswordRecord": "パスワードレコード",
     "AccountHistoryHelpMessage": "現在のアカウントの履歴バージョンを記録する",

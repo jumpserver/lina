@@ -31,11 +31,15 @@ export default {
           columns: ['secret', 'secret_type', 'history_date'],
           columnsMeta: {
             secret: {
+              label: this.$t('assets.Password'),
               formatter: ShowKeyCopyFormatter,
               formatterArgs: {
                 hasDownload: false,
                 name: this.account.name
               }
+            },
+            history_date: {
+              label: this.$t('accounts.HistoryDate')
             },
             secret_type: {
               width: '200px'
@@ -49,7 +53,8 @@ export default {
           }
         },
         headerActions: {
-          has: false
+          hasLeftActions: false,
+          hasSearch: false
         }
       }
     }
