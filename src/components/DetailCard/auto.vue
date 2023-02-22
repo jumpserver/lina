@@ -92,7 +92,6 @@ export default {
                 }
               } else {
                 data = {
-                  key: '',
                   value: value[index]
                 }
               }
