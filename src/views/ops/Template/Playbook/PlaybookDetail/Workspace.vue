@@ -207,7 +207,7 @@ export default {
       if (!node) {
         return
       }
-      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('ops.DeleteFile'), {
+      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('ops.Delete'), {
         confirmButtonText: this.$tc('ops.Confirm'),
         cancelButtonText: this.$tc('ops.Cancel'),
         type: 'warning'
