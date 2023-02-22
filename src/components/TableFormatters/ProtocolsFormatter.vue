@@ -18,11 +18,11 @@ export default {
       default() {
         return {}
       }
-    },
-    data() {
-      return {
-        formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
-      }
+    }
+  },
+  data() {
+    return {
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
     }
   }
 }

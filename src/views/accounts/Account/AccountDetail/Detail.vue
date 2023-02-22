@@ -9,8 +9,6 @@
         v-if="showViewSecretDialog"
         :account="object"
         :url="secretUrl"
-        :title="$tc('common.ViewSecret')"
-        :only-show-password="true"
         :visible.sync="showViewSecretDialog"
       />
     </el-col>
