@@ -55,8 +55,8 @@ export default {
             formatter: row => {
               const status = {
                 0: this.$t('xpack.Cloud.UnSyncCount'),
-                1: this.$t('xpack.Cloud.SyncedCount'),
-                2: this.$t('xpack.Cloud.NewSyncCount'),
+                1: this.$t('xpack.Cloud.NewSyncCount'),
+                2: this.$t('xpack.Cloud.SyncedCount'),
                 3: this.$t('xpack.Cloud.ReleasedCount')
               }
               return <el-tag type='primary' size='mini'>{status[row.status]}</el-tag>
