@@ -18,8 +18,13 @@
     <script>
       window.onload = function() {
         const baseUrl = "/ui/"
-        if (location.pathname === '/' && baseUrl !== '/') {
+        if (location.pathname === '/') {
            location.pathname = baseUrl
+        }
+        const origin = window.location.origin
+        const pathname = window.location.pathname
+        if(pathname.indexOf('/ui') === -1) {
+          window.location.href = origin + '/ui/#' + pathname
         }
       }
     </script>
