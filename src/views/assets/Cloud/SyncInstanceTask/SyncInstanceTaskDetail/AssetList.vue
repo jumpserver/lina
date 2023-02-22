@@ -45,7 +45,7 @@ export default {
         columns: [
           'instance_id',
           {
-            prop: 'asset',
+            prop: 'asset_ip',
             label: this.$t('xpack.ip')
           },
           'region',
