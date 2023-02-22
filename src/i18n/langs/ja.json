@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
     "HistoryPassword": "履歴パスワード",
     "PasswordRecord": "パスワードレコード",
     "AccountHistoryHelpMessage": "現在のアカウントの履歴バージョンを記録する",
