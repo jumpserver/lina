@@ -110,7 +110,14 @@ export default {
   },
   mounted() {
     const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-    this.$axios.get(url).then(resp => {
+    this.$axios.get(url,
+      {
+        validateStatus: (status) => {
+          if (status === 400) return 200
+          return status
+        }
+      }
+    ).then(resp => {
       this.historyCount = resp.count
     })
   },
