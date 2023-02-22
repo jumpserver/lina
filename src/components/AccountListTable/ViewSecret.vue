@@ -2,20 +2,20 @@
   <div>
     <UserConfirmDialog
       :url="url"
-      @UserConfirmDone="getAuthInfo"
       @UserConfirmCancel="exit"
+      @UserConfirmDone="getAuthInfo"
     />
     <Dialog
-      :title="dialogTitle"
-      :show-cancel="false"
       :destroy-on-close="true"
-      :width="'50'"
+      :show-cancel="false"
+      :title="dialogTitle"
       :visible.sync="showSecret"
+      :width="'50'"
       v-bind="$attrs"
       @confirm="showSecret = false"
       v-on="$listeners"
     >
-      <el-form class="password-form" label-position="right" label-width="100px" :model="secretInfo">
+      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('assets.Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -45,9 +45,8 @@
             type="text"
             @click="onShowPasswordHistory"
           >
-            {{ secretInfo.version }}
+            {{ historyCount }}
           </el-button>
-
         </el-form-item>
       </el-form>
     </Dialog>
@@ -97,6 +96,7 @@ export default {
       secretInfo: {},
       showSecret: false,
       sshKeyFingerprint: '',
+      historyCount: 0,
       showPasswordHistoryDialog: false
     }
   },
@@ -107,6 +107,12 @@ export default {
     secretType() {
       return this.account['secret_type'].value
     }
+  },
+  mounted() {
+    const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
+    this.$axios.get(url).then(resp => {
+      this.historyCount = resp.count
+    })
   },
   methods: {
     getAuthInfo() {

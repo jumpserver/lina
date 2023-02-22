@@ -139,9 +139,6 @@ export default {
               }
             }
           },
-          version: {
-            width: '70px'
-          },
           secret_type: {
             width: '100px',
             formatter: function(row) {
