@@ -17,14 +17,15 @@
     </noscript>
     <script>
       window.onload = function() {
-        const baseUrl = "/ui/"
         if (location.pathname === '/') {
-           location.pathname = baseUrl
+           location.pathname = '/ui/'
         }
-        const origin = window.location.origin
         const pathname = window.location.pathname
+        if (pathname.startsWith('/core')) {
+            return
+        }
         if(pathname.indexOf('/ui') === -1) {
-          window.location.href = origin + '/ui/#' + pathname
+          window.location.href = window.location.origin + '/ui/#' + pathname
         }
       }
     </script>
