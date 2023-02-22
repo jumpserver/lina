@@ -432,6 +432,7 @@
   },
   "common": {
     "RestoreDefault": "恢复默认",
+    "DownloadCenter": "下载中心",
     "ImportOrg": "导入组织",
     "About": "关于",
     "PermissionCompany": "授权公司",
