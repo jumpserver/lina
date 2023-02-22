@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "HistoryDate": "日期",
     "SameTypeAccountTip": "相同用户名、密钥类型的账号已存在",
     "TaskID": "任务 ID",
     "DynamicUsername": "动态用户名",

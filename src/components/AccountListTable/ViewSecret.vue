@@ -38,7 +38,7 @@
             type="text"
             @click="onShowPasswordHistory"
           >
-            {{ historyCount }}
+            {{ account['version'] }}
           </el-button>
         </el-form-item>
         <div v-if="!onlyShowPassword">
@@ -120,19 +120,6 @@ export default {
     secretType() {
       return this.account['secret_type'].value
     }
-  },
-  mounted() {
-    const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-    this.$axios.get(url,
-      {
-        validateStatus: (status) => {
-          if (status === 400) return 200
-          return status
-        }
-      }
-    ).then(resp => {
-      this.historyCount = resp.count
-    })
   },
   methods: {
     getAuthInfo() {
