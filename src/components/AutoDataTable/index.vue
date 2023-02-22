@@ -120,8 +120,8 @@ export default {
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
-              true: i18n.t('ops.Yes'),
-              false: i18n.t('ops.no')
+              true: i18n.t('common.Yes'),
+              false: i18n.t('common.No')
             }
           }
           col.width = '80px'
