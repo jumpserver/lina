@@ -22,6 +22,5 @@ export const connectivityMeta = {
       }
     }
   },
-  width: '100px',
-  align: 'center'
+  width: '100px'
 }
