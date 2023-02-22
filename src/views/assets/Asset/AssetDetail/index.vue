@@ -6,7 +6,7 @@
     v-on="$listeners"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="asset" />
+      <component :is="config.activeMenu" :exclude="'Account'" :object="asset" />
     </keep-alive>
   </GenericDetailPage>
 </template>

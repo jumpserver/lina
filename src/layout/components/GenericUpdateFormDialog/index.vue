@@ -1,12 +1,15 @@
 <template>
   <Dialog
-    :title="$tc('common.updateSelected')"
-    :visible.sync="iVisible"
-    width="70%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('common.updateSelected')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="70%"
   >
+    <el-alert v-if="tips" class="tips" type="success">
+      {{ tips }}
+    </el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
         <div class="select-prop-label">
@@ -20,6 +23,7 @@
             :key="name"
             :checked="true"
             :label="name"
+            :disabled="value.disabled"
           >
             {{ value.label }}
           </el-checkbox>
@@ -55,6 +59,10 @@ export default {
     formSetting: {
       type: Object,
       default: () => ({})
+    },
+    tips: {
+      type: String,
+      default: ''
     },
     visible: {
       type: Boolean,
@@ -152,4 +160,7 @@ export default {
     padding-right: 30px;
   }
 
+  .tips {
+    margin-bottom: 10px;
+  }
 </style>

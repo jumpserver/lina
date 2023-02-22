@@ -1,10 +1,11 @@
 <template>
-  <ListTable ref="ListTable" :table-config="replayTableConfig" :header-actions="replayActions" />
+  <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
 </template>
 <script>
 import ListTable from '@/components/ListTable'
-import { TestReplayStorage, SetToDefaultReplayStorage } from '@/api/sessions'
+import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
 import { getReplayStorageOptions } from '@/views/sessions/const'
+
 export default {
   name: 'ReplayStorage',
   components: {
@@ -33,9 +34,12 @@ export default {
           app: 'terminal',
           resource: 'replaystorage'
         },
+        columnsExclude: ['meta'],
+        columns: [
+          'name', 'type', 'comment', 'is_default', 'actions'
+        ],
         columnsShow: {
-          min: ['name', 'type', 'actions'],
-          default: ['name', 'type', 'comment', 'is_default', 'actions']
+          min: ['name', 'type', 'actions']
         },
         columnsMeta: {
           name: {
@@ -45,7 +49,8 @@ export default {
           },
           is_default: {
             formatterArgs: {
-              showFalse: false
+              showFalse: false,
+              showText: false
             },
             align: 'center',
             width: '100px'
@@ -54,10 +59,9 @@ export default {
             sortable: 'custom'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
-              onUpdate: function({ row, col }) {
-                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})
+              onUpdate: function({ row }) {
+                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canUpdate: function({ row }) {
                 return (

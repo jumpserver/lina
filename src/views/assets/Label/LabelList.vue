@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -17,7 +17,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'value', 'asset_count', 'date_created', 'comment', 'org_name', 'actions'
+            'name', 'value', 'asset_count', 'date_created',
+            'comment', 'org_name', 'actions'
           ]
         },
         columnsMeta: {

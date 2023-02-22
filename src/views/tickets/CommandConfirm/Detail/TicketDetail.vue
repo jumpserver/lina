@@ -40,7 +40,7 @@ export default {
           value: object.apply_run_asset
         },
         {
-          key: this.$t('tickets.ApplyRunAccount'),
+          key: this.$t('assets.Account'),
           value: object.rel_snapshot.apply_run_account
         },
         {

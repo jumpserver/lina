@@ -11,14 +11,14 @@
           <WebTerminal />
         </el-tooltip>
       </li>
-      <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip :content="$tc('route.SystemSetting')" effect="dark">
-          <SystemSetting />
-        </el-tooltip>
-      </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
         <el-tooltip :content="$tc('route.Ticket')" effect="dark">
           <Tickets />
+        </el-tooltip>
+      </li>
+      <li v-perms="'settings.view_setting'" class="header-item header-icon">
+        <el-tooltip :content="$tc('route.SystemSetting')" effect="dark">
+          <SystemSetting />
         </el-tooltip>
       </li>
       <li class="header-item active-menu">
@@ -101,7 +101,7 @@ export default {
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: var(--nav-bg);
+    background: var(--banner-bg);
 
     .navbar-left {
       float: left;
@@ -111,16 +111,21 @@ export default {
         display: inline-block;
         vertical-align: middle;
 
-        & >>> .el-submenu__title {
+        & > > > .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $header-height;
           height: $header-height;
         }
 
-        & >>> .org-select {
+        & > > > .org-select {
           padding: 0;
         }
+
+        & > > > .svg-icon {
+          color: #FFF !important;
+        }
+
         .nav-logo {
           width: 200px;
         }
@@ -132,6 +137,7 @@ export default {
       margin-right: 10px;
       height: 50px;
       line-height: 50px;
+
       .header-hover {
         &:hover {
           background-color: rgba(255, 255, 255, .2);
@@ -144,10 +150,12 @@ export default {
         padding-right: 10px;
         padding-left: 10px;
         vertical-align: top;
-        &>>> .svg-icon {
-          color: #FFF!important;
+
+        & > > > .svg-icon {
+          color: #FFF !important;
         }
-        &>>> .el-badge {
+
+        & > > > .el-badge {
           vertical-align: top;
         }
       }
@@ -160,12 +168,12 @@ export default {
           background-color: rgba(255, 255, 255, .2);
         }
 
-        & >>> i {
+        & > > > i {
           color: #FFF;
           font-size: 16px;
         }
 
-        & >>> .svg-icon {
+        & > > > .svg-icon {
           color: #FFF;
           font-size: 16px;
         }
@@ -196,9 +204,9 @@ export default {
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
 
-    & >>> .svg-icon {
-      font-size: 16px!important;
-      color: #fff!important;
+    & > > > .svg-icon {
+      font-size: 16px !important;
+      color: #fff !important;
     }
   }
 
@@ -217,16 +225,18 @@ export default {
     }
   }
 
-  >>> .el-badge__content {
+  > > > .el-badge__content {
     color: var(--color-primary);
   }
-  >>> .el-badge__content--primary {
+
+  > > > .el-badge__content--primary {
     background-color: #fff;
   }
+
   .organization {
     border-radius: 20px;
     background-color: rgba(255, 255, 255, .15);
-    padding-left: 10px!important;
+    padding-left: 10px !important;
   }
 </style>
 

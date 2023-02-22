@@ -104,12 +104,13 @@ export default {
             }
           },
           runas: {
-            type: 'select',
+            type: 'input',
             name: this.$t('ops.runAs'),
             align: 'left',
             value: 'root',
+            tip: this.$tc('ops.RunasHelpText'),
             el: {
-              create: true
+              autoComplete: true
             },
             options: [],
             callback: (option) => {
@@ -121,6 +122,7 @@ export default {
             name: this.$t('ops.RunasPolicy'),
             align: 'left',
             value: 'skip',
+            tip: this.$tc('ops.RunasPolicyHelpText'),
             options: [
               {
                 label: this.$tc('ops.Skip'),
@@ -163,16 +165,11 @@ export default {
             type: 'select',
             name: this.$t('ops.Timeout'),
             align: 'left',
-            value: -1,
-            el: {
-              create: true
-            },
+            value: 60,
             options: [
-              { label: '无', value: -1 },
               { label: '10', value: 10 },
               { label: '30', value: 30 },
-              { label: '60', value: 60 },
-              { label: this.$t('ops.ManualInput'), value: 'manualInput' }
+              { label: '60', value: 60 }
             ],
             callback: (option) => {
               this.timeout = option
@@ -219,7 +216,6 @@ export default {
         showRefresh: true,
         showMenu: false,
         showSearch: true,
-        customTreeHeader: false,
         check: {
           enable: true
         },
@@ -254,10 +250,14 @@ export default {
         getTaskDetail(this.currentTaskId).then(data => {
           getJob(data.job_id).then(res => {
             this.toolbar.left.runas.value = res.runas
+            this.toolbar.left.runas.callback(res.runas)
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
+            this.toolbar.left.runasPolicy.callback(res.runas_policy.value)
             this.toolbar.left.language.value = res.module.value
             this.toolbar.left.language.callback(res.module.value)
             this.toolbar.left.timeout.value = res.timeout
+            this.toolbar.left.timeout.callback(res.timeout)
+
             this.command = res.args
             this.executionInfo.status = data['status']
             this.executionInfo.timeCost = data['time_cost']
@@ -269,17 +269,12 @@ export default {
     },
     getFrequentUsernames() {
       this.$axios.get('/api/v1/ops/frequent-username').then(data => {
-        this.toolbar.left.runas.options.push({
-          label: 'root', value: 'root'
-        })
-        data.filter((item) => {
-          return item.username !== 'root'
-        }).forEach((item) => {
-          this.toolbar.left.runas.options.push({
-            label: item.username,
-            value: item.username
+        this.toolbar.left.runas.el.query = (query, cb) => {
+          const ns = data.map(item => {
+            return { value: item.username }
           })
-        })
+          cb(ns)
+        }
         this.ready = true
       })
     },

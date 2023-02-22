@@ -22,7 +22,7 @@
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('common.Add') }}
         </el-button>
-        <el-button size="mini" type="success" @click="onAddFromTemplateClick">
+        <el-button size="mini" type="success" :disabled="!$hasPerm('accounts.view_accounttemplate')" @click="onAddFromTemplateClick">
           {{ $t('common.TemplateAdd') }}
         </el-button>
       </div>
@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      accounts: [],
+      accounts: this.value || [],
       account: {},
       initial: false,
       addAccountDialogVisible: false,
@@ -93,7 +93,13 @@ export default {
   methods: {
     removeAccount(account) {
       this.accounts = this.accounts.filter((item) => {
-        return item.id !== account.id
+        if (account.id && item.id) {
+          return item.id !== account.id
+        } else if (account.username && item.username) {
+          return item.username !== account.username
+        } else {
+          return account.name !== item.name
+        }
       })
     },
     onEditClick(account) {
@@ -115,6 +121,18 @@ export default {
     },
     goToAssetAccountsPage() {
       const assetId = this.$route.params.id
+      // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
+      // 会跳转到其他组织的资产详情页，而不是发布机详情页
+      if (this.$router.currentRoute.name === 'AppletHostUpdate') {
+        this.$router.push({
+          name: 'AppletHostDetail',
+          params: { id: assetId },
+          query: {
+            activeTab: 'Accounts'
+          }
+        })
+        return
+      }
       this.$router.push({
         name: 'AssetDetail',
         params: { id: assetId },

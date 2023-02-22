@@ -19,7 +19,9 @@
     "vue-i18n-extract": "vue-i18n-extract",
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'",
     "vue-i18n-report-json": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -o /tmp/abc.json",
-    "vue-i18n-report-add-miss": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -a"
+    "vue-i18n-report-add-miss": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -a",
+    "diff-i18n": "python ./src/i18n/langs/i18n-util.py diff en ja",
+    "apply-i18n": "python ./src/i18n/langs/i18n-util.py apply en ja"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",

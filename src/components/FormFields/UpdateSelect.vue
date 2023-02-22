@@ -14,6 +14,7 @@
       v-show="isShow"
       ref="select2"
       v-model="iValue"
+      :disabled="disabled"
       v-bind="$attrs"
       @change="onSelectChange"
       v-on="$listeners"

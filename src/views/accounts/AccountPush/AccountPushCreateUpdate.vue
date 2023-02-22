@@ -5,6 +5,8 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
+import { AssetSelect } from '@/components'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -23,14 +25,8 @@ export default {
         secret_strategy: 'specific'
       },
       url: '/api/v1/accounts/push-account-automations/',
+      encryptedFields: ['secret'],
       fields: [
-        // ['触发方式', ['triggers']],
-        // [this.$t('assets.Account'), [
-        //   'username', 'dynamic_username',
-        //   'secret_type', 'secret_strategy', 'secret',
-        //   'password_rules', 'ssh_key', 'passphrase'
-        // ]],
-        // [this.$t('common.Action'), ['action', 'ssh_key_change_strategy']],
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
         [
@@ -46,6 +42,17 @@ export default {
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
+        assets: {
+          type: 'assetSelect',
+          component: AssetSelect,
+          rules: [
+            { required: false }
+          ],
+          el: {
+            baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
+          },
+          label: i18n.t('xpack.Asset')
+        },
         username: {
           hidden: (formValue) => formValue['dynamic_username']
         },
@@ -68,7 +75,6 @@ export default {
           data.secret = data[secretType]
           delete data[secretType]
         }
-        console.log('Data: ', data)
         return data
       }
     }

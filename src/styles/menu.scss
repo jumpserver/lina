@@ -22,7 +22,7 @@
 
   .el-submenu, .el-menu-item.submenu-title-noDropdown {
     background-color: $menuBg;
-    border-top: solid 1px white;
+    border-top: solid 1px $menuBg;
 
     .el-submenu__title {
       color: $menuText;
@@ -30,6 +30,7 @@
 
       &:hover {
         color: $menuActiveText;
+        background-color: $menuHover;
       }
 
       i {
@@ -50,7 +51,6 @@
     &.is-active {
       color: $subMenuActiveText;
       font-weight: 400;
-      //background-color: $subMenuHover !important;
       list-style-type: disc;
     }
 
@@ -116,7 +116,7 @@
     //  background-color: var(--menu-hover) !important;
     //}
 
-    border-left: 4px solid var(--color-primary);
+    border-left: 4px solid var(--menu-text-active);
   }
 
   .el-submenu-sidebar .el-menu-item {

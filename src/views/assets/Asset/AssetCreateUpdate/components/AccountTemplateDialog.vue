@@ -2,31 +2,31 @@
   <div>
     <Dialog
       v-if="iVisible"
+      :close-on-click-modal="false"
+      :destroy-on-close="true"
       :title="$tc('assets.SelectTemplate')"
       :visible.sync="iVisible"
-      :destroy-on-close="true"
-      width="70%"
-      :close-on-click-modal="false"
       v-bind="$attrs"
-      v-on="$listeners"
-      @confirm="handleConfirm"
+      width="70%"
       @cancel="handleCancel"
+      @confirm="handleConfirm"
+      v-on="$listeners"
     >
       <template>
         <div class="actions">
           <el-button
             v-if="showCreate"
-            type="primary"
+            :disabled="!$hasPerm('accounts.add_accounttemplate')"
             size="small"
-            :disabled="!$hasPerm('accounts.view_accounttemplate')"
+            type="primary"
             @click="onAddClick"
           >
             {{ $t('common.Add') }}
           </el-button>
           <div class="right">
             <el-button
-              type="text"
               size="small"
+              type="text"
               @click="refreshTable"
             >
               <el-tooltip :content="$tc('common.Refresh')" placement="top">
@@ -37,14 +37,14 @@
             </el-button>
           </div>
         </div>
-        <AutoDataTable ref="dataTable" :config="tableConfig" />
+        <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       </template>
     </Dialog>
     <CreateAccountTemplateDialog
       v-if="isShowCreate"
       :create-visible.sync="isShowCreate"
-      v-on="$listeners"
       @onPerform="onCreateTemplatePerform"
+      v-on="$listeners"
     />
   </div>
 </template>
@@ -82,10 +82,17 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: ['name', 'username', 'privileged'],
-        hasColumnActions: false,
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'AccountTemplateDetail'
+            }
+          },
           privileged: {
             width: '100px'
+          },
+          actions: {
+            has: false
           }
         },
         listeners: {
@@ -125,9 +132,14 @@ export default {
     handleConfirm() {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
-      const hasIdAccounts = this.accounts.filter(i => i?.id)
-      const data = _.xorBy(hasIdAccounts, this.accountsSelected, 'id')
-      this.accounts.push(...data)
+      const hasIdAccounts = this.accounts.filter(i => i?.id).map(item => item.id)
+      const newAddAccounts = this.accountsSelected.filter(i => {
+        if (!hasIdAccounts.includes(i.id)) {
+          i.template = true
+          return i
+        }
+      })
+      this.accounts.push(...newAddAccounts)
       this.$emit('onConfirm', this.accounts)
     },
     handleCancel() {
@@ -135,6 +147,19 @@ export default {
     },
     onAddClick() {
       this.isShowCreate = true
+    },
+    handleSelectionChange(values) {
+      const notIdAccounts = this.accounts.filter(i => !i?.id)
+      values.forEach((item, index) => {
+        const hasSameTypeAccount = _.filter(notIdAccounts, function(o) {
+          return o.username === item.username && o.secret_type === item.secret_type.value
+        })
+        if (hasSameTypeAccount.length > 0) {
+          this.$message.error(this.$t('accounts.SameTypeAccountTip'))
+          this.$refs.dataTable.$refs.dataTable.toggleRowSelection(item, false)
+          this.accountsSelected.splice(index, 1)
+        }
+      })
     },
     hasSelectValue(row) {
       return this.accountsSelected.some(item => item.id === row.id)
@@ -158,6 +183,7 @@ export default {
 <style lang="scss" scoped>
 .actions {
   margin-bottom: 10px;
+
   .right {
     float: right;
     vertical-align: middle;

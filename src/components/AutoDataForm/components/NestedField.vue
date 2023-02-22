@@ -1,5 +1,6 @@
 <template>
   <DataForm
+    :disabled="disabled"
     :fields="iFields"
     :form="value"
     style="margin-left: -26%;margin-right: -6%"
@@ -28,6 +29,10 @@ export default {
     errors: {
       type: [Object, String],
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

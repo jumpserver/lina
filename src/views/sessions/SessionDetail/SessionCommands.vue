@@ -44,8 +44,10 @@ export default {
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
+          },
+          actions: {
+            has: false
           }
-
         }
       },
       headerActions: {

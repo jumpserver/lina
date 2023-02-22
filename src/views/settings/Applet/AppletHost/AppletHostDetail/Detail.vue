@@ -1,7 +1,9 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard v-bind="detailBasicConfig" />
+      <AutoDetailCard v-if="detailSpecInfoConfig.show" v-bind="detailSpecInfoConfig" />
+      <AutoDetailCard v-if="detailInfoConfig.show" v-bind="detailInfoConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -88,22 +90,46 @@ export default {
           }
         }
       ],
-      url: `/api/v1/terminal/applet-hosts/${this.object.id}`,
-      detailFields: [
-        'name', 'ip',
-        {
-          key: this.$t('assets.Protocols'),
-          value: this.object.protocols.map(i => i.name).join(',')
-        },
-        'public_ip', 'admin_user_display',
-        'vendor', 'model', 'cpu_model', 'memory', 'disk_info',
-        {
-          key: this.$t('assets.Platform'),
-          value: this.object.platform?.name || ''
-        },
-        'os_arch', 'is_active', 'sn', 'number', 'date_created',
-        'created_by', 'comment'
-      ]
+      detailBasicConfig: {
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        fields: [
+          'name',
+          {
+            key: this.$t('assets.Category'),
+            value: this.object.category.label
+          },
+          {
+            key: this.$t('assets.Type'),
+            value: this.object.type.label
+          },
+          'address',
+          {
+            key: this.$t('assets.Protocols'),
+            value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
+          },
+          {
+            key: this.$t('assets.Platform'),
+            value: this.object.platform.name
+          },
+          'is_active', 'date_created', 'created_by', 'comment'
+        ]
+      },
+      detailSpecInfoConfig: {
+        show: Object.keys(this.object['spec_info']).length > 0,
+        title: this.$t('common.SpecificInfo'),
+        url: `/api/v1/assets/assets/${this.object.id}/spec-info/`,
+        object: this.object.spec_info,
+        showUndefine: false,
+        excludes: ['spec_info.script']
+      },
+      detailInfoConfig: {
+        show: this.object.category.value === 'host' && Object.keys(this.object['info']).length > 0,
+        url: `/api/v1/assets/hosts/${this.object.id}/info/`,
+        title: this.$t('assets.HardwareInfo'),
+        object: this.object.info,
+        showUndefine: false
+      }
     }
   },
   computed: {

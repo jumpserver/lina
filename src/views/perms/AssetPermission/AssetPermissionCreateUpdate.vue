@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
     :fields="fields"
-    :initial="initial"
     :fields-meta="fieldsMeta"
+    :initial="initial"
     :url="url"
     v-bind="$data"
   />
@@ -13,6 +13,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
+import { AllAccount } from '../const'
 
 export default {
   name: 'AccountFormatter',
@@ -21,12 +22,12 @@ export default {
   },
   data() {
     const nodesInitial = []
-    if (this.$route.query['node']) {
-      nodesInitial.push(this.$route.query.node)
+    if (this.$route.query['node_id']) {
+      nodesInitial.push(this.$route.query.node_id)
     }
     const assetsInitial = []
-    if (this.$route.query['asset']) {
-      assetsInitial.push(this.$route.query.asset)
+    if (this.$route.query['asset_id']) {
+      assetsInitial.push(this.$route.query.asset_id)
     }
     return {
       initial: {
@@ -34,7 +35,8 @@ export default {
         date_start: new Date().toISOString(),
         date_expired: getDayFuture(36500, new Date()).toISOString(),
         nodes: nodesInitial,
-        assets: assetsInitial
+        assets: assetsInitial,
+        accounts: [AllAccount]
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -88,7 +90,8 @@ export default {
         accounts: {
           type: 'input',
           label: this.$t('perms.Account'),
-          component: AccountFormatter
+          component: AccountFormatter,
+          helpText: this.$t('perms.AccountsHelp')
         },
         actions: {
           label: this.$t('perms.Actions'),

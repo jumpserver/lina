@@ -17,8 +17,8 @@ export const EmailCheck = {
 export const IpCheck = {
   required: true,
   validator: (rule, value, callback) => {
-    value = value.trim()
-    if (/^[\w://.?]+$/.test(value)) {
+    value = value?.trim()
+    if (/^[\w://.?-]+$/.test(value)) {
       callback()
     } else {
       callback(new Error(i18n.t('common.FormatError')))
@@ -29,9 +29,22 @@ export const IpCheck = {
 
 export const specialEmojiCheck = {
   validator: (rule, value, callback) => {
-    value = value.trim()
+    value = value?.trim()
     if (/[\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/.test(value)) {
       callback(new Error(i18n.t('common.NotSpecialEmoji')))
+    } else {
+      callback()
+    }
+  },
+  trigger: ['blur', 'change']
+}
+
+// 只能输入字母、数字、下划线
+export const matchAlphanumericUnderscore = {
+  validator: (rule, value, callback) => {
+    value = value?.trim()
+    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      callback(new Error(i18n.t('common.notAlphanumericUnderscore')))
     } else {
       callback()
     }
@@ -44,7 +57,8 @@ export default {
   Required,
   RequiredChange,
   EmailCheck,
-  specialEmojiCheck
+  specialEmojiCheck,
+  matchAlphanumericUnderscore
 }
 
 export const JsonRequired = {
@@ -52,7 +66,7 @@ export const JsonRequired = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
+      typeof value === 'string' ? JSON.parse(value) : value
       callback()
     } catch (e) {
       callback(new Error(i18n.t('common.InvalidJson')))
@@ -65,8 +79,8 @@ export const JsonRequiredUserNameMapped = {
   trigger: 'change',
   validator: (rule, value, callback) => {
     try {
-      JSON.parse(value)
-      const hasUserName = _.map(JSON.parse(value), (value) => value)
+      const v = typeof value === 'string' ? JSON.parse(value) : value
+      const hasUserName = _.map(v, (value) => value)
       if (!hasUserName.includes('username')) {
         callback(new Error(i18n.t('common.requiredHasUserNameMapped')))
       }

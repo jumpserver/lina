@@ -21,7 +21,7 @@ export default {
     return {
       execution: { id: '' },
       config: {
-        url: '/api/v1/accounts/push-account-executions/',
+        url: '/api/v1/accounts/push-account-executions',
         activeMenu: 'AccountPushExecutionInfo',
         actions: {
           hasUpdate: false,

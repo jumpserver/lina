@@ -165,6 +165,8 @@ export default {
         }
         this.title = this.$t('common.CurrentUserVerify')
         this.visible = true
+      }).catch(() => {
+        this.$emit('AuthMFAError', true)
       })
     })
   },

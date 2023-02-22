@@ -2,9 +2,12 @@ import store from '@/store'
 import { constantRoutes } from '@/router'
 import { openWindow } from './common'
 
-export function openTaskPage(taskId, taskType) {
+export function openTaskPage(taskId, taskType, taskUrl) {
   taskType = taskType || 'celery'
-  openWindow(`/#/ops/${taskType}/task/${taskId}/log/?type=${taskType}`)
+  if (!taskUrl) {
+    taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
+  }
+  openWindow(taskUrl)
 }
 
 export function checkPermission(permsRequired, permsAll) {

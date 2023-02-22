@@ -2,7 +2,7 @@ import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 
 import SessionRoutes from './sessions'
-import LogRoutes from './logs'
+import LogRoutes from './audits'
 import empty from '@/layout/empty'
 import store from '@/store'
 
@@ -44,7 +44,7 @@ export default {
       children: SessionRoutes
     },
     {
-      path: '/audit/logs',
+      path: '/audit/audits',
       component: empty,
       redirect: '',
       name: 'Audits',

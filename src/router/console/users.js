@@ -134,7 +134,8 @@ export default [
     redirect: '',
     meta: {
       permissions: ['rbac.view_orgrole | rbac.view_systemrole'],
-      app: 'rbac'
+      app: 'rbac',
+      licenseRequired: true
     },
     children: [
       {

@@ -40,6 +40,10 @@ export default {
       formConfig: {
         initial: { secret_type: 'password' },
         url: '/api/v1/accounts/account-templates/',
+        getUrl: function() {
+          return '/api/v1/accounts/account-templates/'
+        },
+        needGetObjectDetail: false,
         hasDetailInMsg: false,
         fields: [
           ...templateFields(this)
@@ -47,6 +51,7 @@ export default {
         fieldsMeta: {
           ...templateFieldsMeta(this)
         },
+        hasSaveContinue: false,
         cleanFormValue(value) {
           Object.keys(value).forEach((item, index, arr) => {
             if (['ssh_key', 'token', 'access_key'].includes(item)) {

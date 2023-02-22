@@ -2,12 +2,19 @@
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
       <AutoDetailCard v-bind="detailBasicConfig" />
-      <AutoDetailCard v-if="detailSpecificConfig.show" v-bind="detailSpecificConfig" />
+      <AutoDetailCard v-if="detailSpecInfoConfig.show" v-bind="detailSpecInfoConfig" />
+      <AutoDetailCard v-if="detailInfoConfig.show" v-bind="detailInfoConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" v-perms="'assets.change_asset'" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
-      <LabelCard v-if="$hasPerm('assets.view_label')" type="warning" style="margin-top: 15px" v-bind="labelConfig" />
+      <QuickActions :actions="quickActions" type="primary" />
+      <RelationCard
+        ref="NodeRelation"
+        v-perms="'assets.change_asset'"
+        style="margin-top: 15px"
+        type="info"
+        v-bind="nodeRelationConfig"
+      />
+      <LabelCard v-if="$hasPerm('assets.view_label')" style="margin-top: 15px" type="warning" v-bind="labelConfig" />
     </el-col>
   </el-row>
 </template>
@@ -30,7 +37,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -63,7 +71,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Refresh'),
-            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo')
+            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo') ||
+              !this.object['auto_info'].gather_facts_enabled ||
+              !this.object['auto_info'].ansible_enabled
           },
           callbacks: {
             click: function() {
@@ -82,7 +92,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_assetconnectivity')
+            disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
+              !this.object['auto_info'].ansible_enabled ||
+              !this.object['auto_info']['ping_enabled']
           },
           callbacks: {
             click: function() {
@@ -165,23 +177,27 @@ export default {
           'is_active', 'date_created', 'created_by', 'comment'
         ]
       },
-      detailSpecificConfig: {
-        show: this.object['spec_info']?.length > 0,
-        fa: 'fa-podcast',
+      detailSpecInfoConfig: {
+        show: Object.keys(this.object['spec_info']).length > 0,
         title: this.$t('common.SpecificInfo'),
-        url: `/api/v1/assets/assets/${this.object.id}/`,
-        object: this.object,
-        fields: ['spec_info'],
+        url: `/api/v1/assets/assets/${this.object.id}/spec-info/`,
+        object: this.object.spec_info,
+        showUndefine: false,
         excludes: ['spec_info.script']
+      },
+      detailInfoConfig: {
+        show: this.object.category.value === 'host' && Object.keys(this.object['info']).length > 0,
+        url: `/api/v1/assets/hosts/${this.object.id}/info/`,
+        title: this.$t('assets.HardwareInfo'),
+        object: this.object.info,
+        showUndefine: false
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

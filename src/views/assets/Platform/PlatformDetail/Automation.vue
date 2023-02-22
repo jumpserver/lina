@@ -1,6 +1,6 @@
 <template>
   <IBox v-if="!loading">
-    <GenericCreateUpdateForm v-bind="$data" />
+    <GenericCreateUpdateForm class="form" v-bind="$data" />
   </IBox>
 </template>
 
@@ -18,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -29,14 +30,15 @@ export default {
           ansible_enabled: true
         }
       },
-      disabled: true,
       url: `/api/v1/assets/platforms/`,
+      disabled: this.object.internal,
       hasReset: false,
       hasDetailInMsg: false,
       submitMethod: () => 'patch',
       fields: [['', ['automation']]],
       fieldsMeta: platformFieldsMeta(this),
       onSubmit: this.submit,
+      canSubmit: !this.object.internal,
       defaultOptions: {}
     }
   },
@@ -67,5 +69,8 @@ export default {
 </script>
 
 <style scoped>
+.form >>> .el-select {
+  width: 100%;
+}
 
 </style>

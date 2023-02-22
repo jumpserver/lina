@@ -55,7 +55,7 @@ export default {
       component: () => import('@/views/settings/Message'),
       meta: {
         title: i18n.t('setting.MessageSub'),
-        icon: 'message',
+        icon: 'remind',
         permissions: ['settings.change_systemmsgsubscription']
       }
     },

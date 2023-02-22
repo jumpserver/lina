@@ -3,8 +3,8 @@
     ref="TreeList"
     component="TabTree"
     :table-config="tableConfig"
-    :active-menu.sync="treeTabConfig.activeMenu"
-    :tree-tab-config="treeTabConfig"
+    :active-menu.sync="treeTableConfig.activeMenu"
+    :tree-tab-config="treeTableConfig"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -39,6 +39,10 @@ export default {
       type: String,
       default: '/api/v1/assets/nodes/children/tree/'
     },
+    treeUrlQuery: {
+      type: Object,
+      default: () => ({})
+    },
     treeSetting: {
       type: Object,
       default: () => ({})
@@ -54,6 +58,9 @@ export default {
   },
   data() {
     const showAssets = this.treeSetting?.showAssets || this.showAssets
+    const treeUrlQuery = this.setTreeUrlQuery()
+    const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
+
     return {
       treeTabConfig: {
         activeMenu: 'CustomTree',
@@ -72,7 +79,7 @@ export default {
               showSearch: true,
               url: this.url,
               nodeUrl: this.nodeUrl,
-              treeUrl: `${this.treeUrl}?assets=${showAssets ? '1' : '0'}`,
+              treeUrl: assetTreeUrl,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               },
@@ -99,6 +106,15 @@ export default {
       }
     }
   },
+  computed: {
+    treeTableConfig() {
+      if (this.treeSetting.notShowBuiltinTree) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.treeTabConfig.submenu.splice(1, 1)
+      }
+      return this.treeTabConfig
+    }
+  },
   mounted() {
     this.decorateRMenu()
     const treeSetting = this.treeTabConfig.submenu[0].treeSetting
@@ -108,6 +124,15 @@ export default {
     treeSetting.showDelete = this.$hasPerm('assets.delete_node')
   },
   methods: {
+    setTreeUrlQuery() {
+      let str = ''
+      for (const key in this.treeUrlQuery) {
+        str += `${key}=${this.treeUrlQuery[key]}&`
+      }
+      str = str.substr(0, str.length - 1)
+
+      return str
+    },
     decorateRMenu() {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
       if (show_current_asset === '1') {
@@ -123,10 +148,10 @@ export default {
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node_id', nodeId)
-        url = setUrlParam(url, 'asset', '')
+        url = setUrlParam(url, 'asset_id', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
-        url = setUrlParam(url, 'node', '')
+        url = setUrlParam(url, 'node_id', '')
         url = setUrlParam(url, 'asset_id', assetId)
       } else if (treeNode.meta.type === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
@@ -136,6 +161,8 @@ export default {
       } else if (treeNode.meta.type === 'platform') {
         url = setUrlParam(url, 'platform', treeNode.id)
       }
+      const query = this.setTreeUrlQuery()
+      url = query ? `${url}&${query}` : url
       this.$set(this.tableConfig, 'url', url)
       setRouterQuery(this, url)
     }

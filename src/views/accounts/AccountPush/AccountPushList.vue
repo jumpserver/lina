@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -19,13 +19,13 @@ export default {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
           'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'actions'
+          'periodic_display', 'executed_amount', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'periodic_display', 'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -37,13 +37,12 @@ export default {
           },
           accounts: {
             formatter: function(row) {
-              console.log('row', row)
-              return <span> { row.accounts.join(', ') } </span>
+              return <span> {row.accounts.join(', ')} </span>
             }
           },
           secret_strategy: {
             formatter: function(row) {
-              return <span> { row.secret_strategy.label } </span>
+              return <span> {row.secret_strategy.label} </span>
             }
           },
           username: {
@@ -63,6 +62,10 @@ export default {
           nodes_amount: {
             label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px'
+          },
+          periodic_display: {
+            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
+            width: '150px'
           },
           password_strategy_display: {
             label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
@@ -97,7 +100,9 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('accounts.add_pushaccountexecution'),
+                  can: ({ row }) => {
+                    return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
+                  },
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(

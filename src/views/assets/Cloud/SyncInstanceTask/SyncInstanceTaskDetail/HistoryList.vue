@@ -23,7 +23,10 @@ export default {
         hasBulkDelete: false,
         hasImport: false,
         hasExport: false,
-        hasSearch: true
+        hasSearch: true,
+        searchConfig: {
+          getUrlQuery: false
+        }
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/history/`,
@@ -45,8 +48,15 @@ export default {
             label: this.$t('xpack.Cloud.ReleasedCount')
           },
           {
-            prop: 'status_display',
-            label: this.$t('xpack.Cloud.Status')
+            prop: 'status',
+            label: this.$t('xpack.Cloud.Status'),
+            formatter: row => {
+              if (row.status === 1) {
+                return <el-tag type='primary' size='mini'>{this.$t('common.Success')}</el-tag>
+              } else {
+                return <el-tag type='danger' size='mini'>{this.$t('common.Failed')}</el-tag>
+              }
+            }
           },
           {
             prop: 'date_sync',
@@ -54,8 +64,8 @@ export default {
             formatter: DateFormatter
           },
           {
-            prop: 'id',
-            label: this.$t('common.Action'),
+            prop: 'actions',
+            label: this.$t('common.Actions'),
             align: 'center',
             formatter: ActionsFormatter,
             formatterArgs: {

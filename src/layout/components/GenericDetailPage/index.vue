@@ -1,12 +1,11 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="iActiveMenu" :submenu="iSubmenu" @tab-click="handleTabClick">
-    <template #title>
-      <slot name="title">
-        <el-button class="go-back" icon="el-icon-back" @click="handleGoBack" />
-        <span style="padding-left: 10px">{{ iTitle }}</span>
-      </slot>
-    </template>
-
+  <TabPage
+    v-if="!loading"
+    :active-menu.sync="iActiveMenu"
+    :submenu="iSubmenu"
+    :title="iTitle"
+    @tab-click="handleTabClick"
+  >
     <template #headingRightSide>
       <span v-if="hasRightSide">
         <ActionsGroup slot="headingRightSide" :actions="pageActions" />
@@ -91,12 +90,6 @@ export default {
         }
         return title
       }
-    },
-    goBack: {
-      type: Function,
-      default: function(obj) {
-        return this.$router.back()
-      }
     }
   },
   data() {
@@ -172,7 +165,7 @@ export default {
       const activity = {
         title: this.$t('common.Activity'),
         name: 'ResourceActivity',
-        hidden: () => !this.$hasPerm('audits.view_operatelog')
+        hidden: () => !this.$hasPerm('audits.view_activitylog')
       }
       return [...this.submenu, activity]
     }
@@ -207,7 +200,12 @@ export default {
             this.$message.success(this.$tc('common.deleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+            const errorDetail = error?.response?.data?.detail || ''
+            if (errorDetail) {
+              this.$message.error(errorDetail)
+            } else {
+              this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+            }
           } finally {
             instance.confirmButtonLoading = false
           }
@@ -248,9 +246,6 @@ export default {
       this.$emit('tab-click', tab, this.iActiveMenu)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
-    },
-    handleGoBack() {
-      return this.goBack.bind(this)(this.object)
     }
   }
 }
@@ -270,15 +265,5 @@ export default {
 
   .page-submenu >>> .el-tabs__nav-wrap {
     position: static;
-  }
-
-  .go-back {
-    border: none;
-    padding: 2px 2px;
-  }
-
-  .go-back >>> i {
-    font-size: 18px;
-    font-weight: 600;
   }
 </style>

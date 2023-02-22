@@ -28,33 +28,33 @@ export default {
         width: '60%',
         tableConfig: {
           url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,
-          columns: ['secret', 'secret_type', 'version'],
+          columns: ['secret', 'secret_type', 'history_date'],
           columnsMeta: {
             secret: {
+              label: this.$t('assets.Password'),
               formatter: ShowKeyCopyFormatter,
               formatterArgs: {
                 hasDownload: false,
                 name: this.account.name
               }
             },
+            history_date: {
+              label: this.$t('accounts.HistoryDate')
+            },
             secret_type: {
               width: '200px'
             },
             version: {
               width: '100px'
+            },
+            actions: {
+              has: false
             }
-
           }
         },
         headerActions: {
-          hasImport: false,
-          hasExport: false,
           hasLeftActions: false,
-          hasColumnSetting: false,
-          hasSearch: false,
-          searchConfig: {
-            getUrlQuery: false
-          }
+          hasSearch: false
         }
       }
     }

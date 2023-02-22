@@ -1,11 +1,12 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, getDaysAgo, getDaysFuture } from '@/utils/common'
+import { timeOffset } from '@/utils/common'
 import { ActionsFormatter } from '@/components/TableFormatters'
+
 export default {
   name: 'BaseList',
   components: {
@@ -22,9 +23,6 @@ export default {
     }
   },
   data() {
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
     return {
       tableConfig: {
         url: this.url,
@@ -32,7 +30,7 @@ export default {
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol', 'login_from',
             'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
@@ -69,6 +67,7 @@ export default {
             }
           },
           is_finished: {
+            width: '86px',
             formatterArgs: {
               showFalse: false
             }
@@ -98,10 +97,10 @@ export default {
             formatter: null
           },
           date_start: {
-            width: '100px'
+            width: '150px'
           },
           date_end: {
-            width: '100px'
+            width: '150px'
           },
           duration: {
             label: this.$t('sessions.duration'),
@@ -123,22 +122,15 @@ export default {
               extraActions: this.extraActions
             }
           }
-        },
-        extraQuery: {
-          date_to: dateTo,
-          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
         hasDatePicker: true,
-        datePicker: {
-          dateEnd: dateTo,
-          dateStart: dateFrom
-        },
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: false,
+          exclude: ['is_finished']
         }
       }
     }

@@ -116,8 +116,9 @@ export default {
           value: this.session.asset
         },
         {
-          key: this.$t('sessions.systemUser'),
-          value: this.session.system_user
+          key: this.$t('assets.Account'),
+          value: this.session.account
+
         },
         {
           key: this.$t('sessions.protocol'),
@@ -125,7 +126,7 @@ export default {
         },
         {
           key: this.$t('sessions.loginFrom'),
-          value: this.session.login_from
+          value: this.session.login_from?.label || '-'
         },
         {
           key: this.$t('sessions.remoteAddr'),

@@ -43,6 +43,7 @@ export default {
                 {
                   name: 'Expired',
                   title: this.$t('setting.Expire'),
+                  can: ({ row }) => row['is_valid'] && this.$hasPerm('authentication.change_temptoken'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
@@ -72,7 +73,7 @@ export default {
             name: this.$t('setting.Create'),
             title: this.$t('setting.Create'),
             type: 'primary',
-            can: true,
+            can: this.$hasPerm('authentication.add_temptoken'),
             callback: function() {
               this.$axios.post(
                 `/api/v1/authentication/temp-tokens/`

@@ -8,13 +8,14 @@
       />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard ref="userRelation" v-bind="relationConfig" />
+      <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import { ListTable, RelationCard } from '@/components'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -60,7 +61,7 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
-        columns: ['user_display', 'org_name', 'actions'],
+        columns: this.object.scope.value === 'system' ? ['user_display', 'actions'] : ['user_display', 'org_name', 'actions'],
         columnsShow: {
           min: ['user_display', 'actions']
         },
@@ -70,7 +71,7 @@ export default {
               hasUpdate: false,
               hasClone: false,
               canDelete: ({ row }) => {
-                return this.$hasPerm(`rbac.delete_${row.scope.value}rolebinding`)
+                return this.$hasPerm(`rbac.delete_${row.scope}rolebinding`)
               }
             }
           }
@@ -95,6 +96,17 @@ export default {
           ]
         }
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['currentOrg', 'currentOrgIsRoot'])
+  },
+  created() {
+    try {
+      const scope = this.$route.query['scope']
+      this.relationConfig.disabled = !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) || (scope === 'org' && this.currentOrgIsRoot)
+    } finally {
+      this.loading = false
     }
   }
 }

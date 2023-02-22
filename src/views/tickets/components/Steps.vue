@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 540px;">
+    <div style="height: 660px;">
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.title}`"
@@ -19,11 +19,11 @@
           <div slot="description">
             <div class="processors">
               <div class="processors-content">
-                <span v-for="assignee of item.assignees_display" :key="assignee" style="display: block">
+                <span v-for="assignee of item.assignees_display.slice(0,4)" :key="assignee" style="display: block">
                   {{ assignee }}
                 </span>
               </div>
-              <el-button v-if="item.assignees.length > 5" type="text" @click="lookOver(item.assignees_display)">
+              <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
                 {{ $tc('tickets.CheckViewAcceptor') }}
               </el-button>
             </div>
@@ -67,7 +67,9 @@ export default {
   data() {
     return {
       status: { open: 2, close: 3 },
-      process_map: this.object.process_map || [],
+      process_map: this.object.process_map.sort(
+        (a, b) => { return a.approval_level - b.approval_level }
+      ) || [],
       vm: this,
       statusMap: STATE_MAP
     }
@@ -101,7 +103,7 @@ export default {
         content.push(h('p', null, item),)
       })
       this.$msgbox({
-        title: '相关受理人',
+        title: this.$t('tickets.RelevantAssignees'),
         customClass: 'acceptance',
         message: h('p', null, content),
         showCancelButton: false,

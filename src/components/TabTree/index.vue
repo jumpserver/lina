@@ -3,6 +3,7 @@
     <el-tabs
       v-if="tabIndices.length > 0"
       v-model="iActiveMenu"
+      :class="{ 'only-submenu': tabIndices.length === 1}"
       class="page-submenu"
       stretch
       @tab-click="handleTabClick"
@@ -97,10 +98,13 @@ export default {
   },
   async mounted() {
     this.iActiveMenu = await this.getPropActiveTab()
+    this.$eventBus.$on('treeComponentKey', () => {
+      this.componentKey += 1
+    })
   },
   methods: {
     hideRMenu() {
-      this.$refs.AutoDataZTree.hideRMenu()
+      this.$refs.AutoDataZTree?.hideRMenu()
     },
     getSelectedNodes: function() {
       return this.$refs.AutoDataZTree.getSelectedNodes()
@@ -179,7 +183,16 @@ export default {
   position: static;
 
   .el-tabs__item.is-active {
-    color:  var(--color-primary);
+    color:  var(--menu-text-active);
+  }
+}
+.only-submenu  {
+  &>>> .el-tabs__active-bar {
+    transform: none!important;
+  }
+  &>>> .el-tabs__item.is-active {
+    text-align: left;
+    padding: 0 20px;
   }
 }
 </style>

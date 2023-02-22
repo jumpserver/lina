@@ -1,5 +1,5 @@
 <template>
-  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
+  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
 <script>
@@ -29,15 +29,17 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
-        hasColumnActions: false,
         columns: [
           'city', 'datetime'
         ],
         columnsMeta: {
           city: {
             formatter: (row) => {
-              return <span>{ row.city }({ row.ip })</span>
+              return <span>{row.city}({row.ip})</span>
             }
+          },
+          actions: {
+            has: false
           }
         },
         hasSelection: false,

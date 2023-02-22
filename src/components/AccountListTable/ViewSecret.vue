@@ -2,20 +2,20 @@
   <div>
     <UserConfirmDialog
       :url="url"
-      @UserConfirmDone="getAuthInfo"
       @UserConfirmCancel="exit"
+      @UserConfirmDone="getAuthInfo"
     />
     <Dialog
-      :title="dialogTitle"
-      :show-cancel="false"
       :destroy-on-close="true"
-      :width="'50'"
+      :show-cancel="false"
+      :title="title"
       :visible.sync="showSecret"
+      :width="'50'"
       v-bind="$attrs"
       @confirm="showSecret = false"
       v-on="$listeners"
     >
-      <el-form class="password-form" label-position="right" label-width="100px" :model="secretInfo">
+      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('assets.Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -39,8 +39,14 @@
         <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="$tc('accounts.PasswordRecord')">
-          <el-button type="text" @click="onShowPasswordHistory">{{ secretInfo.version }}</el-button>
+        <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
+          <el-button
+            v-perms="'accounts.view_historyaccountsecret'"
+            type="text"
+            @click="onShowPasswordHistory"
+          >
+            {{ account['version'] }}
+          </el-button>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -78,14 +84,24 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$tc('assets.AccountDetail')
+      }
+    },
+    showPasswordRecord: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
-      dialogTitle: this.$tc('assets.AccountDetail'),
       secretInfo: {},
       showSecret: false,
       sshKeyFingerprint: '',
+      historyCount: 0,
       showPasswordHistoryDialog: false
     }
   },
@@ -101,7 +117,7 @@ export default {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp['specific']['ssh_key_fingerprint']
+        this.sshKeyFingerprint = resp?.spec_info
         this.showSecret = true
       })
     },

@@ -14,10 +14,36 @@
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
     <el-form-item v-if="hasButtons" class="form-buttons">
-      <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" :loading="button.loading" @click="handleClick(button)">{{ button.title }}</el-button>
-      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">{{ $t('common.Reset') }}</el-button>
-      <el-button v-if="defaultButton && hasSaveContinue" size="small" @click="submitForm('form', true)">{{ $t('common.SaveAndAddAnother') }}</el-button>
-      <el-button v-if="defaultButton" size="small" :loading="isSubmitting" type="primary" @click="submitForm('form')">{{ $t('common.Submit') }}</el-button>
+      <el-button
+        v-for="button in moreButtons"
+        :key="button.title"
+        :loading="button.loading"
+        size="small"
+        v-bind="button"
+        @click="handleClick(button)"
+      >
+        {{ button.title }}
+      </el-button>
+      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
+        {{ $t('common.Reset') }}
+      </el-button>
+      <el-button
+        v-if="defaultButton && hasSaveContinue"
+        size="small"
+        @click="submitForm('form', true)"
+      >
+        {{ $t('common.SaveAndAddAnother') }}
+      </el-button>
+      <el-button
+        v-if="defaultButton"
+        :disabled="!canSubmit"
+        :loading="isSubmitting"
+        size="small"
+        type="primary"
+        @click="submitForm('form')"
+      >
+        {{ $t('common.Submit') }}
+      </el-button>
     </el-form-item>
   </ElFormRender>
 </template>
@@ -25,6 +51,7 @@
 <script>
 import ElFormRender from './components/el-form-renderer'
 import { scrollToError } from '@/utils'
+
 export default {
   components: {
     ElFormRender
@@ -39,6 +66,10 @@ export default {
       default: true
     },
     hasReset: {
+      type: Boolean,
+      default: true
+    },
+    canSubmit: {
       type: Boolean,
       default: true
     },
@@ -125,7 +156,7 @@ export default {
   }
 
   .el-form ::v-deep .el-form-item__error {
-     position: inherit;
+    position: inherit;
   }
 
   .el-form ::v-deep .form-group-header {
@@ -144,9 +175,11 @@ export default {
     font-size: 12px;
     line-height: 18px;
   }
+
   .el-form ::v-deep .help-block a {
     color: var(--color-primary);
   }
+
   .form-buttons {
     margin-top: 20px;
   }

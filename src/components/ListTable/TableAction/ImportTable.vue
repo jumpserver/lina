@@ -244,7 +244,7 @@ export default {
       const totalData = []
       tableData.forEach(item => {
         this.$set(item, '@status', 'pending')
-        const encryptFields = ['password', 'private_key']
+        const encryptFields = ['password', 'secret', 'private_key']
         for (const field of encryptFields) {
           if (item[field]) {
             item[field] = encryptPassword(item[field])
@@ -432,6 +432,7 @@ export default {
   min-height: 20px;
   height: 100%;
   overflow: auto;
+  max-height: 160px;
 }
 
 </style>

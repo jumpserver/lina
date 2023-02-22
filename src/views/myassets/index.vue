@@ -40,11 +40,12 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/self/assets/',
         hasTree: true,
-        columnsExclude: ['specific'],
+        columnsExclude: ['spec_info'],
         columnsShow: {
           default: ['name', 'address', 'platform', 'accounts', 'actions'],
           min: ['name', 'address', 'actions']
         },
+        columns: ['name', 'address', 'platform', 'accounts', 'comment', 'actions'],
         columnsMeta: {
           name: {
             prop: 'name',

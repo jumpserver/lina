@@ -21,18 +21,18 @@ export default {
     getAddFields() {
       const platform = this.$route.query.platform_type
       const baseFields = [[this.$t('common.Basic'), ['db_name']]]
-      let tlsParams = ['use_ssl', 'ca_cert']
+      let tlsFields = ['use_ssl', 'ca_cert']
       switch (platform) {
         case 'redis':
-          tlsParams = tlsParams.concat(['client_cert', 'client_key'])
+          tlsFields = tlsFields.concat(['client_cert', 'client_key'])
           break
         case 'mongodb':
-          tlsParams = tlsParams.concat(['client_key', 'allow_invalid_cert'])
+          tlsFields = tlsFields.concat(['client_key', 'allow_invalid_cert'])
           break
       }
-      if (tlsParams.length > 2) {
+      if (tlsFields.length > 2) {
         const secureField = [
-          this.$t('assets.Secure'), tlsParams, 3
+          this.$t('assets.Secure'), tlsFields, 2
         ]
         baseFields.push(secureField)
       }
@@ -75,7 +75,7 @@ export default {
           component: UploadKey
         }
       }
-      if (platform === 'mongodb') {
+      if (['mongodb', 'postgresql'].indexOf(platform) !== -1) {
         fieldsMeta['db_name']['rules'] = [rules.Required]
       }
       return fieldsMeta

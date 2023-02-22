@@ -1,7 +1,13 @@
 <template>
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
+    <ViewSecret
+      v-if="showViewSecretDialog"
+      :visible.sync="showViewSecretDialog"
+      :url="secretUrl"
+      :account="account"
+      :show-password-record="false"
+    />
   </div>
 </template>
 
@@ -25,7 +31,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: null,
-        columnsExclude: ['specific'],
+        columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'secret_type', 'has_secret', 'privileged', 'actions']

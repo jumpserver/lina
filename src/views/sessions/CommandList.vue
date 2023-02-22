@@ -2,20 +2,20 @@
   <GenericTreeListPage
     ref="GenericTreeListPage"
     v-loading="loading"
-    :table-config="tableConfig"
     :header-actions="headerActions"
+    :table-config="tableConfig"
     :tree-setting="treeSetting"
     class="command-list-table"
-    @TreeInitFinish="checkFirstNode"
-    @TagSearch="handleTagChange"
-    @TagFilter="handleFilterChange"
     @TagDateChange="handleDateChange"
+    @TagFilter="handleFilterChange"
+    @TagSearch="handleTagChange"
+    @TreeInitFinish="checkFirstNode"
   />
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { getDaysAgo, getDaysFuture, toSafeLocalDateStr } from '@/utils/common'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/TableFormatters'
 import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
@@ -29,13 +29,12 @@ export default {
   },
   data() {
     const vm = this
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
+    const dateFrom = getDaysAgo(7).toISOString()
+    const dateTo = getDayEnd().toISOString()
     return {
       query: {
-        date_from: getDaysAgo(7, now).toISOString(),
-        date_to: getDaysFuture(1, now).toISOString()
+        date_from: dateFrom,
+        date_to: dateTo
       },
       loading: true,
       tableConfig: {
@@ -48,7 +47,6 @@ export default {
             return 'command'
           }
         },
-        hasColumnActions: false,
         columns: [
           'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
           'asset', 'session', 'timestamp'
@@ -68,13 +66,16 @@ export default {
             label: this.$t('sessions.riskLevel'),
             width: '105px',
             formatter: (row, col, cellValue) => {
-              const display = row['risk_level_display']
-              if (cellValue === 0) {
+              const display = row['risk_level'].label
+              if (cellValue?.value === 0) {
                 return display
               } else {
-                return <span class='text-danger'> { display } </span>
+                return <span class='text-danger'> {display} </span>
               }
             }
+          },
+          actions: {
+            has: false
           },
           asset: {
             width: '140px'
@@ -114,6 +115,10 @@ export default {
         hasImport: false,
         hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        },
         canExportSelected: true,
         exportOptions: {
           // Todo: 优化这里，和抽象组件重复了
@@ -141,10 +146,6 @@ export default {
             a.click()
             window.URL.revokeObjectURL(url + queryStr)
           }
-        },
-        datePicker: {
-          dateStart: dateFrom,
-          dateEnd: dateTo
         }
       },
       treeSetting: {
@@ -183,8 +184,7 @@ export default {
       return this.$refs.GenericTreeListPage.$refs.TreeTable
     }
   },
-  watch: {
-  },
+  watch: {},
   methods: {
     checkFirstNode(obj) {
       const ztree = obj
@@ -234,7 +234,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table >>> .risk-command {
+.command-list-table > > > .risk-command {
   background-color: oldlace;
 
   tr {

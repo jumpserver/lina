@@ -27,7 +27,8 @@ export default {
       iShowTree: true,
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
-        hasLeftActions: true
+        hasLeftActions: true,
+        hasImport: true
       },
       treeSetting: {
         showMenu: false,

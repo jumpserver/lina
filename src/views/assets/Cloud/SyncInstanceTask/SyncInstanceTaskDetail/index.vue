@@ -29,7 +29,8 @@ export default {
         url: '/api/v1/xpack/cloud/sync-instance-tasks',
         actions: {
           canDelete: vm.$hasPerm('xpack.delete_syncinstancetask'),
-          canUpdate: vm.$hasPerm('xpack.change_syncinstancetask')
+          canUpdate: vm.$hasPerm('xpack.change_syncinstancetask'),
+          deleteSuccessRoute: 'CloudCenter'
         },
         submenu: [
           {

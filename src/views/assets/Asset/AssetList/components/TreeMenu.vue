@@ -1,19 +1,53 @@
 <template>
   <div>
-    <li id="m_add_asset_to_node" v-perms="'assets.add_assettonode'" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
+    <li class="divider" />
+    <li
+      id="m_add_asset_to_node"
+      v-perms="'assets.change_assetnodes'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rMenuAddAssetToNode"
+    >
       <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
     </li>
-    <li id="m_move_asset_to_node" v-perms="'assets.move_assettonode'" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
+    <li
+      id="m_move_asset_to_node"
+      v-perms="'assets.change_assetnodes'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rMenuMoveAssetToNode"
+    >
       <i class="fa fa-scissors" />  {{ this.$t('tree.MoveAssetToNode') }}
     </li>
-    <li v-if="$hasPerm('assets.move_assettonode | assets.add_assettonode')" class="divider" />
-    <li id="m_update_node_asset_hardware_info" v-perms="'assets.refresh_assethardwareinfo'" class="rmenu" tabindex="-1" @click="rMenuUpdateNodeAssetHardwareInfo">
+    <li
+      id="m_remove_asset_from_node"
+      v-perms="'assets.change_assetnodes'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rMenuRemoveAssetFromNode"
+    >
+      <i class="fa fa-minus-square-o" />  {{ this.$t('tree.RemoveAssetFromNode') }}
+    </li>
+    <li v-if="$hasPerm('assets.change_assetnodes')" class="divider" />
+    <li
+      id="m_update_node_asset_hardware_info"
+      v-perms="'assets.refresh_assethardwareinfo'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rMenuUpdateNodeAssetHardwareInfo"
+    >
       <i class="fa fa-refresh" />  {{ this.$t('tree.UpdateNodeAssetHardwareInfo') }}
     </li>
-    <li id="m_test_node_asset_connectivity" v-perms="'assets.test_assetconnectivity'" class="rmenu" tabindex="-1" @click="rMenuTestNodeAssetConnectivity">
+    <li
+      id="m_test_node_asset_connectivity"
+      v-perms="'assets.test_assetconnectivity'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rMenuTestNodeAssetConnectivity"
+    >
       <i class="fa fa-link" />  {{ this.$t('tree.TestNodeAssetConnectivity') }}
     </li>
-    <li v-if="$hasPerm('assets.add_assettonode | assets.test_assetconnectivity')" class="divider" />
+    <li v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')" class="divider" />
     <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetOnlyCurrentNode">
       <i class="fa fa-indent" />  {{ this.$t('tree.ShowAssetOnlyCurrentNode') }}
     </li>
@@ -21,22 +55,29 @@
       <i class="fa fa-align-justify" />  {{ this.$t('tree.ShowAssetAllChildrenNode') }}
     </li>
     <li class="divider" />
-    <li id="m_check_assets_amount" v-perms="'assets.change_node'" class="rmenu" tabindex="-1" @click="rCheckAssetsAmount">
+    <li
+      id="m_check_assets_amount"
+      v-perms="'assets.change_node'"
+      class="rmenu"
+      tabindex="-1"
+      @click="rCheckAssetsAmount"
+    >
       <i class="fa fa-clone" />  {{ this.$t('tree.CheckAssetsAmount') }}
     </li>
     <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
       <i class="fa fa-info-circle" />  {{ this.$t('tree.ShowNodeInfo') }}
     </li>
     <NodeAssetsUpdateDialog
+      v-if="nodeAssetsUpdateDialog.visible"
       :visible.sync="nodeAssetsUpdateDialog.visible"
       v-bind="nodeAssetsUpdateDialog"
     />
     <Dialog
-      width="50%"
-      :title="$tc('assets.NodeInformation')"
-      :visible.sync="nodeInfoDialogSetting.dialogVisible"
       :show-cancel="false"
       :show-confirm="false"
+      :title="$tc('assets.NodeInformation')"
+      :visible.sync="nodeInfoDialogSetting.dialogVisible"
+      width="50%"
     >
       <el-row
         v-for="item in nodeInfoDialogSetting.items"
@@ -95,6 +136,11 @@ export default {
     rMenuMoveAssetToNode() {
       this.nodeAssetsUpdateDialog.visible = true
       this.nodeAssetsUpdateDialog.action = 'move'
+      this.nodeAssetsUpdateDialog.selectNode = this.getSelectedNodes()[0]
+    },
+    rMenuRemoveAssetFromNode() {
+      this.nodeAssetsUpdateDialog.visible = true
+      this.nodeAssetsUpdateDialog.action = 'remove'
       this.nodeAssetsUpdateDialog.selectNode = this.getSelectedNodes()[0]
     },
     rMenuUpdateNodeAssetHardwareInfo() {
@@ -218,8 +264,9 @@ div.rMenu li {
 
 .el-row {
   margin-bottom: 20px;
+
   &:last-child {
-     margin-bottom: 0;
+    margin-bottom: 0;
   }
 }
 

@@ -74,19 +74,21 @@ export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
 
-  const colorValue = colors['--color-primary'].replace(/#/g, '')
   const white = 'ffffff'
   const black = '000000'
-  const menuHoverColor = mix(white, colorValue, 90)
-  const navBackgroundColor = mix(black, colorValue, 20)
-  elementStyle.setProperty('--menu-hover', menuHoverColor)
-  elementStyle.setProperty('--nav-bg', navBackgroundColor)
+
+  // 后端不用返回 --menu-hover
+  const menuActiveTextColor = colors['--menu-text-active']
+  if (menuActiveTextColor) {
+    const menuHover = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
+    colors['--menu-hover'] = menuHover
+  }
 
   for (const key in colors) {
     const currentColor = colors[key]
+    elementStyle.setProperty(key, currentColor)
 
     if (key.includes('--color')) {
-      elementStyle.setProperty(key, currentColor)
       const lightColor = mix(white, currentColor.replace(/#/g, ''), 70)
       const darkColor = mix(black, currentColor.replace(/#/g, ''), 20)
       elementStyle.setProperty(key + '-light', lightColor)

@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :initial="initial" :url="url" />
 </template>
 
 <script>
@@ -13,8 +13,7 @@ export default {
   },
   data() {
     return {
-      initial: {
-      },
+      initial: {},
       fields: [
         [this.$t('common.Basic'), ['name', 'assets', 'comment']]
       ],
@@ -25,13 +24,16 @@ export default {
           label: this.$t('assets.Assets'),
           el: {
             value: [],
+            baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
+            treeUrlQuery: {
+              domain_enabled: true
+            },
             canSelect: (row) => {
-              return row.enabled_info?.domain_enabled
+              return row.platform?.name !== 'Gateway'
             }
           }
         }
       },
-
       url: '/api/v1/assets/domains/'
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable ref="list" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script type="text/jsx">
@@ -18,13 +18,18 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         hasSelection: false,
         url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
         columns: [
-          'id', 'is_finished', 'is_success', 'time_cost', 'date_start', 'actions'
+          'id', 'is_finished', 'is_success', 'time_cost', 'date_start',
+          'date_published', 'date_finished', 'actions'
         ],
+        columnsShow: {
+          default: ['id', 'is_finished', 'is_success', 'time_cost', 'date_start', 'actions']
+        },
         columnsMeta: {
           is_finished: {
             label: this.$t('ops.isFinished'),
@@ -75,9 +80,19 @@ export default {
                 {
                   name: 'detail',
                   title: this.$t('ops.output'),
-                  type: 'primary',
                   callback: function({ row, tableData }) {
                     openTaskPage(row.id)
+                  }
+                },
+                {
+                  name: 'run',
+                  title: this.$t('ops.RunAgain'),
+                  type: 'primary',
+                  callback: function({ row, tableData }) {
+                    this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {
+                      vm.refreshTable()
+                      openTaskPage(data.task_id)
+                    })
                   }
                 }
               ]
@@ -88,6 +103,11 @@ export default {
       headerActions: {
         hasLeftActions: false
       }
+    }
+  },
+  methods: {
+    refreshTable() {
+      this.$refs.list.reloadTable()
     }
   }
 }

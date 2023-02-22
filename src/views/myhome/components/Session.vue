@@ -1,5 +1,5 @@
 <template>
-  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
+  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
 </template>
 
 <script>
@@ -18,7 +18,6 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
-        hasColumnActions: false,
         columns: [
           'id', 'user', 'asset', 'account', 'remote_addr', 'protocol'
         ],
@@ -32,11 +31,14 @@ export default {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
               if (vm.$hasPerm('terminal.view_session')) {
-                return <router-link {...{ attrs: route }} >{ label }</router-link>
+                return <router-link {...{ attrs: route }} >{label}</router-link>
               } else {
                 return label
               }
             }
+          },
+          actions: {
+            has: false
           },
           asset: {
             label: this.$t('sessions.target')

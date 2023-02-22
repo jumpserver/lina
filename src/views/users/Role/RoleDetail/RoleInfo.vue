@@ -53,7 +53,6 @@ export default {
         showMenu: false,
         showRefresh: true,
         showSearch: false,
-        customTreeHeader: false,
         treeUrl: '',
         check: {
           enable: true
@@ -81,7 +80,7 @@ export default {
         'view_audit': ['rbac.view_audit'],
         'view_workbench': ['rbac.view_workbench'],
         'view_setting': ['settings.view_setting'],
-        'cloud_import': ['assets.view_asset'],
+        'cloud_import': ['assets.view_asset', 'assets.view_platform'],
         'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole', 'users.view_user'],
         'rbac.systemrolebinding': ['rbac.view_systemrole', 'users.view_user'],
@@ -97,12 +96,23 @@ export default {
         ],
         'acls.loginacl': ['users.view_user'],
         'acls.loginassetacl': ['users.view_user'],
-        'assets.view_asset': ['assets.view_node'],
-        'assets.commandfilterrule': ['assets.view_commandfilter'],
+        'acls.commandfilteracl': ['users.view_user'],
+        'assets.view_asset': ['assets.view_node', 'assets.view_platform'],
+        'assets.view_node': ['assets.view_asset', 'assets.view_platform'],
+        'acls.commandgroup': ['acls.view_commandfilteracl'],
         'assets.gateway': ['assets.view_domain'],
+        'assets.add_gateway': ['assets.view_domain', 'assets.view_platform', 'assets.view_node'],
+        'assets.change_gateway': ['assets.view_domain', 'assets.view_platform', 'assets.view_node'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
+        'accounts.view_gatheredaccount': ['assets.view_asset', 'assets.view_node'],
         'accounts.view_account': ['assets.view_node'],
+        'accounts.view_accountsecret': ['accounts.view_account'],
+        'accounts.view_historyaccount': ['accounts.view_account', 'accounts.view_accountsecret'],
+        'accounts.view_accounttemplatesecret': ['accounts.view_accounttemplate'],
+        'accounts.change_accounttemplatesecret': ['accounts.view_accounttemplate'],
+        'accounts.view_historyaccountsecret': ['accounts.view_account', 'accounts.view_accountsecret'],
+        'accounts.add_account': ['assets.view_asset'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
         'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],
@@ -126,6 +136,11 @@ export default {
         'terminal.view_status': ['settings.change_terminal'],
         'terminal.view_task': ['settings.change_terminal'],
         'terminal.view_terminal': ['settings.change_terminal'],
+        'terminal.add_applethost': ['assets.view_platform'],
+        'terminal.change_applethost': ['assets.view_platform'],
+        'ops.view_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
+        'ops.change_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
+        'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
@@ -146,13 +161,13 @@ export default {
         {
           key: this.$t('common.DateCreated'),
           formatter: (item, val) => {
-            return <span> { toSafeLocalDateStr(this.object.date_created) }</span>
+            return <span> {toSafeLocalDateStr(this.object.date_created)}</span>
           }
         },
         {
           key: this.$t('common.DateUpdated'),
           formatter: (item, val) => {
-            return <span> { toSafeLocalDateStr(this.object.date_updated) }</span>
+            return <span> {toSafeLocalDateStr(this.object.date_updated)}</span>
           }
         },
         'comment'
@@ -169,6 +184,9 @@ export default {
   },
   mounted() {
     this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
+  },
+  activated() {
+    this.loading = true
     setTimeout(() => {
       this.loading = false
     })
@@ -286,21 +304,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree >>> .ztree * {
+.perm-tree > > > .ztree * {
   background: white;
 }
 
-.perm-tree >>> .ztree {
+.perm-tree > > > .ztree {
   background: white !important;
 }
 
-.perm-tree >>> .checkbox_true_disable,
-.perm-tree >>> .checkbox_false_disable {
+.perm-tree > > > .checkbox_true_disable,
+.perm-tree > > > .checkbox_false_disable {
   cursor: not-allowed !important;
 }
 
-.perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before {
+.perm-tree > > > .checkbox_true_disable:before,
+.perm-tree > > > .checkbox_false_disable:before {
   color: #aaaaaa !important;
 }
 </style>

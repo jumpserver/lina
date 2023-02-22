@@ -12,6 +12,7 @@
 <script>
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanInfo',
@@ -41,7 +42,7 @@ export default {
                 `/api/v1/accounts/account-backup-plan-executions/`,
                 { plan: this.object.id }
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                openTaskPage(res['task'])
               })
             }.bind(this)
           }

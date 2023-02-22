@@ -5,33 +5,24 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <el-dialog
-      :title="this.$tc('route.OperateLog')"
-      :visible.sync="logDetailVisible"
-      width="80%"
-    >
-      <OperateLogDetail :row="rowObj" />
-    </el-dialog>
+    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo, getDaysFuture } from '@/utils/common'
-import OperateLogDetail from './components/OperateLogDetail'
 import { ActionsFormatter } from '@/components/TableFormatters'
+import DiffDetail from '@/components/Dialog/DiffDetail'
 
 export default {
   components: {
     GenericListPage,
-    OperateLogDetail
+    DiffDetail
   },
   data() {
     const vm = this
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
     return {
+      url: '/api/v1/audits/operate-logs/',
       rowObj: {
         diff: ''
       },
@@ -76,11 +67,10 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true
-                    vm.$axios.get(
-                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`,
+                    this.$axios.get(
+                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`
                     ).then(res => {
-                      vm.rowObj.diff = res.diff
-                      vm.logDetailVisible = true
+                      this.$refs.DetailDialog.show(res.diff)
                     }).finally(() => {
                       vm.loading = false
                     })
@@ -89,20 +79,12 @@ export default {
               ]
             }
           }
-        },
-        extraQuery: {
-          date_to: dateTo,
-          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true,
-        datePicker: {
-          dateStart: dateFrom,
-          dateEnd: dateTo
-        }
+        hasDatePicker: true
       }
     }
   }

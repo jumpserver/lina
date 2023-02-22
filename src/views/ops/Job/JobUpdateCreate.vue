@@ -13,6 +13,7 @@ import CodeEditor from '@/components/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   components: {
@@ -45,17 +46,16 @@ export default {
         crontab: '0 0 * * *'
       },
       fieldsMeta: {
+        runas_policy: {
+          helpText: this.$tc('ops.RunasPolicyHelpText')
+        },
         name: {
+          rules: [Required],
           hidden: (formValue) => {
             return this.instantTask
           }
         },
         comment: {
-          on: {
-            change: (val) => {
-              console.log(val)
-            }
-          },
           hidden: () => {
             return this.instantTask
           }
@@ -77,6 +77,7 @@ export default {
           }
         },
         playbook: {
+          rules: [Required],
           hidden: (formValue) => {
             return formValue.type !== 'playbook'
           },
@@ -95,9 +96,7 @@ export default {
           type: 'assetSelect',
           component: AssetSelect,
           label: this.$t('perms.Asset'),
-          rules: [{
-            required: false
-          }],
+          rules: [Required],
           el: {
             baseUrl: '/api/v1/perms/users/self/assets/',
             baseNodeUrl: '/api/v1/perms/users/self/nodes/',
@@ -105,6 +104,7 @@ export default {
           }
         },
         args: {
+          rules: [Required],
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },

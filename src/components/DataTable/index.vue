@@ -70,6 +70,7 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
+        paginationSize: JSON.parse(localStorage.getItem('paginationSize')) || 15,
         paginationSizes: [15, 30, 50, 100],
         paginationBackground: true,
         transformQuery: query => {
@@ -107,7 +108,6 @@ export default {
     },
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig
-      tableDefaultConfig.paginationSize = 15
       let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
         tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
@@ -155,6 +155,7 @@ export default {
       }
     },
     handleSizeChange(val) {
+      localStorage.setItem('paginationSize', val)
       this.$store.commit('table/SET_TABLE_CONFIG',
         {
           key: 'paginationSize',

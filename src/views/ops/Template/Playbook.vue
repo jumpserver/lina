@@ -1,7 +1,8 @@
 <template>
   <div>
     <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
-    <UploadDialog :visible.sync="uploadDialogVisible" @completed="refreshTable" />
+    <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @completed="refreshTable" />
+    <CreatePlaybookDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @completed="refreshTable" />
   </div>
 </template>
 
@@ -9,14 +10,17 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import UploadDialog from '@/views/ops/Template/Playbook/UploadDialog'
 import { ActionsFormatter } from '@/components/TableFormatters'
+import CreatePlaybookDialog from '@/views/ops/Template/Playbook/CreatePlaybookDialog.vue'
 
 export default {
   components: {
     UploadDialog,
-    GenericListTable
+    GenericListTable,
+    CreatePlaybookDialog
   },
   data() {
     return {
+      createDialogVisible: false,
       uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/ops/playbooks/',
@@ -35,10 +39,10 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: true,
+              canUpdate: this.$hasPerm('ops.change_playbook'),
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
-              canDelete: true,
+              canDelete: this.$hasPerm('ops.delete_playbook'),
               hasClone: false
             }
           }
@@ -51,6 +55,30 @@ export default {
         hasMoreActions: true,
         onCreate: () => {
           this.uploadDialogVisible = true
+        },
+        moreCreates: {
+          callback: (item) => {
+            switch (item.name) {
+              case 'create':
+                this.createDialogVisible = true
+                break
+              case 'upload':
+                this.uploadDialogVisible = true
+                break
+            }
+          },
+          dropdown: [
+            {
+              name: 'create',
+              title: this.$t('common.Create') + 'Playbook',
+              has: true
+            },
+            {
+              name: 'upload',
+              title: this.$t('common.Upload') + 'Playbook',
+              has: true
+            }
+          ]
         }
       }
     }

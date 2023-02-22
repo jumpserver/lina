@@ -29,10 +29,10 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: true,
+              canUpdate: this.$hasPerm('ops.change_adhoc'),
               updateRoute: 'AdhocUpdate',
               hasDelete: true,
-              canDelete: true,
+              canDelete: this.$hasPerm('ops.delete_adhoc'),
               hasClone: false
             }
           }

@@ -168,6 +168,13 @@ export function replaceUUID(s, n) {
   return s.replace(uuidPattern, n)
 }
 
+export function replaceAllUUID(string, replacement = '*') {
+  if (hasUUID(string)) {
+    string = string.replace(/[0-9a-zA-Z\-]{36}/g, replacement)
+  }
+  return string
+}
+
 export function getDaysAgo(days, now) {
   if (!now) {
     now = new Date()
@@ -186,7 +193,7 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  const zoneTime = moment(now).utc().endOf('month').format('YYYY-MM-DD HH:mm:ss')
+  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
   return moment(zoneTime).utc().toDate()
 }
 
@@ -234,9 +241,19 @@ export function getDayFuture(days, now) {
 
 export function getErrorResponseMsg(error) {
   let msg = ''
-  const data = error.response && error.response.data || {}
+  const data = error.response && error.response.data || error
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
+  } else if (data && data['non_field_errors']) {
+    msg = data['non_field_errors'].join(', ')
+  } else if (Array.isArray(data)) {
+    msg = data.map((item, i) => {
+      let msg = getErrorResponseMsg(item)
+      if (msg) {
+        msg = `${i + 1}. ${msg}`
+      }
+      return msg
+    }).filter(i => i).join('; ')
   }
   return msg
 }

@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -58,16 +59,26 @@ export default {
           [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
-        cleanFormValue(values) {
-          // Update 的时候
+        performSubmit(validValues) {
+          let url = this.url
           const { id = '' } = this.$route.params
-          if (id) delete values['accounts']
-
+          const values = _.cloneDeep(validValues)
+          const submitMethod = id ? 'put' : 'post'
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          console.log('values[\'accounts\']', values['accounts'])
-          return values
+          if (id) {
+            url = `${url}${id}/`
+            delete values['accounts']
+          } else {
+            const accounts = values?.accounts || []
+            values.accounts = accounts.map((item) => {
+              item['secret'] = encryptPassword(item['secret'])
+              return item
+            })
+          }
+
+          return this.$axios[submitMethod](url, values)
         }
       }
     }

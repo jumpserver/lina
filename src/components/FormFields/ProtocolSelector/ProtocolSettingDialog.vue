@@ -1,13 +1,13 @@
 <template>
   <Dialog
-    :title="$tc('assets.PlatformProtocolConfig') + '：' + item.name"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :close-on-click-modal="false"
+    :title="$tc('assets.PlatformProtocolConfig') + '：' + item.name"
     class="setting-dialog"
-    width="70%"
     v-bind="$attrs"
+    width="70%"
     v-on="$listeners"
   >
     <el-alert v-if="disabled" type="success">
@@ -18,9 +18,9 @@
       <i class="fa fa-external-link" />
     </el-alert>
     <AutoDataForm
-      class="data-form"
-      :form="form"
       :disabled="disabled"
+      :form="form"
+      class="data-form"
       v-bind="config"
       @submit="onSubmit"
     />
@@ -127,6 +127,12 @@ export default {
               label: this.$t('assets.SubmitSelector'),
               type: 'input',
               hidden: (form) => this.item.name !== 'http'
+            },
+            {
+              id: 'auth_username',
+              label: this.$t('assets.AuthUsername'),
+              type: 'switch',
+              hidden: (form) => this.item.name !== 'redis'
             }
           ]]
         ]
@@ -157,12 +163,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-form >>> .el-form-item.form-buttons {
+.data-form > > > .el-form-item.form-buttons {
   padding-top: 10px;
   margin-bottom: 0;
 }
 
-.setting-dialog >>> .el-dialog__body {
+.setting-dialog > > > .el-dialog__body {
   padding-top: 10px;
 }
 

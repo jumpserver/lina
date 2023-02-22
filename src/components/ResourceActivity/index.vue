@@ -1,34 +1,40 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="12" :sm="24">
-      <IBox :title="title" class="block" v-bind="$attrs">
-        <el-timeline>
-          <el-timeline-item
-            v-for="(activity, index) in activities"
-            :key="index"
-            :size="activity.size"
-            :timestamp="activity.timestamp"
-            :type="activity.type"
-            placement="bottom"
-          >
-            {{ activity.content }}
-          </el-timeline-item>
-        </el-timeline>
-        <div v-if="activities.length < 1">
-          {{ this.$t('common.NoContent') }}
-        </div>
-      </IBox>
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :md="12" :sm="24">
+        <IBox :title="title" class="block" v-bind="$attrs">
+          <el-timeline>
+            <el-timeline-item
+              v-for="(activity, index) in activities"
+              :key="index"
+              :size="activity.size"
+              :timestamp="activity.timestamp"
+              :type="activity.type"
+              placement="bottom"
+            >
+              {{ activity.content }}
+              <el-link v-if="activity.detail_url" type="primary" @click.native="onClick(activity.r_type, activity.detail_url)">
+                {{ $tc('common.Detail') }}
+              </el-link>
+            </el-timeline-item>
+          </el-timeline>
+        </IBox>
+      </el-col>
+    </el-row>
+    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+  </div>
 </template>
 
 <script>
 import IBox from '@/components/IBox'
+import DiffDetail from '@/components/Dialog/DiffDetail'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountActivity',
+  name: 'ResourceActivity',
   components: {
-    IBox
+    IBox,
+    DiffDetail
   },
   props: {
     object: {
@@ -59,6 +65,17 @@ export default {
           this.activities.push(res[i])
         }
       })
+    },
+    onClick(type, taskUrl) {
+      if (type === 'O') {
+        this.$axios.get(taskUrl).then(
+          res => {
+            this.$refs.DetailDialog.show(res.diff)
+          }
+        )
+      } else {
+        openTaskPage('', 'celery', taskUrl)
+      }
     }
   }
 }

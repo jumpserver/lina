@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       tableData: [],
-      tableUrl: this.config.url + `&days=1`
+      tableUrl: this.config.url + `&days=7`
     }
   },
   created() {

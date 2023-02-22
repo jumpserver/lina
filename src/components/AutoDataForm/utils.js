@@ -77,6 +77,7 @@ export class FormFieldGenerator {
         field.component = NestedField
         field.label = ''
         field.labelWidth = 0
+        field.el = { ...field.el, ...fieldMeta }
         field.el.fields = this.generateNestFields(field, fieldMeta, fieldRemoteMeta)
         field.el.errors = {}
         break

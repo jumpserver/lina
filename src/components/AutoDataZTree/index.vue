@@ -39,8 +39,6 @@ export default {
         showDelete: true,
         showUpdate: true,
         showSearch: false,
-        // 自定义header
-        customTreeHeader: false,
         customTreeHeaderName: this.$t('assets.AssetTree'),
         async: {
           enable: true,
@@ -169,7 +167,9 @@ export default {
         treeNode.meta.data = res
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
-      }).finally(() => { this.refreshTree() })
+      }).finally(() => {
+        this.refreshTree()
+      })
     },
     onBodyMouseDown: function(event) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
@@ -305,11 +305,13 @@ export default {
     text-decoration: none;
     background-color: #f5f5f5;
   }
-  .rmenu:hover{
+
+  .rmenu:hover {
     background-color: #f5f7fa;
   }
 
   .data-z-tree >>> .fa {
     width: 10px;
+    margin-right: 3px;
   }
 </style>

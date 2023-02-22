@@ -37,15 +37,11 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
-          obj.CAS_RENAME_ATTRIBUTES = JSON.stringify(obj.CAS_RENAME_ATTRIBUTES)
           return obj
         },
         cleanFormValue(data) {
           let userNameAttribute = ''
-          const renameAttributes = JSON.parse(data['CAS_RENAME_ATTRIBUTES'])
-          if (renameAttributes) {
-            data['CAS_RENAME_ATTRIBUTES'] = renameAttributes
-          }
+          const renameAttributes = data['CAS_RENAME_ATTRIBUTES']
           for (const key in renameAttributes) {
             if (renameAttributes[key] === 'username') {
               userNameAttribute = key

@@ -1,13 +1,13 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :initial="initial"
+    v-bind="$data"
   />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Required, specialEmojiCheck } from '@/components/DataForm/rules'
+import { RequiredChange, specialEmojiCheck } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
@@ -20,16 +20,18 @@ export default {
     const vm = this
     const accountProvider = this.$route.query.provider || aliyun
     const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
+
     function setFieldAttrs() {
       const fieldsObject = {}
       const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file']
       for (const item of accountProviderAttrs?.attrs) {
         fieldsObject[item] = {
-          rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [Required]
+          rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [RequiredChange]
         }
       }
       return fieldsObject
     }
+
     return {
       initial: {
         attrs: {
@@ -46,7 +48,7 @@ export default {
       ],
       fieldsMeta: {
         name: {
-          rules: [Required, specialEmojiCheck]
+          rules: [RequiredChange, specialEmojiCheck]
         },
         attrs: {
           encryptedFields: ['access_key_secret'],
@@ -76,12 +78,12 @@ export default {
               }
             },
             password: {
-              rules: this.$route.params.id ? [] : [Required]
+              rules: this.$route.params.id ? [] : [RequiredChange]
             }
           }
         },
         provider: {
-          rules: [Required],
+          rules: [RequiredChange],
           el: {
             disabled: true
           }
@@ -117,7 +119,9 @@ export default {
             continue
           }
           value = value?.split(',') || []
-          value = value.filter((value, index) => { if (value) return true })
+          value = value.filter((value, index) => {
+            if (value) return true
+          })
           attrs[item] = value
         }
         return values
@@ -133,8 +137,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 
 </script>

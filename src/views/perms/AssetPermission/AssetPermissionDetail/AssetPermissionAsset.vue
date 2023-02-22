@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" class- />
+      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" class- />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -33,7 +33,6 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.object.id}/assets/all/`,
-        hasColumnActions: false,
         columnsExclude: ['asset'],
         columnsExtra: ['delete_action'],
         columns: [
@@ -46,6 +45,9 @@ export default {
           asset_display: {
             label: this.$t('perms.Asset'),
             align: 'center'
+          },
+          actions: {
+            has: false
           },
           delete_action: {
             prop: 'asset',
@@ -93,8 +95,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
-          that.$refs.assetSelect.$refs.select2.clearSelected()
+          window.location.reload()
         }
       },
       nodeRelationConfig: {

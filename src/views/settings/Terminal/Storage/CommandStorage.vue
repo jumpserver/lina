@@ -1,10 +1,11 @@
 <template>
-  <ListTable ref="ListTable" :table-config="commandTableConfig" :header-actions="commandActions" />
+  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
 import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
+
 export default {
   name: 'CommandStorage',
   components: {
@@ -58,19 +59,19 @@ export default {
           },
           is_default: {
             formatterArgs: {
-              showFalse: false
+              showFalse: false,
+              showText: false
             },
             align: 'center',
             width: '100px'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
               },
               onUpdate: function({ row }) {
-                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
+                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))

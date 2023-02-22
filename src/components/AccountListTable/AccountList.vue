@@ -1,23 +1,24 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     <ViewSecret
       v-if="showViewSecretDialog"
-      :visible.sync="showViewSecretDialog"
       :account="account"
       :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
     />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
-      :visible.sync="showUpdateSecretDialog"
       :account="account"
+      :visible.sync="showUpdateSecretDialog"
       @updateAuthDone="onUpdateAuthDone"
     />
     <AccountCreateUpdate
       v-if="showAddDialog"
-      :visible.sync="showAddDialog"
-      :asset="iAsset"
       :account="account"
+      :asset="iAsset"
+      :title="accountCreateUpdateTitle"
+      :visible.sync="showAddDialog"
       @add="addAccountSuccess"
     />
   </div>
@@ -67,10 +68,6 @@ export default {
       type: Object,
       default: null
     },
-    hasColumnActions: {
-      type: Boolean,
-      default: true
-    },
     columns: {
       type: Array,
       default: () => []
@@ -85,7 +82,8 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     headerExtraActions: {
       type: Array,
@@ -98,24 +96,21 @@ export default {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showAddDialog: false,
+      accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
       tableConfig: {
         url: this.url,
-        hasColumnActions: this.hasColumnActions,
         permissions: {
           app: 'assets',
           resource: 'account'
         },
-        columnsExclude: ['specific'],
-        columnsShow: {
-          min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username', 'asset', 'privileged',
-            'secret_type', 'source', 'actions'
-          ]
-        },
+        columnsExclude: ['spec_info'],
+        columns: [
+          'name', 'username', 'asset', 'privileged', 'version',
+          'secret_type', 'source', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatter: function(row) {
@@ -144,11 +139,11 @@ export default {
               }
             }
           },
-          version: {
-            width: '70px'
-          },
           secret_type: {
-            width: '100px'
+            width: '100px',
+            formatter: function(row) {
+              return row.secret_type.label
+            }
           },
           source: {
             formatter: function(row) {
@@ -184,6 +179,7 @@ export default {
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    // debugger
                     vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
@@ -207,11 +203,13 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_account'),
+                  can: this.$hasPerm('accounts.change_account') &&
+                    this.asset && this.asset['auto_info'].ansible_enabled &&
+                    this.asset['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/accounts/accounts/${row.id}/verify/`,
-                      { action: 'test' }
+                      `/api/v1/accounts/accounts/tasks/`,
+                      { action: 'verify', accounts: [row.id] }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -222,9 +220,14 @@ export default {
                   title: this.$t('common.Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
+                    const data = {
+                      ...this.asset,
+                      ...row.asset
+                    }
                     vm.account = row
-                    vm.iAsset = row.asset
+                    vm.iAsset = data
                     vm.showAddDialog = false
+                    vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
                     setTimeout(() => {
                       vm.showAddDialog = true
                     })
@@ -240,11 +243,22 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,
-        hasImport: true,
+        hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
+        handleImportClick: ({ selectedRows }) => {
+          this.$eventBus.$emit('showImportDialog', {
+            selectedRows,
+            url: '/api/v1/accounts/accounts/',
+            name: this?.name
+          })
+        },
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
+        },
+        importOptions: {
+          canImportCreate: this.$hasPerm('accounts.add_account'),
+          canImportUpdate: this.$hasPerm('accounts.change_account')
         },
         extraActions: [
           {
@@ -257,6 +271,9 @@ export default {
             callback: async() => {
               await this.getAssetDetail()
               setTimeout(() => {
+                vm.iAsset = this.asset
+                vm.account = {}
+                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
               })
             }

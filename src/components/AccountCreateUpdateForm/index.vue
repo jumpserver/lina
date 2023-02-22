@@ -1,6 +1,7 @@
 <template>
   <AutoDataForm
     v-if="!loading"
+    ref="AutoDataForm"
     v-bind="$data"
     @submit="confirm"
   />
@@ -11,6 +12,8 @@ import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
+import { encryptPassword } from '@/utils/crypto'
+import { RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -29,6 +32,11 @@ export default {
     account: {
       type: Object,
       default: null
+    },
+    // 默认组件密码加密
+    encryptPassword: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -47,6 +55,7 @@ export default {
       },
       url: '/api/v1/accounts/accounts/',
       form: this.account || {},
+      encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
@@ -54,7 +63,7 @@ export default {
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -68,10 +77,13 @@ export default {
           }
         },
         name: {
+          rules: [RequiredChange],
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {
-                updateForm({ username: value })
+                if (!this.account?.name) {
+                  updateForm({ username: value })
+                }
                 const maybePrivileged = this.defaultPrivilegedAccounts.includes(value)
                 if (maybePrivileged) {
                   updateForm({ privileged: true })
@@ -81,6 +93,9 @@ export default {
           }
         },
         username: {
+          el: {
+            disabled: !!this.account?.name
+          },
           on: {
             input: ([value], updateForm) => {
               this.usernameChanged = true
@@ -150,7 +165,8 @@ export default {
         },
         push_now: {
           hidden: () => {
-            return !this.iPlatform.automation?.['push_account_enabled']
+            const automation = this.iPlatform.automation || {}
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
           }
         }
       },
@@ -207,17 +223,13 @@ export default {
       })
     },
     controlShowField() {
-      let privileged = ['privileged']
+      const privileged = ['privileged']
       let suFrom = ['su_from']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web']
       const asset = this?.asset || {}
-      if (asset?.type?.value === 'website') {
-        privileged = []
+      if (filterSuFrom.includes(asset?.category?.value)) {
         suFrom = []
       }
-      if (asset?.category?.value === 'database') {
-        suFrom = []
-      }
-
       return [...privileged, ...suFrom]
     },
     confirm(form) {
@@ -225,6 +237,10 @@ export default {
       if (secretType !== 'password') {
         form.secret = form[secretType]
         delete form[secretType]
+      }
+      form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
+      if (!form.secret) {
+        delete form['secret']
       }
       if (this.account?.name) {
         this.$emit('edit', form)

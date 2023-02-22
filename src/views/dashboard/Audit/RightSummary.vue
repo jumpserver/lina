@@ -34,8 +34,8 @@ export default {
         tip: this.$t('dashboard.SessionTrend')
       },
       chartTitleConfig: {
-        title: this.$t('route.BatchCommand'),
-        tip: this.$t('route.BatchCommand')
+        title: this.$t('route.JobExecutionLog'),
+        tip: this.$t('route.JobExecutionLog')
       },
       chartConfig: {
         datesMetrics: [],
@@ -43,9 +43,9 @@ export default {
         secondaryData: [0]
       },
       data: {
-        total_count_jobs: 0,
-        total_count_jobs_unexecuted: 0,
-        total_count_jobs_executed_failed: 0
+        total_count_job_logs_running: 0,
+        total_count_job_logs_failed: 0,
+        total_count_job_logs: 0
       }
     }
   },
@@ -53,26 +53,26 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('route.BatchCommand') + this.$t('dashboard.Num'),
+          title: this.$t('dashboard.TotalJobLog'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_jobs,
+            count: this.data.total_count_job_logs,
             disabled: true
           }
         },
         {
-          title: this.$t('dashboard.BatchCommandNotExecuted'),
+          title: this.$t('dashboard.TotalJobRunning'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_jobs_unexecuted,
+            count: this.data.total_count_job_logs_running,
             disabled: true
           }
         },
         {
-          title: this.$t('dashboard.ExecuteFailedCommand'),
+          title: this.$t('dashboard.TotalJobFailed'),
           body: {
             route: { name: `CommandList` },
-            count: this.data.total_count_jobs_executed_failed,
+            count: this.data.total_count_job_logs_failed,
             disabled: true
           }
         }
@@ -90,16 +90,16 @@ export default {
   methods: {
     async getData() {
       const data = await this.$axios.get(`/api/v1/index/?days=${this.days}
-        &total_count_jobs=1
-        &total_count_jobs_unexecuted=1
-        &total_count_jobs_executed_failed=1
+        &total_count_job_logs=1
+        &total_count_job_logs_running=1
+        &total_count_job_logs_failed=1
         &session_dates_metrics=1
       `)
       const totalCountSession = data.dates_metrics_total_count_session
       this.chartConfig.datesMetrics = data.dates_metrics_date
-      this.data.total_count_jobs = data?.total_count_jobs
-      this.data.total_count_jobs_unexecuted = data?.total_count_jobs_unexecuted
-      this.data.total_count_jobs_executed_failed = data?.total_count_jobs_executed_failed
+      this.data.total_count_job_logs = data?.total_count_job_logs
+      this.data.total_count_job_logs_running = data?.total_count_job_logs_running
+      this.data.total_count_job_logs_failed = data?.total_count_job_logs_failed
       if (totalCountSession.length > 1) {
         this.chartConfig.secondaryData = totalCountSession
       }
@@ -112,10 +112,12 @@ export default {
 .margin-top-16 {
   margin-top: 16px;
 }
+
 .box {
   margin-top: 16px;
   padding: 20px;
   background: #fff;
+
   .head {
     display: flex;
     justify-content: space-between;

@@ -6,7 +6,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import 'github-markdown-css/github-markdown.css'
+import 'github-markdown-css/github-markdown-light.css'
 
 export default {
   components: {
@@ -24,6 +24,14 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang='scss' scoped>
+.markdown-body * {
+  padding: 10px;
+  background-color: #f3f3f3;
+  color: #1a1a1a;
+  font-size: 13px;
+  //& >>> .table * {
+  //  background-color: #f3f3f3;
+  //}
+}
 </style>

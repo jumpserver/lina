@@ -1,17 +1,18 @@
 <template>
   <Dialog
-    :title="$tc('assets.AddAccount')"
+    :title="title"
     :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :close-on-click-modal="false"
-    width="70%"
     v-bind="$attrs"
+    width="70%"
     v-on="$listeners"
   >
     <AccountCreateUpdateForm
       v-if="!loading"
+      ref="form"
       :account="account"
       :asset="asset"
       @add="addAccount"
@@ -42,6 +43,12 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$t('assets.AddAccount')
+      }
     }
   },
   data() {
@@ -88,9 +95,7 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.createSuccessMsg'))
-      }).catch(() => {
-        this.$message.error(this.$tc('common.createErrorMsg'))
-      })
+      }).catch(error => this.setFieldError(error))
     },
     editAccount(form) {
       const data = { ...form }
@@ -98,7 +103,35 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
-      })
+      }).catch(error => this.setFieldError(error))
+    },
+    setFieldError(error) {
+      const response = error.response
+      const data = response.data
+      const refsAutoDataForm = this.$refs.form.$refs.AutoDataForm
+      if (response.status === 400) {
+        for (const key of Object.keys(data)) {
+          let err = ''
+          let current = key
+          let errorTips = data[current]
+          if (errorTips instanceof Array) {
+            errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
+            for (const i of errorTips) {
+              if (i instanceof Object) {
+                err += i?.port?.join(',')
+              } else {
+                err += errorTips
+              }
+            }
+          } else {
+            err = errorTips
+          }
+          if (current === 'secret') {
+            current = refsAutoDataForm.form.secret_type?.value || key
+          }
+          refsAutoDataForm.setFieldError(current, err)
+        }
+      }
     }
   }
 }

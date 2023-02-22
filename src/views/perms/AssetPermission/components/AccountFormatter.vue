@@ -1,19 +1,18 @@
 <template>
   <div>
-    <el-checkbox-group v-model="select">
+    <el-checkbox-group v-model="choicesSelected">
       <el-checkbox
-        v-for="(i) in checkboxGroup"
+        v-for="(i) in choices"
         :key="i.label"
-        :disabled="isDisabled(i)"
         :label="i.value"
-        @change="handleItemChange"
+        @change="handleCheckboxCheck(i, $event)"
       >
         {{ i.label }}
       </el-checkbox>
     </el-checkbox-group>
     <TagInput
-      v-if="showInput"
-      :value="customTags"
+      v-if="showSpecAccounts"
+      :value="specAccountsInput"
       @change="handleTagChange"
     />
   </div>
@@ -21,6 +20,13 @@
 
 <script>
 import { TagInput } from '@/components/FormFields'
+import {
+  AllAccount,
+  SPECAccount,
+  SameUSER,
+  ManualINPUT,
+  AccountLabelMapper
+} from '@/views/perms/const'
 
 export default {
   components: {
@@ -33,78 +39,76 @@ export default {
     }
   },
   data() {
-    const checkboxGroup = [
+    const choices = [
       {
-        label: this.$t('perms.AllAccounts'),
-        value: '@ALL'
+        label: AccountLabelMapper[AllAccount],
+        value: AllAccount
       },
       {
-        label: this.$t('perms.ManualInput'),
-        value: '@INPUT'
+        label: AccountLabelMapper[SPECAccount],
+        value: SPECAccount
       },
       {
-        label: this.$t('perms.SameAccount'),
-        value: '@USER'
+        label: AccountLabelMapper[ManualINPUT],
+        value: ManualINPUT
       },
       {
-        label: this.$t('perms.SpecifyInput'),
-        value: 'INPUT'
+        label: AccountLabelMapper[SameUSER],
+        value: SameUSER
       }
     ]
     return {
-      checkboxGroup,
-      defaultOptions: ['@ALL', '@INPUT', '@USER'],
-      select: [],
-      customTags: [],
-      showInput: false
+      ALL: AllAccount,
+      SPEC: SPECAccount,
+      choices: choices,
+      choicesSelected: [],
+      defaultChoices: [this.ALL],
+      specAccountsInput: [],
+      showSpecAccounts: false
     }
   },
-  computed: {
-    isDisabled() {
-      return (item) => (['@INPUT', '@USER', 'INPUT'].includes(item.value) && this.select.includes('@ALL'))
-    }
-  },
-  created() {
+  mounted() {
     this.init()
-    if (this.customTags.length > 0) {
-      this.select.push('INPUT')
-      this.showInput = true
-    }
   },
   methods: {
     init() {
-      const select = []
-      const customTags = []
-      this.value.filter(i => {
-        if (this.defaultOptions.includes(i)) {
-          select.push(i)
-        } else {
-          customTags.push(i)
-        }
-      })
-      this.select = select
-      this.customTags = customTags
-    },
-    handleItemChange(val, event) {
-      if (val && event.target.defaultValue === '@ALL') {
-        this.select = Array.from(new Set([...this.select, ...this.defaultOptions]))
+      const choicesSelected = this.value.filter(i => i.startsWith('@'))
+      const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
+      if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
+        choicesSelected.push(this.SPEC)
+        this.showSpecAccounts = true
       }
-      this.showInput = !this.select.includes('@ALL') && this.select.includes('INPUT')
-      this.setValue()
+      if (this.value.indexOf(this.SPEC) > -1) {
+        this.showSpecAccounts = true
+      }
+      this.choicesSelected = choicesSelected
+      this.specAccountsInput = specAccountsInput
+    },
+    handleCheckboxCheck(item, checked) {
+      if (item.value === this.SPEC) {
+        this.showSpecAccounts = checked
+      } else if (item.value === this.ALL) {
+        this.showSpecAccounts = checked ? false : checked
+      }
+      if (item.value === this.ALL) {
+        this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
+      }
+      if (item.value === this.SPEC) {
+        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
+      }
+      this.outputValue()
     },
     handleTagChange(val) {
-      if (this.select.includes('INPUT')) {
-        this.customTags = val
-        this.setValue()
-      }
+      this.specAccountsInput = val
+      this.outputValue()
     },
-    setValue() {
-      const selectValue = this.select.filter(i => i !== 'INPUT')
-      if (this.select.includes('INPUT')) {
-        this.$emit('change', [...selectValue, ...this.customTags])
-      } else {
-        this.$emit('change', selectValue)
+    outputValue() {
+      let choicesSelected = this.choicesSelected
+      if (this.showSpecAccounts) {
+        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput]
       }
+      this.$emit('input', choicesSelected)
+      this.$emit('change', choicesSelected)
     }
   }
 }

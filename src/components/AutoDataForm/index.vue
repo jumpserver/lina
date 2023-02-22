@@ -9,8 +9,8 @@
   >
     <span
       v-for="(group, i) in groups"
-      :slot="'id:'+group.name"
       :key="'group-'+group.name"
+      :slot="'id:'+group.name"
     >
       <FormGroupHeader
         v-if="!groupHidden(group, i)"

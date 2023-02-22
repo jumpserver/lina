@@ -63,7 +63,7 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -77,7 +77,7 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -91,7 +91,7 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -277,7 +277,7 @@ export default {
           key: this.$t('users.DateExpired')
         },
         {
-          value: this.object.workbench_orgs.filter(item => !item.is_root).map(item => item.name).join(' ｜ '),
+          value: this.object.groups.map(item => item.name).join(' ｜ '),
           key: this.$t('users.UserGroups')
         },
         {
@@ -291,7 +291,7 @@ export default {
     },
     bindOrUNBindUrl() {
       let url = ''
-      if (!this.object[`is_${this.currentEdit}_bound`]) {
+      if (!this.object[`${this.currentEdit}_id`]) {
         url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
       } else {
         url = `/api/v1/authentication/${this.currentEdit}/qr/unbind/`
@@ -324,7 +324,7 @@ export default {
     },
     verifyDone() {
       const url = this.bindOrUNBindUrl
-      if (!this.object[`is_${this.currentEdit}_bound`]) {
+      if (!this.object[`${this.currentEdit}_id`]) {
         window.location.href = url
       } else {
         this.$axios.post(url).then(res => {

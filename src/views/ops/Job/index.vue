@@ -9,7 +9,6 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
-import { mapGetters } from 'vuex'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -48,10 +47,7 @@ export default {
             }
           },
           comment: {
-            width: '240px',
-            formatter: (row) => {
-              return row.type.label
-            }
+            width: '240px'
           },
           summary: {
             label: this.$t('ops.Summary(success/total)'),
@@ -83,17 +79,16 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: true,
+              canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
               hasDelete: true,
-              canDelete: true,
+              canDelete: this.$hasPerm('ops.delete_job'),
               hasClone: false,
               extraActions: [
                 {
                   title: this.$t('ops.Run'),
                   name: 'run',
-                  type: 'running',
-                  can: true,
+                  can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     const params = JSON.parse(row.parameters_define)
                     if (Object.keys(params).length > 0) {
@@ -136,9 +131,6 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     runJob(row, parameters) {

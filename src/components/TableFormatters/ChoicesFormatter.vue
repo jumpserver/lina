@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
+    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" effect="dark" placement="bottom">
       <div slot="content" v-html="tips" />
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
@@ -42,7 +42,8 @@ export default {
             return (cellValue && typeof cellValue === 'object') ? cellValue.label : this.textChoices[key] || cellValue
           },
           getIcon({ row, cellValue }) {
-            return this.faChoices[cellValue]
+            const key = this.getKey({ row, cellValue })
+            return this.faChoices[key]
           },
           hasTips: false,
           showIcon: true,
@@ -67,9 +68,10 @@ export default {
       )
     },
     icon() {
-      return this.formatterArgs.getIcon(
+      const icon = this.formatterArgs.getIcon(
         { row: this.row, cellValue: this.cellValue }
       )
+      return icon
     },
     classes() {
       return this.formatterArgs.classChoices[this.key]

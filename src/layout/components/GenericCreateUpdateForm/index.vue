@@ -2,16 +2,16 @@
   <AutoDataForm
     v-if="!loading"
     ref="form"
-    :method="method"
     :form="form"
-    :url="iUrl"
-    :has-save-continue="iHasSaveContinue"
     :has-reset="iHasReset"
+    :has-save-continue="iHasSaveContinue"
     :is-submitting="isSubmitting"
+    :method="method"
+    :url="iUrl"
     v-bind="$attrs"
-    v-on="$listeners"
-    @submit="handleSubmit"
     @afterRemoteMeta="handleAfterRemoteMeta"
+    @submit="handleSubmit"
+    v-on="$listeners"
   />
 </template>
 <script>
@@ -179,12 +179,15 @@ export default {
                 },
                 style: { 'vertical-align': 'top' }
               }, msgLinkName),
-              h('span', { style: {
-                'padding-left': '5px',
-                'height': '18px',
-                'line-height': '18px',
-                'font-size': '13.5px',
-                'font-weight': ' 400' }}, msg)
+              h('span', {
+                style: {
+                  'padding-left': '5px',
+                  'height': '18px',
+                  'line-height': '18px',
+                  'font-size': '13.5px',
+                  'font-weight': ' 400'
+                }
+              }, msg)
             ]),
             type: 'success'
           })
@@ -223,7 +226,7 @@ export default {
                 if (i instanceof Object) {
                   err += i?.port?.join(',')
                 } else {
-                  err += errorTips
+                  err += i
                 }
               }
             } else {
@@ -329,7 +332,9 @@ export default {
       this.performSubmit(validValues)
         .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
         .catch((error) => this.onPerformError(error, this.method, this))
-        .finally(() => { this.isSubmitting = false })
+        .finally(() => {
+          this.isSubmitting = false
+        })
     },
     async getFormValue() {
       const cloneFrom = this.$route.query['clone_from']

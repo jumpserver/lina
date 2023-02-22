@@ -8,38 +8,30 @@
       v-on="$listeners"
       @focus.stop="handleFocus"
     />
-    <Dialog
+    <AssetSelectDialog
       v-if="dialogVisible"
-      :title="$tc('assets.Assets')"
+      ref="dialog"
+      :value="value"
       :visible.sync="dialogVisible"
-      custom-class="asset-select-dialog"
-      top="1vh"
-      width="80vw"
+      v-bind="$attrs"
+      :tree-url-query="treeUrlQuery"
+      :base-url="baseUrl"
+      :base-node-url="baseNodeUrl"
       @cancel="handleCancel"
       @confirm="handleConfirm"
-    >
-      <AssetTreeTable
-        ref="ListPage"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-        class="tree-table"
-        :url="baseUrl"
-        :node-url="baseNodeUrl"
-        :tree-url="`${baseNodeUrl}/children/tree/`"
-      />
-    </Dialog>
+      v-on="$listeners"
+    />
   </div>
 </template>
 
 <script>
-import AssetTreeTable from '@/components/AssetTreeTable'
-import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
-import Dialog from '@/components/Dialog'
+import AssetSelectDialog from './dialog.vue'
+import { b } from 'css-color-function/lib/adjusters'
 
 export default {
   componentName: 'AssetSelect',
-  components: { AssetTreeTable, Select2, Dialog },
+  components: { AssetSelectDialog, Select2 },
   props: {
     baseUrl: {
       type: String,
@@ -47,21 +39,15 @@ export default {
     },
     baseNodeUrl: {
       type: String,
-      default: '/api/v1/assets/nodes'
+      default: '/api/v1/assets/nodes/'
+    },
+    treeUrlQuery: {
+      type: Object,
+      default: () => {}
     },
     value: {
       type: Array,
       default: () => []
-    },
-    canSelect: {
-      type: Function,
-      default(row, index) {
-        return true
-      }
-    },
-    disabled: {
-      type: [Boolean, Function],
-      default: false
     }
   },
   data() {
@@ -73,131 +59,38 @@ export default {
         iValue.push(item)
       }
     }
-    const select2Config = {
-      value: iValue,
-      multiple: true,
-      clearable: true,
-      ajax: {
-        url: this.baseUrl,
-        transformOption: (item) => {
-          return { label: item.name + '(' + item.address + ')', value: item.id }
-        }
-      }
-    }
-    const vm = this
     return {
       dialogVisible: false,
       initialValue: _.cloneDeep(iValue),
-      rowSelected: [],
-      initSelection: null,
-      select2Config: select2Config,
-      dialogSelect2Config: select2Config,
-      tableConfig: {
-        url: this.baseUrl,
-        hasTree: true,
-        canSelect: this.canSelect,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
-            sortable: true,
-            formatter: DialogDetailFormatter,
-            formatterArgs: {
-              getDialogTitle: function({ col, row }) {
-                this.$t('assets.AssetDetail')
-              }.bind(this),
-              getDetailItems: function({ col, row }) {
-                return [
-                  {
-                    key: this.$t('assets.Name'),
-                    value: row.name
-                  },
-                  {
-                    key: this.$t('assets.AssetAddress'),
-                    value: row.address
-                  },
-                  {
-                    key: this.$t('assets.Protocols'),
-                    value: row.protocols.map(item => item.name).join(', ')
-                  },
-                  {
-                    key: this.$t('assets.Category'),
-                    value: row.category.label
-                  },
-                  {
-                    key: this.$t('assets.Type'),
-                    value: row.type.label
-                  },
-                  {
-                    key: this.$t('assets.Platform'),
-                    value: row.platform?.name || ''
-                  },
-                  {
-                    key: this.$t('common.Active'),
-                    value: row.is_active
-                  },
-                  {
-                    key: this.$t('assets.Comment'),
-                    value: row.comment
-                  }
-                ]
-              }.bind(this)
-            }
-          },
-          {
-            prop: 'address',
-            label: this.$t('assets.ipDomain'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'platform',
-            label: this.$t('assets.Platform'),
-            sortable: true,
-            formatter: function(row) {
-              return row.platform.name
-            }
-          },
-          {
-            prop: 'protocols',
-            formatter: function(row) {
-              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
-              return <span> {data} </span>
-            },
-            label: this.$t('assets.Protocols')
+      select2Config: {
+        value: iValue,
+        multiple: true,
+        clearable: true,
+        ajax: {
+          url: this.baseUrl,
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.address + ')', value: item.id }
           }
-        ],
-        listeners: {
-          'toggle-row-selection': (isSelected, row) => {
-            if (isSelected) {
-              vm.addRowToSelect(row)
-            } else {
-              vm.removeRowFromSelect(row)
-            }
-          }
-        },
-        theRowDefaultIsSelected: (row) => {
-          return iValue.indexOf(row.id) > -1
-        }
-      },
-      headerActions: {
-        hasLeftActions: false,
-        hasRightActions: false,
-        searchConfig: {
-          getUrlQuery: false
         }
       }
     }
   },
   methods: {
+    b,
     handleFocus() {
       this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
     },
-    handleConfirm() {
+    handleConfirm(valueSelected, rowsAdd) {
+      if (valueSelected === undefined) {
+        return
+      }
+      this.$refs.select2.iValue = valueSelected
+      this.addRowsToSelect(rowsAdd)
+      this.onInputChange(valueSelected)
       this.dialogVisible = false
     },
     handleCancel() {
-      this.$refs.select2.iValue = this.initialValue
       this.dialogVisible = false
     },
     onInputChange(val) {
@@ -214,29 +107,17 @@ export default {
         options.push(option)
       }
     },
-    addRowToSelect(row) {
+    addRowsToSelect(rows) {
       const outSelectOptions = this.$refs.select2.options
-      this.addToSelect(outSelectOptions, row)
-
-      const selectValue = this.$refs.select2.iValue
-      const selectValueIndex = selectValue.indexOf(row.id)
-      if (selectValueIndex === -1) {
-        selectValue.push(row.id)
-      }
-      this.onInputChange(selectValue)
-    },
-    removeRowFromSelect(row) {
-      const selectValue = this.$refs.select2.iValue
-      const selectValueIndex = selectValue.indexOf(row.id)
-      if (selectValueIndex > -1) {
-        selectValue.splice(selectValueIndex, 1)
+      for (const row of rows) {
+        this.addToSelect(outSelectOptions, row)
       }
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .el-select {
   width: 100%;
 }

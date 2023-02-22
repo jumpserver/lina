@@ -105,7 +105,9 @@ export default {
   },
   computed: {
     hasActionPerm() {
-      return this.object.process_map[this.object.approval_step.value - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return this.object.process_map.filter(
+        item => item.approval_level === this.object.approval_step.value
+      )[0].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
       return this.object.applicant.id === this.$store.state.users.profile.id
