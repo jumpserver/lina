@@ -49,7 +49,8 @@ export default {
       templateDialogVisible: false,
       columns: [
         'name', 'username', 'privileged', 'connectivity',
-        'is_active', 'date_created', 'date_updated', 'actions'
+        'is_active', 'secret_type', 'source', 'date_created',
+        'date_updated', 'actions'
       ],
       headerExtraActions: [
         {
