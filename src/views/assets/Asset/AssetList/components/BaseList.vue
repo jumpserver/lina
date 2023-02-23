@@ -139,7 +139,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true
