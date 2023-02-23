@@ -268,7 +268,7 @@ export default {
             title: this.$t('common.Add'),
             type: 'primary',
             can: () => {
-              return vm.$hasPerm('accounts.add_account')
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
             callback: async() => {
               await this.getAssetDetail()

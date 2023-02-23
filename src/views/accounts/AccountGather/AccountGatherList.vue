@@ -69,7 +69,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.Sync'),
-                  can: this.$hasPerm('accounts.add_gatheredaccount'),
+                  can: this.$hasPerm('accounts.add_gatheredaccount') && !this.$store.getters.currentOrgIsRoot,
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.post(
