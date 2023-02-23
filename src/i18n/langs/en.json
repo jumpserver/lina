@@ -438,6 +438,7 @@
   },
   "common": {
     "DownloadCenter": "Download center",
+    "RestoreDefault": "Restore default",
     "ImportOrg": "Import organization",
     "About": "About",
     "PermissionCompany": "Permission company",
@@ -1263,7 +1264,7 @@
     "UserLoginACLUpdate": "Update User Login ACL",
     "JobCreate": "Create job",
     "JobExecutionLog": "Job Execution Log",
-    "JobList": "Job List",
+    "JobList": "Job list",
     "HostList": "Host list",
     "UserLoginACLCreate": "Create User Login ACL",
     "TicketsNew": "Submit ticket",

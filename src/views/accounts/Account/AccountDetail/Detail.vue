@@ -83,7 +83,12 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('accounts.verify_account')
+            disabled: (
+              !vm.$hasPerm('accounts.verify_account') ||
+              !vm.object.asset.auto_info?.ansible_enabled ||
+              !vm.object.asset.auto_info?.ping_enabled ||
+              this.$store.getters.currentOrgIsRoot
+            )
           },
           callbacks: Object.freeze({
             click: () => {
@@ -104,7 +109,11 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Push'),
-            disabled: !vm.$hasPerm('accounts.push_account')
+            disabled: (
+              !vm.$hasPerm('accounts.push_account') ||
+              !vm.object.asset.auto_info?.push_account_enabled ||
+              this.$store.getters.currentOrgIsRoot
+            )
           },
           callbacks: Object.freeze({
             click: () => {
