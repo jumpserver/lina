@@ -139,7 +139,11 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
+                  can: ({ row }) =>
+                    this.$hasPerm('assets.test_assetconnectivity') &&
+                    !this.$store.getters.currentOrgIsRoot &&
+                    row['auto_info'].ansible_enabled &&
+                    row['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true
