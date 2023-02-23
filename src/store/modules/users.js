@@ -94,6 +94,11 @@ const actions = {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
+        if (typeof response !== 'object') {
+          // 后端 middleware 对 API 做了校验，这里返回可能是 302 重定向, response 为 string 类型
+          resolve(response)
+          return
+        }
         commit('SET_PROFILE', response)
         resolve(response)
       }).catch(error => {
