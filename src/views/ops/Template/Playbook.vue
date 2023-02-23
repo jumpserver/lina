@@ -70,12 +70,12 @@ export default {
           dropdown: [
             {
               name: 'create',
-              title: this.$t('common.Create') + 'Playbook',
+              title: this.$t('common.Create') + ' playbook',
               has: true
             },
             {
               name: 'upload',
-              title: this.$t('common.Upload') + 'Playbook',
+              title: this.$t('common.Upload') + ' playbook',
               has: true
             }
           ]
