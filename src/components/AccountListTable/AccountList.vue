@@ -108,7 +108,7 @@ export default {
         },
         columnsExclude: ['spec_info'],
         columns: [
-          'name', 'username', 'asset', 'privileged', 'version',
+          'name', 'username', 'asset', 'privileged',
           'secret_type', 'source', 'actions'
         ],
         columnsMeta: {
