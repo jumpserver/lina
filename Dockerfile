@@ -16,7 +16,7 @@ ARG VERSION
 ENV VERSION=$VERSION
 ADD . /data
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=lina \
-    sed -i "s@Version <strong>.*</strong>@Version <strong>${VERSION}</strong>@g" src/layout/components/Footer/index.vue \
+    sed -i "s@<strong> version-dev </strong>@<strong> ${VERSION} </strong>@g" src/layout/components/NavHeader/About.vue \
     && yarn build
 
 FROM nginx:alpine
