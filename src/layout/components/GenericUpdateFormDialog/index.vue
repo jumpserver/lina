@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('common.updateSelected')"
@@ -8,9 +9,7 @@
     width="70%"
     v-on="$listeners"
   >
-    <el-alert v-if="tips" class="tips" type="success">
-      {{ tips }}
-    </el-alert>
+    <el-alert v-if="tips" class="tips" type="success">{{ tips }}</el-alert>
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
         <div class="select-prop-label">
