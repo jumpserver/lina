@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative;">
-    <div v-if="showToolBar" style="position: absolute;z-index: 99;right: 4px;margin-top: 4px">
+    <div v-if="showToolBar" class="actions">
       <div
         v-for="(item,index) in toolbar"
         :key="index"
@@ -105,6 +105,13 @@ export default {
 .xterm {
   padding-left: 5px;
   background-color: #FFFFFF;
+}
+
+.actions {
+  position: absolute;
+  right: 4px;
+  z-index: 2;
+  margin-top: 4px;
 }
 
 .el-button {
