@@ -30,7 +30,7 @@
               @click="refreshTable"
             >
               <el-tooltip :content="$tc('common.Refresh')" placement="top">
-                <span>
+                <span style="color: #5e5e5e">
                   <svg-icon icon-class="refresh" style="font-size: 14px;" />
                 </span>
               </el-tooltip>

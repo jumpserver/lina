@@ -6,6 +6,7 @@
     :visible.sync="iVisible"
     top="1vh"
     width="70%"
+    v-on="$listeners"
   >
     <el-alert v-if="tips" class="tips" type="success">
       {{ tips }}
@@ -22,8 +23,8 @@
             v-for="(value, name) in iFormSetting.fieldsMeta"
             :key="name"
             :checked="true"
-            :label="name"
             :disabled="value.disabled"
+            :label="name"
           >
             {{ value.label }}
           </el-checkbox>
