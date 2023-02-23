@@ -46,7 +46,7 @@ export default {
         hasMoreActions: false,
         createRoute: 'CommandGroupCreate',
         canCreate: () => {
-          return this.$hasPerm('acls.add_commandgroup')
+          return this.$hasPerm('acls.add_commandgroup') && !this.$store.getters.currentOrgIsRoot
         }
       }
     }

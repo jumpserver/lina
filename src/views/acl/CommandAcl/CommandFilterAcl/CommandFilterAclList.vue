@@ -43,7 +43,7 @@ export default {
         hasMoreActions: false,
         createRoute: 'CommandFilterAclCreate',
         canCreate: () => {
-          return this.$hasPerm('acls.add_commandfilteracl')
+          return this.$hasPerm('acls.add_commandfilteracl') && !this.$store.getters.currentOrgIsRoot
         }
       }
     }
