@@ -13,7 +13,7 @@
       <div class="head">
         <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
       </div>
-      <div class="text">{{ $tc('ops.version') }}：<strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span></div>
+      <div class="text">{{ $tc('ops.version') }}：<strong> version-dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span></div>
       <div class="text">{{ $tc('common.PermissionCompany') }}：{{ corporation }}</div>
       <el-divider class="divider" />
       <div class="text">
