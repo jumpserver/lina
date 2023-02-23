@@ -48,7 +48,7 @@ export default {
     return {
       templateDialogVisible: false,
       columns: [
-        'name', 'username', 'privileged', 'version', 'connectivity',
+        'name', 'username', 'privileged', 'connectivity',
         'is_active', 'secret_type', 'source', 'date_created',
         'date_updated', 'actions'
       ],
