@@ -39,9 +39,8 @@
         <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
+        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('accounts.PasswordRecord')">
           <el-link
-            v-perms="'accounts.view_accountsecret'"
             :underline="false"
             type="success"
             @click="showHistoryDialog"
@@ -118,17 +117,12 @@ export default {
     }
   },
   mounted() {
-    const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-    this.$axios.get(url,
-      {
-        validateStatus: (status) => {
-          if (status === 400) return 200
-          return status
-        }
-      }
-    ).then(resp => {
-      this.versions = resp.count
-    })
+    if (this.showPasswordRecord) {
+      const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
+      this.$axios.get(url).then(resp => {
+        this.versions = resp.count
+      })
+    }
   },
   methods: {
     getAuthInfo() {
