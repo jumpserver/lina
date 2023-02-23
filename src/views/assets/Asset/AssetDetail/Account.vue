@@ -56,7 +56,7 @@ export default {
         {
           name: this.$t('route.AccountTemplate'),
           title: this.$t('route.AccountTemplate'),
-          can: () => this.$hasPerm('accounts.view_accounttemplate'),
+          can: () => this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
           callback: () => {
             this.templateDialogVisible = true
           }
