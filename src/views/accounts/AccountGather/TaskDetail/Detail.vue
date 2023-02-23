@@ -25,7 +25,7 @@ export default {
     return {
       url: `/api/v1/accounts/gather-account-automations/${this.object.id}/`,
       detailFields: [
-        'name', 'is_periodic',
+        'id', 'name', 'is_periodic',
         {
           key: this.$t('xpack.Cloud.RegularlyPerform'),
           value: this.object?.periodic_display || ''

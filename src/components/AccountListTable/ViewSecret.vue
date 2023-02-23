@@ -39,14 +39,16 @@
         <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
-          <el-button
-            v-perms="'accounts.view_historyaccountsecret'"
-            type="text"
-            @click="onShowPasswordHistory"
+        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('accounts.PasswordRecord')">
+          <el-link
+            :underline="false"
+            type="success"
+            @click="showHistoryDialog"
           >
-            {{ account['version'] }}
-          </el-button>
+            <span style="padding-right: 30px">
+              {{ versions }}
+            </span>
+          </el-link>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -99,6 +101,7 @@ export default {
   data() {
     return {
       secretInfo: {},
+      versions: '-',
       showSecret: false,
       sshKeyFingerprint: '',
       historyCount: 0,
@@ -113,6 +116,14 @@ export default {
       return this.account['secret_type'].value
     }
   },
+  mounted() {
+    if (this.showPasswordRecord) {
+      const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+        this.versions = resp.count
+      })
+    }
+  },
   methods: {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
@@ -124,7 +135,7 @@ export default {
     exit() {
       this.$emit('update:visible', false)
     },
-    onShowPasswordHistory() {
+    showHistoryDialog() {
       this.showPasswordHistoryDialog = true
     }
   }

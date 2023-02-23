@@ -30,14 +30,14 @@
               @click="refreshTable"
             >
               <el-tooltip :content="$tc('common.Refresh')" placement="top">
-                <span>
+                <span style="color: #5e5e5e">
                   <svg-icon icon-class="refresh" style="font-size: 14px;" />
                 </span>
               </el-tooltip>
             </el-button>
           </div>
         </div>
-        <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
+        <AutoDataTable ref="dataTable" :config="tableConfig" />
       </template>
     </Dialog>
     <CreateAccountTemplateDialog
@@ -148,25 +148,29 @@ export default {
     onAddClick() {
       this.isShowCreate = true
     },
-    handleSelectionChange(values) {
-      const notIdAccounts = this.accounts.filter(i => !i?.id)
-      values.forEach((item, index) => {
-        const hasSameTypeAccount = _.filter(notIdAccounts, function(o) {
-          return o.username === item.username && o.secret_type === item.secret_type.value
-        })
-        if (hasSameTypeAccount.length > 0) {
-          this.$message.error(this.$t('accounts.SameTypeAccountTip'))
-          this.$refs.dataTable.$refs.dataTable.toggleRowSelection(item, false)
-          this.accountsSelected.splice(index, 1)
-        }
-      })
-    },
     hasSelectValue(row) {
       return this.accountsSelected.some(item => item.id === row.id)
     },
+    // 判断是否有相同类型的账号, 有则不允许选择
+    hasSameTypeAccount(row) {
+      const notIdAccounts = this.accounts.filter(i => !i?.id)
+      const needFilterAccounts = [...notIdAccounts, ...this.accountsSelected]
+      const status = needFilterAccounts.some(item => {
+        return row.username === item.username && (
+          row.secret_type.value === item.secret_type ||
+          row.secret_type.value === item.secret_type.value
+        )
+      })
+      if (status) {
+        this.$refs.dataTable.$refs.dataTable.toggleRowSelection(row, false)
+        this.$message.error(this.$t('accounts.SameTypeAccountTip'))
+      }
+      return status
+    },
     addRowToSelect(row) {
       const hasSelectValue = this.hasSelectValue(row)
-      if (!hasSelectValue) {
+      const hasSameTypeAccount = this.hasSameTypeAccount(row)
+      if (!hasSelectValue && !hasSameTypeAccount) {
         this.accountsSelected.push(row)
       }
     },

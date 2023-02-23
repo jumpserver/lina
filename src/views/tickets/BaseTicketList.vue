@@ -1,14 +1,14 @@
 <template>
   <GenericListPage
     v-loading="loading"
-    :table-config="ticketTableConfig"
     :header-actions="ticketActions"
+    :table-config="ticketTableConfig"
   />
 </template>
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, TagChoicesFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { APPROVE, REJECT } from './const'
 
@@ -25,13 +25,19 @@ export default {
     hasMoreActions: {
       type: Boolean,
       default: false
+    },
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
+    const vm = this
     return {
       loading: true,
       ticketTableConfig: {
         url: this.url,
+        extraQuery: this.extraQuery,
         columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
@@ -67,7 +73,7 @@ export default {
             label: this.$t('tickets.user'),
             sortable: 'custom',
             formatter: row => {
-              return row.rel_snapshot.applicant
+              return row['rel_snapshot'].applicant
             }
           },
           type: {
@@ -81,11 +87,21 @@ export default {
             align: 'center',
             width: '90px',
             sortable: 'custom',
-            formatter: row => {
-              if (row.status.value === 'open') {
-                return <el-tag type='primary' size='mini'> {this.$t('tickets.OpenStatus')}</el-tag>
-              } else {
-                return <el-tag type='danger' size='mini'>  {this.$t('tickets.CloseStatus')}</el-tag>
+            formatter: TagChoicesFormatter,
+            formatterArgs: {
+              getTagLabel({ row }) {
+                if (row.status.value === 'open') {
+                  return vm.$t('tickets.OpenStatus')
+                } else {
+                  return vm.$t('tickets.CloseStatus')
+                }
+              },
+              getTagType({ row }) {
+                if (row.status.value === 'open') {
+                  return 'primary'
+                } else {
+                  return 'danger'
+                }
               }
             }
           },
@@ -94,28 +110,17 @@ export default {
             align: 'center',
             width: '90px',
             sortable: 'custom',
-            formatter: row => {
-              if (row.status.value === 'open') {
-                return <el-tag
-                  type='success'
-                  size='mini'
-                >
-                  {this.$t('tickets.Pending')}
-                </el-tag>
-              }
-              switch (row.state.value) {
-                case 'approved':
-                  return <el-tag type='primary' size='mini'>
-                    {this.$t('tickets.Approved')}
-                  </el-tag>
-                case 'rejected':
-                  return <el-tag type='danger' size='mini'>
-                    {this.$t('tickets.Rejected')}
-                  </el-tag>
-                default :
-                  return <el-tag type='info' size='mini'>
-                    {this.$t('tickets.Closed')}
-                  </el-tag>
+            formatter: TagChoicesFormatter,
+            formatterArgs: {
+              getTagType({ row }) {
+                const mapper = {
+                  [APPROVE]: 'success',
+                  [REJECT]: 'danger'
+                }
+                return mapper[row.state.value] || 'warning'
+              },
+              getTagLabel({ row }) {
+                return row.state.label || vm.$t('common.Pending')
               }
             }
           },

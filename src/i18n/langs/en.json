@@ -438,6 +438,7 @@
   },
   "common": {
     "DownloadCenter": "Download center",
+    "RestoreDefault": "Restore default",
     "ImportOrg": "Import organization",
     "About": "About",
     "PermissionCompany": "Permission company",
@@ -491,7 +492,7 @@
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
-    "CustomCol": "Custom table col",
+    "CustomCol": "Custom table display",
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "NeedSpecifiedFile": "Required to upload the specified format file",
@@ -602,7 +603,7 @@
     "SelectAtLeastOneAssetOrNodeErrMsg": "Select at least one asset or node",
     "RequiredSystemUserErrMsg": "Required account",
     "createBy": "Create by",
-    "cloneFrom": "Clone from",
+    "cloneFrom": "Duplicate from ",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
     "saveSuccessContinueMsg": "Create success, you may add another",
@@ -763,7 +764,8 @@
     "Task": "Task",
     "Cas": "CAS",
     "Invalid": "Invalid",
-    "Filename": "Filename"
+    "Filename": "Filename",
+    "RestoreDefault": "Restore default"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -833,9 +835,13 @@
     "User": "User",
     "UserRatio": "User Ratio",
     "UsersTotal": "Users total",
-    "Weekly": "Weekly"
+    "Weekly": "Weekly",
+    "TotalJobFailed": "Total job failed",
+    "TotalJobRunning": "Total job running",
+    "TotalJobLog": "Total job log"
   },
   "ops": {
+    "SystemError": "System Error",
     "RunasHelpText": "Fill in the user name to run the script",
     "RunasPolicyHelpText": "Indicates the account selection strategy when there is no running user on the current asset",
     "StatusGreen": "Recently in good condition",
@@ -1258,7 +1264,7 @@
     "UserLoginACLUpdate": "Update User Login ACL",
     "JobCreate": "Create job",
     "JobExecutionLog": "Job Execution Log",
-    "JobList": "Job List",
+    "JobList": "Job list",
     "HostList": "Host list",
     "UserLoginACLCreate": "Create User Login ACL",
     "TicketsNew": "Submit ticket",

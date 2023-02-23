@@ -839,9 +839,10 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "SystemError": "システムエラー",
     "RunasHelpText": "スクリプトを実行するユーザー名を入力",
     "RunasPolicyHelpText": "現在の資産にこの実行ユーザーが存在しない場合にアカウント選択ポリシーを実行することを示します",
-    "StatusGreen": "最近調子がいい\n",
+    "StatusGreen": "最近調子がいい",
     "StatusRed": "最後のタスクの実行に失敗しました",
     "StatusYellow": "最近の存在の実行に失敗しました",
     "RunAgain": "再実行",

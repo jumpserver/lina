@@ -43,7 +43,7 @@ export default {
       category: 'all',
       treeSetting: {
         url: '/api/v1/assets/assets/',
-        showMenu: true
+        showMenu: !this.$store.getters.currentOrgIsRoot
       },
       tableConfig: {
         url: tableUrl,

@@ -207,7 +207,7 @@ export default {
       meta: {
         title: i18n.t('setting.Applets'),
         app: 'terminal',
-        permissions: ['settings.change_terminal']
+        permissions: ['terminal.view_applet']
       },
       children: [
         {
@@ -217,7 +217,7 @@ export default {
           meta: {
             title: i18n.t('setting.Applets'),
             icon: 'application',
-            permissions: ['settings.change_terminal']
+            permissions: ['terminal.view_applet']
           }
         },
         {

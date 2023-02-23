@@ -616,7 +616,7 @@
     "RequiredSystemUserErrMsg": "请选择账号",
     "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
-    "cloneFrom": "克隆自",
+    "cloneFrom": "副本",
     "createErrorMsg": "创建失败",
     "createSuccessMsg": "创建成功",
     "saveSuccessContinueMsg": "创建成功，更新内容后可以继续添加",
@@ -835,6 +835,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "SystemError": "系统错误",
     "RunasHelpText": "填写运行脚本的用户名",
     "RunasPolicyHelpText": "表示当前资产上没此运行用户时，采取什么账号选择策略",
     "StatusGreen": "近期状态良好",

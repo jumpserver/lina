@@ -117,7 +117,7 @@ export default {
             multiple: false,
             clearable: true,
             ajax: {
-              url: `/api/v1/accounts/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
+              url: `/api/v1/accounts/accounts/su-from-accounts/?account=${this.account?.id || ''}&asset=${this.asset?.id || ''}`,
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }

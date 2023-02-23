@@ -108,7 +108,7 @@ export default {
         },
         columnsExclude: ['spec_info'],
         columns: [
-          'name', 'username', 'asset', 'privileged', 'version',
+          'name', 'username', 'asset', 'privileged',
           'secret_type', 'source', 'actions'
         ],
         columnsMeta: {
@@ -203,9 +203,11 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('accounts.change_account') &&
-                    this.asset && this.asset['auto_info'].ansible_enabled &&
-                    this.asset['auto_info'].ping_enabled,
+                  can: ({ row }) =>
+                    !this.$store.getters.currentOrgIsRoot &&
+                    this.$hasPerm('accounts.change_account') &&
+                    row.asset['auto_info'].ansible_enabled &&
+                    row.asset['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/tasks/`,
@@ -266,7 +268,7 @@ export default {
             title: this.$t('common.Add'),
             type: 'primary',
             can: () => {
-              return vm.$hasPerm('accounts.add_account')
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
             callback: async() => {
               await this.getAssetDetail()

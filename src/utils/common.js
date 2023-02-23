@@ -245,14 +245,10 @@ export function getErrorResponseMsg(error) {
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
   } else if (data && data['non_field_errors']) {
-    msg = data['non_field_errors'].join(', ')
+    msg = data['non_field_errors'].join(' ')
   } else if (Array.isArray(data)) {
     msg = data.map((item, i) => {
-      let msg = getErrorResponseMsg(item)
-      if (msg) {
-        msg = `${i + 1}. ${msg}`
-      }
-      return msg
+      return getErrorResponseMsg(item)
     }).filter(i => i).join('; ')
   }
   return msg
