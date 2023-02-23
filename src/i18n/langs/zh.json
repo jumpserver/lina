@@ -616,7 +616,7 @@
     "RequiredSystemUserErrMsg": "请选择账号",
     "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
-    "cloneFrom": "克隆自",
+    "cloneFrom": "副本",
     "createErrorMsg": "创建失败",
     "createSuccessMsg": "创建成功",
     "saveSuccessContinueMsg": "创建成功，更新内容后可以继续添加",
