@@ -93,7 +93,7 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.visible = true
