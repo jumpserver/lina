@@ -491,7 +491,7 @@
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
-    "CustomCol": "Custom table col",
+    "CustomCol": "Custom table display",
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "NeedSpecifiedFile": "Required to upload the specified format file",
@@ -763,7 +763,8 @@
     "Task": "Task",
     "Cas": "CAS",
     "Invalid": "Invalid",
-    "Filename": "Filename"
+    "Filename": "Filename",
+    "RestoreDefault": "Restore default"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -833,7 +834,10 @@
     "User": "User",
     "UserRatio": "User Ratio",
     "UsersTotal": "Users total",
-    "Weekly": "Weekly"
+    "Weekly": "Weekly",
+    "TotalJobFailed": "Total job failed",
+    "TotalJobRunning": "Total job running",
+    "TotalJobLog": "Total job log"
   },
   "ops": {
     "SystemError": "System Error",
