@@ -119,7 +119,7 @@ export default {
   mounted() {
     if (this.showPasswordRecord) {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
-      this.$axios.get(url).then(resp => {
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
         this.versions = resp.count
       })
     }
