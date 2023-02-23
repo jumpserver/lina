@@ -35,6 +35,7 @@ export default {
           }
         },
         nodes: {
+          label: this.$tc('assets.Node'),
           el: {
             multiple: true,
             value: [],

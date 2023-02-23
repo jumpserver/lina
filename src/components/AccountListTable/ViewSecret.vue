@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
           <el-link
-            v-perms="'accounts.view_historyaccountsecret'"
+            v-perms="'accounts.view_accountsecret'"
             :underline="false"
             type="success"
             @click="showHistoryDialog"

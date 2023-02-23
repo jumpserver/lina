@@ -27,7 +27,8 @@ export default {
         },
         {
           title: this.$t('terminal.AppletHosts'),
-          name: 'AppletHosts'
+          name: 'AppletHosts',
+          hidden: () => !this.$hasPerm('terminal.view_applethost')
         }
       ]
     }
