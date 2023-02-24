@@ -110,7 +110,7 @@ export default {
 .actions {
   position: absolute;
   right: 4px;
-  z-index: 2;
+  z-index: 5;
   margin-top: 4px;
 }
 
