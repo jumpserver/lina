@@ -6,7 +6,7 @@
       <AutoDetailCard v-if="detailInfoConfig.show" v-bind="detailInfoConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
@@ -25,7 +25,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   data() {
@@ -43,7 +43,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `/api/v1/assets/assets/${this.object.id}/`,
+                `/api/v1/terminal/applet-hosts/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
@@ -63,7 +63,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
+                `/api/v1/terminal/applet-hosts/${this.object.id}/tasks/`,
                 { action: 'refresh' }
               ).then(res => {
                 openTaskPage(res['task'])
@@ -81,7 +81,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
+                `/api/v1/terminal/applet-hosts/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
                 openTaskPage(res['task'])
@@ -91,7 +91,7 @@ export default {
         }
       ],
       detailBasicConfig: {
-        url: `/api/v1/assets/assets/${this.object.id}/`,
+        url: `/api/v1/terminal/applet-hosts/${this.object.id}/`,
         object: this.object,
         fields: [
           'name',
