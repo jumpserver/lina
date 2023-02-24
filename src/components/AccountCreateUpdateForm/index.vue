@@ -13,7 +13,7 @@ import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange } from '@/components/DataForm/rules'
+import { Required, RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -69,6 +69,7 @@ export default {
         assets: {
           component: AssetSelect,
           label: this.$t('assets.Asset'),
+          rules: [Required],
           el: {
             multiple: false
           },
