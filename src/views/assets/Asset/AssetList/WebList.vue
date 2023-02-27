@@ -27,7 +27,8 @@ export default {
               width: '100px'
             }
           }
-        }
+        },
+        notice: this.$t('assets.WebHelpMessage')
       }
     }
   }
