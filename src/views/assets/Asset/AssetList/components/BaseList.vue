@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :header-actions="iHeaderActions" :notice="notice" :table-config="iTableConfig" />
+    <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -52,10 +52,6 @@ export default {
     addExtraMoreActions: {
       type: Array,
       default: () => []
-    },
-    notice: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -259,6 +255,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style>
 
 </style>
