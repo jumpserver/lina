@@ -297,6 +297,7 @@
     "Domain": "网域",
     "DomainDetail": "网域详情",
     "DomainHelpMessage": "网域功能是为了解决部分环境（如：混合云）无法直接连接而新增的功能，原理是通过网关服务器进行跳转登录。JMS => 网域网关 => 目标资产",
+    "WebHelpMessage": "Web 类型资产依赖于远程应用，请前往系统设置在远程应用中配置发布机。",
     "FullName": "全称",
     "Gateway": "网关",
     "GatewayProtocolHelpText": "SSH网关，支持代理SSH,RDP和VNC",
@@ -989,7 +990,7 @@
   },
   "perms": {
     "": "",
-    "AccountsHelp": "所有账号: 资产上添加的账号; 指定账号：指定账号的用户名；手动输入: 用户名/密码 手动输入; 同名账号: 与被授权人用户名相同的账号;",
+    "AccountsHelp": "所有账号: 资产上添加的账号; 指定账号：指定资产下账号的用户名；手动输入: 用户名/密码 手动输入; 同名账号: 与被授权人用户名相同的账号;",
     "AllAccounts": "所有账号",
     "ManualInput": "手动输入",
     "SameAccount": "同名账号",

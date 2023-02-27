@@ -27,7 +27,8 @@ export default {
               width: '100px'
             }
           }
-        }
+        },
+        helpMessage: this.$t('assets.DomainHelpMessage')
       }
     }
   }
