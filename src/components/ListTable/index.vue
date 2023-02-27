@@ -1,5 +1,11 @@
 <template>
   <div>
+    <PageContent>
+      <el-alert v-if="notice" type="success">
+        <span class="announcement-main" v-html="notice" />
+      </el-alert>
+      <slot />
+    </PageContent>
     <TableAction
       v-if="hasActions"
       :date-pick="handleDateChange"
@@ -30,10 +36,12 @@ import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable'
 import { getDayEnd, getDaysAgo } from '@/utils/common'
+import { PageContent } from '@/layout/components/Page'
 
 export default {
   name: 'ListTable',
   components: {
+    PageContent,
     AutoDataTable,
     TableAction,
     IBox
@@ -49,6 +57,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    notice: {
+      type: String,
+      default: ''
     }
   },
   data() {
