@@ -12,6 +12,7 @@
     </el-checkbox-group>
     <TagInput
       v-if="showSpecAccounts"
+      :autocomplete="autocomplete"
       :value="specAccountsInput"
       @change="handleTagChange"
     />
@@ -20,13 +21,7 @@
 
 <script>
 import { TagInput } from '@/components/FormFields'
-import {
-  AllAccount,
-  SPECAccount,
-  SameUSER,
-  ManualINPUT,
-  AccountLabelMapper
-} from '@/views/perms/const'
+import { AccountLabelMapper, AllAccount, ManualINPUT, SameUSER, SPECAccount } from '@/views/perms/const'
 
 export default {
   components: {
@@ -36,9 +31,18 @@ export default {
     value: {
       type: [Array],
       default: () => []
+    },
+    assets: {
+      type: [Array],
+      default: () => []
+    },
+    nodes: {
+      type: [Array],
+      default: () => []
     }
   },
   data() {
+    const vm = this
     const choices = [
       {
         label: AccountLabelMapper[AllAccount],
@@ -64,7 +68,27 @@ export default {
       choicesSelected: [],
       defaultChoices: [this.ALL],
       specAccountsInput: [],
-      showSpecAccounts: false
+      showSpecAccounts: false,
+      autocomplete: (query, cb) => {
+        this.$axios.get('/api/v1/accounts/accounts/username-suggestions/', {
+          params: {
+            username: query,
+            assets: this.assets.slice(0, 20).join(','),
+            nodes: this.nodes.slice(0, 20).map(item => {
+              if (typeof item === 'object') {
+                return item.pk
+              } else {
+                return item.pk
+              }
+            }).join(',')
+          }
+        }).then(res => {
+          const data = res
+            .filter(item => vm.value.indexOf(item) === -1)
+            .map(v => ({ value: v, label: v }))
+          cb(data)
+        })
+      }
     }
   },
   mounted() {

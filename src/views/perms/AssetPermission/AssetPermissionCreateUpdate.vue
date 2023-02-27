@@ -91,7 +91,15 @@ export default {
           type: 'input',
           label: this.$t('perms.Account'),
           component: AccountFormatter,
-          helpText: this.$t('perms.AccountsHelp')
+          helpText: this.$t('perms.AccountsHelp'),
+          el: {
+            assets: [],
+            nodes: []
+          },
+          hidden: (formValue) => {
+            this.fieldsMeta.accounts.el.assets = formValue.assets
+            this.fieldsMeta.accounts.el.nodes = formValue.nodes
+          }
         },
         actions: {
           label: this.$t('perms.Actions'),
