@@ -8,7 +8,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
-import { JsonEditor } from '@/components/FormFields'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
@@ -30,7 +29,6 @@ export default {
         [this.$t('common.Basic'), ['name', 'type', 'instant']],
         [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
         [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -134,13 +132,6 @@ export default {
             return true
           }
         },
-        parameters_define: {
-          label: '',
-          component: JsonEditor,
-          hidden: (formValue) => {
-            return !formValue.use_parameter_define
-          }
-        },
         chdir: {
           helpText: i18n.t('ops.ChdirHelpText'),
           hidden: (formValue) => {
@@ -150,13 +141,6 @@ export default {
         run_after_save: {
           type: 'checkbox',
           hidden: (formValue) => {
-            return this.instantTask
-          }
-        },
-        use_parameter_define: {
-          label: this.$t('ops.UseParameterDefine'),
-          type: 'switch',
-          hidden: () => {
             return this.instantTask
           }
         },
