@@ -58,7 +58,6 @@ export const assetFieldsMeta = (vm) => {
     platform: {
       el: {
         multiple: false,
-        disabled: true,
         ajax: {
           url: '/api/v1/assets/platforms/',
           transformOption: (item) => {
