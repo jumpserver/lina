@@ -55,14 +55,14 @@ export default {
       toolbar: [
         {
           tip: this.$tc('ops.ScrollToTop'),
-          icon: 'fa fa-upload',
+          icon: 'fa fa-arrow-up',
           callback: () => {
             this.xterm.scrollToTop()
           }
         },
         {
           tip: this.$tc('ops.ScrollToBottom'),
-          icon: 'fa fa-download',
+          icon: 'fa fa-arrow-down',
           callback: () => {
             this.xterm.scrollToBottom()
           }
@@ -108,10 +108,10 @@ export default {
 }
 
 .actions {
-  position: absolute;
-  right: 4px;
-  z-index: 5;
-  margin-top: 4px;
+  text-align: right;
+  background-color: #FFF;
+  padding-right: 5px;
+  padding-top: 2px
 }
 
 .el-button {
