@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span class="announcement-main" v-html="helpMessage" />
+    </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
@@ -52,6 +55,10 @@ export default {
     addExtraMoreActions: {
       type: Array,
       default: () => []
+    },
+    helpMessage: {
+      type: String,
+      default: ''
     }
   },
   data() {
