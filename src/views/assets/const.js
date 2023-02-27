@@ -59,7 +59,7 @@ export const assetFieldsMeta = (vm) => {
       el: {
         multiple: false,
         ajax: {
-          url: '/api/v1/assets/platforms/',
+          url: `/api/v1/assets/platforms/?type=${vm.$route.query.platform_type}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
