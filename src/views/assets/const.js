@@ -29,6 +29,7 @@ export const filterSelectValues = (values) => {
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
+  const platformType = vm?.$route.query.platform_type
   return {
     address: {
       rules: [rules.IpCheck, rules.specialEmojiCheck]
@@ -59,7 +60,7 @@ export const assetFieldsMeta = (vm) => {
       el: {
         multiple: false,
         ajax: {
-          url: `/api/v1/assets/platforms/?type=${vm.$route.query.platform_type}`,
+          url: `/api/v1/assets/platforms/?type=${platformType}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
