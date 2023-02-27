@@ -3,9 +3,8 @@ import rules from '@/components/DataForm/rules'
 import { JsonEditor } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
 
-const assetMeta = assetFieldsMeta()
-
 export const platformFieldsMeta = (vm) => {
+  const assetMeta = assetFieldsMeta(vm)
   return {
     automation: {
       initial: {
