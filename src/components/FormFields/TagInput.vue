@@ -12,14 +12,17 @@
     >
       {{ v }}
     </el-tag>
-    <el-input
+    <component
+      :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
+      :fetch-suggestions="autocomplete"
       :placeholder="this.$t('common.EnterToContinue')"
       class="search-input"
       @blur="focus = false"
       @change="handleConfirm"
       @focus="focus = true"
+      @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
   </div>
@@ -41,19 +44,28 @@ export default {
     placeholder: {
       type: String,
       default: () => i18n.t('perms.Input')
+    },
+    autocomplete: {
+      type: Function,
+      default: null
     }
   },
   data() {
     return {
       filterTags: this.value,
       focus: false,
-      filterValue: ''
+      filterValue: '',
+      component: this.autocomplete ? 'el-autocomplete' : 'el-input'
     }
   },
   methods: {
     handleTagClose(tag) {
       this.filterTags.splice(this.filterTags.indexOf(tag), 1)
       this.$emit('change', this.filterTags)
+    },
+    handleSelect(item) {
+      this.filterValue = item.value
+      this.handleConfirm()
     },
     handleConfirm() {
       if (this.filterValue === '') return
