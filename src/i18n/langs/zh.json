@@ -434,6 +434,9 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "CommunityEdition": "社区版",
+    "EnterpriseEdition": "企业版",
+    "Product": "产品",
     "RestoreDefault": "恢复默认",
     "DownloadCenter": "下载中心",
     "ImportOrg": "导入组织",
