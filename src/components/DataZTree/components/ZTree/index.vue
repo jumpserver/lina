@@ -337,6 +337,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-track:horizontal {
+    background: #FFFFFF;
+    border-radius: 10px;
+  }
   div.rMenu {
     position: absolute;
     visibility: hidden;
