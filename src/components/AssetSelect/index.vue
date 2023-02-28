@@ -11,12 +11,12 @@
     <AssetSelectDialog
       v-if="dialogVisible"
       ref="dialog"
+      :base-node-url="baseNodeUrl"
+      :base-url="baseUrl"
+      :tree-url-query="treeUrlQuery"
       :value="value"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
-      :tree-url-query="treeUrlQuery"
-      :base-url="baseUrl"
-      :base-node-url="baseNodeUrl"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"
@@ -143,8 +143,8 @@ export default {
     .left {
       padding: 5px;
 
-      .treebox {
-        height: 70vh;
+      .ztree {
+        height: calc(100vh - 250px) !important;
       }
     }
 
