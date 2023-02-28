@@ -78,6 +78,7 @@ export default {
             type: 'button',
             align: 'left',
             icon: 'fa fa-save',
+            tip: this.$tc('ops.Save'),
             el: {
               type: 'primary'
             },
@@ -88,7 +89,8 @@ export default {
           reset: {
             type: 'button',
             align: 'left',
-            icon: 'fa fa-refresh',
+            icon: 'fa fa-undo',
+            tip: this.$tc('ops.Reset'),
             el: {
               type: 'primary'
             },

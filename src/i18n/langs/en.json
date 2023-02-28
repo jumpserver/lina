@@ -844,6 +844,8 @@
     "TotalJobLog": "Total job log"
   },
   "ops": {
+    "Save": "Save",
+    "Reset": "Reset",
     "SystemError": "System Error",
     "RunasHelpText": "Fill in the user name to run the script",
     "RunasPolicyHelpText": "Indicates the account selection strategy when there is no running user on the current asset",
