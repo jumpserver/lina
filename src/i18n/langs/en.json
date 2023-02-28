@@ -438,10 +438,12 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
-    "DownloadCenter": "Download center",
-    "RestoreDefault": "Restore default",
-    "ImportOrg": "Import organization",
+    "CommunityEdition": "Community Edition",
+    "EnterpriseEdition": "Enterprise Edition",
+    "Product": "Product",
     "About": "About",
+    "DownloadCenter": "Download center",
+    "ImportOrg": "Import organization",
     "PermissionCompany": "Permission company",
     "ApproverNumbers": "Approver numbers",
     "ConvenientOperate": "Convenient operate",
