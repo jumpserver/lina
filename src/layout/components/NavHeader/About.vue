@@ -129,17 +129,20 @@ export default {
 
 <style lang="scss" scoped>
 .about-dialog {
+  &.dialog >>> .el-dialog__body {
+    padding: 20px 30px;
+  }
+  &.dialog >>> .el-dialog__footer {
+    border-top: none;
+    display: none;
+  }
 }
 .head {
   float: right;
 }
 
-.sidebar-logo-text {
-}
-
 .box {
   .text {
-    padding: 10px;
     line-height: 2;
     font-size: 14px;
     color: #666;
