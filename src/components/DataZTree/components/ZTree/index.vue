@@ -413,8 +413,7 @@ export default {
     >>> .ztree {
       overflow: auto;
       background-color: transparent;
-      max-height: calc(100vh - 220px);
-      min-height: 500px;
+      height: calc(100vh - 237px);
 
       li {
         background-color: transparent !important;
