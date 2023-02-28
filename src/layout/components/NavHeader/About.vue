@@ -3,7 +3,7 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="''"
+    :title="$tc('common.About')"
     :visible.sync="iVisible"
     class="about-dialog"
     top="10%"
@@ -11,10 +11,12 @@
   >
     <div class="box">
       <div class="head">
-        <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
+        <img :src="logoSrc" alt="logo" class="sidebar-logo-text" height="70">
       </div>
-      <div class="text">{{ $tc('ops.version') }}：<strong> version-dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span></div>
-      <div class="text">{{ $tc('common.PermissionCompany') }}：{{ corporation }}</div>
+      <tr v-for="item of items" v-show="item.has || item.has === undefined" :key="item.label" class="text">
+        <td class="title">{{ item.label }}: </td>
+        <td class="value">{{ item.value }}</td>
+      </tr>
       <el-divider class="divider" />
       <div class="text">
         <span v-for="(i, index) in actions" :key="index" class="text-link" @click="onClick(i.name)">
@@ -42,7 +44,6 @@ export default {
   },
   data() {
     return {
-      logoTextSrc: require('@/assets/img/logo_text_green.png'),
       actions: [
         {
           name: 'github',
@@ -69,8 +70,46 @@ export default {
         return this.visible
       }
     },
+    versionType() {
+      return this.hasXPack ? this.$t('common.EnterpriseEdition') : this.$tc('common.CommunityEdition') + ' GPLv3'
+    },
+    items() {
+      return [
+        {
+          label: this.$t('common.Product'),
+          value: 'JumpServer ' + this.versionType
+        },
+        {
+          label: this.$t('common.Version'),
+          value: 'version-dev'
+        },
+        {
+          label: this.$t('common.PermissionCompany'),
+          value: this.corporation,
+          has: this.hasXPack
+        },
+        {
+          label: 'Copyright',
+          value: this.copyright,
+          has: !this.hasXPack
+        }
+      ]
+    },
     corporation() {
       return this.publicSettings.XPACK_LICENSE_INFO.corporation
+    },
+    copyright() {
+      if (this.corporation.indexOf('FIT2CLOUD 飞致云') > -1) {
+        return this.corporation
+      } else {
+        return ''
+      }
+    },
+    logoSrc() {
+      return this.publicSettings['INTERFACE']['logo_logout']
+    },
+    hasXPack() {
+      return this.publicSettings.XPACK_LICENSE_IS_VALID
     }
   },
   methods: {
@@ -90,29 +129,33 @@ export default {
 
 <style lang="scss" scoped>
 .about-dialog {
-  &>>> .el-dialog__header {
-    background-color: #FAFBFD;
-    border-bottom: none;
-  }
-  &>>> .el-dialog__body {
-    background-color: #FAFBFD;
-    padding: 10px 40px 20px;
-  }
-  &>>> .el-dialog__footer {
-    padding: 0;
-  }
 }
 .head {
-  text-align: center;
+  float: right;
 }
+
+.sidebar-logo-text {
+}
+
 .box {
   .text {
-    margin-bottom: 10px;
+    padding: 10px;
+    line-height: 2;
     font-size: 14px;
     color: #666;
+
+    .title {
+      font-weight: 600;
+    }
+
+    .value {
+      padding-left: 30px;
+    }
+
     .icon {
       margin-right: 4px;
     }
+
     span {
       cursor: pointer;
     }
