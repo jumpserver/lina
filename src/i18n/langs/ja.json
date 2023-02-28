@@ -966,6 +966,7 @@
     "FailedAsset": "失敗したアセット",
     "AdhocDetail": "コマンド詳細",
     "RequiredContent": "コマンドを入力してください",
+    "RequiredRunas": "実行ユーザーを入力してください",
     "DateFinished": "完了時間",
     "DeleteFile": "ファイルの削除",
     "AssetAmount": "資産",
