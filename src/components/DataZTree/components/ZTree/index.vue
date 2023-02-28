@@ -408,13 +408,13 @@ export default {
   }
 
   .treebox {
-    height: 70vh;
     background-color: transparent;
 
-    > > > .ztree {
+    >>> .ztree {
       overflow: auto;
       background-color: transparent;
-      height: calc(100% - 50px);
+      max-height: calc(100vh - 220px);
+      min-height: 500px;
 
       li {
         background-color: transparent !important;
