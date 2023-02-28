@@ -207,3 +207,10 @@ input[type=file] {
 .el-table .el-table__row .show-full-content > .cell {
   white-space: normal!important;
 }
+
+@media screen and (max-width: 992px) {
+  .el-select-dropdown.switch-org {
+    left: 0!important;
+    width: 100vw!important;
+  }
+}
