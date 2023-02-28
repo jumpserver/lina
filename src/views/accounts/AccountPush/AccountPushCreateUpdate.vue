@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       initial: {
-        is_periodic: true,
+        is_periodic: this.$store.getters.hasValidLicense,
         password_rules: {
           length: 30
         },
@@ -64,6 +64,10 @@ export default {
           el: {
             readonly: true
           }
+        },
+        is_periodic: {
+          type: 'switch',
+          disabled: !this.$store.getters.hasValidLicense
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },
