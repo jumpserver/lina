@@ -337,6 +337,13 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-track:horizontal {
+    background: #FFFFFF;
+    border-radius: 10px;
+  }
   div.rMenu {
     position: absolute;
     visibility: hidden;
@@ -413,8 +420,7 @@ export default {
     >>> .ztree {
       overflow: auto;
       background-color: transparent;
-      max-height: calc(100vh - 220px);
-      min-height: 500px;
+      height: calc(100vh - 237px);
 
       li {
         background-color: transparent !important;
