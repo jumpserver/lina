@@ -972,6 +972,7 @@
     "FailedAsset": "Failed asset",
     "AdhocDetail": "Adhoc detail",
     "RequiredContent": "Please input the command",
+    "RequiredRunas": "Please input the run user",
     "DateFinished": "Date finished",
     "DeleteFile": "Delete file",
     "AssetAmount": "Assets amount",

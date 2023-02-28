@@ -868,6 +868,7 @@
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
     "RequiredContent": "请输入命令",
+    "RequiredRunas": "请输入运行用户",
     "RequiredEntryFile": "此文件作为运行的入口文件，必须存在",
     "ScrollToTop": "滚动到顶部",
     "ScrollToBottom": "滚动到底部",

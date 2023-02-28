@@ -368,6 +368,10 @@ export default {
         this.$message.error(this.$tc('ops.RequiredContent'))
         return
       }
+      if (!this.runas) {
+        this.$message.error(this.$tc('ops.RequiredRunas'))
+        return
+      }
 
       const data = {
         assets: hosts,
