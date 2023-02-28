@@ -185,8 +185,13 @@ export default {
 }
 >>> .el-collapse {
   border: none;
-  .el-collapse-item:last-child .el-collapse-item__header {
-    border: none;
+  .el-collapse-item:last-child {
+    .el-collapse-item__header {
+      border: none;
+    }
+    .el-collapse-item__wrap {
+      border-bottom: none;
+    }
   }
 }
 </style>
