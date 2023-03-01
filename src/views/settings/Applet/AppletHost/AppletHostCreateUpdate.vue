@@ -23,7 +23,24 @@ export default {
               'CORE_HOST', 'RDS_Licensing', 'RDS_LicenseServer', 'RDS_LicensingMode',
               'RDS_fSingleSessionPerUser', 'RDS_MaxDisconnectionTime',
               'RDS_RemoteAppLogoffTimeLimit'
-            ]
+            ],
+            fieldsMeta: {
+              RDS_LicenseServer: {
+                hidden: (formValue) => !formValue['RDS_Licensing']
+              },
+              RDS_LicensingMode: {
+                hidden: (formValue) => !formValue['RDS_Licensing']
+              },
+              RDS_fSingleSessionPerUser: {
+                hidden: (formValue) => !formValue['RDS_Licensing']
+              },
+              RDS_MaxDisconnectionTime: {
+                hidden: (formValue) => !formValue['RDS_Licensing']
+              },
+              RDS_RemoteAppLogoffTimeLimit: {
+                hidden: (formValue) => !formValue['RDS_Licensing']
+              }
+            }
           },
           platform: {
             hidden: () => true
