@@ -141,7 +141,7 @@ export default {
         'ops.view_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.change_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
-        'ops.add_jobexecution': ['ops.view_celerytask'],
+        'ops.add_jobexecution': ['ops.view_celerytaskexecution'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
