@@ -43,7 +43,8 @@ export default {
     },
     items() {
       const cellValue = { ...this.cellValue }
-      cellValue['memory'] = (this.cellValue['memory'] / 1 || 0).toFixed(2)
+      const memory = this.cellValue?.memory
+      cellValue['memory'] = memory ? (memory / 1 || 0).toFixed(2) : '-'
       return cellValue
     },
     viewText() {
@@ -65,8 +66,8 @@ export default {
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       const remoteMeta = data.actions['GET'] || {}
-      const fieldName = this.formatterArgs.fieldName
-      const remoteMetaFields = remoteMeta[fieldName].children
+      const fieldName = this.formatterArgs?.fieldName || ''
+      const remoteMetaFields = remoteMeta[fieldName]?.children || {}
       const fields = Object.keys(remoteMetaFields)
       const info = {}
       for (const name of fields) {
