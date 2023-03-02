@@ -103,7 +103,7 @@ export default {
       secretInfo: {},
       versions: '-',
       showSecret: false,
-      sshKeyFingerprint: '',
+      sshKeyFingerprint: '-',
       historyCount: 0,
       showPasswordHistoryDialog: false
     }
@@ -128,7 +128,7 @@ export default {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp?.spec_info
+        this.sshKeyFingerprint = resp?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
       })
     },
