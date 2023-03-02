@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0 20px;" @click="toggleClick">
-    <svg-icon icon-class="direction-left" class="hamburger" :class="{'is-active':isActive}" />
+    <svg-icon icon-class="arrow-to-left" class="hamburger" style="color: #ffffff;" :class="{'is-active':isActive}" />
   </div>
 </template>
 
@@ -30,6 +30,6 @@ export default {
   color: $menuText;
 }
 .hamburger.is-active {
-  transform: rotate(-180deg);
+  transform: rotate(180deg);
 }
 </style>
