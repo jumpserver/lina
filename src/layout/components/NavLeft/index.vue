@@ -248,39 +248,39 @@ export default {
     display: none;
 
     & > > > .organization {
+      height: 48px;
+      line-height: 48px;
       padding-left: 8px;
       background: transparent;
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
+      .el-input--prefix .el-input__inner {
+        height: 48px!important;
+        line-height: 48px!important;
+      }
+      .svg-icon {
+        color: #FFF!important;
+        margin-right:0px!important;
+      }
     }
 
     & > > > .title-label {
       color: white !important;
     }
 
-    .mobile-view-switch > > > .el-menu-item.is-active {
-      color: #ffffff;
+    .mobile-view-switch {
+      &>>> .el-menu-item.is-active {
+      color: var(--menu-text-active)!important;
+      .svg-icon {
+        color: var(--menu-text-active)!important;
+      }
+    }
     }
   }
 
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
-      .organization {
-        &>>> .svg-icon {
-          color: #FFF!important;
-          margin-right:0px!important;
-        }
-      }
-      .mobile-view-switch {
-        background: #fff!important;
-        &>>> .el-menu-item.is-active {
-          color: var(--menu-text-active)!important;
-          .svg-icon {
-            color: var(--menu-text-active)!important;
-          }
-        }
-      }
     }
     .active-switch-view {
       display: none!important;
