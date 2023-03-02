@@ -198,6 +198,7 @@ export default {
     line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
+    background-color: white;
     color: #fff;
     cursor: pointer;
     transition: .2s;
