@@ -22,10 +22,11 @@
           :autocomplete="autocomplete"
           :tag-type="getTagType"
           :value="specAccountsInput"
-          style="width: 80%;"
           @change="handleTagChange"
         />
-        <el-button size="small" type="primary" @click="showAccountTemplateDialog=true">通过账号模版选择</el-button>
+        <el-button size="small" type="primary" @click="showAccountTemplateDialog=true">
+          通过账号模版选择
+        </el-button>
       </el-form-item>
     </div>
 
@@ -111,7 +112,8 @@ export default {
         tableConfig: {
           url: '/api/v1/accounts/account-templates/',
           columns: [
-            'name', 'username', 'has_secret', 'comment', 'date_created', 'date_updated'
+            'name', 'username', 'has_secret', 'comment',
+            'date_created', 'date_updated'
           ],
           columnsMeta: {
             has_secret: {
@@ -212,7 +214,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
 }
@@ -220,6 +222,10 @@ export default {
 .spec-accounts {
   border: solid 1px #f3f3f4;
   padding: 10px;
+
+  >>> .filter-field .el-form-item__content {
+    width: 90% !important;
+  }
 }
 
 .help-text {
