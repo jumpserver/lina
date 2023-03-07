@@ -16,6 +16,12 @@
 <script>
 export default {
   props: {
+    days: {
+      type: String,
+      default: () => {
+        return localStorage.getItem('dashboardDays') || '7'
+      }
+    },
     options: {
       type: Array,
       default: () => []
@@ -37,7 +43,7 @@ export default {
       }
     ]
     return {
-      select: localStorage.getItem('auditDays') || '7',
+      select: this.days,
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
