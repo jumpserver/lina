@@ -13,7 +13,11 @@
               placement="bottom"
             >
               {{ activity.content }}
-              <el-link v-if="activity.detail_url" type="primary" @click.native="onClick(activity.r_type, activity.detail_url)">
+              <el-link
+                v-if="activity['detail_url']"
+                type="primary"
+                @click.native="onClick(activity)"
+              >
                 {{ $tc('common.Detail') }}
               </el-link>
             </el-timeline-item>
@@ -66,7 +70,9 @@ export default {
         }
       })
     },
-    onClick(type, taskUrl) {
+    onClick(activity) {
+      const type = activity['r_type']
+      const taskUrl = activity['detail_url']
       if (type === 'O') {
         this.$axios.get(taskUrl).then(
           res => {
