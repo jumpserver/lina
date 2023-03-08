@@ -506,6 +506,7 @@
     "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",
     "TemplateAdd": "Template add",
+    "TemplateHelpText": "When selecting a template to add, it will automatically create an account that does not exist under the asset and push it",
     "PleaseAgreeToTheTerms": "Please agree to the terms",
     "PushSelected": "Push selected",
     "PushSelectedSystemUsersToAsset": "Push selected system users to asset",

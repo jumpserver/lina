@@ -24,9 +24,10 @@
           :value="specAccountsInput"
           @change="handleTagChange"
         />
-        <el-button size="small" type="primary" @click="showAccountTemplateDialog=true">
-          通过账号模版选择
+        <el-button size="small" type="primary" style="margin-left: 10px" @click="showAccountTemplateDialog=true">
+          {{ $t('common.TemplateAdd') }}
         </el-button>
+        {{ $t('common.TemplateHelpText') }}
       </el-form-item>
     </div>
 
@@ -177,7 +178,6 @@ export default {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows
       const added = this.specAccountsTemplate.map(i => i.username)
       this.specAccountsInput = this.specAccountsInput.filter(i => !added.includes(i)).concat(added)
-      console.log('specAccountsInput', this.specAccountsInput)
       this.outputValue()
       setTimeout(() => {
         this.showAccountTemplateDialog = false
@@ -205,7 +205,8 @@ export default {
     outputValue() {
       let choicesSelected = this.choicesSelected
       if (this.showSpecAccounts) {
-        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput]
+        const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
+        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput, ...templateIds]
       }
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
@@ -221,10 +222,18 @@ export default {
 
 .spec-accounts {
   border: solid 1px #f3f3f4;
-  padding: 10px;
+  padding: 10px 10px 0;
 
-  >>> .filter-field .el-form-item__content {
-    width: 90% !important;
+  &>>> .el-form-item {
+    display: flex;
+  }
+  &>>> .el-form-item__content {
+    width: 80% !important;
+    flex: 1;
+  }
+  &>>> .filter-field {
+    width: calc(100% - 94px);
+    display: inline-block;
   }
 }
 
