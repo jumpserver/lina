@@ -209,6 +209,9 @@ export default {
         white-space: nowrap !important;
         overflow: hidden;
         text-overflow: ellipsis;
+        &:hover {
+          border-right: 2px solid #EBEEF5;
+        }
       }
     }
   }
