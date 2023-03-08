@@ -205,6 +205,9 @@ export default {
       font-size: 13px;
       line-height: 1.5;
       border-right: none;
+      &:hover {
+        border-right: 1px solid #EBEEF5;
+      }
       .cell {
         white-space: nowrap !important;
         overflow: hidden;
