@@ -13,8 +13,7 @@
       <div v-else>
         <el-table
           :data="diff"
-          height="500"
-          style="width: 100%"
+          class="diffTable"
         >
           <el-table-column
             :label="$tc('audits.ChangeField')"
@@ -66,7 +65,7 @@ export default {
   },
   data() {
     return {
-      diff: '',
+      diff: [],
       detailVisible: false
     }
   },
@@ -84,7 +83,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .el-tag {
     width: 100%;
     white-space: normal;
@@ -93,5 +92,14 @@ export default {
 
   .el-table::before {
     background-color: inherit;
+  }
+
+  .diffTable {
+    width: 100%;
+    max-height: 80vh;
+
+    & >>> td {
+      padding: 5px 0 !important;
+    }
   }
 </style>
