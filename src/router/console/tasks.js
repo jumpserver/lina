@@ -8,7 +8,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.TaskList'),
-      permissions: ['ops.view_celerytask | ops.view_taskmonitor']
+      permissions: ['ops.view_celerytask']
     },
     children: [
       {
