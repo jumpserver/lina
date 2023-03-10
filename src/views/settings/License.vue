@@ -116,6 +116,14 @@ export default {
         {
           key: this.$t('setting.Edition'),
           value: this.licenseData.edition
+        },
+        {
+          key: this.$t('assets.SerialNumber'),
+          value: this.licenseData?.serial_no || ''
+        },
+        {
+          key: this.$t('common.Comment'),
+          value: this.licenseData?.remark || ''
         }
       ]
     }
