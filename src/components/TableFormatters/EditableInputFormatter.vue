@@ -82,9 +82,6 @@ export default {
         newValue: validValue
       })
       this.inEditMode = false
-    },
-    cancelEdit() {
-      this.inEditMode = false
     }
   }
 }
