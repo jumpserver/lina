@@ -54,7 +54,14 @@ export default {
       const memory = this.items['memory']
       const diskTotal = this.items['disk_total']
       if (cpuCount) {
-        return `${cpuVcpus || cpuCores * cpuCount} Core ${memory}G ${diskTotal}G`
+        let text = `${cpuVcpus || cpuCores * cpuCount} Core`
+        if (memory) {
+          text += ` ${memory}G`
+        }
+        if (diskTotal) {
+          text += ` ${diskTotal}G`
+        }
+        return text
       }
       return '-'
     }

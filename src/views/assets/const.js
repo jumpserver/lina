@@ -32,7 +32,7 @@ export const assetFieldsMeta = (vm) => {
   const platformType = vm?.$route.query.platform_type
   return {
     address: {
-      rules: [rules.IpCheck, rules.specialEmojiCheck]
+      rules: [rules.specialEmojiCheck]
     },
     protocols: {
       component: ProtocolSelector,

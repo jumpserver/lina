@@ -129,7 +129,14 @@ export default {
             label: this.$t('assets.HardwareInfo'),
             formatter: HostInfoFormatter,
             formatterArgs: {
-              fieldName: 'info'
+              fieldName: 'info',
+              can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
+              getRoute({ row }) {
+                return {
+                  name: 'AssetMoreInformationEdit',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           connectivity: connectivityMeta,
