@@ -3,6 +3,7 @@
     <template>
       <el-popover
         placement="top-start"
+        open-delay="500"
         :title="title"
         width="400"
         trigger="hover"
