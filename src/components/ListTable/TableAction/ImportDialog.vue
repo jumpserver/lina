@@ -1,14 +1,14 @@
 <template>
   <Dialog
-    :title="importTitle"
-    :visible.sync="showImportDialog"
-    :destroy-on-close="true"
     :close-on-click-modal="false"
+    :destroy-on-close="true"
     :loading-status="loadStatus"
-    width="60%"
-    class="importDialog"
     :show-cancel="false"
     :show-confirm="false"
+    :title="importTitle"
+    :visible.sync="showImportDialog"
+    class="importDialog"
+    width="80%"
     @close="handleImportCancel"
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
@@ -30,14 +30,14 @@
       <el-form-item :label="$tc('common.Upload' )" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
-          drag
-          action="string"
-          list-type="text/csv"
-          :limit="1"
           :auto-upload="false"
-          :on-change="onFileChange"
           :before-upload="beforeUpload"
+          :limit="1"
+          :on-change="onFileChange"
           accept=".csv,.xlsx"
+          action="string"
+          drag
+          list-type="text/csv"
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">
@@ -55,8 +55,8 @@
     <div v-else class="importTableZone">
       <ImportTable
         ref="importTable"
-        :json-data="jsonData"
         :import-option="importOption"
+        :json-data="jsonData"
         :url="url"
         @cancel="cancelUpload"
         @finish="closeDialog"
