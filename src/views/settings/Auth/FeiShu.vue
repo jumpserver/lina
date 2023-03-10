@@ -44,7 +44,7 @@ export default {
           [
             this.$t('common.BasicInfo'),
             [
-              'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET'
+              'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_VERSION'
             ]
           ]
         ],
