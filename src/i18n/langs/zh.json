@@ -14,6 +14,7 @@
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看",
     "AutoCreate": "自动创建",
     "AccountPush": {
+      "WindowsPushHelpText": "windows 资产暂不支持推送密钥",
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
       "AccountPushUpdate": "账号推送更新",
