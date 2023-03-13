@@ -106,6 +106,9 @@ export default {
           app: 'assets',
           resource: 'account'
         },
+        extraQuery: {
+          order: '-date_updated'
+        },
         columnsExclude: ['spec_info'],
         columns: [
           'name', 'username', 'asset', 'privileged',
