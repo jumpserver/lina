@@ -78,6 +78,7 @@
       "AddSystemUser": "システムユーザーを追加"
     },
     "AccountPush": {
+      "WindowsPushHelpText": "windows アセットはプッシュキーをサポートしていません",
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",

@@ -156,6 +156,7 @@ export default {
           options: []
         },
         push_now: {
+          helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')

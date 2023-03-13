@@ -78,6 +78,7 @@
       "AddSystemUser": "Add system user"
     },
     "AccountPush": {
+      "WindowsPushHelpText": "Windows assets do not support pushing keys",
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",

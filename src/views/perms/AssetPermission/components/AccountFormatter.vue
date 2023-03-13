@@ -66,6 +66,10 @@ export default {
     nodes: {
       type: [Array],
       default: () => []
+    },
+    oid: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -144,7 +148,8 @@ export default {
               } else {
                 return item
               }
-            }).join(',')
+            }).join(','),
+            oid: this.oid
           }
         }).then(res => {
           if (!res) {
