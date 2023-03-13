@@ -80,6 +80,11 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     Vue.$log.error('Current org is null or not a object: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
+  if (currentOrg.name === 'SystemSetting') {
+    const preOrg = store.getters.preOrg
+    await orgUtil.changeOrg(preOrg)
+    return
+  }
   if (!orgUtil.hasCurrentOrgPermission()) {
     Vue.$log.error('Not has current org permission: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
