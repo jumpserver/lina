@@ -1,29 +1,42 @@
 <template>
-  <GenericDetailPage
-    :active-menu.sync="config.activeMenu"
-    :object.sync="TaskDetail"
-    v-bind="config"
-    v-on="$listeners"
-  >
-    <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
-    </keep-alive>
-  </GenericDetailPage>
+  <div>
+    <GenericDetailPage
+      :active-menu.sync="config.activeMenu"
+      :object.sync="account"
+      v-bind="config"
+      v-on="$listeners"
+    >
+      <keep-alive>
+        <component :is="config.activeMenu" :object="account" />
+      </keep-alive>
+    </GenericDetailPage>
+    <AccountCreateUpdate
+      v-if="AccountVisible"
+      :account="account"
+      :asset="account.asset"
+      :title="$tc('assets.UpdateAccount')"
+      :visible.sync="AccountVisible"
+      @add="addAccountSuccess"
+    />
+  </div>
 </template>
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+import AccountCreateUpdate from '@/components/AccountListTable/AccountCreateUpdate'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    AccountCreateUpdate
   },
   data() {
     return {
-      TaskDetail: {},
+      AccountVisible: false,
+      account: {},
       config: {
         activeMenu: 'Detail',
         submenu: [
@@ -33,9 +46,21 @@ export default {
           }
         ],
         actions: {
-          hasUpdate: () => false
+          hasUpdate: () => true,
+          updateCallback: () => {
+            const vm = this
+            vm.AccountVisible = false
+            setTimeout(() => {
+              vm.AccountVisible = true
+            })
+          }
         }
       }
+    }
+  },
+  methods: {
+    addAccountSuccess() {
+      this.$store.commit('common/reload')
     }
   }
 }
