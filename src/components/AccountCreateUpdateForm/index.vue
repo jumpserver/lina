@@ -229,7 +229,6 @@ export default {
       const secretType = form.secret_type || ''
       if (secretType !== 'password') {
         form.secret = form[secretType]
-        delete form[secretType]
       }
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {
