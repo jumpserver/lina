@@ -60,6 +60,10 @@ export default {
     helpMessage: {
       type: String,
       default: ''
+    },
+    optionInfo: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -129,7 +133,14 @@ export default {
             label: this.$t('assets.HardwareInfo'),
             formatter: HostInfoFormatter,
             formatterArgs: {
-              fieldName: 'info'
+              info: vm?.optionInfo,
+              can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
+              getRoute({ row }) {
+                return {
+                  name: 'AssetMoreInformationEdit',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           connectivity: connectivityMeta,
@@ -261,6 +272,11 @@ export default {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
       return actions
+    }
+  },
+  watch: {
+    optionInfo(iNew) {
+      this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
     }
   }
 }

@@ -3,12 +3,13 @@
     <template>
       <el-popover
         placement="top-start"
+        :open-delay="parseInt('500')"
         :title="title"
         width="400"
         trigger="hover"
       >
         <el-row v-for="(item, key) of items" :key="key" class="detail-item">
-          <el-col :span="12">{{ info[key] }}</el-col>
+          <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
           <el-col :span="12">{{ item }}</el-col>
         </el-row>
         <span slot="reference">{{ viewText }}</span>
@@ -54,26 +55,16 @@ export default {
       const memory = this.items['memory']
       const diskTotal = this.items['disk_total']
       if (cpuCount) {
-        return `${cpuVcpus || cpuCores * cpuCount} Core ${memory}G ${diskTotal}G`
+        let text = `${cpuVcpus || cpuCores * cpuCount} Core`
+        if (memory) {
+          text += ` ${memory}G`
+        }
+        if (diskTotal) {
+          text += ` ${diskTotal}G`
+        }
+        return text
       }
       return '-'
-    }
-  },
-  async mounted() {
-    this.info = await this.optionAndGenFields()
-  },
-  methods: {
-    async optionAndGenFields() {
-      const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      const remoteMeta = data.actions['GET'] || {}
-      const fieldName = this.formatterArgs?.fieldName || ''
-      const remoteMetaFields = remoteMeta[fieldName]?.children || {}
-      const fields = Object.keys(remoteMetaFields)
-      const info = {}
-      for (const name of fields) {
-        info[name] = remoteMetaFields[name].label
-      }
-      return info
     }
   }
 }

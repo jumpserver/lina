@@ -250,6 +250,8 @@ export function getErrorResponseMsg(error) {
     msg = data.map((item, i) => {
       return getErrorResponseMsg(item)
     }).filter(i => i).join('; ')
+  } else if (typeof data === 'string') {
+    return data
   }
   return msg
 }

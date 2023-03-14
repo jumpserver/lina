@@ -3,13 +3,13 @@
     <el-input
       v-if="inEditMode"
       v-model="value"
-      size="mini"
       class="editInput"
-      @keyup.enter.native="onInputEnter"
+      size="mini"
       @blur="onInputEnter"
+      @keyup.enter.native="onInputEnter"
     />
     <template v-else>
-      <span>{{ cellValue }}</span>
+      <span>{{ iCellValue }}</span>
     </template>
   </div>
 </template>
@@ -47,9 +47,27 @@ export default {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
   },
+  computed: {
+    iCellValue() {
+      if (Array.isArray(this.cellValue)) {
+        if (this.cellValue.length === 0) {
+          return ''
+        }
+        return this.cellValue.map(v => this.getCellValue(v)).join(', ')
+      }
+      return this.getCellValue(this.cellValue)
+    }
+  },
   methods: {
     editCell() {
       this.inEditMode = true
+    },
+    getCellValue(val) {
+      let v
+      if (val && typeof val === 'object') {
+        v = val['name'] || val['display_name'] || ''
+      }
+      return v || val
     },
     onInputEnter() {
       let validValue = this.value
@@ -63,9 +81,6 @@ export default {
         oldValue: this.cellValue,
         newValue: validValue
       })
-      this.inEditMode = false
-    },
-    cancelEdit() {
       this.inEditMode = false
     }
   }

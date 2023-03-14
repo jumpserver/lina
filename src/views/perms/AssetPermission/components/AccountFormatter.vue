@@ -1,31 +1,58 @@
 <template>
-  <div>
-    <el-checkbox-group v-model="choicesSelected">
-      <el-checkbox
-        v-for="(i) in choices"
-        :key="i.label"
-        :label="i.value"
-        @change="handleCheckboxCheck(i, $event)"
-      >
-        {{ i.label }}
-      </el-checkbox>
-    </el-checkbox-group>
-    <TagInput
-      v-if="showSpecAccounts"
-      :autocomplete="autocomplete"
-      :value="specAccountsInput"
-      @change="handleTagChange"
-    />
-  </div>
+  <el-form>
+    <el-form-item>
+      <el-checkbox-group v-model="choicesSelected">
+        <el-checkbox
+          v-for="(i) in choices"
+          :key="i.label"
+          :label="i.value"
+          @change="handleCheckboxCheck(i, $event)"
+        >
+          {{ i.label }}
+          <el-tooltip :content="i.tip" placement="top">
+            <i class="fa fa-question-circle-o" />
+          </el-tooltip>
+        </el-checkbox>
+      </el-checkbox-group>
+    </el-form-item>
+
+    <div v-if="showSpecAccounts" class="spec-accounts">
+      <el-form-item label="选择账号">
+        <TagInput
+          :autocomplete="autocomplete"
+          :tag-type="getTagType"
+          :value="specAccountsInput"
+          @change="handleTagChange"
+        />
+        <el-button size="small" type="primary" style="margin-left: 10px" @click="showAccountTemplateDialog=true">
+          {{ $t('common.TemplateAdd') }}
+        </el-button>
+        {{ $t('common.TemplateHelpText') }}
+      </el-form-item>
+    </div>
+
+    <Dialog
+      v-if="showAccountTemplateDialog"
+      :title="$tc('accounts.AccountTemplate')"
+      :visible.sync="showAccountTemplateDialog"
+      @confirm="handleAccountTemplateConfirm"
+    >
+      <ListTable ref="templateTable" v-bind="accountTemplateTable" />
+    </Dialog>
+  </el-form>
 </template>
 
 <script>
 import { TagInput } from '@/components/FormFields'
-import { AccountLabelMapper, AllAccount, ManualINPUT, SameUSER, SPECAccount } from '@/views/perms/const'
+import { AccountLabelMapper, AllAccount, ManualAccount, SameAccount, SpecAccount } from '@/views/perms/const'
+import ListTable from '@/components/ListTable'
+import Dialog from '@/components/Dialog'
 
 export default {
   components: {
-    TagInput
+    TagInput,
+    ListTable,
+    Dialog
   },
   props: {
     value: {
@@ -39,6 +66,10 @@ export default {
     nodes: {
       type: [Array],
       default: () => []
+    },
+    oid: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -46,29 +77,66 @@ export default {
     const choices = [
       {
         label: AccountLabelMapper[AllAccount],
-        value: AllAccount
+        value: AllAccount,
+        tip: this.$t('perms.AllAccountTip')
       },
       {
-        label: AccountLabelMapper[SPECAccount],
-        value: SPECAccount
+        label: AccountLabelMapper[SpecAccount],
+        value: SpecAccount,
+        tip: this.$t('perms.SpecAccountTip')
       },
       {
-        label: AccountLabelMapper[ManualINPUT],
-        value: ManualINPUT
+        label: AccountLabelMapper[ManualAccount],
+        value: ManualAccount,
+        tip: this.$t('perms.ManualAccountTip')
       },
       {
-        label: AccountLabelMapper[SameUSER],
-        value: SameUSER
+        label: AccountLabelMapper[SameAccount],
+        value: SameAccount,
+        tip: this.$t('perms.SameAccountTip')
       }
     ]
     return {
       ALL: AllAccount,
-      SPEC: SPECAccount,
+      SPEC: SpecAccount,
+      showAccountTemplateDialog: false,
       choices: choices,
       choicesSelected: [],
       defaultChoices: [this.ALL],
       specAccountsInput: [],
+      specAccountsTemplate: [],
       showSpecAccounts: false,
+      getTagType: (tag) => {
+        if (vm.specAccountsTemplate.filter(i => i.username === tag).length > 0) {
+          return 'primary'
+        } else {
+          return 'info'
+        }
+      },
+      accountTemplateTable: {
+        tableConfig: {
+          url: '/api/v1/accounts/account-templates/',
+          columns: [
+            'name', 'username', 'has_secret', 'comment',
+            'date_created', 'date_updated'
+          ],
+          columnsMeta: {
+            has_secret: {
+              formatterArgs: {
+                showFalse: false
+              }
+            },
+            actions: {
+              has: false
+            }
+          }
+        },
+        headerActions: {
+          hasLeftActions: false,
+          hasImport: false,
+          hasExport: false
+        }
+      },
       autocomplete: (query, cb) => {
         this.$axios.get('/api/v1/accounts/accounts/username-suggestions/', {
           params: {
@@ -78,13 +146,16 @@ export default {
               if (typeof item === 'object') {
                 return item.pk
               } else {
-                return item.pk
+                return item
               }
-            }).join(',')
+            }).join(','),
+            oid: this.oid
           }
         }).then(res => {
-          const data = res
-            .filter(item => vm.value.indexOf(item) === -1)
+          if (!res) {
+            res = []
+          }
+          const data = res.filter(item => vm.value.indexOf(item) === -1)
             .map(v => ({ value: v, label: v }))
           cb(data)
         })
@@ -108,6 +179,16 @@ export default {
       this.choicesSelected = choicesSelected
       this.specAccountsInput = specAccountsInput
     },
+    handleAccountTemplateConfirm() {
+      this.specAccountsTemplate = this.$refs.templateTable.selectedRows
+      const added = this.specAccountsTemplate.map(i => i.username)
+      this.specAccountsInput = this.specAccountsInput.filter(i => !added.includes(i)).concat(added)
+      this.outputValue()
+      setTimeout(() => {
+        this.showAccountTemplateDialog = false
+        this.outputValue()
+      }, 100)
+    },
     handleCheckboxCheck(item, checked) {
       if (item.value === this.SPEC) {
         this.showSpecAccounts = checked
@@ -129,7 +210,8 @@ export default {
     outputValue() {
       let choicesSelected = this.choicesSelected
       if (this.showSpecAccounts) {
-        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput]
+        const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
+        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput, ...templateIds]
       }
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
@@ -138,9 +220,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
+}
+
+.spec-accounts {
+  border: solid 1px #f3f3f4;
+  padding: 10px 10px 0;
+
+  &>>> .el-form-item {
+    display: flex;
+  }
+  &>>> .el-form-item__content {
+    width: 80% !important;
+    flex: 1;
+  }
+  &>>> .filter-field {
+    width: calc(100% - 94px);
+    display: inline-block;
+  }
 }
 
 .help-text {

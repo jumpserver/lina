@@ -4,10 +4,10 @@
       v-for="(v, k) in filterTags"
       :key="k"
       :disable-transitions="true"
-      :type="tagType"
+      :type="tagType(v)"
       closable
       size="small"
-      @click="handleTagClick(v,k)"
+      @click="handleTagClick(v, k)"
       @close="handleTagClose(v)"
     >
       {{ v }}
@@ -38,8 +38,10 @@ export default {
       default: () => []
     },
     tagType: {
-      type: String,
-      default: 'info'
+      type: Function,
+      default: () => {
+        return 'info'
+      }
     },
     placeholder: {
       type: String,
@@ -56,6 +58,11 @@ export default {
       focus: false,
       filterValue: '',
       component: this.autocomplete ? 'el-autocomplete' : 'el-input'
+    }
+  },
+  watch: {
+    value(val) {
+      this.filterTags = val
     }
   },
   methods: {
@@ -99,24 +106,25 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
+    line-height: 32px;
 
     &:hover {
       border-color: #C0C4CC;
     }
   }
 
-  .search-input > > > .el-input__inner {
+  .search-input >>> .el-input__inner {
     max-width: 100%;
     border: none;
     padding-left: 5px;
   }
 
-  .el-input > > > .el-input__inner {
+  .el-input >>> .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
 
-  .filter-field > > > .el-input__inner {
-    //height: 32px;
+  .filter-field >>> .el-input__inner {
+    height: 32px;
   }
 </style>

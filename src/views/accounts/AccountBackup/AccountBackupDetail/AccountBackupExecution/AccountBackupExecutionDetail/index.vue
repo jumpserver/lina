@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="execution" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="execution" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="execution" />
     </keep-alive>
@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountBackupPlanExecutionInfo from './AccountBackupPlanExecutionInfo'
+import AccountBackupPlanExecutionInfo from './AccountBackupExecutionInfo.vue'
 
 export default {
   components: {

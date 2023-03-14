@@ -78,6 +78,7 @@
       "AddSystemUser": "システムユーザーを追加"
     },
     "AccountPush": {
+      "WindowsPushHelpText": "windows アセットはプッシュキーをサポートしていません",
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
@@ -504,6 +505,7 @@
     "TableColSettingInfo": "表示したいリストの詳細を選択してください。",
     "Add": "追加",
     "TemplateAdd": "テンプレートの追加",
+    "TemplateHelpText": "テンプレートを選択してアカウントを追加すると、資産の下では発生しないアカウントが自動的に作成され、プッシュされます",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
     "AddFailMsg": "追加に失敗しました",

@@ -91,7 +91,8 @@ export default {
           }
         },
         apply_accounts: {
-          component: AccountFormatter
+          component: AccountFormatter,
+          el: {}
         },
         org_id: {
           component: Select2,
@@ -105,6 +106,7 @@ export default {
             const fieldsMeta = this.fieldsMeta
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
+            fieldsMeta.apply_accounts.el.oid = form['org_id']
           },
           on: {
             change: ([event], updateForm) => {
