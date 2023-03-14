@@ -200,6 +200,8 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "CustomAuthCommand": "Custom change password command",
+    "CustomAuthCommandHelpMessage": "The user-defined instruction needs to include ` {username} 'and ` {password}' fields. When changing the password, the corresponding account and password will be replaced.<br />for example, Linux changing the password: <br />Passwd {username} <br />{password} <br />{password}",
     "PushAccount": "Push account",
     "AuthUsername": "Auth using username",
     "Secure": "Secure",

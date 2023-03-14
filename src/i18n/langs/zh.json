@@ -200,6 +200,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "CustomAuthCommand": "自定义改密指令",
+    "CustomAuthCommandHelpMessage": "自定义指令中需包含 `{username}` 和 `{password}` 字段，改密时将会进行相应账号和密码的替换。<br />如 linux 改密：<br />passwd {username} <br />{password} <br />{password}",
     "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",

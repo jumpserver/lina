@@ -29,6 +29,11 @@
       :show-fields="fields"
       :visible.sync="visible"
     />
+    <PlatformCustomAuthChangeDialog
+      v-if="customVisible"
+      :object="object"
+      :visible.sync="customVisible"
+    />
   </el-row>
 </template>
 
@@ -37,6 +42,7 @@ import { IBox } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
+import PlatformCustomAuthChangeDialog from './PlatformCustomAuthChangeDialog'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 
 export default {
@@ -46,7 +52,8 @@ export default {
     QuickActions,
     AutoDetailCard,
     ProtocolSelector,
-    PlatformDetailUpdateDialog
+    PlatformDetailUpdateDialog,
+    PlatformCustomAuthChangeDialog
   },
   props: {
     object: {
@@ -58,6 +65,7 @@ export default {
   data() {
     return {
       visible: false,
+      customVisible: false,
       fields: ['domain_enabled'],
       quickActions: this.setQuickActions(),
       url: `/api/v1/assets/platforms/${this.object.id}`,
@@ -95,7 +103,7 @@ export default {
       const { object } = this
       const suEnabledDisabled = ['database', 'device']
       const domainEnabledDisabled = ['cloud', 'web']
-      const quickActions = [
+      return [
         {
           title: this.$t('assets.DomainEnabled'),
           type: 'switch',
@@ -133,10 +141,21 @@ export default {
               this.visible = !this.visible
             }
           })
+        },
+        {
+          title: this.$t('assets.CustomAuthCommand'),
+          has: !object.internal && ['host', 'device'].indexOf(object.category.value) !== -1,
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.customVisible = !this.customVisible
+            }
+          })
         }
       ]
-
-      return quickActions
     }
   }
 }
