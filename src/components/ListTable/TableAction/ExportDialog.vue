@@ -3,18 +3,18 @@
     <div v-if="mfaDialogShow">
       <UserConfirmDialog
         :url="url"
-        @UserConfirmDone="showExportDialog"
-        @UserConfirmCancel="handleExportCancel"
         @AuthMFAError="handleAuthMFAError"
+        @UserConfirmCancel="handleExportCancel"
+        @UserConfirmDone="showExportDialog"
       />
     </div>
     <Dialog
       v-if="exportDialogShow"
+      :destroy-on-close="true"
       :title="$tc('common.Export')"
       :visible.sync="exportDialogShow"
-      :destroy-on-close="true"
-      @confirm="handleExportConfirm()"
       @cancel="handleExportCancel()"
+      @confirm="handleExportConfirm()"
     >
       <el-form label-position="left" style="padding-left: 20px">
         <el-form-item :label="$tc('common.fileType' )" :label-width="'100px'">
@@ -22,20 +22,20 @@
             <el-radio
               v-for="option of exportTypeOptions"
               :key="option.value"
-              style="padding: 10px 20px;"
-              :label="option.value"
               :disabled="!option.can"
+              :label="option.value"
+              style="padding: 10px 20px;"
             >{{ option.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item class="export-form" :label="$tc('common.imExport.ExportRange')" :label-width="'100px'">
+        <el-form-item :label="$tc('common.imExport.ExportRange')" :label-width="'100px'" class="export-form">
           <el-radio-group v-model="exportOption">
             <el-radio
               v-for="option of exportOptions"
               :key="option.value"
-              class="export-item"
-              :label="option.value"
               :disabled="!option.can"
+              :label="option.value"
+              class="export-item"
             >{{ option.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -159,7 +159,7 @@ export default {
   mounted() {
     this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
       // Todo: 没有时间了，只能先这么处理了
-      if (url === this.url || url.indexOf(this.url) > -1 || url.indexOf('account') > -1) {
+      if (url === this.url || url.indexOf(this.url) > -1) {
         this.showExportDialog()
       }
     })
