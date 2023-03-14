@@ -8,7 +8,7 @@
     :title="importTitle"
     :visible.sync="showImportDialog"
     class="importDialog"
-    width="80%"
+    width="70%"
     @close="handleImportCancel"
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 20px">
