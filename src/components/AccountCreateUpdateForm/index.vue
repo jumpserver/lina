@@ -218,9 +218,9 @@ export default {
     controlShowField() {
       const privileged = ['privileged']
       let suFrom = ['su_from']
-      const filterSuFrom = ['database', 'device', 'cloud', 'web']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
       const asset = this?.asset || {}
-      if (filterSuFrom.includes(asset?.category?.value)) {
+      if (filterSuFrom.includes(asset?.category?.value) || filterSuFrom.includes(asset?.type?.value)) {
         suFrom = []
       }
       return [...privileged, ...suFrom]
