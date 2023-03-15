@@ -159,7 +159,7 @@ export default {
   mounted() {
     this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
       // Todo: 没有时间了，只能先这么处理了
-      if (url === this.url || url.indexOf(this.url) > -1 || url.indexOf('account') > -1) {
+      if (url === this.url || url.indexOf(this.url) > -1 || this.url.indexOf('/account') > -1) {
         this.showExportDialog()
       }
     })
