@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: false
     },
+    asset: {
+      type: Object,
+      default: () => {}
+    },
     accounts: {
       type: Array,
       default: () => ([])
@@ -76,12 +80,13 @@ export default {
     }
   },
   data() {
+    const protocols = this.asset.protocols.map(i => i.name).toString()
     return {
       isShowCreate: false,
       accountsSelected: [],
       tableConfig: {
-        url: '/api/v1/accounts/account-templates/',
-        columns: ['name', 'username', 'privileged'],
+        url: `/api/v1/accounts/account-templates/?protocols=${protocols}`,
+        columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
             formatterArgs: {
