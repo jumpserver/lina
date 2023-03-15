@@ -92,7 +92,8 @@ export default {
         razor: 'Razor',
         core: 'Core',
         celery: 'Celery',
-        magnus: 'Magnus'
+        magnus: 'Magnus',
+        tinker: 'Tinker'
       }
       return nameMapper[this.componentMetric.type]
     }
