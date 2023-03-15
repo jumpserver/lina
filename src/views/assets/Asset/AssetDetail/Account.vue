@@ -16,6 +16,7 @@
         <AccountTemplateDialog
           v-if="templateDialogVisible"
           :show-create="false"
+          :asset="object"
           :visible.sync="templateDialogVisible"
           @onConfirm="onConfirm"
         />
