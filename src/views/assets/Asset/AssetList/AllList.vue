@@ -50,7 +50,11 @@ export default {
         category: 'all'
       },
       headerActions: {
-        hasImport: false
+        handleImportClick: ({ selectedRows }) => {
+          this.$message.warning({
+            message: this.$t('assets.ImportMessage')
+          })
+        }
       },
       addExtraMoreActions: [],
       helpMessage: this.$t('assets.AssetListHelpMessage')

@@ -201,6 +201,8 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "BulkUpdatePlatformHelpText": "Modify only assets of the same type",
+    "ImportMessage": "Please go to the page of mapping type to import data",
     "PushAccount": "Push account",
     "AuthUsername": "Auth using username",
     "Secure": "Secure",
