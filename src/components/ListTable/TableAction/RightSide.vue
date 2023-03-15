@@ -37,8 +37,9 @@ export default {
     handleExportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        const option = assignIfNot(this.exportOptions, { url: this.tableUrl })
-        this.$eventBus.$emit('showExportDialog', { selectedRows, url: option.url, name: this.name })
+        const { exportOptions, tableUrl } = this
+        const url = exportOptions?.url ? exportOptions.url : tableUrl
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
       }
     },
     hasImport: defaultTrue,
