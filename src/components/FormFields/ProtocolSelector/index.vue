@@ -1,5 +1,5 @@
 <template>
-  <div :class="showSetting ? 'show-setting' : 'hide-setting'">
+  <div v-if="!loading" :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
         v-model="item.port"
@@ -91,7 +91,8 @@ export default {
       name: '',
       items: [],
       settingItem: {},
-      showDialog: false
+      showDialog: false,
+      loading: false
     }
   },
   computed: {
@@ -118,9 +119,13 @@ export default {
     }
   },
   watch: {
-    iChoices: {
+    choices: {
       handler(value) {
-        this.setDefaultItems(value)
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.setDefaultItems(value)
+        }, 100)
       }
     },
     items: {
@@ -135,6 +140,7 @@ export default {
     this.setDefaultItems(this.iChoices)
     this.$log.debug('Choices: ', this.choices)
     this.$log.debug('Value: ', this.value)
+    this.$log.debug('Items: ', this.items)
   },
   methods: {
     handleDelete(index) {
@@ -157,6 +163,8 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
+      this.items = []
+      const requiredItems = choices.filter(item => (item.required || item.primary))
       if (this.value instanceof Array && this.value.length > 0) {
         const protocols = []
         this.value.forEach(item => {
@@ -169,7 +177,10 @@ export default {
             protocols.push(...assetDefaultItems)
           }
         })
-        this.items = protocols
+        const notFound = requiredItems.filter(item => !protocols.find(p => p.name === item.name))
+        protocols.push(...notFound)
+        const allProtocolNames = protocols.map(item => item.name)
+        this.items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
         this.items = defaults
@@ -179,7 +190,6 @@ export default {
       const protocols = []
       const protocol = choices.find(i => i.name === item.name) || {}
       protocols.push({ ...protocol, ...item })
-
       return protocols
     },
     onSettingClick(item) {
