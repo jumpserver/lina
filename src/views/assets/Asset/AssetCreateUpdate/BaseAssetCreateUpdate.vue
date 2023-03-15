@@ -77,7 +77,6 @@ export default {
               return item
             })
           }
-
           return this.$axios[submitMethod](url, values)
         }
       }
@@ -108,15 +107,18 @@ export default {
       return config
     }
   },
-  async created() {
-    try {
-      await this.setInitial()
-      await this.setPlatformConstrains()
-    } finally {
-      this.loading = false
-    }
+  created() {
+    this.init()
   },
   methods: {
+    async init() {
+      try {
+        await this.setInitial()
+        await this.setPlatformConstrains()
+      } finally {
+        this.loading = false
+      }
+    },
     async setInitial() {
       const { defaultConfig } = this
       const { node, platform } = this.$route?.query || {}
@@ -138,7 +140,8 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      this.defaultConfig.fieldsMeta.protocols.el.choices.splice(0, 0, ...platform.protocols)
+      const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
+      protocolChoices.splice(0, protocolChoices.length, ...platform.protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 

@@ -65,6 +65,15 @@ export const assetFieldsMeta = (vm) => {
             return { label: item.name, value: item.id }
           }
         }
+      },
+      on: {
+        change: ([event], updateForm) => {
+          const pk = event.pk
+          const url = window.location.href
+          const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
+          window.location.href = newURL
+          setTimeout(() => vm.init(), 100)
+        }
       }
     },
     domain: {
