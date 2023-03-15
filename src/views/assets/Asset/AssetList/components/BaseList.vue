@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span class="announcement-main" v-html="helpMessage" />
+    </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
@@ -24,6 +27,7 @@ import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
+import HostInfoFormatter from '@/components/TableFormatters/HostInfoFormatter'
 
 export default {
   components: {
@@ -52,6 +56,14 @@ export default {
     addExtraMoreActions: {
       type: Array,
       default: () => []
+    },
+    helpMessage: {
+      type: String,
+      default: ''
+    },
+    optionInfo: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -89,7 +101,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columnsExclude: ['spec_info', 'auto_info', 'info'],
+        columnsExclude: ['spec_info', 'auto_info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -117,9 +129,19 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-          ip: {
-            sortable: 'custom',
-            width: '140px'
+          info: {
+            label: this.$t('assets.HardwareInfo'),
+            formatter: HostInfoFormatter,
+            formatterArgs: {
+              info: vm?.optionInfo,
+              can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
+              getRoute({ row }) {
+                return {
+                  name: 'AssetMoreInformationEdit',
+                  params: { id: row.id }
+                }
+              }
+            }
           },
           connectivity: connectivityMeta,
           labels_display: {
@@ -250,6 +272,11 @@ export default {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
       return actions
+    }
+  },
+  watch: {
+    optionInfo(iNew) {
+      this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
     }
   }
 }

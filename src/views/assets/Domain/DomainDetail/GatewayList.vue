@@ -84,7 +84,7 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatterArgs: {
-              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id }},
+              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id, platform_type: 'linux' }},
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
@@ -128,7 +128,8 @@ export default {
         createRoute: {
           name: 'GatewayCreate',
           query: {
-            domain: this.object.id
+            domain: this.object.id,
+            platform_type: 'linux'
           }
         }
       },

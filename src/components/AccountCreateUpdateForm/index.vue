@@ -9,11 +9,11 @@
 
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, UploadSecret } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange } from '@/components/DataForm/rules'
+import { RequiredChange, Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -67,6 +67,7 @@ export default {
       ],
       fieldsMeta: {
         assets: {
+          rules: [Required],
           component: AssetSelect,
           label: this.$t('assets.Asset'),
           el: {
@@ -131,10 +132,7 @@ export default {
         },
         ssh_key: {
           label: this.$t('assets.PrivateKey'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         passphrase: {
@@ -144,19 +142,13 @@ export default {
         },
         token: {
           label: this.$t('assets.Token'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
         api_key: {
           id: 'api_key',
           label: this.$t('assets.AccessKey'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'api_key'
         },
         secret_type: {
@@ -164,6 +156,7 @@ export default {
           options: []
         },
         push_now: {
+          helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
@@ -225,9 +218,9 @@ export default {
     controlShowField() {
       const privileged = ['privileged']
       let suFrom = ['su_from']
-      const filterSuFrom = ['database', 'device', 'cloud', 'web']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
       const asset = this?.asset || {}
-      if (filterSuFrom.includes(asset?.category?.value)) {
+      if (filterSuFrom.includes(asset?.category?.value) || filterSuFrom.includes(asset?.type?.value)) {
         suFrom = []
       }
       return [...privileged, ...suFrom]
@@ -236,7 +229,6 @@ export default {
       const secretType = form.secret_type || ''
       if (secretType !== 'password') {
         form.secret = form[secretType]
-        delete form[secretType]
       }
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {

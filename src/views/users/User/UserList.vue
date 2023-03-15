@@ -74,7 +74,7 @@ export default {
             width: '100px',
             label: this.$t('users.OrgRoles'),
             formatter: (row) => {
-              return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+              return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'org_roles',

@@ -1,11 +1,11 @@
 <template>
   <el-dialog
+    :append-to-body="true"
+    :modal-append-to-body="true"
     :title="title"
     :top="top"
     :width="iWidth"
     class="dialog"
-    :append-to-body="true"
-    :modal-append-to-body="true"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -13,7 +13,7 @@
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
         <el-button v-if="showCancel" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm" type="primary" :loading="loadingStatus" @click="onConfirm">
+        <el-button v-if="showConfirm" :loading="loadingStatus" type="primary" @click="onConfirm">
           {{ confirmTitle }}
         </el-button>
       </slot>
@@ -99,6 +99,10 @@ export default {
 
     &__body {
       padding: 20px 30px;
+
+      &:has(.el-table) {
+        background: #f3f3f4;
+      }
     }
 
     &__footer {

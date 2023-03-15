@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountTemplate": "账号模版",
     "HistoryDate": "日期",
     "SameTypeAccountTip": "相同用户名、密钥类型的账号已存在",
     "TaskID": "任务 ID",
@@ -13,6 +14,7 @@
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看",
     "AutoCreate": "自动创建",
     "AccountPush": {
+      "WindowsPushHelpText": "windows 资产暂不支持推送密钥",
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
       "AccountPushUpdate": "账号推送更新",
@@ -297,6 +299,7 @@
     "Domain": "网域",
     "DomainDetail": "网域详情",
     "DomainHelpMessage": "网域功能是为了解决部分环境（如：混合云）无法直接连接而新增的功能，原理是通过网关服务器进行跳转登录。JMS => 网域网关 => 目标资产",
+    "WebHelpMessage": "Web 类型资产依赖于远程应用，请前往系统设置在远程应用中配置发布机。",
     "FullName": "全称",
     "Gateway": "网关",
     "GatewayProtocolHelpText": "SSH网关，支持代理SSH,RDP和VNC",
@@ -433,6 +436,9 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "CommunityEdition": "社区版",
+    "EnterpriseEdition": "企业版",
+    "Product": "产品",
     "RestoreDefault": "恢复默认",
     "DownloadCenter": "下载中心",
     "ImportOrg": "导入组织",
@@ -511,6 +517,7 @@
     "TableColSettingInfo": "请选择您想显示的列表详细信息。",
     "Add": "添加",
     "TemplateAdd": "模版添加",
+    "TemplateHelpText": "选择模版添加时，会自动创建资产下不存在的账号并推送",
     "Task": "任务",
     "UpdateAssetDetail": "配置更多信息",
     "AddSuccessMsg": "添加成功",
@@ -835,6 +842,8 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Save": "保存",
+    "Reset": "还原",
     "SystemError": "系统错误",
     "RunasHelpText": "填写运行脚本的用户名",
     "RunasPolicyHelpText": "表示当前资产上没此运行用户时，采取什么账号选择策略",
@@ -864,6 +873,7 @@
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
     "RequiredContent": "请输入命令",
+    "RequiredRunas": "请输入运行用户",
     "RequiredEntryFile": "此文件作为运行的入口文件，必须存在",
     "ScrollToTop": "滚动到顶部",
     "ScrollToBottom": "滚动到底部",
@@ -989,15 +999,19 @@
   },
   "perms": {
     "": "",
-    "AccountsHelp": "所有账号: 资产上添加的账号; 指定账号：指定账号的用户名；手动输入: 用户名/密码 手动输入; 同名账号: 与被授权人用户名相同的账号;",
+    "AccountsHelp": "<b>所有账号</b>: 资产上已添加的所有账号; <br/> <b>指定账号</b>：指定资产下账号的用户名；<br/>手动账号: 用户名/密码 登录时手动输入; <br/>同名账号: 与被授权人用户名相同的账号;",
     "AllAccounts": "所有账号",
-    "ManualInput": "手动输入",
+    "AllAccountTip": "资产上已添加的所有账号",
+    "ManualAccount": "手动账号",
+    "ManualAccountTip": "登录时手动输入 用户名/密码",
     "SameAccount": "同名账号",
-    "SpecifyAccounts": "指定账号",
+    "SameAccountTip": "与被授权人用户名相同的账号",
+    "SpecAccount": "指定账号",
+    "SpecAccountTip": "指定用户名选择授权账号",
     "Input": "输入",
     "Account": "账号",
     "permAccount": "授权账号",
-    "Actions": "动作",
+    "Actions": "权限",
     "Asset": "资产",
     "Basic": "基本",
     "Exclude": "不包含",

@@ -42,13 +42,13 @@ export const AssetPermissionListPageSearchConfigOptions = [
 ]
 
 export const AllAccount = '@ALL'
-export const SPECAccount = '@SPEC'
-export const SameUSER = '@USER'
-export const ManualINPUT = '@INPUT'
+export const SpecAccount = '@SPEC'
+export const SameAccount = '@USER'
+export const ManualAccount = '@INPUT'
 
 export const AccountLabelMapper = {
   [AllAccount]: i18n.t('perms.AllAccounts'),
-  [SPECAccount]: i18n.t('perms.SpecifyAccounts'),
-  [SameUSER]: i18n.t('perms.SameAccount'),
-  [ManualINPUT]: i18n.t('perms.ManualInput')
+  [SpecAccount]: i18n.t('perms.SpecAccount'),
+  [SameAccount]: i18n.t('perms.SameAccount'),
+  [ManualAccount]: i18n.t('perms.ManualAccount')
 }

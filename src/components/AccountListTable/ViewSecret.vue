@@ -1,10 +1,12 @@
 <template>
   <div>
-    <UserConfirmDialog
-      :url="url"
-      @UserConfirmCancel="exit"
-      @UserConfirmDone="getAuthInfo"
-    />
+    <div v-if="mfaDialogVisible">
+      <UserConfirmDialog
+        :url="url"
+        @UserConfirmCancel="exit"
+        @UserConfirmDone="getAuthInfo"
+      />
+    </div>
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
@@ -12,7 +14,7 @@
       :visible.sync="showSecret"
       :width="'50'"
       v-bind="$attrs"
-      @confirm="showSecret = false"
+      @confirm="accountConfirmHandle"
       v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
@@ -103,7 +105,8 @@ export default {
       secretInfo: {},
       versions: '-',
       showSecret: false,
-      sshKeyFingerprint: '',
+      mfaDialogVisible: true,
+      sshKeyFingerprint: '-',
       historyCount: 0,
       showPasswordHistoryDialog: false
     }
@@ -125,10 +128,14 @@ export default {
     }
   },
   methods: {
+    accountConfirmHandle() {
+      this.showSecret = false
+      this.mfaDialogVisible = false
+    },
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp?.spec_info
+        this.sshKeyFingerprint = resp?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
       })
     },

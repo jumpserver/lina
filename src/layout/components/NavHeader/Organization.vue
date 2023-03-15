@@ -4,6 +4,7 @@
     :value="currentOrgId"
     class="org-select organization"
     filterable
+    popper-class="switch-org"
     @change="changeOrg"
   >
     <template slot="prefix">

@@ -3,19 +3,17 @@
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
-        <ViewSwitcher class="mobile-view-switch" mode="vertical" />
       </div>
       <div class="nav-title">
         <span
           v-show="!isCollapse"
           style="margin-left: 5px;"
-          @click="viewShown = !viewShown"
         >
           {{ isRouteMeta.title || '' }}
         </span>
+
         <span class="switch-view active-switch-view">
           <el-popover
-            v-model="viewShown"
             placement="right-start"
             trigger="hover"
             width="160"
@@ -23,6 +21,9 @@
             <ViewSwitcher :mode="'vertical'" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
           </el-popover>
+        </span>
+        <span class="switch-view show-switch-view">
+          <svg-icon class="icon" icon-class="switch" @click="toggleSwitch" />
         </span>
       </div>
     </div>
@@ -52,6 +53,9 @@
       <div class="toggle-bar">
         <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       </div>
+    </div>
+    <div class="mobile-menu" :class="{'is-show': viewShown}" @click="viewShown = false">
+      <ViewSwitcher :mode="'vertical'" />
     </div>
   </div>
 </template>
@@ -124,6 +128,9 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    toggleSwitch() {
+      this.viewShown = true
     }
   }
 }
@@ -217,26 +224,57 @@ export default {
     }
   }
 
+  .is-show {
+    display: block!important;;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    padding-top: 10px;
+    background: #fff;
+    z-index: 100;
+  }
+
+  .show-switch-view {
+    display: none;
+  }
+
   .active-mobile {
     display: none;
 
     & > > > .organization {
+      height: 48px;
+      line-height: 48px;
       padding-left: 8px;
       background: transparent;
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
-    }
-
-    & > > > .menu-main {
-      margin-left: -10px;
+      .el-input--prefix .el-input__inner {
+        height: 48px!important;
+        line-height: 48px!important;
+      }
+      .svg-icon {
+        color: #FFF!important;
+        margin-right:0px!important;
+      }
     }
 
     & > > > .title-label {
       color: white !important;
     }
 
-    .mobile-view-switch > > > .el-menu-item.is-active {
-      color: #ffffff;
+    .mobile-view-switch {
+      &>>> .el-menu-item.is-active {
+      color: var(--menu-text-active)!important;
+      .svg-icon {
+        color: var(--menu-text-active)!important;
+      }
+    }
     }
   }
 
@@ -245,7 +283,10 @@ export default {
       display: block;
     }
     .active-switch-view {
-      display: none !important;;
+      display: none!important;
+    }
+    .show-switch-view {
+      display: block!important;
     }
   }
 </style>

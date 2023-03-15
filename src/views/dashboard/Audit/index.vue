@@ -41,13 +41,13 @@ export default {
   },
   data() {
     return {
-      days: localStorage.getItem('auditDays') || '7'
+      days: localStorage.getItem('dashboardDays') || '7'
     }
   },
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('auditDays', val)
+      localStorage.setItem('dashboardDays', val)
     }
   }
 }

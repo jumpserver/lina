@@ -38,12 +38,6 @@ export default {
           ]
         ],
         [
-          this.$t('setting.Ops'),
-          [
-            'WINDOWS_SSH_DEFAULT_SHELL'
-          ]
-        ],
-        [
           this.$t('setting.Perm'),
           [
             'PERM_SINGLE_ASSET_TO_UNGROUP_NODE',

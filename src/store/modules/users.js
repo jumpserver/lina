@@ -2,6 +2,8 @@ import { getProfile as apiGetProfile, logout } from '@/api/users'
 import { getCurrentOrgLocal, getTokenFromCookie, saveCurrentOrgLocal } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
+import orgUtil from '@/utils/org'
+import store from '@/store'
 
 const _ = require('lodash')
 
@@ -131,6 +133,17 @@ const actions = {
   },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
+  },
+  enterSettingOrg({ commit }) {
+    const systemOrg = { id: orgUtil.SYSTEM_ORG_ID, name: 'SystemSetting' }
+    commit('SET_CURRENT_ORG', systemOrg)
+  },
+  leaveSettingOrg({ commit }) {
+    const preOrg = store.state.users.preOrg
+    if (!preOrg) {
+      return
+    }
+    commit('SET_CURRENT_ORG', preOrg)
   },
   setPreOrg({ commit }, data) {
     commit('SET_PRE_ORG', data)

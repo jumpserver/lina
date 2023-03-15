@@ -29,9 +29,10 @@ export const filterSelectValues = (values) => {
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
+  const platformType = vm?.$route.query.platform_type
   return {
     address: {
-      rules: [rules.IpCheck, rules.specialEmojiCheck]
+      rules: [rules.specialEmojiCheck]
     },
     protocols: {
       component: ProtocolSelector,
@@ -58,12 +59,20 @@ export const assetFieldsMeta = (vm) => {
     platform: {
       el: {
         multiple: false,
-        disabled: true,
         ajax: {
-          url: '/api/v1/assets/platforms/',
+          url: `/api/v1/assets/platforms/?type=${platformType}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
+        }
+      },
+      on: {
+        change: ([event], updateForm) => {
+          const pk = event.pk
+          const url = window.location.href
+          const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
+          window.location.href = newURL
+          setTimeout(() => vm.init(), 100)
         }
       }
     },

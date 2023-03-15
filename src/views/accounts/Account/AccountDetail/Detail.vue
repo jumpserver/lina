@@ -36,7 +36,7 @@ export default {
   },
   data() {
     const vm = this
-    const filterSuFrom = ['database', 'device', 'cloud', 'web']
+    const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
 
     return {
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
@@ -158,7 +158,7 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
+            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value) || filterSuFrom.includes(vm.object?.asset?.type?.value)
           },
           callbacks: Object.freeze({
             change: (value) => {
