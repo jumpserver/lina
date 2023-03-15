@@ -24,7 +24,7 @@ export default {
     ]),
     expireMsg() {
       // 用户来源不是Local时不显示密码过期提示
-      if (this.currentUser.source !== 'local') {
+      if (this.currentUser.source.value !== 'local') {
         return false
       }
       const intervalTime = this.getIntervalDays(this.currentUser.date_password_last_updated)
