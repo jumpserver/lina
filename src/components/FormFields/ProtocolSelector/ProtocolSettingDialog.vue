@@ -54,7 +54,9 @@ export default {
         sftp_home: '/tmp',
         username_selector: '#username',
         password_selector: '#password',
-        submit_selector: '.btn-submit'
+        submit_selector: '.btn-submit',
+        security: 'any',
+        console: false
       },
       loading: true,
       form: {},
