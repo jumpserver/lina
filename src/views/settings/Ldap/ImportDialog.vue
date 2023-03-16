@@ -18,7 +18,7 @@
       <div slot="footer">
         <span class="org-select">
           <span class="label">{{ $tc('common.ImportOrg') }}：</span>
-          <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
+          <Select2 ref="select2" v-model="select2.value" v-bind="select2" popper-class="select-org-dropdown" />
         </span>
         <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
         <el-button
@@ -156,6 +156,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-select-dropdown.select-org-dropdown {
+  max-width: 300px!important;
+}
+</style>
 
 <style scoped lang="scss">
   .org-select {
