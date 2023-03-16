@@ -80,7 +80,7 @@ export default {
     }
   },
   data() {
-    const protocols = this.asset.protocols.map(i => i.name).toString()
+    const protocols = this.asset?.protocols?.map(i => i.name).toString() || ''
     return {
       isShowCreate: false,
       accountsSelected: [],
