@@ -8,6 +8,7 @@
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      :category="category"
     />
     <GatewayDialog
       :cell="GatewayCell"
