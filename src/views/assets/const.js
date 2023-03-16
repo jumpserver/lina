@@ -3,7 +3,7 @@ import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components/FormFields'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
   if (!values) return
@@ -19,7 +19,7 @@ export const filterSelectValues = (values) => {
         const inputValue = { name, value }
         selects.push(inputValue)
       } else {
-        Message.error(i18n.t('assets.LabelInputFormatValidation'))
+        message.error(i18n.t('assets.LabelInputFormatValidation'))
       }
     }
   })

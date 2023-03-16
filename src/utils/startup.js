@@ -3,7 +3,7 @@ import store from '@/store'
 import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import VueCookie from 'vue-cookie'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
@@ -114,7 +114,7 @@ export async function generatePageRoutes({ to, from, next }) {
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
-    Message.error(error || 'Has Error')
+    message.error(error || 'Has Error')
     Vue.$log.error('Error occur: ', error)
   }
 }
