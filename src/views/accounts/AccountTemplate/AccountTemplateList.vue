@@ -17,7 +17,7 @@ import { ActionsFormatter } from '@/components/TableFormatters'
 import ViewSecret from '@/components/AccountListTable/ViewSecret'
 
 export default {
-  name: 'AccountBackupPlanList',
+  name: 'AccountTemplateList',
   components: {
     GenericListPage,
     ViewSecret
