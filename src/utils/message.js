@@ -1,4 +1,4 @@
-// 重置message，防止重复点击重复弹出message弹框了
+// 重置message，防止重复点击重复弹出message弹框
 import { Message as elMessage } from 'element-ui'
 
 let messageDom = null
