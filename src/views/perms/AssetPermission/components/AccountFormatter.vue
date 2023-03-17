@@ -36,6 +36,7 @@
       :title="$tc('accounts.AccountTemplate')"
       :visible.sync="showAccountTemplateDialog"
       @confirm="handleAccountTemplateConfirm"
+      @cancel="handleAccountTemplateCancel"
     >
       <ListTable ref="templateTable" v-bind="accountTemplateTable" />
     </Dialog>
@@ -178,6 +179,9 @@ export default {
       }
       this.choicesSelected = choicesSelected
       this.specAccountsInput = specAccountsInput
+    },
+    handleAccountTemplateCancel() {
+      this.showAccountTemplateDialog = false
     },
     handleAccountTemplateConfirm() {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows
