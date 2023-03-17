@@ -438,6 +438,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "ServerError": "服务器错误",
     "CommunityEdition": "社区版",
     "EnterpriseEdition": "企业版",
     "Product": "产品",
