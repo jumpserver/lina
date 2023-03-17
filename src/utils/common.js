@@ -1,3 +1,4 @@
+import i18n from '@/i18n/i18n'
 const _ = require('lodash')
 const moment = require('moment')
 
@@ -241,7 +242,12 @@ export function getDayFuture(days, now) {
 
 export function getErrorResponseMsg(error) {
   let msg = ''
-  const data = error.response && error.response.data || error
+  let data = ''
+  if (error.response.status === 500) {
+    data = i18n.t('common.ServerError')
+  } else {
+    data = error.response && error.response.data || error
+  }
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
   } else if (data && data['non_field_errors']) {
