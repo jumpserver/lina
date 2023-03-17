@@ -45,3 +45,18 @@ export function saveCurrentOrgLocal(username, org) {
   localStorage.setItem(key, JSON.stringify(org))
   VueCookie.set('X-JMS-ORG', org.id)
 }
+
+export function setPreOrgLocal(username, org) {
+  const key = 'PRE_ORG_' + username
+  localStorage.setItem(key, JSON.stringify(org))
+}
+
+export function getPreOrgLocal(username) {
+  const key = 'PRE_ORG_' + username
+  const value = localStorage.getItem(key)
+  try {
+    return JSON.parse(value)
+  } catch (e) {
+    return null
+  }
+}
