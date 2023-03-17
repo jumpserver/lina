@@ -1,8 +1,10 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
-import { getCurrentOrgLocal, getTokenFromCookie, saveCurrentOrgLocal } from '@/utils/auth'
+import {
+  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
+} from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
-import orgUtil from '@/utils/org'
+import orgUtil, { SYSTEM_ORG_ID } from '@/utils/org'
 import store from '@/store'
 
 const _ = require('lodash')
@@ -48,6 +50,7 @@ const mutations = {
     })
     state.auditOrgs = profile['audit_orgs']
     state.currentOrg = getCurrentOrgLocal(profile.username)
+    state.preOrg = getPreOrgLocal(profile.username)
   },
   SET_USING_ORGS: (state, orgs) => {
     state.usingOrgs = orgs
@@ -67,8 +70,9 @@ const mutations = {
     state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
-    if (state.currentOrg?.name !== 'System') {
+    if (state.currentOrg?.id !== SYSTEM_ORG_ID) {
       state.preOrg = state.currentOrg
+      setPreOrgLocal(state.username, state.currentOrg)
     }
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
