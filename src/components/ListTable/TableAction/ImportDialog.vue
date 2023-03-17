@@ -93,6 +93,10 @@ export default {
     canImportUpdate: {
       type: [Boolean, Function],
       default: false
+    },
+    reloadTable: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -150,6 +154,7 @@ export default {
   methods: {
     closeDialog() {
       this.showImportDialog = false
+      this.reloadTable()
     },
     cancelUpload() {
       this.showTable = false

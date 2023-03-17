@@ -1,7 +1,7 @@
 <template>
   <div>
     <ExportDialog :selected-rows="selectedRows" v-bind="exportOptions" v-on="$listeners" />
-    <ImportDialog :selected-rows="selectedRows" v-bind="importOptions" v-on="$listeners" />
+    <ImportDialog :selected-rows="selectedRows" v-bind="importOptions" :reload-table="reloadTable" v-on="$listeners" />
   </div>
 </template>
 
@@ -27,6 +27,10 @@ export default {
     importOptions: {
       type: Object,
       default: () => ({})
+    },
+    reloadTable: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {

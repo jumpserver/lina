@@ -5,6 +5,7 @@
       :selected-rows="selectedRows"
       :export-options="iExportOptions"
       :import-options="iImportOptions"
+      :reload-table="reloadTable"
       v-bind="$attrs"
     />
   </div>
