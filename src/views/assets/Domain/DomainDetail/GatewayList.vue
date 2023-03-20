@@ -84,7 +84,7 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatterArgs: {
-              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id }},
+              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id, platform_type: 'linux' }},
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
@@ -93,7 +93,7 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.visible = true
@@ -128,7 +128,8 @@ export default {
         createRoute: {
           name: 'GatewayCreate',
           query: {
-            domain: this.object.id
+            domain: this.object.id,
+            platform_type: 'linux'
           }
         }
       },

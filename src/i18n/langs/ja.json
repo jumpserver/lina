@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "HistoryDate": "历史日期",
+    "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
     "HistoryPassword": "履歴パスワード",
     "PasswordRecord": "パスワードレコード",
     "AccountHistoryHelpMessage": "現在のアカウントの履歴バージョンを記録する",
@@ -76,8 +78,10 @@
       "AddSystemUser": "システムユーザーを追加"
     },
     "AccountPush": {
+      "WindowsPushHelpText": "windows アセットはプッシュキーをサポートしていません",
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
+      "AccountPushUpdate": "アカウントプッシュ更新",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
@@ -197,6 +201,9 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
+    "ImportMessage": "ミラータイプのページにデータをインポートしてください",
+    "PushAccount": "アカウント情報をプッシュ",
     "AuthUsername": "ユーザー名を使用した認証",
     "Secure": "安全である",
     "AssetBulkUpdateTips": "ネットワークデバイス、クラウドサービス、Web、一括更新ネットワークドメインはサポートされていません",
@@ -279,6 +286,7 @@
     "Domain": "ドメイン",
     "DomainDetail": "ドメインの詳細",
     "DomainHelpMessage": "ドメイン機能は、一部の環境 (ハイブリッドクラウドなど) が直接接続できないことを解決するために追加された機能で、ゲートウェイサーバを介してジャンプ登録を行うのが原理です。JMS => ドメインゲートウェイ => ターゲット資産",
+    "WebHelpMessage": "Web タイプ資産はリモートアプリケーションに依存しており、システム設定のリモートアプリケーションでパブリッシャを構成してください。",
     "FullName": "フルネーム",
     "Gateway": "ゲートウェイ",
     "GatewayProtocolHelpText": "SSHゲートウェイ、プロキシSSH、RDP、VNCをサポート",
@@ -433,7 +441,9 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
+    "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
     "About": "について",
     "PermissionCompany": "授权公司",
@@ -496,6 +506,7 @@
     "TableColSettingInfo": "表示したいリストの詳細を選択してください。",
     "Add": "追加",
     "TemplateAdd": "テンプレートの追加",
+    "TemplateHelpText": "テンプレートを選択してアカウントを追加すると、資産の下では発生しないアカウントが自動的に作成され、プッシュされます",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
     "AddFailMsg": "追加に失敗しました",
@@ -774,6 +785,10 @@
     "DisabledUser": "無効",
     "InActiveAsset": "最近登録されていません",
     "InActiveUser": "最近登録していない",
+    "LoginFailed": "ログインに失敗",
+    "LoginSucceeded": "ログイン成功",
+    "DangerCommand": "危険命令",
+    "SafeCommand": "セキュリティ命令",
     "LatestSessions": "最近の登録記録",
     "LatestSessions10": "過去10回の登録",
     "LatestTop10": "トップ10",
@@ -830,7 +845,12 @@
     "Weekly": "週ごと"
   },
   "ops": {
-    "StatusGreen": "最近調子がいい\n",
+    "Save": "保存＃ホゾン＃",
+    "Reset": "リストア",
+    "SystemError": "システムエラー",
+    "RunasHelpText": "スクリプトを実行するユーザー名を入力",
+    "RunasPolicyHelpText": "現在の資産にこの実行ユーザーが存在しない場合にアカウント選択ポリシーを実行することを示します",
+    "StatusGreen": "最近調子がいい",
     "StatusRed": "最後のタスクの実行に失敗しました",
     "StatusYellow": "最近の存在の実行に失敗しました",
     "RunAgain": "再実行",
@@ -953,6 +973,7 @@
     "FailedAsset": "失敗したアセット",
     "AdhocDetail": "コマンド詳細",
     "RequiredContent": "コマンドを入力してください",
+    "RequiredRunas": "実行ユーザーを入力してください",
     "DateFinished": "完了時間",
     "DeleteFile": "ファイルの削除",
     "AssetAmount": "資産",
@@ -985,7 +1006,7 @@
     "ManualInput": "手動入力",
     "SameAccount": "同じ名前のアカウント",
     "SpecifyAccounts": "入力の指定",
-    "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: ユーザー名でアカウントを指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
+    "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
     "Input": "入力",
     "permAccount": "認定アカウント",
     "Actions": "アクション",
@@ -1074,6 +1095,7 @@
     "TicketFlowUpdate": "承認フローの更新",
     "Accounts": "アカウント管理",
     "AssetAccount": "資産アカウント",
+    "AssetAccountDetail": "資産アカウント詳細",
     "AccountTemplate": "アカウントテンプレート",
     "CreateAccountTemplate": "アカウントテンプレートの作成",
     "UpdateAccountTemplate": "アカウントテンプレートの更新",

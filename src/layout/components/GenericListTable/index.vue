@@ -1,5 +1,5 @@
 <template>
-  <ListTable ref="ListTable" v-bind="$attrs" v-on="$listeners" />
+  <ListTable ref="ListTable" class="list-table" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>

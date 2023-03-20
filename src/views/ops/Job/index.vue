@@ -9,7 +9,6 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
-import { mapGetters } from 'vuex'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -80,7 +79,7 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: this.$hasPerm('ops.change_job'),
+              canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
@@ -89,12 +88,14 @@ export default {
                 {
                   title: this.$t('ops.Run'),
                   name: 'run',
-                  can: this.$hasPerm('ops.add_jobexecution'),
+                  can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    const params = JSON.parse(row.parameters_define)
-                    if (Object.keys(params).length > 0) {
-                      this.item = row
-                      this.showJobRunDialog = true
+                    if (row?.use_parameter_define && row?.parameters_define) {
+                      const params = JSON.parse(row.parameters_define)
+                      if (Object.keys(params).length > 0) {
+                        this.item = row
+                        this.showJobRunDialog = true
+                      }
                     } else {
                       this.runJob(row)
                     }
@@ -132,9 +133,6 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     runJob(row, parameters) {

@@ -20,13 +20,13 @@ export default {
         columnsExclude: ['password_rules'],
         columns: [
           'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'actions'
+          'periodic_display', 'executed_amount', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'periodic_display', 'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -92,8 +92,11 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('accounts.add_changesecretautomation'),
+                  can: ({ row }) => {
+                    return row.is_active && vm.$hasPerm('accounts.add_changesecretexection')
+                  },
                   type: 'info',
+                  disabled: ({ row }) => !row.is_active,
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/change-secret-executions/`,

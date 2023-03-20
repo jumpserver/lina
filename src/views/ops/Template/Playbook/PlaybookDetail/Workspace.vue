@@ -78,6 +78,7 @@ export default {
             type: 'button',
             align: 'left',
             icon: 'fa fa-save',
+            tip: this.$tc('ops.Save'),
             el: {
               type: 'primary'
             },
@@ -88,7 +89,8 @@ export default {
           reset: {
             type: 'button',
             align: 'left',
-            icon: 'fa fa-refresh',
+            icon: 'fa fa-undo',
+            tip: this.$tc('ops.Reset'),
             el: {
               type: 'primary'
             },
@@ -207,7 +209,7 @@ export default {
       if (!node) {
         return
       }
-      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('DeleteFile'), {
+      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('ops.Delete'), {
         confirmButtonText: this.$tc('ops.Confirm'),
         cancelButtonText: this.$tc('ops.Cancel'),
         type: 'warning'

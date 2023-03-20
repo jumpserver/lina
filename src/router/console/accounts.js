@@ -15,7 +15,7 @@ export default [
       {
         path: '',
         name: 'AssetAccountList',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
+        component: () => import('@/views/accounts/Account/AccountList.vue'),
         meta: {
           title: i18n.t('route.AssetAccount'),
           app: 'accounts',
@@ -24,9 +24,9 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountDetail/index.vue'),
+        component: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
         name: 'AssetAccountDetail',
-        meta: { title: i18n.t('route.AssetAccount') },
+        meta: { title: i18n.t('route.AssetAccountDetail') },
         hidden: true
       }
     ]
@@ -307,7 +307,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/index.vue'),
         name: 'AccountBackupList',
         meta: {
           title: i18n.t('accounts.AccountBackup.AccountBackup'),
@@ -316,7 +316,7 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
         meta: {
           title: i18n.t('accounts.AccountBackup.AccountBackupCreate'),
@@ -326,7 +326,7 @@ export default [
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
         meta: {
           title: i18n.t('accounts.AccountBackup.AccountBackupUpdate'),
@@ -336,21 +336,21 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
         name: 'AccountBackupPlanDetail',
         meta: { title: i18n.t('accounts.AccountBackup.AccountBackup') },
         hidden: true
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue'),
         name: 'AccountBackupPlanExecutionList',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionDetail',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true

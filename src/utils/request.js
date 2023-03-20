@@ -4,11 +4,11 @@ import { getTokenFromCookie } from '@/utils/auth'
 import { getErrorResponseMsg } from '@/utils/common'
 import { refreshSessionIdAge } from '@/api/users'
 import { MessageBox } from 'element-ui'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
-import { DEFAULT_ORG_ID } from '@/utils/org'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 
 // create an axios instance
 const service = axios.create({
@@ -25,7 +25,7 @@ function beforeRequestAddToken(config) {
   const queryOrgId = router.currentRoute.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
   let orgId = queryOrgId || storeOrgId
-  if (!store.getters.publicSettings?.XPACK_ENABLED) {
+  if (!store.getters.publicSettings?.XPACK_ENABLED && orgId !== SYSTEM_ORG_ID) {
     orgId = DEFAULT_ORG_ID
   }
   if (orgId) {
@@ -93,7 +93,7 @@ export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
     const msg = responseErrorMsg || error.message
-    Message({
+    message({
       message: msg,
       type: 'error',
       duration: 5 * 1000

@@ -33,7 +33,7 @@
 
 <script>
 import DataTable from '@/components/DataTable'
-import { sleep, getUpdateObjURL } from '@/utils/common'
+import { getUpdateObjURL, sleep } from '@/utils/common'
 import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 
@@ -211,11 +211,18 @@ export default {
           const itemColData = d[prop]
           if (typeof itemColData === 'boolean') {
             return 5 // boolean is 5 characters long 并且 boolean.length 是 undefined
+          } else if (typeof itemColData === 'number') {
+            return itemColData.toString().length
+          } else if (typeof itemColData === 'string') {
+            return itemColData.length
+          } else if (typeof itemColData === 'object') {
+            if (!itemColData || itemColData.length === 0) {
+              return 0
+            } else {
+              return JSON.stringify(itemColData).length
+            }
           }
-          if (typeof itemColData !== 'number' && (!itemColData || !itemColData.length)) {
-            return 0
-          }
-          return itemColData.length
+          return 0
         })
         let colMaxWidth = Math.max(...dataItemLens) * 10
         if (colMaxWidth === 0) {
@@ -228,6 +235,7 @@ export default {
           label: item[0],
           minWidth: colMaxWidth + 'px',
           formatter: EditableInputFormatter,
+          showOverflowTooltip: true,
           formatterArgs: {
             onEnter: ({ row, col, oldValue, newValue }) => {
               const prop = col.prop
@@ -431,7 +439,6 @@ export default {
 .importTable >>> .cell {
   min-height: 20px;
   height: 100%;
-  overflow: auto;
   max-height: 160px;
 }
 

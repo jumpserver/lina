@@ -108,6 +108,7 @@ export default {
             name: this.$t('ops.runAs'),
             align: 'left',
             value: 'root',
+            tip: this.$tc('ops.RunasHelpText'),
             el: {
               autoComplete: true
             },
@@ -121,6 +122,7 @@ export default {
             name: this.$t('ops.RunasPolicy'),
             align: 'left',
             value: 'skip',
+            tip: this.$tc('ops.RunasPolicyHelpText'),
             options: [
               {
                 label: this.$tc('ops.Skip'),
@@ -364,6 +366,10 @@ export default {
       }
       if (this.command.length === 0) {
         this.$message.error(this.$tc('ops.RequiredContent'))
+        return
+      }
+      if (!this.runas) {
+        this.$message.error(this.$tc('ops.RequiredRunas'))
         return
       }
 

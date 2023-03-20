@@ -12,7 +12,7 @@ else
 fi
 
 function change_version() {
-  sedi "s@Version <strong>.*</strong>@Version <strong>${VERSION}</strong>@g" "${project_dir}/src/layout/components/Footer/index.vue" || return 2
+  sedi "s@version-dev@${VERSION}@g" "${project_dir}/src/layout/components/NavHeader/About.vue" || return 2
 }
 
 function install_deps() {

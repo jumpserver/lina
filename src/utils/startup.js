@@ -3,7 +3,7 @@ import store from '@/store'
 import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import VueCookie from 'vue-cookie'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
@@ -80,6 +80,11 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     Vue.$log.error('Current org is null or not a object: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
+  if (currentOrg.name === 'SystemSetting') {
+    const preOrg = store.getters.preOrg
+    await orgUtil.changeOrg(preOrg)
+    return
+  }
   if (!orgUtil.hasCurrentOrgPermission()) {
     Vue.$log.error('Not has current org permission: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
@@ -114,7 +119,7 @@ export async function generatePageRoutes({ to, from, next }) {
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
-    Message.error(error || 'Has Error')
+    message.error(error || 'Has Error')
     Vue.$log.error('Error occur: ', error)
   }
 }

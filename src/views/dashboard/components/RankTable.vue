@@ -44,9 +44,10 @@ export default {
     }
   },
   data() {
+    const days = localStorage.getItem('dashboardDays') || '7'
     return {
       tableData: [],
-      tableUrl: this.config.url + `&days=1`
+      tableUrl: this.config.url + `&days=${days}`
     }
   },
   created() {
@@ -61,6 +62,7 @@ export default {
     onChange(val) {
       this.tableUrl = this.config.url + `&days=${val}`
       this.getList()
+      localStorage.setItem('dashboardDays', val)
     }
   }
 }

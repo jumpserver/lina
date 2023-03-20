@@ -29,6 +29,7 @@ import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable'
+import { getDayEnd, getDaysAgo } from '@/utils/common'
 
 export default {
   name: 'ListTable',
@@ -51,10 +52,21 @@ export default {
     }
   },
   data() {
+    let extraQuery = {}
+    if (this.headerActions.hasDatePicker) {
+      extraQuery = {
+        date_from: getDaysAgo(7).toISOString(),
+        date_to: getDayEnd().toISOString()
+      }
+      this.headerActions.datePicker = Object.assign({
+        dateStart: extraQuery.date_from,
+        dateEnd: extraQuery.date_to
+      }, this.headerActions.datePicker)
+    }
     return {
       selectedRows: [],
       init: false,
-      extraQuery: {}
+      extraQuery: extraQuery
     }
   },
   computed: {

@@ -1,8 +1,8 @@
 <template>
   <Dialog
     v-if="detailVisible"
-    :show-confirm="false"
     :show-cancel="false"
+    :show-confirm="false"
     :title="title"
     :visible.sync="detailVisible"
   >
@@ -13,22 +13,21 @@
       <div v-else>
         <el-table
           :data="diff"
-          height="500"
-          style="width: 100%"
+          class="diffTable"
         >
           <el-table-column
-            :label="this.$tc('audits.ChangeField')"
+            :label="$tc('audits.ChangeField')"
             :prop="fieldName"
             show-overflow-tooltip
             width="100"
           />
           <el-table-column
-            :label="this.$tc('audits.BeforeChange')"
+            :label="$tc('audits.BeforeChange')"
             :prop="leftKeyName"
             show-overflow-tooltip
           />
           <el-table-column
-            :label="this.$tc('audits.AfterChange')"
+            :label="$tc('audits.AfterChange')"
             :prop="rightKeyName"
             show-overflow-tooltip
           />
@@ -66,7 +65,7 @@ export default {
   },
   data() {
     return {
-      diff: '',
+      diff: [],
       detailVisible: false
     }
   },
@@ -84,7 +83,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .el-tag {
     width: 100%;
     white-space: normal;
@@ -93,5 +92,14 @@ export default {
 
   .el-table::before {
     background-color: inherit;
+  }
+
+  .diffTable {
+    width: 100%;
+    max-height: 80vh;
+
+    & >>> td {
+      padding: 5px 0 !important;
+    }
   }
 </style>

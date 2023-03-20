@@ -9,10 +9,10 @@
   >
     <span class="announcement-main">{{ announcement.content }}</span>
     <span v-if="announcement.link">
-      <el-link :href="announcement.link" target="_blank" class="link-more">
+      <el-link :href="announcement.link" target="_blank" type="info" class="link-more">
         {{ $t('common.ViewMore') }}
       </el-link>
-      <i class="fa fa-external-link" />
+      <i class="fa fa-external-link icon" />
     </span>
   </el-alert>
 </template>
@@ -67,5 +67,7 @@ export default {
   margin-left: 10px;
   border-bottom: solid 1px;
 }
-
+.icon {
+  vertical-align: text-bottom;
+}
 </style>

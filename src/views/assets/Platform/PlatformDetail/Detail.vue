@@ -80,7 +80,7 @@ export default {
     updateProtocols() {
       const url = `/api/v1/assets/platforms/${this.object.id}/`
       this.$axios.patch(url, { protocols: this.object.protocols }).then(() => {
-        this.$message.success(this.$tc('common.UpdateSuccess'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },
     async getTypeConstraints() {
@@ -94,6 +94,7 @@ export default {
       const vm = this
       const { object } = this
       const suEnabledDisabled = ['database', 'device']
+      const domainEnabledDisabled = ['cloud', 'web']
       const quickActions = [
         {
           title: this.$t('assets.DomainEnabled'),
@@ -101,7 +102,10 @@ export default {
           attrs: {
             label: this.$t('common.Update'),
             model: object['domain_enabled'],
-            disabled: (object.internal || !vm.$hasPerm('assets.change_platform'))
+            disabled: (
+              object.internal || !vm.$hasPerm('assets.change_platform') ||
+              domainEnabledDisabled.includes(object.category?.value)
+            )
           },
           callbacks: Object.freeze({
             change: (val) => {

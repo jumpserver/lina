@@ -51,6 +51,13 @@
           </el-collapse-item>
         </el-collapse>
       </IBox>
+      <IBox
+        v-if="object.summary.error"
+        type="danger"
+        :title="$tc('ops.SystemError') "
+      >
+        {{ object.summary.error }}
+      </IBox>
     </el-col>
   </el-row>
 </template>

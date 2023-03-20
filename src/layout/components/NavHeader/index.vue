@@ -35,7 +35,7 @@
           <Logo v-if="showLogo" :collapse="false" />
         </div>
       </li>
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 21px">
+      <li v-if="showOrganize()" class="left-item" style="margin-left: 21px; vertical-align: middle;">
         <Organization class="organization" />
       </li>
     </ul>
@@ -109,7 +109,7 @@ export default {
       .left-item {
         line-height: $header-height;
         display: inline-block;
-        vertical-align: middle;
+        vertical-align: top;
 
         & > > > .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;

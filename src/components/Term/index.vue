@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative;">
-    <div v-if="showToolBar" style="position: absolute;z-index: 99;right: 4px;margin-top: 4px">
+    <div v-if="showToolBar" class="actions">
       <div
         v-for="(item,index) in toolbar"
         :key="index"
@@ -55,14 +55,14 @@ export default {
       toolbar: [
         {
           tip: this.$tc('ops.ScrollToTop'),
-          icon: 'fa fa-upload',
+          icon: 'fa fa-arrow-up',
           callback: () => {
             this.xterm.scrollToTop()
           }
         },
         {
           tip: this.$tc('ops.ScrollToBottom'),
-          icon: 'fa fa-download',
+          icon: 'fa fa-arrow-down',
           callback: () => {
             this.xterm.scrollToBottom()
           }
@@ -105,6 +105,13 @@ export default {
 .xterm {
   padding-left: 5px;
   background-color: #FFFFFF;
+}
+
+.actions {
+  text-align: right;
+  background-color: #FFF;
+  padding-right: 5px;
+  padding-top: 2px
 }
 
 .el-button {

@@ -55,7 +55,7 @@ export default {
       component: () => import('@/views/settings/Message'),
       meta: {
         title: i18n.t('setting.MessageSub'),
-        icon: 'message',
+        icon: 'remind',
         permissions: ['settings.change_systemmsgsubscription']
       }
     },
@@ -207,7 +207,7 @@ export default {
       meta: {
         title: i18n.t('setting.Applets'),
         app: 'terminal',
-        permissions: ['settings.change_terminal']
+        permissions: ['terminal.view_applet']
       },
       children: [
         {
@@ -217,7 +217,7 @@ export default {
           meta: {
             title: i18n.t('setting.Applets'),
             icon: 'application',
-            permissions: ['settings.change_terminal']
+            permissions: ['terminal.view_applet']
           }
         },
         {
@@ -368,8 +368,8 @@ export default {
       component: empty,
       meta: {
         title: i18n.t('route.TaskList'),
-        icon: 'tools',
-        permissions: ['ops.view_celerytask | ops.view_taskmonitor']
+        icon: 'tasks',
+        permissions: ['ops.view_celerytask']
       },
       children: [
         {

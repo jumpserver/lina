@@ -9,11 +9,11 @@
 
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, UploadSecret } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange } from '@/components/DataForm/rules'
+import { RequiredChange, Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -32,6 +32,11 @@ export default {
     account: {
       type: Object,
       default: null
+    },
+    // 默认组件密码加密
+    encryptPassword: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -62,6 +67,7 @@ export default {
       ],
       fieldsMeta: {
         assets: {
+          rules: [Required],
           component: AssetSelect,
           label: this.$t('assets.Asset'),
           el: {
@@ -112,7 +118,7 @@ export default {
             multiple: false,
             clearable: true,
             ajax: {
-              url: `/api/v1/accounts/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
+              url: `/api/v1/accounts/accounts/su-from-accounts/?account=${this.account?.id || ''}&asset=${this.asset?.id || ''}`,
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }
@@ -126,10 +132,7 @@ export default {
         },
         ssh_key: {
           label: this.$t('assets.PrivateKey'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         passphrase: {
@@ -139,19 +142,13 @@ export default {
         },
         token: {
           label: this.$t('assets.Token'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
         api_key: {
           id: 'api_key',
           label: this.$t('assets.AccessKey'),
-          el: {
-            type: 'textarea',
-            rows: 4
-          },
+          component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'api_key'
         },
         secret_type: {
@@ -159,9 +156,10 @@ export default {
           options: []
         },
         push_now: {
+          helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('assets.push_assetaccount')
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
           }
         }
       },
@@ -218,26 +216,21 @@ export default {
       })
     },
     controlShowField() {
-      let privileged = ['privileged']
+      const privileged = ['privileged']
       let suFrom = ['su_from']
-      const filterSuFrom = ['database', 'device', 'cloud', 'web']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
       const asset = this?.asset || {}
-      if (asset?.type?.value === 'website') {
-        privileged = []
-      }
-      if (filterSuFrom.includes(asset?.category?.value)) {
+      if (filterSuFrom.includes(asset?.category?.value) || filterSuFrom.includes(asset?.type?.value)) {
         suFrom = []
       }
-
       return [...privileged, ...suFrom]
     },
     confirm(form) {
       const secretType = form.secret_type || ''
       if (secretType !== 'password') {
         form.secret = form[secretType]
-        delete form[secretType]
       }
-      form.secret = encryptPassword(form.secret)
+      form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {
         delete form['secret']
       }

@@ -34,7 +34,7 @@
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$tc('assets.Action')" required>
+          <el-form-item :label="$tc('assets.Action')">
             <BasicTree
               v-model="requestForm.actions"
               :tree="treeNodes"
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { formatTime, getDateTimeStamp } from '@/utils/index'
+import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
@@ -57,6 +57,7 @@ import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFo
 import Select2 from '@/components/FormFields/Select2'
 import BasicTree from '@/components/FormFields/BasicTree'
 import IBox from '@/components/IBox'
+import { AccountLabelMapper } from '@/views/perms/const'
 
 export default {
   name: '',
@@ -127,7 +128,7 @@ export default {
         },
         {
           key: this.$tc('perms.Account'),
-          value: object.apply_accounts.join(', ')
+          value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
         },
         {
           key: this.$tc('assets.Action'),
@@ -169,7 +170,7 @@ export default {
         },
         {
           key: this.$tc('perms.Account'),
-          value: (object.apply_accounts || []).join(', ')
+          value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
         },
         {
           key: this.$tc('assets.Action'),

@@ -40,16 +40,17 @@ import LeftSide from './LeftSide'
 import RightSide from './RightSide'
 import AutoDataSearch from '@/components/AutoDataSearch'
 import DatetimeRangePicker from '@/components/FormFields/DatetimeRangePicker'
+import { getDaysAgo, getDaysFuture } from '@/utils/common'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
-    AutoDataSearch,
     LeftSide,
-    DatetimeRangePicker,
-    RightSide
+    RightSide,
+    AutoDataSearch,
+    DatetimeRangePicker
   },
   props: {
     hasLeftActions: defaultTrue,
@@ -58,7 +59,10 @@ export default {
     hasDatePicker: defaultFalse,
     datePicker: {
       type: Object,
-      default: () => ({})
+      default: () => ({
+        dateStart: getDaysAgo(7).toISOString(),
+        dateEnd: getDaysFuture(1).toISOString()
+      })
     },
     searchConfig: {
       type: Object,

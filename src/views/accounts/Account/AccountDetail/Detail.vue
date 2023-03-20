@@ -1,10 +1,16 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :excludes="excludes" :object="object" />
+      <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
+      <ViewSecret
+        v-if="showViewSecretDialog"
+        :account="object"
+        :url="secretUrl"
+        :visible.sync="showViewSecretDialog"
+      />
     </el-col>
   </el-row>
 </template>
@@ -12,13 +18,15 @@
 <script>
 import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
+import ViewSecret from '@/components/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
     AutoDetailCard,
-    QuickActions
+    QuickActions,
+    ViewSecret
   },
   props: {
     object: {
@@ -28,9 +36,11 @@ export default {
   },
   data() {
     const vm = this
-    const filterSuFrom = ['database', 'device', 'cloud', 'web']
+    const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
 
     return {
+      secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
+      showViewSecretDialog: false,
       quickActions: [
         {
           title: this.$t('common.Activate'),
@@ -73,15 +83,61 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('assets.Test'),
-            disabled: !vm.$hasPerm('assets.test_account')
+            disabled: (
+              !vm.$hasPerm('accounts.verify_account') ||
+              !vm.object.asset.auto_info?.ansible_enabled ||
+              !vm.object.asset.auto_info?.ping_enabled ||
+              this.$store.getters.currentOrgIsRoot
+            )
           },
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
-                `/api/v1/accounts/accounts/${this.object.id}/verify/`,
-                { action: 'test' }
+                `/api/v1/accounts/accounts/tasks/`,
+                {
+                  action: 'test',
+                  accounts: [this.object.id]
+                }
               ).then(res => {
                 openTaskPage(res['task'])
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('assets.PushAccount'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('assets.Push'),
+            disabled: (
+              !vm.$hasPerm('accounts.push_account') ||
+              !vm.object.asset.auto_info?.push_account_enabled ||
+              this.$store.getters.currentOrgIsRoot
+            )
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.post(
+                `/api/v1/accounts/accounts/tasks/`,
+                { action: 'push', accounts: [this.object.id] }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('common.ViewSecret'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.View'),
+            disabled: !vm.$hasPerm('accounts.view_accountsecret')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              vm.showViewSecretDialog = false
+              setTimeout(() => {
+                vm.showViewSecretDialog = true
               })
             }
           })
@@ -102,7 +158,7 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('assets.test_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
+            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value) || filterSuFrom.includes(vm.object?.asset?.type?.value)
           },
           callbacks: Object.freeze({
             change: (value) => {
@@ -112,11 +168,22 @@ export default {
           })
         }
       ],
-      url: `/api/v1/accounts/accounts/${this.object.id}`,
-      excludes: [
-        'asset', 'template', 'privileged', 'secret',
-        'passphrase', 'specific'
-      ]
+      detail: {
+        url: `/api/v1/accounts/accounts/${this.object.id}`,
+        excludes: [
+          'template', 'privileged', 'secret',
+          'passphrase', 'spec_info'
+        ],
+        formatters: {
+          asset: (item, value) => {
+            const route = {
+              name: 'AssetDetail',
+              params: { id: this.object.asset.id }
+            }
+            return <router-link to={route} >{ value }</router-link>
+          }
+        }
+      }
     }
   },
   computed: {
@@ -124,5 +191,5 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 </style>

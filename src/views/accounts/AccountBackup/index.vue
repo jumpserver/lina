@@ -4,6 +4,7 @@
 
 <script>
 import { TabPage } from '@/layout/components'
+
 export default {
   name: 'Index',
   components: {
@@ -18,13 +19,13 @@ export default {
             title: this.$t('accounts.AccountBackup.AccountBackup'),
             name: 'AccountBackupPlanList',
             hidden: !this.$hasPerm('accounts.view_accountbackupautomation'),
-            component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList.vue')
+            component: () => import('@/views/accounts/AccountBackup/AccountBackupList.vue')
           },
           {
             title: this.$t('accounts.AccountBackup.ExecutionList'),
             name: 'AccountBackupPlanExecutionList',
             hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
-            component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionList.vue')
+            component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue')
           }
         ]
       }

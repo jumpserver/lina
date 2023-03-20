@@ -36,7 +36,7 @@ export default {
         apply_date_start: date_start,
         apply_assets: [],
         org_id: '',
-        apply_actions: ['all']
+        apply_actions: [this.$t('perms.all')]
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'org_id']],
@@ -91,7 +91,8 @@ export default {
           }
         },
         apply_accounts: {
-          component: AccountFormatter
+          component: AccountFormatter,
+          el: {}
         },
         org_id: {
           component: Select2,
@@ -105,6 +106,7 @@ export default {
             const fieldsMeta = this.fieldsMeta
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
+            fieldsMeta.apply_accounts.el.oid = form['org_id']
           },
           on: {
             change: ([event], updateForm) => {
@@ -118,6 +120,13 @@ export default {
         }
       },
       cleanFormValue(value) {
+        const apply_actions = value['apply_actions'] || []
+        apply_actions.forEach((item, index) => {
+          if (item === this.$t('perms.all')) {
+            apply_actions[index] = 'all'
+          }
+        })
+
         Object.keys(value).forEach((item, index, arr) => {
           if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
             if (value[item].length < 1) {

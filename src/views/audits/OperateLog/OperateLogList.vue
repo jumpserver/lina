@@ -5,13 +5,12 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <DiffDetail ref="DetailDialog" :title="this.$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo, getDaysFuture } from '@/utils/common'
 import { ActionsFormatter } from '@/components/TableFormatters'
 import DiffDetail from '@/components/Dialog/DiffDetail'
 
@@ -22,9 +21,6 @@ export default {
   },
   data() {
     const vm = this
-    const now = new Date()
-    const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDaysFuture(1, now).toISOString()
     return {
       url: '/api/v1/audits/operate-logs/',
       rowObj: {
@@ -72,7 +68,7 @@ export default {
                   callback: ({ row }) => {
                     vm.loading = true
                     this.$axios.get(
-                      `api/v1/audits/operate-logs/${row.id}/?type=action_detail`
+                      `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`
                     ).then(res => {
                       this.$refs.DetailDialog.show(res.diff)
                     }).finally(() => {
@@ -83,20 +79,12 @@ export default {
               ]
             }
           }
-        },
-        extraQuery: {
-          date_to: dateTo,
-          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true,
-        datePicker: {
-          dateStart: dateFrom,
-          dateEnd: dateTo
-        }
+        hasDatePicker: true
       }
     }
   }

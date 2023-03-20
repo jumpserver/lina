@@ -29,6 +29,7 @@ export default {
       config: {
         url: '/api/v1/assets/hosts/',
         category: 'host',
+        optionInfo: {},
         headerActions: {
           createRoute: 'HostCreate',
           extraActions: [
@@ -54,7 +55,11 @@ export default {
                   {
                     name: 'Test',
                     title: this.$t('common.Test'),
-                    can: this.$hasPerm('assets.test_assetconnectivity'),
+                    can: ({ row }) =>
+                      this.$hasPerm('assets.test_assetconnectivity') &&
+                      !this.$store.getters.currentOrgIsRoot &&
+                      row['auto_info'].ansible_enabled &&
+                      row['auto_info'].ping_enabled,
                     callback: ({ row }) => {
                       if (row.platform.name === 'Gateway') {
                         this.GatewayVisible = true
@@ -74,18 +79,6 @@ export default {
                         })
                       }
                     }
-                  },
-                  {
-                    name: 'View',
-                    title: this.$t(`common.UpdateAssetDetail`),
-                    type: 'primary',
-                    can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
-                    callback: function({ cellValue, tableData, row }) {
-                      return this.$router.push({
-                        name: 'AssetMoreInformationEdit',
-                        params: { id: row.id }
-                      })
-                    }
                   }
                 ]
               }
@@ -93,7 +86,22 @@ export default {
           }
         }
       }
-
+    }
+  },
+  async mounted() {
+    this.config.optionInfo = await this.optionAndGenFields()
+  },
+  methods: {
+    async optionAndGenFields() {
+      const data = await this.$store.dispatch('common/getUrlMeta', { url: this.config.url })
+      const remoteMeta = data.actions['GET'] || {}
+      const remoteMetaFields = remoteMeta['info']?.children || {}
+      const fields = Object.keys(remoteMetaFields)
+      const info = {}
+      for (const name of fields) {
+        info[name] = remoteMetaFields[name].label
+      }
+      return info
     }
   }
 }

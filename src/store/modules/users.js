@@ -1,7 +1,11 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
-import { getCurrentOrgLocal, getTokenFromCookie, saveCurrentOrgLocal } from '@/utils/auth'
+import {
+  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
+} from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
+import orgUtil, { SYSTEM_ORG_ID } from '@/utils/org'
+import store from '@/store'
 
 const _ = require('lodash')
 
@@ -46,6 +50,7 @@ const mutations = {
     })
     state.auditOrgs = profile['audit_orgs']
     state.currentOrg = getCurrentOrgLocal(profile.username)
+    state.preOrg = getPreOrgLocal(profile.username)
   },
   SET_USING_ORGS: (state, orgs) => {
     state.usingOrgs = orgs
@@ -61,10 +66,13 @@ const mutations = {
   ADD_ORG: (state, org) => {
     state.consoleOrgs.push(org)
   },
+  DELETE_ORG: (state, org) => {
+    state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
+  },
   SET_CURRENT_ORG(state, org) {
-    console.log('set pre org:  ', state.currentOrg)
-    if (state.currentOrg?.name !== 'System') {
+    if (state.currentOrg?.id !== SYSTEM_ORG_ID) {
       state.preOrg = state.currentOrg
+      setPreOrgLocal(state.username, state.currentOrg)
     }
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
@@ -92,6 +100,11 @@ const actions = {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
+        if (typeof response !== 'object') {
+          // 后端 middleware 对 API 做了校验，这里返回可能是 302 重定向, response 为 string 类型
+          resolve(response)
+          return
+        }
         commit('SET_PROFILE', response)
         resolve(response)
       }).catch(error => {
@@ -102,6 +115,9 @@ const actions = {
   },
   addAdminOrg({ commit, state }, org) {
     commit('ADD_ORG', org)
+  },
+  deleteAdminOrg({ commit }, org) {
+    commit('DELETE_ORG', org)
   },
   modifyOrg({ commit, state }, org) {
     commit('MODIFY_ORG', org)
@@ -121,6 +137,17 @@ const actions = {
   },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
+  },
+  enterSettingOrg({ commit }) {
+    const systemOrg = { id: orgUtil.SYSTEM_ORG_ID, name: 'SystemSetting' }
+    commit('SET_CURRENT_ORG', systemOrg)
+  },
+  leaveSettingOrg({ commit }) {
+    const preOrg = store.state.users.preOrg
+    if (!preOrg) {
+      return
+    }
+    commit('SET_CURRENT_ORG', preOrg)
   },
   setPreOrg({ commit }, data) {
     commit('SET_PRE_ORG', data)

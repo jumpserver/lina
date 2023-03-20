@@ -47,14 +47,14 @@ export default {
         },
         columnsExclude: [
           'password', 'password_strategy', 'public_key',
-          'is_otp_secret_key_bound', 'mfa_enabled', 'mfa_force_enabled',
-          'is_service_account', 'avatar_url'
+          'is_otp_secret_key_bound', 'mfa_enabled',
+          'mfa_force_enabled', 'is_service_account', 'avatar_url'
         ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'email', 'groups', 'system_roles', 'org_roles',
-            'source', 'is_valid', 'actions'
+            'name', 'username', 'email', 'groups', 'system_roles',
+            'org_roles', 'source', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
@@ -65,11 +65,7 @@ export default {
             width: '100px',
             label: this.$t('users.SystemRoles'),
             formatter: (row) => {
-              const roles = []
-              row['system_roles'].forEach(item => {
-                roles.push(item['display_name'])
-              })
-              return roles.join()
+              return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'system_roles'
@@ -78,16 +74,12 @@ export default {
             width: '100px',
             label: this.$t('users.OrgRoles'),
             formatter: (row) => {
-              const roles = []
-              row['org_roles'].forEach(item => {
-                roles.push(item['display_name'])
-              })
-              return roles.join()
+              return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
             filters: [],
             columnKey: 'org_roles',
             has: () => {
-              return this.$store.getters.hasValidLicense
+              return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
             }
           },
           login_blocked: {

@@ -1,10 +1,14 @@
 <template>
   <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span class="announcement-main" v-html="helpMessage" />
+    </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      :category="category"
     />
     <GatewayDialog
       :cell="GatewayCell"
@@ -24,6 +28,7 @@ import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
+import HostInfoFormatter from '@/components/TableFormatters/HostInfoFormatter'
 
 export default {
   components: {
@@ -52,6 +57,14 @@ export default {
     addExtraMoreActions: {
       type: Array,
       default: () => []
+    },
+    helpMessage: {
+      type: String,
+      default: ''
+    },
+    optionInfo: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -70,6 +83,7 @@ export default {
       if (action === 'Clone') {
         route.query.clone_from = row.id
         route.query.platform = row.platform.id
+        route.query.platform_type = row.type.value
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
@@ -88,7 +102,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columnsExclude: ['spec_info', 'auto_info', 'info'],
+        columnsExclude: ['spec_info', 'auto_info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -107,7 +121,6 @@ export default {
             sortable: true
           },
           platform: {
-            width: '100px',
             sortable: true
           },
           protocols: {
@@ -117,9 +130,19 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-          ip: {
-            sortable: 'custom',
-            width: '140px'
+          info: {
+            label: this.$t('assets.HardwareInfo'),
+            formatter: HostInfoFormatter,
+            formatterArgs: {
+              info: vm?.optionInfo,
+              can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
+              getRoute({ row }) {
+                return {
+                  name: 'AssetMoreInformationEdit',
+                  params: { id: row.id }
+                }
+              }
+            }
           },
           connectivity: connectivityMeta,
           labels_display: {
@@ -139,7 +162,11 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  can: ({ row }) =>
+                    this.$hasPerm('assets.test_assetconnectivity') &&
+                    !this.$store.getters.currentOrgIsRoot &&
+                    row['auto_info'].ansible_enabled &&
+                    row['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true
@@ -246,6 +273,11 @@ export default {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
       return actions
+    }
+  },
+  watch: {
+    optionInfo(iNew) {
+      this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
     }
   }
 }

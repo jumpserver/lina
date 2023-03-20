@@ -11,12 +11,12 @@
     <AssetSelectDialog
       v-if="dialogVisible"
       ref="dialog"
+      :base-node-url="baseNodeUrl"
+      :base-url="baseUrl"
+      :tree-url-query="treeUrlQuery"
       :value="value"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
-      :tree-url-query="treeUrlQuery"
-      :base-url="baseUrl"
-      :base-node-url="baseNodeUrl"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"
@@ -130,21 +130,11 @@ export default {
   padding: 0 0 0 3px;
 
   .tree-table {
-    .search {
-      .el-input__inner {
-        background-color: #f3f3f3;
-      }
-
-      .el-cascader {
-        background-color: #f3f3f3;
-      }
-    }
-
     .left {
       padding: 5px;
 
-      .treebox {
-        height: 70vh;
+      .ztree {
+        height: calc(100vh - 250px) !important;
       }
     }
 
@@ -153,7 +143,7 @@ export default {
     }
 
     .transition-box {
-      padding: 5px;
+      padding: 10px 5px;
     }
   }
 }

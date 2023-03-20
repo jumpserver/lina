@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import getChangeSecretFields from '@/views/accounts/AccountBackupPlan/fields'
+import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 
 export default {
   name: 'AccountBackupPlanUpdate',

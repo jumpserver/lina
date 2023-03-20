@@ -9,6 +9,7 @@ import UploadField from './UploadField'
 import UpdateToken from './UpdateToken'
 import UserPassword from './UserPassword'
 import PasswordInput from './PasswordInput'
+import UploadSecret from './UploadSecret'
 import WeekCronSelect from './WeekCronSelect'
 import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
@@ -25,6 +26,7 @@ export default {
   UploadField,
   UserPassword,
   PasswordInput,
+  UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
   DatetimeRangePicker
@@ -42,6 +44,7 @@ export {
   UploadField,
   UserPassword,
   PasswordInput,
+  UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
   DatetimeRangePicker

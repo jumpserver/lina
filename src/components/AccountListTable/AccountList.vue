@@ -106,14 +106,14 @@ export default {
           app: 'assets',
           resource: 'account'
         },
-        columnsExclude: ['spec_info'],
-        columnsShow: {
-          min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username', 'asset', 'privileged',
-            'secret_type', 'source', 'actions'
-          ]
+        extraQuery: {
+          order: '-date_updated'
         },
+        columnsExclude: ['spec_info'],
+        columns: [
+          'name', 'username', 'asset', 'privileged',
+          'secret_type', 'source', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatter: function(row) {
@@ -141,9 +141,6 @@ export default {
                 return <span>{row.asset.name}</span>
               }
             }
-          },
-          version: {
-            width: '70px'
           },
           secret_type: {
             width: '100px',
@@ -185,6 +182,7 @@ export default {
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    // debugger
                     vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
@@ -208,11 +206,15 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_account'),
+                  can: ({ row }) =>
+                    !this.$store.getters.currentOrgIsRoot &&
+                    this.$hasPerm('accounts.change_account') &&
+                    row.asset['auto_info'].ansible_enabled &&
+                    row.asset['auto_info'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/accounts/accounts/${row.id}/verify/`,
-                      { action: 'test' }
+                      `/api/v1/accounts/accounts/tasks/`,
+                      { action: 'verify', accounts: [row.id] }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -223,7 +225,6 @@ export default {
                   title: this.$t('common.Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    console.log('row: ', row.asset)
                     const data = {
                       ...this.asset,
                       ...row.asset
@@ -270,7 +271,7 @@ export default {
             title: this.$t('common.Add'),
             type: 'primary',
             can: () => {
-              return vm.$hasPerm('accounts.add_account')
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
             callback: async() => {
               await this.getAssetDetail()

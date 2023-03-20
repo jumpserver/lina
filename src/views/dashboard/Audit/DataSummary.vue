@@ -76,24 +76,24 @@ export default {
           &total_count_commands=1
           &total_count_commands_danger=1
         `)
-      const logActive = data.total_count_user_login_success_logs === 0 ? 0 : ((data.total_count_user_login_success_logs / data.total_count_user_login_logs) * 100).toFixed(0)
-      const logTotal = logActive === 100 ? 0 : 100 - logActive
+      const LoginSucceeded = data.total_count_user_login_success_logs === 0 ? 0 : ((data.total_count_user_login_success_logs / data.total_count_user_login_logs) * 100).toFixed(0)
+      const LoginFailed = LoginSucceeded === 100 ? 0 : 100 - LoginSucceeded
       const logs = [
-        { name: this.$t('dashboard.ActiveUser'), value: logActive },
-        { name: this.$t('dashboard.InActiveUser'), value: logTotal }
+        { name: this.$t('dashboard.LoginSucceeded'), value: LoginSucceeded },
+        { name: this.$t('dashboard.LoginFailed'), value: LoginFailed }
       ]
       this.$set(this.logConfig, 'data', logs)
       this.$set(this.logConfig, 'total', data.total_count_user_login_logs)
       this.$set(this.logConfig, 'active', data.total_count_user_login_success_logs)
       this.$set(this.logConfig, 'weekAdd', data.total_count_user_login_success_logs)
 
-      const assetActive = data.total_count_commands_danger === 0 ? 0 : ((data.total_count_commands_danger / data.total_count_commands) * 100).toFixed(0)
-      const assetTotal = assetActive === 100 ? 0 : 100 - assetActive
-      const assets = [
-        { name: this.$t('dashboard.ActiveAsset'), value: assetActive },
-        { name: this.$t('dashboard.InActiveAsset'), value: assetTotal }
+      const dangerCommand = data.total_count_commands_danger === 0 ? 0 : ((data.total_count_commands_danger / data.total_count_commands) * 100).toFixed(0)
+      const SafeCommand = dangerCommand === 100 ? 0 : 100 - dangerCommand
+      const commandCounts = [
+        { name: this.$t('dashboard.DangerCommand'), value: dangerCommand },
+        { name: this.$t('dashboard.SafeCommand'), value: SafeCommand }
       ]
-      this.$set(this.assetConfig, 'data', assets)
+      this.$set(this.assetConfig, 'data', commandCounts)
       this.$set(this.assetConfig, 'total', data.total_count_commands)
       this.$set(this.assetConfig, 'active', data.total_count_commands_danger)
       this.$set(this.assetConfig, 'weekAdd', data.total_count_commands_danger)

@@ -30,7 +30,7 @@
               @click="refreshTable"
             >
               <el-tooltip :content="$tc('common.Refresh')" placement="top">
-                <span>
+                <span style="color: #5e5e5e">
                   <svg-icon icon-class="refresh" style="font-size: 14px;" />
                 </span>
               </el-tooltip>
@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: false
     },
+    asset: {
+      type: Object,
+      default: () => {}
+    },
     accounts: {
       type: Array,
       default: () => ([])
@@ -76,12 +80,13 @@ export default {
     }
   },
   data() {
+    const protocols = this.asset?.protocols?.map(i => i.name).toString() || ''
     return {
       isShowCreate: false,
       accountsSelected: [],
       tableConfig: {
-        url: '/api/v1/accounts/account-templates/',
-        columns: ['name', 'username', 'privileged'],
+        url: `/api/v1/accounts/account-templates/?protocols=${protocols}`,
+        columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -151,9 +156,26 @@ export default {
     hasSelectValue(row) {
       return this.accountsSelected.some(item => item.id === row.id)
     },
+    // 判断是否有相同类型的账号, 有则不允许选择
+    hasSameTypeAccount(row) {
+      const notIdAccounts = this.accounts.filter(i => !i?.id)
+      const needFilterAccounts = [...notIdAccounts, ...this.accountsSelected]
+      const status = needFilterAccounts.some(item => {
+        return row.username === item.username && (
+          row.secret_type.value === item.secret_type ||
+          row.secret_type.value === item.secret_type.value
+        )
+      })
+      if (status) {
+        this.$refs.dataTable.$refs.dataTable.toggleRowSelection(row, false)
+        this.$message.error(this.$t('accounts.SameTypeAccountTip'))
+      }
+      return status
+    },
     addRowToSelect(row) {
       const hasSelectValue = this.hasSelectValue(row)
-      if (!hasSelectValue) {
+      const hasSameTypeAccount = this.hasSameTypeAccount(row)
+      if (!hasSelectValue && !hasSameTypeAccount) {
         this.accountsSelected.push(row)
       }
     },

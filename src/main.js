@@ -19,7 +19,7 @@ import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 import ECharts from 'vue-echarts'
 import service from '@/utils/request'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 import xss from '@/utils/xss'
 
 /**
@@ -60,7 +60,7 @@ Vue.prototype.$axios = service
 window._ = require('lodash')
 // Vue.set(Vue.prototype, '_', _)
 
-Vue.prototype.$message = Message
+Vue.prototype.$message = message
 
 Vue.prototype.$xss = xss
 

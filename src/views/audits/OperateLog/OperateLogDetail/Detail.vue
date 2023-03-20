@@ -2,18 +2,18 @@
   <div>
     <el-row :gutter="20">
       <el-col :md="14" :sm="24">
-        <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+        <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       </el-col>
       <el-col :md="10" :sm="24">
         <QuickActions
           v-if="object.id"
           :actions="quickActions"
-          :title="this.$tc('common.ConvenientOperate')"
+          :title="$tc('common.ConvenientOperate')"
           type="primary"
         />
       </el-col>
     </el-row>
-    <DiffDetail ref="DetailDialog" :title="this.$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.get(
-                `api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
+                `/api/v1/audits/operate-logs/${this.object.id}/?type=action_detail`
               ).then(res => {
                 this.$refs.DetailDialog.show(res.diff)
               })
@@ -67,5 +67,5 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 </style>

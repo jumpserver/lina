@@ -4,22 +4,25 @@
       v-for="(v, k) in filterTags"
       :key="k"
       :disable-transitions="true"
-      :type="tagType"
+      :type="tagType(v)"
       closable
       size="small"
-      @click="handleTagClick(v,k)"
+      @click="handleTagClick(v, k)"
       @close="handleTagClose(v)"
     >
       {{ v }}
     </el-tag>
-    <el-input
+    <component
+      :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
+      :fetch-suggestions="autocomplete"
       :placeholder="this.$t('common.EnterToContinue')"
       class="search-input"
       @blur="focus = false"
       @change="handleConfirm"
       @focus="focus = true"
+      @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
   </div>
@@ -35,25 +38,41 @@ export default {
       default: () => []
     },
     tagType: {
-      type: String,
-      default: 'info'
+      type: Function,
+      default: () => {
+        return 'info'
+      }
     },
     placeholder: {
       type: String,
       default: () => i18n.t('perms.Input')
+    },
+    autocomplete: {
+      type: Function,
+      default: null
     }
   },
   data() {
     return {
       filterTags: this.value,
       focus: false,
-      filterValue: ''
+      filterValue: '',
+      component: this.autocomplete ? 'el-autocomplete' : 'el-input'
+    }
+  },
+  watch: {
+    value(val) {
+      this.filterTags = val
     }
   },
   methods: {
     handleTagClose(tag) {
       this.filterTags.splice(this.filterTags.indexOf(tag), 1)
       this.$emit('change', this.filterTags)
+    },
+    handleSelect(item) {
+      this.filterValue = item.value
+      this.handleConfirm()
     },
     handleConfirm() {
       if (this.filterValue === '') return
@@ -87,24 +106,25 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
+    line-height: 32px;
 
     &:hover {
       border-color: #C0C4CC;
     }
   }
 
-  .search-input > > > .el-input__inner {
+  .search-input >>> .el-input__inner {
     max-width: 100%;
     border: none;
     padding-left: 5px;
   }
 
-  .el-input > > > .el-input__inner {
+  .el-input >>> .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
 
-  .filter-field > > > .el-input__inner {
-    //height: 32px;
+  .filter-field >>> .el-input__inner {
+    height: 32px;
   }
 </style>

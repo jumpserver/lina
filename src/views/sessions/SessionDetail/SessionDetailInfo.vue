@@ -98,7 +98,8 @@ export default {
           },
           callbacks: {
             click: function() {
-              const downloadUrl = `/api/v1/terminal/sessions/${vm.session.id}/replay/download/`
+              const oid = vm.session.org_id || ''
+              const downloadUrl = `/api/v1/terminal/sessions/${vm.session.id}/replay/download/${oid ? '?oid=' + oid : ''}`
               window.open(downloadUrl)
             }
           }

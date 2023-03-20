@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -58,15 +59,25 @@ export default {
           [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
-        cleanFormValue(values) {
-          // Update 的时候
+        performSubmit(validValues) {
+          let url = this.url
           const { id = '' } = this.$route.params
-          if (id) delete values['accounts']
+          const values = _.cloneDeep(validValues)
+          const submitMethod = id ? 'put' : 'post'
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-
-          return values
+          if (id) {
+            url = `${url}${id}/`
+            delete values['accounts']
+          } else {
+            const accounts = values?.accounts || []
+            values.accounts = accounts.map((item) => {
+              item['secret'] = encryptPassword(item['secret'])
+              return item
+            })
+          }
+          return this.$axios[submitMethod](url, values)
         }
       }
     }
@@ -96,15 +107,18 @@ export default {
       return config
     }
   },
-  async created() {
-    try {
-      await this.setInitial()
-      await this.setPlatformConstrains()
-    } finally {
-      this.loading = false
-    }
+  created() {
+    this.init()
   },
   methods: {
+    async init() {
+      try {
+        await this.setInitial()
+        await this.setPlatformConstrains()
+      } finally {
+        this.loading = false
+      }
+    },
     async setInitial() {
       const { defaultConfig } = this
       const { node, platform } = this.$route?.query || {}
@@ -126,7 +140,8 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      this.defaultConfig.fieldsMeta.protocols.el.choices.splice(0, 0, ...platform.protocols)
+      const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
+      protocolChoices.splice(0, protocolChoices.length, ...platform.protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 

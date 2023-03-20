@@ -20,7 +20,7 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'ip_group', 'priority', 'endpoint_display', 'actions'
+            'name', 'ip_group', 'priority', 'endpoint', 'actions'
           ]
         },
         columnsMeta: {

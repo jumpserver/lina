@@ -57,7 +57,7 @@ export default {
       tableConfig: {
         url: this.tableUrl,
         hasTree: true,
-        columnsExclude: ['specific'],
+        columnsExclude: ['spec_info'],
         columnShow: {
           min: ['name', 'address', 'accounts']
         },

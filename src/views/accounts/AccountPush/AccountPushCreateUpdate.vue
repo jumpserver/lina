@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       initial: {
-        is_periodic: true,
+        is_periodic: this.$store.getters.hasValidLicense,
         password_rules: {
           length: 30
         },
@@ -28,13 +28,13 @@ export default {
       encryptedFields: ['secret'],
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
+        [this.$t('xpack.Asset'), ['assets', 'nodes']],
         [
-          this.$t('accounts.AccountChangeSecret.SecretKeyStrategy'),
+          this.$t('assets.Account'),
           [
-            'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy',
-            'ssh_key', 'passphrase'
+            'accounts', 'secret_strategy', 'secret_type', 'secret',
+            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
+            'passphrase'
           ]
         ],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
@@ -64,6 +64,10 @@ export default {
           el: {
             readonly: true
           }
+        },
+        is_periodic: {
+          type: 'switch',
+          disabled: !this.$store.getters.hasValidLicense
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },

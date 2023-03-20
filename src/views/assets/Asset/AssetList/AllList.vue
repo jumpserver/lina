@@ -43,14 +43,18 @@ export default {
       category: 'all',
       treeSetting: {
         url: '/api/v1/assets/assets/',
-        showMenu: true
+        showMenu: !this.$store.getters.currentOrgIsRoot
       },
       tableConfig: {
         url: tableUrl,
         category: 'all'
       },
       headerActions: {
-        hasImport: false
+        handleImportClick: ({ selectedRows }) => {
+          this.$message.warning({
+            message: this.$t('assets.ImportMessage')
+          })
+        }
       },
       addExtraMoreActions: [],
       helpMessage: this.$t('assets.AssetListHelpMessage')

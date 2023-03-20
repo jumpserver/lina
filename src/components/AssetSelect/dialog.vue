@@ -5,20 +5,20 @@
     top="1vh"
     v-bind="$attrs"
     width="80vw"
-    @close="handleClose"
     @cancel="handleCancel"
+    @close="handleClose"
     @confirm="handleConfirm"
     v-on="$listeners"
   >
     <AssetTreeTable
       ref="ListPage"
-      v-bind="$attrs"
       :header-actions="headerActions"
-      :table-config="tableConfig"
-      :url="baseUrl"
       :node-url="baseNodeUrl"
-      :tree-url="`${baseNodeUrl}/children/tree/`"
+      :table-config="tableConfig"
+      :tree-url="`${baseNodeUrl}children/tree/`"
+      :url="baseUrl"
       class="tree-table"
+      v-bind="$attrs"
     />
   </Dialog>
 </template>
@@ -161,21 +161,15 @@ export default {
 
   .tree-table {
     .search {
-      .el-input__inner {
-        background-color: #f3f3f3;
-      }
-
-      .el-cascader {
-        background-color: #f3f3f3;
-      }
     }
 
     .left {
       padding: 5px;
+    }
 
-      .treebox {
-        height: 70vh;
-      }
+    .right {
+      height: calc(100vh - 200px);
+      overflow: auto;
     }
 
     .mini {
@@ -183,13 +177,13 @@ export default {
     }
 
     .transition-box {
-      padding: 5px;
+      padding: 10px 5px;
     }
   }
 }
 
-.page ::v-deep .treebox {
-  height: inherit !important;
+.page ::v-deep .treebox .ztree {
+
 }
 
 .asset-select-dialog ::v-deep .el-icon-circle-check {

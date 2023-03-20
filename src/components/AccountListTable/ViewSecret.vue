@@ -1,21 +1,23 @@
 <template>
   <div>
-    <UserConfirmDialog
-      :url="url"
-      @UserConfirmDone="getAuthInfo"
-      @UserConfirmCancel="exit"
-    />
+    <div v-if="mfaDialogVisible">
+      <UserConfirmDialog
+        :url="url"
+        @UserConfirmCancel="exit"
+        @UserConfirmDone="getAuthInfo"
+      />
+    </div>
     <Dialog
-      :title="dialogTitle"
-      :show-cancel="false"
       :destroy-on-close="true"
-      :width="'50'"
+      :show-cancel="false"
+      :title="title"
       :visible.sync="showSecret"
+      :width="'50'"
       v-bind="$attrs"
-      @confirm="showSecret = false"
+      @confirm="accountConfirmHandle"
       v-on="$listeners"
     >
-      <el-form class="password-form" label-position="right" label-width="100px" :model="secretInfo">
+      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('assets.Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -39,15 +41,16 @@
         <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" :label="$tc('accounts.PasswordRecord')">
-          <el-button
-            v-perms="'accounts.view_historyaccountsecret'"
-            type="text"
-            @click="onShowPasswordHistory"
+        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('accounts.PasswordRecord')">
+          <el-link
+            :underline="false"
+            type="success"
+            @click="showHistoryDialog"
           >
-            {{ secretInfo.version }}
-          </el-button>
-
+            <span style="padding-right: 30px">
+              {{ versions }}
+            </span>
+          </el-link>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -86,6 +89,12 @@ export default {
       type: String,
       default: ''
     },
+    title: {
+      type: String,
+      default: function() {
+        return this.$tc('assets.AccountDetail')
+      }
+    },
     showPasswordRecord: {
       type: Boolean,
       default: true
@@ -93,10 +102,12 @@ export default {
   },
   data() {
     return {
-      dialogTitle: this.$tc('assets.AccountDetail'),
       secretInfo: {},
+      versions: '-',
       showSecret: false,
-      sshKeyFingerprint: '',
+      mfaDialogVisible: true,
+      sshKeyFingerprint: '-',
+      historyCount: 0,
       showPasswordHistoryDialog: false
     }
   },
@@ -108,18 +119,30 @@ export default {
       return this.account['secret_type'].value
     }
   },
+  mounted() {
+    if (this.showPasswordRecord) {
+      const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+        this.versions = resp.count
+      })
+    }
+  },
   methods: {
+    accountConfirmHandle() {
+      this.showSecret = false
+      this.mfaDialogVisible = false
+    },
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp?.spec_info
+        this.sshKeyFingerprint = resp?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
       })
     },
     exit() {
       this.$emit('update:visible', false)
     },
-    onShowPasswordHistory() {
+    showHistoryDialog() {
       this.showPasswordHistoryDialog = true
     }
   }

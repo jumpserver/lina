@@ -48,7 +48,7 @@ export default {
         buttonSize: 'mini',
         tableAttrs: {
           stripe: false, // 斑马纹表格
-          border: false, // 表格边框
+          border: true, // 表格边框
           fit: true, // 宽度自适应,
           tooltipEffect: 'dark',
           rowClassName: ({ row }) => {
@@ -182,7 +182,7 @@ export default {
         line-height: 1.5;
         padding: 6px 0;
         font-size: 13px;
-
+        border-right: none;
         * {
           vertical-align: middle;
         }
@@ -204,11 +204,14 @@ export default {
       background-color: #ffffff;
       font-size: 13px;
       line-height: 1.5;
-
+      border-right: none;
       .cell {
         white-space: nowrap !important;
         overflow: hidden;
         text-overflow: ellipsis;
+        &:hover {
+          border-right: 2px solid #EBEEF5;
+        }
       }
     }
   }
