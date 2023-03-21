@@ -233,6 +233,7 @@ export default {
       this.showTable = false
       this.renderError = ''
       this.jsonData = {}
+      this.$emit('importDialogClose')
     }
   }
 }
