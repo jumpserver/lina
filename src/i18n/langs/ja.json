@@ -323,7 +323,7 @@
     "primary": "メジャー",
     "primaryOnly": "主な合意は、1つだけあります",
     "Required": "必須",
-    "RequiredProtocols": "必要なプロトコル、資産の追加時に選択する必要があります",
+    "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
     "LoginConfig": "ログイン構成",

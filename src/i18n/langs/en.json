@@ -330,7 +330,7 @@
     "primary": "primary",
     "primaryOnly": "There can only be one main agreement",
     "Required": "Required",
-    "RequiredProtocols": "Required agreement, which must be selected when adding assets",
+    "RequiredProtocol": "Required agreement, which must be selected when adding assets",
     "Default": "Default",
     "DefaultProtocol": "Default agreement, which will be selected by default when adding assets",
     "LoginConfig": "Login config",
