@@ -49,7 +49,7 @@ export default {
   data() {
     const vm = this
     return {
-      baseAttrs: ['required', 'default'],
+      baseAttrs: ['primary', 'required', 'default'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
       defaultSetting: {
         sftp_enabled: true,
         sftp_home: '/tmp',

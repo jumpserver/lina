@@ -190,17 +190,19 @@ export default {
     setPrimaryIfNeed(items) {
       // 如果没有设置主协议，设置第一个为主协议
       if (!this.settingReadonly) {
-        const primary = items.filter(item => item.primary)
-        if (primary.length === 0) {
+        const primaryProtocols = items.filter(item => item.primary)
+        if (primaryProtocols.length === 0) {
           items[0].primary = true
           items[0].default = true
           items[0].required = true
-        } else if (primary.length > 1) {
-          primary.slice(1, primary.length).forEach(item => {
+          console.log('>>>>>>>> set primary', items)
+        } else if (primaryProtocols.length > 1) {
+          primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
             item.primary = false
           })
         }
       }
+      return items
     },
     setDefaultItems(choices) {
       let items = []
@@ -224,8 +226,12 @@ export default {
         items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
+        if (defaults.length === 0) {
+          defaults.push(choices[0])
+        }
         items = defaults
       }
+      items = this.setPrimaryIfNeed(items)
       this.items = items
     },
     getAssetDefaultItems(item, choices) {
