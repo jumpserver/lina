@@ -160,7 +160,6 @@ export default {
         })
         this.items = [this.settingItem, ...others]
       }
-      console.log('handleSettingConfirm', this.settingItem)
     },
     handleDelete(index) {
       this.items = this.items.filter((value, i) => {
@@ -195,7 +194,6 @@ export default {
           items[0].primary = true
           items[0].default = true
           items[0].required = true
-          console.log('>>>>>>>> set primary', items)
         } else if (primaryProtocols.length > 1) {
           primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
             item.primary = false
