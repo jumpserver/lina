@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",
     "HistoryDate": "History date",
     "SameTypeAccountTip": "An account with the same user name and key type already exists",
     "HistoryPassword": "History password",

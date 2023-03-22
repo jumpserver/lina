@@ -63,7 +63,7 @@ export default {
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'strategy', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -73,6 +73,14 @@ export default {
           el: {
             multiple: false
           },
+          hidden: () => {
+            return this.platform || this.asset
+          }
+        },
+        strategy: {
+          rules: [Required],
+          label: this.$t('ops.RunasPolicy'),
+          helpText: this.$t('accounts.BulkCreateStrategy'),
           hidden: () => {
             return this.platform || this.asset
           }
