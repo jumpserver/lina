@@ -154,7 +154,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
-          'name',
+          'id', 'name',
           {
             key: this.$t('assets.Category'),
             value: this.object.category.label
