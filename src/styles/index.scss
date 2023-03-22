@@ -208,6 +208,10 @@ input[type=file] {
   white-space: normal!important;
 }
 
+.el-input.is-disabled .el-input__inner {
+  color: #737373 !important;
+}
+
 @media screen and (max-width: 992px) {
   .el-select-dropdown.switch-org {
     left: 0!important;

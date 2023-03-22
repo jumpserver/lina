@@ -259,7 +259,8 @@ export default {
       form: {},
       loading: true,
       isSubmitting: false,
-      clone: false
+      clone: false,
+      objectDetail: {}
     }
   },
   computed: {
@@ -281,6 +282,17 @@ export default {
         return this.hasReset
       }
       return this.isUpdateMethod()
+    }
+  },
+  watch: {
+    initial: {
+      handler(val) {
+        if (!this.isUpdateMethod()) {
+          return Object.assign(this.form, this.initial)
+        }
+        this.form = Object.assign(this.form, val)
+      },
+      deep: true
     }
   },
   async created() {
