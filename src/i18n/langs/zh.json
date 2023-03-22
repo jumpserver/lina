@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
     "AccountTemplate": "账号模版",
     "HistoryDate": "日期",
     "SameTypeAccountTip": "相同用户名、密钥类型的账号已存在",
