@@ -11,11 +11,16 @@
         <el-select
           slot="prepend"
           v-model="item.name"
-          :disabled="cannotDelete(item)"
+          :disabled="disableSelect(item)"
           class="prepend"
           @change="handleProtocolChange($event, item)"
         >
-          <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
+          <el-option
+            v-for="p of remainProtocols"
+            :key="p.name"
+            :label="p.name"
+            :value="p.name"
+          />
         </el-select>
         <el-button
           v-if="showSetting(item)"
@@ -24,9 +29,9 @@
           @click="onSettingClick(item)"
         />
       </el-input>
-      <div v-if="!readonly" class="input-button" style="display: flex; margin-left: 20px">
+      <div v-if="!readonly" class="input-button">
         <el-button
-          :disabled="cannotDelete(item)"
+          :disabled="disableDelete(item)"
           icon="el-icon-minus"
           size="mini"
           style="flex-shrink: 0;"
@@ -35,7 +40,7 @@
         />
         <el-button
           v-if="index === items.length - 1"
-          :disabled="remainProtocols.length === 0 || !item.port"
+          :disabled="disableAdd(item, index)"
           icon="el-icon-plus"
           size="mini"
           style="flex-shrink: 0;"
@@ -44,11 +49,20 @@
         />
       </div>
     </div>
+    <el-button
+      v-if="items.length === 0"
+      icon="el-icon-plus"
+      size="mini"
+      style="flex-shrink: 0;"
+      type="primary"
+      @click="handleAdd(0)"
+    />
     <ProtocolSettingDialog
       v-if="showDialog"
       :disabled="settingReadonly || readonly"
       :item="settingItem"
       :visible.sync="showDialog"
+      @confirm="handleSettingConfirm"
     />
   </div>
 </template>
@@ -143,16 +157,37 @@ export default {
     this.$log.debug('Items: ', this.items)
   },
   methods: {
-    handleDelete(index) {
-      this.items = this.items.filter((value, i) => {
-        return i !== index
-      })
+    handleSettingConfirm() {
+      if (this.settingItem.primary) {
+        const others = this.items
+          .filter(item => item.name !== this.settingItem.name)
+          .map(item => {
+            item.primary = false
+            return item
+          })
+        this.items = [this.settingItem, ...others]
+      }
     },
-    cannotDelete(item) {
+    handleDelete(index) {
+      this.items = this.items.filter((value, i) => i !== index)
+    },
+    isRequired(item) {
       const full = this.iChoices.find(choice => {
         return choice.name === item.name
       })
       return full?.primary || full?.required
+    },
+    disableSelect(item) {
+      return this.isRequired(item)
+    },
+    disableDelete(item) {
+      if (this.items.length === 1) {
+        return true
+      }
+      return this.isRequired(item)
+    },
+    disableAdd(item) {
+      return this.remainProtocols.length === 0 || !item.port
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
@@ -162,9 +197,26 @@ export default {
       item.name = selected.name
       item.port = selected.port
     },
+    setPrimaryIfNeed(items) {
+      // 如果没有设置主协议，设置第一个为主协议
+      if (!this.settingReadonly) {
+        const primaryProtocols = items.filter(item => item.primary)
+        if (primaryProtocols.length === 0) {
+          items[0].primary = true
+          items[0].default = true
+          items[0].required = true
+        } else if (primaryProtocols.length > 1) {
+          primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
+            item.primary = false
+          })
+        }
+      }
+      return items
+    },
     setDefaultItems(choices) {
-      this.items = []
+      let items = []
       const requiredItems = choices.filter(item => (item.required || item.primary))
+
       if (this.value instanceof Array && this.value.length > 0) {
         const protocols = []
         this.value.forEach(item => {
@@ -180,11 +232,16 @@ export default {
         const notFound = requiredItems.filter(item => !protocols.find(p => p.name === item.name))
         protocols.push(...notFound)
         const allProtocolNames = protocols.map(item => item.name)
-        this.items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
+        items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
-        this.items = defaults
+        if (defaults.length === 0) {
+          defaults.push(choices[0])
+        }
+        items = defaults
       }
+      items = this.setPrimaryIfNeed(items)
+      this.items = items
     },
     getAssetDefaultItems(item, choices) {
       const protocols = []
@@ -228,6 +285,8 @@ export default {
 
 .input-button {
   margin-top: 4px;
+  display: flex;
+  margin-left: 20px
 }
 
 .input-button ::v-deep .el-button.el-button--mini {

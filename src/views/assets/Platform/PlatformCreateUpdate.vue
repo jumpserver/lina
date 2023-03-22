@@ -124,7 +124,6 @@ export default {
       if (constraints['charset_enabled'] === false) {
         this.fieldsMeta.charset.hidden = () => true
       }
-
       await setAutomations(this)
     }
   }
