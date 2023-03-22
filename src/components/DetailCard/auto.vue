@@ -4,7 +4,7 @@
 
 <script>
 import DetailCard from './index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr, copy } from '@/utils/common'
 
 export default {
   name: 'AutoDetailCard',
@@ -46,6 +46,20 @@ export default {
     this.loading = false
   },
   methods: {
+    defaultFormatter(fields) {
+      const formatter = {}
+      for (const name of fields) {
+        formatter[name] = function(item, val) {
+          if (val === '-') {
+            return <span>{'-'}</span>
+          }
+          return (<span style={{ cursor: 'pointer' }} onClick={() => copy(val)}>
+            {val}
+          </span>)
+        }
+      }
+      return formatter
+    },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       const remoteMeta = data.actions['GET'] || {}
@@ -54,6 +68,7 @@ export default {
       const defaultExcludes = ['org_id']
       const excludes = (this.excludes || []).concat(defaultExcludes)
       fields = fields.filter(item => !excludes.includes(item))
+      const defaultFormatter = this.defaultFormatter(fields)
       for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
@@ -125,7 +140,7 @@ export default {
         const item = {
           key: label,
           value: value,
-          formatter: this.formatters[name]
+          formatter: this.formatters[name] || defaultFormatter[name]
         }
         this.items.push(item)
       }

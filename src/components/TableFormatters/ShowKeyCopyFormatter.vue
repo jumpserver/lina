@@ -33,6 +33,7 @@
 <script>
 import { downloadText } from '@/utils/common'
 import BaseFormatter from '@/components/TableFormatters/base'
+import { copy } from '@/utils/common'
 
 export default {
   name: 'ShowKeyCopyFormatter',
@@ -85,20 +86,9 @@ export default {
     onShow() {
       this.isShow = !this.isShow
     },
-    onCopy: _.throttle(function() {
-      const inputDom = document.createElement('input')
-      inputDom.id = 'createInputDom'
-      inputDom.value = this.cellValue
-      document.body.appendChild(inputDom)
-      inputDom.select()
-      document?.execCommand('copy')
-      this.$message({
-        message: this.$t('common.CopySuccess'),
-        type: 'success',
-        duration: 1400
-      })
-      document.body.removeChild(inputDom)
-    }, 1800),
+    onCopy() {
+      copy(this.cellValue)
+    },
     onDownload() {
       downloadText(this.cellValue, this.name + '.txt')
     }
