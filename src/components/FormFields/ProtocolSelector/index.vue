@@ -11,11 +11,16 @@
         <el-select
           slot="prepend"
           v-model="item.name"
-          :disabled="disableDelete(item)"
+          :disabled="disableSelect(item)"
           class="prepend"
           @change="handleProtocolChange($event, item)"
         >
-          <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
+          <el-option
+            v-for="p of remainProtocols"
+            :key="p.name"
+            :label="p.name"
+            :value="p.name"
+          />
         </el-select>
         <el-button
           v-if="showSetting(item)"
@@ -24,7 +29,7 @@
           @click="onSettingClick(item)"
         />
       </el-input>
-      <div v-if="!readonly" class="input-button" style="display: flex; margin-left: 20px">
+      <div v-if="!readonly" class="input-button">
         <el-button
           :disabled="disableDelete(item)"
           icon="el-icon-minus"
@@ -154,26 +159,32 @@ export default {
   methods: {
     handleSettingConfirm() {
       if (this.settingItem.primary) {
-        const others = this.items.filter(item => item.name !== this.settingItem.name).map(item => {
-          item.primary = false
-          return item
-        })
+        const others = this.items
+          .filter(item => item.name !== this.settingItem.name)
+          .map(item => {
+            item.primary = false
+            return item
+          })
         this.items = [this.settingItem, ...others]
       }
     },
     handleDelete(index) {
-      this.items = this.items.filter((value, i) => {
-        return i !== index
+      this.items = this.items.filter((value, i) => i !== index)
+    },
+    isRequired(item) {
+      const full = this.iChoices.find(choice => {
+        return choice.name === item.name
       })
+      return full?.primary || full?.required
+    },
+    disableSelect(item) {
+      return this.isRequired(item)
     },
     disableDelete(item) {
       if (this.items.length === 1) {
         return true
       }
-      const full = this.iChoices.find(choice => {
-        return choice.name === item.name
-      })
-      return full?.primary || full?.required
+      return this.isRequired(item)
     },
     disableAdd(item) {
       return this.remainProtocols.length === 0 || !item.port
@@ -274,6 +285,8 @@ export default {
 
 .input-button {
   margin-top: 4px;
+  display: flex;
+  margin-left: 20px
 }
 
 .input-button ::v-deep .el-button.el-button--mini {
