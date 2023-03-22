@@ -31,13 +31,16 @@ export default {
         name: '',
         port: 0
       },
+      suMethodLimits: [],
+      suMethods: [],
       initial: {
         comment: '',
         charset: 'utf-8',
         category_type: ['host', 'linux'],
         automation: {
           ansible_enabled: true
-        }
+        },
+        su_method: ''
       },
       fields: [
         [this.$t('common.Basic'), [
@@ -83,6 +86,8 @@ export default {
       defaultOptions: {}
     }
   },
+  watch: {
+  },
   async mounted() {
     try {
       await this.setCategories()
@@ -92,8 +97,22 @@ export default {
     }
   },
   methods: {
+    updateSuMethodOptions() {
+      const options = this.suMethods.filter(i => {
+        return this.suMethodLimits.includes(i.value)
+      })
+      this.fieldsMeta.su_method.options = options
+      if (options.length > 0) {
+        this.initial.su_method = options[0]?.value
+      }
+    },
     handleAfterGetRemoteMeta(meta) {
-      this.fieldsMeta.su_method.options = meta?.su_method?.choices || []
+      this.suMethods = meta?.su_method?.choices || []
+      this.updateSuMethodOptions()
+    },
+    async updateSuMethods(constrains) {
+      this.suMethodLimits = constrains['su_methods'] || []
+      this.updateSuMethodOptions()
     },
     async setCategories() {
       const category = this.$route.query.category
@@ -125,6 +144,7 @@ export default {
         this.fieldsMeta.charset.hidden = () => true
       }
       await setAutomations(this)
+      await this.updateSuMethods(constraints)
     }
   }
 }
