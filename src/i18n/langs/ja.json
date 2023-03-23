@@ -11,6 +11,8 @@
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。",
     "AccountGather": {
+      "IsSyncAccountLabel": "資産への同期化",
+      "IsSyncAccountHelpText": "収集が完了すると、収集したアカウントが資産に同期されます",
       "ExecutionDetail": "タスクの詳細",
       "AccountGatherTaskExecutionList": "タスク実行リスト",
       "ExecutionList": "実行リスト",

@@ -11,6 +11,8 @@
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
     "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view",
     "AccountGather": {
+      "IsSyncAccountLabel": "Synchronize to Asset",
+      "IsSyncAccountHelpText": "After the collection is completed, the collected account will be synchronized to the asset",
       "ExecutionDetail": "Execution detail",
       "AccountGatherTaskExecutionList": "Task execution list",
       "ExecutionList": "Execution list",
