@@ -192,16 +192,16 @@ export default {
                   }
                 },
                 {
-                  name: 'RemoveSecret',
-                  title: this.$t('common.RemoveSecret'),
+                  name: 'ClearSecret',
+                  title: this.$t('common.ClearSecret'),
                   can: this.$hasPerm('accounts.change_account'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.patch(
-                      `/api/v1/accounts/accounts/remove-secret/`,
+                      `/api/v1/accounts/accounts/clear-secret/`,
                       { account_ids: [row.id] }
                     ).then(() => {
-                      this.$message.success(this.$tc('common.RemoveSuccessMsg'))
+                      this.$message.success(this.$tc('common.ClearSuccessMsg'))
                     })
                   }
                 },
@@ -306,8 +306,8 @@ export default {
         ],
         extraMoreActions: [
           {
-            name: 'RemoveSecrets',
-            title: this.$t('common.RemoveSecret'),
+            name: 'ClearSecrets',
+            title: this.$t('common.ClearSecret'),
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
@@ -315,11 +315,11 @@ export default {
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => { return v.id })
               this.$axios.patch(
-                '/api/v1/accounts/accounts/remove-secret/',
+                '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: ids }).then(() => {
-                this.$message.success(this.$tc('common.RemoveSuccessMsg'))
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkRemoveErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.bulkClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }

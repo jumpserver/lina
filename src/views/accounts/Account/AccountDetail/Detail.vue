@@ -143,19 +143,19 @@ export default {
           })
         },
         {
-          title: this.$t('common.RemoveSecret'),
+          title: this.$t('common.ClearSecret'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.Remove'),
+            label: this.$t('common.Clear'),
             disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             click: () => {
               this.$axios.patch(
-                '/api/v1/accounts/accounts/remove-secret/',
+                '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: [this.object.id] }
               ).then(() => {
-                this.$message.success(this.$tc('common.RemoveSuccessMsg'))
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
               })
             }
           })
