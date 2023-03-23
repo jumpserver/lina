@@ -497,6 +497,7 @@
     "MFAVerify": "Verify MFA",
     "CurrentUserVerify": "Verify Current User",
     "ViewSecret": "View secret",
+    "RemoveSecret": "Remove secret",
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",

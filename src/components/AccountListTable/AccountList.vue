@@ -192,6 +192,20 @@ export default {
                   }
                 },
                 {
+                  name: 'RemoveSecret',
+                  title: this.$t('common.RemoveSecret'),
+                  can: this.$hasPerm('accounts.change_account'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.patch(
+                      `/api/v1/accounts/accounts/remove-secret/`,
+                      { account_ids: [row.id] }
+                    ).then(() => {
+                      this.$message.success(this.$tc('common.RemoveSuccessMsg'))
+                    })
+                  }
+                },
+                {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   can: this.$hasPerm('accounts.delete_account'),
@@ -289,6 +303,26 @@ export default {
           //   title: this.$t('accounts.AutoCreate'),
           //   type: 'default'
           // }
+        ],
+        extraMoreActions: [
+          {
+            name: 'RemoveSecrets',
+            title: this.$t('common.RemoveSecret'),
+            type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/remove-secret/',
+                { account_ids: ids }).then(() => {
+                this.$message.success(this.$tc('common.RemoveSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkRemoveErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
