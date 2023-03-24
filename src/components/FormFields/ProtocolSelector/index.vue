@@ -10,7 +10,7 @@
       >
         <el-select
           slot="prepend"
-          v-model="item.name"
+          :value="item.display_name ? item.display_name : item.name"
           :disabled="disableSelect(item)"
           class="prepend"
           @change="handleProtocolChange($event, item)"
