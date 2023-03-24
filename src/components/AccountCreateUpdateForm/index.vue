@@ -13,7 +13,7 @@ import { UpdateToken, UploadSecret } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange, Required } from '@/components/DataForm/rules'
+import { Required, RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -46,6 +46,7 @@ export default {
       defaultPrivilegedAccounts: ['root', 'administrator'],
       iPlatform: {
         automation: {},
+        su_enabled: false,
         protocols: [
           {
             name: 'ssh',
@@ -58,7 +59,7 @@ export default {
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
-        [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
+        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
@@ -120,7 +121,7 @@ export default {
         su_from: {
           component: Select2,
           hidden: (formValue) => {
-            return !this.asset?.id
+            return !this.asset?.id || !this.iPlatform.su_enabled
           },
           el: {
             multiple: false,

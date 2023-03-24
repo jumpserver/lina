@@ -1,11 +1,12 @@
 <template>
   <Dialog
-    :title="title"
-    :visible.sync="iVisible"
+    v-if="iVisible"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :close-on-click-modal="false"
+    :title="title"
+    :visible.sync="iVisible"
     v-bind="$attrs"
     width="70%"
     v-on="$listeners"
