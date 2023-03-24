@@ -140,8 +140,15 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
+      let protocols = platform?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
       const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
-      protocolChoices.splice(0, protocolChoices.length, ...platform.protocols)
+      protocolChoices.splice(0, protocolChoices.length, ...protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 
