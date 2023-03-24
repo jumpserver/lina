@@ -6,9 +6,11 @@
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
+      v-if="updateSelectedDialogSetting.visible"
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
       :category="category"
+      @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
       :cell="GatewayCell"
@@ -278,6 +280,11 @@ export default {
   watch: {
     optionInfo(iNew) {
       this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
+    }
+  },
+  methods: {
+    handleAssetBulkUpdate() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
