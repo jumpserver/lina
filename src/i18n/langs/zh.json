@@ -1599,9 +1599,9 @@
   },
   "tickets": {
     "ApplyAsset": "申请资产",
-    "LoginConfirm": "用户登录复合",
-    "CommandConfirm": "命令复合",
-    "LoginAssetConfirm": "资产登录复合",
+    "LoginConfirm": "用户登录复核",
+    "CommandConfirm": "命令复核",
+    "LoginAssetConfirm": "资产登录复核",
     "RelevantAssignees": "相关受理人",
     "OneAssigneeType": "一级受理人类型",
     "OneAssignee": "一级受理人",
