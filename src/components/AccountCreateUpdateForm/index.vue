@@ -13,7 +13,7 @@ import { UpdateToken, UploadSecret } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange, Required } from '@/components/DataForm/rules'
+import { Required, RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -63,7 +63,7 @@ export default {
           'secret_type', 'secret', 'ssh_key', 'token',
           'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'strategy', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'on_exist', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -77,7 +77,7 @@ export default {
             return this.platform || this.asset
           }
         },
-        strategy: {
+        on_exist: {
           rules: [Required],
           label: this.$t('ops.RunasPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),
