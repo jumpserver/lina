@@ -171,6 +171,7 @@ export default {
     }
   },
   created() {
+    this.form = this.item.setting
     for (const i of this.baseAttrs) {
       this.form[i] = !!this.item[i]
     }

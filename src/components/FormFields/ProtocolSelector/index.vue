@@ -169,6 +169,8 @@ export default {
       }
       if (this.settingItem.setting?.use_ssl) {
         this.settingItem.port = 5986
+      } else {
+        this.settingItem.port = 5985
       }
     },
     handleDelete(index) {
