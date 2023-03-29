@@ -206,7 +206,7 @@
   },
   "assets": {
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
-    "ImportMessage": "请前往对映类型的页面导入数据",
+    "ImportMessage": "请前往对应类型的页面导入数据",
     "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",
@@ -664,6 +664,7 @@
     "Status": "状态",
     "InputEmailAddress": "请输入正确的邮箱地址",
     "Receivers": "接收人",
+    "ClickCopy": "点击复制",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -903,6 +904,7 @@
     "DryRun": "测试运行",
     "Language": "语言",
     "Job": "作业",
+    "JobName": "作业名称",
     "Command": "命令",
     "Material": "内容",
     "Type": "类型",
@@ -993,6 +995,7 @@
     "State": "状态",
     "LastPublishedTime": "最后发布时间",
     "Variable": "变量",
+    "Description": "描述",
     "Module": "模块",
     "Asset": "资产",
     "Plan": "计划",

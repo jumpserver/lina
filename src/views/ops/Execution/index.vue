@@ -24,12 +24,12 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
         columns: [
-          'id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+          'id', 'job', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
         ],
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+            'id', 'job', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
           ]
         },
         columnsMeta: {
@@ -47,6 +47,12 @@ export default {
                 </div>
               }
               return '-'
+            }
+          },
+          job: {
+            label: this.$t('ops.JobName'),
+            formatter: (row) => {
+              return <span>{row.job?.name || '-'}</span>
             }
           },
           material: {

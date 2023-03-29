@@ -648,6 +648,7 @@
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
     "Receivers": "受取人",
+    "ClickCopy": "クリックしてコピー",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -935,6 +936,7 @@
     "AssetResultDetail": "アセットの結果",
     "total": "合計",
     "Variable": "変数",
+    "Description": "説明",
     "PlaybookDetail": "Playbook 詳細",
     "DryRun": "テスト走行",
     "SelectAdhoc": "コマンドを選択",
@@ -973,6 +975,7 @@
     "SaveCommandSuccess": "保存コマンドが成功しました",
     "NewFile": "新しいファイルを作成する",
     "Job": "手術",
+    "JobName": "ジョブ名",
     "SUCCESS": "成功",
     "Type": "タイプ",
     "running": "ランニング",
