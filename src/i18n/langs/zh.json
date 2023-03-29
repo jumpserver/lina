@@ -663,6 +663,7 @@
     "Status": "状态",
     "InputEmailAddress": "请输入正确的邮箱地址",
     "Receivers": "接收人",
+    "ClickCopy": "点击复制",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -993,6 +994,7 @@
     "State": "状态",
     "LastPublishedTime": "最后发布时间",
     "Variable": "变量",
+    "Description": "描述",
     "Module": "模块",
     "Asset": "资产",
     "Plan": "计划",
