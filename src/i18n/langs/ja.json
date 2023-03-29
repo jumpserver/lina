@@ -321,6 +321,7 @@
     "Pending": "待つ",
     "Platform": "システムプラットフォーム",
     "PlatformDetail": "プラットフォームの詳細",
+    "UseSSL": "SSLを立ち上げます",
     "ProtocolsGroup": "プロトコル・グループ",
     "DefaultPort": "デフォルトポート",
     "primary": "メジャー",

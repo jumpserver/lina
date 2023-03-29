@@ -123,6 +123,12 @@ export default {
               ]
             },
             {
+              id: 'use_ssl',
+              label: this.$t('assets.UseSSL'),
+              type: 'switch',
+              hidden: () => this.item.name !== 'winrm'
+            },
+            {
               id: 'sftp_enabled',
               label: this.$t('common.Enable') + ' SFTP',
               type: 'switch',

@@ -167,6 +167,9 @@ export default {
           })
         this.items = [this.settingItem, ...others]
       }
+      if (this.settingItem.setting?.use_ssl) {
+        this.settingItem.port = 5986
+      }
     },
     handleDelete(index) {
       this.items = this.items.filter((value, i) => i !== index)
