@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    :title="title"
-    :visible.sync="iVisible"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :close-on-click-modal="false"
+    :title="title"
+    :visible.sync="iVisible"
     v-bind="$attrs"
     width="70%"
     v-on="$listeners"
@@ -73,25 +73,23 @@ export default {
   methods: {
     addAccount(form) {
       const formValue = Object.assign({}, form)
-      let assets = []
+      let data = {}
+      let url = ''
       if (this.asset) {
-        assets = [this.asset.id]
-      } else {
-        assets = formValue.assets
-      }
-      delete formValue.assets
-      if (assets.length === 0) {
-        this.$message.error(this.$tc('assets.PleaseSelectAsset'))
-        return
-      }
-      const data = []
-      for (const asset of assets) {
-        data.push({
+        data = {
           ...formValue,
-          asset
-        })
+          asset: this.asset.id
+        }
+        url = `/api/v1/accounts/accounts/`
+      } else {
+        data = formValue
+        url = `/api/v1/accounts/accounts/bulk/`
+        if (data.assets.length === 0) {
+          this.$message.error(this.$tc('assets.PleaseSelectAsset'))
+          return
+        }
       }
-      this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
+      this.$axios.post(url, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)
         this.$message.success(this.$tc('common.createSuccessMsg'))
