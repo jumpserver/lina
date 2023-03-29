@@ -647,6 +647,7 @@
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
     "Receivers": "受取人",
+    "ClickCopy": "クリックしてコピー",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -934,6 +935,7 @@
     "AssetResultDetail": "アセットの結果",
     "total": "合計",
     "Variable": "変数",
+    "Description": "説明",
     "PlaybookDetail": "Playbook 詳細",
     "DryRun": "テスト走行",
     "SelectAdhoc": "コマンドを選択",

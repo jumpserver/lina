@@ -645,6 +645,7 @@
     "Success": "Success",
     "Failed": "Failed",
     "Pending": "Pending",
+    "ClickCopy": "Click copy",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
@@ -942,6 +943,7 @@
     "AssetResultDetail": "Asset result",
     "total": "Total",
     "Variable": "Variable",
+    "Description": "Description",
     "PlaybookDetail": "Playbook detail",
     "DryRun": "Dry run",
     "SelectAdhoc": "Select Adhoc",
