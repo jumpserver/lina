@@ -206,7 +206,7 @@
   },
   "assets": {
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
-    "ImportMessage": "请前往对映类型的页面导入数据",
+    "ImportMessage": "请前往对应类型的页面导入数据",
     "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",
