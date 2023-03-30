@@ -167,7 +167,7 @@ export class FormFieldGenerator {
       id: groupTitle,
       title: groupTitle,
       fields: _fields,
-      name: _fields[0].id
+      name: _fields[0]?.id
     }
     this.groups.push(group)
     return _fields
