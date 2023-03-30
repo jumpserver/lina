@@ -95,8 +95,7 @@ export default {
           // helpText: this.$t('perms.AccountsHelp'),
           el: {
             assets: [],
-            nodes: [],
-            showAddTemplate: true
+            nodes: []
           },
           hidden: (formValue) => {
             this.fieldsMeta.accounts.el.assets = formValue.assets

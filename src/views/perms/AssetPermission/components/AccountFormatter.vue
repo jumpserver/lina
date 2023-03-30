@@ -76,7 +76,7 @@ export default {
     },
     showAddTemplate: {
       type: Boolean,
-      default: false
+      default: true
     },
     addTemplateHelpText: {
       type: String,
