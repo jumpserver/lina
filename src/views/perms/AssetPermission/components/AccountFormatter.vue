@@ -81,7 +81,7 @@ export default {
     addTemplateHelpText: {
       type: String,
       default() {
-        this.$t('common.TemplateHelpText')
+        return this.$t('common.TemplateHelpText')
       }
     }
   },
