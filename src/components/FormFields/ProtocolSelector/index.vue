@@ -167,7 +167,7 @@ export default {
           })
         this.items = [this.settingItem, ...others]
       }
-      if (this.settingItem.setting?.use_ssl) {
+      if (this.settingItem.name === 'winrm' && this.settingItem.setting?.use_ssl) {
         this.settingItem.port = 5986
       } else {
         this.settingItem.port = 5985
