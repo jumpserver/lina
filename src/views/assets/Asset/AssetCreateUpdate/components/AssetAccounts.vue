@@ -5,10 +5,16 @@
     </el-link>
     <div v-else class="accounts">
       <el-table :data="accounts" style="width: 100%">
-        <el-table-column :label="$tc('assets.Username')" prop="username" width="180" />
+        <el-table-column :label="$tc('assets.Name')" prop="name" />
+        <el-table-column :label="$tc('assets.Username')" prop="username" />
         <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
           <template v-slot="scope">
             <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />
+          </template>
+        </el-table-column>
+        <el-table-column :label="$tc('common.TemplateAdd')" prop="template">
+          <template v-slot="scope">
+            <i :class="scope.row['template'] ? 'fa-check' : ''" class="fa text-primary" />
           </template>
         </el-table-column>
         <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
