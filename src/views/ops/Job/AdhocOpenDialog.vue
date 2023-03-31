@@ -35,6 +35,12 @@ export default {
           url: `/api/v1/ops/adhocs/`,
           columns: ['name', 'module', 'args', 'comment', 'actions'],
           columnsMeta: {
+            name: {
+              title: this.$tc('common.Name'),
+              formatter: (row) => {
+                return row?.name || '-'
+              }
+            },
             actions: {
               formatter: ActionsFormatter,
               formatterArgs: {
