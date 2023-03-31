@@ -43,9 +43,17 @@ export default {
         },
         {
           key: this.$t('acl.CommandGroup'),
-          value: this.object.command_groups.map((item) => { return item.name }).join(', ')
+          value: this.object.command_groups.map((item) => item.name).join(', ')
         },
-        'comment'
+        {
+          key: this.$t('acl.action'),
+          value: this.object.action?.label
+        },
+        (this.object.action?.value === 'review' && {
+          key: this.$t('acl.reviewer'),
+          value: this.object?.reviewers.map((item) => item?.name).join(', ')
+        }),
+        'priority', 'is_active', 'comment'
       ]
     }
   },
