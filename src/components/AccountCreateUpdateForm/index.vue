@@ -54,16 +54,16 @@ export default {
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: this.account || {},
+      form: Object.assign(this.account, { on_invalid: 'skip' }),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key', 'token',
-          'api_key', 'passphrase'
+          'secret_type', 'secret', 'ssh_key',
+          'token', 'api_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'on_exist', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -77,7 +77,7 @@ export default {
             return this.platform || this.asset
           }
         },
-        on_exist: {
+        on_invalid: {
           rules: [Required],
           label: this.$t('ops.RunasPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),

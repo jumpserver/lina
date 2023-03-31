@@ -58,6 +58,9 @@ export default {
     }
   },
   computed: {
+    protocols() {
+      return this.asset ? this.asset.protocol : []
+    },
     iVisible: {
       get() {
         return this.visible
@@ -65,20 +68,16 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       }
-    },
-    protocols() {
-      return this.asset ? this.asset.protocol : []
     }
   },
   methods: {
     addAccount(form) {
       const formValue = Object.assign({}, form)
-      let data = {}
-      let url = ''
+      let data, url
       if (this.asset) {
         data = {
-          ...formValue,
-          asset: this.asset.id
+          asset: this.asset.id,
+          ...formValue
         }
         url = `/api/v1/accounts/accounts/`
       } else {
@@ -89,19 +88,43 @@ export default {
           return
         }
       }
-      this.$axios.post(url, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
-        this.$message.success(this.$tc('common.createSuccessMsg'))
-      }).catch(error => this.setFieldError(error))
+      this.$axios.post(url, data).then((data) => {
+        this.handleResult(data, null)
+      }).catch(error => {
+        this.handleResult(null, error)
+      })
     },
     editAccount(form) {
       const data = { ...form }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => this.setFieldError(error))
+    },
+    handleResult(resp, error) {
+      const bulkCreate = !this.asset
+      if (!bulkCreate) {
+        if (!error) {
+          this.$message.success(this.$tc('common.createSuccessMsg'))
+        } else {
+          this.setFieldError(error)
+        }
+      } else {
+        let result
+        if (error) {
+          result = error.response.data
+        } else {
+          result = resp
+        }
+        const iResult = []
+        for (const [host, value] of Object.entries(result)) {
+          iResult.push({
+            asset: host,
+            ...value
+          })
+        }
+        console.log('bulk-create-done', [iResult, error])
+        this.$emit('bulk-create-done', iResult)
+      }
     },
     setFieldError(error) {
       const response = error.response

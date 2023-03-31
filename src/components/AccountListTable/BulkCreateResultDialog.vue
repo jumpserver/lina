@@ -1,0 +1,92 @@
+<template>
+  <Dialog
+    :show-cancel="false"
+    :title="title"
+    v-bind="$attrs"
+    @confirm="closeDialog"
+    v-on="$listeners"
+  >
+    <DataTable :config="config" />
+  </Dialog>
+</template>
+
+<script>
+import Dialog from '@/components/Dialog/index.vue'
+import DataTable from '@/components/DataTable/index.vue'
+
+export default {
+  name: 'ResultDialog',
+  components: {
+    DataTable,
+    Dialog
+  },
+  props: {
+    result: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data() {
+    const errorProp = this.$t('common.Error')
+    const stateMap = {
+      'created': this.$tc('common.Created'),
+      'updated': this.$tc('common.Updated'),
+      'skipped': this.$tc('common.Skipped')
+    }
+    const stateClsMap = {
+      'created': 'color-primary',
+      'updated': 'color-success',
+      'skipped': 'color-default'
+    }
+    return {
+      title: this.$t('accounts.AddAccountResult'),
+      config: {
+        columns: [
+          {
+            prop: 'asset',
+            label: this.$t('assets.Asset')
+          },
+          {
+            prop: 'state',
+            label: this.$t('common.Status'),
+            width: '200px',
+            formatter: (row, column, cellValue) => {
+              if (row.error) {
+                return <span class='color-error'>{ errorProp }: { row.error }</span>
+              } else if (row.state) {
+                const colorCls = stateClsMap[row.state]
+                const state = stateMap[row.state]
+                return <span class={ colorCls }>{ state }</span>
+              }
+            }
+          }
+        ],
+        totalData: this.result
+      }
+    }
+  },
+  methods: {
+    closeDialog() {
+      this.$emit('update:visible', false)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.color-error {
+  color: var(--color-danger);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-success {
+  color: var(--color-success);
+}
+
+.color-default {
+}
+
+</style>
