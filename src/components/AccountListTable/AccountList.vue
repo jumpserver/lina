@@ -338,8 +338,11 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     showBulkCreateResult(results) {
+      this.showResultDialog = false
       this.createAccountResults = results
-      this.showResultDialog = true
+      setTimeout(() => {
+        this.showResultDialog = true
+      }, 100)
     }
   }
 }

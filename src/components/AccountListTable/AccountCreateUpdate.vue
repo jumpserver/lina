@@ -101,7 +101,13 @@ export default {
       }).catch(error => this.setFieldError(error))
     },
     handleResult(resp, error) {
-      const bulkCreate = !this.asset
+      let bulkCreate = !this.asset
+      if (error && !Array.isArray(error)) {
+        bulkCreate = false
+      }
+      // if (resp && !Array.isArray(resp)) {
+      //   bulkCreate = false
+      // }
       if (!bulkCreate) {
         if (!error) {
           this.$message.success(this.$tc('common.createSuccessMsg'))
@@ -111,7 +117,6 @@ export default {
       } else {
         let result
         if (error) {
-          console.log('Error: ', error)
           result = error.response.data
         } else {
           result = resp

@@ -74,7 +74,8 @@ export default {
         total: this.$tc('common.Total'),
         created: this.$tc('common.Created'),
         updated: this.$tc('common.Updated'),
-        skipped: this.$tc('common.Skipped')
+        skipped: this.$tc('common.Skipped'),
+        error: this.$tc('common.Error')
       }
       const grouped = _.groupBy(this.result, 'state')
       const groupedLength = _.mapValues(grouped, 'length')

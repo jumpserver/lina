@@ -49,7 +49,7 @@ export default {
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'api_key']
+            secret_types: ['password', 'ssh_key', 'token', 'access_key']
           }
         ]
       },
@@ -61,7 +61,7 @@ export default {
         [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key',
-          'token', 'api_key', 'passphrase'
+          'token', 'access_key', 'passphrase'
         ]],
         [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
       ],
@@ -153,11 +153,11 @@ export default {
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
-        api_key: {
-          id: 'api_key',
+        access_key: {
+          id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'api_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key'
         },
         secret_type: {
           type: 'radio-group',
@@ -209,7 +209,7 @@ export default {
         },
         {
           label: this.$t('assets.AccessKey'),
-          value: 'api_key'
+          value: 'access_key'
         }
       ]
       const secretTypes = []
