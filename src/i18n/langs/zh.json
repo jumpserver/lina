@@ -205,6 +205,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
     "ImportMessage": "请前往对应类型的页面导入数据",
     "PushAccount": "推送账号",
