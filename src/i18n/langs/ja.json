@@ -204,6 +204,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
     "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
     "ImportMessage": "ミラータイプのページにデータをインポートしてください",
     "PushAccount": "アカウント情報をプッシュ",
