@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/message'
+
 const _ = require('lodash')
 const moment = require('moment')
 
@@ -244,10 +245,10 @@ export function getDayFuture(days, now) {
 export function getErrorResponseMsg(error) {
   let msg = ''
   let data = ''
-  if (error.response.status === 500) {
+  if (error?.response?.status === 500) {
     data = i18n.t('common.ServerError')
   } else {
-    data = error.response && error.response.data || error
+    data = error?.response && error?.response.data || error
   }
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail

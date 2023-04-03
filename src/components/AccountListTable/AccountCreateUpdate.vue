@@ -111,19 +111,12 @@ export default {
       } else {
         let result
         if (error) {
+          console.log('Error: ', error)
           result = error.response.data
         } else {
           result = resp
         }
-        const iResult = []
-        for (const [host, value] of Object.entries(result)) {
-          iResult.push({
-            asset: host,
-            ...value
-          })
-        }
-        console.log('bulk-create-done', [iResult, error])
-        this.$emit('bulk-create-done', iResult)
+        this.$emit('bulk-create-done', result)
       }
     },
     setFieldError(error) {
