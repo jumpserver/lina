@@ -74,14 +74,16 @@ export default {
   methods: {
     addAccount(form) {
       const formValue = Object.assign({}, form)
-      let data, url
+      let data, url, iVisible
       if (this.asset) {
         data = {
           asset: this.asset.id,
           ...formValue
         }
+        iVisible = false
         url = `/api/v1/accounts/accounts/`
       } else {
+        iVisible = true
         data = formValue
         url = `/api/v1/accounts/accounts/bulk/`
         if (data.assets.length === 0) {
@@ -89,11 +91,17 @@ export default {
           return
         }
       }
-      this.$axios.post(url, data).then((data) => {
+      this.$axios.post(url, data, {
+        disableFlashErrorMsg: true
+      }).then((data) => {
         this.handleResult(data, null)
       }).catch(error => {
         this.handleResult(null, error)
       })
+      this.iVisible = iVisible
+      if (!iVisible) {
+        this.$store.commit('common/reload')
+      }
     },
     editAccount(form) {
       const data = { ...form }
