@@ -101,7 +101,9 @@
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
-    "TaskID": "Task ID"
+    "TaskID": "Task ID",
+    "AccountTemplate": "Account template",
+    "AddAccountResult": "Add account result"
   },
   "acl": {
     "IgnoreCase": "Ignore case",
@@ -420,7 +422,9 @@
     "Token": "Token",
     "Category": "Category",
     "AssetTree": "Asset tree",
-    "SSHPort": "SSH Port"
+    "SSHPort": "SSH Port",
+    "PrimaryProtocol": "The primary protocol, the most basic and commonly used protocol for assets, can only and must be set up with one.",
+    "Primary": "Primary"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -785,7 +789,11 @@
     "Cas": "CAS",
     "Invalid": "Invalid",
     "Filename": "Filename",
-    "RestoreDefault": "Restore default"
+    "RestoreDefault": "Restore default",
+    "Error": "Error",
+    "Created": "Created",
+    "Skipped": "Skipped",
+    "Updated": "Updated"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1022,13 +1030,13 @@
     "": "",
     "AccountsHelp": "All accounts: accounts exists on the asset; Specify accounts: specify the user name of the account under the asset；Manual input: username/password; Same account: The account username name same with login user",
     "AllAccounts": "All accounts",
-    "AllAccountTip": "All accounts added on the asset",
+    "AllAccountTip": "All accounts of the asset exists",
     "ManualAccount": "Manual account",
-    "ManualAccountTip": "Login manually enter user name/password",
+    "ManualAccountTip": "Non-asset account, Input username/password on connect",
     "SameAccount": "Same account",
-    "SameAccountTip": "Account with the same user name of the authorized person",
+    "SameAccountTip": "The same username account with current login user",
     "SpecAccount": "Specify account",
-    "SpecAccountTip": "Specify user name and select authorized account",
+    "SpecAccountTip": "Specify accounts by username",
     "Input": "Input",
     "permAccount": "Accounts",
     "Actions": "Actions",
