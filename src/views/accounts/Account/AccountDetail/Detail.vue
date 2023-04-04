@@ -143,6 +143,24 @@ export default {
           })
         },
         {
+          title: this.$t('common.ClearSecret'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Clear'),
+            disabled: !vm.$hasPerm('accounts.change_account')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/clear-secret/',
+                { account_ids: [this.object.id] }
+              ).then(() => {
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+              })
+            }
+          })
+        },
+        {
           title: this.$t('assets.UserSwitchFrom'),
           type: 'updateSelect',
           attrs: {

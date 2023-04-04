@@ -78,6 +78,17 @@ export default {
             })
           }
           return this.$axios[submitMethod](url, values)
+        },
+        onPerformSuccess(res, method) {
+          const nextRoute = this.$router.push({ name: 'AssetList', params: { extraQuery: { order: '-date_updated' }}})
+          switch (method) {
+            case 'post':
+              this.$message.success(this.$tc('common.createSuccessMsg'))
+              return nextRoute
+            case 'put':
+              this.$message.success(this.$tc('common.updateSuccessMsg'))
+              return nextRoute
+          }
         }
       }
     }
@@ -140,8 +151,15 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
+      let protocols = platform?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
       const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
-      protocolChoices.splice(0, protocolChoices.length, ...platform.protocols)
+      protocolChoices.splice(0, protocolChoices.length, ...protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 

@@ -81,7 +81,6 @@ export default {
             label: this.$t('sessions.target')
           },
           command_amount: {
-            label: this.$t('sessions.command'),
             width: '90px'
           },
           login_from: {

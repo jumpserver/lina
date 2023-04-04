@@ -202,6 +202,20 @@ export default {
                   }
                 },
                 {
+                  name: 'ClearSecret',
+                  title: this.$t('common.ClearSecret'),
+                  can: this.$hasPerm('accounts.change_account'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.patch(
+                      `/api/v1/accounts/accounts/clear-secret/`,
+                      { account_ids: [row.id] }
+                    ).then(() => {
+                      this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                    })
+                  }
+                },
+                {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   can: this.$hasPerm('accounts.delete_account'),
@@ -294,6 +308,26 @@ export default {
             }
           },
           ...this.headerExtraActions
+        ],
+        extraMoreActions: [
+          {
+            name: 'ClearSecrets',
+            title: this.$t('common.ClearSecret'),
+            type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/clear-secret/',
+                { account_ids: ids }).then(() => {
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkClearErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {

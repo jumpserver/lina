@@ -21,8 +21,8 @@ export default {
       tableConfig: {
         url: `/api/v1/terminal/session-join-records/?session=${this.object.id}`,
         columns: [
-          'joiner_display', 'verify_code', 'reason', 'is_success', 'is_finished',
-          'date_joined', 'date_left', 'org_name'
+          'joiner_display', 'reason', 'is_success', 'is_finished',
+          'date_joined', 'date_left', 'org_name', 'action_permission'
         ],
         columnsShow: {
           min: ['joiner_display', 'is_success', 'reason'],

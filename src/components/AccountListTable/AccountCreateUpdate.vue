@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    v-if="iVisible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"

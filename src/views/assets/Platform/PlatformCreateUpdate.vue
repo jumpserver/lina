@@ -39,8 +39,7 @@ export default {
         category_type: ['host', 'linux'],
         automation: {
           ansible_enabled: true
-        },
-        su_method: ''
+        }
       },
       fields: [
         [this.$t('common.Basic'), [
@@ -133,12 +132,20 @@ export default {
       this.defaultOptions = constraints
 
       const fieldsCheck = ['domain_enabled', 'su_enabled']
+      let protocols = constraints?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
+
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
-      this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
+      this.fieldsMeta.protocols.el.choices = protocols
 
       if (constraints['charset_enabled'] === false) {
         this.fieldsMeta.charset.hidden = () => true

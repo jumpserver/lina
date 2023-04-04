@@ -6,9 +6,11 @@
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
+      v-if="updateSelectedDialogSetting.visible"
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
       :category="category"
+      @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
       :cell="GatewayCell"
@@ -65,6 +67,11 @@ export default {
     optionInfo: {
       type: Object,
       default: () => ({})
+    },
+    // url中需要添加额外的参数
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -91,6 +98,7 @@ export default {
       }
       vm.$router.push(route)
     }
+    const extraQuery = this.$route.params?.extraQuery || {}
     return {
       showPlatform: false,
       GatewayPort: 0,
@@ -101,6 +109,10 @@ export default {
         permissions: {
           app: 'assets',
           resource: 'asset'
+        },
+        extraQuery: {
+          ...extraQuery,
+          ...this.extraQuery
         },
         columnsExclude: ['spec_info', 'auto_info'],
         columnsShow: {
@@ -278,6 +290,11 @@ export default {
   watch: {
     optionInfo(iNew) {
       this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
+    }
+  },
+  methods: {
+    handleAssetBulkUpdate() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
