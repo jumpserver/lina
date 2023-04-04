@@ -50,21 +50,21 @@ export default {
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'api_key']
+            secret_types: ['password', 'ssh_key', 'token', 'access_key']
           }
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: this.account || {},
+      form: Object.assign(this.account, { on_invalid: 'skip' }),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key', 'token',
-          'api_key', 'passphrase'
+          'secret_type', 'secret', 'ssh_key',
+          'token', 'access_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'strategy', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -78,7 +78,7 @@ export default {
             return this.platform || this.asset
           }
         },
-        strategy: {
+        on_invalid: {
           rules: [Required],
           label: this.$t('ops.RunasPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),
@@ -154,11 +154,11 @@ export default {
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
-        api_key: {
-          id: 'api_key',
+        access_key: {
+          id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'api_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key'
         },
         secret_type: {
           type: 'radio-group',
@@ -210,7 +210,7 @@ export default {
         },
         {
           label: this.$t('assets.AccessKey'),
-          value: 'api_key'
+          value: 'access_key'
         }
       ]
       const secretTypes = []

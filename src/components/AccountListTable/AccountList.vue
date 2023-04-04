@@ -20,6 +20,12 @@
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
       @add="addAccountSuccess"
+      @bulk-create-done="showBulkCreateResult($event)"
+    />
+    <ResultDialog
+      v-if="showResultDialog"
+      :result="createAccountResults"
+      :visible.sync="showResultDialog"
     />
   </div>
 </template>
@@ -32,10 +38,12 @@ import UpdateSecretInfo from './UpdateSecretInfo'
 import AccountCreateUpdate from './AccountCreateUpdate'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
+import ResultDialog from './BulkCreateResultDialog.vue'
 
 export default {
   name: 'AccountListTable',
   components: {
+    ResultDialog,
     ListTable,
     UpdateSecretInfo,
     ViewSecret,
@@ -95,7 +103,9 @@ export default {
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
+      showResultDialog: false,
       showAddDialog: false,
+      createAccountResults: [],
       accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
       account: {},
@@ -298,11 +308,6 @@ export default {
             }
           },
           ...this.headerExtraActions
-          // {
-          //   name: 'autocreate',
-          //   title: this.$t('accounts.AutoCreate'),
-          //   type: 'default'
-          // }
         ],
         extraMoreActions: [
           {
@@ -365,6 +370,13 @@ export default {
     },
     refresh() {
       this.$refs.ListTable.reloadTable()
+    },
+    showBulkCreateResult(results) {
+      this.showResultDialog = false
+      this.createAccountResults = results
+      setTimeout(() => {
+        this.showResultDialog = true
+      }, 100)
     }
   }
 }

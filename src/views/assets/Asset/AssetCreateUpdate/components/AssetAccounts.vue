@@ -20,7 +20,7 @@
         <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
-            <el-button icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
+            <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
@@ -28,7 +28,7 @@
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('common.Add') }}
         </el-button>
-        <el-button size="mini" type="success" :disabled="!$hasPerm('accounts.view_accounttemplate')" @click="onAddFromTemplateClick">
+        <el-button :disabled="!$hasPerm('accounts.view_accounttemplate')" size="mini" type="success" @click="onAddFromTemplateClick">
           {{ $t('common.TemplateAdd') }}
         </el-button>
       </div>
