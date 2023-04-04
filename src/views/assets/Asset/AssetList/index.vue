@@ -54,6 +54,12 @@ export default {
             icon: 'fa-globe',
             name: 'web',
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
+          },
+          {
+            title: 'Custom',
+            icon: 'fa-globe',
+            name: 'custom',
+            component: () => import('@/views/assets/Asset/AssetList/CustomList.vue')
           }
         ]
       }
