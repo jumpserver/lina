@@ -160,21 +160,24 @@ export default {
         },
         extraMoreActions: [
           {
-            title: this.$t('common.removeSelected'),
-            name: 'removeSelected',
+            title: this.$t('common.BatchRemoval'),
+            name: 'BatchRemoval',
             has: hasRemove,
+            fa: 'remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
-            name: 'disableSelected',
-            title: this.$t('common.disableSelected'),
+            name: 'BatchDisable',
+            title: this.$t('common.BatchDisable'),
+            icon: 'fa fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
-            name: 'activateSelected',
-            title: this.$t('common.activateSelected'),
+            name: 'BatchActivate',
+            title: this.$t('common.BatchActivate'),
+            icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           }

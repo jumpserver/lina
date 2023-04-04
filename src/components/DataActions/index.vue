@@ -28,7 +28,10 @@
               :command="[option, action]"
               v-bind="option"
             >
-              <i v-if="option.fa" :class="'fa ' + option.fa" />
+              <span v-if="option.fa">
+                <i v-if="option.fa.startsWith('fa-')" :class="'fa ' + option.fa" />
+                <svg-icon v-else :icon-class="option.fa" style="font-size: 14px; margin-right: 2px; margin-left: -2px;" />
+              </span>
               {{ option.title }}
             </el-dropdown-item>
           </template>
@@ -185,5 +188,14 @@ export default {
 
 .el-button-ungroup .action-item:first-child {
   margin-left: 0;
+}
+::v-deep .more-batch-processing.el-dropdown-menu__item--divided {
+  margin-top: 0;
+  border-top: none;
+  color: #748096;
+  border-bottom: 1px solid #EBEEF5;
+}
+::v-deep .more-batch-processing.el-dropdown-menu__item--divided:before {
+  height: 0;
 }
 </style>

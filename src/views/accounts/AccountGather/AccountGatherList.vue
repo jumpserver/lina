@@ -100,6 +100,7 @@ export default {
             name: 'SyncSelected',
             title: this.$t('common.SyncSelected'),
             type: 'primary',
+            icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.add_gatheredaccount')
             },
