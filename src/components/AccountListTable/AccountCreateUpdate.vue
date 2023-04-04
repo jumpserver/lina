@@ -103,12 +103,12 @@ export default {
     },
     handleResult(resp, error) {
       let bulkCreate = !this.asset
-      if (error && !Array.isArray(error)) {
+      if (error && !Array.isArray(error?.response?.data)) {
         bulkCreate = false
       }
-      // if (resp && !Array.isArray(resp)) {
-      //   bulkCreate = false
-      // }
+      if (resp && !Array.isArray(resp)) {
+        bulkCreate = false
+      }
       if (!bulkCreate) {
         if (!error) {
           this.$message.success(this.$tc('common.createSuccessMsg'))
