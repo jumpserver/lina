@@ -1697,6 +1697,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "Set": "已设置",
     "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "FileEncryptionPassword": "文件加密密码",
