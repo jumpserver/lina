@@ -10,7 +10,9 @@ export const STORAGE_TYPE_META_MAP = {
   [S3]: {
     name: S3,
     title: 'S3',
-    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
+    meta: [
+      'BUCKET', 'WITHOUT_SECRET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'
+    ]
   },
   [CEPH]: {
     name: CEPH,

@@ -49,7 +49,12 @@ export default {
         meta: {
           fields: storageTypeMeta.meta,
           fieldsMeta: {
+            WITHOUT_SECRET: {},
+            ACCESS_KEY: {
+              hidden: (item) => item?.WITHOUT_SECRET
+            },
             SECRET_KEY: {
+              hidden: (item) => item?.WITHOUT_SECRET,
               component: UpdateToken
             }
           }
