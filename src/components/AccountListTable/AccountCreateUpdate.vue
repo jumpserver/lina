@@ -100,12 +100,14 @@ export default {
       })
       this.iVisible = iVisible
       if (!iVisible) {
-        this.$store.commit('common/reload')
+        this.$emit('add', true)
       }
     },
     editAccount(form) {
       const data = { ...form }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
+        this.iVisible = false
+        this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => this.setFieldError(error))
     },
