@@ -31,7 +31,7 @@ export default {
     },
     account: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     // 默认组件密码加密
     encryptPassword: {
@@ -55,7 +55,7 @@ export default {
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: Object.assign(this.account, { on_invalid: 'skip' }),
+      form: Object.assign({ 'on_invalid': 'skip' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
@@ -217,7 +217,7 @@ export default {
       this.iPlatform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
-      if (!this.form.secret_type) {
+      if (!this.form?.secret_type) {
         this.form.secret_type = secretTypes[0]
       }
       this.fieldsMeta.secret_type.options = choices.filter(item => {
