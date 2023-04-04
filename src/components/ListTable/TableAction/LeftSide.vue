@@ -91,18 +91,20 @@ export default {
     return {
       defaultMoreActions: [
         {
-          title: this.$t('common.deleteSelected'),
+          title: this.$t('common.BatchDelete'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
+          icon: 'fa fa-trash-o',
           can({ selectedRows }) {
             return selectedRows.length > 0 && vm.canBulkDelete
           },
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$t('common.updateSelected'),
+          title: this.$t('common.BatchUpdate'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
+          icon: 'fa fa-refresh',
           can: function({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
@@ -156,7 +158,19 @@ export default {
       if (!this.hasMoreActions) {
         return
       }
-      let dropdown = _.uniqBy([...this.extraMoreActions, ...this.defaultMoreActions], 'name')
+      const invariantActions = [
+        {
+          name: 'batch',
+          title: this.$t('common.BatchProcessing', { 'Number': this.selectedRows.length }),
+          divided: true,
+          has: function({ selectedRows }) {
+            return selectedRows.length > 0
+          },
+          class: 'more-batch-processing',
+          can: true
+        }
+      ]
+      let dropdown = _.uniqBy([...invariantActions, ...this.extraMoreActions, ...this.defaultMoreActions], 'name')
       dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable

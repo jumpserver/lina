@@ -214,8 +214,9 @@ export default {
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
-            title: this.$t('assets.DeactiveSelected'),
+            title: this.$t('common.BatchDisable'),
             type: 'primary',
+            icon: 'fa fa-ban',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
@@ -233,8 +234,9 @@ export default {
           },
           {
             name: 'ActiveSelected',
-            title: this.$t('assets.ActiveSelected'),
+            title: this.$t('common.BatchActivate'),
             type: 'primary',
+            icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
@@ -252,7 +254,8 @@ export default {
           },
           {
             name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
+            title: this.$t('common.BatchUpdate'),
+            icon: 'fa fa-refresh',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !vm.currentOrgIsRoot &&

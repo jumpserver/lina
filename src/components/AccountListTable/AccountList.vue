@@ -314,6 +314,7 @@ export default {
             name: 'ClearSecrets',
             title: this.$t('common.ClearSecret'),
             type: 'primary',
+            fa: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
