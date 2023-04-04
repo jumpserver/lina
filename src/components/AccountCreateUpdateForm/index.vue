@@ -41,6 +41,7 @@ export default {
   },
   data() {
     return {
+      selectedTemplate: false,
       loading: true,
       usernameChanged: false,
       defaultPrivilegedAccounts: ['root', 'administrator'],
@@ -59,6 +60,7 @@ export default {
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
+        [this.$t('accounts.AccountTemplate'), ['template']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key',
@@ -76,6 +78,26 @@ export default {
           },
           hidden: () => {
             return this.platform || this.asset
+          }
+        },
+        template: {
+          component: Select2,
+          el: {
+            multiple: false,
+            ajax: {
+              url: '/api/v1/accounts/account-templates/',
+              transformOption: (item) => {
+                return { label: item.name, value: item.id }
+              }
+            }
+          },
+          hidden: () => {
+            return this.platform || this.asset
+          },
+          on: {
+            change: ([event]) => {
+              this.selectedTemplate = !!event
+            }
           }
         },
         on_invalid: {
@@ -100,6 +122,9 @@ export default {
                 }
               }
             }
+          },
+          hidden: () => {
+            return this.selectedTemplate
           }
         },
         username: {
@@ -116,6 +141,14 @@ export default {
                 updateForm({ privileged: true })
               }
             }
+          },
+          hidden: () => {
+            return this.selectedTemplate
+          }
+        },
+        privileged: {
+          hidden: () => {
+            return this.selectedTemplate
           }
         },
         su_from: {
@@ -137,38 +170,51 @@ export default {
         secret: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'password'
+          hidden: (formValue) => formValue.secret_type !== 'password' || this.selectedTemplate
         },
         ssh_key: {
           label: this.$t('assets.PrivateKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.selectedTemplate
         },
         passphrase: {
           label: this.$t('assets.Passphrase'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.selectedTemplate
         },
         token: {
           label: this.$t('assets.Token'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'token'
+          hidden: (formValue) => formValue.secret_type !== 'token' || this.selectedTemplate
         },
         access_key: {
           id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'access_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key' || this.selectedTemplate
         },
         secret_type: {
           type: 'radio-group',
-          options: []
+          options: [],
+          hidden: () => {
+            return this.selectedTemplate
+          }
         },
         push_now: {
           helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
+          }
+        },
+        is_active: {
+          hidden: () => {
+            return this.selectedTemplate
+          }
+        },
+        comment: {
+          hidden: () => {
+            return this.selectedTemplate
           }
         }
       },
