@@ -63,6 +63,9 @@ export default {
         dateEnd: extraQuery.date_to
       }, this.headerActions.datePicker)
     }
+    if (this.$route.query.order) {
+      extraQuery['order'] = this.$route.query.order
+    }
     return {
       selectedRows: [],
       init: false,

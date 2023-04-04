@@ -92,7 +92,9 @@ export default {
         },
         apply_accounts: {
           component: AccountFormatter,
-          el: {}
+          el: {
+            showAddTemplate: false
+          }
         },
         org_id: {
           component: Select2,

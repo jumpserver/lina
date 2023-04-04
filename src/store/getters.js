@@ -11,6 +11,7 @@ const getters = {
   noRootWorkbenchOrgs: state => state.users.noRootWorkbenchOrgs,
   usingOrgs: state => state.users.usingOrgs,
   currentOrg: state => state.users.currentOrg,
+  preOrg: state => state.users.preOrg,
   currentOrgIsDefault: state => state.users.currentOrg['is_default'],
   currentOrgIsRoot: state => {
     return state.users.currentOrg && state.users.currentOrg['is_root']

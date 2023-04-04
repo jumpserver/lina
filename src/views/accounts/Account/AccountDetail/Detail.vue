@@ -36,7 +36,7 @@ export default {
   },
   data() {
     const vm = this
-    const filterSuFrom = ['database', 'device', 'cloud', 'web']
+    const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
 
     return {
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
@@ -143,6 +143,24 @@ export default {
           })
         },
         {
+          title: this.$t('common.ClearSecret'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Clear'),
+            disabled: !vm.$hasPerm('accounts.change_account')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/clear-secret/',
+                { account_ids: [this.object.id] }
+              ).then(() => {
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+              })
+            }
+          })
+        },
+        {
           title: this.$t('assets.UserSwitchFrom'),
           type: 'updateSelect',
           attrs: {
@@ -158,7 +176,7 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value)
+            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value) || filterSuFrom.includes(vm.object?.asset?.type?.value)
           },
           callbacks: Object.freeze({
             change: (value) => {

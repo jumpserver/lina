@@ -77,8 +77,18 @@ export default {
               return item
             })
           }
-
           return this.$axios[submitMethod](url, values)
+        },
+        onPerformSuccess(res, method) {
+          const nextRoute = this.$router.push({ name: 'AssetList', params: { extraQuery: { order: '-date_updated' }}})
+          switch (method) {
+            case 'post':
+              this.$message.success(this.$tc('common.createSuccessMsg'))
+              return nextRoute
+            case 'put':
+              this.$message.success(this.$tc('common.updateSuccessMsg'))
+              return nextRoute
+          }
         }
       }
     }
@@ -108,15 +118,18 @@ export default {
       return config
     }
   },
-  async created() {
-    try {
-      await this.setInitial()
-      await this.setPlatformConstrains()
-    } finally {
-      this.loading = false
-    }
+  created() {
+    this.init()
   },
   methods: {
+    async init() {
+      try {
+        await this.setInitial()
+        await this.setPlatformConstrains()
+      } finally {
+        this.loading = false
+      }
+    },
     async setInitial() {
       const { defaultConfig } = this
       const { node, platform } = this.$route?.query || {}
@@ -138,7 +151,15 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      this.defaultConfig.fieldsMeta.protocols.el.choices.splice(0, 0, ...platform.protocols)
+      let protocols = platform?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
+      const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
+      protocolChoices.splice(0, protocolChoices.length, ...protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 

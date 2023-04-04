@@ -13,7 +13,7 @@ import { UpdateToken, UploadSecret } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
-import { RequiredChange, Required } from '@/components/DataForm/rules'
+import { Required, RequiredChange } from '@/components/DataForm/rules'
 
 export default {
   name: 'AccountCreateForm',
@@ -31,7 +31,7 @@ export default {
     },
     account: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     // 默认组件密码加密
     encryptPassword: {
@@ -46,24 +46,25 @@ export default {
       defaultPrivilegedAccounts: ['root', 'administrator'],
       iPlatform: {
         automation: {},
+        su_enabled: false,
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'api_key']
+            secret_types: ['password', 'ssh_key', 'token', 'access_key']
           }
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: this.account || {},
+      form: Object.assign({ 'on_invalid': 'skip' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
-        [this.$t('common.Basic'), ['name', 'username', ...this.controlShowField()]],
+        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key', 'token',
-          'api_key', 'passphrase'
+          'secret_type', 'secret', 'ssh_key',
+          'token', 'access_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -73,6 +74,14 @@ export default {
           el: {
             multiple: false
           },
+          hidden: () => {
+            return this.platform || this.asset
+          }
+        },
+        on_invalid: {
+          rules: [Required],
+          label: this.$t('ops.RunasPolicy'),
+          helpText: this.$t('accounts.BulkCreateStrategy'),
           hidden: () => {
             return this.platform || this.asset
           }
@@ -112,7 +121,7 @@ export default {
         su_from: {
           component: Select2,
           hidden: (formValue) => {
-            return !this.asset?.id
+            return !this.asset?.id || !this.iPlatform.su_enabled
           },
           el: {
             multiple: false,
@@ -145,11 +154,11 @@ export default {
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
-        api_key: {
-          id: 'api_key',
+        access_key: {
+          id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'api_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key'
         },
         secret_type: {
           type: 'radio-group',
@@ -201,14 +210,14 @@ export default {
         },
         {
           label: this.$t('assets.AccessKey'),
-          value: 'api_key'
+          value: 'access_key'
         }
       ]
       const secretTypes = []
       this.iPlatform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
-      if (!this.form.secret_type) {
+      if (!this.form?.secret_type) {
         this.form.secret_type = secretTypes[0]
       }
       this.fieldsMeta.secret_type.options = choices.filter(item => {
@@ -218,9 +227,9 @@ export default {
     controlShowField() {
       const privileged = ['privileged']
       let suFrom = ['su_from']
-      const filterSuFrom = ['database', 'device', 'cloud', 'web']
+      const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
       const asset = this?.asset || {}
-      if (filterSuFrom.includes(asset?.category?.value)) {
+      if (filterSuFrom.includes(asset?.category?.value) || filterSuFrom.includes(asset?.type?.value)) {
         suFrom = []
       }
       return [...privileged, ...suFrom]
@@ -229,7 +238,6 @@ export default {
       const secretType = form.secret_type || ''
       if (secretType !== 'password') {
         form.secret = form[secretType]
-        delete form[secretType]
       }
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {

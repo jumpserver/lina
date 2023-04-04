@@ -3,7 +3,7 @@ import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components/FormFields'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
   if (!values) return
@@ -19,7 +19,7 @@ export const filterSelectValues = (values) => {
         const inputValue = { name, value }
         selects.push(inputValue)
       } else {
-        Message.error(i18n.t('assets.LabelInputFormatValidation'))
+        message.error(i18n.t('assets.LabelInputFormatValidation'))
       }
     }
   })
@@ -32,7 +32,7 @@ export const assetFieldsMeta = (vm) => {
   const platformType = vm?.$route.query.platform_type
   return {
     address: {
-      rules: [rules.specialEmojiCheck]
+      rules: [rules.specialEmojiCheck, rules.RequiredChange]
     },
     protocols: {
       component: ProtocolSelector,
@@ -64,6 +64,15 @@ export const assetFieldsMeta = (vm) => {
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
+        }
+      },
+      on: {
+        change: ([event], updateForm) => {
+          const pk = event.pk
+          const url = window.location.href
+          const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
+          window.location.href = newURL
+          setTimeout(() => vm.init(), 100)
         }
       }
     },
@@ -123,6 +132,9 @@ export const assetFieldsMeta = (vm) => {
     },
     url: {
       label: 'url'
+    },
+    comment: {
+      helpText: i18n.t('assets.CommentHelpText')
     }
   }
 }

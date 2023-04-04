@@ -31,6 +31,8 @@ export default {
         name: '',
         port: 0
       },
+      suMethodLimits: [],
+      suMethods: [],
       initial: {
         comment: '',
         charset: 'utf-8',
@@ -83,6 +85,8 @@ export default {
       defaultOptions: {}
     }
   },
+  watch: {
+  },
   async mounted() {
     try {
       await this.setCategories()
@@ -92,8 +96,22 @@ export default {
     }
   },
   methods: {
+    updateSuMethodOptions() {
+      const options = this.suMethods.filter(i => {
+        return this.suMethodLimits.includes(i.value)
+      })
+      this.fieldsMeta.su_method.options = options
+      if (options.length > 0) {
+        this.initial.su_method = options[0]?.value
+      }
+    },
     handleAfterGetRemoteMeta(meta) {
-      this.fieldsMeta.su_method.options = meta?.su_method?.choices || []
+      this.suMethods = meta?.su_method?.choices || []
+      this.updateSuMethodOptions()
+    },
+    async updateSuMethods(constrains) {
+      this.suMethodLimits = constrains['su_methods'] || []
+      this.updateSuMethodOptions()
     },
     async setCategories() {
       const category = this.$route.query.category
@@ -114,18 +132,26 @@ export default {
       this.defaultOptions = constraints
 
       const fieldsCheck = ['domain_enabled', 'su_enabled']
+      let protocols = constraints?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
+
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
-      this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
+      this.fieldsMeta.protocols.el.choices = protocols
 
       if (constraints['charset_enabled'] === false) {
         this.fieldsMeta.charset.hidden = () => true
       }
-
       await setAutomations(this)
+      await this.updateSuMethods(constraints)
     }
   }
 }

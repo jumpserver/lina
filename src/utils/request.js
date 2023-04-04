@@ -4,7 +4,7 @@ import { getTokenFromCookie } from '@/utils/auth'
 import { getErrorResponseMsg } from '@/utils/common'
 import { refreshSessionIdAge } from '@/api/users'
 import { MessageBox } from 'element-ui'
-import { Message } from '@/utils/Message'
+import { message } from '@/utils/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import router from '@/router'
@@ -93,7 +93,7 @@ export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
     const msg = responseErrorMsg || error.message
-    Message({
+    message({
       message: msg,
       type: 'error',
       duration: 5 * 1000

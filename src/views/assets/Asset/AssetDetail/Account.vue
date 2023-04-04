@@ -15,6 +15,7 @@
         />
         <AccountTemplateDialog
           v-if="templateDialogVisible"
+          :asset="object"
           :show-create="false"
           :visible.sync="templateDialogVisible"
           @onConfirm="onConfirm"
@@ -72,7 +73,7 @@ export default {
   methods: {
     onConfirm(data) {
       data = data?.map(i => {
-        i.template = true
+        i.template = i.id
         i.asset = this.object.id
         return i
       })

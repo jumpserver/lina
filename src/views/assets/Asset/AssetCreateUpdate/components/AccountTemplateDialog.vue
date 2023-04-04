@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: false
     },
+    asset: {
+      type: Object,
+      default: () => {}
+    },
     accounts: {
       type: Array,
       default: () => ([])
@@ -76,12 +80,13 @@ export default {
     }
   },
   data() {
+    const protocols = this.asset?.protocols?.map(i => i.name).toString() || ''
     return {
       isShowCreate: false,
       accountsSelected: [],
       tableConfig: {
-        url: '/api/v1/accounts/account-templates/',
-        columns: ['name', 'username', 'privileged'],
+        url: `/api/v1/accounts/account-templates/?protocols=${protocols}`,
+        columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -132,11 +137,16 @@ export default {
     handleConfirm() {
       this.iVisible = false
       // 过滤掉添加里还没有id的账号
-      const hasIdAccounts = this.accounts.filter(i => i?.id).map(item => item.id)
+      const templates = this.accounts.filter(i => i?.template).map(item => item.template)
       const newAddAccounts = this.accountsSelected.filter(i => {
-        if (!hasIdAccounts.includes(i.id)) {
-          i.template = true
-          return i
+        return templates.indexOf(i.id) === -1
+      }).map(item => {
+        return {
+          template: item.id,
+          name: item.name,
+          username: item.username,
+          secret_type: item.secret_type.value,
+          privileged: item.privileged
         }
       })
       this.accounts.push(...newAddAccounts)
@@ -163,7 +173,7 @@ export default {
       })
       if (status) {
         this.$refs.dataTable.$refs.dataTable.toggleRowSelection(row, false)
-        this.$message.error(this.$t('accounts.SameTypeAccountTip'))
+        this.$message.error(this.$tc('accounts.SameTypeAccountTip'))
       }
       return status
     },

@@ -47,14 +47,17 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      bases: ['required', 'default'],
+      baseAttrs: ['primary', 'required', 'default'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
       defaultSetting: {
         sftp_enabled: true,
         sftp_home: '/tmp',
         username_selector: '#username',
         password_selector: '#password',
-        submit_selector: '.btn-submit'
+        submit_selector: '.btn-submit',
+        security: 'any',
+        console: false
       },
       loading: true,
       form: {},
@@ -66,16 +69,38 @@ export default {
         fields: [
           [this.$t('common.Basic'), [
             {
+              id: 'primary',
+              label: this.$t('assets.Primary'),
+              type: 'switch',
+              helpText: this.$t('assets.PrimaryProtocol'),
+              on: {
+                change: ([val], updateForm) => {
+                  const relatedFields = vm.config['fields'][0][1]
+                    .filter(item => this.baseAttrs.includes(item.id))
+                    .filter(item => item.id !== 'primary')
+                  if (val) {
+                    const relatedValue = relatedFields.reduce((acc, cur) => {
+                      acc[cur.id] = true
+                      return acc
+                    }, {})
+                    updateForm(relatedValue)
+                  }
+                }
+              }
+            },
+            {
               id: 'required',
               label: this.$t('assets.Required'),
               type: 'switch',
-              helpText: this.$t('assets.RequiredProtocols')
+              helpText: this.$t('assets.RequiredProtocol'),
+              disabled: false
             },
             {
               id: 'default',
               label: this.$t('assets.Default'),
               type: 'switch',
-              helpText: this.$t('assets.DefaultProtocol')
+              helpText: this.$t('assets.DefaultProtocol'),
+              disabled: false
             }
           ]],
           [this.$t('assets.LoginConfig'), [
@@ -140,23 +165,20 @@ export default {
     }
   },
   created() {
-    const itemSetting = this.item.setting || this.defaultSetting
-    for (const i of this.bases) {
-      if (this.item.hasOwnProperty(i)) {
-        itemSetting[i] = this.item[i]
-      }
+    for (const i of this.baseAttrs) {
+      this.form[i] = !!this.item[i]
     }
-    this.form = itemSetting
   },
   methods: {
     onSubmit(form) {
-      for (const i of this.bases) {
+      for (const i of this.baseAttrs) {
         if (form.hasOwnProperty(i)) {
           this.item[i] = form[i]
         }
       }
       this.item.setting = form
       this.$emit('update:visible', false)
+      this.$emit('confirm', this.item)
     }
   }
 }

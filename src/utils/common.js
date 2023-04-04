@@ -1,3 +1,6 @@
+import i18n from '@/i18n/i18n'
+import { message } from '@/utils/message'
+
 const _ = require('lodash')
 const moment = require('moment')
 
@@ -241,7 +244,12 @@ export function getDayFuture(days, now) {
 
 export function getErrorResponseMsg(error) {
   let msg = ''
-  const data = error.response && error.response.data || error
+  let data = ''
+  if (error?.response?.status === 500) {
+    data = i18n.t('common.ServerError')
+  } else {
+    data = error?.response && error?.response.data || error
+  }
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
   } else if (data && data['non_field_errors']) {
@@ -355,5 +363,20 @@ export function diffObject(object, base) {
     }
   })
 }
+
+export const copy = _.throttle(function(value) {
+  const inputDom = document.createElement('input')
+  inputDom.id = 'createInputDom'
+  inputDom.value = value
+  document.body.appendChild(inputDom)
+  inputDom.select()
+  document?.execCommand('copy')
+  message({
+    message: i18n.t('common.CopySuccess'),
+    type: 'success',
+    duration: 1000
+  })
+  document.body.removeChild(inputDom)
+}, 1400)
 
 export { BASE_URL }

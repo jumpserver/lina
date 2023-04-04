@@ -220,7 +220,7 @@ export default {
     }
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
-      const elFormItem = this.$refs.select.elFormItem
+      const elFormItem = this.$refs.select?.elFormItem
       if (elFormItem && elFormItem.clearValidate) {
         elFormItem.clearValidate()
       }

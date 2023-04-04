@@ -6,6 +6,7 @@
       :export-options="iExportOptions"
       :import-options="iImportOptions"
       v-bind="$attrs"
+      @importDialogClose="onImportDialogClose"
     />
   </div>
 </template>
@@ -37,7 +38,9 @@ export default {
     handleExportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showExportDialog', { selectedRows, url: this.tableUrl, name: this.name })
+        const { exportOptions, tableUrl } = this
+        const url = exportOptions?.url ? exportOptions.url : tableUrl
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
       }
     },
     hasImport: defaultTrue,
@@ -124,6 +127,10 @@ export default {
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
+    },
+    onImportDialogClose() {
+      this.$emit('importDialogClose')
+      this.reloadTable()
     }
   }
 }

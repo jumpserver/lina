@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
     "HistoryDate": "历史日期",
     "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
     "HistoryPassword": "履歴パスワード",
@@ -10,6 +11,8 @@
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。",
     "AccountGather": {
+      "IsSyncAccountLabel": "資産への同期化",
+      "IsSyncAccountHelpText": "収集が完了すると、収集したアカウントが資産に同期されます",
       "ExecutionDetail": "タスクの詳細",
       "AccountGatherTaskExecutionList": "タスク実行リスト",
       "ExecutionList": "実行リスト",
@@ -98,7 +101,9 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
-    "TaskID": "タスク ID"
+    "TaskID": "タスク ID",
+    "AccountTemplate": "账号模版",
+    "AddAccountResult": "账号批量添加结果"
   },
   "acl": {
     "IgnoreCase": "大文字小文字を無視する",
@@ -201,6 +206,9 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
+    "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
+    "ImportMessage": "ミラータイプのページにデータをインポートしてください",
     "CustomAuthCommand": "カスタム改密命令です",
     "CustomAuthCommandHelpMessage": "カスタムコマンドには、`{username}`と`{password}`のフィールドが含まれている必要があります。<br />例えば linux しゅうみつ：<br />passwd {username} <br />{password} <br />{password}",
     "PushAccount": "アカウント情報をプッシュ",
@@ -323,7 +331,7 @@
     "primary": "メジャー",
     "primaryOnly": "主な合意は、1つだけあります",
     "Required": "必須",
-    "RequiredProtocols": "必要なプロトコル、資産の追加時に選択する必要があります",
+    "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
     "LoginConfig": "ログイン構成",
@@ -416,7 +424,9 @@
     "InitialDeploy": "初期展開",
     "PrivateKey": "鍵",
     "Category": "カテゴリー",
-    "SSHPort": "SSH ポート"
+    "SSHPort": "SSH ポート",
+    "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
+    "Primary": "主要な"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -441,6 +451,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
     "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
@@ -491,7 +502,9 @@
     "ApprovaLevel": "承認情報",
     "MFAVerify": "MFAの検証",
     "CurrentUserVerify": "現在のユーザー検証",
-    "ViewSecret": "パスワードの確認",
+    "ViewSecret": "暗号文の表示",
+    "ClearSecret": "暗号文の削除",
+    "Clear": "クリア",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
     "Action": "アクション",
     "RequestTickets": "ワークオーダーを申請する",
@@ -580,6 +593,8 @@
     "QuickUpdate": "クイックアップデート",
     "QuickSelect": "クイック選択",
     "RemoveSuccessMsg": "削除に成功しました",
+    "ClearSuccessMsg": "クリアに成功しました",
+    "bulkClearErrorMsg": "クリアに失敗しました: ",
     "Reset": "リセット",
     "Search": "検索",
     "Select": "選択",
@@ -602,6 +617,9 @@
     "action": "アクション",
     "User": "ユーザー",
     "activateSelected": "選択した活性化",
+    "SyncSuccessMsg": "同期に成功しました",
+    "SyncSelected": "選択した同期",
+    "bulkSyncErrorMsg": "一括同期に失敗しました:",
     "bulkDeleteErrorMsg": "一括削除に失敗しました:",
     "bulkDeleteSuccessMsg": "一括削除に成功しました",
     "bulkRemoveErrorMsg": "一括削除に失敗しました:",
@@ -636,6 +654,7 @@
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
     "Receivers": "受取人",
+    "ClickCopy": "クリックしてコピー",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -768,7 +787,14 @@
     "Invalid": "無効",
     "PublishAllApplets": "すべてのアプリを公開する",
     "Sync": "同期する",
-    "Filename": "ファイル名"
+    "Filename": "ファイル名",
+    "EnterpriseEdition": "エンタープライズ版",
+    "Error": "错误",
+    "CommunityEdition": "社区版",
+    "Product": "产品",
+    "Created": "已创建",
+    "Skipped": "已跳过",
+    "Updated": "已更新"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -923,6 +949,7 @@
     "AssetResultDetail": "アセットの結果",
     "total": "合計",
     "Variable": "変数",
+    "Description": "説明",
     "PlaybookDetail": "Playbook 詳細",
     "DryRun": "テスト走行",
     "SelectAdhoc": "コマンドを選択",
@@ -961,6 +988,7 @@
     "SaveCommandSuccess": "保存コマンドが成功しました",
     "NewFile": "新しいファイルを作成する",
     "Job": "手術",
+    "JobName": "ジョブ名",
     "SUCCESS": "成功",
     "Type": "タイプ",
     "running": "ランニング",
@@ -1001,11 +1029,15 @@
   },
   "perms": {
     "": "",
-    "AllAccounts": "すべてのアカウント",
-    "ManualInput": "手動入力",
-    "SameAccount": "同じ名前のアカウント",
-    "SpecifyAccounts": "入力の指定",
     "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
+    "AllAccounts": "すべてのアカウント",
+    "AllAccountTip": "アセットに追加されたすべてのアカウント",
+    "ManualInput": "手動入力",
+    "ManualAccountTip": "ログイン時にユーザー名とパスワードを手動で入力する",
+    "SameAccount": "同じ名前のアカウント",
+    "SameAccountTip": "与被授权人用户名相同的账号",
+    "SpecAccount": "特定のアカウント",
+    "SpecAccountTip": "指定用户名选择授权账号",
     "Input": "入力",
     "permAccount": "認定アカウント",
     "Actions": "アクション",
@@ -1068,7 +1100,8 @@
     "userCount": "ユーザー数",
     "userGroupCount": "ユーザーグループ数",
     "usersAndUserGroups": "ユーザーまたはユーザーグループ",
-    "Account": "アカウント"
+    "Account": "アカウント",
+    "ManualAccount": "手动账号"
   },
   "route": {
     "": "",

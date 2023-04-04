@@ -1,11 +1,12 @@
 <template>
   <Dialog
-    :title="title"
-    :visible.sync="iVisible"
+    v-if="iVisible"
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :close-on-click-modal="false"
+    :title="title"
+    :visible.sync="iVisible"
     v-bind="$attrs"
     width="70%"
     v-on="$listeners"
@@ -58,6 +59,9 @@ export default {
     }
   },
   computed: {
+    protocols() {
+      return this.asset ? this.asset.protocol : []
+    },
     iVisible: {
       get() {
         return this.visible
@@ -65,45 +69,61 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       }
-    },
-    protocols() {
-      return this.asset ? this.asset.protocol : []
     }
   },
   methods: {
     addAccount(form) {
       const formValue = Object.assign({}, form)
-      let assets = []
+      let data, url
       if (this.asset) {
-        assets = [this.asset.id]
+        data = {
+          asset: this.asset.id,
+          ...formValue
+        }
+        url = `/api/v1/accounts/accounts/`
       } else {
-        assets = formValue.assets
+        data = formValue
+        url = `/api/v1/accounts/accounts/bulk/`
+        if (data.assets.length === 0) {
+          this.$message.error(this.$tc('assets.PleaseSelectAsset'))
+          return
+        }
       }
-      delete formValue.assets
-      if (assets.length === 0) {
-        this.$message.error(this.$tc('assets.PleaseSelectAsset'))
-        return
-      }
-      const data = []
-      for (const asset of assets) {
-        data.push({
-          ...formValue,
-          asset
-        })
-      }
-      this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
-        this.$message.success(this.$tc('common.createSuccessMsg'))
-      }).catch(error => this.setFieldError(error))
+      this.$axios.post(url, data).then((data) => {
+        this.handleResult(data, null)
+      }).catch(error => {
+        this.handleResult(null, error)
+      })
     },
     editAccount(form) {
       const data = { ...form }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => this.setFieldError(error))
+    },
+    handleResult(resp, error) {
+      let bulkCreate = !this.asset
+      if (error && !Array.isArray(error?.response?.data)) {
+        bulkCreate = false
+      }
+      if (resp && !Array.isArray(resp)) {
+        bulkCreate = false
+      }
+      if (!bulkCreate) {
+        if (!error) {
+          this.$message.success(this.$tc('common.createSuccessMsg'))
+        } else {
+          this.setFieldError(error)
+        }
+      } else {
+        let result
+        if (error) {
+          result = error.response.data
+        } else {
+          result = resp
+        }
+        this.$emit('bulk-create-done', result)
+      }
     },
     setFieldError(error) {
       const response = error.response
