@@ -101,7 +101,9 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
-    "TaskID": "タスク ID"
+    "TaskID": "タスク ID",
+    "AccountTemplate": "账号模版",
+    "AddAccountResult": "账号批量添加结果"
   },
   "acl": {
     "IgnoreCase": "大文字小文字を無視する",
@@ -204,6 +206,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
     "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
     "ImportMessage": "ミラータイプのページにデータをインポートしてください",
     "PushAccount": "アカウント情報をプッシュ",
@@ -419,7 +422,9 @@
     "InitialDeploy": "初期展開",
     "PrivateKey": "鍵",
     "Category": "カテゴリー",
-    "SSHPort": "SSH ポート"
+    "SSHPort": "SSH ポート",
+    "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
+    "Primary": "主要な"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -782,7 +787,14 @@
     "Invalid": "無効",
     "PublishAllApplets": "すべてのアプリを公開する",
     "Sync": "同期する",
-    "Filename": "ファイル名"
+    "Filename": "ファイル名",
+    "EnterpriseEdition": "エンタープライズ版",
+    "Error": "错误",
+    "CommunityEdition": "社区版",
+    "Product": "产品",
+    "Created": "已创建",
+    "Skipped": "已跳过",
+    "Updated": "已更新"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -1019,13 +1031,13 @@
     "": "",
     "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
     "AllAccounts": "すべてのアカウント",
-    "AllAccountTip": "資産に追加されたすべてのアカウント",
+    "AllAccountTip": "アセットに追加されたすべてのアカウント",
     "ManualInput": "手動入力",
-    "ManualAccountTip": "ログイン時のユーザー名/パスワードの手動入力",
+    "ManualAccountTip": "ログイン時にユーザー名とパスワードを手動で入力する",
     "SameAccount": "同じ名前のアカウント",
-    "SameAccountTip": "権限受領者のユーザー名と同じアカウント",
-    "SpecAccount": "入力の指定",
-    "SpecAccountTip": "入力の指定権限アカウントの選択",
+    "SameAccountTip": "与被授权人用户名相同的账号",
+    "SpecAccount": "特定のアカウント",
+    "SpecAccountTip": "指定用户名选择授权账号",
     "Input": "入力",
     "permAccount": "認定アカウント",
     "Actions": "アクション",
@@ -1088,7 +1100,8 @@
     "userCount": "ユーザー数",
     "userGroupCount": "ユーザーグループ数",
     "usersAndUserGroups": "ユーザーまたはユーザーグループ",
-    "Account": "アカウント"
+    "Account": "アカウント",
+    "ManualAccount": "手动账号"
   },
   "route": {
     "": "",

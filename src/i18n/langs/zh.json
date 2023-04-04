@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AddAccountResult": "账号批量添加结果",
     "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
     "AccountTemplate": "账号模版",
     "HistoryDate": "日期",
@@ -205,6 +206,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
     "ImportMessage": "请前往对应类型的页面导入数据",
     "PushAccount": "推送账号",
@@ -442,6 +444,10 @@
   },
   "common": {
     "BatchProcessing": "批量处理(选中 {Number} 项)",
+    "Created": "已创建",
+    "Updated": "已更新",
+    "Skipped": "已跳过",
+    "Error": "错误",
     "ServerError": "服务器错误",
     "CommunityEdition": "社区版",
     "EnterpriseEdition": "企业版",

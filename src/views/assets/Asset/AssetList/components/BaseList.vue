@@ -67,6 +67,11 @@ export default {
     optionInfo: {
       type: Object,
       default: () => ({})
+    },
+    // url中需要添加额外的参数
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -93,6 +98,7 @@ export default {
       }
       vm.$router.push(route)
     }
+    const extraQuery = this.$route.params?.extraQuery || {}
     return {
       showPlatform: false,
       GatewayPort: 0,
@@ -103,6 +109,10 @@ export default {
         permissions: {
           app: 'assets',
           resource: 'asset'
+        },
+        extraQuery: {
+          ...extraQuery,
+          ...this.extraQuery
         },
         columnsExclude: ['spec_info', 'auto_info'],
         columnsShow: {

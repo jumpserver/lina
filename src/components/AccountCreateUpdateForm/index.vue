@@ -31,7 +31,7 @@ export default {
     },
     account: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     // 默认组件密码加密
     encryptPassword: {
@@ -50,21 +50,21 @@ export default {
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'api_key']
+            secret_types: ['password', 'ssh_key', 'token', 'access_key']
           }
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: this.account || {},
+      form: Object.assign({ 'on_invalid': 'skip' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key', 'token',
-          'api_key', 'passphrase'
+          'secret_type', 'secret', 'ssh_key',
+          'token', 'access_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'strategy', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -78,7 +78,7 @@ export default {
             return this.platform || this.asset
           }
         },
-        strategy: {
+        on_invalid: {
           rules: [Required],
           label: this.$t('ops.RunasPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),
@@ -154,11 +154,11 @@ export default {
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
-        api_key: {
-          id: 'api_key',
+        access_key: {
+          id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'api_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key'
         },
         secret_type: {
           type: 'radio-group',
@@ -210,14 +210,14 @@ export default {
         },
         {
           label: this.$t('assets.AccessKey'),
-          value: 'api_key'
+          value: 'access_key'
         }
       ]
       const secretTypes = []
       this.iPlatform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
-      if (!this.form.secret_type) {
+      if (!this.form?.secret_type) {
         this.form.secret_type = secretTypes[0]
       }
       this.fieldsMeta.secret_type.options = choices.filter(item => {
