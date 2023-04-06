@@ -228,7 +228,7 @@ export default [
         name: 'CustomCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateWeb'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('assets.CreateCustom'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
