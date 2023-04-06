@@ -67,7 +67,7 @@ export default {
         },
         is_periodic: {
           type: 'switch',
-          disabled: !this.$store.getters.hasValidLicense
+          hidden: !this.$store.getters.hasValidLicense
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },
