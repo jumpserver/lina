@@ -207,6 +207,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "CustomHelpMessage": "自定义类型资产，需要 Applet 插件的支持",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
     "ImportMessage": "请前往对应类型的页面导入数据",
@@ -253,7 +254,8 @@
     "CreateRemoteApp": "创建资产-远程应用",
     "CreateDevice": "创建资产-网络设备",
     "CreateCloud": "创建资产-云平台",
-    "CreateWeb": "创建资产-web",
+    "CreateWeb": "创建资产-Web",
+    "CreateCustom": "创建资产-自定义",
     "Privileged": "特权账号",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
@@ -375,6 +377,7 @@
     "Refresh": "刷新",
     "RefreshHardware": "更新硬件信息",
     "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
+
     "RemoteApps": "远程应用",
     "Applications": "应用",
     "RemoteType": "应用类型",
