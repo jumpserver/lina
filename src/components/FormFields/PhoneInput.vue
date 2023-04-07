@@ -39,6 +39,7 @@ export default {
         { name: 'China(中国)', value: '+86' },
         { name: 'HongKong(中国香港)', value: '+852' },
         { name: 'Macao(中国澳门)', value: '+853' },
+        { name: 'Taiwan(中国台湾)', value: '+886' },
         { name: 'America(America)', value: '+1' },
         { name: 'Russia(Россия)', value: '+7' },
         { name: 'France(français)', value: '+33' },
