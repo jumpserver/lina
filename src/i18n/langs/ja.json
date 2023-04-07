@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountPolicy": "アカウントポリシー",
     "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
     "HistoryDate": "历史日期",
     "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
@@ -1479,6 +1480,7 @@
     "authLdapUserAttrMap": "ユーザー属性マッピング",
     "authUserAttrMap": "ユーザー属性マッピング",
     "authUserAttrMapHelpText": "左側のキーがJumpServerユーザ属性、右側の値が認証プラットフォームユーザ属性",
+    "authSaml2UserAttrMapHelpText": "左のキーはSAML 2ユーザー属性、右の値は認証プラットフォームユーザー属性",
     "OAuth2": "OAuth2",
     "enableSAML2Auth": "SAML2認証をオンにする",
     "enableOAuth2Auth": "OAuth2認証をオンにする",

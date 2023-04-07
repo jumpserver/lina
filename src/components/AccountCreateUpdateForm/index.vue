@@ -37,11 +37,14 @@ export default {
     encryptPassword: {
       type: Boolean,
       default: true
+    },
+    addTemplate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      selectedTemplate: false,
       loading: true,
       usernameChanged: false,
       defaultPrivilegedAccounts: ['root', 'administrator'],
@@ -82,6 +85,7 @@ export default {
         },
         template: {
           component: Select2,
+          rules: [Required],
           el: {
             multiple: false,
             ajax: {
@@ -92,17 +96,12 @@ export default {
             }
           },
           hidden: () => {
-            return this.platform || this.asset
-          },
-          on: {
-            change: ([event]) => {
-              this.selectedTemplate = !!event
-            }
+            return this.platform || this.asset || !this.addTemplate
           }
         },
         on_invalid: {
           rules: [Required],
-          label: this.$t('ops.RunasPolicy'),
+          label: this.$t('accounts.AccountPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),
           hidden: () => {
             return this.platform || this.asset
@@ -124,7 +123,7 @@ export default {
             }
           },
           hidden: () => {
-            return this.selectedTemplate
+            return this.addTemplate
           }
         },
         username: {
@@ -143,12 +142,12 @@ export default {
             }
           },
           hidden: () => {
-            return this.selectedTemplate
+            return this.addTemplate
           }
         },
         privileged: {
           hidden: () => {
-            return this.selectedTemplate
+            return this.addTemplate
           }
         },
         su_from: {
@@ -170,51 +169,46 @@ export default {
         secret: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'password' || this.selectedTemplate
+          hidden: (formValue) => formValue.secret_type !== 'password' || this.addTemplate
         },
         ssh_key: {
           label: this.$t('assets.PrivateKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.selectedTemplate
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         passphrase: {
           label: this.$t('assets.Passphrase'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.selectedTemplate
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         token: {
           label: this.$t('assets.Token'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'token' || this.selectedTemplate
+          hidden: (formValue) => formValue.secret_type !== 'token' || this.addTemplate
         },
         access_key: {
           id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'access_key' || this.selectedTemplate
+          hidden: (formValue) => formValue.secret_type !== 'access_key' || this.addTemplate
         },
         secret_type: {
           type: 'radio-group',
           options: [],
           hidden: () => {
-            return this.selectedTemplate
+            return this.addTemplate
           }
         },
         push_now: {
           helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
-          }
-        },
-        is_active: {
-          hidden: () => {
-            return this.selectedTemplate
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account') || this.addTemplate
           }
         },
         comment: {
           hidden: () => {
-            return this.selectedTemplate
+            return this.addTemplate
           }
         }
       },
