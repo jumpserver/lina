@@ -9,6 +9,7 @@
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { PhoneInput } from '@/components/FormFields'
 import { IBox } from '@/components'
 
 export default {
@@ -40,6 +41,9 @@ export default {
         },
         email: {
           disabled: true
+        },
+        phone: {
+          component: PhoneInput
         }
       },
       submitMethod() {
