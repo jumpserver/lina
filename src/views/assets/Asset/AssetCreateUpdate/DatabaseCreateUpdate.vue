@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     getAddFields() {
-      const platform = this.$route.query.platform_type
+      const platform = this.$route.query.type
       const baseFields = [[this.$t('common.Basic'), ['db_name']]]
       let tlsFields = ['use_ssl', 'ca_cert']
       switch (platform) {
@@ -39,7 +39,7 @@ export default {
       return baseFields
     },
     getAddFieldsMeta() {
-      const platform = this.$route.query.platform_type
+      const platform = this.$route.query.type
       const fieldsMeta = {
         db_name: [],
         use_ssl: {

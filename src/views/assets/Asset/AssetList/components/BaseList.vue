@@ -94,12 +94,13 @@ export default {
       }
       if (action === 'Clone') {
         route.query.clone_from = row.id
-        route.query.platform = row.platform.id
-        route.query.platform_type = row.type.value
       } else if (action === 'Update') {
         route.params.id = row.id
+      }
+      if (['Create', 'Update'].includes(routeAction)) {
         route.query.platform = row.platform.id
-        route.query.platform_type = row.type.value
+        route.query.type = row.type.value
+        route.query.category = row.type.category
       }
       vm.$router.push(route)
     }
