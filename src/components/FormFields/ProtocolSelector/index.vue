@@ -167,6 +167,13 @@ export default {
           })
         this.items = [this.settingItem, ...others]
       }
+      if (this.settingItem.name === 'winrm') {
+        if (this.settingItem.setting?.use_ssl) {
+          this.settingItem.port = 5986
+        } else {
+          this.settingItem.port = 5985
+        }
+      }
     },
     handleDelete(index) {
       this.items = this.items.filter((value, i) => i !== index)
