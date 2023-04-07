@@ -1479,6 +1479,7 @@
     "authLdapUserAttrMap": "User attr map",
     "authUserAttrMap": "User attr map",
     "authUserAttrMapHelpText": "Mapping relationship { idp_key: sp_key}",
+    "authSaml2UserAttrMapHelpText": "Mapping relationship { saml2_key: sp_key}",
     "SAML2": "SAML2",
     "enableSAML2Auth": "Enable SAML2 Auth",
     "SAML2Auth": "SAML2 Auth",

@@ -1473,6 +1473,7 @@
     "authLdapUserAttrMap": "用户属性映射",
     "authUserAttrMap": "用户属性映射",
     "authUserAttrMapHelpText": "左侧的键为 JumpServer 用户属性，右侧的值为认证平台用户属性",
+    "authSaml2UserAttrMapHelpText": "左侧的键为 SAML2 用户属性，右侧的值为认证平台用户属性",
     "OAuth2": "OAuth2",
     "enableOAuth2Auth": "开启 OAuth2 认证",
     "tokenHTTPMethod": "Token 获取方法",
