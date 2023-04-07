@@ -141,6 +141,7 @@ export default {
       const newAddAccounts = this.accountsSelected.filter(i => {
         if (!hasIdAccounts.includes(i.id)) {
           i.template = true
+          i.secret_type = i.secret_type.value
           return i
         }
       })
