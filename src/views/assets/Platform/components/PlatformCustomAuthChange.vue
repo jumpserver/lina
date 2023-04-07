@@ -36,18 +36,16 @@ export default {
   created() {},
   methods: {
     onSubmit() {
-      if (this.url) {
-        const commands = this.$refs.dynamicFormRef.getInput()
-        this.$axios.put(
-          this.url, { commands: commands }
-        ).then(() => {
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
-          this.$emit('close-dialog')
-        }).catch(err => {
-          const error = err.response.data?.commands.join(',')
-          this.$message.error(error)
-        })
-      }
+      const commands = this.$refs.dynamicFormRef.getInput()
+      this.$axios.put(
+        this.url, { commands: commands }
+      ).then(() => {
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$emit('close-dialog')
+      }).catch(err => {
+        const error = err.response.data?.commands.join(',')
+        this.$message.error(error)
+      })
     }
   }
 }
