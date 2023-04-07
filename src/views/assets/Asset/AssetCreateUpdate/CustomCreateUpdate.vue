@@ -12,20 +12,16 @@ export default {
     return {
       url: '/api/v1/assets/customs/',
       addFields: [
-        [this.$t('assets.Secure'), ['info'], 1]
+        [this.$t('assets.CustomFields'), ['custom_info'], 1]
       ],
       addFieldsMeta: {
-        info: {
+        custom_info: {
           fields: '__all__'
         }
       }
     }
   },
   mounted() {
-    const platform = this.$route.query.platform
-    if (platform) {
-      this.url += `?platform=${platform}`
-    }
   }
 }
 </script>

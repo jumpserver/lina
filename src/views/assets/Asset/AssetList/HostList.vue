@@ -2,8 +2,8 @@
   <div>
     <BaseList v-bind="config" />
     <GatewayDialog
-      :port="GatewayPort"
       :cell="GatewayCell"
+      :port="GatewayPort"
       :visible.sync="GatewayVisible"
     />
   </div>
@@ -58,8 +58,8 @@ export default {
                     can: ({ row }) =>
                       this.$hasPerm('assets.test_assetconnectivity') &&
                       !this.$store.getters.currentOrgIsRoot &&
-                      row['auto_info'].ansible_enabled &&
-                      row['auto_info'].ping_enabled,
+                      row['auto_config'].ansible_enabled &&
+                      row['auto_config'].ping_enabled,
                     callback: ({ row }) => {
                       if (row.platform.name === 'Gateway') {
                         this.GatewayVisible = true

@@ -244,8 +244,8 @@ export default {
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.change_account') &&
-                    row.asset['auto_info'].ansible_enabled &&
-                    row.asset['auto_info'].ping_enabled,
+                    row.asset['auto_config'].ansible_enabled &&
+                    row.asset['auto_config'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/tasks/`,
