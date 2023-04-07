@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/DataForm/rules'
+import { PhoneInput } from '@/components/FormFields'
 
 export default {
   name: 'ProfileUpdate',
@@ -35,6 +36,9 @@ export default {
         },
         email: {
           disabled: true
+        },
+        phone: {
+          component: PhoneInput
         },
         mfa_level: {
           hidden: (formValue) => {
