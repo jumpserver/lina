@@ -29,11 +29,6 @@
       :show-fields="fields"
       :visible.sync="visible"
     />
-    <PlatformCustomAuthChangeDialog
-      v-if="customVisible"
-      :object="object"
-      :visible.sync="customVisible"
-    />
   </el-row>
 </template>
 
@@ -42,7 +37,6 @@ import { IBox } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
-import PlatformCustomAuthChangeDialog from './PlatformCustomAuthChangeDialog'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 
 export default {
@@ -52,8 +46,7 @@ export default {
     QuickActions,
     AutoDetailCard,
     ProtocolSelector,
-    PlatformDetailUpdateDialog,
-    PlatformCustomAuthChangeDialog
+    PlatformDetailUpdateDialog
   },
   props: {
     object: {
@@ -65,7 +58,6 @@ export default {
   data() {
     return {
       visible: false,
-      customVisible: false,
       fields: ['domain_enabled'],
       quickActions: this.setQuickActions(),
       url: `/api/v1/assets/platforms/${this.object.id}`,
@@ -139,19 +131,6 @@ export default {
             click: () => {
               this.fields = ['su_enabled', 'su_method']
               this.visible = !this.visible
-            }
-          })
-        },
-        {
-          title: this.$t('assets.CustomAuthCommand'),
-          has: !object.internal && ['host', 'device'].indexOf(object.category.value) !== -1,
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Update')
-          },
-          callbacks: Object.freeze({
-            click: () => {
-              this.customVisible = !this.customVisible
             }
           })
         }

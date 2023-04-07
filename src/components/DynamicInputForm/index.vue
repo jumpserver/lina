@@ -1,0 +1,115 @@
+<template>
+  <div>
+    <div v-for="(command, index) in value" :key="index" :prop="'value.' + index + '.value'" class="command-item">
+      <el-input v-model="command.value" size="mini">
+        <template slot="prepend"> {{ inputTitle + ' ' + (index + 1) }}</template>
+      </el-input>
+      <div class="input-button">
+        <el-button
+          :disabled="deleteDisabled()"
+          icon="el-icon-minus"
+          size="mini"
+          style="flex-shrink: 0;"
+          type="danger"
+          @click="handleDelete(command)"
+        />
+        <el-button
+          v-if="index === value.length - 1"
+          icon="el-icon-plus"
+          size="mini"
+          style="flex-shrink: 0;"
+          type="primary"
+          @click="handleAdd()"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
+    url: {
+      type: String,
+      default: () => ''
+    },
+    getInput: {
+      type: Function,
+      default: function() {
+        return this.value.map(v => { return v.value })
+      }
+    },
+    getData: {
+      type: Function,
+      default: function() {
+        this.defaultGetData()
+      }
+    },
+    inputTitle: {
+      type: String,
+      default: () => ''
+    }
+  },
+  data() {
+    return {
+      errorMessage: ''
+    }
+  },
+  created() {
+    this.getData()
+  },
+  methods: {
+    defaultGetData() {
+      this.$axios.get(this.url).then(resp => {
+        resp.commands.map(v => {
+          this.value.push({ value: v })
+        })
+        if (this.value.length < 1) {
+          this.value.push({ value: '' })
+        }
+      })
+    },
+    handleDelete(command) {
+      const index = this.value.indexOf(command)
+      if (index !== -1) {
+        this.value.splice(index, 1)
+      }
+    },
+    handleAdd() {
+      this.value.push({ value: '' })
+    },
+    deleteDisabled() {
+      return this.value.length <= 1
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.el-input {
+  width: 90%;
+}
+.command-item {
+  display: flex;
+  margin: 5px 0;
+}
+.input-button {
+  margin-top: 2px;
+  display: flex;
+  margin-left: 20px
+}
+.input-button ::v-deep .el-button.el-button--mini {
+  height: 25px;
+  padding: 5px;
+}
+.el-input-group__append .el-button {
+  font-size: 14px;
+  color: #1a1a1a;
+  padding: 9px 20px;
+}
+</style>

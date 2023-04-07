@@ -210,7 +210,7 @@
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
     "ImportMessage": "请前往对应类型的页面导入数据",
     "CustomAuthCommand": "自定义改密指令",
-    "CustomAuthCommandHelpMessage": "自定义指令中需包含 `{username}` 和 `{password}` 字段，改密时将会进行相应账号和密码的替换。<br />如 linux 改密：<br />passwd {username} <br />{password} <br />{password}",
+    "CustomAuthCommandHelpMessage": "自定义指令中需包含 `&#123;username&#125;` 和 `&#123;password&#125;` 字段，改密时将会进行相应账号和密码的替换。<br />如 linux 改密：<br />passwd &#123;username&#125; <br />&#123;password&#125; <br />&#123;password&#125;",
     "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
     "AuthUsername": "使用用户名认证",

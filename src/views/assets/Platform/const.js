@@ -1,7 +1,8 @@
 import i18n from '@/i18n/i18n'
 import rules from '@/components/DataForm/rules'
-import { JsonEditor } from '@/components/FormFields'
+import { JsonEditor, Select2SettingDialog } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
+import PlatformCustomAuthChange from './components/PlatformCustomAuthChange'
 
 export const platformFieldsMeta = (vm) => {
   const assetMeta = assetFieldsMeta(vm)
@@ -28,7 +29,12 @@ export const platformFieldsMeta = (vm) => {
         ping_method: {},
         gather_facts_method: {},
         push_account_method: {},
-        change_secret_method: {},
+        change_secret_method: {
+          el: {
+            title: i18n.t('assets.CustomAuthCommand'),
+            dialogComponent: PlatformCustomAuthChange
+          }
+        },
         verify_account_method: {}
       }
     },
@@ -106,11 +112,16 @@ export const setAutomations = (vm) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
     // 设置 method 类型和 options
-    _.set(autoFieldsMeta, `${itemMethodKey}.type`, 'select')
+    _.set(autoFieldsMeta, `${itemMethodKey}.component`, Select2SettingDialog)
     const methods = automation[itemMethodKey + 's'] || []
-    autoFieldsMeta[itemMethodKey].options = methods.map(method => {
-      return { value: method['id'], label: method['name'] }
-    })
-    _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)
+    const el = _.get(autoFieldsMeta[itemMethodKey], 'el') || {}
+    const defaultEl = {
+      'options': methods.map(method => {
+        return { value: method['id'], label: method['name'], canSetting: method['can_setting'] }
+      }),
+      'objectId': vm.object?.id || vm.$route.params?.id
+    }
+    _.set(autoFieldsMeta[itemMethodKey], 'el', Object.assign(el, defaultEl))
+    _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].el.options[0]?.value)
   }
 }

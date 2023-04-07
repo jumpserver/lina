@@ -210,7 +210,7 @@
     "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
     "ImportMessage": "ミラータイプのページにデータをインポートしてください",
     "CustomAuthCommand": "カスタム改密命令です",
-    "CustomAuthCommandHelpMessage": "カスタムコマンドには、`{username}`と`{password}`のフィールドが含まれている必要があります。<br />例えば linux しゅうみつ：<br />passwd {username} <br />{password} <br />{password}",
+    "CustomAuthCommandHelpMessage": "カスタムコマンドには、`&#123;username&#125;`と`&#123;password&#125;`のフィールドが含まれている必要があります。<br />例えば linux しゅうみつ：<br />passwd &#123;username&#125; <br />&#123;password&#125; <br />&#123;password&#125;",
     "PushAccount": "アカウント情報をプッシュ",
     "AuthUsername": "ユーザー名を使用した認証",
     "Secure": "安全である",

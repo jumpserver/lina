@@ -13,6 +13,7 @@ import UploadSecret from './UploadSecret'
 import WeekCronSelect from './WeekCronSelect'
 import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
+import Select2SettingDialog from './Select2SettingDialog'
 
 export default {
   Text,
@@ -29,7 +30,8 @@ export default {
   UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker
+  DatetimeRangePicker,
+  Select2SettingDialog
 }
 
 export {
@@ -47,5 +49,6 @@ export {
   UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker
+  DatetimeRangePicker,
+  Select2SettingDialog
 }
