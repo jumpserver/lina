@@ -78,17 +78,6 @@ export default {
             })
           }
           return this.$axios[submitMethod](url, values)
-        },
-        onPerformSuccess(res, method) {
-          const nextRoute = this.$router.push({ name: 'AssetList', params: { extraQuery: { order: '-date_updated' }}})
-          switch (method) {
-            case 'post':
-              this.$message.success(this.$tc('common.createSuccessMsg'))
-              return nextRoute
-            case 'put':
-              this.$message.success(this.$tc('common.updateSuccessMsg'))
-              return nextRoute
-          }
         }
       }
     }

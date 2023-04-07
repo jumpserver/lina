@@ -18,6 +18,7 @@
 import AutoDataForm from '@/components/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
 import { encryptPassword } from '@/utils/crypto'
+import deepmerge from 'deepmerge'
 
 export default {
   name: 'GenericCreateUpdateForm',
@@ -156,6 +157,10 @@ export default {
         return url
       }
     },
+    extraQueryOrder: {
+      type: String,
+      default: '-date_updated'
+    },
     emitPerformSuccessMsg: {
       type: Function,
       default(method, res, addContinue) {
@@ -201,7 +206,9 @@ export default {
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
         if (!(route.params && route.params.id)) {
-          route['params'] = Object.assign(route['params'] || {}, { 'id': res.id })
+          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id, order: this.extraQueryOrder })
+        } else {
+          route['params'] = deepmerge(route['params'], { order: this.extraQueryOrder })
         }
         this.$emit('submitSuccess', res)
 
