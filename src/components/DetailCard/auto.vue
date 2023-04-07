@@ -1,10 +1,10 @@
 <template>
-  <DetailCard v-if="!loading" :items="items" v-bind="$attrs" />
+  <DetailCard v-if="!loading && hasObject" :items="items" v-bind="$attrs" />
 </template>
 
 <script>
 import DetailCard from './index'
-import { toSafeLocalDateStr, copy } from '@/utils/common'
+import { copy, toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'AutoDetailCard',
@@ -33,12 +33,28 @@ export default {
     formatters: {
       type: Object,
       default: () => ({})
+    },
+    nested: {
+      type: String,
+      default: null
     }
   },
   data() {
     return {
       items: [],
       loading: true
+    }
+  },
+  computed: {
+    iObject() {
+      if (this.nested) {
+        return this.object[this.nested] || {}
+      } else {
+        return this.object
+      }
+    },
+    hasObject() {
+      return Object.keys(this.iObject).length > 0
     }
   },
   async mounted() {
@@ -62,7 +78,10 @@ export default {
     },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      const remoteMeta = data.actions['GET'] || {}
+      let remoteMeta = data.actions['GET'] || {}
+      if (this.nested) {
+        remoteMeta = remoteMeta[this.nested]?.children || {}
+      }
       let fields = this.fields
       fields = fields || Object.keys(remoteMeta)
       const defaultExcludes = ['org_id']
@@ -82,7 +101,7 @@ export default {
           continue
         }
 
-        let value = this.object[name]
+        let value = this.iObject[name]
         const label = fieldMeta.label
 
         if (Array.isArray(value)) {

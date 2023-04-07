@@ -1,9 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard v-bind="detailBasicConfig" />
-      <AutoDetailCard v-if="detailSpecInfoConfig.show" v-bind="detailSpecInfoConfig" />
-      <AutoDetailCard v-if="detailInfoConfig.show" v-bind="detailInfoConfig" />
+      <AutoDetailCard v-bind="basicInfoConfig" />
+      <AutoDetailCard v-bind="specInfoConfig" />
+      <AutoDetailCard v-bind="customInfoConfig" />
+      <AutoDetailCard v-bind="gatheredInfoConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -83,8 +84,7 @@ export default {
                 { action: 'refresh' }
               ).then(res => {
                 openTaskPage(res['task'])
-              }
-              )
+              })
             }.bind(this)
           }
         },
@@ -150,7 +150,7 @@ export default {
         title: this.$t('assets.Label'),
         labels: this.object.labels
       },
-      detailBasicConfig: {
+      basicInfoConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
@@ -179,19 +179,26 @@ export default {
           'is_active', 'date_created', 'created_by', 'comment'
         ]
       },
-      detailSpecInfoConfig: {
-        show: Object.keys(this.object['spec_info']).length > 0,
+      specInfoConfig: {
         title: this.$t('common.SpecificInfo'),
-        url: `/api/v1/assets/assets/${this.object.id}/spec-info/`,
-        object: this.object.spec_info,
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        nested: 'spec_info',
         showUndefine: false,
-        excludes: ['spec_info.script']
+        excludes: ['script']
       },
-      detailInfoConfig: {
-        show: this.object.category.value === 'host' && Object.keys(this.object['info']).length > 0,
-        url: `/api/v1/assets/hosts/${this.object.id}/info/`,
+      customInfoConfig: {
+        title: this.$t('common.CustomInfo'),
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        nested: 'custom_info',
+        showUndefine: false
+      },
+      gatheredInfoConfig: {
+        url: `/api/v1/assets/hosts/${this.object.id}/`,
         title: this.$t('assets.HardwareInfo'),
-        object: this.object.info,
+        object: this.object,
+        nested: 'gathered_info',
         showUndefine: false
       }
     }
