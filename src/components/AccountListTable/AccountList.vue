@@ -22,6 +22,16 @@
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
+    <AccountCreateUpdate
+      v-if="showAddTemplateDialog"
+      :account="account"
+      :asset="iAsset"
+      :add-template="true"
+      :title="accountCreateUpdateTitle"
+      :visible.sync="showAddTemplateDialog"
+      @add="addAccountSuccess"
+      @bulk-create-done="showBulkCreateResult($event)"
+    />
     <ResultDialog
       v-if="showResultDialog"
       :result="createAccountResults"
@@ -105,6 +115,7 @@ export default {
       showUpdateSecretDialog: false,
       showResultDialog: false,
       showAddDialog: false,
+      showAddTemplateDialog: false,
       createAccountResults: [],
       accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
@@ -304,6 +315,24 @@ export default {
                 vm.account = {}
                 vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
+              })
+            }
+          },
+          {
+            name: 'add-template',
+            title: this.$t('common.TemplateAdd'),
+            type: 'primary',
+            has: !(this.platform || this.asset),
+            can: () => {
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
+            },
+            callback: async() => {
+              await this.getAssetDetail()
+              setTimeout(() => {
+                vm.iAsset = this.asset
+                vm.account = {}
+                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
+                vm.showAddTemplateDialog = true
               })
             }
           },
