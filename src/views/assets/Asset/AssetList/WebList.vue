@@ -20,7 +20,7 @@ export default {
         tableConfig: {
           columnsExclude: [
             'username_selector', 'password_selector', 'submit_selector',
-            'script', 'spec_info', 'info', 'auto_info'
+            'script', 'spec_info', 'info', 'auto_config'
           ],
           columnsMeta: {
             autofill: {

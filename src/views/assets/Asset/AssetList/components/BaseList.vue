@@ -7,9 +7,9 @@
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
+      :category="category"
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
-      :category="category"
       @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
@@ -23,7 +23,12 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DetailFormatter,
+  ProtocolsFormatter,
+  TagsFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -114,7 +119,7 @@ export default {
           ...extraQuery,
           ...this.extraQuery
         },
-        columnsExclude: ['spec_info', 'auto_info'],
+        columnsExclude: ['spec_info', 'auto_config'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -177,8 +182,8 @@ export default {
                   can: ({ row }) =>
                     this.$hasPerm('assets.test_assetconnectivity') &&
                     !this.$store.getters.currentOrgIsRoot &&
-                    row['auto_info'].ansible_enabled &&
-                    row['auto_info'].ping_enabled,
+                    row['auto_config'].ansible_enabled &&
+                    row['auto_config'].ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true

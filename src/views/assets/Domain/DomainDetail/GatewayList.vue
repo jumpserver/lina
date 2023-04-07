@@ -37,7 +37,7 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
         columnsExclude: [
-          'info', 'spec_info', 'auto_info'
+          'info', 'spec_info', 'auto_config'
         ],
         columnsShow: {
           min: ['name', 'actions'],
