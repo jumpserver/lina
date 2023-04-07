@@ -161,7 +161,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .layout {
   display: flex;
   justify-content: center;
@@ -189,13 +189,22 @@ export default {
 .el-button-ungroup .action-item:first-child {
   margin-left: 0;
 }
-::v-deep .more-batch-processing.el-dropdown-menu__item--divided {
-  margin-top: 0;
-  border-top: none;
-  color: #748096;
-  border-bottom: 1px solid #EBEEF5;
-}
-::v-deep .more-batch-processing.el-dropdown-menu__item--divided:before {
-  height: 0;
+::v-deep .more-batch-processing {
+  &.el-dropdown-menu__item--divided {
+    margin-top: 0;
+    border-top: none;
+    color: #909399;
+    cursor: auto;
+    font-size: 12px;
+    line-height: 30px;
+    border-bottom: 1px solid #E4E7ED;
+    &:before {
+      height: 0;
+    }
+  }
+  &.el-dropdown-menu__item:not(.is-disabled):hover {
+    color: #909399;
+    background-color: #FFFFFF;
+  }
 }
 </style>
