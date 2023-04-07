@@ -207,7 +207,7 @@
   },
   "assets": {
     "CustomAuthCommand": "Custom change password command",
-    "CustomAuthCommandHelpMessage": "The user-defined instruction needs to include ` &#123;username&#125; 'and ` &#123;password&#125;' fields. When changing the password, the corresponding account and password will be replaced.<br />for example, Linux changing the password: <br />Passwd &#123;username&#125; <br />&#123;password&#125; <br />&#123;password&#125;",
+    "CustomAuthCommandHelpMessage": "The user-defined instruction needs to include `&#123;username&#125;` and `&#123;password&#125;` fields. When changing the password, the corresponding account and password will be replaced.<br />for example, Linux changing the password: <br />Passwd &#123;username&#125; <br />&#123;password&#125; <br />&#123;password&#125;",
     "CommentHelpText": "Note: Note information will be hovered and displayed in the user authorization asset tree of Luna page, which can be viewed by ordinary users. Please do not fill in sensitive information.",
     "BulkUpdatePlatformHelpText": "Modify only assets of the same type",
     "ImportMessage": "Please go to the page of mapping type to import data",
