@@ -30,7 +30,7 @@ export default {
   props: {
     value: {
       type: [Object, String],
-      default: () => ({ 'code': '', 'phone': '' })
+      default: () => ({ 'code': '+86', 'phone': '' })
     }
   },
   data() {
@@ -61,7 +61,7 @@ export default {
     }
   },
   mounted() {
-    this.rawValue = this.value || { code: '+86', phone: '' }
+    this.rawValue = this.value || { 'code': '+86', 'phone': '' }
     this.$emit('input', this.fullPhone)
   },
   methods: {
