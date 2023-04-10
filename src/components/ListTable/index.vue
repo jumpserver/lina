@@ -52,9 +52,13 @@ export default {
     }
   },
   data() {
-    let extraQuery = {}
+    const order = this.$route?.params?.order
+    let extraQuery = {
+      ...(order && { order })
+    }
     if (this.headerActions.hasDatePicker) {
       extraQuery = {
+        ...extraQuery,
         date_from: getDaysAgo(7).toISOString(),
         date_to: getDayEnd().toISOString()
       }
