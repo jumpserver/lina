@@ -25,8 +25,7 @@ export default {
             name: 'all',
             title: this.$t('assets.All'),
             icon: 'fa-bars',
-            component: () => import('@/views/assets/Asset/AssetList/AllList.vue'),
-            hidden: true
+            component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
           },
           {
             icon: 'fa-inbox',
