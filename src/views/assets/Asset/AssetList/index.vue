@@ -1,5 +1,6 @@
 <template>
   <TabPage
+    v-if="!loading"
     :active-menu.sync="config.activeMenu"
     :submenu="config.submenu"
     @tab-click="handleTabClick"
@@ -16,49 +17,50 @@ export default {
   },
   data() {
     return {
+      loading: true,
       config: {
         activeMenu: 'all',
         submenu: [
           {
+            name: 'all',
             title: this.$t('assets.All'),
             icon: 'fa-bars',
-            name: 'all',
-            component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
+            component: () => import('@/views/assets/Asset/AssetList/AllList.vue'),
+            hidden: true
           },
           {
-            title: this.$t('applications.host'),
             icon: 'fa-inbox',
-            name: 'hosts',
-            component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
+            name: 'host',
+            component: () => import('@/views/assets/Asset/AssetList/HostList.vue'),
+            hidden: true
           },
           {
-            title: this.$t('route.Device'),
+            name: 'device',
             icon: 'fa-microchip',
-            name: 'devices',
+            hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
-            title: this.$t('route.Database'),
             icon: 'fa-database',
-            name: 'databases',
+            name: 'database',
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
-            title: this.$t('assets.Cloud'),
             icon: 'fa-cloud',
-            name: 'clouds',
+            name: 'cloud',
+            hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
-            title: 'Web',
             icon: 'fa-globe',
             name: 'web',
+            hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
-            title: 'Custom',
-            icon: 'fa-globe',
+            icon: 'fa-th',
             name: 'custom',
+            hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/CustomList.vue')
           }
         ]
@@ -66,6 +68,18 @@ export default {
     }
   },
   mounted() {
+    const nameComponentMap = {}
+    for (const item of this.config.submenu) {
+      nameComponentMap[item.name] = item
+    }
+    this.$axios.get('/api/v1/assets/categories/').then(categories => {
+      for (const item of categories) {
+        const name = item.value
+        nameComponentMap[name]['hidden'] = false
+        nameComponentMap[name]['title'] = item.label
+      }
+      this.loading = false
+    })
   },
   methods: {
     handleTabClick(tab) {
