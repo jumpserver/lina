@@ -1685,6 +1685,7 @@
   "users": {
     "Login": "Users login",
     "InviteSuccess": "Invite success",
+    "inputPhone": "Please enter your mobile phone number",
     "FileEncryptionPassword": "File encryption password",
     "OrgRoles": "Org roles",
     "RoleUsers": "Role users",

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <el-input v-model="rawValue.phone" placeholder="请输入手机号码" @change="OnInputChange">
+    <el-input v-model="rawValue.phone" :placeholder="$tc('users.inputPhone')" @input="OnInputChange">
       <el-select
         slot="prepend"
         :value="rawValue.code"
-        style="width: 80px;"
+        :placeholder="$tc('common.Select')"
+        style="width: 90px;"
         @change="OnChange"
       >
         <el-option
@@ -51,15 +52,17 @@ export default {
       ]
     }
   },
-  computed: {},
-  mounted() {
-    this.rawValue = this.value
-    if (!this.rawValue?.code) {
-      this.rawValue.code = '+86'
-    } else {
-      const value = `${this.rawValue.code}${this.rawValue.phone}`
-      this.$emit('input', value)
+  computed: {
+    fullPhone() {
+      if (!this.rawValue.phone) {
+        return ''
+      }
+      return `${this.rawValue.code} ${this.rawValue.phone}`
     }
+  },
+  mounted() {
+    this.rawValue = this.value || { code: '+86', phone: '' }
+    this.$emit('input', this.fullPhone)
   },
   methods: {
     OnChange(countryCode) {
@@ -67,8 +70,7 @@ export default {
       this.OnInputChange()
     },
     OnInputChange() {
-      const value = `${this.rawValue.code}${this.rawValue.phone}`
-      this.$emit('input', value)
+      this.$emit('input', this.fullPhone)
     }
   }
 }
