@@ -6,7 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
 import { encryptPassword } from '@/utils/crypto'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam, getUpdateObjURL } from '@/utils/common'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -69,7 +69,7 @@ export default {
             delete values['nodes']
           }
           if (id) {
-            url = `${url}${id}/`
+            url = getUpdateObjURL(url, id)
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
