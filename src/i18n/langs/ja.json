@@ -1673,6 +1673,7 @@
   "users": {
     "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
+    "inputPhone": "携帯電話の番号をお願いします",
     "FileEncryptionPassword": "ファイル暗号化パスワード",
     "RoleUsers": "承認されたユーザー",
     "RoleInfo": "ロール情報",
