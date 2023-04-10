@@ -16,6 +16,7 @@
       ref="form"
       :account="account"
       :asset="asset"
+      :add-template="addTemplate"
       @add="addAccount"
       @edit="editAccount"
     />
@@ -34,6 +35,10 @@ export default {
   },
   props: {
     visible: {
+      type: Boolean,
+      default: false
+    },
+    addTemplate: {
       type: Boolean,
       default: false
     },

@@ -12,15 +12,13 @@ export default {
   data() {
     return {
       config: {
-        category: 'web',
-        url: '/api/v1/assets/webs/',
+        category: 'custom',
+        url: '/api/v1/assets/customs/',
         headerActions: {
-          createRoute: 'WebCreate'
+          createRoute: 'CustomCreate'
         },
         tableConfig: {
           columnsExclude: [
-            'username_selector', 'password_selector', 'submit_selector',
-            'script', 'spec_info', 'info', 'auto_config'
           ],
           columnsMeta: {
             autofill: {
@@ -28,7 +26,7 @@ export default {
             }
           }
         },
-        helpMessage: this.$t('assets.WebHelpMessage')
+        helpMessage: this.$t('assets.CustomHelpMessage')
       }
     }
   }

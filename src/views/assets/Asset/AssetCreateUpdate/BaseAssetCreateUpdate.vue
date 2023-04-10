@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
 import { encryptPassword } from '@/utils/crypto'
+import { setUrlParam } from '@/utils/common'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -84,7 +85,11 @@ export default {
   },
   computed: {
     iConfig() {
-      const { url, addFields, addFieldsMeta, defaultConfig } = this
+      const { addFields, addFieldsMeta, defaultConfig } = this
+      let url = this.url
+      if (this.$route.query.platform) {
+        url = setUrlParam(url, 'platform', this.$route.query.platform)
+      }
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
