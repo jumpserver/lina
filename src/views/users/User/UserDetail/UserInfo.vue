@@ -180,7 +180,8 @@ export default {
         {
           key: this.$t('users.Phone'),
           formatter: () => {
-            return <div>{this.object.phone.phone}</div>
+            const phoneObj = this.object.phone
+            return <div>{phoneObj?.code} {phoneObj?.phone}</div>
           }
         },
         'wecom_id', 'dingtalk_id', 'feishu_id',
