@@ -206,7 +206,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
-    "CustomHelpMessage": "自定义类型资产，需要 Applet 插件的支持",
+    "CustomType": "自定义类型",
+    "CustomHelpMessage": "自定义类型资产，需要 Applet 插件的支持，请确保对应 Applet 已部署安装",
     "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
