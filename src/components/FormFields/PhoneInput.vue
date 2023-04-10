@@ -54,17 +54,15 @@ export default {
   },
   computed: {
     fullPhone() {
+      if (!this.rawValue.phone) {
+        return ''
+      }
       return `${this.rawValue.code} ${this.rawValue.phone}`
     }
   },
   mounted() {
-    this.rawValue = this.value || {}
-    if (!this.rawValue?.code) {
-      this.rawValue.code = '+86'
-      this.rawValue.phone = ''
-    } else {
-      this.$emit('input', this.fullPhone)
-    }
+    this.rawValue = this.value || { code: '+86', phone: '' }
+    this.$emit('input', this.fullPhone)
   },
   methods: {
     OnChange(countryCode) {
