@@ -7,6 +7,7 @@ import rules from '@/components/DataForm/rules'
 import BasicTree from '@/components/FormFields/BasicTree'
 import JsonEditor from '@/components/FormFields/JsonEditor'
 import { assignIfNot } from '@/utils/common'
+import ListField from '@/components/FormFields/ListField.vue'
 
 export class FormFieldGenerator {
   constructor(emit) {
@@ -65,6 +66,10 @@ export class FormFieldGenerator {
       case 'boolean':
         type = ''
         field.component = Switcher
+        break
+      case 'list':
+        type = 'input'
+        field.component = ListField
         break
       case 'object_related_field':
         field.component = ObjectSelect2
