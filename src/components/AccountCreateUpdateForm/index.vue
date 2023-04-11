@@ -37,6 +37,10 @@ export default {
     encryptPassword: {
       type: Boolean,
       default: true
+    },
+    addTemplate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -59,6 +63,7 @@ export default {
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],
+        [this.$t('accounts.AccountTemplate'), ['template']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key',
@@ -78,9 +83,25 @@ export default {
             return this.platform || this.asset
           }
         },
+        template: {
+          component: Select2,
+          rules: [Required],
+          el: {
+            multiple: false,
+            ajax: {
+              url: '/api/v1/accounts/account-templates/',
+              transformOption: (item) => {
+                return { label: item.name, value: item.id }
+              }
+            }
+          },
+          hidden: () => {
+            return this.platform || this.asset || !this.addTemplate
+          }
+        },
         on_invalid: {
           rules: [Required],
-          label: this.$t('ops.RunasPolicy'),
+          label: this.$t('accounts.AccountPolicy'),
           helpText: this.$t('accounts.BulkCreateStrategy'),
           hidden: () => {
             return this.platform || this.asset
@@ -100,6 +121,9 @@ export default {
                 }
               }
             }
+          },
+          hidden: () => {
+            return this.addTemplate
           }
         },
         username: {
@@ -116,6 +140,14 @@ export default {
                 updateForm({ privileged: true })
               }
             }
+          },
+          hidden: () => {
+            return this.addTemplate
+          }
+        },
+        privileged: {
+          hidden: () => {
+            return this.addTemplate
           }
         },
         su_from: {
@@ -137,38 +169,46 @@ export default {
         secret: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'password'
+          hidden: (formValue) => formValue.secret_type !== 'password' || this.addTemplate
         },
         ssh_key: {
           label: this.$t('assets.PrivateKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         passphrase: {
           label: this.$t('assets.Passphrase'),
           component: UpdateToken,
-          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         token: {
           label: this.$t('assets.Token'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'token'
+          hidden: (formValue) => formValue.secret_type !== 'token' || this.addTemplate
         },
         access_key: {
           id: 'access_key',
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
-          hidden: (formValue) => formValue.secret_type !== 'access_key'
+          hidden: (formValue) => formValue.secret_type !== 'access_key' || this.addTemplate
         },
         secret_type: {
           type: 'radio-group',
-          options: []
+          options: [],
+          hidden: () => {
+            return this.addTemplate
+          }
         },
         push_now: {
           helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account')
+            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account') || this.addTemplate
+          }
+        },
+        comment: {
+          hidden: () => {
+            return this.addTemplate
           }
         }
       },

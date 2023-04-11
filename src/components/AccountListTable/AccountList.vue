@@ -22,6 +22,16 @@
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
+    <AccountCreateUpdate
+      v-if="showAddTemplateDialog"
+      :account="account"
+      :asset="iAsset"
+      :add-template="true"
+      :title="accountCreateUpdateTitle"
+      :visible.sync="showAddTemplateDialog"
+      @add="addAccountSuccess"
+      @bulk-create-done="showBulkCreateResult($event)"
+    />
     <ResultDialog
       v-if="showResultDialog"
       :result="createAccountResults"
@@ -105,6 +115,7 @@ export default {
       showUpdateSecretDialog: false,
       showResultDialog: false,
       showAddDialog: false,
+      showAddTemplateDialog: false,
       createAccountResults: [],
       accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
@@ -233,8 +244,8 @@ export default {
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.change_account') &&
-                    row.asset['auto_info'].ansible_enabled &&
-                    row.asset['auto_info'].ping_enabled,
+                    row.asset['auto_config'].ansible_enabled &&
+                    row.asset['auto_config'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/tasks/`,
@@ -307,6 +318,24 @@ export default {
               })
             }
           },
+          {
+            name: 'add-template',
+            title: this.$t('common.TemplateAdd'),
+            type: 'primary',
+            has: !(this.platform || this.asset),
+            can: () => {
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
+            },
+            callback: async() => {
+              await this.getAssetDetail()
+              setTimeout(() => {
+                vm.iAsset = this.asset
+                vm.account = {}
+                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
+                vm.showAddTemplateDialog = true
+              })
+            }
+          },
           ...this.headerExtraActions
         ],
         extraMoreActions: [
@@ -314,6 +343,7 @@ export default {
             name: 'ClearSecrets',
             title: this.$t('common.ClearSecret'),
             type: 'primary',
+            fa: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },

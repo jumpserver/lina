@@ -5,6 +5,7 @@ import TagInput from './TagInput'
 import Switcher from './Switcher'
 import UploadKey from './UploadKey'
 import JsonEditor from './JsonEditor'
+import PhoneInput from './PhoneInput'
 import UploadField from './UploadField'
 import UpdateToken from './UpdateToken'
 import UserPassword from './UserPassword'
@@ -24,6 +25,7 @@ export default {
   UploadKey,
   JsonEditor,
   UpdateToken,
+  PhoneInput,
   UploadField,
   UserPassword,
   PasswordInput,
@@ -43,6 +45,7 @@ export {
   UploadKey,
   JsonEditor,
   UpdateToken,
+  PhoneInput,
   UploadField,
   UserPassword,
   PasswordInput,

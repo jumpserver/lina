@@ -16,6 +16,7 @@
       ref="form"
       :account="account"
       :asset="asset"
+      :add-template="addTemplate"
       @add="addAccount"
       @edit="editAccount"
     />
@@ -34,6 +35,10 @@ export default {
   },
   props: {
     visible: {
+      type: Boolean,
+      default: false
+    },
+    addTemplate: {
       type: Boolean,
       default: false
     },
@@ -74,14 +79,16 @@ export default {
   methods: {
     addAccount(form) {
       const formValue = Object.assign({}, form)
-      let data, url
+      let data, url, iVisible
       if (this.asset) {
         data = {
           asset: this.asset.id,
           ...formValue
         }
+        iVisible = false
         url = `/api/v1/accounts/accounts/`
       } else {
+        iVisible = true
         data = formValue
         url = `/api/v1/accounts/accounts/bulk/`
         if (data.assets.length === 0) {
@@ -89,15 +96,23 @@ export default {
           return
         }
       }
-      this.$axios.post(url, data).then((data) => {
+      this.$axios.post(url, data, {
+        disableFlashErrorMsg: true
+      }).then((data) => {
         this.handleResult(data, null)
       }).catch(error => {
         this.handleResult(null, error)
       })
+      this.iVisible = iVisible
+      if (!iVisible) {
+        this.$emit('add', true)
+      }
     },
     editAccount(form) {
       const data = { ...form }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
+        this.iVisible = false
+        this.$emit('add', true)
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => this.setFieldError(error))
     },

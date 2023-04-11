@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountPolicy": "Account policy",
     "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",
     "HistoryDate": "History date",
     "SameTypeAccountTip": "An account with the same user name and key type already exists",
@@ -333,6 +334,7 @@
     "Pending": "Pending",
     "Platform": "Platform",
     "PlatformDetail": "Platform detail",
+    "UseSSL": "Enable SSL",
     "ProtocolsGroup": "Protocols group",
     "DefaultPort": "Default port",
     "primary": "primary",
@@ -451,6 +453,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "BatchProcessing": "Batch processing(select {Number} items)",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",
@@ -618,7 +621,7 @@
     "Yes": "Yes",
     "action": "Action",
     "SyncSuccessMsg": "Sync success",
-    "activateSelected": "Activate selected",
+    "BatchActivate": "Batch activate",
     "SyncSelected": "Sync selected",
     "bulkDeleteErrorMsg": "Bulk delete failed: ",
     "bulkDeleteSuccessMsg": "Bulk delete success",
@@ -638,11 +641,11 @@
     "dateExpired": "Date expired",
     "deleteErrorMsg": "Delete failed",
     "deleteFailedMsg": "Delete failed",
-    "deleteSelected": "Delete selected",
+    "BatchDelete": "Batch delete",
     "deleteSuccessMsg": "Delete success",
     "activateSuccessMsg": "Active success",
     "deleteWarningMsg": "Are you sure to delete ",
-    "disableSelected": "Disable selected",
+    "BatchDisable": "Batch disable",
     "disableSuccessMsg": "Disable success",
     "fieldRequiredError": "This field is required",
     "getErrorMsg": "Get failed",
@@ -705,7 +708,8 @@
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
     "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",
-    "removeSelected": "Remove selected",
+    "BatchUpdate": "Batch update",
+    "BatchRemoval": "Batch removal",
     "removeWarningMsg": "Are you sure to remove ",
     "password": {
       "UPPER_CASE_REQUIRED": "Upper case required",
@@ -1477,6 +1481,7 @@
     "authLdapUserAttrMap": "User attr map",
     "authUserAttrMap": "User attr map",
     "authUserAttrMapHelpText": "Mapping relationship { idp_key: sp_key}",
+    "authSaml2UserAttrMapHelpText": "Mapping relationship { saml2_key: sp_key}",
     "SAML2": "SAML2",
     "enableSAML2Auth": "Enable SAML2 Auth",
     "SAML2Auth": "SAML2 Auth",
@@ -1714,8 +1719,10 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "Set": "Set",
     "Login": "Users login",
     "InviteSuccess": "Invite success",
+    "inputPhone": "Please enter your mobile phone number",
     "FileEncryptionPassword": "File encryption password",
     "OrgRoles": "Org roles",
     "RoleUsers": "Role users",

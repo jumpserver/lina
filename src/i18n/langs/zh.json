@@ -2,6 +2,7 @@
   "": "",
   "accounts": {
     "AddAccountResult": "账号批量添加结果",
+    "AccountPolicy": "账号策略",
     "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
     "AccountTemplate": "账号模版",
     "HistoryDate": "日期",
@@ -206,6 +207,9 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "CustomType": "自定义类型",
+    "CustomHelpMessage": "自定义类型资产，需要 Applet 插件的支持，请确保对应 Applet 已部署安装",
+    "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
     "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
     "ImportMessage": "请前往对应类型的页面导入数据",
@@ -254,7 +258,8 @@
     "CreateRemoteApp": "创建资产-远程应用",
     "CreateDevice": "创建资产-网络设备",
     "CreateCloud": "创建资产-云平台",
-    "CreateWeb": "创建资产-web",
+    "CreateWeb": "创建资产-Web",
+    "CreateCustom": "创建资产-自定义",
     "Privileged": "特权账号",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
@@ -340,6 +345,7 @@
     "Pending": "等待",
     "Platform": "系统平台",
     "PlatformDetail": "平台详情",
+    "UseSSL": "开启 SSL",
     "ProtocolsGroup": "协议",
     "DefaultPort": "默认端口",
     "Primary": "主要的",
@@ -375,6 +381,7 @@
     "Refresh": "刷新",
     "RefreshHardware": "更新硬件信息",
     "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
+
     "RemoteApps": "远程应用",
     "Applications": "应用",
     "RemoteType": "应用类型",
@@ -445,6 +452,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "BatchProcessing": "批量处理(选中 {Number} 项)",
     "Created": "已创建",
     "Updated": "已更新",
     "Skipped": "已跳过",
@@ -634,7 +642,7 @@
     "Yes": "是",
     "action": "动作",
     "User": "用户",
-    "activateSelected": "激活所选",
+    "BatchActivate": "批量激活",
     "SyncSelected": "同步所选",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
@@ -654,11 +662,11 @@
     "dateFinished": "完成日期",
     "deleteErrorMsg": "删除失败",
     "deleteFailedMsg": "删除失败",
-    "deleteSelected": "删除所选",
+    "BatchDelete": "批量删除",
     "deleteSuccessMsg": "删除成功",
     "activateSuccessMsg": "激活成功",
     "deleteWarningMsg": "你确定要删除",
-    "disableSelected": "禁用所选",
+    "BatchDisable": "批量禁用",
     "disableSuccessMsg": "禁用成功",
     "fieldRequiredError": "这个字段是必填项",
     "requiredHasUserNameMapped": "必须包含 username 字段的映射，如 { 'uid': 'username' }",
@@ -725,7 +733,8 @@
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
     "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
-    "removeSelected": "移除所选",
+    "BatchUpdate": "批量更新",
+    "BatchRemoval": "批量移除",
     "removeWarningMsg": "你确定要移除",
     "password": {
       "UPPER_CASE_REQUIRED": "须包含大写字母",
@@ -1471,6 +1480,7 @@
     "authLdapUserAttrMap": "用户属性映射",
     "authUserAttrMap": "用户属性映射",
     "authUserAttrMapHelpText": "左侧的键为 JumpServer 用户属性，右侧的值为认证平台用户属性",
+    "authSaml2UserAttrMapHelpText": "左侧的键为 SAML2 用户属性，右侧的值为认证平台用户属性",
     "OAuth2": "OAuth2",
     "enableOAuth2Auth": "开启 OAuth2 认证",
     "tokenHTTPMethod": "Token 获取方法",
@@ -1697,8 +1707,10 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "Set": "已设置",
     "Login": "用户登录",
     "InviteSuccess": "邀请成功",
+    "inputPhone": "请输入手机号码",
     "FileEncryptionPassword": "文件加密密码",
     "RoleUsers": "授权用户",
     "RoleInfo": "角色信息",

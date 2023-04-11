@@ -6,7 +6,7 @@
     @tab-click="changeMoreCreates"
   >
     <keep-alive>
-      <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
     </keep-alive>
   </TabPage>
 </template>
@@ -87,8 +87,6 @@ export default {
       },
       headerActions: {
         hasRightActions: true,
-        hasMoreActions: false,
-        hasBulkDelete: false,
         createRoute: 'PlatformCreate',
         canCreate: () => {
           return this.$hasPerm('assets.add_platform')
