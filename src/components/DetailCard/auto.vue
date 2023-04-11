@@ -141,9 +141,9 @@ export default {
         } else if (fieldMeta.type === 'labeled_choice') {
           value = value?.['label']
         } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object') {
-          value = value['name']
+          value = value?.['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
-          value = value.map(item => item['name']).join(', ')
+          value = value?.map(item => item['name']).join(', ')
         } else if (fieldMeta.type === 'boolean') {
           value = value ? this.$t('common.Yes') : this.$t('common.No')
         }
