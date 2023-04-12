@@ -172,6 +172,9 @@ export default {
   },
   created() {
     this.form = this.item.setting
+    if (!this.form || !this.item) {
+      return
+    }
     for (const i of this.baseAttrs) {
       this.form[i] = !!this.item[i]
     }
