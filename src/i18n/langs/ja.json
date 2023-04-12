@@ -352,6 +352,7 @@
     "LoginOption": "ログインオプション",
     "PublicIp": "パブリックネットワークIP",
     "Push": "プッシュ",
+    "PushSetting": "プッシュ設定",
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",

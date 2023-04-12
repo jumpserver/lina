@@ -370,6 +370,7 @@
     "LoginOption": "登录选项",
     "PublicIp": "公网IP",
     "Push": "推送",
+    "PushSetting": "推送设置",
     "PushSystemUserNow": "推送系统用户",
     "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
