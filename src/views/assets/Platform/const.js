@@ -2,6 +2,9 @@ import i18n from '@/i18n/i18n'
 import rules from '@/components/DataForm/rules'
 import { JsonEditor } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
+import AutomationParamsSetting from './AutomationParamsSetting'
+
+const needSettingParamsFields = ['push_account']
 
 export const platformFieldsMeta = (vm) => {
   const assetMeta = assetFieldsMeta(vm)
@@ -15,7 +18,7 @@ export const platformFieldsMeta = (vm) => {
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
         'change_secret_enabled', 'change_secret_method',
-        'push_account_enabled', 'push_account_method',
+        'push_account_enabled', 'push_account_method', 'push_account_params',
         'verify_account_enabled', 'verify_account_method',
         'gather_accounts_enabled', 'gather_accounts_method'
       ],
@@ -88,6 +91,7 @@ export const setAutomations = (vm) => {
   for (const item of autoFields) {
     const itemEnabledKey = item + '_enabled'
     const itemMethodKey = item + '_method'
+    const itemParamsKey = item + '_params'
     const itemEnabled = automation[itemEnabledKey]
     // 设置 enableKey disabled 和 默认值
     if (itemEnabled === false) {
@@ -105,6 +109,10 @@ export const setAutomations = (vm) => {
     _.set(autoFieldsMeta, `${itemMethodKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
+    // 设置 enableParams Hidden
+    _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, (formValue) => {
+      return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
+    })
     // 设置 method 类型和 options
     _.set(autoFieldsMeta, `${itemMethodKey}.type`, 'select')
     const methods = automation[itemMethodKey + 's'] || []
@@ -112,5 +120,11 @@ export const setAutomations = (vm) => {
       return { value: method['id'], label: method['name'] }
     })
     _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)
+
+    // 设置 params 类型字段的组件和组件参数
+    if (needSettingParamsFields.includes(item)) {
+      _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
+      _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
+    }
   }
 }
