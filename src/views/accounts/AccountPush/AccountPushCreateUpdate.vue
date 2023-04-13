@@ -3,10 +3,11 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect } from '@/components'
-import i18n from '@/i18n/i18n'
+import AccountAutoPush from './AccountAutoPush.vue'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -15,6 +16,9 @@ export default {
   },
   data() {
     return {
+      node_ids: [],
+      asset_ids: [],
+      isAssetType: '',
       initial: {
         is_periodic: this.$store.getters.hasValidLicense,
         password_rules: {
@@ -34,7 +38,7 @@ export default {
           [
             'accounts', 'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase'
+            'passphrase', 'params'
           ]
         ],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
@@ -43,6 +47,7 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
+          label: i18n.t('xpack.Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -51,7 +56,28 @@ export default {
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
           },
-          label: i18n.t('xpack.Asset')
+          on: {
+            input: ([value]) => {
+              this.asset_ids = value
+            }
+          }
+        },
+        nodes: {
+          label: this.$tc('assets.Node'),
+          el: {
+            multiple: true,
+            ajax: {
+              transformOption: (item) => {
+                return { label: item['full_value'], value: item.id }
+              },
+              url: '/api/v1/assets/nodes/'
+            }
+          },
+          on: {
+            input: ([value]) => {
+              this.node_ids = value?.map(i => i.pk)
+            }
+          }
         },
         username: {
           hidden: (formValue) => formValue['dynamic_username']
@@ -67,7 +93,16 @@ export default {
         },
         is_periodic: {
           type: 'switch',
-          hidden: !this.$store.getters.hasValidLicense
+          disabled: !this.$store.getters.hasValidLicense
+        },
+        params: {
+          component: AccountAutoPush,
+          label: this.$t('assets.AutoPush'),
+          el: {
+            assets: this.asset_ids,
+            nodes: this.node_ids
+          },
+          helpText: this.$t('accounts.AccountPush.AutoPushHelpText')
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },
@@ -83,7 +118,29 @@ export default {
       }
     }
   },
+  computed: {
+    isUpdate() {
+      return this.$route.path.indexOf('/update') > -1
+    }
+  },
+  watch: {
+    node_ids: {
+      handler(val) {
+        this.fieldsMeta.params.el.nodes = val
+      },
+      deep: true
+    },
+    asset_ids: {
+      handler(val) {
+        this.fieldsMeta.params.el.assets = val
+      },
+      deep: true
+    }
+  },
   methods: {
+    hasType(type) {
+      return this.isAssetType.indexOf(type) > -1
+    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = [
         'secret_type', 'secret_strategy', 'ssh_key_change_strategy'

@@ -86,6 +86,7 @@
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",
+      "AutoPushHelpText": "Please select an asset or node before setting it up",
       "AccountPushList": "Account push list"
     },
     "AccountBackup": {
