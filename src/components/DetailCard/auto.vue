@@ -1,10 +1,10 @@
 <template>
-  <DetailCard v-if="!loading" :items="items" v-bind="$attrs" />
+  <DetailCard v-if="!loading && hasObject" :items="items" v-bind="$attrs" />
 </template>
 
 <script>
 import DetailCard from './index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { copy, toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'AutoDetailCard',
@@ -33,6 +33,10 @@ export default {
     formatters: {
       type: Object,
       default: () => ({})
+    },
+    nested: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -41,19 +45,49 @@ export default {
       loading: true
     }
   },
+  computed: {
+    iObject() {
+      if (this.nested) {
+        return this.object[this.nested] || {}
+      } else {
+        return this.object
+      }
+    },
+    hasObject() {
+      return Object.keys(this.iObject).length > 0
+    }
+  },
   async mounted() {
     await this.optionAndGenFields()
     this.loading = false
   },
   methods: {
+    defaultFormatter(fields) {
+      const formatter = {}
+      for (const name of fields) {
+        formatter[name] = function(item, val) {
+          if (val === '-') {
+            return <span>{'-'}</span>
+          }
+          return (<span style={{ cursor: 'pointer' }} onClick={() => copy(val)}>
+            {val}
+          </span>)
+        }
+      }
+      return formatter
+    },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      const remoteMeta = data.actions['GET'] || {}
+      let remoteMeta = data.actions['GET'] || {}
+      if (this.nested) {
+        remoteMeta = remoteMeta[this.nested]?.children || {}
+      }
       let fields = this.fields
       fields = fields || Object.keys(remoteMeta)
       const defaultExcludes = ['org_id']
       const excludes = (this.excludes || []).concat(defaultExcludes)
       fields = fields.filter(item => !excludes.includes(item))
+      const defaultFormatter = this.defaultFormatter(fields)
       for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
@@ -67,7 +101,7 @@ export default {
           continue
         }
 
-        let value = this.object[name]
+        let value = this.iObject[name]
         const label = fieldMeta.label
 
         if (Array.isArray(value)) {
@@ -107,9 +141,9 @@ export default {
         } else if (fieldMeta.type === 'labeled_choice') {
           value = value?.['label']
         } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object') {
-          value = value['name']
+          value = value?.['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
-          value = value.map(item => item['name']).join(', ')
+          value = value?.map(item => item['name']).join(', ')
         } else if (fieldMeta.type === 'boolean') {
           value = value ? this.$t('common.Yes') : this.$t('common.No')
         }
@@ -125,7 +159,7 @@ export default {
         const item = {
           key: label,
           value: value,
-          formatter: this.formatters[name]
+          formatter: this.formatters[name] || defaultFormatter[name]
         }
         this.items.push(item)
       }

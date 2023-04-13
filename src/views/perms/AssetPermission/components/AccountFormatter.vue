@@ -24,10 +24,12 @@
           :value="specAccountsInput"
           @change="handleTagChange"
         />
-        <el-button size="small" type="primary" style="margin-left: 10px" @click="showAccountTemplateDialog=true">
-          {{ $t('common.TemplateAdd') }}
-        </el-button>
-        {{ $t('common.TemplateHelpText') }}
+        <span v-if="showAddTemplate">
+          <el-button size="small" type="primary" style="margin-left: 10px" @click="showAccountTemplateDialog=true">
+            {{ $t('common.TemplateAdd') }}
+          </el-button>
+          {{ addTemplateHelpText }}
+        </span>
       </el-form-item>
     </div>
 
@@ -36,6 +38,7 @@
       :title="$tc('accounts.AccountTemplate')"
       :visible.sync="showAccountTemplateDialog"
       @confirm="handleAccountTemplateConfirm"
+      @cancel="handleAccountTemplateCancel"
     >
       <ListTable ref="templateTable" v-bind="accountTemplateTable" />
     </Dialog>
@@ -70,6 +73,16 @@ export default {
     oid: {
       type: String,
       default: ''
+    },
+    showAddTemplate: {
+      type: Boolean,
+      default: true
+    },
+    addTemplateHelpText: {
+      type: String,
+      default() {
+        return this.$t('common.TemplateHelpText')
+      }
     }
   },
   data() {
@@ -178,6 +191,9 @@ export default {
       }
       this.choicesSelected = choicesSelected
       this.specAccountsInput = specAccountsInput
+    },
+    handleAccountTemplateCancel() {
+      this.showAccountTemplateDialog = false
     },
     handleAccountTemplateConfirm() {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows

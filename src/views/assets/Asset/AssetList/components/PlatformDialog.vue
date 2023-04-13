@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="$tc('assets.SelectPlatforms')"
-    :visible.sync="iVisible"
-    width="60%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('assets.SelectPlatforms')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="60%"
   >
     <div style="margin: 0 10px">
       <el-row :gutter="20">
@@ -14,8 +14,8 @@
           <el-collapse-item
             v-for="(ps, cName) in iPlatforms"
             :key="cName"
-            :title="cName"
             :name="cName"
+            :title="cName"
           >
             <el-col
               v-for="(platform, index) of ps"
@@ -155,7 +155,8 @@ export default {
       const query = {
         node: this.$route.query?.node || '',
         platform: platform.id,
-        platform_type: platform.type.value
+        type: platform.type.value,
+        category: platform.category.value
       }
 
       this.$router.push({ name: route, query })

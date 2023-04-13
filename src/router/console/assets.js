@@ -206,6 +206,40 @@ export default [
     ]
   },
   {
+    path: 'customs',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: {
+      title: i18n.t('route.CustomAsset'),
+      app: 'assets',
+      resource: 'asset'
+    },
+    children: [
+      {
+        path: '',
+        name: 'CustomList',
+        component: () => import('@/views/assets/Asset/AssetList/CustomList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'CustomCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('assets.CreateCustom'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'CustomUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
     path: 'domains',
     component: empty,
     redirect: '',

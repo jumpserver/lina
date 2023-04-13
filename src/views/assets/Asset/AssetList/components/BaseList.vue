@@ -6,8 +6,11 @@
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />
     <AssetBulkUpdateDialog
+      v-if="updateSelectedDialogSetting.visible"
+      :category="category"
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
       :cell="GatewayCell"
@@ -20,7 +23,12 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DetailFormatter,
+  ProtocolsFormatter,
+  TagsFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -64,6 +72,11 @@ export default {
     optionInfo: {
       type: Object,
       default: () => ({})
+    },
+    // url中需要添加额外的参数
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -81,15 +94,17 @@ export default {
       }
       if (action === 'Clone') {
         route.query.clone_from = row.id
-        route.query.platform = row.platform.id
-        route.query.platform_type = row.type.value
       } else if (action === 'Update') {
         route.params.id = row.id
+      }
+      if (['Create', 'Update'].includes(routeAction)) {
         route.query.platform = row.platform.id
-        route.query.platform_type = row.type.value
+        route.query.type = row.type.value
+        route.query.category = row.type.category
       }
       vm.$router.push(route)
     }
+    const extraQuery = this.$route.params?.extraQuery || {}
     return {
       showPlatform: false,
       GatewayPort: 0,
@@ -101,7 +116,11 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columnsExclude: ['spec_info', 'auto_info'],
+        extraQuery: {
+          ...extraQuery,
+          ...this.extraQuery
+        },
+        columnsExclude: ['spec_info', 'auto_config'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -164,8 +183,8 @@ export default {
                   can: ({ row }) =>
                     this.$hasPerm('assets.test_assetconnectivity') &&
                     !this.$store.getters.currentOrgIsRoot &&
-                    row['auto_info'].ansible_enabled &&
-                    row['auto_info'].ping_enabled,
+                    row['auto_config'].ansible_enabled &&
+                    row['auto_config'].ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true
@@ -201,8 +220,9 @@ export default {
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
-            title: this.$t('assets.DeactiveSelected'),
+            title: this.$t('common.BatchDisable'),
             type: 'primary',
+            icon: 'fa fa-ban',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
@@ -220,8 +240,9 @@ export default {
           },
           {
             name: 'ActiveSelected',
-            title: this.$t('assets.ActiveSelected'),
+            title: this.$t('common.BatchActivate'),
             type: 'primary',
+            icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
@@ -239,7 +260,8 @@ export default {
           },
           {
             name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
+            title: this.$t('common.BatchUpdate'),
+            icon: 'fa fa-refresh',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !vm.currentOrgIsRoot &&
@@ -277,6 +299,11 @@ export default {
   watch: {
     optionInfo(iNew) {
       this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
+    }
+  },
+  methods: {
+    handleAssetBulkUpdate() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

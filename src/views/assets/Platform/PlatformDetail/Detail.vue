@@ -51,30 +51,32 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data() {
     return {
       visible: false,
       fields: ['domain_enabled'],
-      quickActions: this.setQuickActions(),
+      quickActions: [],
       url: `/api/v1/assets/platforms/${this.object.id}`,
       detailFields: [
-        'name', 'charset',
+        'name', 'charset', 'internal',
         {
           key: this.$t('assets.Type'),
           value: `${this.object.category?.label}/${this.object.type?.label}`
         },
+        'su_method',
         'comment'
       ],
-      protocolChoices: null
+      protocolChoices: null,
+      constraints: {}
     }
   },
   computed: {},
   async mounted() {
     await this.getTypeConstraints()
+    await this.setQuickActions()
   },
   methods: {
     updateProtocols() {
@@ -89,12 +91,10 @@ export default {
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
       this.protocolChoices = constraints['protocols']
+      this.constraints = constraints
     },
-    setQuickActions() {
-      const vm = this
+    async setQuickActions() {
       const { object } = this
-      const suEnabledDisabled = ['database', 'device']
-      const domainEnabledDisabled = ['cloud', 'web']
       const quickActions = [
         {
           title: this.$t('assets.DomainEnabled'),
@@ -102,10 +102,7 @@ export default {
           attrs: {
             label: this.$t('common.Update'),
             model: object['domain_enabled'],
-            disabled: (
-              object.internal || !vm.$hasPerm('assets.change_platform') ||
-              domainEnabledDisabled.includes(object.category?.value)
-            )
+            disabled: object['internal'] || this.constraints['domain_enabled'] === false
           },
           callbacks: Object.freeze({
             change: (val) => {
@@ -119,24 +116,23 @@ export default {
         },
         {
           title: this.$t(`assets.AccountEnabled`),
+          type: 'switch',
           attrs: {
-            type: 'primary',
-            label: this.$t('common.Update'),
-            disabled: (
-              suEnabledDisabled.includes(object.category?.value) || !object.su_enabled ||
-              object.internal || !vm.$hasPerm('assets.change_platform')
-            )
+            model: object['su_enabled'],
+            disabled: object['internal'] || this.constraints['su_enabled'] === false
           },
           callbacks: Object.freeze({
-            click: () => {
-              this.fields = ['su_enabled', 'su_method']
-              this.visible = !this.visible
+            change: (val) => {
+              const data = { su_enabled: val }
+              this.$axios.patch(
+                `/api/v1/assets/platforms/${object.id}/`, data).then(res => {
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
+              })
             }
           })
         }
       ]
-
-      return quickActions
+      this.quickActions = quickActions
     }
   }
 }

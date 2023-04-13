@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
 import { encryptPassword } from '@/utils/crypto'
+import { setUrlParam, getUpdateObjURL } from '@/utils/common'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -68,7 +69,7 @@ export default {
             delete values['nodes']
           }
           if (id) {
-            url = `${url}${id}/`
+            url = getUpdateObjURL(url, id)
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
@@ -84,7 +85,11 @@ export default {
   },
   computed: {
     iConfig() {
-      const { url, addFields, addFieldsMeta, defaultConfig } = this
+      const { addFields, addFieldsMeta, defaultConfig } = this
+      let url = this.url
+      if (this.$route.query.platform) {
+        url = setUrlParam(url, 'platform', this.$route.query.platform)
+      }
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
@@ -140,8 +145,15 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
+      let protocols = platform?.protocols || []
+      protocols = protocols.map(i => {
+        if (i.name === 'http') {
+          i.display_name = 'http(s)'
+        }
+        return i
+      })
       const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
-      protocolChoices.splice(0, protocolChoices.length, ...platform.protocols)
+      protocolChoices.splice(0, protocolChoices.length, ...protocols)
       this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 

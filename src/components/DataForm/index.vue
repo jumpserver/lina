@@ -101,6 +101,9 @@ export default {
     }
   },
   computed: {
+    elForm() {
+      return this.$refs.form
+    },
     mobile() {
       return this.$store.state.app.device === 'mobile'
     },

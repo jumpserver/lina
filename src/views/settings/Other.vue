@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { IBox, CronTab } from '@/components'
-import { Page, GenericCreateUpdateForm } from '@/layout/components'
+import { CronTab, IBox } from '@/components'
+import { GenericCreateUpdateForm, Page } from '@/layout/components'
 
 export default {
   name: 'Senior',

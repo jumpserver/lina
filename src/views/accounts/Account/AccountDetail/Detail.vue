@@ -85,8 +85,8 @@ export default {
             label: this.$t('assets.Test'),
             disabled: (
               !vm.$hasPerm('accounts.verify_account') ||
-              !vm.object.asset.auto_info?.ansible_enabled ||
-              !vm.object.asset.auto_info?.ping_enabled ||
+              !vm.object.asset.auto_config?.ansible_enabled ||
+              !vm.object.asset.auto_config?.ping_enabled ||
               this.$store.getters.currentOrgIsRoot
             )
           },
@@ -111,7 +111,7 @@ export default {
             label: this.$t('assets.Push'),
             disabled: (
               !vm.$hasPerm('accounts.push_account') ||
-              !vm.object.asset.auto_info?.push_account_enabled ||
+              !vm.object.asset.auto_config?.push_account_enabled ||
               this.$store.getters.currentOrgIsRoot
             )
           },
@@ -138,6 +138,24 @@ export default {
               vm.showViewSecretDialog = false
               setTimeout(() => {
                 vm.showViewSecretDialog = true
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('common.ClearSecret'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Clear'),
+            disabled: !vm.$hasPerm('accounts.change_account')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/clear-secret/',
+                { account_ids: [this.object.id] }
+              ).then(() => {
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
               })
             }
           })

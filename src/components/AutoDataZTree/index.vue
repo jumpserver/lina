@@ -155,10 +155,7 @@ export default {
       if (isCancel) {
         return
       }
-      this.$axios.patch(
-        url,
-        { 'value': treeNode.name }
-      ).then(res => {
+      this.$axios.patch(url, { 'value': treeNode.name }).then(res => {
         let assetsAmount = treeNode.meta.data['assetsAmount']
         if (!assetsAmount) {
           assetsAmount = 0
@@ -209,6 +206,7 @@ export default {
         this.showRMenu('root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
         this.zTree.selectNode(treeNode)
+        this.currentNodeId = treeNode.meta.data.id
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },

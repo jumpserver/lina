@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "AccountPolicy": "アカウントポリシー",
+    "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
     "HistoryDate": "历史日期",
     "SameTypeAccountTip": "同じユーザー名、鍵タイプのアカウントはすでに存在します",
     "HistoryPassword": "履歴パスワード",
@@ -10,6 +12,8 @@
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。",
     "AccountGather": {
+      "IsSyncAccountLabel": "資産への同期化",
+      "IsSyncAccountHelpText": "収集が完了すると、収集したアカウントが資産に同期されます",
       "ExecutionDetail": "タスクの詳細",
       "AccountGatherTaskExecutionList": "タスク実行リスト",
       "ExecutionList": "実行リスト",
@@ -82,6 +86,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
+      "AutoPushHelpText": "まず資産またはノードを選択して設定してください",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
@@ -98,7 +103,9 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
-    "TaskID": "タスク ID"
+    "TaskID": "タスク ID",
+    "AccountTemplate": "账号模版",
+    "AddAccountResult": "账号批量添加结果"
   },
   "acl": {
     "IgnoreCase": "大文字小文字を無視する",
@@ -201,6 +208,9 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
+    "BulkUpdatePlatformHelpText": "同じタイプの資産のみ変更",
+    "ImportMessage": "ミラータイプのページにデータをインポートしてください",
     "PushAccount": "アカウント情報をプッシュ",
     "AuthUsername": "ユーザー名を使用した認証",
     "Secure": "安全である",
@@ -316,12 +326,13 @@
     "Pending": "待つ",
     "Platform": "システムプラットフォーム",
     "PlatformDetail": "プラットフォームの詳細",
+    "UseSSL": "SSLを立ち上げます",
     "ProtocolsGroup": "プロトコル・グループ",
     "DefaultPort": "デフォルトポート",
     "primary": "メジャー",
     "primaryOnly": "主な合意は、1つだけあります",
     "Required": "必須",
-    "RequiredProtocols": "必要なプロトコル、資産の追加時に選択する必要があります",
+    "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
     "LoginConfig": "ログイン構成",
@@ -342,6 +353,7 @@
     "LoginOption": "ログインオプション",
     "PublicIp": "パブリックネットワークIP",
     "Push": "プッシュ",
+    "PushSetting": "プッシュ設定",
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",
@@ -414,7 +426,9 @@
     "InitialDeploy": "初期展開",
     "PrivateKey": "鍵",
     "Category": "カテゴリー",
-    "SSHPort": "SSH ポート"
+    "SSHPort": "SSH ポート",
+    "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
+    "Primary": "主要な"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -439,6 +453,8 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "BatchProcessing": "一括処理(選択 {Number} 項目)",
+    "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
     "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
@@ -489,7 +505,9 @@
     "ApprovaLevel": "承認情報",
     "MFAVerify": "MFAの検証",
     "CurrentUserVerify": "現在のユーザー検証",
-    "ViewSecret": "パスワードの確認",
+    "ViewSecret": "暗号文の表示",
+    "ClearSecret": "暗号文の削除",
+    "Clear": "クリア",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
     "Action": "アクション",
     "RequestTickets": "ワークオーダーを申請する",
@@ -578,6 +596,8 @@
     "QuickUpdate": "クイックアップデート",
     "QuickSelect": "クイック選択",
     "RemoveSuccessMsg": "削除に成功しました",
+    "ClearSuccessMsg": "クリアに成功しました",
+    "bulkClearErrorMsg": "クリアに失敗しました: ",
     "Reset": "リセット",
     "Search": "検索",
     "Select": "選択",
@@ -599,7 +619,10 @@
     "Yes": "はい",
     "action": "アクション",
     "User": "ユーザー",
-    "activateSelected": "選択した活性化",
+    "BatchActivate": "一括アクティブ化",
+    "SyncSuccessMsg": "同期に成功しました",
+    "SyncSelected": "選択した同期",
+    "bulkSyncErrorMsg": "一括同期に失敗しました:",
     "bulkDeleteErrorMsg": "一括削除に失敗しました:",
     "bulkDeleteSuccessMsg": "一括削除に成功しました",
     "bulkRemoveErrorMsg": "一括削除に失敗しました:",
@@ -617,11 +640,11 @@
     "dateFinished": "完了日",
     "deleteErrorMsg": "削除に失敗しました",
     "deleteFailedMsg": "削除に失敗しました",
-    "deleteSelected": "削除選択した",
+    "BatchDelete": "一括削除",
     "deleteSuccessMsg": "削除に成功しました",
     "activateSuccessMsg": "有効化に成功しました",
     "deleteWarningMsg": "本当に削除します",
-    "disableSelected": "選択した無効",
+    "BatchDisable": "一括無効化",
     "disableSuccessMsg": "成功を無効にする",
     "fieldRequiredError": "このフィールドは必須項目です",
     "requiredHasUserNameMapped": "usernameフィールドのマッピングを含める必要があります, {'uid':'username'}など",
@@ -634,6 +657,7 @@
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
     "Receivers": "受取人",
+    "ClickCopy": "クリックしてコピー",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -687,7 +711,8 @@
     "updateSuccessMsg": "更新が成功しました",
     "SelectProperties": "属性の選択",
     "ObjectNotFoundOrDeletedMsg": "対応するリソースが見つかりません。または削除されました。",
-    "removeSelected": "削除選択した",
+    "BatchUpdate": "ロット更新",
+    "BatchRemoval": "一括除去",
     "removeWarningMsg": "削除します",
     "password": {
       "UPPER_CASE_REQUIRED": "大文字を含む必要があります",
@@ -766,7 +791,14 @@
     "Invalid": "無効",
     "PublishAllApplets": "すべてのアプリを公開する",
     "Sync": "同期する",
-    "Filename": "ファイル名"
+    "Filename": "ファイル名",
+    "EnterpriseEdition": "エンタープライズ版",
+    "Error": "错误",
+    "CommunityEdition": "社区版",
+    "Product": "产品",
+    "Created": "已创建",
+    "Skipped": "已跳过",
+    "Updated": "已更新"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -921,6 +953,7 @@
     "AssetResultDetail": "アセットの結果",
     "total": "合計",
     "Variable": "変数",
+    "Description": "説明",
     "PlaybookDetail": "Playbook 詳細",
     "DryRun": "テスト走行",
     "SelectAdhoc": "コマンドを選択",
@@ -959,6 +992,7 @@
     "SaveCommandSuccess": "保存コマンドが成功しました",
     "NewFile": "新しいファイルを作成する",
     "Job": "手術",
+    "JobName": "ジョブ名",
     "SUCCESS": "成功",
     "Type": "タイプ",
     "running": "ランニング",
@@ -999,11 +1033,15 @@
   },
   "perms": {
     "": "",
-    "AllAccounts": "すべてのアカウント",
-    "ManualInput": "手動入力",
-    "SameAccount": "同じ名前のアカウント",
-    "SpecifyAccounts": "入力の指定",
     "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
+    "AllAccounts": "すべてのアカウント",
+    "AllAccountTip": "アセットに追加されたすべてのアカウント",
+    "ManualInput": "手動入力",
+    "ManualAccountTip": "ログイン時にユーザー名とパスワードを手動で入力する",
+    "SameAccount": "同じ名前のアカウント",
+    "SameAccountTip": "与被授权人用户名相同的账号",
+    "SpecAccount": "特定のアカウント",
+    "SpecAccountTip": "指定用户名选择授权账号",
     "Input": "入力",
     "permAccount": "認定アカウント",
     "Actions": "アクション",
@@ -1066,7 +1104,8 @@
     "userCount": "ユーザー数",
     "userGroupCount": "ユーザーグループ数",
     "usersAndUserGroups": "ユーザーまたはユーザーグループ",
-    "Account": "アカウント"
+    "Account": "アカウント",
+    "ManualAccount": "手动账号"
   },
   "route": {
     "": "",
@@ -1443,6 +1482,7 @@
     "authLdapUserAttrMap": "ユーザー属性マッピング",
     "authUserAttrMap": "ユーザー属性マッピング",
     "authUserAttrMapHelpText": "左側のキーがJumpServerユーザ属性、右側の値が認証プラットフォームユーザ属性",
+    "authSaml2UserAttrMapHelpText": "左のキーはSAML 2ユーザー属性、右の値は認証プラットフォームユーザー属性",
     "OAuth2": "OAuth2",
     "enableSAML2Auth": "SAML2認証をオンにする",
     "enableOAuth2Auth": "OAuth2認証をオンにする",
@@ -1671,8 +1711,10 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "Set": "設定",
     "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
+    "inputPhone": "携帯電話の番号をお願いします",
     "FileEncryptionPassword": "ファイル暗号化パスワード",
     "RoleUsers": "承認されたユーザー",
     "RoleInfo": "ロール情報",

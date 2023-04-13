@@ -20,6 +20,22 @@
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
       @add="addAccountSuccess"
+      @bulk-create-done="showBulkCreateResult($event)"
+    />
+    <AccountCreateUpdate
+      v-if="showAddTemplateDialog"
+      :account="account"
+      :asset="iAsset"
+      :add-template="true"
+      :title="accountCreateUpdateTitle"
+      :visible.sync="showAddTemplateDialog"
+      @add="addAccountSuccess"
+      @bulk-create-done="showBulkCreateResult($event)"
+    />
+    <ResultDialog
+      v-if="showResultDialog"
+      :result="createAccountResults"
+      :visible.sync="showResultDialog"
     />
   </div>
 </template>
@@ -32,10 +48,12 @@ import UpdateSecretInfo from './UpdateSecretInfo'
 import AccountCreateUpdate from './AccountCreateUpdate'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
+import ResultDialog from './BulkCreateResultDialog.vue'
 
 export default {
   name: 'AccountListTable',
   components: {
+    ResultDialog,
     ListTable,
     UpdateSecretInfo,
     ViewSecret,
@@ -95,7 +113,10 @@ export default {
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
+      showResultDialog: false,
       showAddDialog: false,
+      showAddTemplateDialog: false,
+      createAccountResults: [],
       accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
       account: {},
@@ -192,6 +213,20 @@ export default {
                   }
                 },
                 {
+                  name: 'ClearSecret',
+                  title: this.$t('common.ClearSecret'),
+                  can: this.$hasPerm('accounts.change_account'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.patch(
+                      `/api/v1/accounts/accounts/clear-secret/`,
+                      { account_ids: [row.id] }
+                    ).then(() => {
+                      this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                    })
+                  }
+                },
+                {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   can: this.$hasPerm('accounts.delete_account'),
@@ -209,8 +244,8 @@ export default {
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.change_account') &&
-                    row.asset['auto_info'].ansible_enabled &&
-                    row.asset['auto_info'].ping_enabled,
+                    row.asset['auto_config'].ansible_enabled &&
+                    row.asset['auto_config'].ping_enabled,
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/tasks/`,
@@ -283,12 +318,46 @@ export default {
               })
             }
           },
+          {
+            name: 'add-template',
+            title: this.$t('common.TemplateAdd'),
+            type: 'primary',
+            has: !(this.platform || this.asset),
+            can: () => {
+              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
+            },
+            callback: async() => {
+              await this.getAssetDetail()
+              setTimeout(() => {
+                vm.iAsset = this.asset
+                vm.account = {}
+                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
+                vm.showAddTemplateDialog = true
+              })
+            }
+          },
           ...this.headerExtraActions
-          // {
-          //   name: 'autocreate',
-          //   title: this.$t('accounts.AutoCreate'),
-          //   type: 'default'
-          // }
+        ],
+        extraMoreActions: [
+          {
+            name: 'ClearSecrets',
+            title: this.$t('common.ClearSecret'),
+            type: 'primary',
+            fa: 'clean',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.patch(
+                '/api/v1/accounts/accounts/clear-secret/',
+                { account_ids: ids }).then(() => {
+                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkClearErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
@@ -331,6 +400,13 @@ export default {
     },
     refresh() {
       this.$refs.ListTable.reloadTable()
+    },
+    showBulkCreateResult(results) {
+      this.showResultDialog = false
+      this.createAccountResults = results
+      setTimeout(() => {
+        this.showResultDialog = true
+      }, 100)
     }
   }
 }

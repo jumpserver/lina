@@ -176,8 +176,15 @@ export default {
             return <img src={this.object.avatar_url} alt='' height='50'/>
           }
         },
-        'name', 'username', 'email', 'phone', 'wecom_id',
-        'dingtalk_id', 'feishu_id',
+        'id', 'name', 'username', 'email',
+        {
+          key: this.$t('users.Phone'),
+          formatter: () => {
+            const phoneObj = this.object.phone
+            return <div>{phoneObj?.code} {phoneObj?.phone}</div>
+          }
+        },
+        'wecom_id', 'dingtalk_id', 'feishu_id',
         {
           key: this.$t('users.Role'),
           formatter: (item, val) => {

@@ -15,11 +15,16 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'nodes']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('common.Other'), ['is_sync_account', 'is_active', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
       hasDetailInMsg: false,
       fieldsMeta: {
+        is_sync_account: {
+          type: 'switch',
+          label: this.$t('accounts.AccountGather.IsSyncAccountLabel'),
+          helpText: this.$t('accounts.AccountGather.IsSyncAccountHelpText')
+        },
         crontab: {
           component: CronTab,
           hidden: (formValue) => {

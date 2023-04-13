@@ -6,6 +6,7 @@
       :export-options="iExportOptions"
       :import-options="iImportOptions"
       v-bind="$attrs"
+      @importDialogClose="onImportDialogClose"
     />
   </div>
 </template>
@@ -126,6 +127,10 @@ export default {
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
+    },
+    onImportDialogClose() {
+      this.$emit('importDialogClose')
+      this.reloadTable()
     }
   }
 }

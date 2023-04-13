@@ -73,10 +73,11 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/accounts/gathered-accounts/${row.id}/sync/`,
+                      `/api/v1/accounts/gathered-accounts/sync-accounts/`,
+                      { gathered_account_ids: [row.id] }
                     ).then(res => {
-                      this.$message.success(this.$tc('common.updateSuccessMsg'))
-                    }).catch(res => {
+                      this.$message.success(this.$tc('common.SyncSuccessMsg'))
+                    }).catch(() => {
                     })
                   }
                 }
@@ -86,14 +87,36 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false,
         hasCreate: false,
         hasImport: false,
         hasExport: false,
+        hasBulkDelete: false,
         searchConfig: {
           exclude: ['asset'],
           options: []
-        }
+        },
+        extraMoreActions: [
+          {
+            name: 'SyncSelected',
+            title: this.$t('common.SyncSelected'),
+            type: 'primary',
+            icon: 'fa fa-exchange',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.add_gatheredaccount')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.post(
+                `/api/v1/accounts/gathered-accounts/sync-accounts/`,
+                { gathered_account_ids: ids }
+              ).then(() => {
+                this.$message.success(this.$tc('common.SyncSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkSyncErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        ]
       }
     }
   }

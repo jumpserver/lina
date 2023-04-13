@@ -69,7 +69,7 @@ export default {
             component: JsonEditor,
             label: this.$t('setting.authUserAttrMap'),
             rules: [JsonRequired],
-            helpText: this.$t('setting.authUserAttrMapHelpText')
+            helpText: this.$t('setting.authSaml2UserAttrMapHelpText')
           }
         },
         submitMethod: () => 'patch',

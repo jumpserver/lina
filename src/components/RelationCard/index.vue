@@ -117,6 +117,22 @@ export default {
         that.$message.success(that.$t('common.RemoveSuccessMsg'))
       }
     },
+    onDeleteFail: {
+      type: Function,
+      default(error, that) {
+        let msg = ''
+        const data = error.response.data
+        for (const item of Object.keys(data)) {
+          const value = data[item]
+          if (value instanceof Array) {
+            msg = value.join(',')
+          } else {
+            msg = value
+          }
+        }
+        that.$message.error(msg)
+      }
+    },
     performAdd: {
       type: Function,
       default: (objects, that) => {}
@@ -248,7 +264,9 @@ export default {
     removeObject(obj) {
       this.performDelete(obj, this).then(
         () => this.onDeleteSuccess(obj, this)
-      )
+      ).catch(error => {
+        this.onDeleteFail(error, this)
+      })
     },
     addObjects() {
       const objects = this.$refs.select2.$refs.select.selected.map(item => ({ label: item.label, value: item.value }))
