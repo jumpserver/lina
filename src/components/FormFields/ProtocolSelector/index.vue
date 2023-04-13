@@ -196,13 +196,21 @@ export default {
     disableAdd(item) {
       return this.remainProtocols.length === 0 || !item.port
     },
+    handleWinRMChange(protocol) {
+      if (protocol.name === 'winrm') {
+        _.set(protocol, 'public', false)
+      }
+    },
     handleAdd(index) {
-      this.items.push({ ...this.remainProtocols[0] })
+      const protocol = this.remainProtocols[0]
+      this.handleWinRMChange(protocol)
+      this.items.push({ ...protocol })
     },
     handleProtocolChange(evt, item) {
       const selected = this.choices.find(item => item.name === evt)
       item.name = selected.name
       item.port = selected.port
+      this.handleWinRMChange(item)
     },
     setPrimaryIfNeed(items) {
       // 如果没有设置主协议，设置第一个为主协议
