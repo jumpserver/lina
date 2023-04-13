@@ -98,9 +98,12 @@ export class FormFieldGenerator {
 
   generateNestFields(field, fieldMeta, fieldRemoteMeta) {
     const fields = []
-    const nestedFields = fieldMeta.fields || []
+    let nestedFields = fieldMeta.fields
     const nestedFieldsMeta = fieldMeta.fieldsMeta || {}
     const nestedFieldsRemoteMeta = fieldRemoteMeta.children || {}
+    if (nestedFields === '__all__') {
+      nestedFields = Object.keys(nestedFieldsRemoteMeta)
+    }
     for (const name of nestedFields) {
       const f = this.generateField(name, nestedFieldsMeta, nestedFieldsRemoteMeta)
       fields.push(f)
@@ -175,6 +178,9 @@ export class FormFieldGenerator {
 
   generateFields(_fields, fieldsMeta, remoteFieldsMeta) {
     let fields = []
+    if (_fields === '__all__') {
+      _fields = Object.keys(remoteFieldsMeta)
+    }
     for (let field of _fields) {
       if (field instanceof Array) {
         const items = this.generateFieldGroup(field, fieldsMeta, remoteFieldsMeta)

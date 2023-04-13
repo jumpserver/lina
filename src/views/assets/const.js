@@ -29,10 +29,10 @@ export const filterSelectValues = (values) => {
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
-  const platformType = vm?.$route.query.platform_type
+  const platformType = vm?.$route.query.type
   return {
     address: {
-      rules: [rules.specialEmojiCheck]
+      rules: [rules.specialEmojiCheck, rules.RequiredChange]
     },
     protocols: {
       component: ProtocolSelector,
@@ -132,6 +132,9 @@ export const assetFieldsMeta = (vm) => {
     },
     url: {
       label: 'url'
+    },
+    comment: {
+      helpText: i18n.t('assets.CommentHelpText')
     }
   }
 }

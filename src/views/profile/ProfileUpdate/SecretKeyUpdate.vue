@@ -31,8 +31,13 @@ export default {
   data() {
     return {
       url: '/api/v1/users/profile/secret-key/',
-      fields: ['new_secret_key', 'new_secret_key_again'],
+      fields: ['has_secret_key', 'new_secret_key', 'new_secret_key_again'],
       fieldsMeta: {
+        has_secret_key: {
+          label: this.$t('users.Set'),
+          type: 'switch',
+          disabled: true
+        },
         new_secret_key: {
           label: this.$t('users.NewPassword'),
           el: {
@@ -55,6 +60,7 @@ export default {
     onPerformSuccess() {
       this.$refs.GenericCreateUpdateForm.$refs.form.$refs.dataForm.resetForm('form')
       this.$message.success(this.$tc('common.updateSuccessMsg'))
+      this.$store.commit('common/reload')
     }
   }
 }
