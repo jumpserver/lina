@@ -30,13 +30,7 @@ export const platformFieldsMeta = (vm) => {
         gather_facts_enabled: {},
         ping_method: {},
         gather_facts_method: {},
-        push_account_method: {
-          on: {
-            change: ([val]) => {
-              vm.fieldsMeta.automation.fieldsMeta.push_account_params.el.method = val
-            }
-          }
-        },
+        push_account_method: {},
         push_account_params: {},
         change_secret_method: {
           on: {
