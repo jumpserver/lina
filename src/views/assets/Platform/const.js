@@ -39,13 +39,13 @@ export const platformFieldsMeta = (vm) => {
             }
           }
         },
-        verify_account_method: {},
         change_secret_params: {
           el: {
             title: vm.$t('assets.ChangeSecretParams'),
             method: 'change_secret_posix'
           }
-        }
+        },
+        verify_account_method: {}
       }
     },
     category_type: {
