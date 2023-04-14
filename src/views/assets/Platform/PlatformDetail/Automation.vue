@@ -7,7 +7,7 @@
 <script>
 import IBox from '@/components/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { platformFieldsMeta, setAutomations } from '../const'
+import { updateAutomationParams, platformFieldsMeta, setAutomations } from '../const'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -39,7 +39,11 @@ export default {
       fieldsMeta: platformFieldsMeta(this),
       onSubmit: this.submit,
       canSubmit: !this.object.internal,
-      defaultOptions: {}
+      defaultOptions: {},
+      afterGetFormValue: (obj) => {
+        updateAutomationParams(this, obj)
+        return obj
+      }
     }
   },
   computed: {

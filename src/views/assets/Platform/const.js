@@ -4,7 +4,7 @@ import { JsonEditor } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
 import AutomationParamsSetting from './AutomationParamsSetting'
 
-const needSettingParamsFields = ['push_account']
+const needSettingParamsFields = ['push_account', 'change_secret']
 
 export const platformFieldsMeta = (vm) => {
   const assetMeta = assetFieldsMeta(vm)
@@ -17,7 +17,7 @@ export const platformFieldsMeta = (vm) => {
         'ansible_enabled', 'ansible_config',
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
-        'change_secret_enabled', 'change_secret_method',
+        'change_secret_enabled', 'change_secret_method', 'change_secret_params',
         'push_account_enabled', 'push_account_method', 'push_account_params',
         'verify_account_enabled', 'verify_account_method',
         'gather_accounts_enabled', 'gather_accounts_method'
@@ -30,9 +30,23 @@ export const platformFieldsMeta = (vm) => {
         gather_facts_enabled: {},
         ping_method: {},
         gather_facts_method: {},
-        push_account_method: {},
-        change_secret_method: {},
-        verify_account_method: {}
+        push_account_method: {
+          on: {
+            change: ([val]) => {
+              vm.fieldsMeta.automation.fieldsMeta.push_account_params.el.method = val
+            }
+          }
+        },
+        push_account_params: {},
+        change_secret_method: {
+          on: {
+            change: ([val]) => {
+              vm.fieldsMeta.automation.fieldsMeta.change_secret_params.el.method = val
+            }
+          }
+        },
+        verify_account_method: {},
+        change_secret_params: {}
       }
     },
     category_type: {
@@ -127,4 +141,11 @@ export const setAutomations = (vm) => {
       _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
     }
   }
+}
+
+export const updateAutomationParams = (vm, obj) => {
+  needSettingParamsFields.forEach((v) => {
+    const value = _.get(obj.automation, `${v}_method`)
+    _.set(vm.fieldsMeta.automation.fieldsMeta, `${v}_params.el.method`, value)
+  })
 }
