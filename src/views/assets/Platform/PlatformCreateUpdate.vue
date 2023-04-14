@@ -15,7 +15,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { platformFieldsMeta, setAutomations } from './const'
+import { platformFieldsMeta, setAutomations, updateAutomationParams } from './const'
 
 export default {
   name: 'PlatformCreateUpdate',
@@ -77,6 +77,7 @@ export default {
         return values
       },
       afterGetFormValue: (obj) => {
+        updateAutomationParams(this, obj)
         if (obj['category'] && obj['type']) {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }

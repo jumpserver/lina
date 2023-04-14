@@ -12,7 +12,7 @@
       v-if="visible"
       width="60%"
       :visible.sync="visible"
-      :title="$tc('assets.AutoPush')"
+      :title="title"
       :show-cancel="false"
       :show-confirm="false"
       :destroy-on-close="true"
@@ -42,6 +42,12 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$t('assets.PushParams')
+      }
     },
     assets: {
       type: Array,
@@ -117,9 +123,10 @@ export default {
       const platforms = await this.getFilterPlatforms()
       let pushAccountMethods = platforms.map(i => i.automation?.push_account_method)
       pushAccountMethods = _.uniq(pushAccountMethods)
-      this.setFormConfig(pushAccountMethods)
-
-      if (pushAccountMethods.length > 0) {
+      // 检测是否有可设置的推送方式
+      const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))
+      this.setFormConfig(hasCanSettingPushMethods)
+      if (hasCanSettingPushMethods.length > 0) {
         this.isDisabled = false
         this.$emit('input', this.form)
       } else {
@@ -134,27 +141,25 @@ export default {
       this.config.fields = []
 
       for (const method of methods) {
-        const filterField = this.remoteMeta[method]
-        if (filterField) {
-          // 修改资产、节点时不点击设置按钮也需要获取form表单值暴露出去
-          if (this.form.hasOwnProperty(method)) {
-            newForm[method] = this.form[method]
-          }
-          fields.push([method, [method]])
-          fieldsMeta[method] = {
-            fields: [],
-            fieldsMeta: {}
-          }
-          if (Object.keys(filterField?.children || {}).length > 0) {
-            for (const [k, v] of Object.entries(filterField.children)) {
-              const item = {
-                ...v,
-                type: 'input'
-              }
-              delete item.default
-              fieldsMeta[method].fields.push(k)
-              fieldsMeta[method].fieldsMeta[k] = item
+        const filterField = this.remoteMeta[method] || {}
+        // 修改资产、节点时不点击设置按钮也需要获取form表单值暴露出去
+        if (this.form.hasOwnProperty(method)) {
+          newForm[method] = this.form[method]
+        }
+        fields.push([filterField.label, [method]])
+        fieldsMeta[method] = {
+          fields: [],
+          fieldsMeta: {}
+        }
+        if (Object.keys(filterField?.children || {}).length > 0) {
+          for (const [k, v] of Object.entries(filterField.children)) {
+            const item = {
+              ...v,
+              type: 'input'
             }
+            delete item.default
+            fieldsMeta[method].fields.push(k)
+            fieldsMeta[method].fieldsMeta[k] = item
           }
         }
       }

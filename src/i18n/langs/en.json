@@ -86,7 +86,7 @@
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",
-      "AutoPushHelpText": "Please select an asset or node before setting it up",
+      "AutoPushHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
       "AccountPushList": "Account push list"
     },
     "AccountBackup": {
@@ -359,7 +359,8 @@
     "Protocols": "Protocols",
     "PublicIp": "Public ip",
     "Push": "Push",
-    "PushSetting": "Push setting",
+    "PushParams": "Push params",
+    "ChangeSecretParams": "Change secret params",
     "PushSystemUserNow": "Push system user now",
     "PushAllSystemUsersToAsset": "Push all system users to asset",
     "QuickUpdate": "Quick update",

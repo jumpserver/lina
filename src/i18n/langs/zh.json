@@ -21,7 +21,7 @@
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
       "AccountPushUpdate": "账号推送更新",
-      "AutoPushHelpText": "请先选择资产或者节点在进行设置",
+      "AutoPushHelpText": "推送参数设置，目前仅对平台种类为主机的资产生效。",
       "AccountPushExecutionList": "执行列表"
     },
     "AccountBackup": {
@@ -371,7 +371,8 @@
     "LoginOption": "登录选项",
     "PublicIp": "公网IP",
     "Push": "推送",
-    "PushSetting": "推送设置",
+    "PushParams": "推送参数",
+    "ChangeSecretParams": "改密参数",
     "PushSystemUserNow": "推送系统用户",
     "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
