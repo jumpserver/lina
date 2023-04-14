@@ -10,8 +10,8 @@
       >
         <el-select
           slot="prepend"
-          :value="item.display_name ? item.display_name : item.name"
           :disabled="disableSelect(item)"
+          :value="item.display_name ? item.display_name : item.name"
           class="prepend"
           @change="handleProtocolChange($event, item)"
         >
@@ -190,6 +190,10 @@ export default {
     disableDelete(item) {
       if (this.items.length === 1) {
         return true
+      }
+      // 代表是设置平台
+      if (!this.settingReadonly) {
+        return false
       }
       return this.isRequired(item)
     },

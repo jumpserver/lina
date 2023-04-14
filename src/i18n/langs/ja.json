@@ -86,6 +86,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
+      "AutoPushHelpText": "まず資産またはノードを選択して設定してください",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
