@@ -101,12 +101,10 @@ export default {
   watch: {
     visible(val) {
       this.isVisible = val
-    }
-  },
-  watch: {
+    },
     method(iNew, iOld) {
       if (iNew !== iOld) {
-        this.init()
+        this.getUrlMeta()
       }
     }
   },
