@@ -97,7 +97,7 @@ export default {
         },
         params: {
           component: AccountAutoPush,
-          label: this.$t('assets.AutoPush'),
+          label: this.$t('assets.PushParams'),
           el: {
             assets: this.asset_ids,
             nodes: this.node_ids

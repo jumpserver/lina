@@ -21,7 +21,7 @@
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
       "AccountPushUpdate": "账号推送更新",
-      "AutoPushHelpText": "请先选择资产或者节点再进行设置",
+      "AutoPushHelpText": "推送参数设置，目前仅对平台种类为主机的资产生效。",
       "AccountPushExecutionList": "执行列表"
     },
     "AccountBackup": {
