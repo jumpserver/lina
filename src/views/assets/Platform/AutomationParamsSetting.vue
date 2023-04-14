@@ -36,6 +36,7 @@
 
 <script>
 import { Dialog, AutoDataForm } from '@/components'
+import { DynamicInput } from '@/components/FormFields'
 
 export default {
   components: {
@@ -100,6 +101,11 @@ export default {
   watch: {
     visible(val) {
       this.isVisible = val
+    },
+    method(iNew, iOld) {
+      if (iNew !== iOld) {
+        this.getUrlMeta()
+      }
     }
   },
   mounted() {
@@ -133,10 +139,13 @@ export default {
 
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
-          const item = {
-            ...v,
-            type: 'input'
+          let component = 'el-input'
+          switch (v?.type) {
+            case 'list':
+              component = DynamicInput
+              break
           }
+          const item = { ...v, component: component }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
         }

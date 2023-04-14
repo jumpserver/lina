@@ -9,6 +9,7 @@ import PhoneInput from './PhoneInput'
 import UploadField from './UploadField'
 import UpdateToken from './UpdateToken'
 import UserPassword from './UserPassword'
+import DynamicInput from './DynamicInput'
 import PasswordInput from './PasswordInput'
 import UploadSecret from './UploadSecret'
 import WeekCronSelect from './WeekCronSelect'
@@ -27,6 +28,7 @@ export default {
   PhoneInput,
   UploadField,
   UserPassword,
+  DynamicInput,
   PasswordInput,
   UploadSecret,
   WeekCronSelect,
@@ -46,6 +48,7 @@ export {
   PhoneInput,
   UploadField,
   UserPassword,
+  DynamicInput,
   PasswordInput,
   UploadSecret,
   WeekCronSelect,

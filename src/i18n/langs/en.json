@@ -360,6 +360,7 @@
     "PublicIp": "Public ip",
     "Push": "Push",
     "PushParams": "Push params",
+    "ChangeSecretParams": "Change secret params",
     "PushSystemUserNow": "Push system user now",
     "PushAllSystemUsersToAsset": "Push all system users to asset",
     "QuickUpdate": "Quick update",

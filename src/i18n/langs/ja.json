@@ -354,6 +354,7 @@
     "PublicIp": "パブリックネットワークIP",
     "Push": "プッシュ",
     "PushParams": "プッシュパラメータ",
+    "ChangeSecretParams": "改密パラメータです",
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",

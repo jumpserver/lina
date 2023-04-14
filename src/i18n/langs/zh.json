@@ -372,6 +372,7 @@
     "PublicIp": "公网IP",
     "Push": "推送",
     "PushParams": "推送参数",
+    "ChangeSecretParams": "改密参数",
     "PushSystemUserNow": "推送系统用户",
     "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
