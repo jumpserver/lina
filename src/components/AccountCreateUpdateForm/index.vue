@@ -14,6 +14,7 @@ import Select2 from '@/components/FormFields/Select2'
 import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
 import { Required, RequiredChange } from '@/components/DataForm/rules'
+import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
 export default {
   name: 'AccountCreateForm',
@@ -69,7 +70,7 @@ export default {
           'secret_type', 'secret', 'ssh_key',
           'token', 'access_key', 'passphrase'
         ]],
-        [this.$t('common.Other'), ['push_now', 'on_invalid', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -204,6 +205,21 @@ export default {
           hidden: () => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account') || this.addTemplate
+          }
+        },
+        params: {
+          label: this.$t('assets.PushParams'),
+          component: AutomationParamsForm,
+          el: {
+            method: this.asset?.auto_config?.push_account_method
+          },
+          hidden: (formValue) => {
+            const automation = this.iPlatform.automation || {}
+            return !formValue.push_now ||
+              !automation.push_account_enabled ||
+              !automation.ansible_enabled ||
+              !this.$hasPerm('accounts.push_account') ||
+              this.addTemplate
           }
         },
         comment: {

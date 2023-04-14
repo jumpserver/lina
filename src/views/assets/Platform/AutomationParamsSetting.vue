@@ -1,18 +1,20 @@
 <template>
   <div class="content">
     <el-button
-      :disabled="!isDisabled"
-      size="small"
+      v-if="hasButton"
+      :disabled="!canSetting"
+      size="mini"
       class="setting"
       :icon="icon"
+      type="primary"
       @click="onSetting"
     >
       {{ btnText }}
     </el-button>
     <Dialog
-      v-if="visible"
+      v-if="isVisible"
       width="60%"
-      :visible.sync="visible"
+      :visible.sync="isVisible"
       :title="title"
       :show-cancel="false"
       :show-confirm="false"
@@ -25,6 +27,7 @@
         :form="form"
         class="data-form"
         v-bind="config"
+        v-on="$listeners"
         @submit="onSubmit"
       />
     </Dialog>
@@ -47,16 +50,18 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('assets.PushSetting')
+        return this.$t('assets.PushParams')
       }
     },
     btnText: {
       type: String,
-      default: null
+      default: function() {
+        return this.$t('common.Setting')
+      }
     },
     icon: {
       type: String,
-      default: 'el-icon-setting'
+      default: ''
     },
     url: {
       type: String,
@@ -65,41 +70,55 @@ export default {
     method: {
       type: String,
       default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    hasButton: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
-      visible: false,
-      isDisabled: true,
+      isVisible: this.visible,
+      canSetting: true,
       form: this.value,
       remoteMeta: {},
       config: {
         url: this.url,
         hasSaveContinue: false,
         hasButtons: true,
+        hasReset: false,
         fields: [],
         method: 'get',
         fieldsMeta: {}
-      },
-      iValue: this.value
+      }
+    }
+  },
+  watch: {
+    visible(val) {
+      this.isVisible = val
     }
   },
   mounted() {
-    this.init()
+    this.getUrlMeta()
   },
   methods: {
-    async init() {
+    async getUrlMeta() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
 
-      if (this.hasDisabled()) {
+      if (this.onCanSetting()) {
         this.setFormConfig()
       }
     },
-    hasDisabled() {
+    onCanSetting() {
       const filterField = Object.keys(this.remoteMeta)
-      this.isDisabled = filterField.includes(this.method)
-      return this.isDisabled
+      this.canSetting = filterField.includes(this.method)
+      this.$emit('canSetting', this.canSetting)
+      return this.canSetting
     },
     setFormConfig() {
       const { method } = this
@@ -129,34 +148,16 @@ export default {
       return fieldsMeta
     },
     onSetting() {
-      this.visible = true
-      console.log('method: ', this.method)
-      console.log('this.value', this.value)
+      this.isVisible = true
     },
     onSubmit(form) {
       this.$emit('input', form)
-      this.visible = false
+      this.isVisible = false
+      this.$emit('update:visible', this.isVisible)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.content {
-  display: flex;
-}
-.setting {
-  background-color: #F5F7FA;
-  border: 1px solid #DCDFE6;
-  font-size: 14px;
-  color: #1a1a1a;
-  padding: 9px 20px;
-}
->>> .el-button.is-disabled, .el-button.is-disabled:hover {
-  color: #C0C4CC!important;
-  cursor: not-allowed!important;
-  background-image: none!important;
-  background-color: #FFF!important;
-  border-color: #EBEEF5!important;
-}
 </style>

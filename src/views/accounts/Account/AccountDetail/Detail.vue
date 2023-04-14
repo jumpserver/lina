@@ -11,6 +11,13 @@
         :url="secretUrl"
         :visible.sync="showViewSecretDialog"
       />
+      <AutomationParamsForm
+        :visible.sync="autoPushVisible"
+        :has-button="false"
+        :method="pushAccountMethod"
+        @canSetting="onCanSetting"
+        @submit="onSubmit"
+      />
     </el-col>
   </el-row>
 </template>
@@ -20,12 +27,14 @@ import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import ViewSecret from '@/components/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
+import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
 export default {
   name: 'Detail',
   components: {
     AutoDetailCard,
     QuickActions,
+    AutomationParamsForm,
     ViewSecret
   },
   props: {
@@ -39,6 +48,8 @@ export default {
     const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
 
     return {
+      needSetAutoPushParams: false,
+      autoPushVisible: false,
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
       showViewSecretDialog: false,
       quickActions: [
@@ -117,12 +128,16 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.post(
-                `/api/v1/accounts/accounts/tasks/`,
-                { action: 'push', accounts: [this.object.id] }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
+              if (this.needSetAutoPushParams) {
+                this.autoPushVisible = true
+              } else {
+                this.$axios.post(
+                  `/api/v1/accounts/accounts/tasks/`,
+                  { action: 'push', accounts: [this.object.id] }
+                ).then(res => {
+                  openTaskPage(res['task'])
+                })
+              }
             }
           })
         },
@@ -205,6 +220,26 @@ export default {
     }
   },
   computed: {
+    pushAccountMethod() {
+      return this.object.asset?.auto_config?.push_account_method || ''
+    }
+  },
+  methods: {
+    onCanSetting(item) {
+      this.needSetAutoPushParams = item
+    },
+    onSubmit(form) {
+      this.$axios.post(
+        `/api/v1/accounts/accounts/tasks/`,
+        {
+          action: 'push',
+          accounts: [this.object.id],
+          params: form
+        }
+      ).then(res => {
+        openTaskPage(res['task'])
+      })
+    }
   }
 }
 </script>
