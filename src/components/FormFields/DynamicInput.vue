@@ -41,18 +41,6 @@ export default {
   data() {
     return {}
   },
-  computed: {
-    // iValue: {
-    //   get() {
-    //     console.log('xxxxthis.value: ', this.value)
-    //     return this.value.length < 1 ? [''] : this.value
-    //   },
-    //   set(val) {
-    //     this.$emit('input', val)
-    //   }
-    // }
-  },
-  created() {},
   methods: {
     handleDelete(command) {
       const index = this.value.indexOf(command)
