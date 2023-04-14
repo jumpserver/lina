@@ -353,7 +353,7 @@
     "LoginOption": "ログインオプション",
     "PublicIp": "パブリックネットワークIP",
     "Push": "プッシュ",
-    "PushSetting": "プッシュ設定",
+    "PushParams": "プッシュパラメータ",
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",
