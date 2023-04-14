@@ -31,7 +31,9 @@ export const platformFieldsMeta = (vm) => {
         ping_method: {},
         gather_facts_method: {},
         push_account_method: {},
-        push_account_params: {},
+        push_account_params: {
+          label: vm.$t('assets.PushParams')
+        },
         change_secret_method: {
           on: {
             change: ([val]) => {
@@ -40,6 +42,7 @@ export const platformFieldsMeta = (vm) => {
           }
         },
         change_secret_params: {
+          label: vm.$t('assets.ChangeSecretParams'),
           el: {
             title: vm.$t('assets.ChangeSecretParams'),
             method: 'change_secret_posix'
