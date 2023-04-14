@@ -121,14 +121,11 @@ export default {
       return this.canSetting
     },
     setFormConfig() {
-      const { method } = this
-      this.config.fieldsMeta = this.getFieldsMeta()
-      this.config.fields = [[method, [method]]]
-    },
-    getFieldsMeta() {
+      let fields = []
       const fieldsMeta = {}
       const { method } = this
       const filterField = this.remoteMeta[method]
+      fields = [[filterField.label, [method]]]
       fieldsMeta[method] = {
         fields: [],
         fieldsMeta: {}
@@ -145,7 +142,8 @@ export default {
         }
       }
 
-      return fieldsMeta
+      this.config.fields = fields
+      this.config.fieldsMeta = fieldsMeta
     },
     onSetting() {
       this.isVisible = true
