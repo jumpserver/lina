@@ -86,7 +86,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
-      "AutoPushHelpText": "まず資産またはノードを選択して設定してください",
+      "AutoPushHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {

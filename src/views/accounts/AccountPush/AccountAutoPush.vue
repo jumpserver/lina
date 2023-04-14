@@ -12,7 +12,7 @@
       v-if="visible"
       width="60%"
       :visible.sync="visible"
-      :title="$tc('assets.AutoPush')"
+      :title="title"
       :show-cancel="false"
       :show-confirm="false"
       :destroy-on-close="true"
@@ -42,6 +42,12 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      type: String,
+      default: function() {
+        return this.$t('assets.PushParams')
+      }
     },
     assets: {
       type: Array,
