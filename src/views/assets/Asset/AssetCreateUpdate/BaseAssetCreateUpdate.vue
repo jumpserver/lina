@@ -44,6 +44,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       loading: true,
       platform: {},
@@ -61,7 +62,7 @@ export default {
         ],
         fieldsMeta: assetFieldsMeta(this),
         performSubmit(validValues) {
-          let url = this.url
+          let url = vm.url
           const { id = '' } = this.$route.params
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
