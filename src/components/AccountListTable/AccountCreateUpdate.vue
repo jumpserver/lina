@@ -100,13 +100,13 @@ export default {
         disableFlashErrorMsg: true
       }).then((data) => {
         this.handleResult(data, null)
+        this.iVisible = iVisible
+        if (!iVisible) {
+          this.$emit('add', true)
+        }
       }).catch(error => {
         this.handleResult(null, error)
       })
-      this.iVisible = iVisible
-      if (!iVisible) {
-        this.$emit('add', true)
-      }
     },
     editAccount(form) {
       const data = { ...form }
