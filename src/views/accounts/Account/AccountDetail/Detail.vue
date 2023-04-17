@@ -214,6 +214,9 @@ export default {
               params: { id: this.object.asset.id }
             }
             return <router-link to={route} >{ value }</router-link>
+          },
+          su_from: (item, value) => {
+            return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
           }
         }
       }
