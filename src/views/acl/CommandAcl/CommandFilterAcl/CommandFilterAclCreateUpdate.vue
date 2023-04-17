@@ -12,7 +12,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import {
-  UserAssetAccountFieldInitial,
   afterGetFormValueForHandleUserAssetAccount,
   cleanFormValueForHandleUserAssetAccount
 } from '../../common'
@@ -25,8 +24,7 @@ export default {
   data() {
     return {
       initial: {
-        is_active: true,
-        ...UserAssetAccountFieldInitial
+        is_active: true
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
