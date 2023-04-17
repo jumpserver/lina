@@ -3,14 +3,12 @@
     <el-button
       v-if="hasButton"
       :disabled="!canSetting"
-      size="mini"
+      size="small"
       class="setting"
       :icon="icon"
       type="primary"
       @click="onSetting"
-    >
-      {{ btnText }}
-    </el-button>
+    />
     <Dialog
       v-if="isVisible"
       width="60%"
@@ -57,12 +55,12 @@ export default {
     btnText: {
       type: String,
       default: function() {
-        return this.$t('common.Setting')
+        return ''
       }
     },
     icon: {
       type: String,
-      default: ''
+      default: 'el-icon-setting'
     },
     url: {
       type: String,
@@ -167,4 +165,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.setting {
+  height: 34px;
+  padding-top: 10px;
+}
 </style>

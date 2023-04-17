@@ -170,5 +170,17 @@ export default {
     width: 100%;
   }
 }
+>>> .itemMethodKey.el-form-item {
+  display: inline-block;
+  width: 100%;
+  .el-form-item__content {
+    width: 70%;
+  }
+}
+>>> .itemParamsKey.el-form-item {
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+}
 </style>
 
