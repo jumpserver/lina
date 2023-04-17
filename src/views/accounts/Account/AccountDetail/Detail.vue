@@ -205,7 +205,7 @@ export default {
         url: `/api/v1/accounts/accounts/${this.object.id}`,
         excludes: [
           'template', 'privileged', 'secret',
-          'passphrase', 'spec_info'
+          'passphrase', 'spec_info', 'params'
         ],
         formatters: {
           asset: (item, value) => {
