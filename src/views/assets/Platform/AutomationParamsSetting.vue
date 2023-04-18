@@ -17,8 +17,6 @@
       :show-cancel="false"
       :show-confirm="false"
       :destroy-on-close="true"
-      v-bind="$attrs"
-      v-on="$listeners"
     >
       <AutoDataForm
         ref="autoDataForm"
@@ -33,7 +31,8 @@
 </template>
 
 <script>
-import { Dialog, AutoDataForm } from '@/components'
+import Dialog from '../../../components/Dialog'
+import AutoDataForm from '../../../components/AutoDataForm'
 import { DynamicInput } from '@/components/FormFields'
 
 export default {
