@@ -13,7 +13,6 @@
       />
       <AutomationParamsForm
         :visible.sync="autoPushVisible"
-        :has-button="false"
         :method="pushAccountMethod"
         @canSetting="onCanSetting"
         @submit="onSubmit"
@@ -27,7 +26,7 @@ import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import ViewSecret from '@/components/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
-import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
+import AutomationParamsForm from './AutomationParamsDialog.vue'
 
 export default {
   name: 'Detail',

@@ -1,16 +1,5 @@
 <template>
   <div class="content">
-    <el-button
-      v-if="hasButton"
-      :disabled="!canSetting"
-      size="mini"
-      class="setting"
-      :icon="icon"
-      type="primary"
-      @click="onSetting"
-    >
-      {{ btnText }}
-    </el-button>
     <Dialog
       v-if="isVisible"
       width="60%"
@@ -72,6 +61,10 @@ export default {
       type: String,
       default: ''
     },
+    visible: {
+      type: Boolean,
+      default: () => false
+    },
     hasButton: {
       type: Boolean,
       default: true
@@ -79,7 +72,6 @@ export default {
   },
   data() {
     return {
-      isVisible: false,
       canSetting: true,
       form: this.value,
       remoteMeta: {},
@@ -91,6 +83,16 @@ export default {
         fields: [],
         method: 'get',
         fieldsMeta: {}
+      }
+    }
+  },
+  computed: {
+    isVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
       }
     }
   },
