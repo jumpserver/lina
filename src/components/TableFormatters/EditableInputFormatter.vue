@@ -63,9 +63,9 @@ export default {
       this.inEditMode = true
     },
     getCellValue(val) {
-      let v
+      let v = ''
       if (val && typeof val === 'object') {
-        v = val['name'] || val['display_name'] || ''
+        v = val['name'] || val['display_name'] || JSON.stringify(val)
       }
       return v || val
     },
