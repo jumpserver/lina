@@ -20,7 +20,7 @@ export default {
       initial: {
         action: 'reject',
         rules: {
-          ip_group: '*'
+          ip_group: ['*']
         },
         user: this.$route.query.user,
         users: {
@@ -119,7 +119,6 @@ export default {
         }
       },
       afterGetFormValue(validValues) {
-        validValues.rules.ip_group = validValues.rules.ip_group.toString()
         if (!this.$route.query.user) {
           validValues.users.username_group = validValues.users.username_group.toString()
         }
