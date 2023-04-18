@@ -113,6 +113,7 @@ export default {
     async updateSuMethods(constrains) {
       this.suMethodLimits = constrains['su_methods'] || []
       this.updateSuMethodOptions()
+      this.initial.su_method = this.suMethodLimits[0]
     },
     async setCategories() {
       const category = this.$route.query.category
