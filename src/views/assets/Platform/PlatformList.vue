@@ -1,6 +1,5 @@
 <template>
   <TabPage
-    v-if="!loading"
     :active-menu.sync="tab.activeMenu"
     :submenu="tab.submenu"
     @tab-click="changeMoreCreates"
@@ -25,7 +24,33 @@ export default {
     return {
       loading: true,
       tab: {
-        submenu: [],
+        submenu: [
+          {
+            name: 'host',
+            title: this.$t('assets.Host'),
+            icon: 'fa-inbox'
+          },
+          {
+            name: 'device',
+            title: this.$t('assets.Device'),
+            icon: 'fa-microchip'
+          },
+          {
+            name: 'database',
+            title: this.$t('assets.Database'),
+            icon: 'fa-database'
+          },
+          {
+            name: 'cloud',
+            title: this.$t('assets.Cloud'),
+            icon: 'fa-cloud'
+          },
+          {
+            name: 'web',
+            title: this.$t('assets.Web'),
+            icon: 'fa-globe'
+          }
+        ],
         activeMenu: 'host'
       },
       tableConfig: {
@@ -115,13 +140,6 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
-  async mounted() {
-    try {
-      await this.setCategories()
-    } finally {
-      this.loading = false
-    }
-  },
   updated() {
     this.changeMoreCreates()
   },
@@ -130,15 +148,6 @@ export default {
       this.tableConfig.url = this.url
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
-      })
-    },
-    async setCategories() {
-      const state = await this.$store.dispatch('assets/getAssetCategories')
-      this.tab.submenu = state.assetCategories.map(item => {
-        return {
-          title: item.label,
-          name: item.value
-        }
       })
     }
   }
