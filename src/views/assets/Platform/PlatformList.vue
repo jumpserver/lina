@@ -86,6 +86,7 @@ export default {
         }
       },
       headerActions: {
+        hasBulkDelete: false,
         hasRightActions: true,
         createRoute: 'PlatformCreate',
         canCreate: () => {
