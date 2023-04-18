@@ -97,7 +97,7 @@ export default {
         }
       }
       this.$axios.post(url, data, {
-        disableFlashErrorMsg: true
+        disableFlashErrorMsg: iVisible
       }).then((data) => {
         this.handleResult(data, null)
         this.iVisible = iVisible
@@ -105,6 +105,7 @@ export default {
           this.$emit('add', true)
         }
       }).catch(error => {
+        this.iVisible = iVisible
         this.handleResult(null, error)
       })
     },
