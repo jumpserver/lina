@@ -46,7 +46,7 @@ export default {
           type: 'input',
           el: {
             type: 'textarea',
-            placeholder: 'rm.*|reboot|shutdown',
+            placeholder: commandPlaceholder,
             rows: 4
           },
           helpText: ''
