@@ -159,7 +159,9 @@ export default {
         category: platform.category.value
       }
 
-      this.$router.push({ name: route, query })
+      const router = { name: route, query }
+      const { href } = this.$router.resolve(router)
+      window.open(href, '_blank')
     }
   }
 }
