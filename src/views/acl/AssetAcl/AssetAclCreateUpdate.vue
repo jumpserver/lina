@@ -5,9 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
-import {
-  afterGetFormValueForHandleUserAssetAccount, cleanFormValueForHandleUserAssetAccount, UserAssetAccountFieldInitial
-} from '../common'
+import { cleanFormValueForHandleUserAssetAccount } from '../common'
 
 export default {
   name: 'AclCreateUpdate',
@@ -16,9 +14,7 @@ export default {
   },
   data() {
     return {
-      initial: {
-        ...UserAssetAccountFieldInitial
-      },
+      initial: {},
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
@@ -56,7 +52,6 @@ export default {
         }
       },
       url: '/api/v1/acls/login-asset-acls/',
-      afterGetFormValue: afterGetFormValueForHandleUserAssetAccount,
       cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   },

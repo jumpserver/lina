@@ -12,7 +12,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import {
-  afterGetFormValueForHandleUserAssetAccount,
   cleanFormValueForHandleUserAssetAccount
 } from '../../common'
 
@@ -77,7 +76,6 @@ export default {
           type: 'checkbox'
         }
       },
-      afterGetFormValue: afterGetFormValueForHandleUserAssetAccount,
       cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   }
