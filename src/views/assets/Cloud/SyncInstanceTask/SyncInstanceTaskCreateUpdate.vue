@@ -70,7 +70,7 @@ export default {
               { 'name': 'ssh', 'port': 22, 'primary': true, 'default': false, 'required': false },
               { 'name': 'telnet', 'port': 23, 'primary': false, 'default': false, 'required': false },
               { 'name': 'vnc', 'port': 5900, 'primary': false, 'default': false, 'required': false },
-              { 'name': 'rdp', 'port': 3306, 'primary': false, 'default': false, 'required': false }
+              { 'name': 'rdp', 'port': 3389, 'primary': false, 'default': false, 'required': false }
             ]
           }
         },
