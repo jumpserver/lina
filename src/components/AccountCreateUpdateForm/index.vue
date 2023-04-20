@@ -204,7 +204,10 @@ export default {
           helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
           hidden: () => {
             const automation = this.iPlatform.automation || {}
-            return !automation.push_account_enabled || !automation.ansible_enabled || !this.$hasPerm('accounts.push_account') || this.addTemplate
+            return !automation.push_account_enabled ||
+              !automation.ansible_enabled ||
+              !this.$hasPerm('accounts.push_account') ||
+              this.addTemplate
           }
         },
         params: {
@@ -279,16 +282,6 @@ export default {
       this.fieldsMeta.secret_type.options = choices.filter(item => {
         return secretTypes.indexOf(item.value) > -1
       })
-    },
-    controlShowField() {
-      const privileged = ['privileged']
-      let suFrom = ['su_from']
-      const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
-      const asset = this?.asset || {}
-      if (filterSuFrom.includes(asset?.category?.value) || filterSuFrom.includes(asset?.type?.value)) {
-        suFrom = []
-      }
-      return [...privileged, ...suFrom]
     },
     confirm(form) {
       const secretType = form.secret_type || ''
