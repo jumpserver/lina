@@ -57,7 +57,7 @@ export default {
               params: { id: this.$route.params.id },
               query: {
                 platform: this.asset.platform.id,
-                platform_type: this.asset.type.value
+                type: this.asset.type.value
               }
             })
           }
