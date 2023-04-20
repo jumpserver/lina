@@ -196,7 +196,7 @@ export default {
           callbacks: Object.freeze({
             change: (value) => {
               const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
-              return this.$axios.patch(relationUrl, { su_from: value })
+              return this.$axios.patch(relationUrl, { su_from: value, name: this.object.name })
             }
           })
         }
