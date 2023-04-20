@@ -11,6 +11,7 @@ export default {
     BaseAssetCreateUpdate
   },
   data() {
+    const platformType = this.$route.query.type
     return {
       url: '/api/v1/assets/gateways/',
       updateInitial: async(initial) => {
@@ -23,6 +24,18 @@ export default {
       addFieldsMeta: {
         domain: {
           disabled: true
+        },
+        platform: {
+          disabled: true,
+          el: {
+            multiple: false,
+            ajax: {
+              url: `/api/v1/assets/platforms/?type=${platformType}`,
+              transformOption: (item) => {
+                return { label: item.name, value: item.id }
+              }
+            }
+          }
         }
       },
       createSuccessNextRoute: {
