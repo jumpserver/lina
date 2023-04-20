@@ -24,23 +24,6 @@ export default {
     const vm = this
     return {
       loading: true,
-      nameComponentMap: {
-        host: {
-          icon: 'fa-inbox'
-        },
-        device: {
-          icon: 'fa-microchip'
-        },
-        database: {
-          icon: 'fa-database'
-        },
-        cloud: {
-          icon: 'fa-cloud'
-        },
-        web: {
-          icon: 'fa-globe'
-        }
-      },
       tab: {
         submenu: [],
         activeMenu: 'host'
@@ -106,9 +89,7 @@ export default {
         hasBulkDelete: false,
         hasRightActions: true,
         createRoute: 'PlatformCreate',
-        canCreate: () => {
-          return this.$hasPerm('assets.add_platform')
-        },
+        canCreate: () => this.$hasPerm('assets.add_platform'),
         handleImportClick: ({ selectedRows }) => {
           this.$eventBus.$emit('showImportDialog', {
             selectedRows,
@@ -135,7 +116,7 @@ export default {
   },
   async mounted() {
     try {
-      await this.setCategories()
+      await this.setCategoriesTab()
     } finally {
       this.loading = false
     }
@@ -150,15 +131,23 @@ export default {
         return item.category === this.tab.activeMenu
       })
     },
-    async setCategories() {
+    async setCategoriesTab() {
+      const categoryIcon = {
+        host: 'fa-inbox',
+        device: 'fa-microchip',
+        database: 'fa-database',
+        cloud: 'fa-cloud',
+        web: 'fa-globe',
+        custom: 'fa-th'
+      }
       const state = await this.$store.dispatch('assets/getAssetCategories')
       for (const item of state.assetCategories) {
-        const name = item.value
-        this.nameComponentMap[name]['name'] = name
-        this.nameComponentMap[name]['title'] = item.label
+        this.tab.submenu.push({
+          name: item.value,
+          title: item.label,
+          icon: categoryIcon[item.value]
+        })
       }
-
-      this.tab.submenu = _.toArray(this.nameComponentMap)
     }
   }
 }
