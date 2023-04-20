@@ -212,7 +212,7 @@
     "CustomHelpMessage": "自定义类型资产，需要 Applet 插件的支持，请确保对应 Applet 已部署安装",
     "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
-    "BulkUpdatePlatformHelpText": "只修改相同类型的资产",
+    "BulkUpdatePlatformHelpText": "只有资产的原平台类型与所选平台类型相同时才会进行更新，若更新前后的平台类型不同则不会更新。",
     "ImportMessage": "请前往对应类型的页面导入数据",
     "PushAccount": "推送账号",
     "SSHPort": "SSH 端口",
