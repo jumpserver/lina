@@ -64,7 +64,7 @@ export default {
             change: (val) => {
               this.$axios.patch(
                 `/api/v1/accounts/accounts/${this.object.id}/`,
-                { is_active: val }
+                { is_active: val, name: this.object.name }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
               })
