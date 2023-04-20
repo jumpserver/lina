@@ -60,7 +60,7 @@ export default {
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: Object.assign({ 'on_invalid': 'skip' }, this.account || {}),
+      form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
         [this.$t('assets.Asset'), ['assets']],

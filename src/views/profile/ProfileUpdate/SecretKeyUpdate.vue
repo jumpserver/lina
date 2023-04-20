@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import TextReadonly from '@/components/FormFields/TextReadonly.vue'
 
 export default {
   name: 'SecretKeyUpdate',
@@ -34,8 +35,12 @@ export default {
       fields: ['has_secret_key', 'new_secret_key', 'new_secret_key_again'],
       fieldsMeta: {
         has_secret_key: {
-          label: this.$t('users.Set'),
-          type: 'switch',
+          label: this.$t('users.SetStatus'),
+          component: TextReadonly,
+          el: {
+            trueText: this.$t('users.Set'),
+            falseText: this.$t('users.NotSet')
+          },
           disabled: true
         },
         new_secret_key: {

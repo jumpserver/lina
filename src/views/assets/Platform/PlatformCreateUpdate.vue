@@ -8,6 +8,7 @@
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
       :initial="initial"
+      :has-reset="false"
       :url="url"
     />
   </div>
@@ -113,6 +114,7 @@ export default {
     async updateSuMethods(constrains) {
       this.suMethodLimits = constrains['su_methods'] || []
       this.updateSuMethodOptions()
+      this.initial.su_method = this.suMethodLimits[0]
     },
     async setCategories() {
       const category = this.$route.query.category
@@ -169,6 +171,18 @@ export default {
   .el-cascader {
     width: 100%;
   }
+}
+>>> .itemMethodKey.el-form-item {
+  display: inline-block;
+  width: 100%;
+  .el-form-item__content {
+    width: 70%;
+  }
+}
+>>> .itemParamsKey.el-form-item {
+  display: inline-block;
+  position: absolute;
+  right: 20px;
 }
 </style>
 

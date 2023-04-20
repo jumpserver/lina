@@ -2,7 +2,6 @@
   <div>
     <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
     <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @completed="refreshTable" />
-    <CreatePlaybookDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @completed="refreshTable" />
   </div>
 </template>
 
@@ -10,13 +9,11 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import UploadDialog from '@/views/ops/Template/Playbook/UploadDialog'
 import { ActionsFormatter } from '@/components/TableFormatters'
-import CreatePlaybookDialog from '@/views/ops/Template/Playbook/CreatePlaybookDialog.vue'
 
 export default {
   components: {
     UploadDialog,
-    GenericListTable,
-    CreatePlaybookDialog
+    GenericListTable
   },
   data() {
     return {
@@ -49,18 +46,16 @@ export default {
         }
       },
       headerActions: {
+        createRoute: 'PlaybookCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
         hasMoreActions: true,
-        onCreate: () => {
-          this.uploadDialogVisible = true
-        },
         moreCreates: {
           callback: (item) => {
             switch (item.name) {
               case 'create':
-                this.createDialogVisible = true
+                this.$router.push({ name: 'PlaybookCreate' })
                 break
               case 'upload':
                 this.uploadDialogVisible = true

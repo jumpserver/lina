@@ -113,4 +113,8 @@ export default {
 .color-default {
 }
 
+::v-deep .el-data-table .el-table .el-table__row > td > div > span {
+  white-space: inherit;
+}
+
 </style>

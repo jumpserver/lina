@@ -143,6 +143,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          window.location.reload()
           this.$refs.listTable.reloadTable()
         }
       }

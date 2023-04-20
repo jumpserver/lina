@@ -24,6 +24,23 @@ export default {
     const vm = this
     return {
       loading: true,
+      nameComponentMap: {
+        host: {
+          icon: 'fa-inbox'
+        },
+        device: {
+          icon: 'fa-microchip'
+        },
+        database: {
+          icon: 'fa-database'
+        },
+        cloud: {
+          icon: 'fa-cloud'
+        },
+        web: {
+          icon: 'fa-globe'
+        }
+      },
       tab: {
         submenu: [],
         activeMenu: 'host'
@@ -86,6 +103,7 @@ export default {
         }
       },
       headerActions: {
+        hasBulkDelete: false,
         hasRightActions: true,
         createRoute: 'PlatformCreate',
         canCreate: () => {
@@ -134,12 +152,13 @@ export default {
     },
     async setCategories() {
       const state = await this.$store.dispatch('assets/getAssetCategories')
-      this.tab.submenu = state.assetCategories.map(item => {
-        return {
-          title: item.label,
-          name: item.value
-        }
-      })
+      for (const item of state.assetCategories) {
+        const name = item.value
+        this.nameComponentMap[name]['name'] = name
+        this.nameComponentMap[name]['title'] = item.label
+      }
+
+      this.tab.submenu = _.toArray(this.nameComponentMap)
     }
   }
 }

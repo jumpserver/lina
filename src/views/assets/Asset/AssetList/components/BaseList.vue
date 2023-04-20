@@ -102,7 +102,8 @@ export default {
         route.query.type = row.type.value
         route.query.category = row.type.category
       }
-      vm.$router.push(route)
+      const { href } = vm.$router.resolve(route)
+      window.open(href, '_blank')
     }
     const extraQuery = this.$route.params?.extraQuery || {}
     return {

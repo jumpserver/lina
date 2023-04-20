@@ -166,7 +166,11 @@ export default {
           'address',
           {
             key: this.$t('assets.Protocols'),
-            value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
+            value: this.object.protocols.map(
+              i => (
+                this.object.address.startsWith('https://') ? 'https' : i.name
+              ) + '/' + i.port
+            ).join(',')
           },
           {
             key: this.$t('assets.Domain'),

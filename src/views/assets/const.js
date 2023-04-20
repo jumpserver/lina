@@ -29,7 +29,7 @@ export const filterSelectValues = (values) => {
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
-  const platformType = vm?.$route.query.type
+  const platformType = vm?.$route.query?.type
   return {
     address: {
       rules: [rules.specialEmojiCheck, rules.RequiredChange]

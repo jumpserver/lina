@@ -196,7 +196,7 @@ export default {
           callbacks: Object.freeze({
             change: (value) => {
               const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
-              return this.$axios.patch(relationUrl, { su_from: value })
+              return this.$axios.patch(relationUrl, { su_from: value, name: this.object.name })
             }
           })
         }
@@ -205,7 +205,7 @@ export default {
         url: `/api/v1/accounts/accounts/${this.object.id}`,
         excludes: [
           'template', 'privileged', 'secret',
-          'passphrase', 'spec_info'
+          'passphrase', 'spec_info', 'params'
         ],
         formatters: {
           asset: (item, value) => {
@@ -214,6 +214,9 @@ export default {
               params: { id: this.object.asset.id }
             }
             return <router-link to={route} >{ value }</router-link>
+          },
+          su_from: (item, value) => {
+            return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
           }
         }
       }

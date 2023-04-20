@@ -321,7 +321,6 @@ export default {
           {
             name: 'add-template',
             title: this.$t('common.TemplateAdd'),
-            type: 'primary',
             has: !(this.platform || this.asset),
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot

@@ -1,7 +1,7 @@
 <template>
   <Dialog
-    :title="$tc('common.OfflineUpload')"
     :show-cancel="false"
+    :title="$tc('common.OfflineUpload')"
     v-bind="$attrs"
     @cancel="onCancel"
     @confirm="onSubmit"
@@ -82,12 +82,13 @@ export default {
           disableFlashErrorMsg: true
         }
       ).then(res => {
-        this.$message.success(this.$t('terminal.UploadSucceed'))
+        this.$message.success(this.$tc('terminal.UploadSucceed'))
         this.$emit('update:visible', false)
         this.$emit('upload-event', res)
       }).catch(err => {
-        const error = err.response.data?.error || this.$t('terminal.UploadFailed')
-        this.$message.error(error)
+        const error = err.response.data
+        const msg = error?.message || error?.detail || error?.error || JSON.stringify(error)
+        this.$message.error(msg)
       })
 
       setTimeout(() => {

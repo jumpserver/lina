@@ -62,6 +62,7 @@
       :title="currentMsg.content.subject"
       :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
+      @close="markAsRead([currentMsg])"
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">

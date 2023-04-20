@@ -32,7 +32,7 @@ export const platformFieldsMeta = (vm) => {
         gather_facts_method: {},
         push_account_method: {},
         push_account_params: {
-          label: vm.$t('assets.PushParams')
+          label: ''
         },
         change_secret_method: {
           on: {
@@ -42,7 +42,7 @@ export const platformFieldsMeta = (vm) => {
           }
         },
         change_secret_params: {
-          label: vm.$t('assets.ChangeSecretParams'),
+          label: '',
           el: {
             title: vm.$t('assets.ChangeSecretParams'),
             method: 'change_secret_posix'
@@ -125,6 +125,8 @@ export const setAutomations = (vm) => {
     _.set(autoFieldsMeta, `${itemMethodKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
+    // 设置 enableMethod className
+    _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'itemMethodKey')
     // 设置 enableParams Hidden
     _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
@@ -139,6 +141,10 @@ export const setAutomations = (vm) => {
 
     // 设置 params 类型字段的组件和组件参数
     if (needSettingParamsFields.includes(item)) {
+      // 设置 enableParams label
+      _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
+      // 设置 enableParams className
+      _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'itemParamsKey')
       _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
       _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
     }

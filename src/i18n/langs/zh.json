@@ -121,7 +121,7 @@
     "reviewer": "审批人",
     "username": "用户名",
     "ip_group": "IP 组",
-    "ip_group_help_text": "格式为逗号分隔的字符串, * 表示匹配所有。例如: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "ip_group_help_text": "* 表示匹配所有。例如: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
     "action": "动作",
     "Rules": "规则",
     "Action": "动作",
@@ -1708,7 +1708,9 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "SetStatus": "设置状态",
     "Set": "已设置",
+    "NotSet": "未设置",
     "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "inputPhone": "请输入手机号码",

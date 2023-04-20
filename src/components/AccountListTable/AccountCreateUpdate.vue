@@ -97,16 +97,17 @@ export default {
         }
       }
       this.$axios.post(url, data, {
-        disableFlashErrorMsg: true
+        disableFlashErrorMsg: iVisible
       }).then((data) => {
         this.handleResult(data, null)
+        this.iVisible = iVisible
+        if (!iVisible) {
+          this.$emit('add', true)
+        }
       }).catch(error => {
+        this.iVisible = iVisible
         this.handleResult(null, error)
       })
-      this.iVisible = iVisible
-      if (!iVisible) {
-        this.$emit('add', true)
-      }
     },
     editAccount(form) {
       const data = { ...form }

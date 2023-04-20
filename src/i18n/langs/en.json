@@ -141,7 +141,7 @@
     "users": "User",
     "Rules": "Rule",
     "Action": "Action",
-    "ip_group_help_text": "The format is a comma-separated string, * means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "ip_group_help_text": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
     "apply_login_account": "Apply login account"
   },
   "applications": {
@@ -1720,7 +1720,9 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "SetStatus": "Set status",
     "Set": "Set",
+    "NotSet": "Not set",
     "Login": "Users login",
     "InviteSuccess": "Invite success",
     "inputPhone": "Please enter your mobile phone number",

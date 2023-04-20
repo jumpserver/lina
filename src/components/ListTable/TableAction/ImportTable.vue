@@ -285,7 +285,9 @@ export default {
       const data = []
       // eslint-disable-next-line prefer-const
       for (let [key, value] of Object.entries(errorData)) {
-        if (typeof value === 'object') {
+        if (Array.isArray(value)) {
+          value = JSON.stringify(value)
+        } else if (typeof value === 'object') {
           value = this.beautifyErrorData(value)
         }
         let label = this.tableColumnNameMapper[key]
