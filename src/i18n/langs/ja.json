@@ -1712,7 +1712,9 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "SetStatus": "ステータスの設定",
     "Set": "設定",
+    "NotSet": "未設定",
     "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
     "inputPhone": "携帯電話の番号をお願いします",
