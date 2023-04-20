@@ -84,8 +84,7 @@ export default {
 <style scoped>
 .button-text {
   color: #676a6c;
-  padding-left: 0!important;
-  padding-right: 0!important;
+  padding: 5px!important;
 }
 .icon {
   color: #676a6c!important;
