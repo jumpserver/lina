@@ -1708,7 +1708,9 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "SetStatus": "设置状态",
     "Set": "已设置",
+    "NotSet": "未设置",
     "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "inputPhone": "请输入手机号码",
