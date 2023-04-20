@@ -51,6 +51,7 @@ export default {
         initial: {},
         platform: {},
         url: '/api/v1/assets/hosts/',
+        hasReset: false,
         createSuccessNextRoute: this.createSuccessNextRoute,
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,

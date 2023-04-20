@@ -8,6 +8,7 @@
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
       :initial="initial"
+      :has-reset="false"
       :url="url"
     />
   </div>
