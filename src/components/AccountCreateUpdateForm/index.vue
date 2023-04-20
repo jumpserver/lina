@@ -15,6 +15,7 @@ import AssetSelect from '@/components/AssetSelect'
 import { encryptPassword } from '@/utils/crypto'
 import { Required, RequiredChange } from '@/components/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
+import { filterSuFrom } from '@/views/accounts/Account/const.js'
 
 export default {
   name: 'AccountCreateForm',
@@ -152,6 +153,7 @@ export default {
           }
         },
         su_from: {
+          disabled: filterSuFrom.includes(this.asset?.category?.value) || filterSuFrom.includes(this.asset?.type?.value),
           component: Select2,
           hidden: (formValue) => {
             return !this.asset?.id || !this.iPlatform.su_enabled

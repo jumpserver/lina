@@ -28,6 +28,7 @@ import QuickActions from '@/components/QuickActions'
 import ViewSecret from '@/components/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
+import { filterSuFrom } from '../const.js'
 
 export default {
   name: 'Detail',
@@ -45,7 +46,6 @@ export default {
   },
   data() {
     const vm = this
-    const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
 
     return {
       needSetAutoPushParams: false,
