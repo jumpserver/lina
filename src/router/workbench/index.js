@@ -218,10 +218,21 @@ export default {
           }
         },
         {
+          path: 'playbook/create',
+          name: 'PlaybookCreate',
+          hidden: true,
+          component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
+          meta: {
+            title: i18n.t('ops.PlaybookCreate'),
+            permissions: ['ops.add_playbook'],
+            activeMenu: '/workbench/ops/templates'
+          }
+        },
+        {
           path: 'playbook/:id/update',
           name: 'PlaybookUpdate',
           hidden: true,
-          component: () => import('@/views/ops/Template/Playbook/PlaybookUpdate'),
+          component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
           meta: {
             title: i18n.t('ops.PlaybookUpdate'),
             permissions: ['ops.change_playbook'],
