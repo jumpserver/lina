@@ -132,7 +132,7 @@ export default {
               }
             },
             {
-              path: 'update',
+              path: ':id/update',
               component: () => import('@/views/ops/Job/JobUpdateCreate'),
               name: 'JobUpdate',
               hidden: true,
