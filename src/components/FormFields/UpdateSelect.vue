@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-button
-      v-show="!isShow"
-      type="text"
-      class="button-text"
+      v-show="!iShowSelect"
       :disabled="disabled"
-      @click="isShow=true"
+      class="button-text"
+      type="text"
+      @click="iShowSelect=true"
     >
       {{ iLabel }}
       <svg-icon class-name="icon" icon-class="switch" />
     </el-button>
     <Select2
-      v-show="isShow"
+      v-show="iShowSelect"
       ref="select2"
       v-model="iValue"
       :disabled="disabled"
@@ -41,7 +41,7 @@ export default {
     },
     showSelect: {
       type: Boolean,
-      default: true
+      default: false
     },
     disabled: {
       type: Boolean,
@@ -50,8 +50,8 @@ export default {
   },
   data() {
     return {
-      isShow: this.showSelect,
-      iLabel: this.label
+      iShowSelect: this.showSelect,
+      iLabel: this.label || '-'
     }
   },
   computed: {
@@ -67,14 +67,14 @@ export default {
   created() {
     const { path } = this.$route
     if (hasUUID(path) && this.value) {
-      this.isShow = false
+      this.iShowSelect = false
     }
   },
   methods: {
     onSelectChange(val) {
       const options = this.$refs.select2.options.filter(item => item.value === val)
       const label = options.length > 0 ? options[0].label : ''
-      this.isShow = false
+      this.iShowSelect = false
       this.iLabel = val ? label : '-'
     }
   }
