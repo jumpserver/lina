@@ -7,8 +7,8 @@
       :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
-      :initial="initial"
       :has-reset="false"
+      :initial="initial"
       :url="url"
     />
   </div>
@@ -161,17 +161,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-form > > > {
-  .el-form-item {
-    .el-select:not(.prepend) {
-      width: 100%;
-    }
-  }
-
+.platform-form >>> {
   .el-cascader {
     width: 100%;
   }
 }
+
 >>> .itemMethodKey.el-form-item {
   display: inline-block;
   width: 100%;
@@ -179,6 +174,7 @@ export default {
     width: 70%;
   }
 }
+
 >>> .itemParamsKey.el-form-item {
   display: inline-block;
   position: absolute;
