@@ -12,9 +12,12 @@
           slot="prepend"
           :disabled="disableSelect(item)"
           :value="item.display_name ? item.display_name : item.name"
-          class="prepend"
+          class="prepend auto-width-select"
           @change="handleProtocolChange($event, item)"
         >
+          <template slot="prefix">
+            {{ item.display_name ? item.display_name : item.name }}
+          </template>
           <el-option
             v-for="p of remainProtocols"
             :key="p.name"
@@ -267,13 +270,9 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .el-select .el-input {
   width: 130px;
-}
-
-.el-select {
-  max-width: 120px;
 }
 
 .input-with-select {
@@ -310,4 +309,30 @@ export default {
   color: #1a1a1a;
   padding: 9px 20px;
 }
+
+.auto-width-select > .el-input--prefix {
+  min-width: 120px!important;
+}
+
+.auto-width-select >>> .el-input__prefix {
+    position: relative;
+    left: 0px;
+    padding: 0 30px;
+    box-sizing: border-box;
+    height: 34px;
+    line-height: 34px;
+    visibility: hidden;
+}
+
+.auto-width-select >>> input {
+  position: absolute!important;
+  width: 100%!important;
+  border: none;
+  color: #606266;
+  background-color: #e6e6e6;
+  font-size: 12px;
+  font-weight: 470;
+  line-height: 27px;
+}
+
 </style>
