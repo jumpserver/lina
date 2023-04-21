@@ -19,7 +19,7 @@ export default {
         is_periodic: true,
         interval: 24,
         hostname_strategy: 'instance_name_partial_ip',
-        ip_network_segment_group: '*'
+        ip_network_segment_group: ['*']
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -123,7 +123,7 @@ export default {
           const [name, port] = i.split('/')
           return { name, port }
         })
-        formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
+
         return formValue
       },
       cleanFormValue(value) {
