@@ -496,3 +496,11 @@ td .el-button.el-button--mini {
 .el-alert.el-alert--error.is-light {
   border-color: var(--color-danger-light);
 }
+
+#nprogress .bar {
+  background: light-5!important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px light-5, 0 0 5px light-5!important;
+}
