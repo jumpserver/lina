@@ -10,7 +10,7 @@
     width="70%"
     v-on="$listeners"
   >
-    <el-alert v-if="disabled" type="success">
+    <el-alert v-if="disabled && platformDetail" type="success">
       {{ $t('assets.InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
         {{ $t('common.View') }}
@@ -48,6 +48,7 @@ export default {
   },
   data() {
     const vm = this
+    const platform = this.$route.query.platform
     return {
       baseAttrs: ['primary', 'required', 'default'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
       defaultSetting: {
@@ -61,7 +62,7 @@ export default {
       },
       loading: true,
       form: {},
-      platformDetail: '#/console/assets/platforms/' + this.$route.query.platform,
+      platformDetail: platform ? '#/console/assets/platforms/' + platform : '',
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
