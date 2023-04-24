@@ -279,6 +279,7 @@ export default {
       this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     },
     handleDialogUpdate() {
+      this.updateSelectedDialogSetting.visible = false
       this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     }
   }

@@ -304,6 +304,7 @@ export default {
   },
   methods: {
     handleAssetBulkUpdate() {
+      this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
     }
   }
