@@ -1,6 +1,7 @@
 <template>
   <Page v-bind="$attrs">
     <AssetTreeTable
+      ref="AssetTreeTable"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
@@ -8,6 +9,7 @@
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
+      @update="handlePermBulkUpdate"
     />
   </Page>
 </template>
@@ -174,7 +176,12 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
-  methods: {}
+  methods: {
+    handlePermBulkUpdate() {
+      this.updateSelectedDialogSetting.visible = false
+      this.$refs.AssetTreeTable.$refs.TreeList.$refs?.ListTable?.reloadTable()
+    }
+  }
 }
 </script>
 
