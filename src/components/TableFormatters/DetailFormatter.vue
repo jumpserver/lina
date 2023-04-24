@@ -29,6 +29,7 @@ export default {
           getRoute: null,
           routeQuery: null,
           can: true,
+          openInNewPage: false,
           getTitle({ col, row, cellValue }) {
             return cellValue
           },
@@ -98,7 +99,12 @@ export default {
   },
   methods: {
     goDetail() {
-      this.$router.push(this.detailRoute)
+      if (this.formatterArgs.openInNewPage) {
+        const { href } = this.$router.resolve(this.detailRoute)
+        window.open(href, '_blank')
+      } else {
+        this.$router.push(this.detailRoute)
+      }
       // const routeName = this.formatterArgs.route
       // this.$log.debug('Will go to detail route: ', routeName)
       // this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
