@@ -22,7 +22,7 @@
       />
       <AccountTemplateChangeSecretDialog
         :visible.sync="visible"
-        :template="object"
+        :object="object"
       />
     </el-row>
   </div>
@@ -31,7 +31,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import QuickActions from '@/components/QuickActions'
-import AccountTemplateChangeSecretDialog from '@/components/AccountTemplateChangeSecretDialog'
+import AccountTemplateChangeSecretDialog from './AccountTemplateChangeSecretDialog'
 import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
 import ViewSecret from '@/components/AccountListTable/ViewSecret'
 
@@ -58,12 +58,10 @@ export default {
       showViewSecretDialog: false,
       quickActions: [
         {
-          // title: this.$t('assets.TestAssetsConnective'),
-          title: '更新密文',
+          title: this.$t('accounts.UpdateSecret'),
           attrs: {
             type: 'primary',
-            // label: this.$t('assets.Test')
-            label: '更新'
+            label: this.$t('common.Update')
           },
           callbacks: Object.freeze({
             click: () => {

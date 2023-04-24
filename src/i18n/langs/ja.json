@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "UpdateSecret": "機密の更新",
     "AccountPolicy": "アカウントポリシー",
     "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
     "HistoryDate": "历史日期",
@@ -340,7 +341,7 @@
     "PasswordSelector": "パスワード入力ボックスセレクタ",
     "SubmitSelector": "コミットボタンセレクタ",
     "PlatformProtocolConfig": "プラットフォームプロトコルの構成",
-    "InheritPlatformConfig": "プラットフォーム構成から継承します。変更する場合は、プラットフォームの構成を変更してください",
+    "InheritPlatformConfig": "アカウントリストには、テンプレートで作成されたアカウントが表示されます。暗号文を更新すると、テンプレートで作成されたアカウントの暗号文が更新されます。",
     "CollectHardwareInfo": "ハードウェア情報の収集を有効にする",
     "DomainEnabled": "ドメインを有効化",
     "ProtocolsEnabled": "プロトコルの有効化",
