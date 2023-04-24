@@ -14,12 +14,14 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+import AccountTemplateChangeSecret from './AccountTemplateChangeSecret/index'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    AccountTemplateChangeSecret
   },
   data() {
     return {
@@ -31,6 +33,11 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('assets.Accounts'),
+            name: 'AccountTemplateChangeSecret',
+            hidden: () => !this.$hasPerm('accounts.change_accounttemplate')
           }
         ]
       }
