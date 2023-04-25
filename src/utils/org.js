@@ -18,28 +18,31 @@ async function change2PropOrg() {
   await changeOrg(org)
 }
 
-// 需要特殊处理资产相关页面在更新里切换组织
-function needSpecialChangeAssetPath(path) {
-  const url = path.split('#')[1]
-  if (path.indexOf('/console/assets/cloud') > -1) {
-    // 以 /XX/ 结尾替换成空字符串
-    return url.replace(/\/[\w-]+\/$/, '')
-  }
-  if (path.indexOf('/console/assets') > -1) {
-    return url.replace(/\/[\w-]+\/$/, '/assets')
-  }
-  return path
-}
-
 async function changeOrg(org, reload = true) {
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   let path = location.href
   if (hasUUID(path)) {
     path = replaceUUID(path, '')
-    path = needSpecialChangeAssetPath(path)
     path = _.trimEnd(path, '/')
     location.href = path
+  } else {
+    const index = path.indexOf('?')
+    if (index !== -1) {
+      location.href = path.substring(0, index)
+    }
+    setTimeout(() => location.reload(), 400)
+  }
+}
+
+async function fromPageChangeOrg(org, that) {
+  const { path, name, matched } = that.$route
+  await store.dispatch('users/setCurrentOrg', org)
+  await store.dispatch('app/reset')
+  if (name.indexOf('Detail') > -1 || name.indexOf('Update') > -1) {
+    const currentRouteIndex = matched.findIndex(item => item.name === name)
+    const parentRoute = matched[currentRouteIndex].parent
+    that.$router.replace(parentRoute)
   } else {
     const index = path.indexOf('?')
     if (index !== -1) {
@@ -62,5 +65,6 @@ export default {
   SYSTEM_ORG_ID,
   change2PropOrg,
   changeOrg,
+  fromPageChangeOrg,
   getPropOrg
 }

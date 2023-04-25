@@ -279,12 +279,20 @@ export default [
   {
     path: 'gateways',
     component: empty,
-    redirect: 'create',
     hidden: true,
     meta: {
       permissions: ['assets.view_gateway']
     },
     children: [
+      {
+        path: '',
+        name: 'DomainList',
+        component: () => import('@/views/assets/Domain/DomainList.vue'),
+        meta: {
+          title: i18n.t('route.GatewayCreate'),
+          permissions: ['assets.view_gateway']
+        }
+      },
       {
         path: 'create',
         name: 'GatewayCreate',

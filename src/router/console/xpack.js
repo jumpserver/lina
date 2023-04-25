@@ -36,7 +36,7 @@ export default [
         children: [
           {
             path: '',
-            component: () => import('@/views/assets/Cloud/Account/AccountList'),
+            component: () => import('@/views/assets/Cloud'),
             name: 'AccountList',
             hidden: true,
             meta: {
@@ -90,7 +90,7 @@ export default [
         children: [
           {
             path: '',
-            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
+            component: () => import('@/views/assets/Cloud'),
             name: 'SyncInstanceTaskList',
             hidden: true,
             meta: {
