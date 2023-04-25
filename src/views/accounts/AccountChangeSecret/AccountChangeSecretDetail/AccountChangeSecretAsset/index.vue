@@ -1,7 +1,11 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <GenericListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable
+        ref="listTable"
+        :table-config="tableConfig"
+        :header-actions="headerActions"
+      />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
@@ -39,7 +43,8 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AssetDetail'
+              route: 'AssetDetail',
+              can: this.$hasPerm('assets.view_asset')
             }
           },
           delete_action: {
