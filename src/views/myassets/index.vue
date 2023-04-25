@@ -47,7 +47,7 @@ export default {
         },
         columns: [
           'name', 'address', 'domain', 'platform', 'connectivity', 'is_active',
-          'nodes', 'org_name', 'created_by', 'accounts', 'comment', 'actions'
+          'nodes', 'org_name', 'created_by', 'labels', 'accounts', 'comment', 'actions'
         ],
         columnsMeta: {
           name: {
