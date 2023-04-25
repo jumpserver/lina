@@ -80,7 +80,7 @@ export default {
       }
 
       this.$axios.patch(
-        `/api/v1/accounts/account-templates/${object.id}/sync-update-secret/`,
+        `/api/v1/accounts/account-templates/${object.id}/`,
         params
       ).then(() => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
