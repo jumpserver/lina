@@ -29,7 +29,9 @@
             :cell-value="secretInfo.secret"
             :col="{ formatterArgs: {
               name: account['name'],
+              secretType: secretType || ''
             }}"
+            @input="onShowKeyCopyFormatterChange"
           />
         </el-form-item>
         <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('assets.sshKeyFingerprint')">
@@ -102,6 +104,7 @@ export default {
   },
   data() {
     return {
+      modifiedSecret: '',
       secretInfo: {},
       versions: '-',
       showSecret: false,
@@ -129,8 +132,18 @@ export default {
   },
   methods: {
     accountConfirmHandle() {
+      this.modifiedSecret && this.onChangeSecretSubmit()
       this.showSecret = false
       this.mfaDialogVisible = false
+    },
+    onChangeSecretSubmit() {
+      const params = {
+        name: this.secretInfo.name,
+        secret: this.secretInfo.secret
+      }
+      this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, params).then(() => {
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
+      })
     },
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
@@ -144,6 +157,10 @@ export default {
     },
     showHistoryDialog() {
       this.showPasswordHistoryDialog = true
+    },
+    onShowKeyCopyFormatterChange(value) {
+      if (value === this.secretInfo.secret) return
+      this.modifiedSecret = value
     }
   }
 }
