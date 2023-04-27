@@ -152,6 +152,8 @@ export default {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }
+        // 这个不删除会导致时，把 platform id 提交成 asset 的
+        delete i['id']
         return i
       })
       const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
