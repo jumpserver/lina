@@ -4,26 +4,25 @@
       {{ $t('assets.InAssetDetail') }}
     </el-link>
     <div v-else class="accounts">
-      <el-table :data="accounts" style="width: 100%">
-        <el-table-column :label="$tc('assets.Name')" prop="name" />
-        <el-table-column :label="$tc('assets.Username')" prop="username" />
-        <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
-          <template v-slot="scope">
-            <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />
-          </template>
-        </el-table-column>
-        <el-table-column :label="$tc('common.TemplateAdd')" prop="template">
-          <template v-slot="scope">
-            <i :class="scope.row['template'] ? 'fa-check' : ''" class="fa text-primary" />
-          </template>
-        </el-table-column>
-        <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
-          <template v-slot="scope">
-            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
-            <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
-          </template>
-        </el-table-column>
-      </el-table>
+      <DataTable :config="iTableConfig" />
+      <!--      <el-table :data="accounts" style="width: 100%">-->
+      <!--        <el-table-column :label="$tc('assets.Privileged')" prop="privileged">-->
+      <!--          <template v-slot="scope">-->
+      <!--            <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column :label="$tc('common.TemplateAdd')" prop="template">-->
+      <!--          <template v-slot="scope">-->
+      <!--            <i :class="scope.row['template'] ? 'fa-check' : ''" class="fa text-primary" />-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--        <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">-->
+      <!--          <template v-slot="scope">-->
+      <!--            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />-->
+      <!--            <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--      </el-table>-->
       <div class="actions">
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('common.Add') }}
@@ -50,12 +49,14 @@
 <script>
 import AccountTemplateDialog from './AccountTemplateDialog'
 import AddAccountDialog from './AddAccountDialog'
+import DataTable from '@/components/DataTable/index.vue'
 
 export default {
   name: 'AssetAccounts',
   components: {
     AccountTemplateDialog,
-    AddAccountDialog
+    AddAccountDialog,
+    DataTable
   },
   props: {
     platform: {
@@ -79,7 +80,27 @@ export default {
       account: {},
       initial: false,
       addAccountDialogVisible: false,
-      templateDialogVisible: false
+      templateDialogVisible: false,
+      iTableConfig: {
+        columns: [
+          {
+            prop: 'name',
+            label: this.$tc('assets.Name')
+          },
+          {
+            prop: 'username',
+            label: this.$tc('assets.Username')
+          },
+          {
+            prop: 'privileged',
+            label: this.$tc('assets.Privileged'),
+            formatter: (row) => {
+              return row.privileged ? this.$tc('common.Yes') : this.$tc('common.No')
+            }
+          }
+        ],
+        hasPagination: false
+      }
     }
   },
   watch: {

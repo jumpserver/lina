@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
     :fields="fields"
-    :initial="initial"
     :fields-meta="fieldsMeta"
+    :initial="initial"
     :url="url"
     v-bind="$data"
   />
@@ -10,10 +10,9 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { JSONManyToManySelect } from '@/components/FormFields'
 import rules from '@/components/DataForm/rules'
-import {
-  cleanFormValueForHandleUserAssetAccount
-} from '../../common'
+import { cleanFormValueForHandleUserAssetAccount } from '../../common'
 
 export default {
   name: 'CommandFilterAclCreateUpdate',
@@ -38,7 +37,28 @@ export default {
       createSuccessNextRoute: { name: 'CommandFilterAclList' },
       fieldsMeta: {
         users: {
-          fields: ['username_group']
+          component: JSONManyToManySelect,
+          el: {
+            value: [],
+            select2: {
+              ajax: {
+                url: '/api/v1/users/users/?fields_size=mini',
+                transformOption: (item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                }
+              }
+            },
+            attrs: [
+              {
+                name: 'name',
+                label: this.$t('common.Name')
+              },
+              {
+                username: 'username',
+                label: this.$t('common.Username')
+              }
+            ]
+          }
         },
         assets: {
           fields: ['name_group', 'address_group']
