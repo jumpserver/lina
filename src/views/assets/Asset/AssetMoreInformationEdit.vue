@@ -11,34 +11,14 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const nodesInitial = []
-    if (this.$route.query['node']) {
-      nodesInitial.push(this.$route.query.node)
-    }
     return {
-      initial: {
-        is_active: true,
-        platform: 'Linux',
-        protocols: ['ssh/22'],
-        nodes: nodesInitial
-      },
+      initial: {},
       fields: [
         [this.$t('common.Basic'), ['name', 'address']],
-        [this.$t('assets.Hardware'), ['info']]
+        [this.$t('assets.Hardware'), ['gathered_info']]
       ],
       fieldsMeta: {
-        platform: {
-          el: {
-            multiple: false,
-            ajax: {
-              url: '/api/v1/assets/platforms/',
-              transformOption: (item) => {
-                return { label: `${item.name}`, value: item.name }
-              }
-            }
-          }
-        },
-        info: {
+        gathered_info: {
           fields: [
             'vendor', 'model', 'sn', 'cpu_model', 'cpu_count',
             'cpu_cores', 'cpu_vcpus', 'memory', 'disk_total',
