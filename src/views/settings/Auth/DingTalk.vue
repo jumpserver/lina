@@ -45,6 +45,10 @@ export default {
               'AUTH_DINGTALK', 'DINGTALK_AGENTID',
               'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
             ]
+          ],
+          [
+            this.$t('common.Other'),
+            ['DINGTALK_CREATE_USER_IF_NOT_EXIST']
           ]
         ],
         fieldsMeta: {

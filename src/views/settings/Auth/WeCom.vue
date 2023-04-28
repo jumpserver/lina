@@ -45,6 +45,10 @@ export default {
             [
               'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID', 'WECOM_SECRET'
             ]
+          ],
+          [
+            this.$t('common.Other'),
+            ['WECOM_CREATE_USER_IF_NOT_EXIST']
           ]
         ],
         fieldsMeta: {

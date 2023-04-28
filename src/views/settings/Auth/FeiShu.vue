@@ -46,6 +46,10 @@ export default {
             [
               'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_VERSION'
             ]
+          ],
+          [
+            this.$t('common.Other'),
+            ['FEISHU_CREATE_USER_IF_NOT_EXIST']
           ]
         ],
         fieldsMeta: {
