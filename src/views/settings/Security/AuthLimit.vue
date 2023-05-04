@@ -70,11 +70,6 @@ export default {
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {},
-      afterGetFormValue(validValues) {
-        validValues.SECURITY_LOGIN_IP_BLACK_LIST = validValues.SECURITY_LOGIN_IP_BLACK_LIST.toString()
-        validValues.SECURITY_LOGIN_IP_WHITE_LIST = validValues.SECURITY_LOGIN_IP_WHITE_LIST.toString()
-        return validValues
-      },
       cleanFormValue(value) {
         const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
         const ipWhiltList = value.SECURITY_LOGIN_IP_WHITE_LIST
