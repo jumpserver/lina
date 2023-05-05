@@ -73,11 +73,11 @@ export default {
       cleanFormValue(value) {
         const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
         const ipWhiltList = value.SECURITY_LOGIN_IP_WHITE_LIST
-        if (!Array.isArray(ipBlackList)) {
-          value.SECURITY_LOGIN_IP_BLACK_LIST = ipBlackList ? ipBlackList.split(',') : []
+        if (Array.isArray(ipBlackList)) {
+          value.SECURITY_LOGIN_IP_BLACK_LIST = ipBlackList.filter(Boolean)
         }
-        if (!Array.isArray(ipWhiltList)) {
-          value.SECURITY_LOGIN_IP_WHITE_LIST = ipWhiltList ? ipWhiltList.split(',') : []
+        if (Array.isArray(ipWhiltList)) {
+          value.SECURITY_LOGIN_IP_WHITE_LIST = ipWhiltList.filter(Boolean)
         }
         return value
       },
