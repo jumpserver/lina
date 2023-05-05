@@ -12,7 +12,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { JSONManyToManySelect } from '@/components/FormFields'
 import rules from '@/components/DataForm/rules'
-import { cleanFormValueForHandleUserAssetAccount } from '../../common'
 
 export default {
   name: 'CommandFilterAclCreateUpdate',
@@ -61,10 +60,52 @@ export default {
           }
         },
         assets: {
-          fields: ['name_group', 'address_group']
+          component: JSONManyToManySelect,
+          el: {
+            value: [],
+            select2: {
+              ajax: {
+                url: '/api/v1/assets/assets/?fields_size=mini',
+                transformOption: (item) => {
+                  return { label: item.name + '(' + item.address + ')', value: item.id }
+                }
+              }
+            },
+            attrs: [
+              {
+                name: 'name',
+                label: this.$t('common.Name')
+              },
+              {
+                username: 'username',
+                label: this.$t('common.Username')
+              }
+            ]
+          }
         },
         accounts: {
-          fields: ['username_group']
+          component: JSONManyToManySelect,
+          el: {
+            value: [],
+            select2: {
+              ajax: {
+                url: '/api/v1/users/users/?fields_size=mini',
+                transformOption: (item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                }
+              }
+            },
+            attrs: [
+              {
+                name: 'name',
+                label: this.$t('common.Name')
+              },
+              {
+                username: 'username',
+                label: this.$t('common.Username')
+              }
+            ]
+          }
         },
         action: {
         },
@@ -95,8 +136,7 @@ export default {
         is_active: {
           type: 'checkbox'
         }
-      },
-      cleanFormValue: cleanFormValueForHandleUserAssetAccount
+      }
     }
   }
 }
