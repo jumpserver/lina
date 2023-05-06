@@ -10,9 +10,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { JSONManyToManySelect } from '@/components/FormFields'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import rules from '@/components/DataForm/rules'
+import { userJSONSelectMeta } from '@/views/users/const'
+import { assetJSONSelectMeta } from '@/views/assets/const'
 
 export default {
   name: 'CommandFilterAclCreateUpdate',
@@ -36,54 +37,8 @@ export default {
       url: '/api/v1/acls/command-filter-acls/',
       createSuccessNextRoute: { name: 'CommandFilterAclList' },
       fieldsMeta: {
-        users: {
-          component: JSONManyToManySelect,
-          el: {
-            value: [],
-            select2: {
-              ajax: {
-                url: '/api/v1/users/users/?fields_size=mini',
-                transformOption: (item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                }
-              }
-            },
-            attrs: [
-              {
-                name: 'name',
-                label: this.$t('common.Name')
-              },
-              {
-                name: 'username',
-                label: this.$t('common.Username')
-              }
-            ]
-          }
-        },
-        assets: {
-          component: JSONManyToManySelect,
-          el: {
-            value: [],
-            select2: {
-              ajax: {
-                url: '/api/v1/assets/assets/?fields_size=mini',
-                transformOption: (item) => {
-                  return { label: item.name + '(' + item.address + ')', value: item.id }
-                }
-              }
-            },
-            attrs: [
-              {
-                name: 'name',
-                label: this.$t('common.Name')
-              },
-              {
-                username: 'address',
-                label: this.$t('assets.Address')
-              }
-            ]
-          }
-        },
+        users: userJSONSelectMeta(this),
+        assets: assetJSONSelectMeta(this),
         accounts: {
           component: AccountFormatter,
           el: {

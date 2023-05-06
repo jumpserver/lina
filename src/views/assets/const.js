@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/DataForm/rules'
-import { Select2 } from '@/components/FormFields'
+import { JSONManyToManySelect, Select2 } from '@/components/FormFields'
 import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
@@ -135,6 +135,51 @@ export const assetFieldsMeta = (vm) => {
     },
     comment: {
       helpText: i18n.t('assets.CommentHelpText')
+    }
+  }
+}
+
+export const assetJSONSelectMeta = (vm) => {
+  return {
+    component: JSONManyToManySelect,
+    el: {
+      value: [],
+      resource: vm.$t('assets.Asset'),
+      select2: {
+        ajax: {
+          url: '/api/v1/assets/assets/?fields_size=mini',
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.address + ')', value: item.id }
+          }
+        }
+      },
+      attrs: [
+        {
+          name: 'name',
+          label: vm.$t('common.Name')
+        },
+        {
+          username: 'address',
+          label: vm.$t('assets.Address')
+        }
+      ]
+    }
+  }
+}
+
+export function getAssetSelect2Meta() {
+  return {
+    component: Select2,
+    el: {
+      value: [],
+      select2: {
+        ajax: {
+          url: '/api/v1/assets/assets/?fields_size=mini',
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.address + ')', value: item.id }
+          }
+        }
+      }
     }
   }
 }

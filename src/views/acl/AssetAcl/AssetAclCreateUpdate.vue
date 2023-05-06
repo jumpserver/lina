@@ -6,6 +6,8 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
 import { cleanFormValueForHandleUserAssetAccount } from '../common'
+import { userJSONSelectMeta } from '@/views/users/const'
+import { assetJSONSelectMeta } from '@/views/assets/const'
 
 export default {
   name: 'AclCreateUpdate',
@@ -16,24 +18,19 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
+        [this.$t('common.Basic'), ['name']],
         [this.$t('acl.users'), ['users']],
         [this.$t('acl.host'), ['assets']],
         [this.$t('acl.account'), ['accounts']],
         [this.$t('acl.action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('common.Other'), ['priority', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
           rules: [rules.Required]
         },
-        assets: {
-          fields: ['name_group', 'address_group']
-        },
-        users: {
-          fields: ['username_group'],
-          fieldsMeta: {}
-        },
+        assets: assetJSONSelectMeta(this),
+        users: userJSONSelectMeta(this),
         accounts: {
           fields: ['username_group']
         },

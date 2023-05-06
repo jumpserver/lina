@@ -46,6 +46,10 @@ export default {
     attrs: {
       type: Array,
       default: () => ([])
+    },
+    resource: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -86,8 +90,8 @@ export default {
       iValue: Object.assign({ type: 'all' }, this.value),
       ids: this.value.ids || [],
       types: [
-        { name: 'all', label: '全部' },
-        { name: 'ids', label: '指定' },
+        { name: 'all', label: '全部' + this.resource },
+        { name: 'ids', label: '指定' + this.resource },
         { name: 'attrs', label: '属性选择' }
       ],
       tableConfig: {
