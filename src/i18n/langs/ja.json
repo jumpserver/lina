@@ -557,6 +557,8 @@
     "Resource": "リソース",
     "DateLast24Hours": "最近の日",
     "DateLast3Months": "直近3月",
+    "DateLastHarfYear": "ここ半年です",
+    "DateLastYear": "ここ1年です",
     "DateLastMonth": "直近1月",
     "DateLastWeek": "最近の一週間",
     "DateStart": "開始日",
