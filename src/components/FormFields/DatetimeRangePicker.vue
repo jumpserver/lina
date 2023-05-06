@@ -72,6 +72,24 @@ export default {
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
               picker.$emit('pick', [start, end])
             }
+          },
+          {
+            text: this.$t('common.DateLastHarfYear'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 183)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: this.$t('common.DateLastYear'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
+              picker.$emit('pick', [start, end])
+            }
           }
         ]
       }

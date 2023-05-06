@@ -558,6 +558,8 @@
     "Resource": "Resource",
     "DateLast24Hours": "Last 24 hours",
     "DateLast3Months": "Last 3 months",
+    "DateLastHarfYear": "Last half year",
+    "DateLastYear": "Last year",
     "DateLastMonth": "Last month",
     "DateLastWeek": "Last week",
     "DateStart": "Date start",

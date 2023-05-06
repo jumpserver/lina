@@ -578,6 +578,8 @@
     "Resource": "资源",
     "DateLast24Hours": "最近一天",
     "DateLast3Months": "最近三月",
+    "DateLastHarfYear": "最近半年",
+    "DateLastYear": "最近一年",
     "DateLastMonth": "最近一月",
     "DateLastWeek": "最近一周",
     "DateStart": "开始日期",
