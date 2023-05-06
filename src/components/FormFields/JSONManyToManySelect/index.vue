@@ -9,22 +9,23 @@
     <div v-if="iValue.type === 'attrs'">
       <DataTable :config="tableConfig" class="attr-list" />
       <div class="actions">
-        <el-button size="mini" type="primary" @click="visible=true">
+        <el-button size="mini" type="primary" @click="handleAttrAdd">
           {{ $t('common.Add') }}
         </el-button>
       </div>
     </div>
-    <Dialog :show-cancel="false" :show-confirm="false" :visible.sync="visible" title="选择属性">
-      <DataForm class="attr-form" v-bind="formConfig" @submit="onConfirm" />
+    <Dialog v-if="visible" :show-cancel="false" :show-confirm="false" :visible.sync="visible" title="选择属性">
+      <DataForm class="attr-form" v-bind="formConfig" @submit="onAttrDialogConfirm" />
     </Dialog>
   </div>
 </template>
 
 <script>
-import Select2 from './Select2.vue'
+import Select2 from '../Select2.vue'
 import DataTable from '@/components/DataTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import DataForm from '@/components/DataForm/index.vue'
+import ValueField from './ValueField.vue'
 
 export default {
   name: 'JSONManyToManySelect',
@@ -44,13 +45,11 @@ export default {
     },
     attrs: {
       type: Array,
-      default: () => {
-        return []
-      }
+      default: () => ([])
     }
   },
   data() {
-    const matchOptions = [
+    const attrMatchOptions = [
       { label: '等于', value: 'exact' },
       { label: '不等于', value: 'not' },
       { label: '在...中', value: 'in' },
@@ -60,22 +59,24 @@ export default {
       { label: '正则', value: 'regex' },
       { label: 'IP 匹配', value: 'ip_in' }
     ]
-    const relOptions = [
+    const attrRelOptions = [
       { label: '与', value: 'and' },
       { label: '或', value: 'or' },
       { label: '非', value: 'not' }
     ]
+    const attrNameOptions = this.attrs.map(attr => ({ label: attr.label, value: attr.name }))
     const tableFormatter = (colName) => {
       return (row, col, cellValue) => {
-        console.log('colName: ', colName, 'row: ', row, 'cellValue: ', cellValue)
         const value = cellValue
         switch (colName) {
           case 'name':
             return this.attrs.find(attr => attr.name === value)?.label || value
           case 'match':
-            return matchOptions.find(opt => opt.value === value).label || value
+            return attrMatchOptions.find(opt => opt.value === value).label || value
           case 'rel':
-            return relOptions.find(opt => opt.value === value)?.label || value
+            return attrRelOptions.find(opt => opt.value === value)?.label || value
+          case 'value':
+            return Array.isArray(value) ? value.join(', ') : value
           default:
             return value
         }
@@ -83,7 +84,7 @@ export default {
     }
     return {
       iValue: Object.assign({ type: 'all' }, this.value),
-      ids: [],
+      ids: this.value.ids || [],
       types: [
         { name: 'all', label: '全部' },
         { name: 'ids', label: '指定' },
@@ -96,72 +97,71 @@ export default {
           { prop: 'value', label: '属性值', formatter: tableFormatter('value') },
           { prop: 'rel', label: '关系', formatter: tableFormatter('rel') },
           { prop: 'action', label: '操作', formatter: (row, col, cellValue, index) => {
-            console.log('row: ', row, 'col: ', col, 'cellValue: ', cellValue, 'index: ', index)
             return (
               <div className='input-button'>
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={this.handleDelete({ row, col, cellValue, index })}
-                />
                 <el-button
                   icon='el-icon-edit'
                   size='mini'
                   style={{ 'flexShrink': 0 }}
                   type='primary'
-                  onClick={this.handleEdit({ row, col, cellValue, index })}
+                  onClick={this.handleAttrEdit({ row, col, cellValue, index })}
+                />
+                <el-button
+                  icon='el-icon-minus'
+                  size='mini'
+                  style={{ 'flexShrink': 0 }}
+                  type='danger'
+                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
                 />
               </div>
             )
           } }
         ],
-        totalData: [{
-          match: 'exact',
-          name: 'name',
-          rel: 'and',
-          value: 'test'
-        }],
+        totalData: this.value.attrs || [],
         hasPagination: false
       },
       formConfig: {
+        // 为了方便更新，避免去取 fields 的索引
+        attrNameOptions: attrNameOptions,
         hasSaveContinue: false,
-        hasReset: false,
-        form: {
-          name: this.attrs[0].name,
-          match: 'exact',
-          value: '',
-          rel: 'and'
-        },
+        editRowIndex: -1,
+        form: {},
         fields: [
           {
             id: 'name',
             label: '属性',
             type: 'select',
-            options: this.attrs.map(attr => {
-              return {
-                label: attr.label,
-                value: attr.name
-              }
-            })
+            options: attrNameOptions
           },
           {
             id: 'match',
             label: '匹配方式',
             type: 'select',
-            options: matchOptions
+            options: attrMatchOptions,
+            on: {
+              change: ([value], updateForm) => {
+                this.formConfig.fields[2].el.match = value
+                if (['in', 'ip_in'].includes(value)) {
+                  updateForm({ value: [] })
+                } else {
+                  updateForm({ value: '' })
+                }
+              }
+            }
           },
           {
             id: 'value',
             label: '值',
-            type: 'input'
+            component: ValueField,
+            el: {
+              match: 'exact'
+            }
           },
           {
             id: 'rel',
             label: '关系',
             type: 'radio-group',
-            options: relOptions
+            options: attrRelOptions
           }
         ]
       },
@@ -170,30 +170,70 @@ export default {
   },
   mounted() {
     this.formConfig.form = this.getDefaultAttrForm()
+    this.$emit('input', this.iValue)
   },
   methods: {
-    onConfirm(form) {
-      console.log('this.formConfig.form: ', form)
-      this.tableConfig.totalData.push(Object.assign({}, form))
+    onAttrDialogConfirm(form) {
+      const allAttrs = this.tableConfig.totalData
+      if (this.formConfig.editRowIndex !== -1) {
+        allAttrs.splice(this.formConfig.editRowIndex, 1)
+        this.formConfig.editRowIndex = -1
+      }
+      // 因为可能 attr 的 name 会重复，所以需要先删除再添加
+      const setIndex = allAttrs.findIndex(attr => attr.name === form.name)
+      if (setIndex === -1) {
+        allAttrs.push(Object.assign({}, form))
+      } else {
+        allAttrs.splice(setIndex, 1, Object.assign({}, form))
+      }
+      form = this.getDefaultAttrForm()
       this.visible = false
     },
     getDefaultAttrForm() {
+      const attrKeys = this.attrs.map(attr => attr.name)
+      const attrSet = this.tableConfig.totalData.map(attr => attr.name)
+      const diff = attrKeys.filter(attr => !attrSet.includes(attr))
+      let name = this.attrs[0].name
+      if (diff.length > 0) {
+        name = diff[0]
+      }
       return {
-        name: this.attrs[0].name,
+        name: name,
         match: 'exact',
         value: '',
         rel: 'and'
       }
     },
-    handleEdit() {
+    setAttrNameOptionUsed() {
+      const options = this.formConfig.attrNameOptions
+      const used = this.tableConfig.totalData.map(attr => attr.name)
+      console.log('Used: ', used)
+      options.forEach(opt => {
+        if (used.includes(opt.value)) {
+          opt.disabled = true
+        } else {
+          delete opt.disabled
+        }
+      })
+      console.log('Options: ', options)
+    },
+    handleAttrEdit({ row, index }) {
       return () => {
-
+        this.formConfig.editRowIndex = index
+        this.formConfig.form = Object.assign({ index }, row)
+        this.setAttrNameOptionUsed()
+        this.visible = true
       }
     },
-    handleDelete({ index }) {
+    handleAttrDelete({ index }) {
       return () => {
         this.tableConfig.totalData.splice(index, 1)
       }
+    },
+    handleAttrAdd() {
+      this.formConfig.form = this.getDefaultAttrForm()
+      this.setAttrNameOptionUsed()
+      this.visible = true
     },
     handleTypeChange(val) {
       switch (val) {

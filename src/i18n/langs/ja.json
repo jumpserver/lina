@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "SelectAccount": "アカウントを選択",
     "UpdateSecret": "機密の更新",
     "AccountPolicy": "アカウントポリシー",
     "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",

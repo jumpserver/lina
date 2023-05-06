@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "SelectAccount": "选择账号",
     "UpdateSecret": "更新密文",
     "AddAccountResult": "账号批量添加结果",
     "AccountPolicy": "账号策略",

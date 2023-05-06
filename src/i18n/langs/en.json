@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "SelectAccount": "Select account",
     "UpdateSecret": "Update secret",
     "AccountPolicy": "Account policy",
     "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",

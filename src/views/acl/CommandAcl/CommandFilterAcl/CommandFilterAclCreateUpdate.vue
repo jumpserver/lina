@@ -11,6 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { JSONManyToManySelect } from '@/components/FormFields'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import rules from '@/components/DataForm/rules'
 
 export default {
@@ -53,7 +54,7 @@ export default {
                 label: this.$t('common.Name')
               },
               {
-                username: 'username',
+                name: 'username',
                 label: this.$t('common.Username')
               }
             ]
@@ -77,38 +78,21 @@ export default {
                 label: this.$t('common.Name')
               },
               {
-                username: 'username',
-                label: this.$t('common.Username')
+                username: 'address',
+                label: this.$t('assets.Address')
               }
             ]
           }
         },
         accounts: {
-          component: JSONManyToManySelect,
+          component: AccountFormatter,
           el: {
-            value: [],
-            select2: {
-              ajax: {
-                url: '/api/v1/users/users/?fields_size=mini',
-                transformOption: (item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                }
-              }
-            },
-            attrs: [
-              {
-                name: 'name',
-                label: this.$t('common.Name')
-              },
-              {
-                username: 'username',
-                label: this.$t('common.Username')
-              }
-            ]
+            showAddTemplate: false,
+            showVirtualAccount: false,
+            value: {}
           }
         },
-        action: {
-        },
+        action: {},
         command_groups: {
           el: {
             value: [],

@@ -14,10 +14,8 @@
           </el-tooltip>
         </el-checkbox>
       </el-checkbox-group>
-    </el-form-item>
 
-    <div v-if="showSpecAccounts" class="spec-accounts">
-      <el-form-item label="选择账号">
+      <div v-if="showSpecAccounts" class="spec-accounts">
         <TagInput
           :autocomplete="autocomplete"
           :tag-type="getTagType"
@@ -25,20 +23,20 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="small" type="primary" style="margin-left: 10px" @click="showAccountTemplateDialog=true">
+          <el-button size="small" style="margin-left: 10px" type="primary" @click="showAccountTemplateDialog=true">
             {{ $t('common.TemplateAdd') }}
           </el-button>
           {{ addTemplateHelpText }}
         </span>
-      </el-form-item>
-    </div>
+      </div>
+    </el-form-item>
 
     <Dialog
       v-if="showAccountTemplateDialog"
       :title="$tc('accounts.AccountTemplate')"
       :visible.sync="showAccountTemplateDialog"
-      @confirm="handleAccountTemplateConfirm"
       @cancel="handleAccountTemplateCancel"
+      @confirm="handleAccountTemplateConfirm"
     >
       <ListTable ref="templateTable" v-bind="accountTemplateTable" />
     </Dialog>
@@ -78,6 +76,10 @@ export default {
       type: Boolean,
       default: true
     },
+    showVirtualAccount: {
+      type: Boolean,
+      default: true
+    },
     addTemplateHelpText: {
       type: String,
       default() {
@@ -113,9 +115,11 @@ export default {
       ALL: AllAccount,
       SPEC: SpecAccount,
       showAccountTemplateDialog: false,
-      choices: choices,
-      choicesSelected: [],
-      defaultChoices: [this.ALL],
+      choices: choices.filter(i => {
+        const isVirtualAccount = [SameAccount, ManualAccount].includes(i.value)
+        return !(isVirtualAccount && !this.showVirtualAccount)
+      }),
+      choicesSelected: [this.ALL],
       specAccountsInput: [],
       specAccountsTemplate: [],
       showSpecAccounts: false,
@@ -156,19 +160,14 @@ export default {
             username: query,
             assets: this.assets.slice(0, 20).join(','),
             nodes: this.nodes.slice(0, 20).map(item => {
-              if (typeof item === 'object') {
-                return item.pk
-              } else {
-                return item
-              }
+              return typeof item === 'object' ? item.pk : item
             }).join(','),
             oid: this.oid
           }
         }).then(res => {
-          if (!res) {
-            res = []
-          }
-          const data = res.filter(item => vm.value.indexOf(item) === -1)
+          if (!res) res = []
+          const data = res
+            .filter(item => vm.value.indexOf(item) === -1)
             .map(v => ({ value: v, label: v }))
           cb(data)
         })
@@ -176,10 +175,10 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.initDefaultChoice()
   },
   methods: {
-    init() {
+    initDefaultChoice() {
       const choicesSelected = this.value.filter(i => i.startsWith('@'))
       const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
       if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
@@ -188,6 +187,9 @@ export default {
       }
       if (this.value.indexOf(this.SPEC) > -1) {
         this.showSpecAccounts = true
+      }
+      if (choicesSelected.length === 0) {
+        choicesSelected.push(this.ALL)
       }
       this.choicesSelected = choicesSelected
       this.specAccountsInput = specAccountsInput
@@ -242,20 +244,6 @@ export default {
 }
 
 .spec-accounts {
-  border: solid 1px #f3f3f4;
-  padding: 10px 10px 0;
-
-  &>>> .el-form-item {
-    display: flex;
-  }
-  &>>> .el-form-item__content {
-    width: 80% !important;
-    flex: 1;
-  }
-  &>>> .filter-field {
-    width: calc(100% - 94px);
-    display: inline-block;
-  }
 }
 
 .help-text {

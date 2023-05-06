@@ -9,12 +9,14 @@
         <el-table-column :label="$tc('assets.Username')" prop="username" />
         <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
           <template v-slot="scope">
-            <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />
+            <i v-if="scope.row['privileged']" class="fa fa-check text-primary" />
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('common.TemplateAdd')" prop="template">
           <template v-slot="scope">
-            <i :class="scope.row['template'] ? 'fa-check' : ''" class="fa text-primary" />
+            <i v-if="scope.row['template']" class="fa fa-check text-primary" />
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
