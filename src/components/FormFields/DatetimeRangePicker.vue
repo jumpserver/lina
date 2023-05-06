@@ -41,53 +41,23 @@ export default {
         shortcuts: [
           {
             text: this.$t('common.DateLast24Hours'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 1)
           },
           {
             text: this.$t('common.DateLastWeek'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 7)
           }, {
             text: this.$t('common.DateLastMonth'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 30)
           }, {
             text: this.$t('common.DateLast3Months'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 90)
           }, {
             text: this.$t('common.DateLastHarfYear'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 183)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 183)
           }, {
             text: this.$t('common.DateLastYear'),
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
-              picker.$emit('pick', [start, end])
-            }
+            onClick: (picker) => this.handleShortcutClick(picker, 365)
           }
         ]
       }
@@ -102,6 +72,12 @@ export default {
         this.$log.debug('Date change: ', val)
         this.$emit('dateChange', val)
       }
+    },
+    handleShortcutClick(picker, day) {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * day)
+      picker.$emit('pick', [start, end])
     }
   }
 }
@@ -124,7 +100,7 @@ export default {
   .el-input__inner {
     border: 1px solid #dcdee2;
     border-radius: 3px;
-    height: 32x;
+    height: 32px;
   }
 
   .el-date-editor ::v-deep .el-range-separator {
