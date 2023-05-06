@@ -41,23 +41,23 @@ export default {
         shortcuts: [
           {
             text: this.$t('common.DateLast24Hours'),
-            onClick: (picker) => this.handleShortcutClick(picker, 1)
+            onClick: (picker) => this.onShortcutClick(picker, 1)
           },
           {
             text: this.$t('common.DateLastWeek'),
-            onClick: (picker) => this.handleShortcutClick(picker, 7)
+            onClick: (picker) => this.onShortcutClick(picker, 7)
           }, {
             text: this.$t('common.DateLastMonth'),
-            onClick: (picker) => this.handleShortcutClick(picker, 30)
+            onClick: (picker) => this.onShortcutClick(picker, 30)
           }, {
             text: this.$t('common.DateLast3Months'),
-            onClick: (picker) => this.handleShortcutClick(picker, 90)
+            onClick: (picker) => this.onShortcutClick(picker, 90)
           }, {
             text: this.$t('common.DateLastHarfYear'),
-            onClick: (picker) => this.handleShortcutClick(picker, 183)
+            onClick: (picker) => this.onShortcutClick(picker, 183)
           }, {
             text: this.$t('common.DateLastYear'),
-            onClick: (picker) => this.handleShortcutClick(picker, 365)
+            onClick: (picker) => this.onShortcutClick(picker, 365)
           }
         ]
       }
@@ -73,7 +73,7 @@ export default {
         this.$emit('dateChange', val)
       }
     },
-    handleShortcutClick(picker, day) {
+    onShortcutClick(picker, day) {
       const end = new Date()
       const start = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * day)
