@@ -294,7 +294,8 @@ export default {
         },
         exportOptions: {
           url: this.exportUrl,
-          mfaVerifyRequired: true
+          mfaVerifyRequired: true,
+          tips: this.$t('accounts.AccountExportTips')
         },
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_account'),
