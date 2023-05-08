@@ -431,7 +431,11 @@
     "AssetTree": "Asset tree",
     "SSHPort": "SSH Port",
     "PrimaryProtocol": "The primary protocol, the most basic and commonly used protocol for assets, can only and must be set up with one.",
-    "Primary": "Primary"
+    "Primary": "Primary",
+    "CreateCustom": "Create Custom",
+    "CustomType": "Custom Type",
+    "CustomHelpMessage": "The assets of custom types require applet support. Please ensure that the corresponding applet is installed.",
+    "CustomFields": "Custom Fields"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -802,7 +806,25 @@
     "Error": "Error",
     "Created": "Created",
     "Skipped": "Skipped",
-    "Updated": "Updated"
+    "Updated": "Updated",
+    "NotEqual": "Not Equal",
+    "Startswith": "Starts With",
+    "AttrName": "Attribute Name",
+    "SelectByAttr": "Select By Attribute",
+    "IPMatch": "IP Match",
+    "Regex": "Regex",
+    "AttrValue": "Attribute Value",
+    "Contains": "Contains",
+    "Match": "Match",
+    "Spec": "Specific",
+    "All": "All",
+    "Endswith": "Ends With",
+    "RelAnd": "And",
+    "Equal": "Equal",
+    "MatchIn": "In ...",
+    "RelNot": "Not",
+    "RelOr": "Or",
+    "Relation": "Relation"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

@@ -54,19 +54,19 @@ export default {
   },
   data() {
     const attrMatchOptions = [
-      { label: '等于', value: 'exact' },
-      { label: '不等于', value: 'not' },
-      { label: '在...中', value: 'in' },
-      { label: '包含', value: 'contains' },
-      { label: '开头是', value: 'startswith' },
-      { label: '结尾是', value: 'endswith' },
-      { label: '正则', value: 'regex' },
-      { label: 'IP 匹配', value: 'ip_in' }
+      { label: this.$t('common.Equal'), value: 'exact' },
+      { label: this.$t('common.NotEqual'), value: 'not' },
+      { label: this.$t('common.MatchIn'), value: 'in' },
+      { label: this.$t('common.Contains'), value: 'contains' },
+      { label: this.$t('common.Startswith'), value: 'startswith' },
+      { label: this.$t('common.Endswith'), value: 'endswith' },
+      { label: this.$t('common.Regex'), value: 'regex' },
+      { label: this.$t('common.IPMatch'), value: 'ip_in' }
     ]
     const attrRelOptions = [
-      { label: '与', value: 'and' },
-      { label: '或', value: 'or' },
-      { label: '非', value: 'not' }
+      { label: this.$t('common.RelAnd'), value: 'and' },
+      { label: this.$t('common.RelOr'), value: 'or' },
+      { label: this.$t('common.RelNot'), value: 'not' }
     ]
     const attrNameOptions = this.attrs.map(attr => ({ label: attr.label, value: attr.name }))
     const tableFormatter = (colName) => {
@@ -90,17 +90,17 @@ export default {
       iValue: Object.assign({ type: 'all' }, this.value),
       ids: this.value.ids || [],
       types: [
-        { name: 'all', label: '全部' + this.resource },
-        { name: 'ids', label: '指定' + this.resource },
-        { name: 'attrs', label: '属性选择' }
+        { name: 'all', label: this.$t('common.All') + this.resource },
+        { name: 'ids', label: this.$t('common.Spec') + this.resource },
+        { name: 'attrs', label: this.$t('common.SelectByAttr') }
       ],
       tableConfig: {
         columns: [
-          { prop: 'name', label: '属性名', formatter: tableFormatter('name') },
-          { prop: 'match', label: '匹配', formatter: tableFormatter('match') },
-          { prop: 'value', label: '属性值', formatter: tableFormatter('value') },
-          { prop: 'rel', label: '关系', formatter: tableFormatter('rel') },
-          { prop: 'action', label: '操作', formatter: (row, col, cellValue, index) => {
+          { prop: 'name', label: this.$t('common.AttrName'), formatter: tableFormatter('name') },
+          { prop: 'match', label: this.$t('common.Match'), formatter: tableFormatter('match') },
+          { prop: 'value', label: this.$t('common.AttrValue'), formatter: tableFormatter('value') },
+          { prop: 'rel', label: this.$t('common.Relation'), formatter: tableFormatter('rel') },
+          { prop: 'action', label: this.$t('common.Action'), formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button

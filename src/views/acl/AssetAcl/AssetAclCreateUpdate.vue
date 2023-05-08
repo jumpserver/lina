@@ -8,6 +8,7 @@ import rules from '@/components/DataForm/rules'
 import { cleanFormValueForHandleUserAssetAccount } from '../common'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 
 export default {
   name: 'AclCreateUpdate',
@@ -32,7 +33,12 @@ export default {
         assets: assetJSONSelectMeta(this),
         users: userJSONSelectMeta(this),
         accounts: {
-          fields: ['username_group']
+          component: AccountFormatter,
+          el: {
+            showAddTemplate: false,
+            showVirtualAccount: false,
+            value: {}
+          }
         },
         reviewers: {
           hidden: (item) => item.action !== 'review',
