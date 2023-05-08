@@ -123,14 +123,14 @@ export default {
           }
           attrs[item] = encryptPassword(value)
         }
+        if (Array.isArray(attrs.ip_group)) {
+          values.attrs.ip_group = attrs.ip_group.filter(Boolean)
+        }
         return values
       },
       afterGetFormValue(formValue) {
         if (!formValue.attrs) {
           return formValue
-        }
-        if (Array.isArray(formValue.attrs.ip_group)) {
-          formValue.attrs.ip_group = formValue.attrs.ip_group.toString()
         }
         return formValue
       }
