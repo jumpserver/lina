@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "Accounts": "Accounts",
     "SelectAccount": "Select account",
     "UpdateSecret": "Update secret",
     "AccountPolicy": "Account policy",

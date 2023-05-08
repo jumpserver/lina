@@ -159,7 +159,7 @@ export const assetJSONSelectMeta = (vm) => {
           label: vm.$t('common.Name')
         },
         {
-          username: 'address',
+          name: 'address',
           label: vm.$t('assets.Address')
         }
       ]

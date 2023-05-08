@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "Accounts": "アカウント",
     "SelectAccount": "アカウントを選択",
     "UpdateSecret": "機密の更新",
     "AccountPolicy": "アカウントポリシー",

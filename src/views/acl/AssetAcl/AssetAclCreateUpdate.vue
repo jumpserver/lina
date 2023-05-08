@@ -20,10 +20,10 @@ export default {
       initial: {},
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('acl.users'), ['users']],
-        [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.account'), ['accounts']],
-        [this.$t('acl.action'), ['action', 'reviewers']],
+        [this.$t('users.Users'), ['users']],
+        [this.$t('assets.Asset'), ['assets']],
+        [this.$t('accounts.Accounts'), ['accounts']],
+        [this.$t('common.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['priority', 'is_active', 'comment']]
       ],
       fieldsMeta: {
