@@ -1330,6 +1330,7 @@
   },
   "terminal": {
     "Author": "Author",
+    "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
