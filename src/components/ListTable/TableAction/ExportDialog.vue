@@ -17,6 +17,9 @@
       @cancel="handleExportCancel()"
       @confirm="handleExportConfirm()"
     >
+      <el-alert v-if="tips" :type="tipsType">
+        {{ tips }}
+      </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
         <el-form-item :label="$tc('common.fileType' )" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
@@ -92,6 +95,14 @@ export default {
     canExportFiltered: {
       type: Boolean,
       default: true
+    },
+    tips: {
+      type: String,
+      default: ''
+    },
+    tipsType: {
+      type: String,
+      default: 'success'
     }
   },
   data() {
