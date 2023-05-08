@@ -41,14 +41,10 @@ export default {
       },
       hasDetailInMsg: false,
       cleanFormValue(value) {
-        if (!Array.isArray(value.ip_group)) {
-          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        if (Array.isArray(value.ip_group)) {
+          value.ip_group = value.ip_group.filter(Boolean)
         }
         return value
-      },
-      afterGetFormValue(formValue) {
-        formValue.ip_group = formValue.ip_group?.toString()
-        return formValue
       }
     }
   }
