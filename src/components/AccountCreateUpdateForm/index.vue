@@ -144,7 +144,8 @@ export default {
           },
           hidden: () => {
             return this.addTemplate
-          }
+          },
+          helpText: this.$t('accounts.AccountUserNameHelpText')
         },
         privileged: {
           hidden: () => {

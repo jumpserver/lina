@@ -104,6 +104,7 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
+    "AccountUserNameHelpText": "一部の資産にパスワードが必要ない場合は、ユーザー名をnullに設定できます",
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
