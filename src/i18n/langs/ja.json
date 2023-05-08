@@ -1325,6 +1325,7 @@
   },
   "terminal": {
     "Author": "作者",
+    "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
     "UploadFailed": "アップロードに失敗しました",
     "Applets": "リモートアプリケーション",

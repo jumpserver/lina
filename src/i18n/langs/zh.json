@@ -1320,6 +1320,7 @@
     "Author": "作者",
     "BasePort": "监听端口",
     "DatabasePort": "数据库协议端口",
+    "Uploading": "文件上传中",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
