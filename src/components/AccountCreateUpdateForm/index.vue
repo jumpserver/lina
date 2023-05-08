@@ -140,11 +140,18 @@ export default {
               if (maybePrivileged) {
                 updateForm({ privileged: true })
               }
+            },
+            blur: ([event], updateForm) => {
+              const form = this.$refs.AutoDataForm.$refs.dataForm.$refs.form.getFormValue()
+              if (form.secret_type === 'password' && !form.secret) {
+                updateForm({ username: 'null' })
+              }
             }
           },
           hidden: () => {
             return this.addTemplate
-          }
+          },
+          helpText: this.$t('accounts.AccountUserNameHelpText')
         },
         privileged: {
           hidden: () => {
@@ -287,6 +294,9 @@ export default {
       const secretType = form.secret_type || ''
       if (secretType !== 'password') {
         form.secret = form[secretType]
+      }
+      if (secretType === 'password' && !form.secret) {
+        form.username = 'null'
       }
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
       if (!form.secret) {

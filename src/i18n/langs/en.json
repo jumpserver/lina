@@ -103,6 +103,7 @@
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
+    "AccountUserNameHelpText": "When the code is empty, the username value is null",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
     "AddAccountResult": "Add account result"

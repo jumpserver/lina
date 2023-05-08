@@ -103,6 +103,7 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
+    "AccountUserNameHelpText": "コードがNULLの場合、ユーザー名の値はnullです",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
     "AddAccountResult": "账号批量添加结果"
