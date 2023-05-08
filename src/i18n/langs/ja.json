@@ -103,6 +103,7 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
+    "AccountUserNameHelpText": "一部の資産にパスワードが必要ない場合は、ユーザー名をnullに設定できます",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
     "AddAccountResult": "账号批量添加结果"

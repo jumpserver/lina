@@ -103,6 +103,7 @@
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
+    "AccountUserNameHelpText": "If some assets do not require a password, the username can be set to null",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
     "AddAccountResult": "Add account result"
