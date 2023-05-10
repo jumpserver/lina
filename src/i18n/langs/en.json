@@ -992,6 +992,7 @@
     "CloseConfirmMessage": "The file has changed, do you want to save it?",
     "privilegeOnly": "Select only privileged accounts",
     "UploadPlaybook": "Upload Playbook",
+    "CreatePlaybook": "Create Playbook",
     "Rename": "Rename",
     "instantAdhoc": "Instant command",
     "Summary(success/total)": "Overview (Success/Total)",
