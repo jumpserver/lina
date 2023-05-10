@@ -13,7 +13,7 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <div style="padding-top: 10px;" v-html="item.body" />
+            <MarkDown :value="item.body" />
           </div>
         </div>
       </div>
@@ -68,9 +68,11 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
+import MarkDown from '@/components/MarkDown'
+
 export default {
   name: 'Comments',
-  components: { IBox },
+  components: { IBox, MarkDown },
   props: {
     object: {
       type: Object,
@@ -105,7 +107,13 @@ export default {
       return this.object.process_map[this.object.approval_step - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
-      const applicant = this.object.applicant.indexOf('(') > -1 ? this.object.applicant.split('(')[0] : this.object.applicant
+      let applicant
+      if (this.object.applicant.indexOf('(') > -1) {
+        const applicantName = this.object.applicant.split('(')[1]
+        applicant = applicantName.substring(0, applicantName.length - 1)
+      } else {
+        applicant = this.object.applicant
+      }
       const userName = this.$store.state.users.profile?.username
       return applicant === userName
     }
