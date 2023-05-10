@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      ready: false,
+      ready: true,
       currentStatus: '',
       currentTaskId: '',
       executionInfo: {
@@ -110,7 +110,19 @@ export default {
             value: 'root',
             tip: this.$tc('ops.RunasHelpText'),
             el: {
-              autoComplete: true
+              autoComplete: true,
+              query: (query, cb) => {
+                const { hosts, nodes } = this.getSelectedNodesAndHosts()
+                this.$axios.post('/api/v1/ops/username-hints/', {
+                  nodes: nodes,
+                  assets: hosts
+                }).then(data => {
+                  const ns = data.map(item => {
+                    return { value: item.username }
+                  })
+                  cb(ns)
+                })
+              }
             },
             options: [],
             callback: (option) => {
@@ -241,7 +253,6 @@ export default {
   },
   methods: {
     async initData() {
-      await this.getFrequentUsernames()
       this.recoverStatus()
     },
     recoverStatus() {
@@ -266,17 +277,6 @@ export default {
           })
         })
       }
-    },
-    getFrequentUsernames() {
-      this.$axios.get('/api/v1/ops/frequent-username').then(data => {
-        this.toolbar.left.runas.el.query = (query, cb) => {
-          const ns = data.map(item => {
-            return { value: item.username }
-          })
-          cb(ns)
-        }
-        this.ready = true
-      })
     },
     onSelectAdhoc(adhoc) {
       this.command = adhoc.args
@@ -344,10 +344,7 @@ export default {
       }, 100)
     },
 
-    execute() {
-      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
-      const url = '/api/v1/ops/jobs/?'
-
+    getSelectedNodesAndHosts() {
       const hosts = this.getSelectedNodes().filter((item) => {
         return item.meta.type !== 'node'
       }).map(function(node) {
@@ -359,6 +356,12 @@ export default {
       }).map(function(node) {
         return node.meta.data.id
       })
+      return { hosts, nodes }
+    },
+    execute() {
+      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
+      const url = '/api/v1/ops/jobs/?'
+      const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
       if (hosts.length === 0 && nodes.length === 0) {
         this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
