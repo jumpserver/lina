@@ -225,6 +225,7 @@ export default {
           items[0].primary = true
           items[0].default = true
           items[0].required = true
+          items[0].public = true
         } else if (primaryProtocols.length > 1) {
           primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
             item.primary = false

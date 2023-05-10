@@ -346,6 +346,8 @@
     "RequiredProtocol": "Required agreement, which must be selected when adding assets",
     "Default": "Default",
     "DefaultProtocol": "Default agreement, which will be selected by default when adding assets",
+    "Public": "Public",
+    "PublicProtocol": "If it is a public protocol, it will be displayed when connecting assets",
     "LoginConfig": "Login config",
     "UserNameSelector": "User name input box selector",
     "PasswordSelector": "Password Input Box Selector",

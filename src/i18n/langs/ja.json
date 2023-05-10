@@ -339,6 +339,8 @@
     "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
+    "Public": "ありふれた",
+    "PublicProtocol": "資産への接続時にパブリック・プロトコルが表示される場合",
     "LoginConfig": "ログイン構成",
     "UserNameSelector": "ユーザー名入力ボックスセレクタ",
     "PasswordSelector": "パスワード入力ボックスセレクタ",
