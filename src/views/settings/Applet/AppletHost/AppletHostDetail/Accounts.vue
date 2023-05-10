@@ -1,13 +1,22 @@
 <template>
-  <Account :object.sync="object" :columns-meta="columnsMeta" />
+  <el-row :gutter="20">
+    <el-col :md="16" :sm="24">
+      <Account :columns-meta="columnsMeta" :object.sync="object" />
+    </el-col>
+    <el-col :md="8" :sm="24">
+      <QuickActions :actions="quickActions" type="primary" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 import Account from '@/views/assets/Asset/AssetDetail/Account'
+import { QuickActions } from '@/components'
+
 export default {
   name: 'Accounts',
   components: {
-    Account
+    QuickActions, Account
   },
   props: {
     object: {
@@ -25,7 +34,25 @@ export default {
           label: this.$t('assets.Asset'),
           formatter: (row) => <span>{row.asset.name}</span>
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('accounts.GenerateAccounts'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Generate')
+          },
+          callbacks: {
+            click: function() {
+              this.$axios.put(
+                `/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`,
+              ).then(res => {
+                this.$message.success(this.$tc('accounts.GenerateSuccessMsg'))
+              })
+            }.bind(this)
+          }
+        }
+      ]
     }
   }
 }

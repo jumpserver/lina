@@ -22,7 +22,12 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
   ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
@@ -329,7 +334,7 @@ export default {
 
       // 最小列
       const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
-        .filter(n => defaultColumnsNames.indexOf(n) > -1)
+        .filter(n => totalColumnsNames.includes(n))
 
       // 应该显示的列
       const _tableConfig = localStorage.getItem('tableConfig')

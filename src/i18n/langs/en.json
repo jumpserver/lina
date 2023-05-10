@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "Accounts generated successfully",
+    "GenerateAccounts": "Regenerate accounts",
     "UpdateSecret": "Update secret",
     "AccountPolicy": "Account policy",
     "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",
@@ -455,6 +457,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Generate": "Generate",
     "BatchProcessing": "Batch processing(select {Number} items)",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
