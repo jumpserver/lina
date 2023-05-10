@@ -987,6 +987,7 @@
     "CloseConfirmMessage": "ファイルが変更されました，保存しますか？",
     "privilegeOnly": "特権アカウントのみを選択",
     "UploadPlaybook": "アップロード Playbook",
+    "CreatePlaybook": "を作成 Playbook",
     "Rename": "名前を変更",
     "RUNNING": "ランニング",
     "instantAdhoc": "インスタントコマンド",
