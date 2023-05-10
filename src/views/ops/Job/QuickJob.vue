@@ -225,6 +225,7 @@ export default {
       },
       treeSetting: {
         treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
+        searchUrl: '/api/v1/perms/users/self/assets/tree/',
         showRefresh: true,
         showMenu: false,
         showSearch: true,

@@ -148,12 +148,12 @@ export default {
     rootNodeAddDom(rootNode) {
       const { showSearch, showRefresh } = this.treeSetting
       const searchIcon = `
-        <a class="tree-action-btn" id='search-btn' onclick="onSearch()">
-          <i class='fa fa-search tree-banner-icon'></i>
+        <a class="tree-action-btn" id="search-btn" onclick="onSearch()">
+          <i class="fa fa-search tree-banner-icon"></i>
         </a>`
       const refreshIcon = `
-        <a id='tree-refresh' class="tree-action-btn" onclick='refresh()'>
-          <i class='fa fa-refresh'></i>
+        <a id="tree-refresh" class="tree-action-btn" onclick="refresh()">
+          <i class="fa fa-refresh"></i>
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
@@ -306,7 +306,7 @@ export default {
         this.zTree.hideNodes(treeNodes)
       }
 
-      let treeUrl = this.treeSetting.treeUrl
+      let treeUrl = this.treeSetting.searchUrl ? this.treeSetting.searchUrl : this.treeSetting.treeUrl
       const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
       if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
         treeUrl = treeUrl + '&all=all'
@@ -336,259 +336,261 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-track:horizontal {
-    background: #FFFFFF;
-    border-radius: 10px;
-  }
-  div.rMenu {
-    position: absolute;
-    visibility: hidden;
-    text-align: left;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    float: left;
-    padding: 0 0;
-    margin: 2px 0 0;
-    list-style: none;
-    background-clip: padding-box;
-  }
+<style lang="scss" scoped>
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
-  .dataTables_wrapper .dataTables_processing {
-    opacity: .9;
-    border: none;
-  }
+::-webkit-scrollbar-track:horizontal {
+  background: #FFFFFF;
+  border-radius: 10px;
+}
 
-  div.rMenu li {
-    margin: 6px 0;
-    cursor: pointer;
-    list-style: none outside none;
-  }
+div.rMenu {
+  position: absolute;
+  visibility: hidden;
+  text-align: left;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  float: left;
+  padding: 0 0;
+  margin: 2px 0 0;
+  list-style: none;
+  background-clip: padding-box;
+}
 
-  .dropdown-menu {
-    border: medium none;
-    min-width: 160px;
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
-    display: block;
-    float: left;
-    font-size: 12px;
-    left: 0;
-    list-style: none outside none;
-    padding: 0;
-    position: absolute;
-    text-shadow: none;
-    top: 100%;
-    z-index: 1000;
-  }
+.dataTables_wrapper .dataTables_processing {
+  opacity: .9;
+  border: none;
+}
 
-  .ztree ::v-deep .fa {
-    font: normal normal normal 14px/1 FontAwesome !important;
-  }
+div.rMenu li {
+  margin: 6px 0;
+  cursor: pointer;
+  list-style: none outside none;
+}
 
-  .dropdown a:hover {
-    background-color: #f1f1f1
-  }
+.dropdown-menu {
+  border: medium none;
+  min-width: 160px;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+  display: block;
+  float: left;
+  font-size: 12px;
+  left: 0;
+  list-style: none outside none;
+  padding: 0;
+  position: absolute;
+  text-shadow: none;
+  top: 100%;
+  z-index: 1000;
+}
 
-  .dropdown-menu > li > a {
-    border-radius: 3px;
-    color: inherit;
-    line-height: 25px;
-    margin: 4px;
-    text-align: left;
-    font-weight: normal;
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    white-space: nowrap;
-  }
+.ztree ::v-deep .fa {
+  font: normal normal normal 14px/1 FontAwesome !important;
+}
 
-  .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-    color: #262626;
-    text-decoration: none;
-    background-color: #f5f5f5;
-  }
+.dropdown a:hover {
+  background-color: #f1f1f1
+}
 
-  .treebox {
+.dropdown-menu > li > a {
+  border-radius: 3px;
+  color: inherit;
+  line-height: 25px;
+  margin: 4px;
+  text-align: left;
+  font-weight: normal;
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
+.treebox {
+  background-color: transparent;
+
+  > > > .ztree {
+    overflow: auto;
     background-color: transparent;
+    height: calc(100vh - 237px);
 
-    >>> .ztree {
-      overflow: auto;
-      background-color: transparent;
-      height: calc(100vh - 237px);
+    li {
+      background-color: transparent !important;
 
-      li {
+      .button {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      ul {
         background-color: transparent !important;
-
-        .button {
-          background-color: rgba(0, 0, 0, 0);
-        }
-
-        ul {
-          background-color: transparent !important;
-        }
       }
     }
   }
+}
 
-  ::v-deep #tree-refresh {
-    margin-left: 3px;
-  }
+::v-deep #tree-refresh {
+  margin-left: 3px;
+}
 
-  ::v-deep .tree-banner-icon-zone {
-    position: absolute;
-    right: 7px;
-    height: 30px;
-    overflow: hidden;
+::v-deep .tree-banner-icon-zone {
+  position: absolute;
+  right: 7px;
+  height: 30px;
+  overflow: hidden;
 
-    .fa {
-      color: #838385 !important;;
-
-      &:hover {
-        color: #606266 !important;;
-      }
-    }
-  }
-
-  ::v-deep .tree-search {
-    position: relative;
-    top: -2px;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    border-radius: 12px;
-    vertical-align: sub;
-    transition: .25s;
-    overflow: hidden;
-
-    .fa {
-      width: 13px !important;
-    }
-
-    .fa-search {
-      padding-top: 1px;
-    }
-  }
-
-  ::v-deep .tree-search .tree-banner-icon {
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: transparent !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  ::v-deep .tree-search.active {
-    width: 160px;
-    background-color: #ffffff !important;
-  }
-
-  ::v-deep .tree-search.active:hover {
-    border-radius: 12px;
-  }
-
-  ::v-deep .tree-search input {
-    position: relative;
-    left: 20px;
-    width: 133px;
-    height: 100%;
-    background-color: #ffffff !important;
-    color: #606266;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    outline: none;
-  }
-
-  .tree-header {
-    position: relative;
-
-    .title {
-      font-weight: 500;
-    }
-
-    .content {
-      height: 30px;
-      line-height: 30px;
-      border-bottom: 1px solid #e0e0e0;
-      border-radius: 3px;
-      padding: 0 5px;
-      box-sizing: border-box;
-      overflow: hidden;
-      cursor: pointer;
-      background-color: #D7D8DC;
-
-      .rotate {
-        transition: all .1 .8s;
-        transform: rotate(-90deg);
-      }
-
-      .fa-caret-down {
-        font-size: 16px;
-      }
-
-      .special {
-        top: 1px !important;
-      }
-    }
-  }
-
-  .tree-empty {
-    margin-left: 4px;
-  }
-
-  .fixed-tree-search {
-    margin-bottom: 10px;
-
-    & > > > .el-input__inner {
-      border-radius: 4px;
-      background: #fafafa;
-      padding-right: 32px;
-    }
-
-    & > > > .el-input__suffix {
-      padding-right: 8px;
-    }
-
-    & > > > .el-input__prefix {
-      padding-left: 6px;
-    }
-
-    & > > > .el-input__suffix-inner {
-      line-height: 30px;
-    }
-  }
-
-  .icon-refresh {
-    border-radius: 4px;
-    padding: 0 1px;
-    z-index: 1;
+  .fa {
+    color: #838385 !important;;
 
     &:hover {
-      cursor: pointer;
-      color: #606266;
-      border-color: #d2d2d2;
-      background-color: #e6e6e6;
+      color: #606266 !important;;
     }
   }
+}
 
-  .icon {
+::v-deep .tree-search {
+  position: relative;
+  top: -2px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 12px;
+  vertical-align: sub;
+  transition: .25s;
+  overflow: hidden;
+
+  .fa {
+    width: 13px !important;
+  }
+
+  .fa-search {
+    padding-top: 1px;
+  }
+}
+
+::v-deep .tree-search .tree-banner-icon {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: transparent !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+::v-deep .tree-search.active {
+  width: 160px;
+  background-color: #ffffff !important;
+}
+
+::v-deep .tree-search.active:hover {
+  border-radius: 12px;
+}
+
+::v-deep .tree-search input {
+  position: relative;
+  left: 20px;
+  width: 133px;
+  height: 100%;
+  background-color: #ffffff !important;
+  color: #606266;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+}
+
+.tree-header {
+  position: relative;
+
+  .title {
+    font-weight: 500;
+  }
+
+  .content {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 3px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    overflow: hidden;
     cursor: pointer;
+    background-color: #D7D8DC;
+
+    .rotate {
+      transition: all .1 .8s;
+      transform: rotate(-90deg);
+    }
+
+    .fa-caret-down {
+      font-size: 16px;
+    }
+
+    .special {
+      top: 1px !important;
+    }
+  }
+}
+
+.tree-empty {
+  margin-left: 4px;
+}
+
+.fixed-tree-search {
+  margin-bottom: 10px;
+
+  & > > > .el-input__inner {
+    border-radius: 4px;
+    background: #fafafa;
+    padding-right: 32px;
   }
 
-  .tree-action-btn {
-    padding: 0 2px;
-    color: red;
+  & > > > .el-input__suffix {
+    padding-right: 8px;
   }
+
+  & > > > .el-input__prefix {
+    padding-left: 6px;
+  }
+
+  & > > > .el-input__suffix-inner {
+    line-height: 30px;
+  }
+}
+
+.icon-refresh {
+  border-radius: 4px;
+  padding: 0 1px;
+  z-index: 1;
+
+  &:hover {
+    cursor: pointer;
+    color: #606266;
+    border-color: #d2d2d2;
+    background-color: #e6e6e6;
+  }
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.tree-action-btn {
+  padding: 0 2px;
+  color: red;
+}
 </style>
