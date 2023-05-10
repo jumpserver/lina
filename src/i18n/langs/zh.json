@@ -357,6 +357,8 @@
     "RequiredProtocol": "必需协议, 添加资产时必须选择, 可以设置多个",
     "Default": "默认的",
     "DefaultProtocol": "默认协议, 添加资产时默认会选择",
+    "Public": "公共的",
+    "PublicProtocol": "如果是公共协议在连接资产时会显示",
     "LoginConfig": "登录配置",
     "UserNameSelector": "用户名输入框选择器",
     "PasswordSelector": "密码输入框选择器",
