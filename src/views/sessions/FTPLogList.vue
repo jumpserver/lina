@@ -4,6 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import { download } from '@/utils/common'
 
 export default {
   components: {
@@ -12,6 +13,12 @@ export default {
   data() {
     return {
       tableConfig: {
+        columnsShow: {
+          default: [
+            'id', 'user', 'remote_addr', 'asset', 'account', 'operate',
+            'filename', 'date_start', 'is_success', 'actions'
+          ]
+        },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
           remote_addr: {
@@ -24,7 +31,26 @@ export default {
             width: '80px'
           },
           actions: {
-            has: false
+            width: '82px',
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'download',
+                  title: this.$t('sessions.download'),
+                  type: 'primary',
+                  has: ({ row }) => {
+                    return row.has_file
+                  },
+                  callback: function({ row }) {
+                    // 跳转下载页面
+                    download(`/api/v1/audits/ftp-logs/${row.id}/file/`)
+                  }
+                }
+              ]
+            }
           }
         }
       },
