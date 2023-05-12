@@ -41,7 +41,9 @@ export default {
     getAddFieldsMeta() {
       const platform = this.$route.query.type
       const fieldsMeta = {
-        db_name: [],
+        db_name: {
+          label: this.$t('assets.DefaultDatabase')
+        },
         use_ssl: {
           label: this.$t('common.UseSSL'),
           component: 'el-switch'

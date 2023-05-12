@@ -337,6 +337,7 @@
     "Pending": "Pending",
     "Platform": "Platform",
     "PlatformDetail": "Platform detail",
+    "DefaultDatabase": "Default database",
     "UseSSL": "Enable SSL",
     "ProtocolsGroup": "Protocols group",
     "DefaultPort": "Default port",

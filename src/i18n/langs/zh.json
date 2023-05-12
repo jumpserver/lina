@@ -348,6 +348,7 @@
     "Pending": "等待",
     "Platform": "系统平台",
     "PlatformDetail": "平台详情",
+    "DefaultDatabase": "默认数据库",
     "UseSSL": "开启 SSL",
     "ProtocolsGroup": "协议",
     "DefaultPort": "默认端口",
