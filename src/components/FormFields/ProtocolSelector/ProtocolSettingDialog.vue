@@ -50,7 +50,7 @@ export default {
     const vm = this
     const platform = this.$route.query.platform
     return {
-      baseAttrs: ['primary', 'required', 'default'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
+      baseAttrs: ['primary', 'required', 'default', 'public'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
       defaultSetting: {
         sftp_enabled: true,
         sftp_home: '/tmp',
@@ -101,6 +101,13 @@ export default {
               label: this.$t('assets.Default'),
               type: 'switch',
               helpText: this.$t('assets.DefaultProtocol'),
+              disabled: false
+            },
+            {
+              id: 'public',
+              label: this.$t('assets.Public'),
+              type: 'switch',
+              helpText: this.$t('assets.PublicProtocol'),
               disabled: false
             }
           ]],

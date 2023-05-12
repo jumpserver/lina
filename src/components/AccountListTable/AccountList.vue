@@ -25,8 +25,8 @@
     <AccountCreateUpdate
       v-if="showAddTemplateDialog"
       :account="account"
-      :asset="iAsset"
       :add-template="true"
+      :asset="iAsset"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
@@ -103,6 +103,13 @@ export default {
       default: () => {
       }
     },
+    columnsDefault: {
+      type: Array,
+      default: () => ([
+        'name', 'username', 'asset', 'privileged',
+        'secret_type', 'date_updated'
+      ])
+    },
     headerExtraActions: {
       type: Array,
       default: () => []
@@ -135,6 +142,10 @@ export default {
           'name', 'username', 'asset', 'privileged',
           'secret_type', 'source', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'username', 'actions'],
+          default: this.columnsDefault
+        },
         columnsMeta: {
           name: {
             formatter: function(row) {

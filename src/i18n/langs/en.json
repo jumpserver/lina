@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "Accounts generated successfully",
+    "GenerateAccounts": "Regenerate accounts",
     "UpdateSecret": "Update secret",
     "AccountPolicy": "Account policy",
     "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",
@@ -344,6 +346,8 @@
     "RequiredProtocol": "Required agreement, which must be selected when adding assets",
     "Default": "Default",
     "DefaultProtocol": "Default agreement, which will be selected by default when adding assets",
+    "Public": "Public",
+    "PublicProtocol": "If it is a public protocol, it will be displayed when connecting assets",
     "LoginConfig": "Login config",
     "UserNameSelector": "User name input box selector",
     "PasswordSelector": "Password Input Box Selector",
@@ -456,6 +460,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Generate": "Generate",
     "BatchProcessing": "Batch processing(select {Number} items)",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
@@ -989,6 +994,7 @@
     "CloseConfirmMessage": "The file has changed, do you want to save it?",
     "privilegeOnly": "Select only privileged accounts",
     "UploadPlaybook": "Upload Playbook",
+    "CreatePlaybook": "Create Playbook",
     "Rename": "Rename",
     "instantAdhoc": "Instant command",
     "Summary(success/total)": "Overview (Success/Total)",
@@ -1330,6 +1336,7 @@
   },
   "terminal": {
     "Author": "Author",
+    "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",

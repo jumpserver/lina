@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "アカウントの生成に成功しました",
+    "GenerateAccounts": "アカウントを再生成する",
     "UpdateSecret": "機密の更新",
     "AccountPolicy": "アカウントポリシー",
     "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
@@ -337,6 +339,8 @@
     "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
+    "Public": "ありふれた",
+    "PublicProtocol": "資産への接続時にパブリック・プロトコルが表示される場合",
     "LoginConfig": "ログイン構成",
     "UserNameSelector": "ユーザー名入力ボックスセレクタ",
     "PasswordSelector": "パスワード入力ボックスセレクタ",
@@ -456,6 +460,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Generate": "生成",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
@@ -984,6 +989,7 @@
     "CloseConfirmMessage": "ファイルが変更されました，保存しますか？",
     "privilegeOnly": "特権アカウントのみを選択",
     "UploadPlaybook": "アップロード Playbook",
+    "CreatePlaybook": "を作成 Playbook",
     "Rename": "名前を変更",
     "RUNNING": "ランニング",
     "instantAdhoc": "インスタントコマンド",
@@ -1325,6 +1331,7 @@
   },
   "terminal": {
     "Author": "作者",
+    "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
     "UploadFailed": "アップロードに失敗しました",
     "Applets": "リモートアプリケーション",

@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "账号生成成功",
+    "GenerateAccounts": "重新生成账号",
     "UpdateSecret": "更新密文",
     "AddAccountResult": "账号批量添加结果",
     "AccountPolicy": "账号策略",
@@ -355,6 +357,8 @@
     "RequiredProtocol": "必需协议, 添加资产时必须选择, 可以设置多个",
     "Default": "默认的",
     "DefaultProtocol": "默认协议, 添加资产时默认会选择",
+    "Public": "公共的",
+    "PublicProtocol": "如果是公共协议在连接资产时会显示",
     "LoginConfig": "登录配置",
     "UserNameSelector": "用户名输入框选择器",
     "PasswordSelector": "密码输入框选择器",
@@ -384,7 +388,6 @@
     "Refresh": "刷新",
     "RefreshHardware": "更新硬件信息",
     "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
-
     "RemoteApps": "远程应用",
     "Applications": "应用",
     "RemoteType": "应用类型",
@@ -455,6 +458,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Generate": "生成",
     "BatchProcessing": "批量处理(选中 {Number} 项)",
     "Created": "已创建",
     "Updated": "已更新",
@@ -908,6 +912,7 @@
     "SelectCreateMethod": "选择创建方式",
     "Workspace": "工作空间",
     "UploadPlaybook": "上传 Playbook",
+    "CreatePlaybook": "创建 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
     "RequiredContent": "请输入命令",
     "RequiredRunas": "请输入运行用户",
@@ -1320,6 +1325,7 @@
     "Author": "作者",
     "BasePort": "监听端口",
     "DatabasePort": "数据库协议端口",
+    "Uploading": "文件上传中",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",

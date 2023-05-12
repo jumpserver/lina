@@ -2,6 +2,8 @@
   <Dialog
     :show-cancel="false"
     :title="$tc('common.OfflineUpload')"
+    :before-close="handleClose"
+    :loading-status="!isFinished"
     v-bind="$attrs"
     @cancel="onCancel"
     @confirm="onSubmit"
@@ -53,7 +55,8 @@ export default {
     return {
       hasFileFormatOrSizeError: false,
       renderError: '',
-      file: null
+      file: null,
+      isFinished: true
     }
   },
   methods: {
@@ -65,6 +68,13 @@ export default {
     },
     beforeUpload(file) {
     },
+    handleClose(done) {
+      if (this.isFinished) {
+        done()
+      } else {
+        this.$message.warning(this.$tc('terminal.Uploading'))
+      }
+    },
     onCancel() {
       this.$emit('update:visible', false)
     },
@@ -72,6 +82,7 @@ export default {
       if (!this.file) {
         return
       }
+      this.isFinished = false
       const form = new FormData()
       form.append('file', this.file.raw)
       this.$axios.post(
@@ -82,10 +93,12 @@ export default {
           disableFlashErrorMsg: true
         }
       ).then(res => {
+        this.isFinished = true
         this.$message.success(this.$tc('terminal.UploadSucceed'))
         this.$emit('update:visible', false)
         this.$emit('upload-event', res)
       }).catch(err => {
+        this.isFinished = true
         const error = err.response.data
         const msg = error?.message || error?.detail || error?.error || JSON.stringify(error)
         this.$message.error(msg)
