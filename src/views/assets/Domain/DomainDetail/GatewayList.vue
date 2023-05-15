@@ -78,8 +78,13 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-          labels_display: {
-            formatter: TagsFormatter
+          labels: {
+            formatter: TagsFormatter,
+            formatterArgs: {
+              getTags(cellValue) {
+                return cellValue.map(item => `${item.name}:${item.value}`)
+              }
+            }
           },
           connectivity: connectivityMeta,
           actions: {
