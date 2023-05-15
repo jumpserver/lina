@@ -69,7 +69,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    openTaskPage(val.row.task)
+                    openTaskPage(val.row.task, '', '', { isAppletHostDeployment: true })
                   }
                 }
               ]
@@ -90,7 +90,7 @@ export default {
                 `/api/v1/terminal/applet-host-deployments/`,
                 { host: this.object.id }
               ).then(res => {
-                openTaskPage(res['task'])
+                openTaskPage(res['task'], '', '', { isAppletHostDeployment: true })
               })
             }.bind(this)
           }

@@ -2,10 +2,14 @@ import store from '@/store'
 import { constantRoutes } from '@/router'
 import { openWindow } from './common'
 
-export function openTaskPage(taskId, taskType, taskUrl) {
+export function openTaskPage(taskId, taskType, taskUrl, extraQuery = {}) {
   taskType = taskType || 'celery'
   if (!taskUrl) {
     taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
+  }
+  if (Object.keys(extraQuery).length > 0) {
+    const queryString = Object.keys(extraQuery).map(key => `${key}=${extraQuery[key]}`).join('&')
+    taskUrl = `${taskUrl}&${queryString}`
   }
   openWindow(taskUrl)
 }

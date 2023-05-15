@@ -88,7 +88,7 @@ export default {
                         applet_id: row.applet.id
                       }
                     ).then(res => {
-                      openTaskPage(res['task'])
+                      openTaskPage(res['task'], '', '', { isAppletHostDeployment: true })
                     })
                   }
                 }
@@ -110,7 +110,7 @@ export default {
                 `/api/v1/terminal/applet-host-deployments/`,
                 { host: this.object.id }
               ).then(res => {
-                openTaskPage(res['task'])
+                openTaskPage(res['task'], '', '', { isAppletHostDeployment: true })
               })
             }.bind(this)
           }
@@ -127,7 +127,7 @@ export default {
                 `/api/v1/terminal/applet-host-deployments/applets/`,
                 { host: this.object.id }
               ).then(res => {
-                openTaskPage(res['task'])
+                openTaskPage(res['task'], '', '', { isAppletHostDeployment: true })
               })
             }.bind(this)
           }
