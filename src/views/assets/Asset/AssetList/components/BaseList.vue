@@ -164,8 +164,13 @@ export default {
             }
           },
           connectivity: connectivityMeta,
-          labels_display: {
-            formatter: TagsFormatter
+          labels: {
+            formatter: TagsFormatter,
+            formatterArgs: {
+              getTags(cellValue) {
+                return cellValue.map(item => `${item.name}:${item.value}`)
+              }
+            }
           },
           actions: {
             formatter: ActionsFormatter,
