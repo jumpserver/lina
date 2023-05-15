@@ -69,6 +69,7 @@ import Dialog from '@/components/Dialog'
 import PasswordHistoryDialog from './PasswordHistoryDialog'
 import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'ShowSecretInfo',
@@ -139,7 +140,7 @@ export default {
     onChangeSecretSubmit() {
       const params = {
         name: this.secretInfo.name,
-        secret: this.secretInfo.secret
+        secret: encryptPassword(this.modifiedSecret)
       }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, params).then(() => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
