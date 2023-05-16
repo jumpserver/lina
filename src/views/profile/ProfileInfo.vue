@@ -63,7 +63,7 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.getBindLabel('wecom'),
+            label: this.getLabel('wecom'),
             disabled: this.isDisabled('wecom'),
             showTip: this.isDisabled('wecom'),
             tip: this.$t('users.UnbindHelpText')
@@ -80,7 +80,7 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.getBindLabel('dingtalk'),
+            label: this.getLabel('dingtalk'),
             disabled: this.isDisabled('dingtalk'),
             showTip: this.isDisabled('dingtalk'),
             tip: this.$t('users.UnbindHelpText')
@@ -97,7 +97,7 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.getBindLabel('feishu'),
+            label: this.getLabel('feishu'),
             disabled: this.isDisabled('feishu'),
             showTip: this.isDisabled('feishu'),
             tip: this.$t('users.UnbindHelpText')
@@ -312,7 +312,7 @@ export default {
     isBind(sourceName) {
       return !!this.$store.state.users.profile[`${sourceName}_id`]
     },
-    getBindLabel(sourceName) {
+    getLabel(sourceName) {
       return this.isBind(sourceName) ? this.$t('common.unbind') : this.$t('common.bind')
     },
     isUserFromSource(sourceName) {
