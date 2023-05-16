@@ -63,9 +63,9 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.isComponentDisabled('wecom_id'),
-            showTip: this.isComponentDisabled('wecom_id'),
+            label: this.getBindLabel('wecom_id'),
+            disabled: this.isDisabled('wecom_id'),
+            showTip: this.isDisabled('wecom_id'),
             tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
@@ -80,9 +80,9 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.isComponentDisabled('dingtalk_id'),
-            showTip: this.isComponentDisabled('dingtalk_id'),
+            label: this.getBindLabel('dingtalk_id'),
+            disabled: this.isDisabled('dingtalk_id'),
+            showTip: this.isDisabled('dingtalk_id'),
             tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
@@ -97,9 +97,9 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.isComponentDisabled('feishu_id'),
-            showTip: this.isComponentDisabled('feishu_id'),
+            label: this.getBindLabel('feishu_id'),
+            disabled: this.isDisabled('feishu_id'),
+            showTip: this.isDisabled('feishu_id'),
             tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
@@ -127,7 +127,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
-            disabled: this.$store.state.users.profile.source.value !== 'local'
+            disabled: this.isUserFromSource('local')
           },
           callbacks: {
             click: function() {
@@ -309,8 +309,17 @@ export default {
     }
   },
   methods: {
-    isComponentDisabled(source) {
-      return !!this.$store.state.users.profile[source] && this.$store.state.users.profile.source.value !== 'local'
+    isBind(sourceField) {
+      return !!this.$store.state.users.profile[sourceField]
+    },
+    getBindLabel(sourceField) {
+      return this.isBind(sourceField) ? this.$t('common.unbind') : this.$t('common.bind')
+    },
+    isUserFromSource(sourceName) {
+      return this.$store.state.users.profile.source.value !== sourceName
+    },
+    isDisabled(sourceField) {
+      return this.isBind(sourceField) && this.isUserFromSource('local')
     },
     updateUserReceiveBackends(val) {
       this.$axios.patch(
