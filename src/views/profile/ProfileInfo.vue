@@ -63,7 +63,10 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.isComponentDisabled('wecom_id'),
+            showTip: this.isComponentDisabled('wecom_id'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -77,7 +80,10 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.isComponentDisabled('dingtalk_id'),
+            showTip: this.isComponentDisabled('dingtalk_id'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -91,7 +97,10 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.isComponentDisabled('feishu_id'),
+            showTip: this.isComponentDisabled('feishu_id'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -300,6 +309,9 @@ export default {
     }
   },
   methods: {
+    isComponentDisabled(source) {
+      return !!this.$store.state.users.profile[source] && this.$store.state.users.profile.source.value !== 'local'
+    },
     updateUserReceiveBackends(val) {
       this.$axios.patch(
         `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
