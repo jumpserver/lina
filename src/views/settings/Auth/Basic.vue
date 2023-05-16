@@ -25,17 +25,6 @@ export default {
           ]
         ]
       ],
-      fieldsMeta: {
-        FORGOT_PASSWORD_URL: {
-          on: {
-            change([value], updateForm) {
-              if (value && !value.startsWith('http')) {
-                updateForm({ FORGOT_PASSWORD_URL: 'http://' + value })
-              }
-            }
-          }
-        }
-      },
       submitMethod() {
         return 'patch'
       }
