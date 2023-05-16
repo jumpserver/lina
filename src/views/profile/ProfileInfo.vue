@@ -127,7 +127,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
-            disabled: this.isUserFromSource('local')
+            disabled: !this.isUserFromSource('local')
           },
           callbacks: {
             click: function() {
@@ -316,10 +316,10 @@ export default {
       return this.isBind(sourceName) ? this.$t('common.unbind') : this.$t('common.bind')
     },
     isUserFromSource(sourceName) {
-      return this.$store.state.users.profile.source.value !== sourceName
+      return this.$store.state.users.profile.source.value === sourceName
     },
     isDisabled(sourceName) {
-      return this.isBind(sourceName) && this.isUserFromSource('local')
+      return this.isBind(sourceName) && !this.isUserFromSource('local')
     },
     updateUserReceiveBackends(val) {
       this.$axios.patch(
