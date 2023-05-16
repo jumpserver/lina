@@ -65,7 +65,6 @@ export default {
         if (!validValues?.meta?.HOSTS) {
           return validValues
         }
-        validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
         return validValues
       },
       cleanFormValue(value) {
