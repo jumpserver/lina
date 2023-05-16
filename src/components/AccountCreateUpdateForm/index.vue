@@ -298,6 +298,9 @@ export default {
       if (!form.secret) {
         delete form['secret']
       }
+      if (!form?.su_from_username) {
+        delete form?.su_from_username
+      }
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {
