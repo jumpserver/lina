@@ -2,16 +2,23 @@
   <tr>
     <td>{{ action.title }}:</td>
     <td>
-      <span>
-        <component
-          :is="iType"
-          v-model="action.attrs.model"
-          v-bind="action.attrs"
-          v-on="callbacks"
-        >
-          {{ label }}
-        </component>
-      </span>
+      <el-popover
+        placement="left-end"
+        trigger="hover"
+        :disabled="!action.attrs.showTip"
+        :content="action.attrs.tip"
+      >
+        <span slot="reference">
+          <component
+            :is="iType"
+            v-model="action.attrs.model"
+            v-bind="action.attrs"
+            v-on="callbacks"
+          >
+            {{ label }}
+          </component>
+        </span>
+      </el-popover>
     </td>
   </tr>
 </template>

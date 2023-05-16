@@ -1733,6 +1733,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
     "SetStatus": "Set status",
     "Set": "Set",
     "NotSet": "Not set",

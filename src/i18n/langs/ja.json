@@ -1725,6 +1725,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "UnbindHelpText": "このユーザーはローカルユーザーではありませんので、解除できません。管理者に連絡してください。",
     "SetStatus": "ステータスの設定",
     "Set": "設定",
     "NotSet": "未設定",

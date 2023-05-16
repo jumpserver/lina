@@ -1720,6 +1720,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "UnbindHelpText": "此用户非本地用户，无法进行解绑，请联系管理员",
     "SetStatus": "设置状态",
     "Set": "已设置",
     "NotSet": "未设置",
