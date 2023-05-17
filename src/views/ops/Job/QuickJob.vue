@@ -333,7 +333,7 @@ export default {
     getSelectedNodes() {
       return this.ztree.getCheckedNodes().filter(node => {
         const status = node.getCheckStatus()
-        return status.half === false
+        return node.id !== 'search' && status.half === false
       })
     },
 
