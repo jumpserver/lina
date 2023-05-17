@@ -884,6 +884,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "EnterRunUser": "输入运行用户",
     "Save": "保存",
     "Reset": "还原",
     "SystemError": "系统错误",

@@ -886,6 +886,7 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "EnterRunUser": "実行ユーザーの入力",
     "Save": "保存＃ホゾン＃",
     "Reset": "リストア",
     "SystemError": "システムエラー",
