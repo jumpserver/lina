@@ -140,6 +140,23 @@ export const assetFieldsMeta = (vm) => {
 }
 
 export const assetJSONSelectMeta = (vm) => {
+  const categories = []
+  const types = []
+  const protocols = []
+  vm.$axios.get('/api/v1/assets/categories/').then((res) => {
+    const _types = []
+    const _protocols = []
+    for (const category of res) {
+      categories.push({ value: category.value, label: category.label })
+      _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
+      for (const type of category.types) {
+        _protocols.push(...type.constraints.protocols?.map(item => ({ value: item.name, label: item.name.toUpperCase() })))
+      }
+    }
+    types.push(..._.uniqBy(_types, 'value'))
+    protocols.push(..._.uniqBy(_protocols, 'value'))
+  })
+
   return {
     component: JSONManyToManySelect,
     el: {
@@ -160,7 +177,63 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'address',
-          label: vm.$t('assets.Address')
+          label: vm.$t('assets.Address'),
+          type: 'ip'
+        },
+        {
+          name: 'nodes',
+          label: vm.$t('assets.Node'),
+          type: 'm2m',
+          el: {
+            url: '/api/v1/assets/nodes/',
+            ajax: {
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
+              }
+            }
+          }
+        },
+        {
+          name: 'platform',
+          label: vm.$t('assets.Platform'),
+          type: 'm2m',
+          el: {
+            multiple: false,
+            url: '/api/v1/assets/platforms/'
+          }
+        },
+        {
+          name: 'category',
+          label: vm.$t('assets.Category'),
+          type: 'select',
+          el: {
+            options: categories
+          }
+        },
+        {
+          name: 'type',
+          label: vm.$t('assets.Type'),
+          type: 'select',
+          el: {
+            options: types
+          }
+        },
+        {
+          name: 'protocols',
+          label: vm.$t('assets.Protocols'),
+          type: 'select',
+          el: {
+            options: protocols
+          }
+        },
+        {
+          name: 'labels',
+          label: vm.$t('assets.Label'),
+          type: 'm2m',
+          el: {
+            multiple: true,
+            url: '/api/v1/assets/labels/'
+          }
         }
       ]
     }

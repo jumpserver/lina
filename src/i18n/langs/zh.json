@@ -456,6 +456,11 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "GreatEqualThan": "大于等于",
+    "LessEqualThan": "小于等于",
+    "BelongTo": "所属",
+    "Email": "邮箱",
+    "IsActive": "激活",
     "All": "所有",
     "Spec": "指定",
     "SelectByAttr": "属性筛选",

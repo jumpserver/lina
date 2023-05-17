@@ -1,0 +1,76 @@
+<template>
+  <span v-if="attr.type === 'bool'">
+    <i v-if="value" class="fa fa-check text-primary" />
+    <i v-else class="fa fa-times text-danger" />
+  </span>
+  <span v-else :title="value">{{ value }}</span>
+</template>
+
+<script>
+import BaseFormatter from '@/components/TableFormatters/base.vue'
+import { setUrlParam } from '@/utils/common'
+
+export default {
+  name: 'ValueFormatter',
+  extends: BaseFormatter,
+  props: {
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          attrs: {}
+        }
+      }
+    }
+  },
+  data() {
+    const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+    return {
+      formatterArgs: formatterArgs,
+      loading: true,
+      value: ''
+    }
+  },
+  computed: {
+    attr() {
+      return this.formatterArgs.attrs.find(attr => attr.name === this.row.name) || {}
+    }
+  },
+  watch: {
+    cellValue: {
+      handler(val) {
+        this.getValue()
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  mounted() {
+    this.getValue()
+  },
+  methods: {
+    async getValue() {
+      if (this.attr.type === 'm2m') {
+        const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
+        const data = await this.$axios.get(url)
+        if (data.length > 0) {
+          const displayField = this.attr.el.displayField || 'name'
+          this.value = data.map(item => item[displayField]).join(', ')
+        }
+      } else if (this.attr.type === 'select') {
+        this.value = this.attr.el.options
+          .filter(item => this.cellValue.includes(item.value))
+          .map(item => item.label).join(',')
+      } else {
+        this.value = this.cellValue
+      }
+      this.loading = false
+    }
+
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

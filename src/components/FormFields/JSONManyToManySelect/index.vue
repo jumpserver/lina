@@ -14,7 +14,7 @@
         </el-button>
       </div>
     </div>
-    <Dialog v-if="visible" :show-cancel="false" :show-confirm="false" :visible.sync="visible" title="选择属性">
+    <Dialog v-if="visible" :show-buttons="false" :visible.sync="visible" title="选择属性">
       <DataForm class="attr-form" v-bind="formConfig" @submit="onAttrDialogConfirm" />
     </Dialog>
   </div>
@@ -25,6 +25,7 @@ import Select2 from '../Select2.vue'
 import DataTable from '@/components/DataTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import DataForm from '@/components/DataForm/index.vue'
+import ValueFormatter from './ValueFormatter.vue'
 import ValueField from './ValueField.vue'
 
 export default {
@@ -61,14 +62,24 @@ export default {
       { label: this.$t('common.Startswith'), value: 'startswith' },
       { label: this.$t('common.Endswith'), value: 'endswith' },
       { label: this.$t('common.Regex'), value: 'regex' },
-      { label: this.$t('common.IPMatch'), value: 'ip_in' }
+      { label: this.$t('common.BelongTo'), value: 'm2m' },
+      { label: this.$t('common.IPMatch'), value: 'ip_in' },
+      { label: this.$t('common.GreatEqualThan'), value: 'gte' },
+      { label: this.$t('common.LessEqualThan'), value: 'lte' }
     ]
-    const attrRelOptions = [
-      { label: this.$t('common.RelAnd'), value: 'and' },
-      { label: this.$t('common.RelOr'), value: 'or' },
-      { label: this.$t('common.RelNot'), value: 'not' }
-    ]
-    const attrNameOptions = this.attrs.map(attr => ({ label: attr.label, value: attr.name }))
+
+    const strMatchValues = ['exact', 'not', 'in', 'contains', 'startswith', 'endswith', 'regex']
+    const typeMatchMapper = {
+      str: strMatchValues,
+      bool: ['exact', 'not'],
+      m2m: ['m2m'],
+      ip: strMatchValues + ['ip_in'],
+      int: strMatchValues + ['gte', 'lte'],
+      select: ['in']
+    }
+    attrMatchOptions.forEach((option) => {
+      option.hidden = !typeMatchMapper[this.attrs[0].type || 'str'].includes(option.value)
+    })
     const tableFormatter = (colName) => {
       return (row, col, cellValue) => {
         const value = cellValue
@@ -77,8 +88,6 @@ export default {
             return this.attrs.find(attr => attr.name === value)?.label || value
           case 'match':
             return attrMatchOptions.find(opt => opt.value === value).label || value
-          case 'rel':
-            return attrRelOptions.find(opt => opt.value === value)?.label || value
           case 'value':
             return Array.isArray(value) ? value.join(', ') : value
           default:
@@ -98,8 +107,7 @@ export default {
         columns: [
           { prop: 'name', label: this.$t('common.AttrName'), formatter: tableFormatter('name') },
           { prop: 'match', label: this.$t('common.Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('common.AttrValue'), formatter: tableFormatter('value') },
-          { prop: 'rel', label: this.$t('common.Relation'), formatter: tableFormatter('rel') },
+          { prop: 'value', label: this.$t('common.AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
           { prop: 'action', label: this.$t('common.Action'), formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
@@ -126,46 +134,48 @@ export default {
       },
       formConfig: {
         // 为了方便更新，避免去取 fields 的索引
-        attrNameOptions: attrNameOptions,
         hasSaveContinue: false,
         editRowIndex: -1,
         form: {},
         fields: [
           {
             id: 'name',
-            label: '属性',
+            label: this.$t('common.AttrName'),
             type: 'select',
-            options: attrNameOptions
+            options: this.attrs.map(attr => ({ label: attr.label, value: attr.name })),
+            on: {
+              change: ([val], updateForm) => {
+                const attr = this.attrs.find(attr => attr.name === val)
+                if (!attr) return
+                this.formConfig.fields[2].el.attr = attr
+                const attrType = attr.type || 'str'
+                const matchSupports = typeMatchMapper[attrType]
+                attrMatchOptions.forEach((option) => {
+                  option.hidden = !matchSupports.includes(option.value)
+                })
+                setTimeout(() => updateForm({ match: matchSupports[0] }), 0.1)
+              }
+            }
           },
           {
             id: 'match',
-            label: '匹配方式',
+            label: this.$t('common.Match'),
             type: 'select',
             options: attrMatchOptions,
             on: {
               change: ([value], updateForm) => {
                 this.formConfig.fields[2].el.match = value
-                if (['in', 'ip_in'].includes(value)) {
-                  updateForm({ value: [] })
-                } else {
-                  updateForm({ value: '' })
-                }
               }
             }
           },
           {
             id: 'value',
-            label: '值',
+            label: this.$t('common.AttrValue'),
             component: ValueField,
             el: {
-              match: 'exact'
+              match: attrMatchOptions[0].value,
+              attr: this.attrs[0]
             }
-          },
-          {
-            id: 'rel',
-            label: '关系',
-            type: 'radio-group',
-            options: attrRelOptions
           }
         ]
       },
@@ -209,9 +219,8 @@ export default {
       }
     },
     setAttrNameOptionUsed() {
-      const options = this.formConfig.attrNameOptions
+      const options = this.formConfig.fields[0].options
       const used = this.tableConfig.totalData.map(attr => attr.name)
-      console.log('Used: ', used)
       options.forEach(opt => {
         if (used.includes(opt.value)) {
           opt.disabled = true
@@ -219,11 +228,11 @@ export default {
           delete opt.disabled
         }
       })
-      console.log('Options: ', options)
     },
     handleAttrEdit({ row, index }) {
       return () => {
         this.formConfig.editRowIndex = index
+        this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === row.name)
         this.formConfig.form = Object.assign({ index }, row)
         this.setAttrNameOptionUsed()
         this.visible = true
@@ -236,6 +245,7 @@ export default {
     },
     handleAttrAdd() {
       this.formConfig.form = this.getDefaultAttrForm()
+      this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === this.formConfig.form.name)
       this.setAttrNameOptionUsed()
       this.visible = true
     },

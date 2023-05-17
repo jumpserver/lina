@@ -176,6 +176,7 @@ export default {
   },
   mounted() {
     this.initDefaultChoice()
+    this.$emit('input', this.value)
   },
   methods: {
     initDefaultChoice() {
