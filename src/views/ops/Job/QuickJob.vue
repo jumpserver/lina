@@ -79,7 +79,7 @@ export default {
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
       DataZTree: 0,
-      runas: 'root',
+      runas: '',
       runasPolicy: 'skip',
       command: '',
       module: 'shell',
@@ -107,7 +107,8 @@ export default {
             type: 'input',
             name: this.$t('ops.runAs'),
             align: 'left',
-            value: 'root',
+            value: '',
+            placeholder: this.$tc('ops.EnterRunUser'),
             tip: this.$tc('ops.RunasHelpText'),
             el: {
               autoComplete: true,
@@ -115,7 +116,8 @@ export default {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
                 this.$axios.post('/api/v1/ops/username-hints/', {
                   nodes: nodes,
-                  assets: hosts
+                  assets: hosts,
+                  query: query
                 }).then(data => {
                   const ns = data.map(item => {
                     return { value: item.username }
