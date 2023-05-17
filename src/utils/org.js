@@ -1,5 +1,4 @@
 import store from '@/store'
-import { hasUUID, replaceUUID } from '@/utils/common'
 
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 export const SYSTEM_ORG_ID = '00000000-0000-0000-0000-000000000004'
@@ -18,21 +17,27 @@ async function change2PropOrg() {
   await changeOrg(org)
 }
 
-async function changeOrg(org, reload = true) {
+async function changeOrg(org, reload = true, vm = null) {
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
-  let path = location.href
-  if (hasUUID(path)) {
-    path = replaceUUID(path, '')
-    path = _.trimEnd(path, '/')
-    location.href = path
-  } else {
-    const index = path.indexOf('?')
-    if (index !== -1) {
-      location.href = path.substring(0, index)
-    }
-    setTimeout(() => location.reload(), 400)
+  let path = location.hash.slice(1)
+  const index = path.indexOf('?')
+  if (index !== -1) {
+    path = path.slice(0, index)
   }
+  const idRegex = /\/(-?\d+(\.\d+)?|[a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12})\//
+  const i = path.search(idRegex)
+  if (i !== -1) {
+    path = path.slice(0, i + 1)
+  }
+  if (vm) {
+    const result = vm.$router.resolve({ path })
+    if (result.resolved.name === '404') {
+      path = '/'
+    }
+  }
+  location.hash = '#' + path
+  setTimeout(() => location.reload(), 400)
 }
 
 function hasCurrentOrgPermission() {
