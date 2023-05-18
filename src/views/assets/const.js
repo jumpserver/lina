@@ -163,8 +163,8 @@ export const assetJSONSelectMeta = (vm) => {
       value: [],
       resource: vm.$t('assets.Asset'),
       select2: {
+        url: '/api/v1/assets/assets/',
         ajax: {
-          url: '/api/v1/assets/assets/?fields_size=mini',
           transformOption: (item) => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
@@ -173,12 +173,14 @@ export const assetJSONSelectMeta = (vm) => {
       attrs: [
         {
           name: 'name',
-          label: vm.$t('common.Name')
+          label: vm.$t('common.Name'),
+          inTable: true
         },
         {
           name: 'address',
           label: vm.$t('assets.Address'),
-          type: 'ip'
+          type: 'ip',
+          inTable: true
         },
         {
           name: 'nodes',
@@ -206,6 +208,7 @@ export const assetJSONSelectMeta = (vm) => {
           name: 'category',
           label: vm.$t('assets.Category'),
           type: 'select',
+          inTable: true,
           el: {
             options: categories
           }
@@ -214,6 +217,7 @@ export const assetJSONSelectMeta = (vm) => {
           name: 'type',
           label: vm.$t('assets.Type'),
           type: 'select',
+          inTable: true,
           el: {
             options: types
           }

@@ -94,6 +94,10 @@ export default {
     border-radius: 0.3em;
     max-width: 1500px;
 
+    .el-icon-circle-check {
+      display: none;
+    }
+
     &__header {
       box-sizing: border-box;
       padding: 15px 22px;

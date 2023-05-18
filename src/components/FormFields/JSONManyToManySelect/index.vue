@@ -12,11 +12,31 @@
         <el-button size="mini" type="primary" @click="handleAttrAdd">
           {{ $t('common.Add') }}
         </el-button>
+        <span style="padding-left: 10px; font-size: 13px">
+          <span class="help-tips; ">{{ $t('common.MatchedCount') }}:</span>
+          <a class="text-link" style="padding: 0 5px;" @click="showAttrMatchTable">{{ attrMatchCount }}</a>
+        </span>
       </div>
     </div>
-    <Dialog v-if="visible" :show-buttons="false" :visible.sync="visible" title="选择属性">
+    <Dialog
+      :destroy-on-close="true"
+      :show-buttons="false"
+      :title="$tc('common.SelectAttrs')"
+      :visible.sync="attrFormVisible"
+      @close="getAttrsCount"
+    >
       <DataForm class="attr-form" v-bind="formConfig" @submit="onAttrDialogConfirm" />
     </Dialog>
+    <Dialog
+      v-if="attrMatchTableVisible"
+      :destroy-on-close="true"
+      :show-buttons="false"
+      :title="$tc('common.MatchResult')"
+      :visible.sync="attrMatchTableVisible"
+    >
+      <ListTable v-bind="attrMatchTableConfig" />
+    </Dialog>
+
   </div>
 </template>
 
@@ -27,10 +47,12 @@ import Dialog from '@/components/Dialog/index.vue'
 import DataForm from '@/components/DataForm/index.vue'
 import ValueFormatter from './ValueFormatter.vue'
 import ValueField from './ValueField.vue'
+import { setUrlParam } from '@/utils/common'
+import ListTable from '@/components/ListTable/index.vue'
 
 export default {
   name: 'JSONManyToManySelect',
-  components: { DataTable, Select2, Dialog, DataForm },
+  components: { DataTable, Select2, Dialog, DataForm, ListTable },
   props: {
     value: {
       type: Object,
@@ -51,6 +73,10 @@ export default {
     resource: {
       type: String,
       default: ''
+    },
+    attrTableColumns: {
+      type: Array,
+      default: () => (['name'])
     }
   },
   data() {
@@ -97,6 +123,25 @@ export default {
     }
     return {
       iValue: Object.assign({ type: 'all' }, this.value),
+      attrMatchTableConfig: {
+        headerActions: {
+          hasRightActions: false,
+          hasCreate: false,
+          hasMoreActions: false
+        },
+        tableConfig: {
+          url: this.select2.url,
+          columns: this.attrs.filter(item => item.inTable).map(item => {
+            return {
+              prop: item.name,
+              label: item.label
+            }
+          })
+        }
+      },
+      attrFormVisible: false,
+      attrMatchCount: 0,
+      attrMatchTableVisible: false,
       ids: this.value.ids || [],
       types: [
         { name: 'all', label: this.$t('common.All') + this.resource },
@@ -178,15 +223,36 @@ export default {
             }
           }
         ]
-      },
-      visible: false
+      }
     }
   },
   mounted() {
     this.formConfig.form = this.getDefaultAttrForm()
+    if (this.value.type === 'attrs') {
+      this.getAttrsCount()
+    }
     this.$emit('input', this.iValue)
   },
   methods: {
+    showAttrMatchTable() {
+      this.attrMatchTableVisible = true
+      const attrFilter = this.getAttrFilterKey()
+      this.attrMatchTableConfig.tableConfig.url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+    },
+    getAttrFilterKey() {
+      let attrFilter = { type: 'attrs', attrs: this.tableConfig.totalData }
+      attrFilter = encodeURIComponent(btoa(JSON.stringify(attrFilter)))
+      return attrFilter
+    },
+    getAttrsCount() {
+      const attrFilter = this.getAttrFilterKey()
+      console.log('attrFilter', attrFilter)
+      let url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+      url = setUrlParam(url, 'limit', 1)
+      return this.$axios.get(url).then(res => {
+        this.attrMatchCount = res.count
+      })
+    },
     onAttrDialogConfirm(form) {
       const allAttrs = this.tableConfig.totalData
       if (this.formConfig.editRowIndex !== -1) {
@@ -201,7 +267,7 @@ export default {
         allAttrs.splice(setIndex, 1, Object.assign({}, form))
       }
       form = this.getDefaultAttrForm()
-      this.visible = false
+      this.attrFormVisible = false
     },
     getDefaultAttrForm() {
       const attrKeys = this.attrs.map(attr => attr.name)
@@ -235,7 +301,7 @@ export default {
         this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === row.name)
         this.formConfig.form = Object.assign({ index }, row)
         this.setAttrNameOptionUsed()
-        this.visible = true
+        this.attrFormVisible = true
       }
     },
     handleAttrDelete({ index }) {
@@ -247,7 +313,7 @@ export default {
       this.formConfig.form = this.getDefaultAttrForm()
       this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === this.formConfig.form.name)
       this.setAttrNameOptionUsed()
-      this.visible = true
+      this.attrFormVisible = true
     },
     handleTypeChange(val) {
       switch (val) {

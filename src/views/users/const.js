@@ -7,8 +7,8 @@ export const userJSONSelectMeta = (vm) => {
       value: [],
       resource: vm.$t('users.Users'),
       select2: {
+        url: '/api/v1/users/users/?fields_size=mini',
         ajax: {
-          url: '/api/v1/users/users/?fields_size=mini',
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
@@ -17,15 +17,18 @@ export const userJSONSelectMeta = (vm) => {
       attrs: [
         {
           name: 'name',
-          label: vm.$t('common.Name')
+          label: vm.$t('common.Name'),
+          inTable: true
         },
         {
           name: 'username',
-          label: vm.$t('common.Username')
+          label: vm.$t('common.Username'),
+          inTable: true
         },
         {
           name: 'email',
-          label: vm.$t('common.Email')
+          label: vm.$t('common.Email'),
+          inTable: true
         },
         {
           name: 'comment',
