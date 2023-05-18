@@ -74,6 +74,7 @@ export default {
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
+            accounts.reverse()
             values.accounts = accounts.map((item) => {
               item['secret'] = encryptPassword(item['secret'])
               return item
