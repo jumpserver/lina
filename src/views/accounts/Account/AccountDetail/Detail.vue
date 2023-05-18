@@ -12,9 +12,9 @@
         :visible.sync="showViewSecretDialog"
       />
       <AutomationParamsForm
-        :visible.sync="autoPushVisible"
         :has-button="false"
         :method="pushAccountMethod"
+        :visible.sync="autoPushVisible"
         @canSetting="onCanSetting"
         @submit="onSubmit"
       />
@@ -45,8 +45,6 @@ export default {
   },
   data() {
     const vm = this
-    const filterSuFrom = ['database', 'device', 'cloud', 'web', 'windows']
-
     return {
       needSetAutoPushParams: false,
       autoPushVisible: false,
@@ -64,7 +62,7 @@ export default {
             change: (val) => {
               this.$axios.patch(
                 `/api/v1/accounts/accounts/${this.object.id}/`,
-                { is_active: val }
+                { is_active: val, name: this.object.name }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
               })
@@ -184,14 +182,15 @@ export default {
             multiple: false,
             clearable: true,
             model: vm.object.su_from?.id || '',
-            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
+            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '-',
             ajax: {
               url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.object.id}&fields_size=mini`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('accounts.verify_account') || filterSuFrom.includes(vm.object?.asset?.category?.value) || filterSuFrom.includes(vm.object?.asset?.type?.value)
+            disabled: !vm.$hasPerm('accounts.change_account') ||
+              !vm.object.asset.auto_config?.su_enabled
           },
           callbacks: Object.freeze({
             change: (value) => {

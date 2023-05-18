@@ -156,6 +156,7 @@ export function formatDate(inputTime) {
 }
 
 const uuidPattern = /[0-9a-zA-Z\-]{36}/
+const uuidRegex = /\/([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12})\//
 
 export function hasUUID(path) {
   const index = path.indexOf('?')
@@ -163,6 +164,15 @@ export function hasUUID(path) {
     path = path.substring(0, index)
   }
   return path.search(uuidPattern) !== -1
+}
+
+export function getUuidUpdateFromUrl(path) {
+  const matches = uuidRegex.exec(path)
+  if (matches !== null) {
+    return matches[1]
+  } else {
+    return ''
+  }
 }
 
 export function replaceUUID(s, n) {

@@ -1,31 +1,26 @@
 <template>
   <div class="content">
-    <pre class="text">{{ currentValue }}</pre>
-    <span v-if="cellValue" class="action">
-      <el-tooltip
-        v-if="hasShow"
-        effect="dark"
-        placement="top"
-        :content="$tc('common.View')"
-      >
-        <i class="fa" :class="isShow ? 'fa-eye-slash' : 'fa-eye'" @click="onShow()" />
-      </el-tooltip>
-      <el-tooltip
-        v-if="hasDownload"
-        effect="dark"
-        placement="top"
-        :content="$tc('common.Download')"
-      >
-        <i class="fa fa-download" @click="onDownload()" />
-      </el-tooltip>
-      <el-tooltip
-        v-if="hasCopy"
-        effect="dark"
-        placement="top"
-        :content="$tc('common.Copy')"
-      >
-        <i class="fa fa-clone" @click="onCopy()" />
-      </el-tooltip>
+    <pre v-if="!isEdit" class="text">{{ currentValue }}</pre>
+    <el-input
+      v-else
+      ref="editInput"
+      v-model="realValue"
+      size="small"
+      class="text edit-input"
+      @blur="onEditBlur"
+    />
+    <span v-if="realValue" class="action">
+      <template v-for="(item, index) in iActions">
+        <el-tooltip
+          v-if="item.has"
+          :key="index"
+          effect="dark"
+          placement="top"
+          :content="item.tooltip"
+        >
+          <i class="fa" :class="[item.class, item.icon]" @click="item.action()" />
+        </el-tooltip>
+      </template>
     </span>
   </div>
 </template>
@@ -47,6 +42,7 @@ export default {
           hasShow: true,
           hasDownload: true,
           hasCopy: true,
+          hasEdit: true,
           defaultShow: false
         }
       }
@@ -54,6 +50,8 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
+      realValue: this.cellValue,
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
       isShow: false
     }
@@ -68,14 +66,46 @@ export default {
     hasCopy: function() {
       return this.formatterArgs.hasCopy
     },
+    hasEdit: function() {
+      return this.formatterArgs.hasEdit
+    },
     name: function() {
       return this.formatterArgs.name
     },
+    iActions() {
+      const actions = [
+        {
+          has: this.hasEdit && this.formatterArgs?.secretType === 'password',
+          class: this.isEdit ? 'fa-check' : 'fa-pencil',
+          action: this.onEdit,
+          tooltip: this.$t('common.Edit')
+        },
+        {
+          has: this.hasShow,
+          class: this.isShow ? 'fa-eye-slash' : 'fa-eye',
+          action: this.onShow,
+          tooltip: this.$t('common.View')
+        },
+        {
+          has: this.hasDownload,
+          icon: 'fa-download',
+          action: this.onDownload,
+          tooltip: this.$t('common.Download')
+        },
+        {
+          has: this.hasCopy,
+          icon: 'fa-clone',
+          action: this.onCopy,
+          tooltip: this.$t('common.Copy')
+        }
+      ]
+      return actions
+    },
     currentValue() {
       if (this.isShow) {
-        return this.cellValue || '-'
+        return this.realValue || '-'
       } else {
-        return this.cellValue ? '******' : '-'
+        return this.realValue ? '******' : '-'
       }
     }
   },
@@ -87,10 +117,21 @@ export default {
       this.isShow = !this.isShow
     },
     onCopy() {
-      copy(this.cellValue)
+      copy(this.realValue)
     },
     onDownload() {
-      downloadText(this.cellValue, this.name + '.txt')
+      downloadText(this.realValue, this.name + '.txt')
+    },
+    onEdit() {
+      this.isEdit = !this.isEdit
+      if (this.isEdit) {
+        this.$nextTick(() => {
+          this.$refs.editInput.focus()
+        })
+      }
+    },
+    onEditBlur() {
+      this.$emit('input', this.realValue)
     }
   }
 }
@@ -127,5 +168,11 @@ export default {
         }
       }
     }
+  }
+  .edit-input >>> input {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    height: 30px;
   }
 </style>

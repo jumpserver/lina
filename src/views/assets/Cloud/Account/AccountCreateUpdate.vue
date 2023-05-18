@@ -123,26 +123,14 @@ export default {
           }
           attrs[item] = encryptPassword(value)
         }
-        const toListFields = ['ip_group']
-        for (const item of toListFields) {
-          let value = attrs[item]
-          if (!value) {
-            continue
-          }
-          value = value?.split(',') || []
-          value = value.filter((value, index) => {
-            if (value) return true
-          })
-          attrs[item] = value
+        if (Array.isArray(attrs.ip_group)) {
+          values.attrs.ip_group = attrs.ip_group.filter(Boolean)
         }
         return values
       },
       afterGetFormValue(formValue) {
         if (!formValue.attrs) {
           return formValue
-        }
-        if (Array.isArray(formValue.attrs.ip_group)) {
-          formValue.attrs.ip_group = formValue.attrs.ip_group.toString()
         }
         return formValue
       }

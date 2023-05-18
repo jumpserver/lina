@@ -1,6 +1,9 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "アカウントの生成に成功しました",
+    "GenerateAccounts": "アカウントを再生成する",
+    "UpdateSecret": "機密の更新",
     "AccountPolicy": "アカウントポリシー",
     "BulkCreateStrategy": "作成時に要件を満たしていないアカウント（例：鍵タイプが規則に合わない、一意のキー制約がある、上記のポリシーを選択することができます）について。",
     "HistoryDate": "历史日期",
@@ -103,6 +106,7 @@
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
+    "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
     "AddAccountResult": "账号批量添加结果"
@@ -326,6 +330,7 @@
     "Pending": "待つ",
     "Platform": "システムプラットフォーム",
     "PlatformDetail": "プラットフォームの詳細",
+    "DefaultDatabase": "デフォルト・データベース",
     "UseSSL": "SSLを立ち上げます",
     "ProtocolsGroup": "プロトコル・グループ",
     "DefaultPort": "デフォルトポート",
@@ -335,12 +340,14 @@
     "RequiredProtocol": "必要なプロトコル、資産の追加時に選択する必要があります",
     "Default": "デフォルト",
     "DefaultProtocol": "デフォルトのプロトコル、資産の追加時にデフォルトで選択",
+    "Public": "ありふれた",
+    "PublicProtocol": "資産への接続時にパブリック・プロトコルが表示される場合",
     "LoginConfig": "ログイン構成",
     "UserNameSelector": "ユーザー名入力ボックスセレクタ",
     "PasswordSelector": "パスワード入力ボックスセレクタ",
     "SubmitSelector": "コミットボタンセレクタ",
     "PlatformProtocolConfig": "プラットフォームプロトコルの構成",
-    "InheritPlatformConfig": "プラットフォーム構成から継承します。変更する場合は、プラットフォームの構成を変更してください",
+    "InheritPlatformConfig": "アカウントリストには、テンプレートで作成されたアカウントが表示されます。暗号文を更新すると、テンプレートで作成されたアカウントの暗号文が更新されます。",
     "CollectHardwareInfo": "ハードウェア情報の収集を有効にする",
     "DomainEnabled": "ドメインを有効化",
     "ProtocolsEnabled": "プロトコルの有効化",
@@ -454,6 +461,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Generate": "生成",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
@@ -556,6 +564,8 @@
     "Resource": "リソース",
     "DateLast24Hours": "最近の日",
     "DateLast3Months": "直近3月",
+    "DateLastHarfYear": "ここ半年です",
+    "DateLastYear": "ここ1年です",
     "DateLastMonth": "直近1月",
     "DateLastWeek": "最近の一週間",
     "DateStart": "開始日",
@@ -616,6 +626,7 @@
     "Username": "ユーザー名",
     "Validity": "有効",
     "Invalidity": "無効",
+    "Edit": "編集",
     "View": "表示",
     "Yes": "はい",
     "action": "アクション",
@@ -875,6 +886,7 @@
     "Weekly": "週ごと"
   },
   "ops": {
+    "EnterRunUser": "実行ユーザーの入力",
     "Save": "保存＃ホゾン＃",
     "Reset": "リストア",
     "SystemError": "システムエラー",
@@ -979,6 +991,7 @@
     "CloseConfirmMessage": "ファイルが変更されました，保存しますか？",
     "privilegeOnly": "特権アカウントのみを選択",
     "UploadPlaybook": "アップロード Playbook",
+    "CreatePlaybook": "を作成 Playbook",
     "Rename": "名前を変更",
     "RUNNING": "ランニング",
     "instantAdhoc": "インスタントコマンド",
@@ -1320,6 +1333,7 @@
   },
   "terminal": {
     "Author": "作者",
+    "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
     "UploadFailed": "アップロードに失敗しました",
     "Applets": "リモートアプリケーション",
@@ -1712,6 +1726,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "UnbindHelpText": "このユーザーはローカルユーザーではありませんので、解除できません。管理者に連絡してください。",
     "SetStatus": "ステータスの設定",
     "Set": "設定",
     "NotSet": "未設定",

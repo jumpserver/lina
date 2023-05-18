@@ -42,10 +42,13 @@ export default {
         hasTree: true,
         columnsExclude: ['spec_info'],
         columnsShow: {
-          default: ['name', 'address', 'platform', 'accounts', 'actions'],
+          default: ['name', 'address', 'platform', 'accounts', 'connectivity', 'is_active', 'actions'],
           min: ['name', 'address', 'actions']
         },
-        columns: ['name', 'address', 'platform', 'accounts', 'comment', 'actions'],
+        columns: [
+          'name', 'address', 'domain', 'platform', 'connectivity', 'is_active',
+          'nodes', 'org_name', 'created_by', 'labels', 'accounts', 'comment', 'actions'
+        ],
         columnsMeta: {
           name: {
             prop: 'name',

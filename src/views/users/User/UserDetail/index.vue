@@ -12,6 +12,7 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
 import UserInfo from './UserInfo'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -28,7 +29,10 @@ export default {
       config: {
         activeMenu: 'UserInfo',
         actions: {
-          canUpdate: this.$hasPerm('users.change_user')
+          canUpdate: () => {
+            return this.$hasPerm('users.change_user') &&
+              !(!this.currentUserIsSuperAdmin && this.user['is_superuser'])
+          }
         },
         submenu: [
           {
@@ -53,6 +57,11 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'currentUserIsSuperAdmin'
+    ])
   },
   methods: {
     handleTabClick(tab) {

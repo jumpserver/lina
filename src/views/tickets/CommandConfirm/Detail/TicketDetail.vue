@@ -51,7 +51,7 @@ export default {
           key: this.$t('tickets.ApplyFromSession'),
           value: object.apply_from_session,
           formatter: function(item, value) {
-            const to = { name: 'SessionDetail', params: { id: value }, query: { oid: object.org_id }}
+            const to = { name: 'SessionDetail', params: { id: value?.id }, query: { oid: object.org_id }}
             if (!this.$hasPerm('terminal.view_session')) {
               return <span>{this.$t('sessions.session')}</span>
             }

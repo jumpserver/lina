@@ -8,26 +8,28 @@
         :readonly="readonly"
         v-bind="$attrs"
       >
-        <el-select
-          slot="prepend"
-          :disabled="disableSelect(item)"
-          :value="item.display_name ? item.display_name : item.name"
-          class="prepend"
-          @change="handleProtocolChange($event, item)"
-        >
-          <el-option
-            v-for="p of remainProtocols"
-            :key="p.name"
-            :label="p.name"
-            :value="p.name"
+        <template #prepend>
+          <el-select
+            :disabled="disableSelect(item)"
+            :value="item.display_name ? item.display_name : item.name"
+            class="prepend"
+            @change="handleProtocolChange($event, item)"
+          >
+            <el-option
+              v-for="p of remainProtocols"
+              :key="p.name"
+              :label="p.name"
+              :value="p.name"
+            />
+          </el-select>
+        </template>
+        <template #append>
+          <el-button
+            v-if="showSetting(item)"
+            icon="el-icon-setting"
+            @click="onSettingClick(item)"
           />
-        </el-select>
-        <el-button
-          v-if="showSetting(item)"
-          slot="append"
-          icon="el-icon-setting"
-          @click="onSettingClick(item)"
-        />
+        </template>
       </el-input>
       <div v-if="!readonly" class="input-button">
         <el-button
@@ -88,10 +90,12 @@ export default {
       default: () => ([])
     },
     readonly: {
+      // 这个是在详情中，不可编辑，包括所有
       type: Boolean,
       default: false
     },
     settingReadonly: {
+      // 这个是在资产添加时设置协议使用，不能修改 setting
       type: Boolean,
       default: false
     },
@@ -144,6 +148,11 @@ export default {
     },
     items: {
       handler(value) {
+        if (this.settingReadonly) {
+          value = value.map(i => {
+            return { name: i.name, port: i.port }
+          })
+        }
         this.$emit('input', value)
       },
       immediate: true,
@@ -216,6 +225,7 @@ export default {
           items[0].primary = true
           items[0].default = true
           items[0].required = true
+          items[0].public = true
         } else if (primaryProtocols.length > 1) {
           primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
             item.primary = false
@@ -267,13 +277,11 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-.el-select .el-input {
-  width: 130px;
-}
-
-.el-select {
-  max-width: 120px;
+<style lang="scss" scoped>
+.el-select >>> .el-input__inner {
+  width: 120px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .input-with-select {
@@ -283,10 +291,6 @@ export default {
 
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
-}
-
-.el-select ::v-deep .el-input__inner {
-  width: 110px;
 }
 
 .protocol-item {

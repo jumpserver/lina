@@ -223,7 +223,7 @@ export default {
           hidden: true,
           component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
           meta: {
-            title: i18n.t('ops.PlaybookCreate'),
+            title: i18n.t('ops.CreatePlaybook'),
             permissions: ['ops.add_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
