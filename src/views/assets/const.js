@@ -209,6 +209,7 @@ export const assetJSONSelectMeta = (vm) => {
           label: vm.$t('assets.Category'),
           type: 'select',
           inTable: true,
+          formatter: (row, column, cellValue) => cellValue.label,
           el: {
             options: categories
           }
@@ -218,6 +219,7 @@ export const assetJSONSelectMeta = (vm) => {
           label: vm.$t('assets.Type'),
           type: 'select',
           inTable: true,
+          formatter: (row, column, cellValue) => cellValue.label,
           el: {
             options: types
           }

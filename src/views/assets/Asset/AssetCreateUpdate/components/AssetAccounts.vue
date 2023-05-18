@@ -19,7 +19,7 @@
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
+        <el-table-column :label="$tc('common.Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
             <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />

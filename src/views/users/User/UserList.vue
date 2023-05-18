@@ -61,6 +61,11 @@ export default {
           source: {
             width: '120px'
           },
+          username: {
+            formatter: (row) => {
+              return row['username'].replace(' ', '*')
+            }
+          },
           system_roles: {
             width: '100px',
             label: this.$t('users.SystemRoles'),

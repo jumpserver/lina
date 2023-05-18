@@ -19,6 +19,7 @@
       </div>
     </div>
     <Dialog
+      v-if="attrFormVisible"
       :destroy-on-close="true"
       :show-buttons="false"
       :title="$tc('common.SelectAttrs')"
@@ -125,8 +126,9 @@ export default {
       iValue: Object.assign({ type: 'all' }, this.value),
       attrMatchTableConfig: {
         headerActions: {
-          hasRightActions: false,
           hasCreate: false,
+          hasImport: false,
+          hasExport: false,
           hasMoreActions: false
         },
         tableConfig: {
@@ -134,7 +136,8 @@ export default {
           columns: this.attrs.filter(item => item.inTable).map(item => {
             return {
               prop: item.name,
-              label: item.label
+              label: item.label,
+              formatter: item.formatter
             }
           })
         }
@@ -153,7 +156,7 @@ export default {
           { prop: 'name', label: this.$t('common.AttrName'), formatter: tableFormatter('name') },
           { prop: 'match', label: this.$t('common.Match'), formatter: tableFormatter('match') },
           { prop: 'value', label: this.$t('common.AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
-          { prop: 'action', label: this.$t('common.Action'), formatter: (row, col, cellValue, index) => {
+          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '120px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button
@@ -198,7 +201,7 @@ export default {
                 attrMatchOptions.forEach((option) => {
                   option.hidden = !matchSupports.includes(option.value)
                 })
-                setTimeout(() => updateForm({ match: matchSupports[0] }), 0.1)
+                setTimeout(() => updateForm({ match: matchSupports[0], value: '' }), 0.1)
               }
             }
           },
@@ -226,6 +229,13 @@ export default {
       }
     }
   },
+  watch: {
+    attrFormVisible(val) {
+      if (!val) {
+        this.getAttrsCount()
+      }
+    }
+  },
   mounted() {
     this.formConfig.form = this.getDefaultAttrForm()
     if (this.value.type === 'attrs') {
@@ -240,13 +250,17 @@ export default {
       this.attrMatchTableConfig.tableConfig.url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
     },
     getAttrFilterKey() {
+      if (this.tableConfig.totalData.length === 0) return ''
       let attrFilter = { type: 'attrs', attrs: this.tableConfig.totalData }
       attrFilter = encodeURIComponent(btoa(JSON.stringify(attrFilter)))
       return attrFilter
     },
     getAttrsCount() {
       const attrFilter = this.getAttrFilterKey()
-      console.log('attrFilter', attrFilter)
+      if (!attrFilter) {
+        this.attrMatchCount = 0
+        return
+      }
       let url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
       url = setUrlParam(url, 'limit', 1)
       return this.$axios.get(url).then(res => {
@@ -288,7 +302,7 @@ export default {
       const options = this.formConfig.fields[0].options
       const used = this.tableConfig.totalData.map(attr => attr.name)
       options.forEach(opt => {
-        if (used.includes(opt.value)) {
+        if (used.includes(opt.value) && opt.value !== this.formConfig.form.name) {
           opt.disabled = true
         } else {
           delete opt.disabled

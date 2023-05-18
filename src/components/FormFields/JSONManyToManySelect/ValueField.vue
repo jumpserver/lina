@@ -31,11 +31,42 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: true,
+      type: 'string'
     }
   },
-  computed: {
-    type() {
+  watch: {
+    match() {
+      this.getSetType()
+    },
+    attr: {
+      handler() {
+        this.getSetType()
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.getSetType()
+    this.loading = false
+  },
+  methods: {
+    handleInput(value) {
+      this.$emit('input', value)
+    },
+    getSetType() {
+      this.loading = true
+      this.type = this.getType()
+      if (['select', 'array'].includes(this.type) && typeof this.value === 'string') {
+        const value = this.value ? this.value.split(',') : []
+        console.log('Type: ', this.type, 'Value: ', value)
+        this.handleInput(value)
+      }
+      this.$nextTick(() => {
+        this.loading = false
+      })
+    },
+    getType() {
       const attrType = this.attr.type
       if (attrType === 'm2m') {
         return 'select'
@@ -44,27 +75,11 @@ export default {
       } else if (attrType === 'select') {
         return 'select'
       }
-      if (this.match in ['in', 'ip_in']) {
+      if (['in', 'ip_in'].includes(this.match)) {
         return 'array'
       } else {
         return 'string'
       }
-    }
-  },
-  watch: {
-    attr: {
-      handler() {
-        this.loading = true
-        this.$nextTick(() => {
-          this.loading = false
-        })
-      },
-      deep: true
-    }
-  },
-  methods: {
-    handleInput(value) {
-      this.$emit('input', value)
     }
   }
 }

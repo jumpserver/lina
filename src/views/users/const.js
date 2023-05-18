@@ -7,7 +7,7 @@ export const userJSONSelectMeta = (vm) => {
       value: [],
       resource: vm.$t('users.Users'),
       select2: {
-        url: '/api/v1/users/users/?fields_size=mini',
+        url: '/api/v1/users/users/',
         ajax: {
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
