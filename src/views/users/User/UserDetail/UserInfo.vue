@@ -188,7 +188,7 @@ export default {
         {
           key: this.$t('users.Role'),
           formatter: (item, val) => {
-            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles)
+            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles || [])
             const dom = rolesDisplay.map(item => {
               return <el-tag size='mini'>{item.display_name}</el-tag>
             })
