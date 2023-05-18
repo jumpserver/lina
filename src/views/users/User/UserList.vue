@@ -117,7 +117,10 @@ export default {
             formatterArgs: {
               fixed: 'right',
               hasDelete: hasDelete,
-              canUpdate: this.$hasPerm('users.change_user'),
+              canUpdate: ({ row }) => {
+                return this.$hasPerm('users.change_user') &&
+                  !(!this.currentUserIsSuperAdmin && row['is_superuser'])
+              },
               extraActions: [
                 {
                   title: this.$t('users.Remove'),
