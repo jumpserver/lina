@@ -82,6 +82,12 @@ export default {
               return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
             }
           },
+          phone: {
+            formatter: (row) => {
+              const phoneObj = row.phone
+              return <div>{phoneObj?.code}{phoneObj?.phone}</div>
+            }
+          },
           login_blocked: {
             width: '90px',
             formatterArgs: {
