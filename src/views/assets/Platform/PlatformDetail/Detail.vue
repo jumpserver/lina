@@ -61,14 +61,14 @@ export default {
       quickActions: [],
       url: `/api/v1/assets/platforms/${this.object.id}`,
       detailFields: [
-        'name', 'charset', 'internal',
+        'id', 'name', 'charset', 'internal',
         {
           key: this.$t('assets.Type'),
           value: `${this.object.category?.label}/${this.object.type?.label}`
         },
-        'su_method',
-        'comment'
+        'su_method', 'comment'
       ],
+
       protocolChoices: null,
       constraints: {}
     }
