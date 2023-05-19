@@ -43,6 +43,7 @@ const mutations = {
     state.profile = profile
     state.username = profile.username
     state.perms = profile.perms
+    state.isSuperAdmin = profile['is_superuser']
     state.consoleOrgs = profile['console_orgs']
     state.workbenchOrgs = profile['workbench_orgs']
     state.noRootWorkbenchOrgs = profile['workbench_orgs'].filter(item => {
