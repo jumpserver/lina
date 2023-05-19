@@ -57,7 +57,7 @@ export default {
       if (!this.rawValue.phone) {
         return ''
       }
-      return `${this.rawValue.code} ${this.rawValue.phone}`
+      return `${this.rawValue.code}${this.rawValue.phone}`
     }
   },
   mounted() {
