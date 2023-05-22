@@ -198,6 +198,7 @@ export default {
         this.nodeInfoDialogSetting.dialogVisible = true
         this.nodeInfoDialogSetting.items = [
           { key: 'id', label: 'ID', value: res.id },
+          { key: 'key', label: 'KEY', value: res.key },
           { key: 'name', label: this.$t('assets.Name'), value: res.name },
           { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value }
         ]
