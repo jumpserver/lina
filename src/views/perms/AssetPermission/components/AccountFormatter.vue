@@ -57,7 +57,7 @@ export default {
   },
   props: {
     value: {
-      type: [Array],
+      type: [Array, String],
       default: () => []
     },
     assets: {
@@ -176,7 +176,11 @@ export default {
   },
   mounted() {
     this.initDefaultChoice()
-    this.$emit('input', this.value)
+    if (this.value === '') {
+      this.$emit('input', [])
+    } else {
+      this.$emit('input', this.value)
+    }
   },
   methods: {
     initDefaultChoice() {
@@ -245,6 +249,9 @@ export default {
 }
 
 .spec-accounts {
+  >>> .el-select {
+    width: 100%;
+  }
 }
 
 .help-text {

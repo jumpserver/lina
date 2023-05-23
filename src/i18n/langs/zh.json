@@ -482,7 +482,7 @@
     "RelAnd": "与",
     "RelOr": "或",
     "RelNot": "非",
-    "BatchProcessing": "批量处理(选中 {Number} 项)",
+    "BatchProcessing": "选中 {Number} 项",
     "Created": "已创建",
     "Updated": "已更新",
     "Skipped": "已跳过",

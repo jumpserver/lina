@@ -461,7 +461,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
-    "BatchProcessing": "一括処理(選択 {Number} 項目)",
+    "BatchProcessing": "選択 {Number} 項目",
     "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
     "DownloadCenter": "ダウンロードセンター",

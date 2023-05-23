@@ -2,7 +2,7 @@
   <div v-if="!loading">
     <TagInput v-if="type === 'array'" :value="value" @input="handleInput" />
     <Select2 v-else-if="type === 'select'" :value="value" v-bind="attr.el" @change="handleInput" @input="handleInput" />
-    <Switcher v-else-if="type === 'bool'" :value="value" @change="handleInput" />
+    <Switcher v-else-if="type === 'bool'" :value="value" @change="handleInput" @input="handleInput" />
     <el-input v-else :value="value" @input="handleInput" />
   </div>
 </template>
@@ -37,37 +37,41 @@ export default {
   },
   watch: {
     match() {
-      this.getSetType()
+      this.setTypeAndValue()
     },
     attr: {
       handler() {
-        this.getSetType()
+        this.setTypeAndValue()
       },
       deep: true
     }
   },
   mounted() {
-    this.getSetType()
-    this.loading = false
+    this.setTypeAndValue()
   },
   methods: {
     handleInput(value) {
       this.$emit('input', value)
     },
-    getSetType() {
-      this.loading = true
+    setTypeAndValue() {
+      this.loading = false
       this.type = this.getType()
+      console.log('Type: ', this.type, 'Value: ', this.value)
       if (['select', 'array'].includes(this.type) && typeof this.value === 'string') {
         const value = this.value ? this.value.split(',') : []
-        console.log('Type: ', this.type, 'Value: ', value)
         this.handleInput(value)
+      } else if (this.type === 'bool') {
+        const value = !!this.value
+        this.handleInput(value)
+        console.log('This. vlaue: ', value)
       }
       this.$nextTick(() => {
         this.loading = false
       })
     },
     getType() {
-      const attrType = this.attr.type
+      const attrType = this.attr.type || 'str'
+      this.$log.debug('Value field attr type: ', attrType, this.attr, this.match)
       if (attrType === 'm2m') {
         return 'select'
       } else if (attrType === 'bool') {

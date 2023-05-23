@@ -461,7 +461,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
-    "BatchProcessing": "Batch processing(select {Number} items)",
+    "BatchProcessing": "Select {Number} items",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",

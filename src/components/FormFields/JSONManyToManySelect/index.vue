@@ -5,7 +5,7 @@
         {{ tp.label }}
       </el-radio>
     </el-radio-group>
-    <Select2 v-if="iValue.type === 'ids'" v-model="ids" v-bind="select2" />
+    <Select2 v-if="iValue.type === 'ids'" v-model="ids" v-bind="select2" @change="onChangeEmit" />
     <div v-if="iValue.type === 'attrs'">
       <DataTable :config="tableConfig" class="attr-list" />
       <div class="actions">
@@ -18,42 +18,36 @@
         </span>
       </div>
     </div>
-    <Dialog
-      v-if="attrFormVisible"
-      :destroy-on-close="true"
-      :show-buttons="false"
-      :title="$tc('common.SelectAttrs')"
-      :visible.sync="attrFormVisible"
-      @close="getAttrsCount"
-    >
-      <DataForm class="attr-form" v-bind="formConfig" @submit="onAttrDialogConfirm" />
-    </Dialog>
-    <Dialog
-      v-if="attrMatchTableVisible"
-      :destroy-on-close="true"
-      :show-buttons="false"
-      :title="$tc('common.MatchResult')"
-      :visible.sync="attrMatchTableVisible"
-    >
-      <ListTable v-bind="attrMatchTableConfig" />
-    </Dialog>
 
+    <AttrFormDialog
+      v-if="attrFormVisible"
+      :attrs="attrs"
+      :attrs-added="attrsAdded"
+      :form="attrForm"
+      :visible.sync="attrFormVisible"
+      @confirm="handleAttrDialogConfirm"
+    />
+    <AttrMatchResultDialog
+      v-if="attrMatchTableVisible"
+      :attrs="attrs"
+      :url="attrMatchTableUrl"
+      :visible.sync="attrMatchTableVisible"
+    />
   </div>
 </template>
 
 <script>
 import Select2 from '../Select2.vue'
 import DataTable from '@/components/DataTable/index.vue'
-import Dialog from '@/components/Dialog/index.vue'
-import DataForm from '@/components/DataForm/index.vue'
 import ValueFormatter from './ValueFormatter.vue'
-import ValueField from './ValueField.vue'
+import AttrFormDialog from './AttrFormDialog.vue'
+import AttrMatchResultDialog from './AttrMatchResultDialog.vue'
 import { setUrlParam } from '@/utils/common'
-import ListTable from '@/components/ListTable/index.vue'
+import { attrMatchOptions } from './const'
 
 export default {
   name: 'JSONManyToManySelect',
-  components: { DataTable, Select2, Dialog, DataForm, ListTable },
+  components: { AttrFormDialog, DataTable, Select2, AttrMatchResultDialog },
   props: {
     value: {
       type: Object,
@@ -81,32 +75,6 @@ export default {
     }
   },
   data() {
-    const attrMatchOptions = [
-      { label: this.$t('common.Equal'), value: 'exact' },
-      { label: this.$t('common.NotEqual'), value: 'not' },
-      { label: this.$t('common.MatchIn'), value: 'in' },
-      { label: this.$t('common.Contains'), value: 'contains' },
-      { label: this.$t('common.Startswith'), value: 'startswith' },
-      { label: this.$t('common.Endswith'), value: 'endswith' },
-      { label: this.$t('common.Regex'), value: 'regex' },
-      { label: this.$t('common.BelongTo'), value: 'm2m' },
-      { label: this.$t('common.IPMatch'), value: 'ip_in' },
-      { label: this.$t('common.GreatEqualThan'), value: 'gte' },
-      { label: this.$t('common.LessEqualThan'), value: 'lte' }
-    ]
-
-    const strMatchValues = ['exact', 'not', 'in', 'contains', 'startswith', 'endswith', 'regex']
-    const typeMatchMapper = {
-      str: strMatchValues,
-      bool: ['exact', 'not'],
-      m2m: ['m2m'],
-      ip: strMatchValues + ['ip_in'],
-      int: strMatchValues + ['gte', 'lte'],
-      select: ['in']
-    }
-    attrMatchOptions.forEach((option) => {
-      option.hidden = !typeMatchMapper[this.attrs[0].type || 'str'].includes(option.value)
-    })
     const tableFormatter = (colName) => {
       return (row, col, cellValue) => {
         const value = cellValue
@@ -124,28 +92,13 @@ export default {
     }
     return {
       iValue: Object.assign({ type: 'all' }, this.value),
-      attrMatchTableConfig: {
-        headerActions: {
-          hasCreate: false,
-          hasImport: false,
-          hasExport: false,
-          hasMoreActions: false
-        },
-        tableConfig: {
-          url: this.select2.url,
-          columns: this.attrs.filter(item => item.inTable).map(item => {
-            return {
-              prop: item.name,
-              label: item.label,
-              formatter: item.formatter
-            }
-          })
-        }
-      },
       attrFormVisible: false,
+      attrForm: {},
       attrMatchCount: 0,
       attrMatchTableVisible: false,
+      attrMatchTableUrl: '',
       ids: this.value.ids || [],
+      editIndex: -1,
       types: [
         { name: 'all', label: this.$t('common.All') + this.resource },
         { name: 'ids', label: this.$t('common.Spec') + this.resource },
@@ -179,54 +132,12 @@ export default {
         ],
         totalData: this.value.attrs || [],
         hasPagination: false
-      },
-      formConfig: {
-        // 为了方便更新，避免去取 fields 的索引
-        hasSaveContinue: false,
-        editRowIndex: -1,
-        form: {},
-        fields: [
-          {
-            id: 'name',
-            label: this.$t('common.AttrName'),
-            type: 'select',
-            options: this.attrs.map(attr => ({ label: attr.label, value: attr.name })),
-            on: {
-              change: ([val], updateForm) => {
-                const attr = this.attrs.find(attr => attr.name === val)
-                if (!attr) return
-                this.formConfig.fields[2].el.attr = attr
-                const attrType = attr.type || 'str'
-                const matchSupports = typeMatchMapper[attrType]
-                attrMatchOptions.forEach((option) => {
-                  option.hidden = !matchSupports.includes(option.value)
-                })
-                setTimeout(() => updateForm({ match: matchSupports[0], value: '' }), 0.1)
-              }
-            }
-          },
-          {
-            id: 'match',
-            label: this.$t('common.Match'),
-            type: 'select',
-            options: attrMatchOptions,
-            on: {
-              change: ([value], updateForm) => {
-                this.formConfig.fields[2].el.match = value
-              }
-            }
-          },
-          {
-            id: 'value',
-            label: this.$t('common.AttrValue'),
-            component: ValueField,
-            el: {
-              match: attrMatchOptions[0].value,
-              attr: this.attrs[0]
-            }
-          }
-        ]
       }
+    }
+  },
+  computed: {
+    attrsAdded() {
+      return this.tableConfig.totalData.map(item => item.name)
     }
   },
   watch: {
@@ -237,7 +148,6 @@ export default {
     }
   },
   mounted() {
-    this.formConfig.form = this.getDefaultAttrForm()
     if (this.value.type === 'attrs') {
       this.getAttrsCount()
     }
@@ -245,9 +155,9 @@ export default {
   },
   methods: {
     showAttrMatchTable() {
-      this.attrMatchTableVisible = true
       const attrFilter = this.getAttrFilterKey()
-      this.attrMatchTableConfig.tableConfig.url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+      this.attrMatchTableUrl = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+      this.attrMatchTableVisible = true
     },
     getAttrFilterKey() {
       if (this.tableConfig.totalData.length === 0) return ''
@@ -267,67 +177,27 @@ export default {
         this.attrMatchCount = res.count
       })
     },
-    onAttrDialogConfirm(form) {
-      const allAttrs = this.tableConfig.totalData
-      if (this.formConfig.editRowIndex !== -1) {
-        allAttrs.splice(this.formConfig.editRowIndex, 1)
-        this.formConfig.editRowIndex = -1
-      }
-      // 因为可能 attr 的 name 会重复，所以需要先删除再添加
-      const setIndex = allAttrs.findIndex(attr => attr.name === form.name)
-      if (setIndex === -1) {
-        allAttrs.push(Object.assign({}, form))
-      } else {
-        allAttrs.splice(setIndex, 1, Object.assign({}, form))
-      }
-      form = this.getDefaultAttrForm()
-      this.attrFormVisible = false
-    },
-    getDefaultAttrForm() {
-      const attrKeys = this.attrs.map(attr => attr.name)
-      const attrSet = this.tableConfig.totalData.map(attr => attr.name)
-      const diff = attrKeys.filter(attr => !attrSet.includes(attr))
-      let name = this.attrs[0].name
-      if (diff.length > 0) {
-        name = diff[0]
-      }
-      return {
-        name: name,
-        match: 'exact',
-        value: '',
-        rel: 'and'
-      }
-    },
-    setAttrNameOptionUsed() {
-      const options = this.formConfig.fields[0].options
-      const used = this.tableConfig.totalData.map(attr => attr.name)
-      options.forEach(opt => {
-        if (used.includes(opt.value) && opt.value !== this.formConfig.form.name) {
-          opt.disabled = true
-        } else {
-          delete opt.disabled
-        }
-      })
-    },
     handleAttrEdit({ row, index }) {
       return () => {
-        this.formConfig.editRowIndex = index
-        this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === row.name)
-        this.formConfig.form = Object.assign({ index }, row)
-        this.setAttrNameOptionUsed()
+        this.attrForm = Object.assign({ index }, row)
+        this.editIndex = index
         this.attrFormVisible = true
       }
     },
     handleAttrDelete({ index }) {
       return () => {
         this.tableConfig.totalData.splice(index, 1)
+        this.getAttrsCount()
       }
     },
     handleAttrAdd() {
-      this.formConfig.form = this.getDefaultAttrForm()
-      this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === this.formConfig.form.name)
-      this.setAttrNameOptionUsed()
+      this.attrForm = {}
+      this.editIndex = -1
       this.attrFormVisible = true
+    },
+    onChangeEmit() {
+      const tp = this.iValue.type
+      this.handleTypeChange(tp)
     },
     handleTypeChange(val) {
       switch (val) {
@@ -341,6 +211,21 @@ export default {
           this.$emit('input', { type: 'all' })
           break
       }
+    },
+    handleAttrDialogConfirm(form) {
+      if (this.editIndex > -1) {
+        this.tableConfig.totalData.splice(this.editIndex, 1)
+      }
+      const allAttrs = this.tableConfig.totalData
+      // 因为可能 attr 的 name 会重复，所以需要先删除再添加
+      const setIndex = allAttrs.findIndex(attr => attr.name === form.name)
+      if (setIndex === -1) {
+        allAttrs.push(Object.assign({}, form))
+      } else {
+        allAttrs.splice(setIndex, 1, Object.assign({}, form))
+      }
+      this.attrFormVisible = false
+      this.onChangeEmit()
     }
   }
 }
@@ -349,10 +234,5 @@ export default {
 <style lang="scss" scoped>
 .attr-list {
   width: 99%;
-}
-.attr-form {
-  >>> .el-select {
-    width: 100%;
-  }
 }
 </style>

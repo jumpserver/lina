@@ -28,13 +28,11 @@ export default {
     return {
       formatterArgs: formatterArgs,
       loading: true,
+      attr: {},
       value: ''
     }
   },
   computed: {
-    attr() {
-      return this.formatterArgs.attrs.find(attr => attr.name === this.row.name) || {}
-    }
   },
   watch: {
     cellValue: {
@@ -50,6 +48,9 @@ export default {
   },
   methods: {
     async getValue() {
+      this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
+      this.match = this.row.match
+      console.log('Attr: ', this.attr, this.row.name)
       if (this.attr.type === 'm2m') {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
         const data = await this.$axios.get(url)
@@ -61,6 +62,8 @@ export default {
         this.value = this.attr.el.options
           .filter(item => this.cellValue.includes(item.value))
           .map(item => item.label).join(',')
+      } else if (['in', 'ip_in'].includes(this.match)) {
+        this.value = this.cellValue.join(', ')
       } else {
         this.value = this.cellValue
       }
