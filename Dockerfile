@@ -19,6 +19,6 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=lin
     sed -i "s@version-dev@${VERSION}@g" src/layout/components/NavHeader/About.vue \
     && yarn build
 
-FROM nginx:alpine
+FROM nginx:1.24
 COPY --from=stage-build /data/lina /opt/lina
 COPY nginx.conf /etc/nginx/conf.d/default.conf
