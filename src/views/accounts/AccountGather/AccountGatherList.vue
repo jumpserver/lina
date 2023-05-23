@@ -63,7 +63,6 @@ export default {
             formatterArgs: {
               hasClone: false,
               hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
               moreActionsTitle: this.$t('common.More'),
               extraActions: [
                 {
@@ -90,7 +89,6 @@ export default {
         hasCreate: false,
         hasImport: false,
         hasExport: false,
-        hasBulkDelete: false,
         searchConfig: {
           exclude: ['asset'],
           options: []
