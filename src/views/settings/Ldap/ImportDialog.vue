@@ -97,14 +97,14 @@ export default {
         }
       },
       select2: {
-        multiple: false,
+        multiple: true,
         ajax: {
           url: '/api/v1/orgs/orgs/',
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         },
-        value: store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_ID
+        value: store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS
       }
     }
   },
@@ -116,7 +116,7 @@ export default {
         selectIds.push(item.id)
       })
       const data = {
-        org_id: this.select2.value,
+        org_ids: this.select2.value,
         username_list: selectIds
       }
       if (selectIds.length === 0) {
@@ -137,7 +137,7 @@ export default {
     importAllUserClick() {
       this.dialogLdapUserImportAllLoginStatus = true
       const data = {
-        org_id: this.select2.value,
+        org_ids: this.select2.value,
         username_list: ['*']
       }
       importLdapUser(data).then(res => {
