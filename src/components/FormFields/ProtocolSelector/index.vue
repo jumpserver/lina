@@ -90,10 +90,12 @@ export default {
       default: () => ([])
     },
     readonly: {
+      // 这个是在详情中，不可编辑，包括所有
       type: Boolean,
       default: false
     },
     settingReadonly: {
+      // 这个是在资产添加时设置协议使用，不能修改 setting
       type: Boolean,
       default: false
     },
@@ -146,6 +148,11 @@ export default {
     },
     items: {
       handler(value) {
+        if (this.settingReadonly) {
+          value = value.map(i => {
+            return { name: i.name, port: i.port }
+          })
+        }
         this.$emit('input', value)
       },
       immediate: true,
@@ -218,6 +225,7 @@ export default {
           items[0].primary = true
           items[0].default = true
           items[0].required = true
+          items[0].public = true
         } else if (primaryProtocols.length > 1) {
           primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
             item.primary = false

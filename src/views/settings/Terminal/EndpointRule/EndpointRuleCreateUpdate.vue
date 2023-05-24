@@ -3,7 +3,6 @@
     v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    :after-get-form-value="afterGetFormValue"
   />
 </template>
 
@@ -18,7 +17,7 @@ export default {
     return {
       url: '/api/v1/terminal/endpoint-rules/',
       initial: {
-        ip_group: '*'
+        ip_group: ['*']
       },
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' }},
       fields: [
@@ -41,14 +40,10 @@ export default {
       },
       hasDetailInMsg: false,
       cleanFormValue(value) {
-        if (!Array.isArray(value.ip_group)) {
-          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        if (Array.isArray(value.ip_group)) {
+          value.ip_group = value.ip_group.filter(Boolean)
         }
         return value
-      },
-      afterGetFormValue(formValue) {
-        formValue.ip_group = formValue.ip_group?.toString()
-        return formValue
       }
     }
   }

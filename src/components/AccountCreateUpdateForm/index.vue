@@ -65,7 +65,7 @@ export default {
       fields: [
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('accounts.AccountTemplate'), ['template']],
-        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
+        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
         [this.$t('assets.Secret'), [
           'secret_type', 'secret', 'ssh_key',
           'token', 'access_key', 'passphrase'
@@ -165,6 +165,12 @@ export default {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }
             }
+          }
+        },
+        su_from_username: {
+          label: this.$t('assets.UserSwitchFrom'),
+          hidden: (formValue) => {
+            return this.platform || this.asset
           }
         },
         secret: {

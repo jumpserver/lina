@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GenerateSuccessMsg": "Accounts generated successfully",
+    "GenerateAccounts": "Regenerate accounts",
     "Accounts": "Accounts",
     "SelectAccount": "Select account",
     "UpdateSecret": "Update secret",
@@ -106,6 +108,7 @@
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
+    "AccountExportTips": "The exported information contains account secret, which involves sensitive information. The exported format is an encrypted zip file (if no encryption password is set, please go to personal information to set the file encryption password).",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
     "AddAccountResult": "Add account result"
@@ -336,6 +339,7 @@
     "Pending": "Pending",
     "Platform": "Platform",
     "PlatformDetail": "Platform detail",
+    "DefaultDatabase": "Default database",
     "UseSSL": "Enable SSL",
     "ProtocolsGroup": "Protocols group",
     "DefaultPort": "Default port",
@@ -345,6 +349,8 @@
     "RequiredProtocol": "Required agreement, which must be selected when adding assets",
     "Default": "Default",
     "DefaultProtocol": "Default agreement, which will be selected by default when adding assets",
+    "Public": "Public",
+    "PublicProtocol": "If it is a public protocol, it will be displayed when connecting assets",
     "LoginConfig": "Login config",
     "UserNameSelector": "User name input box selector",
     "PasswordSelector": "Password Input Box Selector",
@@ -462,6 +468,8 @@
   },
   "common": {
     "BatchProcessing": "Select {Number} items",
+    "Generate": "Generate",
+    "BatchProcessing": "Batch processing(select {Number} items)",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",
@@ -564,6 +572,8 @@
     "Resource": "Resource",
     "DateLast24Hours": "Last 24 hours",
     "DateLast3Months": "Last 3 months",
+    "DateLastHarfYear": "Last half year",
+    "DateLastYear": "Last year",
     "DateLastMonth": "Last month",
     "DateLastWeek": "Last week",
     "DateStart": "Date start",
@@ -625,6 +635,7 @@
     "Username": "Username",
     "Validity": "Validity",
     "Invalidity": "Invalidity",
+    "Edit": "Edit",
     "View": "View",
     "Yes": "Yes",
     "action": "Action",
@@ -901,6 +912,7 @@
     "TotalJobLog": "Total job log"
   },
   "ops": {
+    "EnterRunUser": "Enter run user",
     "Save": "Save",
     "Reset": "Reset",
     "SystemError": "System Error",
@@ -1009,6 +1021,7 @@
     "CloseConfirmMessage": "The file has changed, do you want to save it?",
     "privilegeOnly": "Select only privileged accounts",
     "UploadPlaybook": "Upload Playbook",
+    "CreatePlaybook": "Create Playbook",
     "Rename": "Rename",
     "instantAdhoc": "Instant command",
     "Summary(success/total)": "Overview (Success/Total)",
@@ -1350,6 +1363,7 @@
   },
   "terminal": {
     "Author": "Author",
+    "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
@@ -1745,6 +1759,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
     "SetStatus": "Set status",
     "Set": "Set",
     "NotSet": "Not set",

@@ -63,7 +63,10 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.wecom_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.getLabel('wecom'),
+            disabled: this.isDisabled('wecom'),
+            showTip: this.isDisabled('wecom'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -77,7 +80,10 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.dingtalk_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.getLabel('dingtalk'),
+            disabled: this.isDisabled('dingtalk'),
+            showTip: this.isDisabled('dingtalk'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -91,7 +97,10 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.feishu_id ? this.$t('common.unbind') : this.$t('common.bind')
+            label: this.getLabel('feishu'),
+            disabled: this.isDisabled('feishu'),
+            showTip: this.isDisabled('feishu'),
+            tip: this.$t('users.UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -118,7 +127,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
-            disabled: this.$store.state.users.profile.source.value !== 'local'
+            disabled: !this.isUserFromSource('local')
           },
           callbacks: {
             click: function() {
@@ -300,6 +309,18 @@ export default {
     }
   },
   methods: {
+    isBind(sourceName) {
+      return !!this.$store.state.users.profile[`${sourceName}_id`]
+    },
+    getLabel(sourceName) {
+      return this.isBind(sourceName) ? this.$t('common.unbind') : this.$t('common.bind')
+    },
+    isUserFromSource(sourceName) {
+      return this.$store.state.users.profile.source.value === sourceName
+    },
+    isDisabled(sourceName) {
+      return this.isBind(sourceName) && !this.isUserFromSource('local')
+    },
     updateUserReceiveBackends(val) {
       this.$axios.patch(
         `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,

@@ -149,7 +149,7 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-          info: {
+          gathered_info: {
             label: this.$t('assets.HardwareInfo'),
             formatter: HostInfoFormatter,
             formatterArgs: {
@@ -164,8 +164,13 @@ export default {
             }
           },
           connectivity: connectivityMeta,
-          labels_display: {
-            formatter: TagsFormatter
+          labels: {
+            formatter: TagsFormatter,
+            formatterArgs: {
+              getTags(cellValue) {
+                return cellValue.map(item => `${item.name}:${item.value}`)
+              }
+            }
           },
           actions: {
             formatter: ActionsFormatter,
@@ -299,11 +304,12 @@ export default {
   },
   watch: {
     optionInfo(iNew) {
-      this.$set(this.defaultConfig.columnsMeta.info.formatterArgs, 'info', iNew)
+      this.$set(this.defaultConfig.columnsMeta.gathered_info.formatterArgs, 'info', iNew)
     }
   },
   methods: {
     handleAssetBulkUpdate() {
+      this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
     }
   }

@@ -20,6 +20,7 @@
           <el-autocomplete
             v-if="item.type === 'input' && item.el.autoComplete"
             v-model="item.value"
+            :placeholder="item.placeholder"
             :fetch-suggestions="item.el.query"
             class="inline-input"
             size="mini"

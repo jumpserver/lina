@@ -82,6 +82,12 @@ export default {
         if (obj['category'] && obj['type']) {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }
+        obj.protocols = obj.protocols.map(i => {
+          if (i.name === 'http') {
+            i.display_name = 'http(s)'
+          }
+          return i
+        })
         return obj
       },
       defaultOptions: {}

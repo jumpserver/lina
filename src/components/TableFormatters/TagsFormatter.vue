@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tag
-      v-for="tag of cellValue"
+      v-for="tag of iTags"
       :key="tag"
       :type="getTagType(tag)"
       class="tag-formatter"
@@ -24,6 +24,9 @@ export default {
         return {
           getTagType(tag) {
             return 'primary'
+          },
+          getTags(cellValue) {
+            return cellValue
           }
         }
       }
@@ -32,6 +35,11 @@ export default {
   data() {
     return {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+    }
+  },
+  computed: {
+    iTags() {
+      return this.formatterArgs.getTags(this.cellValue)
     }
   },
   methods: {

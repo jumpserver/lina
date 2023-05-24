@@ -181,14 +181,14 @@ export default {
           key: this.$t('users.Phone'),
           formatter: () => {
             const phoneObj = this.object.phone
-            return <div>{phoneObj?.code} {phoneObj?.phone}</div>
+            return <div>{phoneObj?.code}{phoneObj?.phone}</div>
           }
         },
         'wecom_id', 'dingtalk_id', 'feishu_id',
         {
           key: this.$t('users.Role'),
           formatter: (item, val) => {
-            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles)
+            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles || [])
             const dom = rolesDisplay.map(item => {
               return <el-tag size='mini'>{item.display_name}</el-tag>
             })

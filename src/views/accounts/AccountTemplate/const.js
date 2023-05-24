@@ -1,8 +1,10 @@
+import { getUuidUpdateFromUrl } from '@/utils/common'
 import { UpdateToken } from '@/components/FormFields'
+import Select2 from '@/components/FormFields/Select2'
 
 export const templateFields = (vm) => {
   return [
-    [vm.$t('common.Basic'), ['name', 'username', 'privileged']],
+    [vm.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
     [vm.$t('assets.Secret'), [
       'secret_type', 'secret', 'ssh_key', 'token',
       'access_key', 'passphrase'
@@ -12,7 +14,21 @@ export const templateFields = (vm) => {
 }
 
 export const templateFieldsMeta = (vm) => {
+  const id = getUuidUpdateFromUrl(vm.$route.path)
   return {
+    su_from: {
+      component: Select2,
+      el: {
+        multiple: false,
+        clearable: true,
+        ajax: {
+          url: `/api/v1/accounts/account-templates/su-from-account-templates/?${id ? 'template_id=' + id : ''}`,
+          transformOption: (item) => {
+            return { label: `${item.name}(${item.username})`, value: item.id }
+          }
+        }
+      }
+    },
     secret: {
       label: vm.$t('assets.Password'),
       component: UpdateToken,
