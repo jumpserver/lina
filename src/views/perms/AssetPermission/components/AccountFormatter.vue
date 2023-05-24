@@ -23,7 +23,7 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="small" style="margin-left: 10px" type="primary" @click="showAccountTemplateDialog=true">
+          <el-button size="small" style="margin-left: 10px" type="primary" @click="showTemplateDialog=true">
             {{ $t('common.TemplateAdd') }}
           </el-button>
           {{ addTemplateHelpText }}
@@ -32,9 +32,9 @@
     </el-form-item>
 
     <Dialog
-      v-if="showAccountTemplateDialog"
+      v-if="showTemplateDialog"
       :title="$tc('accounts.AccountTemplate')"
-      :visible.sync="showAccountTemplateDialog"
+      :visible.sync="showTemplateDialog"
       @cancel="handleAccountTemplateCancel"
       @confirm="handleAccountTemplateConfirm"
     >
@@ -114,7 +114,7 @@ export default {
     return {
       ALL: AllAccount,
       SPEC: SpecAccount,
-      showAccountTemplateDialog: false,
+      showTemplateDialog: false,
       choices: choices.filter(i => {
         const isVirtualAccount = [SameAccount, ManualAccount].includes(i.value)
         return !(isVirtualAccount && !this.showVirtualAccount)
@@ -176,11 +176,14 @@ export default {
   },
   mounted() {
     this.initDefaultChoice()
-    if (this.value === '') {
-      this.$emit('input', [])
-    } else {
-      this.$emit('input', this.value)
-    }
+    setTimeout(() => {
+      console.log('Account Value: ', this.value)
+      if (this.value === '') {
+        this.$emit('input', ['@ALL'])
+      } else {
+        this.$emit('input', this.value)
+      }
+    })
   },
   methods: {
     initDefaultChoice() {
@@ -200,7 +203,7 @@ export default {
       this.specAccountsInput = specAccountsInput
     },
     handleAccountTemplateCancel() {
-      this.showAccountTemplateDialog = false
+      this.showTemplateDialog = false
     },
     handleAccountTemplateConfirm() {
       this.specAccountsTemplate = this.$refs.templateTable.selectedRows
@@ -208,7 +211,7 @@ export default {
       this.specAccountsInput = this.specAccountsInput.filter(i => !added.includes(i)).concat(added)
       this.outputValue()
       setTimeout(() => {
-        this.showAccountTemplateDialog = false
+        this.showTemplateDialog = false
         this.outputValue()
       }, 100)
     },

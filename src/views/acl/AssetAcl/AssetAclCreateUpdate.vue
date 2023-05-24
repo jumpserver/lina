@@ -5,7 +5,6 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
-import { cleanFormValueForHandleUserAssetAccount } from '../common'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
@@ -17,7 +16,9 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: {
+        accounts: ['@ALL']
+      },
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('users.Users'), ['users']],
@@ -37,7 +38,7 @@ export default {
           el: {
             showAddTemplate: false,
             showVirtualAccount: false,
-            value: {}
+            value: ['@ALL']
           }
         },
         reviewers: {
@@ -54,8 +55,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-asset-acls/',
-      cleanFormValue: cleanFormValueForHandleUserAssetAccount
+      url: '/api/v1/acls/login-asset-acls/'
     }
   },
   methods: {}

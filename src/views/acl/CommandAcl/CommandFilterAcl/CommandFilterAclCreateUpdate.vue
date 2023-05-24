@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       initial: {
-        is_active: true
+        is_active: true,
+        accounts: ['@ALL']
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -43,8 +44,7 @@ export default {
           component: AccountFormatter,
           el: {
             showAddTemplate: false,
-            showVirtualAccount: false,
-            value: {}
+            showVirtualAccount: false
           }
         },
         action: {},
