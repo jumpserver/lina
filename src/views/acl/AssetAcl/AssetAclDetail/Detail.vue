@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>
@@ -23,21 +23,9 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/acls/login-asset-acls/${this.object.id}`,
+      url: `/api/v1/acls/login-asset-acls/${this.object.id}/`,
       detailFields: [
         'name',
-        {
-          key: this.$t('acl.UserUsername'),
-          value: this.object.users.username_group.toString()
-        },
-        {
-          key: this.$t('acl.AssetName'),
-          value: this.object.assets.name_group.toString()
-        },
-        {
-          key: this.$t('acl.AssetAddress'),
-          value: this.object.accounts.username_group.toString()
-        },
         {
           key: this.$t('acl.action'),
           value: this.object.action.label

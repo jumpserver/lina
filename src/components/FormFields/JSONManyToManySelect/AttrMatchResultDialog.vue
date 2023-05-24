@@ -63,9 +63,6 @@ export default {
         return this.visible
       }
     }
-  },
-  mounted() {
-    console.log('attrs', this.$attrs)
   }
 }
 </script>

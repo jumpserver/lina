@@ -50,7 +50,7 @@ export default {
     async getValue() {
       this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
       this.match = this.row.match
-      console.log('Attr: ', this.attr, this.row.name)
+      this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
       if (this.attr.type === 'm2m') {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
         const data = await this.$axios.get(url)

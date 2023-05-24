@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="CommandFilterAcl"
     :active-menu.sync="config.activeMenu"
+    :object.sync="CommandFilterAcl"
     v-bind="config"
     v-on="$listeners"
   >
@@ -13,13 +13,17 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
+import UserJsonTab from '@/components/ManyJsonTabs/UserJsonTab.vue'
+import AssetJsonTab from '@/components/ManyJsonTabs/AssetJsonTab.vue'
 import Detail from './Detail.vue'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    UserJsonTab,
+    AssetJsonTab
   },
   data() {
     return {
@@ -31,6 +35,14 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('users.Users'),
+            name: 'UserJsonTab'
+          },
+          {
+            title: this.$t('assets.Assets'),
+            name: 'AssetJsonTab'
           }
         ],
         actions: {

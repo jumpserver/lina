@@ -56,14 +56,13 @@ export default {
     setTypeAndValue() {
       this.loading = false
       this.type = this.getType()
-      console.log('Type: ', this.type, 'Value: ', this.value)
+      this.$log.debug('ValueField: Type: ', this.type, 'Value: ', this.value)
       if (['select', 'array'].includes(this.type) && typeof this.value === 'string') {
         const value = this.value ? this.value.split(',') : []
         this.handleInput(value)
       } else if (this.type === 'bool') {
         const value = !!this.value
         this.handleInput(value)
-        console.log('This. vlaue: ', value)
       }
       this.$nextTick(() => {
         this.loading = false

@@ -44,6 +44,7 @@ import AttrFormDialog from './AttrFormDialog.vue'
 import AttrMatchResultDialog from './AttrMatchResultDialog.vue'
 import { setUrlParam } from '@/utils/common'
 import { attrMatchOptions } from './const'
+import { toM2MJsonParams } from '@/utils/jms'
 
 export default {
   name: 'JSONManyToManySelect',
@@ -155,14 +156,14 @@ export default {
   },
   methods: {
     showAttrMatchTable() {
-      const attrFilter = this.getAttrFilterKey()
-      this.attrMatchTableUrl = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+      const [key, value] = this.getAttrFilterKey()
+      this.attrMatchTableUrl = setUrlParam(this.select2.url, key, value)
       this.attrMatchTableVisible = true
     },
     getAttrFilterKey() {
       if (this.tableConfig.totalData.length === 0) return ''
       let attrFilter = { type: 'attrs', attrs: this.tableConfig.totalData }
-      attrFilter = encodeURIComponent(btoa(JSON.stringify(attrFilter)))
+      attrFilter = toM2MJsonParams(attrFilter)
       return attrFilter
     },
     getAttrsCount() {
@@ -171,7 +172,8 @@ export default {
         this.attrMatchCount = 0
         return
       }
-      let url = setUrlParam(this.select2.url, 'attr_rules', attrFilter)
+      const [key, value] = attrFilter
+      let url = setUrlParam(this.select2.url, key, value)
       url = setUrlParam(url, 'limit', 1)
       return this.$axios.get(url).then(res => {
         this.attrMatchCount = res.count
