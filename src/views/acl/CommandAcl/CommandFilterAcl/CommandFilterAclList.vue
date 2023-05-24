@@ -1,5 +1,5 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -22,7 +22,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'command_groups_amount', 'priority', 'is_active', 'comment', 'actions'
+            'name', 'command_groups_amount', 'priority',
+            'is_active', 'comment', 'actions'
           ]
         },
         columnsMeta: {
@@ -40,7 +41,6 @@ export default {
         hasImport: false,
         hasRefresh: true,
         hasSearch: true,
-        hasMoreActions: false,
         createRoute: 'CommandFilterAclCreate',
         canCreate: () => {
           return this.$hasPerm('acls.add_commandfilteracl') && !this.$store.getters.currentOrgIsRoot

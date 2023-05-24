@@ -144,3 +144,7 @@ export function getConstRouteName() {
   addRoutes(names, constRoutes)
   return names
 }
+
+export function toM2MJsonParams(attrFilter) {
+  return ['attr_rules', encodeURIComponent(btoa(JSON.stringify(attrFilter)))]
+}

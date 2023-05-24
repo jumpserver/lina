@@ -53,7 +53,6 @@ export default {
     iGetTag() {
       let tag = this.formatterArgs.getTag({ row: this.row, cellValue: this.cellValue })
       if (tag) return tag
-      console.log('Tag: ', tag)
       tag = {
         size: this.formatterArgs.getTagSize({ row: this.row, cellValue: this.cellValue }),
         type: this.formatterArgs.getTagType({ row: this.row, cellValue: this.cellValue }),

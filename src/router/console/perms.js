@@ -40,7 +40,7 @@ export default [
     ]
   },
   {
-    path: 'host-acls',
+    path: 'login-asset-acls',
     component: empty,
     redirect: '',
     meta: {
