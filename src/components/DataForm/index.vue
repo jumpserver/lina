@@ -136,6 +136,8 @@ export default {
       const form = this.$refs['form']
       const values = form.getFormValue()
       callback(values, form, button)
+    },
+    getFormValue() {
     }
   }
 }

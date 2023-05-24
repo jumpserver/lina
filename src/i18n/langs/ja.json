@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "Accounts": "アカウント",
+    "SelectAccount": "アカウントを選択",
     "GenerateSuccessMsg": "アカウントの生成に成功しました",
     "GenerateAccounts": "アカウントを再生成する",
     "UpdateSecret": "機密の更新",
@@ -436,7 +438,11 @@
     "Category": "カテゴリー",
     "SSHPort": "SSH ポート",
     "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
-    "Primary": "主要な"
+    "Primary": "主要な",
+    "CreateCustom": "カスタムアセットを作成する",
+    "CustomType": "カスタムタイプ",
+    "CustomHelpMessage": "カスタムタイプのアセットにはアプレットのサポートが必要です。対応するアプレットがインストールされていることを確認してください。",
+    "CustomFields": "カスタム属性"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -461,6 +467,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "BatchProcessing": "選択 {Number} 項目",
     "Generate": "生成",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "ServerError": "サーバーエラー",
@@ -810,7 +817,25 @@
     "Product": "产品",
     "Created": "已创建",
     "Skipped": "已跳过",
-    "Updated": "已更新"
+    "Updated": "已更新",
+    "NotEqual": "等しくない",
+    "Startswith": "で始まる",
+    "AttrName": "属性名",
+    "SelectByAttr": "属性で選択",
+    "IPMatch": "IPアドレスが一致する",
+    "Regex": "正規表現",
+    "AttrValue": "属性値",
+    "Contains": "含む",
+    "Match": "一致する",
+    "Spec": "指定する",
+    "All": "すべて",
+    "Endswith": "で終わる",
+    "RelAnd": "かつ",
+    "Equal": "等しい",
+    "MatchIn": "以下のいずれかに一致する",
+    "RelNot": "でない",
+    "RelOr": "または",
+    "Relation": "関係"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",

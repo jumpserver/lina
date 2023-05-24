@@ -5,7 +5,9 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
-import { cleanFormValueForHandleUserAssetAccount } from '../common'
+import { userJSONSelectMeta } from '@/views/users/const'
+import { assetJSONSelectMeta } from '@/views/assets/const'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 
 export default {
   name: 'AclCreateUpdate',
@@ -14,28 +16,30 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: {
+        accounts: ['@ALL']
+      },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('acl.users'), ['users']],
-        [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.account'), ['accounts']],
-        [this.$t('acl.action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('common.Basic'), ['name']],
+        [this.$t('users.Users'), ['users']],
+        [this.$t('assets.Asset'), ['assets']],
+        [this.$t('accounts.Accounts'), ['accounts']],
+        [this.$t('common.Action'), ['action', 'reviewers']],
+        [this.$t('common.Other'), ['priority', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
           rules: [rules.Required]
         },
-        assets: {
-          fields: ['name_group', 'address_group']
-        },
-        users: {
-          fields: ['username_group'],
-          fieldsMeta: {}
-        },
+        assets: assetJSONSelectMeta(this),
+        users: userJSONSelectMeta(this),
         accounts: {
-          fields: ['username_group']
+          component: AccountFormatter,
+          el: {
+            showAddTemplate: false,
+            showVirtualAccount: false,
+            value: ['@ALL']
+          }
         },
         reviewers: {
           hidden: (item) => item.action !== 'review',
@@ -51,8 +55,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-asset-acls/',
-      cleanFormValue: cleanFormValueForHandleUserAssetAccount
+      url: '/api/v1/acls/login-asset-acls/'
     }
   },
   methods: {}

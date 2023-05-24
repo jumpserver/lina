@@ -3,21 +3,23 @@
     <el-link v-if="isUpdate(this)" :underline="false" type="default" @click="goToAssetAccountsPage()">
       {{ $t('assets.InAssetDetail') }}
     </el-link>
-    <div v-else class="accounts">
-      <el-table :data="accounts" style="width: 100%">
+    <div v-else class="accounts el-data-table">
+      <el-table :data="accounts" class="el-table--fit el-table--border">
         <el-table-column :label="$tc('assets.Name')" prop="name" />
         <el-table-column :label="$tc('assets.Username')" prop="username" />
         <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
           <template v-slot="scope">
-            <i :class="scope.row['privileged'] ? 'fa-check' : ''" class="fa text-primary" />
+            <i v-if="scope.row['privileged']" class="fa fa-check text-primary" />
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('common.TemplateAdd')" prop="template">
           <template v-slot="scope">
-            <i :class="scope.row['template'] ? 'fa-check' : ''" class="fa text-primary" />
+            <i v-if="scope.row['template']" class="fa fa-check text-primary" />
+            <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('common.Actions')" align="right" class-name="buttons" fixed="right" width="135">
+        <el-table-column :label="$tc('common.Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
             <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
@@ -74,8 +76,9 @@ export default {
     }
   },
   data() {
+    const accounts = this.value || []
     return {
-      accounts: this.value || [],
+      accounts: accounts,
       account: {},
       initial: false,
       addAccountDialogVisible: false,
@@ -152,7 +155,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.accounts >>> .buttons .cell {
-  padding-right: 2px;
+.el-data-table >>> .el-table {
+  .table {
+    margin-top: 15px;
+  }
+
+  .el-table__row {
+    &.selected-row {
+      background-color: #f5f7fa;
+    }
+
+    & > td {
+      line-height: 1.5;
+      padding: 6px 0;
+      font-size: 13px;
+      border-right: none;
+      * {
+        vertical-align: middle;
+      }
+
+      .el-checkbox {
+        vertical-align: super;
+      }
+
+      & > div > span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .el-table__header > thead > tr > th {
+    padding: 6px 0;
+    background-color: #ffffff;
+    font-size: 13px;
+    line-height: 1.5;
+    border-right: none;
+    .cell {
+      white-space: nowrap !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &:hover {
+        border-right: 2px solid #EBEEF5;
+      }
+    }
+  }
+}
+.el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
+  padding: 5px 0;
+  .cell {
+    padding-top: 3px!important;
+  }
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <el-switch
     v-model="iValue"
-    inactive-color="#dcdfe6"
     :class="type"
+    inactive-color="#dcdfe6"
     v-bind="$attrs"
     v-on="$listeners"
   />
@@ -17,7 +17,7 @@ export default {
       default: 'primary'
     },
     value: {
-      type: Boolean,
+      type: [Boolean, String],
       default: true
     }
   },
@@ -31,8 +31,13 @@ export default {
         this.$emit('input', newValue)
       },
       get: function() {
-        return this.value
+        return !!this.value
       }
+    }
+  },
+  watch: {
+    value(val) {
+      this.$log.debug('Switcher Value changed: ', val)
     }
   }
 }
