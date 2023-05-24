@@ -1450,6 +1450,7 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "Custom": "自定义",
     "CleanHelpText": "定期清理任务会在 每天凌晨 2 点执行, 清理后的数据将无法恢复",
     "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
     "Applets": "远程应用",
