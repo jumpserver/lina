@@ -14,7 +14,7 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 60 * 1000 // request timeout
+  timeout: 2 * 60 * 1000 // request timeout
 })
 
 function beforeRequestAddToken(config) {
