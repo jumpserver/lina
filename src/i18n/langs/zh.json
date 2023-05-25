@@ -3,6 +3,7 @@
   "accounts": {
     "Accounts": "账号",
     "SelectAccount": "选择账号",
+    "AccountTemplateUpdateSecretHelpText": "账号列表展示通过模版创建的账号。更新密文时，会更新通过模版所创建账号的密文。",
     "GenerateSuccessMsg": "账号生成成功",
     "GenerateAccounts": "重新生成账号",
     "UpdateSecret": "更新密文",
@@ -367,7 +368,7 @@
     "PasswordSelector": "密码输入框选择器",
     "SubmitSelector": "提交按钮选择器",
     "PlatformProtocolConfig": "平台协议配置",
-    "InheritPlatformConfig": "账号列表展示通过模版创建的账号。更新密文时，会更新通过模版所创建账号的密文。",
+    "InheritPlatformConfig": "继承自平台配置，如需更改，请更改平台中的配置。",
     "CollectHardwareInfo": "启用收集硬件信息",
     "DomainEnabled": "启用网域",
     "ProtocolsEnabled": "启用协议",

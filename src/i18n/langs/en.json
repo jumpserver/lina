@@ -3,6 +3,7 @@
   "accounts": {
     "GenerateSuccessMsg": "Accounts generated successfully",
     "GenerateAccounts": "Regenerate accounts",
+    "AccountTemplateUpdateSecretHelpText": "The account list displays accounts created through templates. When updating ciphertext, the ciphertext of the account created through the template will be updated.",
     "Accounts": "Accounts",
     "SelectAccount": "Select account",
     "UpdateSecret": "Update secret",
@@ -356,7 +357,7 @@
     "PasswordSelector": "Password Input Box Selector",
     "SubmitSelector": "Submit Button Selector",
     "PlatformProtocolConfig": "Platform protocol config",
-    "InheritPlatformConfig": "The account list displays accounts created through templates. When updating ciphertext, the ciphertext of the account created through the template will be updated.",
+    "InheritPlatformConfig": "Inherited from the platform configuration. If you need to change, please change the configuration in the platform.",
     "CollectHardwareInfo": "Enable collection of hardware information",
     "DomainEnabled": "Enable domain",
     "ProtocolsEnabled": "Enable protocol",
