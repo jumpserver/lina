@@ -13,9 +13,8 @@ import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
 import SyncSettingDialog from './SyncSettingDialog'
 import { IBox } from '@/components'
-import rules from '@/components/DataForm/rules'
-import { JsonRequired } from '@/components/DataForm/rules'
-import { UpdateToken, JsonEditor } from '@/components/FormFields'
+import rules, { JsonRequired } from '@/components/DataForm/rules'
+import { JsonEditor, UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'Ldap',
@@ -83,12 +82,15 @@ export default {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
             btn.loading = true
+
             testLdapSetting(value).then(resp => {
               this.$message.success(resp)
             }).catch(err => {
               const response = err.response
               this.$message.error(response.data)
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }.bind(this)
         },
         {
