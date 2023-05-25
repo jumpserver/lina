@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :md="24" :sm="24">
         <el-alert type="success">
-          {{ $t('assets.InheritPlatformConfig') }}
+          {{ $t('accounts.AccountTemplateUpdateSecretHelpText') }}
         </el-alert>
       </el-col>
     </el-row>
