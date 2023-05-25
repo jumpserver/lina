@@ -78,7 +78,11 @@ function ifUnauthorized({ response, error }) {
 
 function ifBadRequest({ response, error }) {
   if (response.status === 400) {
-    error.message = i18n.t('common.BadRequestErrorMsg')
+    if (response.data?.detail) {
+      error.message = response.data.detail
+    } else {
+      error.message = i18n.t('common.BadRequestErrorMsg')
+    }
   }
   if (response.status === 403) {
     error.message = i18n.t('common.BadRoleErrorMsg')
