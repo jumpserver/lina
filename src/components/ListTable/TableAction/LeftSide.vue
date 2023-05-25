@@ -221,7 +221,7 @@ export default {
             reloadTable()
             this.$message.success(this.$tc('common.bulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$tc('common.bulkDeleteErrorMsg') + error)
+            this.$message.error(this.$tc('common.bulkDeleteErrorMsg') + error.message)
           } finally {
             instance.confirmButtonLoading = false
           }
