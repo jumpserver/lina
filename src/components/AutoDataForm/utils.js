@@ -7,7 +7,7 @@ import rules from '@/components/DataForm/rules'
 import BasicTree from '@/components/FormFields/BasicTree'
 import JsonEditor from '@/components/FormFields/JsonEditor'
 import { assignIfNot } from '@/utils/common'
-import ListField from '@/components/FormFields/ListField.vue'
+import TagInput from '@/components/FormFields/TagInput.vue'
 
 export class FormFieldGenerator {
   constructor(emit) {
@@ -69,7 +69,7 @@ export class FormFieldGenerator {
         break
       case 'list':
         type = 'input'
-        field.component = ListField
+        field.component = TagInput
         break
       case 'object_related_field':
         field.component = ObjectSelect2
