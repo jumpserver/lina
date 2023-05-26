@@ -36,6 +36,9 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        host: {
+          disabled: ({ row }) => row.id === '00000000-0000-0000-0000-000000000001'
+        },
         oracle_port_range: {
           disabled: true
         }
