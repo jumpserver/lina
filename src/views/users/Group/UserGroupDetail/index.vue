@@ -25,6 +25,12 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'GroupInfo'
+          },
+          {
+            title: this.$t('route.UserList'),
+            name: 'GroupAddUser'
+            // TODO 稍后加权限
+            // hidden: () => !this.$hasPerm('accounts.change_accounttemplate')
           }
         ]
       }
