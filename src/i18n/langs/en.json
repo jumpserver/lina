@@ -374,6 +374,7 @@
     "PushSystemUserNow": "Push system user now",
     "PushAllSystemUsersToAsset": "Push all system users to asset",
     "QuickUpdate": "Quick update",
+    "QuickAdd": "Quick add",
     "Connectivity": "Reachable",
     "Unreachable": "Unreachable",
     "Unknown": "Unknown",
@@ -1761,6 +1762,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "AllMembers": "All members",
     "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
     "SetStatus": "Set status",
     "Set": "Set",

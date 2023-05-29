@@ -368,6 +368,7 @@
     "PushSystemUserNow": "プッシュシステムユーザー",
     "PushAllSystemUsersToAsset": "すべてのシステムユーザーをアセットにプッシュ",
     "QuickUpdate": "クイックアップデート",
+    "QuickAdd": "クイック追加",
     "Connectivity": "接続可能",
     "Unreachable": "接続できません",
     "Unknown": "不明",
@@ -1753,6 +1754,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "AllMembers": "すべてのメンバー",
     "UnbindHelpText": "このユーザーはローカルユーザーではありませんので、解除できません。管理者に連絡してください。",
     "SetStatus": "ステータスの設定",
     "Set": "設定",
