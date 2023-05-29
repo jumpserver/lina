@@ -539,7 +539,7 @@
     "NeedSpecifiedFile": "Required to upload the specified format file",
     "TestPortErrorMsg": "Port Error, please check",
     "Activate": "Activate",
-    "actionsTips": "Clipboard's copy and paste control only support RDP/VNC protocol.",
+    "actionsTips": "The effects of each permission vary, click the icon next to the permission to view.",
     "Active": "Active",
     "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",

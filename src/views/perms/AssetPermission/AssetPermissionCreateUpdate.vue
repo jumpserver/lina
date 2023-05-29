@@ -130,6 +130,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+>>> .el-tree {
+  margin-top: 8px;
+  border: solid 1px #EBEEF5;
+}
 
 </style>

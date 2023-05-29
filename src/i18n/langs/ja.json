@@ -534,7 +534,7 @@
     "NeedSpecifiedFile": "アップロードする必要がある指定形式のファイル",
     "TestPortErrorMsg": "ポートエラー、再入力してください",
     "Active": "アクティブ化中",
-    "actionsTips": "クリップボード権限制御は現在RDP/VNCプロトコルの接続のみをサポートしています",
+    "actionsTips": "各権限の効果は異なります。権限の後ろにあるアイコンをクリックして表示してください",
     "TableColSettingInfo": "表示したいリストの詳細を選択してください。",
     "Add": "追加",
     "TemplateAdd": "テンプレートの追加",

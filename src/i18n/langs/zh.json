@@ -578,7 +578,7 @@
     "Inactive": "禁用",
     "Valid": "有效",
     "Invalid": "无效",
-    "actionsTips": "剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
+    "actionsTips": "各个权限作用协议不尽相同，点击权限后面的图标查看",
     "TableColSettingInfo": "请选择您想显示的列表详细信息。",
     "Add": "添加",
     "TemplateAdd": "模版添加",
