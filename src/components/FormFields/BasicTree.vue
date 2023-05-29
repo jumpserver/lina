@@ -1,12 +1,14 @@
 <template>
   <el-tree
     :data="iTree"
-    show-checkbox
-    node-key="value"
+    :default-checked-keys="iValue"
     :default-expand-all="true"
     :default-expanded-keys="iValue"
-    :default-checked-keys="iValue"
     :props="defaultProps"
+    :render-content="renderContent"
+    class="el-tree-custom"
+    node-key="value"
+    show-checkbox
     @check="handleCheckChange"
   />
 </template>
@@ -67,11 +69,41 @@ export default {
         }
         return item
       })
+    },
+    renderContent(h, { node, data, store }) {
+      let label = node.label
+      let helpText = ''
+      const regex = /(.*?)\s*\((.*?)\)/
+      const match = label.match(regex)
+      if (match) {
+        label = match[1]
+        helpText = match[2]
+      }
+
+      return (
+        <span >
+          <span>{label} </span>
+          {helpText
+            ? (<el-tooltip content={helpText} placement='top'>
+              <i class='fa fa-info-circle'></i>
+            </el-tooltip>) : ''}
+        </span>)
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.el-tree-custom >>> {
+  .help-tips {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #999;
+  }
+  .el-tree-node__content:hover {
+    background-color: inherit;
+  }
+}
 
 </style>
