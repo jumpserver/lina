@@ -148,7 +148,7 @@
     "users": "User",
     "Rules": "Rule",
     "Action": "Action",
-    "ip_group_help_text": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "ipGroupHelpText": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
     "apply_login_account": "Apply login account"
   },
   "applications": {
@@ -741,7 +741,7 @@
     "noAnnouncement": "No announcement",
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format",
-    "time_period": "Time period",
+    "timePeriod": "Time period",
     "CronTab": {
       "newCron": "new cron",
       "timeExpression": "time expression",

@@ -2,10 +2,10 @@
   <div class="c-weektime">
     <div class="c-schedue" />
     <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" :style="styleValue" />
-    <table class="c-weektime-table" :class="{'c-min-table': colspan < 2}">
+    <table :class="{'c-min-table': colspan < 2}" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
-          <th rowspan="8" class="week-td">{{ this.$t('common.WeekCronSelect.WeekOrTime') }}</th>
+          <th class="week-td" rowspan="8">{{ this.$t('common.WeekCronSelect.WeekOrTime') }}</th>
           <th :colspan="12 * colspan">00:00 - 12:00</th>
           <th :colspan="12 * colspan">12:00 - 24:00</th>
         </tr>
@@ -19,17 +19,17 @@
           <td
             v-for="n in t.child"
             :key="`${n.row}-${n.col}`"
-            :data-week="n.row"
-            :data-time="n.col"
             :class="selectClasses(n)"
+            :data-time="n.col"
+            :data-week="n.row"
             class="weektime-atom-item"
-            @mouseenter="cellEnter(n)"
             @mousedown="cellDown(n)"
+            @mouseenter="cellEnter(n)"
             @mouseup="cellUp(n)"
           />
         </tr>
         <tr>
-          <td colspan="49" class="c-weektime-preview">
+          <td class="c-weektime-preview" colspan="49">
             <div class="g-clearfix c-weektime-con">
               <span class="g-pull-left">{{ this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
               <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('common.WeekCronSelect.ClearSelection') }}</a>
@@ -314,6 +314,7 @@ export default {
   min-width: 640px;
   position: relative;
   display: inline-block;
+  padding-right: 20px;
 }
 .c-schedue {
   background: #598fe6;

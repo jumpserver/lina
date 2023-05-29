@@ -1,13 +1,14 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
+    v-bind="$data"
   />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+
 export default {
   name: 'EndpointRuleCreateUpdate',
   components: {
@@ -21,7 +22,8 @@ export default {
       },
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' }},
       fields: [
-        [this.$t('common.Basic'), ['name', 'ip_group', 'endpoint', 'priority']],
+        [this.$t('common.Basic'), ['name', 'priority']],
+        [this.$t('terminal.Endpoint'), ['ip_group', 'endpoint']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {

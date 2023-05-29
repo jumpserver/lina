@@ -2,9 +2,9 @@
   <div>
     <img v-if="icon" :src="icon" alt="icon" class="icon">
     <el-link
-      class="detail"
       :disabled="disabled"
       :type="col.type || 'info'"
+      class="detail"
       @click="goDetail"
     >
       <slot>
@@ -105,9 +105,6 @@ export default {
       } else {
         this.$router.push(this.detailRoute)
       }
-      // const routeName = this.formatterArgs.route
-      // this.$log.debug('Will go to detail route: ', routeName)
-      // this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
     }
   }
 }
