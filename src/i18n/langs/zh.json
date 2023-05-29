@@ -115,6 +115,8 @@
     }
   },
   "acl": {
+    "LoginIP": "登录 IP",
+    "UserIP": "登录 IP",
     "apply_login_account": "申请登录账号",
     "IgnoreCase": "忽略大小写",
     "Content": "内容",
@@ -128,7 +130,7 @@
     "reviewer": "审批人",
     "username": "用户名",
     "ip_group": "IP 组",
-    "ip_group_help_text": "* 表示匹配所有。例如: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "ipGroupHelpText": "* 表示匹配所有。例如: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
     "action": "动作",
     "Rules": "规则",
     "Action": "动作",
@@ -463,6 +465,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "OtherRules": "其它规则",
     "MatchedCount": "匹配结果",
     "SelectAttrs": "选择属性",
     "MatchResult": "匹配结果",
@@ -510,7 +513,7 @@
     "ConvenientOperate": "便捷操作",
     "Overview": "概览",
     "Now": "现在",
-    "EnterToContinue": "按回车继续输入",
+    "EnterToContinue": "按下 Enter 继续输入",
     "SpecificInfo": "特殊信息",
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",
@@ -629,7 +632,7 @@
     "CopySuccess": "复制成功",
     "Enable": "启用",
     "On/Off": "启/停",
-    "EnterForSearch": "按回车进行搜索",
+    "EnterForSearch": "按下 Enter 进行搜索",
     "Export": "导出",
     "Import": "导入",
     "ContinueImport": "继续导入",
@@ -788,7 +791,7 @@
     "noAnnouncement": "暂无公告",
     "lastCannotBeDeleteMsg": "最后一项，不能被删除",
     "InvalidJson": "不是合法 JSON",
-    "time_period": "时段",
+    "timePeriod": "时段",
     "FormatError": "格式错误",
     "NotSpecialEmoji": "不允许输入特殊表情符号",
     "notAlphanumericUnderscore": "只能输入字母、数字、下划线",
@@ -1365,7 +1368,8 @@
     "AppletHosts": "应用发布机",
     "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
-    "TerminalStat": "CPU/内存/磁盘"
+    "TerminalStat": "CPU/内存/磁盘",
+    "Endpoint": "端点"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

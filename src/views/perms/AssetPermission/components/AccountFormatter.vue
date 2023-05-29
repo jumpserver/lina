@@ -23,7 +23,7 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="small" style="margin-left: 10px" type="primary" @click="showTemplateDialog=true">
+          <el-button size="small" type="primary" @click="showTemplateDialog=true">
             {{ $t('common.TemplateAdd') }}
           </el-button>
           {{ addTemplateHelpText }}

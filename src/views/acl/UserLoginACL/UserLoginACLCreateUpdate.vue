@@ -1,7 +1,7 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :after-get-form-value="afterGetFormValue"
+    v-bind="$data"
   />
 </template>
 
@@ -19,13 +19,15 @@ export default {
     return {
       initial: {
         action: 'reject',
-        rules: {
-          ip_group: ['*']
-        },
         user: this.$route.query.user,
         users: {
           username_group: ''
-        }
+        },
+        rules: [
+          {
+            ip_group: ['*']
+          }
+        ]
       },
       url: '/api/v1/acls/login-acls/',
       hasDetailInMsg: false,
@@ -74,10 +76,10 @@ export default {
           fieldsMeta: {
             ip_group: {
               label: this.$t('acl.ip_group'),
-              helpText: this.$t('acl.ip_group_help_text')
+              helpText: this.$t('acl.ipGroupHelpText')
             },
             time_period: {
-              label: this.$t('common.time_period'),
+              label: this.$t('common.timePeriod'),
               component: WeekCronSelect
             }
           }

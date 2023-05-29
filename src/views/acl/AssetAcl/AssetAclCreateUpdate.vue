@@ -8,6 +8,7 @@ import rules from '@/components/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
+import { WeekCronSelect } from '@/components/FormFields'
 
 export default {
   name: 'AclCreateUpdate',
@@ -17,21 +18,42 @@ export default {
   data() {
     return {
       initial: {
-        accounts: ['@ALL']
+        accounts: ['@ALL'],
+        rules: [
+          {
+            ip_group: ['*']
+          }
+        ]
       },
       fields: [
-        [this.$t('common.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('users.Users'), ['users']],
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('accounts.Accounts'), ['accounts']],
+        [this.$t('acl.Rules'), ['rules']],
         [this.$t('common.Action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['priority', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
           rules: [rules.Required]
         },
         assets: assetJSONSelectMeta(this),
+        rules: {
+          fields: [
+            'ip_group', 'time_period'
+          ],
+          fieldsMeta: {
+            ip_group: {
+              label: this.$t('acl.LoginIP'),
+              helpText: this.$t('acl.ipGroupHelpText')
+            },
+            time_period: {
+              label: this.$t('common.timePeriod'),
+              component: WeekCronSelect
+            }
+          }
+        },
         users: userJSONSelectMeta(this),
         accounts: {
           component: AccountFormatter,
