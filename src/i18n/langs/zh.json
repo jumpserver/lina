@@ -386,6 +386,7 @@
     "PushSystemUserNow": "推送系统用户",
     "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
+    "QuickAdd": "快速添加",
     "Connectivity": "可连接",
     "Unreachable": "不可连接",
     "Unknown": "未知",
@@ -1752,6 +1753,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "AllMembers": "全部成员",
     "UnbindHelpText": "此用户非本地用户，无法进行解绑，请联系管理员",
     "SetStatus": "设置状态",
     "Set": "已设置",
