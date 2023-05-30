@@ -1505,7 +1505,7 @@
     "Ldap": "LDAP",
     "License": "License",
     "LicenseFile": "License file",
-    "ExpirationTimeout": "Expiration timeout",
+    "ExpirationTimeout": "Expiration timeout (second)",
     "PasswordCheckRule": "Password check rule",
     "Security": "Security",
     "SecuritySetting": "Security",
