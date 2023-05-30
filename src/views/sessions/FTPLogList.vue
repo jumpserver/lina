@@ -46,7 +46,7 @@ export default {
                   },
                   callback: function({ row }) {
                     // 跳转下载页面
-                    download(`/api/v1/audits/ftp-logs/${row.id}/file/`)
+                    download(`/api/v1/audits/ftp-logs/${row.id}/download/`)
                   }
                 }
               ]
