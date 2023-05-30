@@ -13,6 +13,7 @@ import ProfileUpdate from './ProfileUpdate'
 import PasswordUpdate from './PasswordUpdate'
 import SecretKeyUpdate from './SecretKeyUpdate'
 import SSHUpdate from './SSHUpdate'
+import UserMFA from './UserMFA'
 
 export default {
   components: {
@@ -21,7 +22,8 @@ export default {
     ProfileUpdate,
     PasswordUpdate,
     SecretKeyUpdate,
-    SSHUpdate
+    SSHUpdate,
+    UserMFA
   },
   data() {
     return {
@@ -57,6 +59,10 @@ export default {
         {
           title: this.$t('users.FileEncryptionPassword'),
           name: 'SecretKeyUpdate'
+        },
+        {
+          title: this.$t('users.MfaLevel'),
+          name: 'UserMFA'
         }
       ]
     },

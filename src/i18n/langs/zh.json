@@ -431,7 +431,11 @@
     "ReLogin": "重新登录",
     "ReLoginTitle": "当前三方登录用户（CAS/SAML），未绑定 MFA 且不支持密码校验，请重新登录。",
     "NeedReLogin": "需要重新登录",
-    "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
+    "ReLoginErr": "登录时长已超过 5 分钟，请重新登录",
+    "Username": "用户名",
+    "Password": "密码",
+    "Captcha": "验证码",
+    "OtherAuthMethod": "其他登录方式"
   },
   "common": {
     "CommunityEdition": "社区版",
@@ -1063,6 +1067,8 @@
   },
   "route": {
     "": "",
+    "Login": "登录",
+    "ForgetPassword": "忘记密码?",
     "AppletDetail": "远程应用",
     "AppletHostDetail": "远程应用发布机详情",
     "AppletHostCreate": "添加远程应用发布机",

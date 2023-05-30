@@ -435,7 +435,11 @@
     "ReLogin": "再ログイン",
     "ReLoginTitle": "現在、サードパーティのログインユーザー（CAS/SAML）は、MFAをバインドしておらず、パスワードチェックをサポートしていません。再ログインしてください。",
     "NeedReLogin": "再ログインが必要です",
-    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
+    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください",
+    "Username": "ゆーざめい",
+    "Password": "あんごうふごう",
+    "Captcha": "認証コード",
+    "OtherAuthMethod": "その他の登録方法です"
   },
   "common": {
     "RestoreDefault": "デフォルトに戻す",
@@ -1068,6 +1072,8 @@
   },
   "route": {
     "": "",
+    "Login": "ログオンする",
+    "ForgetPassword": "パスワードを忘れる?",
     "AppletDetail": "遠隔応用です",
     "AssignedTicketList": "割り当て済みワークオーダー",
     "CreateEndpoint": "エンドポイントを作成する",

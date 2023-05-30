@@ -23,7 +23,7 @@ export default {
     {
       path: '/authentication/forget-password',
       component: () => import('@/views/authentication/ForgetPassword'),
-      name: 'ForgetPassword',
+      name: 'ForgetPasswordPreviewing',
       meta: {
         title: i18n.t('route.ForgetPassword'),
         permissions: []
@@ -32,7 +32,7 @@ export default {
     {
       path: '/authentication/forget-password/auth-step/',
       component: () => import('@/views/authentication/ForgetPassword/AuthStep'),
-      name: 'ForgetPassword',
+      name: 'ForgetPassword-2',
       meta: {
         title: i18n.t('route.ForgetPassword'),
         permissions: []

@@ -8,7 +8,7 @@
 
 <script>
 import { CentralForm } from '@/components'
-import { Captcha } from '@/components/FormFields'
+import { SelectLanguage, AutoLogin, OtherAuthMethods } from './components'
 
 export default {
   name: 'Login',
@@ -17,20 +17,31 @@ export default {
   },
   data() {
     return {
-      fields: ['username', 'password'],
+      fields: ['username', 'password', 'auto_login'],
       fieldsMeta: {
-        code: {
-          label: this.$t('users.Captcha'),
-          component: Captcha
+        username: {
+          label: '',
+          el: {
+            placeholder: this.$t('auth.Username')
+          }
+        },
+        password: {
+          label: '',
+          el: {
+            placeholder: this.$t('auth.Password')
+          }
+        },
+        auto_login: {
+          label: '',
+          component: AutoLogin
         }
       },
       config: {
-        url: '/api/v1/authentication/password/forget/previewing/',
-        btnCallback: (resp) => {
-          this.$router.push({
-            path: `/authentication/forget-password/auth-step/?token=${resp?.token}`
-          })
-        }
+        url: '/api/v1/authentication/login/',
+        rightImageUrl: '/static/img/login_image.png',
+        subMenu: SelectLanguage,
+        btnTitle: this.$t('route.Login'),
+        extraMenu: OtherAuthMethods
       }
     }
   }

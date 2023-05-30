@@ -1,7 +1,7 @@
 <template>
   <el-row style="min-width: 100px">
     <el-col :span="12">
-      <el-input v-model="value" @input="handleInput" />
+      <el-input v-model="value" :placeholder="this.$t('auth.Captcha')" @input="handleInput" />
     </el-col>
     <el-col :span="12">
       <el-image

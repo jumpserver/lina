@@ -22,6 +22,7 @@ export default {
       fields: ['methods', 'account', 'code'],
       fieldsMeta: {
         methods: {
+          label: '方法',
           component: Radio,
           el: {
             value: 'email',
@@ -37,13 +38,22 @@ export default {
           on: {
             change: ([val]) => {
               this.config.subTitle = this.helpTextMap[val]
+              if (val === 'sms') {
+                this.fieldsMeta.account.el.placeholder = this.$t('users.Phone')
+              } else {
+                this.fieldsMeta.account.el.placeholder = this.$t('users.Email')
+              }
             }
           }
         },
         account: {
-          label: this.$t('users.Account')
+          label: '',
+          el: {
+            placeholder: this.$t('users.Email')
+          }
         },
         code: {
+          label: '',
           component: CaptchaButton,
           el: {
             url: '',

@@ -83,6 +83,7 @@ import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
+import authenticationRoutes from './authentication'
 import { getPropView } from '@/utils/jms'
 import store from '@/store'
 
@@ -96,7 +97,8 @@ export const viewRoutes = [
   workbenchViewRoutes,
   ticketsRoutes,
   settingsRoutes,
-  profileRoutes
+  profileRoutes,
+  authenticationRoutes
 ]
 
 const createRouter = () => new Router({

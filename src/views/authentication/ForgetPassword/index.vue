@@ -19,8 +19,14 @@ export default {
     return {
       fields: ['username', 'code'],
       fieldsMeta: {
+        username: {
+          label: '',
+          el: {
+            placeholder: this.$t('auth.Username')
+          }
+        },
         code: {
-          label: this.$t('users.Captcha'),
+          label: '',
           component: Captcha
         }
       },

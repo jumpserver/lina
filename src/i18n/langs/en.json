@@ -435,7 +435,11 @@
     "ReLogin": "Re-Login",
     "ReLoginTitle": "The current three-party login user (cas/saml) is not bound to MFA and does not support password verification. Please login again",
     "NeedReLogin": "Need Re-Login",
-    "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
+    "ReLoginErr": "Login time has exceeded 5 minutes, please login again",
+    "Username": "Username",
+    "Password": "Password",
+    "Captcha": "Captcha",
+    "OtherAuthMethod": "Other login methods"
   },
   "common": {
     "CommunityEdition": "Community Edition",
@@ -1073,6 +1077,8 @@
   },
   "route": {
     "": "",
+    "Login": "Login",
+    "ForgetPassword": "ForgetPassword?",
     "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",

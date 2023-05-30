@@ -1,13 +1,18 @@
 <template>
-  <div style="padding-top: 100px">
-    <el-col :md="8" :offset="8" :sm="24">
-      <el-card style="padding: 30px 0 30px 40px">
-        <div slot="header">
-          <h1>{{ iTitle }}</h1>
-          <small>{{ iConfig.subTitle }}</small>
-          <div style="float: right; padding: 3px 0">
+  <div class="content">
+    <div v-if="iConfig.rightImageUrl" class="right-box">
+      <el-image :src="iConfig.rightImageUrl" />
+    </div>
+    <div :class="iConfig.rightImageUrl ? 'left-box' : 'one-box'">
+      <el-card style="height: 100%" shadow="never">
+        <div class="header">
+          <div style="text-align: left; display: inline-block">
+            <h2 style="font-weight: 400; font-size: 24px;">{{ iTitle }}</h2>
+            <small>{{ iConfig.subTitle }}</small>
+          </div>
+          <div v-if="iConfig.subMenu" style="float: right; padding: 20px 0; width: 30%">
             <keep-alive>
-              <component :is="iConfig.subMenu" v-if="iConfig.subMenu" />
+              <component :is="iConfig.subMenu" />
             </keep-alive>
           </div>
         </div>
@@ -24,13 +29,18 @@
           :disabled="!iConfig.canSubmit"
           size="medium"
           type="primary"
-          style="width: 95%"
+          style="width: 90%; margin-left: 5%"
           @click="submitForm('form')"
         >
           {{ iConfig.btnTitle }}
         </el-button>
+        <div v-if="iConfig.extraMenu" style="margin-top: 10%">
+          <keep-alive>
+            <component :is="iConfig.extraMenu" />
+          </keep-alive>
+        </div>
       </el-card>
-    </el-col>
+    </div>
   </div>
 </template>
 
@@ -94,7 +104,7 @@ export default {
     submitForm(formName, addContinue) {
       this.iForm.validate((valid) => {
         if (valid) {
-          const data = self.getFormData()
+          const data = this.getFormData()
           this.$axios.post(
             this.iConfig.url, data, { disableFlashErrorMsg: true }
           ).then((resp) => {
@@ -121,5 +131,41 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+ .el-form ::v-deep .el-form-item__content {
+    margin-left: 5% !important;
+    width: 90%;
+  }
+  .content {
+    height: 500px;
+    width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: calc((100vh - 470px) / 3);
+  }
+
+  .header {
+    padding: 25px 5%;
+  }
+
+  .one-box {
+    width: 500px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: calc((100vh - 470px) / 3);
+  }
+
+  .right-box {
+    height: 100%;
+    width: 50%;
+    float: right;
+  }
+
+  .left-box {
+    text-align: left;
+    background-color: white;
+    height: 100%;
+    width: 50%;
+    border-right: 1px solid #EFF0F1;
+  }
 </style>
