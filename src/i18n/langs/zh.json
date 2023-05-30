@@ -1512,7 +1512,7 @@
     "License": "许可证",
     "Senior": "高级",
     "LicenseFile": "许可证文件",
-    "ExpirationTimeout": "过期超时时间",
+    "ExpirationTimeout": "过期超时时间（秒）",
     "PasswordCheckRule": "密码强弱规则",
     "Security": "安全设置",
     "SecuritySetting": "安全设置",

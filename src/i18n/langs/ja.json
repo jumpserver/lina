@@ -1507,7 +1507,7 @@
     "License": "ライセンス",
     "Senior": "高度",
     "LicenseFile": "ライセンスファイル",
-    "ExpirationTimeout": "期限切れタイムアウト時間",
+    "ExpirationTimeout": "期限切れタイムアウト時間（秒）",
     "PasswordCheckRule": "パスワード強弱ルール",
     "Security": "セキュリティ設定",
     "SecuritySetting": "セキュリティ設定",
