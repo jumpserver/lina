@@ -85,6 +85,10 @@ export class FormFieldGenerator {
         field.el = { ...field.el, ...fieldMeta }
         field.el.fields = this.generateNestFields(field, fieldMeta, fieldRemoteMeta)
         field.el.errors = {}
+        field.hidden = () => {
+          const hidden = fieldMeta['hiddenFields'] || (() => field.el.fields.length === 0)
+          return hidden(fieldMeta, fieldRemoteMeta, field.el.fields)
+        }
         break
       default:
         type = 'input'

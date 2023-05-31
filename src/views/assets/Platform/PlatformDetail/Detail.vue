@@ -66,7 +66,8 @@ export default {
           key: this.$t('assets.Type'),
           value: `${this.object.category?.label}/${this.object.type?.label}`
         },
-        'su_method', 'comment'
+        'su_method', 'date_created', 'date_updated',
+        'created_by', 'updated_by', 'comment'
       ],
 
       protocolChoices: null,
