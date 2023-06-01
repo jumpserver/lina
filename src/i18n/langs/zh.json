@@ -465,6 +465,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Assets": "资产",
     "OtherRules": "其它规则",
     "MatchedCount": "匹配结果",
     "SelectAttrs": "选择属性",
