@@ -21,7 +21,6 @@ export default {
         category: 'all',
         url: `/api/v1/assets/assets/?platform=${this.object.id}`,
         headerActions: {
-          createRoute: 'AssetCreate',
           hasCreate: false,
           hasRefresh: true,
           hasExport: false,
