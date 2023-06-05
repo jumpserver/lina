@@ -41,12 +41,13 @@ export default {
                   name: 'download',
                   title: this.$t('sessions.download'),
                   type: 'primary',
-                  has: ({ row }) => {
-                    return row.has_file
+                  can: ({ row }) => { return row.has_file },
+                  tip: ({ row }) => {
+                    return row.has_file ? this.$t('sessions.download') : this.$t('sessions.DownloadFTPFileTip')
                   },
                   callback: function({ row }) {
                     // 跳转下载页面
-                    download(`/api/v1/audits/ftp-logs/${row.id}/download/`)
+                    download(`/api/v1/audits/ftp-logs/${row.id}/file/download/`)
                   }
                 }
               ]

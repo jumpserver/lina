@@ -1348,6 +1348,7 @@
     "BasePort": "listening port"
   },
   "sessions": {
+    "DownloadFTPFileTip": "The current action is not recorded in the file, or the file has not been saved to the corresponding storage",
     "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",
     "SetSuccess": "Set success",

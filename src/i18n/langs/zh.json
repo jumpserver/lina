@@ -1335,6 +1335,7 @@
     "TerminalStat": "CPU/内存/磁盘"
   },
   "sessions": {
+    "DownloadFTPFileTip": "当前动作不记录文件，或者文件还未保存到对应存储中",
     "SetToDefaultStorage": "设置为默认存储",
     "SetToDefault": "设为默认",
     "SetSuccess": "设置成功",

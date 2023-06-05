@@ -1343,6 +1343,7 @@
     "BasePort": "リスニング ポート"
   },
   "sessions": {
+    "DownloadFTPFileTip": "現在の動作がファイルに記録されていないか、対応するストレージにファイルが保存されていません。",
     "SetToDefaultStorage": "デフォルトストレージに設定",
     "SetToDefault": "デフォルトに設定",
     "SetSuccess": "設定に成功しました",
