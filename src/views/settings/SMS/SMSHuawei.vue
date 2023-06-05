@@ -4,7 +4,7 @@
 
 <script>
 import BaseSMS from './Base'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, PhoneInput } from '@/components/FormFields'
 
 export default {
   name: 'SMSHuawei',
@@ -70,6 +70,9 @@ export default {
         },
         HUAWEI_SMS_ENDPOINT: {
           label: this.$t('setting.AppEndpoint')
+        },
+        SMS_TEST_PHONE: {
+          component: PhoneInput
         }
       },
       submitMethod() {
