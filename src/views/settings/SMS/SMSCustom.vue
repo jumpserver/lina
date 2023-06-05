@@ -4,7 +4,7 @@
 
 <script>
 import BaseSMS from './Base'
-import { JsonEditor } from '@/components/FormFields'
+import { JsonEditor, PhoneInput } from '@/components/FormFields'
 
 export default {
   name: 'SMSCustom',
@@ -53,6 +53,9 @@ export default {
         'CUSTOM_SMS_API_PARAMS': {
           label: this.$t('common.Params'),
           component: JsonEditor
+        },
+        SMS_TEST_PHONE: {
+          component: PhoneInput
         }
       },
       submitMethod() {
