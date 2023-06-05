@@ -110,7 +110,8 @@ export default {
       )[0].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
-      return this.object.applicant.id === this.$store.state.users.profile.id
+      const profile = this.$store.state.users.profile
+      return this.object.applicant === `${profile.name}(${profile.username})`
     }
   },
   mounted() {

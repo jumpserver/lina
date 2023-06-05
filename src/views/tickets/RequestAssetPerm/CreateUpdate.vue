@@ -93,7 +93,13 @@ export default {
         apply_accounts: {
           component: AccountFormatter,
           el: {
+            nodes: [],
+            assets: [],
             showAddTemplate: false
+          },
+          hidden: (formValue) => {
+            this.fieldsMeta.apply_accounts.el.assets = formValue.apply_assets
+            this.fieldsMeta.apply_accounts.el.nodes = formValue.apply_nodes
           }
         },
         org_id: {
