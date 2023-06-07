@@ -1151,6 +1151,7 @@
   },
   "route": {
     "": "",
+
     "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",

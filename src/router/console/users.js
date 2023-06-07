@@ -44,47 +44,6 @@ export default [
         name: 'UserDetail',
         hidden: true,
         meta: { title: i18n.t('route.UserDetail') }
-      },
-      {
-        path: 'user-acl',
-        component: empty,
-        redirect: '',
-        hidden: true,
-        meta: {
-          title: i18n.t('route.UserLoginACLList'),
-          app: 'acls',
-          resource: 'loginacl'
-        },
-        children: [
-          {
-            path: '',
-            name: 'UserLoginACLList',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLList'),
-            hidden: true,
-            meta: { title: i18n.t('route.UserLoginACLList') }
-          },
-          {
-            path: 'create',
-            name: 'UserLoginACLCreate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
-            hidden: true,
-            meta: { title: i18n.t('route.UserLoginACLCreate') }
-          },
-          {
-            path: ':id',
-            name: 'UserLoginACLDetail',
-            component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
-            hidden: true,
-            meta: { title: i18n.t('route.UserLoginACLDetail') }
-          },
-          {
-            path: ':id/update',
-            name: 'UserLoginACLUpdate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
-            hidden: true,
-            meta: { title: i18n.t('route.UserLoginACLUpdate') }
-          }
-        ]
       }
     ]
   },

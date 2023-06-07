@@ -1150,6 +1150,11 @@
   },
   "route": {
     "": "",
+    "UserLoginAclList": "登录控制",
+    "UserLoginAclUpdate": "更新登录控制",
+    "ConnectMethodAclList": "连接方式",
+    "ConnectMethodAclCreate": "创建连接方式控制",
+    "ConnectMethodAclUpdate": "更新连接方式控制",
     "AppletDetail": "远程应用",
     "AppletHostDetail": "远程应用发布机详情",
     "AppletHostCreate": "添加远程应用发布机",
@@ -1369,7 +1374,8 @@
     "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘",
-    "Endpoint": "端点"
+    "Endpoint": "端点",
+    "ConnectMethod": "连接方式"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

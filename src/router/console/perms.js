@@ -39,6 +39,7 @@ export default [
       }
     ]
   },
+
   {
     path: 'login-asset-acls',
     component: empty,
@@ -53,27 +54,27 @@ export default [
       {
         path: '',
         name: 'AssetAclList',
-        component: () => import('@/views/acl/AssetAcl/AssetAclList'),
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
         meta: { title: i18n.t('route.AssetAclList') }
       },
       {
         path: 'create',
         name: 'AssetAclCreate',
-        component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetAclCreate') }
       },
       {
         path: ':id',
         name: 'AssetAclDetail',
-        component: () => import('@/views/acl/AssetAcl/AssetAclDetail/index'),
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
         hidden: true,
         meta: { title: i18n.t('route.AssetAclDetail') }
       },
       {
         path: ':id/update',
         name: 'AssetAclUpdate',
-        component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetAclUpdate') }
       }
@@ -173,6 +174,91 @@ export default [
           title: i18n.t('route.CommandGroupUpdate'),
           activeMenu: '/console/perms/cmd-acls'
         }
+      }
+    ]
+  },
+  {
+    path: 'login-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.UserLoginAclList'),
+      app: 'acls',
+      resource: 'loginacl'
+    },
+    children: [
+      {
+        path: '',
+        name: 'UserLoginAclList',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
+        meta: { title: i18n.t('route.UserLoginAclList') }
+      },
+      {
+        path: 'create',
+        name: 'UserLoginAclCreate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.UserLoginAclCreate')
+        }
+      },
+      {
+        path: ':id',
+        name: 'UserLoginAclDetail',
+        component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.AssetAclDetail'),
+          app: 'acls',
+          resource: 'loginacl'
+        }
+      },
+      {
+        path: ':id/update',
+        name: 'UserLoginAclUpdate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.UserLoginAclUpdate') }
+      }
+    ]
+  },
+  {
+    path: 'connect-method-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.ConnectMethodList'),
+      licenseRequired: true,
+      app: 'acls',
+      resource: 'connectmethodacl'
+    },
+    children: [
+      {
+        path: '',
+        name: 'ConnectMethodAclList',
+        component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclList.vue'),
+        meta: { title: i18n.t('route.ConnectMethodAclList') }
+      },
+      {
+        path: 'create',
+        name: 'ConnectMethodAclCreate',
+        component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.ConnectMethodAclCreate') }
+      },
+      {
+        path: ':id',
+        name: 'ConnectMethodAclDetail',
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'ConnectMethodAclUpdate',
+        component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.ConnectMethodAclUpdate') }
       }
     ]
   }

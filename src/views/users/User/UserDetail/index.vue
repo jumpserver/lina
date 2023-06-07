@@ -10,14 +10,14 @@
 import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
-import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
 import UserInfo from './UserInfo'
+import UserLoginAcl from './UserLoginAcl.vue'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
     UserInfo,
-    UserLoginACLList,
+    UserLoginAcl,
     GenericDetailPage,
     UserGrantedAssets,
     UserAssetPermissionRules
@@ -51,7 +51,7 @@ export default {
           },
           {
             title: this.$t('route.UserAclLists'),
-            name: 'UserLoginACLList',
+            name: 'UserLoginAcl',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
           }
         ]

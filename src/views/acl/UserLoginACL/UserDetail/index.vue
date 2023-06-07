@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -9,6 +9,7 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import Detail from './Detail.vue'
+
 export default {
   components: {
     GenericDetailPage,
@@ -27,8 +28,8 @@ export default {
         ],
         hasRightSide: false,
         actions: {
-          detailApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/?user=${this.$route.query.user}`,
-          deleteApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/?user=${this.$route.query.user}`
+          detailApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/`
         }
       }
     }
