@@ -200,7 +200,6 @@ export const assetJSONSelectMeta = (vm) => {
           label: vm.$t('assets.Platform'),
           type: 'm2m',
           el: {
-            multiple: false,
             url: '/api/v1/assets/platforms/'
           }
         },
