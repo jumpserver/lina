@@ -149,7 +149,9 @@
     "Rules": "Rule",
     "Action": "Action",
     "ipGroupHelpText": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
-    "apply_login_account": "Apply login account"
+    "apply_login_account": "Apply login account",
+    "UserIP": "Login IP",
+    "LoginIP": "Login IP"
   },
   "applications": {
     "": "",
@@ -469,9 +471,8 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
-    "BatchProcessing": "Select {Number} items",
-    "Generate": "Generate",
     "BatchProcessing": "Batch processing(select {Number} items)",
+    "Generate": "Generate",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",
@@ -838,7 +839,16 @@
     "MatchIn": "In ...",
     "RelNot": "Not",
     "RelOr": "Or",
-    "Relation": "Relation"
+    "Relation": "Relation",
+    "Email": "Email",
+    "SelectAttrs": "Select attrs",
+    "MatchResult": "Match results",
+    "MatchedCount": "Match count",
+    "IsActive": "Is active",
+    "LessEqualThan": "Less than or equal to",
+    "OtherRules": "Other rules",
+    "BelongTo": "Belong to",
+    "GreatEqualThan": "Greater than or equal to"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1151,7 +1161,6 @@
   },
   "route": {
     "": "",
-
     "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
@@ -1358,7 +1367,14 @@
     "Execution": "Execution history",
     "AssignedTicketList": "Todo approval",
     "JobDetail": "Job detail",
-    "Clouds": "Cloud"
+    "Clouds": "Cloud",
+    "Acls": "Acls",
+    "UserLoginAclCreate": "Create user login acl",
+    "UserLoginAclUpdate": "Update user login acl",
+    "UserLoginAclList": "User login acl",
+    "ConnectMethodAclCreate": "Create connect method acl",
+    "ConnectMethodAclList": "Connect method acl",
+    "ConnectMethodAclUpdate": "Update connect method acl"
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -1375,7 +1391,9 @@
     "HostDeployment": "Remote host deployment",
     "TerminalStat": "CPU/MEM/DISK",
     "DatabasePort": "Database protocol port",
-    "BasePort": "listening port"
+    "BasePort": "listening port",
+    "Endpoint": "Endpoint",
+    "ConnectMethod": "Connect method"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
