@@ -1391,6 +1391,7 @@
     "ConnectMethod": "接続方式"
   },
   "sessions": {
+    "DownloadFTPFileTip": "現在の動作がファイルに記録されていないか、ファイルサイズが閾値(デフォルトでは100M)を超えているか、対応するストレージに保存されていません。",
     "SetToDefaultStorage": "デフォルトストレージに設定",
     "SetToDefault": "デフォルトに設定",
     "SetSuccess": "設定に成功しました",

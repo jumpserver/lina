@@ -1396,6 +1396,7 @@
     "ConnectMethod": "Connect method"
   },
   "sessions": {
+    "DownloadFTPFileTip": "The current action is not recorded in the file, or the file size exceeds the threshold (100 MB by default), or is not saved to the corresponding storage",
     "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",
     "SetSuccess": "Set success",

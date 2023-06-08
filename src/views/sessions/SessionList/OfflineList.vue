@@ -4,6 +4,8 @@
 
 <script>
 import BaseList from './BaseList'
+import { download } from '@/utils/common'
+
 export default {
   name: 'OfflineList',
   components: {
@@ -32,11 +34,7 @@ export default {
           can: ({ row }) => vm.hasPerms(row, 'download'),
           callback: function({ row, tableData }) {
             // 跳转下载页面
-            const downloadUrl = `/api/v1/terminal/sessions/${row.id}/replay/download/`
-            const a = document.createElement('a')
-            a.href = downloadUrl
-            a.click()
-            window.URL.revokeObjectURL(downloadUrl)
+            download(`/api/v1/terminal/sessions/${row.id}/replay/download/`)
           }
         }
       ]

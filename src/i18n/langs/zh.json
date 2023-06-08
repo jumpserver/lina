@@ -1385,6 +1385,7 @@
     "ConnectMethod": "连接方式"
   },
   "sessions": {
+    "DownloadFTPFileTip": "当前动作不记录文件，或者文件大小超过阈值（默认100M），或者还未保存到对应存储中",
     "SetToDefaultStorage": "设置为默认存储",
     "SetToDefault": "设为默认",
     "SetSuccess": "设置成功",
