@@ -107,7 +107,10 @@ export async function generatePageRoutes({ to, from, next }) {
       hidden: true
     }]
     // dynamically add accessible routes
-    Vue.$log.debug('All routes:', accessRoutes)
+    Vue.$log.debug('All routes:', accessRoutes.reduce((acc, cur) => {
+      acc[cur.name] = cur
+      return acc
+    }, {}))
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })

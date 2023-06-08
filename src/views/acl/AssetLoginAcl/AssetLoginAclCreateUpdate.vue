@@ -19,11 +19,9 @@ export default {
     return {
       initial: {
         accounts: ['@ALL'],
-        rules: [
-          {
-            ip_group: ['*']
-          }
-        ]
+        rules: {
+          ip_group: ['*']
+        }
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],

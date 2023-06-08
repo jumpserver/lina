@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page :help-message="helpMsg" v-bind="$attrs">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+      helpMsg: this.$t('perms.AssetPermissionHelpMsg'),
       treeSetting: {
         showMenu: false,
         showAssets: true,

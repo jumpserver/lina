@@ -149,7 +149,9 @@
     "apply_login_user": "ログインユーザーの申請",
     "login_confirm_user": "登録再確認受付者",
     "RuleDetail": "ルールの詳細",
-    "apply_login_account": "ログインアカウントの申請"
+    "apply_login_account": "ログインアカウントの申請",
+    "UserIP": "ログインIP",
+    "LoginIP": "ログインIP"
   },
   "applications": {
     "": "",
@@ -469,9 +471,8 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
-    "BatchProcessing": "選択 {Number} 項目",
-    "Generate": "生成",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
+    "Generate": "生成",
     "ServerError": "サーバーエラー",
     "RestoreDefault": "デフォルトに戻す",
     "DownloadCenter": "ダウンロードセンター",
@@ -837,7 +838,16 @@
     "MatchIn": "以下のいずれかに一致する",
     "RelNot": "でない",
     "RelOr": "または",
-    "Relation": "関係"
+    "Relation": "関係",
+    "Email": "Email",
+    "SelectAttrs": "選擇屬性",
+    "MatchResult": "マッチ結果",
+    "MatchedCount": "一致する結果",
+    "IsActive": "アクティブです",
+    "LessEqualThan": "以下または等しい",
+    "OtherRules": "他のルール",
+    "BelongTo": "所属する",
+    "GreatEqualThan": "以上または等しい"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -1352,7 +1362,14 @@
     "AppletHostCreate": "リモート アプリケーション発行者を追加する",
     "Execution": "実行履歴",
     "JobDetail": "仕事の詳細",
-    "Clouds": "クラウド プラットフォーム"
+    "Clouds": "クラウド プラットフォーム",
+    "Acls": "ファンアクセスコントロール",
+    "UserLoginAclCreate": "ユーザーログイン制御の作成",
+    "UserLoginAclUpdate": "ユーザーログイン制御ルールの更新",
+    "UserLoginAclList": "ユーザーログイン",
+    "ConnectMethodAclCreate": "接続方式制御の作成",
+    "ConnectMethodAclList": "接続方式",
+    "ConnectMethodAclUpdate": "接続方式制御ルールの更新"
   },
   "rbac": {
     "Permissions": "権限",
@@ -1369,7 +1386,9 @@
     "HostDeployment": "パブリッシャーの導入",
     "TerminalStat": "CPU/メモリ/ディスク",
     "DatabasePort": "データベース プロトコル ポート",
-    "BasePort": "リスニング ポート"
+    "BasePort": "リスニング ポート",
+    "Endpoint": "エンドポイント",
+    "ConnectMethod": "接続方式"
   },
   "sessions": {
     "SetToDefaultStorage": "デフォルトストレージに設定",
