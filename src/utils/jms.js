@@ -146,5 +146,7 @@ export function getConstRouteName() {
 }
 
 export function toM2MJsonParams(attrFilter) {
-  return ['attr_rules', encodeURIComponent(btoa(JSON.stringify(attrFilter)))]
+  const encoder = new TextEncoder()
+  const data = encoder.encode(JSON.stringify(attrFilter))
+  return ['attr_rules', encodeURIComponent(btoa(String.fromCharCode(...data)))]
 }
