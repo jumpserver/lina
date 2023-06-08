@@ -1,5 +1,9 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <el-alert type="success">{{ helpMsg }}</el-alert>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  </div>
+
 </template>
 
 <script>
@@ -12,6 +16,7 @@ export default {
   },
   data() {
     return {
+      helpMsg: this.$t('acl.CommandFilterACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/command-filter-acls/',
         permissions: {

@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :help-message="helpMsg" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -11,6 +11,7 @@ export default {
   },
   data() {
     return {
+      helpMsg: this.$t('acl.AssetLoginACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],

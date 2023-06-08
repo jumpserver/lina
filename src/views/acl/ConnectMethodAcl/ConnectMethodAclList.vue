@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage :header-actions="headerActions" :help-message="helpText" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -10,6 +10,7 @@ export default {
   components: { GenericListPage },
   data() {
     return {
+      helpText: this.$t('acl.ConnectMethodACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/connect-method-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],

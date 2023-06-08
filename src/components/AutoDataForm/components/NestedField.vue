@@ -65,10 +65,6 @@ export default {
       return fields
     }
   },
-  mounted() {
-    console.log('Value is: ', this.value)
-    console.log('Fields: ', this.iFields)
-  },
   methods: {
     objectToString(obj) {
       let data = ''
