@@ -13,8 +13,8 @@ export const filterSelectValues = (values) => {
       selects.push(item)
     } else {
       // 格式校验：不以:开头，不以:结尾
-      const rule = /^(?!:).*(?<!:)$/
-      if (item.name.indexOf(':') > -1 && rule.test(item.name)) {
+      const reg = /^:|:$/
+      if (item.name.indexOf(':') > -1 && !reg.test(item.name)) {
         const [name, value] = item.name.split(':')
         const inputValue = { name, value }
         selects.push(inputValue)
