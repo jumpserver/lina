@@ -7,6 +7,7 @@ import UsersRoute from './users'
 import AssetsRoute from './assets'
 import PermsRoute from './perms'
 import AccountRoutes from './accounts'
+import ACLRoutes from './acls'
 
 export default {
   path: '/console',
@@ -68,11 +69,22 @@ export default {
       path: '/console/perms',
       component: empty,
       name: 'Perms',
+      alwaysShow: false,
       meta: {
         title: i18n.t('route.Perms'),
         icon: 'permission'
       },
       children: PermsRoute
+    },
+    {
+      path: '/console/acls',
+      component: empty,
+      name: 'Acls',
+      meta: {
+        title: i18n.t('route.Acls'),
+        icon: 'unlock'
+      },
+      children: ACLRoutes
     }
   ]
 }
