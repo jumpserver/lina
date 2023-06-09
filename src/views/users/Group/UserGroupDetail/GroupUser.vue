@@ -49,6 +49,7 @@ export default {
               this.$axios.post(
                 `/api/v1/users/groups/${this.object.id}/add-all-users/`,
               ).then(res => {
+                this.$message.success(this.$tc('common.AddSuccessMsg'))
                 window.location.reload()
               })
             }
@@ -133,6 +134,7 @@ export default {
             }
           })
           this.$axios.post(relationUrl, data)
+          this.$message.success(this.$tc('common.AddSuccessMsg'))
           window.location.reload()
         }
       }
