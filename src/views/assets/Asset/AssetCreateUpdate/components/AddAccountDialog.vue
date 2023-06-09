@@ -1,17 +1,17 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="$tc('assets.AddAccount')"
-    :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('assets.AddAccount')"
+    :visible.sync="iVisible"
     width="70%"
   >
     <AccountCreateForm
-      :platform="platform"
       :account="account"
       :encrypt-password="false"
+      :platform="platform"
       @add="addAccount"
       @edit="editAccount"
     />
@@ -66,7 +66,7 @@ export default {
         this.accounts.splice(i, 1)
       }
       this.accounts.push(account)
-      this.iVisible = false
+      // this.iVisible = false
     },
     editAccount(form) {
       const i = this.accounts.findIndex(item => item.username === this.account.username)
