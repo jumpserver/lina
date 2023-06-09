@@ -101,8 +101,10 @@ export default {
 
   .filter-field {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     padding-left: 2px;
+    padding-bottom: 3px;
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
@@ -110,6 +112,14 @@ export default {
 
     &:hover {
       border-color: #C0C4CC;
+    }
+
+    &>>> .el-tag {
+      margin-top: 3px;
+    }
+
+    &>>> .el-autocomplete {
+      height: 26px;
     }
   }
 
@@ -125,6 +135,6 @@ export default {
   }
 
   .filter-field >>> .el-input__inner {
-    height: 32px;
+    height: 26px;
   }
 </style>
