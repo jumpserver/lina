@@ -30,7 +30,7 @@ export default {
   props: {
     value: {
       type: [Object, String],
-      default: () => ({ 'code': '', 'phone': '' })
+      default: () => ({ 'code': '+86', 'phone': '' })
     }
   },
   data() {

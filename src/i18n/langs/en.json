@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "SuFrom": "Su from",
     "GenerateSuccessMsg": "Accounts generated successfully",
     "GenerateAccounts": "Regenerate accounts",
     "AccountTemplateUpdateSecretHelpText": "The account list displays accounts created through templates. When updating ciphertext, the ciphertext of the account created through the template will be updated.",
