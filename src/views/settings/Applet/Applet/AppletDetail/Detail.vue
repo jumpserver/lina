@@ -87,6 +87,7 @@ export default {
             />
           }
         },
+        'edition', 'can_concurrent',
         'date_created', 'date_updated', 'comment'
       ]
     }

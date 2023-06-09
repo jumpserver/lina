@@ -15,8 +15,8 @@
       v-if="!loading"
       ref="form"
       :account="account"
-      :asset="asset"
       :add-template="addTemplate"
+      :asset="asset"
       @add="addAccount"
       @edit="editAccount"
     />
@@ -105,7 +105,7 @@ export default {
           this.$emit('add', true)
         }
       }).catch(error => {
-        this.iVisible = iVisible
+        this.iVisible = true
         this.handleResult(null, error)
       })
     },

@@ -3,6 +3,51 @@ import empty from '@/layout/empty'
 
 export default [
   {
+    path: 'login-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.UserLoginAclList'),
+      app: 'acls',
+      resource: 'loginacl'
+    },
+    children: [
+      {
+        path: '',
+        name: 'UserLoginAclList',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
+        meta: { title: i18n.t('route.UserLoginAclList') }
+      },
+      {
+        path: 'create',
+        name: 'UserLoginAclCreate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.UserLoginAclCreate')
+        }
+      },
+      {
+        path: ':id',
+        name: 'UserLoginAclDetail',
+        component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.AssetAclDetail'),
+          app: 'acls',
+          resource: 'loginacl'
+        }
+      },
+      {
+        path: ':id/update',
+        name: 'UserLoginAclUpdate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.UserLoginAclUpdate') }
+      }
+    ]
+  },
+  {
     path: 'login-asset-acls',
     component: empty,
     redirect: '',
@@ -139,51 +184,7 @@ export default [
       }
     ]
   },
-  {
-    path: 'login-acls',
-    component: empty,
-    redirect: '',
-    meta: {
-      title: i18n.t('route.UserLoginAclList'),
-      app: 'acls',
-      resource: 'loginacl'
-    },
-    children: [
-      {
-        path: '',
-        name: 'UserLoginAclList',
-        component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
-        meta: { title: i18n.t('route.UserLoginAclList') }
-      },
-      {
-        path: 'create',
-        name: 'UserLoginAclCreate',
-        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
-        hidden: true,
-        meta: {
-          title: i18n.t('route.UserLoginAclCreate')
-        }
-      },
-      {
-        path: ':id',
-        name: 'UserLoginAclDetail',
-        component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
-        hidden: true,
-        meta: {
-          title: i18n.t('route.AssetAclDetail'),
-          app: 'acls',
-          resource: 'loginacl'
-        }
-      },
-      {
-        path: ':id/update',
-        name: 'UserLoginAclUpdate',
-        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.UserLoginAclUpdate') }
-      }
-    ]
-  },
+
   {
     path: 'connect-method-acls',
     component: empty,
