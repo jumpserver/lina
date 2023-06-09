@@ -60,7 +60,7 @@ export default {
           }
         },
         reviewers: {
-          hidden: (item) => item.action !== 'review',
+          hidden: (item) => !['review', 'warn'].includes(item.action),
           rules: [rules.RequiredChange],
           el: {
             value: [],
