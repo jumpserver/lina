@@ -170,7 +170,7 @@ export default {
         su_from_username: {
           label: this.$t('assets.UserSwitchFrom'),
           hidden: (formValue) => {
-            return this.platform || this.asset
+            return this.platform || this.asset || this.addTemplate
           }
         },
         secret: {
