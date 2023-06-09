@@ -123,10 +123,13 @@ export default {
     }
   }
 
-  .search-input >>> .el-input__inner {
-    max-width: 100%;
-    border: none;
-    padding-left: 5px;
+  .search-input {
+    flex: 1;
+    &>>> .el-input__inner {
+      max-width: 100%;
+      border: none;
+      padding-left: 5px;
+    }
   }
 
   .el-input >>> .el-input__inner {
