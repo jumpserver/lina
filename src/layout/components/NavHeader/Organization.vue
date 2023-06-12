@@ -1,5 +1,6 @@
 <template>
   <el-select
+    :disabled="disabled"
     :placeholder="$tc('common.Select')"
     :value="currentOrgId"
     class="org-select organization"
@@ -46,6 +47,10 @@ export default {
       default: () => {
         return true
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -186,5 +191,9 @@ export default {
     font-size: 12px;
     line-height: 30px;
   }
+}
+
+.org-select >>> .el-input.is-disabled .el-input__inner {
+  color: #ffffff !important;
 }
 </style>

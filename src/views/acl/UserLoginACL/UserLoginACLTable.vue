@@ -40,7 +40,6 @@ export default {
             formatterArgs: {
               hasClone: false,
               updateRoute: ({ row }) => {
-                console.log('row', row)
                 return {
                   name: 'UserLoginAclUpdate',
                   params: {

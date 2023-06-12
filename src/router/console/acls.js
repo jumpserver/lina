@@ -1,22 +1,27 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+const globalSubmenu = () => import('@/layout/globalOrg.vue')
+
 export default [
   {
     path: 'login-acls',
-    component: empty,
+    component: globalSubmenu,
     redirect: '',
     meta: {
       title: i18n.t('route.UserLoginAclList'),
       app: 'acls',
-      resource: 'loginacl'
+      resource: 'loginacl',
+      disableOrgsChange: true
     },
     children: [
       {
         path: '',
         name: 'UserLoginAclList',
         component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
-        meta: { title: i18n.t('route.UserLoginAclList') }
+        meta: {
+          title: i18n.t('route.UserLoginAclList')
+        }
       },
       {
         path: 'create',
@@ -187,12 +192,13 @@ export default [
 
   {
     path: 'connect-method-acls',
-    component: empty,
+    component: globalSubmenu,
     redirect: '',
     meta: {
       title: i18n.t('route.ConnectMethodList'),
       licenseRequired: true,
       app: 'acls',
+      disableOrgsChange: true,
       resource: 'connectmethodacl'
     },
     children: [
