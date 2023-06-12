@@ -5,8 +5,8 @@ export const typeMatchMapper = {
   str: strMatchValues,
   bool: ['exact', 'not'],
   m2m: ['m2m'],
-  ip: strMatchValues + ['ip_in'],
-  int: strMatchValues + ['gte', 'lte'],
+  ip: [...strMatchValues, 'ip_in'],
+  int: [...strMatchValues, 'gte', 'lte'],
   select: ['in']
 }
 
