@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="tag">
     <el-tag
       v-for="tag of iTags"
       :key="tag"
       :type="getTagType(tag)"
+      v-bind="formatterArgs.config"
       class="tag-formatter"
       disable-transitions
     >
@@ -27,7 +28,8 @@ export default {
           },
           getTags(cellValue) {
             return cellValue
-          }
+          },
+          config: {}
         }
       }
     }
@@ -50,7 +52,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.tag {
+  display: flex;
+  flex-wrap: wrap;
+  & > span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
 
 .tag-formatter {
   margin: 2px 0;

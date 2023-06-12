@@ -15,7 +15,7 @@ export const connectivityMeta = {
       err: 'text-danger'
     },
     getText({ cellValue }) {
-      if (cellValue?.value === '-') {
+      if (cellValue?.value === '-' || cellValue?.value === 'unknown') {
         return '-'
       } else {
         return cellValue?.label
