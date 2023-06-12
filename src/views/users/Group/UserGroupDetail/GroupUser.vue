@@ -42,7 +42,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$tc('common.Add'),
-            disabled: !this.$hasPerm('users.change_usergroup')
+            disabled: !this.$hasPerm('users.add_usergroup')
           },
           callbacks: Object.freeze({
             click: () => {
