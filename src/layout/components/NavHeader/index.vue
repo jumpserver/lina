@@ -82,8 +82,8 @@ export default {
       return this.$store.state.settings.sidebarLogo
     },
     orgsDisabled() {
-      console.log('this.$route.meta?.disableOrganization', this.$route.meta)
-      return this.$route.meta?.disableOrganization === true
+      console.log('this.$route.meta?.toGlobalOrg', this.$route.meta)
+      return this.$route.meta?.toGlobalOrg === true
     },
     orgsShow() {
       return (this.$route.meta?.showOrganization !== false) && this.$hasLicense()

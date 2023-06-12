@@ -149,7 +149,7 @@ export default [
       title: i18n.t('route.UserLoginAclList'),
       app: 'acls',
       resource: 'loginacl',
-      disableOrganization: true
+      toGlobalOrg: true
     },
     children: [
       {
@@ -197,7 +197,7 @@ export default [
       title: i18n.t('route.ConnectMethodList'),
       licenseRequired: true,
       app: 'acls',
-      disableOrganization: true,
+      toGlobalOrg: true,
       resource: 'connectmethodacl'
     },
     children: [

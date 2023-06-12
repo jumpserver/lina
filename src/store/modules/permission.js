@@ -116,8 +116,8 @@ function cleanRoute(tmp, parent) {
     tmp.meta.showOrganization = parent.meta.showOrganization
   }
 
-  if (!tmp.meta.disableOrganization && parent.meta.disableOrganization !== undefined) {
-    tmp.meta.disableOrganization = parent.meta.disableOrganization
+  if (!tmp.meta.toGlobalOrg && parent.meta.toGlobalOrg !== undefined) {
+    tmp.meta.toGlobalOrg = parent.meta.toGlobalOrg
   }
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
