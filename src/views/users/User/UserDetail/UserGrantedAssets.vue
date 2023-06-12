@@ -1,5 +1,5 @@
 <template>
-  <GrantedAssets :tree-url="treeUrl" :table-url="tableUrl" />
+  <GrantedAssets :table-url="tableUrl" :tree-url="treeUrl" />
 </template>
 
 <script>

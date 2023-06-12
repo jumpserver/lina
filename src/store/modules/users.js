@@ -1,10 +1,8 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
-import {
-  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
-} from '@/utils/auth'
+import { getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal } from '@/utils/auth'
+import orgUtil, { GLOBAL_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
-import orgUtil, { SYSTEM_ORG_ID } from '@/utils/org'
 import store from '@/store'
 
 const _ = require('lodash')
@@ -71,7 +69,9 @@ const mutations = {
     state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
-    if (state.currentOrg?.id !== SYSTEM_ORG_ID) {
+    // 系统组织和全局组织不设置成 Pre org
+    const notSetToPre = [SYSTEM_ORG_ID, GLOBAL_ORG_ID]
+    if (!notSetToPre.includes(state.currentOrg?.id)) {
       state.preOrg = state.currentOrg
       setPreOrgLocal(state.username, state.currentOrg)
     }
@@ -148,6 +148,18 @@ const actions = {
     if (!preOrg) {
       return
     }
+    commit('SET_CURRENT_ORG', preOrg)
+  },
+  enterGlobalOrg({ commit }) {
+    const globalOrg = { id: orgUtil.GLOBAL_ORG_ID, name: 'Global' }
+    commit('SET_CURRENT_ORG', globalOrg)
+  },
+  leaveGlobalOrg({ commit }) {
+    const preOrg = store.state.users.preOrg
+    if (!preOrg) {
+      return
+    }
+    console.log('Pre ogx is :', preOrg)
     commit('SET_CURRENT_ORG', preOrg)
   },
   setPreOrg({ commit }, data) {

@@ -3,6 +3,8 @@ import store from '@/store'
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 export const SYSTEM_ORG_ID = '00000000-0000-0000-0000-000000000004'
 
+export const GLOBAL_ORG_ID = '00000000-0000-0000-0000-000000000000'
+
 function getPropOrg() {
   const orgs = store.getters.usingOrgs
   const defaultOrg = orgs.find((item) => item.is_default)
@@ -51,6 +53,7 @@ export default {
   hasCurrentOrgPermission,
   DEFAULT_ORG_ID,
   SYSTEM_ORG_ID,
+  GLOBAL_ORG_ID,
   change2PropOrg,
   changeOrg,
   getPropOrg
