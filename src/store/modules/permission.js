@@ -1,8 +1,5 @@
 import Vue from 'vue'
-import {
-  viewRoutes,
-  constantRoutes
-} from '@/router'
+import { constantRoutes, viewRoutes } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
 import { getResourceNameByPath, hasPermission } from '@/utils/jms'
@@ -117,6 +114,10 @@ function cleanRoute(tmp, parent) {
   // 设置是否显示 Organization, 该参数是继承的
   if (!tmp.meta.showOrganization && parent.meta.showOrganization !== undefined) {
     tmp.meta.showOrganization = parent.meta.showOrganization
+  }
+
+  if (!tmp.meta.disableOrgsChange && parent.meta.disableOrgsChange !== undefined) {
+    tmp.meta.disableOrgsChange = parent.meta.disableOrgsChange
   }
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')

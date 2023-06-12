@@ -177,7 +177,6 @@ export default {
   mounted() {
     this.initDefaultChoice()
     setTimeout(() => {
-      console.log('Account Value: ', this.value)
       if (this.value === '') {
         this.$emit('input', ['@ALL'])
       } else {

@@ -1,5 +1,9 @@
 <template>
-  <UserLoginACLTable :url="url" />
+  <el-row :gutter="10">
+    <el-col :span="18">
+      <UserLoginACLTable :url="url" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
