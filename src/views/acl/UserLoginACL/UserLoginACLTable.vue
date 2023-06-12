@@ -19,7 +19,7 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columnsExclude: ['rules'],
+        columnsExclude: ['rules', 'users'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
