@@ -28,9 +28,11 @@ export default {
     }
   },
   data() {
+    const id = this.object.id
+    const url = id ? `/api/v1/perms/asset-permissions/${id}/users/all/` : ''
     return {
       tableConfig: {
-        url: `/api/v1/perms/asset-permissions/${this.object.id}/users/all/`,
+        url: url,
         columnsExclude: ['user'],
         columnsExtra: ['delete_action'],
         columnsShow: {
