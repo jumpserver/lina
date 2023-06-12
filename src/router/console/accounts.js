@@ -124,7 +124,7 @@ export default [
         name: 'AccountPushDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
+          title: i18n.t('accounts.AccountPush.AccountPushList'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       },
