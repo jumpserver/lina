@@ -177,7 +177,7 @@ export default {
   mounted() {
     this.initDefaultChoice()
     setTimeout(() => {
-      if (this.value === '') {
+      if (this.value.length === 0) {
         this.$emit('input', ['@ALL'])
       } else {
         this.$emit('input', this.value)
