@@ -230,9 +230,7 @@ export default {
       if (elFormItem && elFormItem.clearValidate) {
         elFormItem.clearValidate()
       }
-      this.iValue = this.value
     })
-    this.$refs.selectRef = this.$refs.select
   },
   methods: {
     async loadMore(load) {
