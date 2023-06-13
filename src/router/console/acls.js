@@ -218,7 +218,7 @@ export default [
       {
         path: ':id',
         name: 'ConnectMethodAclDetail',
-        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
+        component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclDetail/index'),
         hidden: true,
         meta: { title: i18n.t('route.AssetAclDetail') }
       },
