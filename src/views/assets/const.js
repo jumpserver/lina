@@ -239,6 +239,10 @@ export const assetJSONSelectMeta = (vm) => {
             multiple: true,
             url: '/api/v1/assets/labels/'
           }
+        },
+        {
+          name: 'comment',
+          label: vm.$t('common.Comment')
         }
       ]
     }

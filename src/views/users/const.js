@@ -32,7 +32,8 @@ export const userJSONSelectMeta = (vm) => {
         },
         {
           name: 'comment',
-          label: vm.$t('common.Comment')
+          label: vm.$t('common.Comment'),
+          inTable: true
         },
         {
           name: 'is_active',
