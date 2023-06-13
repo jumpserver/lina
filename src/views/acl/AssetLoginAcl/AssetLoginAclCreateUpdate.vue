@@ -58,7 +58,12 @@ export default {
           el: {
             showAddTemplate: false,
             showVirtualAccount: false,
-            value: ['@ALL']
+            value: ['@ALL'],
+            assets: []
+          },
+          hidden: (formValue) => {
+            const ids = formValue.assets?.ids
+            this.fieldsMeta.accounts.el.assets = ids || []
           }
         },
         reviewers: {
