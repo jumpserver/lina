@@ -216,7 +216,7 @@ export default {
         this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
-      })
+      }, 10)
     }
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
@@ -315,6 +315,8 @@ export default {
         if (this.iOptions.length === 0) {
           this.remote = false
         }
+      } else {
+        this.remote = false
       }
       this.iValue = this.value
     },
