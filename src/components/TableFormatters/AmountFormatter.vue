@@ -1,15 +1,15 @@
 <template>
-  <DetailFormatter :row="row" :col="col">
+  <DetailFormatter :col="col" :row="row">
     <template>
       <el-popover
-        placement="top-start"
-        :title="title"
-        width="400"
-        trigger="hover"
         :disabled="!showItems"
+        :title="title"
+        placement="top-start"
+        trigger="hover"
+        width="400"
       >
         <div class="detail-content">
-          <div v-for="item of items" :key="item" class="detail-item">
+          <div v-for="item of items" :key="getKey(item)" class="detail-item">
             <span class="detail-item-name">{{ item }}</span>
           </div>
         </div>
@@ -22,20 +22,29 @@
 <script>
 import DetailFormatter from './DetailFormatter'
 import BaseFormatter from './base'
+
 export default {
   name: 'AmountFormatter',
   components: {
     DetailFormatter
   },
   extends: BaseFormatter,
-  data() {
-    return {
-      formatterArgsNew: {
-        showItems: true,
-        getItem(item) {
-          return item.name
+  props: {
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          showItems: true,
+          getItem(item) {
+            return item.name
+          }
         }
       }
+    }
+  },
+  data() {
+    return {
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
     }
   },
   computed: {
@@ -43,16 +52,18 @@ export default {
       return this.formatterArgs.title || ''
     },
     items() {
-      const getItem = this.formatterArgs.getItem || function(item) { return item.name }
+      const getItem = this.formatterArgs.getItem || (item => item.name)
       return this.cellValue?.map(item => getItem(item))
     },
     showItems() {
       return this.formatterArgs.showItems !== false && this.cellValue?.length > 0
     }
   },
-  mounted() {
-  },
   methods: {
+    getKey(item) {
+      const id = Math.random().toString(36).substring(2)
+      return id + item
+    }
   }
 }
 </script>
