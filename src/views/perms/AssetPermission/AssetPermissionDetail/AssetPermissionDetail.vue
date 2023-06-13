@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
@@ -72,7 +72,7 @@ export default {
           key: this.$t('perms.Actions'),
           value: this.object.actions,
           formatter(row, value) {
-            const actionLabels = value.map(item => item.label)
+            const actionLabels = value.map(item => item.label.replace(/ \([^)]*\)/, ''))
             return (
               <div>
                 {actionLabels.map(item => (
