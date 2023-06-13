@@ -41,8 +41,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       loading: true,
+      currentValue: '',
       formConfig: {
         // 为了方便更新，避免去取 fields 的索引
         hasSaveContinue: false,
@@ -69,11 +71,13 @@ export default {
                 if (['m2m', 'select'].includes(attrType)) {
                   defaultValue = []
                 } else if (['bool'].includes(attrType)) {
-                  defaultValue = false
+                  defaultValue = !!this.currentValue
+                } else {
+                  defaultValue = typeof this.currentValue === 'string' ? this.currentValue : ''
                 }
                 setTimeout(() => {
                   updateForm({ match: matchSupports[0], value: defaultValue })
-                }, 0.1)
+                }, 10)
               }
             }
           },
@@ -85,11 +89,15 @@ export default {
             on: {
               change: ([value], updateForm) => {
                 let defaultValue = ''
-                if (['in', 'ip_in'].includes(value)) {
+                if (['in', 'ip_in', 'm2m'].includes(value)) {
                   defaultValue = []
+                } else if (typeof vm.currentValue === 'string') {
+                  defaultValue = vm.currentValue
                 }
-                updateForm({ value: defaultValue })
-                this.formConfig.fields[2].el.match = value
+                setTimeout(() => {
+                  updateForm({ value: defaultValue })
+                  this.formConfig.fields[2].el.match = value
+                }, 10)
               }
             }
           },
@@ -100,6 +108,11 @@ export default {
             el: {
               match: attrMatchOptions[0].value,
               attr: this.attrs[0]
+            },
+            on: {
+              input: ([value], updateForm) => {
+                vm.currentValue = value
+              }
             }
           }
         ]
