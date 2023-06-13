@@ -66,7 +66,7 @@ export default {
         this.accounts.splice(i, 1)
       }
       this.accounts.push(account)
-      // this.iVisible = false
+      this.iVisible = false
     },
     editAccount(form) {
       const i = this.accounts.findIndex(item => item.username === this.account.username)
