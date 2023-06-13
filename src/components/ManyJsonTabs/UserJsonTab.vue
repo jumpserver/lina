@@ -32,9 +32,33 @@ export default {
         },
         tableConfig: {
           url: `/api/v1/users/users/?${key}=${value}`,
-          columns: ['name', 'username'],
-          columnsShow: {
-            min: ['id']
+          columns: [
+            'name', 'username', 'groups', 'system_roles',
+            'org_roles', 'source', 'is_valid'
+          ],
+          columnsMeta: {
+            system_roles: {
+              label: this.$t('users.SystemRoles'),
+              formatter: (row) => {
+                return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+              },
+              filters: [],
+              columnKey: 'system_roles'
+            },
+            org_roles: {
+              label: this.$t('users.OrgRoles'),
+              formatter: (row) => {
+                return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+              },
+              filters: [],
+              columnKey: 'org_roles',
+              has: () => {
+                return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
+              }
+            },
+            actions: {
+              has: false
+            }
           }
         }
       }

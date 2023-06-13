@@ -32,9 +32,13 @@ export default {
         },
         tableConfig: {
           url: `/api/v1/assets/assets/?${key}=${value}`,
-          columns: ['name', 'address'],
-          columnsShow: {
-            min: ['id']
+          columns: ['name', 'address', 'platform',
+            'type', 'is_active'
+          ],
+          columnsMeta: {
+            actions: {
+              has: false
+            }
           }
         }
       }
