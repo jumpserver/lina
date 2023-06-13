@@ -9,6 +9,7 @@
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -27,7 +28,7 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'command_groups_amount', 'priority',
+            'name', 'command_groups', 'priority',
             'is_active', 'comment', 'actions'
           ]
         },
@@ -36,6 +37,16 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'CommandFilterAclDetail'
+            }
+          },
+          command_groups: {
+            label: this.$t('acl.CommandGroup'),
+            width: '160px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'GroupUser'
+              }
             }
           }
         }

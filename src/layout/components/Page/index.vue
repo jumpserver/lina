@@ -63,7 +63,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page {
   height: calc(100vh - 50px);
   overflow-y: auto;

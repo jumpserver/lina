@@ -9,6 +9,7 @@
 import IBox from '@/components/IBox'
 import Page from '@/layout/components/Page'
 import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
+
 export default {
   name: 'GenericCreateUpdatePage',
   components: {
@@ -17,5 +18,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+>>> .ibox .el-card__body {
+  padding-top: 30px;
+}
 </style>

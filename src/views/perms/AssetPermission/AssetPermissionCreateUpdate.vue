@@ -92,7 +92,6 @@ export default {
           type: 'input',
           label: this.$t('perms.Account'),
           component: AccountFormatter,
-          // helpText: this.$t('perms.AccountsHelp'),
           el: {
             assets: [],
             nodes: []
@@ -134,6 +133,7 @@ export default {
 >>> .el-tree {
   margin-top: 8px;
   border: solid 1px #EBEEF5;
+  padding: 10px 0;
 }
 
 </style>
