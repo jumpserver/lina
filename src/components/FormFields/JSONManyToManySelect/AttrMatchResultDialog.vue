@@ -49,7 +49,12 @@ export default {
               label: item.label,
               formatter: item.formatter
             }
-          })
+          }),
+          columnsMeta: {
+            actions: {
+              has: false
+            }
+          }
         }
       }
     }

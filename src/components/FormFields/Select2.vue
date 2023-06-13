@@ -221,6 +221,8 @@ export default {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
+        this.$log.debug('Value is : ', this.value)
+        this.iValue = this.value
         this.initialized = true
       }, 100)
     }
@@ -321,6 +323,8 @@ export default {
         if (this.iOptions.length === 0) {
           this.remote = false
         }
+      } else {
+        this.remote = false
       }
     },
     refresh() {
