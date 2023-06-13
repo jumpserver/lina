@@ -40,10 +40,10 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('perms.User'), ['users', 'user_groups']],
-        [this.$t('perms.Asset'), ['assets', 'nodes']],
-        [this.$t('assets.Account'), ['accounts']],
-        [this.$t('perms.Actions'), ['actions']],
+        [this.$t('perms.User'), ['users']],
+        // [this.$t('perms.Asset'), ['assets', 'nodes']],
+        // [this.$t('assets.Account'), ['accounts']],
+        // [this.$t('perms.Actions'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
@@ -92,7 +92,6 @@ export default {
           type: 'input',
           label: this.$t('perms.Account'),
           component: AccountFormatter,
-          // helpText: this.$t('perms.AccountsHelp'),
           el: {
             assets: [],
             nodes: []
@@ -134,6 +133,7 @@ export default {
 >>> .el-tree {
   margin-top: 8px;
   border: solid 1px #EBEEF5;
+  padding: 10px 0;
 }
 
 </style>

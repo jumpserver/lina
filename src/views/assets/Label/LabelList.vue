@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -17,13 +18,23 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'value', 'asset_count', 'date_created',
+            'name', 'value', 'assets', 'date_created',
             'comment', 'org_name', 'actions'
           ]
         },
         columnsMeta: {
           name: {
             formatter: null
+          },
+          assets: {
+            label: this.$t('assets.Assets'),
+            width: '160px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'GroupUser'
+              }
+            }
           }
         }
       },

@@ -189,7 +189,6 @@ export default [
       }
     ]
   },
-
   {
     path: 'connect-method-acls',
     component: globalSubmenu,

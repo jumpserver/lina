@@ -2,10 +2,11 @@
   <el-select
     ref="select"
     v-model="iValue"
-    v-loading="!initialized"
     v-loadmore="loadMore"
     :clearable="clearable"
-    :disabled="selectDisabled"
+    :collapse-tags="collapseTags"
+    :disabled="!!selectDisabled"
+    :loading="!initialized"
     :multiple="multiple"
     :options="iOptions"
     :remote="remote"
@@ -90,6 +91,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    collapseTagsCount: {
+      type: Number,
+      default: 10
     }
   },
   data() {
@@ -127,6 +132,9 @@ export default {
   computed: {
     selectRef() {
       return this.$refs.select
+    },
+    collapseTags() {
+      return this.multiple && this.collapseTagsCount > 0 && this.value.length > this.collapseTagsCount
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
@@ -213,10 +221,8 @@ export default {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
-        this.$log.debug('Value is : ', this.value)
-        this.iValue = this.value
         this.initialized = true
-      })
+      }, 100)
     }
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
@@ -224,7 +230,9 @@ export default {
       if (elFormItem && elFormItem.clearValidate) {
         elFormItem.clearValidate()
       }
+      this.iValue = this.value
     })
+    this.$refs.selectRef = this.$refs.select
   },
   methods: {
     async loadMore(load) {
@@ -316,7 +324,6 @@ export default {
           this.remote = false
         }
       }
-      this.iValue = this.value
     },
     refresh() {
       this.resetParams()

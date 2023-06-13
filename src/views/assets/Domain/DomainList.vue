@@ -5,6 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -14,17 +15,21 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/domains/',
-        columnsExclude: ['assets', 'gateway'],
-        columnsExtra: ['asset_count', 'gateway_count'],
+        columnsExclude: ['gateway'],
+        columnsExtra: ['gateway_count'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'asset_count', 'gateway_count', 'comment', 'actions']
+          default: ['name', 'assets', 'gateway_count', 'comment', 'actions']
         },
         columnsMeta: {
-          asset_count: {
+          assets: {
             label: this.$t('assets.Assets'),
-            formatter: function(row) {
-              return <span> {row.assets.length} </span>
+            width: '160px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'GroupUser'
+              }
             }
           },
           gateway_count: {
