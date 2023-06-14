@@ -124,6 +124,8 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'AssetPermissionUpdate',
+              hasDelete: false,
+              hasClone: false,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/asset-permissions/${id}/`

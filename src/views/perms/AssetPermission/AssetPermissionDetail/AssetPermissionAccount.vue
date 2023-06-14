@@ -5,10 +5,11 @@
         ref="ListTable"
         :asset="object"
         :has-clone="false"
-        :has-column-actions="false"
         :has-export="false"
         :has-import="false"
+        :has-delete-action="false"
         :has-left-actions="false"
+        :has-column-actions="false"
         :url="url"
       />
     </el-col>
