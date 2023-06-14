@@ -37,6 +37,20 @@ export default {
             'org_roles', 'source', 'is_valid'
           ],
           columnsMeta: {
+            name: {
+              label: this.$t('common.Name'),
+              formatter: (row) => {
+                const to = {
+                  name: 'UserDetail',
+                  params: { id: row.id }
+                }
+                if (this.$hasPerm('users.view_user')) {
+                  return <router-link to={to} class='text-link'>{row.name}</router-link>
+                } else {
+                  return <span>{row.name}</span>
+                }
+              }
+            },
             system_roles: {
               label: this.$t('users.SystemRoles'),
               formatter: (row) => {
