@@ -97,6 +97,9 @@ export default {
             name: this?.name
           })
         },
+        exportOptions: {
+          url: vm.url
+        },
         moreCreates: {
           callback: (item) => {
             this.$router.push({
@@ -127,6 +130,7 @@ export default {
   methods: {
     changeMoreCreates() {
       this.tableConfig.url = this.url
+      this.headerActions.exportOptions.url = this.url
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
       })
