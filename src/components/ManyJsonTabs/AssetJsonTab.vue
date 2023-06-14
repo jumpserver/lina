@@ -36,6 +36,20 @@ export default {
             'type', 'is_active'
           ],
           columnsMeta: {
+            name: {
+              label: this.$t('assets.Asset'),
+              formatter: (row) => {
+                const to = {
+                  name: 'AssetDetail',
+                  params: { id: row.id }
+                }
+                if (this.$hasPerm('assets.view_asset')) {
+                  return <router-link to={to} class='text-link'>{row.name}</router-link>
+                } else {
+                  return <span>{row.name}</span>
+                }
+              }
+            },
             actions: {
               has: false
             }
