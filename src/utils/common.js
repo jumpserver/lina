@@ -395,4 +395,9 @@ export const copy = _.throttle(function(value) {
   document.body.removeChild(inputDom)
 }, 1400)
 
+export function getQueryFromPath(path) {
+  const url = new URL(path, location.origin)
+  return Object.fromEntries(url.searchParams)
+}
+
 export { BASE_URL }

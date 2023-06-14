@@ -27,19 +27,19 @@ async function changeOrg(org, reload = true, vm = null) {
   if (index !== -1) {
     path = path.slice(0, index)
   }
-  const idRegex = /\/(-?\d+(\.\d+)?|[a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12})\//
-  const i = path.search(idRegex)
-  if (i !== -1) {
-    path = path.slice(0, i + 1)
-  }
+  const idRegex = /\/?(-?\d+(\.\d+)?|([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}))\/?/
+  path = path.replace(idRegex, '')
+
   if (vm) {
     const result = vm.$router.resolve({ path })
+    console.log('path: ', path)
     if (result.resolved.name === '404') {
       path = '/'
     }
+    console.log('route', result)
   }
-  location.hash = '#' + path
-  setTimeout(() => location.reload(), 400)
+  // location.hash = '#' + path
+  // setTimeout(() => location.reload(), 400)
 }
 
 function hasCurrentOrgPermission() {
