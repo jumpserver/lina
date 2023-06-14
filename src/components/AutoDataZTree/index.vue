@@ -2,13 +2,13 @@
   <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
     <slot v-if="treeSetting.hasRightMenu" slot="rMenu">
       <li v-if="treeSetting.showCreate" id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
-        <i class="fa fa-plus-square-o" />  {{ this.$t('tree.CreateNode') }}
+        <i class="fa fa-plus-square-o" /> {{ this.$t('tree.CreateNode') }}
       </li>
       <li v-if="treeSetting.showUpdate" id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
-        <i class="fa fa-pencil-square-o" />  {{ this.$t('tree.RenameNode') }}
+        <i class="fa fa-pencil-square-o" /> {{ this.$t('tree.RenameNode') }}
       </li>
       <li v-if="treeSetting.showDelete" id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
-        <i class="fa fa-minus-square" />  {{ this.$t('tree.DeleteNode') }}
+        <i class="fa fa-minus-square" /> {{ this.$t('tree.DeleteNode') }}
       </li>
       <slot name="rMenu" />
     </slot>
@@ -42,7 +42,9 @@ export default {
         customTreeHeaderName: this.$t('assets.AssetTree'),
         async: {
           enable: true,
-          url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
+          url: (process.env.VUE_APP_ENV === 'production')
+            ? (`${this.setting.treeUrl}`)
+            : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
@@ -206,7 +208,9 @@ export default {
         this.showRMenu('root', event.clientX, event.clientY)
       } else if (treeNode && !treeNode.noR) {
         this.zTree.selectNode(treeNode)
-        this.currentNodeId = treeNode.meta.data.id
+        if (treeNode.meta?.data?.id) {
+          this.currentNodeId = treeNode.meta.data.id
+        }
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },
@@ -284,32 +288,32 @@ export default {
 </script>
 
 <style scoped>
-  .rmenu {
-    font-size: 12px;
-    padding: 0 16px;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #606266;
-    height: 24px;
-    line-height: 24px;
-    box-sizing: border-box;
-    cursor: pointer;
-  }
+.rmenu {
+  font-size: 12px;
+  padding: 0 16px;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #606266;
+  height: 24px;
+  line-height: 24px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
 
-  .rmenu > a:hover, .dropdown-menu > a:focus {
-    color: #262626;
-    text-decoration: none;
-    background-color: #f5f5f5;
-  }
+.rmenu > a:hover, .dropdown-menu > a:focus {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
 
-  .rmenu:hover {
-    background-color: #f5f7fa;
-  }
+.rmenu:hover {
+  background-color: #f5f7fa;
+}
 
-  .data-z-tree >>> .fa {
-    width: 10px;
-    margin-right: 3px;
-  }
+.data-z-tree >>> .fa {
+  width: 10px;
+  margin-right: 3px;
+}
 </style>
