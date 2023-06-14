@@ -53,46 +53,6 @@ export default [
     ]
   },
   {
-    path: 'login-asset-acls',
-    component: empty,
-    redirect: '',
-    meta: {
-      title: i18n.t('route.AssetAclList'),
-      licenseRequired: true,
-      app: 'acls',
-      resource: 'loginassetacl'
-    },
-    children: [
-      {
-        path: '',
-        name: 'AssetAclList',
-        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
-        meta: { title: i18n.t('route.AssetAclList') }
-      },
-      {
-        path: 'create',
-        name: 'AssetAclCreate',
-        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.AssetAclCreate') }
-      },
-      {
-        path: ':id',
-        name: 'AssetAclDetail',
-        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
-        hidden: true,
-        meta: { title: i18n.t('route.AssetAclDetail') }
-      },
-      {
-        path: ':id/update',
-        name: 'AssetAclUpdate',
-        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.AssetAclUpdate') }
-      }
-    ]
-  },
-  {
     path: 'cmd-acls',
     component: empty,
     redirect: '',
@@ -131,6 +91,46 @@ export default [
         component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
         hidden: true,
         meta: { title: i18n.t('route.CommandFilterAclUpdate') }
+      }
+    ]
+  },
+  {
+    path: 'login-asset-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.AssetAclList'),
+      licenseRequired: true,
+      app: 'acls',
+      resource: 'loginassetacl'
+    },
+    children: [
+      {
+        path: '',
+        name: 'AssetAclList',
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
+        meta: { title: i18n.t('route.AssetAclList') }
+      },
+      {
+        path: 'create',
+        name: 'AssetAclCreate',
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclCreate') }
+      },
+      {
+        path: ':id',
+        name: 'AssetAclDetail',
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'AssetAclUpdate',
+        component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclUpdate') }
       }
     ]
   },
