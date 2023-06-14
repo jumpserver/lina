@@ -77,5 +77,10 @@ export default {
 </script>
 
 <style scoped>
-
+::v-deep .el-select-dropdown .el-select-dropdown__item {
+  max-width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>
