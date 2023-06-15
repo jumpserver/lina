@@ -281,3 +281,10 @@ input[type=file] {
     padding-top: 3px!important;
   }
 }
+
+.sync-setting-org.el-select-dropdown .el-select-dropdown__item {
+  max-width: 600px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
