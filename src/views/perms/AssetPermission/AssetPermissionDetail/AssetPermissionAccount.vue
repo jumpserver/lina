@@ -5,10 +5,11 @@
         ref="ListTable"
         :asset="object"
         :has-clone="false"
-        :has-column-actions="false"
         :has-export="false"
         :has-import="false"
+        :has-delete-action="false"
         :has-left-actions="false"
+        :has-column-actions="false"
         :url="url"
       />
     </el-col>
@@ -43,8 +44,10 @@ export default {
     }
   },
   data() {
+    const id = this.object.id
+    const url = id ? `/api/v1/perms/asset-permissions/${id}/accounts/` : ''
     return {
-      url: `/api/v1/perms/asset-permissions/${this.object.id}/accounts/`,
+      url: url,
       relation: {
         disabled: false,
         username: ''

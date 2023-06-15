@@ -193,7 +193,7 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
-      this.fieldsMeta.password.el.userIsOrgAdmin = user.role === 'Admin' || user.org_roles.indexOf('Admin') !== -1
+      this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
       if (this.$route.query.clone_from) {
         this.user.groups = []
       }

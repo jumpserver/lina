@@ -357,13 +357,19 @@ export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
  * @param  {String} fileName
  */
 export function downloadText(content, filename) {
-  const a = document.createElement('a')
   const blob = new Blob([content])
   const url = window.URL.createObjectURL(blob)
-  a.href = url
-  a.download = filename
+  download(url, filename)
+}
+
+export function download(downloadUrl, filename) {
+  const a = document.createElement('a')
+  a.href = downloadUrl
+  if (filename) {
+    a.download = filename
+  }
   a.click()
-  window.URL.revokeObjectURL(url)
+  window.URL.revokeObjectURL(downloadUrl)
 }
 
 export function diffObject(object, base) {
@@ -388,5 +394,10 @@ export const copy = _.throttle(function(value) {
   })
   document.body.removeChild(inputDom)
 }, 1400)
+
+export function getQueryFromPath(path) {
+  const url = new URL(path, location.origin)
+  return Object.fromEntries(url.searchParams)
+}
 
 export { BASE_URL }

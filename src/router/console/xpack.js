@@ -36,13 +36,12 @@ export default [
         children: [
           {
             path: '',
-            component: () => import('@/views/assets/Cloud/'),
             name: 'AccountList',
             hidden: true,
+            redirect: '/console/assets/cloud',
             meta: {
               title: i18n.t('xpack.Cloud.AccountList'),
-              permissions: ['xpack.view_account'],
-              hidden: true
+              permissions: ['xpack.view_account']
             }
           },
           {

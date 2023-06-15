@@ -22,6 +22,7 @@ export default {
           this.$t('common.Basic'),
           [
             'SECURITY_COMMAND_EXECUTION',
+            'SECURITY_COMMAND_BLACKLIST',
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
             'SECURITY_MAX_IDLE_TIME',
             'SECURITY_WATERMARK_ENABLED',

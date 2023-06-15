@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
+      <AutoDetailCard :url="url" :object="object" :fields="detailFields" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -22,7 +22,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -50,11 +51,22 @@ export default {
         }
       ],
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
-      excludes: ['privileged', 'secret', 'passphrase', 'spec_info']
+      excludes: ['privileged', 'secret', 'passphrase', 'spec_info'],
+      detailFields: [
+        'id', 'name', 'username', 'secret_type', 'created_by', 'comment',
+        {
+          key: this.$t('accounts.SuFrom'),
+          formatter: () => {
+            const su_from = this.object.su_from
+            if (!su_from) return <span>-</span>
+            return <span>{su_from.name}({su_from.username})</span>
+          }
+        },
+        'is_active', 'date_created', 'date_updated'
+      ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

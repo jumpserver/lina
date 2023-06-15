@@ -68,12 +68,14 @@ export default {
       path: '/console/perms',
       component: empty,
       name: 'Perms',
+      alwaysShow: false,
       meta: {
         title: i18n.t('route.Perms'),
         icon: 'permission'
       },
       children: PermsRoute
     }
+
   ]
 }
 

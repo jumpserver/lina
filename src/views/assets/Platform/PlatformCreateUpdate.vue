@@ -171,6 +171,9 @@ export default {
   .el-cascader {
     width: 100%;
   }
+  .el-select {
+    width: 100%;
+  }
 }
 
 >>> .itemMethodKey.el-form-item {

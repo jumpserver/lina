@@ -5,7 +5,9 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
-import { cleanFormValueForHandleUserAssetAccount } from '../common'
+import { userJSONSelectMeta } from '@/views/users/const'
+import { assetJSONSelectMeta } from '@/views/assets/const'
+import { Select2 } from '@/components/FormFields'
 
 export default {
   name: 'AclCreateUpdate',
@@ -14,28 +16,35 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: {
+      },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('acl.users'), ['users']],
-        [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.account'), ['accounts']],
-        [this.$t('acl.action'), ['action', 'reviewers']],
+        [this.$t('users.Users'), ['users']],
+        [this.$t('terminal.ConnectMethod'), ['connect_methods']],
+        [this.$t('common.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
           rules: [rules.Required]
         },
-        assets: {
-          fields: ['name_group', 'address_group']
-        },
-        users: {
-          fields: ['username_group'],
-          fieldsMeta: {}
-        },
-        accounts: {
-          fields: ['username_group']
+        assets: assetJSONSelectMeta(this),
+        users: userJSONSelectMeta(this, true),
+        connect_methods: {
+          component: Select2,
+          label: this.$t('terminal.ConnectMethod'),
+          el: {
+            url: '/api/v1/terminal/components/connect-methods/?flat=1&limit=10&os=all',
+            ajax: {
+              processResults: (data) => {
+                return {
+                  results: data,
+                  more: false
+                }
+              }
+            }
+          }
         },
         reviewers: {
           hidden: (item) => item.action !== 'review',
@@ -51,8 +60,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-asset-acls/',
-      cleanFormValue: cleanFormValueForHandleUserAssetAccount
+      url: '/api/v1/acls/connect-method-acls/'
     }
   },
   methods: {}

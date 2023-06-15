@@ -82,11 +82,13 @@ export default {
       return this.$refs.dataTable.$refs.dataTable
     },
     iHeaderActions() {
+      // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
+      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
       const actions = {
-        canCreate: { action: 'add', checkRoot: true },
+        canCreate: { action: 'add', checkRoot: checkRoot },
         canBulkDelete: { action: 'delete', checkRoot: false },
-        canBulkUpdate: { action: 'change', checkRoot: true },
-        hasImport: { action: 'add|change', checkRoot: true },
+        canBulkUpdate: { action: 'change', checkRoot: checkRoot },
+        hasImport: { action: 'add|change', checkRoot: checkRoot },
         hasExport: { action: 'view', checkRoot: false }
       }
       const defaults = {}
@@ -106,13 +108,14 @@ export default {
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
+      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
       const formatterArgs = {
         'columnsMeta.actions.formatterArgs.canUpdate': () => {
-          return this.hasActionPerm('change') && !this.currentOrgIsRoot
+          return this.hasActionPerm('change') && (!checkRoot || !this.currentOrgIsRoot)
         },
         'columnsMeta.actions.formatterArgs.canDelete': 'delete',
         'columnsMeta.actions.formatterArgs.canClone': () => {
-          return this.hasActionPerm('add') && !this.currentOrgIsRoot
+          return this.hasActionPerm('add') && (!checkRoot || !this.currentOrgIsRoot)
         },
         'columnsMeta.name.formatterArgs.can': 'view'
       }

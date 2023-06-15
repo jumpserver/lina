@@ -4,7 +4,7 @@
 
 <script>
 import BaseSMS from './Base'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, PhoneInput } from '@/components/FormFields'
 
 export default {
   name: 'SMSTencent',
@@ -62,6 +62,9 @@ export default {
         },
         TENCENT_SECRET_KEY: {
           component: UpdateToken
+        },
+        SMS_TEST_PHONE: {
+          component: PhoneInput
         }
       },
       submitMethod() {

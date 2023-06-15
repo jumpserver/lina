@@ -1,8 +1,12 @@
 {
   "": "",
   "accounts": {
+    "SuFrom": "Su from",
     "GenerateSuccessMsg": "Accounts generated successfully",
     "GenerateAccounts": "Regenerate accounts",
+    "AccountTemplateUpdateSecretHelpText": "The account list displays accounts created through templates. When updating ciphertext, the ciphertext of the account created through the template will be updated.",
+    "Accounts": "Accounts",
+    "SelectAccount": "Select account",
     "UpdateSecret": "Update secret",
     "AccountPolicy": "Account policy",
     "BulkCreateStrategy": "When creating accounts that do not meet the requirements, such as key type non-compliance and unique key constraints, the above policies can be selected.",
@@ -112,6 +116,10 @@
     "AddAccountResult": "Add account result"
   },
   "acl": {
+    "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
+    "AssetLoginACLHelpMsg": "It can determine whether the user can access the asset based on the user's login IP and time period.",
+    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period.",
+    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited.",
     "IgnoreCase": "Ignore case",
     "Content": "Content",
     "CommandFilterACL": "Command filter",
@@ -145,8 +153,10 @@
     "users": "User",
     "Rules": "Rule",
     "Action": "Action",
-    "ip_group_help_text": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
-    "apply_login_account": "Apply login account"
+    "ipGroupHelpText": "* means match all. Example: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
+    "apply_login_account": "Apply login account",
+    "UserIP": "Login IP",
+    "LoginIP": "Login IP"
   },
   "applications": {
     "": "",
@@ -354,7 +364,7 @@
     "PasswordSelector": "Password Input Box Selector",
     "SubmitSelector": "Submit Button Selector",
     "PlatformProtocolConfig": "Platform protocol config",
-    "InheritPlatformConfig": "The account list displays accounts created through templates. When updating ciphertext, the ciphertext of the account created through the template will be updated.",
+    "InheritPlatformConfig": "Inherited from the platform configuration. If you need to change, please change the configuration in the platform.",
     "CollectHardwareInfo": "Enable collection of hardware information",
     "DomainEnabled": "Enable domain",
     "ProtocolsEnabled": "Enable protocol",
@@ -371,6 +381,7 @@
     "PushSystemUserNow": "Push system user now",
     "PushAllSystemUsersToAsset": "Push all system users to asset",
     "QuickUpdate": "Quick update",
+    "QuickAdd": "Quick add",
     "Connectivity": "Reachable",
     "Unreachable": "Unreachable",
     "Unknown": "Unknown",
@@ -436,7 +447,11 @@
     "AssetTree": "Asset tree",
     "SSHPort": "SSH Port",
     "PrimaryProtocol": "The primary protocol, the most basic and commonly used protocol for assets, can only and must be set up with one.",
-    "Primary": "Primary"
+    "Primary": "Primary",
+    "CreateCustom": "Create Custom",
+    "CustomType": "Custom Type",
+    "CustomHelpMessage": "The assets of custom types require applet support. Please ensure that the corresponding applet is installed.",
+    "CustomFields": "Custom Fields"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -461,8 +476,8 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
-    "Generate": "Generate",
     "BatchProcessing": "Batch processing(select {Number} items)",
+    "Generate": "Generate",
     "ServerError": "Server Error",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",
@@ -531,7 +546,7 @@
     "NeedSpecifiedFile": "Required to upload the specified format file",
     "TestPortErrorMsg": "Port Error, please check",
     "Activate": "Activate",
-    "actionsTips": "Clipboard's copy and paste control only support RDP/VNC protocol.",
+    "actionsTips": "The effects of each permission vary, click the icon next to the permission to view.",
     "Active": "Active",
     "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",
@@ -733,7 +748,7 @@
     "noAnnouncement": "No announcement",
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format",
-    "time_period": "Time period",
+    "timePeriod": "Time period",
     "CronTab": {
       "newCron": "new cron",
       "timeExpression": "time expression",
@@ -811,7 +826,34 @@
     "Error": "Error",
     "Created": "Created",
     "Skipped": "Skipped",
-    "Updated": "Updated"
+    "Updated": "Updated",
+    "NotEqual": "Not Equal",
+    "Startswith": "Starts With",
+    "AttrName": "Attribute Name",
+    "SelectByAttr": "Select By Attribute",
+    "IPMatch": "IP Match",
+    "Regex": "Regex",
+    "AttrValue": "Attribute Value",
+    "Contains": "Contains",
+    "Match": "Match",
+    "Spec": "Specific",
+    "All": "All",
+    "Endswith": "Ends With",
+    "RelAnd": "And",
+    "Equal": "Equal",
+    "MatchIn": "In ...",
+    "RelNot": "Not",
+    "RelOr": "Or",
+    "Relation": "Relation",
+    "Email": "Email",
+    "SelectAttrs": "Select attrs",
+    "MatchResult": "Match results",
+    "MatchedCount": "Match count",
+    "IsActive": "Is active",
+    "LessEqualThan": "Less than or equal to",
+    "OtherRules": "Other rules",
+    "BelongTo": "Belong to",
+    "GreatEqualThan": "Greater than or equal to"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1048,6 +1090,7 @@
   },
   "perms": {
     "": "",
+    "AssetPermissionHelpMsg": "Asset permission allows you to authorize the assets to the users. Additionally, you can set some specific action permission.",
     "AccountsHelp": "All accounts: accounts exists on the asset; Specify accounts: specify the user name of the account under the asset；Manual input: username/password; Same account: The account username name same with login user",
     "AllAccounts": "All accounts",
     "AllAccountTip": "All accounts of the asset exists",
@@ -1330,7 +1373,16 @@
     "Execution": "Execution history",
     "AssignedTicketList": "Todo approval",
     "JobDetail": "Job detail",
-    "Clouds": "Cloud"
+    "Clouds": "Cloud",
+    "Acls": "Acls",
+    "UserLoginAclCreate": "Create user login acl",
+    "UserLoginAclUpdate": "Update user login acl",
+    "UserLoginAclList": "User login acl",
+    "UserLoginAclDetail": "User login acl detail",
+    "ConnectMethodAclDetail": "Connect method acl detail",
+    "ConnectMethodAclCreate": "Create connect method acl",
+    "ConnectMethodAclList": "Connect method acl",
+    "ConnectMethodAclUpdate": "Update connect method acl"
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -1347,9 +1399,12 @@
     "HostDeployment": "Remote host deployment",
     "TerminalStat": "CPU/MEM/DISK",
     "DatabasePort": "Database protocol port",
-    "BasePort": "listening port"
+    "BasePort": "listening port",
+    "Endpoint": "Endpoint",
+    "ConnectMethod": "Connect method"
   },
   "sessions": {
+    "DownloadFTPFileTip": "The current action is not recorded in the file, or the file size exceeds the threshold (100 MB by default), or is not saved to the corresponding storage",
     "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",
     "SetSuccess": "Set success",
@@ -1430,6 +1485,7 @@
     }
   },
   "setting": {
+    "Custom": "Custom",
     "CleanHelpText": " Regular cleanup tasks will be executed at 2 o'clock in the morning every day, and the cleaned data cannot be recovered",
     "Applets": "Applets",
     "EndpointListHelpMessage": "The service endpoint is the address (port) for the user to access the service. When the user connects to the asset, the service endpoint will be selected according to the endpoint rules and asset tags, and the connection will be established as the access entry to realize the distributed connection of assets.",
@@ -1478,7 +1534,7 @@
     "Ldap": "LDAP",
     "License": "License",
     "LicenseFile": "License file",
-    "ExpirationTimeout": "Expiration timeout",
+    "ExpirationTimeout": "Expiration timeout (second)",
     "PasswordCheckRule": "Password check rule",
     "Security": "Security",
     "SecuritySetting": "Security",
@@ -1734,6 +1790,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "AllMembers": "All members",
     "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
     "SetStatus": "Set status",
     "Set": "Set",

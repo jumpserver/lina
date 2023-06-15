@@ -2,7 +2,7 @@
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
       <AutoDetailCard v-bind="basicInfoConfig" />
-      <AutoDetailCard v-bind="specInfoConfig" />
+      <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
       <AutoDetailCard v-bind="customInfoConfig" />
       <AutoDetailCard v-bind="gatheredInfoConfig" />
     </el-col>
@@ -207,7 +207,14 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    isShowSpecInfo() {
+      const object = this.object
+      const type = object.type.value
+      const autofill = object.spec_info?.autofill
+      return !(type === 'website' && autofill === 'script')
+    }
+  },
   mounted() {
   },
   methods: {}

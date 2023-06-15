@@ -12,8 +12,8 @@
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <el-button v-if="showCancel" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm" :loading="loadingStatus" type="primary" @click="onConfirm">
+        <el-button v-if="showCancel && showButtons" @click="onCancel">{{ cancelTitle }}</el-button>
+        <el-button v-if="showConfirm && showButtons" :loading="loadingStatus" type="primary" @click="onConfirm">
           {{ confirmTitle }}
         </el-button>
       </slot>
@@ -29,16 +29,6 @@ export default {
       type: String,
       default: 'Title'
     },
-    showCancel: {
-      type: Boolean,
-      default: true
-    },
-    cancelTitle: {
-      type: String,
-      default() {
-        return this.$t('common.Cancel')
-      }
-    },
     top: {
       type: String,
       default: '3vh'
@@ -51,15 +41,29 @@ export default {
       type: Boolean,
       default: true
     },
-    loadingStatus: {
-      type: Boolean,
-      default: false
-    },
     confirmTitle: {
       type: String,
       default() {
         return this.$t('common.Confirm')
       }
+    },
+    showCancel: {
+      type: Boolean,
+      default: true
+    },
+    cancelTitle: {
+      type: String,
+      default() {
+        return this.$t('common.Cancel')
+      }
+    },
+    showButtons: {
+      type: Boolean,
+      default: true
+    },
+    loadingStatus: {
+      type: Boolean,
+      default: false
     },
     maxWidth: {
       type: String,
@@ -89,6 +93,10 @@ export default {
   .dialog >>> .el-dialog {
     border-radius: 0.3em;
     max-width: 1500px;
+
+    .el-icon-circle-check {
+      display: none;
+    }
 
     &__header {
       box-sizing: border-box;

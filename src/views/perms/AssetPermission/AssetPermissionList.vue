@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page :help-message="helpMsg" v-bind="$attrs">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -29,7 +29,9 @@ export default {
     PermBulkUpdateDialog
   },
   data() {
+    const vm = this
     return {
+      helpMsg: this.$t('perms.AssetPermissionHelpMsg'),
       treeSetting: {
         showMenu: false,
         showAssets: true,
@@ -60,9 +62,12 @@ export default {
           action: {
             label: this.$t('common.Action'),
             formatter: function(row) {
+              if (row.actions.length === 6) {
+                return vm.$t('common.All')
+              }
               return row.actions.map(item => {
-                return item.label
-              }).join(', ')
+                return item.label.replace(/ \([^)]*\)/, '')
+              }).join(',')
             }
           },
           is_expired: {

@@ -15,12 +15,12 @@ export const platformFieldsMeta = (vm) => {
       },
       fields: [
         'ansible_enabled', 'ansible_config',
-        'ping_enabled', 'ping_method',
-        'gather_facts_enabled', 'gather_facts_method',
+        'ping_enabled', 'ping_method', 'ping_params',
+        'gather_facts_enabled', 'gather_facts_method', 'gather_facts_params',
         'change_secret_enabled', 'change_secret_method', 'change_secret_params',
         'push_account_enabled', 'push_account_method', 'push_account_params',
-        'verify_account_enabled', 'verify_account_method',
-        'gather_accounts_enabled', 'gather_accounts_method'
+        'verify_account_enabled', 'verify_account_method', 'verify_account_params',
+        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params'
       ],
       fieldsMeta: {
         ansible_config: {
@@ -29,6 +29,9 @@ export const platformFieldsMeta = (vm) => {
         },
         gather_facts_enabled: {},
         ping_method: {},
+        ping_params: {
+          label: ''
+        },
         gather_facts_method: {},
         push_account_method: {},
         push_account_params: {
@@ -140,14 +143,14 @@ export const setAutomations = (vm) => {
     _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)
 
     // 设置 params 类型字段的组件和组件参数
-    if (needSettingParamsFields.includes(item)) {
-      // 设置 enableParams label
-      _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
-      // 设置 enableParams className
-      _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'itemParamsKey')
-      _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
-      _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
-    }
+    // if (needSettingParamsFields.includes(item)) {
+    // 设置 enableParams label
+    _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
+    // 设置 enableParams className
+    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'itemParamsKey')
+    _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
+    _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
+    // }
   }
 }
 

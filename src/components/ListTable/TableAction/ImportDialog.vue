@@ -213,7 +213,7 @@ export default {
       return this.url.indexOf('?') === -1 ? `${this.url}?${query}` : `${this.url}&${query}`
     },
     catchError(err) {
-      console.log(err)
+      this.$log.error(err)
     },
     onSuccess(msg) {
       this.errorMsg = ''

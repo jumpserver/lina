@@ -47,7 +47,7 @@ export default {
         },
         columnsExclude: [
           'password', 'password_strategy', 'public_key',
-          'is_otp_secret_key_bound', 'mfa_enabled',
+          'is_otp_secret_key_bound', 'mfa_enabled', 'is_superuser',
           'mfa_force_enabled', 'is_service_account', 'avatar_url'
         ],
         columnsShow: {
@@ -60,6 +60,11 @@ export default {
         columnsMeta: {
           source: {
             width: '120px'
+          },
+          username: {
+            formatter: (row) => {
+              return row['username'].replace(' ', '*')
+            }
           },
           system_roles: {
             width: '100px',
@@ -80,6 +85,12 @@ export default {
             columnKey: 'org_roles',
             has: () => {
               return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
+            }
+          },
+          phone: {
+            formatter: (row) => {
+              const phoneObj = row.phone
+              return <div>{phoneObj?.code}{phoneObj?.phone}</div>
             }
           },
           login_blocked: {

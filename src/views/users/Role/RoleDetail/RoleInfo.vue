@@ -97,7 +97,7 @@ export default {
         'acls.loginacl': ['users.view_user'],
         'acls.loginassetacl': ['users.view_user'],
         'acls.commandfilteracl': ['users.view_user'],
-        'assets.view_asset': ['assets.view_node', 'assets.view_platform'],
+        'assets.view_asset': ['assets.view_platform'],
         'assets.view_node': ['assets.view_asset', 'assets.view_platform'],
         'acls.commandgroup': ['acls.view_commandfilteracl'],
         'assets.gateway': ['assets.view_domain'],

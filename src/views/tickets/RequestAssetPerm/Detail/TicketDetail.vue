@@ -20,7 +20,13 @@
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('perms.Account')" :rules="isRequired">
-            <AccountFormatter v-model="requestForm.accounts" :show-add-template="false" style="width: 50% !important" />
+            <AccountFormatter
+              v-model="requestForm.accounts"
+              :nodes="requestForm.nodes"
+              :assets="requestForm.assets"
+              :show-add-template="false"
+              style="width: 50% !important"
+            />
           </el-form-item>
           <el-form-item :label="$tc('common.DateStart')" required>
             <el-date-picker

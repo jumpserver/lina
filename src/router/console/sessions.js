@@ -2,7 +2,6 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common'
 
-// Todo: 放到系统设置中
 export default [
   {
     path: 'sessions',

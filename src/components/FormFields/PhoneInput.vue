@@ -30,7 +30,7 @@ export default {
   props: {
     value: {
       type: [Object, String],
-      default: () => ({ 'code': '', 'phone': '' })
+      default: () => ({ 'code': '+86', 'phone': '' })
     }
   },
   data() {
@@ -57,7 +57,7 @@ export default {
       if (!this.rawValue.phone) {
         return ''
       }
-      return `${this.rawValue.code} ${this.rawValue.phone}`
+      return `${this.rawValue.code}${this.rawValue.phone}`
     }
   },
   mounted() {

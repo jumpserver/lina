@@ -1,9 +1,10 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -13,15 +14,24 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
-        columnsExclude: ['users'],
         columnsShow: {
-          default: ['name', 'users_amount', 'comment', 'actions'],
+          default: ['name', 'users', 'comment', 'actions'],
           min: ['name', 'action']
         },
         columnsMeta: {
           users_amount: {
             label: this.$t('users.Users'),
             width: '120px'
+          },
+          users: {
+            label: this.$t('perms.User'),
+            width: '160px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'GroupUser'
+              }
+            }
           }
         },
         permissions: {

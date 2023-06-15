@@ -1,10 +1,8 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
-import {
-  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
-} from '@/utils/auth'
+import { getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal } from '@/utils/auth'
+import orgUtil, { GLOBAL_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
-import orgUtil, { SYSTEM_ORG_ID } from '@/utils/org'
 import store from '@/store'
 
 const _ = require('lodash')
@@ -43,6 +41,7 @@ const mutations = {
     state.profile = profile
     state.username = profile.username
     state.perms = profile.perms
+    state.isSuperAdmin = profile['is_superuser']
     state.consoleOrgs = profile['console_orgs']
     state.workbenchOrgs = profile['workbench_orgs']
     state.noRootWorkbenchOrgs = profile['workbench_orgs'].filter(item => {
@@ -70,7 +69,9 @@ const mutations = {
     state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
-    if (state.currentOrg?.id !== SYSTEM_ORG_ID) {
+    // 系统组织和全局组织不设置成 Pre org
+    const notSetToPre = [SYSTEM_ORG_ID, GLOBAL_ORG_ID]
+    if (!notSetToPre.includes(state.currentOrg?.id)) {
       state.preOrg = state.currentOrg
       setPreOrgLocal(state.username, state.currentOrg)
     }
@@ -149,6 +150,17 @@ const actions = {
     }
     commit('SET_CURRENT_ORG', preOrg)
   },
+  enterGlobalOrg({ commit }) {
+    const globalOrg = { id: orgUtil.GLOBAL_ORG_ID, name: 'Global' }
+    commit('SET_CURRENT_ORG', globalOrg)
+  },
+  leaveGlobalOrg({ commit }) {
+    const preOrg = store.state.users.preOrg
+    if (!preOrg) {
+      return
+    }
+    commit('SET_CURRENT_ORG', preOrg)
+  },
   setPreOrg({ commit }, data) {
     commit('SET_PRE_ORG', data)
   },
@@ -170,7 +182,8 @@ const actions = {
       console: state.consoleOrgs,
       audit: state.auditOrgs,
       workbench: state.workbenchOrgs,
-      tickets: state.consoleOrgs
+      tickets: state.consoleOrgs,
+      settings: state.consoleOrgs
     }
     const usingOrgs = mapper[viewName] || state.consoleOrgs
     Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)

@@ -59,7 +59,8 @@ export default {
         hasTree: true,
         columnsExclude: ['spec_info'],
         columnShow: {
-          min: ['name', 'address', 'accounts']
+          min: ['name', 'address', 'accounts'],
+          default: ['name', 'address', 'accounts', 'actions']
         },
         columnsMeta: {
           name: {

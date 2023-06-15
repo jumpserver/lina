@@ -34,13 +34,13 @@ export default {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_ORG_ID', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
+        fields: ['AUTH_LDAP_SYNC_ORG_IDS', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
         fieldsMeta: {
-          AUTH_LDAP_SYNC_ORG_ID: {
+          AUTH_LDAP_SYNC_ORG_IDS: {
             component: Select2,
             rules: [Required],
             el: {
-              multiple: false,
+              multiple: true,
               ajax: {
                 url: '/api/v1/orgs/orgs/',
                 transformOption: (item) => {
@@ -77,5 +77,10 @@ export default {
 </script>
 
 <style scoped>
-
+::v-deep .el-select-dropdown .el-select-dropdown__item {
+  max-width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>

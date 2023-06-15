@@ -10,13 +10,15 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Automation from './Automation.vue'
+import Assets from './Assets.vue'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
     Detail,
-    Automation
+    Automation,
+    Assets
   },
   data() {
     return {
@@ -29,6 +31,10 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('assets.Asset'),
+            name: 'Assets'
           },
           {
             title: this.$t('common.Automations'),

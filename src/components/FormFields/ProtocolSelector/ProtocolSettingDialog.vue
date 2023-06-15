@@ -10,7 +10,7 @@
     width="70%"
     v-on="$listeners"
   >
-    <el-alert v-if="disabled && platformDetail" type="success">
+    <el-alert v-if="disabled && platformDetail" type="success" style="margin-bottom: 10px">
       {{ $t('assets.InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
         {{ $t('common.View') }}
@@ -214,7 +214,6 @@ export default {
 
 .link-more {
   font-size: 10px;
-  margin-left: 10px;
   border-bottom: solid 1px;
   color: inherit;
 }

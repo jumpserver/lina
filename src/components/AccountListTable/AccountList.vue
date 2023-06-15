@@ -98,6 +98,10 @@ export default {
       type: Boolean,
       default: true
     },
+    hasDeleteAction: {
+      type: Boolean,
+      default: true
+    },
     columnsMeta: {
       type: Object,
       default: () => {
@@ -234,18 +238,6 @@ export default {
                       { account_ids: [row.id] }
                     ).then(() => {
                       this.$message.success(this.$tc('common.ClearSuccessMsg'))
-                    })
-                  }
-                },
-                {
-                  name: 'Delete',
-                  title: this.$t('common.Delete'),
-                  can: this.$hasPerm('accounts.delete_account'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                      this.$refs.ListTable.reloadTable()
                     })
                   }
                 },
@@ -394,6 +386,22 @@ export default {
       for (const item of this.otherActions) {
         actionColumn.formatterArgs.extraActions.push(item)
       }
+    }
+    if (this.hasDeleteAction) {
+      this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
+        {
+          name: 'Delete',
+          title: this.$t('common.Delete'),
+          can: this.$hasPerm('accounts.delete_account'),
+          type: 'primary',
+          callback: ({ row }) => {
+            this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
+              this.$message.success(this.$tc('common.deleteSuccessMsg'))
+              this.$refs.ListTable.reloadTable()
+            })
+          }
+        }
+      )
     }
   },
   methods: {

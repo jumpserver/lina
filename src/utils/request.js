@@ -14,7 +14,7 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 60 * 1000 // request timeout
+  timeout: 2 * 60 * 1000 // request timeout
 })
 
 function beforeRequestAddToken(config) {
@@ -78,7 +78,11 @@ function ifUnauthorized({ response, error }) {
 
 function ifBadRequest({ response, error }) {
   if (response.status === 400) {
-    error.message = i18n.t('common.BadRequestErrorMsg')
+    if (response.data?.detail) {
+      error.message = response.data.detail
+    } else {
+      error.message = i18n.t('common.BadRequestErrorMsg')
+    }
   }
   if (response.status === 403) {
     error.message = i18n.t('common.BadRoleErrorMsg')

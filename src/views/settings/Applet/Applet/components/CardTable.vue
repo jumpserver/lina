@@ -186,6 +186,7 @@ export default {
 <style lang="scss" scoped>
 .my-card {
   margin: 0 0 20px 0;
+  position: relative;
 }
 
 .my-divider {

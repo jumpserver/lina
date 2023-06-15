@@ -9,11 +9,13 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import GroupInfo from './GroupInfo'
+import GroupUser from './GroupUser'
 
 export default {
   components: {
     GenericDetailPage,
-    GroupInfo
+    GroupInfo,
+    GroupUser
   },
   data() {
     return {
@@ -25,6 +27,10 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'GroupInfo'
+          },
+          {
+            title: this.$t('route.UserList'),
+            name: 'GroupUser'
           }
         ]
       }

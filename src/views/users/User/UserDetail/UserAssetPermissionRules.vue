@@ -1,5 +1,9 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <el-row :gutter="10">
+    <el-col :span="18">
+      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -120,6 +124,8 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'AssetPermissionUpdate',
+              hasDelete: false,
+              hasClone: false,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/asset-permissions/${id}/`

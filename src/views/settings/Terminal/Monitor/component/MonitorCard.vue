@@ -93,7 +93,8 @@ export default {
         core: 'Core',
         celery: 'Celery',
         magnus: 'Magnus',
-        tinker: 'Tinker'
+        tinker: 'Tinker',
+        video_worker: 'Video-Worker'
       }
       return nameMapper[this.componentMetric.type]
     }

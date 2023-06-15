@@ -1,18 +1,18 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :help-message="helpText" :table-config="tableConfig" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericListPage from '@/layout/components/GenericListPage/index.vue'
 
 export default {
-  components: {
-    GenericListPage
-  },
+  name: 'ConnectMethodListAcl',
+  components: { GenericListPage },
   data() {
     return {
+      helpText: this.$t('acl.ConnectMethodACLHelpMsg'),
       tableConfig: {
-        url: '/api/v1/acls/login-asset-acls/',
+        url: '/api/v1/acls/connect-method-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
@@ -21,9 +21,7 @@ export default {
           ]
         }
       },
-      updateRoute: 'AssetAclUpdate',
       headerActions: {
-        createRoute: 'AssetAclCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false
@@ -33,6 +31,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

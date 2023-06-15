@@ -35,8 +35,8 @@
           <Logo v-if="showLogo" :collapse="false" />
         </div>
       </li>
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 21px; vertical-align: middle;">
-        <Organization class="organization" />
+      <li v-if="orgsShow" class="left-item" style="margin-left: 21px; vertical-align: middle;">
+        <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
   </div>
@@ -80,14 +80,17 @@ export default {
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
+    },
+    orgsDisabled() {
+      return this.$route.meta?.disableOrgsChange === true
+    },
+    orgsShow() {
+      return (this.$route.meta?.showOrganization !== false) && this.$hasLicense()
     }
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
-    },
-    showOrganize() {
-      return (this.$route.meta?.showOrganization !== false) && this.$hasLicense()
     }
   }
 }

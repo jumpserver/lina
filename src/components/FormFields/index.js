@@ -15,6 +15,7 @@ import UploadSecret from './UploadSecret'
 import WeekCronSelect from './WeekCronSelect'
 import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
+import JSONManyToManySelect from './JSONManyToManySelect/index.vue'
 
 export default {
   Text,
@@ -33,7 +34,8 @@ export default {
   UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker
+  DatetimeRangePicker,
+  JSONManyToManySelect
 }
 
 export {
@@ -53,5 +55,6 @@ export {
   UploadSecret,
   WeekCronSelect,
   NestedObjectSelect2,
-  DatetimeRangePicker
+  DatetimeRangePicker,
+  JSONManyToManySelect
 }
