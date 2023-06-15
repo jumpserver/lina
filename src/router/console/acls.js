@@ -38,7 +38,7 @@ export default [
         component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
         hidden: true,
         meta: {
-          title: i18n.t('route.AssetAclDetail'),
+          title: i18n.t('route.UserLoginAclDetail'),
           app: 'acls',
           resource: 'loginacl'
         }
@@ -219,7 +219,7 @@ export default [
         name: 'ConnectMethodAclDetail',
         component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclDetail/index'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetAclDetail') }
+        meta: { title: i18n.t('route.ConnectMethodAclDetail') }
       },
       {
         path: ':id/update',

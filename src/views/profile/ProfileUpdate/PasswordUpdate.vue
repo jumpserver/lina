@@ -45,7 +45,10 @@ export default {
         new_password: {
           label: this.$t('users.NewPassword'),
           rules: [rules.RequiredChange],
-          component: UserPassword
+          component: UserPassword,
+          el: {
+            userIsOrgAdmin: false
+          }
         },
         new_password_again: {
           label: this.$t('users.ConfirmPassword'),
@@ -56,6 +59,9 @@ export default {
         path: '/'
       }
     }
+  },
+  mounted() {
+    this.fieldsMeta.new_password.el.userIsOrgAdmin = this.object['is_org_admin']
   },
   methods: {
     submitMethod() {
