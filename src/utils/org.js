@@ -35,7 +35,10 @@ async function changeOrg(org, reload = true, vm = null) {
   }
   // 替换 Path 中的 UUID
   const idRegex = /\/?([a-fA-F0-9]{8}-(?:[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12})|(-?\d+(\.\d+)?)\/?/
-  path = path.replace(idRegex, '')
+  const i = path.search(idRegex)
+  if (i !== -1) {
+    path = path.slice(0, i + 1)
+  }
 
   // 替换 Query 中的 UUID
   const newQuery = {}

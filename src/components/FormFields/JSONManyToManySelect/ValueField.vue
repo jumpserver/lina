@@ -54,9 +54,9 @@ export default {
       this.$emit('input', value)
     },
     setTypeAndValue() {
-      this.loading = false
+      this.loading = true
       this.type = this.getType()
-      this.$log.debug('ValueField: Type: ', this.type, 'Value: ', this.value)
+      this.$log.debug('ValueField: Type: ', this.type, 'Value: ', this.value, 'attr: ', this.attr)
       if (['select', 'array'].includes(this.type) && typeof this.value === 'string') {
         const value = this.value ? this.value.split(',') : []
         this.handleInput(value)
