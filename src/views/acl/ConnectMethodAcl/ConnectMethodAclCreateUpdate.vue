@@ -30,7 +30,7 @@ export default {
           rules: [rules.Required]
         },
         assets: assetJSONSelectMeta(this),
-        users: userJSONSelectMeta(this),
+        users: userJSONSelectMeta(this, true),
         connect_methods: {
           component: Select2,
           label: this.$t('terminal.ConnectMethod'),
