@@ -1375,6 +1375,8 @@
     "UserLoginAclList": "ユーザーログイン",
     "ConnectMethodAclCreate": "接続方式制御の作成",
     "ConnectMethodAclList": "接続方式",
+    "ConnectMethodAclDetail": "接続方式制御の詳細",
+    "UserLoginAclDetail": "ユーザーログイン制御の詳細",
     "ConnectMethodAclUpdate": "接続方式制御ルールの更新"
   },
   "rbac": {

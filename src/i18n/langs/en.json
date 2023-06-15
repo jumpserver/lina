@@ -1378,6 +1378,8 @@
     "UserLoginAclCreate": "Create user login acl",
     "UserLoginAclUpdate": "Update user login acl",
     "UserLoginAclList": "User login acl",
+    "UserLoginAclDetail": "User login acl detail",
+    "ConnectMethodAclDetail": "Connect method acl detail",
     "ConnectMethodAclCreate": "Create connect method acl",
     "ConnectMethodAclList": "Connect method acl",
     "ConnectMethodAclUpdate": "Update connect method acl"
