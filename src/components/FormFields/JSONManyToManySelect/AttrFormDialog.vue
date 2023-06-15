@@ -62,24 +62,13 @@ export default {
             }),
             on: {
               change: ([val], updateForm) => {
+                // 变化会影响 match 的选项
                 const attr = this.attrs.find(attr => attr.name === val)
                 if (!attr) return
-                this.formConfig.fields[2].el.attr = attr
-                const attrType = attr.type || 'str'
-                const matchSupports = typeMatchMapper[attrType]
-                attrMatchOptions.forEach((option) => {
-                  option.hidden = !matchSupports.includes(option.value)
-                })
-                let defaultValue = ''
-                if (['m2m', 'select'].includes(attrType)) {
-                  defaultValue = []
-                } else if (['bool'].includes(attrType)) {
-                  defaultValue = !!this.currentValue
-                } else {
-                  defaultValue = typeof this.currentValue === 'string' ? this.currentValue : ''
-                }
+                const matchSupports = vm.updateMatchOptions(attr)
+                const matchOption = matchSupports.find(item => item.value === vm.form.match) || matchSupports[0]
                 setTimeout(() => {
-                  updateForm({ match: matchSupports[0], value: defaultValue })
+                  updateForm({ match: matchOption.value })
                 }, 10)
               }
             }
@@ -91,14 +80,8 @@ export default {
             options: attrMatchOptions,
             on: {
               change: ([value], updateForm) => {
-                let defaultValue = ''
-                if (['in', 'ip_in', 'm2m'].includes(value)) {
-                  defaultValue = []
-                } else if (typeof vm.currentValue === 'string') {
-                  defaultValue = vm.currentValue
-                }
+                // 变化会影响 value 的选项
                 setTimeout(() => {
-                  updateForm({ value: defaultValue })
                   this.formConfig.fields[2].el.match = value
                 }, 10)
               }
@@ -126,9 +109,8 @@ export default {
     if (this.form.index === undefined || this.form.index === -1) {
       Object.assign(this.form, this.getDefaultAttrForm())
     }
-    this.formConfig.fields[2].el.attr = this.attrs.find(attr => attr.name === this.form.name)
-    this.formConfig.fields[2].el.match = this.form.match
-    this.$log.debug('Form config: ', this.formConfig)
+    this.updateMatchOptions()
+    this.$log.debug('Attr Form config: ', this.formConfig)
     this.loading = false
   },
   methods: {
@@ -148,6 +130,21 @@ export default {
     },
     onAttrDialogConfirm(form) {
       this.$emit('confirm', form)
+    },
+    updateMatchOptions(attr) {
+      if (!attr) {
+        attr = this.attrs.find(attr => attr.name === this.form.name)
+      }
+      if (!attr) return
+      const attrType = attr.type || 'str'
+      const matchSupports = typeMatchMapper[attrType]
+      attrMatchOptions.forEach((option) => {
+        option.hidden = !matchSupports.includes(option.value)
+      })
+      this.formConfig.fields[2].el.attr = attr
+      const supports = attrMatchOptions.filter(option => !option.hidden)
+      this.formConfig.fields[2].el.match = supports[0].value
+      return supports
     }
   }
 }
