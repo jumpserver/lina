@@ -65,8 +65,7 @@ export default {
                 // 变化会影响 match 的选项
                 const attr = this.attrs.find(attr => attr.name === val)
                 if (!attr) return
-                const matchSupports = vm.updateMatchOptions(attr)
-                const matchOption = matchSupports.find(item => item.value === vm.form.match) || matchSupports[0]
+                const matchOption = vm.updateMatchOptions(attr)
                 setTimeout(() => {
                   updateForm({ match: matchOption.value })
                 }, 10)
@@ -143,8 +142,9 @@ export default {
       })
       this.formConfig.fields[2].el.attr = attr
       const supports = attrMatchOptions.filter(option => !option.hidden)
-      this.formConfig.fields[2].el.match = supports[0].value
-      return supports
+      const matchOption = supports.find(item => item.value === this.form.match) || supports[0]
+      this.formConfig.fields[2].el.match = matchOption.value
+      return matchOption
     }
   }
 }
