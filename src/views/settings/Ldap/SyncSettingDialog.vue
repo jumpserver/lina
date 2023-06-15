@@ -40,6 +40,7 @@ export default {
             component: Select2,
             rules: [Required],
             el: {
+              popperClass: 'sync-setting-org',
               multiple: true,
               ajax: {
                 url: '/api/v1/orgs/orgs/',
@@ -77,10 +78,5 @@ export default {
 </script>
 
 <style scoped>
-::v-deep .el-select-dropdown .el-select-dropdown__item {
-  max-width: 600px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
+
 </style>
