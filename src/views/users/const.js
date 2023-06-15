@@ -1,6 +1,6 @@
 import { JSONManyToManySelect } from '@/components/FormFields'
 
-export const userJSONSelectMeta = (vm) => {
+export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
   return {
     component: JSONManyToManySelect,
     el: {
@@ -66,7 +66,8 @@ export const userJSONSelectMeta = (vm) => {
               }
             },
             displayField: 'display_name'
-          }
+          },
+          disabled: withoutOrgRole
         },
         {
           name: 'groups',

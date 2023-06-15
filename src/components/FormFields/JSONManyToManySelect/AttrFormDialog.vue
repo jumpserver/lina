@@ -54,7 +54,10 @@ export default {
             label: this.$t('common.AttrName'),
             type: 'select',
             options: this.attrs.map(attr => {
-              const disabled = this.attrsAdded.includes(attr.name) && this.form.name !== attr.name
+              let disabled = this.attrsAdded.includes(attr.name) && this.form.name !== attr.name
+              if (attr.disabled) {
+                disabled = true
+              }
               return { label: attr.label, value: attr.name, disabled: disabled }
             }),
             on: {

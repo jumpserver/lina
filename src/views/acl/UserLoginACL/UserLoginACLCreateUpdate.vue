@@ -38,7 +38,7 @@ export default {
         is_active: {
           type: 'checkbox'
         },
-        users: userJSONSelectMeta(this),
+        users: userJSONSelectMeta(this, true),
         reviewers: {
           el: {
             value: [],
