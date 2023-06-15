@@ -192,8 +192,8 @@ export default {
                   can: ({ row }) =>
                     this.$hasPerm('assets.test_assetconnectivity') &&
                     !this.$store.getters.currentOrgIsRoot &&
-                    row['auto_config'].ansible_enabled &&
-                    row['auto_config'].ping_enabled,
+                    row?.auto_config?.ansible_enabled &&
+                    row?.auto_config?.ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
                       this.GatewayVisible = true
