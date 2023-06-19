@@ -55,10 +55,10 @@ export default {
         password: {
           component: UserPassword,
           hidden: (formValue) => {
-            if (formValue.password_strategy === 'custom') {
+            if (formValue.password_strategy === 'custom' & formValue.source === 'local') {
               return false
             }
-            return !formValue.update_password || formValue.source !== 'local'
+            return !formValue.update_password
           },
           el: {
             required: false,
@@ -79,7 +79,7 @@ export default {
             }
           ],
           hidden: (formValue) => {
-            if (formValue.password_strategy === 'custom') {
+            if (formValue.password_strategy === 'custom' & formValue.source === 'local') {
               return false
             }
             return !formValue.update_password || !this.user.can_public_key_auth
