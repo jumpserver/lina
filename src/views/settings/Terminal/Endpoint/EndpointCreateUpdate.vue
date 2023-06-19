@@ -37,7 +37,7 @@ export default {
       ],
       fieldsMeta: {
         host: {
-          disabled: ({ row }) => row.id === '00000000-0000-0000-0000-000000000001'
+          disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
         },
         oracle_port_range: {
           disabled: true
@@ -47,6 +47,7 @@ export default {
     }
   },
   computed: {},
+  created() {},
   methods: {}
 }
 </script>
