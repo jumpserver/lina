@@ -1,6 +1,6 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
 import { getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal } from '@/utils/auth'
-import orgUtil, { GLOBAL_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
+import orgUtil from '@/utils/org'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
 import store from '@/store'
@@ -70,8 +70,7 @@ const mutations = {
   },
   SET_CURRENT_ORG(state, org) {
     // 系统组织和全局组织不设置成 Pre org
-    const notSetToPre = [SYSTEM_ORG_ID, GLOBAL_ORG_ID]
-    if (!notSetToPre.includes(state.currentOrg?.id)) {
+    if (!state.currentOrg?.autoEnter) {
       state.preOrg = state.currentOrg
       setPreOrgLocal(state.username, state.currentOrg)
     }
@@ -140,7 +139,11 @@ const actions = {
     commit('SET_CURRENT_ORG', data)
   },
   enterSettingOrg({ commit }) {
-    const systemOrg = { id: orgUtil.SYSTEM_ORG_ID, name: 'SystemSetting' }
+    const systemOrg = {
+      id: orgUtil.SYSTEM_ORG_ID,
+      name: 'SystemSetting',
+      autoEnter: true
+    }
     commit('SET_CURRENT_ORG', systemOrg)
   },
   leaveSettingOrg({ commit }) {
@@ -151,7 +154,11 @@ const actions = {
     commit('SET_CURRENT_ORG', preOrg)
   },
   enterGlobalOrg({ commit }) {
-    const globalOrg = { id: orgUtil.GLOBAL_ORG_ID, name: 'Global' }
+    const globalOrg = {
+      id: orgUtil.GLOBAL_ORG_ID,
+      name: 'Global',
+      autoEnter: true
+    }
     commit('SET_CURRENT_ORG', globalOrg)
   },
   leaveGlobalOrg({ commit }) {
