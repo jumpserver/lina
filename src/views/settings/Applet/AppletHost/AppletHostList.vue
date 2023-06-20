@@ -1,5 +1,10 @@
 <template>
-  <ListTable class="applet-host" v-bind="$data" />
+  <div>
+    <el-alert type="success">
+      {{ $t('terminal.AppletHostSelectHelpMessage') }}
+    </el-alert>
+    <ListTable class="applet-host" v-bind="$data" />
+  </div>
 </template>
 
 <script>

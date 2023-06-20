@@ -1381,6 +1381,7 @@
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
+    "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>",
     "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘",
