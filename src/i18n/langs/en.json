@@ -1394,6 +1394,7 @@
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
+    "AppletHostSelectHelpMessage": "When connecting assets, the selection of the applet host is random. If you want to assign a specific one, you can specify the label AppletHost:AppletHostName in the asset label",
     "AppletHosts": "Remote hosts",
     "uploadZipTips": "Please upload zip file",
     "HostDeployment": "Remote host deployment",
