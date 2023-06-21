@@ -270,7 +270,7 @@ export default {
           {
             name: 'actionUpdateSelected',
             title: this.$t('common.BatchUpdate'),
-            icon: 'fa fa-refresh',
+            fa: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !vm.currentOrgIsRoot &&
