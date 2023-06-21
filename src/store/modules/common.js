@@ -56,7 +56,11 @@ const actions = {
       url = url.substring(0, url.indexOf('?'))
     }
     url = url.replace('/api/v1', '')
-    const sqlCount = resp.headers['x-jms-sql-count']
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1)
+    }
+    let sqlCount = resp.headers['x-jms-sql-count']
+    sqlCount -= 2
     if (!sqlCount || sqlCount < 3) {
       return
     }
