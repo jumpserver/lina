@@ -3,7 +3,8 @@ import { optionUrlMeta } from '@/api/common'
 const getDefaultState = () => {
   return {
     metaMap: {},
-    isRouterAlive: true
+    isRouterAlive: true,
+    sqlQueryCounter: []
   }
 }
 
@@ -18,6 +19,13 @@ const mutations = {
     setTimeout(() => {
       state.isRouterAlive = true
     }, 0)
+  },
+  addSQLQueryCounter: (state, { url, count }) => {
+    state.sqlQueryCounter = state.sqlQueryCounter.filter(item => item.url !== url)
+    state.sqlQueryCounter.push({ url, count, time: new Date().getTime() })
+    if (state.sqlQueryCounter.length > 10) {
+      state.sqlQueryCounter.shift()
+    }
   }
 }
 
@@ -38,6 +46,21 @@ const actions = {
         reject(error)
       })
     })
+  },
+  digestSQLQuery({ commit, state }, resp) {
+    if (!resp || !resp.status.toString().startsWith('20')) {
+      return
+    }
+    let url = resp.config.url
+    if (url.indexOf('?') > 0) {
+      url = url.substring(0, url.indexOf('?'))
+    }
+    url = url.replace('/api/v1', '')
+    const sqlCount = resp.headers['x-jms-sql-count']
+    if (!sqlCount || sqlCount < 3) {
+      return
+    }
+    commit('addSQLQueryCounter', { url, count: sqlCount })
   }
 }
 

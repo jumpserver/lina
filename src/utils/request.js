@@ -135,6 +135,7 @@ service.interceptors.response.use(
     // NProgress.done()
     refreshSessionAgeDelay(response)
     const res = response.data
+    store.dispatch('common/digestSQLQuery', response).then()
 
     if (response.config.raw === 1) {
       return response
