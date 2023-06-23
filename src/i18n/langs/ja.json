@@ -32,6 +32,7 @@
     },
     "AccountChangeSecret": {
       "Result": "結果",
+      "ParamsHelpText": "改密パラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "ExecutionTimes": "実行時間",
       "TaskList": "タスク レコード",
       "TimerPeriod": "時限実行サイクル",
@@ -93,7 +94,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
-      "AutoPushHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
+      "ParamsHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {

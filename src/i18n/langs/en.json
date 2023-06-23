@@ -32,6 +32,7 @@
     },
     "AccountChangeSecret": {
       "Result": "Result",
+      "ParamsHelpText": "The change secret parameter settings are currently only effective for assets with a platform type of host.",
       "ExecutionTimes": "Execution times",
       "TaskList": "Task record",
       "TimerPeriod": "Timed execution cycle",
@@ -93,7 +94,7 @@
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",
-      "AutoPushHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
+      "ParamsHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
       "AccountPushList": "Account push list"
     },
     "AccountBackup": {
