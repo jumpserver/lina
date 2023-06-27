@@ -1091,7 +1091,7 @@
     "ManualAccount": "手动账号",
     "AnonymousAccount": "匿名账号",
     "ManualAccountTip": "登录时手动输入 用户名/密码",
-    "AnonymousAccountTip": "匿名账号 是指的连接资产时不使用用户名和密码，仅支持 web类型 和 自定义类型 的资产",
+    "AnonymousAccountTip": "连接资产时不使用用户名和密码，仅支持 web类型 和 自定义类型 的资产",
     "SameAccount": "同名账号",
     "SameAccountTip": "与被授权人用户名相同的账号",
     "SpecAccount": "指定账号",
