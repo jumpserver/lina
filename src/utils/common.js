@@ -354,4 +354,16 @@ export function diffObject(object, base) {
   })
 }
 
+export function redirectUrl(router, url) {
+  if (url) {
+    const params = url.split('?')[1]
+    const query = Object.fromEntries(new URLSearchParams(params))
+    if (query.type === 'flash') {
+      router.push({ name: 'FlashMessage', params: { code: query.code }})
+    } else {
+      window.location = url
+    }
+  }
+}
+
 export { BASE_URL }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-checkbox v-model="auto_login" style="color: #737373">
-      {{ auto_login_days }} 天内自动登录
+      {{ auto_login_days }} {{ this.$t('auth.DaysAutoLogin') }}
     </el-checkbox>
     <el-link type="primary" :underline="false" :href="forgot_password_url" style="float: right;">
       {{ this.$t('route.ForgetPassword') }}
@@ -26,12 +26,8 @@ export default {
   },
   methods: {
     get_forgot_password_url() {
-      let url = store.getters.publicSettings.LOGIN_INFO.FORGOT_PASSWORD_URL
-      if (!url) {
-        url = '#/authentication/forget-password'
-      }
-      console.log(url)
-      return url
+      const url = store.getters.publicSettings.LOGIN_INFO.FORGOT_PASSWORD_URL
+      return url || '/ui/#/authentication/forget-password'
     }
   }
 }

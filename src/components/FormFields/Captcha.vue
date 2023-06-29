@@ -5,8 +5,9 @@
     </el-col>
     <el-col :span="12">
       <el-image
+        class="image"
         :src="image_url"
-        style="padding: 2% 0 0 4%; height: 38px"
+        style="padding: 2% 0 0 4%; height: 40px"
         @click="refresh"
       />
     </el-col>
@@ -19,12 +20,7 @@ export default {
   name: 'Captcha',
   components: {
   },
-  props: {
-    url: {
-      type: String,
-      default: () => ''
-    }
-  },
+  props: {},
   data() {
     return {
       value: '',
@@ -40,7 +36,7 @@ export default {
   methods: {
     refresh() {
       this.$axios.get(
-        '/core/auth/captcha/refresh/', {
+        '/api/v1/authentication/captcha/refresh/', {
           headers: {
             'x-requested-with': 'XMLHttpRequest'
           }
@@ -62,4 +58,7 @@ export default {
 </script>
 
 <style scoped>
+  .image {
+    display: block;
+  }
 </style>

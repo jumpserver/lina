@@ -10,6 +10,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'Footer',
+  props: {
+    noStyle: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       curYear: this.$moment().year() || ''
@@ -22,13 +28,13 @@ export default {
       'publicSettings'
     ]),
     style() {
-      if (this.device === 'mobile') {
+      if (this.device === 'mobile' || this.noStyle) {
         return ''
       }
       return this.sidebar.opened ? ('margin-left: 200px;') : ('margin-left: 54px')
     },
     corporation() {
-      return this.publicSettings.XPACK_LICENSE_INFO.corporation
+      return this.publicSettings.XPACK_LICENSE_INFO?.corporation || `FIT2CLOUD 飞致云 © 2014-${this.curYear}`
     }
   }
 }

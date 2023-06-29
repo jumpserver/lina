@@ -439,9 +439,15 @@
     "Username": "Username",
     "Password": "Password",
     "Captcha": "Captcha",
-    "OtherAuthMethod": "Other login methods"
+    "OtherAuthMethod": "Other login methods",
+    "DaysAutoLogin": "days auto login",
+    "HelpText": {
+      "Username": "Please enter the username for which you want to retrieve the password"
+    }
   },
   "common": {
+    "Next": "Next",
+    "SixNumber": "Six figures",
     "CommunityEdition": "Community Edition",
     "EnterpriseEdition": "Enterprise Edition",
     "Product": "Product",
@@ -1079,6 +1085,7 @@
     "": "",
     "Login": "Login",
     "ForgetPassword": "ForgetPassword?",
+    "ResetPassword": "Reset password",
     "AppletDetail": "Remote apps",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
@@ -1687,6 +1694,8 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "DisableOtp": "Disable OTP",
+    "EnableOtp": "Enable OTP",
     "Login": "Users login",
     "InviteSuccess": "Invite success",
     "FileEncryptionPassword": "File encryption password",
@@ -1732,7 +1741,11 @@
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
       "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here",
       "OrgRoleHelpText": "Organizational roles are the user's role in the current organization",
-      "addRolePermissions": "After add or update success, set permissions in detail page"
+      "addRolePermissions": "After add or update success, set permissions in detail page",
+      "InstallMFAApp": "Download and install the MFA Authenticator application on your phone or applet of WeChat",
+      "InstallMFAAppBind": "After installation, click the next step to enter the binding page (if installed, go to the next step directly).",
+      "MFAScanQR": "Use the MFA Authenticator application to scan the following qr code for a 6-bit verification code",
+      "AccountProtect": "The account protection has been opened, please complete the following operations according to the prompts"
     },
     "IAgree": "I agree",
     "ImprovePersonalInformation": "Improve personal information",
@@ -1757,6 +1770,8 @@
     "SSHKeySetting": "SSH Key setting",
     "Secure": "Secure",
     "SetMFA": "Set MFA",
+    "BindMFA": "Bind one-time password authenticator",
+    "InstallApp": "Install app",
     "Source": "Source",
     "TermsAndConditions": "Terms and conditions",
     "UpdateMFA": "Update MFA",

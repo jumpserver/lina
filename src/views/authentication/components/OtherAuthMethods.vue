@@ -1,9 +1,9 @@
 <template>
-  <div v-if="auth_methods.length !== 0" style="text-align: center">
+  <div v-if="auth_methods.length !== 0" style="text-align: center; margin-top: 5%;">
     <el-divider content-position="center" color="#ff0000">{{ this.$t('auth.OtherAuthMethod') }}</el-divider>
     <div v-for="m in auth_methods" :key="m.name" style="display: inline-block">
-      <el-link :underline="false" style="margin: 10px">
-        <img :src="m.logo" height="15" width="15" style="vertical-align: middle">{{ m.name }}
+      <el-link :underline="false" style="margin: 10px 10px" :href="m.url">
+        <img :src="m.logo" height="15" width="15" style="vertical-align: middle"> {{ m.name }}
       </el-link>
     </div>
   </div>
@@ -23,15 +23,11 @@ export default {
       auth_methods: store.getters.publicSettings.LOGIN_INFO.AUTH_METHODS
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     get_forgot_password_url() {
-      let url = store.getters.publicSettings.LOGIN_INFO.FORGOT_PASSWORD_URL
-      if (!url) {
-        url = '#/authentication/forget-password'
-      }
-      return url
+      const url = store.getters.publicSettings.LOGIN_INFO.FORGOT_PASSWORD_URL
+      return url || '/ui/#/authentication/forget-password'
     }
   }
 }
@@ -39,6 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-divider {
+  margin: 10px 0;
   & >>> .el-divider__text {
     font-weight: normal;
     color: #676A6C;

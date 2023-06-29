@@ -7,6 +7,7 @@ import rules from '@/components/DataForm/rules'
 import BasicTree from '@/components/FormFields/BasicTree'
 import JsonEditor from '@/components/FormFields/JsonEditor'
 import { assignIfNot } from '@/utils/common'
+import { Captcha } from '@/components/FormFields'
 
 export class FormFieldGenerator {
   constructor(emit) {
@@ -16,6 +17,10 @@ export class FormFieldGenerator {
 
   generateFieldByType(type, field, fieldMeta, fieldRemoteMeta) {
     switch (type) {
+      case 'captcha':
+        field.label = ''
+        field.component = Captcha
+        break
       case 'labeled_choice':
       case 'choice':
         // Value 处理事在 AutoDataForm 中处理的

@@ -7,24 +7,34 @@ import { Message } from '@/utils/Message'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
-import request from '@/utils/request'
-
-const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
 }
 
 async function checkLogin({ to, from, next }) {
+  // no redirect whitelist
+  let NotProfileUrlWhitelist = store.getters.publicSettings?.LOGIN_INFO?.NOT_PROFILE_URL_WHITELIST || []
+  NotProfileUrlWhitelist = NotProfileUrlWhitelist.map((str) => {
+    return str.replace(/^\/api\/v1/, '')
+  })
+  const whiteList = [
+    '/authentication/login', '/', process.env.VUE_APP_LOGIN_PATH
+  ].concat(NotProfileUrlWhitelist)
   if (whiteList.indexOf(to.path) !== -1) {
     next()
   }
   // Determine whether the user has logged in
   const sessionExpire = VueCookie.get('jms_session_expire')
   if (!sessionExpire) {
-    request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
-      window.location = process.env.VUE_APP_LOGIN_PATH
-    })
+    window.location = process.env.VUE_APP_LOGIN_PATH
+    // setTimeout(() => {
+    //   request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
+    //     if (to.path !== '/authentication/login') {
+    //       window.location = process.env.VUE_APP_LOGIN_PATH
+    //     }
+    //   })
+    // }, 200)
     return reject('No session mark found in cookie')
   } else if (sessionExpire === 'close') {
     let startTime = new Date().getTime()

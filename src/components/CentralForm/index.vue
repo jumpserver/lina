@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" @keyup.enter="onEnter">
     <div v-if="iConfig.rightImageUrl" class="right-box">
       <el-image :src="iConfig.rightImageUrl" />
     </div>
@@ -7,7 +7,7 @@
       <el-card style="height: 100%" shadow="never">
         <div class="header">
           <div style="text-align: left; display: inline-block">
-            <h2 style="font-weight: 400; font-size: 24px;">{{ iTitle }}</h2>
+            <h2 style="font-weight: 500; font-size: 24px;">{{ iTitle }}</h2>
             <small>{{ iConfig.subTitle }}</small>
           </div>
           <div v-if="iConfig.subMenu" style="float: right; padding: 20px 0; width: 30%">
@@ -29,14 +29,14 @@
           :disabled="!iConfig.canSubmit"
           size="medium"
           type="primary"
-          style="width: 90%; margin-left: 5%"
-          @click="submitForm('form')"
+          style="width: 90%; margin-left: 5%; margin-bottom: 5%;"
+          @click="submitForm()"
         >
           {{ iConfig.btnTitle }}
         </el-button>
-        <div v-if="iConfig.extraMenu" style="margin-top: 10%">
+        <div v-if="iConfig.extraMenu">
           <keep-alive>
-            <component :is="iConfig.extraMenu" />
+            <component :is="iConfig.extraMenu" :extra-menu-config="iConfig.extraMenuConfig" />
           </keep-alive>
         </div>
       </el-card>
@@ -65,6 +65,10 @@ export default {
     fieldsMeta: {
       type: Object,
       default: () => ({})
+    },
+    cleanFormValue: {
+      type: Function,
+      default: (value) => value
     }
   },
   data() {
@@ -72,11 +76,14 @@ export default {
       kwargs: {
         hasReset: false,
         hasSaveContinue: false,
-        defaultButton: false
+        defaultButton: false,
+        hasButtons: false
       },
       defaultConfig: {
+        url: '',
         title: '',
         subTitle: '',
+        method: 'post',
         btnTitle: this.$t('common.Submit'),
         canSubmit: true,
         submitButton: true
@@ -101,24 +108,35 @@ export default {
     getFormData() {
       return this.iForm.getFormValue()
     },
-    submitForm(formName, addContinue) {
+    onEnter() {
+      this.submitForm()
+    },
+    submitForm() {
       this.iForm.validate((valid) => {
         if (valid) {
-          const data = this.getFormData()
-          this.$axios.post(
+          const data = this.cleanFormValue(this.getFormData())
+          this.$axios[this.iConfig.method](
             this.iConfig.url, data, { disableFlashErrorMsg: true }
           ).then((resp) => {
-            if (this.iConfig.btnCallback) {
-              this.iConfig.btnCallback(resp)
+            if (typeof this.iConfig.submitButtonCallback === 'function') {
+              this.iConfig.submitButtonCallback(resp)
             }
           }).catch(error => {
             const data = error.response.data
-            for (const key of Object.keys(data)) {
-              let value = data[key]
-              if (value instanceof Array) {
-                value = value.join(';')
+            if (data?.error) {
+              let errMsg = data.error
+              if (Array.isArray(errMsg)) {
+                errMsg = errMsg.join(', ')
               }
-              this.$refs['form'].setFieldError(key, value)
+              this.$message.error(errMsg)
+            } else {
+              for (const key of Object.keys(data)) {
+                let value = data[key]
+                if (value instanceof Array) {
+                  value = value.join(';')
+                }
+                this.$refs['form'].setFieldError(key, value)
+              }
             }
           })
         } else {
@@ -145,7 +163,7 @@ export default {
   }
 
   .header {
-    padding: 25px 5%;
+    padding: 0 5%;
   }
 
   .one-box {

@@ -32,7 +32,7 @@ export default {
       type: Function,
       default: () => false
     },
-    btnCallback: {
+    submitButtonCallback: {
       type: Function,
       default: function() {}
     },
@@ -56,8 +56,8 @@ export default {
   methods: {
     btnClick() {
       let can = true
-      if (typeof this.btnCallback === 'function') {
-        can = this.btnCallback()
+      if (typeof this.submitButtonCallback === 'function') {
+        can = this.submitButtonCallback()
       }
       if (can) {
         const countdown = setInterval(() => {

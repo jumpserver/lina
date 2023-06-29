@@ -24,6 +24,7 @@ Vue.use(Router)
   }
  */
 import commonRoutes from './common'
+import authenticationRoutes from './authentication'
 
 /**
  * constantRoutes
@@ -69,7 +70,8 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  ...commonRoutes
+  ...commonRoutes,
+  ...authenticationRoutes
 ]
 
 /**
@@ -83,7 +85,6 @@ import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
-import authenticationRoutes from './authentication'
 import { getPropView } from '@/utils/jms'
 import store from '@/store'
 
@@ -97,8 +98,7 @@ export const viewRoutes = [
   workbenchViewRoutes,
   ticketsRoutes,
   settingsRoutes,
-  profileRoutes,
-  authenticationRoutes
+  profileRoutes
 ]
 
 const createRouter = () => new Router({

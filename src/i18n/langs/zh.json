@@ -435,9 +435,15 @@
     "Username": "用户名",
     "Password": "密码",
     "Captcha": "验证码",
-    "OtherAuthMethod": "其他登录方式"
+    "OtherAuthMethod": "其他登录方式",
+    "DaysAutoLogin": "天内自动登录",
+    "HelpText": {
+      "Username": "请输入您需要找回密码的用户名"
+    }
   },
   "common": {
+    "Next": "下一步",
+    "SixNumber": "6位数字",
     "CommunityEdition": "社区版",
     "EnterpriseEdition": "企业版",
     "Product": "产品",
@@ -1068,6 +1074,7 @@
   "route": {
     "": "",
     "Login": "登录",
+    "ResetPassword": "重置密码",
     "ForgetPassword": "忘记密码?",
     "AppletDetail": "远程应用",
     "AppletHostDetail": "远程应用发布机详情",
@@ -1672,6 +1679,8 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "DisableOtp": "禁用虚拟 MFA(OTP)",
+    "EnableOtp": "启用 MFA(OTP)",
     "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "FileEncryptionPassword": "文件加密密码",
@@ -1715,7 +1724,11 @@
       "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）",
       "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里",
       "OrgRoleHelpText": "组织角色是用户在当前组织中的角色",
-      "addRolePermissions": "创建/更新成功后，详情中添加权限"
+      "addRolePermissions": "创建/更新成功后，详情中添加权限",
+      "InstallMFAApp": "请在手机端或微信小程序下载并安装 MFA 验证器应用",
+      "InstallMFAAppBind": "安装完成后点击下一步进入绑定页面（如已安装，直接进入下一步）",
+      "MFAScanQR": "使用 MFA 验证器应用扫描以下二维码，获取6位验证码",
+      "AccountProtect": "账号保护已开启，请根据提示完成以下操作"
     },
     "IAgree": "我同意",
     "ImprovePersonalInformation": "完善个人信息",
@@ -1741,6 +1754,8 @@
     "SSHKeySetting": "SSH公钥设置",
     "Secure": "安全",
     "SetMFA": "设置多因子认证",
+    "InstallApp": "安装应用",
+    "BindMFA": "绑定MFA验证器",
     "Source": "来源",
     "TermsAndConditions": "条款和条件",
     "UpdateMFA": "更改多因子认证",

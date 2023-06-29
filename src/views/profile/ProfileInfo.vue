@@ -109,8 +109,8 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.location.href = `/core/auth/profile/mfa/`
-            }
+              this.$router.push({ name: 'ProfileSetting', query: { activeTab: 'UserMFA' }})
+            }.bind(this)
           }
         },
         {

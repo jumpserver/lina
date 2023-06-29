@@ -57,7 +57,7 @@ export default {
           component: CaptchaButton,
           el: {
             url: '',
-            btnCallback: () => {
+            submitButtonCallback: () => {
               let can = true
               this.$refs['centralForm'].iForm.validateField(
                 'account', err => { can = !err }
@@ -70,7 +70,7 @@ export default {
       config: {
         url: `/api/v1/authentication/password/forget/auth/?token=${this.$route.query.token}`,
         subTitle: '',
-        btnCallback: (resp) => {
+        submitButtonCallback: (resp) => {
           // 跳转路由
           console.log('resp: ', resp)
         }

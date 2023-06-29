@@ -32,8 +32,8 @@ export default {
       },
       config: {
         url: '/api/v1/authentication/password/forget/previewing/',
-        subTitle: '请输入您需要找回密码的用户名',
-        btnCallback: (resp) => {
+        subTitle: this.$t('auth.HelpText.Username'),
+        submitButtonCallback: (resp) => {
           this.$router.push({
             path: `/authentication/forget-password/auth-step/?token=${resp?.token}`
           })

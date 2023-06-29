@@ -61,7 +61,7 @@ function ifUnauthorized({ response, error }) {
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
-      window.location = '/core/auth/login/'
+      window.location = '/ui/#/authentication/login'
       return
     }
     const title = i18n.t('common.Info')
@@ -71,7 +71,7 @@ function ifUnauthorized({ response, error }) {
       cancelButtonText: i18n.t('common.Cancel'),
       type: 'warning'
     }).then(() => {
-      window.location = '/core/auth/login/'
+      window.location = '/ui/#/authentication/login'
     })
   }
 }
@@ -104,9 +104,15 @@ export function flashErrorMsg({ response, error }) {
 let timer = null
 
 function refreshSessionAgeDelay(response) {
-  if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
-    return
-  }
+  let canRequest = true
+  const notProfileUrlWhitelist = store.getters.publicSettings?.LOGIN_INFO?.NOT_PROFILE_URL_WHITELIST || []
+  const responseUrl = response?.config?.url || ''
+  notProfileUrlWhitelist.map((url) => {
+    if (responseUrl.indexOf(url) !== -1) {
+      canRequest = false
+    }
+  })
+  if (!canRequest || notProfileUrlWhitelist.length === 0) { return }
   if (timer) {
     clearTimeout(timer)
   }

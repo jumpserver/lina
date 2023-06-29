@@ -439,9 +439,15 @@
     "Username": "ゆーざめい",
     "Password": "あんごうふごう",
     "Captcha": "認証コード",
-    "OtherAuthMethod": "その他の登録方法です"
+    "OtherAuthMethod": "その他の登録方法です",
+    "DaysAutoLogin": "日自動ログイン",
+    "HelpText": {
+      "Username": "パスワードを取り戻す必要があるユーザー名を入力してください"
+    }
   },
   "common": {
+    "Next": "次へ",
+    "SixNumber": "6つの数字",
     "RestoreDefault": "デフォルトに戻す",
     "DownloadCenter": "ダウンロードセンター",
     "ImportOrg": "組織をインポート",
@@ -1074,6 +1080,7 @@
     "": "",
     "Login": "ログオンする",
     "ForgetPassword": "パスワードを忘れる?",
+    "ResetPassword": "パスワードのリセット",
     "AppletDetail": "遠隔応用です",
     "AssignedTicketList": "割り当て済みワークオーダー",
     "CreateEndpoint": "エンドポイントを作成する",
@@ -1675,6 +1682,8 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "DisableOtp": "OTPの無効化",
+    "EnableOtp": "OTPの有効化",
     "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
     "FileEncryptionPassword": "ファイル暗号化パスワード",
@@ -1718,7 +1727,11 @@
       "MFAOfUserFirstLoginUserGuidePage": "あなたと会社の安全を守るために、あなたのアカウント、パスワード、鍵などの重要な機密情報を大切に保管してください (例: 複雑なパスワードを設定し、多因子認証を有効にする)",
       "SSHKeyOfProfileSSHUpdatePage": "公開鍵をここにコピーします",
       "OrgRoleHelpText": "組織ロールは、現在の組織におけるユーザーのロールです",
-      "addRolePermissions": "作成/更新に成功したら、詳細に権限を追加します"
+      "addRolePermissions": "作成/更新に成功したら、詳細に権限を追加します",
+      "InstallMFAApp": "携帯電話またはWeChatのアプレットにMFA Authenticatorアプリケーションをダウンロードしてインストールします",
+      "InstallMFAAppBind": "インストール後、次のステップをクリックしてバインディングページに入ります (インストールされている場合は、次のステップに直接進みます)。",
+      "MFAScanQR": "以下の二次元コードをMFAベリファイアアプリケーションでスキャンし、6桁の認証コードを取得します。",
+      "AccountProtect": "アカウント保護が開始されました。プロンプトに従って次の操作を完了してください"
     },
     "IAgree": "同意します",
     "ImprovePersonalInformation": "個人情報の充実",
@@ -1744,6 +1757,8 @@
     "SSHKeySetting": "SSH公開鍵設定",
     "Secure": "セキュリティ",
     "SetMFA": "多因子認証の設定",
+    "BindMFA": "ワンタイムパスワード認証子のバインド",
+    "InstallApp": "アプリのインストール",
     "Source": "ソース",
     "TermsAndConditions": "契約条件",
     "UpdateMFA": "多因子認証の変更",

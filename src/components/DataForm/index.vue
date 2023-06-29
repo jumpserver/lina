@@ -152,6 +152,7 @@ export default {
   }
 
   .el-form ::v-deep .el-form-item__label {
+    text-align: left;
     padding: 0 30px 0 0;
   }
 
