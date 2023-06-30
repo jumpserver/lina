@@ -14,9 +14,6 @@ export default {
       config: {
         category: 'custom',
         url: '/api/v1/assets/customs/',
-        headerActions: {
-          createRoute: 'CustomCreate'
-        },
         tableConfig: {
           columnsExclude: [
           ],

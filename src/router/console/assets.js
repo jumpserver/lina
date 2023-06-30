@@ -201,7 +201,38 @@ export default [
         name: 'WebUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.WebUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'gpts',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: {
+      title: i18n.t('route.gpts'),
+      app: 'assets',
+      resource: 'asset'
+    },
+    children: [
+      {
+        path: '',
+        name: 'GptList',
+        component: () => import('@/views/assets/Asset/AssetList/GPTList.vue'),
+        meta: { title: i18n.t('route.GPTList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'GptCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/GPTCreateUpdate.vue'),
+        meta: { title: i18n.t('assets.CreateGPT'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'GptUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/GPTCreateUpdate.vue'),
+        meta: { title: i18n.t('route.GPTUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
