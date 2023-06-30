@@ -476,6 +476,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Advanced": "高度な",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "Generate": "生成",
     "ServerError": "サーバーエラー",

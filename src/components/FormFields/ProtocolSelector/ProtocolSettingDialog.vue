@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    v-if="$attrs.visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
@@ -10,7 +11,7 @@
     width="70%"
     v-on="$listeners"
   >
-    <el-alert v-if="disabled && platformDetail" type="success" style="margin-bottom: 10px">
+    <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
       {{ $t('assets.InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
         {{ $t('common.View') }}
@@ -66,115 +67,18 @@ export default {
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
-        url: '',
+        url: '/api/v1/assets/protocol-settings/?name=' + this.item.name,
         fields: [
-          [this.$t('common.Basic'), [
-            {
-              id: 'primary',
-              label: this.$t('assets.Primary'),
-              type: 'switch',
-              helpText: this.$t('assets.PrimaryProtocol'),
-              on: {
-                change: ([val], updateForm) => {
-                  const relatedFields = vm.config['fields'][0][1]
-                    .filter(item => this.baseAttrs.includes(item.id))
-                    .filter(item => item.id !== 'primary')
-                  if (val) {
-                    const relatedValue = relatedFields.reduce((acc, cur) => {
-                      acc[cur.id] = true
-                      return acc
-                    }, {})
-                    updateForm(relatedValue)
-                  }
-                }
-              }
-            },
-            {
-              id: 'required',
-              label: this.$t('assets.Required'),
-              type: 'switch',
-              helpText: this.$t('assets.RequiredProtocol'),
-              disabled: false
-            },
-            {
-              id: 'default',
-              label: this.$t('assets.Default'),
-              type: 'switch',
-              helpText: this.$t('assets.DefaultProtocol'),
-              disabled: false
-            },
-            {
-              id: 'public',
-              label: this.$t('assets.Public'),
-              type: 'switch',
-              helpText: this.$t('assets.PublicProtocol'),
-              disabled: false
-            }
+          [vm.$t('common.Basic'), [
+            'primary', 'required', 'default', 'public'
           ]],
-          [this.$t('assets.LoginConfig'), [
-            {
-              id: 'console',
-              label: 'Console',
-              type: 'switch',
-              hidden: () => this.item.name !== 'rdp'
-            },
-            {
-              id: 'security',
-              label: 'Security',
-              hidden: () => this.item.name !== 'rdp',
-              type: 'radio-group',
-              options: [
-                { label: 'Any', value: 'any' },
-                { label: 'RDP', value: 'rdp' },
-                { label: 'NLA', value: 'nla' },
-                { label: 'TLS', value: 'tls' }
-              ]
-            },
-            {
-              id: 'use_ssl',
-              label: this.$t('assets.UseSSL'),
-              type: 'switch',
-              hidden: () => this.item.name !== 'winrm'
-            },
-            {
-              id: 'sftp_enabled',
-              label: this.$t('common.Enable') + ' SFTP',
-              type: 'switch',
-              hidden: () => this.item.name !== 'ssh'
-            },
-            {
-              id: 'sftp_home',
-              label: 'SFTP home',
-              type: 'input',
-              helpText: this.$t('assets.SFTPHelpMessage'),
-              hidden: (form) => this.item.name !== 'ssh' || !form['sftp_enabled']
-            },
-            {
-              id: 'username_selector',
-              label: this.$t('assets.UserNameSelector'),
-              type: 'input',
-              hidden: (form) => this.item.name !== 'http'
-            },
-            {
-              id: 'password_selector',
-              label: this.$t('assets.PasswordSelector'),
-              type: 'input',
-              hidden: (form) => this.item.name !== 'http'
-            },
-            {
-              id: 'submit_selector',
-              label: this.$t('assets.SubmitSelector'),
-              type: 'input',
-              hidden: (form) => this.item.name !== 'http'
-            },
-            {
-              id: 'auth_username',
-              label: this.$t('assets.AuthUsername'),
-              type: 'switch',
-              hidden: (form) => this.item.name !== 'redis'
-            }
-          ]]
-        ]
+          [vm.$t('common.Advanced'), ['setting']]
+        ],
+        fieldsMeta: {
+          setting: {
+            fields: '__all__'
+          }
+        }
       }
     }
   },
