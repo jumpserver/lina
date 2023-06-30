@@ -7,7 +7,7 @@ export const templateFields = (vm) => {
     [vm.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
     [vm.$t('assets.Secret'), [
       'secret_type', 'secret', 'ssh_key', 'token',
-      'access_key', 'passphrase'
+      'access_key', 'passphrase', 'api_key'
     ]],
     [vm.$t('common.Other'), ['comment']]
   ]

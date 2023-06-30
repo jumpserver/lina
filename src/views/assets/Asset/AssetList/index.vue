@@ -57,7 +57,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
-            icon: 'fa-globe',
+            icon: 'fa-comment',
             name: 'gpt',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')

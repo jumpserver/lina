@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :visible.sync="iVisible"
-    :title="$tc('accounts.UpdateSecret')"
-    width="50%"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :destroy-on-close="true"
+    :title="$tc('accounts.UpdateSecret')"
+    :visible.sync="iVisible"
+    width="50%"
   >
     <AutoDataForm
       :form="form"
@@ -47,7 +47,7 @@ export default {
         fields: [
           ['', [
             'secret_type', 'secret', 'ssh_key', 'token',
-            'access_key', 'passphrase'
+            'access_key', 'passphrase', 'api_key'
           ]]
         ],
         fieldsMeta: {
