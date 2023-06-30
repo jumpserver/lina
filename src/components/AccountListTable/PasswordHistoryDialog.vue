@@ -29,7 +29,7 @@ export default {
         tableConfig: {
           id: 'history_date',
           url: `/api/v1/accounts/account-secrets/${this.account.id}/histories/`,
-          columns: ['secret', 'secret_type', 'version', 'history_date'],
+          columns: ['secret', 'version', 'history_date'],
           columnsMeta: {
             secret: {
               label: this.$t('assets.Password'),

@@ -1474,6 +1474,7 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "Vault": "密钥匣子",
     "Custom": "自定义",
     "CleanHelpText": "定期清理任务会在 每天凌晨 2 点执行, 清理后的数据将无法恢复",
     "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
@@ -1684,6 +1685,7 @@
     "destinationIP": "目的地址",
     "testPort": "端口",
     "testTools": "测试",
+    "sync": "同步",
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
