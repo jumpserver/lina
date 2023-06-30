@@ -23,7 +23,7 @@ export default {
         [
           this.$t('terminal.BasePort'),
           [
-            'http_port', 'https_port', 'ssh_port', 'rdp_port'
+            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'rdp7_port'
           ]
         ],
         [
