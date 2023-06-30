@@ -44,7 +44,8 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), [
-          'name', 'category_type', 'charset', 'domain_enabled'
+          'name', 'category_type', 'charset',
+          'domain_enabled'
         ]],
         [this.$t('setting.Config'), [
           'protocols', 'su_enabled', 'su_method'
@@ -82,7 +83,7 @@ export default {
         if (obj['category'] && obj['type']) {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }
-        obj.protocols = obj.protocols.map(i => {
+        obj.protocols = obj.protocols?.map(i => {
           if (i.name === 'http') {
             i.display_name = 'http(s)'
           }
@@ -142,7 +143,7 @@ export default {
 
       const fieldsCheck = ['domain_enabled', 'su_enabled']
       let protocols = constraints?.protocols || []
-      protocols = protocols.map(i => {
+      protocols = protocols?.map(i => {
         if (i.name === 'http') {
           i.display_name = 'http(s)'
         }
