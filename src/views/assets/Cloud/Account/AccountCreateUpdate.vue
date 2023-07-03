@@ -23,7 +23,7 @@ export default {
 
     function setFieldAttrs() {
       const fieldsObject = {}
-      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file']
+      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key']
       for (const item of accountProviderAttrs?.attrs) {
         fieldsObject[item] = {
           rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [RequiredChange]
@@ -90,6 +90,17 @@ export default {
                   }
                 }
               }
+            },
+            public_key: {
+              label: this.$t('common.PublicKey'),
+              rules: this.$route.params.id ? [] : [RequiredChange]
+            },
+            private_key: {
+              label: this.$t('common.PrivateKey'),
+              rules: this.$route.params.id ? [] : [RequiredChange]
+            },
+            project: {
+              label: this.$t('common.Project')
             }
           }
         },

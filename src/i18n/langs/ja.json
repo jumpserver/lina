@@ -476,6 +476,9 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "PublicKey": "公開鍵です",
+    "PrivateKey": "秘密鍵です",
+    "Project": "プロジェクト名です",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "Generate": "生成",
     "ServerError": "サーバーエラー",
@@ -2027,6 +2030,7 @@
       "OpenStack": "OpenStack",
       "CTYunPrivate": "天翼プライベート・クラウド",
       "GCP": "Googleクラウド",
+      "UCloud": "UCloudユケデです",
       "FC": "Fusion Compute",
       "LAN": "ローカルエリアネットワーク",
       "AWS_China": "AWS(中国)",

@@ -470,6 +470,9 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "PublicKey": "公钥",
+    "PrivateKey": "私钥",
+    "Project": "项目名",
     "OtherRules": "其它规则",
     "MatchedCount": "匹配结果",
     "SelectAttrs": "选择属性",
@@ -1947,6 +1950,7 @@
       "CTYunPrivate": "天翼私有云",
       "OpenStack": "OpenStack",
       "GCP": "谷歌云",
+      "UCloud": "UCloud优刻得",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
