@@ -479,6 +479,7 @@
     "PublicKey": "公開鍵です",
     "PrivateKey": "秘密鍵です",
     "Project": "プロジェクト名です",
+    "Advanced": "高度な",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "Generate": "生成",
     "ServerError": "サーバーエラー",

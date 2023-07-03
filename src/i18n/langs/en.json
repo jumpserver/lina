@@ -479,6 +479,7 @@
     "PublicKey": "Public key",
     "PrivateKey": "Private key",
     "Project": "Project name",
+    "Advanced": "Advanced",
     "BatchProcessing": "Batch processing(select {Number} items)",
     "Generate": "Generate",
     "ServerError": "Server Error",

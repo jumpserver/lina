@@ -473,6 +473,7 @@
     "PublicKey": "公钥",
     "PrivateKey": "私钥",
     "Project": "项目名",
+    "Advanced": "高级选项",
     "OtherRules": "其它规则",
     "MatchedCount": "匹配结果",
     "SelectAttrs": "选择属性",
