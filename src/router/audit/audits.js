@@ -77,7 +77,7 @@ export default [
     component: () => import('@/views/audits/JobExecutionLogList'),
     meta: {
       title: i18n.t('route.JobExecutionLog'),
-      permissions: []
+      permissions: ['audits.view_joblog']
     }
   }
 ]
