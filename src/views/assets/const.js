@@ -57,6 +57,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
+      label: i18n.t('assets.PlatformSimple'),
       el: {
         multiple: false,
         ajax: {
