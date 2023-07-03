@@ -3,9 +3,10 @@
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
         v-model="item.port"
-        :class="readonly ? '' : 'input-with-select'"
+        :class="isPortReadonly(item) ? '' : 'input-with-select'"
         :placeholder="portPlaceholder"
-        :readonly="readonly"
+        :readonly="isPortReadonly(item)"
+        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
         v-bind="$attrs"
       >
         <template #prepend>
@@ -102,6 +103,10 @@ export default {
     showSetting: {
       type: Function,
       default: (item) => true
+    },
+    instance: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -144,7 +149,9 @@ export default {
           this.loading = false
           this.setDefaultItems(value)
         }, 100)
-      }
+      },
+      deep: true,
+      immediate: true
     },
     items: {
       handler(value) {
@@ -157,6 +164,21 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    instance: {
+      handler(value) {
+        const port = this.getPortFromInstance(value)
+        if (!port) {
+          return
+        }
+        for (const item of this.items) {
+          if (item['port_from_addr']) {
+            item.port = port
+          }
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   mounted() {
@@ -166,6 +188,18 @@ export default {
     this.$log.debug('Items: ', this.items)
   },
   methods: {
+    getPortFromInstance(instance) {
+      if (!instance) {
+        return 0
+      }
+      let address = instance.address
+      if (address.indexOf('://') === -1) {
+        address = `https://${address}`
+      }
+      const parse = require('url-parse')
+      const path = parse(address)
+      return path.port
+    },
     handleSettingConfirm() {
       if (this.settingItem.primary) {
         const others = this.items
@@ -216,6 +250,12 @@ export default {
       const selected = this.choices.find(item => item.name === evt)
       item.name = selected.name
       item.port = selected.port
+    },
+    isPortFormAddr(item) {
+      return !!item['port_from_addr']
+    },
+    isPortReadonly(item) {
+      return this.readonly || this.isPortFormAddr(item)
     },
     setPrimaryIfNeed(items) {
       // 如果没有设置主协议，设置第一个为主协议

@@ -139,7 +139,7 @@ export default [
         name: 'CloudUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.CloudUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('assets.CloudUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
