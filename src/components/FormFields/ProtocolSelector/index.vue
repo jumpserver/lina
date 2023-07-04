@@ -143,12 +143,15 @@ export default {
   },
   watch: {
     choices: {
-      handler(value) {
+      handler(value, oldValue) {
+        if (value?.length === oldValue?.length) {
+          return
+        }
         this.loading = true
         setTimeout(() => {
-          this.loading = false
           this.setDefaultItems(value)
-        }, 100)
+          this.loading = false
+        },)
       },
       deep: true,
       immediate: true
@@ -192,7 +195,7 @@ export default {
       if (!instance) {
         return 0
       }
-      let address = instance.address
+      let address = instance.address || ''
       if (address.indexOf('://') === -1) {
         address = `https://${address}`
       }
