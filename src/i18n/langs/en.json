@@ -1091,6 +1091,7 @@
   },
   "perms": {
     "": "",
+    "AnonymousAccountTip": "Connect asset without using a username and password, and it only supports web-based and custom-type assets.",
     "AssetPermissionHelpMsg": "Asset permission allows you to authorize the assets to the users. Additionally, you can set some specific action permission.",
     "AccountsHelp": "All accounts: accounts exists on the asset; Specify accounts: specify the user name of the account under the asset；Manual input: username/password; Same account: The account username name same with login user",
     "AllAccounts": "All accounts",
