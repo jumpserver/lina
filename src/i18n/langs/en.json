@@ -477,6 +477,9 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "PublicKey": "Public key",
+    "PrivateKey": "Private key",
+    "Project": "Project name",
     "Advanced": "Advanced",
     "BatchProcessing": "Batch processing(select {Number} items)",
     "Generate": "Generate",
@@ -2035,6 +2038,7 @@
       "HuaweiPrivatecloud": "Huawei Private Cloud",
       "OpenStack": "OpenStack",
       "GCP": "Google Cloud Platform",
+      "UCloud": "UCloud Platform",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
