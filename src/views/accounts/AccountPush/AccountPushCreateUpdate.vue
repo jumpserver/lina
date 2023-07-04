@@ -55,11 +55,6 @@ export default {
           ],
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
-          },
-          on: {
-            input: ([value]) => {
-              this.asset_ids = value
-            }
           }
         },
         nodes: {
@@ -71,11 +66,6 @@ export default {
                 return { label: item['full_value'], value: item.id }
               },
               url: '/api/v1/assets/nodes/'
-            }
-          },
-          on: {
-            input: ([value]) => {
-              this.node_ids = value?.map(i => i.pk)
             }
           }
         },
@@ -118,11 +108,6 @@ export default {
       }
     }
   },
-  computed: {
-    isUpdate() {
-      return this.$route.path.indexOf('/update') > -1
-    }
-  },
   watch: {
     node_ids: {
       handler(val) {
@@ -138,12 +123,10 @@ export default {
     }
   },
   methods: {
-    hasType(type) {
-      return this.isAssetType.indexOf(type) > -1
-    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = [
-        'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
+        'secret_type', 'secret_strategy',
+        'ssh_key_change_strategy'
       ]
       for (const i of needSetOptionFields) {
         const field = this.fieldsMeta[i] || {}

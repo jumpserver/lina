@@ -2,21 +2,21 @@
   <div>
     <div>
       <el-button
+        :disabled="isDisabled"
         size="mini"
         type="primary"
-        :disabled="isDisabled"
         @click="onOpenDialog"
       >{{ $tc('common.Setting') }}</el-button>
     </div>
     <Dialog
       v-if="visible"
-      width="60%"
-      :visible.sync="visible"
-      :title="title"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
+      :title="title"
+      :visible.sync="visible"
       v-bind="$attrs"
+      width="60%"
       v-on="$listeners"
     >
       <AutoDataForm
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { Dialog, AutoDataForm } from '@/components'
+import { AutoDataForm, Dialog } from '@/components'
 
 export default {
   components: {
@@ -57,6 +57,10 @@ export default {
       type: Array,
       default: () => []
     },
+    platforms: {
+      type: Array,
+      default: () => []
+    },
     url: {
       type: String,
       default: `/api/v1/assets/platform-automation-methods/`
@@ -68,8 +72,6 @@ export default {
       visible: false,
       isDisabled: true,
       form: this.value,
-      node_ids: this.nodes,
-      asset_ids: this.assets,
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -77,26 +79,26 @@ export default {
         method: 'get',
         fields: [],
         fieldsMeta: {}
-      }
-    }
-  },
-  computed: {
-    refForm() {
-      return this.$refs.autoDataForm
+      },
+      onFieldChangeHandler: _.debounce(this.handleFieldChange, 1000)
     }
   },
   watch: {
     nodes: {
       handler(val) {
-        this.node_ids = val
-        this.onFieldChangeHandle()
+        this.onFieldChangeHandler()
       },
       deep: true
     },
     assets: {
       handler(val) {
-        this.asset_ids = val
-        this.onFieldChangeHandle()
+        this.onFieldChangeHandler()
+      },
+      deep: true
+    },
+    platforms: {
+      handler(val) {
+        this.onFieldChangeHandler()
       },
       deep: true
     }
@@ -113,13 +115,14 @@ export default {
       const res = await this.$axios.post(
         '/api/v1/assets/platforms/filter-nodes-assets/',
         {
-          'node_ids': this.node_ids,
-          'asset_ids': this.asset_ids
+          'node_ids': this.nodes,
+          'asset_ids': this.assets,
+          'platform_ids': this.platforms
         }
       )
       return res
     },
-    async onFieldChangeHandle() {
+    async handleFieldChange() {
       const platforms = await this.getFilterPlatforms()
       let pushAccountMethods = platforms.map(i => i.automation?.push_account_method)
       pushAccountMethods = _.uniq(pushAccountMethods)
@@ -172,8 +175,8 @@ export default {
       this.visible = true
     },
     onSubmit(form) {
-      this.visible = false
       this.$emit('input', form)
+      this.visible = false
       this.$log.debug('Auto push form:', form)
     }
   }

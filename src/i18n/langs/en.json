@@ -394,7 +394,6 @@
     "RemoveFromCurrentNode": "Remove from node",
     "ReplaceNodeAssetsAdminUserWithThis": "Replace node assets admin user with this",
     "Rules": "Rules",
-    "SFTPHelpMessage": "SFTP root dir, default is /tmp, Set to HOME to use user home dir. <br/> Support some vars: ${ACCOUNT} the account username connected, ${USER} the staff username",
     "SerialNumber": "Serial number",
     "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami, /bin/ifconfig",
     "PasswordHelpMessage": "Password or private key password",

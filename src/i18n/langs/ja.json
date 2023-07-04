@@ -388,7 +388,6 @@
     "RemoveFromCurrentNode": "ノードから削除",
     "ReplaceNodeAssetsAdminUserWithThis": "アセットを置換する管理者",
     "Rules": "ルール",
-    "SFTPHelpMessage": "SFTPのルートディレクトリはデフォルトで/tmpです。ユーザのホームディレクトリを使用する場合は、HOMEに設定してください。<br/>いくつかの変数をサポートしています：${ACCOUNT}は接続したアカウントのユーザ名で、${USER}はスタッフのユーザ名です。",
     "SerialNumber": "シリアルナンバー",
     "SudoHelpMessage": "コンマを使用して複数のコマンドを区切ります",
     "PasswordHelpMessage": "パスワードまたはキーパスワード",

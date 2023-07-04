@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AutoPush": "自动推送",
     "Accounts": "账号",
     "SuFrom": "切换至",
     "SelectAccount": "选择账号",
@@ -406,7 +407,6 @@
     "RemoveFromCurrentNode": "从节点移除",
     "ReplaceNodeAssetsAdminUserWithThis": "替换资产的管理员",
     "Rules": "规则",
-    "SFTPHelpMessage": "SFTP 的起始路径，家目录可以填: HOME. <br/> 支持变量: ${ACCOUNT} 连接的账号用户名, ${USER} 当前用户用户名, 如 /tmp/${ACCOUNT}",
     "SerialNumber": "序列号",
     "SudoHelpMessage": "使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig",
     "PasswordHelpMessage": "密码或密钥密码",
@@ -436,7 +436,7 @@
     "sshkey": "sshkey",
     "SSHSecretKey": "SSH 密钥",
     "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（需填写已存在的用户组）",
-    "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
+    "HomeHelpMessage": "默认家目录 /home/${username}",
     "Home": "家目录",
     "LinuxUserAffiliateGroup": "用户附属组",
     "Cluster": "集群",
