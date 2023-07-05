@@ -1,7 +1,7 @@
 import { getUuidUpdateFromUrl } from '@/utils/common'
 import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
-import AccountAutoPush from '@/views/accounts/AccountPush/AccountAutoPush.vue'
+import AccountAutoPush from '@/views/accounts/AccountPush/AccountPushParams.vue'
 
 export const templateFields = (vm) => {
   return [

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div>
-      <el-button
-        :disabled="isDisabled"
-        size="mini"
-        type="primary"
-        @click="onOpenDialog"
-      >{{ $tc('common.Setting') }}</el-button>
-    </div>
+    <el-button
+      :disabled="isDisabled"
+      size="mini"
+      type="primary"
+      @click="onOpenDialog"
+    >
+      {{ $tc('common.Setting') }}
+    </el-button>
     <Dialog
       v-if="visible"
       :destroy-on-close="true"
@@ -17,6 +17,7 @@
       :visible.sync="visible"
       v-bind="$attrs"
       width="60%"
+      @opened="handleFieldChange($event)"
       v-on="$listeners"
     >
       <AutoDataForm
@@ -67,6 +68,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       remoteMeta: {},
       visible: false,
@@ -80,30 +82,36 @@ export default {
         fields: [],
         fieldsMeta: {}
       },
-      onFieldChangeHandler: _.debounce(this.handleFieldChange, 1000)
+      onFieldChangeHandler: _.debounce(vm.handleFieldChange, 1000)
     }
   },
   watch: {
     nodes: {
-      handler(val) {
+      handler() {
         this.onFieldChangeHandler()
       },
       deep: true
     },
     assets: {
-      handler(val) {
+      handler() {
         this.onFieldChangeHandler()
       },
       deep: true
     },
     platforms: {
-      handler(val) {
+      handler() {
         this.onFieldChangeHandler()
+      },
+      deep: true
+    },
+    value: {
+      handler(val) {
+        this.form = val
       },
       deep: true
     }
   },
-  async created() {
+  async mounted() {
     await this.getUrlMeta()
     await this.handleFieldChange()
   },
@@ -130,26 +138,21 @@ export default {
       // 检测是否有可设置的推送方式
       const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))
       this.setFormConfig(hasCanSettingPushMethods)
-      if (hasCanSettingPushMethods.length > 0) {
-        this.isDisabled = false
-        this.$emit('input', this.form)
-      } else {
-        this.isDisabled = true
-        this.$emit('input', {})
-      }
+      this.isDisabled = hasCanSettingPushMethods.length <= 0
     },
     setFormConfig(methods) {
-      const newForm = {}
       const fields = []
       const fieldsMeta = {}
       this.config.fields = []
+      // Todo: 未来改成后端处理，生成 serializer, 这里就不用判断类型了
+      const typeMapper = {
+        'string': 'input',
+        'boolean': 'switch'
+      }
 
       for (const method of methods) {
         const filterField = this.remoteMeta[method] || {}
         // 修改资产、节点时不点击设置按钮也需要获取form表单值暴露出去
-        if (this.form.hasOwnProperty(method)) {
-          newForm[method] = this.form[method]
-        }
         fields.push([filterField.label, [method]])
         fieldsMeta[method] = {
           fields: [],
@@ -159,7 +162,7 @@ export default {
           for (const [k, v] of Object.entries(filterField.children)) {
             const item = {
               ...v,
-              type: 'input'
+              type: typeMapper[v.type] || 'input'
             }
             delete item.default
             fieldsMeta[method].fields.push(k)
@@ -168,7 +171,7 @@ export default {
         }
       }
 
-      this.form = newForm
+      // this.form = newForm
       this.config.fields = fields
       this.config.fieldsMeta = fieldsMeta
     },
@@ -176,8 +179,11 @@ export default {
       this.visible = true
     },
     onSubmit(form) {
+      this.form = form
       this.$emit('input', form)
-      this.visible = false
+      setTimeout(() => {
+        this.visible = false
+      }, 100)
       this.$log.debug('Auto push form:', form)
     }
   }

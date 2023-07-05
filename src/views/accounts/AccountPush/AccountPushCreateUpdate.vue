@@ -7,7 +7,7 @@ import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect } from '@/components'
-import AccountAutoPush from './AccountAutoPush.vue'
+import AccountAutoPush from './AccountPushParams.vue'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -55,6 +55,11 @@ export default {
           ],
           el: {
             baseUrl: '/api/v1/assets/assets/?push_account_enabled=true'
+          },
+          on: {
+            change: ([value]) => {
+              this.asset_ids = value?.map(i => i.pk || i.id || i)
+            }
           }
         },
         nodes: {
@@ -66,6 +71,11 @@ export default {
                 return { label: item['full_value'], value: item.id }
               },
               url: '/api/v1/assets/nodes/'
+            }
+          },
+          on: {
+            change: ([value]) => {
+              this.node_ids = value?.map(i => i.pk || i.id || i)
             }
           }
         },
