@@ -103,8 +103,9 @@ export default {
       deep: true
     }
   },
-  created() {
-    this.getUrlMeta()
+  async created() {
+    await this.getUrlMeta()
+    await this.handleFieldChange()
   },
   methods: {
     async getUrlMeta() {
@@ -117,7 +118,7 @@ export default {
         {
           'node_ids': this.nodes,
           'asset_ids': this.assets,
-          'platform_ids': this.platforms
+          'platform_ids': this.platforms.map(i => i.id || i.pk || i)
         }
       )
       return res

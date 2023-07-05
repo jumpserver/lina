@@ -13,6 +13,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     return {
       initial: { secret_type: 'password' },
       url: '/api/v1/accounts/account-templates/',
@@ -22,6 +23,10 @@ export default {
       ],
       fieldsMeta: {
         ...templateFieldsMeta(this)
+      },
+      afterGetFormValue(value) {
+        vm.fieldsMeta['push_params'].el.platforms = value['platforms']
+        return value
       },
       cleanFormValue(value) {
         Object.keys(value).forEach((item, index, arr) => {
