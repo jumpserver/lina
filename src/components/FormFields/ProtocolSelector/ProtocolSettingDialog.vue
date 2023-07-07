@@ -5,7 +5,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.PlatformProtocolConfig') + '：' + item.name"
+    :title="$tc('assets.PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     v-bind="$attrs"
     width="70%"
@@ -38,7 +38,7 @@ export default {
     AutoDataForm
   },
   props: {
-    item: {
+    protocol: {
       type: Object,
       default: () => ({})
     },
@@ -51,23 +51,13 @@ export default {
     const vm = this
     const platform = this.$route.query.platform
     return {
-      baseAttrs: ['primary', 'required', 'default', 'public'], // 基础属性， 放到 setting 中处理了，处理完成后，还得返回回去
-      defaultSetting: {
-        sftp_enabled: true,
-        sftp_home: '/tmp',
-        username_selector: '#username',
-        password_selector: '#password',
-        submit_selector: '.btn-submit',
-        security: 'any',
-        console: false
-      },
       loading: true,
-      form: {},
+      form: this.protocol,
       platformDetail: platform ? '#/console/assets/platforms/' + platform : '',
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
-        url: '/api/v1/assets/protocol-settings/?name=' + this.item.name,
+        url: '/api/v1/assets/protocol-settings/?name=' + this.protocol.name,
         fields: [
           [vm.$t('common.Basic'), [
             'primary', 'required', 'default', 'public'
@@ -82,25 +72,11 @@ export default {
       }
     }
   },
-  created() {
-    this.form = this.item.setting
-    if (!this.form || !this.item) {
-      return
-    }
-    for (const i of this.baseAttrs) {
-      this.form[i] = !!this.item[i]
-    }
-  },
   methods: {
     onSubmit(form) {
-      for (const i of this.baseAttrs) {
-        if (form.hasOwnProperty(i)) {
-          this.item[i] = form[i]
-        }
-      }
-      this.item.setting = form
+      this.protocol = Object.assign(this.protocol, form)
       this.$emit('update:visible', false)
-      this.$emit('confirm', this.item)
+      this.$emit('confirm', this.protocol)
     }
   }
 }

@@ -62,7 +62,7 @@
     <ProtocolSettingDialog
       v-if="showDialog"
       :disabled="settingReadonly || readonly"
-      :item="settingItem"
+      :protocol="currentProtocol"
       :visible.sync="showDialog"
       @confirm="handleSettingConfirm"
     />
@@ -108,7 +108,7 @@ export default {
     return {
       name: '',
       items: [],
-      settingItem: {},
+      currentProtocol: {},
       showDialog: false,
       loading: false
     }
@@ -167,20 +167,20 @@ export default {
   },
   methods: {
     handleSettingConfirm() {
-      if (this.settingItem.primary) {
+      if (this.currentProtocol.primary) {
         const others = this.items
-          .filter(item => item.name !== this.settingItem.name)
+          .filter(item => item.name !== this.currentProtocol.name)
           .map(item => {
             item.primary = false
             return item
           })
-        this.items = [this.settingItem, ...others]
+        this.items = [this.currentProtocol, ...others]
       }
-      if (this.settingItem.name === 'winrm') {
-        if (this.settingItem.setting?.use_ssl) {
-          this.settingItem.port = 5986
+      if (this.currentProtocol.name === 'winrm') {
+        if (this.currentProtocol.setting?.use_ssl) {
+          this.currentProtocol.port = 5986
         } else {
-          this.settingItem.port = 5985
+          this.currentProtocol.port = 5985
         }
       }
     },
@@ -271,7 +271,7 @@ export default {
       return protocols
     },
     onSettingClick(item) {
-      this.settingItem = item
+      this.currentProtocol = item
       this.showDialog = true
     }
   }
