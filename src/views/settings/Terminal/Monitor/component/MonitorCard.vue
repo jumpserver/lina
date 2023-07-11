@@ -67,8 +67,7 @@
 
 export default {
   name: 'MonitorCard',
-  components: {
-  },
+  components: {},
   props: {
     // koko/guacamole/omnidb/lion/core
     type: {
@@ -94,6 +93,8 @@ export default {
         celery: 'Celery',
         magnus: 'Magnus',
         tinker: 'Tinker',
+        chen: 'Chen',
+        kael: 'Kael',
         video_worker: 'Video-Worker'
       }
       return nameMapper[this.componentMetric.type]
@@ -107,16 +108,18 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 
 .echarts {
   width: 100%;
   height: 150px;
 }
-.el-card ::v-deep .el-card__body{
+
+.el-card ::v-deep .el-card__body {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 .progress {
   height: 20px;
   margin-bottom: 20px;
@@ -124,18 +127,23 @@ export default {
   background-color: #f5f5f5;
   border-radius: 4px;
 }
-.progress-bar-success{
+
+.progress-bar-success {
   background-color: #13CE66 !important;
 }
-.progress-bar-warning{
+
+.progress-bar-warning {
   background-color: #E6A23C !important;
 }
-.progress-bar-danger{
+
+.progress-bar-danger {
   background-color: #FF4949 !important;
 }
-.progress-bar-offline{
+
+.progress-bar-offline {
   background-color: #bfbaba !important;
 }
+
 .progress-bar {
   float: left;
   width: 0;
