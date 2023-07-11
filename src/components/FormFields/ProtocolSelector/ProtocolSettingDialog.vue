@@ -30,6 +30,7 @@
 
 <script>
 import { AutoDataForm, Dialog } from '@/components'
+import JsonEditor from '@/components/FormFields/JsonEditor.vue'
 
 export default {
   name: 'ProtocolSetting',
@@ -66,7 +67,22 @@ export default {
         ],
         fieldsMeta: {
           setting: {
-            fields: '__all__'
+            fields: '__all__',
+            fieldsMeta: {
+              username_selector: {
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
+              },
+              password_selector: {
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
+              },
+              submit_selector: {
+                hidden: (formValue) => formValue['autofill'] !== 'basic'
+              },
+              script: {
+                component: JsonEditor,
+                hidden: (formValue) => formValue['autofill'] !== 'script'
+              }
+            }
           }
         }
       }

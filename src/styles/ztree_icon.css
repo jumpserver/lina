@@ -292,6 +292,10 @@
   background: url('./icons/website.png') no-repeat center left transparent;
 }
 
+.ztree li span.button.chatgpt_ico_docu {
+    background: url('./icons/chatgpt.png') no-repeat center left transparent;
+}
+
 .ztree li span.button.clickhouse_ico_docu {
   background: url('./icons/clickhouse.png') no-repeat center left transparent;
 }
