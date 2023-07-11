@@ -13,10 +13,7 @@ export default {
     return {
       tableConfig: {
         category: 'cloud',
-        url: '/api/v1/assets/clouds/',
-        headerActions: {
-          createRoute: 'CloudCreate'
-        }
+        url: '/api/v1/assets/clouds/'
       }
     }
   }

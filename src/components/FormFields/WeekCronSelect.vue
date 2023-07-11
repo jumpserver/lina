@@ -13,7 +13,7 @@
           <td v-for="t in theadArr" :key="t" :colspan="colspan">{{ t }}</td>
         </tr>
       </thead>
-      <tbody class="c-weektime-body">
+      <tbody class="c-weektime-body" @mouseleave="containerLeave()">
         <tr v-for="t in weektimeData" :key="t.row">
           <td>{{ t.value }}</td>
           <td
@@ -229,6 +229,11 @@ export default {
         })
       })
       this.setTimeRange()
+    },
+    containerLeave() {
+      this.width = 0
+      this.height = 0
+      this.mode = 0
     },
     setTimeRange() {
       this.timeRange = this.weektimeData.map(item => {

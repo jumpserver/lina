@@ -32,6 +32,7 @@
     },
     "AccountChangeSecret": {
       "Result": "結果",
+      "ParamsHelpText": "改密パラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "ExecutionTimes": "実行時間",
       "TaskList": "タスク レコード",
       "TimerPeriod": "時限実行サイクル",
@@ -93,7 +94,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
-      "AutoPushHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
+      "ParamsHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
@@ -248,12 +249,12 @@
     "UpdateAccount": "アカウントの更新",
     "Account": "アカウント",
     "Defaults": "デフォルト値",
-    "CreateDatabase": "資産の作成 - データベース",
-    "CreateHost": "資産の作成 - ホスト",
+    "DatabaseCreate": "資産の作成 - データベース",
+    "HostCreate": "資産の作成 - ホスト",
     "CreateRemoteApp": "資産の作成 - リモートアプリケーション",
-    "CreateDevice": "資産の作成 - ネットワークデバイス",
-    "CreateCloud": "資産の作成 - クラウドプラットフォーム",
-    "CreateWeb": "資産の作成 - ウェブ",
+    "DeviceCreate": "資産の作成 - ネットワークデバイス",
+    "CloudCreate": "資産の作成 - クラウドプラットフォーム",
+    "WebCreate": "資産の作成 - ウェブ",
     "Privileged": "特権のある",
     "SelectPlatforms": "プラットフォームを選択",
     "AppList": "アプリケーションリスト",
@@ -448,10 +449,19 @@
     "SSHPort": "SSH ポート",
     "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
     "Primary": "主要な",
-    "CreateCustom": "カスタムアセットを作成する",
+    "CustomCreate": "カスタムアセットを作成する",
     "CustomType": "カスタムタイプ",
     "CustomHelpMessage": "カスタムタイプのアセットにはアプレットのサポートが必要です。対応するアプレットがインストールされていることを確認してください。",
-    "CustomFields": "カスタム属性"
+    "CustomFields": "カスタム属性",
+    "DeviceUpdate": "資産の更新 - 機器",
+    "CustomUpdate": "資産の更新 - カスタマイズ",
+    "CloudUpdate": "資産の更新 - クラウドプラットフォーム",
+    "GPTUpdate": "資産の更新 - GPT",
+    "PlatformSimple": "プラットフォーム",
+    "HostUpdate": "資産の更新 - ホスト",
+    "WebUpdate": "資産の更新 - Web",
+    "DatabaseUpdate": "資産の更新 - データベース",
+    "GPTCreate": "資産の作成 - GPT"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -476,6 +486,10 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Proxy": "プロキシ",
+    "PublicKey": "公開鍵です",
+    "PrivateKey": "秘密鍵です",
+    "Project": "プロジェクト名です",
     "Advanced": "高度な",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "Generate": "生成",
@@ -1090,6 +1104,7 @@
   },
   "perms": {
     "": "",
+    "AnonymousAccountTip": "匿名アカウントとは、資産の接続時にユーザー名とパスワードを使用せず、ウェブタイプとカスタムタイプの資産のみをサポートするものです。",
     "AssetPermissionHelpMsg": "資産の権限設定では、ユーザーに対して資産へのアクセス権を許可することができます。さらに、特定の操作権限を設定することもできます",
     "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
     "AllAccounts": "すべてのアカウント",
@@ -2028,6 +2043,7 @@
       "OpenStack": "OpenStack",
       "CTYunPrivate": "天翼プライベート・クラウド",
       "GCP": "Googleクラウド",
+      "UCloud": "UCloudユケデです",
       "FC": "Fusion Compute",
       "LAN": "ローカルエリアネットワーク",
       "AWS_China": "AWS(中国)",

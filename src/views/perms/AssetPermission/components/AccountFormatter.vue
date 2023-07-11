@@ -45,7 +45,14 @@
 
 <script>
 import { TagInput } from '@/components/FormFields'
-import { AccountLabelMapper, AllAccount, ManualAccount, SameAccount, SpecAccount } from '@/views/perms/const'
+import {
+  AccountLabelMapper,
+  AllAccount,
+  AnonymousAccount,
+  ManualAccount,
+  SameAccount,
+  SpecAccount
+} from '@/views/perms/const'
 import ListTable from '@/components/ListTable'
 import Dialog from '@/components/Dialog'
 
@@ -109,6 +116,11 @@ export default {
         label: AccountLabelMapper[SameAccount],
         value: SameAccount,
         tip: this.$t('perms.SameAccountTip')
+      },
+      {
+        label: AccountLabelMapper[AnonymousAccount],
+        value: AnonymousAccount,
+        tip: this.$t('perms.AnonymousAccountTip')
       }
     ]
     return {
@@ -116,7 +128,7 @@ export default {
       SPEC: SpecAccount,
       showTemplateDialog: false,
       choices: choices.filter(i => {
-        const isVirtualAccount = [SameAccount, ManualAccount].includes(i.value)
+        const isVirtualAccount = [SameAccount, ManualAccount, AnonymousAccount].includes(i.value)
         return !(isVirtualAccount && !this.showVirtualAccount)
       }),
       choicesSelected: [this.ALL],

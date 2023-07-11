@@ -34,6 +34,7 @@
 import { Dialog, AutoDataForm } from '@/components'
 
 export default {
+  componentName: 'AutomationParams',
   components: {
     Dialog,
     AutoDataForm
@@ -56,6 +57,10 @@ export default {
     nodes: {
       type: Array,
       default: () => []
+    },
+    method: {
+      type: String,
+      default: ''
     },
     url: {
       type: String,
@@ -110,18 +115,17 @@ export default {
       this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
     },
     async getFilterPlatforms() {
-      const res = await this.$axios.post(
+      return await this.$axios.post(
         '/api/v1/assets/platforms/filter-nodes-assets/',
         {
           'node_ids': this.node_ids,
           'asset_ids': this.asset_ids
         }
       )
-      return res
     },
     async onFieldChangeHandle() {
       const platforms = await this.getFilterPlatforms()
-      let pushAccountMethods = platforms.map(i => i.automation?.push_account_method)
+      let pushAccountMethods = platforms.map(i => i.automation[this.method])
       pushAccountMethods = _.uniq(pushAccountMethods)
       // 检测是否有可设置的推送方式
       const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))

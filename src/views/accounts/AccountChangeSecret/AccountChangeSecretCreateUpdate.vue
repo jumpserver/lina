@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
+import { AssetSelect, AutomationParams } from '@/components'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',
@@ -13,6 +14,8 @@ export default {
   },
   data() {
     return {
+      node_ids: [],
+      asset_ids: [],
       initial: {
         is_periodic: true,
         password_rules: {
@@ -33,14 +36,57 @@ export default {
           [
             'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy',
-            'ssh_key', 'passphrase'
+            'ssh_key', 'passphrase', 'params'
           ]
         ],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {
-        ...getChangeSecretFields()
+        ...getChangeSecretFields(),
+        assets: {
+          label: this.$t('xpack.Asset'),
+          type: 'assetSelect',
+          component: AssetSelect,
+          rules: [
+            { required: false }
+          ],
+          el: {
+            baseUrl: '/api/v1/assets/assets/?change_secret_enabled=true'
+          },
+          on: {
+            input: ([value]) => {
+              this.asset_ids = value
+            }
+          }
+        },
+        nodes: {
+          label: this.$t('xpack.Node'),
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/nodes/',
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
+              }
+            }
+          },
+          on: {
+            input: ([value]) => {
+              this.node_ids = value?.map(i => i.pk)
+            }
+          }
+        },
+        params: {
+          component: AutomationParams,
+          label: this.$t('assets.ChangeSecretParams'),
+          el: {
+            method: 'change_secret_method',
+            assets: this.asset_ids,
+            nodes: this.node_ids
+          },
+          helpText: this.$t('accounts.AccountChangeSecret.ParamsHelpText')
+        }
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },
       updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
@@ -53,6 +99,20 @@ export default {
         }
         return data
       }
+    }
+  },
+  watch: {
+    node_ids: {
+      handler(val) {
+        this.fieldsMeta.params.el.nodes = val
+      },
+      deep: true
+    },
+    asset_ids: {
+      handler(val) {
+        this.fieldsMeta.params.el.assets = val
+      },
+      deep: true
     }
   },
   methods: {
