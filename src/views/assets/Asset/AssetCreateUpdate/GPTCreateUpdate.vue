@@ -12,10 +12,9 @@ export default {
     return {
       url: '/api/v1/assets/gpts/',
       addFields: [
+        [this.$t('common.Proxy'), ['proxy'], 1]
       ]
     }
-  },
-  mounted() {
   }
 }
 </script>
