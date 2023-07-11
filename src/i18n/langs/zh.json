@@ -479,6 +479,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Proxy": "代理",
     "PublicKey": "公钥",
     "PrivateKey": "私钥",
     "Project": "项目名",

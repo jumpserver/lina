@@ -486,6 +486,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Proxy": "Proxy",
     "PublicKey": "Public key",
     "PrivateKey": "Private key",
     "Project": "Project name",
