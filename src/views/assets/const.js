@@ -30,15 +30,25 @@ export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
   const platformType = vm?.$route.query?.type
+  const asset = { address: 'https://jumpserver:330' }
   return {
     address: {
-      rules: [rules.specialEmojiCheck, rules.RequiredChange]
+      rules: [rules.specialEmojiCheck, rules.RequiredChange],
+      on: {
+        change: ([event], updateForm) => {
+          asset.address = event
+        },
+        input: ([event], updateForm) => {
+          asset.address = event
+        }
+      }
     },
     protocols: {
       component: ProtocolSelector,
       el: {
         settingReadonly: true,
-        choices: platformProtocols
+        choices: platformProtocols,
+        instance: asset
       },
       on: {
         input: ([value]) => {
@@ -57,6 +67,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
+      label: i18n.t('assets.PlatformSimple'),
       el: {
         multiple: false,
         ajax: {

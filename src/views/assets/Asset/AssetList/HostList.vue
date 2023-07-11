@@ -31,7 +31,6 @@ export default {
         category: 'host',
         optionInfo: {},
         headerActions: {
-          createRoute: 'HostCreate',
           extraActions: [
             {
               name: this.$t('xpack.Cloud.CloudSync'),

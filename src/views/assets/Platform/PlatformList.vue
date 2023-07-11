@@ -142,6 +142,7 @@ export default {
         database: 'fa-database',
         cloud: 'fa-cloud',
         web: 'fa-globe',
+        gpt: 'fa-comment',
         custom: 'fa-th'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')

@@ -1,5 +1,5 @@
 <template>
-  <BaseList v-bind="config" />
+  <BaseList v-bind="tableConfig" />
 </template>
 
 <script>
@@ -11,9 +11,9 @@ export default {
   },
   data() {
     return {
-      config: {
-        url: '/api/v1/assets/devices/',
-        category: 'device'
+      tableConfig: {
+        category: 'gpt',
+        url: '/api/v1/assets/gpts/'
       }
     }
   }
