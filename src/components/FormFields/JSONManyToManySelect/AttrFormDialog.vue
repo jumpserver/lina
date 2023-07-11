@@ -21,7 +21,7 @@
 import DataForm from '@/components/DataForm/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import ValueField from '@/components/FormFields/JSONManyToManySelect/ValueField.vue'
-import { attrMatchOptions, typeMatchMapper } from './const'
+import { attrMatchOptions, typeMatchMapper } from '@/components/const'
 
 export default {
   name: 'AttrFormDialog',

@@ -43,7 +43,7 @@ import ValueFormatter from './ValueFormatter.vue'
 import AttrFormDialog from './AttrFormDialog.vue'
 import AttrMatchResultDialog from './AttrMatchResultDialog.vue'
 import { setUrlParam } from '@/utils/common'
-import { attrMatchOptions } from './const'
+import { attrMatchOptions } from '@/components/const'
 import { toM2MJsonParams } from '@/utils/jms'
 
 export default {

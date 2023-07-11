@@ -256,7 +256,7 @@ export default {
         items = protocols.filter(item => allProtocolNames.indexOf(item.name) !== -1)
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
-        if (defaults.length === 0) {
+        if (defaults.length === 0 && choices.length !== 0) {
           defaults.push(choices[0])
         }
         items = defaults
