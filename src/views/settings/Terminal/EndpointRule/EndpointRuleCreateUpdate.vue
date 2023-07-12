@@ -22,9 +22,9 @@ export default {
       },
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' }},
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority', 'is_active']],
+        [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('terminal.Endpoint'), ['ip_group', 'endpoint']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         endpoint: {
