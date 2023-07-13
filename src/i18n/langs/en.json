@@ -119,8 +119,8 @@
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
     "AssetLoginACLHelpMsg": "It can determine whether the user can access the asset based on the user's login IP and time period.",
-    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period.",
-    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited.",
+    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period（global effective）.",
+    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited（global effective）.",
     "IgnoreCase": "Ignore case",
     "Content": "Content",
     "CommandFilterACL": "Command filter",
