@@ -1808,7 +1808,7 @@
   },
   "users": {
     "AllMembers": "All members",
-    "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
+    "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
     "SetStatus": "Set status",
     "Set": "Set",
     "NotSet": "Not set",

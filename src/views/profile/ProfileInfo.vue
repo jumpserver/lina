@@ -319,7 +319,7 @@ export default {
       return this.$store.state.users.profile.source.value === sourceName
     },
     isDisabled(sourceName) {
-      return this.isBind(sourceName) && !this.isUserFromSource('local')
+      return this.isBind(sourceName) && this.isUserFromSource(sourceName)
     },
     updateUserReceiveBackends(val) {
       this.$axios.patch(
