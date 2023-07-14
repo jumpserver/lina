@@ -1,10 +1,9 @@
 <template>
   <div>
     <GenericCreateUpdateForm
-      :form="form"
       class="attr-form"
       v-bind="formConfig"
-      @submit="onAttrDialogConfirm"
+      @submit="onSubmit"
     />
     <DataTable :config="tableConfig" class="attr-list" />
   </div>
@@ -18,10 +17,6 @@ export default {
   name: 'AttrInput',
   components: { DataTable, GenericCreateUpdateForm },
   props: {
-    form: {
-      type: Object,
-      default: () => ({})
-    },
     formConfig: {
       type: Object,
       default: () => ({})
@@ -32,15 +27,13 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
-  mounted() {},
   methods: {
-    onAttrDialogConfirm(form) {
+    onSubmit(form) {
       const clonedForm = JSON.parse(JSON.stringify(form))
       this.tableConfig.totalData.push(clonedForm)
-      this.$emit('confirm', clonedForm)
+      this.$emit('input', this.tableConfig.totalData)
     }
   }
 }

@@ -2,10 +2,13 @@
   <div>
     <DataTable :config="tableConfig" class="attr-list" />
     <AttrDialog
-      v-if="attrVisible"
-      :visible.sync="attrVisible"
+      v-if="visible"
+      :value="attrValue"
+      :visible.sync="visible"
+      :table-config="tableConfig"
+      @confirm="onAttrDialogConfirm"
     />
-    <el-button type="primary" size="mini" @click="handleCreate">新建</el-button>
+    <el-button type="primary" size="mini" @click="handleCreate">{{ this.$t('common.New') }}</el-button>
   </div>
 </template>
 
@@ -16,17 +19,33 @@ import AttrDialog from './AttrDialog.vue'
 export default {
   name: 'SyncInstanceTaskStrategy',
   components: { DataTable, AttrDialog },
-  props: {},
+  props: {
+    totalData: {
+      type: Array,
+      default: () => []
+    },
+    value: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      attrVisible: false,
+      attrValue: { name: '', rules: [], actions: [] },
+      visible: false,
       tableConfig: {
         columns: [
-          { prop: 'rules', label: this.$t('条件名称') },
-          { prop: 'actions', label: this.$t('动作名称') },
+          { prop: 'name', label: this.$t('common.PolicyName') },
           { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
+                <el-button
+                  icon='el-icon-edit'
+                  size='mini'
+                  style={{ 'flexShrink': 0 }}
+                  type='primary'
+                  onClick={this.handleAttrEdit({ row, col, cellValue, index })}
+                />
                 <el-button
                   icon='el-icon-minus'
                   size='mini'
@@ -38,26 +57,33 @@ export default {
             )
           } }
         ],
-        totalData: this.value?.attrs || [],
+        totalData: this.value,
         hasPagination: false
       }
     }
   },
-  computed: {},
-  watch: {},
-  mounted() {
-    this.$emit('input', this.value)
-  },
   methods: {
     handleCreate() {
-      this.attrVisible = true
+      this.attrValue = { name: '', rules: [], actions: [] }
+      this.visible = true
     },
-    onAttrDialogConfirm(form) {
-      this.$emit('confirm', form)
+    onAttrDialogConfirm() {
+      this.$emit('input', this.tableConfig.totalData)
+    },
+    handleAttrEdit({ row, index }) {
+      return () => {
+        this.$axios.get(`/api/v1/xpack/cloud/rules-actions/${row?.id}/`).then((data) => {
+          this.attrValue = data
+          this.visible = true
+        })
+      }
     },
     handleAttrDelete({ index }) {
       return () => {
-        this.tableConfig.totalData.splice(index, 1)
+        const item = this.tableConfig.totalData.splice(index, 1)
+        this.$axios.delete(`/api/v1/xpack/cloud/rules-actions/${item[0]?.id}/`).then(() => {
+          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        })
       }
     }
   }

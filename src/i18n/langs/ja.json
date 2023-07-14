@@ -486,6 +486,13 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "New": "新筑",
+    "Strategy": "せんりゃく",
+    "Rule": "ルール",
+    "PolicyName": "ポリシーの名前です",
+    "BasicSetting": "基本設定",
+    "RuleSetting": "条件設定です",
+    "ActionSetting": "動作設定です",
     "Proxy": "プロキシ",
     "PublicKey": "公開鍵です",
     "PrivateKey": "秘密鍵です",
@@ -592,6 +599,7 @@
     "CrontabHelpTips": "Eg: 毎週日曜日03:05に <5 3 * * 0> <br> ヒント: 5ビットLinux crontab式 <時分割日月曜日> (<a href = 'https:// tool.lu/crontab/' target = '_ blank'> オンラインツール </a>) <br>注意: 定期実行とサイクル実行の両方が設定されている場合は、定期実行を優先します",
     "DateEnd": "終了日",
     "Resource": "リソース",
+    "ResourceType": "リソースタイプです",
     "DateLast24Hours": "最近の日",
     "DateLast3Months": "直近3月",
     "DateLastHarfYear": "ここ半年です",
@@ -2032,6 +2040,8 @@
       "Reason": "原因"
     },
     "Cloud": {
+      "InstanceName": "インスタンス名です",
+      "InstancePlatformName": "インスタンスのプラットフォーム名です",
       "CloudSync": "クラウド同期",
       "ServerAccountKey": "サービスアカウントキー",
       "IPNetworkSegment": "IPネットワークセグメント",

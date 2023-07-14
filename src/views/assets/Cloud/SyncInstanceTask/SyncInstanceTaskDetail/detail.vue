@@ -53,8 +53,8 @@ export default {
       detailFields: [
         'name', 'account_display', 'node_display',
         {
-          key: this.$t('assets.Protocols'),
-          value: this.object.protocols
+          key: this.$t('xpack.Cloud.Strategy'),
+          value: this.object.strategies?.map(item => item.name).join(', ')
         },
         {
           key: this.$t('xpack.Cloud.IPNetworkSegment'),

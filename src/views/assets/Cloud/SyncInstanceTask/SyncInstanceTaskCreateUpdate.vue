@@ -25,7 +25,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
         [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
-        [this.$t('同步策略'), ['strategy']],
+        [this.$t('同步策略'), ['strategies']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -64,7 +64,7 @@ export default {
             ajax: {
               url: '/api/v1/xpack/cloud/regions/',
               processResults(data) {
-                const results = data.regions.map((item) => {
+                const results = data.regions?.map((item) => {
                   return { label: item.name, value: item.id }
                 })
                 const more = !!data.next
@@ -91,8 +91,8 @@ export default {
           },
           helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         },
-        strategy: {
-          label: '条件动作配置',
+        strategies: {
+          label: this.$t('common.Strategy'),
           component: SyncInstanceTaskStrategy
         }
       },
@@ -103,14 +103,15 @@ export default {
           const [name, port] = i.split('/')
           return { name, port }
         })
-
         return formValue
       },
       cleanFormValue(value) {
         const ipNetworkSegments = value.ip_network_segment_group
+        const strategies = value.strategies
         if (!Array.isArray(ipNetworkSegments)) {
           value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
+        value.strategies = strategies.map(item => { return item.id })
         return value
       },
       onPerformError(error, method, vm) {
