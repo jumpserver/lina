@@ -1792,7 +1792,7 @@
   },
   "users": {
     "AllMembers": "全部成员",
-    "UnbindHelpText": "此用户非本地用户，无法进行解绑，请联系管理员",
+    "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
     "Set": "已设置",
     "NotSet": "未设置",
