@@ -262,18 +262,17 @@ export default {
     },
     setPrimaryIfNeed(items) {
       // 如果没有设置主协议，设置第一个为主协议
-      if (!this.settingReadonly) {
-        const primaryProtocols = items.filter(item => item.primary)
-        if (primaryProtocols.length === 0) {
-          items[0].primary = true
-          items[0].default = true
-          items[0].required = true
-          items[0].public = true
-        } else if (primaryProtocols.length > 1) {
-          primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
-            item.primary = false
-          })
-        }
+      if (this.settingReadonly) {
+        return items
+      }
+      const primaryProtocols = items.filter(item => item.primary)
+      if (primaryProtocols.length === 0) {
+        items[0].default = true
+        items[0].public = true
+      } else if (primaryProtocols.length > 1) {
+        primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
+          item.primary = false
+        })
       }
       return items
     },
