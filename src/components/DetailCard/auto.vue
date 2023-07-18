@@ -1,5 +1,5 @@
 <template>
-  <DetailCard v-if="!loading && hasObject" :items="items" v-bind="$attrs" />
+  <DetailCard v-if="!loading && hasObject && items.length > 0" :items="items" v-bind="$attrs" />
 </template>
 
 <script>
