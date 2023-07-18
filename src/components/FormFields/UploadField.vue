@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input ref="upLoadFile" type="file" style="display: none" @change="Onchange">
+    <input ref="upLoadFile" :accept="accept" type="file" style="display: none" @change="Onchange">
     <el-button size="mini" @click.native.stop="onUpLoad">
       {{ this.$t('common.SelectFile') }}
     </el-button>
@@ -23,6 +23,10 @@ export default {
     tip: {
       type: String,
       default: () => ''
+    },
+    accept: {
+      type: String,
+      default: '*'
     }
   },
   data() {
