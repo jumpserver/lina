@@ -19,7 +19,7 @@ import AttrInput from './AttrInput'
 import { attrMatchOptions, strMatchValues } from '@/components/const'
 import Select2 from '@/components/FormFields/Select2'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
-import TagInput from '@/components/FormFields/TagInput.vue'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'AttrDialog',
@@ -93,11 +93,12 @@ export default {
               onSubmit: () => {},
               submitMethod: () => 'post',
               getUrl: () => '',
-              fields: [['', ['attr', 'match', { id: 'value', 'component': 'el-input' }]]],
+              fields: [['', ['attr', 'match', 'value']]],
               fieldsMeta: {
                 attr: {
                   label: '',
                   component: Select2,
+                  rules: [Required],
                   el: {
                     value: [],
                     multiple: false,
@@ -108,31 +109,21 @@ export default {
                 match: {
                   label: '',
                   component: Select2,
+                  rules: [Required],
                   el: {
                     value: [],
                     multiple: false,
                     clearable: false,
                     options: attrMatchOptions.filter((option) => {
-                      if (strMatchValues.indexOf(option.value) !== -1) {
+                      if (strMatchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
                         return option
                       }
                     })
-                  },
-                  on: {
-                    change: ([value], updateForm) => {
-                      if (value === 'in') {
-                        vm.fieldsMeta.rules.el.formConfig.fields[0][1][2].component = TagInput
-                      } else {
-                        vm.fieldsMeta.rules.el.formConfig.fields[0][1][2].component = 'el-input'
-                      }
-                      setTimeout(() => {
-                        updateForm({ match: value })
-                      }, 10)
-                    }
                   }
                 },
                 value: {
-                  component: Select2
+                  component: 'el-input',
+                  rules: [Required]
                 }
               }
             },
@@ -185,6 +176,7 @@ export default {
                 attr: {
                   label: '',
                   component: Select2,
+                  rules: [Required],
                   el: {
                     url: '',
                     clearable: false,
@@ -197,7 +189,7 @@ export default {
                       let url
                       switch (val) {
                         case 'platform':
-                          url = '/api/v1/assets/platforms/'
+                          url = '/api/v1/assets/platforms/?category=host'
                           break
                         case 'node':
                           url = '/api/v1/assets/nodes/'
@@ -220,6 +212,7 @@ export default {
                 value: {
                   label: '',
                   component: Select2,
+                  rules: [Required],
                   el: {
                     value: [],
                     style: { width: '400px' },
@@ -236,6 +229,10 @@ export default {
                             break
                           case 'account_template':
                             label = `${item.name}(${item.username})`
+                            vm.globalResource[item.id] = label
+                            break
+                          case 'node':
+                            label = item?.full_value
                             vm.globalResource[item.id] = label
                             break
                           default:

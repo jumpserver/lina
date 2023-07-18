@@ -107,7 +107,7 @@ export default {
       },
       cleanFormValue(value) {
         const ipNetworkSegments = value.ip_network_segment_group
-        const strategies = value.strategies
+        const strategies = value?.strategies || []
         if (!Array.isArray(ipNetworkSegments)) {
           value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
