@@ -150,6 +150,19 @@ export default {
             'date_created', 'date_updated'
           ],
           columnsMeta: {
+            name: {
+              formatterArgs: {
+                openInNewPage: true,
+                getRoute({ row, col, cellValue }) {
+                  return {
+                    name: 'AccountTemplateDetail',
+                    params: {
+                      id: row.id
+                    }
+                  }
+                }
+              }
+            },
             has_secret: {
               formatterArgs: {
                 showFalse: false
