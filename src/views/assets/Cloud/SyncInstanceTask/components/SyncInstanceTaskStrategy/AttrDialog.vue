@@ -155,6 +155,21 @@ export default {
           label: this.$t('common.Action'),
           component: AttrInput,
           el: {
+            beforeSubmit: (value) => {
+              let status = true
+              const labelMap = {
+                platform: this.$tc('assets.Platform'), domain: this.$tc('assets.Domain')
+              }
+              if (Object.keys(labelMap).indexOf(value?.attr) !== -1) {
+                this.fieldsMeta.actions.el.tableConfig.totalData.map(item => {
+                  if (item.attr === value.attr) {
+                    status = false
+                    this.$message.error(`${this.$tc('xpack.Cloud.UniqueError')}: ${labelMap[value.attr]}`)
+                  }
+                })
+              }
+              return status
+            },
             formConfig: {
               initial: { attr: '', value: '' },
               inline: true,

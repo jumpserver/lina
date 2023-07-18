@@ -1959,6 +1959,7 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "Cloud": {
+      "UniqueError": "以下属性只能设置一个",
       "InstanceName": "实例名称",
       "InstancePlatformName": "实例平台名称",
       "LAN": "局域网",

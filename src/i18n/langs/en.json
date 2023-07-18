@@ -2047,6 +2047,7 @@
       "Reason": "Reason"
     },
     "Cloud": {
+      "UniqueError": "Only one of the following properties can be set",
       "InstanceName": "Instance name",
       "InstancePlatformName": "Instance platform name",
       "CloudSync": "Cloud sync",

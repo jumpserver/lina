@@ -2040,6 +2040,7 @@
       "Reason": "原因"
     },
     "Cloud": {
+      "UniqueError": "以下の属性は1つしか設定できません",
       "InstanceName": "インスタンス名です",
       "InstancePlatformName": "インスタンスのプラットフォーム名です",
       "CloudSync": "クラウド同期",

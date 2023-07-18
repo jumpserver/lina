@@ -24,16 +24,22 @@ export default {
     tableConfig: {
       type: Object,
       default: () => ({})
+    },
+    beforeSubmit: {
+      type: Function,
+      default: (val) => { return true }
     }
   },
   data() {
     return {}
   },
   methods: {
-    onSubmit(form) {
-      const clonedForm = JSON.parse(JSON.stringify(form))
-      this.tableConfig.totalData.push(clonedForm)
-      this.$emit('input', this.tableConfig.totalData)
+    onSubmit(value) {
+      if (this.beforeSubmit(value)) {
+        const clonedValue = JSON.parse(JSON.stringify(value))
+        this.tableConfig.totalData.push(clonedValue)
+        this.$emit('input', this.tableConfig.totalData)
+      }
     }
   }
 }
