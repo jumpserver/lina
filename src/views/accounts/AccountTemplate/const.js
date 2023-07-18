@@ -62,6 +62,14 @@ export const templateFieldsMeta = (vm) => {
         rows: 4
       },
       hidden: (formValue) => formValue.secret_type !== 'access_key'
+    },
+    api_key: {
+      label: vm.$t('assets.ApiKey'),
+      el: {
+        type: 'textarea',
+        rows: 4
+      },
+      hidden: (formValue) => formValue.secret_type !== 'api_key'
     }
   }
 }
