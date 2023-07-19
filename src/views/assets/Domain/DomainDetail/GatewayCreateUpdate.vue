@@ -11,7 +11,7 @@ export default {
     BaseAssetCreateUpdate
   },
   data() {
-    const platformType = this.$route.query.type
+    const platformType = this.$route.query.platform_type
     return {
       url: '/api/v1/assets/gateways/',
       updateInitial: async(initial) => {

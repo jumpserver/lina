@@ -134,7 +134,7 @@ export default {
           name: 'GatewayCreate',
           query: {
             domain: this.object.id,
-            type: 'linux',
+            platform_type: 'linux',
             category: 'host'
           }
         }
