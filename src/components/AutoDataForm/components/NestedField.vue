@@ -1,10 +1,13 @@
 <template>
   <DataForm
+    v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
     :form="value"
     style="margin-left: -26%;margin-right: -6%"
     v-bind="kwargs"
+    @change="updateValue($event)"
+    @input="updateValue($event)"
     v-on="$listeners"
   />
 </template>
@@ -37,6 +40,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      formJson: JSON.stringify(this.value),
       kwargs: {
         hasReset: false,
         hasSaveContinue: false,
@@ -65,7 +70,26 @@ export default {
       return fields
     }
   },
+  watch: {
+    value: {
+      handler(val) {
+        const valJson = JSON.stringify(val)
+        // 如果不想等，证明是 value 自己变化导致的， 需要重新渲染
+        if (valJson !== this.formJson) {
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+          }, 10)
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
+    updateValue(val) {
+      this.formJson = JSON.stringify(val)
+      this.$emit('input', val)
+    },
     objectToString(obj) {
       let data = ''
       // eslint-disable-next-line prefer-const
