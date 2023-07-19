@@ -1718,6 +1718,8 @@
     "basicTools": "Basic tool"
   },
   "tickets": {
+    "BatchApproval": "Batch approval",
+    "BatchReject": "Batch reject",
     "ApplyAsset": "Apply asset",
     "LoginConfirm": "User login confirm",
     "CommandConfirm": "Command confirm",

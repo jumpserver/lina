@@ -1711,6 +1711,8 @@
     "Applets": "リモート アプリケーション"
   },
   "tickets": {
+    "BatchApproval": "大量承認です",
+    "BatchReject": "一括拒否です",
     "ApplyAsset": "リソースの適用",
     "LoginConfirm": "ユーザーログインの確認",
     "CommandConfirm": "コマンドの確認",
