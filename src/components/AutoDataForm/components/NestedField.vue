@@ -1,10 +1,13 @@
 <template>
   <DataForm
+    v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
-    :form="value"
+    :form="form"
     style="margin-left: -26%;margin-right: -6%"
     v-bind="kwargs"
+    @change="form = $event"
+    @input="form = $event"
     v-on="$listeners"
   />
 </template>
@@ -37,6 +40,9 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      iForm: Object.assign({}, this.value),
+      formJson: JSON.stringify(this.value),
       kwargs: {
         hasReset: false,
         hasSaveContinue: false,
@@ -45,6 +51,16 @@ export default {
     }
   },
   computed: {
+    form: {
+      get() {
+        return this.iForm
+      },
+      set(val) {
+        this.iForm = Object.assign(this.iForm, val)
+        this.formJson = JSON.stringify(this.iForm)
+        this.$emit('input', this.iForm)
+      }
+    },
     iFields() {
       const fields = this.fields
       if (this.errors && typeof this.errors === 'object') {
@@ -63,6 +79,21 @@ export default {
       }
       this.$log.debug('Fields change: ', fields, this.errors)
       return fields
+    }
+  },
+  watch: {
+    value: {
+      handler(val) {
+        const valJson = JSON.stringify(val)
+        if (valJson !== this.formJson) {
+          this.loading = true
+          this.form = val
+          setTimeout(() => {
+            this.loading = false
+          })
+        }
+      },
+      deep: true
     }
   },
   methods: {
