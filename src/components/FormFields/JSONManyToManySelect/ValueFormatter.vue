@@ -48,6 +48,8 @@ export default {
   },
   methods: {
     async getValue() {
+      console.log('ValueFormatter: ', this.row, this.col, this.cellValue)
+      this.loading = true
       this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
       this.match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
