@@ -3,11 +3,11 @@
     v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
-    :form="form"
+    :form="value"
     style="margin-left: -26%;margin-right: -6%"
     v-bind="kwargs"
-    @change="form = $event"
-    @input="form = $event"
+    @change="updateValue($event)"
+    @input="updateValue($event)"
     v-on="$listeners"
   />
 </template>
@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       loading: false,
-      iForm: Object.assign({}, this.value),
       formJson: JSON.stringify(this.value),
       kwargs: {
         hasReset: false,
@@ -51,16 +50,6 @@ export default {
     }
   },
   computed: {
-    form: {
-      get() {
-        return this.iForm
-      },
-      set(val) {
-        this.iForm = Object.assign(this.iForm, val)
-        this.formJson = JSON.stringify(this.iForm)
-        this.$emit('input', this.iForm)
-      }
-    },
     iFields() {
       const fields = this.fields
       if (this.errors && typeof this.errors === 'object') {
@@ -85,18 +74,22 @@ export default {
     value: {
       handler(val) {
         const valJson = JSON.stringify(val)
+        // 如果不想等，证明是 value 自己变化导致的， 需要重新渲染
         if (valJson !== this.formJson) {
           this.loading = true
-          this.form = val
           setTimeout(() => {
             this.loading = false
-          })
+          }, 10)
         }
       },
       deep: true
     }
   },
   methods: {
+    updateValue(val) {
+      this.formJson = JSON.stringify(val)
+      this.$emit('input', val)
+    },
     objectToString(obj) {
       let data = ''
       // eslint-disable-next-line prefer-const
