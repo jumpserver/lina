@@ -180,6 +180,9 @@ export default {
   .el-form-item__content {
     width: 70%;
   }
+  .el-select {
+    width: 100%;
+  }
 }
 
 >>> .itemParamsKey.el-form-item {
