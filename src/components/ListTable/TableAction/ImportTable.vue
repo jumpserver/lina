@@ -371,7 +371,7 @@ export default {
     },
     async performUpdateObject(item) {
       const updateUrl = getUpdateObjURL(this.url, item.id)
-      return this.$axios.put(
+      return this.$axios.patch(
         updateUrl,
         item,
         { disableFlashErrorMsg: true }
