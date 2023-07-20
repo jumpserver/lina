@@ -4,9 +4,7 @@
     <i v-else class="fa fa-times text-danger" />
   </span>
   <span v-else :title="value">
-    <span>
-      {{ value }}
-    </span>
+    {{ value }}
   </span>
 </template>
 
@@ -47,11 +45,12 @@ export default {
     }
   },
   mounted() {
-    this.getValue()
+    setTimeout(() => {
+      this.getValue()
+    }, 10)
   },
   methods: {
     async getValue() {
-      this.loading = true
       this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
       this.match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
@@ -75,9 +74,7 @@ export default {
         this.value = this.cellValue
       }
       console.log('Value: ', this.value)
-      this.loading = false
     }
-
   }
 }
 </script>
