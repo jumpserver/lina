@@ -3,7 +3,11 @@
     <i v-if="value" class="fa fa-check text-primary" />
     <i v-else class="fa fa-times text-danger" />
   </span>
-  <span v-else :title="value">{{ value }}</span>
+  <span v-else :title="value">
+    <span>
+      {{ value }}
+    </span>
+  </span>
 </template>
 
 <script>
@@ -39,7 +43,6 @@ export default {
       handler(val) {
         this.getValue()
       },
-      immediate: true,
       deep: true
     }
   },
@@ -48,14 +51,15 @@ export default {
   },
   methods: {
     async getValue() {
-      console.log('ValueFormatter: ', this.row, this.col, this.cellValue)
       this.loading = true
       this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
       this.match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
+      console.log('ValueFormatter: ', { row: this.row, col: this.col, cellValue: this.cellValue, args: this.formatterArgs })
+      console.log('attr: ', this.attr)
       if (this.attr.type === 'm2m') {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
-        const data = await this.$axios.get(url)
+        const data = await this.$axios.get(url) || []
         if (data.length > 0) {
           const displayField = this.attr.el.displayField || 'name'
           this.value = data.map(item => item[displayField]).join(', ')
@@ -63,12 +67,14 @@ export default {
       } else if (this.attr.type === 'select') {
         this.value = this.attr.el.options
           .filter(item => this.cellValue.includes(item.value))
-          .map(item => item.label).join(',')
+          .map(item => item.label)
+          .join(', ')
       } else if (['in', 'ip_in'].includes(this.match)) {
         this.value = this.cellValue.join(', ')
       } else {
         this.value = this.cellValue
       }
+      console.log('Value: ', this.value)
       this.loading = false
     }
 
