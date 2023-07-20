@@ -73,10 +73,7 @@ export default {
         }
       } else if (this.attr.type === 'select') {
         const options = this.attr.el.options || []
-        console.log('Options: ', options)
-        console.log('Cell value: ', this.cellValue)
         const items = options.filter(item => this.cellValue.includes(item.value))
-        console.log('Items: ', items)
         this.value = items.map(item => item.label).join(', ')
       } else if (['in', 'ip_in'].includes(match)) {
         this.value = this.cellValue.join(', ')
