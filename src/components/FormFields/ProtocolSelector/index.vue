@@ -201,7 +201,14 @@ export default {
       }
       const parse = require('url-parse')
       const path = parse(address)
-      return path.port
+      let port = path.port
+      if (port < 0 || port > 65535) {
+        port = 0
+      }
+      if (!port) {
+        port = path.protocol === 'https:' ? 443 : 80
+      }
+      return port
     },
     handleSettingConfirm() {
       if (this.currentProtocol.primary) {
