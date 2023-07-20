@@ -4,6 +4,7 @@
       v-model="resultInfo"
       :mode="'code'"
       :show-btns="false"
+      :class="{resize: resize === 'vertical'}"
       @json-change="onJsonChange"
       @json-save="onJsonSave"
       @has-error="onError"
@@ -20,6 +21,13 @@ export default {
     value: {
       type: [String, Object, Array],
       default: () => ({})
+    },
+    resize: {
+      type: String,
+      validator: (value) => {
+        return ['none', 'vertical'].indexOf(value) !== -1
+      },
+      default: 'vertical'
     }
   },
   data() {
@@ -46,7 +54,7 @@ export default {
     },
     onError: _.debounce(function(value) {
       this.$message.error(this.$tc('common.FormatError'))
-    }, 1100)
+    }, 1500)
   }
 }
 </script>
@@ -55,6 +63,12 @@ export default {
   @import "~@/styles/variables.scss";
 
   .json-editor {
+    .resize {
+      & > > > .jsoneditor {
+      resize: vertical;
+      cursor: s-resize;
+      }
+    }
     & > > > .jsoneditor {
       border: 1px solid #e5e6e7;
     }

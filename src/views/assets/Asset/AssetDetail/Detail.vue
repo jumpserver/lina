@@ -15,7 +15,13 @@
         type="info"
         v-bind="nodeRelationConfig"
       />
-      <LabelCard v-if="$hasPerm('assets.view_label')" style="margin-top: 15px" type="warning" v-bind="labelConfig" />
+      <RelationCard
+        ref="LabelRelation"
+        v-perms="'assets.view_label'"
+        style="margin-top: 15px"
+        type="warning"
+        v-bind="labelConfig"
+      />
     </el-col>
   </el-row>
 </template>
@@ -24,7 +30,6 @@
 import AutoDetailCard from '@/components/DetailCard/auto'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
-import LabelCard from './components/LabelCard'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -32,8 +37,7 @@ export default {
   components: {
     AutoDetailCard,
     QuickActions,
-    RelationCard,
-    LabelCard
+    RelationCard
   },
   props: {
     object: {
@@ -147,8 +151,40 @@ export default {
         }
       },
       labelConfig: {
+        icon: 'fa-info',
         title: this.$t('assets.Label'),
-        labels: this.object.labels
+        objectsAjax: {
+          url: '/api/v1/assets/labels/',
+          transformOption: (item) => {
+            return { label: String(item.name) + ':' + String(item.value), value: item.id }
+          }
+        },
+        hasObjectsId: this.object.labels?.map(i => i.id) || [],
+        performAdd: (items) => {
+          const newData = []
+          const value = this.$refs.LabelRelation.iHasObjects
+          value.map(v => {
+            newData.push({ 'pk': v.value })
+          })
+
+          const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
+          items.map(v => {
+            newData.push({ 'pk': v.value })
+          })
+          return this.$axios.patch(relationUrl, { labels: newData })
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const newData = []
+          const value = this.$refs.LabelRelation.iHasObjects
+          value.map(v => {
+            if (v.value !== itemId) {
+              newData.push({ 'pk': v.value })
+            }
+          })
+          const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
+          return this.$axios.patch(relationUrl, { labels: newData })
+        }
       },
       basicInfoConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/`,
@@ -188,7 +224,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: false,
+        showUndefine: true,
         excludes: ['script']
       },
       customInfoConfig: {
@@ -212,7 +248,7 @@ export default {
       const object = this.object
       const type = object.type.value
       const autofill = object.spec_info?.autofill
-      return !(type === 'website' && autofill === 'script')
+      return !(type === 'website' && autofill === 'script') && Object.keys(object.spec_info || {}).length > 0
     }
   },
   mounted() {

@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { AssetSelect, CronTab } from '@/components'
+import { CronTab } from '@/components'
 import { TagInput, UpdateToken } from '@/components/FormFields'
 import { Required } from '@/components/DataForm/rules'
 
@@ -46,29 +46,6 @@ function generatePasswordRulesItemsFields(obType) {
 
 export const getChangeSecretFields = () => {
   return {
-    assets: {
-      type: 'assetSelect',
-      component: AssetSelect,
-      rules: [
-        { required: false }
-      ],
-      el: {
-        baseUrl: '/api/v1/assets/assets/?change_secret_enabled=true'
-      },
-      label: i18n.t('xpack.Asset')
-    },
-    nodes: {
-      label: i18n.t('xpack.Node'),
-      el: {
-        value: [],
-        ajax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
-          }
-        }
-      }
-    },
     secret_type: {
       type: 'radio-group',
       options: []
@@ -149,7 +126,6 @@ export const getChangeSecretFields = () => {
       label: i18n.t('common.Username'),
       component: TagInput
     }
-
   }
 }
 

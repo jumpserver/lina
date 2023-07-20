@@ -55,7 +55,7 @@ export default {
         protocols: [
           {
             name: 'ssh',
-            secret_types: ['password', 'ssh_key', 'token', 'access_key']
+            secret_types: ['password', 'ssh_key', 'token', 'access_key', 'api_key']
           }
         ]
       },
@@ -67,8 +67,8 @@ export default {
         [this.$t('accounts.AccountTemplate'), ['template']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key',
-          'token', 'access_key', 'passphrase'
+          'secret_type', 'password', 'ssh_key', 'token',
+          'access_key', 'passphrase', 'api_key'
         ]],
         [this.$t('common.Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
@@ -173,7 +173,7 @@ export default {
             return this.platform || this.asset || this.addTemplate
           }
         },
-        secret: {
+        password: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'password' || this.addTemplate
@@ -198,6 +198,12 @@ export default {
           label: this.$t('assets.AccessKey'),
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'access_key' || this.addTemplate
+        },
+        api_key: {
+          id: 'api_key',
+          label: this.$t('assets.ApiKey'),
+          component: UploadSecret,
+          hidden: (formValue) => formValue.secret_type !== 'api_key' || this.addTemplate
         },
         secret_type: {
           type: 'radio-group',
@@ -276,6 +282,10 @@ export default {
         {
           label: this.$t('assets.AccessKey'),
           value: 'access_key'
+        },
+        {
+          label: this.$t('assets.ApiKey'),
+          value: 'api_key'
         }
       ]
       const secretTypes = []
@@ -290,11 +300,10 @@ export default {
       })
     },
     confirm(form) {
-      const secretType = form.secret_type || ''
-      if (secretType !== 'password') {
-        form.secret = form[secretType]
-      }
+      const secretType = form.secret_type || 'password'
+      form.secret = form[secretType]
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
+
       if (!form.secret) {
         delete form['secret']
       }

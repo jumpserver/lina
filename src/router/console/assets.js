@@ -47,25 +47,18 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'HostList',
-        component: () => import('@/views/assets/Asset/AssetList/HostList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'HostCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateHost'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.HostCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'HostUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.HostUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
@@ -81,25 +74,18 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'DatabaseList',
-        component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'DatabaseCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateDatabase'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.DatabaseCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'DatabaseUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.DatabaseUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
@@ -115,25 +101,18 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'DeviceList',
-        component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'DeviceCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateDevice'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.DeviceCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'DeviceUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.DeviceUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
@@ -149,25 +128,18 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'CloudsPlatformList',
-        component: () => import('@/views/assets/Asset/AssetList/CloudList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'CloudCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateCloud'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.CloudCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'CloudUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.CloudUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
@@ -183,25 +155,43 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'WebList',
-        component: () => import('@/views/assets/Asset/AssetList/WebList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'WebCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateWeb'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.WebCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'WebUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.WebUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'gpts',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: {
+      title: i18n.t('route.gpts'),
+      app: 'assets',
+      resource: 'asset'
+    },
+    children: [
+      {
+        path: 'create',
+        name: 'GptCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/GPTCreateUpdate.vue'),
+        meta: { title: i18n.t('route.GPTCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'GptUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/GPTCreateUpdate.vue'),
+        meta: { title: i18n.t('route.GPTUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },
@@ -217,25 +207,18 @@ export default [
     },
     children: [
       {
-        path: '',
-        name: 'CustomList',
-        component: () => import('@/views/assets/Asset/AssetList/CustomList.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
-      },
-      {
         path: 'create',
         name: 'CustomCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateCustom'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.CustomCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'CustomUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('route.CustomUpdate'), activeMenu: '/console/assets/assets' }
       }
     ]
   },

@@ -57,6 +57,12 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
+            icon: 'fa-comment',
+            name: 'gpt',
+            hidden: true,
+            component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')
+          },
+          {
             icon: 'fa-th',
             name: 'custom',
             hidden: true,
@@ -74,6 +80,7 @@ export default {
     this.$axios.get('/api/v1/assets/categories/').then(categories => {
       for (const item of categories) {
         const name = item.value
+        // 如果报错，需要在上面的 submenu 中添加对应的组件
         nameComponentMap[name]['hidden'] = false
         nameComponentMap[name]['title'] = item.label
       }

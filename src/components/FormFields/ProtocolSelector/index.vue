@@ -3,9 +3,10 @@
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
         v-model="item.port"
-        :class="readonly ? '' : 'input-with-select'"
+        :class="isPortReadonly(item) ? '' : 'input-with-select'"
         :placeholder="portPlaceholder"
-        :readonly="readonly"
+        :readonly="isPortReadonly(item)"
+        :title="isPortReadonly(item) ? '端口由 URL 指定' : ''"
         v-bind="$attrs"
       >
         <template #prepend>
@@ -62,7 +63,7 @@
     <ProtocolSettingDialog
       v-if="showDialog"
       :disabled="settingReadonly || readonly"
-      :item="settingItem"
+      :protocol="currentProtocol"
       :visible.sync="showDialog"
       @confirm="handleSettingConfirm"
     />
@@ -102,13 +103,17 @@ export default {
     showSetting: {
       type: Function,
       default: (item) => true
+    },
+    instance: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
       name: '',
       items: [],
-      settingItem: {},
+      currentProtocol: {},
       showDialog: false,
       loading: false
     }
@@ -138,13 +143,18 @@ export default {
   },
   watch: {
     choices: {
-      handler(value) {
+      handler(value, oldValue) {
+        if (value?.length === oldValue?.length) {
+          return
+        }
         this.loading = true
         setTimeout(() => {
-          this.loading = false
           this.setDefaultItems(value)
-        }, 100)
-      }
+          this.loading = false
+        },)
+      },
+      deep: true,
+      immediate: true
     },
     items: {
       handler(value) {
@@ -157,6 +167,21 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    instance: {
+      handler(value) {
+        const port = this.getPortFromInstance(value)
+        if (!port) {
+          return
+        }
+        for (const item of this.items) {
+          if (item['port_from_addr']) {
+            item.port = port
+          }
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   mounted() {
@@ -166,21 +191,40 @@ export default {
     this.$log.debug('Items: ', this.items)
   },
   methods: {
+    getPortFromInstance(instance) {
+      if (!instance) {
+        return 0
+      }
+      let address = instance.address || ''
+      if (address.indexOf('://') === -1) {
+        address = `https://${address}`
+      }
+      const parse = require('url-parse')
+      const path = parse(address)
+      let port = path.port
+      if (port < 0 || port > 65535) {
+        port = 0
+      }
+      if (!port) {
+        port = path.protocol === 'https:' ? 443 : 80
+      }
+      return port
+    },
     handleSettingConfirm() {
-      if (this.settingItem.primary) {
+      if (this.currentProtocol.primary) {
         const others = this.items
-          .filter(item => item.name !== this.settingItem.name)
+          .filter(item => item.name !== this.currentProtocol.name)
           .map(item => {
             item.primary = false
             return item
           })
-        this.items = [this.settingItem, ...others]
+        this.items = [this.currentProtocol, ...others]
       }
-      if (this.settingItem.name === 'winrm') {
-        if (this.settingItem.setting?.use_ssl) {
-          this.settingItem.port = 5986
+      if (this.currentProtocol.name === 'winrm') {
+        if (this.currentProtocol.setting?.use_ssl) {
+          this.currentProtocol.port = 5986
         } else {
-          this.settingItem.port = 5985
+          this.currentProtocol.port = 5985
         }
       }
     },
@@ -217,20 +261,25 @@ export default {
       item.name = selected.name
       item.port = selected.port
     },
+    isPortFormAddr(item) {
+      return !!item['port_from_addr']
+    },
+    isPortReadonly(item) {
+      return this.readonly || this.isPortFormAddr(item)
+    },
     setPrimaryIfNeed(items) {
       // 如果没有设置主协议，设置第一个为主协议
-      if (!this.settingReadonly) {
-        const primaryProtocols = items.filter(item => item.primary)
-        if (primaryProtocols.length === 0) {
-          items[0].primary = true
-          items[0].default = true
-          items[0].required = true
-          items[0].public = true
-        } else if (primaryProtocols.length > 1) {
-          primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
-            item.primary = false
-          })
-        }
+      if (this.settingReadonly) {
+        return items
+      }
+      const primaryProtocols = items.filter(item => item.primary)
+      if (primaryProtocols.length === 0) {
+        items[0].default = true
+        items[0].public = true
+      } else if (primaryProtocols.length > 1) {
+        primaryProtocols.slice(1, primaryProtocols.length).forEach(item => {
+          item.primary = false
+        })
       }
       return items
     },
@@ -271,7 +320,7 @@ export default {
       return protocols
     },
     onSettingClick(item) {
-      this.settingItem = item
+      this.currentProtocol = item
       this.showDialog = true
     }
   }

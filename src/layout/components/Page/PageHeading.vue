@@ -1,7 +1,8 @@
 <template>
   <div>
     <slot name="globalNotification">
-      <LicenseRelatedTip />
+      <SqlQueryTip v-if="debug" />
+      <LicenseRelatedTip v-else />
       <PasswordExpireTip />
     </slot>
     <div class="page-heading">
@@ -21,18 +22,26 @@
 </template>
 
 <script>
-import LicenseRelatedTip from '@/layout/components/Page/LicenseRelatedTip'
-import PasswordExpireTip from '@/layout/components/Page/PasswordExpireTip'
+import LicenseRelatedTip from './LicenseRelatedTip'
+import PasswordExpireTip from './PasswordExpireTip'
+import SqlQueryTip from './SqlQueryTip'
+
 export default {
   name: 'PageHeading',
   components: {
     LicenseRelatedTip,
-    PasswordExpireTip
+    PasswordExpireTip,
+    SqlQueryTip
   },
   props: {
     title: {
       type: String,
       default: ''
+    }
+  },
+  data() {
+    return {
+      debug: process.env.NODE_ENV === 'development'
     }
   }
 }

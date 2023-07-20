@@ -1,16 +1,16 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
       <IBox :title="$tc('rbac.Permissions')">
         <div style="height: 10%">
           <el-button
-            size="small"
-            type="primary"
-            style="width: 100%;"
             :disabled="isDisabled"
+            size="small"
+            style="width: 100%;"
+            type="primary"
             @click="updatePermissions"
           >
             {{ $t('common.Update') }}
@@ -142,6 +142,7 @@ export default {
         'ops.change_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.add_jobexecution': ['ops.view_celerytaskexecution'],
+        'authentication.add_connectiontoken': ['rbac.view_webterminal'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'

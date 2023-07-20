@@ -1,6 +1,8 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+const globalSubmenu = () => import('@/layout/globalOrg.vue')
+
 export default [
   {
     path: 'users',
@@ -89,11 +91,12 @@ export default [
   },
   {
     path: 'roles',
-    component: empty,
+    component: globalSubmenu,
     redirect: '',
     meta: {
       permissions: ['rbac.view_orgrole | rbac.view_systemrole'],
       app: 'rbac',
+      disableOrgsChange: true,
       licenseRequired: true
     },
     children: [

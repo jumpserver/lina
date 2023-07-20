@@ -6,6 +6,7 @@
       :table-config="tableConfig"
     />
     <GenericUpdateFormDialog
+      v-if="updateSelectedDialogSetting.visible"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :visible.sync="updateSelectedDialogSetting.visible"

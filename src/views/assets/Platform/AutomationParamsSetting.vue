@@ -17,6 +17,7 @@
       :show-cancel="false"
       :show-confirm="false"
       :destroy-on-close="true"
+      @close="onDialogClose"
     >
       <AutoDataForm
         ref="autoDataForm"
@@ -157,6 +158,9 @@ export default {
     onSubmit(form) {
       this.$emit('input', form)
       this.isVisible = false
+      this.$emit('update:visible', this.isVisible)
+    },
+    onDialogClose() {
       this.$emit('update:visible', this.isVisible)
     }
   }
