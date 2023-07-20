@@ -34,11 +34,21 @@ export default {
       value: ''
     }
   },
-  computed: {
-  },
   watch: {
     cellValue: {
-      handler(val) {
+      handler() {
+        this.getValue()
+      },
+      deep: true
+    },
+    formatterArgs: {
+      handler() {
+        this.getValue()
+      },
+      deep: true
+    },
+    row: {
+      handler() {
         this.getValue()
       },
       deep: true
@@ -47,15 +57,13 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getValue()
-    }, 10)
+    }, 100)
   },
   methods: {
     async getValue() {
       this.attr = this.formatterArgs.attrs.find(attr => attr.name === this.row.name)
-      this.match = this.row.match
+      const match = this.row.match
       this.$log.debug('ValueFormatter: ', this.attr, this.row.name)
-      console.log('ValueFormatter: ', { row: this.row, col: this.col, cellValue: this.cellValue, args: this.formatterArgs })
-      console.log('attr: ', this.attr)
       if (this.attr.type === 'm2m') {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
         const data = await this.$axios.get(url) || []
@@ -64,16 +72,17 @@ export default {
           this.value = data.map(item => item[displayField]).join(', ')
         }
       } else if (this.attr.type === 'select') {
-        this.value = this.attr.el.options
-          .filter(item => this.cellValue.includes(item.value))
-          .map(item => item.label)
-          .join(', ')
-      } else if (['in', 'ip_in'].includes(this.match)) {
+        const options = this.attr.el.options || []
+        console.log('Options: ', options)
+        console.log('Cell value: ', this.cellValue)
+        const items = options.filter(item => this.cellValue.includes(item.value))
+        console.log('Items: ', items)
+        this.value = items.map(item => item.label).join(', ')
+      } else if (['in', 'ip_in'].includes(match)) {
         this.value = this.cellValue.join(', ')
       } else {
         this.value = this.cellValue
       }
-      console.log('Value: ', this.value)
     }
   }
 }
