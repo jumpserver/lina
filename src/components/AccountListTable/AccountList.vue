@@ -111,7 +111,7 @@ export default {
       type: Array,
       default: () => ([
         'name', 'username', 'asset', 'privileged',
-        'secret_type', 'date_updated'
+        'secret_type', 'is_active', 'date_updated'
       ])
     },
     headerExtraActions: {
