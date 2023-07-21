@@ -61,9 +61,9 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
-        columns: this.object.scope.value === 'system' ? ['user_display', 'actions'] : ['user_display', 'org_name', 'actions'],
+        columns: this.object.scope.value === 'system' ? ['user_name', 'user_username', 'actions'] : ['user_name', 'org_name', 'actions'],
         columnsShow: {
-          min: ['user_display', 'actions']
+          min: ['user_name', 'user_username', 'actions']
         },
         columnsMeta: {
           actions: {
@@ -86,12 +86,12 @@ export default {
           exclude: ['user', 'scope', 'role', 'org'],
           options: [
             {
-              label: this.$t('users.Username'),
-              value: 'user__username'
+              label: this.$t('users.Name'),
+              value: 'user__name'
             },
             {
-              label: this.$t('perms.User'),
-              value: 'user__name'
+              label: this.$t('users.Username'),
+              value: 'user__username'
             }
           ]
         }
