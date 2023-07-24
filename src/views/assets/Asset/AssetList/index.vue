@@ -74,8 +74,13 @@ export default {
     this.$axios.get('/api/v1/assets/categories/').then(categories => {
       for (const item of categories) {
         const name = item.value
-        nameComponentMap[name]['hidden'] = false
-        nameComponentMap[name]['title'] = item.label
+        const nameComponent = nameComponentMap[name] || {}
+        if (nameComponent.hasOwnProperty('hidden')) {
+          nameComponent.hidden = false
+        }
+        if (nameComponent.hasOwnProperty('title')) {
+          nameComponent.title = item.label
+        }
       }
       this.loading = false
     })

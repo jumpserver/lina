@@ -50,30 +50,30 @@ export default {
           }
         }
       ],
-      encryptedFields: ['HCP_VAULT_TOKEN'],
+      encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         [
           this.$t('setting.Vault'),
           [
             'VAULT_TYPE',
-            'HCP_VAULT_HOST',
-            'HCP_VAULT_TOKEN',
-            'HCP_VAULT_MOUNT_POINT'
+            'VAULT_HCP_HOST',
+            'VAULT_HCP_TOKEN',
+            'VAULT_HCP_MOUNT_POINT'
           ]
         ]
       ],
       fieldsMeta: {
-        HCP_VAULT_HOST: {
+        VAULT_HCP_HOST: {
           hidden: (formValue) => {
             return formValue.VAULT_TYPE === 'local'
           }
         },
-        HCP_VAULT_TOKEN: {
+        VAULT_HCP_TOKEN: {
           hidden: (formValue) => {
             return formValue.VAULT_TYPE === 'local'
           }
         },
-        HCP_VAULT_MOUNT_POINT: {
+        VAULT_HCP_MOUNT_POINT: {
           hidden: (formValue) => {
             return formValue.VAULT_TYPE === 'local'
           }
