@@ -498,7 +498,6 @@
     "RelAnd": "与",
     "RelOr": "或",
     "RelNot": "非",
-    "BatchProcessing": "选中 {Number} 项",
     "Generate": "生成",
     "BatchProcessing": "批量处理(选中 {Number} 项)",
     "Created": "已创建",
@@ -574,6 +573,8 @@
     "ClearSecret": "清除密文",
     "Clear": "清除",
     "ConnectWebSocketError": "连接 WebSocket 失败",
+    "WebSocketDisconnect": "WebSocket 断开",
+    "TaskDone": "任务结束",
     "Action": "动作",
     "RequestTickets": "申请工单",
     "Actions": "操作",
@@ -729,6 +730,7 @@
     "Pending": "等待",
     "Status": "状态",
     "InputEmailAddress": "请输入正确的邮箱地址",
+    "InputNumber": "请输入数字类型",
     "Receivers": "接收人",
     "ClickCopy": "点击复制",
     "imExport": {
@@ -1491,6 +1493,7 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "ServerTime": "服务器时间",
     "Custom": "自定义",
     "CleanHelpText": "定期清理任务会在 每天凌晨 2 点执行, 清理后的数据将无法恢复",
     "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
@@ -1699,7 +1702,9 @@
     "SystemTools": "系统工具",
     "basicTools": "基本工具",
     "destinationIP": "目的地址",
+    "testMultiPort": "多个端口用,分隔",
     "testPort": "端口",
+    "testParam": "参数",
     "testTools": "测试",
     "testHelpText": "请输入目的地址进行测试"
   },

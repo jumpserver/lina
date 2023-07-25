@@ -356,7 +356,7 @@ export default {
     {
       path: '/settings/tools',
       name: 'Tools',
-      component: () => import('@/views/settings/Tools'),
+      component: () => import('@/views/settings/Tool'),
       meta: {
         title: i18n.t('setting.SystemTools'),
         icon: 'tools',

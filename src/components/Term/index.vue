@@ -36,22 +36,25 @@ export default {
       default: () => {
         return false
       }
+    },
+    xtermConfig: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      xterm: new Terminal(
-        {
-          fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
-          lineHeight: 1.2,
-          fontSize: 13,
-          rightClickSelectsWord: true,
-          theme: {
-            background: '#fff',
-            foreground: '#000',
-            selection: '#363535'
-          }
-        }),
+      xterm: new Terminal(Object.assign({
+        fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
+        lineHeight: 1.2,
+        fontSize: 13,
+        rightClickSelectsWord: true,
+        theme: {
+          background: '#fff',
+          foreground: '#000',
+          selection: '#363535'
+        }
+      }, this.xtermConfig)),
       toolbar: [
         {
           tip: this.$tc('ops.ScrollToTop'),
@@ -96,7 +99,6 @@ export default {
       this.xterm.write(val)
     }
   }
-
 }
 
 </script>
