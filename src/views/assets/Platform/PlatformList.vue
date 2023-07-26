@@ -13,7 +13,7 @@
 
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter, ProtocolsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -52,6 +52,10 @@ export default {
             formatterArgs: {
               showFalse: false
             }
+          },
+          protocols: {
+            showFullContent: true,
+            formatter: ProtocolsFormatter
           },
           base: {
             width: '140px'
