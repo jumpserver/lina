@@ -46,7 +46,7 @@ import $ from '@/utils/jquery-vendor.js'
 import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
 import '@ztree/ztree_v3/js/jquery.ztree.exhide.min.js'
 import '@/styles/ztree.css'
-import '@/styles/ztree_icon.css'
+import '@/styles/ztree_icon.scss'
 import axiosRetry from 'axios-retry'
 
 const defaultObject = {
