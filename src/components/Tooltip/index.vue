@@ -1,10 +1,10 @@
 <template>
   <div ref="boxDom" class="tooltip">
     <el-tooltip
-      :disabled="showTooltip"
       :content="content"
-      :placement="placement"
+      :disabled="showTooltip"
       :effect="effect"
+      :placement="placement"
     >
       <div class="multi-line-limit">{{ content }}</div>
     </el-tooltip>
@@ -56,12 +56,12 @@ export default {
       this.showTooltip = boxWidth * this.line > textWidth
     },
     setUI() {
-      this.$refs.boxDom.style.setProperty('--line', `${this.line * 15}px`)
+      this.$refs.boxDom.style.setProperty('--line', `${this.line * 18}px`)
     }
   }
 }
 </script>
-<style scoped lang="less">
+<style lang="less" scoped>
   .tooltip {
     margin-bottom: 10px;
   }
