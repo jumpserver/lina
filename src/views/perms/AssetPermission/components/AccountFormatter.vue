@@ -180,16 +180,17 @@ export default {
         }
       },
       autocomplete: (query, cb) => {
-        this.$axios.get('/api/v1/accounts/accounts/username-suggestions/', {
-          params: {
-            username: query,
-            assets: this.assets.slice(0, 20).join(','),
-            nodes: this.nodes.slice(0, 20).map(item => {
-              return typeof item === 'object' ? item.pk : item
-            }).join(','),
-            oid: this.oid
-          }
-        }).then(res => {
+        const data = {
+          username: query,
+          assets: this.assets.slice(0, 20),
+          nodes: this.nodes.slice(0, 20).map(item => {
+            return typeof item === 'object' ? item.pk : item
+          })
+        }
+        this.$axios.post(
+          '/api/v1/accounts/accounts/username-suggestions/',
+          data, { params: { oid: this.oid }}
+        ).then(res => {
           if (!res) res = []
           const data = res
             .filter(item => vm.value.indexOf(item) === -1)
@@ -270,7 +271,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
 }
