@@ -1390,6 +1390,7 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "Marketplace": "应用市场",
     "Author": "作者",
     "BasePort": "监听端口",
     "DatabasePort": "数据库协议端口",

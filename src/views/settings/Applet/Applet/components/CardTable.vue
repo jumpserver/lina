@@ -23,7 +23,9 @@
                 <div class="one-line"><b>{{ d.display_name }}</b></div>
                 <el-divider class="my-divider" />
                 <Tooltip :content="d.comment" class="comment" />
-                <el-tag v-for="tag of d.tags" :key="tag" size="mini"> {{ tag }}</el-tag>
+                <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                  {{ capitalize(tag) }}
+                </el-tag>
               </el-col>
             </el-row>
           </el-card>
@@ -87,11 +89,13 @@ export default {
       return this.tableConfig.url || ''
     }
   },
-  watch: {},
   mounted() {
     this.getList()
   },
   methods: {
+    capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
     getIcon(status) {
       let iconClass = 'fa-check-circle'
       if (status === false) {

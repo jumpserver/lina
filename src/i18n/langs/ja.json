@@ -1400,6 +1400,7 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Marketplace": "マーケットプレイス",
     "Author": "作者",
     "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
