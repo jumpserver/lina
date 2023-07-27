@@ -1405,6 +1405,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Marketplace": "Marketplace",
     "Author": "Author",
     "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
