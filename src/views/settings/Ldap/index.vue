@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm v-bind="$data" />
-    <ImportDialog :visible.sync="dialogLdapUserImport" />
+    <ImportDialog v-if="dialogLdapUserImport" :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" />
     <SyncSettingDialog :visible.sync="dialogSyncSetting" />
   </IBox>

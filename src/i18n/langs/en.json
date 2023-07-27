@@ -1581,6 +1581,7 @@
     "authSAMLCertHelpText": "After upload cert and private key, View SP Metadata",
     "authSAML2AdvancedSettings": "Advanced Settings",
     "unselectedUser": "Unselected user",
+    "unselectedOrg": "Unselected org",
     "auto": "Auto",
     "basicSetting": "Basic setting",
     "communityEdition": "Community edition",
