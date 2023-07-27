@@ -1587,6 +1587,7 @@
     "authCASAttrMap": "ユーザー属性マッピング",
     "SignaturesAndTemplates": "署名とテンプレート",
     "unselectedUser": "ユーザーを選択していない",
+    "unselectedOrg": "組織を選択していない",
     "auto": "自動",
     "basicSetting": "基本設定",
     "communityEdition": "コミュニティ版",

@@ -1581,6 +1581,7 @@
     "authCASAttrMap": "用户属性映射",
     "SignaturesAndTemplates": "Signatures and Templates",
     "unselectedUser": "没有选择用户",
+    "unselectedOrg": "没有选择组织",
     "auto": "自动",
     "basicSetting": "基本设置",
     "communityEdition": "社区版",
