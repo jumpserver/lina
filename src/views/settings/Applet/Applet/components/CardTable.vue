@@ -20,7 +20,10 @@
                 <img :src="d.icon" class="image">
               </el-col>
               <el-col :span="16" style="text-align: left; padding: 5px 0">
-                <div class="one-line"><b>{{ d.display_name }}</b></div>
+                <div class="one-line">
+                  <b>{{ d.display_name }}</b>
+                  <el-tag size="mini" style="margin-left: 5px">{{ d.version }}</el-tag>
+                </div>
                 <el-divider class="my-divider" />
                 <Tooltip :content="d.comment" class="comment" />
                 <el-tag v-for="tag of d.tags" :key="tag" size="mini">
