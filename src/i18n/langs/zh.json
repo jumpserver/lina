@@ -1711,6 +1711,8 @@
     "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
+    "BatchApproval": "批量审批",
+    "BatchReject": "批量拒绝",
     "ApplyAsset": "申请资产",
     "LoginConfirm": "用户登录复核",
     "CommandConfirm": "命令复核",
