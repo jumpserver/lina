@@ -13,20 +13,27 @@
         class="listTable"
         :table-config="tableConfig"
         :header-actions="headerActions"
-        @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
-        <span class="org-select">
+        <span v-show="showOrgSelect" class="org-select">
           <span class="label">{{ $tc('common.ImportOrg') }}：</span>
-          <Select2 ref="select2" v-model="select2.value" v-bind="select2" popper-class="select-org-dropdown" />
+          <Select2
+            ref="select2"
+            v-model="select2.value"
+            v-bind="select2"
+            popper-class="select-org-dropdown"
+          />
         </span>
-        <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
+        <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">
+          {{ $t('common.Import') }}
+        </el-button>
         <el-button
           type="primary"
           size="small"
           :loading="dialogLdapUserImportAllLoginStatus"
           @click="importAllUserClick"
-        >{{ $t('common.ImportAll') }}</el-button>
+        >{{ $t('common.ImportAll') }}
+        </el-button>
         <el-button size="small" @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
       </div>
     </Dialog>
@@ -35,6 +42,7 @@
 
 <script>
 import store from '@/store'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import ListTable from '@/components/ListTable'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
@@ -101,31 +109,52 @@ export default {
         ajax: {
           url: '/api/v1/orgs/orgs/',
           transformOption: (item) => {
-            return { label: item.name, value: item.id }
+            if (item.id !== SYSTEM_ORG_ID) {
+              return { label: item.name, value: item.id }
+            }
           }
         },
-        value: store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS
+        value: this.orgIds()
       }
     }
   },
+  computed: {
+    showOrgSelect() {
+      return store.getters.hasValidLicense
+    }
+  },
   methods: {
+    orgIds() {
+      let orgIds = []
+      if (store.getters.hasValidLicense) {
+        const allOrgIds = store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS
+        orgIds = allOrgIds.filter(item => item.id !== SYSTEM_ORG_ID)
+      } else {
+        orgIds = [DEFAULT_ORG_ID]
+      }
+      return orgIds
+    },
     importUserClick() {
       this.dialogLdapUserImportLoginStatus = true
       const selectIds = []
       this.$refs.listTable.selectedRows.forEach((item, index) => {
         selectIds.push(item.id)
       })
+      const org_ids = this.select2.value || []
       const data = {
-        org_ids: this.select2.value,
+        org_ids: org_ids,
         username_list: selectIds
       }
+      console.log('store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS', store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS)
       if (selectIds.length === 0) {
         this.$message.error(this.$tc('setting.unselectedUser'))
+        this.dialogLdapUserImportLoginStatus = false
+      } else if (org_ids.length === 0) {
+        this.$message.error(this.$tc('setting.unselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
-          // eslint-disable-next-line no-return-assign
         }).catch(error => {
           const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
           this.$message.error(errorMessage)
@@ -136,14 +165,21 @@ export default {
     },
     importAllUserClick() {
       this.dialogLdapUserImportAllLoginStatus = true
+      const org_ids = this.select2.value || []
       const data = {
-        org_ids: this.select2.value,
+        org_ids: org_ids,
         username_list: ['*']
       }
-      importLdapUser(data).then(res => {
-        this.$message.success(res.msg)
-        // eslint-disable-next-line no-return-assign
-      }).finally(() => this.dialogLdapUserImportAllLoginStatus = false)
+      if (org_ids.length === 0) {
+        this.$message.error(this.$tc('setting.unselectedOrg'))
+        this.dialogLdapUserImportLoginStatus = false
+      } else {
+        importLdapUser(data).then(res => {
+          this.$message.success(res.msg)
+        }).finally(() => {
+          this.dialogLdapUserImportAllLoginStatus = false
+        })
+      }
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
@@ -159,24 +195,26 @@ export default {
 
 <style>
 .el-select-dropdown.select-org-dropdown {
-  max-width: 300px!important;
+  max-width: 300px !important;
 }
 </style>
 
 <style scoped lang="scss">
-  .org-select {
-    float: left;
-    width: 300px;
-    display: inline-block;
-    text-align: left;
-    padding-left: 14px;
-    .label {
-      font-weight:bold;
-      width: 100px!important;
-    }
-    .select2 {
-      width: 180px!important;
-    }
+.org-select {
+  float: left;
+  width: 300px;
+  display: inline-block;
+  text-align: left;
+  padding-left: 14px;
+
+  .label {
+    font-weight: bold;
+    width: 100px !important;
   }
+
+  .select2 {
+    width: 180px !important;
+  }
+}
 
 </style>
