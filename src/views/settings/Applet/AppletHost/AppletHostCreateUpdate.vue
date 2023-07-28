@@ -19,6 +19,9 @@ export default {
           [this.$t('assets.Account'), ['auto_create_accounts', 'accounts_create_amount']]
         ],
         addFieldsMeta: {
+          accounts_create_amount: {
+            hidden: (formValue) => !formValue['auto_create_accounts']
+          },
           deploy_options: {
             fields: [
               'CORE_HOST', 'IGNORE_VERIFY_CERTS', 'RDS_Licensing', 'RDS_LicenseServer', 'RDS_LicensingMode',
