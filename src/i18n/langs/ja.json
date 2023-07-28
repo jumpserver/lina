@@ -548,6 +548,8 @@
     "ClearSecret": "暗号文の削除",
     "Clear": "クリア",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
+    "WebSocketDisconnect": "Websocketオフです",
+    "TaskDone": "タスク終了",
     "Action": "アクション",
     "RequestTickets": "ワークオーダーを申請する",
     "Actions": "操作",
@@ -698,6 +700,7 @@
     "Pending": "待つ",
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
+    "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
     "imExport": {
@@ -1498,6 +1501,7 @@
     }
   },
   "setting": {
+    "ServerTime": "サーバータイムです",
     "Custom": "カスタムです",
     "CleanHelpText": " 定期清理タスクは毎日午前2時に実行され、クリーンアップ後のデータは復元できません",
     "OAuth2LogoTip": "ヒント: 認証サービス プロバイダー (推奨画像サイズ: 64px*64px)",
@@ -1706,7 +1710,9 @@
     "SystemTools": "システムツール",
     "basicTools": "基本的なツール",
     "destinationIP": "宛先アドレス",
+    "testMultiPort": "復数ポート用,分離です",
     "testPort": "テストポート",
+    "testParam": "パラメーター",
     "testTools": "テスト",
     "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル",
