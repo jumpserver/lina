@@ -19,7 +19,7 @@
           v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')"
           command="tempPassword"
         >
-          <svg-icon class="icon" icon-class="personal" />
+          <svg-icon class="icon" icon-class="unlock-one" />
           {{ $t('common.nav.TempPassword') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" command="connectionToken">
