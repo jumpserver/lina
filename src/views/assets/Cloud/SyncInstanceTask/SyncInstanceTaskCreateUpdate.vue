@@ -6,7 +6,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
-import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
 
 export default {

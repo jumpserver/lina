@@ -11,7 +11,7 @@
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import DataTable from '@/components/DataTable/index.vue'
+import DataTable from '@/components/Table/DataTable/index.vue'
 
 export default {
   name: 'AttrInput',

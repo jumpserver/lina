@@ -8,10 +8,9 @@
 </template>
 
 <script>
-import Select2 from '@/components/FormFields/Select2'
-import { Required } from '@/components/DataForm/rules'
-import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
-import { AttrInput } from '@/components/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
+import ProtocolSelector from '@/components/Form/FormFields/'
+import { AttrInput, Select2 } from '@/components/Form/FormFields'
 import { resourceTypeOptions, tableFormatter } from './const'
 
 export default {

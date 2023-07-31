@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable/index.vue'
-import Select2 from '@/components/FormFields/Select2.vue'
+import DataTable from '@/components/Table/DataTable/index.vue'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { tableFormatter } from '@/views/assets/Cloud/Strategy/components/const'
 import AttrDialog from './AttrDialog.vue'
 

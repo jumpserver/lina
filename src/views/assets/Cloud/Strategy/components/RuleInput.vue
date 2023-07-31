@@ -7,9 +7,8 @@
 </template>
 
 <script>
-import Select2 from '@/components/FormFields/Select2'
-import { AttrInput } from '@/components/FormFields'
-import { Required } from '@/components/DataForm/rules'
+import { AttrInput, Select2 } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 import { instanceAttrOptions, tableFormatter } from './const'
 import { attrMatchOptions, strMatchValues } from '@/components/const'
 

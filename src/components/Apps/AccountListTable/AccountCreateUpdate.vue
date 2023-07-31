@@ -25,7 +25,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import AccountCreateUpdateForm from '@/components/AccountCreateUpdateForm'
+import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm'
 
 export default {
   name: 'CreateAccountDialog',

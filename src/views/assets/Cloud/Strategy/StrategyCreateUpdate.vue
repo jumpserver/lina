@@ -6,7 +6,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { RequiredChange, specialEmojiCheck } from '@/components/DataForm/rules'
+import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import RuleInput from './components/RuleInput'
 import ActionInput from './components/ActionInput'
 
