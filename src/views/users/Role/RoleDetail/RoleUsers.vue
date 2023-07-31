@@ -61,11 +61,17 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
-        columns: this.object.scope.value === 'system' ? ['user_display', 'actions'] : ['user_display', 'org_name', 'actions'],
+        columns: this.object.scope.value === 'system' ? ['user.name', 'user.username', 'actions'] : ['user_name', 'org_name', 'actions'],
         columnsShow: {
-          min: ['user_display', 'actions']
+          min: ['user.name', 'user.username', 'actions']
         },
         columnsMeta: {
+          'user.name': {
+            label: this.$t('users.Name')
+          },
+          'user.username': {
+            label: this.$t('users.Username')
+          },
           actions: {
             formatterArgs: {
               hasUpdate: false,
