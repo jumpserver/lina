@@ -1,10 +1,10 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$tc('setting.AlibabaCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.AlibabaCloud')" />
 </template>
 
 <script>
 import BaseSMS from './Base'
-import { UpdateToken, PhoneInput } from '@/components/FormFields'
+import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
 
 export default {
   name: 'SMSAlibaba',

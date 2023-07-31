@@ -1,10 +1,11 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :has-detail-in-msg="false" />
+  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :has-detail-in-msg="false" :initial="initial" :url="url" />
 </template>
 
 <script>
-import AssetSelect from '@/components/AssetSelect'
+import AssetSelect from '@/components/Apps/AssetSelect'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+
 export default {
   name: 'LabelCreateUpdate',
   components: {

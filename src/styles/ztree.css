@@ -264,7 +264,7 @@ website:    http://code.google.com/p/jquerytree/
 }
 
 .ztree li span.button.roots_docu::before {
-  content: "\f114";
+  content: '';
   padding-left: 2px;
   display: inline-block;
   color: #676a6c;
@@ -417,3 +417,11 @@ ul.ztree.zTreeDragUL {
   filter: alpha(opacity=0);
   position: absolute;
 }
+
+.ztree li span.button::before {
+  color: #676a6c;
+}
+.ztree li a > span.button {
+  filter: invert(47%) sepia(3%) saturate(412%) hue-rotate(161deg) brightness(83%) contrast(83%);
+}
+

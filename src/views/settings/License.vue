@@ -6,16 +6,16 @@
       </el-alert>
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
-          <DetailCard :title="cardTitle" :items="detailItems" />
+          <DetailCard :items="detailItems" :title="cardTitle" />
         </el-col>
         <el-col :md="10" :sm="24">
-          <QuickActions type="primary" :actions="quickActions" />
+          <QuickActions :actions="quickActions" type="primary" />
         </el-col>
       </el-row>
       <Dialog
+        :title="$tc('setting.ImportLicense')"
         :visible.sync="dialogLicenseImport"
         top="20vh"
-        :title="$tc('setting.ImportLicense')"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >
@@ -29,8 +29,8 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import { QuickActions, Dialog } from '@/components'
-import DetailCard from '@/components/DetailCard/index'
+import { Dialog, QuickActions } from '@/components'
+import DetailCard from '@/components/Cards/DetailCard/index'
 import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
 

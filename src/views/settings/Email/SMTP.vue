@@ -3,11 +3,11 @@
     <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
     <Dialog
       v-if="visible"
-      :title="$tc('setting.SMTP')"
-      :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
+      :title="$tc('setting.SMTP')"
+      :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
     >
@@ -20,7 +20,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { Dialog } from '@/components'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken } from '@/components/Form/FormFields'
 
 export default {
   name: 'SMTP',

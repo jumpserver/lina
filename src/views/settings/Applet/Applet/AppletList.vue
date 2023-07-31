@@ -26,10 +26,20 @@ export default {
         onCreate: () => {
           this.uploadDialogVisible = true
         },
+        createTitle: this.$t('common.Upload'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['version']
         },
+        extraActions: [
+          {
+            title: this.$t('terminal.Marketplace'),
+            icon: 'el-icon-shopping-bag-1',
+            callback: () => {
+              window.open('https://apps.fit2cloud.com/jumpserver')
+            }
+          }
+        ],
         detailRoute: 'AppletDetail',
         hasExport: false,
         hasImport: false,

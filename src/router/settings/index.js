@@ -50,6 +50,16 @@ export default {
       }
     },
     {
+      path: '/settings/vault',
+      name: 'Vault',
+      component: () => import('@/views/settings/Vault'),
+      meta: {
+        title: i18n.t('setting.Vault'),
+        icon: 'security',
+        permissions: ['settings.change_vault']
+      }
+    },
+    {
       path: '/settings/message',
       name: 'SysMessageSub',
       component: () => import('@/views/settings/Message'),
@@ -356,7 +366,7 @@ export default {
     {
       path: '/settings/tools',
       name: 'Tools',
-      component: () => import('@/views/settings/Tools'),
+      component: () => import('@/views/settings/Tool'),
       meta: {
         title: i18n.t('setting.SystemTools'),
         icon: 'tools',

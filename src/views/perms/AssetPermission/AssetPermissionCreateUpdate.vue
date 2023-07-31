@@ -10,7 +10,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import AssetSelect from '@/components/AssetSelect'
+import AssetSelect from '@/components/Apps/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'

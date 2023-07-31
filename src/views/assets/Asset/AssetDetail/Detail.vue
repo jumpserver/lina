@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
-import RelationCard from '@/components/RelationCard'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import { openTaskPage } from '@/utils/jms'
 
@@ -224,7 +224,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: false,
+        showUndefine: true,
         excludes: ['script']
       },
       customInfoConfig: {
@@ -248,7 +248,7 @@ export default {
       const object = this.object
       const type = object.type.value
       const autofill = object.spec_info?.autofill
-      return !(type === 'website' && autofill === 'script')
+      return !(type === 'website' && autofill === 'script') && Object.keys(object.spec_info || {}).length > 0
     }
   },
   mounted() {

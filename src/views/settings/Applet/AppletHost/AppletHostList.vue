@@ -10,7 +10,7 @@
 <script>
 import { ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
-import { ProtocolsFormatter } from '@/components/TableFormatters'
+import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AppletHost',

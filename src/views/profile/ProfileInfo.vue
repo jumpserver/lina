@@ -4,8 +4,8 @@
       v-if="showPasswordDialog"
       :url="confirmUrl"
       :visible.sync="showPasswordDialog"
-      @UserConfirmDone="verifyDone"
       @UserConfirmCancel="exit"
+      @UserConfirmDone="verifyDone"
     />
     <div>
       <el-row :gutter="20">
@@ -14,16 +14,16 @@
         </el-col>
         <el-col :md="10" :sm="24">
           <QuickActions
-            type="primary"
-            :title="$tc('users.AuthSettings')"
             :actions="authQuickActions"
+            :title="$tc('users.AuthSettings')"
+            type="primary"
           />
           <QuickActions
-            type="info"
-            style="margin-top: 15px"
+            :actions="messageSubscriptionQuickActions"
             :title="$tc('users.MessageSubscription')"
             fa="fa-info-circle"
-            :actions="messageSubscriptionQuickActions"
+            style="margin-top: 15px"
+            type="info"
           />
         </el-col>
       </el-row>
@@ -33,9 +33,9 @@
 
 <script type="text/jsx">
 import Page from '@/layout/components/Page'
-import DetailCard from '@/components/DetailCard'
+import DetailCard from '@/components/Cards/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import UserConfirmDialog from '@/components/UserConfirmDialog'
+import UserConfirmDialog from '@/components/Apps/UserConfirmDialog'
 import { toSafeLocalDateStr } from '@/utils/common'
 import store from '@/store'
 
@@ -319,7 +319,7 @@ export default {
       return this.$store.state.users.profile.source.value === sourceName
     },
     isDisabled(sourceName) {
-      return this.isBind(sourceName) && !this.isUserFromSource('local')
+      return this.isBind(sourceName) && this.isUserFromSource(sourceName)
     },
     updateUserReceiveBackends(val) {
       this.$axios.patch(

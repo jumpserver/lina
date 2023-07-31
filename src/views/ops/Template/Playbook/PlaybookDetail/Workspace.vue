@@ -42,7 +42,7 @@
 
 <script>
 import { TreeTable } from '@/components'
-import CodeEditor from '@/components/FormFields/CodeEditor'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
 import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
 import { renameFile } from '@/api/ops'

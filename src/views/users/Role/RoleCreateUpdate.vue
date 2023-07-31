@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Text } from '@/components/FormFields'
+import { Text } from '@/components/Form/FormFields'
 
 export default {
   components: {

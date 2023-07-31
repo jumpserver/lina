@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="StrategyRelation"
         v-perms="'xpack.change_taskstrategy'"
@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
-import RelationCard from '@/components/RelationCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
 

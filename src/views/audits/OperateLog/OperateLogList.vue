@@ -11,7 +11,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import DiffDetail from '@/components/Dialog/DiffDetail'
 
 export default {

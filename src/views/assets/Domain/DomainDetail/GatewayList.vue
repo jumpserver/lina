@@ -16,9 +16,9 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import GatewayDialog from '@/components/GatewayDialog'
-import { connectivityMeta } from '@/components/AccountListTable/const'
-import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
+import GatewayDialog from '@/components/Apps/GatewayDialog'
+import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
+import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -134,7 +134,7 @@ export default {
           name: 'GatewayCreate',
           query: {
             domain: this.object.id,
-            type: 'linux',
+            platform_type: 'linux',
             category: 'host'
           }
         }

@@ -17,10 +17,10 @@
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
-import { DetailFormatter } from '@/components/TableFormatters'
-import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
 import deepmerge from 'deepmerge'
-import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
+import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
 
 export default {

@@ -1,19 +1,19 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="8" :sm="24">
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+    </el-col>
+    <el-col :md="16" :sm="24">
       <IBox title="README">
         <vue-markdown v-if="object.readme" :source="object.readme" />
         <span v-else>{{ $tc('common.NoData') }}</span>
       </IBox>
     </el-col>
-    <el-col :md="10" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
   </el-row>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import VueMarkdown from 'vue-markdown'
 import { IBox } from '@/components'
 

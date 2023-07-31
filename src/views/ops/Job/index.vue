@@ -1,13 +1,13 @@
 <template>
   <div>
-    <JobRunDialog v-if="showJobRunDialog" :visible.sync="showJobRunDialog" :item="item" @submit="runJob" />
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import { openTaskPage } from '@/utils/jms'
 

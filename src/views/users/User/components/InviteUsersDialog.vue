@@ -22,7 +22,7 @@ import Dialog from '@/components/Dialog'
 import { Select2 } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { mapGetters } from 'vuex'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 
 export default {
   components: {

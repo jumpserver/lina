@@ -16,9 +16,9 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import AssetTreeTable from '@/components/AssetTreeTable'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
-import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
 

@@ -1,35 +1,35 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
     <el-col v-if="hasSummary" :md="10" :sm="24">
       <IBox
         v-if="object.summary.ok"
-        type="success"
         :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` "
+        type="success"
       >
         <el-collapse>
           <el-collapse-item
             v-for="(item,index) in object.summary.ok"
             :key="index"
-            :title="item"
             :name="index"
+            :title="item"
             disabled
           />
         </el-collapse>
       </IBox>
       <IBox
         v-if="object.summary.excludes"
-        type="warning"
         :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` "
+        type="warning"
       >
         <el-collapse>
           <el-collapse-item
             v-for="(val,key,index) in object.summary.excludes"
             :key="index"
-            :title="key"
             :name="index"
+            :title="key"
           >
             <div>{{ $tc('ops.Reason') }}: {{ val }}</div>
           </el-collapse-item>
@@ -37,15 +37,15 @@
       </IBox>
       <IBox
         v-if="object.summary.failures"
-        type="danger"
         :title="`${$tc('ops.FailedAsset')} (${Object.keys(Object.assign(object.summary.failures,object.summary.dark)).length})` "
+        type="danger"
       >
         <el-collapse>
           <el-collapse-item
             v-for="(val,key,index) in Object.assign(object.summary.failures,object.summary.dark)"
             :key="index"
-            :title="key"
             :name="index"
+            :title="key"
           >
             <div>{{ $tc('ops.Reason') }}: {{ val }}</div>
           </el-collapse-item>
@@ -53,8 +53,8 @@
       </IBox>
       <IBox
         v-if="object.summary.error"
-        type="danger"
         :title="$tc('ops.SystemError') "
+        type="danger"
       >
         {{ object.summary.error }}
       </IBox>
@@ -63,7 +63,7 @@
 </template>
 
 <script type="text/jsx">
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import IBox from '@/components/IBox'
 
 export default {

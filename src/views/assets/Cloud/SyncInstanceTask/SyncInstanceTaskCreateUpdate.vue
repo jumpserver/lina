@@ -5,7 +5,8 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
 
 export default {
@@ -25,7 +26,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
         [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
-        [this.$t('同步策略'), ['strategy']],
+        [this.$t('common.Strategy'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],

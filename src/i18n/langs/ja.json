@@ -119,8 +119,8 @@
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
     "AssetLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、アセットへのアクセスを許可するかどうかを判断することができます。",
-    "UserLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、システムへのアクセスを許可するかどうかを判断することができます。",
-    "ConnectMethodACLHelpMsg": "接続フィルタリングを使用すると、ユーザーが特定の接続方法を使用してアセットにログインできるかどうかを制御できます。設定したルールに基づいて、特定の接続方法を許可したり禁止したりすることができます。",
+    "UserLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、システムへのアクセスを許可するかどうかを判断することができます（グローバル発効）。",
+    "ConnectMethodACLHelpMsg": "接続フィルタリングを使用すると、ユーザーが特定の接続方法を使用してアセットにログインできるかどうかを制御できます。設定したルールに基づいて、特定の接続方法を許可したり禁止したりすることができます（グローバル発効）。",
     "IgnoreCase": "大文字小文字を無視する",
     "Content": "コンテンツ",
     "CommandFilterACL": "命令フィルタリング",
@@ -562,6 +562,8 @@
     "ClearSecret": "暗号文の削除",
     "Clear": "クリア",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
+    "WebSocketDisconnect": "Websocketオフです",
+    "TaskDone": "タスク終了",
     "Action": "アクション",
     "RequestTickets": "ワークオーダーを申請する",
     "Actions": "操作",
@@ -713,6 +715,7 @@
     "Pending": "待つ",
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
+    "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
     "imExport": {
@@ -1415,6 +1418,7 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Marketplace": "マーケットプレイス",
     "Author": "作者",
     "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
@@ -1512,6 +1516,7 @@
     }
   },
   "setting": {
+    "ServerTime": "サーバータイムです",
     "Custom": "カスタムです",
     "CleanHelpText": " 定期清理タスクは毎日午前2時に実行され、クリーンアップ後のデータは復元できません",
     "OAuth2LogoTip": "ヒント: 認証サービス プロバイダー (推奨画像サイズ: 64px*64px)",
@@ -1601,6 +1606,7 @@
     "authCASAttrMap": "ユーザー属性マッピング",
     "SignaturesAndTemplates": "署名とテンプレート",
     "unselectedUser": "ユーザーを選択していない",
+    "unselectedOrg": "組織を選択していない",
     "auto": "自動",
     "basicSetting": "基本設定",
     "communityEdition": "コミュニティ版",
@@ -1719,13 +1725,17 @@
     "SystemTools": "システムツール",
     "basicTools": "基本的なツール",
     "destinationIP": "宛先アドレス",
+    "testMultiPort": "復数ポート用,分離です",
     "testPort": "テストポート",
+    "testParam": "パラメーター",
     "testTools": "テスト",
     "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル",
     "Applets": "リモート アプリケーション"
   },
   "tickets": {
+    "BatchApproval": "大量承認です",
+    "BatchReject": "一括拒否です",
     "ApplyAsset": "リソースの適用",
     "LoginConfirm": "ユーザーログインの確認",
     "CommandConfirm": "コマンドの確認",
@@ -1815,7 +1825,7 @@
   },
   "users": {
     "AllMembers": "すべてのメンバー",
-    "UnbindHelpText": "このユーザーはローカルユーザーではありませんので、解除できません。管理者に連絡してください。",
+    "UnbindHelpText": "ローカルユーザはソースユーザを認証します",
     "SetStatus": "ステータスの設定",
     "Set": "設定",
     "NotSet": "未設定",

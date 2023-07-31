@@ -119,8 +119,8 @@
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
     "AssetLoginACLHelpMsg": "It can determine whether the user can access the asset based on the user's login IP and time period.",
-    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period.",
-    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited.",
+    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period（global effective）.",
+    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited（global effective）.",
     "IgnoreCase": "Ignore case",
     "Content": "Content",
     "CommandFilterACL": "Command filter",
@@ -567,6 +567,8 @@
     "bulkClearErrorMsg": "Bulk clear error:",
     "Clear": "Clear",
     "ConnectWebSocketError": "Connect Websocket failed",
+    "WebSocketDisconnect": "Websocket disconnection",
+    "TaskDone": "Task done",
     "Nothing": "Nothing",
     "Action": "Action",
     "CustomCol": "Custom table display",
@@ -656,6 +658,7 @@
     "Search": "Search",
     "MFAErrorMsg": "MFA Error, please check",
     "InputEmailAddress": "Please enter your email address",
+    "InputNumber": "Please enter the number type",
     "Select": "Select",
     "SelectFile": "Select file",
     "Show": "Show",
@@ -1420,6 +1423,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Marketplace": "Marketplace",
     "Author": "Author",
     "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
@@ -1517,6 +1521,7 @@
     }
   },
   "setting": {
+    "ServerTime": "Server time",
     "Custom": "Custom",
     "CleanHelpText": " Regular cleanup tasks will be executed at 2 o'clock in the morning every day, and the cleaned data cannot be recovered",
     "Applets": "Applets",
@@ -1596,6 +1601,7 @@
     "authSAMLCertHelpText": "After upload cert and private key, View SP Metadata",
     "authSAML2AdvancedSettings": "Advanced Settings",
     "unselectedUser": "Unselected user",
+    "unselectedOrg": "Unselected org",
     "auto": "Auto",
     "basicSetting": "Basic setting",
     "communityEdition": "Community edition",
@@ -1720,11 +1726,13 @@
     "JMSSSO": "SSO Token Login",
     "AppAuth": "App auth",
     "testPort": "Port",
+    "testParam": "Param",
     "CMPP2": "CMPP v2.0",
     "SignChannelNum": "Signature channel number",
     "testHelpText": "Please enter the destination address for testing",
     "OAuth2": "OAuth2",
     "destinationIP": "Destination address",
+    "testMultiPort": "Multiple ports are separated by commas (,)",
     "AppEndpoint": "Application access address",
     "authCASAttrMap": "User Attribute Mapping",
     "SignaturesAndTemplates": "Signatures and Templates",
@@ -1733,6 +1741,8 @@
     "basicTools": "Basic tool"
   },
   "tickets": {
+    "BatchApproval": "Batch approval",
+    "BatchReject": "Batch reject",
     "ApplyAsset": "Apply asset",
     "LoginConfirm": "User login confirm",
     "CommandConfirm": "Command confirm",
@@ -1823,7 +1833,7 @@
   },
   "users": {
     "AllMembers": "All members",
-    "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
+    "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
     "SetStatus": "Set status",
     "Set": "Set",
     "NotSet": "Not set",

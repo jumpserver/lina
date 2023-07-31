@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :md="16" :sm="24">
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+        <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
       <el-col :md="8" :sm="24">
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { GenericListTableDialog } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 import PermUserGroupCard from './components/PermUserGroupCard'
 
 export default {

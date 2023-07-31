@@ -44,7 +44,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Hamburger from '@/components/Hamburger'
+import Hamburger from '@/components/Widgets/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
 import Help from './Help'

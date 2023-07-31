@@ -15,7 +15,7 @@
   />
 </template>
 <script>
-import AutoDataForm from '@/components/AutoDataForm'
+import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
 import { encryptPassword } from '@/utils/crypto'
 import deepmerge from 'deepmerge'

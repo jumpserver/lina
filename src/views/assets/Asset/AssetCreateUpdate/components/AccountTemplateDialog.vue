@@ -51,7 +51,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import AutoDataTable from '@/components/AutoDataTable'
+import AutoDataTable from '@/components/Table/AutoDataTable'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
 
 export default {

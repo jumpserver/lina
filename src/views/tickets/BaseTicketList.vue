@@ -1,14 +1,15 @@
 <template>
   <GenericListPage
+    ref="ListPage"
     v-loading="loading"
-    :header-actions="ticketActions"
+    :header-actions="iTicketAction"
     :table-config="ticketTableConfig"
   />
 </template>
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, TagChoicesFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { APPROVE, REJECT } from './const'
 
@@ -22,9 +23,9 @@ export default {
       type: String,
       default: '/api/v1/tickets/tickets/'
     },
-    hasMoreActions: {
-      type: Boolean,
-      default: false
+    extraTicketAction: {
+      type: Object,
+      default: () => ({})
     },
     extraQuery: {
       type: Object,
@@ -132,9 +133,10 @@ export default {
           }
         }
       },
-      ticketActions: {
+      defaultTicketActions: {
         hasExport: false,
-        hasLeftActions: this.hasMoreActions,
+        hasMoreActions: false,
+        hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
@@ -217,20 +219,13 @@ export default {
             }
           ]
         },
-        createTitle: this.$t('common.RequestTickets'),
-        hasMoreActions: false,
-        moreCreates: {
-          dropdown: [
-            {
-              name: 'RequestAssetPerm',
-              title: this.$t('tickets.RequestAssetPerm'),
-              callback: () => this.$router.push({
-                name: 'RequestAssetPermTicketCreateUpdate'
-              })
-            }
-          ]
-        }
+        createTitle: this.$t('common.RequestTickets')
       }
+    }
+  },
+  computed: {
+    iTicketAction() {
+      return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
   },
   mounted() {
@@ -238,7 +233,11 @@ export default {
       this.loading = false
     }, 500)
   },
-  methods: {}
+  methods: {
+    reloadTable() {
+      this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+    }
+  }
 }
 </script>
 

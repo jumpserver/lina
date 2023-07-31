@@ -1,12 +1,12 @@
 <template>
   <div>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {

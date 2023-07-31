@@ -11,7 +11,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
 import EmailContent from './EmailContent'
 import SMTP from './SMTP'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'Email',
