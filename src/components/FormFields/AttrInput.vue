@@ -38,7 +38,7 @@ export default {
       if (this.beforeSubmit(value)) {
         const clonedValue = JSON.parse(JSON.stringify(value))
         this.tableConfig.totalData.push(clonedValue)
-        this.$emit('input', this.tableConfig.totalData)
+        this.$emit('submit', this.tableConfig.totalData)
       }
     }
   }

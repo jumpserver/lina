@@ -1,6 +1,7 @@
 <template>
   <div>
-    <DataTable :config="tableConfig" class="attr-list" />
+    <Select2 v-bind="select2" @change="handleInput" />
+    <DataTable :config="tableConfig" />
     <AttrDialog
       v-if="visible"
       :value="attrValue"
@@ -14,11 +15,13 @@
 
 <script>
 import DataTable from '@/components/DataTable/index.vue'
+import Select2 from '@/components/FormFields/Select2.vue'
+import { tableFormatter } from '@/views/assets/Cloud/Strategy/components/const'
 import AttrDialog from './AttrDialog.vue'
 
 export default {
   name: 'SyncInstanceTaskStrategy',
-  components: { DataTable, AttrDialog },
+  components: { DataTable, AttrDialog, Select2 },
   props: {
     totalData: {
       type: Array,
@@ -31,11 +34,14 @@ export default {
   },
   data() {
     return {
-      attrValue: { name: '', rules: [], actions: [] },
+      attrValue: { name: '', task_rules: [], task_actions: [] },
+      strategy: {},
       visible: false,
       tableConfig: {
         columns: [
           { prop: 'name', label: this.$t('common.PolicyName') },
+          { prop: 'task_rules', label: this.$t('common.RuleCount'), formatter: tableFormatter('count') },
+          { prop: 'task_actions', label: this.$t('common.ActionCount'), formatter: tableFormatter('count') },
           { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
@@ -51,7 +57,7 @@ export default {
                   size='mini'
                   style={{ 'flexShrink': 0 }}
                   type='danger'
-                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
+                  onClick={(index) => this.tableConfig.totalData.splice(index, 1)}
                 />
               </div>
             )
@@ -59,12 +65,41 @@ export default {
         ],
         totalData: this.value,
         hasPagination: false
+      },
+      select2: {
+        url: '/api/v1/xpack/cloud/strategies/',
+        multiple: false,
+        ajax: {
+          transformOption: (item) => {
+            this.strategy[item.id] = {
+              name: item.name, task_rules: item.task_rules, task_actions: item.task_actions
+            }
+            return { label: item.name, value: item.id }
+          }
+        }
       }
     }
   },
   methods: {
+    handleInput(value) {
+      let status = true
+      const totalData = this.tableConfig.totalData
+      const data = this.strategy[value]
+      for (let i = 0; i < totalData.length; i++) {
+        if (totalData[i].id === value) {
+          status = false
+          this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
+          break
+        }
+      }
+      if (status) {
+        data['id'] = value
+        this.tableConfig.totalData.push(data)
+        console.log('hello: ', this.tableConfig.totalData)
+      }
+    },
     handleCreate() {
-      this.attrValue = { name: '', rules: [], actions: [] }
+      this.attrValue = { name: '', task_rules: [], task_actions: [] }
       this.visible = true
     },
     onAttrDialogConfirm() {
@@ -72,17 +107,9 @@ export default {
     },
     handleAttrEdit({ row, index }) {
       return () => {
-        this.$axios.get(`/api/v1/xpack/cloud/rules-actions/${row?.id}/`).then((data) => {
+        this.$axios.get(`/api/v1/xpack/cloud/strategies/${row?.id}/`).then((data) => {
           this.attrValue = data
           this.visible = true
-        })
-      }
-    },
-    handleAttrDelete({ index }) {
-      return () => {
-        const item = this.tableConfig.totalData.splice(index, 1)
-        this.$axios.delete(`/api/v1/xpack/cloud/rules-actions/${item[0]?.id}/`).then(() => {
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
         })
       }
     }
@@ -91,18 +118,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.attr-list {
-  width: 99%;
-}
-.attr-form {
-  >>> .el-select {
-    width: 100%;
-  }
-  >>> .el-form-item__content {
-    width: 100%;
-  }
-  >>> .form-buttons {
-    margin: auto;
-  }
-}
 </style>

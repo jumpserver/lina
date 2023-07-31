@@ -3,6 +3,7 @@ import Text from './Text'
 import Select2 from './Select2'
 import TagInput from './TagInput'
 import Switcher from './Switcher'
+import AttrInput from './AttrInput'
 import UploadKey from './UploadKey'
 import JsonEditor from './JsonEditor'
 import PhoneInput from './PhoneInput'
@@ -23,6 +24,7 @@ export default {
   Switcher,
   Select2,
   TagInput,
+  AttrInput,
   UploadKey,
   JsonEditor,
   UpdateToken,
@@ -44,6 +46,7 @@ export {
   Switcher,
   Select2,
   TagInput,
+  AttrInput,
   UploadKey,
   JsonEditor,
   UpdateToken,

@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
 import rules from '@/components/DataForm/rules'
-import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/indexa'
+import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
         [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
-        [this.$t('同步策略'), ['strategies']],
+        [this.$t('同步策略'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -91,7 +91,7 @@ export default {
           },
           helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         },
-        strategies: {
+        strategy: {
           label: this.$t('common.Strategy'),
           component: SyncInstanceTaskStrategy
         }
@@ -107,11 +107,11 @@ export default {
       },
       cleanFormValue(value) {
         const ipNetworkSegments = value.ip_network_segment_group
-        const strategies = value?.strategies || []
+        const strategy = value?.strategy || []
         if (!Array.isArray(ipNetworkSegments)) {
           value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
-        value.strategies = strategies.map(item => { return item.id })
+        value.strategy = strategy.map(item => { return item.id })
         return value
       },
       onPerformError(error, method, vm) {
