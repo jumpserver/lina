@@ -24,8 +24,8 @@ export default {
           },
           deploy_options: {
             fields: [
-              'CORE_HOST', 'IGNORE_VERIFY_CERTS', 'RDS_Licensing', 'RDS_LicenseServer', 'RDS_LicensingMode',
-              'RDS_fSingleSessionPerUser', 'RDS_MaxDisconnectionTime',
+              'CORE_HOST', 'IGNORE_VERIFY_CERTS', 'RDS_Licensing', 'RDS_LicenseServer',
+              'RDS_LicensingMode', 'RDS_fSingleSessionPerUser', 'RDS_MaxDisconnectionTime',
               'RDS_RemoteAppLogoffTimeLimit'
             ],
             fieldsMeta: {
