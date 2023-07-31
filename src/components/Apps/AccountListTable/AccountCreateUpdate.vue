@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
-import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm'
+import Dialog from '@/components/Dialog/index.vue'
+import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
 
 export default {
   name: 'CreateAccountDialog',

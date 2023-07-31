@@ -38,12 +38,6 @@ export default {
       getUrl() {
         const id = this.$route.params?.id
         return id ? `${this.url}${id}/` : this.url
-      },
-      cleanFormValue(values) {
-        return values
-      },
-      afterGetFormValue(formValue) {
-        return formValue
       }
     }
   },
