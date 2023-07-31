@@ -33,8 +33,8 @@
 
 <script>
 import Dialog from '../../../components/Dialog'
-import AutoDataForm from '../../../components/AutoDataForm'
-import { DynamicInput } from '@/components/FormFields'
+import AutoDataForm from '../../../components/Form/AutoDataForm'
+import { DynamicInput } from '../../../components/Form/FormFields'
 
 export default {
   components: {

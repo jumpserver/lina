@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import Switcher from '../FormFields/Switcher'
-import Select2 from '../FormFields/Select2'
-import UpdateSelect from '../FormFields/UpdateSelect'
+import Switcher from '@/components/Form/FormFields/Switcher'
+import Select2 from '@/components/Form/FormFields/Select2'
+import UpdateSelect from '@/components/Form/FormFields/UpdateSelect'
 
 class Action {
   constructor() {

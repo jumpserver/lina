@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {

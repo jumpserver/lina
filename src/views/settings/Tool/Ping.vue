@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 import Base from './Base'
 
 export default {

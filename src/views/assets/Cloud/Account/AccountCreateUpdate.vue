@@ -7,7 +7,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { RequiredChange, specialEmojiCheck } from '@/components/DataForm/rules'
+import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'

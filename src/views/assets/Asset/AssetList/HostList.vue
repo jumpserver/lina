@@ -11,8 +11,8 @@
 
 <script>
 import BaseList from './components/BaseList'
-import { ActionsFormatter } from '@/components/TableFormatters'
-import GatewayDialog from '@/components/GatewayDialog'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {

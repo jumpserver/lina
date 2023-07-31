@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import AssetSelect from '@/components/AssetSelect'
+import AssetSelect from '@/components/Apps/AssetSelect'
 
 export default {
   name: 'GatewayCreateUpdate',

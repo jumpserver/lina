@@ -3,22 +3,22 @@
     <el-col :md="14" :sm="24">
       <GenericListTable
         ref="listTable"
-        :table-config="tableConfig"
         :header-actions="headerActions"
+        :table-config="tableConfig"
       />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import RelationCard from '@/components/RelationCard/index'
-import AssetRelationCard from '@/components/AssetRelationCard'
-import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormatters'
+import RelationCard from '@/components/Cards/RelationCard/index'
+import AssetRelationCard from '@/components/Apps/AssetRelationCard'
+import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AccountChangeSecretAsset',

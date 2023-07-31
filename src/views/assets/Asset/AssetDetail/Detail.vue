@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
-import RelationCard from '@/components/RelationCard'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import { openTaskPage } from '@/utils/jms'
 

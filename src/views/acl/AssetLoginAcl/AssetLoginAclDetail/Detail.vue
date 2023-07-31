@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
   name: 'Detail',

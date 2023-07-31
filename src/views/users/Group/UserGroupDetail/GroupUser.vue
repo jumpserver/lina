@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :md="14" :sm="24">
-        <GenericListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
       <el-col :md="10" :sm="24">
         <QuickActions :actions="quickActions" :title="title" type="primary" />
@@ -15,8 +15,8 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import QuickActions from '@/components/QuickActions'
-import RelationCard from '@/components/RelationCard'
-import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormatters'
+import RelationCard from '@/components/Cards/RelationCard'
+import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'GroupUser',

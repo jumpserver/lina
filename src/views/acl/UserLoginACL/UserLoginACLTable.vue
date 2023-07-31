@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index.vue'
+import ListTable from '@/components/Table/ListTable/index.vue'
 
 export default {
   components: {

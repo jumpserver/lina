@@ -4,16 +4,17 @@
       <DetailCard v-if="object" :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions v-if="object" type="primary" :actions="quickActions" />
+      <QuickActions v-if="object" :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard/index'
+import DetailCard from '@/components/Cards/DetailCard/index'
 import QuickActions from '@/components/QuickActions'
 import { terminateSession } from '@/api/sessions'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'SessionDetailInfo',
   components: {

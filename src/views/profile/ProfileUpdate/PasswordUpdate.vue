@@ -1,24 +1,24 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="fields"
       :encrypted-fields="encryptedFields"
+      :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
-      :url="url"
       :submit-method="submitMethod"
-      class="password-update"
       :update-success-next-route="updateSuccessNextRoute"
+      :url="url"
+      class="password-update"
     />
   </IBox>
 </template>
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import UserPassword from '@/components/FormFields/UserPassword'
+import UserPassword from '@/components/Form/FormFields/UserPassword'
 import { IBox } from '@/components'
-import rules from '@/components/DataForm/rules'
-import { PasswordInput } from '@/components/FormFields'
+import rules from '@/components/Form/DataForm/rules'
+import { PasswordInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'PasswordUpdate',

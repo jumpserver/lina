@@ -10,7 +10,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
-import Select2 from '@/components/FormFields/Select2'
+import Select2 from '@/components/Form/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { mapGetters, mapState } from 'vuex'
 import store from '@/store'

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
-import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
+import ListTable from '@/components/Table/ListTable'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
 
 export default {

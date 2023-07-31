@@ -1,7 +1,7 @@
 import i18n from '@/i18n/i18n'
 import { CronTab } from '@/components'
-import { TagInput, UpdateToken } from '@/components/FormFields'
-import { Required } from '@/components/DataForm/rules'
+import { TagInput, UpdateToken } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {

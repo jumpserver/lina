@@ -1,9 +1,9 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 
 export default {
   name: 'SessionJoinRecords',

@@ -1,6 +1,6 @@
 import { getUuidUpdateFromUrl } from '@/utils/common'
-import { UpdateToken } from '@/components/FormFields'
-import Select2 from '@/components/FormFields/Select2'
+import { UpdateToken } from '@/components/Form/FormFields'
+import Select2 from '@/components/Form/FormFields/Select2'
 
 export const templateFields = (vm) => {
   return [

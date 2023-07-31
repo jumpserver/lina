@@ -14,16 +14,16 @@
       </div>
       <ListTable
         ref="ListTable"
-        class="ListTable"
-        :table-config="tableConfig"
         :header-actions="headerActions"
+        :table-config="tableConfig"
+        class="ListTable"
       />
     </el-card>
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import ListTable from '@/components/Table/ListTable/index'
 
 export default {
   name: 'HomeCard',

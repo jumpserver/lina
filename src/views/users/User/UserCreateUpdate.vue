@@ -4,8 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { UserPassword, PhoneInput } from '@/components/FormFields'
-import rules from '@/components/DataForm/rules'
+import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
+import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
 
 export default {

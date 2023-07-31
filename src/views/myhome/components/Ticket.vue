@@ -6,7 +6,7 @@
 import HomeCard from './HomeCard'
 import { mapGetters } from 'vuex'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'HomeAnnouncement',

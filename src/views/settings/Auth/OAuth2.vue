@@ -9,8 +9,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { JsonEditor } from '@/components/FormFields'
-import { JsonRequired } from '@/components/DataForm/rules'
+import { JsonEditor } from '@/components/Form/FormFields'
+import { JsonRequired } from '@/components/Form/DataForm/rules'
 import { UploadField } from '@/components'
 import request from '@/utils/request'
 

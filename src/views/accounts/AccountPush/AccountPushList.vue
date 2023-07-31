@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
 

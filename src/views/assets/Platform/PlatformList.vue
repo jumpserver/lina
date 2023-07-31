@@ -13,7 +13,7 @@
 
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesFormatter, ProtocolsFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter, ProtocolsFormatter } from '../../../components/Table/TableFormatters'
 
 export default {
   components: {

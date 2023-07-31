@@ -1,18 +1,18 @@
 <template>
   <div>
     <Dialog
-      :title="$tc('setting.importLdapUserTitle')"
-      v-bind="$attrs"
       :destroy-on-close="true"
       :show-cancel="false"
+      :title="$tc('setting.importLdapUserTitle')"
+      v-bind="$attrs"
       v-on="$listeners"
     >
       <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
-        class="listTable"
-        :table-config="tableConfig"
         :header-actions="headerActions"
+        :table-config="tableConfig"
+        class="listTable"
       />
       <div slot="footer">
         <span v-show="showOrgSelect" class="org-select">
@@ -20,17 +20,17 @@
           <Select2
             ref="select2"
             v-model="select2.value"
-            v-bind="select2"
             popper-class="select-org-dropdown"
+            v-bind="select2"
           />
         </span>
-        <el-button type="primary" size="small" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">
+        <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
           {{ $t('common.Import') }}
         </el-button>
         <el-button
-          type="primary"
-          size="small"
           :loading="dialogLdapUserImportAllLoginStatus"
+          size="small"
+          type="primary"
           @click="importAllUserClick"
         >{{ $t('common.ImportAll') }}
         </el-button>
@@ -43,9 +43,9 @@
 <script>
 import store from '@/store'
 import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
-import Select2 from '@/components/FormFields/Select2'
+import Select2 from '@/components/Form/FormFields/Select2'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
 import { getErrorResponseMsg } from '@/utils/common'
 
@@ -199,7 +199,7 @@ export default {
 }
 </style>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .org-select {
   float: left;
   width: 300px;

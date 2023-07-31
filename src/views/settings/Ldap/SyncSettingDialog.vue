@@ -20,8 +20,8 @@
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { CronTab, Dialog } from '@/components'
-import Select2 from '@/components/FormFields/Select2'
-import { Required } from '@/components/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SyncSettingDialog',
