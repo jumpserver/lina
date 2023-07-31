@@ -8,8 +8,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { JsonRequiredUserNameMapped } from '@/components/DataForm/rules'
-import { JsonEditor } from '@/components/FormFields'
+import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { JsonEditor } from '@/components/Form/FormFields'
 
 export default {
   name: 'Cas',

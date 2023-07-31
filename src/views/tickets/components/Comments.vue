@@ -69,7 +69,7 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
-import MarkDown from '@/components/MarkDown'
+import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
   name: 'Comments',

@@ -44,16 +44,11 @@
 </template>
 
 <script>
-import { TagInput } from '@/components/FormFields'
+import { TagInput } from '@/components/Form/FormFields'
 import {
-  AccountLabelMapper,
-  AllAccount,
-  AnonymousAccount,
-  ManualAccount,
-  SameAccount,
-  SpecAccount
+  AccountLabelMapper, AllAccount, AnonymousAccount, ManualAccount, SameAccount, SpecAccount
 } from '@/views/perms/const'
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
 export default {

@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <el-form ref="testForm" label-width="15%" :model="testData" :rules="rules">
+    <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
       <el-form-item v-for="f in fields" :key="f.name" :label="f.label" :prop="f.name">
         <Select2 v-if="f.options" v-model="testData[f.name]" :options="f.options" />
         <TagInput
@@ -11,13 +11,13 @@
         <el-input v-else v-model="testData[f.name]" :placeholder="f.placeholder" :type="f.type" />
       </el-form-item>
       <el-form-item :label="$tc('ops.output')">
-        <Term ref="xterm" style="border: solid 1px #dddddd" :xterm-config="xtermConfig" />
+        <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
       </el-form-item>
       <el-form-item>
         <el-button
-          type="primary"
-          size="mini"
           :loading="isTesting"
+          size="mini"
+          type="primary"
           @click="submitTest"
         >
           {{ $t('setting.testTools') }}
@@ -29,8 +29,8 @@
 
 <script>
 import { IBox } from '@/components'
-import Term from '@/components/Term'
-import { Select2, TagInput } from '@/components/FormFields'
+import Term from '@/components/Widgets/Term'
+import { Select2, TagInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'Base',

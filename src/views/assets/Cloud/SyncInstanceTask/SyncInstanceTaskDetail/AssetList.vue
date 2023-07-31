@@ -1,10 +1,10 @@
 <template>
-  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable ref="GenericListTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import { DateFormatter } from '@/components/TableFormatters'
+import { DateFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AssetList',

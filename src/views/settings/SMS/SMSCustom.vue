@@ -1,10 +1,10 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$tc('setting.Custom')" :config="$data" />
+  <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.Custom')" />
 </template>
 
 <script>
 import BaseSMS from './Base'
-import { JsonEditor, PhoneInput } from '@/components/FormFields'
+import { JsonEditor, PhoneInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'SMSCustom',

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import TableAction from '@/components/ListTable/TableAction'
+import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination, Tooltip } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 

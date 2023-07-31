@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import AssetDialog from '@/components/AssetSelect/dialog.vue'
+import AssetDialog from '@/components/Apps/AssetSelect/dialog.vue'
 import $ from '@/utils/jquery-vendor'
 
 export default {

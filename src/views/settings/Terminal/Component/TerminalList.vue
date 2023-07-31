@@ -1,12 +1,12 @@
 <template>
   <div>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
     <Dialog
-      :visible.sync="dialogSettings.visible"
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="$tc('sessions.terminalUpdateStorage')"
       :show-confirm="false"
+      :title="$tc('sessions.terminalUpdateStorage')"
+      :visible.sync="dialogSettings.visible"
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
     </Dialog>
@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
-import Select2 from '@/components/FormFields/Select2'
+import Select2 from '@/components/Form/FormFields/Select2'
 
 export default {
   components: {

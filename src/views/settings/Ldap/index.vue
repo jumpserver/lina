@@ -13,8 +13,8 @@ import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
 import SyncSettingDialog from './SyncSettingDialog'
 import { IBox } from '@/components'
-import rules, { JsonRequired } from '@/components/DataForm/rules'
-import { JsonEditor, UpdateToken } from '@/components/FormFields'
+import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 
 export default {
   name: 'Ldap',

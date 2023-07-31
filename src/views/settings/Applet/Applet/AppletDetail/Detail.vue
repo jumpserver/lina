@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import VueMarkdown from 'vue-markdown'
 import { IBox } from '@/components'
 

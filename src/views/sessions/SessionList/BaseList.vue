@@ -3,9 +3,9 @@
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { timeOffset } from '@/utils/common'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseList',

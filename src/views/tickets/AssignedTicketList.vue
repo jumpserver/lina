@@ -3,17 +3,17 @@
     <BaseTicketList ref="BaseTicketList" :url="url" v-bind="$data" />
     <Dialog
       v-if="isVisible"
-      width="70%"
-      :title="$tc('tickets.BatchApproval')"
-      :visible.sync="isVisible"
       :cancel-title="$tc('tickets.BatchReject')"
       :confirm-title="$tc('tickets.BatchApproval')"
       :destroy-on-close="true"
+      :title="$tc('tickets.BatchApproval')"
+      :visible.sync="isVisible"
+      width="70%"
       @cancel="onCancel"
       @confirm="onConfirm"
     >
       <div v-for="d in ticketData" :key="d.id">
-        <AutoDetailCard :url="detailUrl" :fields="getDetailFields(d)" :object="d" :title="`${d.title}(${d.type.label})`" />
+        <AutoDetailCard :fields="getDetailFields(d)" :object="d" :title="`${d.title}(${d.type.label})`" :url="detailUrl" />
       </div>
     </Dialog>
   </div>
@@ -23,8 +23,9 @@
 <script>
 import BaseTicketList from './BaseTicketList'
 import { mapGetters } from 'vuex'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
+
 export default {
   name: 'AssignedTicketList',
   components: {

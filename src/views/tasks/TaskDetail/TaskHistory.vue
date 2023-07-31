@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { openTaskPage } from '@/utils/jms'
 
 export default {

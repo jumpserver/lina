@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
-import RelationCard from '@/components/RelationCard'
-import { DeleteActionFormatter } from '@/components/TableFormatters'
-import AssetRelationCard from '@/components/AssetRelationCard'
+import ListTable from '@/components/Table/ListTable'
+import RelationCard from '@/components/Cards/RelationCard'
+import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
+import AssetRelationCard from '@/components/Apps/AssetRelationCard'
 
 export default {
   name: 'AssetPermissionAsset',

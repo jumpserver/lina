@@ -9,7 +9,7 @@
         <slot name="table" />
       </template>
       <div slot="rMenu" slot-scope="{data}">
-        <slot name="rMenu" :data="data" />
+        <slot :data="data" name="rMenu" />
       </div>
     </TreeTable>
   </Page>
@@ -17,8 +17,9 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import TreeTable from '@/components/TreeTable'
+import TreeTable from '@/components/Table/TreeTable'
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'GenericTreeListPage',
   components: {

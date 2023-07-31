@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailCardItems" />
+      <DetailCard :items="detailCardItems" :title="cardTitle" />
     </el-col>
   </el-row>
 </template>
 
 <script type="text/jsx">
-import DetailCard from '@/components/DetailCard'
+import DetailCard from '@/components/Cards/DetailCard'
 
 export default {
   name: 'TaskDetail',

@@ -10,7 +10,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 import Announcement from './announcement'
 
 export default {

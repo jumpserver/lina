@@ -1,8 +1,8 @@
 <template>
   <div>
     <GenericTreeListPage
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
   </div>
@@ -10,7 +10,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { AccountShowFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+import { AccountShowFormatter, DialogDetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {

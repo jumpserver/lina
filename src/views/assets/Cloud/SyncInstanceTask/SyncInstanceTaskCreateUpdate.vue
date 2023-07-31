@@ -5,8 +5,8 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
-import rules from '@/components/DataForm/rules'
-import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
+import rules from '@/components/Form/DataForm/rules'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 
 export default {
   components: {

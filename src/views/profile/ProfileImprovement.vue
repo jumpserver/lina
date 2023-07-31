@@ -4,8 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Required } from '@/components/DataForm/rules'
-import { PhoneInput } from '@/components/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
+import { PhoneInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'ProfileUpdate',

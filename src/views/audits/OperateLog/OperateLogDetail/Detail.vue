@@ -19,7 +19,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import DiffDetail from '@/components/Dialog/DiffDetail'
 
 export default {

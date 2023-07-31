@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import ListTable from '@/components/Table/ListTable/index'
 
 export default {
   name: 'GenericListTable',

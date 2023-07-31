@@ -26,8 +26,8 @@
 
 <script>
 import { IBox } from '@/components'
-import AutoDetailCard from '@/components/DetailCard/auto'
-import AutoDataZTree from '@/components/AutoDataZTree'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDataZTree from '@/components/Tree/AutoDataZTree'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
