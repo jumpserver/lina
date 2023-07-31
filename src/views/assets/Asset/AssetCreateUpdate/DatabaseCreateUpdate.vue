@@ -5,7 +5,7 @@
 <script>
 import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 import { UploadKey } from '@/components'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'DatabaseCreateUpdate',

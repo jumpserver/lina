@@ -29,8 +29,9 @@
   </IBox>
 </template>
 <script>
-import ItemValue from '@/components/DetailCard/ItemValue'
+import ItemValue from '@/components/Cards/DetailCard/ItemValue'
 import IBox from '@/components/IBox'
+
 export default {
   name: 'Details',
   components: { ItemValue, IBox },

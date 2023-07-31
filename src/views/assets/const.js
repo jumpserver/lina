@@ -1,8 +1,8 @@
 import i18n from '@/i18n/i18n'
-import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
-import rules from '@/components/DataForm/rules'
-import { JSONManyToManySelect, Select2 } from '@/components/FormFields'
+import rules from '@/components/Form/DataForm/rules'
+import { JSONManyToManySelect, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
@@ -30,15 +30,25 @@ export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
   const platformType = vm?.$route.query?.type
+  const asset = { address: 'https://jumpserver:330' }
   return {
     address: {
-      rules: [rules.specialEmojiCheck, rules.RequiredChange]
+      rules: [rules.specialEmojiCheck, rules.RequiredChange],
+      on: {
+        change: ([event], updateForm) => {
+          asset.address = event
+        },
+        input: ([event], updateForm) => {
+          asset.address = event
+        }
+      }
     },
     protocols: {
       component: ProtocolSelector,
       el: {
         settingReadonly: true,
-        choices: platformProtocols
+        choices: platformProtocols,
+        instance: asset
       },
       on: {
         input: ([value]) => {
@@ -57,6 +67,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
+      label: i18n.t('assets.PlatformSimple'),
       el: {
         multiple: false,
         ajax: {

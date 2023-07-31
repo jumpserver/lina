@@ -4,8 +4,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { WeekCronSelect } from '@/components/FormFields'
-import { Required } from '@/components/DataForm/rules'
+import { WeekCronSelect } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {

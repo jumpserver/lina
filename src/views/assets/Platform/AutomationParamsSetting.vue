@@ -17,6 +17,7 @@
       :show-cancel="false"
       :show-confirm="false"
       :destroy-on-close="true"
+      @close="onDialogClose"
     >
       <AutoDataForm
         ref="autoDataForm"
@@ -32,8 +33,8 @@
 
 <script>
 import Dialog from '../../../components/Dialog'
-import AutoDataForm from '../../../components/AutoDataForm'
-import { DynamicInput } from '@/components/FormFields'
+import AutoDataForm from '../../../components/Form/AutoDataForm'
+import { DynamicInput } from '../../../components/Form/FormFields'
 
 export default {
   components: {
@@ -157,6 +158,9 @@ export default {
     onSubmit(form) {
       this.$emit('input', form)
       this.isVisible = false
+      this.$emit('update:visible', this.isVisible)
+    },
+    onDialogClose() {
       this.$emit('update:visible', this.isVisible)
     }
   }

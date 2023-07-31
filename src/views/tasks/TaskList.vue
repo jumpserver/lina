@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
-import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common'
 
 export default {

@@ -32,6 +32,7 @@
     },
     "AccountChangeSecret": {
       "Result": "結果",
+      "ParamsHelpText": "改密パラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "ExecutionTimes": "実行時間",
       "TaskList": "タスク レコード",
       "TimerPeriod": "時限実行サイクル",
@@ -93,7 +94,7 @@
       "AccountPushExecutionList": "実行リスト",
       "AccountPushCreate": "アカウントのプッシュ作成",
       "AccountPushUpdate": "アカウントプッシュ更新",
-      "AutoPushHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
+      "ParamsHelpText": "Pushパラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "AccountPushList": "アカウントプッシュ"
     },
     "AccountBackup": {
@@ -118,8 +119,8 @@
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
     "AssetLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、アセットへのアクセスを許可するかどうかを判断することができます。",
-    "UserLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、システムへのアクセスを許可するかどうかを判断することができます。",
-    "ConnectMethodACLHelpMsg": "接続フィルタリングを使用すると、ユーザーが特定の接続方法を使用してアセットにログインできるかどうかを制御できます。設定したルールに基づいて、特定の接続方法を許可したり禁止したりすることができます。",
+    "UserLoginACLHelpMsg": "ユーザーのログインIPと時間帯に基づいて監査を行い、システムへのアクセスを許可するかどうかを判断することができます（グローバル発効）。",
+    "ConnectMethodACLHelpMsg": "接続フィルタリングを使用すると、ユーザーが特定の接続方法を使用してアセットにログインできるかどうかを制御できます。設定したルールに基づいて、特定の接続方法を許可したり禁止したりすることができます（グローバル発効）。",
     "IgnoreCase": "大文字小文字を無視する",
     "Content": "コンテンツ",
     "CommandFilterACL": "命令フィルタリング",
@@ -248,12 +249,12 @@
     "UpdateAccount": "アカウントの更新",
     "Account": "アカウント",
     "Defaults": "デフォルト値",
-    "CreateDatabase": "資産の作成 - データベース",
-    "CreateHost": "資産の作成 - ホスト",
+    "DatabaseCreate": "資産の作成 - データベース",
+    "HostCreate": "資産の作成 - ホスト",
     "CreateRemoteApp": "資産の作成 - リモートアプリケーション",
-    "CreateDevice": "資産の作成 - ネットワークデバイス",
-    "CreateCloud": "資産の作成 - クラウドプラットフォーム",
-    "CreateWeb": "資産の作成 - ウェブ",
+    "DeviceCreate": "資産の作成 - ネットワークデバイス",
+    "CloudCreate": "資産の作成 - クラウドプラットフォーム",
+    "WebCreate": "資産の作成 - ウェブ",
     "Privileged": "特権のある",
     "SelectPlatforms": "プラットフォームを選択",
     "AppList": "アプリケーションリスト",
@@ -448,10 +449,19 @@
     "SSHPort": "SSH ポート",
     "PrimaryProtocol": "主要協議は、資産にとって最も基本的で最も一般的に使用されるプロトコルであり、1つのみ設定でき、必ず設定する必要があります",
     "Primary": "主要な",
-    "CreateCustom": "カスタムアセットを作成する",
+    "CustomCreate": "カスタムアセットを作成する",
     "CustomType": "カスタムタイプ",
     "CustomHelpMessage": "カスタムタイプのアセットにはアプレットのサポートが必要です。対応するアプレットがインストールされていることを確認してください。",
-    "CustomFields": "カスタム属性"
+    "CustomFields": "カスタム属性",
+    "DeviceUpdate": "資産の更新 - 機器",
+    "CustomUpdate": "資産の更新 - カスタマイズ",
+    "CloudUpdate": "資産の更新 - クラウドプラットフォーム",
+    "GPTUpdate": "資産の更新 - GPT",
+    "PlatformSimple": "プラットフォーム",
+    "HostUpdate": "資産の更新 - ホスト",
+    "WebUpdate": "資産の更新 - Web",
+    "DatabaseUpdate": "資産の更新 - データベース",
+    "GPTCreate": "資産の作成 - GPT"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -476,6 +486,11 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Proxy": "プロキシ",
+    "PublicKey": "公開鍵です",
+    "PrivateKey": "秘密鍵です",
+    "Project": "プロジェクト名です",
+    "Advanced": "高度な",
     "BatchProcessing": "一括処理(選択 {Number} 項目)",
     "Generate": "生成",
     "ServerError": "サーバーエラー",
@@ -533,6 +548,8 @@
     "ClearSecret": "暗号文の削除",
     "Clear": "クリア",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
+    "WebSocketDisconnect": "Websocketオフです",
+    "TaskDone": "タスク終了",
     "Action": "アクション",
     "RequestTickets": "ワークオーダーを申請する",
     "Actions": "操作",
@@ -683,6 +700,7 @@
     "Pending": "待つ",
     "Status": "ステータス",
     "InputEmailAddress": "正しいメールアドレスを入力してください",
+    "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
     "imExport": {
@@ -1089,6 +1107,7 @@
   },
   "perms": {
     "": "",
+    "AnonymousAccountTip": "匿名アカウントとは、資産の接続時にユーザー名とパスワードを使用せず、ウェブタイプとカスタムタイプの資産のみをサポートするものです。",
     "AssetPermissionHelpMsg": "資産の権限設定では、ユーザーに対して資産へのアクセス権を許可することができます。さらに、特定の操作権限を設定することもできます",
     "AccountsHelp": "すべてのアカウント: アカウントはアセットに存在します。 アカウントの指定: 資産の下のアカウントのユーザー名を指定します。手入力: ユーザー名/パスワード; 同一アカウント：ログインユーザーと同じアカウントのユーザー名",
     "AllAccounts": "すべてのアカウント",
@@ -1384,6 +1403,7 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Marketplace": "マーケットプレイス",
     "Author": "作者",
     "Uploading": "ファイルのアップロード",
     "UploadSucceed": "アップロード成功",
@@ -1481,6 +1501,7 @@
     }
   },
   "setting": {
+    "ServerTime": "サーバータイムです",
     "Custom": "カスタムです",
     "CleanHelpText": " 定期清理タスクは毎日午前2時に実行され、クリーンアップ後のデータは復元できません",
     "OAuth2LogoTip": "ヒント: 認証サービス プロバイダー (推奨画像サイズ: 64px*64px)",
@@ -1570,6 +1591,7 @@
     "authCASAttrMap": "ユーザー属性マッピング",
     "SignaturesAndTemplates": "署名とテンプレート",
     "unselectedUser": "ユーザーを選択していない",
+    "unselectedOrg": "組織を選択していない",
     "auto": "自動",
     "basicSetting": "基本設定",
     "communityEdition": "コミュニティ版",
@@ -1688,13 +1710,17 @@
     "SystemTools": "システムツール",
     "basicTools": "基本的なツール",
     "destinationIP": "宛先アドレス",
+    "testMultiPort": "復数ポート用,分離です",
     "testPort": "テストポート",
+    "testParam": "パラメーター",
     "testTools": "テスト",
     "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル",
     "Applets": "リモート アプリケーション"
   },
   "tickets": {
+    "BatchApproval": "大量承認です",
+    "BatchReject": "一括拒否です",
     "ApplyAsset": "リソースの適用",
     "LoginConfirm": "ユーザーログインの確認",
     "CommandConfirm": "コマンドの確認",
@@ -1784,7 +1810,7 @@
   },
   "users": {
     "AllMembers": "すべてのメンバー",
-    "UnbindHelpText": "このユーザーはローカルユーザーではありませんので、解除できません。管理者に連絡してください。",
+    "UnbindHelpText": "ローカルユーザはソースユーザを認証します",
     "SetStatus": "ステータスの設定",
     "Set": "設定",
     "NotSet": "未設定",
@@ -2027,6 +2053,7 @@
       "OpenStack": "OpenStack",
       "CTYunPrivate": "天翼プライベート・クラウド",
       "GCP": "Googleクラウド",
+      "UCloud": "UCloudユケデです",
       "FC": "Fusion Compute",
       "LAN": "ローカルエリアネットワーク",
       "AWS_China": "AWS(中国)",

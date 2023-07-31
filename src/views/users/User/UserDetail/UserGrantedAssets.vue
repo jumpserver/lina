@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import GrantedAssets from '@/components/GrantedAssets'
+import GrantedAssets from '@/components/Apps/GrantedAssets'
 
 export default {
   name: 'UserGrantedAssets',

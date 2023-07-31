@@ -45,10 +45,12 @@ export const AllAccount = '@ALL'
 export const SpecAccount = '@SPEC'
 export const SameAccount = '@USER'
 export const ManualAccount = '@INPUT'
+export const AnonymousAccount = '@ANON'
 
 export const AccountLabelMapper = {
   [AllAccount]: i18n.t('perms.AllAccounts'),
   [SpecAccount]: i18n.t('perms.SpecAccount'),
   [SameAccount]: i18n.t('perms.SameAccount'),
-  [ManualAccount]: i18n.t('perms.ManualAccount')
+  [ManualAccount]: i18n.t('perms.ManualAccount'),
+  [AnonymousAccount]: i18n.t('perms.AnonymousAccount')
 }

@@ -1,12 +1,12 @@
 <template>
   <div>
     <ExecutionDetailDialog v-if="showExecutionDetailDialog" :item="item" :visible.sync="showExecutionDetailDialog" />
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
 <script>
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'

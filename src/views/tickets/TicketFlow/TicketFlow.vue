@@ -1,10 +1,10 @@
 <template>
-  <GenericListPage ref="GenericListPage" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'TicketFlow',

@@ -18,6 +18,8 @@
         <AccountFormatter
           class="checkbox-accounts"
           :value="object['accounts']"
+          :assets="assetIds"
+          :nodes="nodeIds"
           @change="updateAccount"
         />
       </IBox>
@@ -52,6 +54,14 @@ export default {
         disabled: false,
         username: ''
       }
+    }
+  },
+  computed: {
+    assetIds() {
+      return this.object.assets.map(asset => asset.id)
+    },
+    nodeIds() {
+      return this.object.nodes.map(node => node.id)
     }
   },
   methods: {

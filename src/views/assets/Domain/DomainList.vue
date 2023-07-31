@@ -4,8 +4,8 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
-import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {

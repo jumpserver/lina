@@ -44,9 +44,11 @@
 </template>
 
 <script>
-import { TagInput } from '@/components/FormFields'
-import { AccountLabelMapper, AllAccount, ManualAccount, SameAccount, SpecAccount } from '@/views/perms/const'
-import ListTable from '@/components/ListTable'
+import { TagInput } from '@/components/Form/FormFields'
+import {
+  AccountLabelMapper, AllAccount, AnonymousAccount, ManualAccount, SameAccount, SpecAccount
+} from '@/views/perms/const'
+import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
 export default {
@@ -109,6 +111,11 @@ export default {
         label: AccountLabelMapper[SameAccount],
         value: SameAccount,
         tip: this.$t('perms.SameAccountTip')
+      },
+      {
+        label: AccountLabelMapper[AnonymousAccount],
+        value: AnonymousAccount,
+        tip: this.$t('perms.AnonymousAccountTip')
       }
     ]
     return {
@@ -116,7 +123,7 @@ export default {
       SPEC: SpecAccount,
       showTemplateDialog: false,
       choices: choices.filter(i => {
-        const isVirtualAccount = [SameAccount, ManualAccount].includes(i.value)
+        const isVirtualAccount = [SameAccount, ManualAccount, AnonymousAccount].includes(i.value)
         return !(isVirtualAccount && !this.showVirtualAccount)
       }),
       choicesSelected: [this.ALL],
@@ -138,6 +145,19 @@ export default {
             'date_created', 'date_updated'
           ],
           columnsMeta: {
+            name: {
+              formatterArgs: {
+                openInNewPage: true,
+                getRoute({ row, col, cellValue }) {
+                  return {
+                    name: 'AccountTemplateDetail',
+                    params: {
+                      id: row.id
+                    }
+                  }
+                }
+              }
+            },
             has_secret: {
               formatterArgs: {
                 showFalse: false
@@ -155,16 +175,17 @@ export default {
         }
       },
       autocomplete: (query, cb) => {
-        this.$axios.get('/api/v1/accounts/accounts/username-suggestions/', {
-          params: {
-            username: query,
-            assets: this.assets.slice(0, 20).join(','),
-            nodes: this.nodes.slice(0, 20).map(item => {
-              return typeof item === 'object' ? item.pk : item
-            }).join(','),
-            oid: this.oid
-          }
-        }).then(res => {
+        const data = {
+          username: query,
+          assets: this.assets.slice(0, 20),
+          nodes: this.nodes.slice(0, 20).map(item => {
+            return typeof item === 'object' ? item.pk : item
+          })
+        }
+        this.$axios.post(
+          '/api/v1/accounts/accounts/username-suggestions/',
+          data, { params: { oid: this.oid }}
+        ).then(res => {
           if (!res) res = []
           const data = res
             .filter(item => vm.value.indexOf(item) === -1)
@@ -245,7 +266,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
 }

@@ -1,15 +1,15 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
+    v-bind="$data"
   />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken } from '@/components/Form/FormFields'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {

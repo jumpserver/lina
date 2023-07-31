@@ -3,6 +3,7 @@ import { optionUrlMeta } from '@/api/common'
 const getDefaultState = () => {
   return {
     metaMap: {},
+    metaPromiseMap: {},
     isRouterAlive: true,
     sqlQueryCounter: []
   }
@@ -38,14 +39,22 @@ const actions = {
         resolve(meta)
       })
     }
-    return new Promise((resolve, reject) => {
+    let promise = state.metaPromiseMap[url]
+    if (promise) {
+      return promise
+    }
+    promise = new Promise((resolve, reject) => {
       optionUrlMeta(url).then(meta => {
         commit('SET_URL_META', { url, meta })
         resolve(meta)
       }).catch(error => {
         reject(error)
+      }).finally(() => {
+        state.metaPromiseMap[url] = null
       })
     })
+    state.metaPromiseMap[url] = promise
+    return promise
   },
   digestSQLQuery({ commit, state }, resp) {
     if (!resp || !resp.status.toString().startsWith('20')) {

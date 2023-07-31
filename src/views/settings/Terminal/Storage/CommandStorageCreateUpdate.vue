@@ -8,7 +8,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { Required } from '@/components/DataForm/rules'
+import { Required } from '@/components/Form/DataForm/rules'
 export default {
   name: 'CommandStorageUpdate',
   components: {

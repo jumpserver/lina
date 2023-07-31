@@ -13,10 +13,7 @@ export default {
     return {
       config: {
         category: 'database',
-        url: '/api/v1/assets/databases/',
-        extraHeaderActions: {
-          createRoute: 'DatabaseCreate'
-        }
+        url: '/api/v1/assets/databases/'
       }
     }
   }

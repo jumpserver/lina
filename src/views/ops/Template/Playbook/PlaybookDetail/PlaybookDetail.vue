@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>
 
 <script type="text/jsx">
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
   components: {

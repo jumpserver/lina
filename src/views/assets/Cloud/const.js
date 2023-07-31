@@ -12,6 +12,7 @@ export const qcloud = 'qcloud'
 export const qcloud_lighthouse = 'qcloud_lighthouse'
 export const azure = 'azure'
 export const azure_international = 'azure_international'
+export const ucloud = 'ucloud'
 
 export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
@@ -82,6 +83,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: gcp,
     title: i18n.t('xpack.Cloud.GCP'),
     attrs: ['service_account_key']
+  },
+  [ucloud]: {
+    name: ucloud,
+    title: i18n.t('xpack.Cloud.UCloud'),
+    attrs: ['base_url', 'public_key', 'private_key', 'project']
   },
   [vmware]: {
     name: vmware,

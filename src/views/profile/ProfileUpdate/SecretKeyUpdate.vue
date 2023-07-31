@@ -15,7 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
-import TextReadonly from '@/components/FormFields/TextReadonly.vue'
+import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 
 export default {
   name: 'SecretKeyUpdate',

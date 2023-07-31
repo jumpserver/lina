@@ -13,10 +13,7 @@ export default {
     return {
       config: {
         url: '/api/v1/assets/devices/',
-        category: 'device',
-        headerActions: {
-          createRoute: 'DeviceCreate'
-        }
+        category: 'device'
       }
     }
   }

@@ -6,8 +6,7 @@
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
-import { AssetSelect } from '@/components'
-import AccountAutoPush from './AccountAutoPush.vue'
+import { AssetSelect, AutomationParams } from '@/components'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -96,13 +95,14 @@ export default {
           disabled: !this.$store.getters.hasValidLicense
         },
         params: {
-          component: AccountAutoPush,
+          component: AutomationParams,
           label: this.$t('assets.PushParams'),
           el: {
+            method: 'push_account_method',
             assets: this.asset_ids,
             nodes: this.node_ids
           },
-          helpText: this.$t('accounts.AccountPush.AutoPushHelpText')
+          helpText: this.$t('accounts.AccountPush.ParamsHelpText')
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },

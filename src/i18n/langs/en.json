@@ -32,6 +32,7 @@
     },
     "AccountChangeSecret": {
       "Result": "Result",
+      "ParamsHelpText": "The change secret parameter settings are currently only effective for assets with a platform type of host.",
       "ExecutionTimes": "Execution times",
       "TaskList": "Task record",
       "TimerPeriod": "Timed execution cycle",
@@ -93,7 +94,7 @@
       "AccountPushExecutionList": "Execution list",
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",
-      "AutoPushHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
+      "ParamsHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
       "AccountPushList": "Account push list"
     },
     "AccountBackup": {
@@ -118,8 +119,8 @@
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
     "AssetLoginACLHelpMsg": "It can determine whether the user can access the asset based on the user's login IP and time period.",
-    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period.",
-    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited.",
+    "UserLoginACLHelpMsg": "It can determines whether the user can access the system based on the user's login IP and time period（global effective）.",
+    "ConnectMethodACLHelpMsg": "You can control whether users can use a certain connection method to log in to the asset. Based on the rules you set, certain connection methods can be allowed while others are prohibited（global effective）.",
     "IgnoreCase": "Ignore case",
     "Content": "Content",
     "CommandFilterACL": "Command filter",
@@ -253,12 +254,12 @@
     "UpdateAccount": "Update account",
     "Account": "Account",
     "Defaults": "Default",
-    "CreateDatabase": "Create asset - Database",
-    "CreateHost": "Create asset - Host",
+    "DatabaseCreate": "Create asset - Database",
+    "HostCreate": "Create asset - Host",
     "CreateRemoteApp": "Create asset - Remote app",
-    "CreateDevice": "Create asset - Network device",
-    "CreateCloud": "Create asset - Cloud platform",
-    "CreateWeb": "Create asset - web",
+    "DeviceCreate": "Create asset - Network device",
+    "CloudCreate": "Create asset - Cloud platform",
+    "WebCreate": "Create asset - web",
     "Privileged": "Privileged",
     "SelectPlatforms": "Select platforms",
     "AppList": "Application list",
@@ -448,10 +449,19 @@
     "SSHPort": "SSH Port",
     "PrimaryProtocol": "The primary protocol, the most basic and commonly used protocol for assets, can only and must be set up with one.",
     "Primary": "Primary",
-    "CreateCustom": "Create Custom",
+    "CustomCreate": "Create Custom",
     "CustomType": "Custom Type",
     "CustomHelpMessage": "The assets of custom types require applet support. Please ensure that the corresponding applet is installed.",
-    "CustomFields": "Custom Fields"
+    "CustomFields": "Custom Fields",
+    "DeviceUpdate": "Update asset - Device",
+    "CustomUpdate": "Update asset - Custom",
+    "CloudUpdate": "Update asset - Cloud",
+    "GPTUpdate": "Update asset - GPT",
+    "PlatformSimple": "Platform",
+    "HostUpdate": "Update asset - Host",
+    "WebUpdate": "Update asset - Web",
+    "DatabaseUpdate": "Update asset - Database",
+    "GPTCreate": "Create asset - GPT"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -476,6 +486,11 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Proxy": "Proxy",
+    "PublicKey": "Public key",
+    "PrivateKey": "Private key",
+    "Project": "Project name",
+    "Advanced": "Advanced",
     "BatchProcessing": "Batch processing(select {Number} items)",
     "Generate": "Generate",
     "ServerError": "Server Error",
@@ -538,6 +553,8 @@
     "bulkClearErrorMsg": "Bulk clear error:",
     "Clear": "Clear",
     "ConnectWebSocketError": "Connect Websocket failed",
+    "WebSocketDisconnect": "Websocket disconnection",
+    "TaskDone": "Task done",
     "Nothing": "Nothing",
     "Action": "Action",
     "CustomCol": "Custom table display",
@@ -626,6 +643,7 @@
     "Search": "Search",
     "MFAErrorMsg": "MFA Error, please check",
     "InputEmailAddress": "Please enter your email address",
+    "InputNumber": "Please enter the number type",
     "Select": "Select",
     "SelectFile": "Select file",
     "Show": "Show",
@@ -1090,6 +1108,7 @@
   },
   "perms": {
     "": "",
+    "AnonymousAccountTip": "Connect asset without using a username and password, and it only supports web-based and custom-type assets.",
     "AssetPermissionHelpMsg": "Asset permission allows you to authorize the assets to the users. Additionally, you can set some specific action permission.",
     "AccountsHelp": "All accounts: accounts exists on the asset; Specify accounts: specify the user name of the account under the asset；Manual input: username/password; Same account: The account username name same with login user",
     "AllAccounts": "All accounts",
@@ -1389,6 +1408,7 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "Marketplace": "Marketplace",
     "Author": "Author",
     "Uploading": "File uploading",
     "UploadSucceed": "Upload succeed",
@@ -1486,6 +1506,7 @@
     }
   },
   "setting": {
+    "ServerTime": "Server time",
     "Custom": "Custom",
     "CleanHelpText": " Regular cleanup tasks will be executed at 2 o'clock in the morning every day, and the cleaned data cannot be recovered",
     "Applets": "Applets",
@@ -1565,6 +1586,7 @@
     "authSAMLCertHelpText": "After upload cert and private key, View SP Metadata",
     "authSAML2AdvancedSettings": "Advanced Settings",
     "unselectedUser": "Unselected user",
+    "unselectedOrg": "Unselected org",
     "auto": "Auto",
     "basicSetting": "Basic setting",
     "communityEdition": "Community edition",
@@ -1689,11 +1711,13 @@
     "JMSSSO": "SSO Token Login",
     "AppAuth": "App auth",
     "testPort": "Port",
+    "testParam": "Param",
     "CMPP2": "CMPP v2.0",
     "SignChannelNum": "Signature channel number",
     "testHelpText": "Please enter the destination address for testing",
     "OAuth2": "OAuth2",
     "destinationIP": "Destination address",
+    "testMultiPort": "Multiple ports are separated by commas (,)",
     "AppEndpoint": "Application access address",
     "authCASAttrMap": "User Attribute Mapping",
     "SignaturesAndTemplates": "Signatures and Templates",
@@ -1702,6 +1726,8 @@
     "basicTools": "Basic tool"
   },
   "tickets": {
+    "BatchApproval": "Batch approval",
+    "BatchReject": "Batch reject",
     "ApplyAsset": "Apply asset",
     "LoginConfirm": "User login confirm",
     "CommandConfirm": "Command confirm",
@@ -1792,7 +1818,7 @@
   },
   "users": {
     "AllMembers": "All members",
-    "UnbindHelpText": "The user is not a local user and cannot be unbound. Contact the administrator",
+    "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
     "SetStatus": "Set status",
     "Set": "Set",
     "NotSet": "Not set",
@@ -2032,6 +2058,7 @@
       "HuaweiPrivatecloud": "Huawei Private Cloud",
       "OpenStack": "OpenStack",
       "GCP": "Google Cloud Platform",
+      "UCloud": "UCloud Platform",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",

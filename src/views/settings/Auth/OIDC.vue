@@ -8,8 +8,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { JsonEditor, UpdateToken } from '@/components/FormFields'
-import { JsonRequired } from '@/components/DataForm/rules'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { JsonRequired } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'OIDC',

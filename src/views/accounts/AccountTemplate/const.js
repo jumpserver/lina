@@ -1,13 +1,13 @@
 import { getUuidUpdateFromUrl } from '@/utils/common'
-import { UpdateToken } from '@/components/FormFields'
-import Select2 from '@/components/FormFields/Select2'
+import { UpdateToken } from '@/components/Form/FormFields'
+import Select2 from '@/components/Form/FormFields/Select2'
 
 export const templateFields = (vm) => {
   return [
     [vm.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
     [vm.$t('assets.Secret'), [
       'secret_type', 'secret', 'ssh_key', 'token',
-      'access_key', 'passphrase'
+      'access_key', 'passphrase', 'api_key'
     ]],
     [vm.$t('common.Other'), ['comment']]
   ]
@@ -62,6 +62,14 @@ export const templateFieldsMeta = (vm) => {
         rows: 4
       },
       hidden: (formValue) => formValue.secret_type !== 'access_key'
+    },
+    api_key: {
+      label: vm.$t('assets.ApiKey'),
+      el: {
+        type: 'textarea',
+        rows: 4
+      },
+      hidden: (formValue) => formValue.secret_type !== 'api_key'
     }
   }
 }

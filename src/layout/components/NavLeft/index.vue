@@ -54,7 +54,7 @@
         <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       </div>
     </div>
-    <div class="mobile-menu" :class="{'is-show': viewShown}" @click="viewShown = false">
+    <div :class="{'is-show': viewShown}" class="mobile-menu" @click="viewShown = false">
       <ViewSwitcher :mode="'vertical'" />
     </div>
   </div>
@@ -63,7 +63,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
-import Hamburger from '@/components/Hamburger'
+import Hamburger from '@/components/Widgets/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
 import variables from '@/styles/variables.scss'

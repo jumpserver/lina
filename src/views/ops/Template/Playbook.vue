@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable ref="list" :header-actions="headerActions" :table-config="tableConfig" />
     <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @completed="refreshTable" />
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import UploadDialog from '@/views/ops/Template/Playbook/UploadDialog'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {

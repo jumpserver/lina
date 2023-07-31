@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
-import RelationCard from '@/components/RelationCard'
-import { DeleteActionFormatter } from '@/components/TableFormatters'
+import ListTable from '@/components/Table/ListTable'
+import RelationCard from '@/components/Cards/RelationCard'
+import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AssetPermissionUser',

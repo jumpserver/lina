@@ -2,14 +2,14 @@
   <div>
     <el-row :gutter="20">
       <el-col :md="14" :sm="24">
-        <AutoDetailCard :url="url" :object="object" />
+        <AutoDetailCard :object="object" :url="url" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
   name: 'TerminalDetail',

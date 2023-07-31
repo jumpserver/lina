@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
-import ViewSecret from '@/components/AccountListTable/ViewSecret'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 

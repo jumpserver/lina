@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, qcloud_lighthouse, azure, azure_international, vmware, nutanix, qingcloud_private, huaweicloud_private, ctyun_private, openstack, gcp, baiducloud, jdcloud, kingsoftcloud, fc, lan } from '../const'
+import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, qcloud_lighthouse, azure, azure_international, ucloud, vmware, nutanix, qingcloud_private, huaweicloud_private, ctyun_private, openstack, gcp, baiducloud, jdcloud, kingsoftcloud, fc, lan } from '../const'
 
 export default {
   name: 'AccountList',
@@ -118,6 +118,10 @@ export default {
             {
               name: gcp,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
+            },
+            {
+              name: ucloud,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[ucloud].title
             },
             {
               name: vmware,

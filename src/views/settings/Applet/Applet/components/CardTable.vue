@@ -20,10 +20,15 @@
                 <img :src="d.icon" class="image">
               </el-col>
               <el-col :span="16" style="text-align: left; padding: 5px 0">
-                <div class="one-line"><b>{{ d.display_name }}</b></div>
+                <div class="one-line">
+                  <b>{{ d.display_name }}</b>
+                  <el-tag size="mini" style="margin-left: 5px">{{ d.version }}</el-tag>
+                </div>
                 <el-divider class="my-divider" />
                 <Tooltip :content="d.comment" class="comment" />
-                <el-tag v-for="tag of d.tags" :key="tag" size="mini"> {{ tag }}</el-tag>
+                <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                  {{ capitalize(tag) }}
+                </el-tag>
               </el-col>
             </el-row>
           </el-card>
@@ -40,7 +45,7 @@
 </template>
 
 <script>
-import TableAction from '@/components/ListTable/TableAction'
+import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination, Tooltip } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 
@@ -87,11 +92,13 @@ export default {
       return this.tableConfig.url || ''
     }
   },
-  watch: {},
   mounted() {
     this.getList()
   },
   methods: {
+    capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
     getIcon(status) {
       let iconClass = 'fa-check-circle'
       if (status === false) {

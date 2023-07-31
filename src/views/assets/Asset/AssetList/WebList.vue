@@ -14,9 +14,6 @@ export default {
       config: {
         category: 'web',
         url: '/api/v1/assets/webs/',
-        headerActions: {
-          createRoute: 'WebCreate'
-        },
         tableConfig: {
           columnsExclude: [
             'username_selector', 'password_selector', 'submit_selector',

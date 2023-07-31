@@ -1,4 +1,4 @@
-import { JSONManyToManySelect } from '@/components/FormFields'
+import { JSONManyToManySelect } from '@/components/Form/FormFields'
 
 export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
   return {
