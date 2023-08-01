@@ -668,6 +668,7 @@
     "SyncSuccessMsg": "Sync success",
     "BatchActivate": "Batch activate",
     "SyncSelected": "Sync selected",
+    "bulkDeploy": "Bulk deploy",
     "bulkDeleteErrorMsg": "Bulk delete failed: ",
     "bulkDeleteSuccessMsg": "Bulk delete success",
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
