@@ -143,9 +143,7 @@ export default {
       const msg = this.session.is_locked ? resumeMsg : pauseMsg
       this.$axios.post(url, data).then(res => {
         this.$message.success(msg)
-        this.curTimer = setTimeout(() => {
-          this.init()
-        }, 50000)
+        this.session.is_locked = true
       }).catch(err => {
         this.$message.error(err)
       })
