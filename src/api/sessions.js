@@ -8,24 +8,11 @@ export function terminateSession(data) {
   })
 }
 
-export function getSessionDetail(id) {
+export function toggleLockSession(data) {
   return request({
-    url: `/api/v1/terminal/sessions/${id}/`,
-    method: 'get'
-  })
-}
-
-export function getSessionCommands(id) {
-  return request({
-    url: `/api/v1/terminal/commands/?session_id=${id}`,
-    method: 'get'
-  })
-}
-
-export function getTerminalDetail(id) {
-  return request({
-    url: `/api/v1/terminal/terminals/${id}/`,
-    method: 'get'
+    url: '/api/v1/terminal/tasks/toggle-lock-session/',
+    method: 'post',
+    data: data
   })
 }
 
