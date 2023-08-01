@@ -143,7 +143,7 @@ export default {
       const msg = this.session.is_locked ? resumeMsg : pauseMsg
       this.$axios.post(url, data).then(res => {
         this.$message.success(msg)
-        this.session.is_locked = true
+        this.session.is_locked = !this.session.is_locked
       }).catch(err => {
         this.$message.error(err)
       })
