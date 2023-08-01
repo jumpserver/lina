@@ -1,24 +1,18 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <ListTable :header-actions="headerConfig" :table-config="config" />
-    </el-col>
-    <el-col :md="8" :sm="24">
-      <QuickActions :actions="quickActions" type="primary" />
-    </el-col>
+    <ListTable :header-actions="headerActions" :table-config="config" />
   </el-row>
 </template>
 
 <script type="text/jsx">
-import { ListTable, QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms'
+import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Publications',
   components: {
-    ListTable,
-    QuickActions
+    ListTable
   },
   props: {
     object: {
@@ -28,30 +22,50 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      headerConfig: {
-        hasLeftActions: false,
-        hasImport: false
+      headerActions: {
+        hasCreate: false,
+        hasImport: false,
+        hasExport: false,
+        hasBulkDelete: false,
+        extraMoreActions: [
+          {
+            name: 'SyncSelected',
+            title: this.$t('common.bulkDeploy'),
+            type: 'primary',
+            callback: function({ selectedRows }) {
+              vm.$axios.post(
+                `/api/v1/terminal/applet-host-deployments/applets/`,
+                {
+                  hosts: selectedRows.map(v => { return v.host.id }),
+                  applet_id: vm.object.id
+                }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }
+          }
+        ]
       },
       config: {
-        url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
+        url: `/api/v1/terminal/applet-publications/?applet=${this.object.id}`,
         columns: [
-          'applet.display_name', 'applet.version',
+          'host.display_name', 'applet.version',
           'date_updated', 'status', 'actions'
         ],
         columnsMeta: {
-          'applet.display_name': {
+          'host.display_name': {
             label: this.$t('common.DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getIcon: ({ row }) => row.applet?.icon,
-              getTitle: ({ row }) => row.applet.display_name,
+              getTitle: ({ row }) => row.host.name,
               getRoute: ({ row }) => ({
-                name: 'AppletDetail',
-                params: { id: row.applet.id }
+                name: 'AppletHostDetail',
+                params: { id: row.host.id }
               })
             },
-            id: ({ row }) => row.applet.id
+            id: ({ row }) => row.host.id
           },
           'applet.version': {
             label: this.$t('common.Version')
@@ -85,7 +99,7 @@ export default {
                       `/api/v1/terminal/applet-host-deployments/applets/`,
                       {
                         hosts: [row.host.id],
-                        applet_id: row.applet.id
+                        applet_id: vm.object.id
                       }
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -96,43 +110,7 @@ export default {
             }
           }
         }
-      },
-      quickActions: [
-        {
-          title: this.$t('assets.InitialDeploy'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Deploy')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/`,
-                { host: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
-        },
-        {
-          title: this.$t('common.PublishAllApplets'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Publish')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/applets/`,
-                { hosts: [this.object.id] }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
-        }
-      ]
+      }
     }
   }
 }

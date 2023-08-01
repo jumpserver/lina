@@ -14,13 +14,15 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
+import AppletHosts from './AppletHosts'
 
 export default {
   name: 'AppletDetail',
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    AppletHosts
   },
   data() {
     return {
@@ -32,6 +34,10 @@ export default {
           {
             'title': this.$t('common.Detail'),
             'name': 'Detail'
+          },
+          {
+            'title': this.$t('terminal.AppletHosts'),
+            'name': 'AppletHosts'
           }
         ],
         hasRightSide: true,
