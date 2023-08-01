@@ -47,9 +47,7 @@ export default {
             toggleLockSession(data).then(res => {
               const msg = vm.$t('sessions.PauseTaskSendSuccessMsg')
               this.$message.success(msg)
-              window.setTimeout(function() {
-                reload()
-              }, 50000)
+              row['is_locked'] = !row['is_locked']
             }
             )
           }
@@ -68,9 +66,7 @@ export default {
             toggleLockSession(data).then(res => {
               const msg = vm.$t('sessions.ResumeTaskSendSuccessMsg')
               this.$message.success(msg)
-              window.setTimeout(function() {
-                reload()
-              }, 50000)
+              row['is_locked'] = !row['is_locked']
             })
           }
         },
