@@ -24,11 +24,11 @@ export default {
     return {
       url: `/api/v1/xpack/cloud/strategies/${this.object.id}/`,
       detailFields: [
-        'name',
+        'name', 'priority',
         {
           key: this.$t('common.Rule'),
           formatter: () => {
-            const newArr = this.object.task_rules || []
+            const newArr = this.object.strategy_rules || []
             return (
               <ul>
                 {
@@ -43,7 +43,7 @@ export default {
         {
           key: this.$t('common.Action'),
           formatter: () => {
-            const newArr = this.object.task_actions || []
+            const newArr = this.object.strategy_actions || []
             return (
               <ul>
                 {

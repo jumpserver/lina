@@ -7,7 +7,7 @@
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="StrategyRelation"
-        v-perms="'xpack.change_taskstrategy'"
+        v-perms="'xpack.change_strategy'"
         style="margin-top: 15px"
         type="info"
         v-bind="strategyRelationConfig"

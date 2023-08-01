@@ -136,7 +136,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.Cloud.Strategy'),
-          permissions: ['xpack.view_taskstrategy']
+          permissions: ['xpack.view_strategy']
         },
         children: [
           {
@@ -146,7 +146,7 @@ export default [
             component: () => import('@/views/assets/Cloud/'),
             meta: {
               title: i18n.t('xpack.Cloud.StrategyList'),
-              permissions: ['xpack.view_taskstrategy']
+              permissions: ['xpack.view_strategy']
             }
           },
           {
@@ -157,7 +157,7 @@ export default [
             meta: {
               title: i18n.t('common.StrategyCreate'),
               action: 'create',
-              permissions: ['xpack.add_taskstrategy']
+              permissions: ['xpack.add_strategy']
             }
           },
           {
@@ -167,7 +167,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('common.StrategyUpdate'),
-              permissions: ['xpack.change_taskstrategy']
+              permissions: ['xpack.change_strategy']
             }
           },
           {
@@ -177,7 +177,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('common.StrategyDetail'),
-              permissions: ['xpack.view_taskstrategy']
+              permissions: ['xpack.view_strategy']
             }
           }
         ]

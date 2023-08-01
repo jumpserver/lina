@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       Account: {
-        name: '', task_rules: [], task_actions: [], comment: ''
+        name: '', strategy_rules: [], strategy_actions: [], comment: ''
       },
       config: {
         url: `/api/v1/xpack/cloud/strategies`,

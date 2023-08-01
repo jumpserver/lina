@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import { Required } from '@/components/Form/DataForm/rules'
-import ProtocolSelector from '@/components/Form/FormFields/'
 import { AttrInput, Select2 } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import { resourceTypeOptions, tableFormatter } from './const'
 
 export default {
@@ -27,24 +27,6 @@ export default {
       resourceType: '',
       globalResource: {},
       globalProtocols: {},
-      beforeSubmit: (data) => {
-        let status = true
-        const labelMap = {
-          platform: this.$tc('assets.Platform'), domain: this.$tc('assets.Domain')
-        }
-        this.tableConfig.totalData.map(item => {
-          const iValue = item.value?.id || item.value
-          const iAttr = item.attr?.value || item.attr
-          if (iValue === data.value) {
-            status = false
-            this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
-          } else if (Object.keys(labelMap).indexOf(data?.attr) !== -1 && iAttr === data.attr) {
-            status = false
-            this.$message.error(`${this.$tc('xpack.Cloud.UniqueError')}: ${labelMap[data.attr]}`)
-          }
-        })
-        return status
-      },
       formConfig: {
         initial: { attr: '', value: '' },
         inline: true,
@@ -183,10 +165,28 @@ export default {
     onSubmit() {
       this.$emit('input', this.tableConfig.totalData)
     },
+    beforeSubmit(data) {
+      let status = true
+      const labelMap = {
+        platform: this.$tc('assets.Platform'), domain: this.$tc('assets.Domain')
+      }
+      this.tableConfig.totalData.map(item => {
+        const iValue = item.value?.id || item.value
+        const iAttr = item.attr?.value || item.attr
+        if (iValue === data.value) {
+          status = false
+          this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
+        } else if (Object.keys(labelMap).indexOf(data?.attr) !== -1 && iAttr === data.attr) {
+          status = false
+          this.$message.error(`${this.$tc('xpack.Cloud.UniqueError')}: ${labelMap[data.attr]}`)
+        }
+      })
+      return status
+    },
     handleDelete(index) {
       return () => {
         const item = this.tableConfig.totalData.splice(index, 1)
-        this.$axios.delete(`/api/v1/xpack/cloud/task-actions/${item[0]?.id}/`)
+        this.$axios.delete(`/api/v1/xpack/cloud/strategy-actions/${item[0]?.id}/`)
         this.$message.success(this.$tc('common.deleteSuccessMsg'))
       }
     }

@@ -34,14 +34,15 @@ export default {
   },
   data() {
     return {
-      attrValue: { name: '', task_rules: [], task_actions: [] },
+      attrValue: { name: '', priority: 50, strategy_rules: [], strategy_actions: [] },
       strategy: {},
       visible: false,
       tableConfig: {
         columns: [
           { prop: 'name', label: this.$t('common.PolicyName') },
-          { prop: 'task_rules', label: this.$t('common.RuleCount'), formatter: tableFormatter('count') },
-          { prop: 'task_actions', label: this.$t('common.ActionCount'), formatter: tableFormatter('count') },
+          { prop: 'priority', label: this.$t('acl.priority') },
+          { prop: 'strategy_rules', label: this.$t('common.RuleCount'), formatter: tableFormatter('count') },
+          { prop: 'strategy_actions', label: this.$t('common.ActionCount'), formatter: tableFormatter('count') },
           { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
@@ -57,7 +58,7 @@ export default {
                   size='mini'
                   style={{ 'flexShrink': 0 }}
                   type='danger'
-                  onClick={(index) => this.tableConfig.totalData.splice(index, 1)}
+                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
                 />
               </div>
             )
@@ -72,7 +73,7 @@ export default {
         ajax: {
           transformOption: (item) => {
             this.strategy[item.id] = {
-              name: item.name, task_rules: item.task_rules, task_actions: item.task_actions
+              name: item.name, priority: item.priority, strategy_rules: item.strategy_rules, strategy_actions: item.strategy_actions
             }
             return { label: item.name, value: item.id }
           }
@@ -95,15 +96,19 @@ export default {
       if (status) {
         data['id'] = value
         this.tableConfig.totalData.push(data)
-        console.log('hello: ', this.tableConfig.totalData)
       }
     },
     handleCreate() {
-      this.attrValue = { name: '', task_rules: [], task_actions: [] }
+      this.attrValue = { name: '', priority: 50, strategy_rules: [], strategy_actions: [] }
       this.visible = true
     },
     onAttrDialogConfirm() {
       this.$emit('input', this.tableConfig.totalData)
+    },
+    handleAttrDelete({ index }) {
+      return () => {
+        this.tableConfig.totalData.splice(index, 1)
+      }
     },
     handleAttrEdit({ row, index }) {
       return () => {

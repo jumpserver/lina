@@ -24,7 +24,7 @@ export default {
           {
             title: this.$t('xpack.Cloud.SyncStrategy'),
             name: 'StrategyList',
-            hidden: () => !this.$hasPerm('xpack.view_taskstrategy'),
+            hidden: () => !this.$hasPerm('xpack.view_strategy'),
             component: () => import('@/views/assets/Cloud/Strategy/StrategyList.vue')
           },
           {

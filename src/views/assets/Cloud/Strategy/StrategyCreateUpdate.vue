@@ -18,18 +18,18 @@ export default {
     return {
       url: '/api/v1/xpack/cloud/strategies/',
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('common.Strategy'), ['task_rules', 'task_actions']],
+        [this.$t('common.Basic'), ['name', 'priority']],
+        [this.$t('common.Strategy'), ['strategy_rules', 'strategy_actions']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         name: {
           rules: [RequiredChange, specialEmojiCheck]
         },
-        task_rules: {
+        strategy_rules: {
           component: RuleInput
         },
-        task_actions: {
+        strategy_actions: {
           component: ActionInput
         }
       },

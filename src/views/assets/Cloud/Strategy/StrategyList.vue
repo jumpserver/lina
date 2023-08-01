@@ -17,9 +17,9 @@ export default {
         url: '/api/v1/xpack/cloud/strategies/',
         permissions: {
           app: 'xpack',
-          resource: 'taskstrategy'
+          resource: 'strategy'
         },
-        columns: ['name', 'task_rules', 'task_actions', 'actions', 'user_actions'],
+        columns: ['name', 'priority', 'strategy_rules', 'strategy_actions', 'actions', 'user_actions'],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -27,11 +27,11 @@ export default {
               route: 'CloudStrategyDetail'
             }
           },
-          task_rules: {
-            formatter: (row) => { return row.task_rules.length }
+          strategy_rules: {
+            formatter: (row) => { return row.strategy_rules.length }
           },
-          task_actions: {
-            formatter: (row) => { return row.task_actions.length }
+          strategy_actions: {
+            formatter: (row) => { return row.strategy_actions.length }
           },
           actions: {
             formatterArgs: {
