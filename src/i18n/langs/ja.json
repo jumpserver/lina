@@ -1479,6 +1479,8 @@
     "terminalUpdate": "端末の更新",
     "terminalUpdateStorage": "端末ストレージの更新",
     "terminate": "終断",
+    "resume": "再開",
+    "pause": "一時停止",
     "sessionTerminate": "会話が終わる",
     "test": "テスト",
     "type": "タイプ",
@@ -1494,6 +1496,8 @@
     "RazorNotSupport": "RDPクライアントセッションは、監視をサポートしていません",
     "sessionMonitor": "モニタリング",
     "TerminateTaskSendSuccessMsg": "最終タスクが発行されました。後で更新して確認してください。",
+    "PauseTaskSendSuccessMsg": "一時停止タスクが発行されました。後で更新して確認してください。",
+    "ResumeTaskSendSuccessMsg": "再開タスクが発行されました。後で更新して確認してください。",
     "helpText": {
       "esUrl": "ヒント: 複数のホストがある場合は、カンマ ( , ) で分割します。 (Eg: http://www.jumpserver.a.com:3000、http://www.jumpserver.b.com:3000)",
       "esIndex": "Esはデフォルトindexを提供します。日付による索引の作成を選択した場合、この空は索引接頭辞です。",

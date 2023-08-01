@@ -1484,6 +1484,8 @@
     "terminalUpdate": "Update terminal",
     "terminalUpdateStorage": "Update terminal storage",
     "terminate": "Terminate",
+    "resume": "Resume",
+    "pause": "Pause",
     "sessionTerminate": "Session Terminate",
     "test": "Test",
     "type": "Type",
@@ -1499,6 +1501,8 @@
     "RazorNotSupport": "RDP Client session not support now",
     "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
+    "PauseTaskSendSuccessMsg": "Pause task has been send, Please check later",
+    "ResumeTaskSendSuccessMsg": "Resume task has been send, Please check later",
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (, ) to split (eg: http://www.jumpserver.a.com, http://www.jumpserver.b.com)",
       "esIndex": "Es provides the default index: jumpserver. If you choose to build an index by date, this blank is the index prefix",
