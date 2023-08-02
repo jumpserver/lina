@@ -23,10 +23,12 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="small" type="primary" @click="showTemplateDialog=true">
+          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
             {{ $t('common.TemplateAdd') }}
           </el-button>
-          {{ addTemplateHelpText }}
+          <span class="help-block" style="display: inline">
+            {{ addTemplateHelpText }}
+          </span>
         </span>
       </div>
     </el-form-item>
