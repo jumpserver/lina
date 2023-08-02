@@ -24,6 +24,11 @@ export default {
     return {
       url: `/api/v1/accounts/push-account-executions/${this.object.id}`,
       detailFields: [
+        'id',
+        {
+          key: this.$t('common.DisplayName'),
+          value: this.object.snapshot.name
+        },
         {
           key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
           value: this.object.snapshot.asset_amount
@@ -32,7 +37,11 @@ export default {
           key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
           value: this.object.snapshot.node_amount
         },
-        'trigger_display', 'date_start'
+        'trigger_display', 'date_start', 'date_finished',
+        {
+          key: this.$t('common.Comment'),
+          value: this.object.snapshot.common
+        }
       ]
     }
   },
