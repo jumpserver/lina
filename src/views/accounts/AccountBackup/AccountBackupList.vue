@@ -21,6 +21,10 @@ export default {
           app: 'accounts',
           resource: 'accountbackupautomation'
         },
+        columns: [
+          'name', 'org_name', 'is_periodic',
+          'periodic_display', 'executed_amount', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

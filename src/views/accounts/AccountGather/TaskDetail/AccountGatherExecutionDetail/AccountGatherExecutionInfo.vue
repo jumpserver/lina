@@ -23,7 +23,7 @@ export default {
     return {
       url: `/api/v1/accounts/gather-account-executions/${this.object.id}/`,
       detailFields: [
-        'status', 'trigger_display', 'date_start', 'date_finished'
+        'id', 'status', 'trigger_display', 'date_start', 'date_finished'
       ]
     }
   },

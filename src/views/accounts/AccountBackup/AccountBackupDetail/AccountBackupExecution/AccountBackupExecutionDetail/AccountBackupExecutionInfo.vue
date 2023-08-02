@@ -24,6 +24,7 @@ export default {
     return {
       url: `/api/v1/accounts/account-backup-plan-executions/${this.object.id}/`,
       detailFields: [
+        'id',
         {
           key: this.$t('accounts.AccountChangeSecret.TimeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
