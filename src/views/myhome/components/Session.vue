@@ -67,7 +67,7 @@ export default {
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
-                    window.open(`/luna/?login_to=${row.id}`, '_blank')
+                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
                   }
                 }
               ]
