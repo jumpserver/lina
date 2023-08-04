@@ -65,7 +65,21 @@ export default {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
-        'date_created', 'date_updated', 'comment'
+        'date_created', 'date_updated', 'comment',
+        {
+          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' A',
+          value: this.object.recipients_part_one,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
+        },
+        {
+          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' B',
+          value: this.object.recipients_part_two,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
+        }
       ]
     }
   },
