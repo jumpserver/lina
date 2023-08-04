@@ -1,10 +1,10 @@
 <template>
   <ActionsGroup
     v-loading="loadingStatus"
-    :size="'mini'"
     :actions="actions"
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
+    :size="'mini'"
   />
 </template>
 
@@ -24,6 +24,7 @@ const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
   let route = { params: { id: id }}
   const updateRoute = this.colActions.updateRoute
+  console.log('Update route: ', updateRoute)
 
   if (typeof updateRoute === 'object') {
     route = Object.assign(route, updateRoute)

@@ -5,9 +5,9 @@
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
-      :url="url"
-      :submit-method="submitMethod"
       :on-perform-success="onPerformSuccess"
+      :submit-method="submitMethod"
+      :url="url"
     />
   </IBox>
 </template>
@@ -15,7 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
-import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
+import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly.vue'
 
 export default {
   name: 'SecretKeyUpdate',
@@ -36,7 +36,7 @@ export default {
       fieldsMeta: {
         has_secret_key: {
           label: this.$t('users.SetStatus'),
-          component: TextReadonly,
+          component: BoolTextReadonly,
           el: {
             trueText: this.$t('users.Set'),
             falseText: this.$t('users.NotSet')

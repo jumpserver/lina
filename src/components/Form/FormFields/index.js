@@ -1,5 +1,4 @@
 import Link from './Link.vue'
-import Text from './Text.vue'
 import Select2 from './Select2.vue'
 import TagInput from './TagInput.vue'
 import Switcher from './Switcher.vue'
@@ -9,16 +8,17 @@ import PhoneInput from './PhoneInput.vue'
 import UploadField from './UploadField.vue'
 import UpdateToken from './UpdateToken.vue'
 import UserPassword from './UserPassword.vue'
+import UploadSecret from './UploadSecret.vue'
+import TextReadonly from './TextReadonly.vue'
 import DynamicInput from './DynamicInput.vue'
 import PasswordInput from './PasswordInput.vue'
-import UploadSecret from './UploadSecret.vue'
 import WeekCronSelect from './WeekCronSelect.vue'
+import BoolTextReadonly from './BoolTextReadonly.vue'
 import NestedObjectSelect2 from './NestedObjectSelect2.vue'
 import DatetimeRangePicker from './DatetimeRangePicker.vue'
 import JSONManyToManySelect from './JSONManyToManySelect/index.vue'
 
 export default {
-  Text,
   Link,
   Switcher,
   Select2,
@@ -32,14 +32,15 @@ export default {
   DynamicInput,
   PasswordInput,
   UploadSecret,
+  TextReadonly,
   WeekCronSelect,
+  BoolTextReadonly,
   NestedObjectSelect2,
   DatetimeRangePicker,
   JSONManyToManySelect
 }
 
 export {
-  Text,
   Link,
   Switcher,
   Select2,
@@ -53,7 +54,9 @@ export {
   DynamicInput,
   PasswordInput,
   UploadSecret,
+  TextReadonly,
   WeekCronSelect,
+  BoolTextReadonly,
   NestedObjectSelect2,
   DatetimeRangePicker,
   JSONManyToManySelect

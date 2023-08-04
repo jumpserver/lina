@@ -18,7 +18,7 @@
             trigger="hover"
             width="160"
           >
-            <ViewSwitcher :mode="'vertical'" />
+            <ViewSwitcher mode="vertical" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
           </el-popover>
         </span>
