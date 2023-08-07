@@ -32,7 +32,8 @@ export default {
             },
             readonly: this.$store.getters.publicSettings['CACHE_LOGIN_PASSWORD_ENABLED'] !== true
           }
-        }
+        },
+        updateSuccessNextRoute: { name: 'VirtualAccountDetail' }
       }
     }
   },
