@@ -40,6 +40,7 @@ export default {
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'VERIFY_CODE_TTL',
             'SECURITY_MFA_VERIFY_TTL',
+            'SECURITY_UNCOMMON_USERS_TTL',
             'SECURITY_CHECK_DIFFERENT_CITY_LOGIN',
             'AuthLimit',
             'PasswordRule'
