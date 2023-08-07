@@ -16,12 +16,19 @@ export default {
       taskType: 'telnet',
       fields: [
         {
-          name: 'dest_ip', label: this.$t('setting.destinationIP'),
-          placeholder: this.$t('setting.destinationIP')
+          name: 'dest_ip',
+          label: this.$t('setting.DestinationIP'),
+          el: {
+            placeholder: this.$t('setting.DestinationIP')
+          }
         },
         {
-          name: 'dest_port', label: this.$t('setting.testPort'),
-          placeholder: this.$t('setting.testPort'), type: 'number'
+          name: 'dest_port',
+          label: this.$t('setting.DestinationPort'),
+          el: {
+            type: 'number',
+            placeholder: this.$t('setting.DestinationPort')
+          }
         }
       ],
       rules: {

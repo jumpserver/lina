@@ -15,7 +15,11 @@ export default {
     return {
       taskType: 'ping',
       fields: [{
-        name: 'dest_ip', label: this.$t('setting.destinationIP'), placeholder: this.$t('setting.destinationIP')
+        name: 'dest_ip',
+        label: this.$t('setting.DestinationIP'),
+        el: {
+          placeholder: this.$t('setting.DestinationIP')
+        }
       }],
       rules: {
         dest_ip: rules.Required
