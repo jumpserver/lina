@@ -1749,6 +1749,7 @@
   },
   "tickets": {
     "BatchApproval": "Batch approval",
+    "BatchConsent": "Batch consent",
     "BatchReject": "Batch reject",
     "ApplyAsset": "Apply asset",
     "LoginConfirm": "User login confirm",

@@ -4,7 +4,7 @@
     <Dialog
       v-if="isVisible"
       :cancel-title="$tc('tickets.BatchReject')"
-      :confirm-title="$tc('tickets.BatchApproval')"
+      :confirm-title="$tc('tickets.BatchConsent')"
       :destroy-on-close="true"
       :title="$tc('tickets.BatchApproval')"
       :visible.sync="isVisible"
