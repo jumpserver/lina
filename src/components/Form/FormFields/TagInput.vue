@@ -10,7 +10,7 @@
       @click="handleTagClick(v, k)"
       @close="handleTagClose(v)"
     >
-      {{ v }}
+      {{ isCheckShowPassword ? changeTagShowValue(v) : v }}
     </el-tag>
     <component
       :is="component"
@@ -26,6 +26,13 @@
       @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
+    <span
+      v-if="replaceShowPassword && filterTags.length > 0"
+      class="show-password"
+      @click="handleShowPassword"
+    >
+      <i class="fa" :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" />
+    </span>
   </div>
 </template>
 
@@ -52,6 +59,18 @@ export default {
       type: Function,
       default: null
     },
+    replaceShowPassword: {
+      type: Boolean,
+      default: false
+    },
+    replaceRule: {
+      type: String,
+      default: ''
+    },
+    replaceContent: {
+      type: String,
+      default: '*'
+    },
     inputType: {
       type: String,
       default: () => 'text'
@@ -62,6 +81,7 @@ export default {
       filterTags: this.value,
       focus: false,
       filterValue: '',
+      isCheckShowPassword: this.replaceShowPassword,
       component: this.autocomplete ? 'el-autocomplete' : 'el-input'
     }
   },
@@ -81,6 +101,7 @@ export default {
     },
     handleConfirm() {
       if (this.filterValue === '') return
+
       if (!this.filterTags.includes(this.filterValue)) {
         this.filterTags.push(this.filterValue)
         this.filterValue = ''
@@ -94,6 +115,23 @@ export default {
       this.$delete(this.filterTags, k)
       this.filterValue = v
       this.$refs.SearchInput.focus()
+    },
+    matchRule(value) {
+      const regex = new RegExp(this.replaceRule)
+      const replacedValue = value.replace(regex, (match, p1, p2, p3) => {
+        const stars = p2.replace(/./g, this.replaceContent)
+        return p1 + stars + p3
+      })
+      return replacedValue
+    },
+    changeTagShowValue(value) {
+      if (this.replaceShowPassword && this.replaceRule) {
+        value = this.matchRule(value)
+      }
+      return value
+    },
+    handleShowPassword() {
+      this.isCheckShowPassword = !this.isCheckShowPassword
     }
   }
 }
@@ -121,6 +159,7 @@ export default {
 
     &>>> .el-tag {
       margin-top: 3px;
+      font-family: sans-serif !important;
     }
 
     &>>> .el-autocomplete {
@@ -144,5 +183,14 @@ export default {
 
   .filter-field >>> .el-input__inner {
     height: 26px;
+  }
+
+  .show-password {
+    display: inherit;
+    padding-right: 6px;
+    cursor: pointer;
+    &:hover {
+      color: #999999;
+    }
   }
 </style>
