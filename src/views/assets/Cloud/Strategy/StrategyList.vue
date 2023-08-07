@@ -43,6 +43,7 @@ export default {
       },
       headerActions: {
         hasImport: false,
+        hasExport: false,
         hasMoreActions: false,
         createRoute: 'CloudStrategyCreate'
       }
