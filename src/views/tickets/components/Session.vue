@@ -43,6 +43,19 @@
         {{ $t('sessions.terminate') }}
       </el-button>
       <el-button
+        type="warning"
+        size="small"
+        :disabled="!session.can_join"
+        @click="onToggleLock"
+      >
+        <template v-if="session.is_locked">
+          {{ $t('sessions.resume') }}
+        </template>
+        <template v-else>
+          {{ $t('sessions.pause') }}
+        </template>
+      </el-button>
+      <el-button
         type="primary"
         size="small"
         :disabled="!session.can_join"
@@ -117,6 +130,23 @@ export default {
     onMonitor() {
       const joinUrl = `/luna/monitor/${this.session.id}`
       window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+    },
+    onToggleLock() {
+      const url = '/api/v1/terminal/tasks/toggle-lock-session-for-ticket/'
+      const task_name = this.session.is_locked ? 'unlock_session' : 'lock_session'
+      const data = {
+        'session_id': this.session.id,
+        'task_name': task_name
+      }
+      const resumeMsg = this.$tc('sessions.ResumeTaskSendSuccessMsg')
+      const pauseMsg = this.$tc('sessions.PauseTaskSendSuccessMsg')
+      const msg = this.session.is_locked ? resumeMsg : pauseMsg
+      this.$axios.post(url, data).then(res => {
+        this.$message.success(msg)
+        this.session.is_locked = !this.session.is_locked
+      }).catch(err => {
+        this.$message.error(err)
+      })
     }
   }
 

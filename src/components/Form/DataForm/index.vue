@@ -38,11 +38,11 @@
         v-if="defaultButton"
         :disabled="!canSubmit"
         :loading="isSubmitting"
-        size="small"
+        :size="submitBtnSize"
         type="primary"
         @click="submitForm('form')"
       >
-        {{ $t('common.Submit') }}
+        {{ submitBtnText }}
       </el-button>
     </el-form-item>
   </ElFormRender>
@@ -72,6 +72,16 @@ export default {
     canSubmit: {
       type: Boolean,
       default: true
+    },
+    submitBtnSize: {
+      type: String,
+      default: 'small'
+    },
+    submitBtnText: {
+      type: String,
+      default() {
+        return this.$t('common.Submit')
+      }
     },
     hasSaveContinue: {
       type: Boolean,

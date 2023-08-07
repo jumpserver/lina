@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
-import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
+import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
 
 export default {
   components: {
@@ -24,7 +24,8 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'protocols', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
+        [this.$t('common.Strategy'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -49,31 +50,6 @@ export default {
           rules: [rules.RequiredChange],
           helpText: this.$t('xpack.Cloud.HostnameStrategy')
         },
-        node: {
-          rules: [rules.RequiredChange],
-          el: {
-            multiple: false,
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/nodes/',
-              transformOption: (item) => {
-                return { label: item.full_value, value: item.id }
-              }
-            }
-          }
-        },
-        protocols: {
-          component: ProtocolSelector,
-          el: {
-            showSetting: () => { return false },
-            choices: [
-              { 'name': 'ssh', 'port': 22, 'primary': true, 'default': false, 'required': false },
-              { 'name': 'telnet', 'port': 23, 'primary': false, 'default': false, 'required': false },
-              { 'name': 'vnc', 'port': 5900, 'primary': false, 'default': false, 'required': false },
-              { 'name': 'rdp', 'port': 3389, 'primary': false, 'default': false, 'required': false }
-            ]
-          }
-        },
         is_always_update: {
           type: 'switch',
           label: this.$t('xpack.Cloud.IsAlwaysUpdate'),
@@ -88,7 +64,7 @@ export default {
             ajax: {
               url: '/api/v1/xpack/cloud/regions/',
               processResults(data) {
-                const results = data.regions.map((item) => {
+                const results = data.regions?.map((item) => {
                   return { label: item.name, value: item.id }
                 })
                 const more = !!data.next
@@ -114,6 +90,10 @@ export default {
             return formValue.is_periodic === false
           },
           helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
+        },
+        strategy: {
+          label: this.$t('common.Strategy'),
+          component: SyncInstanceTaskStrategy
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
@@ -123,20 +103,15 @@ export default {
           const [name, port] = i.split('/')
           return { name, port }
         })
-
         return formValue
       },
       cleanFormValue(value) {
-        let protocols = ''
         const ipNetworkSegments = value.ip_network_segment_group
+        const strategy = value?.strategy || []
         if (!Array.isArray(ipNetworkSegments)) {
           value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
-        if (value.protocols.length > 0) {
-          protocols = value.protocols.map(i => (i.name + '/' + i.port)).join(' ')
-        }
-        value.protocols = protocols
-
+        value.strategy = strategy.map(item => { return item.id })
         return value
       },
       onPerformError(error, method, vm) {

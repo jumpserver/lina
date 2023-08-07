@@ -16,6 +16,7 @@
       :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
+      :type="inputType"
       :fetch-suggestions="autocomplete"
       :placeholder="this.$t('common.EnterToContinue')"
       class="search-input"
@@ -69,6 +70,10 @@ export default {
     replaceContent: {
       type: String,
       default: '*'
+    },
+    inputType: {
+      type: String,
+      default: () => 'text'
     }
   },
   data() {

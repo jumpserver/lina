@@ -5,6 +5,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { openTaskPage } from '@/utils/jms'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AccountPushExecutionList',
@@ -23,10 +24,22 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
         columns: [
-          'asset_amount', 'node_amount', 'status',
-          'trigger', 'date_start', 'actions'
+          'PushUserName', 'asset_amount', 'node_amount', 'status',
+          'trigger', 'date_start', 'date_finished', 'actions'
         ],
         columnsMeta: {
+          'PushUserName': {
+            label: this.$t('common.DisplayName'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getTitle: ({ row }) => row.snapshot.name,
+              getRoute: ({ row }) => ({
+                name: 'AccountPushDetail',
+                params: { id: row.automation }
+              })
+            },
+            id: ({ row }) => row.automation
+          },
           asset_amount: {
             label: this.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px',
@@ -87,6 +100,10 @@ export default {
             {
               label: this.$t('accounts.TaskID'),
               value: 'automation_id'
+            },
+            {
+              label: this.$t('common.DisplayName'),
+              value: 'automation__name'
             }
           ]
         },

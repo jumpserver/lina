@@ -3,6 +3,7 @@ import Text from './Text.vue'
 import Select2 from './Select2.vue'
 import TagInput from './TagInput.vue'
 import Switcher from './Switcher.vue'
+import AttrInput from './AttrInput.vue'
 import UploadKey from './UploadKey.vue'
 import JsonEditor from './JsonEditor.vue'
 import PhoneInput from './PhoneInput.vue'
@@ -23,6 +24,7 @@ export default {
   Switcher,
   Select2,
   TagInput,
+  AttrInput,
   UploadKey,
   JsonEditor,
   UpdateToken,
@@ -44,6 +46,7 @@ export {
   Switcher,
   Select2,
   TagInput,
+  AttrInput,
   UploadKey,
   JsonEditor,
   UpdateToken,

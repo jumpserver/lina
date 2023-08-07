@@ -4,7 +4,7 @@
 
 <script>
 import BaseList from './BaseList'
-import { terminateSession } from '@/api/sessions'
+import { terminateSession, toggleLockSession } from '@/api/sessions'
 export default {
   name: 'OnlineList',
   components: {
@@ -31,6 +31,43 @@ export default {
               }, 50000)
             }
             )
+          }
+        },
+        {
+          name: 'pause',
+          title: this.$t('sessions.pause'),
+          type: 'warning',
+          can: ({ row }) => row['can_join'] && vm.$hasPerm('terminal.terminate_session'),
+          has: ({ row }) => !row['is_locked'],
+          callback: function({ reload, row }) {
+            const data = {
+              'session_id': row.id,
+              'task_name': 'lock_session'
+            }
+            toggleLockSession(data).then(res => {
+              const msg = vm.$t('sessions.PauseTaskSendSuccessMsg')
+              this.$message.success(msg)
+              row['is_locked'] = !row['is_locked']
+            }
+            )
+          }
+        },
+        {
+          name: 'resume',
+          title: this.$t('sessions.resume'),
+          type: 'warning',
+          can: ({ row }) => row['can_join'] && vm.$hasPerm('terminal.terminate_session'),
+          has: ({ row }) => row['is_locked'],
+          callback: function({ reload, row }) {
+            const data = {
+              'session_id': row.id,
+              'task_name': 'unlock_session'
+            }
+            toggleLockSession(data).then(res => {
+              const msg = vm.$t('sessions.ResumeTaskSendSuccessMsg')
+              this.$message.success(msg)
+              row['is_locked'] = !row['is_locked']
+            })
           }
         },
         {

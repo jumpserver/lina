@@ -1,15 +1,34 @@
 <template>
   <IBox>
     <el-form ref="testForm" :model="testData" :rules="rules" label-width="15%">
-      <el-form-item v-for="f in fields" :key="f.name" :label="f.label" :prop="f.name">
-        <Select2 v-if="f.options" v-model="testData[f.name]" :options="f.options" />
-        <TagInput
-          v-else-if="f.type === 'multiInput'"
-          :value="testData[f.name]"
-          @change="onTagInputChange(f.name, $event)"
-        />
-        <el-input v-else v-model="testData[f.name]" :placeholder="f.placeholder" :type="f.type" />
-      </el-form-item>
+      <div v-for="field in fields" :key="field.name">
+        <div v-if="Array.isArray(field)">
+          <el-form-item label-width="8%">
+            <el-col v-for="item in field" :key="item.name" :span="getSpan(field)">
+              <el-form-item :label="item.label" :prop="item.name">
+                <component
+                  :is="item.component ? item.component : 'el-input'"
+                  v-model="testData[item.name]"
+                  :value="testData[item.name]"
+                  v-bind="item.el"
+                  @change="onChange(item.name, $event)"
+                />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+        </div>
+        <div v-else>
+          <el-form-item :label="field.label" :prop="field.name">
+            <component
+              :is="field.component ? field.component : 'el-input'"
+              v-model="testData[field.name]"
+              :value="testData[field.name]"
+              v-bind="field.el"
+              @change="onChange(field.name, $event)"
+            />
+          </el-form-item>
+        </div>
+      </div>
       <el-form-item :label="$tc('ops.output')">
         <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
       </el-form-item>
@@ -20,7 +39,16 @@
           type="primary"
           @click="submitTest"
         >
-          {{ $t('setting.testTools') }}
+          {{ $t('common.Test') }}
+        </el-button>
+        <el-button
+          v-if="hasStop"
+          :disabled="!isTesting"
+          size="mini"
+          type="danger"
+          @click="interruptTest"
+        >
+          {{ $t('common.Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -41,6 +69,10 @@ export default {
     TagInput
   },
   props: {
+    hasStop: {
+      type: Boolean,
+      default: () => { return false }
+    },
     taskType: {
       type: String,
       required: true
@@ -64,7 +96,7 @@ export default {
   },
   computed: {
     xterm() {
-      return this.$refs.xterm.xterm
+      return this.$refs.xterm
     },
     iTestData() {
       return Object.assign({ tool_type: this.taskType }, this.testData)
@@ -76,7 +108,7 @@ export default {
       const port = document.location.port ? ':' + document.location.port : ''
       const url = '/ws/setting/tools/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.xterm.clear()
+      this.xterm.reset()
       this.ws = new WebSocket(wsURL)
       this.setWsCallback()
     },
@@ -99,7 +131,7 @@ export default {
         this.isTesting = false
       }
     },
-    onTagInputChange(key, val) {
+    onChange(key, val) {
       this.testData[key] = val
     },
     submitTest() {
@@ -108,10 +140,21 @@ export default {
           this.enableWS()
         }
       })
+    },
+    interruptTest() {
+      this.ws.close()
+      this.isTesting = false
+    },
+    getSpan(fields) {
+      const span = 24 / fields.length
+      return span >= 12 ? span : 12
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.filter-field >>> .el-input__inner {
+  height: 30px;
+}
 </style>

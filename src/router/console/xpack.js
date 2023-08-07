@@ -129,6 +129,58 @@ export default [
             }
           }
         ]
+      },
+      {
+        path: 'strategy',
+        component: empty,
+        hidden: true,
+        meta: {
+          title: i18n.t('xpack.Cloud.Strategy'),
+          permissions: ['xpack.view_strategy']
+        },
+        children: [
+          {
+            path: '',
+            name: 'CloudStrategyList',
+            hidden: true,
+            component: () => import('@/views/assets/Cloud/'),
+            meta: {
+              title: i18n.t('xpack.Cloud.StrategyList'),
+              permissions: ['xpack.view_strategy']
+            }
+          },
+          {
+            path: 'create',
+            component: () => import('@/views/assets/Cloud/Strategy/StrategyCreateUpdate'),
+            name: 'CloudStrategyCreate',
+            hidden: true,
+            meta: {
+              title: i18n.t('common.StrategyCreate'),
+              action: 'create',
+              permissions: ['xpack.add_strategy']
+            }
+          },
+          {
+            path: ':id/update',
+            component: () => import('@/views/assets/Cloud/Strategy/StrategyCreateUpdate'),
+            name: 'CloudStrategyUpdate',
+            hidden: true,
+            meta: {
+              title: i18n.t('common.StrategyUpdate'),
+              permissions: ['xpack.change_strategy']
+            }
+          },
+          {
+            path: ':id/',
+            component: () => import('@/views/assets/Cloud/Strategy/StrategyDetail/index'),
+            name: 'CloudStrategyDetail',
+            hidden: true,
+            meta: {
+              title: i18n.t('common.StrategyDetail'),
+              permissions: ['xpack.view_strategy']
+            }
+          }
+        ]
       }
     ]
   }

@@ -80,17 +80,6 @@ export default {
             password: {
               rules: this.$route.params.id ? [] : [RequiredChange]
             },
-            platform: {
-              el: {
-                multiple: false,
-                ajax: {
-                  url: `/api/v1/assets/platforms/`,
-                  transformOption: (item) => {
-                    return { label: item.name, value: item.id }
-                  }
-                }
-              }
-            },
             public_key: {
               label: this.$t('common.PublicKey'),
               rules: this.$route.params.id ? [] : [RequiredChange]

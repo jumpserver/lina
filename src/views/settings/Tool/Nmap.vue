@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { TagInput } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import Base from './Base'
 
@@ -16,11 +17,19 @@ export default {
       taskType: 'nmap',
       fields: [
         {
-          name: 'dest_ip', label: this.$t('setting.destinationIP'),
-          placeholder: this.$t('setting.destinationIP')
+          name: 'dest_ips',
+          label: this.$t('setting.DestinationIP'),
+          el: {
+            placeholder: this.$t('setting.DestinationIP')
+          }
         },
         {
-          name: 'dest_port', label: this.$t('setting.testPort'), type: 'multiInput'
+          name: 'dest_ports',
+          component: TagInput,
+          label: this.$t('setting.DestinationPort'),
+          el: {
+            inputType: 'number'
+          }
         }
       ],
       rules: {
