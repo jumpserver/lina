@@ -1736,6 +1736,7 @@
   },
   "tickets": {
     "BatchApproval": "批量审批",
+    "BatchConsent": "批量同意",
     "BatchReject": "批量拒绝",
     "ApplyAsset": "申请资产",
     "LoginConfirm": "用户登录复核",
