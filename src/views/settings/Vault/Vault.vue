@@ -20,7 +20,7 @@ export default {
       url: '/api/v1/settings/setting/?category=vault',
       moreButtons: [
         {
-          title: this.$t('setting.testTools'),
+          title: this.$t('common.Test'),
           loading: false,
           callback: function(value, form, btn) {
             btn.loading = true

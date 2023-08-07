@@ -16,13 +16,15 @@ import TabPage from '@/layout/components/TabPage'
 import Ping from './Ping'
 import Telnet from './Telnet'
 import Nmap from './Nmap'
+import Tcpdump from './Tcpdump'
 
 export default {
   components: {
     TabPage,
     Ping,
     Telnet,
-    Nmap
+    Nmap,
+    Tcpdump
   },
   data() {
     return {
@@ -42,6 +44,10 @@ export default {
         {
           title: 'Nmap',
           name: 'Nmap'
+        },
+        {
+          title: 'Tcpdump',
+          name: 'Tcpdump'
         }
       ]
     }
