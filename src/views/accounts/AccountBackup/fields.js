@@ -9,9 +9,23 @@ const validatorInterval = (rule, value, callback) => {
 }
 
 function getAccountBackupFields() {
-  const recipients = {
-    label: i18n.t('accounts.AccountChangeSecret.Addressee'),
-    helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
+  const recipients_part_one = {
+    label: i18n.t('accounts.AccountChangeSecret.Addressee') + ' A',
+    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
+    el: {
+      value: [],
+      ajax: {
+        url: '/api/v1/users/users/?fields_size=mini',
+        transformOption: (item) => {
+          return { label: item.name + '(' + item.username + ')', value: item.id }
+        }
+      }
+    }
+  }
+
+  const recipients_part_two = {
+    label: i18n.t('accounts.AccountChangeSecret.Addressee') + ' B',
+    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
     el: {
       value: [],
       ajax: {
@@ -52,7 +66,8 @@ function getAccountBackupFields() {
     is_periodic: is_periodic,
     crontab: crontab,
     interval: interval,
-    recipients: recipients
+    recipients_part_one: recipients_part_one,
+    recipients_part_two: recipients_part_two
   }
 }
 

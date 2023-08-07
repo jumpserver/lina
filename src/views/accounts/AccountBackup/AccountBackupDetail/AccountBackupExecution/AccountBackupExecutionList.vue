@@ -32,7 +32,7 @@ export default {
             label: this.$t('common.DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getTitle: ({ row }) => row.plan_snapshot.name,
+              getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountBackupPlanDetail',
                 params: { id: row.plan }

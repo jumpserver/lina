@@ -107,7 +107,8 @@
       "Backup": "Backup",
       "ExecutionList": "Execution list",
       "Reason": "Reason",
-      "AccountBackup": "Account backup"
+      "AccountBackup": "Account backup",
+      "RecipientHelpText": "Currently, only email sending is supported. If both recipients A and B are set, the account key will be split into two parts: front and back"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",

@@ -107,7 +107,8 @@
       "Backup": "バックアップ",
       "ExecutionList": "実行リスト",
       "Reason": "理由",
-      "AccountBackup": "アカウントのバックアップ"
+      "AccountBackup": "アカウントのバックアップ",
+      "RecipientHelpText": "現在はメール送信のみをサポートしており、受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます"
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",

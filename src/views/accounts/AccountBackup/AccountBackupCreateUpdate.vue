@@ -19,7 +19,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('accounts.AccountBackup.Types'), ['types']],
-        [this.$t('accounts.AccountBackup.Backup'), ['recipients']],
+        [this.$t('accounts.AccountBackup.Backup'), ['recipients_part_one', 'recipients_part_two']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -32,7 +32,8 @@ export default {
         is_periodic: fields.is_periodic,
         crontab: fields.crontab,
         interval: fields.interval,
-        recipients: fields.recipients,
+        recipients_part_one: fields.recipients_part_one,
+        recipients_part_two: fields.recipients_part_two,
         types: {
           component: 'el-cascader',
           label: this.$t('accounts.AccountBackup.Types'),
