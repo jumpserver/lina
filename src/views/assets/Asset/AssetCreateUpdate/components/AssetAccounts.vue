@@ -22,7 +22,7 @@
         <el-table-column :label="$tc('common.Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
-            <el-button :disabled="scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
+            <el-button :disabled="!!scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
           </template>
         </el-table-column>
       </el-table>
