@@ -44,7 +44,7 @@ export default [
     children: [
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/VirtualAccount/CreateUpdate.vue'),
+        component: () => import('@/views/accounts/VirtualAccount/VirtualUpdate.vue'),
         name: 'VirtualAccountUpdate',
         meta: {
           title: i18n.t('route.VirtualAccountUpdate'),
@@ -55,7 +55,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/VirtualAccount/Detail/index.vue'),
+        component: () => import('@/views/accounts/VirtualAccount/VirtualDetail/index.vue'),
         name: 'VirtualAccountDetail',
         meta: {
           title: i18n.t('route.VirtualAccountDetail'),

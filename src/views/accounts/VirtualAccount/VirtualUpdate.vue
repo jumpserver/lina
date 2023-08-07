@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" />
+  <GenericCreateUpdatePage v-bind="config" @getObjectDone="handleObjectDone" />
 </template>
 
 <script>
@@ -11,8 +11,10 @@ export default {
   components: { GenericCreateUpdatePage },
   data() {
     return {
+      object: {},
       config: {
         url: '/api/v1/accounts/virtual-accounts/',
+        object: {},
         fields: [
           [this.$t('common.Basic'), ['name', 'username']],
           [this.$t('assets.Secret'), ['secret_from_login']]
@@ -23,9 +25,20 @@ export default {
           },
           username: {
             component: TextReadonly
+          },
+          secret_from_login: {
+            hidden: () => {
+              return this.object.alias !== '@USER'
+            },
+            readonly: this.$store.getters.publicSettings['CACHE_LOGIN_PASSWORD_ENABLED'] !== true
           }
         }
       }
+    }
+  },
+  methods: {
+    handleObjectDone(object) {
+      this.object = object
     }
   }
 }

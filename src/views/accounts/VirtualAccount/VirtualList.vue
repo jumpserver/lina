@@ -26,7 +26,10 @@ export default {
               formatterArgs: {
                 hasClone: false,
                 hasDelete: false,
-                updateRoute: 'VirtualAccountUpdate'
+                updateRoute: 'VirtualAccountUpdate',
+                canUpdate: ({ row }) => {
+                  return row.alias === '@USER'
+                }
               }
             }
           }
