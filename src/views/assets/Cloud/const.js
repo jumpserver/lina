@@ -127,6 +127,6 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [lan]: {
     name: lan,
     title: i18n.t('xpack.Cloud.LAN'),
-    attrs: ['ip_group', 'test_port', 'test_timeout', 'platform', 'hostname_prefix']
+    attrs: ['ip_group', 'test_port', 'test_timeout', 'hostname_prefix']
   }
 }
