@@ -1,9 +1,10 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+
 const performDelete = function({ row, col }) {
   const id = row.id
   const url = `${this.url}${id}/`
@@ -46,7 +47,7 @@ export default {
             formatterArgs: {
               canUpdate: this.$hasPerm('orgs.change_organization'),
               canDelete: function({ row }) {
-                return !row.is_default && vm.$hasPerm('orgs.delete_organization')
+                return !row.internal && vm.$hasPerm('orgs.delete_organization')
               },
               onDelete: function({ row, col, cellValue, reload }) {
                 const msg = this.$t('xpack.Organization.DeleteOrgMsg')
@@ -61,9 +62,11 @@ export default {
                     try {
                       await performDelete.bind(this)({ row: row, col: col })
                       this.$store.dispatch('users/deleteAdminOrg', { id: row.id, name: row.name })
-                      done()
-                      reload()
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                        .then(() => {
+                          done()
+                          reload()
+                          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                        })
                     } finally {
                       instance.confirmButtonLoading = false
                     }
