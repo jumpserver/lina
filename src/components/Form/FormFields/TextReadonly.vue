@@ -1,6 +1,6 @@
 <template>
-  <div>
-    {{ value? trueText : falseText }}
+  <div class="input-text">
+    {{ value.toString() }}
   </div>
 </template>
 
@@ -10,20 +10,7 @@ export default {
     value: {
       type: [String, Boolean],
       default: () => false
-    },
-    trueText: {
-      type: String,
-      default: function() {
-        return this.$t('common.Yes')
-      }
-    },
-    falseText: {
-      type: String,
-      default: function() {
-        return this.$t('common.No')
-      }
     }
-
   },
   data() {
     return {}
@@ -31,6 +18,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+.input-text {
+  border: solid 1px #dcdfe6;
+  line-height: 32px;
+  padding-left: 5px;
+  height: 32px;
+  margin-top: 4px;
+  font-size: 13px;
+}
 
 </style>

@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "GeneralAccounts": "普通账号",
+    "VirtualAccounts": "虚拟账号",
     "Accounts": "账号",
     "SuFrom": "切换至",
     "SelectAccount": "选择账号",
@@ -1178,6 +1180,8 @@
   },
   "route": {
     "": "",
+    "VirtualAccountDetail": "虚拟账号详情",
+    "VirtualAccountUpdate": "虚拟账号更新",
     "Acls": "访问控制",
     "GPTCreate": "创建资产-GPT",
     "GPTUpdate": "更新资产-GPT",

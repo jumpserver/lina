@@ -15,7 +15,7 @@ export default [
       {
         path: '',
         name: 'AssetAccountList',
-        component: () => import('@/views/accounts/Account/AccountList.vue'),
+        component: () => import('@/views/accounts/Account/index.vue'),
         meta: {
           title: i18n.t('route.AssetAccount'),
           app: 'accounts',
@@ -28,6 +28,39 @@ export default [
         name: 'AssetAccountDetail',
         meta: { title: i18n.t('route.AssetAccountDetail') },
         hidden: true
+      }
+    ]
+  },
+  {
+    path: 'virtual-accounts',
+    component: empty,
+    meta: {
+      title: i18n.t('route.VirtualAccount'),
+      app: 'accounts',
+      permissions: ['accounts.view_virtualaccount']
+    },
+    hidden: true,
+    redirect: '/console/accounts/accounts',
+    children: [
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/VirtualAccount/VirtualUpdate.vue'),
+        name: 'VirtualAccountUpdate',
+        meta: {
+          title: i18n.t('route.VirtualAccountUpdate'),
+          activeMenu: '/console/accounts/accounts',
+          action: 'update'
+        },
+        hidden: true
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/VirtualAccount/VirtualDetail/index.vue'),
+        name: 'VirtualAccountDetail',
+        meta: {
+          title: i18n.t('route.VirtualAccountDetail'),
+          activeMenu: '/console/accounts/accounts'
+        }
       }
     ]
   },
