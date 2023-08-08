@@ -2,13 +2,13 @@
   <Dialog
     ref="myDialog"
     :destroy-on-close="true"
-    width="790px"
     height="720px"
     v-bind="$attrs"
+    width="790px"
     @confirm="submit"
     v-on="$listeners"
   >
-    <krryPaging ref="pageTransfer" v-bind="pagingTransfer" class="transfer" />
+    <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
   </Dialog>
 </template>
 
@@ -16,6 +16,7 @@
 import Dialog from '@/components/Dialog'
 import { krryPaging } from 'krry-transfer'
 import { getUserList } from '@/api/users'
+
 export default {
   name: 'ListSelect',
   components: {
@@ -47,7 +48,7 @@ export default {
           }
           const data = await getUserList(params)
           const results = data['results'].map(item => {
-            return { id: item.id, label: `${item.name}(${item.username})` }
+            return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
         },
@@ -62,7 +63,7 @@ export default {
           }
           const data = await getUserList(params)
           const results = data['results'].map(item => {
-            return { id: item.id, label: `${item.name}(${item.username})` }
+            return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
         },
