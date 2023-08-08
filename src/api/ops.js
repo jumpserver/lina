@@ -44,3 +44,11 @@ export function renameFile(playbookId, node) {
     data: node
   })
 }
+
+export function createJob(form) {
+  return request({
+    url: '/api/v1/ops/jobs/',
+    method: 'post',
+    data: form
+  })
+}
