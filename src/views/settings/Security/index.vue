@@ -25,6 +25,7 @@ export default {
             'SECURITY_COMMAND_BLACKLIST',
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
             'SECURITY_MAX_IDLE_TIME',
+            'SECURITY_MAX_SESSION_TIME',
             'SECURITY_WATERMARK_ENABLED',
             'SECURITY_SESSION_SHARE'
           ]
