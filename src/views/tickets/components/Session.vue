@@ -128,7 +128,7 @@ export default {
       })
     },
     onMonitor() {
-      const joinUrl = `/luna/monitor/${this.session.id}`
+      const joinUrl = `/luna/monitor/${this.session.id}?ticket_id=${this.object.id}`
       window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
     },
     onToggleLock() {
