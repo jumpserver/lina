@@ -6,10 +6,10 @@
     </div>
     <el-table
       :data="tableData"
-      style="width: 100%"
       class="table"
+      style="width: 100%"
     >
-      <el-table-column :label="$tc('dashboard.ranking')">
+      <el-table-column :label="$tc('dashboard.ranking')" width="60px">
         <template v-slot="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>
@@ -17,8 +17,9 @@
       <el-table-column
         v-for="i in config.columns"
         :key="i.prop"
-        :prop="i.prop"
         :label="i.label"
+        :prop="i.prop"
+        :width="i.width"
       />
     </el-table>
   </div>
@@ -81,5 +82,10 @@ export default {
 }
 >>> .el-table th, .el-table tr {
   background-color: #F5F6F7!important;
+
+}
+
+>>> .el-table .cell {
+  white-space: nowrap;
 }
 </style>
