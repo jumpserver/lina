@@ -13,6 +13,7 @@
 
 <script>
 import RankTable from '../components/RankTable.vue'
+
 export default {
   components: {
     RankTable
@@ -31,7 +32,8 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('dashboard.LoginCount')
+            label: this.$t('dashboard.LoginCount'),
+            width: '80px'
           }
         ]
       },
@@ -47,7 +49,8 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('dashboard.NumberOfVisits')
+            label: this.$t('dashboard.NumberOfVisits'),
+            width: '80px'
           }
         ]
       }
