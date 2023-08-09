@@ -69,6 +69,7 @@
 
 <script>
 import IBox from '@/components/IBox'
+import { IsSupportPauseSessionType } from '@/utils/jms'
 
 export default {
   components: { IBox },
@@ -108,8 +109,7 @@ export default {
       }).then(res => {
         this.session = res || {}
         const terminalType = res['terminal']['type']
-        this.supportedLock = ['koko', 'lion', 'magnus', 'chen', 'kael']
-          .includes(terminalType)
+        this.supportedLock = IsSupportPauseSessionType(terminalType)
       }).catch(err => {
         this.curTimer = setTimeout(() => {
           this.init()
