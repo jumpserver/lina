@@ -5,6 +5,7 @@
 <script>
 import BaseList from './BaseList'
 import { terminateSession, toggleLockSession } from '@/api/sessions'
+import { IsSupportPauseSessionType } from '@/utils/jms'
 export default {
   name: 'OnlineList',
   components: {
@@ -39,8 +40,7 @@ export default {
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
-            const supportedType = ['koko', 'lion', 'magnus', 'chen', 'kael']
-              .includes(terminalType)
+            const supportedType = IsSupportPauseSessionType(terminalType)
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => !row['is_locked'],
@@ -63,8 +63,7 @@ export default {
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
-            const supportedType = ['koko', 'lion', 'magnus', 'chen', 'kael']
-              .includes(terminalType)
+            const supportedType = IsSupportPauseSessionType(terminalType)
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => row['is_locked'],
