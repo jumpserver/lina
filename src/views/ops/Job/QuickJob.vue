@@ -174,6 +174,9 @@ export default {
               },
               {
                 label: 'PostgreSQL', value: 'postgresql'
+              },
+              {
+                label: 'SQL Server', value: 'sqlserver'
               }
             ],
             callback: (option) => {
