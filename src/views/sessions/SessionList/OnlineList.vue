@@ -37,7 +37,12 @@ export default {
           name: 'pause',
           title: this.$t('sessions.pause'),
           type: 'warning',
-          can: ({ row }) => row['can_join'] && vm.$hasPerm('terminal.terminate_session'),
+          can: ({ row }) => {
+            const terminalType = row['terminal']['type']
+            const supportedType = ['koko', 'lion', 'magnus', 'chen', 'kael']
+              .includes(terminalType)
+            return supportedType && vm.$hasPerm('terminal.terminate_session')
+          },
           has: ({ row }) => !row['is_locked'],
           callback: function({ reload, row }) {
             const data = {
@@ -56,7 +61,12 @@ export default {
           name: 'resume',
           title: this.$t('sessions.resume'),
           type: 'warning',
-          can: ({ row }) => row['can_join'] && vm.$hasPerm('terminal.terminate_session'),
+          can: ({ row }) => {
+            const terminalType = row['terminal']['type']
+            const supportedType = ['koko', 'lion', 'magnus', 'chen', 'kael']
+              .includes(terminalType)
+            return supportedType && vm.$hasPerm('terminal.terminate_session')
+          },
           has: ({ row }) => row['is_locked'],
           callback: function({ reload, row }) {
             const data = {
