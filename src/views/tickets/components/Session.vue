@@ -45,7 +45,7 @@
       <el-button
         type="warning"
         size="small"
-        :disabled="!session.can_join"
+        :disabled="!supportedLock"
         @click="onToggleLock"
       >
         <template v-if="session.is_locked">
@@ -83,7 +83,8 @@ export default {
     return {
       session: {},
       curTimer: null,
-      loading: false
+      loading: false,
+      supportedLock: false
     }
   },
 
@@ -106,6 +107,9 @@ export default {
         disableFlashErrorMsg: true
       }).then(res => {
         this.session = res || {}
+        const terminalType = res['terminal']['type']
+        this.supportedLock = ['koko', 'lion', 'magnus', 'chen', 'kael']
+          .includes(terminalType)
       }).catch(err => {
         this.curTimer = setTimeout(() => {
           this.init()
