@@ -142,10 +142,6 @@ export default {
           order: '-date_updated'
         },
         columnsExclude: ['spec_info'],
-        columns: [
-          'name', 'username', 'asset', 'privileged',
-          'secret_type', 'source', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: this.columnsDefault

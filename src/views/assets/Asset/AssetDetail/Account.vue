@@ -48,11 +48,6 @@ export default {
   data() {
     return {
       templateDialogVisible: false,
-      columns: [
-        'name', 'username', 'privileged', 'connectivity',
-        'is_active', 'secret_type', 'source', 'date_created',
-        'date_updated', 'actions'
-      ],
       headerExtraActions: [
         {
           name: this.$t('route.AccountTemplate'),
