@@ -15,6 +15,7 @@
             shadow="hover"
             @click.native="onView(d)"
           >
+            <span v-if="d.edition === 'enterprise'" class="enterprise">企业版</span>
             <el-row :gutter="20">
               <el-col :span="8">
                 <img :src="d.icon" class="image">
@@ -22,10 +23,14 @@
               <el-col :span="16" style="text-align: left; padding: 5px 0">
                 <div class="one-line">
                   <b>{{ d.display_name }}</b>
-                  <el-tag size="mini" style="margin-left: 5px">{{ d.version }}</el-tag>
+                  <el-tag size="mini" style="margin-left: 5px">
+                    {{ d.version }}
+                  </el-tag>
                 </div>
                 <el-divider class="my-divider" />
-                <Tooltip :content="d.comment" class="comment" />
+                <div class="comment">
+                  {{ d.comment }}
+                </div>
                 <el-tag v-for="tag of d.tags" :key="tag" size="mini">
                   {{ capitalize(tag) }}
                 </el-tag>
@@ -46,7 +51,7 @@
 
 <script>
 import TableAction from '@/components/Table/ListTable/TableAction'
-import { Pagination, Tooltip } from '@/components'
+import { Pagination } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 const defaultFirstPage = 1
@@ -55,8 +60,7 @@ export default {
   name: 'CardTable',
   components: {
     TableAction,
-    Pagination,
-    Tooltip
+    Pagination
   },
   props: {
     // 定义 table 的配置
@@ -216,6 +220,12 @@ export default {
 
 .comment {
   font-size: 12px;
+  height: 50px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .closeIcon {
@@ -235,6 +245,17 @@ export default {
 
 .my-card:hover .closeIcon {
   visibility: visible;
+}
+
+.enterprise {
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 3px 8px 4px 9px;
+  font-size: 13px;
+  border-radius: 3px 3px 3px 10px;
 }
 
 </style>
