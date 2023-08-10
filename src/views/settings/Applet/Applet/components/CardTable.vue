@@ -15,7 +15,9 @@
             shadow="hover"
             @click.native="onView(d)"
           >
-            <span v-if="d.edition === 'enterprise'" class="enterprise">企业版</span>
+            <span v-if="d.edition === 'enterprise'" class="enterprise">
+              {{ $t('common.Enterprise') }}
+            </span>
             <el-row :gutter="20">
               <el-col :span="8">
                 <img :src="d.icon" class="image">

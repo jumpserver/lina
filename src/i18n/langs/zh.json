@@ -469,6 +469,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Enterprise": "企业版",
     "SyncTask": "同步任务",
     "New": "新建",
     "Strategy": "策略",

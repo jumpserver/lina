@@ -487,6 +487,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
     "Strategy": "せんりゃく",
