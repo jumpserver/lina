@@ -152,6 +152,6 @@ export function toM2MJsonParams(attrFilter) {
 }
 
 export function IsSupportPauseSessionType(terminalType) {
-  const supportedType = ['koko', 'lion', 'magnus', 'chen', 'kael']
+  const supportedType = ['koko', 'lion', 'chen', 'kael']
   return supportedType.includes(terminalType)
 }

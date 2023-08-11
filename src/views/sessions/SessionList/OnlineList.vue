@@ -40,7 +40,8 @@ export default {
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
-            const supportedType = IsSupportPauseSessionType(terminalType)
+            const isNormalSession = row['type']['value'] === 'normal'
+            const supportedType = IsSupportPauseSessionType(terminalType) && isNormalSession
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => !row['is_locked'],
@@ -63,7 +64,8 @@ export default {
           type: 'warning',
           can: ({ row }) => {
             const terminalType = row['terminal']['type']
-            const supportedType = IsSupportPauseSessionType(terminalType)
+            const isNormalSession = row['type']['value'] === 'normal'
+            const supportedType = IsSupportPauseSessionType(terminalType) && isNormalSession
             return supportedType && vm.$hasPerm('terminal.terminate_session')
           },
           has: ({ row }) => row['is_locked'],
@@ -94,7 +96,7 @@ export default {
           },
           callback: function({ row, tableData }) {
             const monitorUrl = '/luna/monitor/' + row.id
-            window.open(monitorUrl, '_blank', 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+            window.open(monitorUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }
       ]
