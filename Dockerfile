@@ -1,4 +1,4 @@
-FROM node:14.16 as stage-build
+FROM jumpserver/node:14.16 as stage-build
 ARG TARGETARCH
 
 ARG DEPENDENCIES="                    \
