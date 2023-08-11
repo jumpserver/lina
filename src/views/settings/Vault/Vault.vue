@@ -1,13 +1,17 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <div>
+    <el-alert type="warning" v-html="helpText" />
+    <IBox>
+      <GenericCreateUpdateForm v-bind="$data" />
+    </IBox>
+  </div>
 </template>
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/IBox'
 import { openTaskPage } from '@/utils/jms'
+import store from '@/store'
 
 export default {
   components: {
@@ -18,6 +22,8 @@ export default {
     const vm = this
     return {
       url: '/api/v1/settings/setting/?category=vault',
+      hasReset: false,
+      helpText: this.$t('setting.VaultHelpText'),
       moreButtons: [
         {
           title: this.$t('common.Test'),
@@ -37,6 +43,7 @@ export default {
         {
           title: this.$t('setting.sync'),
           loading: false,
+          disabled: store.getters.publicSettings['VAULT_TYPE'] === 'local',
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
@@ -63,6 +70,9 @@ export default {
         ]
       ],
       fieldsMeta: {
+        VAULT_TYPE: {
+          disabled: true
+        },
         VAULT_HCP_HOST: {
           hidden: (formValue) => {
             return formValue.VAULT_TYPE === 'local'
