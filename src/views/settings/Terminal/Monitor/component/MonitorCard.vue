@@ -138,8 +138,10 @@ export default {
     }
   },
   mounted() {
-    this.resizeObserver = new ResizeObserver(this.onResize)
-    this.resizeObserver.observe(document.querySelector('.box-card'))
+    this.$nextTick(() => {
+      this.resizeObserver = new ResizeObserver(this.setBarColor)
+      this.resizeObserver.observe(document.querySelector('.box-card'))
+    })
   },
   beforeDestroy() {
     const el = document.querySelector('.box-card')
@@ -149,9 +151,6 @@ export default {
     this.resizeObserver = null
   },
   methods: {
-    onResize: _.throttle(function() {
-      this.setBarColor()
-    }, 50),
     setElementsColor(numArray) {
       const className = `.${this.componentMetric.type}-progress .box-bar`
       const elements = document.querySelectorAll(className)
