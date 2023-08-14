@@ -29,6 +29,9 @@ export default {
         hasImport: false,
         hasExport: false,
         hasBulkDelete: false,
+        searchConfig: {
+          exclude: ['applet']
+        },
         extraMoreActions: [
           {
             name: 'SyncSelected',
