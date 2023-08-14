@@ -1510,7 +1510,7 @@
     "PauseTaskSendSuccessMsg": "暂停任务已下发，请稍后刷新查看",
     "ResumeTaskSendSuccessMsg": "恢复任务已下发，请稍后刷新查看",
     "helpText": {
-      "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com:3000,http://www.jumpserver.b.com:3000）",
+      "esUrl": "eg: http://es_user:es_password@es_host:es_port",
       "esIndex": "es 提供默认 index：jumpserver。如果开启按日期建立索引，那么输入的值会作为索引前缀",
       "esDocType": "es 默认文档类型：command"
     }
