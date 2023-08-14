@@ -8,7 +8,7 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage'
-import LDAP from '../Ldap'
+import LDAP from './Ldap'
 import Base from './Base'
 import Basic from './Basic'
 import CAS from './CAS'

@@ -30,11 +30,76 @@ export default {
       }
     },
     {
-      path: '/settings/email',
-      name: 'Email',
-      component: () => import('@/views/settings/Email'),
+      path: '/settings/orgs',
+      component: empty,
+      redirect: '',
       meta: {
-        title: i18n.t('setting.Email'),
+        app: 'orgs',
+        resource: 'organization',
+        permissions: ['orgs.view_organization'],
+        licenseRequired: true
+      },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/settings/Org/OrganizationList'),
+          name: 'OrganizationList',
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationList'),
+            icon: 'organization-set',
+            permissions: ['orgs.view_organization']
+          }
+        },
+        {
+          path: 'create',
+          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationCreate',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationCreate'),
+            action: 'create',
+            permissions: ['orgs.add_organization']
+          }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationUpdate'),
+            action: 'update',
+            permissions: ['orgs.change_organization']
+          }
+        },
+        {
+          path: ':id',
+          component: () => import('@/views/settings/Org/OrganizationDetail/index'),
+          name: 'OrganizationDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationDetail'),
+            permissions: ['orgs.view_organization']
+          }
+        }
+      ]
+    },
+    {
+      path: '/settings/msg',
+      name: 'Msg',
+      component: () => import('@/views/settings/Msg'),
+      meta: {
+        title: i18n.t('setting.Message'),
+        icon: 'email-set',
+        permissions: ['settings.change_email']
+      }
+    },
+    {
+      path: '/settings/features',
+      name: 'Feature',
+      component: () => import('@/views/settings/Feature'),
+      meta: {
+        title: i18n.t('setting.Features'),
         icon: 'email-set',
         permissions: ['settings.change_email']
       }
@@ -47,37 +112,6 @@ export default {
         title: i18n.t('setting.Auth'),
         icon: 'attestation',
         permissions: ['settings.change_auth']
-      }
-    },
-    {
-      path: '/settings/vault',
-      name: 'Vault',
-      component: () => import('@/views/settings/Vault'),
-      meta: {
-        title: i18n.t('setting.Vault'),
-        icon: 'security',
-        permissions: ['settings.change_vault']
-      }
-    },
-    {
-      path: '/settings/message',
-      name: 'SysMessageSub',
-      component: () => import('@/views/settings/Message'),
-      meta: {
-        title: i18n.t('setting.MessageSub'),
-        icon: 'remind',
-        permissions: ['settings.change_systemmsgsubscription']
-      }
-    },
-    {
-      path: '/settings/sms',
-      name: 'SMS',
-      component: () => import('@/views/settings/SMS'),
-      meta: {
-        title: i18n.t('setting.SMS'),
-        icon: 'short-message',
-        permissions: ['settings.change_sms'],
-        licenseRequired: true
       }
     },
     {
@@ -287,16 +321,6 @@ export default {
       }
     },
     {
-      path: '/settings/clean',
-      name: 'Clean',
-      component: () => import('@/views/settings/Clean'),
-      meta: {
-        title: i18n.t('setting.Cleaning'),
-        icon: 'clean',
-        permissions: ['settings.change_clean']
-      }
-    },
-    {
       path: '/settings/interface',
       name: 'Interface',
       component: () => import('@/views/settings/Interface'),
@@ -306,61 +330,6 @@ export default {
         licenseRequired: true,
         permissions: ['settings.change_interface']
       }
-    },
-    {
-      path: '/settings/orgs',
-      component: empty,
-      redirect: '',
-      meta: {
-        app: 'orgs',
-        resource: 'organization',
-        permissions: ['orgs.view_organization'],
-        licenseRequired: true
-      },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/settings/Org/OrganizationList'),
-          name: 'OrganizationList',
-          meta: {
-            title: i18n.t('xpack.Organization.OrganizationList'),
-            icon: 'organization-set',
-            permissions: ['orgs.view_organization']
-          }
-        },
-        {
-          path: 'create',
-          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
-          name: 'OrganizationCreate',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Organization.OrganizationCreate'),
-            action: 'create',
-            permissions: ['orgs.add_organization']
-          }
-        },
-        {
-          path: ':id/update',
-          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
-          name: 'OrganizationUpdate',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Organization.OrganizationUpdate'),
-            action: 'update',
-            permissions: ['orgs.change_organization']
-          }
-        },
-        {
-          path: ':id',
-          component: () => import('@/views/settings/Org/OrganizationDetail/index'),
-          name: 'OrganizationDetail',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Organization.OrganizationDetail'),
-            permissions: ['orgs.view_organization']
-          }
-        }
-      ]
     },
 
     {
@@ -385,7 +354,7 @@ export default {
         {
           path: '',
           name: 'TaskList',
-          component: () => import('@/views/tasks/TaskList'),
+          component: () => import('@/views/settings/Task/index.vue'),
           meta: {
             title: i18n.t('route.TaskList'),
             permissions: ['ops.view_celerytask']
@@ -393,7 +362,7 @@ export default {
         },
         {
           path: ':id',
-          component: () => import('@/views/tasks/TaskDetail'),
+          component: () => import('@/views/settings/Task/TaskDetail'),
           name: 'TaskDetail',
           hidden: true,
           meta: {

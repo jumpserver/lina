@@ -1523,6 +1523,15 @@
     }
   },
   "setting": {
+    "TaskList": "タスクリスト",
+    "Announcement": "公告",
+    "Features": "機能有効",
+    "PasswordRule": "パスワードルール",
+    "PasswordSecurity": "パスワードセキュリティ",
+    "SessionSecurity": "セッションセキュリティ",
+    "AuthSecurity": "認証とセキュリティ",
+    "MsgSubscribe": "メッセージ購読",
+    "Message": "メッセージ設定",
     "ServerTime": "サーバータイムです",
     "Custom": "カスタムです",
     "CleanHelpText": "定期清理タスクは毎日午前2時に実行され、クリーンアップ後のデータは復元できません",

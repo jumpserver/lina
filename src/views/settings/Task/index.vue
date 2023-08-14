@@ -8,18 +8,24 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
-import Basic from './Common.vue'
+import TaskList from './TaskList.vue'
+import Clean from './Clean.vue'
 
 export default {
   name: 'Index',
-  components: { TabPage, Basic },
+  components: { TabPage, TaskList, Clean },
   data() {
     return {
-      activeMenu: 'Basic',
+      activeMenu: 'TaskList',
       submenu: [
         {
-          title: this.$t('common.Basic'),
-          name: 'Basic'
+          title: this.$t('setting.TaskList'),
+          name: 'TaskList'
+        },
+        {
+          title: this.$t('setting.Cleaning'),
+          name: 'Clean',
+          hidden: !this.$hasPerm('settings.change_clean')
         }
       ]
     }

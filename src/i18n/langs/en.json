@@ -1528,6 +1528,15 @@
     }
   },
   "setting": {
+    "TaskList": "Task list",
+    "Announcement": "Announcement",
+    "Features": "Features enable",
+    "PasswordRule": "Password rule",
+    "PasswordSecurity": "Password security",
+    "SessionSecurity": "Session security",
+    "AuthSecurity": "Auth security",
+    "MsgSubscribe": "Message subscribe",
+    "Message": "Message setting",
     "ServerTime": "Server time",
     "Custom": "Custom",
     "CleanHelpText": "Regular cleanup tasks will be executed at 2 o'clock in the morning every day, and the cleaned data cannot be recovered",

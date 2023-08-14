@@ -1,7 +1,7 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <div>
-      <el-alert v-if="currentTime" :closable="false" type="info">
+      <el-alert v-if="currentTime" :closable="false" type="success">
         {{ `${this.$t('setting.ServerTime')}: ${currentTime}` }}
       </el-alert>
       <keep-alive>

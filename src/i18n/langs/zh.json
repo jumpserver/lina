@@ -1520,6 +1520,15 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "TaskList": "任务列表",
+    "Announcement": "公告",
+    "Features": "功能启用",
+    "PasswordRule": "密码规则",
+    "PasswordSecurity": "密码安全",
+    "SessionSecurity": "会话安全",
+    "AuthSecurity": "认证安全",
+    "MsgSubscribe": "消息订阅",
+    "Message": "消息通知",
     "Vault": "密钥匣子",
     "ServerTime": "服务器时间",
     "Custom": "自定义",

@@ -32,12 +32,6 @@ export default {
           ]
         ],
         [
-          this.$t('setting.OTP'),
-          [
-            'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
-          ]
-        ],
-        [
           this.$t('setting.Perm'),
           [
             'PERM_SINGLE_ASSET_TO_UNGROUP_NODE',

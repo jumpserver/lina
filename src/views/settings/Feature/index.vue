@@ -8,11 +8,13 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
-import Basic from './Common.vue'
+import Announcement from './Announcement.vue'
+import Basic from './Basic.vue'
+import Vault from './Vault.vue'
 
 export default {
-  name: 'Index',
-  components: { TabPage, Basic },
+  name: 'Feature',
+  components: { TabPage, Basic, Announcement, Vault },
   data() {
     return {
       activeMenu: 'Basic',
@@ -20,6 +22,15 @@ export default {
         {
           title: this.$t('common.Basic'),
           name: 'Basic'
+        },
+        {
+          title: this.$t('setting.Announcement'),
+          name: 'Announcement'
+        },
+        {
+          title: this.$t('setting.Vault'),
+          name: 'Vault',
+          hidden: !this.$hasPerm('settings.change_vault')
         }
       ]
     }
