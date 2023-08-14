@@ -50,7 +50,7 @@ export default {
       ],
       url: `/api/v1/accounts/account-backup-plans/${this.object.id}/`,
       detailFields: [
-        'name',
+        'id', 'name',
         {
           key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
           value: this.object.crontab,

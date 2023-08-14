@@ -51,7 +51,7 @@ export default {
       ],
       url: `/api/v1/accounts/change-secret-automations/${this.object.id}`,
       detailFields: [
-        'name',
+        'id', 'name',
         {
           key: this.$t('accounts.AccountChangeSecret.Username'),
           value: this.object.accounts.join(', ')
