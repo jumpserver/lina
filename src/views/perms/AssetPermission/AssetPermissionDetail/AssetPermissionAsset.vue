@@ -62,7 +62,9 @@ export default {
           }
         },
         tableAttrs: {
-          border: false
+          border: false,
+          rowKey: 'asset',
+          currentRowKey: 'asset'
         }
       },
       headerActions: {
