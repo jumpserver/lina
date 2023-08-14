@@ -34,6 +34,9 @@ export default {
             name: 'SyncSelected',
             title: this.$t('common.bulkDeploy'),
             type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
             callback: function({ selectedRows }) {
               vm.$axios.post(
                 `/api/v1/terminal/applet-host-deployments/applets/`,
