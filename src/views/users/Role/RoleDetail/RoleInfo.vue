@@ -78,7 +78,11 @@ export default {
       nodesDeps: {
         'view_console': ['rbac.view_console'],
         'view_audit': ['rbac.view_audit'],
-        'view_workbench': ['rbac.view_workbench'],
+        'view_workbench': [
+          'rbac.view_workbench',
+          'authentication.view_connectiontoken', 'authentication.add_connectiontoken',
+          'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken'
+        ],
         'view_setting': ['settings.view_setting'],
         'cloud_import': ['assets.view_asset', 'assets.view_platform'],
         'terminal_node': ['settings.change_terminal'],
