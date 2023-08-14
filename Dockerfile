@@ -1,4 +1,4 @@
-FROM jumpserver/node:16.17.1 as stage-build
+FROM node:16.17.1-bullseye-slim as stage-build
 ARG TARGETARCH
 
 ARG DEPENDENCIES="                    \
@@ -34,6 +34,6 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=lin
     sed -i "s@version-dev@${VERSION}@g" src/layout/components/NavHeader/About.vue \
     && yarn build
 
-FROM nginx:1.24
+FROM nginx:1.24-bullseye
 COPY --from=stage-build /data/lina /opt/lina
 COPY nginx.conf /etc/nginx/conf.d/default.conf
