@@ -1521,6 +1521,7 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "AppOps": "任务中心",
     "Ticket": "工单",
     "TaskList": "任务列表",
     "Announcement": "公告",

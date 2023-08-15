@@ -20,15 +20,18 @@ export default {
         [
           this.$t('common.Basic'),
           [
-            'FORGOT_PASSWORD_URL',
-            'LOGIN_REDIRECT_MSG_ENABLED'
+            'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
           ]
         ]
       ],
+      fieldsMeta: {
+      },
       submitMethod() {
         return 'patch'
       }
     }
+  },
+  mounted() {
   }
 }
 </script>

@@ -26,8 +26,7 @@ export default {
       fields: [
         [
           this.$t('common.BasicInfo'), [
-            'SITE_URL', // 'USER_GUIDE_URL',
-            'GLOBAL_ORG_DISPLAY_NAME'
+            'SITE_URL' // 'USER_GUIDE_URL',
           ]
         ],
         [this.$t('xpack.NavHelp'), [
@@ -38,18 +37,14 @@ export default {
         SITE_URL: {
           rules: [rules.Required]
         },
-        GLOBAL_ORG_DISPLAY_NAME: {
-          hidden: () => !this.hasValidLicense()
-        },
+
         HELP_DOCUMENT_URL: {
           label: this.$t('xpack.helpDocument'),
-          helpText: this.$t('xpack.helpDocumentTip'),
-          hidden: () => !this.hasValidLicense()
+          helpText: this.$t('xpack.helpDocumentTip')
         },
         HELP_SUPPORT_URL: {
           label: this.$t('xpack.helpSupport'),
-          helpText: this.$t('xpack.helpSupportTip'),
-          hidden: () => !this.hasValidLicense()
+          helpText: this.$t('xpack.helpSupportTip')
         }
       },
       successUrl: { name: 'Basic' },
@@ -60,8 +55,8 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    hasValidLicense() {
-      return this.$store.getters.hasValidLicense
+    noValidLicense() {
+      return !this.$store.getters.hasValidLicense
     }
   }
 }

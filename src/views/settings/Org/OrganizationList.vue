@@ -1,9 +1,19 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <Dialog
+      :show-buttons="false"
+      :title="$tc('common.Setting')"
+      :visible.sync="visible"
+    >
+      <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
+    </Dialog>
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericCreateUpdateForm, GenericListPage } from '@/layout/components'
+import { Dialog } from '@/components'
 
 const performDelete = function({ row, col }) {
   const id = row.id
@@ -12,11 +22,23 @@ const performDelete = function({ row, col }) {
 }
 export default {
   components: {
-    GenericListPage
+    GenericCreateUpdateForm,
+    GenericListPage,
+    Dialog
   },
   data() {
     const vm = this
     return {
+      visible: false,
+      form: {
+        url: '/api/v1/settings/setting/?category=basic',
+        fields: ['GLOBAL_ORG_DISPLAY_NAME'],
+        fieldsMeta: {
+        },
+        submitMethod() {
+          return 'patch'
+        }
+      },
       tableConfig: {
         url: '/api/v1/orgs/orgs/',
         permissions: {
@@ -81,6 +103,15 @@ export default {
       },
       headerActions: {
         canCreate: this.$hasPerm('orgs.add_organization'),
+        extraActions: [
+          {
+            title: this.$t('common.Setting'),
+            icon: 'el-icon-setting',
+            callback: () => {
+              this.visible = true
+            }
+          }
+        ],
         hasExport: false,
         hasImport: false,
         hasMoreActions: false

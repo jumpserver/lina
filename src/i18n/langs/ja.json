@@ -1524,6 +1524,7 @@
     }
   },
   "setting": {
+    "AppOps": "タスクセンター",
     "Ticket": "チケット",
     "TaskList": "タスクリスト",
     "Announcement": "公告",
