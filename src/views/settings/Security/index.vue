@@ -8,7 +8,6 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
-import Basic from './Basic.vue'
 import Auth from './Auth.vue'
 import Password from './Password.vue'
 import AuthLimit from './AuthLimit.vue'
@@ -16,15 +15,11 @@ import Session from './Session.vue'
 
 export default {
   name: 'Index',
-  components: { TabPage, Basic, Auth, Password, AuthLimit, Session },
+  components: { TabPage, Auth, Password, AuthLimit, Session },
   data() {
     return {
-      activeMenu: 'Basic',
+      activeMenu: 'Auth',
       submenu: [
-        {
-          title: this.$t('setting.Basic'),
-          name: 'Basic'
-        },
         {
           title: this.$t('setting.AuthSecurity'),
           name: 'Auth'

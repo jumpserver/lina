@@ -9,7 +9,6 @@
       v-bind="$data"
     />
   </IBox>
-
 </template>
 
 <script>
@@ -67,7 +66,7 @@ export default {
         }
         return value
       },
-      url: '/api/v1/settings/setting/?category=security'
+      url: '/api/v1/settings/setting/?category=security_login_limit'
     }
   },
   methods: {

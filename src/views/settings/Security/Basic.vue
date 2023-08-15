@@ -6,7 +6,7 @@
 
 <script>
 import IBox from '@/components/IBox/index.vue'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
+import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'Basic',
@@ -14,14 +14,12 @@ export default {
   data() {
     return {
       config: {
-        url: '/api/v1/settings/setting/?category=security',
+        url: '/api/v1/settings/setting/?category=security_basic',
         hasDetailInMsg: false,
         fields: [
           [
             this.$t('common.Basic'),
             [
-              'SECURITY_COMMAND_EXECUTION',
-              'SECURITY_COMMAND_BLACKLIST',
               'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
             ]
           ]

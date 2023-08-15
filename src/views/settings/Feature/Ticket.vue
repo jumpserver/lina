@@ -22,29 +22,19 @@ export default {
   },
   data() {
     return {
-      title: this.$t('common.Announcement'),
       visible: false,
-      enableField: 'ANNOUNCEMENT_ENABLED',
       config: {
         fields: [
-          ['', ['ANNOUNCEMENT_ENABLED', 'ANNOUNCEMENT']]
+          [this.$t('common.Basic'), ['TICKETS_ENABLED']],
+          [this.$t('perms.AssetPermission'), [
+            'TICKET_AUTHORIZE_DEFAULT_TIME',
+            'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
+          ]]
         ],
         fieldsMeta: {
-          ANNOUNCEMENT: {
-            fields: [
-              'SUBJECT', 'CONTENT', 'LINK'
-            ],
-            fieldsMeta: {
-              CONTENT: {
-                el: {
-                  rows: 5
-                }
-              }
-            }
-          }
         },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
-        url: '/api/v1/settings/setting/?category=announcement',
+        url: '/api/v1/settings/setting/?category=ticket',
         hasReset: false,
         submitMethod() {
           return 'patch'

@@ -374,16 +374,6 @@ export default {
       ]
     },
     {
-      path: '/settings/other',
-      name: 'Other',
-      component: () => import('@/views/settings/Other'),
-      meta: {
-        title: i18n.t('setting.Other'),
-        icon: 'other',
-        permissions: ['settings.change_other']
-      }
-    },
-    {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),

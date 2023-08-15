@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       config: {
-        url: '/api/v1/settings/setting/?category=security',
+        url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
         fields: [
           [

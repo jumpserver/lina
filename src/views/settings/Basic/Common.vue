@@ -29,21 +29,27 @@ export default {
             'SITE_URL', // 'USER_GUIDE_URL',
             'GLOBAL_ORG_DISPLAY_NAME'
           ]
-        ]
+        ],
+        [this.$t('xpack.NavHelp'), [
+          'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL'
+        ]]
       ],
       fieldsMeta: {
         SITE_URL: {
           rules: [rules.Required]
         },
         GLOBAL_ORG_DISPLAY_NAME: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
+          hidden: !this.hasValidLicense()
         },
-        TICKETS_ENABLED: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
+        HELP_DOCUMENT_URL: {
+          label: this.$t('xpack.helpDocument'),
+          helpText: this.$t('xpack.helpDocumentTip'),
+          hidden: () => !this.hasValidLicense()
+        },
+        HELP_SUPPORT_URL: {
+          label: this.$t('xpack.helpSupport'),
+          helpText: this.$t('xpack.helpSupportTip'),
+          hidden: () => !this.hasValidLicense()
         }
       },
       successUrl: { name: 'Basic' },
@@ -53,6 +59,9 @@ export default {
   methods: {
     submitMethod() {
       return 'patch'
+    },
+    hasValidLicense() {
+      return this.$store.getters.hasValidLicense
     }
   }
 }

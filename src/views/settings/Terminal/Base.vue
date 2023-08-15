@@ -18,6 +18,12 @@ export default {
     return {
       fields: [
         [
+          this.$t('common.Basic'),
+          [
+            'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
+          ]
+        ],
+        [
           `SSH ${comp}(KoKo)`,
           [
             'TERMINAL_KOKO_SSH_ENABLED',

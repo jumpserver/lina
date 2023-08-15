@@ -43,7 +43,7 @@ export default {
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {},
-      url: '/api/v1/settings/setting/?category=security'
+      url: '/api/v1/settings/setting/?category=security_password'
     }
   },
   methods: {

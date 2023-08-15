@@ -9,20 +9,20 @@
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
 import Announcement from './Announcement.vue'
-import Basic from './Basic.vue'
 import Vault from './Vault.vue'
+import Ticket from './Ticket.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Basic, Announcement, Vault },
+  components: { TabPage, Announcement, Vault, Ticket },
   data() {
     return {
       activeMenu: 'Basic',
       submenu: [
-        {
-          title: this.$t('common.Basic'),
-          name: 'Basic'
-        },
+        // {
+        //   title: this.$t('common.Basic'),
+        //   name: 'Basic'
+        // },
         {
           title: this.$t('setting.Announcement'),
           name: 'Announcement'
@@ -31,6 +31,10 @@ export default {
           title: this.$t('setting.Vault'),
           name: 'Vault',
           hidden: !this.$hasPerm('settings.change_vault')
+        },
+        {
+          title: this.$t('setting.Ticket'),
+          name: 'Ticket'
         }
       ]
     }
