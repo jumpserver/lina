@@ -11,10 +11,11 @@ import TabPage from '@/layout/components/TabPage/index.vue'
 import Announcement from './Announcement.vue'
 import Vault from './Vault.vue'
 import Ticket from './Ticket.vue'
+import Ops from './Ops.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Announcement, Vault, Ticket },
+  components: { TabPage, Announcement, Vault, Ticket, Ops },
   data() {
     return {
       activeMenu: 'Basic',
@@ -35,6 +36,10 @@ export default {
         {
           title: this.$t('setting.Ticket'),
           name: 'Ticket'
+        },
+        {
+          title: this.$t('setting.AppOps'),
+          name: 'Ops'
         }
       ]
     }

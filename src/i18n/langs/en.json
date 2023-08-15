@@ -1529,6 +1529,7 @@
     }
   },
   "setting": {
+    "AppOps": "Task center",
     "Ticket": "Ticket",
     "TaskList": "Task list",
     "Announcement": "Announcement",

@@ -33,21 +33,23 @@ export default {
       encryptedFields: ['AUTH_LDAP_BIND_PASSWORD'],
       fields: [
         [
-          this.$t('setting.LDAPServerInfo'),
+          this.$t('common.Basic'),
           [
-            'AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
+            'AUTH_LDAP', 'AUTH_LDAP_SERVER_URI',
+            'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
           ]
         ],
         [
           this.$t('setting.LDAPUser'),
           [
-            'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP'
+            'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER',
+            'AUTH_LDAP_USER_ATTR_MAP'
           ]
         ],
         [
           this.$t('common.Other'),
           [
-            'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE', 'AUTH_LDAP'
+            'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE'
           ]
         ]
       ],
