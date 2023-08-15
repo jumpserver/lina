@@ -39,7 +39,7 @@ export default {
           rules: [rules.Required]
         },
         GLOBAL_ORG_DISPLAY_NAME: {
-          hidden: !this.hasValidLicense()
+          hidden: () => !this.hasValidLicense()
         },
         HELP_DOCUMENT_URL: {
           label: this.$t('xpack.helpDocument'),
