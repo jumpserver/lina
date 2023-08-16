@@ -125,10 +125,18 @@ export default {
         return {}
       }
       const query = listTableRef?.dataTable?.getQuery() || {}
+      const extraQuery = Object.keys(listTableRef?.tableConfig?.extraQuery || {})
+
       delete query['limit']
       delete query['offset']
       delete query['date_from']
       delete query['date_to']
+      for (const key in query) {
+        if (extraQuery.includes(key)) {
+          delete query[key]
+        }
+      }
+
       return query
     },
     tableHasQuery() {
