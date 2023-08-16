@@ -304,6 +304,9 @@ export default {
       form.secret = form[secretType]
       form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
 
+      // 如果不删除会明文显示
+      delete form[secretType]
+
       if (!form.secret) {
         delete form['secret']
       }
