@@ -125,16 +125,27 @@ export default {
         return {}
       }
       const query = listTableRef?.dataTable?.getQuery() || {}
+      const extraQuery = Object.keys(listTableRef?.tableConfig?.extraQuery || {})
+
       delete query['limit']
       delete query['offset']
       delete query['date_from']
       delete query['date_to']
+      for (const key in query) {
+        if (extraQuery.includes(key)) {
+          delete query[key]
+        }
+      }
+
       return query
     },
     tableHasQuery() {
       return Object.keys(this.tableQuery).length > 0
     },
     exportOptions() {
+      console.log('this.canExportAll: ', this.canExportAll)
+      console.log('this.canExportSelected: ', this.canExportSelected)
+      console.log('this.canExportFiltered: ', this.canExportFiltered)
       return [
         {
           label: this.$t('common.imExport.ExportAll'),
@@ -171,6 +182,8 @@ export default {
   mounted() {
     this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
       if (url === this.url || url.indexOf(this.url) > -1) {
+        console.log('this.url: ---------------------ddd', this.url)
+        console.log('url: ------------------------ddd', url)
         this.showExportDialog()
       }
     })
