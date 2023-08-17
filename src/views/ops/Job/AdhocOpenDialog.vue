@@ -8,7 +8,7 @@
 
 <script>
 import { GenericListTableDialog } from '@/layout/components'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {

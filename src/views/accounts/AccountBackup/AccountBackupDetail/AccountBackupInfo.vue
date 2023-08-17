@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -11,7 +11,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -50,7 +50,7 @@ export default {
       ],
       url: `/api/v1/accounts/account-backup-plans/${this.object.id}/`,
       detailFields: [
-        'name',
+        'id', 'name',
         {
           key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
           value: this.object.crontab,
@@ -65,7 +65,21 @@ export default {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
-        'date_created', 'date_updated', 'comment'
+        'date_created', 'date_updated', 'comment',
+        {
+          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' A',
+          value: this.object.recipients_part_one,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
+        },
+        {
+          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' B',
+          value: this.object.recipients_part_two,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
+        }
       ]
     }
   },

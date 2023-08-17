@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import TreeTable from '@/components/TreeTable'
+import TreeTable from '@/components/Table/TreeTable'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {

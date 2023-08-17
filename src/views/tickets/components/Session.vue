@@ -43,6 +43,19 @@
         {{ $t('sessions.terminate') }}
       </el-button>
       <el-button
+        type="warning"
+        size="small"
+        :disabled="!supportedLock"
+        @click="onToggleLock"
+      >
+        <template v-if="session.is_locked">
+          {{ $t('sessions.resume') }}
+        </template>
+        <template v-else>
+          {{ $t('sessions.pause') }}
+        </template>
+      </el-button>
+      <el-button
         type="primary"
         size="small"
         :disabled="!session.can_join"
@@ -56,6 +69,7 @@
 
 <script>
 import IBox from '@/components/IBox'
+import { IsSupportPauseSessionType } from '@/utils/jms'
 
 export default {
   components: { IBox },
@@ -70,7 +84,8 @@ export default {
     return {
       session: {},
       curTimer: null,
-      loading: false
+      loading: false,
+      supportedLock: false
     }
   },
 
@@ -93,6 +108,9 @@ export default {
         disableFlashErrorMsg: true
       }).then(res => {
         this.session = res || {}
+        const terminalType = res['terminal']['type']
+        const isNormalSession = res['type']['value'] === 'normal'
+        this.supportedLock = IsSupportPauseSessionType(terminalType) && isNormalSession
       }).catch(err => {
         this.curTimer = setTimeout(() => {
           this.init()
@@ -115,8 +133,25 @@ export default {
       })
     },
     onMonitor() {
-      const joinUrl = `/luna/monitor/${this.session.id}`
-      window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+      const joinUrl = `/luna/monitor/${this.session.id}?ticket_id=${this.object.id}`
+      window.open(joinUrl, 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+    },
+    onToggleLock() {
+      const url = '/api/v1/terminal/tasks/toggle-lock-session-for-ticket/'
+      const task_name = this.session.is_locked ? 'unlock_session' : 'lock_session'
+      const data = {
+        'session_id': this.session.id,
+        'task_name': task_name
+      }
+      const resumeMsg = this.$tc('sessions.ResumeTaskSendSuccessMsg')
+      const pauseMsg = this.$tc('sessions.PauseTaskSendSuccessMsg')
+      const msg = this.session.is_locked ? resumeMsg : pauseMsg
+      this.$axios.post(url, data).then(res => {
+        this.$message.success(msg)
+        this.session.is_locked = !this.session.is_locked
+      }).catch(err => {
+        this.$message.error(err)
+      })
     }
   }
 

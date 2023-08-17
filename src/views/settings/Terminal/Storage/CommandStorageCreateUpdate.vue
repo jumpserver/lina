@@ -8,7 +8,9 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { Required } from '@/components/DataForm/rules'
+import { Required } from '@/components/Form/DataForm/rules'
+import TagInput from '@/components/Form/FormFields/TagInput.vue'
+
 export default {
   name: 'CommandStorageUpdate',
   components: {
@@ -42,6 +44,11 @@ export default {
           fields: ['HOSTS', 'INDEX_BY_DATE', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
             HOSTS: {
+              component: TagInput,
+              el: {
+                replaceShowPassword: true,
+                replaceRule: '(https?:\/\/[^:@]+:)([^@]+)(@.+)'
+              },
               helpText: this.$t('sessions.helpText.esUrl')
             },
             INDEX: {

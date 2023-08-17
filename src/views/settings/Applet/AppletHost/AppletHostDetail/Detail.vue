@@ -6,13 +6,13 @@
       <AutoDetailCard v-bind="detailInfoConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import { openTaskPage } from '@/utils/jms'
 

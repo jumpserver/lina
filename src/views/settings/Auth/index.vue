@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -8,7 +8,7 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage'
-import LDAP from '../Ldap'
+import LDAP from './Ldap'
 import Base from './Base'
 import Basic from './Basic'
 import CAS from './CAS'
@@ -43,35 +43,38 @@ export default {
       extraBackends = [
         {
           title: this.$t('setting.OIDC'),
-          name: 'OIDC'
+          name: 'OIDC',
+          key: 'AUTH_OPENID'
         },
         {
           title: this.$t('setting.SAML2'),
-          name: 'SAML2'
+          name: 'SAML2',
+          key: 'AUTH_SAML2'
         },
         {
           title: this.$t('setting.OAuth2'),
-          name: 'OAuth2'
+          name: 'OAuth2',
+          key: 'AUTH_OAUTH2'
         },
         {
           title: this.$t('setting.WeCom'),
-          name: 'WeCom'
+          name: 'WeCom',
+          key: 'AUTH_WECOM'
         },
         {
           title: this.$t('setting.DingTalk'),
-          name: 'DingTalk'
+          name: 'DingTalk',
+          key: 'AUTH_DINGTALK'
         },
         {
           title: this.$t('setting.FeiShu'),
-          name: 'FeiShu'
+          name: 'FeiShu',
+          key: 'AUTH_FEISHU'
         },
         {
           title: this.$t('setting.Radius'),
-          name: 'Radius'
-        },
-        {
-          title: this.$t('setting.SSO'),
-          name: 'SSO'
+          name: 'Radius',
+          key: 'AUTH_RADIUS'
         }
       ]
     }
@@ -85,11 +88,13 @@ export default {
         },
         {
           title: this.$t('setting.Ldap'),
-          name: 'LDAP'
+          name: 'LDAP',
+          key: 'AUTH_LDAP'
         },
         {
           title: this.$t('setting.CAS'),
-          name: 'CAS'
+          name: 'CAS',
+          key: 'AUTH_CAS'
         },
         ...extraBackends
       ]
@@ -101,11 +106,27 @@ export default {
     }
   },
   mounted() {
+    this.$axios.get('/api/v1/settings/setting/?category=auth').then(res => {
+      for (const item of this.submenu) {
+        const key = item.key
+        if (!key) {
+          continue
+        }
+        if (res[key]) {
+          item.icon = 'fa-check-circle text-primary'
+        }
+      }
+    }).finally(() => {
+      this.loading = false
+    })
   },
   methods: {}
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+>>> .el-tabs__item .fa {
+  font-size: 11px;
+}
 
 </style>

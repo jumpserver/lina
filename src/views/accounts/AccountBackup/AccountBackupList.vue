@@ -1,10 +1,10 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
-import { ArrayFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -21,6 +21,10 @@ export default {
           app: 'accounts',
           resource: 'accountbackupautomation'
         },
+        columns: [
+          'name', 'org_name', 'is_periodic',
+          'periodic_display', 'executed_amount', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

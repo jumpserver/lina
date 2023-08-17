@@ -9,9 +9,9 @@
 
 <script>
 import BaseAuth from './Base'
-import { JsonRequired } from '@/components/DataForm/rules'
+import { JsonRequired } from '@/components/Form/DataForm/rules'
 import { UploadKey } from '@/components'
-import { JsonEditor } from '@/components/FormFields'
+import { JsonEditor } from '@/components/Form/FormFields'
 
 export default {
   name: 'SAML2',

@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import AmountFormatter from '@/components/TableFormatters/AmountFormatter.vue'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -29,11 +29,10 @@ export default {
           assets: {
             label: this.$t('assets.Assets'),
             width: '160px',
+            type: '-',
             formatter: AmountFormatter,
             formatterArgs: {
-              routeQuery: {
-                activeTab: 'GroupUser'
-              }
+              can: false
             }
           }
         }

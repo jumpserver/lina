@@ -13,10 +13,10 @@
         <div class="transition-box" style="width: calc(100% - 17px);">
           <CodeEditor
             v-if="ready"
-            style="margin-bottom: 20px"
-            :toolbar="toolbar"
             :options="cmOptions"
+            :toolbar="toolbar"
             :value.sync="command"
+            style="margin-bottom: 20px"
           />
           <b>{{ $tc('ops.output') }}:</b>
           <span v-if="executionInfo.status" style="float: right">
@@ -35,7 +35,7 @@
             </span>
           </span>
           <div style="padding-left: 30px; background-color: rgb(247 247 247)">
-            <Term ref="xterm" style="border-left: solid 1px #dddddd" :show-tool-bar="true" />
+            <Term ref="xterm" :show-tool-bar="true" style="border-left: solid 1px #dddddd" />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
@@ -46,13 +46,13 @@
 
 <script>
 import { TreeTable } from '@/components'
-import Term from '@/components/Term'
-import CodeEditor from '@/components/FormFields/CodeEditor'
+import Term from '@/components/Widgets/Term'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
-import { getJob, getTaskDetail } from '@/api/ops'
+import { createJob, getJob, getTaskDetail } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -168,6 +168,15 @@ export default {
               },
               {
                 label: 'Python', value: 'python'
+              },
+              {
+                label: 'MySQL', value: 'mysql'
+              },
+              {
+                label: 'PostgreSQL', value: 'postgresql'
+              },
+              {
+                label: 'SQL Server', value: 'sqlserver'
               }
             ],
             callback: (option) => {
@@ -363,7 +372,6 @@ export default {
     },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
-      const url = '/api/v1/ops/jobs/?'
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
       if (hosts.length === 0 && nodes.length === 0) {
@@ -390,9 +398,7 @@ export default {
         is_periodic: false,
         timeout: this.timeout
       }
-      this.$axios.post(
-        url, data
-      ).then(res => {
+      createJob(data).then(res => {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = 'running'
         this.currentTaskId = res.task_id

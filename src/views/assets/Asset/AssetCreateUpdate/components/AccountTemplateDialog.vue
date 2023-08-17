@@ -13,31 +13,7 @@
       v-on="$listeners"
     >
       <template>
-        <div class="actions">
-          <el-button
-            v-if="showCreate"
-            :disabled="!$hasPerm('accounts.add_accounttemplate')"
-            size="small"
-            type="primary"
-            @click="onAddClick"
-          >
-            {{ $t('common.Add') }}
-          </el-button>
-          <div class="right">
-            <el-button
-              size="small"
-              type="text"
-              @click="refreshTable"
-            >
-              <el-tooltip :content="$tc('common.Refresh')" placement="top">
-                <span style="color: #5e5e5e">
-                  <svg-icon icon-class="refresh" style="font-size: 14px;" />
-                </span>
-              </el-tooltip>
-            </el-button>
-          </div>
-        </div>
-        <AutoDataTable ref="dataTable" :config="tableConfig" />
+        <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
       </template>
     </Dialog>
     <CreateAccountTemplateDialog
@@ -51,14 +27,14 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import AutoDataTable from '@/components/AutoDataTable'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
+import ListTable from '@/components/Table/ListTable/index.vue'
 
 export default {
   name: 'AccountTemplateDialog',
   components: {
     Dialog,
-    AutoDataTable,
+    ListTable,
     CreateAccountTemplateDialog
   },
   props: {
@@ -114,10 +90,23 @@ export default {
             return account.id === row.id
           })
         }
+      },
+      headerActions: {
+        onCreate: () => {
+          this.isShowCreate = true
+        },
+        hasCreate: this.showCreate,
+        hasMoreActions: false,
+        hasColumnSetting: false,
+        hasImport: false,
+        hasExport: false
       }
     }
   },
   computed: {
+    refTable() {
+      return this.$refs.listTable.$refs.dataTable.$refs.dataTable
+    },
     iVisible: {
       get() {
         return this.visible
@@ -128,11 +117,8 @@ export default {
     }
   },
   methods: {
-    refreshTable() {
-      this.$refs.dataTable.$refs.dataTable.getList()
-    },
     onCreateTemplatePerform() {
-      this.refreshTable()
+      this.refTable.getList()
     },
     handleConfirm() {
       this.iVisible = false
@@ -172,7 +158,7 @@ export default {
         )
       })
       if (status) {
-        this.$refs.dataTable.$refs.dataTable.toggleRowSelection(row, false)
+        this.refTable.toggleRowSelection(row, false)
         this.$message.error(this.$tc('accounts.SameTypeAccountTip'))
       }
       return status

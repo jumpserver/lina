@@ -1,20 +1,20 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
     <ViewSecret
       v-if="showViewSecretDialog"
-      :visible.sync="showViewSecretDialog"
-      :url="secretUrl"
       :account="account"
       :show-password-record="false"
+      :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
     />
   </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/TableFormatters'
-import ViewSecret from '@/components/AccountListTable/ViewSecret'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 
 export default {
   name: 'AccountTemplateList',

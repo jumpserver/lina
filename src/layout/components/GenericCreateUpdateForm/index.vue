@@ -15,7 +15,7 @@
   />
 </template>
 <script>
-import AutoDataForm from '@/components/AutoDataForm'
+import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
 import { encryptPassword } from '@/utils/crypto'
 import deepmerge from 'deepmerge'
@@ -125,7 +125,7 @@ export default {
     },
     // 获取提交的方法
     submitMethod: {
-      type: Function,
+      type: [Function, String],
       default: function() {
         const params = this.$route.params
         if (params.id) {
@@ -271,7 +271,11 @@ export default {
   },
   computed: {
     method() {
-      return this.submitMethod(this)
+      if (this.submitMethod instanceof Function) {
+        return this.submitMethod(this)
+      } else {
+        return this.submitMethod
+      }
     },
     iUrl() {
       // 更新或创建的url

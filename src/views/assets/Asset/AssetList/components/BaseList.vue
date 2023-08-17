@@ -23,19 +23,14 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter,
-  ArrayFormatter,
-  ChoicesFormatter,
-  DetailFormatter,
-  ProtocolsFormatter,
-  TagsFormatter
-} from '@/components/TableFormatters'
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
+} from '@/components/Table/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
-import { connectivityMeta } from '@/components/AccountListTable/const'
+import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
-import GatewayDialog from '@/components/GatewayDialog'
+import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
-import HostInfoFormatter from '@/components/TableFormatters/HostInfoFormatter'
+import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter'
 
 export default {
   components: {

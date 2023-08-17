@@ -1,5 +1,5 @@
 <template>
-  <BaseTicketList :url="url" :has-more-actions="true" />
+  <BaseTicketList :url="url" v-bind="$data" />
 </template>
 
 <script>
@@ -12,6 +12,19 @@ export default {
   },
   data() {
     return {
+      extraTicketAction: {
+        moreCreates: {
+          dropdown: [
+            {
+              name: 'RequestAssetPerm',
+              title: this.$t('tickets.RequestAssetPerm'),
+              callback: () => this.$router.push({
+                name: 'RequestAssetPermTicketCreateUpdate'
+              })
+            }
+          ]
+        }
+      }
     }
   },
   computed: {

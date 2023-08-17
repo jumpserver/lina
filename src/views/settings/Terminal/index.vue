@@ -79,6 +79,12 @@ export default {
     componentData() {
       return {}
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.name === from.name && to.path === from.path && to.query?.activeTab) {
+      this.$store.commit('common/reload')
+    }
+    next()
   }
 }
 </script>

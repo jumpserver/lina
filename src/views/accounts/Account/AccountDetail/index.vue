@@ -22,15 +22,15 @@
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import AccountCreateUpdate from '@/components/AccountListTable/AccountCreateUpdate'
+import { GenericDetailPage, TabPage } from '@/layout/components'
+import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 
 export default {
   components: {
-    GenericDetailPage,
     TabPage,
     Detail,
+    GenericDetailPage,
     AccountCreateUpdate
   },
   data() {

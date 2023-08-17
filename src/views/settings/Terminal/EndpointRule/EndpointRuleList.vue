@@ -1,12 +1,13 @@
 <template>
   <div>
     <el-alert type="success" v-html="helpMessage" />
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
+
 export default {
   name: 'EndpointRule',
   components: {

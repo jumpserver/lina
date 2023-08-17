@@ -15,7 +15,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import CodeEditor from '@/components/FormFields/CodeEditor'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 
 export default {
   components: {

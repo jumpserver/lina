@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Select2 from '@/components/FormFields/Select2'
+import Select2 from '@/components/Form/FormFields/Select2'
 
 export default {
   components: {

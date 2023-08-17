@@ -5,6 +5,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { openTaskPage } from '@/utils/jms'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AccountBackupPlanExecutionList',
@@ -23,9 +24,22 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'timedelta', 'trigger', 'date_start', 'is_success', 'reason', 'actions'
+          'AccountBackupName', 'timedelta', 'trigger', 'date_start',
+          'is_success', 'reason', 'actions'
         ],
         columnsMeta: {
+          'AccountBackupName': {
+            label: this.$t('common.DisplayName'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getTitle: ({ row }) => row.snapshot.name,
+              getRoute: ({ row }) => ({
+                name: 'AccountBackupPlanDetail',
+                params: { id: row.plan }
+              })
+            },
+            id: ({ row }) => row.plan
+          },
           timedelta: {
             label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
@@ -66,6 +80,10 @@ export default {
             {
               label: this.$t('accounts.TaskID'),
               value: 'plan_id'
+            },
+            {
+              label: this.$t('common.DisplayName'),
+              value: 'plan__name'
             }
           ]
         },

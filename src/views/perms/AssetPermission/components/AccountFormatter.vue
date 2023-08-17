@@ -23,10 +23,12 @@
           @change="handleTagChange"
         />
         <span v-if="showAddTemplate">
-          <el-button size="small" type="primary" @click="showTemplateDialog=true">
+          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
             {{ $t('common.TemplateAdd') }}
           </el-button>
-          {{ addTemplateHelpText }}
+          <span class="help-block" style="display: inline">
+            {{ addTemplateHelpText }}
+          </span>
         </span>
       </div>
     </el-form-item>
@@ -44,16 +46,11 @@
 </template>
 
 <script>
-import { TagInput } from '@/components/FormFields'
+import { TagInput } from '@/components/Form/FormFields'
 import {
-  AccountLabelMapper,
-  AllAccount,
-  AnonymousAccount,
-  ManualAccount,
-  SameAccount,
-  SpecAccount
+  AccountLabelMapper, AllAccount, AnonymousAccount, ManualAccount, SameAccount, SpecAccount
 } from '@/views/perms/const'
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
 export default {
@@ -180,16 +177,17 @@ export default {
         }
       },
       autocomplete: (query, cb) => {
-        this.$axios.get('/api/v1/accounts/accounts/username-suggestions/', {
-          params: {
-            username: query,
-            assets: this.assets.slice(0, 20).join(','),
-            nodes: this.nodes.slice(0, 20).map(item => {
-              return typeof item === 'object' ? item.pk : item
-            }).join(','),
-            oid: this.oid
-          }
-        }).then(res => {
+        const data = {
+          username: query,
+          assets: this.assets.slice(0, 20),
+          nodes: this.nodes.slice(0, 20).map(item => {
+            return typeof item === 'object' ? item.pk : item
+          })
+        }
+        this.$axios.post(
+          '/api/v1/accounts/accounts/username-suggestions/',
+          data, { params: { oid: this.oid }}
+        ).then(res => {
           if (!res) res = []
           const data = res
             .filter(item => vm.value.indexOf(item) === -1)
@@ -270,7 +268,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .select >>> .el-input.el-input--suffix {
   width: 100px
 }

@@ -11,7 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
-import rules from '@/components/DataForm/rules'
+import rules from '@/components/Form/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 

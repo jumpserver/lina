@@ -9,8 +9,8 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import UserJsonTab from '@/components/ManyJsonTabs/UserJsonTab.vue'
-import AssetJsonTab from '@/components/ManyJsonTabs/AssetJsonTab.vue'
+import UserJsonTab from '@/components/Apps/ManyJsonTabs/UserJsonTab.vue'
+import AssetJsonTab from '@/components/Apps/ManyJsonTabs/AssetJsonTab.vue'
 
 export default {
   components: {

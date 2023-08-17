@@ -1,9 +1,20 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <Dialog
+      :show-buttons="false"
+      :title="$tc('common.Setting')"
+      :visible.sync="visible"
+    >
+      <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
+    </Dialog>
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericCreateUpdateForm, GenericListPage } from '@/layout/components'
+import { Dialog } from '@/components'
+
 const performDelete = function({ row, col }) {
   const id = row.id
   const url = `${this.url}${id}/`
@@ -11,11 +22,23 @@ const performDelete = function({ row, col }) {
 }
 export default {
   components: {
-    GenericListPage
+    GenericCreateUpdateForm,
+    GenericListPage,
+    Dialog
   },
   data() {
     const vm = this
     return {
+      visible: false,
+      form: {
+        url: '/api/v1/settings/setting/?category=basic',
+        fields: ['GLOBAL_ORG_DISPLAY_NAME'],
+        fieldsMeta: {
+        },
+        submitMethod() {
+          return 'patch'
+        }
+      },
       tableConfig: {
         url: '/api/v1/orgs/orgs/',
         permissions: {
@@ -46,7 +69,7 @@ export default {
             formatterArgs: {
               canUpdate: this.$hasPerm('orgs.change_organization'),
               canDelete: function({ row }) {
-                return !row.is_default && vm.$hasPerm('orgs.delete_organization')
+                return !row.internal && vm.$hasPerm('orgs.delete_organization')
               },
               onDelete: function({ row, col, cellValue, reload }) {
                 const msg = this.$t('xpack.Organization.DeleteOrgMsg')
@@ -61,9 +84,11 @@ export default {
                     try {
                       await performDelete.bind(this)({ row: row, col: col })
                       this.$store.dispatch('users/deleteAdminOrg', { id: row.id, name: row.name })
-                      done()
-                      reload()
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                        .then(() => {
+                          done()
+                          reload()
+                          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                        })
                     } finally {
                       instance.confirmButtonLoading = false
                     }
@@ -78,6 +103,15 @@ export default {
       },
       headerActions: {
         canCreate: this.$hasPerm('orgs.add_organization'),
+        extraActions: [
+          {
+            title: this.$t('common.Setting'),
+            icon: 'el-icon-setting',
+            callback: () => {
+              this.visible = true
+            }
+          }
+        ],
         hasExport: false,
         hasImport: false,
         hasMoreActions: false

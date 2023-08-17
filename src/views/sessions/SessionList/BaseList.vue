@@ -3,9 +3,9 @@
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { timeOffset } from '@/utils/common'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseList',
@@ -32,7 +32,8 @@ export default {
           min: ['id', 'actions'],
           default: [
             'id', 'user', 'asset', 'account', 'remote_addr', 'protocol', 'login_from',
-            'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
+            'command_amount', 'date_start', 'duration', 'terminal_display', 'actions',
+            'is_locked'
           ]
         },
         columnsMeta: {

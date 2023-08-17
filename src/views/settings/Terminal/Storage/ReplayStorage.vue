@@ -2,7 +2,7 @@
   <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
 </template>
 <script>
-import ListTable from '@/components/ListTable'
+import ListTable from '@/components/Table/ListTable'
 import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
 import { getReplayStorageOptions } from '@/views/sessions/const'
 

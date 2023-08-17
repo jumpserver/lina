@@ -150,3 +150,8 @@ export function toM2MJsonParams(attrFilter) {
   const data = encoder.encode(JSON.stringify(attrFilter))
   return ['attr_rules', encodeURIComponent(btoa(String.fromCharCode(...data)))]
 }
+
+export function IsSupportPauseSessionType(terminalType) {
+  const supportedType = ['koko', 'lion', 'chen', 'kael']
+  return supportedType.includes(terminalType)
+}

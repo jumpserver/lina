@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="16" :sm="24">
-      <ListTable :table-config="config" :header-actions="headerConfig" />
+      <ListTable :header-actions="headerConfig" :table-config="config" />
     </el-col>
     <el-col :md="8" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
@@ -12,7 +12,7 @@
 <script type="text/jsx">
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'Publications',
@@ -84,7 +84,7 @@ export default {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,
                       {
-                        host: row.host.id,
+                        hosts: [row.host.id],
                         applet_id: row.applet.id
                       }
                     ).then(res => {
@@ -125,7 +125,7 @@ export default {
             click: function() {
               this.$axios.post(
                 `/api/v1/terminal/applet-host-deployments/applets/`,
-                { host: this.object.id }
+                { hosts: [this.object.id] }
               ).then(res => {
                 openTaskPage(res['task'])
               })

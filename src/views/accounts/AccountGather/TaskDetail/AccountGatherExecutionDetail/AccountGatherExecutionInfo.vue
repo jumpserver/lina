@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
   components: {
@@ -23,7 +23,7 @@ export default {
     return {
       url: `/api/v1/accounts/gather-account-executions/${this.object.id}/`,
       detailFields: [
-        'status', 'trigger_display', 'date_start', 'date_finished'
+        'id', 'status', 'trigger_display', 'date_start', 'date_finished'
       ]
     }
   },

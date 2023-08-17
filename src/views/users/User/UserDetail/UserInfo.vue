@@ -12,8 +12,8 @@
 
 <script>
 import QuickActions from '@/components/QuickActions'
-import RelationCard from '@/components/RelationCard'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
   name: 'UserInfo',

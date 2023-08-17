@@ -9,7 +9,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :md="14" :sm="24">
-        <GenericListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
       <el-col :md="10" :sm="24">
         <QuickActions :actions="quickActions" type="primary" />
@@ -21,8 +21,8 @@
         :visible.sync="showViewSecretDialog"
       />
       <AccountTemplateChangeSecretDialog
-        :visible.sync="visible"
         :object="object"
+        :visible.sync="visible"
       />
     </el-row>
   </div>
@@ -32,8 +32,8 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import QuickActions from '@/components/QuickActions'
 import AccountTemplateChangeSecretDialog from './AccountTemplateChangeSecretDialog'
-import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
-import ViewSecret from '@/components/AccountListTable/ViewSecret'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 
 export default {
   name: 'AccountTemplateChangeSecret',

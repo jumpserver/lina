@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -11,7 +11,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -51,7 +51,7 @@ export default {
       ],
       url: `/api/v1/accounts/push-account-automations/${this.object.id}`,
       detailFields: [
-        'name',
+        'id', 'name',
         {
           key: this.$t('accounts.AccountChangeSecret.Username'),
           value: this.object.accounts.join(', ')

@@ -26,7 +26,7 @@ export default {
             prop: 'id',
             label: this.$t('sessions.id'),
             align: 'center',
-            width: '40px',
+            width: '70px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
@@ -37,9 +37,6 @@ export default {
               }
             }
           },
-          actions: {
-            has: false
-          },
           asset: {
             label: this.$t('sessions.target')
           },
@@ -47,8 +44,7 @@ export default {
             label: this.$t('sessions.command')
           },
           remote_addr: {
-            label: this.$t('sessions.remoteAddr'),
-            width: '140px'
+            label: this.$t('sessions.remoteAddr')
           },
           protocol: {
             label: this.$t('sessions.protocol'),
@@ -56,6 +52,26 @@ export default {
               disabled: false
             },
             sortable: false
+          },
+          actions: {
+            width: '150px',
+            align: 'center',
+            formatterArgs: {
+              hasDelete: false,
+              hasClone: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'connect',
+                  fa: 'fa-terminal',
+                  type: 'primary',
+                  can: ({ row }) => row.is_active,
+                  callback: ({ row }) => {
+                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                  }
+                }
+              ]
+            }
           }
         },
         hasSelection: false,

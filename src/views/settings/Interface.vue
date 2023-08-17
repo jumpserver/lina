@@ -37,7 +37,7 @@
           <el-radio :label="9">备选项3</el-radio>
         </el-radio-group>
       </div>
-      <el-steps class="dz" :space="200" :active="1" finish-status="error">
+      <el-steps :active="1" :space="200" class="dz" finish-status="error">
         <el-step title="已完成" />
         <el-step title="进行中" />
         <el-step title="步骤 3" />
@@ -47,14 +47,14 @@
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
         :fields="fields"
-        :url="url"
-        :initial="interfaceInfo"
-        :update-success-next-route="successUrl"
         :fields-meta="fieldsMeta"
-        :on-submit="submitForm"
-        :more-buttons="moreButtons"
         :has-save-continue="hasSaveContinue"
+        :initial="interfaceInfo"
+        :more-buttons="moreButtons"
+        :on-submit="submitForm"
         :submit-method="submitMethod"
+        :update-success-next-route="successUrl"
+        :url="url"
       />
     </IBox>
   </Page>
@@ -64,7 +64,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, updateInterface, restoreInterface, previewThemes } from '@/api/interface'
+import { getInterfaceInfo, previewThemes, restoreInterface, updateInterface } from '@/api/interface'
 
 export default {
   name: 'InterfaceSettings',

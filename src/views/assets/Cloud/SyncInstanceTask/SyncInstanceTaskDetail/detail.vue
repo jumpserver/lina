@@ -1,16 +1,24 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
+      <RelationCard
+        ref="StrategyRelation"
+        v-perms="'xpack.change_strategy'"
+        style="margin-top: 15px"
+        type="info"
+        v-bind="strategyRelationConfig"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
@@ -19,7 +27,8 @@ export default {
   name: 'Detail',
   components: {
     AutoDetailCard,
-    QuickActions
+    QuickActions,
+    RelationCard
   },
   props: {
     object: {
@@ -47,14 +56,57 @@ export default {
               )
             }.bind(this)
           }
+        },
+        {
+          title: this.$t('common.Strategy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('xpack.Execute'),
+            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
+          }
         }
       ],
+      strategyRelationConfig: {
+        icon: 'fa-info',
+        title: this.$t('common.Strategy'),
+        objectsAjax: {
+          url: '/api/v1/xpack/cloud/strategies/',
+          transformOption: (item) => {
+            return { label: item.name, value: item.id }
+          }
+        },
+        hasObjectsId: this.object.strategy?.map(i => i.id) || [],
+        performAdd: (items) => {
+          const newData = []
+          const value = this.$refs.StrategyRelation.iHasObjects
+          value.map(v => {
+            newData.push(v.value)
+          })
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          items.map(v => {
+            newData.push(v.value)
+          })
+          return this.$axios.patch(relationUrl, { strategy: newData })
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const newData = []
+          const value = this.$refs.StrategyRelation.iHasObjects
+          value.map(v => {
+            if (v.value !== itemId) {
+              newData.push(v.value)
+            }
+          })
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          return this.$axios.patch(relationUrl, { strategy: newData })
+        }
+      },
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}`,
       detailFields: [
         'name', 'account_display', 'node_display',
         {
-          key: this.$t('assets.Protocols'),
-          value: this.object.protocols
+          key: this.$t('common.Strategy'),
+          value: this.object.strategy?.map(item => item.name).join(', ')
         },
         {
           key: this.$t('xpack.Cloud.IPNetworkSegment'),
@@ -87,7 +139,6 @@ export default {
   computed: {
   },
   mounted() {
-
   },
   methods: {
 

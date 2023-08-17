@@ -1,15 +1,15 @@
 <template>
   <GenericListPage
     ref="GenericListTable"
-    :table-config="tableConfig"
     :header-actions="headerActions"
     :help-message="helpMessage"
+    :table-config="tableConfig"
   />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DateFormatter, ShowKeyCopyFormatter } from '@/components/TableFormatters'
+import { DateFormatter, ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {

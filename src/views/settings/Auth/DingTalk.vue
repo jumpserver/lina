@@ -8,7 +8,7 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken } from '@/components/Form/FormFields'
 
 export default {
   name: 'DingTalk',

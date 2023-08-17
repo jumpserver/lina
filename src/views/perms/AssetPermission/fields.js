@@ -1,4 +1,4 @@
-import AssetSelect from '@/components/AssetSelect'
+import AssetSelect from '@/components/Apps/AssetSelect'
 import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {

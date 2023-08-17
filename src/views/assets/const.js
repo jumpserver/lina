@@ -1,8 +1,8 @@
 import i18n from '@/i18n/i18n'
-import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
-import rules from '@/components/DataForm/rules'
-import { JSONManyToManySelect, Select2 } from '@/components/FormFields'
+import rules from '@/components/Form/DataForm/rules'
+import { JSONManyToManySelect, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {

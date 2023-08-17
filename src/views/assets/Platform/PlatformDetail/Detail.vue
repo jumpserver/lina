@@ -34,10 +34,10 @@
 
 <script>
 import { IBox } from '@/components'
-import AutoDetailCard from '@/components/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
-import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
+import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 
 export default {
   name: 'Detail',
