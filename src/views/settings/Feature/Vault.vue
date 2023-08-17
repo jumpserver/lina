@@ -28,6 +28,7 @@ export default {
         {
           title: this.$t('common.Test'),
           loading: false,
+          disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
@@ -43,7 +44,7 @@ export default {
         {
           title: this.$t('setting.sync'),
           loading: false,
-          disabled: store.getters.publicSettings['VAULT_TYPE'] === 'local',
+          disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
@@ -60,9 +61,9 @@ export default {
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         [
-          this.$t('setting.Vault'),
+          this.$t('setting.AccountStorage'),
           [
-            'VAULT_TYPE',
+            'VAULT_ENABLED',
             'VAULT_HCP_HOST',
             'VAULT_HCP_TOKEN',
             'VAULT_HCP_MOUNT_POINT'
@@ -70,22 +71,23 @@ export default {
         ]
       ],
       fieldsMeta: {
-        VAULT_TYPE: {
-          disabled: true
+        VAULT_ENABLED: {
+          disabled: true,
+          label: this.$t('setting.EnableVaultStorage')
         },
         VAULT_HCP_HOST: {
           hidden: (formValue) => {
-            return formValue.VAULT_TYPE === 'local'
+            return !formValue.VAULT_ENABLED
           }
         },
         VAULT_HCP_TOKEN: {
           hidden: (formValue) => {
-            return formValue.VAULT_TYPE === 'local'
+            return !formValue.VAULT_ENABLED
           }
         },
         VAULT_HCP_MOUNT_POINT: {
           hidden: (formValue) => {
-            return formValue.VAULT_TYPE === 'local'
+            return !formValue.VAULT_ENABLED
           }
         }
       },
