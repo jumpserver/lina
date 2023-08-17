@@ -462,7 +462,8 @@
     "HostUpdate": "資産の更新 - ホスト",
     "WebUpdate": "資産の更新 - Web",
     "DatabaseUpdate": "資産の更新 - データベース",
-    "GPTCreate": "資産の作成 - GPT"
+    "GPTCreate": "資産の作成 - GPT",
+    "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
