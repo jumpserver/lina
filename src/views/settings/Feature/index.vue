@@ -20,18 +20,9 @@ export default {
     return {
       activeMenu: 'Basic',
       submenu: [
-        // {
-        //   title: this.$t('common.Basic'),
-        //   name: 'Basic'
-        // },
         {
           title: this.$t('setting.Announcement'),
           name: 'Announcement'
-        },
-        {
-          title: this.$t('setting.AccountStorage'),
-          name: 'Vault',
-          hidden: !this.$hasPerm('settings.change_vault')
         },
         {
           title: this.$t('setting.Ticket'),
@@ -40,6 +31,11 @@ export default {
         {
           title: this.$t('setting.AppOps'),
           name: 'Ops'
+        },
+        {
+          title: this.$t('setting.AccountStorage'),
+          name: 'Vault',
+          hidden: !this.$hasPerm('settings.change_vault')
         }
       ]
     }
