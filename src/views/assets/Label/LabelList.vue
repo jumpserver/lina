@@ -29,11 +29,10 @@ export default {
           assets: {
             label: this.$t('assets.Assets'),
             width: '160px',
+            type: '-',
             formatter: AmountFormatter,
             formatterArgs: {
-              routeQuery: {
-                activeTab: 'GroupUser'
-              }
+              can: false
             }
           }
         }
