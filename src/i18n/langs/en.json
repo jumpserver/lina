@@ -462,7 +462,8 @@
     "HostUpdate": "Update asset - Host",
     "WebUpdate": "Update asset - Web",
     "DatabaseUpdate": "Update asset - Database",
-    "GPTCreate": "Create asset - GPT"
+    "GPTCreate": "Create asset - GPT",
+    "AppletHostDomainHelpText": "These domains are in System Organization"
   },
   "audits": {
     "ChangeField": "Change field",

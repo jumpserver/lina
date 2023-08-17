@@ -50,7 +50,10 @@ export default {
             hidden: () => true
           },
           domain: {
-            hidden: () => true
+            hidden: () => {
+              return !this.$store.getters.hasValidLicense
+            },
+            helpText: this.$t('assets.AppletHostDomainHelpText')
           },
           nodes: {
             hidden: () => true
