@@ -35,7 +35,7 @@ export default {
         {
           title: this.$t('setting.AccountStorage'),
           name: 'Vault',
-          hidden: !this.$hasPerm('settings.change_vault')
+          hidden: !this.$hasPerm('settings.change_vault') || !this.$store.getters.hasValidLicense
         }
       ]
     }
