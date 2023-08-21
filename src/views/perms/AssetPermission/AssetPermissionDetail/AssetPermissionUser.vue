@@ -50,7 +50,15 @@ export default {
             width: 150,
             objects: this.object.users,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=`
+            onDelete: function(col, row, cellValue, reload) {
+              const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
+              this.$axios.delete(url).then(res => {
+                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$store.commit('common/reload')
+              }).catch(error => {
+                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+              })
+            }.bind(this)
           },
           actions: {
             has: false
@@ -78,7 +86,7 @@ export default {
           }
         },
         showHasMore: false,
-        hasObjectsId: this.object.users,
+        hasObjectsId: this.object.users?.map(i => i.id) || [],
         showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
@@ -94,8 +102,7 @@ export default {
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
-          window.location.reload()
+          this.$store.commit('common/reload')
         }
       },
       groupRelationConfig: {
@@ -104,7 +111,7 @@ export default {
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
-        hasObjectsId: this.object.user_groups,
+        hasObjectsId: this.object.user_groups?.map(i => i.id) || [],
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/`
           const objectId = this.object.id
@@ -123,7 +130,6 @@ export default {
           return this.$axios.delete(relationUrl)
         },
         onAddSuccess: (objects, that) => {
-          this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$tc('common.updateSuccessMsg'))
