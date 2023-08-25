@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-for="(command, index) in value" :key="index" :prop="'value.' + index + '.value'" class="command-item">
-      <el-input v-model="value[index]" size="mini">
+    <div v-for="(command, index) in iValue" :key="index" :prop="'iValue.' + index + '.value'" class="command-item">
+      <el-input v-model="iValue[index]" size="mini">
         <template slot="prepend"> {{ inputTitle + ' ' + (index + 1) }}</template>
       </el-input>
       <div class="input-button">
@@ -14,7 +14,7 @@
           @click="handleDelete(command)"
         />
         <el-button
-          v-if="index === value.length - 1"
+          v-if="index === iValue.length - 1"
           icon="el-icon-plus"
           size="mini"
           style="flex-shrink: 0;"
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     value: {
@@ -39,20 +40,34 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      iValue: ['']
+    }
+  },
+  watch: {
+    iValue: {
+      handler(v) {
+        this.$emit('input', Array.from(v))
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  created() {
+    this.iValue = Array.from(this.value)
   },
   methods: {
     handleDelete(command) {
-      const index = this.value.indexOf(command)
+      const index = this.iValue.indexOf(command)
       if (index !== -1) {
-        this.value.splice(index, 1)
+        this.iValue.splice(index, 1)
       }
     },
     handleAdd() {
-      this.value.push('')
+      this.iValue.push('')
     },
     deleteDisabled() {
-      return this.value.length <= 1
+      return this.iValue.length <= 1
     }
   }
 }
