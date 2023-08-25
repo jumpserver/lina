@@ -48,9 +48,7 @@ export default {
     iValue: {
       handler(v) {
         this.$emit('input', Array.from(v))
-      },
-      immediate: true,
-      deep: true
+      }
     }
   },
   created() {
