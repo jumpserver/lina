@@ -7,7 +7,7 @@
     :title="title"
     @close="onClose"
   >
-    <span class="announcement-main">{{ announcement.content }}</span>
+    <MarkDown class="markdown" :value="announcement.content" />
     <span v-if="announcement.link">
       <el-link :href="announcement.link" target="_blank" type="info" class="link-more">
         {{ $t('common.ViewMore') }}
@@ -19,9 +19,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
   name: 'Announcement',
+  components: { MarkDown },
   data() {
     return {
       viewedKey: 'AnnouncementViewed'
@@ -54,7 +56,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .announcement >>> .el-alert__content {
   width: 100%;
 }
@@ -69,5 +71,15 @@ export default {
 }
 .icon {
   vertical-align: text-bottom;
+}
+>>> .markdown-body {
+  background-color: transparent !important;
+  a {
+    color: var(--color-info) !important;
+  }
+  h1, h2, h3, h4, h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
 }
 </style>
