@@ -2,21 +2,23 @@
   <div>
     <div>
       <el-button
+        :disabled="isDisabled"
         size="mini"
         type="primary"
-        :disabled="isDisabled"
         @click="onOpenDialog"
-      >{{ $tc('common.Setting') }}</el-button>
+      >
+        {{ $tc('common.Setting') }}
+      </el-button>
     </div>
     <Dialog
       v-if="visible"
-      width="60%"
-      :visible.sync="visible"
-      :title="title"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
+      :title="title"
+      :visible.sync="visible"
       v-bind="$attrs"
+      width="60%"
       v-on="$listeners"
     >
       <AutoDataForm
@@ -31,7 +33,7 @@
 </template>
 
 <script>
-import { Dialog, AutoDataForm } from '@/components'
+import { AutoDataForm, Dialog } from '@/components'
 
 export default {
   componentName: 'AutomationParams',
@@ -58,6 +60,10 @@ export default {
       type: Array,
       default: () => []
     },
+    platforms: {
+      type: Array,
+      default: () => []
+    },
     method: {
       type: String,
       default: ''
@@ -68,13 +74,12 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       remoteMeta: {},
       visible: false,
       isDisabled: true,
       form: this.value,
-      node_ids: this.nodes,
-      asset_ids: this.assets,
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -82,7 +87,8 @@ export default {
         method: 'get',
         fields: [],
         fieldsMeta: {}
-      }
+      },
+      onFieldChangeHandler: _.debounce(vm.handleFieldChange, 1000)
     }
   },
   computed: {
@@ -92,22 +98,29 @@ export default {
   },
   watch: {
     nodes: {
-      handler(val) {
-        this.node_ids = val
-        this.onFieldChangeHandle()
+      handler() {
+        this.onFieldChangeHandler()
       },
       deep: true
     },
     assets: {
-      handler(val) {
-        this.asset_ids = val
-        this.onFieldChangeHandle()
+      handler() {
+        this.onFieldChangeHandler()
       },
       deep: true
+    },
+    platforms: {
+      handler(newVal) {
+        console.log('Found platforms change, ', newVal.length)
+        this.onFieldChangeHandler()
+      },
+      deep: true,
+      immediate: true
     }
   },
-  created() {
-    this.getUrlMeta()
+  async mounted() {
+    await this.getUrlMeta()
+    await this.handleFieldChange()
   },
   methods: {
     async getUrlMeta() {
@@ -115,34 +128,35 @@ export default {
       this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
     },
     async getFilterPlatforms() {
+      console.log('this.Platforms', this.platforms)
       return await this.$axios.post(
         '/api/v1/assets/platforms/filter-nodes-assets/',
         {
-          'node_ids': this.node_ids,
-          'asset_ids': this.asset_ids
+          'node_ids': this.nodes,
+          'asset_ids': this.assets,
+          'platform_ids': this.platforms.map(i => i.id || i.pk || i)
         }
       )
     },
-    async onFieldChangeHandle() {
+    async handleFieldChange() {
       const platforms = await this.getFilterPlatforms()
       let pushAccountMethods = platforms.map(i => i.automation[this.method])
       pushAccountMethods = _.uniq(pushAccountMethods)
       // 检测是否有可设置的推送方式
       const hasCanSettingPushMethods = _.intersection(pushAccountMethods, Object.keys(this.remoteMeta))
       this.setFormConfig(hasCanSettingPushMethods)
-      if (hasCanSettingPushMethods.length > 0) {
-        this.isDisabled = false
-        this.$emit('input', this.form)
-      } else {
-        this.isDisabled = true
-        this.$emit('input', {})
-      }
+      this.isDisabled = hasCanSettingPushMethods.length <= 0
     },
     setFormConfig(methods) {
       const newForm = {}
       const fields = []
       const fieldsMeta = {}
       this.config.fields = []
+      // Todo: 未来改成后端处理，生成 serializer, 这里就不用判断类型了
+      const typeMapper = {
+        'string': 'input',
+        'boolean': 'switch'
+      }
 
       for (const method of methods) {
         const filterField = this.remoteMeta[method] || {}
@@ -159,7 +173,7 @@ export default {
           for (const [k, v] of Object.entries(filterField.children)) {
             const item = {
               ...v,
-              type: 'input'
+              type: typeMapper[v.type] || 'input'
             }
             delete item.default
             fieldsMeta[method].fields.push(k)
@@ -176,8 +190,11 @@ export default {
       this.visible = true
     },
     onSubmit(form) {
-      this.visible = false
+      this.form = form
       this.$emit('input', form)
+      setTimeout(() => {
+        this.visible = false
+      }, 100)
       this.$log.debug('Auto push form:', form)
     }
   }
