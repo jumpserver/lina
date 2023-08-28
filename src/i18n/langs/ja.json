@@ -115,7 +115,10 @@
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
-    "AddAccountResult": "账号批量添加结果"
+    "AddAccountResult": "账号批量添加结果",
+    "AutoPush": "自動プッシュ",
+    "GeneralAccounts": "一般アカウント",
+    "VirtualAccounts": "仮想アカウント"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
@@ -1201,7 +1204,8 @@
     "userGroupCount": "ユーザーグループ数",
     "usersAndUserGroups": "ユーザーまたはユーザーグループ",
     "Account": "アカウント",
-    "ManualAccount": "手动账号"
+    "ManualAccount": "手动账号",
+    "AnonymousAccount": "匿名アカウント"
   },
   "route": {
     "": "",
@@ -1416,7 +1420,23 @@
     "ConnectMethodAclList": "接続方式",
     "ConnectMethodAclDetail": "接続方式制御の詳細",
     "UserLoginAclDetail": "ユーザーログイン制御の詳細",
-    "ConnectMethodAclUpdate": "接続方式制御ルールの更新"
+    "ConnectMethodAclUpdate": "接続方式制御ルールの更新",
+    "HostCreate": "アセット作成 - ホスト",
+    "DatabaseCreate": "アセット作成 - データベース",
+    "DeviceCreate": "アセット作成 - ネットワークデバイス",
+    "CustomUpdate": "アセット更新 - カスタム",
+    "HostUpdate": "アセット更新 - ホスト",
+    "WebCreate": "アセット作成 - ウェブ",
+    "WebUpdate": "アセット更新 - ウェブ",
+    "CustomCreate": "アセット作成 - カスタム",
+    "VirtualAccountUpdate": "仮想アカウント更新",
+    "GPTUpdate": "アセット更新 - GPT",
+    "GPTCreate": "アセット作成 - GPT",
+    "VirtualAccountDetail": "仮想アカウント詳細",
+    "DeviceUpdate": "アセット更新 - ネットワークデバイス",
+    "CloudCreate": "アセット作成 - クラウドプラットフォーム",
+    "DatabaseUpdate": "アセット更新 - データベース",
+    "CloudUpdate": "アセット更新 - クラウドプラットフォーム"
   },
   "rbac": {
     "Permissions": "権限",
@@ -1755,7 +1775,9 @@
     "TestParam": "パラメーター",
     "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル",
-    "Applets": "リモート アプリケーション"
+    "Applets": "リモート アプリケーション",
+    "sync": "同期",
+    "AccountStorage": "アカウントストレージ"
   },
   "tickets": {
     "BatchApproval": "大量承認です",

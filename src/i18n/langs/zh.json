@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
     "Accounts": "账号",
