@@ -98,7 +98,9 @@ export default {
     handleDelete(index) {
       return () => {
         const item = this.tableConfig.totalData.splice(index, 1)
-        this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0]?.id}/`)
+        if (item[0]?.id) {
+          this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`)
+        }
         this.$message.success(this.$tc('common.deleteSuccessMsg'))
       }
     }
