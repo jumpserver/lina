@@ -85,7 +85,8 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
-          permissions: ['xpack.view_syncinstancetask']
+          permissions: ['xpack.view_syncinstancetask'],
+          activeMenu: activateMenu
         },
         children: [
           {
@@ -105,7 +106,8 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'),
-              permissions: ['xpack.add_syncinstancetask']
+              permissions: ['xpack.add_syncinstancetask'],
+              activeMenu: activateMenu
             }
           },
           {
@@ -115,7 +117,8 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'),
-              permissions: ['xpack.change_syncinstancetask']
+              permissions: ['xpack.change_syncinstancetask'],
+              activeMenu: activateMenu
             }
           },
           {
