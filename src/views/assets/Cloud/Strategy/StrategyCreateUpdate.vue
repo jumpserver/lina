@@ -44,5 +44,8 @@ export default {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+>>> .attr-input {
+  margin-top: -6px;
+}
 </style>

@@ -149,6 +149,7 @@ export default [
             component: () => import('@/views/assets/Cloud/'),
             meta: {
               title: i18n.t('xpack.Cloud.StrategyList'),
+              activeMenu: activateMenu,
               permissions: ['xpack.view_strategy']
             }
           },
@@ -160,6 +161,7 @@ export default [
             meta: {
               title: i18n.t('common.StrategyCreate'),
               action: 'create',
+              activeMenu: activateMenu,
               permissions: ['xpack.add_strategy']
             }
           },
@@ -170,6 +172,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('common.StrategyUpdate'),
+              activeMenu: activateMenu,
               permissions: ['xpack.change_strategy']
             }
           },
@@ -180,6 +183,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('common.StrategyDetail'),
+              activeMenu: activateMenu,
               permissions: ['xpack.view_strategy']
             }
           }

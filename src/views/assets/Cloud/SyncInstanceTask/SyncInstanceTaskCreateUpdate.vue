@@ -35,6 +35,7 @@ export default {
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
         account: {
+          label: this.$t('xpack.Cloud.Account'),
           on: {
             change: ([event], updateForm) => {
               vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event?.pk}`
@@ -45,7 +46,11 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/xpack/cloud/accounts/'
+              url: '/api/v1/xpack/cloud/accounts/',
+              transformOption: (item) => {
+                const label = `${item.name}(${item.provider.label})`
+                return { label: label, value: item.id }
+              }
             }
           }
         },

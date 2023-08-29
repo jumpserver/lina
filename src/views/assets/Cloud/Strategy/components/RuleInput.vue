@@ -2,6 +2,7 @@
   <AttrInput
     :form-config="formConfig"
     :table-config="tableConfig"
+    class="attr-input"
     @submit="onSubmit"
   />
 </template>
