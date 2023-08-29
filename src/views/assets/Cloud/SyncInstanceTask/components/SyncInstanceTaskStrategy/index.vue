@@ -4,12 +4,14 @@
     <DataTable :config="tableConfig" />
     <AttrDialog
       v-if="visible"
+      :table-config="tableConfig"
       :value="attrValue"
       :visible.sync="visible"
-      :table-config="tableConfig"
       @confirm="onAttrDialogConfirm"
     />
-    <el-button type="primary" size="mini" @click="handleCreate">{{ this.$t('common.New') }}</el-button>
+    <el-button size="mini" type="primary" @click="handleCreate">
+      {{ this.$t('common.New') }}
+    </el-button>
   </div>
 </template>
 
@@ -73,7 +75,10 @@ export default {
         ajax: {
           transformOption: (item) => {
             this.strategy[item.id] = {
-              name: item.name, priority: item.priority, strategy_rules: item.strategy_rules, strategy_actions: item.strategy_actions
+              name: item.name,
+              priority: item.priority,
+              strategy_rules: item.strategy_rules,
+              strategy_actions: item.strategy_actions
             }
             return { label: item.name, value: item.id }
           }
