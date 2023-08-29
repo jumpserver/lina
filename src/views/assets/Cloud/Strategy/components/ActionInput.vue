@@ -1,8 +1,9 @@
 <template>
   <AttrInput
+    :before-submit="beforeSubmit"
     :form-config="formConfig"
     :table-config="tableConfig"
-    :before-submit="beforeSubmit"
+    class="attr-input"
     @submit="onSubmit"
   />
 </template>
