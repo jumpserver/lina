@@ -1702,7 +1702,8 @@
       "securityPasswordSpecialChar": "After opening, the user password changes and resets must contain special characters",
       "securityPasswordUpperCase": "After opening, the user password changes and resets must contain uppercase letters",
       "securityServiceAccountRegistration": "Allow using bootstrap token register service account, when terminal setup, can disable it",
-      "SecurityInsecureCommand": "After it is enabled, when a dangerous command is executed on the asset, an email alarm notification will be sent"
+      "SecurityInsecureCommand": "After it is enabled, when a dangerous command is executed on the asset, an email alarm notification will be sent",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "Ensure this value is greater than or equal to 3",
