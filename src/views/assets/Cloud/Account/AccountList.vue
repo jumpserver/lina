@@ -1,10 +1,14 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, qcloud_lighthouse, azure, azure_international, ucloud, vmware, nutanix, qingcloud_private, huaweicloud_private, ctyun_private, openstack, gcp, baiducloud, jdcloud, kingsoftcloud, fc, lan } from '../const'
+import {
+  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
+  ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, qcloud,
+  qcloud_lighthouse, qingcloud_private, ucloud, vmware
+} from '../const'
 
 export default {
   name: 'AccountList',
@@ -21,6 +25,11 @@ export default {
           resource: 'account'
         },
         columnsExclude: ['attrs'],
+        columnsShow: {
+          default: [
+            'name', 'provider', 'comment', 'validity', 'actions'
+          ]
+        },
         columnsMeta: {
           name: {
             sortable: true,
