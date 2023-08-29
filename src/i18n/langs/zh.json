@@ -1687,7 +1687,8 @@
       "securityPasswordSpecialChar": "开启后，用户密码修改、重置必须包含特殊字符",
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当组件注册成功后可以禁止",
-      "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知"
+      "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
@@ -1748,7 +1749,7 @@
     "BasicTools": "基本工具",
     "DestinationIP": "目的地址",
     "SourceIP": "源地址",
-    "Interface": "接口",
+    "Interface": "网络接口",
     "TestMultiPort": "多个端口用,分隔",
     "SourcePort": "源端口",
     "DestinationPort": "目的端口",

@@ -1708,7 +1708,8 @@
       "securityPasswordSpecialChar": "オンにすると、ユーザーパスワードの変更、リセットに特殊文字が含まれている必要があります",
       "securityPasswordUpperCase": "オンにすると、ユーザーパスワードの変更、リセットに大文字を含める必要があります",
       "securityServiceAccountRegistration": "Bootstrap tokenを使用して端末を登録できるようにし、端末の登録が成功すると禁止できるようにします",
-      "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます"
+      "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "この値が3以上であることを確認してください",
