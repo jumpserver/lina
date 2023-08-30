@@ -1648,6 +1648,7 @@
     "LDAPUser": "LDAP User",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
+      "UserAttr": "If the user attribute contains `uid`, change it to `cas:user`",
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
       "ConnectionTokenList": "The connection token is a kind of authentication information that combines authentication and connection assets. It allows users to log in to assets with one click. Currently supported components include: KoKo, Lion, Magnus, Razor, etc.",
