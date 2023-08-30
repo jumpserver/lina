@@ -26,6 +26,9 @@ export default {
         case 'redis':
           tlsFields = tlsFields.concat(['client_cert', 'client_key'])
           break
+        case 'mysql':
+          tlsFields = tlsFields.concat(['client_cert', 'client_key', 'allow_invalid_cert'])
+          break
         case 'mongodb':
           tlsFields = tlsFields.concat(['client_key', 'allow_invalid_cert'])
           break
