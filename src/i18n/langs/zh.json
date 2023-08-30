@@ -1652,6 +1652,7 @@
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
     "helpText": {
+      "UserAttr": "用户属性中包含 `uid` 的需要更换为 `cas:user` ",
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用",
       "ConnectionTokenList": "连接令牌是将身份验证和连接资产结合起来使用的一种认证信息，支持用户一键登录到资产，目前支持的组件包括：KoKo、Lion、Magnus、Razor 等",

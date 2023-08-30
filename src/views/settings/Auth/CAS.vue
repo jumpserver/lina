@@ -32,6 +32,7 @@ export default {
           CAS_RENAME_ATTRIBUTES: {
             component: JsonEditor,
             label: this.$t('setting.authUserAttrMap'),
+            helpText: this.$t('setting.helpText.UserAttr'),
             rules: [JsonRequiredUserNameMapped]
           }
         },
