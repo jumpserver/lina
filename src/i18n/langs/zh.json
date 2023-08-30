@@ -614,6 +614,7 @@
     "Task": "任务",
     "UpdateAssetDetail": "配置更多信息",
     "AddSuccessMsg": "添加成功",
+    "UnlockSuccessMsg": "解锁成功",
     "AddFailMsg": "添加失败",
     "Auth": "认证",
     "bind": "绑定",
@@ -1523,6 +1524,10 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "BlockedIPS": "已锁定的 IP",
+    "ViewBlockedIPSHelpText": "查看已被锁定的 IP 列表",
+    "Unblock": "解锁",
+    "BulkUnblock": "批量解锁",
     "AppOps": "任务中心",
     "Ticket": "工单",
     "TaskList": "任务列表",
