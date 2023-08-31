@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import ListTable from '@/components/Table/ListTable'
 import { timeOffset } from '@/utils/common'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseList',
@@ -31,9 +31,8 @@ export default {
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol', 'login_from',
-            'command_amount', 'date_start', 'duration', 'terminal_display', 'actions',
-            'is_locked'
+            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
+            'command_amount', 'date_start', 'duration', 'actions'
           ]
         },
         columnsMeta: {
@@ -46,6 +45,19 @@ export default {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
               return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
+            }
+          },
+          user: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: {
+                    id: row['user_id']
+                  }
+                }
+              }
             }
           },
           can_join: {
@@ -80,7 +92,18 @@ export default {
             }
           },
           asset: {
-            label: this.$t('sessions.target')
+            label: this.$t('sessions.target'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute: ({ row }) => {
+                return {
+                  name: 'AssetDetail',
+                  params: {
+                    id: row['asset_id']
+                  }
+                }
+              }
+            }
           },
           command_amount: {
             width: '90px'
