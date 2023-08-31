@@ -596,6 +596,7 @@
     "TestSelectedSystemUsersConnective": "Test selected system users connective",
     "UpdateAssetDetail": "Update more detail",
     "AddSuccessMsg": "Add success",
+    "UnlockSuccessMsg": "Unlock success",
     "AddFailMsg": "Add fail",
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
@@ -1550,6 +1551,10 @@
     }
   },
   "setting": {
+    "BlockedIPS": "Blocked IPS",
+    "ViewBlockedIPSHelpText": "View the list of locked IPs",
+    "Unblock": "Unblock",
+    "BulkUnblock": "BulkUnblock",
     "AppOps": "Task center",
     "Ticket": "Ticket",
     "TaskList": "Task list",

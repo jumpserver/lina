@@ -79,7 +79,7 @@ export default {
         }
       },
       hasDetailInMsg: false,
-      successUrl: { name: 'Email' },
+      successUrl: { name: 'Msg' },
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {

@@ -14,6 +14,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import IBox from '@/components/IBox/index.vue'
+import { BlockedIPs } from '@/components'
 
 export default {
   name: 'EmailContent',
@@ -41,7 +42,8 @@ export default {
             'SECURITY_LOGIN_IP_LIMIT_COUNT',
             'SECURITY_LOGIN_IP_LIMIT_TIME',
             'SECURITY_LOGIN_IP_WHITE_LIST',
-            'SECURITY_LOGIN_IP_BLACK_LIST'
+            'SECURITY_LOGIN_IP_BLACK_LIST',
+            'SECURITY_VIEW_BLOCKED_IPS'
           ]
         ],
         [
@@ -54,7 +56,18 @@ export default {
         ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
-      fieldsMeta: {},
+      fieldsMeta: {
+        SECURITY_VIEW_BLOCKED_IPS: {
+          component: BlockedIPs,
+          label: this.$t('setting.BlockedIPS'),
+          el: {
+            method: 'push_account_method',
+            assets: this.asset_ids,
+            nodes: this.node_ids
+          },
+          helpText: this.$t('setting.ViewBlockedIPSHelpText')
+        }
+      },
       cleanFormValue(value) {
         const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
         const ipWhiltList = value.SECURITY_LOGIN_IP_WHITE_LIST

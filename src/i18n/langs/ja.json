@@ -585,6 +585,7 @@
     "TemplateHelpText": "テンプレートを選択してアカウントを追加すると、資産の下では発生しないアカウントが自動的に作成され、プッシュされます",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
+    "UnlockSuccessMsg": "ロック解除成功メッセージ",
     "AddFailMsg": "追加に失敗しました",
     "Auth": "認証",
     "bind": "紐付け",
@@ -1545,6 +1546,10 @@
     }
   },
   "setting": {
+    "BlockedIPS": "ロックされたIP",
+    "ViewBlockedIPSHelpText": "ロックされたIPリストの表示",
+    "Unblock": "ロック解除",
+    "BulkUnblock": "一括ロック解除",
     "AppOps": "タスクセンター",
     "Ticket": "チケット",
     "TaskList": "タスクリスト",
