@@ -382,6 +382,8 @@
     "AccountEnabled": "启用切换账号",
     "AutoEnabled": "启用自动化",
     "SupportedProtocol": "支持的协议",
+    "SupportedProtocolHelpText": "设置资产支持的协议，点击设置按钮可以为协议修改自定义配置，如 SFTP 目录，RDP AD 域等",
+    "AssetProtocolHelpText": "资产支持的协议受平台限制，点击设置按钮可以查看协议的设置。 如果需要更新，请更新平台",
     "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
     "Protocol": "协议",
     "Protocols": "协议",

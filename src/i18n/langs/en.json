@@ -376,6 +376,8 @@
     "AccountEnabled": "Enable account switching",
     "AutoEnabled": "Enable Automation",
     "SupportedProtocol": "Supported protocol",
+    "SupportedProtocolHelpText": "Set the protocol supported by the asset. Click the Settings button to modify the custom configuration for the protocol, such as the SFTP directory, RDP AD domain, etc.",
+    "AssetProtocolHelpText": "Asset support protocol is limited by platform, click the Settings button to view the protocol settings. If you need to update, please update the platform",
     "PriorityHelpMessage": "1-100, High level will be using login asset as default, if user was granted more than 2 system user",
     "Protocol": "Protocol",
     "Protocols": "Protocols",
