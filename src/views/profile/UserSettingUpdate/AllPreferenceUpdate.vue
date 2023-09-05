@@ -1,0 +1,82 @@
+<template>
+  <IBox>
+    <GenericCreateUpdateForm
+      v-if="!loading"
+      :fields="fields"
+      :fields-meta="fieldsMeta"
+      :initial="object"
+      :submit-method="submitMethod"
+      :url="url"
+      class="password-update"
+    />
+  </IBox>
+</template>
+
+<script>
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { IBox } from '@/components'
+
+export default {
+  name: 'AllPreferenceUpdate',
+  components: {
+    GenericCreateUpdateForm,
+    IBox
+  },
+  props: {
+    object: {
+      type: Object,
+      default: null
+    },
+    category: {
+      type: String,
+      default: 'luna'
+    }
+  },
+  data() {
+    return {
+      fields: [],
+      fieldsMeta: {},
+      loading: true,
+      url: `/api/v1/users/preference/?category=${this.category}`
+    }
+  },
+  async mounted() {
+    try {
+      this.loading = true
+      await this.getUrlMeta()
+      await this.setFormConfig()
+    } finally {
+      this.loading = false
+    }
+  },
+  methods: {
+    async getUrlMeta() {
+      const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
+      this.remoteMeta = data.actions['PATCH'] || {}
+    },
+    async setFormConfig() {
+      const fields = []
+      const fieldsMeta = {}
+      for (const k in this.remoteMeta) {
+        if (this.remoteMeta.hasOwnProperty(k)) {
+          fields.push([this.remoteMeta[k].label, [k]])
+          fieldsMeta[k] = { 'fields': Object.keys(this.remoteMeta[k].children) }
+        }
+      }
+
+      this.fields = fields
+      this.fieldsMeta = fieldsMeta
+    },
+    submitMethod() {
+      return 'patch'
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.password-update > > > .el-input {
+  width: 600px;
+  max-width: 600px;
+}
+</style>

@@ -1887,6 +1887,8 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "LunaSettingUpdate": "Luna setting",
+    "UserSetting": "User setting",
     "AllMembers": "All members",
     "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
     "SetStatus": "Set status",

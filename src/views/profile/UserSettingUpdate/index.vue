@@ -8,29 +8,27 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ProfileInfo from '../ProfileInfo'
-import ProfileUpdate from './ProfileUpdate'
-import PasswordUpdate from './PasswordUpdate'
-import SSHUpdate from './SSHUpdate'
-
+import LunaUpdate from './LunaUpdate'
+import KokoUpdate from './KokoUpdate'
+import LinaUpdate from './LinaUpdate'
 export default {
   components: {
     GenericDetailPage,
-    ProfileInfo,
-    ProfileUpdate,
-    PasswordUpdate,
-    SSHUpdate
+    LunaUpdate,
+    KokoUpdate,
+    LinaUpdate
   },
   data() {
     return {
       user: this.$store.state.users.profile,
       config: {
-        title: this.$t('users.ProfileSetting'),
-        activeMenu: 'ProfileUpdate',
+        title: this.$t('common.Basic'),
+        activeMenu: 'LinaUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,
+        hasActivity: false,
         actions: {
-          detailApiUrl: '/api/v1/users/profile/'
+          detailApiUrl: '/api/v1/users/preference/?category=luna'
         }
       }
     }
@@ -39,18 +37,16 @@ export default {
     getSubmenu() {
       return [
         {
-          title: this.$t('users.ProfileSetting'),
-          name: 'ProfileUpdate'
+          title: this.$t('common.Basic'),
+          name: 'LinaUpdate'
         },
         {
-          title: this.$t('users.LoginPasswordSetting'),
-          name: 'PasswordUpdate',
-          disabled: this.$store.state.users.profile.source.value !== 'local'
+          title: this.$t('users.LunaSettingUpdate'),
+          name: 'LunaUpdate'
         },
         {
-          title: this.$t('users.SSHKeySetting'),
-          name: 'SSHUpdate',
-          disabled: !this.$store.state.users.profile.can_public_key_auth
+          title: this.$t('users.KokoSettingUpdate'),
+          name: 'KokoUpdate'
         }
       ]
     },
