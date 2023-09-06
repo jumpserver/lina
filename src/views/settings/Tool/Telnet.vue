@@ -14,7 +14,6 @@ export default {
   data() {
     return {
       taskType: 'telnet',
-      hasStop: true,
       fields: [
         {
           name: 'dest_ips',
@@ -34,7 +33,7 @@ export default {
         }
       ],
       rules: {
-        dest_ip: rules.Required,
+        dest_ips: rules.Required,
         dest_port: rules.Required
       }
     }

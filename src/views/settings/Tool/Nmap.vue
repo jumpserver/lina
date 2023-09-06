@@ -34,7 +34,7 @@ export default {
         }
       ],
       rules: {
-        dest_ip: rules.Required
+        dest_ips: rules.Required
       }
     }
   },

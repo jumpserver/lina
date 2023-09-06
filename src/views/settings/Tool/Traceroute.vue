@@ -7,13 +7,13 @@ import rules from '@/components/Form/DataForm/rules'
 import Base from './Base'
 
 export default {
-  name: 'Ping',
+  name: 'Traceroute',
   components: {
     Base
   },
   data() {
     return {
-      taskType: 'ping',
+      taskType: 'traceroute',
       fields: [{
         name: 'dest_ips',
         label: this.$t('setting.DestinationIP'),
