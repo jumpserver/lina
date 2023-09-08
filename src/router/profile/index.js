@@ -75,6 +75,16 @@ export default {
         icon: 'token',
         permissions: ['authentication.view_connectiontoken']
       }
+    },
+    {
+      path: '/profile/passkeys',
+      component: () => import('@/views/profile/PassKey.vue'),
+      name: 'Passkey',
+      meta: {
+        title: i18n.t('common.nav.PassKey'),
+        icon: 'token',
+        permissions: ['authentication.view_connectiontoken']
+      }
     }
   ]
 }
