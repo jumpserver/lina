@@ -82,7 +82,7 @@ export default {
       name: 'Passkey',
       meta: {
         title: i18n.t('common.nav.PassKey'),
-        icon: 'token',
+        icon: 'passkey',
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
         permissions: ['authentication.view_connectiontoken']
       }
