@@ -20,6 +20,7 @@ import WeCom from './WeCom'
 import SSO from './SSO'
 import SAML2 from './SAML2'
 import OAuth2 from './OAuth2'
+import Passkey from './Passkey.vue'
 
 export default {
   components: {
@@ -35,7 +36,8 @@ export default {
     Radius,
     SSO,
     SAML2,
-    OAuth2
+    OAuth2,
+    Passkey
   },
   data() {
     let extraBackends = []
@@ -95,6 +97,11 @@ export default {
           title: this.$t('setting.CAS'),
           name: 'CAS',
           key: 'AUTH_CAS'
+        },
+        {
+          title: this.$t('setting.Passkey'),
+          name: 'Passkey',
+          key: 'AUTH_PASSKEY'
         },
         ...extraBackends
       ]
