@@ -1880,6 +1880,7 @@
   },
   "users": {
     "LunaSettingUpdate": "Luna 設定更新",
+    "KokoSettingUpdate": "Koko 設定更新",
     "UserSetting": "個人設定",
     "AllMembers": "すべてのメンバー",
     "UnbindHelpText": "ローカルユーザはソースユーザを認証します",
