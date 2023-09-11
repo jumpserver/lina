@@ -17,7 +17,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DateFormatter, ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'
 
@@ -52,17 +51,9 @@ export default {
         url: ajaxUrl,
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'enabled', 'date_created', 'actions']
+          default: ['name', 'is_active', 'date_last_used', 'date_created', 'actions']
         },
         columnsMeta: {
-          secret: {
-            label: 'Secret Key',
-            formatter: ShowKeyCopyFormatter
-          },
-          date_created: {
-            label: this.$t('common.DateCreated'),
-            formatter: DateFormatter
-          },
           actions: {
             formatterArgs: {
               hasUpdate: false,

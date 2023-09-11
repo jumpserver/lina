@@ -466,7 +466,7 @@
     "AfterChange": "变更后"
   },
   "auth": {
-    "AddPassKey": "添加 同行密钥(Passkey)",
+    "AddPassKey": "添加 Passkey(通行密钥)",
     "LoginRequiredMsg": "账号已退出，请重新登录",
     "ReLogin": "重新登录",
     "ReLoginTitle": "当前三方登录用户（CAS/SAML），未绑定 MFA 且不支持密码校验，请重新登录。",
@@ -779,7 +779,7 @@
     "nav": {
       "TempPassword": "临时密码",
       "ConnectionToken": "连接令牌",
-      "PassKey": "通行密钥",
+      "PassKey": "Passkey",
       "APIKey": "API Key",
       "Workbench": "工作台",
       "Navigation": "导航",
@@ -1528,6 +1528,7 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "Passkey": "Passkey",
     "BlockedIPS": "已锁定的 IP",
     "ViewBlockedIPSHelpText": "查看已被锁定的 IP 列表",
     "Unblock": "解锁",
