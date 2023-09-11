@@ -1888,6 +1888,7 @@
   },
   "users": {
     "LunaSettingUpdate": "Luna setting",
+    "KokoSettingUpdate": "Koko setting",
     "UserSetting": "User setting",
     "AllMembers": "All members",
     "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
