@@ -75,6 +75,16 @@ export default {
         icon: 'token',
         permissions: ['authentication.view_connectiontoken']
       }
+    },
+    {
+      path: '/profile/user/setting',
+      name: 'UserSetting',
+      component: () => import('@/views/profile/UserSettingUpdate/index'),
+      meta: {
+        title: i18n.t('users.UserSetting'),
+        icon: 'setting',
+        permissions: []
+      }
     }
   ]
 }

@@ -1879,6 +1879,8 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "LunaSettingUpdate": "Luna 設定更新",
+    "UserSetting": "個人設定",
     "AllMembers": "すべてのメンバー",
     "UnbindHelpText": "ローカルユーザはソースユーザを認証します",
     "SetStatus": "ステータスの設定",
