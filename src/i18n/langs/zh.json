@@ -271,7 +271,6 @@
     "UpdateAccount": "更新账号",
     "Account": "账号",
     "Defaults": "默认值",
-
     "Privileged": "特权账号",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
@@ -1859,6 +1858,9 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "LunaSettingUpdate": "Luna 配置设置",
+    "KokoSettingUpdate": "Koko 配置设置",
+    "UserSetting": "个人设置",
     "AllMembers": "全部成员",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",

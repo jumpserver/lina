@@ -5,7 +5,7 @@
         <div v-if="Array.isArray(field)">
           <el-form-item label-width="8%">
             <el-col v-for="item in field" :key="item.name" :span="getSpan(field)">
-              <el-form-item :label="item.label" :prop="item.name">
+              <el-form-item :label="item.label" :prop="item.name" label-width="80px">
                 <template #label>
                   {{ item.label }}
                   <el-tooltip v-if="item.tip" :content="item.tip" placement="top">
@@ -83,7 +83,7 @@ export default {
   props: {
     hasStop: {
       type: Boolean,
-      default: () => { return false }
+      default: () => { return true }
     },
     taskType: {
       type: String,

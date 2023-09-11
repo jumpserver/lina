@@ -17,6 +17,7 @@ import Ping from './Ping'
 import Telnet from './Telnet'
 import Nmap from './Nmap'
 import Tcpdump from './Tcpdump'
+import Traceroute from './Traceroute'
 
 export default {
   components: {
@@ -24,7 +25,8 @@ export default {
     Ping,
     Telnet,
     Nmap,
-    Tcpdump
+    Tcpdump,
+    Traceroute
   },
   data() {
     return {
@@ -48,6 +50,10 @@ export default {
         {
           title: 'Tcpdump',
           name: 'Tcpdump'
+        },
+        {
+          title: 'Traceroute',
+          name: 'traceroute'
         }
       ]
     }

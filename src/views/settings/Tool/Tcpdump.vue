@@ -13,7 +13,6 @@ export default {
   },
   data() {
     return {
-      hasStop: true,
       taskType: 'tcpdump',
       fields: [
         {

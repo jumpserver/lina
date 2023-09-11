@@ -86,6 +86,16 @@ export default {
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
         permissions: ['authentication.view_connectiontoken']
       }
+    },
+    {
+      path: '/profile/user/setting',
+      name: 'UserSetting',
+      component: () => import('@/views/profile/UserSettingUpdate/index'),
+      meta: {
+        title: i18n.t('users.UserSetting'),
+        icon: 'setting',
+        permissions: []
+      }
     }
   ]
 }
