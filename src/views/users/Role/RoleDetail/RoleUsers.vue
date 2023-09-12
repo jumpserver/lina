@@ -66,6 +66,12 @@ export default {
           min: ['user_display', 'actions']
         },
         columnsMeta: {
+          user_display: {
+            label: this.$t('users.Name'),
+            formatter: (row) => {
+              return row.user.name
+            }
+          },
           actions: {
             formatterArgs: {
               hasUpdate: false,
