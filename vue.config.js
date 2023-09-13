@@ -60,6 +60,11 @@ module.exports = {
         changeOrigin: true,
         ws: true
       },
+      '/chen/': {
+        target: 'http://127.0.0.1:9523',
+        changeOrigin: true,
+        ws: true
+      },
       '/guacamole/': {
         target: 'http://127.0.0.1:8081',
         changeOrigin: true,
