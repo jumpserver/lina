@@ -1277,6 +1277,8 @@
     "CommandStorageUpdate": "コマンドストアの更新",
     "Commands": "コマンド記録",
     "FileTransfer": "ファイル転送",
+    "OnlineSession": "オンラインセッション",
+    "OnlineUserDevices": "オンラインデバイス",
     "CreateCommandStorage": "コマンドストアの作成",
     "CreateReplayStorage": "録画ストレージの作成",
     "Dashboard": "ダッシュボード",
@@ -1446,6 +1448,10 @@
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Offline": "オフライン",
+    "OnlineSessionHelpMsg": "セッションが現在のユーザーのオンラインセッションであるため、現在のセッションをオフラインできません。現在はWebログイン済みのユーザーのみが記録されています。",
+    "OfflineSuccessMsg": "オフラインに成功しました",
+    "BulkOffline": "オフライン",
     "Marketplace": "マーケットプレイス",
     "Author": "作者",
     "Uploading": "ファイルのアップロード",

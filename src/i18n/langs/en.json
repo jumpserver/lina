@@ -925,6 +925,7 @@
     "CurrentConnections": "Current connections",
     "TodayFailedConnections": "Connections failed today",
     "OnlineSessions": "Online sessions",
+    "OnlineUserDevices": "Online user devices",
     "RealTimeData": "Real-time data",
     "UserAssetActivity": "User/Asset activity",
     "UserData": "User data",
@@ -1271,6 +1272,7 @@
     "CommandStorageUpdate": "Command storage update",
     "Commands": "Commands",
     "FileTransfer": "File transfer",
+    "OnlineSession": "Online session",
     "CreateCommandStorage": "Create command storage",
     "CreateReplayStorage": "Create replay storage",
     "Dashboard": "Dashboard",
@@ -1451,6 +1453,10 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "OnlineSessionHelpMsg": "The current session cannot be offline because it is an online session of the current user. Currently, only users who have logged in through web mode are recorded.",
+    "Offline": "Offline",
+    "OfflineSuccessMsg": "Offline success",
+    "BulkOffline": "Bulk offline",
     "Marketplace": "Marketplace",
     "Author": "Author",
     "Uploading": "File uploading",

@@ -1290,6 +1290,8 @@
     "CommandStorageUpdate": "更新命令存储",
     "Commands": "命令记录",
     "FileTransfer": "文件传输",
+    "OnlineSession": "在线用户",
+    "OnlineUserDevices": "在线用户设备",
     "CreateCommandStorage": "创建命令存储",
     "CreateReplayStorage": "创建录像存储",
     "Dashboard": "仪表盘",
@@ -1421,6 +1423,10 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "OnlineSessionHelpMsg": "无法下线当前会话，因为该会话是当前用户的在线会话。当前只记录以 Web 方式登录的用户。",
+    "Offline": "下线",
+    "OfflineSuccessMsg": "下线成功",
+    "BulkOffline": "批量下线",
     "Marketplace": "应用市场",
     "Author": "作者",
     "BasePort": "监听端口",
