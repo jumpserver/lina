@@ -27,7 +27,7 @@ export default {
         {
           title: this.$t('setting.SMS'),
           name: 'SMS',
-          hidden: !this.$hasPerm('settings.change_sms')
+          hidden: !this.$hasPerm('settings.change_sms') || !this.$store.getters.hasValidLicense
         },
         {
           title: this.$t('setting.MsgSubscribe'),
