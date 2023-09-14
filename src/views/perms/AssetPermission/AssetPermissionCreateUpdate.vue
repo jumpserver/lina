@@ -33,7 +33,7 @@ export default {
       initial: {
         is_active: true,
         date_start: new Date().toISOString(),
-        date_expired: getDayFuture(36500, new Date()).toISOString(),
+        date_expired: getDayFuture(25550, new Date()).toISOString(),
         nodes: nodesInitial,
         assets: assetsInitial,
         accounts: [AllAccount]
