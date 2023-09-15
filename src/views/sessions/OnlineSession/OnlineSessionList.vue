@@ -29,12 +29,12 @@ export default {
         columnsShow: {
           min: ['user_display', 'actions'],
           default: [
-            'user_display', 'ip', 'city',
+            'user_display', 'backend_display', 'ip', 'city',
             'user_agent', 'date_created', 'actions'
           ]
         },
         columns: [
-          'user_display', 'backend_display', 'ip', 'city',
+          'user_display', 'backend_display', 'ip', 'city', 'type',
           'user_agent', 'date_created', 'date_expired', 'actions'
         ],
         columnsMeta: {
