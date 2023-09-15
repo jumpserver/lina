@@ -38,7 +38,7 @@ export default {
       meta: {
         icon: 'users',
         title: i18n.t('route.OnlineSession'),
-        permissions: ['users.view_usersession']
+        permissions: ['audits.view_usersession']
       }
     },
     {
