@@ -21,10 +21,10 @@ export default {
       helpMsg: this.$t('terminal.OnlineSessionHelpMsg'),
       tableConfig: {
         permissions: {
-          app: 'users',
+          app: 'audits',
           resource: 'usersession'
         },
-        url: '/api/v1/users/user-sessions/',
+        url: '/api/v1/audits/user-sessions/',
         columnsExclude: ['backend', 'user', 'is_current_user_session', 'type'],
         columnsShow: {
           min: ['user_display', 'actions'],
@@ -62,12 +62,12 @@ export default {
                   name: 'OfflineSession',
                   title: this.$t('terminal.Offline'),
                   can: ({ row }) => {
-                    return vm.$hasPerm('users.offline_usersession') && !row.is_current_user_session
+                    return vm.$hasPerm('audits.offline_usersession') && !row.is_current_user_session
                   },
                   type: 'danger',
                   callback: ({ row }) => {
                     this.$axios.post(
-                      '/api/v1/users/user-sessions/offline/',
+                      '/api/v1/audits/user-sessions/offline/',
                       { ids: [row.id] }
                     ).then(() => {
                       vm.$message.success(this.$tc('terminal.OfflineSuccessMsg'))
@@ -94,11 +94,11 @@ export default {
             type: 'danger',
             fa: 'clean',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('users.offline_usersession')
+              return selectedRows.length > 0 && vm.$hasPerm('audits.offline_usersession')
             },
             callback: function({ selectedRows }) {
               vm.$axios.post(
-                '/api/v1/users/user-sessions/offline/',
+                '/api/v1/audits/user-sessions/offline/',
                 {
                   ids: selectedRows.map(v => {
                     return v.id
