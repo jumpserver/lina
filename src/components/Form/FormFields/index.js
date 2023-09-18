@@ -18,6 +18,7 @@ import BoolTextReadonly from './BoolTextReadonly.vue'
 import NestedObjectSelect2 from './NestedObjectSelect2.vue'
 import DatetimeRangePicker from './DatetimeRangePicker.vue'
 import JSONManyToManySelect from './JSONManyToManySelect/index.vue'
+import PasswordRule from './PasswordRule.vue'
 
 export default {
   Link,
@@ -34,6 +35,7 @@ export default {
   DynamicInput,
   PasswordInput,
   UploadSecret,
+  PasswordRule,
   TextReadonly,
   WeekCronSelect,
   BoolTextReadonly,
@@ -57,6 +59,7 @@ export {
   DynamicInput,
   PasswordInput,
   UploadSecret,
+  PasswordRule,
   TextReadonly,
   WeekCronSelect,
   BoolTextReadonly,

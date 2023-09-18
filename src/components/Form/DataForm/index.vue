@@ -136,8 +136,8 @@ export default {
       })
     },
     // 重置表单
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    resetForm() {
+      this.$refs['form'].resetFields()
     },
     handleClick(button) {
       const callback = button.callback || function(values, form) {
@@ -148,6 +148,7 @@ export default {
       callback(values, form, button)
     },
     getFormValue() {
+      return this.$refs.form.getFormValue()
     }
   }
 }

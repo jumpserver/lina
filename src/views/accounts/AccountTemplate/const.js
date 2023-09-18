@@ -1,14 +1,15 @@
 import { getUuidUpdateFromUrl } from '@/utils/common'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { PasswordRule, UpdateToken } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
+import i18n from '@/i18n/i18n'
 
 export const templateFields = (vm) => {
   return [
     [vm.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
     [vm.$t('assets.Secret'), [
-      'secret_type', 'secret_strategy', 'secret', 'ssh_key', 'token',
-      'access_key', 'passphrase', 'api_key'
+      'secret_type', 'secret_strategy', 'password_rules',
+      'secret', 'ssh_key', 'token', 'access_key', 'passphrase', 'api_key'
     ]],
     [vm.$t('accounts.AutoPush'), [
       'auto_push', 'platforms', 'push_params'
@@ -92,6 +93,11 @@ export const templateFieldsMeta = (vm) => {
         rows: 4
       },
       hidden: (formValue) => formValue.secret_type !== 'api_key' || formValue.secret_strategy === 'random'
+    },
+    password_rules: {
+      component: PasswordRule,
+      label: i18n.t('accounts.AccountChangeSecret.PasswordRule'),
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     platforms: {
       el: {

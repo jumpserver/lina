@@ -1,47 +1,12 @@
 import i18n from '@/i18n/i18n'
 import { CronTab } from '@/components'
-import { TagInput, UpdateToken } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
+import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormFields'
 
-var validatorInterval = (rule, value, callback) => {
+const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
     return callback(new Error(i18n.t('accounts.AccountChangeSecret.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
-}
-
-function getAssetPasswordRulesItems() {
-  return [
-    {
-      id: 'length',
-      prop: 'length',
-      label: i18n.t('accounts.AccountChangeSecret.PasswordLength'),
-      rules: [Required],
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
-    }
-  ]
-}
-
-function generatePasswordRulesItemsFields(obType) {
-  const itemsFields = []
-  let items
-  if (obType === 'asset') {
-    items = getAssetPasswordRulesItems()
-  }
-  items.forEach((item, index, array) => {
-    itemsFields.push({
-      id: item.id,
-      prop: item.prop,
-      el: {},
-      attrs: {},
-      type: 'input',
-      label: item.label,
-      rules: item.rules,
-      helpText: item.helpText,
-      hidden: item.hidden
-    })
-  })
-  return itemsFields
 }
 
 export const getChangeSecretFields = () => {
@@ -84,8 +49,9 @@ export const getChangeSecretFields = () => {
       }
     },
     password_rules: {
-      type: 'group',
-      items: generatePasswordRulesItemsFields('asset')
+      component: PasswordRule,
+      label: i18n.t('accounts.AccountChangeSecret.PasswordRule'),
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     recipients: {
       label: i18n.t('accounts.AccountChangeSecret.Addressee'),

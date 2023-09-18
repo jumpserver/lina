@@ -87,7 +87,8 @@
       "SystemUserAmount": "SystemUser amount",
       "AssetChangeSecretUpdate": "Update account change secret",
       "Success": "Success",
-      "AddSystemUser": "Add system user"
+      "AddSystemUser": "Add system user",
+      "PasswordRule": "PasswordRule"
     },
     "AccountPush": {
       "WindowsPushHelpText": "Windows assets do not support pushing keys",
@@ -490,7 +491,8 @@
     "ReLogin": "Re-Login",
     "ReLoginTitle": "The current three-party login user (cas/saml) is not bound to MFA and does not support password verification. Please login again",
     "NeedReLogin": "Need Re-Login",
-    "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
+    "ReLoginErr": "Login time has exceeded 5 minutes, please login again",
+    "AddPassKey": "AddPassKey"
   },
   "common": {
     "Enterprise": "Enterprise",
@@ -761,7 +763,8 @@
       "Download": "Download",
       "UserPage": "User page",
       "View": "View",
-      "EnterpriseEdition": "Enterprise edition"
+      "EnterpriseEdition": "Enterprise edition",
+      "PassKey": "Passkey"
     },
     "passwordOrPassphrase": "Password or Passphrase",
     "removeErrorMsg": "Remove failed: ",
@@ -896,7 +899,13 @@
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
     "BelongTo": "Belong to",
-    "GreatEqualThan": "Greater than or equal to"
+    "GreatEqualThan": "Greater than or equal to",
+    "PasswordRule": "PasswordRule",
+    "Uppercase": "Uppercase",
+    "Length": "Length",
+    "Digit": "Digit",
+    "Lowercase": "Lowercase",
+    "SpecialSymbol": "SpecialSymbol"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1446,7 +1455,8 @@
     "DeviceUpdate": "Update Asset - Network Device",
     "CloudCreate": "Create Asset - Cloud Platform",
     "DatabaseUpdate": "Update Asset - Database",
-    "CloudUpdate": "Update Asset - Cloud Platform"
+    "CloudUpdate": "Update Asset - Cloud Platform",
+    "OnlineUserDevices": "OnlineUserDevices"
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -1798,7 +1808,8 @@
     "SystemTools": "Tools",
     "BasicTools": "Basic tool",
     "sync": "Sync",
-    "AccountStorage": "Account Storage"
+    "AccountStorage": "Account Storage",
+    "Passkey": "Passkey"
   },
   "tickets": {
     "BatchApproval": "Batch approval",
@@ -2199,7 +2210,8 @@
       "QcloudLighthouse": "Tencent Cloud (lightweight application server)",
       "KingSoftCloud": "KingSoft Cloud",
       "CTYunPrivate": "CTYun Private",
-      "LAN": "LAN"
+      "LAN": "LAN",
+      "AccountHelpText": "A cloud account is used to connect to a cloud service provider and access the provider's resource information."
     },
     "Corporation": "Corporation",
     "Edition": "Edition",

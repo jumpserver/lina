@@ -87,7 +87,8 @@
       "SystemUserAmount": "システムユーザー数",
       "AssetChangeSecretUpdate": "アカウントの更新とパスワードの変更",
       "Success": "成功",
-      "AddSystemUser": "システムユーザーを追加"
+      "AddSystemUser": "システムユーザーを追加",
+      "PasswordRule": "パスワードのルール"
     },
     "AccountPush": {
       "WindowsPushHelpText": "windows アセットはプッシュキーをサポートしていません",
@@ -490,7 +491,8 @@
     "ReLogin": "再ログイン",
     "ReLoginTitle": "現在、サードパーティのログインユーザー（CAS/SAML）は、MFAをバインドしておらず、パスワードチェックをサポートしていません。再ログインしてください。",
     "NeedReLogin": "再ログインが必要です",
-    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
+    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください",
+    "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
     "Enterprise": "企業版",
@@ -764,7 +766,8 @@
       "Download": "ダウンロード",
       "UserPage": "ユーザービュー",
       "View": "ビュー",
-      "EnterpriseEdition": "企業版"
+      "EnterpriseEdition": "企業版",
+      "PassKey": "パスキー"
     },
     "passwordOrPassphrase": "パスワードまたはキーパスワード",
     "removeErrorMsg": "削除に失敗しました:",
@@ -895,7 +898,13 @@
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
     "BelongTo": "所属する",
-    "GreatEqualThan": "以上または等しい"
+    "GreatEqualThan": "以上または等しい",
+    "PasswordRule": "パスワードのルール",
+    "Uppercase": "大文字",
+    "Length": "長さ",
+    "Digit": "数字",
+    "Lowercase": "小文字",
+    "SpecialSymbol": "特殊記号"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -1791,7 +1800,8 @@
     "SMSProvider": "メールサービス業者 / プロトコル",
     "Applets": "リモート アプリケーション",
     "sync": "同期",
-    "AccountStorage": "アカウントストレージ"
+    "AccountStorage": "アカウントストレージ",
+    "Passkey": "パスキー"
   },
   "tickets": {
     "BatchApproval": "大量承認です",
@@ -2192,7 +2202,8 @@
       "DateSync": "同期日",
       "Status": "ステータス",
       "Log": "ログ",
-      "DeleteReleasedAssets": "リリース済アセットの削除"
+      "DeleteReleasedAssets": "リリース済アセットの削除",
+      "AccountHelpText": "クラウドアカウントはクラウドサービスプロバイダーに接続し、プロバイダーのリソース情報にアクセスするためのアカウントです"
     },
     "Template": {
       "Template": "テンプレート管理"
