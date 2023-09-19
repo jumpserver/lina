@@ -13,7 +13,7 @@
             <span class="detail-item-name">{{ item }}</span>
           </div>
         </div>
-        <span slot="reference">{{ cellValue && cellValue.length }}</span>
+        <span slot="reference">{{ items && items.length }}</span>
       </el-popover>
     </template>
   </DetailFormatter>
@@ -53,7 +53,9 @@ export default {
     },
     items() {
       const getItem = this.formatterArgs.getItem || (item => item.name)
-      return this.cellValue?.map(item => getItem(item))
+      let data = this.cellValue?.map(item => getItem(item)) || []
+      data = data.filter(Boolean)
+      return data
     },
     showItems() {
       return this.formatterArgs.showItems !== false && this.cellValue?.length > 0
