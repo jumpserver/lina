@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly'
 
 export default {
   name: 'AllPreferenceUpdate',
@@ -64,6 +65,19 @@ export default {
         }
       }
 
+      if (this.category === 'lina') {
+        fieldsMeta.basic.fieldsMeta = {
+          has_secret_key: {
+            label: this.$t('users.SetStatus'),
+            component: BoolTextReadonly,
+            el: {
+              trueText: this.$t('users.Set'),
+              falseText: this.$t('users.NotSet')
+            },
+            disabled: true
+          }
+        }
+      }
       this.fields = fields
       this.fieldsMeta = fieldsMeta
     },
