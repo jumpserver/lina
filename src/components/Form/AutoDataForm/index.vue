@@ -67,6 +67,9 @@ export default {
     }
   },
   computed: {
+    dataForm() {
+      return this.$refs.dataForm
+    },
     iForm() {
       const iForm = {}
       Object.entries(this.form).forEach(([key, value]) => {
