@@ -1563,7 +1563,7 @@
     "PauseTaskSendSuccessMsg": "Pause task has been send, Please check later",
     "ResumeTaskSendSuccessMsg": "Resume task has been send, Please check later",
     "helpText": {
-      "esUrl": "eg: http://es_user:es_password@es_host:es_port",
+      "esUrl": "Cannot contain special characters `#`; eg: http://es_user:es_password@es_host:es_port",
       "esIndex": "Es provides the default index: jumpserver. If you choose to build an index by date, this blank is the index prefix",
       "esDocType": "Es provides the default document type: command"
     }
