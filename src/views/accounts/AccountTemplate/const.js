@@ -21,7 +21,8 @@ export const templateFields = (vm) => {
 export const templateFieldsMeta = (vm) => {
   const id = getUuidUpdateFromUrl(vm.$route.path)
   const platformIds = []
-  const canRandomSecretTypes = ['password']
+  const canRandomSecretTypes = ['password', 'ssh_key']
+  const autoPushEl = { disabled: false }
   return {
     su_from: {
       component: Select2,
@@ -41,6 +42,10 @@ export const templateFieldsMeta = (vm) => {
         change: ([event], updateForm) => {
           if (!canRandomSecretTypes.includes(event)) {
             updateForm({ secret_strategy: 'specific' })
+            updateForm({ auto_push: false })
+            autoPushEl.disabled = true
+          } else {
+            autoPushEl.disabled = false
           }
         }
       }
@@ -113,13 +118,14 @@ export const templateFieldsMeta = (vm) => {
         change: ([event], updateForm) => {
           platformIds.splice(0, platformIds.length)
           platformIds.push(...event)
-          console.log('On platfrom change: ', platformIds)
-          console.log(vm.fieldsMeta)
         }
       },
       hidden: (formValue) => {
         return !formValue['auto_push']
       }
+    },
+    auto_push: {
+      el: autoPushEl
     },
     push_params: {
       component: AutomationParams,
