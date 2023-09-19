@@ -128,7 +128,9 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               getItem(item) {
-                return AccountLabelMapper[item] || item
+                if (item !== '@SPEC') {
+                  return AccountLabelMapper[item] || item
+                }
               },
               routeQuery: {
                 activeTab: 'AssetPermissionAccount'
