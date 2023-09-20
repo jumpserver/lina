@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import { AutoDataForm, Dialog } from '@/components'
+import Dialog from '../../Dialog'
+import AutoDataForm from '../../Form/AutoDataForm'
 
 export default {
   componentName: 'AutomationParams',
