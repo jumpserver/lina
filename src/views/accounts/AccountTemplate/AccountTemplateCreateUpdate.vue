@@ -27,13 +27,6 @@ export default {
       fieldsMeta: {
         ...templateFieldsMeta(vm)
       },
-      afterGetFormValue(value) {
-        if (!value.platforms) {
-          return
-        }
-        vm.fieldsMeta['push_params'].el.platforms = value['platforms']
-        return value
-      },
       cleanFormValue(value) {
         Object.keys(value).forEach((item, index, arr) => {
           if (['ssh_key', 'token', 'access_key', 'api_key'].includes(item)) {
