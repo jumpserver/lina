@@ -115,7 +115,7 @@ export const templateFieldsMeta = (vm) => {
         }
       },
       on: {
-        change: ([event], updateForm) => {
+        input: ([event], updateForm) => {
           platformIds.splice(0, platformIds.length)
           platformIds.push(...event)
         }

@@ -112,7 +112,6 @@ export default {
     },
     platforms: {
       handler(newVal) {
-        console.log('Found platforms change, ', newVal.length)
         this.onFieldChangeHandler()
       },
       deep: true,
