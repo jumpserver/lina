@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
+  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" @tab-click="handleTabClick">
     <div slot="title">
       {{ Title }}
     </div>
@@ -41,6 +41,21 @@ export default {
     }
   },
   mounted() {
+    this.switchGlobalOrg(this.config.activeMenu === 'OrgRoleList')
+  },
+  methods: {
+    handleTabClick(tab) {
+      this.switchGlobalOrg(tab.name === 'OrgRoleList')
+    },
+    switchGlobalOrg(status) {
+      if (status) {
+        this.$route.meta.disableOrgsChange = false
+        this.$store.dispatch('users/leaveGlobalOrg')
+      } else {
+        this.$route.meta.disableOrgsChange = true
+        this.$store.dispatch('users/enterGlobalOrg')
+      }
+    }
   }
 }
 </script>
