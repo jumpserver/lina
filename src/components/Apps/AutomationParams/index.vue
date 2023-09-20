@@ -128,7 +128,6 @@ export default {
       this.remoteMeta = data.actions[this.config.method.toUpperCase()] || {}
     },
     async getFilterPlatforms() {
-      console.log('this.Platforms', this.platforms)
       return await this.$axios.post(
         '/api/v1/assets/platforms/filter-nodes-assets/',
         {
