@@ -51,7 +51,9 @@ export default {
     handleImportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showImportDialog', { selectedRows, url: this.tableUrl, name: this.name })
+        const { importOptions, tableUrl } = this
+        const url = importOptions?.url ? importOptions.url : tableUrl
+        this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
       }
     },
     hasColumnSetting: defaultTrue,
