@@ -133,7 +133,7 @@ export default {
         this.getRefsListTable.reloadTable()
         this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch((error) => {
-        console.log('Error = ', error)
+        alert(error)
       })
     },
     makeCredReq(makeCredReq) {
