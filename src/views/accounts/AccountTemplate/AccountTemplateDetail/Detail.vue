@@ -53,7 +53,8 @@ export default {
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
       excludes: ['privileged', 'secret', 'passphrase', 'spec_info'],
       detailFields: [
-        'id', 'name', 'username', 'secret_type', 'created_by', 'comment',
+        'id', 'name', 'username', 'secret_type', 'auto_push',
+        'secret_strategy', 'created_by', 'comment',
         {
           key: this.$t('accounts.SuFrom'),
           formatter: () => {

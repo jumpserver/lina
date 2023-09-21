@@ -82,7 +82,8 @@ export const platformFieldsMeta = (vm) => {
       ...assetMeta.protocols,
       el: {
         choices: []
-      }
+      },
+      helpText: i18n.t('assets.SupportedProtocolHelpText')
     },
     su_method: {
       type: 'select',

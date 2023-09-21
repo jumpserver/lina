@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
     "Accounts": "账号",
@@ -48,6 +49,7 @@
       "RecipientHelpText": "当前只支持邮件发送, 若收件人 A B 都设置，账号的密钥将被拆分成前后两部分"
     },
     "AccountChangeSecret": {
+      "PasswordRule": "密码生成规则",
       "ParamsHelpText": "改密参数设置，目前仅对平台种类为主机的资产生效。",
       "ContainAttachment": "含附件",
       "AddAsset": "添加资产",
@@ -270,7 +272,6 @@
     "UpdateAccount": "更新账号",
     "Account": "账号",
     "Defaults": "默认值",
-
     "Privileged": "特权账号",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
@@ -381,6 +382,8 @@
     "AccountEnabled": "启用切换账号",
     "AutoEnabled": "启用自动化",
     "SupportedProtocol": "支持的协议",
+    "SupportedProtocolHelpText": "设置资产支持的协议，点击设置按钮可以为协议修改自定义配置，如 SFTP 目录，RDP AD 域等",
+    "AssetProtocolHelpText": "资产支持的协议受平台限制，点击设置按钮可以查看协议的设置。 如果需要更新，请更新平台",
     "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
     "Protocol": "协议",
     "Protocols": "协议",
@@ -463,6 +466,7 @@
     "AfterChange": "变更后"
   },
   "auth": {
+    "AddPassKey": "添加 Passkey(通行密钥)",
     "LoginRequiredMsg": "账号已退出，请重新登录",
     "ReLogin": "重新登录",
     "ReLoginTitle": "当前三方登录用户（CAS/SAML），未绑定 MFA 且不支持密码校验，请重新登录。",
@@ -470,6 +474,12 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "PasswordRule": "密码生成规则",
+    "Length": "长度",
+    "Uppercase": "大写字母",
+    "Lowercase": "小写字母",
+    "Digit": "数字",
+    "SpecialSymbol": "特殊字符",
     "Enterprise": "企业版",
     "SyncTask": "同步任务",
     "New": "新建",
@@ -613,6 +623,7 @@
     "Task": "任务",
     "UpdateAssetDetail": "配置更多信息",
     "AddSuccessMsg": "添加成功",
+    "UnlockSuccessMsg": "解锁成功",
     "AddFailMsg": "添加失败",
     "Auth": "认证",
     "bind": "绑定",
@@ -774,6 +785,7 @@
     "nav": {
       "TempPassword": "临时密码",
       "ConnectionToken": "连接令牌",
+      "PassKey": "Passkey",
       "APIKey": "API Key",
       "Workbench": "工作台",
       "Navigation": "导航",
@@ -898,21 +910,21 @@
     "LoginCount": "登录次数",
     "LoginOverview": "会话统计",
     "LoginTo": "登录了",
-    "LoginUsers": "活跃用户",
+    "LoginUsers": "活跃账号",
     "Monthly": "按月",
     "CurrentConnections": "当前连接数",
     "TodayFailedConnections": "今日连接失败数",
     "OnlineSessions": "在线会话数",
     "RealTimeData": "实时数据",
-    "UserAssetActivity": "用户/资产活跃情况",
-    "UserData": "用户数据",
-    "LoginUserToday": "今日登录用户数",
+    "UserAssetActivity": "账号/资产活跃情况",
+    "UserData": "账号数据",
+    "LoginUserToday": "今日登录账号数",
     "AssetData": "资产数据",
     "LoginAssetToday": "今日活跃资产数",
     "WeekAdd": "本周新增",
     "ProportionOfAssetTypes": "资产类型占比",
     "Proportion": "占比",
-    "LoginUserRanking": "登录用户排名",
+    "LoginUserRanking": "登录账号排名",
     "ActiveAssetRanking": "登录资产排名",
     "AssetName": "资产名称",
     "NumberOfVisits": "访问次数",
@@ -920,8 +932,8 @@
     "Today": "今天",
     "Last7Days": "近7天",
     "Last30Days": "近30天",
-    "OnlineUsers": "在线用户",
-    "ConnectUsers": "连接用户",
+    "OnlineUsers": "在线账号",
+    "ConnectUsers": "连接账号",
     "Num": "数",
     "Total": "总数",
     "LogData": "日志数据",
@@ -937,13 +949,13 @@
     "BatchCommandNotExecuted": "未执行批量命令",
     "ExecuteFailedCommand": "执行失败命令",
     "SessionTrend": "会话趋势",
-    "UserLoginTrend": "用户登录趋势",
+    "UserLoginTrend": "账号登录趋势",
     "TimesWeekUnit": "次/周",
     "TopAssetsOfWeek": "周资产 TOP10",
     "TopUsersOfWeek": "周用户 TOP10",
     "User": "用户",
     "UserRatio": "用户占比统计",
-    "UsersTotal": "用户总数",
+    "UsersTotal": "账号总数",
     "Weekly": "按周"
   },
   "ops": {
@@ -1285,6 +1297,8 @@
     "CommandStorageUpdate": "更新命令存储",
     "Commands": "命令记录",
     "FileTransfer": "文件传输",
+    "OnlineSession": "在线用户",
+    "OnlineUserDevices": "在线用户设备",
     "CreateCommandStorage": "创建命令存储",
     "CreateReplayStorage": "创建录像存储",
     "Dashboard": "仪表盘",
@@ -1416,6 +1430,10 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "OnlineSessionHelpMsg": "无法下线当前会话，因为该会话是当前用户的在线会话。当前只记录以 Web 方式登录的用户。",
+    "Offline": "下线",
+    "OfflineSuccessMsg": "下线成功",
+    "BulkOffline": "批量下线",
     "Marketplace": "应用市场",
     "Author": "作者",
     "BasePort": "监听端口",
@@ -1425,7 +1443,7 @@
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
-    "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>",
+    "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的(但优先选择上次使用的)，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>; <br>连接该发布机选择账号时，以下情况会选择用户 <b>专有账号(js开头)</b>，否则使用公用账号(jms开头)：<br>&nbsp;  1. 发布机和应用都支持并发; <br>&nbsp; 2. 发布机支持并发，应用不支持并发，当前应用没有使用专有账号; <br>&nbsp; 3. 发布机不支持并发，应用支持并发或不支持，没有任一应用使用专有账号; <br> 注意: 应用支不支持并发是开发者决定，主机支不支持是发布机配置中的 单用户单会话决定",
     "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘",
@@ -1512,7 +1530,7 @@
     "PauseTaskSendSuccessMsg": "暂停任务已下发，请稍后刷新查看",
     "ResumeTaskSendSuccessMsg": "恢复任务已下发，请稍后刷新查看",
     "helpText": {
-      "esUrl": "eg: http://es_user:es_password@es_host:es_port",
+      "esUrl": "不能包含特殊字符 `#`；eg: http://es_user:es_password@es_host:es_port",
       "esIndex": "es 提供默认 index：jumpserver。如果开启按日期建立索引，那么输入的值会作为索引前缀",
       "esDocType": "es 默认文档类型：command"
     }
@@ -1522,6 +1540,11 @@
     "PublishStatus": "发布状态"
   },
   "setting": {
+    "Passkey": "Passkey",
+    "BlockedIPS": "已锁定的 IP",
+    "ViewBlockedIPSHelpText": "查看已被锁定的 IP 列表",
+    "Unblock": "解锁",
+    "BulkUnblock": "批量解锁",
     "AppOps": "任务中心",
     "Ticket": "工单",
     "TaskList": "任务列表",
@@ -1538,7 +1561,7 @@
     "Custom": "自定义",
     "CleanHelpText": "定期清理任务会在 每天凌晨 2 点执行, 清理后的数据将无法恢复",
     "EnableVaultStorage": "开启 Vault 存储",
-    "VaultHelpText": "1. 请前往配置文件中开启 Vault 存储。<br>2. 开启后，填写其他配置 -> 点击测试。<br>3. 进行数据同步（同步是单向的，只会从数据库数据同步到 Vault，请备份好数据）。<br>4. 二次修改 Vault 配置后需重启服务。",
+    "VaultHelpText": "1. 由于安全原因，需要配置文件中开启 Vault 存储。<br>2. 开启后，填写其他配置，进行测试。<br>3. 进行数据同步，同步是单向的，只会从本地数据库同步到远端 Vault，同步完成本地数据库不再存储密码，请备份好数据。<br>4. 二次修改 Vault 配置后需重启服务。",
     "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
     "Applets": "远程应用",
     "EndpointListHelpMessage": "服务端点是用户访问服务的地址(端口)，当用户在连接资产时，会根据端点规则和资产标签选择服务端点，作为访问入口建立连接，实现分布式连接资产",
@@ -1686,7 +1709,8 @@
       "securityPasswordSpecialChar": "开启后，用户密码修改、重置必须包含特殊字符",
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当组件注册成功后可以禁止",
-      "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知"
+      "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
@@ -1747,7 +1771,7 @@
     "BasicTools": "基本工具",
     "DestinationIP": "目的地址",
     "SourceIP": "源地址",
-    "Interface": "接口",
+    "Interface": "网络接口",
     "TestMultiPort": "多个端口用,分隔",
     "SourcePort": "源端口",
     "DestinationPort": "目的端口",
@@ -1847,6 +1871,9 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "LunaSettingUpdate": "Luna 配置设置",
+    "KokoSettingUpdate": "Koko 配置设置",
+    "UserSetting": "个人设置",
     "AllMembers": "全部成员",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
@@ -2007,6 +2034,7 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "Cloud": {
+      "AccountHelpText": "云账号是用来连接云服务商的账号，用于获取云服务商的资源信息",
       "UniqueError": "以下属性只能设置一个",
       "ExistError": "这个元素已经存在",
       "InstanceName": "实例名称",
@@ -2037,7 +2065,7 @@
       "HostnameStrategy": "用于生成资产主机名。例如：1. 实例名称 (instanceDemo)；2. 实例名称和部分IP(后两位) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "资产信息保持最新",
       "AccountCreate": "创建账户",
-      "AccountList": "账户列表",
+      "AccountList": "云账号",
       "AccountUpdate": "更新账户",
       "AccountDetail": "账户详情",
       "Cloud": "云管中心",
@@ -2055,7 +2083,7 @@
       "CloudSource": "同步源",
       "SaveSetting": "同步设置",
       "Name": "名称",
-      "Account": "账户",
+      "Account": "云账号",
       "Node": "节点",
       "WindowsAdminUser": "Windows 特权用户",
       "LinuxAdminUser": "Linux 特权用户",

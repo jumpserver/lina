@@ -78,7 +78,7 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
-        hasObjectsId: this.object.assets,
+        hasObjectsId: this.object.assets?.map(i => i.id) || [],
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
           return this.object.assets.indexOf(row.id) === -1
@@ -97,7 +97,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('common.updateSuccessMsg'))
-          window.location.reload()
+          this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
@@ -109,7 +109,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes,
+        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/`
           const objectId = this.object.id

@@ -5,14 +5,11 @@
         <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title">
-        <span
-          v-show="!isCollapse"
-          style="margin-left: 5px;"
-        >
+        <span v-show="!isCollapse" style="margin-left: 5px;">
           {{ isRouteMeta.title || '' }}
         </span>
 
-        <span class="switch-view active-switch-view">
+        <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
             placement="right-start"
             trigger="hover"
@@ -77,7 +74,8 @@ export default {
   },
   data() {
     return {
-      viewShown: false
+      viewShown: false,
+      switchViewOtherClasses: ''
     }
   },
   computed: {
@@ -125,12 +123,24 @@ export default {
       return this.currentViewRoute.meta || {}
     }
   },
+  mounted() {
+    this.setViewIconAttention()
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
     toggleSwitch() {
       this.viewShown = true
+    },
+    setViewIconAttention() {
+      const t = setInterval(() => {
+        this.switchViewOtherClasses = this.switchViewOtherClasses ? '' : 'hover-switch-view'
+      }, 1000)
+      setTimeout(() => {
+        clearInterval(t)
+        this.switchViewOtherClasses = ''
+      }, 2000)
     }
   }
 }
@@ -145,6 +155,11 @@ export default {
 
   .nav-logo {
     height: 50px;
+  }
+
+  .hover-switch-view {
+    background: var(--menu-hover) !important;
+    color: var(--color-primary);
   }
 
   .nav-title {
@@ -231,8 +246,8 @@ export default {
   .mobile-menu {
     display: none;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     padding-top: 10px;
@@ -247,7 +262,7 @@ export default {
   .active-mobile {
     display: none;
 
-    & > > > .organization {
+    & >>> .organization {
       height: 48px;
       line-height: 48px;
       padding-left: 8px;
@@ -264,7 +279,7 @@ export default {
       }
     }
 
-    & > > > .title-label {
+    & >>> .title-label {
       color: white !important;
     }
 

@@ -87,7 +87,8 @@
       "SystemUserAmount": "SystemUser amount",
       "AssetChangeSecretUpdate": "Update account change secret",
       "Success": "Success",
-      "AddSystemUser": "Add system user"
+      "AddSystemUser": "Add system user",
+      "PasswordRule": "PasswordRule"
     },
     "AccountPush": {
       "WindowsPushHelpText": "Windows assets do not support pushing keys",
@@ -115,7 +116,10 @@
     "AccountExportTips": "The exported information contains account secret, which involves sensitive information. The exported format is an encrypted zip file (if no encryption password is set, please go to personal information to set the file encryption password).",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
-    "AddAccountResult": "Add account result"
+    "AddAccountResult": "Add account result",
+    "AutoPush": "Auto Push",
+    "GeneralAccounts": "General Accounts",
+    "VirtualAccounts": "Virtual Accounts"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
@@ -373,6 +377,8 @@
     "AccountEnabled": "Enable account switching",
     "AutoEnabled": "Enable Automation",
     "SupportedProtocol": "Supported protocol",
+    "SupportedProtocolHelpText": "Set the protocol supported by the asset. Click the Settings button to modify the custom configuration for the protocol, such as the SFTP directory, RDP AD domain, etc.",
+    "AssetProtocolHelpText": "Asset support protocol is limited by platform, click the Settings button to view the protocol settings. If you need to update, please update the platform",
     "PriorityHelpMessage": "1-100, High level will be using login asset as default, if user was granted more than 2 system user",
     "Protocol": "Protocol",
     "Protocols": "Protocols",
@@ -485,7 +491,8 @@
     "ReLogin": "Re-Login",
     "ReLoginTitle": "The current three-party login user (cas/saml) is not bound to MFA and does not support password verification. Please login again",
     "NeedReLogin": "Need Re-Login",
-    "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
+    "ReLoginErr": "Login time has exceeded 5 minutes, please login again",
+    "AddPassKey": "AddPassKey"
   },
   "common": {
     "Enterprise": "Enterprise",
@@ -593,6 +600,7 @@
     "TestSelectedSystemUsersConnective": "Test selected system users connective",
     "UpdateAssetDetail": "Update more detail",
     "AddSuccessMsg": "Add success",
+    "UnlockSuccessMsg": "Unlock success",
     "AddFailMsg": "Add fail",
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
@@ -755,7 +763,8 @@
       "Download": "Download",
       "UserPage": "User page",
       "View": "View",
-      "EnterpriseEdition": "Enterprise edition"
+      "EnterpriseEdition": "Enterprise edition",
+      "PassKey": "Passkey"
     },
     "passwordOrPassphrase": "Password or Passphrase",
     "removeErrorMsg": "Remove failed: ",
@@ -890,7 +899,13 @@
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
     "BelongTo": "Belong to",
-    "GreatEqualThan": "Greater than or equal to"
+    "GreatEqualThan": "Greater than or equal to",
+    "PasswordRule": "PasswordRule",
+    "Uppercase": "Uppercase",
+    "Length": "Length",
+    "Digit": "Digit",
+    "Lowercase": "Lowercase",
+    "SpecialSymbol": "SpecialSymbol"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -914,21 +929,22 @@
     "LoginCount": "Login count",
     "LoginOverview": "Sessions overview",
     "LoginTo": "Login to",
-    "LoginUsers": "Active users",
+    "LoginUsers": "Active accounts",
     "Monthly": "Monthly",
     "CurrentConnections": "Current connections",
     "TodayFailedConnections": "Connections failed today",
     "OnlineSessions": "Online sessions",
+    "OnlineUserDevices": "Online user devices",
     "RealTimeData": "Real-time data",
-    "UserAssetActivity": "User/Asset activity",
-    "UserData": "User data",
-    "LoginUserToday": "Login user today",
+    "UserAssetActivity": "Account/Asset activity",
+    "UserData": "Account data",
+    "LoginUserToday": "Login account today",
     "AssetData": "Asset data",
     "LoginAssetToday": "Active assets today",
     "WeekAdd": "New this week",
     "ProportionOfAssetTypes": "Proportion of asset types",
     "Proportion": "Proportion",
-    "LoginUserRanking": "Login user ranking",
+    "LoginUserRanking": "Login account ranking",
     "ActiveAssetRanking": "Login asset ranking",
     "AssetName": "Asset name",
     "NumberOfVisits": "Number of visits",
@@ -936,8 +952,8 @@
     "Today": "Today",
     "Last7Days": "Last 7 days",
     "Last30Days": "Last30 days",
-    "OnlineUsers": "Online users",
-    "ConnectUsers": "Connect users",
+    "OnlineUsers": "Online accounts",
+    "ConnectUsers": "Connect accounts",
     "Num": "Num",
     "Total": "Total",
     "LogData": "Log data",
@@ -953,13 +969,13 @@
     "BatchCommandNotExecuted": "Batch command not executed",
     "ExecuteFailedCommand": "Execute failed command",
     "SessionTrend": "Session trend",
-    "UserLoginTrend": "User login trend",
+    "UserLoginTrend": "Account login trend",
     "TimesWeekUnit": "times/week",
     "TopAssetsOfWeek": "Top assets of week",
     "TopUsersOfWeek": "Top user of week",
     "User": "User",
     "UserRatio": "User Ratio",
-    "UsersTotal": "Users total",
+    "UsersTotal": "Accounts total",
     "Weekly": "Weekly",
     "TotalJobFailed": "Total job failed",
     "TotalJobRunning": "Total job running",
@@ -1202,7 +1218,8 @@
     "userCount": "User count",
     "userGroupCount": "User group count",
     "usersAndUserGroups": "Users and user groups",
-    "Account": "Account"
+    "Account": "Account",
+    "AnonymousAccount": "Anonymous Account"
   },
   "route": {
     "": "",
@@ -1264,6 +1281,7 @@
     "CommandStorageUpdate": "Command storage update",
     "Commands": "Commands",
     "FileTransfer": "File transfer",
+    "OnlineSession": "Online session",
     "CreateCommandStorage": "Create command storage",
     "CreateReplayStorage": "Create replay storage",
     "Dashboard": "Dashboard",
@@ -1421,13 +1439,34 @@
     "ConnectMethodAclDetail": "Connect method acl detail",
     "ConnectMethodAclCreate": "Create connect method acl",
     "ConnectMethodAclList": "Connect method acl",
-    "ConnectMethodAclUpdate": "Update connect method acl"
+    "ConnectMethodAclUpdate": "Update connect method acl",
+    "HostCreate": "Create Asset - Host",
+    "DatabaseCreate": "Create Asset - Database",
+    "DeviceCreate": "Create Asset - Network Device",
+    "CustomUpdate": "Update Asset - Custom",
+    "HostUpdate": "Update Asset - Host",
+    "WebCreate": "Create Asset - Web",
+    "WebUpdate": "Update Asset - Web",
+    "CustomCreate": "Create Asset - Custom",
+    "VirtualAccountUpdate": "Virtual Account Update",
+    "GPTUpdate": "Update Asset - GPT",
+    "GPTCreate": "Create Asset - GPT",
+    "VirtualAccountDetail": "Virtual Account Details",
+    "DeviceUpdate": "Update Asset - Network Device",
+    "CloudCreate": "Create Asset - Cloud Platform",
+    "DatabaseUpdate": "Update Asset - Database",
+    "CloudUpdate": "Update Asset - Cloud Platform",
+    "OnlineUserDevices": "OnlineUserDevices"
   },
   "rbac": {
     "Permissions": "Permissions",
     "NoPermission": "No permission"
   },
   "terminal": {
+    "OnlineSessionHelpMsg": "The current session cannot be offline because it is an online session of the current user. Currently, only users who have logged in through web mode are recorded.",
+    "Offline": "Offline",
+    "OfflineSuccessMsg": "Offline success",
+    "BulkOffline": "Bulk offline",
     "Marketplace": "Marketplace",
     "Author": "Author",
     "Uploading": "File uploading",
@@ -1524,12 +1563,16 @@
     "PauseTaskSendSuccessMsg": "Pause task has been send, Please check later",
     "ResumeTaskSendSuccessMsg": "Resume task has been send, Please check later",
     "helpText": {
-      "esUrl": "eg: http://es_user:es_password@es_host:es_port",
+      "esUrl": "Cannot contain special characters `#`; eg: http://es_user:es_password@es_host:es_port",
       "esIndex": "Es provides the default index: jumpserver. If you choose to build an index by date, this blank is the index prefix",
       "esDocType": "Es provides the default document type: command"
     }
   },
   "setting": {
+    "BlockedIPS": "Blocked IPS",
+    "ViewBlockedIPSHelpText": "View the list of locked IPs",
+    "Unblock": "Unblock",
+    "BulkUnblock": "BulkUnblock",
     "AppOps": "Task center",
     "Ticket": "Ticket",
     "TaskList": "Task list",
@@ -1682,7 +1725,8 @@
       "securityPasswordSpecialChar": "After opening, the user password changes and resets must contain special characters",
       "securityPasswordUpperCase": "After opening, the user password changes and resets must contain uppercase letters",
       "securityServiceAccountRegistration": "Allow using bootstrap token register service account, when terminal setup, can disable it",
-      "SecurityInsecureCommand": "After it is enabled, when a dangerous command is executed on the asset, an email alarm notification will be sent"
+      "SecurityInsecureCommand": "After it is enabled, when a dangerous command is executed on the asset, an email alarm notification will be sent",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "Ensure this value is greater than or equal to 3",
@@ -1762,7 +1806,10 @@
     "authCASAttrMap": "User Attribute Mapping",
     "SignaturesAndTemplates": "Signatures and Templates",
     "SystemTools": "Tools",
-    "BasicTools": "Basic tool"
+    "BasicTools": "Basic tool",
+    "sync": "Sync",
+    "AccountStorage": "Account Storage",
+    "Passkey": "Passkey"
   },
   "tickets": {
     "BatchApproval": "Batch approval",
@@ -1857,6 +1904,9 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "LunaSettingUpdate": "Luna setting",
+    "KokoSettingUpdate": "Koko setting",
+    "UserSetting": "User setting",
     "AllMembers": "All members",
     "UnbindHelpText": "Local users cannot be unbound because they are authenticated as source users",
     "SetStatus": "Set status",
@@ -2160,7 +2210,8 @@
       "QcloudLighthouse": "Tencent Cloud (lightweight application server)",
       "KingSoftCloud": "KingSoft Cloud",
       "CTYunPrivate": "CTYun Private",
-      "LAN": "LAN"
+      "LAN": "LAN",
+      "AccountHelpText": "A cloud account is used to connect to a cloud service provider and access the provider's resource information."
     },
     "Corporation": "Corporation",
     "Edition": "Edition",

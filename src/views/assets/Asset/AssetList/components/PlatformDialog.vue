@@ -153,7 +153,7 @@ export default {
       this.addToRecentPlatforms(platform)
       this.iVisible = false
       const query = {
-        node: this.$route.query?.node || '',
+        node: this.$route.query?.node || this.$route.query?.node_id || '',
         platform: platform.id,
         type: platform.type.value,
         category: platform.category.value

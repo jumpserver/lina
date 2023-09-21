@@ -87,7 +87,8 @@
       "SystemUserAmount": "システムユーザー数",
       "AssetChangeSecretUpdate": "アカウントの更新とパスワードの変更",
       "Success": "成功",
-      "AddSystemUser": "システムユーザーを追加"
+      "AddSystemUser": "システムユーザーを追加",
+      "PasswordRule": "パスワードのルール"
     },
     "AccountPush": {
       "WindowsPushHelpText": "windows アセットはプッシュキーをサポートしていません",
@@ -115,7 +116,10 @@
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
-    "AddAccountResult": "账号批量添加结果"
+    "AddAccountResult": "账号批量添加结果",
+    "AutoPush": "自動プッシュ",
+    "GeneralAccounts": "一般アカウント",
+    "VirtualAccounts": "仮想アカウント"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
@@ -366,6 +370,8 @@
     "AccountEnabled": "アカウントを有効にする",
     "AutoEnabled": "自動化の有効化",
     "SupportedProtocol": "サポートされるプロトコル",
+    "SupportedProtocolHelpText": "資産がサポートするプロトコルを設定します。設定ボタンをクリックして、SFTPディレクトリ、RDP ADドメインなどのプロトコルのカスタム構成を変更します。",
+    "AssetProtocolHelpText": "資産のサポートプロトコルはプラットフォームによって制限されます。プロトコル設定を表示するには、[設定]ボタンをクリックします。更新する必要がある場合は、プラットフォームを更新してください。",
     "PriorityHelpMessage": "1-100、1最低優先度、100最高優先度。複数のユーザーを許可する場合、優先度の高いシステムユーザーはデフォルトのログインユーザーになります",
     "Protocol": "プロトコル",
     "Protocols": "プロトコルグループ",
@@ -485,7 +491,8 @@
     "ReLogin": "再ログイン",
     "ReLoginTitle": "現在、サードパーティのログインユーザー（CAS/SAML）は、MFAをバインドしておらず、パスワードチェックをサポートしていません。再ログインしてください。",
     "NeedReLogin": "再ログインが必要です",
-    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
+    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください",
+    "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
     "Enterprise": "企業版",
@@ -582,6 +589,7 @@
     "TemplateHelpText": "テンプレートを選択してアカウントを追加すると、資産の下では発生しないアカウントが自動的に作成され、プッシュされます",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
+    "UnlockSuccessMsg": "ロック解除成功メッセージ",
     "AddFailMsg": "追加に失敗しました",
     "Auth": "認証",
     "bind": "紐付け",
@@ -758,7 +766,8 @@
       "Download": "ダウンロード",
       "UserPage": "ユーザービュー",
       "View": "ビュー",
-      "EnterpriseEdition": "企業版"
+      "EnterpriseEdition": "企業版",
+      "PassKey": "パスキー"
     },
     "passwordOrPassphrase": "パスワードまたはキーパスワード",
     "removeErrorMsg": "削除に失敗しました:",
@@ -889,7 +898,13 @@
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
     "BelongTo": "所属する",
-    "GreatEqualThan": "以上または等しい"
+    "GreatEqualThan": "以上または等しい",
+    "PasswordRule": "パスワードのルール",
+    "Uppercase": "大文字",
+    "Length": "長さ",
+    "Digit": "数字",
+    "Lowercase": "小文字",
+    "SpecialSymbol": "特殊記号"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -916,21 +931,21 @@
     "LoginCount": "ログイン回数",
     "LoginOverview": "セッション統計",
     "LoginTo": "ログインしました",
-    "LoginUsers": "アクティブユーザー",
+    "LoginUsers": "アクティブなアカウント",
     "Monthly": "月ごと",
     "CurrentConnections": "現在の接続数",
     "TodayFailedConnections": "今日の接続に失敗しました",
     "OnlineSessions": "オンラインセッション",
     "RealTimeData": "リアルタイムデータ",
-    "UserAssetActivity": "ユーザー/資産のアクティブ化",
-    "UserData": "ユーザデータ",
-    "LoginUserToday": "今日のログインユーザー数",
+    "UserAssetActivity": "アカウント/資産のアクティブ化",
+    "UserData": "アカウントデータ",
+    "LoginUserToday": "今日のログインアカウント数",
     "AssetData": "資産データ",
     "LoginAssetToday": "今日のアクティブ資産数",
     "WeekAdd": "今週の追加",
     "ProportionOfAssetTypes": "資産タイプの割合",
     "Proportion": "占有率",
-    "LoginUserRanking": "ログインユーザーランキング",
+    "LoginUserRanking": "ログインアカウントランキング",
     "ActiveAssetRanking": "ログイン資産ランキング",
     "AssetName": "資産名",
     "NumberOfVisits": "アクセス回数",
@@ -938,8 +953,8 @@
     "Today": "今日",
     "Last7Days": "7日",
     "Last30Days": "30日",
-    "OnlineUsers": "オンラインユーザー",
-    "ConnectUsers": "ユーザーの接続",
+    "OnlineUsers": "オンラインアカウント",
+    "ConnectUsers": "接続アカウント",
     "Num": "数",
     "Total": "合計数",
     "LogData": "ログデータ",
@@ -955,13 +970,13 @@
     "BatchCommandNotExecuted": "未実行コマンド",
     "ExecuteFailedCommand": "失敗コマンドの実行",
     "SessionTrend": "セッショントレンド",
-    "UserLoginTrend": "ユーザーログイントレンド",
+    "UserLoginTrend": "アカウントログイントレンド",
     "TimesWeekUnit": "回/週",
     "TopAssetsOfWeek": "週間資産TOP10",
     "TopUsersOfWeek": "週ユーザーTOP10",
     "User": "ユーザー",
     "UserRatio": "ユーザー比率統計",
-    "UsersTotal": "ユーザー総数",
+    "UsersTotal": "アカウント総数",
     "Weekly": "週ごと"
   },
   "ops": {
@@ -1201,7 +1216,8 @@
     "userGroupCount": "ユーザーグループ数",
     "usersAndUserGroups": "ユーザーまたはユーザーグループ",
     "Account": "アカウント",
-    "ManualAccount": "手动账号"
+    "ManualAccount": "手动账号",
+    "AnonymousAccount": "匿名アカウント"
   },
   "route": {
     "": "",
@@ -1270,6 +1286,8 @@
     "CommandStorageUpdate": "コマンドストアの更新",
     "Commands": "コマンド記録",
     "FileTransfer": "ファイル転送",
+    "OnlineSession": "オンラインセッション",
+    "OnlineUserDevices": "オンラインデバイス",
     "CreateCommandStorage": "コマンドストアの作成",
     "CreateReplayStorage": "録画ストレージの作成",
     "Dashboard": "ダッシュボード",
@@ -1416,13 +1434,33 @@
     "ConnectMethodAclList": "接続方式",
     "ConnectMethodAclDetail": "接続方式制御の詳細",
     "UserLoginAclDetail": "ユーザーログイン制御の詳細",
-    "ConnectMethodAclUpdate": "接続方式制御ルールの更新"
+    "ConnectMethodAclUpdate": "接続方式制御ルールの更新",
+    "HostCreate": "アセット作成 - ホスト",
+    "DatabaseCreate": "アセット作成 - データベース",
+    "DeviceCreate": "アセット作成 - ネットワークデバイス",
+    "CustomUpdate": "アセット更新 - カスタム",
+    "HostUpdate": "アセット更新 - ホスト",
+    "WebCreate": "アセット作成 - ウェブ",
+    "WebUpdate": "アセット更新 - ウェブ",
+    "CustomCreate": "アセット作成 - カスタム",
+    "VirtualAccountUpdate": "仮想アカウント更新",
+    "GPTUpdate": "アセット更新 - GPT",
+    "GPTCreate": "アセット作成 - GPT",
+    "VirtualAccountDetail": "仮想アカウント詳細",
+    "DeviceUpdate": "アセット更新 - ネットワークデバイス",
+    "CloudCreate": "アセット作成 - クラウドプラットフォーム",
+    "DatabaseUpdate": "アセット更新 - データベース",
+    "CloudUpdate": "アセット更新 - クラウドプラットフォーム"
   },
   "rbac": {
     "Permissions": "権限",
     "NoPermission": "権限なし"
   },
   "terminal": {
+    "Offline": "オフライン",
+    "OnlineSessionHelpMsg": "セッションが現在のユーザーのオンラインセッションであるため、現在のセッションをオフラインできません。現在はWebログイン済みのユーザーのみが記録されています。",
+    "OfflineSuccessMsg": "オフラインに成功しました",
+    "BulkOffline": "オフライン",
     "Marketplace": "マーケットプレイス",
     "Author": "作者",
     "Uploading": "ファイルのアップロード",
@@ -1519,12 +1557,16 @@
     "PauseTaskSendSuccessMsg": "一時停止タスクが発行されました。後で更新して確認してください。",
     "ResumeTaskSendSuccessMsg": "再開タスクが発行されました。後で更新して確認してください。",
     "helpText": {
-      "esUrl": "eg: http://es_user:es_password@es_host:es_port",
+      "esUrl": "特殊文字「#」を含めることはできません; eg: http://es_user:es_password@es_host:es_port",
       "esIndex": "Esはデフォルトindexを提供します。日付による索引の作成を選択した場合、この空は索引接頭辞です。",
       "esDocType": "Esデフォルトのドキュメントタイプ: command"
     }
   },
   "setting": {
+    "BlockedIPS": "ロックされたIP",
+    "ViewBlockedIPSHelpText": "ロックされたIPリストの表示",
+    "Unblock": "ロック解除",
+    "BulkUnblock": "一括ロック解除",
     "AppOps": "タスクセンター",
     "Ticket": "チケット",
     "TaskList": "タスクリスト",
@@ -1688,7 +1730,8 @@
       "securityPasswordSpecialChar": "オンにすると、ユーザーパスワードの変更、リセットに特殊文字が含まれている必要があります",
       "securityPasswordUpperCase": "オンにすると、ユーザーパスワードの変更、リセットに大文字を含める必要があります",
       "securityServiceAccountRegistration": "Bootstrap tokenを使用して端末を登録できるようにし、端末の登録が成功すると禁止できるようにします",
-      "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます"
+      "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます",
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "この値が3以上であることを確認してください",
@@ -1755,7 +1798,10 @@
     "TestParam": "パラメーター",
     "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル",
-    "Applets": "リモート アプリケーション"
+    "Applets": "リモート アプリケーション",
+    "sync": "同期",
+    "AccountStorage": "アカウントストレージ",
+    "Passkey": "パスキー"
   },
   "tickets": {
     "BatchApproval": "大量承認です",
@@ -1849,6 +1895,9 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "LunaSettingUpdate": "Luna 設定更新",
+    "KokoSettingUpdate": "Koko 設定更新",
+    "UserSetting": "個人設定",
     "AllMembers": "すべてのメンバー",
     "UnbindHelpText": "ローカルユーザはソースユーザを認証します",
     "SetStatus": "ステータスの設定",
@@ -2153,7 +2202,8 @@
       "DateSync": "同期日",
       "Status": "ステータス",
       "Log": "ログ",
-      "DeleteReleasedAssets": "リリース済アセットの削除"
+      "DeleteReleasedAssets": "リリース済アセットの削除",
+      "AccountHelpText": "クラウドアカウントはクラウドサービスプロバイダーに接続し、プロバイダーのリソース情報にアクセスするためのアカウントです"
     },
     "Template": {
       "Template": "テンプレート管理"

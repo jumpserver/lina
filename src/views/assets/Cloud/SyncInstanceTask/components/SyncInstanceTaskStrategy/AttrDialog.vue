@@ -1,14 +1,16 @@
 <template>
   <Dialog
+    :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-buttons="false"
-    :close-on-click-modal="false"
     :title="$tc('common.Strategy')"
-    width="80%"
     v-bind="$attrs"
+    width="80%"
     v-on="$listeners"
   >
-    <GenericCreateUpdateForm v-bind="$data" />
+    <IBox>
+      <GenericCreateUpdateForm v-bind="$data" />
+    </IBox>
   </Dialog>
 </template>
 
@@ -17,10 +19,11 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import Dialog from '@/components/Dialog/index.vue'
 import RuleInput from '@/views/assets/Cloud/Strategy/components/RuleInput'
 import ActionInput from '@/views/assets/Cloud/Strategy/components/ActionInput'
+import IBox from '@/components/IBox/index.vue'
 
 export default {
   name: 'AttrDialog',
-  components: { Dialog, GenericCreateUpdateForm },
+  components: { Dialog, GenericCreateUpdateForm, IBox },
   props: {
     value: {
       type: Object,

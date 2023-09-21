@@ -24,14 +24,18 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
-        [this.$t('common.Strategy'), ['strategy']],
+        [this.$t('xpack.Cloud.SaveSetting'), [
+          'hostname_strategy', 'ip_network_segment_group',
+          'sync_ip_type', 'is_always_update'
+        ]],
+        [this.$t('common.Actions'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
         account: {
+          label: this.$t('xpack.Cloud.Account'),
           on: {
             change: ([event], updateForm) => {
               vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event?.pk}`
@@ -42,7 +46,11 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/xpack/cloud/accounts/'
+              url: '/api/v1/xpack/cloud/accounts/',
+              transformOption: (item) => {
+                const label = `${item.name}(${item.provider.label})`
+                return { label: label, value: item.id }
+              }
             }
           }
         },

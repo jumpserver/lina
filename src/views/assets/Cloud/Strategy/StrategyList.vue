@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script type="text/jsx">
@@ -19,7 +19,10 @@ export default {
           app: 'xpack',
           resource: 'strategy'
         },
-        columns: ['name', 'priority', 'strategy_rules', 'strategy_actions', 'actions', 'user_actions'],
+        columns: [
+          'name', 'priority', 'strategy_rules',
+          'strategy_actions', 'actions', 'user_actions'
+        ],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -55,6 +58,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss' scoped>
 
 </style>

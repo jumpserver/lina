@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" @getObjectDone="afterGetUser" />
 </template>
 
 <script>
@@ -14,8 +14,11 @@ export default {
   },
   data() {
     return {
+      loading: true,
       initial: {
-        need_update_password: true
+        need_update_password: true,
+        system_roles: [],
+        org_roles: []
       },
       user: {
         'can_public_key_auth': false
@@ -191,10 +194,12 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
-  mounted() {
+  async mounted() {
     if (this.currentOrgIsRoot) {
       this.fieldsMeta.groups.el.disabled = true
     }
+    await this.setDefaultRoles()
+    this.loading = false
   },
   methods: {
     afterGetUser(user) {
@@ -203,6 +208,11 @@ export default {
       if (this.$route.query.clone_from) {
         this.user.groups = []
       }
+    },
+    async setDefaultRoles() {
+      const roles = await this.$axios.get('/api/v1/rbac/roles/')
+      this.initial.system_roles = roles.filter(role => role.name === 'User').map(role => role.id)
+      this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
     }
   }
 }

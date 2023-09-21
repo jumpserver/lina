@@ -167,6 +167,9 @@ export default {
                 label: 'Powershell', value: 'win_shell'
               },
               {
+                label: 'Raw', value: 'raw'
+              },
+              {
                 label: 'Python', value: 'python'
               },
               {

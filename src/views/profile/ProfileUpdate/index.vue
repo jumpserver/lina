@@ -11,7 +11,6 @@ import { GenericDetailPage } from '@/layout/components'
 import ProfileInfo from '../ProfileInfo'
 import ProfileUpdate from './ProfileUpdate'
 import PasswordUpdate from './PasswordUpdate'
-import SecretKeyUpdate from './SecretKeyUpdate'
 import SSHUpdate from './SSHUpdate'
 
 export default {
@@ -20,7 +19,6 @@ export default {
     ProfileInfo,
     ProfileUpdate,
     PasswordUpdate,
-    SecretKeyUpdate,
     SSHUpdate
   },
   data() {
@@ -53,10 +51,6 @@ export default {
           title: this.$t('users.SSHKeySetting'),
           name: 'SSHUpdate',
           disabled: !this.$store.state.users.profile.can_public_key_auth
-        },
-        {
-          title: this.$t('users.FileEncryptionPassword'),
-          name: 'SecretKeyUpdate'
         }
       ]
     },

@@ -13,7 +13,6 @@ export default {
   },
   data() {
     return {
-      hasStop: true,
       taskType: 'tcpdump',
       fields: [
         {
@@ -25,6 +24,7 @@ export default {
           {
             name: 'src_ips',
             label: this.$t('setting.SourceIP'),
+            tip: this.$t('setting.helpTip.IP'),
             el: {
               placeholder: this.$t('setting.SourceIP')
             }
@@ -42,6 +42,7 @@ export default {
           {
             name: 'dest_ips',
             label: this.$t('setting.DestinationIP'),
+            tip: this.$t('setting.helpTip.IP'),
             el: {
               placeholder: this.$t('setting.DestinationIP')
             }

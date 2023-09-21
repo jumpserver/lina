@@ -25,7 +25,9 @@
           multiple
           style="width:100%"
         >
-          <el-option v-for="(item,index) of weekList" :key="index" :value="index+1">{{ item }}</el-option>
+          <el-option v-for="(item,index) of weekList" :key="index" :value="index === 6 ? 0 : (index + 1)">
+            {{ item }}
+          </el-option>
         </el-select>
       </el-radio>
     </el-form-item>

@@ -214,11 +214,12 @@ export default {
         },
         push_now: {
           helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
-          hidden: () => {
+          hidden: (formValue) => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled ||
               !automation.ansible_enabled ||
               !this.$hasPerm('accounts.push_account') ||
+              (formValue.secret_type === 'ssh_key' && this.iPlatform.type.value === 'windows') ||
               this.addTemplate
           }
         },

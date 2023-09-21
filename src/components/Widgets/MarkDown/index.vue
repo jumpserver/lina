@@ -25,13 +25,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.markdown-body {
+  background-color: #f3f3f3;
+}
 .markdown-body * {
   padding: 10px;
-  background-color: #f3f3f3;
   color: #1a1a1a;
   font-size: 13px;
-  //& >>> .table * {
-  //  background-color: #f3f3f3;
-  //}
 }
 </style>

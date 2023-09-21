@@ -16,8 +16,9 @@ export default {
       taskType: 'telnet',
       fields: [
         {
-          name: 'dest_ip',
+          name: 'dest_ips',
           label: this.$t('setting.DestinationIP'),
+          tip: this.$t('setting.helpTip.IP'),
           el: {
             placeholder: this.$t('setting.DestinationIP')
           }
@@ -32,7 +33,7 @@ export default {
         }
       ],
       rules: {
-        dest_ip: rules.Required,
+        dest_ips: rules.Required,
         dest_port: rules.Required
       }
     }

@@ -50,6 +50,7 @@ export const assetFieldsMeta = (vm) => {
         choices: platformProtocols,
         instance: asset
       },
+      helpText: i18n.t('assets.AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {

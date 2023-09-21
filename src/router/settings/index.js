@@ -100,8 +100,8 @@ export default {
       component: () => import('@/views/settings/Feature'),
       meta: {
         title: i18n.t('setting.Features'),
-        icon: 'email-set',
-        permissions: ['settings.change_email']
+        icon: 'feature',
+        permissions: ['settings.view_setting']
       }
     },
     {

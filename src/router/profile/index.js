@@ -75,6 +75,27 @@ export default {
         icon: 'token',
         permissions: ['authentication.view_connectiontoken']
       }
+    },
+    {
+      path: '/profile/passkeys',
+      component: () => import('@/views/profile/PassKey.vue'),
+      name: 'Passkey',
+      meta: {
+        title: i18n.t('common.nav.PassKey'),
+        icon: 'passkey',
+        hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
+        permissions: ['authentication.view_connectiontoken']
+      }
+    },
+    {
+      path: '/profile/user/setting',
+      name: 'UserSetting',
+      component: () => import('@/views/profile/UserSettingUpdate/index'),
+      meta: {
+        title: i18n.t('users.UserSetting'),
+        icon: 'setting',
+        permissions: []
+      }
     }
   ]
 }

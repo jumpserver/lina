@@ -32,6 +32,16 @@ export default {
       }
     },
     {
+      path: '/audit/online-user-session',
+      component: () => import('@/views/sessions/OnlineSession/OnlineSessionList'),
+      name: 'OnlineSession',
+      meta: {
+        icon: 'users',
+        title: i18n.t('route.OnlineSession'),
+        permissions: ['audits.view_usersession']
+      }
+    },
+    {
       path: '/audit/sessions',
       component: empty,
       name: 'Sessions',
