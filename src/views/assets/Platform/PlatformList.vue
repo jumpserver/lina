@@ -94,12 +94,8 @@ export default {
         hasRightActions: true,
         createRoute: 'PlatformCreate',
         canCreate: () => this.$hasPerm('assets.add_platform'),
-        handleImportClick: ({ selectedRows }) => {
-          this.$eventBus.$emit('showImportDialog', {
-            selectedRows,
-            url: '/api/v1/assets/platforms/',
-            name: this?.name
-          })
+        importOptions: {
+          url: vm.url
         },
         exportOptions: {
           url: vm.url
@@ -134,6 +130,7 @@ export default {
   methods: {
     changeMoreCreates() {
       this.tableConfig.url = this.url
+      this.headerActions.importOptions.url = this.url
       this.headerActions.exportOptions.url = this.url
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
