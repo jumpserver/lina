@@ -27,7 +27,7 @@ export default {
       tableConfig: {
         url: this.url,
         columnsExtra: ['index', 'duration'],
-        columnsExclude: ['terminal'],
+        columnsExclude: ['terminal', 'is_locked'],
         columnsShow: {
           min: ['id', 'actions'],
           default: [
