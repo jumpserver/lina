@@ -36,6 +36,7 @@
       @focus="focus = true"
       @change="handleConfirm"
       @keyup.enter.native="handleConfirm"
+      @keyup.delete.native="handleDelete"
     />
   </div>
 
@@ -67,6 +68,7 @@ export default {
       filterKey: '',
       filterValue: '',
       valueLabel: '',
+      emptyCount: 0,
       filterTags: this.default || {},
       focus: false
     }
@@ -112,6 +114,11 @@ export default {
         }
       },
       deep: true
+    },
+    filterValue(newValue, oldValue) {
+      if (newValue === '' && oldValue !== '') {
+        this.emptyCount = 1
+      }
     }
   },
   mounted() {
@@ -243,9 +250,21 @@ export default {
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
-      this.checkUrlFilds(evt)
+      if (this.getUrlQuery) {
+        this.checkUrlFields(evt)
+      }
       this.$emit('tagSearch', this.filterMaps)
       return true
+    },
+    handleDelete() {
+      const filterTags = Object.keys(this.filterTags)
+      if (this.filterValue === '' && filterTags.length > 0) {
+        if (this.emptyCount === 2) {
+          this.handleTagClose(filterTags[filterTags.length - 1])
+        } else {
+          this.emptyCount++
+        }
+      }
     },
     handleConfirm() {
       if (this.filterValue === '') {
@@ -256,6 +275,9 @@ export default {
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
+      setTimeout(() => {
+        this.emptyCount = 2
+      }, 10)
       const tag = {
         key: this.filterKey,
         label: this.keyLabel,
@@ -304,7 +326,7 @@ export default {
       this.$refs.SearchInput.focus()
     },
     // 删除查询条件时改变url
-    checkUrlFilds(evt) {
+    checkUrlFields(evt) {
       let newQuery = _.omit(this.$route.query, evt)
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search
