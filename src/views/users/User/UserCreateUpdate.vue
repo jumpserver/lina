@@ -1,16 +1,22 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdateDrawer
+    v-if="!loading"
+    :drawer="$attrs.drawer"
+    v-bind="$data"
+    @getObjectDone="afterGetUser"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {
