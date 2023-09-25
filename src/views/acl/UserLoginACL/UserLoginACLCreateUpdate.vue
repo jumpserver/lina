@@ -51,7 +51,7 @@ export default {
           },
           rules: [Required],
           hidden: (formValue) => {
-            return formValue.action !== 'review'
+            return !['review', 'notice'].includes(formValue.action)
           }
         },
         rules: {
@@ -86,7 +86,7 @@ export default {
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []
         }
-        if (value.action !== 'review') {
+        if (!['review', 'notice'].includes(value.action)) {
           value.reviewers = []
         }
         return value
