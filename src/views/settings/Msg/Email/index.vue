@@ -99,18 +99,14 @@ export default {
         }
       ],
       cleanFormValue(data) {
-        const submitValue = {}
-        submitValue['EMAIL_RECIPIENT'] = data['EMAIL_RECIPIENT']
-        submitValue['EMAIL_FROM'] = data['EMAIL_FROM']
-        submitValue['EMAIL_SUBJECT_PREFIX'] = data['EMAIL_SUBJECT_PREFIX']
-        Object.keys(submitValue).forEach(
+        Object.keys(data).forEach(
           function(key) {
-            if (submitValue[key] === null) {
-              delete submitValue[key]
+            if (data[key] === null) {
+              delete data[key]
             }
           }
         )
-        return submitValue
+        return data
       },
       submitMethod() {
         return 'patch'
