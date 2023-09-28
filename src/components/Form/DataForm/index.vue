@@ -1,19 +1,22 @@
 <template>
-  <ElFormRender
-    ref="form"
-    :class="mobile? 'mobile' : 'desktop'"
-    :content="fields"
-    :form="basicForm"
-    :label-position="labelPosition"
-    label-width="20%"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <!-- slot 透传 -->
-    <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
-    <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
+  <div>
+    <ElFormRender
+      ref="form"
+      :class="mobile? 'mobile' : 'desktop'"
+      :content="fields"
+      :form="basicForm"
+      :label-position="labelPosition"
+      class="form-fields"
+      label-width="20%"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <!-- slot 透传 -->
+      <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
+      <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
-    <el-form-item v-if="hasButtons" class="form-buttons">
+    </ElFormRender>
+    <div v-if="hasButtons" class="form-buttons">
       <el-button
         v-for="button in moreButtons"
         :key="button.title"
@@ -44,8 +47,8 @@
       >
         {{ submitBtnText }}
       </el-button>
-    </el-form-item>
-  </ElFormRender>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -198,5 +201,7 @@ export default {
 
   .form-buttons {
     margin-top: 20px;
+    margin-left: 20%;
+    margin-bottom: 20px;
   }
 </style>

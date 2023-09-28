@@ -2,26 +2,27 @@
   <el-drawer
     :direction="direction"
     :size="width"
-    :title="title"
-    :visible="drawer"
+    :title="iTitle"
+    :visible="visible"
     class="drawer"
-    @update:visible="(val) => $emit('update:drawer', val)"
+    @update:visible="(val) => $emit('update:visible', val)"
   >
     <div class="el-drawer__content">
-      <GenericCreateUpdateForm ref="createUpdateForm" v-bind="$attrs" v-on="$listeners" />
+      <GenericCreateUpdateForm v-bind="$attrs" @submitSuccess="onSubmitSuccess" v-on="$listeners" />
     </div>
   </el-drawer>
 </template>
 <script>
-import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
+
+import GenericCreateUpdateForm from '../GenericCreateUpdateForm/index.vue'
 
 export default {
-  name: 'GenericCreateUpdateForm',
+  name: 'GenericCreateUpdateDrawer',
   components: {
     GenericCreateUpdateForm
   },
   props: {
-    drawer: {
+    visible: {
       type: Boolean,
       default: false
     },
@@ -35,11 +36,11 @@ export default {
     },
     title: {
       type: String,
-      default: '创建用户'
+      default: ''
     },
     width: {
       type: String,
-      default: '800px'
+      default: '700px'
     }
   },
   data() {
@@ -47,6 +48,27 @@ export default {
     }
   },
   computed: {
+    iTitle() {
+      if (this.title) {
+        return title
+      }
+      let title = this.$route.meta.title || this.$route.name
+      title = title.replace('List', '').replace('列表', '')
+      if (this.action === 'create') {
+        title = this.$t('common.Create') + title
+      } else if (this.action === 'update') {
+        title = this.$t('common.Update') + title
+      }
+      return title
+    }
+  },
+  mounted() {
+    console.log('Dat: ', this.$attrs)
+  },
+  methods: {
+    onSubmitSuccess(res, { addContinue }) {
+      this.$emit('update:visible', false)
+    }
   }
 }
 </script>
@@ -56,12 +78,15 @@ export default {
     padding-top: 30px;
   }
   .el-drawer__content {
-    overflow: auto;
-    height: calc(100vh - 130px);
+
+    >>> .form-fields {
+      overflow: auto;
+      max-height: calc(100vh - 150px);
+    }
 
     >>> .form-buttons {
-      position: absolute;
-      bottom: 10px;
+      //position: absolute;
+      //bottom: 15px;
       width: 100%;
       background: white;
     }

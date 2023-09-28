@@ -13,9 +13,7 @@
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
-    <UserCreateUpdate
-      :drawer.sync="showCreateUpdate"
-    />
+    <UserCreateUpdate :visible.sync="showCreateUpdate" />
   </div>
 </template>
 

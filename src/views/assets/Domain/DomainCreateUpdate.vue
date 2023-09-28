@@ -1,21 +1,29 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :initial="initial" :url="url" />
+  <GenericCreateUpdateDrawer
+    :fields="fields"
+    :fields-meta="fieldsMeta"
+    :initial="initial"
+    :url="url"
+    v-bind="$attrs"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 import AssetSelect from '@/components/Apps/AssetSelect'
 
 export default {
   name: 'GatewayCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'assets', 'comment']]
+        [this.$t('common.Basic'), ['name', 'assets']],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         assets: {

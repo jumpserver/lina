@@ -1,6 +1,5 @@
 <template>
   <AutoDataForm
-    v-if="!loading"
     ref="form"
     :form="form"
     :has-reset="iHasReset"
@@ -120,7 +119,13 @@ export default {
     getNextRoute: {
       type: Function,
       default(res, method) {
-        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        const route = method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+        if (!(route.params && route.params.id)) {
+          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id, order: this.extraQueryOrder })
+        } else {
+          route['params'] = deepmerge(route['params'], { order: this.extraQueryOrder })
+        }
+        return route
       }
     },
     // 获取提交的方法
@@ -204,16 +209,10 @@ export default {
     onPerformSuccess: {
       type: Function,
       default(res, method, vm, addContinue) {
-        const route = this.getNextRoute(res, method)
-        if (!(route.params && route.params.id)) {
-          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id, order: this.extraQueryOrder })
-        } else {
-          route['params'] = deepmerge(route['params'], { order: this.extraQueryOrder })
-        }
-        this.$emit('submitSuccess', res)
-
+        this.$emit('submitSuccess', res, { method, vm, addContinue })
         this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
+          const route = this.getNextRoute(res, method)
           setTimeout(() => this.$router.push(route), 100)
         }
       }
@@ -305,6 +304,9 @@ export default {
     } finally {
       this.loading = false
     }
+  },
+  mounted() {
+    console.log('mounted in object form')
   },
   methods: {
     isUpdateMethod() {

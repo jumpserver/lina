@@ -1,15 +1,16 @@
 <template>
   <GenericCreateUpdateDrawer
     v-if="!loading"
-    :drawer="$attrs.drawer"
+    :visible="visible"
     v-bind="$data"
     @getObjectDone="afterGetUser"
     v-on="$listeners"
+    @update:visible="(val) => $emit('update:visible', val)"
   />
 </template>
 
 <script>
-import { GenericCreateUpdateDrawer } from '@/layout/components'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
@@ -17,6 +18,12 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     GenericCreateUpdateDrawer
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
