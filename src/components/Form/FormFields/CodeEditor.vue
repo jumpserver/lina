@@ -16,9 +16,8 @@
           >
             <i :class="item.icon" style="margin-right: 4px;" />{{ item.name }}
           </el-button>
-
           <el-autocomplete
-            v-if="item.type === 'input' && item.el.autoComplete"
+            v-if="item.type === 'input' &&item.el && item.el.autoComplete"
             v-model="item.value"
             :placeholder="item.placeholder"
             :fetch-suggestions="item.el.query"
@@ -27,7 +26,14 @@
             @select="item.callback(item.value)"
             @change="item.callback(item.value)"
           />
-
+          <el-input
+            v-else-if="item.type==='input'"
+            v-model="item.value"
+            :placeholder="item.placeholder"
+            class="inline-input"
+            size="mini"
+            @change="item.callback(item.value)"
+          />
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
               {{ item.name }}:
