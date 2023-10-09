@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div v-if="mfaDialogVisible">
-      <UserConfirmDialog
-        :url="url"
-        @UserConfirmCancel="exit"
-        @UserConfirmDone="getAuthInfo"
-      />
-    </div>
+    <UserConfirmDialog :handler="getAuthInfo" @onConfirmDone="showSecretDialog" />
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
@@ -147,11 +141,12 @@ export default {
       })
     },
     getAuthInfo() {
-      this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
-        this.secretInfo = resp
-        this.sshKeyFingerprint = resp?.spec_info?.ssh_key_fingerprint || '-'
-        this.showSecret = true
-      })
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true })
+    },
+    showSecretDialog(res) {
+      this.secretInfo = res
+      this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
+      this.showSecret = true
     },
     exit() {
       this.$emit('update:visible', false)

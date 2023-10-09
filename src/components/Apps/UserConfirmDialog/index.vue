@@ -1,20 +1,19 @@
 <template>
   <Dialog
-    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
     :visible.sync="visible"
-    :width="'36%'"
     class="dialog-content"
     v-bind="$attrs"
+    width="600px"
+    @confirm="visible = false"
     v-on="$listeners"
   >
-    <div v-if="ConfirmType === 'relogin'">
+    <div v-if="confirmTypeRequired === 'relogin'">
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-alert
-            :closable="false"
             :title="$tc('auth.ReLoginTitle')"
             center
             style="margin-bottom: 20px;"
@@ -24,12 +23,7 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
-          <el-button
-            size="mini"
-            style="width: 100%; line-height:20px;"
-            type="primary"
-            @click="logOut"
-          >
+          <el-button class="confirm-btn" size="mini" type="primary" @click="logout">
             {{ this.$t('auth.ReLogin') }}
           </el-button>
         </el-col>
@@ -39,14 +33,13 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
-            v-model="Select"
-            :disabled="ConfirmType === 'password'"
+            v-model="subTypeSelected"
             style="width: 100%; margin-bottom: 20px;"
-            @change="helpText(Select)"
+            @change="handleSubTypeChange"
           >
             <el-option
-              v-for="(item, i) of Content"
-              :key="i"
+              v-for="item of subTypeChoices"
+              :key="item.name"
               :disabled="item.disabled"
               :label="item.display_name"
               :value="item.name"
@@ -56,28 +49,23 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
-          <el-input v-model="SecretKey" :placeholder="HelpText" :show-password="showPassword" />
-          <span v-if="Select === 'sms'" style="margin: -1px 0 0 20px;">
+          <el-input v-model="secretValue" :placeholder="inputPlaceholder" :show-password="showPassword" />
+          <span v-if="subTypeSelected === 'sms'" style="margin: -1px 0 0 20px;">
             <el-button
-              :disabled="smsBtndisabled"
+              :disabled="smsBtnDisabled"
               size="mini"
               style="line-height:20px; float: right;"
               type="primary"
-              @click="sendChallengeCode"
+              @click="sendSMSCode"
             >
               {{ smsBtnText }}
             </el-button>
           </span>
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 0 auto;">
+      <el-row :gutter="24" style="margin: 10px auto;">
         <el-col :md="24" :sm="24">
-          <el-button
-            size="mini"
-            style="width: 100%; line-height:20px;"
-            type="primary"
-            @click="userConfirm"
-          >
+          <el-button class="confirm-btn" size="mini" type="primary" @click="handleConfirm">
             {{ this.$t('common.Confirm') }}
           </el-button>
         </el-col>
@@ -96,125 +84,125 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => ''
+      default: ''
+    },
+    handler: {
+      type: Function,
+      default: null
     }
   },
   data() {
     return {
-      title: '',
+      title: this.$t('common.CurrentUserVerify'),
       smsWidth: 0,
-      Select: '',
-      Level: null,
-      HelpText: '',
-      smsBtnText: '',
-      smsBtndisabled: false,
-      ConfirmType: '',
-      Content: null,
-      SecretKey: '',
+      subTypeSelected: '',
+      inputPlaceholder: '',
+      smsBtnText: this.$t('common.SendVerificationCode'),
+      smsBtnDisabled: false,
+      confirmTypeRequired: '',
+      subTypeChoices: [],
+      secretValue: '',
       visible: false
     }
   },
-
   computed: {
     showPassword() {
-      if (this.ConfirmType === 'password') {
-        return true
+      return this.confirmTypeRequired === 'password'
+    },
+    iHandler() {
+      if (this.handler === null) {
+        return () => this.$axios.get(this.url, { disableFlashErrorMsg: true })
       }
-      return false
+      return this.handler
     }
   },
   watch: {
     visible(val) {
       if (!val) {
-        this.$emit('UserConfirmCancel', true)
+        this.$emit('onConfirmCancel', true)
       }
     }
   },
   mounted() {
-    this.smsBtnText = this.$t('common.SendVerificationCode')
-    this.$axios.get(`${this.url}`, { disableFlashErrorMsg: true }).then(
-      () => { this.$emit('UserConfirmDone', true) }).catch((err) => {
-      const confirm_type = err.response.data.code
-      this.$axios.get('/api/v1/authentication/confirm/', { params: { confirm_type: confirm_type }}).then((data) => {
-        this.ConfirmType = data.confirm_type
-        this.Content = data.content
-        if (this.ConfirmType === 'relogin') {
-          this.$axios.post(
-            `/api/v1/authentication/confirm/`,
-            {
-              confirm_type: this.ConfirmType,
-              secret_key: ''
-            },
-            { disableFlashErrorMsg: true },
-          ).then(() => { this.$emit('UserConfirmDone', true) }).catch(() => {
-            this.title = this.$t('auth.NeedReLogin')
-            this.visible = true
-          })
-          return
-        }
-        if (this.ConfirmType === 'mfa') {
-          this.Select = this.Content.filter(item => !item.disabled)[0].name
-          if (this.Select === 'sms') {
-            this.smsWidth = 6
-          }
-          this.HelpText = this.Content.filter(item => !item.disabled)[0].placeholder
-        } else if (this.ConfirmType === 'password') {
-          this.Select = this.$t('setting.password')
-          this.HelpText = this.$t('common.PasswordRequireForSecurity')
-          this.Content = [{ 'name': 'password' }]
-        }
-        this.title = this.$t('common.CurrentUserVerify')
-        this.visible = true
-      }).catch(() => {
-        this.$emit('AuthMFAError', true)
-      })
-    })
+    this.performConfirm()
   },
   methods: {
-    helpText(val) {
-      this.HelpText = this.Content.filter(item => item.name === val)[0]?.placeholder
-      if (val === 'sms') {
-        this.smsWidth = 6
-      } else {
-        this.smsWidth = 0
-      }
+    handleSubTypeChange(val) {
+      this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
+      this.smsWidth = val === 'sms' ? 6 : 0
     },
-    logOut() {
+    performConfirm() {
+      this.iHandler().then((res) => {
+        this.$emit('onConfirmDone', res)
+      }).catch((err) => {
+        const confirmType = err.response.data?.code
+        const confirmUrl = '/api/v1/authentication/confirm/'
+        this.$axios.get(confirmUrl, { params: { confirm_type: confirmType }}).then((data) => {
+          this.subTypeChoices = data.content
+          this.confirmTypeRequired = data.confirm_type
+
+          if (this.confirmTypeRequired === 'relogin') {
+            const data = {
+              confirm_type: this.confirmTypeRequired,
+              secret_key: ''
+            }
+            this.$axios.post(confirmUrl, data, { disableFlashErrorMsg: true }).then(() => {
+              this.afterConfirm()
+            }).catch(() => {
+              this.title = this.$t('auth.NeedReLogin')
+            })
+            return
+          }
+          const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
+          this.subTypeSelected = defaultSubType.name
+          this.inputPlaceholder = defaultSubType.placeholder
+          this.visible = true
+        }).catch(() => {
+          this.$emit('AuthMFAError', true)
+        })
+      })
+    },
+    logout() {
       window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
-    sendChallengeCode() {
-      this.$axios.post(
-        `/api/v1/authentication/mfa/select/`, {
-          type: 'sms'
-        }
-      ).then(res => {
-        this.$message.success(this.$t('common.VerificationCodeSent'))
+    sendSMSCode() {
+      this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: 'sms' }).then(res => {
+        this.$message.success(this.$tc('common.VerificationCodeSent'))
         let time = 60
         const interval = setInterval(() => {
+          const originText = this.smsBtnText
           this.smsBtnText = this.$t('common.Pending') + `: ${time}`
-          this.smsBtndisabled = true
+          this.smsBtnDisabled = true
           time -= 1
 
           if (time === 0) {
-            this.smsBtnText = this.$t('common.SendVerificationCode')
-            this.smsBtndisabled = false
+            this.smsBtnText = originText
+            this.smsBtnDisabled = false
             clearInterval(interval)
           }
         }, 1000)
       })
     },
-    userConfirm() {
-      if (this.Select === 'otp' && this.SecretKey.length !== 6) {
-        return this.$message.error(this.$t('common.MFAErrorMsg'))
+    afterConfirm() {
+      this.iHandler().then(res => {
+        this.$emit('onConfirmDone', res)
+      }).catch((e) => {
+        this.$emit('onHandlerError', e)
+      }).finally(() => {
+        this.visible = false
+      })
+    },
+    handleConfirm() {
+      if (this.subTypeSelected === 'otp' && this.secretValue.length !== 6) {
+        return this.$message.error(this.$tc('common.MFAErrorMsg'))
       }
-      this.$axios.post(
-        `/api/v1/authentication/confirm/`, {
-          confirm_type: this.ConfirmType,
-          mfa_type: this.ConfirmType === 'password' ? undefined : this.Select,
-          secret_key: this.SecretKey
-        }
-      ).then(res => {
-        this.$emit('UserConfirmDone', true)
+      const data = {
+        confirm_type: this.confirmTypeRequired,
+        mfa_type: this.confirmTypeRequired === 'mfa' ? this.subTypeSelected : '',
+        secret_key: this.secretValue
+      }
+      this.$axios.post(`/api/v1/authentication/confirm/`, data).then(res => {
+        this.afterConfirm()
       })
     }
   }
@@ -228,5 +216,16 @@ export default {
 
   .dialog-content >>> .el-dialog {
     padding: 8px;
+
+    .el-dialog__body {
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
   }
+
+  .confirm-btn {
+    width: 100%;
+    line-height: 20px;
+  }
+
 </style>

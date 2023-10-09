@@ -4,8 +4,8 @@
       v-if="showPasswordDialog"
       :url="confirmUrl"
       :visible.sync="showPasswordDialog"
-      @UserConfirmCancel="exit"
-      @UserConfirmDone="verifyDone"
+      @onConfirmCancel="exit"
+      @onConfirmDone="verifyDone"
     />
     <div>
       <el-row :gutter="20">
@@ -346,7 +346,7 @@ export default {
     verifyDone() {
       const url = this.bindOrUNBindUrl
       if (!this.object[`${this.currentEdit}_id`]) {
-        window.location.href = url
+        window.open(url, 'Bind', 'width=800,height=600')
       } else {
         this.$axios.post(url).then(res => {
           this.$message.success(this.$tc('common.updateSuccessMsg'))

@@ -1,5 +1,4 @@
 {
-  "": "",
   "accounts": {
     "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
@@ -1679,7 +1678,7 @@
     "LDAPUser": "LDAP 用户",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
-      "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用",
+      "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",
       "ConnectionTokenList": "连接令牌是将身份验证和连接资产结合起来使用的一种认证信息，支持用户一键登录到资产，目前支持的组件包括：KoKo、Lion、Magnus、Razor 等",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
@@ -1695,7 +1694,7 @@
       "securityLoginLimitTime": "提示：（单位：分）当用户登录失败次数达到限制后，那么在此时间间隔内禁止登录",
       "securityMaxIdleTime": "提示：如果超过该配置没有操作，连接会被断开 （单位：分）",
       "securityPasswordExpirationTime": "提示：（单位：天）如果用户在此期间没有更新密码，用户密码将过期失效； 密码过期提醒邮件将在密码过期前5天内由系统（每天）自动发送给用户",
-      "siteUrl": "eg: http://jumpserver.abc.com:8080",
+      "siteUrl": "eg: https://jumpserver.example.com:8080",
       "terminalHeartbeatInterval": "单位: 秒",
       "terminalSessionKeepDuration": "单位：天。 会话、录像、命令记录超过该时长将会被删除(仅影响数据库存储, oss等不受影响)",
       "terminalTelnetRegex": "登录telnet服务器成功后的提示正则表达式，如: Last\\s*login|success|成功",
@@ -1872,6 +1871,10 @@
     "ShowNodeInfo": "显示节点详情",
     "TestNodeAssetConnectivity": "测试资产节点可连接性",
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
+  },
+  "profile": {
+    "CreateAccessKey": "创建访问密钥",
+    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。"
   },
   "users": {
     "LunaSettingUpdate": "Luna 配置设置",

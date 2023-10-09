@@ -2,10 +2,10 @@
   <div>
     <div v-if="mfaDialogShow">
       <UserConfirmDialog
-        :url="url"
+        :url="confirmUrl"
         @AuthMFAError="handleAuthMFAError"
-        @UserConfirmCancel="handleExportCancel"
-        @UserConfirmDone="showExportDialog"
+        @onConfirmCancel="handleExportCancel"
+        @onConfirmDone="showExportDialog"
       />
     </div>
     <Dialog
@@ -112,7 +112,8 @@ export default {
       exportTypeOption: 'csv',
       meta: {},
       mfaVerified: false,
-      mfaDialogShow: false
+      mfaDialogShow: false,
+      confirmUrl: '/api/v1/accounts/account-secrets/?limit=1'
     }
   },
   computed: {
@@ -136,7 +137,6 @@ export default {
           delete query[key]
         }
       }
-
       return query
     },
     tableHasQuery() {
