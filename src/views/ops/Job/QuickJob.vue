@@ -81,6 +81,7 @@ export default {
       DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
+      chdir: '',
       command: '',
       module: 'shell',
       timeout: -1,
@@ -199,6 +200,17 @@ export default {
             ],
             callback: (option) => {
               this.timeout = option
+            }
+          },
+          chdir: {
+            type: 'input',
+            name: this.$t('ops.runningPath'),
+            align: 'left',
+            value: '',
+            placeholder: this.$tc('ops.EnterRunningPath'),
+            tip: this.$tc('ops.RunningPathHelpText'),
+            callback: (val) => {
+              this.chdir = val
             }
           }
         },
@@ -400,6 +412,9 @@ export default {
         instant: true,
         is_periodic: false,
         timeout: this.timeout
+      }
+      if (this.chdir) {
+        data.chdir = this.chdir
       }
       createJob(data).then(res => {
         this.executionInfo.timeCost = 0
