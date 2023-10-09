@@ -7,6 +7,7 @@
       :initial="object"
       :submit-method="submitMethod"
       :url="url"
+      :clean-form-value="cleanFormValue"
       class="password-update"
     />
   </IBox>
@@ -61,7 +62,9 @@ export default {
       for (const k in this.remoteMeta) {
         if (this.remoteMeta.hasOwnProperty(k)) {
           fields.push([this.remoteMeta[k].label, [k]])
-          fieldsMeta[k] = { 'fields': Object.keys(this.remoteMeta[k].children) }
+          fieldsMeta[k] = { 'fields': Object.keys(this.remoteMeta[k].children).filter(
+            // todo: remove this when we have a better solution
+            (key) => key !== 'terminal_theme_name') }
         }
       }
 
@@ -83,6 +86,13 @@ export default {
     },
     submitMethod() {
       return 'patch'
+    },
+    cleanFormValue(value) {
+      if (this.category === 'koko') {
+        // todo: remove this when we have a better solution
+        delete value['basic']['terminal_theme_name']
+      }
+      return value
     }
   }
 }
