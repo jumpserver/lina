@@ -10,6 +10,7 @@ import SMSAlibaba from './SMSAlibaba.vue'
 import SMSTencent from './SMSTencent.vue'
 import SMSHuawei from './SMSHuawei.vue'
 import SMSCustom from './SMSCustom.vue'
+import SMSFileCustom from './SMSFileCustom.vue'
 import CMPP2 from './CMPP2.vue'
 import { IBox } from '@/components'
 
@@ -25,12 +26,12 @@ export default {
       fields: [
         [
           this.$t('setting.Basic'), [
-            'SMS_ENABLED', 'SMS_BACKEND'
+            'SMS_ENABLED', 'SMS_BACKEND', 'SMS_CODE_LENGTH'
           ]
         ],
         [
           this.$t('setting.SMSProvider'), [
-            'ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2', 'SMSCustom'
+            'ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2', 'SMSCustom', 'SMSFileCustom'
           ]
         ]
       ],
@@ -68,6 +69,13 @@ export default {
           component: SMSCustom,
           hidden: (form) => {
             return form['SMS_BACKEND'] !== 'custom'
+          }
+        },
+        SMSFileCustom: {
+          label: this.$t('setting.Custom'),
+          component: SMSFileCustom,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'custom_file'
           }
         }
       },

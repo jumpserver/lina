@@ -1712,7 +1712,9 @@
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当组件注册成功后可以禁止",
       "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知",
-      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1",
+      "CustomParams": "左侧为短信平台接收的参数，右侧为JumpServer待格式化参数，最终如下：<br/>{\"phone_numbers\": \"123,134\", \"content\": \"验证码为: 666666\"}",
+      "CustomFile": "请将自定义的文件放到指定目录下(data/sms/main.py)，并在 config.txt 中启用配置项 SMS_CUSTOM_FILE_MD5=<文件md5值>"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
