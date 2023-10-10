@@ -1,20 +1,24 @@
 <template>
-  <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.Custom')" />
+  <div>
+    <el-alert :title="helpMessage" type="success" :closable="false" />
+    <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.Custom')" />
+  </div>
 </template>
 
 <script>
 import BaseSMS from './Base.vue'
-import { JsonEditor, PhoneInput } from '@/components/Form/FormFields'
+import { PhoneInput } from '@/components/Form/FormFields'
 
 export default {
-  name: 'SMSCustom',
+  name: 'SMSFileCustom',
   components: {
     BaseSMS
   },
   data() {
     const vm = this
     return {
-      url: `/api/v1/settings/setting/?category=custom`,
+      helpMessage: this.$t('setting.helpTip.CustomFile'),
+      url: `/api/v1/settings/setting/?category=custom_file`,
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -24,7 +28,7 @@ export default {
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
-              `/api/v1/settings/sms/custom/testing/`,
+              `/api/v1/settings/sms/custom_file/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
@@ -37,12 +41,6 @@ export default {
       ],
       fields: [
         [
-          this.$t('common.BasicInfo'),
-          [
-            'CUSTOM_SMS_URL', 'CUSTOM_SMS_REQUEST_METHOD', 'CUSTOM_SMS_API_PARAMS'
-          ]
-        ],
-        [
           this.$t('common.Other'),
           [
             'SMS_TEST_PHONE'
@@ -50,11 +48,6 @@ export default {
         ]
       ],
       fieldsMeta: {
-        'CUSTOM_SMS_API_PARAMS': {
-          label: this.$t('common.Params'),
-          component: JsonEditor,
-          helpText: this.$t('setting.helpTip.CustomParams')
-        },
         SMS_TEST_PHONE: {
           component: PhoneInput
         }

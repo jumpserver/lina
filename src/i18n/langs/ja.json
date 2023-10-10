@@ -1734,7 +1734,9 @@
       "securityPasswordUpperCase": "オンにすると、ユーザーパスワードの変更、リセットに大文字を含める必要があります",
       "securityServiceAccountRegistration": "Bootstrap tokenを使用して端末を登録できるようにし、端末の登録が成功すると禁止できるようにします",
       "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます",
-      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1",
+      "CustomParams": "左側はSMSプラットフォームで受信されるパラメータ、右側はJumpServerフォーマットされるパラメータで、最終的には次のようになります。<br/>{\"phone_numbers\": \"123,134\", \"content\": \"認証コードは: 666666\"}",
+      "CustomFile": "カスタムファイルを指定のディレクトリ(data/sms/main.py)に置き、config.txtで設定項目SMS_CUSTOM_FILE_MD5=<ファイルmd5値>を有効にします"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "この値が3以上であることを確認してください",
