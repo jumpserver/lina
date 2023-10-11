@@ -1874,7 +1874,8 @@
   },
   "profile": {
     "CreateAccessKey": "创建访问密钥",
-    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。"
+    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。",
+    "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey"
   },
   "users": {
     "LunaSettingUpdate": "Luna 配置设置",

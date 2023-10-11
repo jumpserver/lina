@@ -94,10 +94,10 @@ export default {
   data() {
     return {
       title: this.$t('common.CurrentUserVerify'),
+      smsBtnText: this.$t('common.SendVerificationCode'),
       smsWidth: 0,
       subTypeSelected: '',
       inputPlaceholder: '',
-      smsBtnText: this.$t('common.SendVerificationCode'),
       smsBtnDisabled: false,
       confirmTypeRequired: '',
       subTypeChoices: [],
@@ -119,7 +119,7 @@ export default {
   watch: {
     visible(val) {
       if (!val) {
-        this.$emit('onConfirmCancel', true)
+        this.$emit('onConfirmFinal', true)
       }
     }
   },
@@ -189,6 +189,7 @@ export default {
       }).catch((e) => {
         this.$emit('onHandlerError', e)
       }).finally(() => {
+        this.$emit('onConfirmFinal')
         this.visible = false
       })
     },
