@@ -11,6 +11,10 @@
           <svg-icon class="icon" icon-class="personal" />
           {{ $t('common.nav.Profile') }}
         </el-dropdown-item>
+        <el-dropdown-item command="UserSetting">
+          <svg-icon class="icon" icon-class="setting" />
+          {{ $t('users.UserSetting') }}
+        </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
           <svg-icon class="icon" icon-class="key" />
           {{ $t('common.nav.APIKey') }}
@@ -21,10 +25,6 @@
         >
           <svg-icon class="icon" icon-class="unlock-one" />
           {{ $t('common.nav.TempPassword') }}
-        </el-dropdown-item>
-        <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" command="connectionToken">
-          <svg-icon class="icon" icon-class="token" />
-          {{ $t('common.nav.ConnectionToken') }}
         </el-dropdown-item>
         <el-dropdown-item command="logout" divided>
           <svg-icon class="icon" icon-class="logout" />
@@ -69,8 +69,8 @@ export default {
         case 'tempPassword':
           this.$router.push('/profile/temp-password')
           break
-        case 'connectionToken':
-          this.$router.push('/profile/connection-token')
+        case 'UserSetting':
+          this.$router.push('/profile/user/setting')
       }
     },
     logout() {
