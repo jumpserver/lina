@@ -12,6 +12,7 @@
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
@@ -48,6 +49,22 @@ export default {
               })
             }.bind(this)
           }
+        },
+        {
+          title: this.$t('accounts.SyncUpdateAccountInfo'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('accounts.Sync')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.patch(
+                `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }
+          })
         }
       ],
       url: `/api/v1/accounts/account-templates/${this.object.id}/`,
