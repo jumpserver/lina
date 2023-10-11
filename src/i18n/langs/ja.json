@@ -116,6 +116,8 @@
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
+    "Sync": "同期",
+    "SyncUpdateAccountInfo": "アカウント情報の同期更新",
     "AddAccountResult": "账号批量添加结果",
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
