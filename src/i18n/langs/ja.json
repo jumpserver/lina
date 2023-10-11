@@ -1023,7 +1023,7 @@
     "ratio": "スケール",
     "run": "実行",
     "runAs": "実行ユーザー",
-    "runningPath":"実行パス",
+    "runningPath": "実行パス",
     "runTimes": "実行回数",
     "selectAssetsMessage": "左側の資産を選択し、実行するシステムユーザーを選択し、コマンドを一括実行します",
     "selectedAssets": "選択済アセット:",
@@ -2304,5 +2304,10 @@
   "applets": {
     "PublishStatus": "投稿ステータス",
     "NoPublished": "未発表"
+  },
+  "profile": {
+    "CreateAccessKey": "Create Access key",
+    "ApiKeyWarning": "AccessKeyの漏洩リスクを低減するため、Secretは作成時にのみ提供され、後で再度クエリできません。安全に保管してください。",
+    "PasskeyAddDisableInfo": "あなたの認証元は {source} であり、Passkeyの追加はサポートされていません。"
   }
 }

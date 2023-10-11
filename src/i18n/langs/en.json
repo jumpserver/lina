@@ -2313,5 +2313,10 @@
   "applets": {
     "PublishStatus": "Publish status",
     "NoPublished": "Unpublished"
+  },
+  "profile": {
+    "CreateAccessKey": "Create Access key",
+    "ApiKeyWarning": "To reduce the risk of AccessKey exposure, Secret is provided only during creation and cannot be queried again later. Please keep it safe.",
+    "PasskeyAddDisableInfo": "Your authentication source is {source}, and Passkey addition is not supported."
   }
 }

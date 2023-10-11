@@ -10,7 +10,10 @@
       :title="$tc('auth.AddPassKey')"
       :visible.sync="dialogVisible"
     >
-      <AutoDataForm v-bind="form" @submit="onAddConfirm" />
+      <el-alert v-if="!isLocalUser" :closable="false" class="source-alert" type="error">
+        {{ $t('profile.PasskeyAddDisableInfo', {source: source.label}) }}
+      </el-alert>
+      <AutoDataForm v-else v-bind="form" @submit="onAddConfirm" />
     </Dialog>
   </div>
 </template>
@@ -115,6 +118,12 @@ export default {
   computed: {
     getRefsListTable() {
       return this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable || {}
+    },
+    isLocalUser() {
+      return this.source?.value === 'local'
+    },
+    source() {
+      return this.$store.getters.currentUser?.source
     }
   },
   methods: {
@@ -149,5 +158,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+.source-alert >>> .el-alert__content {
+  text-align: center;
+}
 </style>
