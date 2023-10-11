@@ -116,6 +116,8 @@
     "AccountExportTips": "The exported information contains account secret, which involves sensitive information. The exported format is an encrypted zip file (if no encryption password is set, please go to personal information to set the file encryption password).",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
+    "Sync": "Sync",
+    "SyncUpdateAccountInfo": "Sync update account info",
     "AddAccountResult": "Add account result",
     "AutoPush": "Auto Push",
     "GeneralAccounts": "General Accounts",
