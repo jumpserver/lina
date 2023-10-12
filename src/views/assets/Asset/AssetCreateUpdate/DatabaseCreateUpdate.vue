@@ -17,6 +17,9 @@ export default {
       addFieldsMeta: this.getAddFieldsMeta()
     }
   },
+  mounted() {
+    this.url = `${this.url}?platform=${this.$route.query.platform}`
+  },
   methods: {
     getAddFields() {
       const platform = this.$route.query.type
