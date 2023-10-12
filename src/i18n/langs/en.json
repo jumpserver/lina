@@ -230,6 +230,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "SyncProtocolToAsset": "Sync protocol to asset",
     "CommentHelpText": "Note: Note information will be hovered and displayed in the user authorization asset tree of Luna page, which can be viewed by ordinary users. Please do not fill in sensitive information.",
     "BulkUpdatePlatformHelpText": "Only when the original platform type of the asset is the same as the selected platform type will it be updated, if the platform type before and after the update is different, it will not be updated.",
     "ImportMessage": "Please go to the page of mapping type to import data",
