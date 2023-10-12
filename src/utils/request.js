@@ -76,6 +76,10 @@ function ifUnauthorized({ response, error }) {
   }
 }
 
+function ifConfirmRequired({ response, error }) {
+
+}
+
 function ifBadRequest({ response, error }) {
   if (response.status === 400) {
     if (response.data?.detail) {
@@ -151,6 +155,7 @@ service.interceptors.response.use(
     const response = error.response
     ifUnauthorized({ response, error })
     ifBadRequest({ response, error })
+    ifConfirmRequired({ response, error })
     flashErrorMsg({ response, error })
     return Promise.reject(error)
   }

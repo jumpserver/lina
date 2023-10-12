@@ -105,7 +105,8 @@ export default {
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_passkey'),
             callback: function() {
-              this.dialogVisible = true
+              this.$store.dispatch('common/showConfirmDialog', true)
+              // this.dialogVisible = true
             }.bind(this)
           }
         ]

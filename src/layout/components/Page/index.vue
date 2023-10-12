@@ -15,16 +15,19 @@
       </el-alert>
       <slot />
     </PageContent>
+    <UserConfirmDialog v-if="showConfirmDialog" :handler="testIt" />
   </div>
 </template>
 
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
+import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 
 export default {
   name: 'Page',
   components: {
+    UserConfirmDialog,
     PageHeading,
     PageContent
   },
@@ -53,11 +56,17 @@ export default {
         return true
       }
       return window.history.length <= 2
+    },
+    showConfirmDialog() {
+      return this.$store.state.common.confirmDialogVisible
     }
   },
   methods: {
     handleGoBack() {
       this.goBack.bind(this)()
+    },
+    testIt() {
+      return this.$axios.post('/api/v1/authentication/access-keys/')
     }
   }
 }
