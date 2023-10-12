@@ -131,6 +131,22 @@ export default {
               })
             }
           })
+        },
+        {
+          title: this.$t(`assets.SyncProtocolToAsset`),
+          attrs: {
+            type: 'primary',
+            label: this.$t('accounts.Sync')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              const data = { platform_id: this.object.id }
+              this.$axios.post(
+                '/api/v1/assets/assets/sync-platform-protocols/', data).then(res => {
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
+              })
+            }
+          })
         }
       ]
       this.quickActions = quickActions

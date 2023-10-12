@@ -230,6 +230,7 @@
   },
   "assets": {
     "CustomType": "自定义类型",
+    "SyncProtocolToAsset": "同步协议到资产",
     "CustomHelpMessage": "自定义类型资产，依赖于远程应用，请前往系统设置在远程应用中配置",
     "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
