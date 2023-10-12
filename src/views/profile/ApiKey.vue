@@ -17,7 +17,8 @@
       :title="$tc('profile.CreateAccessKey')"
       :visible.sync="visible"
       width="700px"
-      @confirm="visible = false"
+      @close="onClose"
+      @confirm="onConfirm"
     >
       <el-alert type="warning">
         {{ warningText }}
@@ -151,6 +152,13 @@ export default {
       setTimeout(() => {
         this.mfaDialogVisible = false
       })
+    },
+    onClose() {
+      this.getRefsListTable.reloadTable()
+    },
+    onConfirm() {
+      this.visible = false
+      this.getRefsListTable.reloadTable()
     }
   }
 }
