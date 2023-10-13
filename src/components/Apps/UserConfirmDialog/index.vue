@@ -1,5 +1,7 @@
 <template>
   <Dialog
+    :close-on-click-modal="false"
+    :destory-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
@@ -17,7 +19,7 @@
             :title="$tc('auth.ReLoginTitle')"
             center
             style="margin-bottom: 20px;"
-            type="info"
+            type="error"
           />
         </el-col>
       </el-row>
@@ -94,72 +96,68 @@ export default {
   data() {
     return {
       title: this.$t('common.CurrentUserVerify'),
-      smsBtnText: this.$t('common.SendVerificationCode'),
       smsWidth: 0,
       subTypeSelected: '',
       inputPlaceholder: '',
+      smsBtnText: this.$t('common.SendVerificationCode'),
       smsBtnDisabled: false,
       confirmTypeRequired: '',
       subTypeChoices: [],
       secretValue: '',
-      visible: false
+      visible: false,
+      callback: null,
+      cancel: null,
+      processing: false
     }
   },
   computed: {
     showPassword() {
       return this.confirmTypeRequired === 'password'
-    },
-    iHandler() {
-      if (this.handler === null) {
-        return () => this.$axios.get(this.url, { disableFlashErrorMsg: true })
-      }
-      return this.handler
-    }
-  },
-  watch: {
-    visible(val) {
-      if (!val) {
-        this.$emit('onConfirmFinal', true)
-      }
     }
   },
   mounted() {
-    this.performConfirm()
+    // const onRecvCallback = _.debounce(this.performConfirm, 500)
+    this.$eventBus.$on('showConfirmDialog', this.performConfirm)
   },
   methods: {
     handleSubTypeChange(val) {
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm() {
-      this.iHandler().then((res) => {
-        this.$emit('onConfirmDone', res)
-      }).catch((err) => {
-        const confirmType = err.response.data?.code
-        const confirmUrl = '/api/v1/authentication/confirm/'
-        this.$axios.get(confirmUrl, { params: { confirm_type: confirmType }}).then((data) => {
-          this.subTypeChoices = data.content
-          this.confirmTypeRequired = data.confirm_type
+    performConfirm({ response, callback, cancel }) {
+      if (this.processing || this.visible) {
+        return
+      }
+      this.processing = true
+      this.callback = callback
+      this.cancel = cancel
+      this.$log.debug('perform confirm action')
+      const confirmType = response.data?.code
+      const confirmUrl = '/api/v1/authentication/confirm/'
+      this.$axios.get(confirmUrl, { params: { confirm_type: confirmType }}).then((data) => {
+        this.confirmTypeRequired = data.confirm_type
 
-          if (this.confirmTypeRequired === 'relogin') {
-            const data = {
-              confirm_type: this.confirmTypeRequired,
-              secret_key: ''
-            }
-            this.$axios.post(confirmUrl, data, { disableFlashErrorMsg: true }).then(() => {
-              this.afterConfirm()
-            }).catch(() => {
-              this.title = this.$t('auth.NeedReLogin')
-            })
-            return
-          }
-          const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
-          this.subTypeSelected = defaultSubType.name
-          this.inputPlaceholder = defaultSubType.placeholder
-          this.visible = true
-        }).catch(() => {
-          this.$emit('AuthMFAError', true)
-        })
+        if (this.confirmTypeRequired === 'relogin') {
+          this.$axios.post(confirmUrl, { 'confirm_type': 'relogin', 'secret_key': 'x' }).then(() => {
+            this.callback()
+            this.visible = false
+          }).catch(() => {
+            this.title = this.$t('auth.NeedReLogin')
+            this.visible = true
+          })
+        }
+        this.subTypeChoices = data.content
+        const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
+        this.subTypeSelected = defaultSubType.name
+        this.inputPlaceholder = defaultSubType.placeholder
+        this.visible = true
+      }).catch((err) => {
+        const data = err.response?.data
+        const msg = data?.error || data?.detail || data?.msg || this.$t('common.GetConfirmTypeFailed')
+        this.$message.error(msg)
+        this.cancel(err)
+      }).finally(() => {
+        this.processing = false
       })
     },
     logout() {
@@ -183,17 +181,10 @@ export default {
         }, 1000)
       })
     },
-    afterConfirm() {
-      this.iHandler().then(res => {
-        this.$emit('onConfirmDone', res)
-      }).catch((e) => {
-        this.$emit('onHandlerError', e)
-      }).finally(() => {
-        this.$emit('onConfirmFinal')
-        this.visible = false
-      })
-    },
     handleConfirm() {
+      if (this.confirmTypeRequired === 'relogin') {
+        return this.logout()
+      }
       if (this.subTypeSelected === 'otp' && this.secretValue.length !== 6) {
         return this.$message.error(this.$tc('common.MFAErrorMsg'))
       }
@@ -203,7 +194,8 @@ export default {
         secret_key: this.secretValue
       }
       this.$axios.post(`/api/v1/authentication/confirm/`, data).then(res => {
-        this.afterConfirm()
+        this.callback()
+        this.visible = false
       })
     }
   }

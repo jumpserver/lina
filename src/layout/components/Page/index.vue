@@ -15,16 +15,19 @@
       </el-alert>
       <slot />
     </PageContent>
+    <UserConfirmDialog />
   </div>
 </template>
 
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
+import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 
 export default {
   name: 'Page',
   components: {
+    UserConfirmDialog,
     PageHeading,
     PageContent
   },

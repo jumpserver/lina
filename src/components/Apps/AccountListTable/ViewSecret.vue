@@ -1,6 +1,5 @@
 <template>
   <div>
-    <UserConfirmDialog :handler="getAuthInfo" @onConfirmDone="showSecretDialog" />
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
@@ -61,7 +60,6 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
-import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 
@@ -70,7 +68,6 @@ export default {
   components: {
     Dialog,
     PasswordHistoryDialog,
-    UserConfirmDialog,
     ShowKeyCopyFormatter
   },
   props: {
@@ -124,6 +121,7 @@ export default {
         this.versions = resp.count
       })
     }
+    this.showSecretDialog()
   },
   methods: {
     accountConfirmHandle() {
@@ -140,13 +138,12 @@ export default {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },
-    getAuthInfo() {
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true })
-    },
     showSecretDialog(res) {
-      this.secretInfo = res
-      this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
-      this.showSecret = true
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(() => {
+        this.secretInfo = res
+        this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
+        this.showSecret = true
+      })
     },
     exit() {
       this.$emit('update:visible', false)

@@ -6,19 +6,12 @@
       :help-message="helpMessage"
       :table-config="tableConfig"
     />
-    <UserConfirmDialog
-      v-if="mfaDialogVisible"
-      :handler="createAccessKey"
-      @close="mfaDialogVisible = false"
-      @onConfirmDone="showAccessKeyDialog"
-    />
     <Dialog
       :show-cancel="false"
       :title="$tc('profile.CreateAccessKey')"
       :visible.sync="visible"
       width="700px"
-      @close="onClose"
-      @confirm="onConfirm"
+      @confirm="visible = false"
     >
       <el-alert type="warning">
         {{ warningText }}
@@ -41,21 +34,17 @@
 import { GenericListPage } from '@/layout/components'
 import { DateFormatter } from '@/components/Table/TableFormatters'
 import Dialog from '@/components/Dialog/index.vue'
-import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 
 export default {
   components: {
-    UserConfirmDialog,
     Dialog,
     GenericListPage
   },
   data() {
     const ajaxUrl = '/api/v1/authentication/access-keys/'
-    const vm = this
     return {
       mfaUrl: '',
       mfaDialogVisible: false,
-      createAccessKey: () => vm.$axios.post(ajaxUrl),
       helpMessage: this.$t('setting.helpText.ApiKeyList'),
       warningText: this.$t('profile.ApiKeyWarning'),
       visible: false,
@@ -130,10 +119,10 @@ export default {
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_accesskey'),
             callback: function() {
-              this.mfaDialogVisible = false
-              setTimeout(() => {
-                this.mfaDialogVisible = true
-              }, 100)
+              this.$axios.post(ajaxUrl).then(res => {
+                this.key = res
+                this.visible = true
+              })
             }.bind(this)
           }
         ]
@@ -146,20 +135,6 @@ export default {
     }
   },
   methods: {
-    showAccessKeyDialog(res) {
-      this.key = res
-      this.visible = true
-      setTimeout(() => {
-        this.mfaDialogVisible = false
-      })
-    },
-    onClose() {
-      this.getRefsListTable.reloadTable()
-    },
-    onConfirm() {
-      this.visible = false
-      this.getRefsListTable.reloadTable()
-    }
   }
 }
 </script>

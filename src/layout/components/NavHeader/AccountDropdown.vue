@@ -64,7 +64,7 @@ export default {
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
         case 'apiKey':
-          this.$router.push('/profile/key')
+          this.$router.push('/profile/api-keys')
           break
         case 'tempPassword':
           this.$router.push('/profile/temp-password')

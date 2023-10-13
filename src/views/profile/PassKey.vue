@@ -9,6 +9,7 @@
       :show-buttons="false"
       :title="$tc('auth.AddPassKey')"
       :visible.sync="dialogVisible"
+      width="600px"
     >
       <el-alert v-if="!isLocalUser" :closable="false" class="source-alert" type="error">
         {{ $t('profile.PasskeyAddDisableInfo', {source: source.label}) }}
@@ -142,6 +143,9 @@ export default {
         this.getRefsListTable.reloadTable()
         this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch((error) => {
+        if (error.response.status === 412) {
+          return
+        }
         alert(error)
       })
     },
