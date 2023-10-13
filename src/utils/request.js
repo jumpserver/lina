@@ -121,15 +121,13 @@ function refreshSessionAgeDelay(response) {
 }
 
 function ifConfirmRequired({ response, error }) {
-  console.log('Response is ', response)
+  if (response.status !== 412) {
+    return null
+  }
   return new Promise((resolve, reject) => {
-    if (response.status === 412) {
-      const callback = () => resolve()
-      const cancel = () => reject()
-      eventBus.$emit('showConfirmDialog', { response, callback, cancel })
-    } else {
-      reject()
-    }
+    const callback = () => resolve()
+    const cancel = () => reject()
+    eventBus.$emit('showConfirmDialog', { response, callback, cancel })
   })
 }
 
@@ -163,11 +161,16 @@ service.interceptors.response.use(
     }
     const response = error.response
 
-    ifConfirmRequired({ response, error }).then(() => {
-      return service(error.config)
-    }).catch(() => {
-      // on cancel error: err
-    })
+    const confirming = ifConfirmRequired({ response, error })
+    if (confirming) {
+      return new Promise((resolve, reject) => {
+        confirming.then(() => {
+          resolve(service(error.config))
+        }).catch(() => {
+          reject(error)
+        })
+      })
+    }
 
     await ifUnauthorized({ response, error })
     await ifBadRequest({ response, error })

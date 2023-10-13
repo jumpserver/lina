@@ -53,7 +53,7 @@ export default {
       meta: { title: i18n.t('route.PersonalInformationImprovement'), permissions: [] }
     },
     {
-      path: '/profile/apikeys',
+      path: '/profile/api-keys',
       component: () => import('@/views/profile/ApiKey'),
       name: 'ApiKey',
       meta: {
