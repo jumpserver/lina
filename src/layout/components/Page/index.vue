@@ -15,7 +15,7 @@
       </el-alert>
       <slot />
     </PageContent>
-    <UserConfirmDialog v-if="showConfirmDialog" :handler="testIt" />
+    <UserConfirmDialog />
   </div>
 </template>
 
@@ -56,17 +56,11 @@ export default {
         return true
       }
       return window.history.length <= 2
-    },
-    showConfirmDialog() {
-      return this.$store.state.common.confirmDialogVisible
     }
   },
   methods: {
     handleGoBack() {
       this.goBack.bind(this)()
-    },
-    testIt() {
-      return this.$axios.post('/api/v1/authentication/access-keys/')
     }
   }
 }

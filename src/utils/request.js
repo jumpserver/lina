@@ -1,5 +1,6 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
+import { eventBus } from '@/utils/const'
 import { getTokenFromCookie } from '@/utils/auth'
 import { getErrorResponseMsg } from '@/utils/common'
 import { refreshSessionIdAge } from '@/api/users'
@@ -76,10 +77,6 @@ function ifUnauthorized({ response, error }) {
   }
 }
 
-function ifConfirmRequired({ response, error }) {
-
-}
-
 function ifBadRequest({ response, error }) {
   if (response.status === 400) {
     if (response.data?.detail) {
@@ -123,6 +120,19 @@ function refreshSessionAgeDelay(response) {
   }, 30 * 1000)
 }
 
+function ifConfirmRequired({ response, error }) {
+  console.log('Response is ', response)
+  return new Promise((resolve, reject) => {
+    if (response.status === 412) {
+      const callback = () => resolve()
+      const cancel = () => reject()
+      eventBus.$emit('showConfirmDialog', { response, callback, cancel })
+    } else {
+      reject()
+    }
+  })
+}
+
 // response interceptor
 service.interceptors.response.use(
   /**
@@ -146,17 +156,22 @@ service.interceptors.response.use(
     }
     return res
   },
-  error => {
+  async error => {
     // NProgress.done()
     if (!error.response) {
       return Promise.reject(error)
     }
-
     const response = error.response
-    ifUnauthorized({ response, error })
-    ifBadRequest({ response, error })
-    ifConfirmRequired({ response, error })
-    flashErrorMsg({ response, error })
+
+    ifConfirmRequired({ response, error }).then(() => {
+      return service(error.config)
+    }).catch(() => {
+      // on cancel error: err
+    })
+
+    await ifUnauthorized({ response, error })
+    await ifBadRequest({ response, error })
+    await flashErrorMsg({ response, error })
     return Promise.reject(error)
   }
 )

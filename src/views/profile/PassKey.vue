@@ -9,6 +9,7 @@
       :show-buttons="false"
       :title="$tc('auth.AddPassKey')"
       :visible.sync="dialogVisible"
+      width="600px"
     >
       <AutoDataForm v-bind="form" @submit="onAddConfirm" />
     </Dialog>
@@ -105,8 +106,7 @@ export default {
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_passkey'),
             callback: function() {
-              this.$store.dispatch('common/showConfirmDialog', true)
-              // this.dialogVisible = true
+              this.dialogVisible = true
             }.bind(this)
           }
         ]
@@ -134,6 +134,9 @@ export default {
         this.getRefsListTable.reloadTable()
         this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch((error) => {
+        if (error.response.status === 412) {
+          return
+        }
         alert(error)
       })
     },
