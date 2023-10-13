@@ -19,7 +19,6 @@ export const attrMatchOptions = [
   { label: i18n.t('common.Endswith'), value: 'endswith' },
   { label: i18n.t('common.Regex'), value: 'regex' },
   { label: i18n.t('common.BelongTo'), value: 'm2m' },
-  { label: i18n.t('common.BelongToAll'), value: 'm2m_all' },
   { label: i18n.t('common.IPMatch'), value: 'ip_in' },
   { label: i18n.t('common.GreatEqualThan'), value: 'gte' },
   { label: i18n.t('common.LessEqualThan'), value: 'lte' }

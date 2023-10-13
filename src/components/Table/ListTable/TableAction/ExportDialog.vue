@@ -181,7 +181,6 @@ export default {
         return
       }
       this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
-        console.log('>>>>>>>>>>>>> ok le ')
         this.exportDialogShow = true
       })
     },
