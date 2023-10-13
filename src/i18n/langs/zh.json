@@ -10,6 +10,8 @@
     "GenerateSuccessMsg": "账号生成成功",
     "GenerateAccounts": "重新生成账号",
     "UpdateSecret": "更新密文",
+    "Sync": "同步",
+    "SyncUpdateAccountInfo": "同步更新账号信息",
     "AddAccountResult": "账号批量添加结果",
     "AccountPolicy": "账号策略",
     "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
@@ -228,6 +230,7 @@
   },
   "assets": {
     "CustomType": "自定义类型",
+    "SyncProtocolToAsset": "同步协议到资产",
     "CustomHelpMessage": "自定义类型资产，依赖于远程应用，请前往系统设置在远程应用中配置",
     "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
@@ -1876,7 +1879,8 @@
   },
   "profile": {
     "CreateAccessKey": "创建访问密钥",
-    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。"
+    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。",
+    "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey"
   },
   "users": {
     "LunaSettingUpdate": "Luna 配置设置",

@@ -116,6 +116,8 @@
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
+    "Sync": "同期",
+    "SyncUpdateAccountInfo": "アカウント情報の同期更新",
     "AddAccountResult": "账号批量添加结果",
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
@@ -228,6 +230,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "SyncProtocolToAsset": "プロトコルをアセットに同期",
     "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
     "BulkUpdatePlatformHelpText": "アセットの元のプラットフォーム タイプが選択したプラットフォーム タイプと同じ場合にのみ更新され、更新の前後のプラットフォーム タイプが異なる場合は更新されません。",
     "ImportMessage": "ミラータイプのページにデータをインポートしてください",
@@ -1021,7 +1024,7 @@
     "ratio": "スケール",
     "run": "実行",
     "runAs": "実行ユーザー",
-    "runningPath":"実行パス",
+    "runningPath": "実行パス",
     "runTimes": "実行回数",
     "selectAssetsMessage": "左側の資産を選択し、実行するシステムユーザーを選択し、コマンドを一括実行します",
     "selectedAssets": "選択済アセット:",
@@ -2302,5 +2305,10 @@
   "applets": {
     "PublishStatus": "投稿ステータス",
     "NoPublished": "未発表"
+  },
+  "profile": {
+    "CreateAccessKey": "Create Access key",
+    "ApiKeyWarning": "AccessKeyの漏洩リスクを低減するため、Secretは作成時にのみ提供され、後で再度クエリできません。安全に保管してください。",
+    "PasskeyAddDisableInfo": "あなたの認証元は {source} であり、Passkeyの追加はサポートされていません。"
   }
 }
