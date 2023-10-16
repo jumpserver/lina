@@ -119,9 +119,11 @@ export default {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
       this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
         this.versions = resp.count
+        this.showSecretDialog()
       })
+    } else {
+      this.showSecretDialog()
     }
-    this.showSecretDialog()
   },
   methods: {
     accountConfirmHandle() {
@@ -138,8 +140,8 @@ export default {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },
-    showSecretDialog(res) {
-      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(() => {
+    showSecretDialog() {
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
         this.secretInfo = res
         this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
