@@ -13,7 +13,7 @@
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
-    <UserCreateUpdate :visible.sync="showCreateUpdate" />
+    <UserCreateUpdate />
   </div>
 </template>
 
@@ -154,9 +154,6 @@ export default {
       headerActions: {
         hasBulkDelete: hasDelete,
         canCreate: this.$hasPerm('users.add_user'),
-        onCreate: () => {
-          this.showCreateUpdate = true
-        },
         extraActions: [
           {
             name: this.$t('users.InviteUser'),

@@ -3,12 +3,17 @@
     :direction="direction"
     :size="width"
     :title="iTitle"
-    :visible="visible"
+    :visible.sync="visible"
     class="drawer"
-    @update:visible="(val) => $emit('update:visible', val)"
   >
     <div class="el-drawer__content">
-      <GenericCreateUpdateForm v-bind="$attrs" @submitSuccess="onSubmitSuccess" v-on="$listeners" />
+      <GenericCreateUpdateForm
+        :action="action"
+        :action-id="actionId"
+        v-bind="$attrs"
+        @submitSuccess="onSubmitSuccess"
+        v-on="$listeners"
+      />
     </div>
   </el-drawer>
 </template>
@@ -22,17 +27,9 @@ export default {
     GenericCreateUpdateForm
   },
   props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
     direction: {
       type: String,
       default: 'rtl'
-    },
-    action: {
-      type: String,
-      default: 'create'
     },
     title: {
       type: String,
@@ -45,6 +42,9 @@ export default {
   },
   data() {
     return {
+      visible: false,
+      action: 'create',
+      actionId: ''
     }
   },
   computed: {
@@ -63,11 +63,17 @@ export default {
     }
   },
   mounted() {
-    console.log('Dat: ', this.$attrs)
+    this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, col, row }) => {
+      this.action = action
+      this.actionId = row ? row.id : ''
+      this.visible = true
+    })
   },
   methods: {
     onSubmitSuccess(res, { addContinue }) {
-      this.$emit('update:visible', false)
+      if (!addContinue) {
+        this.visible = false
+      }
     }
   }
 }

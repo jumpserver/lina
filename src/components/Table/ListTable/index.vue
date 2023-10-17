@@ -83,7 +83,7 @@ export default {
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
-      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
+      const checkRoot = this.$route.meta?.disableOrgsChange !== true
       const actions = {
         canCreate: { action: 'add', checkRoot: checkRoot },
         canBulkDelete: { action: 'delete', checkRoot: false },
@@ -108,7 +108,7 @@ export default {
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
-      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
+      const checkRoot = this.$route.meta?.disableOrgsChange !== true
       const formatterArgs = {
         'columnsMeta.actions.formatterArgs.canUpdate': () => {
           return this.hasActionPerm('change') && (!checkRoot || !this.currentOrgIsRoot)

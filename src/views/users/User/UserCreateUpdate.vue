@@ -1,11 +1,9 @@
 <template>
   <GenericCreateUpdateDrawer
     v-if="!loading"
-    :visible="visible"
     v-bind="$data"
     @getObjectDone="afterGetUser"
     v-on="$listeners"
-    @update:visible="(val) => $emit('update:visible', val)"
   />
 </template>
 
@@ -18,12 +16,6 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     GenericCreateUpdateDrawer
-  },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {
@@ -74,10 +66,7 @@ export default {
             if (formValue.source !== 'local') {
               return true
             }
-            if (formValue.password_strategy === 'custom' || formValue.update_password) {
-              return false
-            }
-            return true
+            return !(formValue.password_strategy === 'custom' || formValue.update_password)
           },
           el: {
             required: false,
@@ -176,14 +165,6 @@ export default {
         },
         phone: {
           component: PhoneInput
-        }
-      },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
         }
       },
       cleanFormValue(value) {

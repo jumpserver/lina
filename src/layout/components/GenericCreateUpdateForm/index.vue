@@ -1,11 +1,13 @@
 <template>
   <AutoDataForm
+    v-if="!loading"
     ref="form"
     :form="form"
     :has-reset="iHasReset"
     :has-save-continue="iHasSaveContinue"
     :is-submitting="isSubmitting"
     :method="method"
+    :submit-btn-text="submitBtnText"
     :url="iUrl"
     v-bind="$attrs"
     @afterRemoteMeta="handleAfterRemoteMeta"
@@ -17,7 +19,6 @@
 import AutoDataForm from '@/components/Form/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
 import { encryptPassword } from '@/utils/crypto'
-import deepmerge from 'deepmerge'
 
 export default {
   name: 'GenericCreateUpdateForm',
@@ -27,6 +28,14 @@ export default {
   props: {
     // 创建对象的地址
     url: {
+      type: String,
+      default: ''
+    },
+    action: {
+      type: String,
+      default: ''
+    },
+    actionId: {
       type: String,
       default: ''
     },
@@ -115,25 +124,11 @@ export default {
         return { name: routeName }
       }
     },
-    // 获取下一个路由
-    getNextRoute: {
-      type: Function,
-      default(res, method) {
-        const route = method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
-        if (!(route.params && route.params.id)) {
-          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id, order: this.extraQueryOrder })
-        } else {
-          route['params'] = deepmerge(route['params'], { order: this.extraQueryOrder })
-        }
-        return route
-      }
-    },
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
       default: function() {
-        const params = this.$route.params
-        if (params.id) {
+        if (this.action === 'update') {
           return 'put'
         } else {
           return 'post'
@@ -144,20 +139,20 @@ export default {
     getUrl: {
       type: Function,
       default: function() {
-        const params = this.$route.params
         let url = this.url
-        if (params.id) {
-          url = getUpdateObjURL(url, params.id)
+        if (this.action === 'update') {
+          url = getUpdateObjURL(url, this.actionId)
         }
 
-        const clone_from = this.$route.query['clone_from']
-        const query = clone_from ? `clone_from=${clone_from}` : ''
-        if (query) {
-          if (url.indexOf('?') === -1) {
-            url = `${url}?${query}`
-          } else {
-            url = `${url}&${query}`
-          }
+        const cloneFrom = this.action === 'clone' ? this.actionId : ''
+        const query = cloneFrom ? `clone_from=${cloneFrom}` : ''
+        if (!query) {
+          return url
+        }
+        if (url.indexOf('?') === -1) {
+          url = `${url}?${query}`
+        } else {
+          url = `${url}&${query}`
         }
         return url
       }
@@ -211,10 +206,6 @@ export default {
       default(res, method, vm, addContinue) {
         this.$emit('submitSuccess', res, { method, vm, addContinue })
         this.emitPerformSuccessMsg(method, res, addContinue)
-        if (!addContinue) {
-          const route = this.getNextRoute(res, method)
-          setTimeout(() => this.$router.push(route), 100)
-        }
       }
     },
     onPerformError: {
@@ -291,6 +282,13 @@ export default {
         return this.hasReset
       }
       return this.isUpdateMethod()
+    },
+    submitBtnText() {
+      if (this.action === 'update') {
+        return this.$t('common.Update')
+      } else {
+        return this.$t('common.Create')
+      }
     }
   },
   async created() {
@@ -306,7 +304,6 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted in object form')
   },
   methods: {
     isUpdateMethod() {
@@ -350,25 +347,26 @@ export default {
         })
     },
     async getFormValue() {
-      const cloneFrom = this.$route.query['clone_from']
-      if ((!this.isUpdateMethod() && !cloneFrom) || !this.needGetObjectDetail) {
+      const cloneFrom = this.actionId
+      if (this.action === 'create' || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
-      if (!object || Object.keys(object).length === 0) {
-        if (cloneFrom) {
-          const [curUrl, query] = this.url.split('?')
-          const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
-          object = await this.getObjectDetail(url)
-          if (object['name']) {
-            object.name = this.$t('common.cloneFrom') + object.name
-          } else if (object['hostname']) {
-            object.hostname = this.$t('common.cloneFrom') + object.hostname
-            object.name = this.$t('common.cloneFrom') + '' + object.name
-          }
-        } else {
-          object = await this.getObjectDetail(this.iUrl)
+      if (object && Object.keys(object).length > 0) {
+        return object
+      }
+      if (this.action === 'clone') {
+        const [curUrl, query] = this.url.split('?')
+        const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
+        object = await this.getObjectDetail(url)
+        if (object['name']) {
+          object.name = this.$t('common.cloneFrom') + object.name
+        } else if (object['hostname']) {
+          object.hostname = this.$t('common.cloneFrom') + object.hostname
+          object.name = this.$t('common.cloneFrom') + '' + object.name
         }
+      } else {
+        object = await this.getObjectDetail(this.iUrl)
       }
       if (object) {
         object = _.cloneDeep(object)
