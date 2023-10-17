@@ -165,6 +165,18 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    this.$eventBus.$on('closeCreateUpdateDrawer', () => {
+      console.log('Found closeCreateUpdateDrawer event')
+      this.extraQuery = {
+        ...this.extraQuery,
+        order: '-date_updated'
+      }
+      setTimeout(() => {
+        this.reloadTable()
+      })
+    })
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val

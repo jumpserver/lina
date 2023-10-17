@@ -81,7 +81,7 @@ export default {
               permissions: 'xpack.view_syncinstancetaskexecution',
               route: 'SyncInstanceTaskDetail',
               routeQuery: {
-                activeTab: 'HistoryList'
+                tab: 'HistoryList'
               }
             }
           },
@@ -91,7 +91,7 @@ export default {
               permissions: 'xpack.view_syncinstancetask',
               route: 'SyncInstanceTaskDetail',
               routeQuery: {
-                activeTab: 'AssetList'
+                tab: 'AssetList'
               }
             }
           }

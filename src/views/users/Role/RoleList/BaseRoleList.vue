@@ -1,14 +1,19 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <RoleCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import RoleCreateUpdate from '@/views/users/Role/RoleCreateUpdate.vue'
 
 export default {
   name: 'BaseRoleList',
   components: {
+    RoleCreateUpdate,
     ListTable
   },
   props: {

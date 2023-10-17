@@ -55,7 +55,7 @@ export default {
           name: {
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionDetail'
+                tab: 'AssetPermissionDetail'
               }
             }
           },
@@ -88,7 +88,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionUser'
+                tab: 'AssetPermissionUser'
               }
             }
           },
@@ -98,7 +98,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionUser'
+                tab: 'AssetPermissionUser'
               }
             }
           },
@@ -108,7 +108,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                tab: 'AssetPermissionAsset'
               }
             }
           },
@@ -118,7 +118,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                tab: 'AssetPermissionAsset'
               }
             }
           },
@@ -133,7 +133,7 @@ export default {
                 }
               },
               routeQuery: {
-                activeTab: 'AssetPermissionAccount'
+                tab: 'AssetPermissionAccount'
               }
             }
           },

@@ -1,21 +1,22 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" @getObjectDone="getObjectDone" />
+  <GenericCreateUpdateDrawer v-if="!loading" v-bind="config" @getObjectDone="getObjectDone" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
-import { Text } from '@/components/Form/FormFields'
+import { TextReadonly } from '@/components/Form/FormFields'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
-    const scope = this.$route.query['scope']
+    const tab = this.$route.query['tab']
+    const scope = tab === 'SysRoleList' ? 'system' : 'org'
+    console.log('scope', scope)
     return {
       loading: true,
       scope: scope,
-      scopeRole: scope + 'role',
       config: {
         url: `/api/v1/rbac/${scope}-roles/`,
         objectDetailRoute: { name: 'RoleDetail', query: { scope: scope }},
@@ -33,7 +34,7 @@ export default {
             readonly: true
           },
           permissions: {
-            component: Text,
+            component: TextReadonly,
             el: {
               text: this.$t('users.HelpText.addRolePermissions')
             }

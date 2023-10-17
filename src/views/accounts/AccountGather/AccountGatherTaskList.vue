@@ -33,7 +33,7 @@ export default {
             formatterArgs: {
               route: 'AccountGatherTaskDetail',
               routeQuery: {
-                activeTab: 'Detail'
+                tab: 'Detail'
               }
             }
           },
@@ -62,7 +62,7 @@ export default {
                 return {
                   name: 'AccountGatherList',
                   query: {
-                    activeTab: 'AccountGatherTaskExecutionList',
+                    tab: 'AccountGatherTaskExecutionList',
                     automation_id: row.id
                   }
                 }

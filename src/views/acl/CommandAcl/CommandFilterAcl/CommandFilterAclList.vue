@@ -45,7 +45,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'GroupUser'
+                tab: 'GroupUser'
               }
             }
           }

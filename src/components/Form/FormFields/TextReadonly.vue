@@ -1,6 +1,6 @@
 <template>
   <div class="input-text">
-    {{ value.toString() }}
+    {{ value.toString() || text }}
   </div>
 </template>
 
@@ -9,7 +9,11 @@ export default {
   props: {
     value: {
       type: [String, Boolean],
-      default: () => false
+      default: () => ''
+    },
+    text: {
+      type: String,
+      default: () => ''
     }
   },
   data() {

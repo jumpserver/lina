@@ -44,7 +44,7 @@ export default {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       },
       updateSuccessNextRoute: {
@@ -53,7 +53,7 @@ export default {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       }
     }

@@ -34,7 +34,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'GroupUser'
+                tab: 'GroupUser'
               }
             }
           },
@@ -44,7 +44,7 @@ export default {
             formatterArgs: {
               permissions: 'assets.view_gateway',
               routeQuery: {
-                activeTab: 'GatewayList'
+                tab: 'GatewayList'
               },
               getTitle: function({ row }) {
                 return row.gateways.length

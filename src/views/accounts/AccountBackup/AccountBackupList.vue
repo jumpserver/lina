@@ -64,7 +64,7 @@ export default {
                 return {
                   name: 'AccountBackupList',
                   query: {
-                    activeTab: 'AccountBackupPlanExecutionList',
+                    tab: 'AccountBackupPlanExecutionList',
                     plan_id: row.id
                   }
                 }

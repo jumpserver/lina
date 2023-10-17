@@ -44,7 +44,8 @@ export default {
     return {
       visible: false,
       action: 'create',
-      actionId: ''
+      actionId: '',
+      success: false
     }
   },
   computed: {
@@ -62,6 +63,13 @@ export default {
       return title
     }
   },
+  watch: {
+    visible(val) {
+      if (!val) {
+        this.$eventBus.$emit('closeCreateUpdateDrawer')
+      }
+    }
+  },
   mounted() {
     this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, col, row }) => {
       this.action = action
@@ -71,6 +79,7 @@ export default {
   },
   methods: {
     onSubmitSuccess(res, { addContinue }) {
+      this.success = true
       if (!addContinue) {
         this.visible = false
       }
