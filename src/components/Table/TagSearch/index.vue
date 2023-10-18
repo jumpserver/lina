@@ -107,9 +107,16 @@ export default {
   },
   watch: {
     options: {
-      handler(val) {
-        if (val && val.length > 0) {
-          const routeFilter = this.checkInTableColumns()
+      handler(newVal, oldVal) {
+        if (newVal && newVal.length > 0) {
+          const routeFilter = this.checkInTableColumns(newVal)
+          if (oldVal.length > 0 && newVal.length !== oldVal.length) {
+            const beforeRouteFilter = this.checkInTableColumns(oldVal)
+            // 如果2次过滤的参数相同就不在重复请求
+            if (_.isEqual(routeFilter, beforeRouteFilter)) {
+              return
+            }
+          }
           this.filterTagSearch(routeFilter)
         }
       },
@@ -121,19 +128,11 @@ export default {
       }
     }
   },
-  mounted() {
-    setTimeout(() => {
-      if (Object.keys(this.filterMaps).length > 0) {
-        return this.$emit('tagSearch', this.filterMaps)
-      }
-    }, 400)
-    // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
-  },
   methods: {
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
-    checkInTableColumns() {
+    checkInTableColumns(options) {
       const searchFieldOptions = {}
-      const queryInfoValues = this.options.map((i) => i.value)
+      const queryInfoValues = options.map((i) => i.value)
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeysLength = Object.keys(routeQuery).length
       if (routeQueryKeysLength < 1) return searchFieldOptions
@@ -211,10 +210,10 @@ export default {
         ...asFilterTags,
         ...routeFilter
       }
-      if (Object.keys(routeFilter).length > 0) {
+      if (Object.keys(this.filterTags).length > 0) {
         setTimeout(() => {
           return this.$emit('tagSearch', this.filterMaps)
-        }, 490)
+        }, 400)
       }
     },
     getValueLabel(key, value) {
