@@ -42,10 +42,10 @@ export default {
   },
   methods: {
     getIntervalDays(date) {
+      date = new Date(date)
       const dateExpired = this.$moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD')
       const dateNow = this.$moment(new Date()).format('YYYY-MM-DD')
-      const intervalTime = this.$moment(dateNow).diff(this.$moment(dateExpired), 'days')
-      return intervalTime
+      return this.$moment(dateNow).diff(this.$moment(dateExpired), 'days')
     }
   }
 }
