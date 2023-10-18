@@ -16,11 +16,13 @@
         :title="$tc('setting.ImportLicense')"
         :visible.sync="dialogLicenseImport"
         top="20vh"
+        width="600px"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >
-        {{ this.$t('setting.LicenseFile') }}
-        <br>
+        <div style="padding-bottom: 10px">
+          {{ this.$t('setting.LicenseFile') }}
+        </div>
         <input type="file" @change="fileChange">
       </Dialog>
     </div>
