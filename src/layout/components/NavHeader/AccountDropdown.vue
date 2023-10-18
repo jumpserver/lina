@@ -12,7 +12,7 @@
           {{ $t('common.nav.Profile') }}
         </el-dropdown-item>
         <el-dropdown-item command="UserSetting">
-          <svg-icon class="icon" icon-class="setting" />
+          <svg-icon class="icon" icon-class="preference" />
           {{ $t('users.UserSetting') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
