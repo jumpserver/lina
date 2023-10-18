@@ -1,9 +1,13 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AccountCreateUpdate />
+  </div>
 </template>
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
+import AccountCreateUpdate from './AccountCreateUpdate.vue'
 import {
   ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
   ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, qcloud,
@@ -13,13 +17,15 @@ import {
 export default {
   name: 'AccountList',
   components: {
-    GenericListTable
+    GenericListTable,
+    AccountCreateUpdate
   },
   data() {
     const vm = this
+    const url = '/api/v1/xpack/cloud/accounts/'
     return {
       tableConfig: {
-        url: '/api/v1/xpack/cloud/accounts/',
+        url: url,
         permissions: {
           app: 'xpack',
           resource: 'account'
@@ -45,7 +51,13 @@ export default {
               updateRoute: 'AccountUpdate',
               hasClone: false,
               onUpdate: ({ row, col }) => {
-                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider?.value }})
+                vm.$router.push({
+                  params: { id: row.id },
+                  query: { provider: row.provider?.value }
+                })
+                setTimeout(() => {
+                  vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { row, col })
+                })
               },
               extraActions: [
                 {
@@ -72,7 +84,10 @@ export default {
         },
         moreCreates: {
           callback: (option) => {
-            vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
+            vm.$router.push({ query: { provider: option.name }})
+            setTimeout(() => {
+              vm.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url })
+            })
           },
           dropdown: [
             {

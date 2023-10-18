@@ -1,16 +1,16 @@
 <template>
-  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" />
+  <GenericCreateUpdateDrawer ref="createUpdatePage" v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { CronTab, Select2 } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const vm = this

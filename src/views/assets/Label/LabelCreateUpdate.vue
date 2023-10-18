@@ -1,15 +1,21 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :has-detail-in-msg="false" :initial="initial" :url="url" />
+  <GenericCreateUpdateDrawer
+    :fields="fields"
+    :fields-meta="fieldsMeta"
+    :has-detail-in-msg="false"
+    :initial="initial"
+    :url="url"
+  />
 </template>
 
 <script>
 import AssetSelect from '@/components/Apps/AssetSelect'
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   name: 'LabelCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

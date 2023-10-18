@@ -7,7 +7,7 @@
       :form="basicForm"
       :label-position="labelPosition"
       class="form-fields"
-      label-width="20%"
+      label-width="22%"
       v-bind="$attrs"
       v-on="$listeners"
     >
@@ -163,7 +163,7 @@ export default {
   }
 
   .el-form ::v-deep .el-form-item__content {
-    width: 75%;
+    width: 73%;
   }
 
   .mobile.el-form ::v-deep .el-form-item__content {
@@ -201,7 +201,7 @@ export default {
 
   .form-buttons {
     margin-top: 20px;
-    margin-left: 20%;
+    margin-left: 22%;
     margin-bottom: 20px;
   }
 </style>

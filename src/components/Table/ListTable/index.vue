@@ -79,7 +79,7 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     dataTable() {
-      return this.$refs.dataTable.$refs.dataTable
+      return this.$refs.dataTable?.$refs?.dataTable
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
@@ -166,8 +166,10 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('closeCreateUpdateDrawer', () => {
-      console.log('Found closeCreateUpdateDrawer event')
+    this.$eventBus.$on('closeCreateUpdateDrawer', ({ success }) => {
+      if (!success) {
+        return
+      }
       this.extraQuery = {
         ...this.extraQuery,
         order: '-date_updated'
@@ -182,7 +184,7 @@ export default {
       this.selectedRows = val
     },
     reloadTable() {
-      this.dataTable.getList()
+      this.dataTable?.getList()
     },
     search(attrs) {
       this.$emit('TagSearch', attrs)

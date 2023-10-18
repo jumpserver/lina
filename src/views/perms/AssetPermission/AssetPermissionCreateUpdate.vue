@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
+  <GenericCreateUpdateDrawer
     :fields="fields"
     :fields-meta="fieldsMeta"
     :initial="initial"
@@ -9,16 +9,16 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   name: 'AccountFormatter',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const nodesInitial = []

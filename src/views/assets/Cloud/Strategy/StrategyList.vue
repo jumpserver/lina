@@ -1,15 +1,20 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <StrategyCreateUpdate />
+  </div>
 </template>
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import StrategyCreateUpdate from './StrategyCreateUpdate.vue'
 
 export default {
   name: 'StrategyList',
   components: {
-    GenericListTable
+    GenericListTable,
+    StrategyCreateUpdate
   },
   data() {
     return {

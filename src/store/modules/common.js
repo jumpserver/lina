@@ -5,7 +5,8 @@ const getDefaultState = () => {
     metaMap: {},
     metaPromiseMap: {},
     isRouterAlive: true,
-    sqlQueryCounter: []
+    sqlQueryCounter: [],
+    createArgs: {}
   }
 }
 
@@ -27,6 +28,9 @@ const mutations = {
     if (state.sqlQueryCounter.length > 10) {
       state.sqlQueryCounter.shift()
     }
+  },
+  SET_CREATE_ARGS: (state, args) => {
+    state.createArgs = args
   }
 }
 
@@ -74,6 +78,9 @@ const actions = {
       return
     }
     commit('addSQLQueryCounter', { url, count: sqlCount })
+  },
+  setCreateArgs({ commit, state }, args) {
+    commit('SET_CREATE_ARGS', args)
   }
 }
 

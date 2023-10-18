@@ -36,7 +36,7 @@ export default {
       default: ''
     },
     actionId: {
-      type: String,
+      type: [String, Number],
       default: ''
     },
     // 更新的对象

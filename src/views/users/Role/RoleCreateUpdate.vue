@@ -13,7 +13,6 @@ export default {
   data() {
     const tab = this.$route.query['tab']
     const scope = tab === 'SysRoleList' ? 'system' : 'org'
-    console.log('scope', scope)
     return {
       loading: true,
       scope: scope,

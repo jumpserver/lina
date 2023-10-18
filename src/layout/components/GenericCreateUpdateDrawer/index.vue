@@ -5,6 +5,7 @@
     :title="iTitle"
     :visible.sync="visible"
     class="drawer"
+    destroy-on-close
   >
     <div class="el-drawer__content">
       <GenericCreateUpdateForm
@@ -35,6 +36,10 @@ export default {
       type: String,
       default: ''
     },
+    resource: {
+      type: String,
+      default: ''
+    },
     width: {
       type: String,
       default: '700px'
@@ -51,27 +56,46 @@ export default {
   computed: {
     iTitle() {
       if (this.title) {
-        return title
+        return this.title
       }
-      let title = this.$route.meta.title || this.$route.name
-      title = title.replace('List', '').replace('列表', '')
-      if (this.action === 'create') {
-        title = this.$t('common.Create') + title
-      } else if (this.action === 'update') {
-        title = this.$t('common.Update') + title
+      let resource = this.resource
+      if (!resource) {
+        const routeName = this.$route.meta.title || this.$route.name
+        resource = routeName.replace('List', '').replace('列表', '')
+      }
+      let title
+      if (this.action === 'update') {
+        title = this.$t('common.Update') + ' ' + resource
+      } else {
+        title = this.$t('common.Create') + ' ' + resource
       }
       return title
     }
   },
   watch: {
-    visible(val) {
+    shown(val) {
       if (!val) {
-        this.$eventBus.$emit('closeCreateUpdateDrawer')
+        this.$eventBus.$emit(
+          'closeCreateUpdateDrawer',
+          { action: this.action, actionId: this.actionId, success: this.success }
+        )
+        this.$emit('close', { action: this.action, actionId: this.actionId, success: this.success })
       }
     }
   },
   mounted() {
-    this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, col, row }) => {
+    this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, row, col }) => {
+      if (action === 'create') {
+        const tableUrl = this.$attrs.url
+        if (!tableUrl || !url) {
+          return
+        }
+        const tablePath = tableUrl.split('?')[0]
+        const createPath = url.split('?')[0]
+        if (tablePath !== createPath) {
+          return
+        }
+      }
       this.action = action
       this.actionId = row ? row.id : ''
       this.visible = true

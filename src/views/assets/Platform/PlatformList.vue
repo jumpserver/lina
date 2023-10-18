@@ -1,35 +1,46 @@
 <template>
-  <TabPage
-    v-if="!loading"
-    :active-menu.sync="tab.activeMenu"
-    :submenu="tab.submenu"
-    @tab-click="changeMoreCreates"
-  >
-    <keep-alive>
-      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </keep-alive>
-  </TabPage>
+  <div>
+    <TabPage
+      v-if="!loading"
+      :active-menu.sync="tab.activeMenu"
+      :submenu="tab.submenu"
+      @tab-click="changeMoreCreates"
+    >
+      <keep-alive>
+        <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+      </keep-alive>
+    </TabPage>
+    <PlatformCreateUpdate :action="action" :category="category" :row="row" :type="type" :visible.sync="showDrawer" />
+  </div>
 </template>
 
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesFormatter, ProtocolsFormatter } from '../../../components/Table/TableFormatters'
+import { ChoicesFormatter, ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import PlatformCreateUpdate from '@/views/assets/Platform/PlatformCreateUpdate.vue'
 
 export default {
   components: {
+    PlatformCreateUpdate,
     TabPage,
     GenericListTable
   },
   data() {
     const vm = this
+    const url = '/api/v1/assets/platforms/'
     return {
       loading: true,
+      showDrawer: false,
+      category: '',
+      type: '',
+      action: '',
+      row: {},
       tab: {
         submenu: [],
         activeMenu: 'host'
       },
       tableConfig: {
-        url: '/api/v1/assets/platforms/',
+        url: url,
         columnsExclude: ['automation'],
         columnsShow: {
           min: ['name', 'actions'],
@@ -65,25 +76,19 @@ export default {
               canClone: () => vm.$hasPerm('assets.add_platform'),
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
-              updateRoute: ({ row }) => {
-                return {
-                  name: 'PlatformUpdate',
-                  params: { id: row.id },
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value
-                  }
-                }
+              onUpdate: ({ row }) => {
+                this.category = row.category.value
+                this.type = row.type.value
+                this.action = 'update'
+                this.row = row
+                this.showDrawer = true
               },
-              cloneRoute: ({ row }) => {
-                return {
-                  name: 'PlatformCreate',
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value,
-                    clone_from: row.id
-                  }
-                }
+              onClone: ({ row }) => {
+                this.category = row.category.value
+                this.type = row.type.value
+                this.action = 'clone'
+                this.row = row
+                this.showDrawer = true
               }
             }
           }
@@ -102,10 +107,9 @@ export default {
         },
         moreCreates: {
           callback: (item) => {
-            this.$router.push({
-              name: 'PlatformCreate',
-              query: { type: item.name, category: item.category }
-            })
+            this.category = item.category
+            this.type = item.name
+            this.showDrawer = true
           },
           dropdown: []
         }

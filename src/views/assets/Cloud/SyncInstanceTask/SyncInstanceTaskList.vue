@@ -1,22 +1,28 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <SyncInstanceTaskCreateUpdate />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import SyncInstanceTaskCreateUpdate from './SyncInstanceTaskCreateUpdate.vue'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'SyncInstanceTaskList',
   components: {
-    GenericListTable
+    GenericListTable,
+    SyncInstanceTaskCreateUpdate
   },
   data() {
     const vm = this
+    const url = '/api/v1/xpack/cloud/sync-instance-tasks/'
     return {
       tableConfig: {
-        url: '/api/v1/xpack/cloud/sync-instance-tasks/',
+        url: url,
         permissions: {
           app: 'xpack',
           resource: 'syncinstancetask'
@@ -103,8 +109,7 @@ export default {
       headerActions: {
         hasMoreActions: false,
         hasImport: false,
-        hasExport: false,
-        createRoute: 'SyncInstanceTaskCreate'
+        hasExport: false
       }
     }
   }

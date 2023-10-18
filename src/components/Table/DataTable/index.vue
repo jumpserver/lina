@@ -125,7 +125,7 @@ export default {
   methods: {
     getList() {
       this.$refs.table?.clearSelection()
-      return this.$refs.table.getList()
+      return this.$refs.table?.getList()
     },
     getData() {
       return this.$refs.table.data

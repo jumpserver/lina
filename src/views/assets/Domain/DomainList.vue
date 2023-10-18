@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericListPage :header-actions="headerActions" :help-message="notice" :table-config="tableConfig" />
-    <DomainCreateUpdate :visible.sync="showCreateUpdate" />
+    <DomainCreateUpdate />
   </div>
 </template>
 
@@ -54,10 +54,6 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'DomainCreate',
-        onCreate: () => {
-          this.showCreateUpdate = true
-        }
       },
       notice: this.$t('assets.DomainHelpMessage')
     }

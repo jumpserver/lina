@@ -1,13 +1,18 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <LabelCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import LabelCreateUpdate from '@/views/assets/Label/LabelCreateUpdate.vue'
 
 export default {
   components: {
+    LabelCreateUpdate,
     GenericListPage
   },
   data() {
