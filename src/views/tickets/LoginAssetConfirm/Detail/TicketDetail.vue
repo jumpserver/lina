@@ -40,17 +40,6 @@ export default {
           value: object.apply_login_account
         },
         {
-          key: this.$t('tickets.ApplyFromSession'),
-          value: object.apply_from_session,
-          formatter: function(item, value) {
-            const to = { name: 'SessionDetail', params: { id: value?.id }, query: { oid: object.org_id }}
-            if (!this.$hasPerm('terminal.view_session')) {
-              return <span>{this.$t('sessions.session')}</span>
-            }
-            return <router-link to={to}>{this.$t('sessions.session')}</router-link>
-          }
-        },
-        {
           key: this.$t('acl.apply_login_user'),
           value: object.apply_login_user.name
         }
