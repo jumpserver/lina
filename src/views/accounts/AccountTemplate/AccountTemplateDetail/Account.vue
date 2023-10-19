@@ -20,10 +20,6 @@
         :url="secretUrl"
         :visible.sync="showViewSecretDialog"
       />
-      <AccountTemplateChangeSecretDialog
-        :object="object"
-        :visible.sync="visible"
-      />
     </el-row>
   </div>
 </template>
@@ -31,17 +27,16 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import QuickActions from '@/components/QuickActions'
-import AccountTemplateChangeSecretDialog from './AccountTemplateChangeSecretDialog'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountTemplateChangeSecret',
   components: {
     ViewSecret,
     QuickActions,
-    GenericListTable,
-    AccountTemplateChangeSecretDialog
+    GenericListTable
   },
   props: {
     object: {
@@ -58,14 +53,18 @@ export default {
       showViewSecretDialog: false,
       quickActions: [
         {
-          title: this.$t('accounts.UpdateSecret'),
+          title: this.$t('accounts.SyncUpdateAccountInfo'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Update')
+            label: this.$t('accounts.Sync')
           },
           callbacks: Object.freeze({
             click: () => {
-              vm.visible = true
+              this.$axios.patch(
+                `/api/v1/accounts/account-templates/${this.object.id}/sync-related-accounts/`
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
             }
           })
         }

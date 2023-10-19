@@ -44,8 +44,15 @@ export default {
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {
-              routeQuery: {
-                activeTab: 'GroupUser'
+              route: 'AccountGatherList',
+              getRoute({ row }) {
+                return {
+                  name: 'CommandFilterAclList',
+                  query: {
+                    activeTab: 'CommandGroup',
+                    command_filters: row.id
+                  }
+                }
               }
             }
           }

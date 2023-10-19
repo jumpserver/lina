@@ -1,12 +1,5 @@
 <template>
   <Page v-bind="$attrs">
-    <UserConfirmDialog
-      v-if="showPasswordDialog"
-      :url="confirmUrl"
-      :visible.sync="showPasswordDialog"
-      @UserConfirmCancel="exit"
-      @UserConfirmDone="verifyDone"
-    />
     <div>
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
@@ -35,7 +28,6 @@
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import UserConfirmDialog from '@/components/Apps/UserConfirmDialog'
 import { toSafeLocalDateStr } from '@/utils/common'
 import store from '@/store'
 
@@ -44,8 +36,7 @@ export default {
   components: {
     Page,
     DetailCard,
-    QuickActions,
-    UserConfirmDialog
+    QuickActions
   },
   props: {
     object: {
@@ -72,7 +63,7 @@ export default {
           callbacks: {
             click: function() {
               this.currentEdit = 'wecom'
-              this.showPasswordDialog = true
+              this.verifyDone()
             }.bind(this)
           }
         },
@@ -89,7 +80,7 @@ export default {
           callbacks: {
             click: function() {
               this.currentEdit = 'dingtalk'
-              this.showPasswordDialog = true
+              this.verifyDone()
             }.bind(this)
           }
         },
@@ -106,7 +97,7 @@ export default {
           callbacks: {
             click: function() {
               this.currentEdit = 'feishu'
-              this.showPasswordDialog = true
+              this.verifyDone()
             }.bind(this)
           }
         },
@@ -298,7 +289,7 @@ export default {
     confirmUrl() {
       return '/api/v1/authentication/confirm-oauth/'
     },
-    bindOrUNBindUrl() {
+    bindOrUnbindUrl() {
       let url = ''
       if (!this.object[`${this.currentEdit}_id`]) {
         url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
@@ -344,16 +335,17 @@ export default {
       return backendList
     },
     verifyDone() {
-      const url = this.bindOrUNBindUrl
-      if (!this.object[`${this.currentEdit}_id`]) {
-        window.location.href = url
-      } else {
-        this.$axios.post(url).then(res => {
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
-          this.$store.dispatch('users/getProfile')
-        })
-      }
-      this.showPasswordDialog = false
+      this.$axios.get(this.confirmUrl).then(() => {
+        const url = this.bindOrUnbindUrl
+        if (!this.object[`${this.currentEdit}_id`]) {
+          window.open(url, 'Bind', 'width=800,height=600')
+        } else {
+          this.$axios.post(url).then(res => {
+            this.$message.success(this.$tc('common.updateSuccessMsg'))
+            this.$store.dispatch('users/getProfile')
+          })
+        }
+      })
     },
     exit() {
       this.$emit('update:visible', false)

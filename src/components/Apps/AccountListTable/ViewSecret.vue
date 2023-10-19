@@ -1,12 +1,5 @@
 <template>
   <div>
-    <div v-if="mfaDialogVisible">
-      <UserConfirmDialog
-        :url="url"
-        @UserConfirmCancel="exit"
-        @UserConfirmDone="getAuthInfo"
-      />
-    </div>
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
@@ -67,7 +60,6 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
-import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 
@@ -76,7 +68,6 @@ export default {
   components: {
     Dialog,
     PasswordHistoryDialog,
-    UserConfirmDialog,
     ShowKeyCopyFormatter
   },
   props: {
@@ -128,7 +119,10 @@ export default {
       const url = `/api/v1/accounts/account-secrets/${this.account.id}/histories/?limit=1`
       this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
         this.versions = resp.count
+        this.showSecretDialog()
       })
+    } else {
+      this.showSecretDialog()
     }
   },
   methods: {
@@ -146,10 +140,10 @@ export default {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },
-    getAuthInfo() {
-      this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
-        this.secretInfo = resp
-        this.sshKeyFingerprint = resp?.spec_info?.ssh_key_fingerprint || '-'
+    showSecretDialog() {
+      return this.$axios.get(this.url, { disableFlashErrorMsg: true }).then((res) => {
+        this.secretInfo = res
+        this.sshKeyFingerprint = res?.spec_info?.ssh_key_fingerprint || '-'
         this.showSecret = true
       })
     },

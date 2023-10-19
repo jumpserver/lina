@@ -5,6 +5,7 @@
 <script>
 import BaseFormatter from './base.vue'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'DateFormatter',
   extends: BaseFormatter,
@@ -13,7 +14,7 @@ export default {
     if (this.cellValue) {
       value = toSafeLocalDateStr(this.cellValue)
     } else {
-      value = ''
+      value = '-'
     }
     // const locale = this.$i18n.locale
     // const value = dt.toLocaleString(locale, { hourCycle: 'h23' })

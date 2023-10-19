@@ -8,8 +8,12 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="profile">
-          <svg-icon class="icon" icon-class="personal" />
+          <svg-icon class="icon" icon-class="attestation" />
           {{ $t('common.nav.Profile') }}
+        </el-dropdown-item>
+        <el-dropdown-item command="UserSetting">
+          <svg-icon class="icon" icon-class="preference" />
+          {{ $t('users.UserSetting') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
           <svg-icon class="icon" icon-class="key" />
@@ -21,10 +25,6 @@
         >
           <svg-icon class="icon" icon-class="unlock-one" />
           {{ $t('common.nav.TempPassword') }}
-        </el-dropdown-item>
-        <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" command="connectionToken">
-          <svg-icon class="icon" icon-class="token" />
-          {{ $t('common.nav.ConnectionToken') }}
         </el-dropdown-item>
         <el-dropdown-item command="logout" divided>
           <svg-icon class="icon" icon-class="logout" />
@@ -64,13 +64,13 @@ export default {
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
         case 'apiKey':
-          this.$router.push('/profile/key')
+          this.$router.push('/profile/api-keys')
           break
         case 'tempPassword':
           this.$router.push('/profile/temp-password')
           break
-        case 'connectionToken':
-          this.$router.push('/profile/connection-token')
+        case 'UserSetting':
+          this.$router.push('/profile/user/setting')
       }
     },
     logout() {

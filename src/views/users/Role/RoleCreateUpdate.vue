@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Text } from '@/components/Form/FormFields'
+import { TextReadonly } from '@/components/Form/FormFields'
 
 export default {
   components: {
@@ -33,9 +33,10 @@ export default {
             readonly: true
           },
           permissions: {
-            component: Text,
+            component: TextReadonly,
             el: {
-              text: this.$t('users.HelpText.addRolePermissions')
+              text: this.$t('users.HelpText.addRolePermissions'),
+              bolder: false
             }
           }
         }

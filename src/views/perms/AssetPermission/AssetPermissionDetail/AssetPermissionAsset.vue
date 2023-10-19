@@ -58,7 +58,15 @@ export default {
             width: 150,
             objects: this.object.assets,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=`
+            onDelete: function(col, row, cellValue, reload) {
+              const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
+              this.$axios.delete(url).then(res => {
+                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$store.commit('common/reload')
+              }).catch(error => {
+                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+              })
+            }.bind(this)
           }
         },
         tableAttrs: {
@@ -81,7 +89,7 @@ export default {
         hasObjectsId: this.object.assets?.map(i => i.id) || [],
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return this.object.assets.indexOf(row.id) === -1
+          return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
