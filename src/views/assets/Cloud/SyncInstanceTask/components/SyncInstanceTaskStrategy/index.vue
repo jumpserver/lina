@@ -101,6 +101,7 @@ export default {
       if (status) {
         data['id'] = value
         this.tableConfig.totalData.push(data)
+        this.$emit('change', this.tableConfig.totalData)
       }
     },
     handleCreate() {
