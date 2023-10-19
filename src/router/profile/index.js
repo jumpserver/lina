@@ -41,7 +41,7 @@ export default {
       component: () => import('@/views/profile/UserSettingUpdate/index'),
       meta: {
         title: i18n.t('users.UserSetting'),
-        icon: 'setting',
+        icon: 'preference',
         permissions: []
       }
     },
