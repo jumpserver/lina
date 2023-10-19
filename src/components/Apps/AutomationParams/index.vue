@@ -120,7 +120,6 @@ export default {
   },
   async mounted() {
     await this.getUrlMeta()
-    await this.handleFieldChange()
   },
   methods: {
     async getUrlMeta() {
