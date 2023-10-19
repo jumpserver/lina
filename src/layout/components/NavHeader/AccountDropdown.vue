@@ -8,7 +8,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="profile">
-          <svg-icon class="icon" icon-class="personal" />
+          <svg-icon class="icon" icon-class="attestation" />
           {{ $t('common.nav.Profile') }}
         </el-dropdown-item>
         <el-dropdown-item command="UserSetting">
