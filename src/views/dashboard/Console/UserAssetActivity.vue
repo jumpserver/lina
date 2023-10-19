@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-bind="lineChartConfig" />
+    <LineChart v-if="loading" v-bind="lineChartConfig" />
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       config: {
         title: this.$t('dashboard.UserAssetActivity'),
         tip: this.$t('dashboard.UserAssetActivity')
@@ -34,7 +35,11 @@ export default {
     }
   },
   mounted() {
-    this.getMetricData()
+    try {
+      this.getMetricData()
+    } finally {
+      this.loading = true
+    }
   },
   methods: {
     async getMetricData() {
