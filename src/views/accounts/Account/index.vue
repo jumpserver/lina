@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'VirtualAccountList',
+        activeMenu: 'AccountList',
         submenu: [
           {
             title: this.$t('accounts.GeneralAccounts'),
