@@ -1,16 +1,16 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 import { templateFields, templateFieldsMeta } from './const.js'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'GatewayCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const vm = this

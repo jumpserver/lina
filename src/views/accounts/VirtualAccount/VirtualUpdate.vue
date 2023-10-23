@@ -1,14 +1,14 @@
 <template>
-  <GenericCreateUpdatePage v-bind="config" @getObjectDone="handleObjectDone" />
+  <GenericCreateUpdateDrawer v-bind="config" @getObjectDone="handleObjectDone" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 
 export default {
   name: 'CreateUpdate',
-  components: { GenericCreateUpdatePage },
+  components: { GenericCreateUpdateDrawer },
   data() {
     return {
       object: {},

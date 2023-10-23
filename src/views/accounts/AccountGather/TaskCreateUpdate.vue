@@ -1,14 +1,14 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import { CronTab } from '@/components'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

@@ -1,16 +1,16 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {
