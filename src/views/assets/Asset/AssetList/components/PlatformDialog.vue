@@ -1,12 +1,13 @@
 <template>
-  <Dialog
+  <el-drawer
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('assets.SelectPlatforms')"
     :visible.sync="iVisible"
-    top="1vh"
-    width="60%"
+    class="platform-dialog"
+    direction="rtl"
+    size="600px"
   >
     <div style="margin: 0 10px">
       <el-row :gutter="20">
@@ -20,7 +21,7 @@
             <el-col
               v-for="(platform, index) of ps"
               :key="platform.id"
-              :span="6"
+              :span="12"
             >
               <el-card
                 :style="{ borderLeftColor: randomBorderColor(index) }"
@@ -35,16 +36,13 @@
         </el-collapse>
       </el-row>
     </div>
-  </Dialog>
+  </el-drawer>
 </template>
-
 <script>
-import Dialog from '@/components/Dialog'
 
 export default {
   name: 'PlatformDialog',
   components: {
-    Dialog
   },
   props: {
     visible: {
@@ -149,19 +147,12 @@ export default {
       localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatformIds))
     },
     createAsset(platform) {
-      const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
       this.addToRecentPlatforms(platform)
-      this.iVisible = false
-      const query = {
-        node: this.$route.query?.node || this.$route.query?.node_id || '',
-        platform: platform.id,
-        type: platform.type.value,
-        category: platform.category.value
-      }
-
-      const router = { name: route, query }
-      const { href } = this.$router.resolve(router)
-      window.open(href, '_blank')
+      setTimeout(() => {
+        this.iVisible = false
+      })
+      const url = `/api/v1/assets/${platform.category.value}s/`
+      this.$eventBus.$emit('assetCreateUpdate', platform, 'create', { url })
     }
   }
 }
@@ -186,8 +177,17 @@ export default {
   font-weight: 500;
   color: #303133;
 }
+
+.platform-dialog {
+  >>> .el-drawer__header {
+    margin-bottom: 10px;
+  }
+}
+
 >>> .el-collapse {
   border: none;
+  padding: 0 20px;
+
   .el-collapse-item:last-child {
     .el-collapse-item__header {
       border: none;

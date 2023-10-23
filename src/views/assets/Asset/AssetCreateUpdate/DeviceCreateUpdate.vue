@@ -1,9 +1,9 @@
 <template>
-  <BaseAssetCreateUpdate v-bind="$data" />
+  <BaseAssetCreateUpdate v-bind="Object.assign($data, $attrs)" v-on="$listeners" />
 </template>
 
 <script>
-import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
+import BaseAssetCreateUpdate from './BaseAssetCreateDrawer.vue'
 
 export default {
   name: 'DeviceCreateUpdate',

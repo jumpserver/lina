@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
+import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateDrawer.vue'
 
 export default {
   components: {

@@ -17,11 +17,13 @@
       :port="GatewayPort"
       :visible.sync="GatewayVisible"
     />
+    <AssetCreateUpdate />
   </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
+import AssetCreateUpdate from '../../AssetCreateUpdate'
 import {
   ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
 } from '@/components/Table/TableFormatters'
@@ -37,7 +39,8 @@ export default {
     ListTable,
     GatewayDialog,
     PlatformDialog,
-    AssetBulkUpdateDialog
+    AssetBulkUpdateDialog,
+    AssetCreateUpdate
   },
   props: {
     url: {

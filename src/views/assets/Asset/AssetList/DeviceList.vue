@@ -1,5 +1,5 @@
 <template>
-  <BaseList v-bind="config" />
+  <BaseList v-bind="Object.assign(config, $attrs)" />
 </template>
 
 <script>

@@ -1,15 +1,15 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" />
+  <GenericCreateUpdateDrawer v-if="!loading" v-bind="iConfig" v-on="$listeners" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { assetFieldsMeta } from '@/views/assets/const'
 import { encryptPassword } from '@/utils/crypto'
 import { getUpdateObjURL, setUrlParam } from '@/utils/common'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
-  components: { GenericCreateUpdatePage },
+  components: { GenericCreateUpdateDrawer },
   props: {
     url: {
       type: String,
@@ -28,10 +28,6 @@ export default {
       type: [Array, Function],
       default: () => []
     },
-    createSuccessNextRoute: {
-      type: Object,
-      default: () => ({ name: 'AssetList' })
-    },
     updateSuccessNextRoute: {
       type: Object,
       default: () => ({ name: 'AssetList' })
@@ -41,6 +37,18 @@ export default {
       default: (initial) => {
         return initial
       }
+    },
+    platformId: {
+      type: Number,
+      default: 0
+    },
+    action: {
+      type: String,
+      default: 'create'
+    },
+    row: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -64,14 +72,13 @@ export default {
         fieldsMeta: assetFieldsMeta(this),
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.params
           const values = _.cloneDeep(validValues)
-          const submitMethod = id ? 'put' : 'post'
+          const submitMethod = this.action === 'update' ? 'put' : 'post'
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          if (id) {
-            url = getUpdateObjURL(url, id)
+          if (this.action === 'update') {
+            url = getUpdateObjURL(url, this.row.id)
             delete values['accounts']
           } else {
             const accounts = values?.accounts || []
@@ -89,10 +96,7 @@ export default {
     iConfig() {
       const { addFields, addFieldsMeta, defaultConfig } = this
       let url = this.url
-      const { id = '' } = this.$route.params
-      if (this.$route.query.platform && !id) {
-        url = setUrlParam(url, 'platform', this.$route.query.platform)
-      }
+      url = setUrlParam(url, 'platform', this.platformId)
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
@@ -103,6 +107,12 @@ export default {
         } else {
           config.fields.splice(pos, 0, [groupName, adds])
         }
+      }
+
+      const tp = this.platform.type?.value
+      const category = this.platform.category?.value
+      if (tp && category) {
+        defaultConfig.fieldsMeta.platform.el.ajax.url = `/api/v1/assets/platforms/?category=${category}&type=${tp}`
       }
 
       for (const [name, meta] of Object.entries(addFieldsMeta)) {
@@ -129,16 +139,16 @@ export default {
     },
     async setInitial() {
       const { defaultConfig } = this
-      const { node, platform } = this.$route?.query || {}
+      const { node } = this.$route?.query || {}
       const nodesInitial = node ? [node] : []
-      const platformId = platform || 1
+      const platformId = this.platformId
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
         labels: [],
         is_active: true,
         nodes: nodesInitial,
-        platform: parseInt(platformId),
+        platform: platformId,
         protocols: []
       }
       if (this.updateInitial) {

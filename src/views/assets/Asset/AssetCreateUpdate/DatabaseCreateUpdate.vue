@@ -1,9 +1,9 @@
 <template>
-  <BaseAssetCreateUpdate v-bind="$data" />
+  <BaseAssetCreateUpdate v-bind="Object.assign($data, $attrs)" v-on="$listeners" />
 </template>
 
 <script>
-import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
+import BaseAssetCreateUpdate from './BaseAssetCreateDrawer.vue'
 import { UploadKey } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 
@@ -16,6 +16,9 @@ export default {
       addFields: this.getAddFields(),
       addFieldsMeta: this.getAddFieldsMeta()
     }
+  },
+  mounted() {
+    console.log('Attrs: ', this.$attrs)
   },
   methods: {
     getAddFields() {
