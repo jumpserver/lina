@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
+  <GenericCreateUpdateDrawer
     :fields="fields"
     :initial="initial"
     :fields-meta="fieldsMeta"
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   name: 'CommandGroupCreateUpdate',
-  components: { GenericCreateUpdatePage },
+  components: { GenericCreateUpdateDrawer },
   data() {
     const regexPlaceholder = 'rm.*|reboot|shutdown'
     const commandPlaceholder = 'rm\rreboot'

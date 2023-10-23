@@ -1,19 +1,19 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/Form/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import { WeekCronSelect } from '@/components/Form/FormFields'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 
 export default {
   name: 'AclCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

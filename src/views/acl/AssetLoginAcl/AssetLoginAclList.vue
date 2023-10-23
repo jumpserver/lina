@@ -1,13 +1,18 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-message="helpMsg" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :help-message="helpMsg" :table-config="tableConfig" />
+    <AssetLoginAclCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import AssetLoginAclCreateUpdate from './AssetLoginAclCreateUpdate.vue'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    AssetLoginAclCreateUpdate
   },
   data() {
     return {
