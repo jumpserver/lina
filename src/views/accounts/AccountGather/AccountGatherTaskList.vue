@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <TaskCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import TaskCreateUpdate from './TaskCreateUpdate.vue'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountGatherTaskList',
   components: {
-    GenericListTable
+    GenericListTable,
+    TaskCreateUpdate
   },
   data() {
     const vm = this

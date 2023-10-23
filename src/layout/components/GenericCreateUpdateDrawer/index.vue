@@ -8,13 +8,15 @@
     destroy-on-close
   >
     <div class="el-drawer__content">
-      <GenericCreateUpdateForm
-        :action="action"
-        :action-id="actionId"
-        v-bind="$attrs"
-        @submitSuccess="onSubmitSuccess"
-        v-on="$listeners"
-      />
+      <slot>
+        <GenericCreateUpdateForm
+          :action="action"
+          :action-id="actionId"
+          v-bind="$attrs"
+          @submitSuccess="onSubmitSuccess"
+          v-on="$listeners"
+        />
+      </slot>
     </div>
   </el-drawer>
 </template>

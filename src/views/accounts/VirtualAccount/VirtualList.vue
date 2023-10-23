@@ -1,14 +1,19 @@
 <template>
-  <ListTable v-bind="config" />
+  <div>
+    <ListTable v-bind="config" />
+    <VirtualUpdate />
+  </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
+import VirtualUpdate from './VirtualUpdate.vue'
 
 export default {
   name: 'VirtualAccountList',
   components: {
-    ListTable
+    ListTable,
+    VirtualUpdate
   },
   data() {
     return {

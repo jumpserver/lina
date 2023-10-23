@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AccountBackupCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
+import AccountBackupCreateUpdate from './AccountBackupCreateUpdate.vue'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanList',
   components: {
-    GenericListTable
+    GenericListTable,
+    AccountBackupCreateUpdate
   },
   data() {
     const vm = this
