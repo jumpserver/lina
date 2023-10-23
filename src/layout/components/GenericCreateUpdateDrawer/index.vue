@@ -75,7 +75,7 @@ export default {
     }
   },
   watch: {
-    shown(val) {
+    visible(val) {
       if (!val) {
         this.$eventBus.$emit(
           'closeCreateUpdateDrawer',
