@@ -75,6 +75,9 @@ export default {
       }
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showColumnSettingPopover')
+  },
   methods: {
     handleColumnConfirm() {
       this.showColumnSettingPopover = false

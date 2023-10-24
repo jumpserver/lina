@@ -1,6 +1,13 @@
 <template>
   <div>
-    <component :is="component" v-if="component" :platform-id="platform.id" @close="component = ''" />
+    <component
+      :is="component"
+      v-if="component"
+      :action="action"
+      :platform-id="platform.id"
+      :row="row"
+      @close="component = ''"
+    />
   </div>
 </template>
 
@@ -22,11 +29,15 @@ export default {
     DeviceCreateUpdate,
     CustomCreateUpdate
   },
+  props: {
+  },
   data() {
     return {
       category: '',
       component: '',
       platform: { id: 0 },
+      row: {},
+      action: '',
       components: {
         host: HostCreateUpdate,
         database: DatabaseCreateUpdate,
@@ -38,14 +49,17 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('assetCreateUpdate', (platform, action, args) => {
+    this.$eventBus.$on('assetCreateUpdate', (platform, action, { url, row }) => {
       this.platform = platform
       this.category = platform.category.value
       this.component = this.components[this.category]
-      setTimeout(() => {
-        this.$eventBus.$emit('showCreateUpdateDrawer', action, args)
-      }, 200)
+      this.row = row
+      this.action = action
+      setTimeout(() => this.$eventBus.$emit('showCreateUpdateDrawer', action, { url, row }))
     })
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('assetCreateUpdate')
   }
 }
 </script>

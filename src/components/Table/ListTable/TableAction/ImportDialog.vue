@@ -147,6 +147,9 @@ export default {
       }
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showImportDialog')
+  },
   methods: {
     closeDialog() {
       this.showImportDialog = false

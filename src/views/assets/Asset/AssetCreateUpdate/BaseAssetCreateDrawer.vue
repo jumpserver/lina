@@ -70,7 +70,8 @@ export default {
           [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
-        performSubmit(validValues) {
+        performSubmit: (validValues) => {
+          console.log('This row: ', this.row, 'This action: ', this.action)
           let url = this.url
           const values = _.cloneDeep(validValues)
           const submitMethod = this.action === 'update' ? 'put' : 'post'

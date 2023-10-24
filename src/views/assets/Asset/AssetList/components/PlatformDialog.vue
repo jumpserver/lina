@@ -75,6 +75,7 @@ export default {
   computed: {
     iVisible: {
       set(val) {
+        console.log('Platform visible changed: ', val)
         this.$emit('update:visible', val)
       },
       get() {

@@ -21,10 +21,11 @@ const defaultPerformDelete = function({ row, col }) {
 }
 
 const defaultUpdateCallback = function({ row, col }) {
-  this.$eventBus.$emit('showCreateUpdateDrawer', 'update', { row, col })
+  this.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url: this.url, row, col })
 }
 
 const defaultCloneCallback = function({ row, col }) {
+  console.log('Url: ', this.url)
   this.$eventBus.$emit('showCreateUpdateDrawer', 'clone', { row, col })
 }
 

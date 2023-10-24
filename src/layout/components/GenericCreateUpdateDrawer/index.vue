@@ -1,11 +1,13 @@
 <template>
   <el-drawer
     :direction="direction"
+    :modal="false"
     :size="width"
     :title="iTitle"
     :visible.sync="visible"
-    class="drawer"
-    destroy-on-close
+    append-to-body
+    class="drawer generic-create-update-drawer"
+    v-on="$listeners"
   >
     <div class="el-drawer__content">
       <slot>
@@ -45,6 +47,10 @@ export default {
     width: {
       type: String,
       default: '700px'
+    },
+    name: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -63,7 +69,8 @@ export default {
       let resource = this.resource
       if (!resource) {
         const routeName = this.$route.meta.title || this.$route.name
-        resource = routeName.replace('List', '').replace('列表', '')
+        resource = routeName.replace('List', '')
+          .replace('列表', '')
       }
       let title
       if (this.action === 'update') {
@@ -76,6 +83,7 @@ export default {
   },
   watch: {
     visible(val) {
+      console.log('Visible changed: ', val, ' ', this.$attrs.url)
       if (!val) {
         this.$eventBus.$emit(
           'closeCreateUpdateDrawer',
@@ -86,24 +94,29 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, row, col }) => {
-      if (action === 'create') {
-        const tableUrl = this.$attrs.url
-        if (!tableUrl || !url) {
-          return
-        }
-        const tablePath = tableUrl.split('?')[0]
-        const createPath = url.split('?')[0]
-        if (tablePath !== createPath) {
-          return
-        }
+    this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, row }) => {
+      const tableUrl = this.$attrs.url
+      this.$log.debug('Table url: ', tableUrl, ' action url: ', url, 'action: ', action)
+      if (!tableUrl || !url) {
+        return
+      }
+      const tablePath = tableUrl.split('?')[0]
+      const actionPath = url.split('?')[0]
+      if (tablePath !== actionPath) {
+        return
       }
       this.action = action
       this.actionId = row ? row.id : ''
-      this.visible = true
+      this.setVisible(true)
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showCreateUpdateDrawer')
+  },
   methods: {
+    setVisible: _.debounce(function(val) {
+      this.visible = val
+    }, 100),
     onSubmitSuccess(res, { addContinue }) {
       this.success = true
       if (!addContinue) {

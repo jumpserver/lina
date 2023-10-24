@@ -183,6 +183,9 @@ export default {
       }
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showExportDialog')
+  },
   methods: {
     showExportDialog() {
       if (!this.mfaVerifyRequired) {

@@ -102,6 +102,9 @@ export default {
       this.componentKey += 1
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('treeComponentKey')
+  },
   methods: {
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()

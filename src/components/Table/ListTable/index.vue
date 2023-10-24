@@ -179,6 +179,9 @@ export default {
       })
     })
   },
+  beforeDestroy() {
+    this.$eventBus.$off('closeCreateUpdateDrawer')
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val
