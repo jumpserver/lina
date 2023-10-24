@@ -6,6 +6,7 @@
     :title="iTitle"
     :visible.sync="visible"
     append-to-body
+    wrapper-closable
     class="drawer generic-create-update-drawer"
     v-on="$listeners"
   >
