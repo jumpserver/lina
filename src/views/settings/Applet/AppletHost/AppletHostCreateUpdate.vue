@@ -4,6 +4,7 @@
 
 <script>
 import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
+import { Required, MatchExcludeParenthesis } from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
@@ -19,6 +20,9 @@ export default {
           [this.$t('assets.Account'), ['auto_create_accounts', 'accounts_create_amount']]
         ],
         addFieldsMeta: {
+          name: {
+            rules: [Required, MatchExcludeParenthesis]
+          },
           accounts_create_amount: {
             hidden: (formValue) => !formValue['auto_create_accounts']
           },
