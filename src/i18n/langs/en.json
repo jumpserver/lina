@@ -867,6 +867,7 @@
     "SecretKey": "Secret Key",
     "NotSpecialEmoji": "No special emoji allowed",
     "notAlphanumericUnderscore": "Only numbers, letters and underscores can be entered",
+    "notParenthesis": "Not contain ( )",
     "Task": "Task",
     "Cas": "CAS",
     "Invalid": "Invalid",
