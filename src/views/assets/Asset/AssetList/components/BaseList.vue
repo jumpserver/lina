@@ -85,6 +85,7 @@ export default {
         type: row.type,
         category: row.category
       }
+      console.log('ON action: ', action)
       vm.$eventBus.$emit('assetCreateUpdate', platform, action.toLowerCase(), { url: this.url, row })
     }
     const extraQuery = this.$route.params?.extraQuery || {}

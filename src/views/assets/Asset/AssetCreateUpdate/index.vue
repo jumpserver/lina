@@ -6,7 +6,7 @@
       :action="action"
       :platform-id="platform.id"
       :row="row"
-      @close="component = ''"
+      @close="onClose"
     />
   </div>
 </template>
@@ -55,11 +55,19 @@ export default {
       this.component = this.components[this.category]
       this.row = row
       this.action = action
+      console.log('Row: ', this.row)
       setTimeout(() => this.$eventBus.$emit('showCreateUpdateDrawer', action, { url, row }))
     })
   },
   beforeDestroy() {
     this.$eventBus.$off('assetCreateUpdate')
+  },
+  methods: {
+    onClose() {
+      console.log('On closed draw')
+      this.row = {}
+      this.component = ''
+    }
   }
 }
 </script>

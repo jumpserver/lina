@@ -9,7 +9,7 @@
     class="drawer generic-create-update-drawer"
     v-on="$listeners"
   >
-    <div class="el-drawer__content">
+    <div v-if="visible" class="el-drawer__content">
       <slot>
         <GenericCreateUpdateForm
           :action="action"
@@ -96,7 +96,7 @@ export default {
   mounted() {
     this.$eventBus.$on('showCreateUpdateDrawer', (action, { url, row }) => {
       const tableUrl = this.$attrs.url
-      this.$log.debug('Table url: ', tableUrl, ' action url: ', url, 'action: ', action)
+      this.$log.debug('Table url: ', tableUrl, ' action url: ', url, 'action: ', action, 'row: ', row)
       if (!tableUrl || !url) {
         return
       }
