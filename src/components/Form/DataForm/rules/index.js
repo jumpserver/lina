@@ -53,13 +53,27 @@ export const matchAlphanumericUnderscore = {
   trigger: ['blur', 'change']
 }
 
+// 不能包含()
+export const MatchExcludeParenthesis = {
+  validator: (rule, value, callback) => {
+    value = value?.trim()
+    if (!/^[^()]*$/.test(value)) {
+      callback(new Error(i18n.t('common.notParenthesis')))
+    } else {
+      callback()
+    }
+  },
+  trigger: ['blur', 'change']
+}
+
 export default {
   IpCheck,
   Required,
   RequiredChange,
   EmailCheck,
   specialEmojiCheck,
-  matchAlphanumericUnderscore
+  matchAlphanumericUnderscore,
+  MatchExcludeParenthesis
 }
 
 export const JsonRequired = {
