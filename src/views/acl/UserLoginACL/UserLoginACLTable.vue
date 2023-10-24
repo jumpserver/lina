@@ -1,13 +1,18 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <UserLoginACLCreateUpdate />
+  </div>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
+import UserLoginACLCreateUpdate from './UserLoginACLCreateUpdate.vue'
 
 export default {
   components: {
-    ListTable
+    ListTable,
+    UserLoginACLCreateUpdate
   },
   props: {
     url: {

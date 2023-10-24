@@ -1,9 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 import { WeekCronSelect } from '@/components/Form/FormFields'
 import { Required } from '@/components/Form/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
@@ -11,7 +11,7 @@ import { userJSONSelectMeta } from '@/views/users/const'
 export default {
   name: 'AclCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {
@@ -69,18 +69,6 @@ export default {
             }
           }
         }
-      },
-      getUrl() {
-        const query = this.$route.query
-        const params = this.$route.params
-        let url = `/api/v1/acls/login-acls/`
-        if (params.id) {
-          url = `${url}${params.id}/`
-        }
-        if (query.user) {
-          url = `${url}?user=${query.user}`
-        }
-        return url
       },
       cleanFormValue(value) {
         if (!Array.isArray(value.rules.ip_group)) {
