@@ -1,6 +1,6 @@
 <template>
   <el-dropdown>
-    <span class="el-dropdown-link">
+    <span class="el-dropdown-link header-lang">
       {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
     </span>
     <el-dropdown-menu slot="dropdown">
@@ -51,7 +51,6 @@ export default {
     }
   },
   mounted() {
-    this.changeLang()
     this.changeMomentLang()
   },
   methods: {
@@ -92,5 +91,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .header-lang {
+    color: white;
+  }
 </style>
