@@ -11,6 +11,7 @@
       :title="$tc('profile.CreateAccessKey')"
       :visible.sync="visible"
       width="700px"
+      @close="onClose"
       @confirm="visible = false"
     >
       <el-alert type="warning">
@@ -135,6 +136,9 @@ export default {
     }
   },
   methods: {
+    onClose() {
+      this.getRefsListTable.reloadTable()
+    }
   }
 }
 </script>
