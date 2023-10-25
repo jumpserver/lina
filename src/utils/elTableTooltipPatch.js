@@ -43,6 +43,7 @@ Object.assign(Table.components.TableBody.methods, {
         tooltip.doDestroy()
         tooltip.setExpectedState(true)
         this.activateTooltip(tooltip)
+        tooltip.$refs.popper.style.cursor = 'pointer'
         // 点击复制
         tooltip.$refs.popper.onclick = () => {
           message.success(i18n.t('common.CopySuccess'))
