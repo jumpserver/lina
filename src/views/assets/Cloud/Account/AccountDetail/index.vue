@@ -39,7 +39,7 @@ export default {
             this.$router.push({
               name: routeName,
               params: { id: id },
-              query: { provider: vm.Account.provider }
+              query: { provider: vm.Account.provider.value }
             })
           }
         }
