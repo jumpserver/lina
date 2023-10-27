@@ -5,6 +5,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
+
 export default {
   name: 'GrantedSystemUsersShowFormatter',
   extends: BaseFormatter,
@@ -28,7 +29,7 @@ export default {
       const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
       const url = formatterArgs.getUrl({ row: this.row, col: this.col })
       const data = await this.$axios.get(url)
-      this.accounts = data.map((item) => item.name)
+      this.accounts = data['permed_accounts'].map((item) => item.name)
     }
   }
 }

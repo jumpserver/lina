@@ -476,6 +476,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "WordSep": "",
     "PasswordRule": "密码生成规则",
     "Length": "长度",
     "Uppercase": "大写字母",

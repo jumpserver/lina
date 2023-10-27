@@ -106,7 +106,7 @@ export default {
             formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
-                return `/api/v1/perms/users/self/assets/${row.id}/accounts/?cache_policy=1`
+                return `/api/v1/perms/users/self/assets/${row.id}/`
               }
             }
           },
