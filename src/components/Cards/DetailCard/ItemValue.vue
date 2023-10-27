@@ -17,6 +17,11 @@ export default {
       default: null
     }
   },
+  data() {
+    return {
+      formatterData: ''
+    }
+  },
   computed: {
     displayValue() {
       if ([null, undefined, ''].includes(this.value)) {
@@ -65,7 +70,17 @@ export default {
   },
   render(h) {
     if (typeof this.formatter === 'function') {
-      return this.formatter(this.item, this.value)
+      const data = this.formatter(this.item, this.value)
+      if (data instanceof Promise) {
+        data.then(res => {
+          this.formatterData = res
+        })
+      } else {
+        this.formatterData = data
+      }
+      return (
+        <span>{this.formatterData}</span>
+      )
     }
     if (this.value instanceof Array) {
       const newArr = this.value || []
