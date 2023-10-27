@@ -14,6 +14,7 @@ import AssetSelect from '@/components/Apps/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
+import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 
 export default {
   name: 'AccountFormatter',
@@ -43,6 +44,7 @@ export default {
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes']],
         [this.$t('assets.Account'), ['accounts']],
+        [this.$t('assets.Protocol'), ['protocols']],
         [this.$t('perms.Actions'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
@@ -84,6 +86,21 @@ export default {
               url: '/api/v1/assets/nodes/',
               transformOption: (item) => {
                 return { label: item.full_value, value: item.id }
+              }
+            }
+          }
+        },
+        protocols: {
+          component: ProtocolsSelect,
+          label: this.$t('assets.Protocols'),
+          el: {
+            resource: this.$t('assets.Protocol'),
+            select2: {
+              url: '/api/v1/assets/categories/protocols/',
+              ajax: {
+                transformOption: (item) => {
+                  return { label: item.label, value: item.value }
+                }
               }
             }
           }
