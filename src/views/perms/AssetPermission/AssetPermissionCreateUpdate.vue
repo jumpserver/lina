@@ -96,7 +96,7 @@ export default {
           el: {
             resource: this.$t('assets.Protocol'),
             select2: {
-              url: '/api/v1/assets/categories/protocols/',
+              url: '/api/v1/assets/protocols/',
               ajax: {
                 transformOption: (item) => {
                   return { label: item.label, value: item.value }
