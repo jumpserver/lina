@@ -4,7 +4,8 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountChangeSecretExecutionTaskList',
@@ -23,7 +24,7 @@ export default {
       tableConfig: {
         url: `/api/v1/accounts/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error'
+          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
         ],
         columnsMeta: {
           asset: {
@@ -59,13 +60,40 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('accounts.AccountChangeSecret.Success')
+            label: this.$t('accounts.AccountChangeSecret.Success'),
+            formatter: (row) => {
+              if (row.status === 'pending') {
+                return <i Class='fa  fa fa-spinner fa-spin'/>
+              }
+              if (row.is_success) {
+                return <i Class='fa fa-check text-primary'/>
+              }
+              return <i Class='fa fa-times text-danger'/>
+            }
           },
-          timedelta: {
-            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
-            width: '90px',
-            formatter: function(row) {
-              return row.timedelta ? row.timedelta.toFixed(2) + 's' : 0
+          actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              moreActionsTitle: this.$t('common.More'),
+              extraActions: [
+                {
+                  name: 'Retry',
+                  title: this.$t('accounts.AccountChangeSecret.Retry'),
+                  can: this.$hasPerm('accounts.add_changesecretexecution'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.post(
+                      '/api/v1/accounts/change-secret-records/execute/',
+                      { record_id: row.id }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                }
+              ]
             }
           }
         }
