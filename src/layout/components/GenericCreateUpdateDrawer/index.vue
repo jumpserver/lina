@@ -13,6 +13,7 @@
     <div class="el-drawer__content">
       <slot>
         <GenericCreateUpdateForm
+          v-if="visible"
           :action="action"
           :action-id="actionId"
           v-bind="$attrs"
