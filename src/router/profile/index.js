@@ -1,5 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty.vue'
 
 export default {
   path: '/profile',
@@ -54,15 +55,31 @@ export default {
     },
     {
       path: '/profile/api-keys',
-      component: () => import('@/views/profile/ApiKey'),
-      name: 'ApiKey',
+      component: empty,
       meta: {
-        title: i18n.t('common.nav.APIKey'),
-        icon: 'key',
-        permissions: ['authentication.view_accesskey'],
-        resource: 'accesskey',
-        app: 'authentication'
-      }
+        icon: 'key'
+      },
+      redirect: '',
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/profile/ApiKey'),
+          name: 'ApiKey',
+          icon: 'key',
+          meta: { title: i18n.t('common.nav.APIKey'), permissions: ['authentication.view_accesskey'] }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/profile/ApiKeyCreateUpdate/index'),
+          name: 'ApiKeyCreateUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('common.nav.APIKey'),
+            permissions: ['authentication.change_accesskey'],
+            activeMenu: '/profile/api-keys'
+          }
+        }
+      ]
     },
     {
       path: '/profile/temp-password',
