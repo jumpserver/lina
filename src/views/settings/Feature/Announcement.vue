@@ -7,6 +7,7 @@
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { IBox } from '@/components'
+import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
   name: 'Announcement',
@@ -36,7 +37,9 @@ export default {
             ],
             fieldsMeta: {
               CONTENT: {
+                component: MarkDown,
                 el: {
+                  preview: true,
                   rows: 5
                 }
               }
