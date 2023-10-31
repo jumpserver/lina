@@ -17,14 +17,14 @@ export default {
       LANG_COOKIE_NAME: 'django_language', // 后端Django需要的COOKIE KEY
       supportLanguages: [
         {
-          title: 'English',
-          code: 'en',
-          cookieCode: 'en'
-        },
-        {
           title: '中文(简体)',
           code: 'cn',
           cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
+        },
+        {
+          title: 'English',
+          code: 'en',
+          cookieCode: 'en'
         },
         {
           title: '日本語',
