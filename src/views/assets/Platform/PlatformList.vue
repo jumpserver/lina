@@ -33,7 +33,7 @@ export default {
       showDrawer: false,
       category: '',
       type: '',
-      action: '',
+      action: 'create',
       row: {},
       tab: {
         submenu: [],
@@ -107,6 +107,7 @@ export default {
         },
         moreCreates: {
           callback: (item) => {
+            this.action = 'create'
             this.category = item.category
             this.type = item.name
             this.showDrawer = true
