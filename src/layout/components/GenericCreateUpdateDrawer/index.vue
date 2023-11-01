@@ -10,7 +10,7 @@
     class="drawer generic-create-update-drawer"
     v-on="$listeners"
   >
-    <div v-if="visible" class="el-drawer__content">
+    <div class="el-drawer__content">
       <slot>
         <GenericCreateUpdateForm
           v-if="iVisible"
