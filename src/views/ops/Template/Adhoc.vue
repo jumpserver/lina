@@ -1,14 +1,19 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AdhocUpdateCreate />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import AdhocUpdateCreate from './Adhoc/AdhocUpdateCreate.vue'
 
 export default {
   components: {
-    GenericListTable
+    GenericListTable,
+    AdhocUpdateCreate
   },
   data() {
     return {
