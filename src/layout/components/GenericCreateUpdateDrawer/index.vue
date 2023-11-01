@@ -4,14 +4,16 @@
     :modal="false"
     :size="width"
     :title="iTitle"
-    :visible.sync="visible"
+    :visible.sync="iVisible"
     append-to-body
+    wrapper-closable
     class="drawer generic-create-update-drawer"
     v-on="$listeners"
   >
     <div v-if="visible" class="el-drawer__content">
       <slot>
         <GenericCreateUpdateForm
+          v-if="iVisible"
           :action="action"
           :action-id="actionId"
           v-bind="$attrs"
@@ -51,11 +53,15 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      visible: false,
+      iVisible: this.visible,
       action: 'create',
       actionId: '',
       success: false
@@ -83,7 +89,10 @@ export default {
   },
   watch: {
     visible(val) {
-      console.log('Visible changed: ', val, ' ', this.$attrs.url)
+      this.setVisible(val)
+    },
+    iVisible(val) {
+      console.log('iVisible changed: ', val, ' ', this.$attrs.url)
       if (!val) {
         this.$eventBus.$emit(
           'closeCreateUpdateDrawer',
@@ -115,12 +124,12 @@ export default {
   },
   methods: {
     setVisible: _.debounce(function(val) {
-      this.visible = val
+      this.iVisible = val
     }, 100),
     onSubmitSuccess(res, { addContinue }) {
       this.success = true
       if (!addContinue) {
-        this.visible = false
+        this.iVisible = false
       }
     }
   }
