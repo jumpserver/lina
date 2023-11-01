@@ -498,6 +498,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
+    "BelongAll": "すべての",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",

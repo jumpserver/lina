@@ -498,6 +498,7 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
+    "BelongAll": "Include all",
     "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
