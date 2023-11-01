@@ -88,15 +88,15 @@ export default {
     getType() {
       const attrType = this.attr.type || 'str'
       this.$log.debug('Value field attr type: ', attrType, this.attr, this.match)
-      if (attrType === 'm2m') {
+      if (['m2m', 'fk', 'select'].includes(attrType)) {
         return 'select'
       } else if (attrType === 'bool') {
         return 'bool'
-      } else if (attrType === 'select') {
-        return 'select'
       }
       if (['in', 'ip_in'].includes(this.match)) {
         return 'array'
+      } else if (this.match.startsWith('m2m')) {
+        return 'select'
       } else {
         return 'string'
       }
