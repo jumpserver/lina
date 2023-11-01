@@ -260,7 +260,7 @@ export default {
                     vm.addTemplate = false
                     vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
                     setTimeout(() => {
-                      vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { row, col })
+                      vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url: this.url, row, col })
                     })
                   }
                 }
