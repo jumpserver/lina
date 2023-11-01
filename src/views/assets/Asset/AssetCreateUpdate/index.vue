@@ -55,7 +55,7 @@ export default {
       this.component = this.components[this.category]
       this.row = row
       this.action = action
-      setTimeout(() => this.$eventBus.$emit('showCreateUpdateDrawer', action, { url, row }))
+      setTimeout(() => this.$eventBus.$emit('showCreateUpdateDrawer', action, { url, row }), 80)
     })
   },
   beforeDestroy() {
