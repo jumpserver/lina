@@ -26,7 +26,7 @@ const defaultUpdateCallback = function({ row, col }) {
 
 const defaultCloneCallback = function({ row, col }) {
   console.log('Url: ', this.url)
-  this.$eventBus.$emit('showCreateUpdateDrawer', 'clone', { row, col })
+  this.$eventBus.$emit('showCreateUpdateDrawer', 'clone', { url: this.url, row, col })
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {

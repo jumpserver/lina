@@ -79,12 +79,8 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanUpdate', params: { id: row.id }})
-              },
+              hasClone: true,
+              hasUpdate: true,
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
