@@ -1,5 +1,12 @@
 <template>
-  <GenericCreateUpdateDrawer v-if="!loading" v-bind="iConfig" v-on="$listeners" />
+  <GenericCreateUpdateDrawer
+    v-if="!loading"
+    :visible="visible"
+    :action="action"
+    :action-id="actionId"
+    v-bind="iConfig"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
@@ -46,6 +53,10 @@ export default {
       type: String,
       default: 'create'
     },
+    visible: {
+      type: Boolean,
+      default: false
+    },
     row: {
       type: Object,
       default: () => ({})
@@ -54,6 +65,7 @@ export default {
   data() {
     return {
       loading: true,
+      actionId: this.row?.id,
       platform: {},
       defaultConfig: {
         initial: {},

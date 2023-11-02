@@ -14,8 +14,8 @@
       <slot>
         <GenericCreateUpdateForm
           v-if="iVisible"
-          :action="action"
-          :action-id="actionId"
+          :action="iAction"
+          :action-id="iActionId"
           v-bind="$attrs"
           @submitSuccess="onSubmitSuccess"
           v-on="$listeners"
@@ -54,16 +54,26 @@ export default {
       type: String,
       default: ''
     },
+    action: {
+      type: String,
+      default: 'create'
+    },
+    actionId: {
+      type: String,
+      default: ''
+    },
     visible: {
       type: Boolean,
       default: false
     }
   },
   data() {
+    console.log('this.actionId: ', this.actionId)
+    console.log(this.$attrs, '-----------------------------333')
     return {
       iVisible: this.visible,
-      action: 'create',
-      actionId: '',
+      iAction: this.action,
+      iActionId: this.actionId,
       success: false
     }
   },
@@ -79,7 +89,7 @@ export default {
           .replace('列表', '')
       }
       let title
-      if (this.action === 'update') {
+      if (this.iAction === 'update') {
         title = this.$t('common.Update') + ' ' + resource
       } else {
         title = this.$t('common.Create') + ' ' + resource
@@ -94,11 +104,12 @@ export default {
     iVisible(val) {
       console.log('iVisible changed: ', val, ' ', this.$attrs.url)
       if (!val) {
+        this.visible = false
         this.$eventBus.$emit(
           'closeCreateUpdateDrawer',
-          { action: this.action, actionId: this.actionId, success: this.success }
+          { action: this.iAction, actionId: this.iActionId, success: this.success }
         )
-        this.$emit('close', { action: this.action, actionId: this.actionId, success: this.success })
+        this.$emit('close', { action: this.iAction, actionId: this.iActionId, success: this.success })
       }
     }
   },
@@ -114,8 +125,8 @@ export default {
       if (tablePath !== actionPath) {
         return
       }
-      this.action = action
-      this.actionId = row ? row.id : ''
+      this.iAction = action
+      this.iActionId = row ? row.id : ''
       this.setVisible(true)
     })
   },

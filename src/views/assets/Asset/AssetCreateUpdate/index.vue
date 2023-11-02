@@ -2,7 +2,7 @@
   <div>
     <component
       :is="component"
-      v-if="component"
+      :visible.sync="visible"
       :action="action"
       :platform-id="platform.id"
       :row="row"
@@ -33,6 +33,7 @@ export default {
   },
   data() {
     return {
+      visible: false,
       category: '',
       component: '',
       platform: { id: 0 },
@@ -55,7 +56,7 @@ export default {
       this.component = this.components[this.category]
       this.row = row
       this.action = action
-      setTimeout(() => this.$eventBus.$emit('showCreateUpdateDrawer', action, { url, row }), 100)
+      this.visible = true
     })
   },
   beforeDestroy() {
