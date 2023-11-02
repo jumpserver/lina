@@ -68,8 +68,6 @@ export default {
     }
   },
   data() {
-    console.log('this.actionId: ', this.actionId)
-    console.log(this.$attrs, '-----------------------------333')
     return {
       iVisible: this.visible,
       iAction: this.action,
