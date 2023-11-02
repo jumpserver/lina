@@ -146,7 +146,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: 1px 2px;
+    padding: 1px 2px 1px;
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
@@ -162,7 +162,7 @@ export default {
     }
 
     &>>> .el-autocomplete {
-      height: 29px;
+      height: 30px;
     }
   }
 
@@ -171,7 +171,7 @@ export default {
     &>>> .el-input__inner {
       max-width: 100%;
       border: none;
-      padding-left: 5px;
+      padding-left: 10px;
     }
   }
 
