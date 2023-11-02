@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 

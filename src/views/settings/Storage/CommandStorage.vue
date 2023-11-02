@@ -1,47 +1,57 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
+  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
 </template>
+
 <script>
-import ListTable from '@/components/Table/ListTable'
-import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
-import { getReplayStorageOptions } from '@/views/sessions/const'
+import ListTable from '@/components/Table/ListTable/index.vue'
+import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
 
 export default {
-  name: 'ReplayStorage',
+  name: 'CommandStorage',
   components: {
     ListTable
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     const vm = this
-    const storageOptions = getReplayStorageOptions()
     return {
-      replayActions: {
-        canCreate: this.$hasPerm('terminal.add_replaystorage'),
+      commandActions: {
+        canCreate: this.$hasPerm('terminal.add_commandstorage'),
         hasExport: false,
         hasImport: false,
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
-            this.$router.push({ name: 'CreateReplayStorage', query: { type: item.name.toLowerCase() }})
+            this.$router.push({ name: 'CreateCommandStorage', query: { type: item.name }})
           },
-          dropdown: storageOptions
+          dropdown: [
+            {
+              name: 'es',
+              title: 'Elasticsearch'
+            }
+          ]
         }
       },
-      replayTableConfig: {
-        url: '/api/v1/terminal/replay-storages/',
+      commandTableConfig: {
+        title: 'command',
+        url: '/api/v1/terminal/command-storages/',
         permissions: {
-          app: 'terminal',
-          resource: 'replaystorage'
+          resource: 'commandstorage'
         },
-        columnsExclude: ['meta'],
-        columns: [
-          'name', 'type', 'comment', 'is_default', 'actions'
-        ],
         columnsShow: {
-          min: ['name', 'type', 'actions']
+          min: ['name', 'type', 'actions'],
+          default: ['name', 'type', 'comment', 'is_default', 'actions']
         },
         columnsMeta: {
+          comment: {
+            sortable: 'custom'
+          },
           name: {
             formatter: function(row) {
               return row.name
@@ -55,31 +65,26 @@ export default {
             align: 'center',
             width: '100px'
           },
-          comment: {
-            sortable: 'custom'
-          },
           actions: {
             formatterArgs: {
-              onUpdate: function({ row }) {
-                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
-              },
               canUpdate: function({ row }) {
-                return (
-                  row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_replaystorage')
-                )
+                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
+              },
+              onUpdate: function({ row }) {
+                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_replaystorage'))
+                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
               },
               hasClone: false,
               extraActions: [
                 {
                   name: 'test',
                   title: this.$t('sessions.test'),
-                  can: vm.$hasPerm('terminal.view_replaystorage'),
                   type: 'primary',
+                  can: vm.$hasPerm('terminal.view_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
-                    TestReplayStorage(row.id).then(data => {
+                    TestCommandStorage(row.id).then(data => {
                       if (!data['is_valid']) {
                         this.$message.error(data.msg)
                       } else {
@@ -91,10 +96,10 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('sessions.SetToDefault'),
-                  can: this.$hasPerm('terminal.change_replaystorage'),
                   type: 'primary',
+                  can: vm.$hasPerm('terminal.change_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
-                    SetToDefaultReplayStorage(row.id).then(data => {
+                    SetToDefaultCommandStorage(row.id).then(data => {
                       vm.$refs.ListTable.reloadTable()
                       this.$message.success(this.$tc('sessions.SetSuccess'))
                     }).catch(() => {
@@ -110,8 +115,12 @@ export default {
     }
   },
   methods: {
+    createEs() {
+      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
+    }
   }
 }
+
 </script>
 
 <style scoped>
