@@ -115,6 +115,72 @@ export default {
       }
     },
     {
+      path: '/settings/storage',
+      component: empty,
+      redirect: '',
+      meta: {
+        title: i18n.t('setting.Storage'),
+        app: 'terminal',
+        permissions: ['settings.change_terminal']
+      },
+      children: [
+        {
+          path: '',
+          name: 'Storage',
+          component: () => import('@/views/settings/Storage'),
+          meta: {
+            title: i18n.t('setting.Storage'),
+            icon: 'terminal-set',
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
+          path: 'replay-storage/create',
+          name: 'CreateReplayStorage',
+          component: () => import('@/views/settings/Storage/ReplayStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CreateReplayStorage'),
+            activeMenu: '/settings/storage',
+            permissions: ['terminal.add_replaystorage']
+          },
+          hidden: true
+        },
+        {
+          path: 'replay-storage/:id/update',
+          name: 'ReplayStorageUpdate',
+          component: () => import('@/views/settings/Storage/ReplayStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.ReplayStorageUpdate'),
+            activeMenu: '/settings/storage',
+            permissions: ['terminal.change_replaystorage']
+          },
+          hidden: true
+        },
+        {
+          path: 'command-storage/create',
+          name: 'CreateCommandStorage',
+          component: () => import('@/views/settings/Storage/CommandStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CreateCommandStorage'),
+            activeMenu: '/settings/storage',
+            permissions: ['terminal.add_commandstorage']
+          },
+          hidden: true
+        },
+        {
+          path: 'command-storage/:id/update',
+          name: 'CommandStorageUpdate',
+          component: () => import('@/views/settings/Storage/CommandStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CommandStorageUpdate'),
+            activeMenu: '/settings/storage',
+            permissions: ['terminal.change_commandstorage']
+          },
+          hidden: true
+        }
+      ]
+    },
+    {
       path: '/settings/terminal',
       component: empty,
       redirect: '',
@@ -151,50 +217,6 @@ export default {
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.change_terminal']
-          },
-          hidden: true
-        },
-        {
-          path: 'replay-storage/create',
-          name: 'CreateReplayStorage',
-          component: () => import('@/views/settings/Terminal/Storage/ReplayStorageCreateUpdate'),
-          meta: {
-            title: i18n.t('route.CreateReplayStorage'),
-            activeMenu: '/settings/terminal',
-            permissions: ['terminal.add_replaystorage']
-          },
-          hidden: true
-        },
-        {
-          path: 'replay-storage/:id/update',
-          name: 'ReplayStorageUpdate',
-          component: () => import('@/views/settings/Terminal/Storage/ReplayStorageCreateUpdate'),
-          meta: {
-            title: i18n.t('route.ReplayStorageUpdate'),
-            activeMenu: '/settings/terminal',
-            permissions: ['terminal.change_replaystorage']
-          },
-          hidden: true
-        },
-        {
-          path: 'command-storage/create',
-          name: 'CreateCommandStorage',
-          component: () => import('@/views/settings/Terminal/Storage/CommandStorageCreateUpdate'),
-          meta: {
-            title: i18n.t('route.CreateCommandStorage'),
-            activeMenu: '/settings/terminal',
-            permissions: ['terminal.add_commandstorage']
-          },
-          hidden: true
-        },
-        {
-          path: 'command-storage/:id/update',
-          name: 'CommandStorageUpdate',
-          component: () => import('@/views/settings/Terminal/Storage/CommandStorageCreateUpdate'),
-          meta: {
-            title: i18n.t('route.CommandStorageUpdate'),
-            activeMenu: '/settings/terminal',
-            permissions: ['terminal.change_commandstorage']
           },
           hidden: true
         },

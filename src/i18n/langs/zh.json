@@ -1308,7 +1308,7 @@
     "OnlineSession": "在线用户",
     "OnlineUserDevices": "在线用户设备",
     "CreateCommandStorage": "创建命令存储",
-    "CreateReplayStorage": "创建录像存储",
+    "CreateReplayStorage": "创建对象存储",
     "Dashboard": "仪表盘",
     "DatabaseApp": "数据库",
     "RemoteApps": "远程应用",
@@ -1386,7 +1386,7 @@
     "ApplicationPermissionDetail": "应用授权详情",
     "ApplicationPermissionUpdate": "更新应用授权规则",
     "RemoteAppUpdate": "更新远程应用",
-    "ReplayStorageUpdate": "更新录像存储",
+    "ReplayStorageUpdate": "更新对象存储",
     "Detail": "详情",
     "SessionOffline": "历史会话",
     "SessionOnline": "在线会话",
@@ -1508,7 +1508,7 @@
     "remoteAddr": "远端地址",
     "replay": "回放",
     "replaySession": "回放会话",
-    "replayStorage": "录像存储",
+    "replayStorage": "对象存储",
     "riskLevel": "风险等级",
     "session": "会话",
     "sshPort": "SSH端口",
@@ -1787,7 +1787,8 @@
     "DestinationPort": "目的端口",
     "TestParam": "参数",
     "sync": "同步",
-    "testHelpText": "请输入目的地址进行测试"
+    "testHelpText": "请输入目的地址进行测试",
+    "Storage": "存储设置"
   },
   "tickets": {
     "BatchApproval": "批量审批",
