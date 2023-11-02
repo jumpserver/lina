@@ -20,10 +20,17 @@ export default {
       url: '/api/v1/authentication/access-keys/',
       hasDetailInMsg: false,
       fields: [
-        'ip_group'
+        'id',
+        'ip_group',
+        'is_active'
       ],
       fieldsMeta: {
-
+        id: {
+          el: {
+            disabled: true,
+            type: 'string'
+          }
+        },
         rules: {
           fields: [
             'ip_group'
