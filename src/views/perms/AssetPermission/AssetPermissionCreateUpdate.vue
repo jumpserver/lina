@@ -107,7 +107,6 @@ export default {
         },
         accounts: {
           type: 'input',
-          label: this.$t('perms.Account'),
           component: AccountFormatter,
           el: {
             assets: [],
@@ -148,8 +147,6 @@ export default {
 
 <style lang="scss" scoped>
 >>> .el-tree {
-  margin-top: 8px;
-  border: solid 1px #EBEEF5;
   padding: 10px 0;
 }
 
