@@ -27,7 +27,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => ({ name: '', strategy_rules: [], strategy_actions: [] })
+      default: () => ({ name: '', priority: 50, strategy_rules: [], strategy_actions: [] })
     },
     tableConfig: {
       type: Object,
@@ -76,7 +76,7 @@ export default {
     getObject() {
       if (this.value?.id) {
         return {
-          id: this.value.id, name: this.value.name,
+          id: this.value.id, name: this.value.name, priority: this.value.priority,
           strategy_rules: this.value.strategy_rules, strategy_actions: this.value.strategy_actions
         }
       }
