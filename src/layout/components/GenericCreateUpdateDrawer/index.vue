@@ -102,7 +102,7 @@ export default {
     iVisible(val) {
       console.log('iVisible changed: ', val, ' ', this.$attrs.url)
       if (!val) {
-        this.visible = false
+        this.iVisible = false
         this.$eventBus.$emit(
           'closeCreateUpdateDrawer',
           { action: this.iAction, actionId: this.iActionId, success: this.success }
