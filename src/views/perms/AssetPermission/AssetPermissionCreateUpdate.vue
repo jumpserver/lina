@@ -11,6 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
+import TableSelect2 from '@/components/Apps/TableSelect2'
 import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
@@ -52,14 +53,9 @@ export default {
       createSuccessNextRoute: { name: 'AssetPermissionDetail' },
       fieldsMeta: {
         users: {
+          component: TableSelect2,
           el: {
-            value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            value: []
           }
         },
         user_groups: {
