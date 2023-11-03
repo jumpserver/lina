@@ -66,7 +66,7 @@ export default {
         }
       },
       cleanFormValue(values) {
-        const encryptedFields = ['SFTP_PASSWORD', 'STP_PASSPHRASE']
+        const encryptedFields = ['SFTP_PASSWORD', 'STP_PASSPHRASE', 'SECRET_KEY', 'ACCOUNT_KEY']
         const meta = values.meta
         for (const item of encryptedFields) {
           const val = meta[item]
