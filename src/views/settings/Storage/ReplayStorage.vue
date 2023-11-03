@@ -23,7 +23,6 @@ export default {
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
-            console.log(item)
             this.$router.push({ name: 'CreateReplayStorage', query: { type: item.name.toLowerCase() }})
           },
           dropdown: storageOptions
