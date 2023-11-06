@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import AssetSelect from '@/components/Apps/AssetSelect'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 
 export default {
@@ -14,19 +13,11 @@ export default {
   data() {
     return {
       initial: {
-
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'value', 'assets']]
+        [this.$t('common.Basic'), ['name', 'value']]
       ],
-      fieldsMeta: {
-        assets: {
-          type: 'assetSelect',
-          component: AssetSelect,
-          label: this.$t('assets.Assets')
-        }
-      },
-      url: '/api/v1/assets/labels/'
+      url: '/api/v1/labels/labels/'
     }
   }
 }

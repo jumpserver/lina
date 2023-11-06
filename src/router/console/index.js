@@ -7,6 +7,7 @@ import UsersRoute from './users'
 import AssetsRoute from './assets'
 import PermsRoute from './perms'
 import AccountRoutes from './accounts'
+import LabelRoutes from './labels'
 
 export default {
   path: '/console',
@@ -74,8 +75,17 @@ export default {
         icon: 'permission'
       },
       children: PermsRoute
+    },
+    {
+      path: '/console/labels',
+      component: empty,
+      name: 'Label',
+      meta: {
+        title: i18n.t('route.Labels'),
+        icon: 'permission'
+      },
+      children: LabelRoutes
     }
-
   ]
 }
 

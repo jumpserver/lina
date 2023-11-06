@@ -326,36 +326,5 @@ export default [
       }
     ]
   },
-  {
-    path: 'labels',
-    component: empty,
-    redirect: '',
-    meta: {
-      resource: 'label',
-      permissions: ['assets.view_label']
-    },
-    children: [
-      {
-        path: '',
-        name: 'LabelList',
-        component: () => import('@/views/assets/Label/LabelList.vue'),
-        meta: { title: i18n.t('route.LabelList') }
-      },
-      {
-        path: 'create',
-        name: 'LabelCreate',
-        component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.LabelCreate') }
-      },
-      {
-        path: ':id/update',
-        name: 'LabelUpdate',
-        component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.LabelUpdate') }
-      }
-    ]
-  },
   ...XPackRoutes
 ]
