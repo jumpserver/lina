@@ -57,7 +57,8 @@ export default {
           onSelected: this.onSelected.bind(this),
           beforeDrop: this.beforeDrop.bind(this),
           onDrop: this.onDrop.bind(this),
-          refresh: this.refresh.bind(this)
+          refresh: this.refresh.bind(this),
+          onAsyncSuccess: this.onAsyncSuccess.bind(this)
           // 尚未定义的函数
           // beforeClick
           // beforeDrag
@@ -89,6 +90,16 @@ export default {
     $('body').unbind('mousedown')
   },
   methods: {
+    onAsyncSuccess(event, treeId, treeNode, msg) {
+      const nodes = JSON.parse(msg)
+      nodes.forEach((node) => {
+        if (treeNode.checked) {
+          const currentNode = this.zTree.getNodeByParam('id', node.id, null)
+          currentNode.checked = true
+          this.zTree.updateNode(currentNode)
+        }
+      })
+    },
     refreshTree: function() {
       // const refreshIconRef = $('#tree-refresh')
       // refreshIconRef.click()
