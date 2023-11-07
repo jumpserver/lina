@@ -4,7 +4,7 @@
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
     "Accounts": "账号",
-    "SuFrom": "切换至",
+    "SuFrom": "切换自",
     "SelectAccount": "选择账号",
     "AccountTemplateUpdateSecretHelpText": "账号列表展示通过模版创建的账号。更新密文时，会更新通过模版所创建账号的密文。",
     "GenerateSuccessMsg": "账号生成成功",
