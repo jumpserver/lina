@@ -1,14 +1,20 @@
 <template>
-  <BaseTicketList :url="url" v-bind="$data" />
+  <div>
+    <BaseTicketList :url="url" v-bind="$data" />
+    <CreateUpdate />
+  </div>
 </template>
 
 <script>
 import BaseTicketList from './BaseTicketList'
+import CreateUpdate from './RequestAssetPerm/CreateUpdate.vue'
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'MyTicketList',
   components: {
-    BaseTicketList
+    BaseTicketList,
+    CreateUpdate
   },
   data() {
     return {
@@ -18,9 +24,10 @@ export default {
             {
               name: 'RequestAssetPerm',
               title: this.$t('tickets.RequestAssetPerm'),
-              callback: () => this.$router.push({
-                name: 'RequestAssetPermTicketCreateUpdate'
-              })
+              callback: () => {
+                const url = '/api/v1/tickets/apply-asset-tickets/?state=pending'
+                this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url })
+              }
             }
           ]
         }

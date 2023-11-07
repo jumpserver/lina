@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
+  <GenericCreateUpdateDrawer
     v-if="!loading"
     v-bind="$data"
     :perform-submit="performSubmit"
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/Form/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
@@ -17,7 +17,7 @@ import store from '@/store'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const now = new Date()
@@ -156,18 +156,27 @@ export default {
     }),
     ...mapGetters(['currentOrg'])
   },
-  mounted() {
-    const currentOrgId = this.currentOrg.id || ''
-    const userAllOrgIds = this.workbenchOrgs.map(i => i.id) || []
-    if (userAllOrgIds.includes(currentOrgId)) {
-      this.initial.org_id = currentOrgId
-    } else {
-      this.initial.org_id = userAllOrgIds[0]
+  watch: {
+    currentOrg: {
+      handler(val) {
+        this.init()
+      },
+      immediate: true
     }
-
-    this.loading = false
   },
   methods: {
+    init() {
+      this.loading = true
+      const currentOrgId = this.currentOrg.id || ''
+      const userAllOrgIds = this.workbenchOrgs.map(i => i.id) || []
+      if (userAllOrgIds.includes(currentOrgId)) {
+        this.initial.org_id = currentOrgId
+      } else {
+        this.initial.org_id = userAllOrgIds[0]
+      }
+
+      this.loading = false
+    },
     performSubmit(validValues) {
       return this.$axios['post'](`/api/v1/tickets/apply-asset-tickets/open/`, validValues)
     }
