@@ -276,17 +276,6 @@ export default {
           }
         },
         {
-          path: 'hosts/create',
-          name: 'AppletHostCreate',
-          component: () => import('@/views/settings/Applet/AppletHost/AppletHostCreateUpdate'),
-          hidden: true,
-          meta: {
-            title: i18n.t('route.AppletHostCreate'),
-            permissions: ['terminal.add_applethost'],
-            activeMenu: '/settings/applets'
-          }
-        },
-        {
           path: 'hosts/:id',
           name: 'AppletHostDetail',
           component: () => import('@/views/settings/Applet/AppletHost/AppletHostDetail/index'),

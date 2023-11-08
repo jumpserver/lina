@@ -52,17 +52,6 @@ export default {
       },
       children: [
         {
-          path: 'request-host-perm/create',
-          name: 'RequestAssetPermTicketCreateUpdate',
-          component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
-          meta: {
-            title: i18n.t('tickets.OpenTicket'),
-            permissions: ['tickets.view_ticket'],
-            activeMenu: '/tickets/my-tickets'
-          },
-          hidden: true
-        },
-        {
           path: 'request-host-perm/:id',
           name: 'AssetsTicketDetail',
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
