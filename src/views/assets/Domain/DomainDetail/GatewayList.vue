@@ -10,6 +10,7 @@
         :port="port"
         :visible.sync="visible"
       />
+      <GatewayCreateUpdate :domain="domain" :platform-type="platformType" />
     </el-col>
   </div>
 </template>
@@ -17,12 +18,14 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
+import GatewayCreateUpdate from './GatewayCreateUpdate.vue'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
     GenericListTable,
+    GatewayCreateUpdate,
     GatewayDialog
   },
   props: {
@@ -34,6 +37,8 @@ export default {
   },
   data() {
     return {
+      domain: '',
+      platformType: '',
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
         columnsExclude: [
@@ -89,7 +94,10 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatterArgs: {
-              updateRoute: { name: 'GatewayUpdate', query: { domain: this.object.id, platform_type: 'linux', 'category': 'host' }},
+              updateRoute: ({ row }) => {
+                this.domain = this.object.id
+                this.platformType = 'linux'
+              },
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
@@ -130,13 +138,11 @@ export default {
       headerActions: {
         hasBulkUpdate: false,
         hasSearch: true,
-        createRoute: {
-          name: 'GatewayCreate',
-          query: {
-            domain: this.object.id,
-            platform_type: 'linux',
-            category: 'host'
-          }
+        onCreate: (item) => {
+          this.domain = this.object.id
+          this.platformType = 'linux'
+          this.category = 'host'
+          this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: this.tableConfig.url })
         }
       },
       port: 0,

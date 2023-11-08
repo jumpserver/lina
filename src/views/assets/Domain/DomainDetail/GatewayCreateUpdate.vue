@@ -10,15 +10,25 @@ export default {
   components: {
     BaseAssetCreateUpdate
   },
+  props: {
+    domain: {
+      type: String,
+      default: ''
+    },
+    platformType: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
-    const platformType = this.$route.query.platform_type
+    const platformType = this.platformType
     return {
       url: '/api/v1/assets/gateways/',
       updateInitial: async(initial) => {
         const url = `/api/v1/assets/platforms/?name=Gateway`
         const platform = await this.$axios.get(url)
         initial.platform = parseInt(platform[0].id)
-        initial.domain = this.$route.query.domain
+        initial.domain = this.domain
         return initial
       },
       addFieldsMeta: {
@@ -36,24 +46,6 @@ export default {
               }
             }
           }
-        }
-      },
-      createSuccessNextRoute: {
-        name: 'DomainDetail',
-        params: {
-          id: this.$route.query.domain
-        },
-        query: {
-          tab: 'GatewayList'
-        }
-      },
-      updateSuccessNextRoute: {
-        name: 'DomainDetail',
-        params: {
-          id: this.$route.query.domain
-        },
-        query: {
-          tab: 'GatewayList'
         }
       }
     }
