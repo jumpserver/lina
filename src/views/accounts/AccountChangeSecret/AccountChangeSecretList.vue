@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AccountChangeSecretCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
+import AccountChangeSecretCreateUpdate from './AccountChangeSecretCreateUpdate.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountChangeSecretList',
   components: {
-    GenericListTable
+    GenericListTable,
+    AccountChangeSecretCreateUpdate
   },
   data() {
     const vm = this
@@ -69,7 +74,7 @@ export default {
                 return {
                   name: 'AccountChangeSecretList',
                   query: {
-                    activeTab: 'AccountChangeSecretExecutionList',
+                    tab: 'AccountChangeSecretExecutionList',
                     automation_id: row.id
                   }
                 }
@@ -82,12 +87,6 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretUpdate', params: { id: row.id }})
-              },
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),

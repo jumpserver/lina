@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!loading" class="platform-form">
-    <GenericCreateUpdatePage
+  <div class="platform-form">
+    <GenericCreateUpdateDrawer
       :after-get-form-value="afterGetFormValue"
       :after-get-remote-meta="handleAfterGetRemoteMeta"
       :clean-form-value="cleanFormValue"
@@ -10,18 +10,44 @@
       :has-reset="false"
       :initial="initial"
       :url="url"
+      v-bind="$attrs"
+      @close="$emit('update:visible', false)"
+      v-on="$listeners"
     />
   </div>
 </template>
 
 <script>
-import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from './const'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
+import { setUrlParam } from '@/utils/common'
 
 export default {
   name: 'PlatformCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
+  },
+  props: {
+    category: {
+      type: String,
+      default: 'host'
+    },
+    type: {
+      type: String,
+      default: 'linux'
+    },
+    action: {
+      type: String,
+      default: ''
+    },
+    row: {
+      type: Object,
+      default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -95,16 +121,18 @@ export default {
     }
   },
   watch: {
-  },
-  async mounted() {
-    try {
-      await this.setCategories()
-      await this.setConstraints()
-    } finally {
-      this.loading = false
+    visible(val) {
+      if (val) {
+        this.showCreateUpdateDrawer()
+      }
     }
   },
   methods: {
+    async showCreateUpdateDrawer() {
+      await this.setCategories()
+      await this.setConstraints()
+      this.$eventBus.$emit('showCreateUpdateDrawer', this.action, { url: this.url, row: this.row })
+    },
     updateSuMethodOptions() {
       const options = this.suMethods.filter(i => {
         return this.suMethodLimits.includes(i.value)
@@ -124,19 +152,20 @@ export default {
       this.initial.su_method = this.suMethodLimits[0]
     },
     async setCategories() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.category
+      const type = this.type
       const state = await this.$store.dispatch('assets/getAssetCategories')
       this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
       if (category && type) {
         this.initial.category_type = [category, type]
       }
-      this.url += `?category=${category}&type=${type}`
+      this.url = setUrlParam(this.url, 'category', category)
+      this.url = setUrlParam(this.url, 'type', type)
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.category
+      const type = this.type
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints

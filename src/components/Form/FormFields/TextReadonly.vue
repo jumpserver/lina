@@ -1,5 +1,5 @@
 <template>
-  <div :class="bolder ? 'bolder' : ''" class="input-text">
+  <div class="input-text">
     {{ value.toString() || text }}
   </div>
 </template>
@@ -9,15 +9,11 @@ export default {
   props: {
     value: {
       type: [String, Boolean],
-      default: ''
+      default: () => ''
     },
     text: {
       type: String,
-      default: ''
-    },
-    bolder: {
-      type: Boolean,
-      default: true
+      default: () => ''
     }
   },
   data() {

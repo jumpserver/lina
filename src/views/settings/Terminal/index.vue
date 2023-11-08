@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -67,7 +67,7 @@ export default {
     }
   },
   beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.path === from.path && to.query?.activeTab) {
+    if (to.name === from.name && to.path === from.path && to.query?.tab) {
       this.$store.commit('common/reload')
     }
     next()

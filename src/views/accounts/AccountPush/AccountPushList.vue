@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AccountPushCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
+import AccountPushCreateUpdate from './AccountPushCreateUpdate.vue'
 
 export default {
   name: 'AccountPushList',
   components: {
-    GenericListTable
+    GenericListTable,
+    AccountPushCreateUpdate
   },
   data() {
     const vm = this
@@ -80,7 +85,7 @@ export default {
                 return {
                   name: 'AccountPushList',
                   query: {
-                    activeTab: 'AccountPushExecutionList',
+                    tab: 'AccountPushExecutionList',
                     automation_id: row.id
                   }
                 }

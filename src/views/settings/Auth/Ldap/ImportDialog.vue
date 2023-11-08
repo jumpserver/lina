@@ -145,7 +145,6 @@ export default {
         org_ids: org_ids,
         username_list: selectIds
       }
-      console.log('store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS', store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS)
       if (selectIds.length === 0) {
         this.$message.error(this.$tc('setting.unselectedUser'))
         this.dialogLdapUserImportLoginStatus = false

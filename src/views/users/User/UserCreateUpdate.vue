@@ -1,16 +1,21 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdateDrawer
+    v-if="!loading"
+    v-bind="$data"
+    @getObjectDone="afterGetUser"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {
@@ -61,10 +66,7 @@ export default {
             if (formValue.source !== 'local') {
               return true
             }
-            if (formValue.password_strategy === 'custom' || formValue.update_password) {
-              return false
-            }
-            return true
+            return !(formValue.password_strategy === 'custom' || formValue.update_password)
           },
           el: {
             required: false,
@@ -163,14 +165,6 @@ export default {
         },
         phone: {
           component: PhoneInput
-        }
-      },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
         }
       },
       cleanFormValue(value) {

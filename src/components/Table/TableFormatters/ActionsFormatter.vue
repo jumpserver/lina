@@ -21,34 +21,12 @@ const defaultPerformDelete = function({ row, col }) {
 }
 
 const defaultUpdateCallback = function({ row, col }) {
-  const id = row.id
-  let route = { params: { id: id }}
-  const updateRoute = this.colActions.updateRoute
-  console.log('Update route: ', updateRoute)
-
-  if (typeof updateRoute === 'object') {
-    route = Object.assign(route, updateRoute)
-  } else if (typeof updateRoute === 'function') {
-    route = updateRoute({ row, col })
-  } else {
-    route.name = updateRoute
-  }
-  this.$router.push(route)
+  this.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url: this.url, row, col })
 }
 
 const defaultCloneCallback = function({ row, col }) {
-  const id = row.id
-  let route = { query: { clone_from: id }}
-  const cloneRoute = this.colActions.cloneRoute
-
-  if (typeof cloneRoute === 'object') {
-    route = Object.assign(route, cloneRoute)
-  } else if (typeof cloneRoute === 'function') {
-    route = cloneRoute({ row, col })
-  } else {
-    route.name = cloneRoute
-  }
-  this.$router.push(route)
+  console.log('Url: ', this.url)
+  this.$eventBus.$emit('showCreateUpdateDrawer', 'clone', { url: this.url, row, col })
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {

@@ -14,21 +14,11 @@
       @updateAuthDone="onUpdateAuthDone"
     />
     <AccountCreateUpdate
-      v-if="showAddDialog"
-      :account="account"
+      :url="url"
       :asset="iAsset"
-      :title="accountCreateUpdateTitle"
-      :visible.sync="showAddDialog"
-      @add="addAccountSuccess"
-      @bulk-create-done="showBulkCreateResult($event)"
-    />
-    <AccountCreateUpdate
-      v-if="showAddTemplateDialog"
       :account="account"
-      :add-template="true"
-      :asset="iAsset"
+      :add-template="addTemplate"
       :title="accountCreateUpdateTitle"
-      :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
@@ -128,6 +118,7 @@ export default {
       showAddDialog: false,
       showAddTemplateDialog: false,
       createAccountResults: [],
+      addTemplate: false,
       accountCreateUpdateTitle: this.$t('assets.AddAccount'),
       iAsset: this.asset,
       account: {},
@@ -258,7 +249,7 @@ export default {
                   name: 'Update',
                   title: this.$t('common.Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
+                  callback: ({ row, col }) => {
                     const data = {
                       ...this.asset,
                       ...row.asset
@@ -266,9 +257,10 @@ export default {
                     vm.account = row
                     vm.iAsset = data
                     vm.showAddDialog = false
+                    vm.addTemplate = false
                     vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
                     setTimeout(() => {
-                      vm.showAddDialog = true
+                      vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url: this.url, row, col })
                     })
                   }
                 }
@@ -313,8 +305,9 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
+                vm.addTemplate = false
                 vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
-                vm.showAddDialog = true
+                vm.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: vm.url })
               })
             }
           },
@@ -330,8 +323,9 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
+                vm.addTemplate = true
                 vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
-                vm.showAddTemplateDialog = true
+                vm.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: vm.url })
               })
             }
           },

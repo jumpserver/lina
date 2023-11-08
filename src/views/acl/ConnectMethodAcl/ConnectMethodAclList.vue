@@ -1,13 +1,19 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-message="helpText" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :help-message="helpText" :table-config="tableConfig" />
+    <ConnectMethodAclCreateUpdate />
+  </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage/index.vue'
-
+import ConnectMethodAclCreateUpdate from './ConnectMethodAclCreateUpdate.vue'
 export default {
   name: 'ConnectMethodListAcl',
-  components: { GenericListPage },
+  components: {
+    GenericListPage,
+    ConnectMethodAclCreateUpdate
+  },
   data() {
     return {
       helpText: this.$t('acl.ConnectMethodACLHelpMsg'),

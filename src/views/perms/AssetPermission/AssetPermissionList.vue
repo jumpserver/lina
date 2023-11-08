@@ -11,6 +11,7 @@
       v-bind="updateSelectedDialogSetting"
       @update="handlePermBulkUpdate"
     />
+    <AssetPermissionCreateUpdate />
   </Page>
 </template>
 
@@ -21,12 +22,14 @@ import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
+import AssetPermissionCreateUpdate from './AssetPermissionCreateUpdate.vue'
 
 export default {
   components: {
     Page,
     AssetTreeTable,
-    PermBulkUpdateDialog
+    PermBulkUpdateDialog,
+    AssetPermissionCreateUpdate
   },
   data() {
     const vm = this
@@ -55,7 +58,7 @@ export default {
           name: {
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionDetail'
+                tab: 'AssetPermissionDetail'
               }
             }
           },
@@ -88,7 +91,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionUser'
+                tab: 'AssetPermissionUser'
               }
             }
           },
@@ -98,7 +101,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionUser'
+                tab: 'AssetPermissionUser'
               }
             }
           },
@@ -108,7 +111,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                tab: 'AssetPermissionAsset'
               }
             }
           },
@@ -118,7 +121,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                tab: 'AssetPermissionAsset'
               }
             }
           },
@@ -133,7 +136,7 @@ export default {
                 }
               },
               routeQuery: {
-                activeTab: 'AssetPermissionAccount'
+                tab: 'AssetPermissionAccount'
               }
             }
           },

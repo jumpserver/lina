@@ -29,7 +29,6 @@ export const filterSelectValues = (values) => {
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
-  const platformType = vm?.$route.query?.type
   const asset = { address: 'https://jumpserver:330' }
   return {
     address: {
@@ -72,7 +71,7 @@ export const assetFieldsMeta = (vm) => {
       el: {
         multiple: false,
         ajax: {
-          url: `/api/v1/assets/platforms/?type=${platformType}`,
+          url: `/api/v1/assets/platforms/`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }

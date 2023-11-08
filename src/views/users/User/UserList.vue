@@ -13,6 +13,7 @@
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
+    <UserCreateUpdate />
   </div>
 </template>
 
@@ -22,12 +23,14 @@ import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
+import UserCreateUpdate from './UserCreateUpdate.vue'
 
 export default {
   components: {
     InviteUsersDialog,
     GenericListPage,
-    GenericUpdateFormDialog
+    GenericUpdateFormDialog,
+    UserCreateUpdate
   },
   data() {
     const vm = this
@@ -41,6 +44,7 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      showCreateUpdate: false,
       tableConfig: {
         url: '/api/v1/users/users/',
         permissions: {
@@ -246,6 +250,8 @@ export default {
     this.setRolesFilter()
   },
   methods: {
+    handleClose() {
+    },
     setRolesFilter() {
       const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]
       for (const roleType of roleTypes) {
@@ -309,4 +315,5 @@ export default {
 .dialog ::v-deep .el-dialog__footer {
   padding: 0;
 }
+
 </style>

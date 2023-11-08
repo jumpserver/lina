@@ -38,6 +38,10 @@ export default {
       type: Boolean,
       default: false
     },
+    createInDrawer: {
+      type: Boolean,
+      default: true
+    },
     hasBulkDelete: defaultTrue,
     canBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
@@ -187,6 +191,10 @@ export default {
   },
   methods: {
     handleCreate() {
+      if (this.createInDrawer) {
+        this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: this.tableUrl })
+        return
+      }
       let route
       if (typeof this.createRoute === 'string') {
         route = { name: this.createRoute }

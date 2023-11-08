@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
+import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateDrawer.vue'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -44,7 +44,7 @@ export default {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       },
       updateSuccessNextRoute: {
@@ -53,7 +53,7 @@ export default {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       }
     }

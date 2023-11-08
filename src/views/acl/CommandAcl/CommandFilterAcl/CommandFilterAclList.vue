@@ -2,6 +2,7 @@
   <div>
     <el-alert type="success">{{ helpMsg }}</el-alert>
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <CommandFilterAclCreateUpdate />
   </div>
 
 </template>
@@ -10,10 +11,12 @@
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import CommandFilterAclCreateUpdate from './CommandFilterAclCreateUpdate.vue'
 
 export default {
   components: {
-    ListTable
+    ListTable,
+    CommandFilterAclCreateUpdate
   },
   data() {
     return {
@@ -44,15 +47,8 @@ export default {
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {
-              route: 'AccountGatherList',
-              getRoute({ row }) {
-                return {
-                  name: 'CommandFilterAclList',
-                  query: {
-                    activeTab: 'CommandGroup',
-                    command_filters: row.id
-                  }
-                }
+              routeQuery: {
+                tab: 'GroupUser'
               }
             }
           }

@@ -122,7 +122,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'ProfileSetting', query: { activeTab: 'PasswordUpdate' }})
+              this.$router.push({ name: 'ProfileSetting', query: { tab: 'PasswordUpdate' }})
             }.bind(this)
           }
         },
@@ -135,7 +135,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'ProfileSetting', query: { activeTab: 'SSHUpdate' }})
+              this.$router.push({ name: 'ProfileSetting', query: { tab: 'SSHUpdate' }})
             }.bind(this)
           }
         },

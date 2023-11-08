@@ -43,7 +43,7 @@
 import Page from '../Page/'
 import merge from 'webpack-merge'
 
-const ACTIVE_TAB_KEY = 'activeTab'
+const ACTIVE_TAB_KEY = 'tab'
 
 export default {
   name: 'TabPage',
@@ -109,18 +109,21 @@ export default {
   },
   created() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.setToRoute()
   },
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
-
-      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+      this.setToRoute()
+    },
+    setToRoute() {
+      setTimeout(() => {
         this.$router.push({
-          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: '' })
+          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: this.iActiveMenu })
         })
-      }
+      })
     },
     getPropActiveTab() {
       let activeTab = ''

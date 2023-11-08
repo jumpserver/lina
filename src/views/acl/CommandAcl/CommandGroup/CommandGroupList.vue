@@ -1,14 +1,19 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <CommandGroupCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import CommandGroupCreateUpdate from './CommandGroupCreateUpdate.vue'
 
 export default {
   components: {
-    ListTable
+    ListTable,
+    CommandGroupCreateUpdate
   },
   data() {
     const _id = this.$route.query.command_filters

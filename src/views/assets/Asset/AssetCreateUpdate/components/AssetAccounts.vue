@@ -137,7 +137,7 @@ export default {
           name: 'AppletHostDetail',
           params: { id: assetId },
           query: {
-            activeTab: 'Accounts'
+            tab: 'Accounts'
           }
         })
         return
@@ -146,7 +146,7 @@ export default {
         name: 'AssetDetail',
         params: { id: assetId },
         query: {
-          activeTab: 'Account'
+          tab: 'Account'
         }
       })
     }

@@ -1,16 +1,5 @@
 <template>
-  <Dialog
-    v-if="iVisible"
-    :close-on-click-modal="false"
-    :destroy-on-close="true"
-    :show-cancel="false"
-    :show-confirm="false"
-    :title="title"
-    :visible.sync="iVisible"
-    v-bind="$attrs"
-    width="70%"
-    v-on="$listeners"
-  >
+  <GenericCreateUpdateDrawer v-bind="$attrs">
     <AccountCreateUpdateForm
       v-if="!loading"
       ref="form"
@@ -20,18 +9,18 @@
       @add="addAccount"
       @edit="editAccount"
     />
-  </Dialog>
+  </GenericCreateUpdateDrawer>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog/index.vue'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
 
 export default {
   name: 'CreateAccountDialog',
   components: {
-    Dialog,
-    AccountCreateUpdateForm
+    AccountCreateUpdateForm,
+    GenericCreateUpdateDrawer
   },
   props: {
     visible: {

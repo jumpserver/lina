@@ -1,18 +1,24 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-message="notice" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :help-message="notice" :table-config="tableConfig" />
+    <DomainCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import DomainCreateUpdate from './DomainCreateUpdate.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    DomainCreateUpdate
   },
   data() {
     return {
+      showCreateUpdate: false,
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],
@@ -28,7 +34,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'GroupUser'
+                tab: 'GroupUser'
               }
             }
           },
@@ -38,7 +44,7 @@ export default {
             formatterArgs: {
               permissions: 'assets.view_gateway',
               routeQuery: {
-                activeTab: 'GatewayList'
+                tab: 'GatewayList'
               },
               getTitle: function({ row }) {
                 return row.gateways.length
@@ -48,7 +54,6 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'DomainCreate'
       },
       notice: this.$t('assets.DomainHelpMessage')
     }

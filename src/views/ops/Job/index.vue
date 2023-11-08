@@ -2,22 +2,27 @@
   <div>
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <JobUpdateCreate :type="type" :item="item" />
   </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
+import JobUpdateCreate from './JobUpdateCreate.vue'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
     JobRunDialog,
+    JobUpdateCreate,
     GenericListPage
   },
   data() {
     return {
+      type: '',
+      createUpdateVisible: false,
       item: {},
       runtime_parameters: {},
       showJobRunDialog: false,
@@ -113,10 +118,9 @@ export default {
         hasImport: false,
         moreCreates: {
           callback: (item) => {
-            this.$router.push({
-              name: 'JobCreate',
-              query: { type: item.name }
-            })
+            this.type = item.name
+            this.item = {}
+            this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: this.tableConfig.url })
           },
           dropdown: [
             {

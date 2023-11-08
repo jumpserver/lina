@@ -1,16 +1,16 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer :resource="$tc('xpack.Cloud.SyncStrategy')" v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import RuleInput from './components/RuleInput'
 import ActionInput from './components/ActionInput'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

@@ -13,10 +13,10 @@
                 <span style="color: #a3a3a4;">{{ item.name }}</span>
                 <el-popover
                   v-if="componentMetric[item.key].length > 0"
-                  width="280"
-                  trigger="hover"
                   placement="bottom"
                   popper-class="monitor-popover"
+                  trigger="hover"
+                  width="280"
                 >
                   <ul>
                     <li v-for="(i, index) in componentMetric[item.key]" :key="index" @click="routeToList(i)">
@@ -32,7 +32,7 @@
                 </span>
               </span>
             </div>
-            <div class="progress" :class="componentMetric.type + '-progress'">
+            <div :class="componentMetric.type + '-progress'" class="progress">
               <div style="position: absolute; height: 100%; padding: 2px 0;">
                 <span v-for="(bar, index) in barArray" :key="index" class="box-bar" />
               </div>
@@ -207,7 +207,7 @@ export default {
       this.$router.replace({
         name: 'TerminalSetting',
         query: {
-          activeTab: 'TerminalList',
+          tab: 'TerminalList',
           name: name
         }
       })

@@ -79,11 +79,11 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     dataTable() {
-      return this.$refs.dataTable.$refs.dataTable
+      return this.$refs.dataTable?.$refs?.dataTable
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
-      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
+      const checkRoot = this.$route.meta?.disableOrgsChange !== true
       const actions = {
         canCreate: { action: 'add', checkRoot: checkRoot },
         canBulkDelete: { action: 'delete', checkRoot: false },
@@ -108,7 +108,7 @@ export default {
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
-      const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
+      const checkRoot = this.$route.meta?.disableOrgsChange !== true
       const formatterArgs = {
         'columnsMeta.actions.formatterArgs.canUpdate': () => {
           return this.hasActionPerm('change') && (!checkRoot || !this.currentOrgIsRoot)
@@ -165,12 +165,29 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    this.$eventBus.$on('closeCreateUpdateDrawer', ({ success }) => {
+      if (!success) {
+        return
+      }
+      this.extraQuery = {
+        ...this.extraQuery,
+        order: '-date_updated'
+      }
+      setTimeout(() => {
+        this.reloadTable()
+      })
+    })
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('closeCreateUpdateDrawer')
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val
     },
     reloadTable() {
-      this.dataTable.getList()
+      this.dataTable?.getList()
     },
     search(attrs) {
       this.$emit('TagSearch', attrs)

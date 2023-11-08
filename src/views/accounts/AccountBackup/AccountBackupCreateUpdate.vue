@@ -1,16 +1,16 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'AccountBackupPlanUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const vm = this

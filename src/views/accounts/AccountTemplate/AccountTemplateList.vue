@@ -8,11 +8,13 @@
       :url="secretUrl"
       :visible.sync="showViewSecretDialog"
     />
+    <AccountTemplateCreateUpdate />
   </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import AccountTemplateCreateUpdate from './AccountTemplateCreateUpdate.vue'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 
@@ -20,6 +22,7 @@ export default {
   name: 'AccountTemplateList',
   components: {
     GenericListPage,
+    AccountTemplateCreateUpdate,
     ViewSecret
   },
   data() {
@@ -86,11 +89,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasMoreActions: false,
-        createRoute: () => {
-          return {
-            name: 'AccountTemplateCreate'
-          }
-        }
+        createRoute: 'AccountTemplateCreate'
       }
     }
   }

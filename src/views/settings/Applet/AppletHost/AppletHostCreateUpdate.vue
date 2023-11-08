@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
-import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
+import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateDrawer.vue'
 
 export default {
   components: {

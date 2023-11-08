@@ -6,7 +6,7 @@ const getDefaultState = () => {
     metaPromiseMap: {},
     isRouterAlive: true,
     sqlQueryCounter: [],
-    confirmDialogVisible: false
+    createArgs: {}
   }
 }
 
@@ -29,8 +29,8 @@ const mutations = {
       state.sqlQueryCounter.shift()
     }
   },
-  setConfirmDialogVisible: (state, show) => {
-    state.confirmDialogVisible = show
+  SET_CREATE_ARGS: (state, args) => {
+    state.createArgs = args
   }
 }
 
@@ -79,8 +79,8 @@ const actions = {
     }
     commit('addSQLQueryCounter', { url, count: sqlCount })
   },
-  showConfirmDialog({ commit, state }, show) {
-    commit('setConfirmDialogVisible', show)
+  setCreateArgs({ commit, state }, args) {
+    commit('SET_CREATE_ARGS', args)
   }
 }
 

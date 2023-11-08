@@ -17,11 +17,13 @@
       :port="GatewayPort"
       :visible.sync="GatewayVisible"
     />
+    <AssetCreateUpdate />
   </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
+import AssetCreateUpdate from '../../AssetCreateUpdate'
 import {
   ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
 } from '@/components/Table/TableFormatters'
@@ -37,7 +39,8 @@ export default {
     ListTable,
     GatewayDialog,
     PlatformDialog,
-    AssetBulkUpdateDialog
+    AssetBulkUpdateDialog,
+    AssetCreateUpdate
   },
   props: {
     url: {
@@ -77,28 +80,13 @@ export default {
   data() {
     const vm = this
     const onAction = (row, action) => {
-      let routeAction = action
-      if (action === 'Clone') {
-        routeAction = 'Create'
+      const platform = {
+        ...row.platform,
+        type: row.type,
+        category: row.category
       }
-      const routeName = _.capitalize(row.category.value) + routeAction
-      const route = {
-        name: routeName,
-        params: {},
-        query: {}
-      }
-      if (action === 'Clone') {
-        route.query.clone_from = row.id
-      } else if (action === 'Update') {
-        route.params.id = row.id
-      }
-      if (['Create', 'Update'].includes(routeAction)) {
-        route.query.platform = row.platform.id
-        route.query.type = row.type.value
-        route.query.category = row.type.category
-      }
-      const { href } = vm.$router.resolve(route)
-      window.open(href, '_blank')
+      console.log('ON action: ', action)
+      vm.$eventBus.$emit('assetCreateUpdate', platform, action.toLowerCase(), { url: this.url, row })
     }
     const extraQuery = this.$route.params?.extraQuery || {}
     return {

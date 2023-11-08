@@ -1,25 +1,26 @@
 <template>
-  <GenericCreateUpdatePage
+  <GenericCreateUpdateDrawer
     :initial="initial"
+    :resource="$tc('xpack.Cloud.Account')"
     v-bind="$data"
   />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
+import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     const vm = this
     const accountProvider = this.$route.query.provider || aliyun
-    const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
+    const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider] || {}
 
     function setFieldAttrs() {
       const fieldsObject = {}
@@ -127,12 +128,6 @@ export default {
           values.attrs.ip_group = attrs.ip_group.filter(Boolean)
         }
         return values
-      },
-      afterGetFormValue(formValue) {
-        if (!formValue.attrs) {
-          return formValue
-        }
-        return formValue
       }
     }
   },

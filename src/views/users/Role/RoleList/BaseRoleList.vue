@@ -1,25 +1,29 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <RoleCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import RoleCreateUpdate from '@/views/users/Role/RoleCreateUpdate.vue'
 
 export default {
   name: 'BaseRoleList',
   components: {
+    RoleCreateUpdate,
     ListTable
   },
   props: {
     scope: {
       type: String,
-      default: 'org'
+      default: 'system'
     }
   },
   data() {
     const scopeRole = this.scope + 'role'
-    const vm = this
     return {
       loading: true,
       scopeRole: scopeRole,
@@ -73,13 +77,7 @@ export default {
                 return this.$hasPerm(`rbac.add_${row.scope?.value}role`)
               },
               onClone: ({ row }) => {
-                return vm.$router.push({
-                  name: 'RoleCreate',
-                  query: {
-                    scope: row.scope?.value,
-                    clone_from: row.id
-                  }
-                })
+                this.$eventBus.$emit('showCreateUpdateDrawer', 'clone', { url: this.tableConfig.url, row })
               }
             }
           }

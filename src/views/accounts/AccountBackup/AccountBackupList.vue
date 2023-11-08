@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <AccountBackupCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
+import AccountBackupCreateUpdate from './AccountBackupCreateUpdate.vue'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanList',
   components: {
-    GenericListTable
+    GenericListTable,
+    AccountBackupCreateUpdate
   },
   data() {
     const vm = this
@@ -64,7 +69,7 @@ export default {
                 return {
                   name: 'AccountBackupList',
                   query: {
-                    activeTab: 'AccountBackupPlanExecutionList',
+                    tab: 'AccountBackupPlanExecutionList',
                     plan_id: row.id
                   }
                 }
@@ -74,12 +79,8 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanUpdate', params: { id: row.id }})
-              },
+              hasClone: true,
+              hasUpdate: true,
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),

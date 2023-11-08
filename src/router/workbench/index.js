@@ -196,17 +196,6 @@ export default {
           }
         },
         {
-          path: 'adhoc/create',
-          name: 'AdhocCreate',
-          hidden: true,
-          component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
-          meta: {
-            title: i18n.t('ops.createAdhoc'),
-            permissions: ['ops.add_adhoc'],
-            activeMenu: '/workbench/ops/templates'
-          }
-        },
-        {
           path: 'adhoc/:id',
           component: () => import('@/views/ops/Template/Adhoc/AdhocDetail'),
           name: 'AdhocDetail',
@@ -214,17 +203,6 @@ export default {
           meta: {
             title: i18n.t('route.AdhocDetail'),
             permissions: ['ops.view_adhoc'],
-            activeMenu: '/workbench/ops/templates'
-          }
-        },
-        {
-          path: 'playbook/create',
-          name: 'PlaybookCreate',
-          hidden: true,
-          component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
-          meta: {
-            title: i18n.t('ops.CreatePlaybook'),
-            permissions: ['ops.add_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
         },

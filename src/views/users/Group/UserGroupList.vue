@@ -1,13 +1,18 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <UserGroupCreateUpdate />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import UserGroupCreateUpdate from '@/views/users/Group/UserGroupCreateUpdate.vue'
 
 export default {
   components: {
+    UserGroupCreateUpdate,
     GenericListPage
   },
   data() {
@@ -29,7 +34,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'GroupUser'
+                tab: 'GroupUser'
               }
             }
           }

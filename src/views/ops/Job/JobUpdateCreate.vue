@@ -1,12 +1,12 @@
 <template>
-  <div v-if="ready">
+  <div>
     <VariableHelpDialog :visible.sync="showHelpDialog" />
-    <GenericCreateUpdatePage ref="form" v-bind="$data" />
+    <GenericCreateUpdateDrawer v-bind="$data" />
   </div>
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { CronTab } from '@/components'
@@ -16,8 +16,18 @@ import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
-    GenericCreateUpdatePage,
-    VariableHelpDialog
+    VariableHelpDialog,
+    GenericCreateUpdateDrawer
+  },
+  props: {
+    item: {
+      type: Object,
+      default: () => {}
+    },
+    type: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -162,41 +172,52 @@ export default {
       }
     }
   },
-  mounted() {
-    if (this.$route.query && this.$route.query.type) {
-      this.initial.type = 'adhoc'
-      switch (this.$route.query.type) {
-        case 'adhoc':
-          this.initial.type = 'adhoc'
-          if (this.$route.query.id) {
-            this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
-              this.initial.module = data.module
-              this.initial.args = data.args
-              this.initial.instant = true
-              this.initial.runAfterSave = true
-              this.instantTask = true
-              this.createSuccessNextRoute = { name: 'Adhoc' }
-              this.ready = true
-            })
-          } else {
-            this.ready = true
-          }
-          break
-        case 'playbook':
-          this.initial.type = 'playbook'
-          if (this.$route.query.id) {
-            this.initial.playbook = this.$route.query.id
-            this.ready = true
-          } else {
-            this.ready = true
-          }
-          break
-      }
-    } else {
-      this.ready = true
+  watch: {
+    type: {
+      handler(val) {
+        this.init()
+      },
+      immediate: true
     }
   },
-  methods: {}
+  mounted() {
+    this.init()
+  },
+  methods: {
+    init() {
+      if (this.type) {
+        this.initial.type = 'adhoc'
+        switch (this.type) {
+          case 'adhoc':
+            this.initial.type = 'adhoc'
+            if (this.item.id) {
+              this.$axios.get(`/api/v1/ops/adhocs/${this.item.id}`).then((data) => {
+                this.initial.module = data.module
+                this.initial.args = data.args
+                this.initial.instant = true
+                this.initial.runAfterSave = true
+                this.instantTask = true
+                this.ready = true
+              })
+            } else {
+              this.ready = true
+            }
+            break
+          case 'playbook':
+            this.initial.type = 'playbook'
+            if (this.item.id) {
+              this.initial.playbook = this.item.id
+              this.ready = true
+            } else {
+              this.ready = true
+            }
+            break
+        }
+      } else {
+        this.ready = true
+      }
+    }
+  }
 }
 
 </script>
