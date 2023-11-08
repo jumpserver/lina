@@ -14,6 +14,7 @@ import { getDayFuture } from '@/utils/common'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import GenericCreateUpdateDrawer from '@/layout/components/GenericCreateUpdateDrawer/index.vue'
+import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 
 export default {
   name: 'AccountFormatter',

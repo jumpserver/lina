@@ -2,19 +2,22 @@
   <el-row :gutter="10">
     <el-col :span="18">
       <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+      <AssetPermissionUpdate />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable'
+import AssetPermissionUpdate from '@/views/perms/AssetPermission/AssetPermissionCreateUpdate.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
 
 export default {
   name: 'UserAssetPermission',
   components: {
-    ListTable
+    ListTable,
+    AssetPermissionUpdate
   },
   props: {
     object: {
@@ -123,7 +126,9 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AssetPermissionUpdate',
+              onUpdate: ({ row }) => {
+                this.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url: this.tableConfig.url, row })
+              },
               hasDelete: false,
               hasClone: false,
               performDelete: ({ row, col }) => {
