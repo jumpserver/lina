@@ -65,22 +65,6 @@ export default [
         meta: { title: i18n.t('route.UserGroupList'), permissions: ['users.view_usergroup'] }
       },
       {
-        path: 'create',
-        component: () => import('@/views/users/Group/UserGroupCreateUpdate.vue'), // Parent router-view
-        name: 'UserGroupCreate',
-        hidden: true,
-        meta: {
-          title: i18n.t('route.UserGroupCreate')
-        }
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/users/Group/UserGroupCreateUpdate.vue'), // Parent router-view
-        name: 'UserGroupUpdate',
-        hidden: true,
-        meta: { title: i18n.t('route.UserGroupUpdate') }
-      },
-      {
         path: ':id',
         component: () => import('@/views/users/Group/UserGroupDetail'), // Parent router-view
         name: 'UserGroupDetail',

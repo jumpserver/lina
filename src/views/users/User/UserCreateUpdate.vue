@@ -1,6 +1,7 @@
 <template>
   <GenericCreateUpdateDrawer
     v-if="!loading"
+    :action-meta.sync="actionMeta"
     v-bind="$data"
     @getObjectDone="afterGetUser"
     v-on="$listeners"
@@ -20,6 +21,10 @@ export default {
   data() {
     return {
       loading: true,
+      actionMeta: {
+        action: 'create',
+        actionId: ''
+      },
       initial: {
         need_update_password: true,
         system_roles: [],
@@ -41,7 +46,7 @@ export default {
       fieldsMeta: {
         password_strategy: {
           hidden: (formValue) => {
-            return this.$route.params.id || formValue.source !== 'local'
+            return this.actionMeta.action === 'update' || formValue.source !== 'local'
           }
         },
         email: {
@@ -57,7 +62,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
-            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
+            return this.actionMeta.action !== 'update' || formValue.source !== 'local'
           }
         },
         password: {
@@ -103,7 +108,7 @@ export default {
             if (formValue.set_public_key) {
               return true
             }
-            return this.$route.meta.action !== 'update'
+            return this.actionMeta.action !== 'update'
           }
         },
         public_key: {

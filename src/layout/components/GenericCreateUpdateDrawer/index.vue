@@ -6,8 +6,8 @@
     :title="iTitle"
     :visible.sync="iVisible"
     append-to-body
-    wrapper-closable
     class="drawer generic-create-update-drawer"
+    wrapper-closable
     v-on="$listeners"
   >
     <div class="el-drawer__content">
@@ -65,6 +65,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    actionMeta: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -100,7 +104,6 @@ export default {
       this.setVisible(val)
     },
     iVisible(val) {
-      console.log('iVisible changed: ', val, ' ', this.$attrs.url)
       if (!val) {
         this.iVisible = false
         this.$eventBus.$emit(
@@ -125,6 +128,7 @@ export default {
       }
       this.iAction = action
       this.iActionId = row ? row.id : ''
+      this.$emit('update:actionMeta', { action: action, actionId: this.iActionId, row: row })
       this.setVisible(true)
     })
   },
