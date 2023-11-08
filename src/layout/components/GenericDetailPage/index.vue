@@ -129,13 +129,14 @@ export default {
     ...mapGetters(['currentOrgIsRoot']),
     pageActions() {
       return [
-        {
-          name: 'update',
-          title: this.$t('common.Update'),
-          can: this.validActions.canUpdate,
-          has: this.validActions.hasUpdate,
-          callback: this.validActions.updateCallback.bind(this)
-        },
+        // 暂时处理，详情中关闭更新操作
+        // {
+        //   name: 'update',
+        //   title: this.$t('common.Update'),
+        //   can: this.validActions.canUpdate,
+        //   has: this.validActions.hasUpdate,
+        //   callback: this.validActions.updateCallback.bind(this)
+        // },
         {
           name: 'delete',
           title: this.$t('common.Delete'),
