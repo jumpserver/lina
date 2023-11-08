@@ -36,6 +36,7 @@
       @focus="focus = true"
       @change="handleConfirm"
       @keyup.enter.native="handleConfirm"
+      @keyup.delete.native="handleDelete"
     />
   </div>
 
@@ -67,6 +68,7 @@ export default {
       filterKey: '',
       filterValue: '',
       valueLabel: '',
+      emptyCount: 0,
       filterTags: this.default || {},
       focus: false
     }
@@ -105,28 +107,32 @@ export default {
   },
   watch: {
     options: {
-      handler(val) {
-        if (val && val.length > 0) {
-          const routeFilter = this.checkInTableColumns()
+      handler(newVal, oldVal) {
+        if (newVal && newVal.length > 0) {
+          const routeFilter = this.checkInTableColumns(newVal)
+          if (oldVal.length > 0 && newVal.length !== oldVal.length) {
+            const beforeRouteFilter = this.checkInTableColumns(oldVal)
+            // 如果2次过滤的参数相同就不在重复请求
+            if (_.isEqual(routeFilter, beforeRouteFilter)) {
+              return
+            }
+          }
           this.filterTagSearch(routeFilter)
         }
       },
       deep: true
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      if (Object.keys(this.filterMaps).length > 0) {
-        return this.$emit('tagSearch', this.filterMaps)
+    },
+    filterValue(newValue, oldValue) {
+      if (newValue === '' && oldValue !== '') {
+        this.emptyCount = 1
       }
-    }, 400)
-    // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
+    }
   },
   methods: {
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
-    checkInTableColumns() {
+    checkInTableColumns(options) {
       const searchFieldOptions = {}
-      const queryInfoValues = this.options.map((i) => i.value)
+      const queryInfoValues = options.map((i) => i.value)
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeysLength = Object.keys(routeQuery).length
       if (routeQueryKeysLength < 1) return searchFieldOptions
@@ -204,10 +210,10 @@ export default {
         ...asFilterTags,
         ...routeFilter
       }
-      if (Object.keys(routeFilter).length > 0) {
+      if (Object.keys(this.filterTags).length > 0) {
         setTimeout(() => {
           return this.$emit('tagSearch', this.filterMaps)
-        }, 490)
+        }, 400)
       }
     },
     getValueLabel(key, value) {
@@ -243,9 +249,21 @@ export default {
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
-      this.checkUrlFilds(evt)
+      if (this.getUrlQuery) {
+        this.checkUrlFields(evt)
+      }
       this.$emit('tagSearch', this.filterMaps)
       return true
+    },
+    handleDelete() {
+      const filterTags = Object.keys(this.filterTags)
+      if (this.filterValue === '' && filterTags.length > 0) {
+        if (this.emptyCount === 2) {
+          this.handleTagClose(filterTags[filterTags.length - 1])
+        } else {
+          this.emptyCount++
+        }
+      }
     },
     handleConfirm() {
       if (this.filterValue === '') {
@@ -256,6 +274,9 @@ export default {
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
+      setTimeout(() => {
+        this.emptyCount = 2
+      }, 10)
       const tag = {
         key: this.filterKey,
         label: this.keyLabel,
@@ -304,7 +325,7 @@ export default {
       this.$refs.SearchInput.focus()
     },
     // 删除查询条件时改变url
-    checkUrlFilds(evt) {
+    checkUrlFields(evt) {
       let newQuery = _.omit(this.$route.query, evt)
       if (this.getUrlQuery && evt.startsWith('search')) {
         if (newQuery.search) delete newQuery.search

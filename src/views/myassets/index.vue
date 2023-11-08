@@ -68,7 +68,14 @@ export default {
                   },
                   {
                     key: this.$t('assets.Protocols'),
-                    value: row.protocols.map(item => item.name).join(', ')
+                    formatter: () => {
+                      return this.$axios.get(`/api/v1/perms/users/self/assets/${row.id}/`).then(res => {
+                        const protocols = res.permed_protocols
+                        const names = protocols.map(item => item.name).join(', ')
+                        console.log('Names: ', names)
+                        return names
+                      })
+                    }
                   },
                   {
                     key: this.$t('assets.Category'),
@@ -106,7 +113,7 @@ export default {
             formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
-                return `/api/v1/perms/users/self/assets/${row.id}/accounts/?cache_policy=1`
+                return `/api/v1/perms/users/self/assets/${row.id}/`
               }
             }
           },

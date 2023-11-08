@@ -24,6 +24,9 @@
       <li class="header-item active-menu">
         <Help />
       </li>
+      <li class="header-item">
+        <Language />
+      </li>
       <li class="header-item header-profile">
         <AccountDropdown />
       </li>
@@ -53,7 +56,7 @@ import Tickets from './Tickets'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
 import Logo from '../NavLeft/Logo'
-
+import Language from './Language'
 export default {
   components: {
     Hamburger,
@@ -64,7 +67,8 @@ export default {
     WebTerminal,
     SiteMessages,
     SystemSetting,
-    Logo
+    Logo,
+    Language
   },
   data() {
     return {}

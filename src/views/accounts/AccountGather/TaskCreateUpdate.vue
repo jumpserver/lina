@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdateDrawer } from '@/layout/components'
 import { CronTab } from '@/components'
+import i18n from '@/i18n/i18n'
 
 export default {
   components: {
@@ -15,7 +16,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'nodes']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_sync_account', 'is_active', 'comment']]
+        [this.$t('common.Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
       hasDetailInMsg: false,
@@ -54,6 +55,19 @@ export default {
         },
         is_periodic: {
           type: 'switch'
+        },
+        recipients: {
+          label: i18n.t('accounts.AccountChangeSecret.Addressee'),
+          helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            }
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountGatherList' },

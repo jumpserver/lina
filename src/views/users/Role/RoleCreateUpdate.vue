@@ -35,7 +35,8 @@ export default {
           permissions: {
             component: TextReadonly,
             el: {
-              text: this.$t('users.HelpText.addRolePermissions')
+              text: this.$t('users.HelpText.addRolePermissions'),
+              bolder: false
             }
           }
         }

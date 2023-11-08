@@ -28,7 +28,7 @@
         </template>
       </el-tabs>
 
-      <transition appear mode="out-in" name="fade-transform">
+      <transition v-if="loading" appear mode="out-in" name="fade-transform">
         <slot>
           <keep-alive>
             <component :is="computeActiveComponent" />
@@ -60,6 +60,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      loading: true
+    }
+  },
   computed: {
     iActiveMenu: {
       get() {
@@ -88,6 +93,18 @@ export default {
         }
       }
       return needActiveComponent
+    }
+  },
+  watch: {
+    $route(to, from) {
+      const activeTab = to.query?.activeTab
+      if (activeTab && this.iActiveMenu !== activeTab) {
+        this.iActiveMenu = activeTab
+        this.loading = false
+        setTimeout(() => {
+          this.loading = true
+        })
+      }
     }
   },
   created() {

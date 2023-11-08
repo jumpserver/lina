@@ -33,17 +33,27 @@ jobs:
           tag: ${{ steps.get_version.outputs.TAG }}
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.16'
-
-  build-and-release:
-    needs: create-realese
-    name: Build and Release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build it and upload
-        uses: jumpserver/action-build-upload-assets@node14.16
+          node-version: '16.20'
+      - name: Install dependencies
+        run: yarn install
+      - name: Build web
+        run: |
+          sed -i "s@version-dev@${{ steps.get_version.outputs.TAG }}@g" src/layout/components/NavHeader/About.vue
+          yarn build
+      - name: Create Upload Assets
+        run: |
+          rm -rf build/*
+          mv lina lina-${{ steps.get_version.outputs.VERSION }}
+          tar -czf lina-${{ steps.get_version.outputs.VERSION }}.tar.gz lina-${{ steps.get_version.outputs.VERSION }}
+          echo $(md5sum lina-${{ steps.get_version.outputs.VERSION }}.tar.gz | awk '{print $1}') > build/lina-${{ steps.get_version.outputs.VERSION }}.tar.gz.md5
+          mv lina-${{ steps.get_version.outputs.VERSION }}.tar.gz build/
+      - name: Release Upload Assets
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          files: |
+            build/lina-${{ steps.get_version.outputs.TAG }}.tar.gz
+            build/lina-${{ steps.get_version.outputs.TAG }}.tar.gz.md5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-realese.outputs.upload_url }}

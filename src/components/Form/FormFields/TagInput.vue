@@ -16,9 +16,9 @@
       :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
-      :type="inputType"
       :fetch-suggestions="autocomplete"
       :placeholder="this.$t('common.EnterToContinue')"
+      :type="inputType"
       class="search-input"
       @blur="focus = false"
       @change="handleConfirm"
@@ -31,7 +31,7 @@
       class="show-password"
       @click="handleShowPassword"
     >
-      <i class="fa" :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" />
+      <i :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" class="fa" />
     </span>
   </div>
 </template>
@@ -146,8 +146,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding-left: 2px;
-    padding-bottom: 3px;
+    padding: 1px 2px 1px;
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
@@ -158,12 +157,12 @@ export default {
     }
 
     &>>> .el-tag {
-      margin-top: 3px;
+      margin-top: 1px;
       font-family: sans-serif !important;
     }
 
     &>>> .el-autocomplete {
-      height: 26px;
+      height: 30px;
     }
   }
 
@@ -172,7 +171,7 @@ export default {
     &>>> .el-input__inner {
       max-width: 100%;
       border: none;
-      padding-left: 5px;
+      padding-left: 10px;
     }
   }
 
@@ -182,7 +181,7 @@ export default {
   }
 
   .filter-field >>> .el-input__inner {
-    height: 26px;
+    height: 29px;
   }
 
   .show-password {

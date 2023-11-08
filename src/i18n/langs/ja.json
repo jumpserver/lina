@@ -109,13 +109,16 @@
       "ExecutionList": "実行リスト",
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
-      "RecipientHelpText": "現在はメール送信のみをサポートしており、受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます"
+      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
+      "RecipientServer":"受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
+    "Sync": "同期",
+    "SyncUpdateAccountInfo": "アカウント情報の同期更新",
     "AddAccountResult": "账号批量添加结果",
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
@@ -228,6 +231,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "SyncProtocolToAsset": "プロトコルをアセットに同期",
     "CommentHelpText": "注意：コメント情報はLunaページのユーザー認可資産ツリーに表示されます。一般ユーザーは表示できますので、機密情報を記入しないでください。",
     "BulkUpdatePlatformHelpText": "アセットの元のプラットフォーム タイプが選択したプラットフォーム タイプと同じ場合にのみ更新され、更新の前後のプラットフォーム タイプが異なる場合は更新されません。",
     "ImportMessage": "ミラータイプのページにデータをインポートしてください",
@@ -495,6 +499,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
+    "BelongAll": "すべての",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
@@ -801,6 +806,7 @@
     "FormatError": "フォーマットエラー",
     "NotSpecialEmoji": "特殊な表情記号の入力は許可されていません",
     "notAlphanumericUnderscore": "数字、文字、アンダースコアのみ入力可能",
+    "notParenthesis": "含まない ( )",
     "WeekCronSelect": {
       "Monday": "月曜日",
       "Tuesday": "火曜日",
@@ -981,11 +987,13 @@
   },
   "ops": {
     "EnterRunUser": "実行ユーザーの入力",
+    "EnterRunningPath": "実行パスの入力",
     "Save": "保存＃ホゾン＃",
     "Reset": "リストア",
     "SystemError": "システムエラー",
     "RunasHelpText": "スクリプトを実行するユーザー名を入力",
     "RunasPolicyHelpText": "現在の資産にこの実行ユーザーが存在しない場合にアカウント選択ポリシーを実行することを示します",
+    "RunningPathHelpText": "スクリプトの実行パスを入力します。この設定はシェル スクリプトにのみ有効です",
     "StatusGreen": "最近調子がいい",
     "StatusRed": "最後のタスクの実行に失敗しました",
     "StatusYellow": "最近の存在の実行に失敗しました",
@@ -1019,6 +1027,7 @@
     "ratio": "スケール",
     "run": "実行",
     "runAs": "実行ユーザー",
+    "runningPath": "実行パス",
     "runTimes": "実行回数",
     "selectAssetsMessage": "左側の資産を選択し、実行するシステムユーザーを選択し、コマンドを一括実行します",
     "selectedAssets": "選択済アセット:",
@@ -1289,7 +1298,7 @@
     "OnlineSession": "オンラインセッション",
     "OnlineUserDevices": "オンラインデバイス",
     "CreateCommandStorage": "コマンドストアの作成",
-    "CreateReplayStorage": "録画ストレージの作成",
+    "CreateReplayStorage": "オブジェクトストレージを作成する",
     "Dashboard": "ダッシュボード",
     "DatabaseApp": "データベース",
     "DatabaseAppCreate": "データベースアプリケーションの作成",
@@ -1360,7 +1369,7 @@
     "ApplicationPermissionDetail": "アプリライセンスの詳細",
     "ApplicationPermissionUpdate": "アプリ認可ルールの更新",
     "RemoteAppUpdate": "リモートアプリケーションの更新",
-    "ReplayStorageUpdate": "録画保存の更新",
+    "ReplayStorageUpdate": "オブジェクトストレージを更新する",
     "Detail": "詳細",
     "SessionOffline": "履歴セッション",
     "SessionOnline": "オンラインセッション",
@@ -1527,7 +1536,7 @@
     "remoteAddr": "リモートアドレス",
     "replay": "リプレイ",
     "replaySession": "再生セッション",
-    "replayStorage": "録画保存",
+    "replayStorage": "オブジェクトストレージ",
     "riskLevel": "リスクレベル",
     "session": "会話",
     "sshPort": "SSHポート",
@@ -1731,7 +1740,9 @@
       "securityPasswordUpperCase": "オンにすると、ユーザーパスワードの変更、リセットに大文字を含める必要があります",
       "securityServiceAccountRegistration": "Bootstrap tokenを使用して端末を登録できるようにし、端末の登録が成功すると禁止できるようにします",
       "SecurityInsecureCommand": "オンにすると、資産に危険なコマンドが実行されたときに、メールの警告通知が送信されます",
-      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1",
+      "CustomParams": "左側はSMSプラットフォームで受信されるパラメータ、右側はJumpServerフォーマットされるパラメータで、最終的には次のようになります。<br/>{\"phone_numbers\": \"123,134\", \"content\": \"認証コードは: 666666\"}",
+      "CustomFile": "カスタムファイルを指定のディレクトリ(data/sms/main.py)に置き、config.txtで設定項目SMS_CUSTOM_FILE_MD5=<ファイルmd5値>を有効にします"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "この値が3以上であることを確認してください",
@@ -1914,8 +1925,7 @@
     "AuthSettings": "認証設定",
     "UserName": "氏名",
     "Account": "アカウント",
-    "AccountInformation": "アカウント情報",
-    "PersonalSetting": "個人設定",
+    "UserInformation": "アカウント情報",
     "Authentication": "認証",
     "Comment": "備考",
     "ConfirmPassword": "パスワードの確認",
@@ -1944,7 +1954,7 @@
     "setFeiShu": "飛書認証を設定する",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "アカウントをより安全にするために、マルチファクタ认证を有効にします。 <Br/> 有効にすると、次回のログイン時に多因子認証バインディングプロセスに入ります。また、 (個人情報-> クイック修正-> 多因子設定の変更) もできます。で直接紐付けます",
-      "MFAOfUserFirstLoginUserGuidePage": "あなたと会社の安全を守るために、あなたのアカウント、パスワード、鍵などの重要な機密情報を大切に保管してください (例: 複雑なパスワードを設定し、多因子認証を有効にする)",
+      "MFAOfUserFirstLoginUserGuidePage": "あなたと会社の安全を守るために、あなたのアカウント、パスワード、鍵などの重要な機密情報を大切に保管してください (例: 複雑なパスワードを設定し、多因子認証を有効にする) <br> メールボックス、携帯電話番号、微信などの個人情報は、ユーザー認証やプラットフォーム内部のメッセージ通知としてのみ使用されています。",
       "SSHKeyOfProfileSSHUpdatePage": "公開鍵をここにコピーします",
       "OrgRoleHelpText": "組織ロールは、現在の組織におけるユーザーのロールです",
       "addRolePermissions": "作成/更新に成功したら、詳細に権限を追加します"
@@ -1963,6 +1973,7 @@
     "OldSSHKey": "元のSSH公開鍵",
     "Profile": "個人情報",
     "ProfileSetting": "個人情報設定",
+    "AuthSetting": "資格認定の設定",
     "Remove": "削除",
     "ResetAndDownloadSSHKey": "キーをリセットしてダウンロードします",
     "ResetPublicKeyAndDownload": "SSHキーをリセットしてダウンロードします",
@@ -2297,5 +2308,11 @@
   "applets": {
     "PublishStatus": "投稿ステータス",
     "NoPublished": "未発表"
+  },
+  "profile": {
+    "CreateAccessKey": "Create Access key",
+    "AccessIP": "Access IP",
+    "ApiKeyWarning": "AccessKeyの漏洩リスクを低減するため、Secretは作成時にのみ提供され、後で再度クエリできません。安全に保管してください。",
+    "PasskeyAddDisableInfo": "あなたの認証元は {source} であり、Passkeyの追加はサポートされていません。"
   }
 }

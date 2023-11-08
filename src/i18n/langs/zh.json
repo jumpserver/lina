@@ -1,16 +1,17 @@
 {
-  "": "",
   "accounts": {
     "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
     "Accounts": "账号",
-    "SuFrom": "切换至",
+    "SuFrom": "切换自",
     "SelectAccount": "选择账号",
     "AccountTemplateUpdateSecretHelpText": "账号列表展示通过模版创建的账号。更新密文时，会更新通过模版所创建账号的密文。",
     "GenerateSuccessMsg": "账号生成成功",
     "GenerateAccounts": "重新生成账号",
     "UpdateSecret": "更新密文",
+    "Sync": "同步",
+    "SyncUpdateAccountInfo": "同步更新账号信息",
     "AddAccountResult": "账号批量添加结果",
     "AccountPolicy": "账号策略",
     "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
@@ -46,7 +47,8 @@
       "MailRecipient": "邮件收件人",
       "IsSuccess": "是否成功",
       "Reason": "原因",
-      "RecipientHelpText": "当前只支持邮件发送, 若收件人 A B 都设置，账号的密钥将被拆分成前后两部分"
+      "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分",
+      "RecipientServer":"接收服务器"
     },
     "AccountChangeSecret": {
       "PasswordRule": "密码生成规则",
@@ -229,6 +231,7 @@
   },
   "assets": {
     "CustomType": "自定义类型",
+    "SyncProtocolToAsset": "同步协议到资产",
     "CustomHelpMessage": "自定义类型资产，依赖于远程应用，请前往系统设置在远程应用中配置",
     "CustomFields": "自定义属性",
     "CommentHelpText": "注意：备注信息会在 Luna 页面的用户授权资产树中进行悬停显示，普通用户可以查看，请不要填写敏感信息。",
@@ -474,6 +477,8 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "BelongAll": "包含所有",
+    "WordSep": "",
     "PasswordRule": "密码生成规则",
     "Length": "长度",
     "Uppercase": "大写字母",
@@ -836,6 +841,7 @@
     "FormatError": "格式错误",
     "NotSpecialEmoji": "不允许输入特殊表情符号",
     "notAlphanumericUnderscore": "只能输入字母、数字、下划线",
+    "notParenthesis": "不能包含 ( )",
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",
@@ -960,10 +966,12 @@
   },
   "ops": {
     "EnterRunUser": "输入运行用户",
+    "EnterRunningPath": "输入运行路径",
     "Save": "保存",
     "Reset": "还原",
     "SystemError": "系统错误",
     "RunasHelpText": "填写运行脚本的用户名",
+    "RunningPathHelpText": "填写脚本的运行路径，此设置仅 shell 脚本生效",
     "RunasPolicyHelpText": "当前资产上没此运行用户时，采取什么账号选择策略。跳过：不执行。优先特权账号：如果有特权账号先选特权账号，如果没有就选普通账号。仅特权账号：只从特权账号中选择，如果没有则不执行",
     "StatusGreen": "近期状态良好",
     "StatusRed": "上一次任务执行失败",
@@ -1057,6 +1065,7 @@
     "ratio": "比例",
     "run": "执行",
     "runAs": "运行用户",
+    "runningPath": "运行路径",
     "RunasPolicy": "账号策略",
     "runTimes": "执行次数",
     "selectAssetsMessage": "选择左侧资产, 选择运行的系统用户，批量执行命令",
@@ -1300,7 +1309,7 @@
     "OnlineSession": "在线用户",
     "OnlineUserDevices": "在线用户设备",
     "CreateCommandStorage": "创建命令存储",
-    "CreateReplayStorage": "创建录像存储",
+    "CreateReplayStorage": "创建对象存储",
     "Dashboard": "仪表盘",
     "DatabaseApp": "数据库",
     "RemoteApps": "远程应用",
@@ -1378,7 +1387,7 @@
     "ApplicationPermissionDetail": "应用授权详情",
     "ApplicationPermissionUpdate": "更新应用授权规则",
     "RemoteAppUpdate": "更新远程应用",
-    "ReplayStorageUpdate": "更新录像存储",
+    "ReplayStorageUpdate": "更新对象存储",
     "Detail": "详情",
     "SessionOffline": "历史会话",
     "SessionOnline": "在线会话",
@@ -1443,7 +1452,7 @@
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
-    "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的(但优先选择上次使用的)，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>; <br>连接该发布机选择账号时，以下情况会选择用户 <b>专有账号(js开头)</b>，否则使用公用账号(jms开头)：<br>&nbsp;  1. 发布机和应用都支持并发; <br>&nbsp; 2. 发布机支持并发，应用不支持并发，当前应用没有使用专有账号; <br>&nbsp; 3. 发布机不支持并发，应用支持并发或不支持，没有任一应用使用专有账号; <br> 注意: 应用支不支持并发是开发者决定，主机支不支持是发布机配置中的 单用户单会话决定",
+    "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的(但优先选择上次使用的)，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>; <br>连接该发布机选择账号时，以下情况会选择用户的 <b>同名账号 或 专有账号(js开头)</b>，否则使用公用账号(jms开头)：<br>&nbsp;  1. 发布机和应用都支持并发; <br>&nbsp; 2. 发布机支持并发，应用不支持并发，当前应用没有使用专有账号; <br>&nbsp; 3. 发布机不支持并发，应用支持并发或不支持，没有任一应用使用专有账号; <br> 注意: 应用支不支持并发是开发者决定，主机支不支持是发布机配置中的 单用户单会话决定",
     "uploadZipTips": "请上传 zip 格式的文件",
     "HostDeployment": "发布机部署",
     "TerminalStat": "CPU/内存/磁盘",
@@ -1500,7 +1509,7 @@
     "remoteAddr": "远端地址",
     "replay": "回放",
     "replaySession": "回放会话",
-    "replayStorage": "录像存储",
+    "replayStorage": "对象存储",
     "riskLevel": "风险等级",
     "session": "会话",
     "sshPort": "SSH端口",
@@ -1676,7 +1685,7 @@
     "LDAPUser": "LDAP 用户",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
-      "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用",
+      "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",
       "ConnectionTokenList": "连接令牌是将身份验证和连接资产结合起来使用的一种认证信息，支持用户一键登录到资产，目前支持的组件包括：KoKo、Lion、Magnus、Razor 等",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
@@ -1692,7 +1701,7 @@
       "securityLoginLimitTime": "提示：（单位：分）当用户登录失败次数达到限制后，那么在此时间间隔内禁止登录",
       "securityMaxIdleTime": "提示：如果超过该配置没有操作，连接会被断开 （单位：分）",
       "securityPasswordExpirationTime": "提示：（单位：天）如果用户在此期间没有更新密码，用户密码将过期失效； 密码过期提醒邮件将在密码过期前5天内由系统（每天）自动发送给用户",
-      "siteUrl": "eg: http://jumpserver.abc.com:8080",
+      "siteUrl": "eg: https://jumpserver.example.com:8080",
       "terminalHeartbeatInterval": "单位: 秒",
       "terminalSessionKeepDuration": "单位：天。 会话、录像、命令记录超过该时长将会被删除(仅影响数据库存储, oss等不受影响)",
       "terminalTelnetRegex": "登录telnet服务器成功后的提示正则表达式，如: Last\\s*login|success|成功",
@@ -1710,7 +1719,9 @@
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当组件注册成功后可以禁止",
       "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知",
-      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1",
+      "CustomParams": "左侧为短信平台接收的参数，右侧为JumpServer待格式化参数，最终如下：<br/>{\"phone_numbers\": \"123,134\", \"content\": \"验证码为: 666666\"}",
+      "CustomFile": "请将自定义的文件放到指定目录下(data/sms/main.py)，并在 config.txt 中启用配置项 SMS_CUSTOM_FILE_MD5=<文件md5值>"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
@@ -1777,7 +1788,8 @@
     "DestinationPort": "目的端口",
     "TestParam": "参数",
     "sync": "同步",
-    "testHelpText": "请输入目的地址进行测试"
+    "testHelpText": "请输入目的地址进行测试",
+    "Storage": "存储设置"
   },
   "tickets": {
     "BatchApproval": "批量审批",
@@ -1870,10 +1882,16 @@
     "TestNodeAssetConnectivity": "测试资产节点可连接性",
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
+  "profile": {
+    "CreateAccessKey": "创建访问密钥",
+    "AccessIP": "IP 白名单",
+    "ApiKeyWarning": "为降低 AccessKey 泄露的风险，只在创建时提供 Secret，后续不可再进行查询，请妥善保存。",
+    "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey"
+  },
   "users": {
     "LunaSettingUpdate": "Luna 配置设置",
     "KokoSettingUpdate": "Koko 配置设置",
-    "UserSetting": "个人设置",
+    "UserSetting": "偏好设置",
     "AllMembers": "全部成员",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
@@ -1890,8 +1908,7 @@
     "AuthSettings": "认证配置",
     "UserName": "姓名",
     "Account": "账户",
-    "AccountInformation": "账号信息",
-    "PersonalSetting": "个人设置",
+    "UserInformation": "用户信息",
     "Authentication": "认证",
     "Comment": "备注",
     "ConfirmPassword": "确认密码",
@@ -1920,7 +1937,7 @@
     "setFeiShu": "设置飞书认证",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "启用多因子认证，使账号更加安全。<br/> 启用之后您将会在下次登录时进入多因子认证绑定流程；您也可以在（个人信息->快速修改->更改多因子设置）中直接绑定！",
-      "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）",
+      "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）<br/> 邮箱、手机号、微信等个人信息，仅作为用户认证和平台内部消息通知使用。",
       "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里",
       "OrgRoleHelpText": "组织角色是用户在当前组织中的角色",
       "addRolePermissions": "创建/更新成功后，详情中添加权限"
@@ -1939,6 +1956,7 @@
     "OldSSHKey": "原来SSH公钥",
     "Profile": "个人信息",
     "ProfileSetting": "个人信息设置",
+    "AuthSetting": "认证设置",
     "Remove": "移除",
     "ResetAndDownloadSSHKey": "重置并下载密钥",
     "ResetPublicKeyAndDownload": "重置并下载SSH密钥",

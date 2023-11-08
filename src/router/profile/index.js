@@ -1,5 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty.vue'
 
 export default {
   path: '/profile',
@@ -20,7 +21,7 @@ export default {
       name: 'ProfileInfo',
       component: () => import('@/views/profile/ProfileInfo'),
       meta: {
-        title: i18n.t('users.AccountInformation'),
+        title: i18n.t('users.UserInformation'),
         icon: 'attestation',
         permissions: []
       }
@@ -30,8 +31,18 @@ export default {
       name: 'ProfileSetting',
       component: () => import('@/views/profile/ProfileUpdate/index'),
       meta: {
-        title: i18n.t('users.Profile'),
+        title: i18n.t('users.AuthSetting'),
         icon: 'personal',
+        permissions: []
+      }
+    },
+    {
+      path: '/profile/user/setting',
+      name: 'UserSetting',
+      component: () => import('@/views/profile/UserSettingUpdate/index'),
+      meta: {
+        title: i18n.t('users.UserSetting'),
+        icon: 'preference',
         permissions: []
       }
     },
@@ -43,16 +54,32 @@ export default {
       meta: { title: i18n.t('route.PersonalInformationImprovement'), permissions: [] }
     },
     {
-      path: '/profile/key',
-      component: () => import('@/views/profile/ApiKey'),
-      name: 'ApiKey',
+      path: '/profile/api-keys',
+      component: empty,
       meta: {
-        title: i18n.t('common.nav.APIKey'),
-        icon: 'key',
-        permissions: ['authentication.view_accesskey'],
-        resource: 'accesskey',
-        app: 'authentication'
-      }
+        icon: 'key'
+      },
+      redirect: '',
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/profile/ApiKey'),
+          name: 'ApiKey',
+          icon: 'key',
+          meta: { title: i18n.t('common.nav.APIKey'), permissions: ['authentication.view_accesskey'] }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/profile/ApiKeyCreateUpdate/index'),
+          name: 'ApiKeyCreateUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('common.nav.APIKey'),
+            permissions: ['authentication.change_accesskey'],
+            activeMenu: '/profile/api-keys'
+          }
+        }
+      ]
     },
     {
       path: '/profile/temp-password',
@@ -85,16 +112,6 @@ export default {
         icon: 'passkey',
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
         permissions: ['authentication.view_connectiontoken']
-      }
-    },
-    {
-      path: '/profile/user/setting',
-      name: 'UserSetting',
-      component: () => import('@/views/profile/UserSettingUpdate/index'),
-      meta: {
-        title: i18n.t('users.UserSetting'),
-        icon: 'setting',
-        permissions: []
       }
     }
   ]

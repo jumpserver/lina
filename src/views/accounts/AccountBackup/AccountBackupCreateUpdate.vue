@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdateDrawer } from '@/layout/components'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'AccountBackupPlanUpdate',
@@ -19,7 +20,18 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('accounts.AccountBackup.Types'), ['types']],
-        [this.$t('accounts.AccountBackup.Backup'), ['recipients_part_one', 'recipients_part_two']],
+        [this.$t('accounts.AccountBackup.Backup'),
+          [
+            'backup_type',
+            'is_password_divided_by_email',
+            'recipients_part_one',
+            'recipients_part_two',
+            'is_password_divided_by_obj_storage',
+            'obj_recipients_part_one',
+            'obj_recipients_part_two',
+            'zip_encrypt_password'
+          ]
+        ],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -32,8 +44,13 @@ export default {
         is_periodic: fields.is_periodic,
         crontab: fields.crontab,
         interval: fields.interval,
+        is_password_divided_by_email: fields.is_password_divided_by_email,
+        zip_encrypt_password: fields.zip_encrypt_password,
+        is_password_divided_by_obj_storage: fields.is_password_divided_by_obj_storage,
         recipients_part_one: fields.recipients_part_one,
         recipients_part_two: fields.recipients_part_two,
+        obj_recipients_part_one: fields.obj_recipients_part_one,
+        obj_recipients_part_two: fields.obj_recipients_part_two,
         types: {
           component: 'el-cascader',
           label: this.$t('accounts.AccountBackup.Types'),
@@ -57,6 +74,9 @@ export default {
       createSuccessNextRoute: { name: 'AccountBackupList' },
       updateSuccessNextRoute: { name: 'AccountBackupList' },
       cleanFormValue(data) {
+        if (data['zip_encrypt_password'] !== '') {
+          data['zip_encrypt_password'] = encryptPassword(data['zip_encrypt_password'])
+        }
         if (data['interval'] === '') {
           delete data['interval']
         }

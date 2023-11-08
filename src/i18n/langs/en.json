@@ -109,13 +109,16 @@
       "ExecutionList": "Execution list",
       "Reason": "Reason",
       "AccountBackup": "Account backup",
-      "RecipientHelpText": "Currently, only email sending is supported. If both recipients A and B are set, the account key will be split into two parts: front and back"
+      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
+      "RecipientServer":"Receiving server"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
     "AccountExportTips": "The exported information contains account secret, which involves sensitive information. The exported format is an encrypted zip file (if no encryption password is set, please go to personal information to set the file encryption password).",
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
+    "Sync": "Sync",
+    "SyncUpdateAccountInfo": "Sync update account info",
     "AddAccountResult": "Add account result",
     "AutoPush": "Auto Push",
     "GeneralAccounts": "General Accounts",
@@ -228,6 +231,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "SyncProtocolToAsset": "Sync protocol to asset",
     "CommentHelpText": "Note: Note information will be hovered and displayed in the user authorization asset tree of Luna page, which can be viewed by ordinary users. Please do not fill in sensitive information.",
     "BulkUpdatePlatformHelpText": "Only when the original platform type of the asset is the same as the selected platform type will it be updated, if the platform type before and after the update is different, it will not be updated.",
     "ImportMessage": "Please go to the page of mapping type to import data",
@@ -495,6 +499,8 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
+    "BelongAll": "Include all",
+    "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
     "New": "New",
@@ -864,6 +870,7 @@
     "SecretKey": "Secret Key",
     "NotSpecialEmoji": "No special emoji allowed",
     "notAlphanumericUnderscore": "Only numbers, letters and underscores can be entered",
+    "notParenthesis": "Not contain ( )",
     "Task": "Task",
     "Cas": "CAS",
     "Invalid": "Invalid",
@@ -983,10 +990,12 @@
   },
   "ops": {
     "EnterRunUser": "Enter run user",
+    "EnterRunningPath": "Enter running path",
     "Save": "Save",
     "Reset": "Reset",
     "SystemError": "System Error",
     "RunasHelpText": "Fill in the user name to run the script",
+    "RunningPathHelpText": "Fill in the running path of the script. This setting only takes effect for shell scripts.",
     "RunasPolicyHelpText": "Indicates the account selection strategy when there is no running user on the current asset",
     "StatusGreen": "Recently in good condition",
     "StatusRed": "The last task execution failed",
@@ -1021,6 +1030,7 @@
     "ratio": "Ratio",
     "run": "Run",
     "runAs": "Run as",
+    "runningPath": "Running path",
     "runTimes": "Run times",
     "selectAssetsMessage": "Select the left asset, select the running system user, execute command in batch",
     "selectedAssets": "Selected assets:",
@@ -1283,7 +1293,7 @@
     "FileTransfer": "File transfer",
     "OnlineSession": "Online session",
     "CreateCommandStorage": "Create command storage",
-    "CreateReplayStorage": "Create replay storage",
+    "CreateReplayStorage": "Create object storage",
     "Dashboard": "Dashboard",
     "DatabaseApp": "Database Apps",
     "DatabaseAppCreate": "Database app create",
@@ -1355,7 +1365,7 @@
     "ApplicationPermissionDetail": "Application permission detail",
     "ApplicationPermissionUpdate": "Application permission update",
     "RemoteAppUpdate": "Remote app update",
-    "ReplayStorageUpdate": "Replay storage update",
+    "ReplayStorageUpdate": "Replay object update",
     "Detail": "Detail",
     "Activity": "Activity",
     "SessionOffline": "Sessions offline",
@@ -1533,7 +1543,7 @@
     "remoteAddr": "Remote addr",
     "replay": "replay",
     "replaySession": "Replay session",
-    "replayStorage": "Replay storage",
+    "replayStorage": "Object storage",
     "riskLevel": "Risk level",
     "session": "Session",
     "sshPort": "SSH port",
@@ -1726,7 +1736,9 @@
       "securityPasswordUpperCase": "After opening, the user password changes and resets must contain uppercase letters",
       "securityServiceAccountRegistration": "Allow using bootstrap token register service account, when terminal setup, can disable it",
       "SecurityInsecureCommand": "After it is enabled, when a dangerous command is executed on the asset, an email alarm notification will be sent",
-      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1"
+      "IP": "192.168.1.1,192.168.1.2 | 192.168.1.1-12 | 192.168.1.1-192.168.1.12 | 192.168.1.0/30 | 192.168.1.1",
+      "CustomParams": "On the left are the parameters received by the SMS platform, and on the right are the JumpServer parameters to be formatted, as follows:：<br/>{\"phone_numbers\": \"123,134\", \"content\": \"The verification code is: 666666\"}",
+      "CustomFile": "Save the customized file to the specified directory (data/sms/main.py) and enable the configuration item SMS_CUSTOM_FILE_MD5=<file md5> in config.txt"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "Ensure this value is greater than or equal to 3",
@@ -1925,8 +1937,7 @@
     "UserName": "Name",
     "Account": "Account",
     "Existing": "Existing",
-    "AccountInformation": "Account information",
-    "PersonalSetting": "Personal setting",
+    "UserInformation": "User information",
     "Authentication": "Account",
     "Comment": "Comment",
     "ConfirmPassword": "Confirm password",
@@ -1955,7 +1966,7 @@
     "OrgAuditor": "Org Auditor",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Enable multi-factor authentication to make the account more secure <br/> After is enabled, you will enter the multi-factor authentication binding process on your next login <br/> You can also bind directly in (personal information -> fast modifier -> modifier multiple factor Settings)",
-      "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
+      "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication) <br> Personal information such as email, phone number, WeChat, etc. is only used for user authentication and platform internal message notifications.",
       "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here",
       "OrgRoleHelpText": "Organizational roles are the user's role in the current organization",
       "addRolePermissions": "After add or update success, set permissions in detail page"
@@ -1973,6 +1984,7 @@
     "OldSSHKey": "Old SSH key",
     "Profile": "Profile",
     "ProfileSetting": "Profile setting",
+    "AuthSetting": "Auth setting",
     "Remove": "Remove",
     "ResetAndDownloadSSHKey": "Reset and download SSH Key",
     "ResetPublicKeyAndDownload": "Reset public key and download",
@@ -2306,5 +2318,11 @@
   "applets": {
     "PublishStatus": "Publish status",
     "NoPublished": "Unpublished"
+  },
+  "profile": {
+    "CreateAccessKey": "Create Access key",
+    "AccessIP": "Access IP",
+    "ApiKeyWarning": "To reduce the risk of AccessKey exposure, Secret is provided only during creation and cannot be queried again later. Please keep it safe.",
+    "PasskeyAddDisableInfo": "Your authentication source is {source}, and Passkey addition is not supported."
   }
 }

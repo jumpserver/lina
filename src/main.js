@@ -8,6 +8,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 import i18n from './i18n/i18n'
+import { eventBus } from './utils/const'
 
 import '@/icons' // icon
 import '@/guards' // permission control
@@ -22,6 +23,7 @@ import service from '@/utils/request'
 import { message } from '@/utils/message'
 import xss from '@/utils/xss'
 import ElDrawerPatch from '@/utils/elDrawerPatch.js'
+import ElTableTooltipPatch from '@/utils/elTableTooltipPatch.js'
 
 /**
  * If you don't want to use mock-server
@@ -42,6 +44,7 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.use(ElDrawerPatch)
+Vue.use(ElTableTooltipPatch)
 
 Vue.config.productionTip = false
 
@@ -68,7 +71,7 @@ Vue.prototype.$message = message
 Vue.prototype.$xss = xss
 
 // 注册全局事件总线
-Vue.prototype.$eventBus = new Vue()
+Vue.prototype.$eventBus = eventBus
 new Vue({
   el: '#app',
   i18n,

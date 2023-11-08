@@ -92,7 +92,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_changesecretexection')
+                    return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
                   },
                   type: 'info',
                   disabled: ({ row }) => !row.is_active,

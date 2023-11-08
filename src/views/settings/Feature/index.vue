@@ -26,7 +26,8 @@ export default {
         },
         {
           title: this.$t('setting.Ticket'),
-          name: 'Ticket'
+          name: 'Ticket',
+          hidden: !this.$store.getters.hasValidLicense
         },
         {
           title: this.$t('setting.AppOps'),

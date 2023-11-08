@@ -1,13 +1,5 @@
 <template>
   <div>
-    <div v-if="mfaDialogShow">
-      <UserConfirmDialog
-        :url="url"
-        @AuthMFAError="handleAuthMFAError"
-        @UserConfirmCancel="handleExportCancel"
-        @UserConfirmDone="showExportDialog"
-      />
-    </div>
     <Dialog
       v-if="exportDialogShow"
       :destroy-on-close="true"
@@ -40,7 +32,9 @@
               :disabled="!option.can"
               :label="option.value"
               class="export-item"
-            >{{ option.label }}</el-radio>
+            >
+              {{ option.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -50,15 +44,13 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   name: 'ExportDialog',
   components: {
-    Dialog,
-    UserConfirmDialog
+    Dialog
   },
   props: {
     selectedRows: {
@@ -107,12 +99,12 @@ export default {
   },
   data() {
     return {
+      meta: {},
       exportDialogShow: false,
       exportOption: 'all',
       exportTypeOption: 'csv',
-      meta: {},
-      mfaVerified: false,
-      mfaDialogShow: false
+      mfaDialogShow: false,
+      confirmUrl: '/api/v1/accounts/account-secrets/?limit=1'
     }
   },
   computed: {
@@ -136,7 +128,6 @@ export default {
           delete query[key]
         }
       }
-
       return query
     },
     tableHasQuery() {
@@ -192,12 +183,9 @@ export default {
         this.exportDialogShow = true
         return
       }
-      // 这是需要校验 MFA 的
-      if (!this.mfaDialogShow) {
-        this.mfaDialogShow = true
-      } else {
+      this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
         this.exportDialogShow = true
-      }
+      })
     },
     downloadCsv(url) {
       const a = document.createElement('a')
@@ -234,13 +222,11 @@ export default {
     async handleExportConfirm() {
       await this.handleExport()
       this.exportDialogShow = false
-      this.mfaDialogShow = false
     },
     handleExportCancel() {
       const vm = this
       setTimeout(() => {
         vm.exportDialogShow = false
-        vm.mfaDialogShow = false
       }, 100)
     },
     handleAuthMFAError() {

@@ -209,7 +209,7 @@ export const assetJSONSelectMeta = (vm) => {
         {
           name: 'platform',
           label: vm.$t('assets.Platform'),
-          type: 'm2m',
+          type: 'fk',
           el: {
             url: '/api/v1/assets/platforms/'
           }
@@ -248,7 +248,12 @@ export const assetJSONSelectMeta = (vm) => {
           type: 'm2m',
           el: {
             multiple: true,
-            url: '/api/v1/assets/labels/'
+            url: '/api/v1/assets/labels/',
+            ajax: {
+              transformOption: (item) => {
+                return { label: `${item.name}:${item.value}`, value: item.id }
+              }
+            }
           }
         },
         {

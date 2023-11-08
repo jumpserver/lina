@@ -24,12 +24,14 @@ export default {
 
 <style lang='scss' scoped>
 .input-text {
-  border: solid 1px #dcdfe6;
   line-height: 32px;
-  padding-left: 5px;
+  padding-left: 8px;
   height: 32px;
   margin-top: 4px;
   font-size: 13px;
+}
+.bolder {
+  border: solid 1px #dcdfe6;
 }
 
 </style>

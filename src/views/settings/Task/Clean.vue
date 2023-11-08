@@ -31,6 +31,7 @@ export default {
         [
           this.$t('common.Database'),
           [
+            'JOB_EXECUTION_KEEP_DAYS',
             'CLOUD_SYNC_TASK_EXECUTION_KEEP_DAYS'
           ]
         ]

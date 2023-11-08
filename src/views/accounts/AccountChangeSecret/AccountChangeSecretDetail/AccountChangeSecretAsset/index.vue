@@ -60,7 +60,7 @@ export default {
                 { assets: [row.id] }
               ).then(res => {
                 this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                reload()
+                this.$store.commit('common/reload')
               }).catch(error => {
                 this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
               })
@@ -92,7 +92,7 @@ export default {
         title: this.$t('accounts.AccountChangeSecret.AddAsset'),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
-          return this.object.assets.indexOf(row.id) === -1
+          return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/asset/add/`
@@ -104,7 +104,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('common.updateSuccessMsg'))
-          window.location.reload()
+          this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
