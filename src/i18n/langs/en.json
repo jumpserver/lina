@@ -1474,6 +1474,7 @@
   "terminal": {
     "OnlineSessionHelpMsg": "The current session cannot be offline because it is an online session of the current user. Currently, only users who have logged in through web mode are recorded.",
     "Offline": "Offline",
+    "Active": "Active",
     "OfflineSuccessMsg": "Offline success",
     "BulkOffline": "Bulk offline",
     "Marketplace": "Marketplace",

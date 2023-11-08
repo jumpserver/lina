@@ -1440,6 +1440,7 @@
   "terminal": {
     "OnlineSessionHelpMsg": "无法下线当前会话，因为该会话是当前用户的在线会话。当前只记录以 Web 方式登录的用户。",
     "Offline": "下线",
+    "Active": "活跃",
     "OfflineSuccessMsg": "下线成功",
     "BulkOffline": "批量下线",
     "Marketplace": "应用市场",

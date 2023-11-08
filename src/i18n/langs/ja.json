@@ -1466,6 +1466,7 @@
   },
   "terminal": {
     "Offline": "オフライン",
+    "Active": "アクティブ",
     "OnlineSessionHelpMsg": "セッションが現在のユーザーのオンラインセッションであるため、現在のセッションをオフラインできません。現在はWebログイン済みのユーザーのみが記録されています。",
     "OfflineSuccessMsg": "オフラインに成功しました",
     "BulkOffline": "オフライン",
