@@ -1,17 +1,18 @@
 <template>
   <Dialog
-    v-if="setting.InviteDialogVisible"
-    :title="$tc('users.InviteUserInOrg')"
-    :visible.sync="setting.InviteDialogVisible"
+    v-if="setting.inviteDialogVisible"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    custom-class="asset-select-dialog"
-    width="50vw"
-    top="15vh"
+    :title="$tc('users.InviteUserInOrg')"
+    :visible.sync="setting.inviteDialogVisible"
     after
-    :destroy-on-close="true"
+    custom-class="asset-select-dialog"
+    top="15vh"
+    width="50vw"
   >
     <GenericCreateUpdateForm
+      action="invite"
       v-bind="formConfig"
       @submitSuccess="onSubmitSuccess"
     />
@@ -33,7 +34,7 @@ export default {
     setting: {
       type: Object,
       default: () => {
-        return { InviteDialogVisible: false }
+        return { inviteDialogVisible: false }
       }
     }
   },
@@ -43,7 +44,6 @@ export default {
       InviteLoading: false,
       formConfig: {
         url: '/api/v1/users/users/invite/',
-        getUrl: () => '/api/v1/users/users/invite/',
         submitMethod: () => 'post',
         hasReset: false,
         hasSaveContinue: false,
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     onSubmitSuccess(res) {
-      this.setting.InviteDialogVisible = false
+      this.setting.inviteDialogVisible = false
       this.$emit('close', res)
       this.$store.dispatch('users/currentUserJoinNewOrg', res.users)
     }

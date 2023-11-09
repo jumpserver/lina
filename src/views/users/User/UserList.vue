@@ -163,7 +163,7 @@ export default {
             },
             can: () => vm.$hasPerm('users.invite_user'),
             callback: () => {
-              this.InviteDialogSetting.InviteDialogVisible = true
+              this.InviteDialogSetting.inviteDialogVisible = true
             }
           }
         ],
@@ -236,7 +236,7 @@ export default {
         }
       },
       InviteDialogSetting: {
-        InviteDialogVisible: false
+        inviteDialogVisible: false
       }
     }
   },
@@ -296,7 +296,7 @@ export default {
       })
     },
     handleInviteDialogClose() {
-      this.InviteDialogSetting.InviteDialogVisible = false
+      this.InviteDialogSetting.inviteDialogVisible = false
       this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     },
     handleDialogUpdate() {
