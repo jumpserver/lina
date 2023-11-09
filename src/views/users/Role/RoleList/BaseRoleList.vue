@@ -19,7 +19,7 @@ export default {
   props: {
     scope: {
       type: String,
-      default: 'system'
+      required: true
     }
   },
   data() {

@@ -12,6 +12,11 @@ export default {
   name: 'GenericListPage',
   components: {
     Page, ListTable
+  },
+  methods: {
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
+    }
   }
 }
 </script>
