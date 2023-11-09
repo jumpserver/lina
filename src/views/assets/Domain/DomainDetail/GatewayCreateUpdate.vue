@@ -29,6 +29,7 @@ export default {
         const platform = await this.$axios.get(url)
         initial.platform = parseInt(platform[0].id)
         initial.domain = this.domain
+        initial.protocols = platform?.[0]?.protocols
         return initial
       },
       addFieldsMeta: {

@@ -46,8 +46,8 @@ export default {
       }
     },
     platformId: {
-      type: Number,
-      default: 0
+      type: [Number, String],
+      default: () => ''
     },
     action: {
       type: String,
@@ -155,8 +155,10 @@ export default {
       const { node } = this.$route?.query || {}
       const nodesInitial = node ? [node] : []
       const platformId = this.platformId
-      const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
+      if (platformId) {
+        const url = `/api/v1/assets/platforms/${platformId}/`
+        this.platform = await this.$axios.get(url)
+      }
       const initial = {
         labels: [],
         is_active: true,
