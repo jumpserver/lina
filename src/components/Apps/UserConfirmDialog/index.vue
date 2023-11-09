@@ -51,7 +51,12 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
-          <el-input v-model="secretValue" :placeholder="inputPlaceholder" :show-password="showPassword" />
+          <el-input
+            v-model="secretValue"
+            :placeholder="inputPlaceholder"
+            :show-password="showPassword"
+            @keyup.enter.native="handleConfirm"
+          />
           <span v-if="subTypeSelected === 'sms'" style="margin: -1px 0 0 20px;">
             <el-button
               :disabled="smsBtnDisabled"
