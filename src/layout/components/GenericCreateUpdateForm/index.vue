@@ -365,7 +365,7 @@ export default {
           object.hostname = this.$t('common.cloneFrom') + object.hostname
           object.name = this.$t('common.cloneFrom') + '' + object.name
         }
-      } else {
+      } else if (this.action === 'update') {
         object = await this.getObjectDetail(this.iUrl)
       }
       if (object) {

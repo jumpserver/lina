@@ -153,6 +153,7 @@ export default {
         this.iVisible = false
       })
       const url = `/api/v1/assets/${platform.category.value}s/`
+      this.$log.debug('Emit assetCreateUpdate event: ', platform, 'create', { url })
       this.$eventBus.$emit('assetCreateUpdate', platform, 'create', { url })
     }
   }
