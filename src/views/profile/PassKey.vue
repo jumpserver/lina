@@ -143,7 +143,7 @@ export default {
         this.getRefsListTable.reloadTable()
         this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch((error) => {
-        if (error.response.status === 412) {
+        if (error.response?.status === 412) {
           return
         }
         alert(error)
