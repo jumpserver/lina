@@ -10,7 +10,7 @@
         :port="port"
         :visible.sync="visible"
       />
-      <GatewayCreateUpdate :domain="domain" :platform-type="platformType" />
+      <GatewayCreateUpdate v-if="isShow" :domain="domain" :platform-type="platformType" />
     </el-col>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
   },
   data() {
     return {
-      domain: '',
+      isShow: true,
+      domain: this.object.id,
       platformType: '',
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
@@ -95,8 +96,10 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: ({ row }) => {
+                this.isShow = false
                 this.domain = this.object.id
                 this.platformType = 'linux'
+                this.isShow = true
               },
               performDelete: ({ row }) => {
                 const id = row.id
@@ -139,9 +142,11 @@ export default {
         hasBulkUpdate: false,
         hasSearch: true,
         onCreate: (item) => {
+          this.isShow = false
           this.domain = this.object.id
           this.platformType = 'linux'
           this.category = 'host'
+          this.isShow = true
           this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: this.tableConfig.url })
         }
       },
