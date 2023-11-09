@@ -56,7 +56,7 @@ export default {
                   query: { provider: row.provider?.value }
                 })
                 setTimeout(() => {
-                  vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { row, col })
+                  vm.$eventBus.$emit('showCreateUpdateDrawer', 'update', { url, row, col })
                 })
               },
               extraActions: [
