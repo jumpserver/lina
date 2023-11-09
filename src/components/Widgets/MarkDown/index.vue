@@ -81,7 +81,6 @@ export default {
 }
 .source {
   padding: 6px;
-  background-color: #f3f3f3;
 }
 .result-html {
   height: 100%;
