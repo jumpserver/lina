@@ -95,7 +95,7 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
+        hasMoreActions: false,
         hasRightActions: true,
         createRoute: 'PlatformCreate',
         canCreate: () => this.$hasPerm('assets.add_platform'),
