@@ -289,6 +289,20 @@ export default {
       } else {
         return this.$t('common.Create')
       }
+    },
+    iAction() {
+      if (this.action) {
+        return this.action
+      }
+      let submitMethod = this.submitMethod
+      if (submitMethod instanceof Function) {
+        submitMethod = submitMethod(this)
+      }
+      if (submitMethod === 'post') {
+        return 'create'
+      } else {
+        return 'update'
+      }
     }
   },
   async created() {
@@ -348,14 +362,15 @@ export default {
     },
     async getFormValue() {
       const cloneFrom = this.actionId
-      if (this.action === 'create' || !this.needGetObjectDetail) {
+      console.log('action: ', this.iAction)
+      if (this.iAction === 'create' || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
       if (object && Object.keys(object).length > 0) {
         return object
       }
-      if (this.action === 'clone') {
+      if (this.iAction === 'clone') {
         const [curUrl, query] = this.url.split('?')
         const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
         object = await this.getObjectDetail(url)
@@ -365,7 +380,7 @@ export default {
           object.hostname = this.$t('common.cloneFrom') + object.hostname
           object.name = this.$t('common.cloneFrom') + '' + object.name
         }
-      } else if (this.action === 'update') {
+      } else if (this.iAction === 'update') {
         object = await this.getObjectDetail(this.iUrl)
       }
       if (object) {
