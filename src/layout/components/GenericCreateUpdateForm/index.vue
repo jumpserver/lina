@@ -376,7 +376,6 @@ export default {
       return object
     },
     async getObjectDetail(url) {
-      this.$log.debug('Get object detail: ', url)
       return this.$axios.get(url)
     }
   }
