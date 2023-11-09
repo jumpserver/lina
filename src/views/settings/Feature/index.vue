@@ -18,7 +18,7 @@ export default {
   components: { TabPage, Announcement, Vault, Ticket, Ops },
   data() {
     return {
-      activeMenu: 'Basic',
+      activeMenu: 'Announcement',
       submenu: [
         {
           title: this.$t('setting.Announcement'),

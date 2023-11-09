@@ -1,5 +1,7 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
+  <div>
+    <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
+  </div>
 </template>
 
 <script>

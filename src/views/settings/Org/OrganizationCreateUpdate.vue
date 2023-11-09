@@ -17,46 +17,9 @@ export default {
         url: '/api/v1/orgs/orgs/',
         fields: [
           ['', ['name', 'comment']]
-          // [this.$t('common.Members'), ['admins', 'auditors', 'users']],
         ],
         hasSaveContinue: false,
         fieldsMeta: {
-          // admins: {
-          //   label: this.$t('xpack.Admin'),
-          //   el: {
-          //     value: [],
-          //     ajax: {
-          //       url: '/api/v1/users/users/?fields_size=mini&oid=DEFAULT',
-          //       transformOption: (item) => {
-          //         return { label: item.name + '(' + item.username + ')', value: item.id }
-          //       }
-          //     }
-          //   }
-          // },
-          // auditors: {
-          //   label: this.$t('xpack.Auditor'),
-          //   el: {
-          //     value: [],
-          //     ajax: {
-          //       url: '/api/v1/users/users/?fields_size=mini&oid=DEFAULT',
-          //       transformOption: (item) => {
-          //         return { label: item.name + '(' + item.username + ')', value: item.id }
-          //       }
-          //     }
-          //   }
-          // },
-          // users: {
-          //   label: this.$t('xpack.User'),
-          //   el: {
-          //     value: [],
-          //     ajax: {
-          //       url: '/api/v1/users/users/?fields_size=mini&oid=DEFAULT',
-          //       transformOption: (item) => {
-          //         return { label: item.name + '(' + item.username + ')', value: item.id }
-          //       }
-          //     }
-          //   }
-          // }
         },
         onPerformSuccess(res, method) {
           switch (method) {

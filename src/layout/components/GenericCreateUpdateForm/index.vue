@@ -204,7 +204,6 @@ export default {
     onPerformSuccess: {
       type: Function,
       default(res, method, vm, addContinue) {
-        this.$emit('submitSuccess', res, { method, vm, addContinue })
         this.emitPerformSuccessMsg(method, res, addContinue)
       }
     },
@@ -354,7 +353,10 @@ export default {
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
+        .then((res) => {
+          this.$emit('submitSuccess', res, [this.method, this, addContinue])
+          this.onPerformSuccess.bind(this)(res, this.method, this, addContinue)
+        })
         .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
           this.isSubmitting = false
