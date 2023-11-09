@@ -1,9 +1,15 @@
 <template>
-  <BaseAssetCreateUpdate v-if="!loading" v-bind="config" />
+  <BaseAssetCreateUpdate
+    v-if="!loading"
+    :platform-id="platformId"
+    v-bind="Object.assign(config, $attrs)"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
 import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateDrawer.vue'
+import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
@@ -12,6 +18,7 @@ export default {
   data() {
     return {
       loading: true,
+      platformId: '',
       config: {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
@@ -78,7 +85,7 @@ export default {
   },
   async mounted() {
     const platform = await this.$axios.get('/api/v1/assets/platforms/RemoteAppHost/')
-    this.$route.query.platform = platform['id']
+    this.platformId = platform.id
     this.loading = false
   },
   methods: {}

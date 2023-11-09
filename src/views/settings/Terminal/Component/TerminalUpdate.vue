@@ -1,21 +1,21 @@
 <template>
-  <GenericCreateUpdatePage
-    :fields="fields"
-    :url="url"
-    :update-success-next-route="successUrl"
+  <GenericCreateUpdateDrawer
     :create-success-next-route="successUrl"
+    :fields="fields"
     :fields-meta="fieldsMeta"
+    :update-success-next-route="successUrl"
+    :url="url"
   />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 import { getAllCommandStorage, getAllReplayStorage } from '@/api/sessions'
 
 export default {
   name: 'TerminalUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

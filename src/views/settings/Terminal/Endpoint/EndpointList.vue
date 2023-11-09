@@ -2,15 +2,18 @@
   <div>
     <el-alert type="success" v-html="helpMessage" />
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <EndpointCreateUpdate />
   </div>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable'
+import EndpointCreateUpdate from './EndpointCreateUpdate.vue'
 
 export default {
   name: 'EndpointList',
   components: {
+    EndpointCreateUpdate,
     ListTable
   },
   data() {

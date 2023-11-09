@@ -191,6 +191,7 @@ export default {
   },
   methods: {
     handleCreate() {
+      this.$log.debug('Handle create in left side')
       if (this.createInDrawer) {
         this.$eventBus.$emit('showCreateUpdateDrawer', 'create', { url: this.tableUrl })
         return

@@ -10,6 +10,7 @@
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
     </Dialog>
+    <TerminalUpdate />
   </div>
 </template>
 
@@ -18,9 +19,11 @@ import ListTable from '@/components/Table/ListTable'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/Form/FormFields/Select2'
+import TerminalUpdate from './TerminalUpdate.vue'
 
 export default {
   components: {
+    TerminalUpdate,
     ListTable,
     Dialog,
     GenericCreateUpdateForm

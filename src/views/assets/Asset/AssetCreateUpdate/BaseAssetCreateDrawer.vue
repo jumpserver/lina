@@ -1,9 +1,9 @@
 <template>
   <GenericCreateUpdateDrawer
     v-if="!loading"
-    :visible="visible"
     :action="action"
     :action-id="actionId"
+    :visible="visible"
     v-bind="iConfig"
     v-on="$listeners"
   />
@@ -139,6 +139,7 @@ export default {
     }
   },
   created() {
+    this.$log.debug('AssetCreateUpdateDrawer created, ', this.action, this.actionId)
     this.init()
   },
   methods: {
