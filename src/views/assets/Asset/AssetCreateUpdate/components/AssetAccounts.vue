@@ -68,11 +68,13 @@ export default {
       type: [Array],
       default: () => []
     },
-    isUpdate: {
-      type: Function,
-      default: (vm) => {
-        return vm.$route.params.id
-      }
+    action: {
+      type: String,
+      default: 'create'
+    },
+    actionId: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -100,6 +102,9 @@ export default {
     }
   },
   methods: {
+    isUpdate() {
+      return this.action === 'update'
+    },
     removeAccount(account) {
       this.accounts = this.accounts.filter((item) => {
         if (account.id && item.id) {
@@ -126,29 +131,30 @@ export default {
     onAddFromTemplateClick() {
       this.templateDialogVisible = true
     },
-    onSelectTemplate() {
-    },
     goToAssetAccountsPage() {
-      const assetId = this.$route.params.id
+      const assetId = this.actionId
       // todo: 临时解决方案，后续需要优化 发布机的组织是 system，所以需要判断一下，否则
       // 会跳转到其他组织的资产详情页，而不是发布机详情页
+      let route
       if (this.$router.currentRoute.name === 'AppletHostUpdate') {
-        this.$router.push({
+        route = {
           name: 'AppletHostDetail',
           params: { id: assetId },
           query: {
             tab: 'Accounts'
           }
-        })
-        return
-      }
-      this.$router.push({
-        name: 'AssetDetail',
-        params: { id: assetId },
-        query: {
-          tab: 'Account'
         }
-      })
+      } else {
+        route = {
+          name: 'AssetDetail',
+          params: { id: assetId },
+          query: {
+            tab: 'Account'
+          }
+        }
+      }
+      const url = this.$router.resolve(route)
+      window.open(url.href, '_blank')
     }
   }
 }

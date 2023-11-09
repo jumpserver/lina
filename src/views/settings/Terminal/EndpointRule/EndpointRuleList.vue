@@ -2,15 +2,18 @@
   <div>
     <el-alert type="success" v-html="helpMessage" />
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <EndpointRuleCreateUpdate />
   </div>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable'
+import EndpointRuleCreateUpdate from './EndpointRuleCreateUpdate.vue'
 
 export default {
   name: 'EndpointRule',
   components: {
+    EndpointRuleCreateUpdate,
     ListTable
   },
   data() {
@@ -30,17 +33,13 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canUpdate: this.$hasPerm('terminal.change_endpointrule'),
-              updateRoute: 'EndpointRuleUpdate',
-              cloneRoute: 'EndpointRuleCreate'
+              canUpdate: this.$hasPerm('terminal.change_endpointrule')
             }
           }
         }
       },
       headerActions: {
-        canCreate: this.$hasPerm('terminal.add_endpointrule'),
-        hasMoreActions: false,
-        createRoute: 'EndpointRuleCreate'
+        hasMoreActions: false
       }
     }
   }

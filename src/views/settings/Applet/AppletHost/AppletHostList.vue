@@ -4,7 +4,7 @@
       <span v-html="$t('terminal.AppletHostSelectHelpMessage')" />
     </el-alert>
     <ListTable class="applet-host" v-bind="$data" />
-    <AppletHostCreateUpdate />
+    <AppletHostCreateUpdate v-if="visible" :action="action" :row="row" :visible.sync="visible" />
   </div>
 </template>
 
@@ -23,25 +23,18 @@ export default {
   data() {
     const vm = this
     const onAction = (row, action) => {
-      let routeAction = action
-      if (action === 'Clone') {
-        routeAction = 'Create'
-      }
-      const routeName = 'AppletHost' + routeAction
-      const route = {
-        name: routeName,
-        params: {},
-        query: {}
-      }
-      if (action === 'Clone') {
-        route.query.clone_from = row.id
-      } else if (action === 'Update') {
-        route.params.id = row.id
-        route.query.platform = row.platform.id
-      }
-      vm.$router.push(route)
+      vm.action = action.toLowerCase()
+      vm.row = row
+      vm.platform = row.platform
+      setTimeout(() => {
+        vm.visible = true
+      }, 0)
     }
     return {
+      visible: false,
+      action: 'create',
+      row: {},
+      platform: {},
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
         columnsExclude: ['info'],
@@ -107,7 +100,10 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'AppletHostCreate',
+        onCreate: () => {
+          this.visible = true
+          this.platform = {}
+        },
         hasRefresh: true,
         hasExport: false,
         hasImport: false

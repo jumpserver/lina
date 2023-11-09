@@ -1,18 +1,14 @@
 <template>
-  <GenericCreateUpdatePage
-    :create-success-next-route="successUrl"
-    :update-success-next-route="successUrl"
-    v-bind="$data"
-  />
+  <GenericCreateUpdateDrawer v-bind="$data" />
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateDrawer } from '@/layout/components'
 
 export default {
   name: 'EndpointRuleCreateUpdate',
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateDrawer
   },
   data() {
     return {

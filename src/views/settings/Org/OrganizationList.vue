@@ -8,12 +8,14 @@
     >
       <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
     </Dialog>
+    <OrganizationCreateUpdate />
   </div>
 </template>
 
 <script>
 import { GenericCreateUpdateForm, GenericListPage } from '@/layout/components'
 import { Dialog } from '@/components'
+import OrganizationCreateUpdate from '@/views/settings/Org/OrganizationCreateUpdate.vue'
 
 const performDelete = function({ row, col }) {
   const id = row.id
@@ -22,6 +24,7 @@ const performDelete = function({ row, col }) {
 }
 export default {
   components: {
+    OrganizationCreateUpdate,
     GenericCreateUpdateForm,
     GenericListPage,
     Dialog

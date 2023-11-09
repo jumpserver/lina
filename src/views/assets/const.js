@@ -103,7 +103,9 @@ export const assetFieldsMeta = (vm) => {
       label: i18n.t('assets.Accounts'),
       el: {
         platform: {},
-        default: []
+        default: [],
+        action: vm.action,
+        actionId: vm.row.id
       }
     },
     nodes: {
