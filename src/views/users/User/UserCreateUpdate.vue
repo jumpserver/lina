@@ -204,7 +204,7 @@ export default {
     afterGetUser(user) {
       this.user = user
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
-      if (this.$route.query.clone_from) {
+      if (this.actionMeta.action === 'clone') {
         this.user.groups = []
       }
     },
