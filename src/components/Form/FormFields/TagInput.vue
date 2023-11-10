@@ -21,7 +21,6 @@
       :placeholder="this.$t('common.EnterToContinue')"
       class="search-input"
       @blur="focus = false"
-      @change="handleConfirm"
       @focus="focus = true"
       @select="handleSelect"
       @keyup.enter.native="handleConfirm"
