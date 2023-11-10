@@ -8,7 +8,7 @@
           </span>
         </div>
       </div>
-      <el-col :span="span">
+      <el-col :span="span" :style="{'height': height + 'px' }">
         <el-input
           v-model="iValue"
           autosize
@@ -17,7 +17,7 @@
           @change="onChange"
         />
       </el-col>
-      <el-col v-if="isShow" :span="span">
+      <el-col v-show="isShow" :span="span">
         <VueMarkdown class="result-html" :source="iValue" :show="true" :html="true" />
       </el-col>
     </el-row>
@@ -49,10 +49,32 @@ export default {
   },
   data() {
     return {
+      height: 0,
+      resizeObserver: null,
       span: 12,
       isShow: true,
       iValue: this.value
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.resizeObserver = new ResizeObserver(entries => {
+        // 监听高度变化
+        const height = entries[0].target.offsetHeight
+        if (height) {
+          this.height = height
+        }
+      })
+      const el = document.querySelector('.result-html')
+      this.resizeObserver.observe(el)
+    })
+  },
+  beforeDestroy() {
+    const el = document.querySelector('.result-html')
+    if (el) {
+      this.resizeObserver.unobserve(el)
+    }
+    this.resizeObserver = null
   },
   methods: {
     onChange() {
@@ -76,14 +98,17 @@ export default {
   font-size: 13px;
 }
 
->>> .el-textarea__inner {
-  min-height: 210px !important;
+>>> .el-textarea {
+  height: 100% !important;
+  .el-textarea__inner {
+    min-height: 210px !important;
+    height: 100% !important;
+  }
 }
 .source {
   padding: 6px;
 }
 .result-html {
-  height: 100%;
   min-height: 210px;
   margin-left: 4px;
   padding: 5px 10px;
