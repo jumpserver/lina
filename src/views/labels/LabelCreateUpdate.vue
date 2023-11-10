@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :fields-meta="fieldsMeta" :has-detail-in-msg="false" :initial="initial" :url="url" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :fields-meta="fieldsMeta"
+    :has-detail-in-msg="false"
+    :initial="initial"
+    :url="url"
+  />
 </template>
 
 <script>
@@ -17,7 +23,8 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'value']]
       ],
-      url: '/api/v1/labels/labels/'
+      url: '/api/v1/labels/labels/',
+      fieldsMeta: {}
     }
   }
 }
