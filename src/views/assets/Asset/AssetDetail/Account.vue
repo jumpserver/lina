@@ -5,7 +5,6 @@
         <AccountListTable
           ref="ListTable"
           :asset="object"
-          :columns="columns"
           :has-clone="false"
           :has-import="false"
           :has-left-actions="true"
