@@ -3,6 +3,7 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     v-bind="$data"
+    :help-message="getHelpMessage()"
   />
 </template>
 
@@ -79,6 +80,10 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.query.type === 'sftp' && !this.$hasLicense()) this.$router.push({ name: '404' })
+  },
+  methods: {
+    getHelpMessage() { if (!this.$hasLicense()) return ''; else return this.$t('setting.ReplayStorageCreateUpdateHelpMessage') }
   }
 }
 </script>

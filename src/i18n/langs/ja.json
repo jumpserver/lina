@@ -1813,7 +1813,8 @@
     "Applets": "リモート アプリケーション",
     "sync": "同期",
     "AccountStorage": "アカウントストレージ",
-    "Passkey": "パスキー"
+    "Passkey": "パスキー",
+    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。"
   },
   "tickets": {
     "BatchApproval": "大量承認です",

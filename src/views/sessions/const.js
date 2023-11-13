@@ -49,16 +49,3 @@ export const STORAGE_TYPE_META_MAP = {
     meta: ['SFTP_HOST', 'SFTP_PORT', 'SFTP_USERNAME', 'STP_SECRET_TYPE', 'SFTP_PASSWORD', 'STP_PRIVATE_KEY', 'STP_PASSPHRASE', 'SFTP_ROOT_PATH']
   }
 }
-
-export function getReplayStorageOptions() {
-  const options = []
-  const storages = Object.values(STORAGE_TYPE_META_MAP)
-  for (const s of storages) {
-    const option = {
-      name: s.name,
-      title: s.title
-    }
-    options.push(option)
-  }
-  return options
-}
