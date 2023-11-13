@@ -142,6 +142,9 @@ export default {
     },
     selectNode: function(node) {
       return this.$refs.AutoDataZTree.selectNode(node)
+    },
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
