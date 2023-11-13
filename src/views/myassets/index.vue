@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericTreeListPage
+      ref="GenericTreeListPage"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
