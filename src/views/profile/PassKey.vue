@@ -64,7 +64,7 @@ export default {
               hasClone: false,
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
-                  this.getRefsListTable.reloadTable()
+                  this.reloadTable()
                   this.$message.success(this.$tc('common.deleteSuccessMsg'))
                 }).catch(error => {
                   this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
@@ -82,7 +82,7 @@ export default {
                     this.$axios.patch(`${ajaxUrl}${row.id}/`,
                       { is_active: !row.is_active }
                     ).then(res => {
-                      this.getRefsListTable.reloadTable()
+                      this.reloadTable()
                       this.$message.success(this.$tc('common.updateSuccessMsg'))
                     }).catch(error => {
                       this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
@@ -117,9 +117,6 @@ export default {
     }
   },
   computed: {
-    getRefsListTable() {
-      return this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable || {}
-    },
     isLocalUser() {
       return this.source?.value === 'local'
     },
@@ -140,7 +137,7 @@ export default {
         return this.$axios.post('/api/v1/authentication/passkeys/register/', data)
       }).then((res) => {
         this.dialogVisible = false
-        this.getRefsListTable.reloadTable()
+        this.reloadTable()
         this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch((error) => {
         if (error.response?.status === 412) {
@@ -157,6 +154,9 @@ export default {
         excludeCred.id = passkey.decode(excludeCred.id)
       }
       return makeCredReq
+    },
+    reloadTable() {
+      this.$refs.GenericListTable.reloadTable()
     }
   }
 }
