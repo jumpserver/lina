@@ -56,7 +56,7 @@ export default {
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
-                      this.getRefsListTable.reloadTable()
+                      this.reloadTable()
                       this.$message.success(this.$tc('common.updateSuccessMsg'))
                     }).catch(error => {
                       this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
@@ -83,8 +83,10 @@ export default {
     }
   },
   computed: {
-    getRefsListTable() {
-      return this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable || {}
+  },
+  methods: {
+    reloadTable() {
+      return this.$refs.GenericListTable.reloadTable()
     }
   }
 }
