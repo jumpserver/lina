@@ -79,6 +79,20 @@ export default {
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>
           }
+        },
+        {
+          key: this.$t('accounts.AccountBackup.RecipientServer') + ' A',
+          value: this.object.obj_recipients_part_one,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
+        },
+        {
+          key: this.$t('accounts.AccountBackup.RecipientServer') + ' B',
+          value: this.object.obj_recipients_part_two,
+          formatter: (item, val) => {
+            return <span>{val.map(item => item.name).join(', ')}</span>
+          }
         }
       ]
     }
