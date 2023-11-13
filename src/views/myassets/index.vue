@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericTreeListPage
+      ref="GenericTreeListPage"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
@@ -28,7 +29,6 @@ export default {
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/perms/users/self/nodes/children/tree/',
         callback: {
-          refresh: () => {},
           onSelected: function(event, treeNode) {
             if (treeNode.meta.type === 'node') {
               const currentNodeId = treeNode.meta.data.id
@@ -201,6 +201,7 @@ export default {
       } else {
         this.favor(assetId)
       }
+      this.$refs.GenericTreeListPage.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.refresh()
     },
     checkFavorite(assetId) {
       let ok = false
