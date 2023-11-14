@@ -150,6 +150,7 @@ export default {
             this.title = this.$t('auth.NeedReLogin')
             this.visible = true
           })
+          return
         }
         this.subTypeChoices = data.content
         const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
