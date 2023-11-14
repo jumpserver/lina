@@ -53,7 +53,16 @@ export default {
               component: Select2,
               el: {
                 ajax: {
-                  url: `/api/v1/terminal/replay-storages/`
+                  url: `/api/v1/terminal/replay-storages/`,
+                  processResults(data) {
+                    const options = []
+                    data?.results.forEach(item => {
+                      if (item.type.value === 'sftp') return
+                      options.push({ label: item.name, value: item.id })
+                    })
+                    data.results = options
+                    return { results: options, pagination: data.next, total: data.count }
+                  }
                 },
                 multiple: false
               }
