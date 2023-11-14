@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { krryPaging } from 'krry-transfer'
+import krryPaging from '@/components/Libs/Krry/paging/index.vue'
 import { getUserList } from '@/api/users'
 import Dialog from '@/components/Dialog/index.vue'
 
@@ -140,8 +140,11 @@ export default {
 }
 
 .select2 {
-  width: 400px;
-  margin: 20px;
+  width: 300px;
+}
+
+.el-row {
+  margin: 20px 0;
 }
 
 </style>

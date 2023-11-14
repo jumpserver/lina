@@ -14,7 +14,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { krryPaging } from 'krry-transfer'
+import krryPaging from '@/components/Libs/Krry/paging/index.vue'
 import { getUserList } from '@/api/users'
 
 export default {
