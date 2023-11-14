@@ -8,7 +8,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
-import { Required } from '@/components/Form/DataForm/rules'
+import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 
 export default {
@@ -49,6 +49,7 @@ export default {
                 replaceShowPassword: true,
                 replaceRule: '(https?:\/\/[^:@]+:)([^@]+)(@.+)'
               },
+              rules: [RequiredChange],
               helpText: this.$t('sessions.helpText.esUrl')
             },
             INDEX: {
