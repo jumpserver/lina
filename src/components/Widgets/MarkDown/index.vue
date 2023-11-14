@@ -66,7 +66,9 @@ export default {
         }
       })
       const el = document.querySelector('.result-html')
-      this.resizeObserver.observe(el)
+      if (el) {
+        this.resizeObserver.observe(el)
+      }
     })
   },
   beforeDestroy() {
