@@ -240,7 +240,7 @@ export default {
           key: this.$t('users.Email')
         },
         {
-          value: `${this.object.is_active}`,
+          value: this.object.is_active,
           key: this.$t('users.IsActive')
         },
         {
