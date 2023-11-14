@@ -1,9 +1,11 @@
 <template>
-  <Dialog title="绑定资源" top="80px" v-bind="$attrs" width="700px" v-on="$listeners">
+  <Dialog title="绑定资源" top="80px" v-bind="$attrs" width="760px" v-on="$listeners">
     <div style="padding: 0 20px 20px">
       <el-row>
-        <label class="type-label" for="">类型: </label>
-        <el-select v-model="select2.value" class="select2" placeholder="请选择">
+        <div class="label-zone">
+          <label class="type-label" for="">类型: </label>
+        </div>
+        <el-select v-model="select2.value" class="select2" placeholder="请选择" @change="handleChangeType">
           <el-option-group
             v-for="group in select2.options"
             :key="group.label"
@@ -19,7 +21,9 @@
         </el-select>
       </el-row>
       <el-row>
-        <label class="table-label" for="">选择资源: </label>
+        <div class="label-zone">
+          <label class="table-label" for="">选择资源: </label>
+        </div>
         <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
       </el-row>
     </div>
@@ -35,6 +39,7 @@ export default {
   name: 'BindDrawer',
   components: { Dialog, krryPaging },
   data() {
+    const vm = this
     return {
       select2Done: false,
       select2: {
@@ -52,11 +57,15 @@ export default {
           const offset = (pageIndex - 1) * pageSize
           const params = {
             'limit': limit,
-            'offset': offset
+            'offset': offset,
+            'fields_size': 'mini'
           }
-          const data = await this.$axios.get('/api/v1/assets/assets/', { params })
+          if (!vm.select2.value) {
+            return
+          }
+          const data = await this.$axios.get(`/api/v1/labels/resource-types/${vm.select2.value}/resources/`, { params })
           const results = data['results'].map(item => {
-            return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
+            return { id: item.id, label: item.name }
           })
           return results
         },
@@ -105,6 +114,9 @@ export default {
     this.getResourceTypes()
   },
   methods: {
+    handleChangeType() {
+      this.$refs.pageTransfer.getData(1)
+    },
     async getResourceTypes() {
       const resourceTypes = await this.$axios.get('/api/v1/labels/resource-types/')
       const grouped = _.groupBy(resourceTypes, 'app_label')
@@ -114,7 +126,7 @@ export default {
         for (const type of types) {
           children.push({
             value: type.id,
-            label: type.name
+            label: type.name + '(' + type.app_label + '.' + type.model + ')'
           })
         }
         options.push({
@@ -145,6 +157,10 @@ export default {
 
 .el-row {
   margin: 20px 0;
+}
+
+.label-zone {
+  margin-bottom: 8px;
 }
 
 </style>

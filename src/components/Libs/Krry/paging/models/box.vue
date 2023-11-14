@@ -5,10 +5,12 @@
         v-model="checkAll"
         :indeterminate="isIndeterminate"
         @change="handleCheckAllChange"
-      >{{ title }}</el-checkbox>
-      <span
-        class="check-number"
-      >{{ checkedData.length }}/{{ districtListMock.length }}</span>
+      >
+        {{ title }}
+      </el-checkbox>
+      <span class="check-number">
+        {{ checkedData.length }}/{{ districtListMock.length }}
+      </span>
     </div>
     <div class="el-transfer-panel__body">
       <div
@@ -45,20 +47,18 @@
           :title="item.label"
           class="el-transfer-panel__item"
         >
-          <span
-            v-html="isHighlight ? filterHighlight(item.label) : item.label"
-          />
+          <span v-html="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">无数据</p>
+      <p v-else class="no-data">{{ this.$t('common.NoData') }}</p>
     </div>
     <div class="vip-footer">
-      <el-button :disabled="disabledPre" class="v-page" plain @click="prev">{{
-        pageTexts[0]
-      }}</el-button>
-      <el-button :disabled="disabledNex" class="v-page" plain @click="next">{{
-        pageTexts[1]
-      }}</el-button>
+      <el-button :disabled="disabledPre" class="v-page" plain @click="prev">
+        {{ pageTexts[0] }}
+      </el-button>
+      <el-button :disabled="disabledNex" class="v-page" plain @click="next">
+        {{ pageTexts[1] }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -277,16 +277,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .district-panel {
-  width: 240px;
+  width: 280px;
 
   .el-transfer-panel__header {
     .el-checkbox {
       display: inline-block;
+
+      >>> .el-checkbox__label {
+        font-size: 14px;
+      }
     }
   }
   .el-transfer-panel__body {
-    height: 292px;
+    height: 342px;
     padding: 6px 0;
 
     .el-transfer-panel__filter {
@@ -295,13 +300,13 @@ export default {
 
       .showClear {
         padding-right: 30px;
+        border-radius: 0;
       }
-
       .clear-input {
         position: absolute;
         height: 100%;
         right: 10px;
-        top: 0px;
+        top: 0;
         text-align: center;
         color: #c0c4cc;
         transition: all 0.3s;
@@ -323,7 +328,7 @@ export default {
     }
   }
   .el-checkbox-group {
-    height: 240px;
+    height: 280px;
     overflow: auto;
     &.expand {
       height: 290px;
@@ -331,6 +336,17 @@ export default {
 
     .el-transfer-panel__item {
       display: block;
+      line-height: 28px;
+      height: 28px;
+
+      >>> .el-checkbox__label  {
+        font-weight: 400;
+        line-height: 28px ;
+      }
+
+      >>> .el-checkbox__input {
+        top: 7px;
+      }
     }
   }
   .check-number {

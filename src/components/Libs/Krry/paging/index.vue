@@ -93,7 +93,7 @@ export default {
     },
     pageTexts: {
       type: Array,
-      default: () => ['上一页', '下一页']
+      default: () => ['< 上一页', '下一页 >']
     },
     sort: {
       type: Boolean,
@@ -108,7 +108,8 @@ export default {
       default: () => []
     },
     getSearchData: {
-      type: Function
+      type: Function,
+      default: () => []
     },
     isHighlight: {
       type: Boolean,
@@ -134,8 +135,8 @@ export default {
       noCheckData: [], // 未选中区域的已勾选的数据（待添加到已选区域)
       hasCheckData: [], // 已选中区域的已勾选的数据（从未选区域中待删除)
 
-      noSelectkeyword: '',
-      haSelectkeyword: '',
+      noSelectKeyword: '',
+      haSelectKeyword: '',
 
       disablePre: true,
       disableNex: true,
@@ -214,7 +215,7 @@ export default {
         this.notSelectDataList = this.originList.filter(
           ele =>
             !checkDataId.includes(ele.id) &&
-            (ele.label.includes(this.noSelectkeyword) || this.asyncSearchFlag)
+            (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
         )
         this.dataListNoCheck = this.originList.filter(
           ele => !checkDataId.includes(ele.id)
@@ -225,14 +226,14 @@ export default {
       // 过滤掉数据，保留搜索的数据
       // 如果设置了异步搜索，就不用过滤关键词 this.asyncSearchFlag 为 true
       if (titleId === 0) {
-        this.noSelectkeyword = keyword
+        this.noSelectKeyword = keyword
         if (!this.asyncSearchFlag) {
           this.notSelectDataList = this.dataListNoCheck.filter(val =>
             val.label.includes(keyword)
           )
         }
       } else {
-        this.haSelectkeyword = keyword
+        this.haSelectKeyword = keyword
         this.checkedData = this.selectListCheck.filter(val =>
           val.label.includes(keyword)
         )
@@ -268,7 +269,7 @@ export default {
       this.notSelectDataList = this.notSelectDataList.filter(
         ele =>
           !noCheckDataId.includes(ele.id) &&
-          (ele.label.includes(this.noSelectkeyword) || this.asyncSearchFlag)
+          (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
       this.dataListNoCheck = this.dataListNoCheck.filter(
         ele => !noCheckDataId.includes(ele.id)
@@ -281,7 +282,7 @@ export default {
         this.checkedData = this.originList.filter(
           ele =>
             !dataListNoCheckId.includes(ele.id) &&
-            ele.label.includes(this.haSelectkeyword)
+            ele.label.includes(this.haSelectKeyword)
         )
         this.selectListCheck = this.originList.filter(
           ele => !dataListNoCheckId.includes(ele.id)
@@ -291,7 +292,7 @@ export default {
         this.checkedData.push(...this.noCheckData)
         this.selectListCheck.push(...this.noCheckData)
         this.checkedData = this.checkedData.filter(ele =>
-          ele.label.includes(this.haSelectkeyword)
+          ele.label.includes(this.haSelectKeyword)
         )
       }
     },
@@ -302,7 +303,7 @@ export default {
       this.checkedData = this.checkedData.filter(
         ele =>
           !hasCheckDataId.includes(ele.id) &&
-          ele.label.includes(this.haSelectkeyword)
+          ele.label.includes(this.haSelectKeyword)
       )
       this.selectListCheck = this.selectListCheck.filter(
         ele => !hasCheckDataId.includes(ele.id)
@@ -317,7 +318,7 @@ export default {
       this.notSelectDataList = this.originList.filter(
         ele =>
           !selectListCheckId.includes(ele.id) &&
-          (ele.label.includes(this.noSelectkeyword) || this.asyncSearchFlag)
+          (ele.label.includes(this.noSelectKeyword) || this.asyncSearchFlag)
       )
       this.dataListNoCheck = this.originList.filter(
         ele => !selectListCheckId.includes(ele.id)
@@ -400,7 +401,7 @@ export default {
   position: relative;
   display: inline-block;
   vertical-align: middle;
-  margin: 0 5px;
+  margin: 0 8px;
 
   .el-button.is-circle {
     border-radius: 50%;
