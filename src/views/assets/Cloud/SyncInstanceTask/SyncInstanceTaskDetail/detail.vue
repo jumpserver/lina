@@ -56,14 +56,6 @@ export default {
               )
             }.bind(this)
           }
-        },
-        {
-          title: this.$t('common.Strategy'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('xpack.Execute'),
-            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
-          }
         }
       ],
       strategyRelationConfig: {
