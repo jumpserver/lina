@@ -22,6 +22,7 @@
       class="search-input"
       @blur="focus = false"
       @focus="focus = true"
+      @change="handleChange"
       @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
@@ -98,6 +99,9 @@ export default {
       this.filterValue = item.value
       this.handleConfirm()
     },
+    handleChange: _.debounce(function(item) {
+      this.handleConfirm()
+    }, 240),
     handleConfirm() {
       if (this.filterValue === '') return
 
