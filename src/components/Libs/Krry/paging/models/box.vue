@@ -53,10 +53,10 @@
       <p v-else class="no-data">{{ this.$t('common.NoData') }}</p>
     </div>
     <div class="vip-footer">
-      <el-button :disabled="disabledPre" class="v-page" plain @click="prev">
+      <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
         {{ pageTexts[0] }}
       </el-button>
-      <el-button :disabled="disabledNex" class="v-page" plain @click="next">
+      <el-button :disabled="disabledNex" class="v-page" plain small @click="next">
         {{ pageTexts[1] }}
       </el-button>
     </div>

@@ -116,8 +116,8 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/api/v1/asses/platforms/?limit=1000').then(data => {
-      this.platforms = data['result']
+    this.$axios.get('/api/v1/assets/platforms/').then(data => {
+      this.platforms = data
       this.loadRecentPlatformIds()
       this.activeType = Object.keys(this.iPlatforms)[0]
     })

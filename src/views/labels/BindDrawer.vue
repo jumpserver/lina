@@ -1,5 +1,5 @@
 <template>
-  <Dialog title="绑定资源" top="80px" v-bind="$attrs" width="760px" v-on="$listeners">
+  <Dialog title="绑定资源" top="80px" v-bind="$attrs" width="768px" @confirm="handleConfirm" v-on="$listeners">
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
@@ -32,7 +32,6 @@
 
 <script>
 import krryPaging from '@/components/Libs/Krry/paging/index.vue'
-import { getUserList } from '@/api/users'
 import Dialog from '@/components/Dialog/index.vue'
 
 export default {
@@ -75,38 +74,16 @@ export default {
           const params = {
             'limit': limit,
             'offset': offset,
-            'oid': 'ROOT',
             'search': keyword
           }
-          const data = await getUserList(params)
+          const data = await this.$axios.get(`/api/v1/labels/resource-types/${vm.select2.value}/resources/`, { params })
           const results = data['results'].map(item => {
-            return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
+            return { id: item.id, label: item.name }
           })
           return results
         },
         selectedData: [],
         showClearBtn: true
-      },
-      table: {
-        tableConfig: {
-          url: '/api/v1/assets/assets/',
-          columns: ['id', 'name'],
-          columnsShow: {
-            default: ['id', 'name'],
-            min: ['id', 'name']
-          },
-          columnsMeta: {
-            name: {
-              formatter: (row, col) => {
-                return row.name
-              }
-            }
-          }
-        },
-        headerActions: {
-          hasLeftActions: false,
-          hasRightActions: false
-        }
       }
     }
   },
@@ -116,6 +93,10 @@ export default {
   methods: {
     handleChangeType() {
       this.$refs.pageTransfer.getData(1)
+    },
+    handleConfirm() {
+      const selectedData = this.$refs.pageTransfer.getSelectedData()
+      console.log('Select resources: ', selectedData)
     },
     async getResourceTypes() {
       const resourceTypes = await this.$axios.get('/api/v1/labels/resource-types/')
