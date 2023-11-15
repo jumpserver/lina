@@ -75,7 +75,7 @@ export default {
           formatterData = res
         })
       } else {
-        this.formatterData = data
+        formatterData = data
       }
       return (
         <span>{formatterData}</span>
