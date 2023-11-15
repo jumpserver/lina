@@ -76,7 +76,9 @@ export default {
           this.formatterData = res
         })
       } else {
-        this.formatterData = data
+        if (data instanceof Object && data.hasOwnProperty('componentOptions')) {
+          this.formatterData = h(data.componentOptions.tag, data.componentOptions.children)
+        }
       }
       return (
         <span>{this.formatterData}</span>
