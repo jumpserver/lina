@@ -1771,6 +1771,7 @@
     "securityPasswordSpecialChar": "特殊文字を含む必要があります",
     "securityPasswordUpperCase": "大文字を含む必要があります",
     "securityServiceAccountRegistration": "端末登録",
+    "Storage": "設定を保存する",
     "siteUrl": "現在のサイトURL",
     "technologyConsult": "技術コンサルティング",
     "terminalAssetListPageSize": "資産ページングのページ数あたり",
