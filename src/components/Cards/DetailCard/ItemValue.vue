@@ -18,9 +18,7 @@ export default {
     }
   },
   data() {
-    return {
-      formatterData: ''
-    }
+    return {}
   },
   computed: {
     displayValue() {
@@ -69,19 +67,18 @@ export default {
     }
   },
   render(h) {
+    let formatterData = ''
     if (typeof this.formatter === 'function') {
       const data = this.formatter(this.item, this.value)
       if (data instanceof Promise) {
         data.then(res => {
-          this.formatterData = res
+          formatterData = res
         })
       } else {
-        if (data instanceof Object && data.hasOwnProperty('componentOptions')) {
-          this.formatterData = h(data.componentOptions.tag, data.componentOptions.children)
-        }
+        this.formatterData = data
       }
       return (
-        <span>{this.formatterData}</span>
+        <span>{formatterData}</span>
       )
     }
     if (this.value instanceof Array) {
