@@ -306,6 +306,8 @@ export default {
       const data = processResults.bind(this)(resp)
       if (!data.pagination) {
         this.params.hasMore = false
+      } else {
+        await this.loadMore(this.getInitialOptions)
       }
       data.results.forEach((v) => {
         if (this.optionsValues.indexOf(v.value) === -1) {

@@ -60,8 +60,9 @@ export default {
                       if (item.type.value === 'sftp') return
                       options.push({ label: item.name, value: item.id })
                     })
+                    const more = !!data.next
                     data.results = options
-                    return { results: options, pagination: data.next, total: data.count }
+                    return { results: options, pagination: more, total: data.count }
                   }
                 },
                 multiple: false
