@@ -329,6 +329,39 @@ export default {
             permissions: ['terminal.change_applethost'],
             activeMenu: '/settings/applets'
           }
+        },
+        {
+          path: 'virtual-apps/create',
+          name: 'VirtualAppCreate',
+          component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.VirtualAppCreate'),
+            permissions: ['terminal.add_virtualapp'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'virtual-apps/:id',
+          name: 'VirtualAppDetail',
+          component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppDetail/index.vue'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostDetail'),
+            permissions: ['terminal.view_virtualapp'],
+            activeMenu: '/settings/applets'
+          }
+        },
+        {
+          path: 'virtual-apps/:id/update',
+          name: 'VirtualAppUpdate',
+          component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostUpdate'),
+            permissions: ['terminal.change_virtualapp'],
+            activeMenu: '/settings/applets'
+          }
         }
       ]
     },
