@@ -4,6 +4,7 @@
 
 <script>
 import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
+import { MatchExcludeParenthesis, Required } from '@/components/Form/DataForm/rules'
 
 export default {
   components: {
@@ -16,11 +17,20 @@ export default {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
           [this.$t('common.Automations'), ['deploy_options'], 3],
-          [this.$t('assets.Account'), ['auto_create_accounts', 'accounts_create_amount']]
+          [this.$t('assets.Account'), [
+            'using_same_account',
+            'auto_create_accounts', 'accounts_create_amount']
+          ]
         ],
         addFieldsMeta: {
+          name: {
+            rules: [Required, MatchExcludeParenthesis]
+          },
           accounts_create_amount: {
             hidden: (formValue) => !formValue['auto_create_accounts']
+          },
+          using_same_account: {
+            readonly: this.$store.getters.publicSettings['CACHE_LOGIN_PASSWORD_ENABLED'] !== true
           },
           deploy_options: {
             fields: [

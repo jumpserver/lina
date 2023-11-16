@@ -109,7 +109,8 @@
       "ExecutionList": "Execution list",
       "Reason": "Reason",
       "AccountBackup": "Account backup",
-      "RecipientHelpText": "Currently, only email sending is supported. If both recipients A and B are set, the account key will be split into two parts: front and back"
+      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
+      "RecipientServer":"Receiving server"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
@@ -498,6 +499,8 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
+    "BelongAll": "Contains all",
+    "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
     "New": "New",
@@ -867,6 +870,7 @@
     "SecretKey": "Secret Key",
     "NotSpecialEmoji": "No special emoji allowed",
     "notAlphanumericUnderscore": "Only numbers, letters and underscores can be entered",
+    "notParenthesis": "Not contain ( )",
     "Task": "Task",
     "Cas": "CAS",
     "Invalid": "Invalid",
@@ -901,7 +905,7 @@
     "IsActive": "Is active",
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
-    "BelongTo": "Belong to",
+    "BelongTo": "Contains any",
     "GreatEqualThan": "Greater than or equal to",
     "PasswordRule": "PasswordRule",
     "Uppercase": "Uppercase",
@@ -1289,7 +1293,7 @@
     "FileTransfer": "File transfer",
     "OnlineSession": "Online session",
     "CreateCommandStorage": "Create command storage",
-    "CreateReplayStorage": "Create replay storage",
+    "CreateReplayStorage": "Create object storage",
     "Dashboard": "Dashboard",
     "DatabaseApp": "Database Apps",
     "DatabaseAppCreate": "Database app create",
@@ -1361,7 +1365,7 @@
     "ApplicationPermissionDetail": "Application permission detail",
     "ApplicationPermissionUpdate": "Application permission update",
     "RemoteAppUpdate": "Remote app update",
-    "ReplayStorageUpdate": "Replay storage update",
+    "ReplayStorageUpdate": "Replay object update",
     "Detail": "Detail",
     "Activity": "Activity",
     "SessionOffline": "Sessions offline",
@@ -1471,6 +1475,7 @@
   "terminal": {
     "OnlineSessionHelpMsg": "The current session cannot be offline because it is an online session of the current user. Currently, only users who have logged in through web mode are recorded.",
     "Offline": "Offline",
+    "Active": "Active",
     "OfflineSuccessMsg": "Offline success",
     "BulkOffline": "Bulk offline",
     "Marketplace": "Marketplace",
@@ -1539,7 +1544,7 @@
     "remoteAddr": "Remote addr",
     "replay": "replay",
     "replaySession": "Replay session",
-    "replayStorage": "Replay storage",
+    "replayStorage": "Object storage",
     "riskLevel": "Risk level",
     "session": "Session",
     "sshPort": "SSH port",
@@ -1762,6 +1767,7 @@
     "securityPasswordSpecialChar": "Must contain special characters",
     "securityPasswordUpperCase": "Must contain capital letters",
     "securityServiceAccountRegistration": "Service account registration",
+    "Storage": "Storage",
     "siteUrl": "Current SITE URL",
     "technologyConsult": "Technology Consult",
     "terminalAssetListPageSize": "List page size",
@@ -1817,7 +1823,8 @@
     "BasicTools": "Basic tool",
     "sync": "Sync",
     "AccountStorage": "Account Storage",
-    "Passkey": "Passkey"
+    "Passkey": "Passkey",
+    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage."
   },
   "tickets": {
     "BatchApproval": "Batch approval",
@@ -2317,6 +2324,7 @@
   },
   "profile": {
     "CreateAccessKey": "Create Access key",
+    "AccessIP": "Access IP",
     "ApiKeyWarning": "To reduce the risk of AccessKey exposure, Secret is provided only during creation and cannot be queried again later. Please keep it safe.",
     "PasskeyAddDisableInfo": "Your authentication source is {source}, and Passkey addition is not supported."
   }

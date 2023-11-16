@@ -11,6 +11,7 @@
       :title="$tc('profile.CreateAccessKey')"
       :visible.sync="visible"
       width="700px"
+      @close="onClose"
       @confirm="visible = false"
     >
       <el-alert type="warning">
@@ -32,7 +33,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DateFormatter } from '@/components/Table/TableFormatters'
+import { ArrayFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import Dialog from '@/components/Dialog/index.vue'
 
 export default {
@@ -52,7 +53,7 @@ export default {
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
-        columns: ['id', 'secret', 'is_active', 'date_created', 'date_last_used', 'actions'],
+        columns: ['id', 'secret', 'ip_group', 'is_active', 'date_created', 'date_last_used', 'actions'],
         columnsShow: {
           min: ['id', 'actions']
         },
@@ -70,13 +71,17 @@ export default {
             label: this.$t('common.DateCreated'),
             formatter: DateFormatter
           },
+          ip_group: {
+            label: this.$t('profile.AccessIP'),
+            formatter: ArrayFormatter
+          },
           actions: {
             formatterArgs: {
-              hasUpdate: false,
               hasClone: false,
+              updateRoute: 'ApiKeyCreateUpdate',
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
-                  this.getRefsListTable.reloadTable()
+                  this.reloadTable()
                   this.$message.success(this.$tc('common.deleteSuccessMsg'))
                 }).catch(error => {
                   this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
@@ -94,7 +99,7 @@ export default {
                     this.$axios.patch(`${ajaxUrl}${row.id}/`,
                       { is_active: !row.is_active }
                     ).then(res => {
-                      this.getRefsListTable.reloadTable()
+                      this.reloadTable()
                       this.$message.success(this.$tc('common.updateSuccessMsg'))
                     }).catch(error => {
                       this.$message.error(this.$t('common.updateErrorMsg') + ' ' + error)
@@ -129,12 +134,13 @@ export default {
       }
     }
   },
-  computed: {
-    getRefsListTable() {
-      return this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable || {}
-    }
-  },
   methods: {
+    onClose() {
+      this.reloadTable()
+    },
+    reloadTable() {
+      this.$refs.GenericListTable.reloadTable()
+    }
   }
 }
 </script>

@@ -3,13 +3,14 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     v-bind="$data"
+    :help-message="getHelpMessage()"
   />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { UploadSecret } from '@/components/Form/FormFields'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
@@ -21,7 +22,7 @@ export default {
     const storageType = this.$route.query.type || 's3'
     const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType] || {}
     return {
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'RelayStorage' }},
+      successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' }},
       url: `/api/v1/terminal/replay-storages/`,
       initial: {
         type: storageType,
@@ -49,8 +50,15 @@ export default {
         meta: {
           fields: storageTypeMeta.meta,
           fieldsMeta: {
-            SECRET_KEY: {
-              component: UpdateToken
+            SFTP_PASSWORD: {
+              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'password'
+            },
+            STP_PRIVATE_KEY: {
+              component: UploadSecret,
+              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'ssh_key'
+            },
+            STP_PASSPHRASE: {
+              hidden: (formValue) => formValue.STP_SECRET_TYPE !== 'ssh_key'
             }
           }
         },
@@ -59,7 +67,7 @@ export default {
         }
       },
       cleanFormValue(values) {
-        const encryptedFields = ['SECRET_KEY', 'ACCOUNT_KEY']
+        const encryptedFields = ['SFTP_PASSWORD', 'STP_PASSPHRASE', 'SECRET_KEY', 'ACCOUNT_KEY']
         const meta = values.meta
         for (const item of encryptedFields) {
           const val = meta[item]
@@ -70,6 +78,12 @@ export default {
         return values
       }
     }
+  },
+  mounted() {
+    if (this.$route.query.type === 'sftp' && !this.$hasLicense()) this.$router.push({ name: '404' })
+  },
+  methods: {
+    getHelpMessage() { if (!this.$hasLicense()) return ''; else return this.$t('setting.ReplayStorageCreateUpdateHelpMessage') }
   }
 }
 </script>

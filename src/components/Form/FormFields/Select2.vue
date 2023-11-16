@@ -215,6 +215,13 @@ export default {
       handler(newValue, oldValue) {
       },
       deep: true
+    },
+    iOptions(val) {
+      if (val.length === 0) {
+        this.remote = false
+      } else {
+        this.remote = true
+      }
     }
   },
   async mounted() {

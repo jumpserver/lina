@@ -76,10 +76,9 @@ export default {
         }
       },
       nodesDeps: {
-        'view_console': ['rbac.view_console'],
-        'view_audit': ['rbac.view_audit'],
+        'view_console': [],
+        'view_audit': [],
         'view_workbench': [
-          'rbac.view_workbench',
           'authentication.view_connectiontoken', 'authentication.add_connectiontoken',
           'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken'
         ],

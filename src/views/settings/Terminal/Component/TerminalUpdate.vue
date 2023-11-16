@@ -56,6 +56,7 @@ export default {
       })
       const replayOptions = await getAllReplayStorage()
       replayOptions.forEach(item => {
+        if (item.type.value === 'sftp') return
         this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
       })
     }

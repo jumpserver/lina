@@ -277,6 +277,9 @@ export default {
         this.$message.success(this.$tc('common.removeSuccessMsg'))
       })
     },
+    reloadTable() {
+      this.$refs.GenericListPage.reloadTable()
+    },
     bulkActionCallback(selectedRows, reloadTable, actionType) {
       const vm = this
       const url = '/api/v1/users/users/'
@@ -291,11 +294,11 @@ export default {
     },
     handleInviteDialogClose() {
       this.InviteDialogSetting.InviteDialogVisible = false
-      this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+      this.reloadTable()
     },
     handleDialogUpdate() {
       this.updateSelectedDialogSetting.visible = false
-      this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+      this.reloadTable()
     }
   }
 }

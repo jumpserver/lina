@@ -109,7 +109,8 @@
       "ExecutionList": "実行リスト",
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
-      "RecipientHelpText": "現在はメール送信のみをサポートしており、受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます"
+      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
+      "RecipientServer":"受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
@@ -498,6 +499,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
+    "BelongAll": "すべてが含まれています",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
@@ -804,6 +806,7 @@
     "FormatError": "フォーマットエラー",
     "NotSpecialEmoji": "特殊な表情記号の入力は許可されていません",
     "notAlphanumericUnderscore": "数字、文字、アンダースコアのみ入力可能",
+    "notParenthesis": "含まない ( )",
     "WeekCronSelect": {
       "Monday": "月曜日",
       "Tuesday": "火曜日",
@@ -900,7 +903,7 @@
     "IsActive": "アクティブです",
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
-    "BelongTo": "所属する",
+    "BelongTo": "どれも含まれます",
     "GreatEqualThan": "以上または等しい",
     "PasswordRule": "パスワードのルール",
     "Uppercase": "大文字",
@@ -1295,7 +1298,7 @@
     "OnlineSession": "オンラインセッション",
     "OnlineUserDevices": "オンラインデバイス",
     "CreateCommandStorage": "コマンドストアの作成",
-    "CreateReplayStorage": "録画ストレージの作成",
+    "CreateReplayStorage": "オブジェクトストレージを作成する",
     "Dashboard": "ダッシュボード",
     "DatabaseApp": "データベース",
     "DatabaseAppCreate": "データベースアプリケーションの作成",
@@ -1366,7 +1369,7 @@
     "ApplicationPermissionDetail": "アプリライセンスの詳細",
     "ApplicationPermissionUpdate": "アプリ認可ルールの更新",
     "RemoteAppUpdate": "リモートアプリケーションの更新",
-    "ReplayStorageUpdate": "録画保存の更新",
+    "ReplayStorageUpdate": "オブジェクトストレージを更新する",
     "Detail": "詳細",
     "SessionOffline": "履歴セッション",
     "SessionOnline": "オンラインセッション",
@@ -1464,6 +1467,7 @@
   },
   "terminal": {
     "Offline": "オフライン",
+    "Active": "アクティブ",
     "OnlineSessionHelpMsg": "セッションが現在のユーザーのオンラインセッションであるため、現在のセッションをオフラインできません。現在はWebログイン済みのユーザーのみが記録されています。",
     "OfflineSuccessMsg": "オフラインに成功しました",
     "BulkOffline": "オフライン",
@@ -1533,7 +1537,7 @@
     "remoteAddr": "リモートアドレス",
     "replay": "リプレイ",
     "replaySession": "再生セッション",
-    "replayStorage": "録画保存",
+    "replayStorage": "オブジェクトストレージ",
     "riskLevel": "リスクレベル",
     "session": "会話",
     "sshPort": "SSHポート",
@@ -1767,6 +1771,7 @@
     "securityPasswordSpecialChar": "特殊文字を含む必要があります",
     "securityPasswordUpperCase": "大文字を含む必要があります",
     "securityServiceAccountRegistration": "端末登録",
+    "Storage": "設定を保存する",
     "siteUrl": "現在のサイトURL",
     "technologyConsult": "技術コンサルティング",
     "terminalAssetListPageSize": "資産ページングのページ数あたり",
@@ -1809,7 +1814,8 @@
     "Applets": "リモート アプリケーション",
     "sync": "同期",
     "AccountStorage": "アカウントストレージ",
-    "Passkey": "パスキー"
+    "Passkey": "パスキー",
+    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。"
   },
   "tickets": {
     "BatchApproval": "大量承認です",
@@ -2308,6 +2314,7 @@
   },
   "profile": {
     "CreateAccessKey": "Create Access key",
+    "AccessIP": "Access IP",
     "ApiKeyWarning": "AccessKeyの漏洩リスクを低減するため、Secretは作成時にのみ提供され、後で再度クエリできません。安全に保管してください。",
     "PasskeyAddDisableInfo": "あなたの認証元は {source} であり、Passkeyの追加はサポートされていません。"
   }

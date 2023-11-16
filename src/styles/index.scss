@@ -1,5 +1,5 @@
 @import './mixin.scss';
-@import './transition.scss';
+//@import './transition.scss';
 @import './sidebar.scss';
 @import './menu.scss';
 @import './fonts/font-awesome.min.css';
@@ -24,6 +24,7 @@
 
 body {
   height: calc(100% - 50px);
+  overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   color: #676a6c;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;

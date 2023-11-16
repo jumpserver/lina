@@ -30,14 +30,21 @@ export default {
           min: ['user_display', 'actions'],
           default: [
             'user_display', 'backend_display', 'ip', 'city',
-            'user_agent', 'date_created', 'actions'
+            'user_agent', 'date_created', 'is_active', 'actions'
           ]
         },
         columns: [
           'user_display', 'backend_display', 'ip', 'city', 'type',
-          'user_agent', 'date_created', 'date_expired', 'actions'
+          'user_agent', 'date_created', 'is_active', 'date_expired', 'actions'
         ],
         columnsMeta: {
+          is_active: {
+            label: this.$t('terminal.Active'),
+            formatterArgs: {
+              showText: false,
+              showFalse: false
+            }
+          },
           user_display: {
             label: this.$t('audits.User'),
             formatter: function(row) {
@@ -87,6 +94,19 @@ export default {
         hasBulkDelete: false,
         hasLeftActions: true,
         hasRightActions: true,
+        searchConfig: {
+          exclude: ['is_active'],
+          options: [
+            {
+              value: 'is_active',
+              label: this.$t('terminal.Active'),
+              children: [
+                { value: true, label: this.$t('common.Yes') },
+                { value: false, label: this.$t('common.No') }
+              ]
+            }
+          ]
+        },
         extraMoreActions: [
           {
             name: 'OfflineSelected',

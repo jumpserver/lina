@@ -85,7 +85,7 @@ export default {
           <span>{label} </span>
           {helpText
             ? (<el-tooltip content={helpText} placement='top'>
-              <i class='fa fa-info-circle'></i>
+              <i class='fa fa-question-circle-o'></i>
             </el-tooltip>) : ''}
         </span>)
     }

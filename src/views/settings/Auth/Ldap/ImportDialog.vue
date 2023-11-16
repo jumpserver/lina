@@ -101,6 +101,9 @@ export default {
           existing: {
             label: this.$t('users.Existing'),
             width: '120px'
+          },
+          actions: {
+            has: false
           }
         }
       },
@@ -176,6 +179,9 @@ export default {
       } else {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
+        }).catch(error => {
+          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
+          this.$message.error(errorMessage)
         }).finally(() => {
           this.dialogLdapUserImportAllLoginStatus = false
         })
