@@ -499,7 +499,7 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
-    "BelongAll": "Include all",
+    "BelongAll": "Contains all",
     "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
@@ -905,7 +905,7 @@
     "IsActive": "Is active",
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
-    "BelongTo": "Belong to",
+    "BelongTo": "Contains any",
     "GreatEqualThan": "Greater than or equal to",
     "PasswordRule": "PasswordRule",
     "Uppercase": "Uppercase",
