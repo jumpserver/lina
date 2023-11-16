@@ -101,6 +101,9 @@ export default {
           existing: {
             label: this.$t('users.Existing'),
             width: '120px'
+          },
+          actions: {
+            has: false
           }
         }
       },
