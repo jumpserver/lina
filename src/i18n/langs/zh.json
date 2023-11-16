@@ -477,7 +477,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
-    "BelongAll": "包含所有",
+    "BelongAll": "同时包含",
     "WordSep": "",
     "PasswordRule": "密码生成规则",
     "Length": "长度",
@@ -511,7 +511,7 @@
     "MatchResult": "匹配结果",
     "GreatEqualThan": "大于等于",
     "LessEqualThan": "小于等于",
-    "BelongTo": "所属",
+    "BelongTo": "任意包含",
     "Email": "邮箱",
     "IsActive": "激活",
     "All": "所有",

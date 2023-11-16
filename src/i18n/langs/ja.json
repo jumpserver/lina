@@ -499,7 +499,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
-    "BelongAll": "すべての",
+    "BelongAll": "すべてが含まれています",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
@@ -903,7 +903,7 @@
     "IsActive": "アクティブです",
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
-    "BelongTo": "所属する",
+    "BelongTo": "どれも含まれます",
     "GreatEqualThan": "以上または等しい",
     "PasswordRule": "パスワードのルール",
     "Uppercase": "大文字",
