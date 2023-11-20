@@ -91,7 +91,7 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('sessions.SetToDefault'),
-                  can: this.$hasPerm('terminal.change_replaystorage'),
+                  can: (value) => this.$hasPerm('terminal.change_replaystorage') && value.row.type.value !== 'sftp',
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultReplayStorage(row.id).then(data => {
