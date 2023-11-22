@@ -1,5 +1,14 @@
 <template>
-  <Dialog title="绑定资源" top="80px" v-bind="$attrs" width="768px" @confirm="handleConfirm" v-on="$listeners">
+  <Dialog
+    :close-on-click-modal="false"
+    :destory-on-close="true"
+    title="绑定资源"
+    top="80px"
+    v-bind="$attrs"
+    width="768px"
+    @confirm="handleConfirm"
+    v-on="$listeners"
+  >
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
@@ -24,7 +33,7 @@
         <div class="label-zone">
           <label class="table-label" for="">选择资源: </label>
         </div>
-        <krryPaging ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+        <krryPaging v-if="!transferLoading" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
       </el-row>
     </div>
   </Dialog>
@@ -37,50 +46,51 @@ import Dialog from '@/components/Dialog/index.vue'
 export default {
   name: 'BindDrawer',
   components: { Dialog, krryPaging },
+  props: {
+    label: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     const vm = this
+    const getPageData = async({ pageIndex, pageSize, keyword }) => {
+      const limit = pageSize
+      const offset = (pageIndex - 1) * pageSize
+      const params = {
+        'limit': limit,
+        'offset': offset,
+        'fields_size': 'mini'
+      }
+      if (keyword) {
+        params['search'] = keyword
+      }
+      if (!vm.select2.value) {
+        return
+      }
+      const url = `/api/v1/labels/resource-types/${vm.select2.value}/resources/`
+      const data = await this.$axios.get(url, { params })
+      return data['results'].map(item => {
+        return { id: item.id, label: item.name }
+      })
+    }
     return {
-      select2Done: false,
       select2: {
         value: '',
         options: [],
         multiple: false
       },
+      transferLoading: false,
       pagingTransfer: {
-        pageSize: 10,
+        pageSize: 100,
         filterable: true,
         async: true,
         dataList: [],
-        getPageData: async function(pageIndex, pageSize) {
-          const limit = pageSize
-          const offset = (pageIndex - 1) * pageSize
-          const params = {
-            'limit': limit,
-            'offset': offset,
-            'fields_size': 'mini'
-          }
-          if (!vm.select2.value) {
-            return
-          }
-          const data = await this.$axios.get(`/api/v1/labels/resource-types/${vm.select2.value}/resources/`, { params })
-          const results = data['results'].map(item => {
-            return { id: item.id, label: item.name }
-          })
-          return results
+        getPageData: function(pageIndex, pageSize) {
+          return getPageData({ pageIndex, pageSize })
         },
         getSearchData: async function(keyword, pageIndex, pageSize) {
-          const limit = pageSize
-          const offset = (pageIndex - 1) * pageSize
-          const params = {
-            'limit': limit,
-            'offset': offset,
-            'search': keyword
-          }
-          const data = await this.$axios.get(`/api/v1/labels/resource-types/${vm.select2.value}/resources/`, { params })
-          const results = data['results'].map(item => {
-            return { id: item.id, label: item.name }
-          })
-          return results
+          return getPageData({ keyword, pageIndex, pageSize })
         },
         selectedData: [],
         showClearBtn: true
@@ -92,10 +102,31 @@ export default {
   },
   methods: {
     handleChangeType() {
+      const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
+      this.$axios.get(url).then(res => {
+        this.pagingTransfer.selectedData = res.map(item => {
+          return { id: item.id, label: item.name }
+        })
+      })
       this.$refs.pageTransfer.getData(1)
     },
     handleConfirm() {
       const selectedData = this.$refs.pageTransfer.getSelectedData()
+      const data = {
+        res_ids: selectedData
+      }
+      const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
+      this.$axios.put(url, data).then(res => {
+        this.pagingTransfer.selectedData = []
+        this.pagingTransfer.dataList = []
+        this.select2.value = ''
+        this.$message.success('绑定成功')
+        this.transferLoading = true
+        setTimeout(() => {
+          this.transferLoading = false
+        }, 100)
+        this.$emit('update:visible', false)
+      })
       console.log('Select resources: ', selectedData)
     },
     async getResourceTypes() {

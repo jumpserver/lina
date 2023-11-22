@@ -1,22 +1,28 @@
 <template>
   <div>
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDrawer :visible.sync="bindVisible" />
+    <BindDialog :label="label" :visible.sync="bindVisible" />
+    <LabelResourcesDialog v-if="resDialogVisible" :label="label" :visible.sync="resDialogVisible" @addResource="handleAddResource" />
   </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import BindDrawer from '@/views/labels/BindDrawer.vue'
+import BindDialog from './BindDialog.vue'
+import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
 
 export default {
   components: {
-    BindDrawer,
+    LabelResourcesDialog,
+    BindDialog,
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       bindVisible: false,
+      resDialogVisible: false,
+      label: {},
       tableConfig: {
         url: '/api/v1/labels/labels/',
         columnsShow: {
@@ -24,13 +30,25 @@ export default {
           min: ['name', 'action']
         },
         columnsMeta: {
+          res_count: {
+            label: '资源数量',
+            formatter: (row) => {
+              const onClick = () => {
+                vm.handleClickResCount(row)
+              }
+              return (
+                <el-link type='success' onClick={onClick}>{ row['res_count'] }</el-link>
+              )
+            }
+          },
           actions: {
             formatterArgs: {
               extraActions: [
                 {
                   title: 'Bind',
                   name: 'bind',
-                  callback: () => {
+                  callback: ({ row }) => {
+                    this.label = row
                     this.bindVisible = true
                   }
                 }
@@ -41,6 +59,16 @@ export default {
         }
       },
       headerActions: {}
+    }
+  },
+  methods: {
+    handleClickResCount(row) {
+      this.label = row
+      this.resDialogVisible = true
+    },
+    handleAddResource() {
+      this.bindVisible = true
+      this.resDialogVisible = false
     }
   }
 }
