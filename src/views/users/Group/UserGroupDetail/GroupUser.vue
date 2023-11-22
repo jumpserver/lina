@@ -46,12 +46,21 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              this.$axios.post(
-                `/api/v1/users/groups/${this.object.id}/add-all-users/`,
-              ).then(res => {
-                this.$message.success(this.$tc('common.AddSuccessMsg'))
-                window.location.reload()
-              })
+              const msg = `${this.$t('users.AddAllMembersWarningMsg')} ?`
+              this.$confirm(msg, this.$tc('common.Info'), {
+                type: 'warning',
+                confirmButtonClass: 'el-button--danger',
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  this.$axios.post(
+                    `/api/v1/users/groups/${this.object.id}/add-all-users/`,
+                  ).then(res => {
+                    this.$message.success(this.$tc('common.AddSuccessMsg'))
+                    done()
+                    window.location.reload()
+                  })
+                }
+              }).catch(() => {})
             }
           })
         }

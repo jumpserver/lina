@@ -1895,6 +1895,7 @@
     "KokoSettingUpdate": "Koko 配置设置",
     "UserSetting": "偏好设置",
     "AllMembers": "全部成员",
+    "AddAllMembersWarningMsg": "你确定要添加全部成员",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
     "Set": "已设置",
