@@ -735,6 +735,7 @@
     "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
+    "SyncUser": "ユーザーを同期する",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",

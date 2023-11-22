@@ -110,7 +110,7 @@
       "Reason": "Reason",
       "AccountBackup": "Account backup",
       "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
-      "RecipientServer":"Receiving server"
+      "RecipientServer": "Receiving server"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
@@ -734,6 +734,7 @@
     "Failed": "Failed",
     "Pending": "Pending",
     "ClickCopy": "Click copy",
+    "SyncUser": "Sync User",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
