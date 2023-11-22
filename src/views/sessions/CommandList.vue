@@ -30,12 +30,8 @@ export default {
   data() {
     const vm = this
     const dateFrom = getDaysAgo(7).toISOString()
-    const dateTo = getDayEnd().toISOString()
+    const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
     return {
-      query: {
-        date_from: dateFrom,
-        date_to: dateTo
-      },
       loading: true,
       tableConfig: {
         url: '',
