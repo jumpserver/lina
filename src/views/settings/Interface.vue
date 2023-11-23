@@ -86,7 +86,8 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
-        [this.$t('xpack.Images'), ['login_image']]
+        [this.$t('xpack.Images'), ['login_image']],
+        [this.$t('xpack.Beian'), ['beian_link', 'beian_text']]
       ],
       fieldsMeta: {
         login_title: {

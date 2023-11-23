@@ -2317,7 +2317,8 @@
     "officialWebsite": "Official website link",
     "Template": {
       "Template": "Template"
-    }
+    },
+    "Beian": "Registration"
   },
   "applets": {
     "PublishStatus": "Publish status",
