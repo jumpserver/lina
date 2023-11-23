@@ -110,7 +110,7 @@
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
       "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
-      "RecipientServer":"受信サーバー"
+      "RecipientServer": "受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
@@ -2307,7 +2307,8 @@
       "CrontabOfCreateUpdatePage": "例: 毎週日曜日03:05に <5 3 * * 0> <br/> 5桁のLinux crontab式を使用して、時分割日月曜日> (<a href = \"https://tool.lu/crontab/\" target = \"_ ツール </a>) <br/> 定期実行とサイクル実行を同時に設定している場合は、優先的に定期実行を使って",
       "IntervalOfCreateUpdatePage": "単位: 時",
       "UsernameOfCreateUpdatePage": "ターゲットホスト上のユーザーのユーザー名存在する場合は、ユーザーパスワードを変更します存在しない場合は、ユーザーを追加してパスワードを設定します"
-    }
+    },
+    "Beian": "ファイリング"
   },
   "applets": {
     "PublishStatus": "投稿ステータス",
