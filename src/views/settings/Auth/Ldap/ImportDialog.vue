@@ -24,6 +24,9 @@
             v-bind="select2"
           />
         </span>
+        <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
+          {{ $t('common.SyncUser') }}
+        </el-button>
         <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
           {{ $t('common.Import') }}
         </el-button>
@@ -46,7 +49,7 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import ListTable from '@/components/Table/ListTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
-import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
+import { importLdapUser } from '@/api/settings'
 import { getErrorResponseMsg } from '@/utils/common'
 
 export default {
@@ -60,6 +63,7 @@ export default {
     return {
       dialogLdapUserImportLoginStatus: false,
       dialogLdapUserImportAllLoginStatus: false,
+      dialogLdapUserSyncStatus: false,
       refreshed: false,
       headerActions: {
         hasCreate: false,
@@ -69,11 +73,6 @@ export default {
         hasImport: false,
         hasUpdate: false,
         handleRefreshClick: async({ reloadTable }) => {
-          if (!this.refreshed) {
-            await refreshLdapUserCache()
-            await startLdapUserCache()
-            this.refreshed = true
-          }
           reloadTable()
         }
       },
@@ -101,6 +100,9 @@ export default {
           existing: {
             label: this.$t('users.Existing'),
             width: '120px'
+          },
+          actions: {
+            has: false
           }
         }
       },
@@ -182,6 +184,29 @@ export default {
         }).finally(() => {
           this.dialogLdapUserImportAllLoginStatus = false
         })
+      }
+    },
+    enableWS() {
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/ldap/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
+    },
+    SyncUserClick() {
+      this.dialogLdapUserSyncStatus = true
+      this.enableWS()
+      this.ws.onopen = (e) => {
+        this.ws.send(JSON.stringify({ msg_type: 'sync_user' }))
+      }
+      this.ws.onmessage = (e) => {
+        const data = JSON.parse(e.data)
+        if (data.ok) {
+          this.$refs.listTable.reloadTable()
+        } else {
+          this.$message.error(data.msg)
+        }
+        this.dialogLdapUserSyncStatus = false
       }
     },
     handlerListTableXHRError(errMsg) {

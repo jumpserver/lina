@@ -499,7 +499,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
-    "BelongAll": "すべての",
+    "BelongAll": "すべてが含まれています",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
@@ -735,6 +735,7 @@
     "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
+    "SyncUser": "ユーザーを同期する",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -903,7 +904,7 @@
     "IsActive": "アクティブです",
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
-    "BelongTo": "所属する",
+    "BelongTo": "どれも含まれます",
     "GreatEqualThan": "以上または等しい",
     "PasswordRule": "パスワードのルール",
     "Uppercase": "大文字",
@@ -1771,6 +1772,7 @@
     "securityPasswordSpecialChar": "特殊文字を含む必要があります",
     "securityPasswordUpperCase": "大文字を含む必要があります",
     "securityServiceAccountRegistration": "端末登録",
+    "Storage": "設定を保存する",
     "siteUrl": "現在のサイトURL",
     "technologyConsult": "技術コンサルティング",
     "terminalAssetListPageSize": "資産ページングのページ数あたり",

@@ -8,7 +8,6 @@
 </template>
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import { testLdapSetting } from '@/api/settings'
 import ImportDialog from './ImportDialog.vue'
 import TestLoginDialog from './TestLoginDialog.vue'
 import SyncSettingDialog from './SyncSettingDialog.vue'
@@ -84,15 +83,19 @@ export default {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
             btn.loading = true
-
-            testLdapSetting(value).then(resp => {
-              this.$message.success(resp)
-            }).catch(err => {
-              const response = err.response
-              this.$message.error(response.data)
-            }).finally(() => {
+            this.enableWS()
+            this.ws.onopen = (e) => {
+              this.ws.send(JSON.stringify({ msg_type: 'testing_config', ...value }))
+            }
+            this.ws.onmessage = (e) => {
+              const data = JSON.parse(e.data)
+              if (data.ok) {
+                this.$message.success(data.msg)
+              } else {
+                this.$message.error(data.msg)
+              }
               btn.loading = false
-            })
+            }
           }.bind(this)
         },
         {
@@ -130,12 +133,19 @@ export default {
     // this.loading = false
   },
   methods: {
+    enableWS() {
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/ldap/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
+    }
   }
 }
 </script>
 
 <style scoped>
-.listTable ::v-deep .table-action-right-side{
+.listTable ::v-deep .table-action-right-side {
   padding-top: 0 !important;
 }
 

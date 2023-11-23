@@ -94,6 +94,19 @@ export default {
         hasBulkDelete: false,
         hasLeftActions: true,
         hasRightActions: true,
+        searchConfig: {
+          exclude: ['is_active'],
+          options: [
+            {
+              value: 'is_active',
+              label: this.$t('terminal.Active'),
+              children: [
+                { value: true, label: this.$t('common.Yes') },
+                { value: false, label: this.$t('common.No') }
+              ]
+            }
+          ]
+        },
         extraMoreActions: [
           {
             name: 'OfflineSelected',

@@ -121,7 +121,6 @@ export default {
     }
   },
   mounted() {
-    // const onRecvCallback = _.debounce(this.performConfirm, 500)
     this.$eventBus.$on('showConfirmDialog', this.performConfirm)
   },
   methods: {
@@ -201,6 +200,7 @@ export default {
       }
       this.$axios.post(`/api/v1/authentication/confirm/`, data).then(res => {
         this.callback()
+        this.secretValue = ''
         this.visible = false
       })
     }

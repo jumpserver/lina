@@ -110,7 +110,7 @@
       "Reason": "Reason",
       "AccountBackup": "Account backup",
       "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
-      "RecipientServer":"Receiving server"
+      "RecipientServer": "Receiving server"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
@@ -499,7 +499,7 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
-    "BelongAll": "Include all",
+    "BelongAll": "Contains all",
     "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
@@ -734,6 +734,7 @@
     "Failed": "Failed",
     "Pending": "Pending",
     "ClickCopy": "Click copy",
+    "SyncUser": "Sync User",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
@@ -905,7 +906,7 @@
     "IsActive": "Is active",
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
-    "BelongTo": "Belong to",
+    "BelongTo": "Contains any",
     "GreatEqualThan": "Greater than or equal to",
     "PasswordRule": "PasswordRule",
     "Uppercase": "Uppercase",
@@ -1767,6 +1768,7 @@
     "securityPasswordSpecialChar": "Must contain special characters",
     "securityPasswordUpperCase": "Must contain capital letters",
     "securityServiceAccountRegistration": "Service account registration",
+    "Storage": "Storage",
     "siteUrl": "Current SITE URL",
     "technologyConsult": "Technology Consult",
     "terminalAssetListPageSize": "List page size",
@@ -1823,7 +1825,8 @@
     "BasicTools": "Basic tool",
     "sync": "Sync",
     "AccountStorage": "Account Storage",
-    "Passkey": "Passkey"
+    "Passkey": "Passkey",
+    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage."
   },
   "tickets": {
     "BatchApproval": "Batch approval",

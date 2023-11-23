@@ -53,7 +53,7 @@ export default {
               component: Select2,
               el: {
                 ajax: {
-                  url: `/api/v1/terminal/replay-storages/`
+                  url: `/api/v1/terminal/replay-storages/?type_not=sftp`
                 },
                 multiple: false
               }

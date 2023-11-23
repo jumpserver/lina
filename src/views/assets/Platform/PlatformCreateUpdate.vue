@@ -149,13 +149,13 @@ export default {
         }
         return i
       })
+      this.fieldsMeta.protocols.el.choices = protocols
 
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
-      this.fieldsMeta.protocols.el.choices = protocols
 
       if (constraints['charset_enabled'] === false) {
         this.fieldsMeta.charset.hidden = () => true

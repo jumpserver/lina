@@ -48,7 +48,7 @@
       "IsSuccess": "是否成功",
       "Reason": "原因",
       "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分",
-      "RecipientServer":"接收服务器"
+      "RecipientServer": "接收服务器"
     },
     "AccountChangeSecret": {
       "PasswordRule": "密码生成规则",
@@ -477,7 +477,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
-    "BelongAll": "包含所有",
+    "BelongAll": "同时包含",
     "WordSep": "",
     "PasswordRule": "密码生成规则",
     "Length": "长度",
@@ -511,7 +511,7 @@
     "MatchResult": "匹配结果",
     "GreatEqualThan": "大于等于",
     "LessEqualThan": "小于等于",
-    "BelongTo": "所属",
+    "BelongTo": "任意包含",
     "Email": "邮箱",
     "IsActive": "激活",
     "All": "所有",
@@ -770,6 +770,7 @@
     "InputNumber": "请输入数字类型",
     "Receivers": "接收人",
     "ClickCopy": "点击复制",
+    "SyncUser": "同步用户",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -1896,6 +1897,7 @@
     "KokoSettingUpdate": "Koko 配置设置",
     "UserSetting": "偏好设置",
     "AllMembers": "全部成员",
+    "AddAllMembersWarningMsg": "你确定要添加全部成员",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
     "Set": "已设置",
