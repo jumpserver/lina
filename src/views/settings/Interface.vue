@@ -108,7 +108,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.loginImageTip')
           },
           on: {
@@ -123,7 +123,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.faviconTip')
           },
           on: {
@@ -138,7 +138,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.logoIndexTip')
           },
           on: {
@@ -153,7 +153,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.logoLogoutTip')
           },
           on: {
