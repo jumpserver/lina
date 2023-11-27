@@ -12,6 +12,7 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserInfo from './UserInfo'
 import UserLoginAcl from './UserLoginAcl.vue'
+import UserSession from './UserSession.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -20,7 +21,8 @@ export default {
     UserLoginAcl,
     GenericDetailPage,
     UserGrantedAssets,
-    UserAssetPermissionRules
+    UserAssetPermissionRules,
+    UserSession
   },
   data() {
     const vm = this
@@ -53,6 +55,11 @@ export default {
             title: this.$t('route.UserAclLists'),
             name: 'UserLoginAcl',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
+          },
+          {
+            title: this.$t('route.UserSession'),
+            name: 'UserSession',
+            hidden: () => !vm.$hasPerm('terminal.view_session')
           }
         ]
       }
