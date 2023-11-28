@@ -911,7 +911,8 @@
     "Length": "長さ",
     "Digit": "数字",
     "Lowercase": "小文字",
-    "SpecialSymbol": "特殊記号"
+    "SpecialSymbol": "特殊記号",
+    "ExcludeSymbol": "記号を除外する"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",

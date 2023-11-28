@@ -913,7 +913,8 @@
     "Length": "Length",
     "Digit": "Digit",
     "Lowercase": "Lowercase",
-    "SpecialSymbol": "SpecialSymbol"
+    "SpecialSymbol": "Special symbol",
+    "ExcludeSymbol": "Exclude symbol"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

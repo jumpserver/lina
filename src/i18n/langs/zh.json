@@ -485,6 +485,7 @@
     "Lowercase": "小写字母",
     "Digit": "数字",
     "SpecialSymbol": "特殊字符",
+    "ExcludeSymbol": "排除字符",
     "Enterprise": "企业版",
     "SyncTask": "同步任务",
     "New": "新建",
