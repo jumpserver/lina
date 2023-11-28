@@ -23,7 +23,7 @@
 import DataTable from '@/components/Table/DataTable/index.vue'
 import {
   ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter, TagsFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { newURL, replaceAllUUID } from '@/utils/common'
@@ -139,6 +139,9 @@ export default {
         case 'datetime':
         case 'date_start':
           col.formatter = DateFormatter
+          break
+        case 'labels':
+          col.formatter = TagsFormatter
           break
         case 'comment':
           col.showOverflowTooltip = true

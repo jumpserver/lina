@@ -172,7 +172,11 @@ export default {
         return params
       }
       const defaultTransformOption = (item) => {
-        return { label: item.name, value: item.id }
+        if (typeof item === 'object') {
+          return { label: item.name, value: item.id }
+        } else {
+          return { label: item, value: item }
+        }
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultFilterOption = (item) => {
@@ -207,6 +211,12 @@ export default {
     }
   },
   watch: {
+    disabled(newValue, oldValue) {
+      this.selectDisabled = newValue
+    },
+    options(newValue, oldValue) {
+      this.iOptions = newValue
+    },
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()

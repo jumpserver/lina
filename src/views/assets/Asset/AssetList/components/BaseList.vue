@@ -162,12 +162,6 @@ export default {
           labels: {
             formatter: TagsFormatter,
             formatterArgs: {
-              getTags(cellValue) {
-                return cellValue.map(item => `${item.name}:${item.value}`)
-              },
-              config: {
-                size: 'mini'
-              }
             }
           },
           actions: {
