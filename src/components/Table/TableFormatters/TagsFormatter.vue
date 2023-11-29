@@ -17,27 +17,23 @@
           size="mini"
           v-bind="formatterArgs.config"
         >
-          <i class="fa fa-tag" /> {{ tag }}
+          <i class="fa fa-tag" /> <b>{{ getTagKey(tag) }}</b>: {{ getTagValue(tag) }}
         </el-tag>
       </div>
     </a>
-    <Dialog v-if="showDialog" :visible.sync="showDialog" title="Tags" width="600px">
+    <Dialog v-if="showDialog" :visible.sync="showDialog" title="Tags" width="600px" @confirm="handleConfirm">
       <el-row :gutter="1" class="tag-select">
-        <el-col :span="10">
+        <el-col :span="12">
           <Select2 v-model="keySelect2.value" v-bind="keySelect2" @change="handleKeyChanged" />
         </el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <Select2
             v-model="valueSelect2.value"
             :disabled="!keySelect2.value"
             style="margin-left: 10px"
             v-bind="valueSelect2"
+            @change="handleAddTag"
           />
-        </el-col>
-        <el-col :span="3" class="input-button">
-          <el-button size="mini" style="float: right " type="primary" @click="handleAddTag">
-            <i class="fa fa-plus" />
-          </el-button>
         </el-col>
       </el-row>
       <div class="tag-zone">
@@ -55,7 +51,7 @@
             v-bind="formatterArgs.config"
             @close="handleCloseTag(tag)"
           >
-            <i class="fa fa-tag" /> {{ tag }}
+            <i class="fa fa-tag" /> <b>{{ getTagKey(tag) }}</b>: {{ getTagValue(tag) }}
           </el-tag>
         </div>
       </div>
@@ -108,7 +104,7 @@ export default {
         multiple: false,
         ajax: {
           transformOption: (item) => {
-            return { label: item.value, value: item.id }
+            return { label: item.value, value: item.value }
           }
         }
       },
@@ -116,7 +112,6 @@ export default {
     }
   },
   computed: {
-
   },
   mounted() {
     this.iTags = this.formatterArgs.getTags(this.cellValue)
@@ -132,6 +127,12 @@ export default {
     handleKeyChanged(val) {
       this.valueSelect2.url = `/api/v1/labels/labels/?name=${val}`
     },
+    getTagKey(tag) {
+      return tag.split(':')[0]
+    },
+    getTagValue(tag) {
+      return tag.split(':').slice(1).join(':')
+    },
     handleAddTag() {
       const key = this.keySelect2.value
       const value = this.valueSelect2.value
@@ -145,7 +146,23 @@ export default {
         return
       }
       this.iTags.push(tag)
+      this.keySelect2.value = ''
+      this.valueSelect2.value = ''
       this.$emit('input', this.iTags)
+    },
+    handleConfirm() {
+      const origin = _.sortBy(this.initialTags)
+      const current = _.sortBy(this.iTags)
+      if (_.isEqual(origin, current)) {
+        console.log('No change: ', origin, current)
+        return
+      }
+      const path = new URL(this.url, location.origin).pathname
+      const url = `${path}${this.row.id}/`
+      this.$axios.patch(url, { labels: this.iTags }).then(res => {
+        this.$message.success('修改成功')
+        this.showDialog = false
+      })
     }
   }
 }
