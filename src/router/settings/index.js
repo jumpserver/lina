@@ -362,6 +362,17 @@ export default {
             permissions: ['terminal.change_virtualapp'],
             activeMenu: '/settings/applets'
           }
+        },
+        {
+          path: 'virtual-hosts/:id',
+          name: 'VirtualHostDetail',
+          component: () => import('@/views/settings/Applet/VirtualHost/VirtualHostDetail/index.vue'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostDetail'),
+            permissions: ['terminal.view_virtualhost'],
+            activeMenu: '/settings/applets'
+          }
         }
       ]
     },
