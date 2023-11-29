@@ -299,24 +299,116 @@ export default {
   display: -webkit-box;
   font-size: 12px;
   display: block;
+
+  > > > .ticket-container {
+    .title {
+      font-size: 12px;
+    }
+  }
+
 }
 
 .msg-detail {
-  padding-left: 20px;
 
   .msg-detail-time {
     font-weight: 400;
-    font-size: 12px;
     line-height: 1.1;
     float: right;
+    color: var(--N600, #646A73);
+    text-align: right;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-size: 14px;
+    font-style: normal;
   }
 
   .msg-detail-txt {
-    margin-bottom: 20px;
-    line-height: 25px;
+    line-height: 24px;
+
+    .el-dialog__title {
+      color: var(--neutral-900, #1F2329);
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 24px;
+    }
 
     & > > > a {
       color: var(--color-success) !important;
+    }
+
+    > > > .ticket-container {
+      height: 618px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      background: #FFF;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px; /* 150% */
+
+      .title {
+        margin-bottom: 8px;
+        color: var(--neutral-900, #1F2329);
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .card {
+        .child_title {
+          padding-top: 16px;
+          margin: 0 0 12px 16px;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: flex-start;
+          color: var(--neutral-900, #1F2329);
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+        }
+
+        margin-top: 16px;
+        width: 100%;
+        display: inline-block;
+        border-radius: 4px;
+        background: var(--N100, #F5F6F7);
+      }
+
+      .action_group {
+        margin-top: 8px;
+
+        .view-link {
+          color: #3370FF !important;
+          text-align: right;
+          font-size: 14px;
+          border-radius: 4px;
+
+          &:hover {
+            background: rgba(51, 112, 255, 0.20);
+            display: inline-block;
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .field-group {
+        font-size: 14px;
+        padding-inline-start: 0;
+        margin: 0;
+
+        .field-name {
+          margin: 4px 0 4px 16px;
+          color: var(--N600, #646A73);
+          display: inline-block;
+
+          strong {
+            font-weight: 400 !important;
+          }
+        }
+
+        .field-value {
+          color: var(--N900, #1F2329);
+          display: inline-block;
+        }
+      }
     }
   }
 }
@@ -329,5 +421,4 @@ export default {
 > > > :focus {
   outline: 0;
 }
-
 </style>
