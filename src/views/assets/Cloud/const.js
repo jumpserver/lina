@@ -18,6 +18,7 @@ export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
 export const ctyun_private = 'ctyun_private'
 export const openstack = 'openstack'
+export const zstack = 'zstack'
 export const nutanix = 'nutanix'
 export const vmware = 'vmware'
 export const fc = 'fc'
@@ -115,6 +116,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: openstack,
     title: i18n.t('xpack.Cloud.OpenStack'),
     attrs: ['auth_url', 'user_domain_name', 'username', 'password']
+  },
+  [zstack]: {
+    name: zstack,
+    title: i18n.t('xpack.Cloud.ZStack'),
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [fc]: {
     name: fc,

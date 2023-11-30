@@ -2173,6 +2173,7 @@
       "QingyunPrivatecloud": "Qingyun Private Cloud",
       "HuaweiPrivatecloud": "Huawei Private Cloud",
       "OpenStack": "OpenStack",
+      "ZStack": "ZStack",
       "GCP": "Google Cloud Platform",
       "UCloud": "UCloud Platform",
       "FC": "Fusion Compute",
