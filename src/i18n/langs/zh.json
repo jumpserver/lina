@@ -2094,6 +2094,7 @@
       "HuaweiPrivatecloud": "华为私有云",
       "CTYunPrivate": "天翼私有云",
       "OpenStack": "OpenStack",
+      "ZStack": "ZStack",
       "GCP": "谷歌云",
       "UCloud": "UCloud优刻得",
       "FC": "Fusion Compute",
