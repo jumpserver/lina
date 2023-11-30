@@ -1203,6 +1203,7 @@
   },
   "route": {
     "": "",
+    "More": "更多 ..",
     "VirtualAccountDetail": "虚拟账号详情",
     "VirtualAccountUpdate": "虚拟账号更新",
     "Acls": "访问控制",

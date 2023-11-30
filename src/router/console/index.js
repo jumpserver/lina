@@ -77,12 +77,12 @@ export default {
       children: PermsRoute
     },
     {
-      path: '/console/labels',
+      path: '/console/more',
       component: empty,
-      name: 'Label',
+      name: 'More',
       meta: {
-        title: i18n.t('route.Labels'),
-        icon: 'permission'
+        title: i18n.t('route.More'),
+        icon: 'more'
       },
       children: LabelRoutes
     }
