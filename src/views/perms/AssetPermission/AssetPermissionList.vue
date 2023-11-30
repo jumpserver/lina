@@ -150,6 +150,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         hasBulkDelete: true,
         createRoute() {
           return {

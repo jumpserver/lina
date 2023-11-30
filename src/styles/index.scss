@@ -275,6 +275,7 @@ input[type=file] {
     }
   }
 }
+
 .el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
   padding: 5px 0;
 
@@ -288,4 +289,12 @@ input[type=file] {
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
+}
+
+.el-link--default {
+    color: #1c84c6 !important;
+}
+
+.el-link.is-underline:hover:after  {
+  border-bottom: 1px solid #007bff !important;
 }

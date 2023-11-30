@@ -23,11 +23,12 @@
 import DataTable from '@/components/Table/DataTable/index.vue'
 import {
   ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
-  ObjectRelatedFormatter, TagsFormatter
+  ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { newURL, replaceAllUUID } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
+import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
 export default {
   name: 'AutoDataTable',
@@ -141,7 +142,7 @@ export default {
           col.formatter = DateFormatter
           break
         case 'labels':
-          col.formatter = TagsFormatter
+          col.formatter = LabelsFormatter
           break
         case 'comment':
           col.showOverflowTooltip = true

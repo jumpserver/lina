@@ -18,7 +18,10 @@
         v-on="$listeners"
       />
       <div :class="searchClass" class="search">
-        <LabelSearch @labelSearch="handleLabelSearch" />
+        <LabelSearch
+          v-if="hasLabelSearch"
+          @labelSearch="handleLabelSearch"
+        />
         <AutoDataSearch
           v-if="hasSearch"
           class="right-side-item action-search"
@@ -60,6 +63,7 @@ export default {
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
+    hasLabelSearch: defaultFalse,
     datePicker: {
       type: Object,
       default: () => ({
@@ -117,7 +121,6 @@ export default {
   },
   methods: {
     handleTagSearch(val) {
-      console.log('handleTagSearch', val)
       this.searchTable(val)
     },
     handleDateChange(val) {

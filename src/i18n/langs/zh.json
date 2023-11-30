@@ -122,6 +122,13 @@
       "AccountGatherTaskExecutionList": "任务执行列表"
     }
   },
+  "labels": {
+    "SelectKeyOrCreateNew": "选择标签键或创建新的",
+    "SelectValueOrCreateNew": "选择标签值或创建新的",
+    "BindLabel": "关联标签",
+    "LabelList": "标签列表",
+    "SelectLabelFilter": "选择标签进行过滤"
+  },
   "acl": {
     "CommandFilterACLHelpMsg": "通过命令过滤，您可以控制命令是否可以发送到资产上。根据您设定的规则，某些命令可以被放行，而另一些命令则被禁止。",
     "AssetLoginACLHelpMsg": "登录资产时，可以根据用户的登录 IP 和时间段进行审核，判断是否可以登录资产",

@@ -12,10 +12,10 @@
       v-show="showLabelSearch"
       v-model="labelValue"
       :options="labelOptions"
+      :placeholder="placeholder"
       class="label-cascader"
       clearable
       filterable
-      placeholder="试试搜索：指南"
       separator=": "
     >
       <i slot="prefix" class="el-input__icon el-icon-search" />
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'LabelSearch',
   data() {
@@ -31,7 +32,8 @@ export default {
       showLabelButton: true,
       showLabelSearch: false,
       labelOptions: [],
-      labelValue: ''
+      labelValue: '',
+      placeholder: this.$t('labels.SelectLabelFilter')
     }
   },
   watch: {
@@ -94,17 +96,8 @@ export default {
 
 .label-cascader {
   >>> .el-input__inner {
+    font-size: 13px;
   }
-}
-
-.label-cascader .el-input__inner::before {
-  content: '\e60c'; /* 这里应该是你想要的图标的 Unicode 编码 */
-  font-family: 'element-icons'; /* 使用 Element UI 的图标字体 */
-  position: absolute;
-  left: 10px; /* 根据需要调整位置 */
-  top: 50%;
-  transform: translateY(-50%);
-  color: #c0c4cc; /* 可以调整图标颜色 */
 }
 
 </style>
