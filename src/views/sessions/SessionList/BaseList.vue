@@ -20,6 +20,18 @@ export default {
     extraActions: {
       type: Array,
       default: () => []
+    },
+    columnsShow: {
+      type: Object,
+      default: () => {
+        return {
+          min: ['id', 'actions'],
+          default: [
+            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
+            'command_amount', 'date_start', 'duration', 'actions'
+          ]
+        }
+      }
     }
   },
   data() {
@@ -28,13 +40,7 @@ export default {
         url: this.url,
         columnsExtra: ['index', 'duration'],
         columnsExclude: ['terminal'],
-        columnsShow: {
-          min: ['id', 'actions'],
-          default: [
-            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
-            'command_amount', 'date_start', 'duration', 'actions'
-          ]
-        },
+        columnsShow: this.columnsShow,
         columnsMeta: {
           id: {
             prop: 'id',

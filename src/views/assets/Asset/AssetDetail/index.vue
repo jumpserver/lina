@@ -51,7 +51,7 @@ export default {
             hidden: () => !this.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('route.SessionOffline'),
+            title: this.$t('route.SessionList'),
             name: 'AssetSession',
             hidden: () => !this.$hasPerm('terminal.view_session')
           },
