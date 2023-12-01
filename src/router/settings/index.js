@@ -347,7 +347,7 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppDetail/index.vue'),
           hidden: true,
           meta: {
-            title: i18n.t('route.AppletHostDetail'),
+            title: i18n.t('route.VirtualHostDetail'),
             permissions: ['terminal.view_virtualapp'],
             activeMenu: '/settings/applets'
           }
@@ -358,7 +358,7 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppCreateUpdate'),
           hidden: true,
           meta: {
-            title: i18n.t('route.AppletHostUpdate'),
+            title: i18n.t('route.VirtualHostUpdate'),
             permissions: ['terminal.change_virtualapp'],
             activeMenu: '/settings/applets'
           }
@@ -369,7 +369,7 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualHost/VirtualHostDetail/index.vue'),
           hidden: true,
           meta: {
-            title: i18n.t('route.AppletHostDetail'),
+            title: i18n.t('route.VirtualHostDetail'),
             permissions: ['terminal.view_virtualhost'],
             activeMenu: '/settings/applets'
           }
