@@ -67,6 +67,7 @@ export default {
         hasExport: false,
         hasImport: false,
         canBulkDelete: false
+
       }
     }
   }

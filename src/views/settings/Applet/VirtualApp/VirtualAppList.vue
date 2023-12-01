@@ -1,78 +1,59 @@
 <template>
   <div>
-    <ListTable class="virtual-app" v-bind="$data" />
+    <CardTable ref="CardTable" v-bind="$data" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
 <script>
-import { ListTable } from '@/components'
-import { ActionsFormatter, ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import CardTable from './components/CardTable'
+import UploadDialog from './UploadDialog'
 
 export default {
   name: 'VirtualApp',
   components: {
-    ListTable
+    CardTable,
+    UploadDialog
   },
   data() {
     return {
+      uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/terminal/virtual-apps/',
-        columnsShow: {
-          min: ['name'],
-          default: [
-            'name', 'image_name', 'comment', 'actions'
-          ]
-        },
-        columnsMeta: {
-          name: {
-            formatterArgs: {
-              getRoute: ({ row }) => {
-                return {
-                  name: 'VirtualAppDetail',
-                  params: { id: row.id }
-                }
-              }
-            }
-          },
-          protocols: {
-            label: this.$t('assets.Protocols'),
-            formatter: ProtocolsFormatter
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasClone: false,
-              onUpdate: ({ row }) => {
-                const route = {
-                  name: 'VirtualAppUpdate',
-                  params: { id: row.id },
-                  query: {}
-                }
-                this.$router.push(route)
-              },
-              performDelete: ({ row }) => {
-                const id = row.id
-                const url = `/api/v1/terminal/virtual-apps/${id}/`
-                return this.$axios.delete(url)
-              }
-            }
-          }
-        }
+        deletePerm: 'terminal.delete_virtualapp'
       },
       headerActions: {
-        createRoute: 'VirtualAppCreate',
-        hasRefresh: true,
+        onCreate: () => {
+          this.uploadDialogVisible = true
+        },
+        createTitle: this.$t('common.Upload'),
+        searchConfig: {
+          getUrlQuery: false,
+          exclude: ['version']
+        },
+        detailRoute: 'VirtualAppDetail',
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        hasColumnSetting: false
       }
+    }
+  },
+  methods: {
+    handleUpload(res) {
+      this.$refs.CardTable.reloadTable()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.virtual-app > > > .protocol {
-  margin-left: 3px;
-}
+.dom {
+  white-space: initial;
 
+  .el-tag {
+    margin-right: 3px;
+  }
+}
 </style>
