@@ -5,7 +5,7 @@
       :async="async"
       :async-search-flag="asyncSearchFlag"
       :data-show-list="notSelectDataList"
-      :filter-placeholder="filterPlaceholder[0]"
+      :filter-placeholder="filterPlaceholder[0] || $tc('common.Search')"
       :filterable="filterable"
       :highlight-color="highlightColor"
       :is-highlight="isHighlight"
@@ -14,7 +14,7 @@
       :page-size="pageSize"
       :page-texts="pageTexts"
       :show-clear-btn="showClearBtn"
-      :title="boxTitle[0]"
+      :title="boxTitle[0] || $tc('common.Selection')"
       @check-district="noCheckSelect"
       @search-word="searchWord"
       @check-disable="checkDisable"
@@ -41,7 +41,7 @@
     <krry-box
       ref="hasSelect"
       :data-show-list="checkedData"
-      :filter-placeholder="filterPlaceholder[1]"
+      :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
       :filterable="filterable"
       :highlight-color="highlightColor"
       :is-highlight="isHighlight"
@@ -49,7 +49,7 @@
       :page-size="pageSize"
       :page-texts="pageTexts"
       :show-clear-btn="showClearBtn"
-      :title="boxTitle[1]"
+      :title="boxTitle[1] || $tc('common.Selected')"
       @check-district="hasCheckSelect"
       @search-word="searchWord"
       @check-disable="checkDisable"
@@ -62,14 +62,15 @@
 import krryBox from './models/box'
 
 export default {
-  name: 'KrPaging',
+  name: 'KrryPaging',
   components: {
     krryBox
   },
   props: {
     boxTitle: {
       type: Array,
-      default: () => ['待选区', '已选中']
+      // default: () => [this.$tc('common.Selection'), this.$tc('common.Selected')]
+      default: () => ['', '']
     },
     pageSize: {
       type: Number,
@@ -89,11 +90,13 @@ export default {
     },
     filterPlaceholder: {
       type: Array,
-      default: () => ['请输入搜索内容', '请输入搜索内容']
+      default: () => ['', '']
+      // default: () => [this.$tc('common.Search'), this.$tc('common.Search')]
     },
     pageTexts: {
       type: Array,
-      default: () => ['< 上一页', '下一页 >']
+      default: () => ['', '']
+      // default: () => ['< ' + this.$tc('common.PagePrev'), this.$tc('common.PageNext') + ' >']
     },
     sort: {
       type: Boolean,

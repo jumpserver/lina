@@ -54,10 +54,10 @@
     </div>
     <div class="vip-footer">
       <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
-        {{ pageTexts[0] }}
+        {{ pageTexts[0] || defaultPrev }}
       </el-button>
       <el-button :disabled="disabledNex" class="v-page" plain small @click="next">
-        {{ pageTexts[1] }}
+        {{ pageTexts[1] || defaultNext }}
       </el-button>
     </div>
   </div>
@@ -68,25 +68,31 @@ export default {
   components: {},
   props: {
     title: {
-      type: String
+      type: String,
+      default: () => ''
     },
     operateId: {
-      type: Number
+      type: Number,
+      default: () => 0
     },
     dataShowList: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     pageSize: {
-      type: Number
+      type: Number,
+      default: () => 10
     },
     filterable: {
       type: Boolean
     },
     filterPlaceholder: {
-      type: String
+      type: String,
+      default: () => 'Search'
     },
     pageTexts: {
-      type: Array
+      type: Array,
+      default: () => ['', '']
     },
     async: {
       type: Boolean,
@@ -99,7 +105,8 @@ export default {
       type: Boolean
     },
     highlightColor: {
-      type: String
+      type: String,
+      default: () => '#409EFF'
     },
     asyncSearchFlag: {
       // 是否设置了异步搜索方法
@@ -123,7 +130,9 @@ export default {
       disabledNex: false,
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
-      asyncSearchPageIndex: 1 // 异步搜索的 pageIndex
+      asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
+      defaultPrev: '< ' + this.$tc('common.PagePrev'),
+      defaultNext: this.$tc('common.PageNext') + ' >'
     }
   },
   watch: {
@@ -291,11 +300,11 @@ export default {
     }
   }
   .el-transfer-panel__body {
-    height: 342px;
-    padding: 6px 0;
+    height: 335px;
+    //padding: 6px 0;
 
     .el-transfer-panel__filter {
-      margin: 6px 14px 12px;
+      margin: 6px 14px;
       line-height: 0;
 
       .showClear {
@@ -328,7 +337,7 @@ export default {
     }
   }
   .el-checkbox-group {
-    height: 280px;
+    height: 295px;
     overflow: auto;
     &.expand {
       height: 290px;
@@ -378,6 +387,7 @@ export default {
       border: none;
       margin: 0;
       border-radius: 0;
+      padding: 10px 15px;
       &:first-child {
         border-right: 1px solid #ebeef5;
       }

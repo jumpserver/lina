@@ -31,7 +31,6 @@ export default {
         },
         columnsMeta: {
           res_count: {
-            label: '资源数量',
             formatter: (row) => {
               const onClick = () => {
                 vm.handleClickResCount(row)
@@ -45,7 +44,7 @@ export default {
             formatterArgs: {
               extraActions: [
                 {
-                  title: 'Bind',
+                  title: this.$t('labels.BindResource'),
                   name: 'bind',
                   callback: ({ row }) => {
                     this.label = row

@@ -1,5 +1,5 @@
 <template>
-  <Dialog destroy-on-close title="资源" v-bind="$attrs" v-on="$listeners">
+  <Dialog :title="$tc('labels.BindResource')" destroy-on-close v-bind="$attrs" v-on="$listeners">
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </Dialog>
 </template>
@@ -23,7 +23,15 @@ export default {
         url: `/api/v1/labels/labeled-resources/?label=${this.label.id}`,
         columns: [
           'resource', 'res_type', 'actions'
-        ]
+        ],
+        columnsMeta: {
+          actions: {
+            formatterArgs: {
+              hasClone: false,
+              hasUpdate: false
+            }
+          }
+        }
       },
       headerActions: {
         onCreate: () => {

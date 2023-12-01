@@ -2,7 +2,7 @@
   <Dialog
     :close-on-click-modal="false"
     :destory-on-close="true"
-    title="绑定资源"
+    :title="$tc('labels.BindResource')"
     top="80px"
     v-bind="$attrs"
     width="768px"
@@ -12,9 +12,9 @@
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
-          <label class="type-label" for="">类型: </label>
+          <label class="type-label" for="">{{ $t('labels.ResourceType') }}: </label>
         </div>
-        <el-select v-model="select2.value" class="select2" placeholder="请选择" @change="handleChangeType">
+        <el-select v-model="select2.value" class="select2" @change="handleChangeType">
           <el-option-group
             v-for="group in select2.options"
             :key="group.label"
@@ -31,7 +31,7 @@
       </el-row>
       <el-row>
         <div class="label-zone">
-          <label class="table-label" for="">选择资源: </label>
+          <label class="table-label" for="">{{ $t('labels.SelectResource') }}: </label>
         </div>
         <krryPaging v-if="!transferLoading" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
       </el-row>

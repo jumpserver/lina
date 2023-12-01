@@ -127,7 +127,11 @@
     "SelectValueOrCreateNew": "选择标签值或创建新的",
     "BindLabel": "关联标签",
     "LabelList": "标签列表",
-    "SelectLabelFilter": "选择标签进行过滤"
+    "SelectLabelFilter": "选择标签进行过滤",
+    "BindResource": "关联资源",
+    "ResourceType": "资源类型",
+    "Resources": "资源",
+    "SelectResource": "选择资源"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "通过命令过滤，您可以控制命令是否可以发送到资产上。根据您设定的规则，某些命令可以被放行，而另一些命令则被禁止。",
@@ -483,6 +487,10 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Selection": "可选择",
+    "Selected": "已选择",
+    "PagePrev": "上一页",
+    "PageNext": "下一页",
     "BelongAll": "包含所有",
     "WordSep": "",
     "PasswordRule": "密码生成规则",
