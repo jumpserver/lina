@@ -918,7 +918,11 @@
     "PageNext": "Next",
     "Selected": "Selected",
     "SpecialSymbol": "Special symbol",
-    "ExcludeSymbol": "Exclude symbol"
+    "ExcludeSymbol": "Exclude symbol",
+    "VirtualApps": "Virtual apps",
+    "ImageName": "Image name",
+    "ID": "ID",
+    "Ports": "Ports"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1474,7 +1478,9 @@
     "DatabaseUpdate": "Update Asset - Database",
     "CloudUpdate": "Update Asset - Cloud Platform",
     "OnlineUserDevices": "OnlineUserDevices",
-    "More": "More .."
+    "More": "More ..",
+    "VirtualAppDetail": "Virtual App Detail",
+    "VirtualHostDetail": "Virtual Host Detail"
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -1500,7 +1506,11 @@
     "DatabasePort": "Database protocol port",
     "BasePort": "listening port",
     "Endpoint": "Endpoint",
-    "ConnectMethod": "Connect method"
+    "ConnectMethod": "Connect method",
+    "VirtualApp": "Virtual app",
+    "VirtualAppDetail": "Virtual app detail",
+    "VirtualHost": "Virtual host",
+    "Containers": "Containers"
   },
   "sessions": {
     "DownloadFTPFileTip": "The current action is not recorded in the file, or the file size exceeds the threshold (100 MB by default), or is not saved to the corresponding storage",

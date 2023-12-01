@@ -48,16 +48,17 @@ export default {
         ],
         hasRightSide: true,
         actions: {
+          hasDelete: false,
+          hasUpdate: false,
           canDelete: this.$hasPerm('terminal.delete_virtualhost'),
           canUpdate: this.$hasPerm('terminal.change_virtualhost'),
-          deleteSuccessRoute: 'Applets',
-          updateCallback: () => {
-            this.$router.push({
-              name: 'AppletHostUpdate',
-              params: { id: this.$route.params.id },
-              query: { platform: this.host.platform.id }
-            })
-          }
+          deleteSuccessRoute: 'Applets'
+          // updateCallback: () => {
+          //   this.$router.push({
+          //     name: 'VirtualHostUpdate',
+          //     params: { id: this.$route.params.id }
+          //   })
+          // }
         }
       }
     }

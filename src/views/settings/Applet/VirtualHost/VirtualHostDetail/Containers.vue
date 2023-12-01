@@ -35,8 +35,17 @@ export default {
         ],
         excludes: ['actions'],
         columnsMeta: {
+          'container_id': {
+            label: this.$t('common.ID')
+          },
           'container_name': {
             label: this.$t('common.Name')
+          },
+          'container_status': {
+            label: this.$t('common.Status')
+          },
+          'container_ports': {
+            label: this.$t('common.Ports')
           },
           'container_image': {
             label: this.$t('common.ImageName')

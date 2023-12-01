@@ -347,7 +347,7 @@ export default {
           component: () => import('@/views/settings/Applet/VirtualApp/VirtualAppDetail/index.vue'),
           hidden: true,
           meta: {
-            title: i18n.t('route.VirtualHostDetail'),
+            title: i18n.t('route.VirtualAppDetail'),
             permissions: ['terminal.view_virtualapp'],
             activeMenu: '/settings/applets'
           }
