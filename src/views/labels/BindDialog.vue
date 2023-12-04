@@ -131,14 +131,14 @@ export default {
     },
     async getResourceTypes() {
       const resourceTypes = await this.$axios.get('/api/v1/labels/resource-types/')
-      const grouped = _.groupBy(resourceTypes, 'app_label')
+      const grouped = _.groupBy(resourceTypes, 'app_display')
       const options = []
       for (const [app, types] of Object.entries(grouped)) {
         const children = []
         for (const type of types) {
           children.push({
             value: type.id,
-            label: type.name + '(' + type.app_label + '.' + type.model + ')'
+            label: type.name
           })
         }
         options.push({
