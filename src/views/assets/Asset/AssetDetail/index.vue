@@ -16,6 +16,8 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Account from './Account.vue'
 import PermUserList from './PermUser.vue'
+import AssetSession from './AssetSession.vue'
+import AssetCommand from './AssetCommand.vue'
 
 export default {
   name: 'AssetListDetail',
@@ -24,7 +26,9 @@ export default {
     TabPage,
     Detail,
     Account,
-    PermUserList
+    PermUserList,
+    AssetSession,
+    AssetCommand
   },
   data() {
     return {
@@ -45,6 +49,16 @@ export default {
             title: this.$t('assets.PermUserList'),
             name: 'PermUserList',
             hidden: () => !this.$hasPerm('perms.view_assetpermission')
+          },
+          {
+            title: this.$t('route.SessionList'),
+            name: 'AssetSession',
+            hidden: () => !this.$hasPerm('terminal.view_session')
+          },
+          {
+            title: this.$t('route.Commands'),
+            name: 'AssetCommand',
+            hidden: () => !this.$hasPerm('terminal.view_command')
           }
         ],
         hasRightSide: true,
