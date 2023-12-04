@@ -909,7 +909,12 @@
     "Length": "長さ",
     "Digit": "数字",
     "Lowercase": "小文字",
-    "SpecialSymbol": "特殊記号"
+    "SpecialSymbol": "特殊記号",
+    "PagePrev": "前のページ",
+    "WordSep": "",
+    "Selection": "選択可能",
+    "PageNext": "次のページ",
+    "Selected": "選択済み"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -2320,6 +2325,10 @@
     "LabelList": "ラベルリスト",
     "SelectValueOrCreateNew": "ラベル値を選択するか新規作成",
     "SelectKeyOrCreateNew": "ラベルキーを選択するか新規作成",
-    "SelectLabelFilter": "フィルタ用ラベルを選択"
+    "SelectLabelFilter": "フィルタ用ラベルを選択",
+    "ResourceType": "リソースタイプ",
+    "Resources": "リソース",
+    "BindResource": "リソースを関連付ける",
+    "SelectResource": "リソースを選択"
   }
 }

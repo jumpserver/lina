@@ -911,7 +911,11 @@
     "Length": "Length",
     "Digit": "Digit",
     "Lowercase": "Lowercase",
-    "SpecialSymbol": "SpecialSymbol"
+    "SpecialSymbol": "SpecialSymbol",
+    "PagePrev": "Previous",
+    "Selection": "Selection",
+    "PageNext": "Next",
+    "Selected": "Selected"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -2330,6 +2334,10 @@
     "LabelList": "Label list",
     "SelectValueOrCreateNew": "Select label value or create new",
     "SelectKeyOrCreateNew": "Select label key or create new",
-    "SelectLabelFilter": "Select label to filter"
+    "SelectLabelFilter": "Select label to filter",
+    "ResourceType": "Resource type",
+    "Resources": "Resources",
+    "BindResource": "Bind resource",
+    "SelectResource": "Select resource"
   }
 }

@@ -17,7 +17,7 @@
           size="mini"
           v-bind="formatterArgs.config"
         >
-          <i class="fa fa-tag" /> <b>{{ getKey(label) }}</b>: {{ getValue(label) }}
+          <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
         </el-tag>
       </div>
     </a>
@@ -223,7 +223,7 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-  display: block;
+  display: table;
 }
 
 .tag-tip {
