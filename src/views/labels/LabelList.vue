@@ -57,7 +57,9 @@ export default {
 
         }
       },
-      headerActions: {}
+      headerActions: {
+        createRoute: 'LabelCreate'
+      }
     }
   },
   methods: {

@@ -7,14 +7,15 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('route.Labels')
+      title: i18n.t('route.Labels'),
+      app: 'labels'
     },
     children: [
       {
         path: '',
         component: () => import('@/views/labels/LabelList.vue'),
         name: 'LabelList',
-        meta: { title: i18n.t('route.LabelList'), permissions: ['labels.view_label'] }
+        meta: { title: i18n.t('route.LabelList') }
       },
       {
         path: 'create',
