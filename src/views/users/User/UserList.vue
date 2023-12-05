@@ -48,7 +48,6 @@ export default {
         },
         columnsExclude: [
           'password', 'password_strategy', 'public_key',
-          'is_otp_secret_key_bound', 'mfa_enabled', 'is_superuser',
           'mfa_force_enabled', 'is_service_account', 'avatar_url'
         ],
         columnsShow: {
