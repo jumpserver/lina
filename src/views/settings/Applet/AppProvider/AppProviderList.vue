@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable class="virtual-host" v-bind="$data" />
+    <ListTable class="App-Provider" v-bind="$data" />
   </div>
 </template>
 
@@ -9,14 +9,14 @@ import { ListTable } from '@/components'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'VirtualHost',
+  name: 'AppProvider',
   components: {
     ListTable
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/terminal/virtual-hosts/',
+        url: '/api/v1/terminal/app-providers/',
         columnsShow: {
           min: ['name'],
           default: [
@@ -28,7 +28,7 @@ export default {
             formatterArgs: {
               getRoute: ({ row }) => {
                 return {
-                  name: 'VirtualHostDetail',
+                  name: 'AppProviderDetail',
                   params: { id: row.id }
                 }
               }
@@ -54,7 +54,7 @@ export default {
               canDelete: false,
               performDelete: ({ row }) => {
                 const id = row.id
-                const url = `/api/v1/terminal/virtual-hosts/${id}/`
+                const url = `/api/v1/terminal/app-providers/${id}/`
                 return this.$axios.delete(url)
               }
             }
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.virtual-host > > > .protocol {
+.App-Provider > > > .protocol {
   margin-left: 3px;
 }
 

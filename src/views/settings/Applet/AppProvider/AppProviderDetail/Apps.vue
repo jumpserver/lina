@@ -30,7 +30,7 @@ export default {
         hasExport: false
       },
       config: {
-        url: `/api/v1/terminal/virtual-app-publications/?vhost=${this.object.id}`,
+        url: `/api/v1/terminal/virtual-app-publications/?provider=${this.object.id}`,
         columns: [
           'app.name', 'app.image_name', 'date_updated', 'status'
         ],

@@ -29,7 +29,7 @@ export default {
         hasExport: false
       },
       config: {
-        url: `/api/v1/terminal/virtual-hosts/${this.object.id}/containers/`,
+        url: `/api/v1/terminal/app-providers/${this.object.id}/containers/`,
         columns: [
           'container_id', 'container_name', 'container_image', 'container_ports', 'container_status'
         ],

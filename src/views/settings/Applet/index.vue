@@ -11,7 +11,7 @@ import { TabPage } from '@/layout/components'
 import Applets from './Applet/AppletList'
 import AppletHosts from './AppletHost/AppletHostList'
 import VirtualApp from './VirtualApp/VirtualAppList'
-import VirtualHost from './VirtualHost/VirtualHostList'
+import AppProvider from './AppProvider/AppProviderList'
 import store from '@/store'
 export default {
   name: 'Applet',
@@ -20,7 +20,7 @@ export default {
     Applets,
     AppletHosts,
     VirtualApp,
-    VirtualHost
+    AppProvider
   },
   data() {
     return {
@@ -43,8 +43,8 @@ export default {
           }
         },
         {
-          title: this.$t('terminal.VirtualHost'),
-          name: 'VirtualHost',
+          title: this.$t('terminal.AppProvider'),
+          name: 'AppProvider',
           hidden: () => {
             return !store.getters.publicSettings['VIRTUAL_APP_ENABLED']
           }

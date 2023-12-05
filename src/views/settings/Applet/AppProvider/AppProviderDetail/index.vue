@@ -18,7 +18,7 @@ import Apps from './Apps.vue'
 import Containers from './Containers'
 
 export default {
-  name: 'AssetHostDetail',
+  name: 'AppProviderDetail',
   components: {
     GenericDetailPage,
     Detail,
@@ -30,7 +30,7 @@ export default {
     return {
       host: {},
       config: {
-        url: '/api/v1/terminal/virtual-hosts/',
+        url: '/api/v1/terminal/app-providers/',
         activeMenu: 'Detail',
         submenu: [
           {

@@ -364,13 +364,13 @@ export default {
           }
         },
         {
-          path: 'virtual-hosts/:id',
-          name: 'VirtualHostDetail',
-          component: () => import('@/views/settings/Applet/VirtualHost/VirtualHostDetail/index.vue'),
+          path: 'app-providers/:id',
+          name: 'AppProviderDetail',
+          component: () => import('@/views/settings/Applet/AppProvider/AppProviderDetail/index.vue'),
           hidden: true,
           meta: {
-            title: i18n.t('route.VirtualHostDetail'),
-            permissions: ['terminal.view_virtualhost'],
+            title: i18n.t('route.AppProviderDetail'),
+            permissions: ['terminal.view_appprovider'],
             activeMenu: '/settings/applets'
           }
         }

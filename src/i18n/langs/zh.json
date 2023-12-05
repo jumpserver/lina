@@ -1457,7 +1457,7 @@
     "CannotAccess": "无法访问当前页面",
     "GoHomePage": "去往首页",
     "VirtualAppDetail": "虚拟应用详情",
-    "VirtualHostDetail": "虚拟主机详情"
+    "AppProviderDetail": "应用提供者详情"
   },
   "rbac": {
     "Permissions": "权限",
@@ -1486,7 +1486,7 @@
     "ConnectMethod": "连接方式",
     "VirtualApp": "虚拟应用",
     "VirtualAppDetail": "虚拟应用详情",
-    "VirtualHost": "虚拟主机",
+    "AppProvider": "应用提供者",
     "Containers": "容器"
   },
   "sessions": {

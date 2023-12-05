@@ -1480,7 +1480,7 @@
     "OnlineUserDevices": "OnlineUserDevices",
     "More": "More ..",
     "VirtualAppDetail": "Virtual App Detail",
-    "VirtualHostDetail": "Virtual Host Detail"
+    "AppProviderDetail": "Provider Detail"
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -1509,7 +1509,7 @@
     "ConnectMethod": "Connect method",
     "VirtualApp": "Virtual app",
     "VirtualAppDetail": "Virtual app detail",
-    "VirtualHost": "Virtual host",
+    "AppProvider": "App provider",
     "Containers": "Containers"
   },
   "sessions": {

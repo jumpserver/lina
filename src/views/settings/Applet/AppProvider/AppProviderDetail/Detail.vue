@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/terminal/virtual-hosts/${this.object.id}`,
+      url: `/api/v1/terminal/app-providers/${this.object.id}`,
       detailFields: ['name', 'hostname', 'comment']
     }
   },
