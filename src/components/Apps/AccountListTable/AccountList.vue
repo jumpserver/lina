@@ -279,6 +279,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,

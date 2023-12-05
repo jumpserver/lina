@@ -40,6 +40,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         createRoute: 'UserGroupCreate'
       }
     }

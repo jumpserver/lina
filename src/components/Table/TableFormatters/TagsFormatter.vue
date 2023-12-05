@@ -4,9 +4,9 @@
       v-for="tag of iTags"
       :key="tag"
       :type="getTagType(tag)"
-      v-bind="formatterArgs.config"
       class="tag-formatter"
       disable-transitions
+      v-bind="formatterArgs.config"
     >
       <i class="fa fa-tag" /> {{ tag }}
     </el-tag>
@@ -15,6 +15,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
+
 export default {
   name: 'TagsFormatter',
   extends: BaseFormatter,
@@ -52,7 +53,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .tag {
   display: flex;
   flex-wrap: wrap;

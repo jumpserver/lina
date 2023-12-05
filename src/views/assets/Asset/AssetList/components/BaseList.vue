@@ -23,7 +23,7 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, TagsFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter
 } from '@/components/Table/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
@@ -159,17 +159,6 @@ export default {
             }
           },
           connectivity: connectivityMeta,
-          labels: {
-            formatter: TagsFormatter,
-            formatterArgs: {
-              getTags(cellValue) {
-                return cellValue.map(item => `${item.name}:${item.value}`)
-              },
-              config: {
-                size: 'mini'
-              }
-            }
-          },
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -218,6 +207,7 @@ export default {
         onCreate: () => {
           this.showPlatform = true
         },
+        hasLabelSearch: true,
         searchConfig: {
           getUrlQuery: false
         },

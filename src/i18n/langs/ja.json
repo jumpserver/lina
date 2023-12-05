@@ -912,6 +912,11 @@
     "Digit": "数字",
     "Lowercase": "小文字",
     "SpecialSymbol": "特殊記号",
+    "PagePrev": "前のページ",
+    "WordSep": "",
+    "Selection": "選択可能",
+    "PageNext": "次のページ",
+    "Selected": "選択済み",
     "ExcludeSymbol": "記号を除外する"
   },
   "dashboard": {
@@ -1462,7 +1467,8 @@
     "DeviceUpdate": "アセット更新 - ネットワークデバイス",
     "CloudCreate": "アセット作成 - クラウドプラットフォーム",
     "DatabaseUpdate": "アセット更新 - データベース",
-    "CloudUpdate": "アセット更新 - クラウドプラットフォーム"
+    "CloudUpdate": "アセット更新 - クラウドプラットフォーム",
+    "More": "さらに.."
   },
   "rbac": {
     "Permissions": "権限",
@@ -2326,5 +2332,16 @@
     "AccessIP": "Access IP",
     "ApiKeyWarning": "AccessKeyの漏洩リスクを低減するため、Secretは作成時にのみ提供され、後で再度クエリできません。安全に保管してください。",
     "PasskeyAddDisableInfo": "あなたの認証元は {source} であり、Passkeyの追加はサポートされていません。"
+  },
+  "labels": {
+    "BindLabel": "ラベルをバインド",
+    "LabelList": "ラベルリスト",
+    "SelectValueOrCreateNew": "ラベル値を選択するか新規作成",
+    "SelectKeyOrCreateNew": "ラベルキーを選択するか新規作成",
+    "SelectLabelFilter": "フィルタ用ラベルを選択",
+    "ResourceType": "リソースタイプ",
+    "Resources": "リソース",
+    "BindResource": "リソースを関連付ける",
+    "SelectResource": "リソースを選択"
   }
 }

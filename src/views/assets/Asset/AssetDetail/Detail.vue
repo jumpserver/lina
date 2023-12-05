@@ -154,7 +154,7 @@ export default {
         icon: 'fa-info',
         title: this.$t('assets.Label'),
         objectsAjax: {
-          url: '/api/v1/assets/labels/',
+          url: '/api/v1/labels/labels/',
           transformOption: (item) => {
             return { label: String(item.name) + ':' + String(item.value), value: item.id }
           }

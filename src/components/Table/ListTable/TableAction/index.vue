@@ -18,6 +18,10 @@
         v-on="$listeners"
       />
       <div :class="searchClass" class="search">
+        <LabelSearch
+          v-if="hasLabelSearch"
+          @labelSearch="handleLabelSearch"
+        />
         <AutoDataSearch
           v-if="hasSearch"
           class="right-side-item action-search"
@@ -41,12 +45,14 @@ import RightSide from './RightSide.vue'
 import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
+import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
+    LabelSearch,
     LeftSide,
     RightSide,
     AutoDataSearch,
@@ -57,6 +63,7 @@ export default {
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
+    hasLabelSearch: defaultFalse,
     datePicker: {
       type: Object,
       default: () => ({
@@ -118,12 +125,20 @@ export default {
     },
     handleDateChange(val) {
       this.datePick(val)
+    },
+    handleLabelSearch(val) {
+      if (!val || val.length !== 2) {
+        this.searchTable({ label: '' })
+        return
+      }
+      const [key, value] = val
+      this.searchTable({ label: `${key}:${value}` })
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .table-header {
     /*display: flex;*/
     /*flex-direction: row;*/
@@ -232,4 +247,5 @@ export default {
   .filter-field.right-side-item.action-search {
     height: 34px;
   }
+
 </style>

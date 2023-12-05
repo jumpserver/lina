@@ -96,7 +96,7 @@
       "AccountPushCreate": "Account push create",
       "AccountPushUpdate": "Account push update",
       "ParamsHelpText": "The push parameter settings are currently only effective for assets with a platform type of host.",
-      "AccountPushList": "Account push list"
+      "AccountPushList": "Account push"
     },
     "AccountBackup": {
       "IsSuccess": "Is success",
@@ -913,6 +913,10 @@
     "Length": "Length",
     "Digit": "Digit",
     "Lowercase": "Lowercase",
+    "PagePrev": "Previous",
+    "Selection": "Selection",
+    "PageNext": "Next",
+    "Selected": "Selected",
     "SpecialSymbol": "Special symbol",
     "ExcludeSymbol": "Exclude symbol"
   },
@@ -1270,7 +1274,7 @@
     "AssetCreate": "Asset create",
     "AssetDetail": "Asset detail",
     "AssetList": "Assets",
-    "AssetPermission": "Asset Permissions",
+    "AssetPermission": "Asset permissions",
     "AssetPermissionCreate": "Asset permissions create",
     "AssetPermissionDetail": "Asset permissions detail",
     "AssetPermissionUpdate": "Asset permissions update",
@@ -1319,7 +1323,7 @@
     "UserAclUpdate": "User acl update",
     "UserAclLists": "User acl lists",
     "UserAclDetail": "User acl detail",
-    "AssetAclList": "Asset Acl",
+    "AssetAclList": "Asset connect acl",
     "CommandFilterAclList": "Command Acl",
     "CommandFilterAclCreate": "Command Acl create",
     "CommandFilterAclDetail": "Command Acl detail",
@@ -1469,7 +1473,8 @@
     "CloudCreate": "Create Asset - Cloud Platform",
     "DatabaseUpdate": "Update Asset - Database",
     "CloudUpdate": "Update Asset - Cloud Platform",
-    "OnlineUserDevices": "OnlineUserDevices"
+    "OnlineUserDevices": "OnlineUserDevices",
+    "More": "More .."
   },
   "rbac": {
     "Permissions": "Permissions",
@@ -2336,5 +2341,16 @@
     "AccessIP": "Access IP",
     "ApiKeyWarning": "To reduce the risk of AccessKey exposure, Secret is provided only during creation and cannot be queried again later. Please keep it safe.",
     "PasskeyAddDisableInfo": "Your authentication source is {source}, and Passkey addition is not supported."
+  },
+  "labels": {
+    "BindLabel": "Bind label",
+    "LabelList": "Label list",
+    "SelectValueOrCreateNew": "Select label value or create new",
+    "SelectKeyOrCreateNew": "Select label key or create new",
+    "SelectLabelFilter": "Select label to filter",
+    "ResourceType": "Resource type",
+    "Resources": "Resources",
+    "BindResource": "Bind resource",
+    "SelectResource": "Select resource"
   }
 }

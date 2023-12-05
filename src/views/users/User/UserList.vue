@@ -148,6 +148,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         hasBulkDelete: hasDelete,
         canCreate: this.$hasPerm('users.add_user'),
         extraActions: [

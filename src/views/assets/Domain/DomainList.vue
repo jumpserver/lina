@@ -48,6 +48,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         createRoute: 'DomainCreate'
       },
       notice: this.$t('assets.DomainHelpMessage')
