@@ -51,7 +51,12 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
-          <el-input v-model="secretValue" :placeholder="inputPlaceholder" :show-password="showPassword" />
+          <el-input
+            v-model="secretValue"
+            :placeholder="inputPlaceholder"
+            :show-password="showPassword"
+            @keyup.enter.native="handleConfirm"
+          />
           <span v-if="subTypeSelected === 'sms'" style="margin: -1px 0 0 20px;">
             <el-button
               :disabled="smsBtnDisabled"
@@ -116,7 +121,6 @@ export default {
     }
   },
   mounted() {
-    // const onRecvCallback = _.debounce(this.performConfirm, 500)
     this.$eventBus.$on('showConfirmDialog', this.performConfirm)
   },
   methods: {
@@ -145,6 +149,7 @@ export default {
             this.title = this.$t('auth.NeedReLogin')
             this.visible = true
           })
+          return
         }
         this.subTypeChoices = data.content
         const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
@@ -195,6 +200,7 @@ export default {
       }
       this.$axios.post(`/api/v1/authentication/confirm/`, data).then(res => {
         this.callback()
+        this.secretValue = ''
         this.visible = false
       })
     }

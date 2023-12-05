@@ -15,6 +15,9 @@ export default {
   created() {
   },
   methods: {
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
+    }
   }
 }
 </script>

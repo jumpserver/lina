@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import ListTable from '@/components/Table/ListTable/index.vue'
 import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
 
 export default {

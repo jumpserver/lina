@@ -1,6 +1,6 @@
 <template>
-  <GenericTreeListPage
-    ref="GenericTreeListPage"
+  <TreeTable
+    ref="CommandTreeTable"
     v-loading="loading"
     :header-actions="headerActions"
     :table-config="tableConfig"
@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import TreeTable from '@/components/Table/TreeTable/index.vue'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
-import { OutputExpandFormatter } from './formatters'
+import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
 import deepmerge from 'deepmerge'
@@ -24,18 +24,21 @@ import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-tabl
 import { createSourceIdCache } from '@/api/common'
 
 export default {
+  name: 'CommandList',
   components: {
-    GenericTreeListPage
+    TreeTable
+  },
+  props: {
+    assetId: {
+      type: String,
+      default: () => ''
+    }
   },
   data() {
     const vm = this
     const dateFrom = getDaysAgo(7).toISOString()
-    const dateTo = getDayEnd().toISOString()
+    const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
     return {
-      query: {
-        date_from: dateFrom,
-        date_to: dateTo
-      },
       loading: true,
       tableConfig: {
         url: '',
@@ -122,16 +125,14 @@ export default {
         },
         canExportSelected: true,
         exportOptions: {
-          // Todo: 优化这里，和抽象组件重复了
           performExport: async(selectRows, exportOption, q, exportTypeOption) => {
             let url = this.tableConfig.url
             url = (process.env.VUE_APP_ENV === 'production') ? (`${url}`) : (`${process.env.VUE_APP_BASE_API}${url}`)
-            const query = Object.assign({}, q)
+            const query = { ...q }
             if (exportOption === 'selected') {
               const resources = []
-              const data = selectRows
-              for (let index = 0; index < data.length; index++) {
-                resources.push(data[index].id)
+              for (const item of selectRows) {
+                resources.push(item.id)
               }
               const spm = await createSourceIdCache(resources)
               query['spm'] = spm.spm
@@ -175,6 +176,9 @@ export default {
               return
             }
             this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
+            if (this.assetId) {
+              this.tableConfig.url += `&asset_id=${this.assetId}`
+            }
           }
         }
       }
@@ -182,7 +186,7 @@ export default {
   },
   computed: {
     treeTable() {
-      return this.$refs.GenericTreeListPage.$refs.TreeTable
+      return this.$refs.CommandTreeTable
     }
   },
   watch: {},

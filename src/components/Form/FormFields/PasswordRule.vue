@@ -70,6 +70,11 @@ export default {
             id: 'symbol',
             label: this.$t('common.SpecialSymbol'),
             type: 'switch'
+          },
+          {
+            id: 'exclude_symbols',
+            label: this.$t('common.ExcludeSymbol'),
+            type: 'input'
           }
         ]
       }

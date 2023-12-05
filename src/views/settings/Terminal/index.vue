@@ -10,8 +10,6 @@
 import TabPage from '@/layout/components/TabPage'
 import Basic from './Base'
 import TerminalList from './Component/TerminalList'
-import ReplayStorage from './Storage/ReplayStorage'
-import CommandStorage from './Storage/CommandStorage'
 import Monitor from './Monitor'
 import EndpointList from './Endpoint/EndpointList'
 import EndpointRuleList from './EndpointRule/EndpointRuleList'
@@ -22,8 +20,6 @@ export default {
     Basic,
     Monitor,
     TerminalList,
-    ReplayStorage,
-    CommandStorage,
     EndpointList,
     EndpointRuleList
   },
@@ -40,16 +36,6 @@ export default {
           title: this.$t('route.Terminal'),
           name: 'TerminalList',
           hidden: () => !this.$hasPerm('terminal.view_terminal')
-        },
-        {
-          title: this.$t('sessions.replayStorage'),
-          name: 'ReplayStorage',
-          hidden: () => !this.$hasPerm('terminal.view_replaystorage')
-        },
-        {
-          title: this.$t('sessions.commandStorage'),
-          name: 'CommandStorage',
-          hidden: () => !this.$hasPerm('terminal.view_commandstorage')
         },
         {
           title: this.$t('xpack.ComponentMonitor'),

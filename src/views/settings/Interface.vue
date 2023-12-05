@@ -86,7 +86,8 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
-        [this.$t('xpack.Images'), ['login_image']]
+        [this.$t('xpack.Images'), ['login_image']],
+        [this.$t('xpack.Beian'), ['beian_link', 'beian_text']]
       ],
       fieldsMeta: {
         login_title: {
@@ -108,7 +109,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.loginImageTip')
           },
           on: {
@@ -123,7 +124,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.faviconTip')
           },
           on: {
@@ -138,7 +139,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.logoIndexTip')
           },
           on: {
@@ -153,7 +154,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            accept: 'image/*',
+            accept: 'image/jpg, image/png, image/jpeg',
             tip: this.$t('xpack.logoLogoutTip')
           },
           on: {

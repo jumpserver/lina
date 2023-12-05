@@ -103,7 +103,9 @@ class StrategyPersistSelection extends StrategyAbstract {
    */
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
-    data.forEach(r => {
+    // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和selected合并
+    const mergeData = _.uniqWith([...data, ...selected], _.isEqual)
+    mergeData.forEach(r => {
       const isSelected = !!selected.find(r2 => r[id] === r2[id])
       if (!this.elTable) {
         return

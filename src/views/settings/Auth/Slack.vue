@@ -1,8 +1,8 @@
 <template>
   <BaseAuth
     :config="settings"
-    :title="$tc('setting.FeiShu')"
-    enable-field="AUTH_FEISHU"
+    :title="$tc('setting.Slack')"
+    enable-field="AUTH_SLACK"
     v-on="$listeners"
   />
 </template>
@@ -12,7 +12,7 @@ import BaseAuth from './Base'
 import { UpdateToken } from '@/components/Form/FormFields'
 
 export default {
-  name: 'Feishu',
+  name: 'Slack',
   components: {
     BaseAuth
   },
@@ -20,16 +20,16 @@ export default {
     const vm = this
     return {
       settings: {
-        url: '/api/v1/settings/setting/?category=feishu',
+        url: '/api/v1/settings/setting/?category=slack',
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('setting.feiShuTest'),
+            title: this.$t('common.Test'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
               vm.$axios.post(
-                '/api/v1/settings/feishu/testing/',
+                '/api/v1/settings/slack/testing/',
                 value
               ).then(res => {
                 vm.$message.success(res['msg'])
@@ -39,25 +39,32 @@ export default {
             }
           }
         ],
-        encryptedFields: ['FEISHU_APP_SECRET'],
+        encryptedFields: ['SLACK_SECRET'],
         fields: [
           [
             this.$t('common.BasicInfo'),
             [
-              'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_VERSION'
+              'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
             ]
           ]
         ],
         fieldsMeta: {
-          FEISHU_APP_SECRET: {
+          SLACK_APP_SECRET: {
+            component: UpdateToken
+          },
+          SLACK_BOT_TOKEN: {
             component: UpdateToken
           }
         },
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
-          if (!data['FEISHU_APP_SECRET']) {
-            delete data['FEISHU_APP_SECRET']
-          }
+          const needDeleteValues = ['SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN']
+          needDeleteValues.map((k) => {
+            if (!data[k]) {
+              delete data[k]
+            }
+          })
+          console.log('data: ', data)
           return data
         },
         submitMethod() {

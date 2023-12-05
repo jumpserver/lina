@@ -173,7 +173,8 @@ export default {
     removeRowToSelect(row) {
       const hasSelectValue = this.hasSelectValue(row)
       if (hasSelectValue) {
-        this.accountsSelected.splice(hasSelectValue, 1)
+        const index = this.accountsSelected.findIndex(i => i?.id === row.id)
+        this.accountsSelected.splice(index, 1)
       }
     }
   }

@@ -2,8 +2,7 @@
 import { Table } from 'element-ui'
 import { getCell, getColumnByCell } from 'element-ui/packages/table/src/util'
 import { getStyle, hasClass } from 'element-ui/src/utils/dom'
-import i18n from '@/i18n/i18n'
-import { message } from './message'
+import { copy } from './common'
 
 Object.assign(Table.components.TableBody.methods, {
   handleCellMouseEnter(event, row) {
@@ -46,7 +45,7 @@ Object.assign(Table.components.TableBody.methods, {
         tooltip.$refs.popper.style.cursor = 'pointer'
         // 点击复制
         tooltip.$refs.popper.onclick = () => {
-          message.success(i18n.t('common.CopySuccess'))
+          copy(this.tooltipContent)
         }
       }
       if (tooltipEnterable && tooltip.showPopper) {

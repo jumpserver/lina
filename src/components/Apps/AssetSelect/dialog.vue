@@ -84,16 +84,6 @@ export default {
             }
           },
           {
-            prop: 'protocols',
-            formatter: function(row) {
-              const data = row.protocols.map(p => {
-                return <el-tag size='mini'>{p.name}/{p.port} </el-tag>
-              })
-              return <span> {data} </span>
-            },
-            label: this.$t('assets.Protocols')
-          },
-          {
             prop: 'actions',
             has: false
           }

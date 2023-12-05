@@ -11,10 +11,15 @@ export default {
   components: {
     BaseList
   },
+  props: {
+    url: {
+      type: String,
+      default: () => '/api/v1/terminal/sessions/?is_finished=1'
+    }
+  },
   data() {
     const vm = this
     return {
-      url: '/api/v1/terminal/sessions/?is_finished=1',
       extraActions: [
         {
           name: 'replay',

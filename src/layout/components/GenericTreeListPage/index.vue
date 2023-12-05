@@ -50,6 +50,9 @@ export default {
     },
     selectNode: function(node) {
       return this.$refs.TreeTable.selectNode(node)
+    },
+    reloadTable() {
+      this.$refs.TreeTable.reloadTable()
     }
   }
 }

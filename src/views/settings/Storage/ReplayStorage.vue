@@ -2,9 +2,9 @@
   <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
 </template>
 <script>
-import ListTable from '@/components/Table/ListTable'
+import ListTable from '@/components/Table/ListTable/index.vue'
 import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
-import { getReplayStorageOptions } from '@/views/sessions/const'
+import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 
 export default {
   name: 'ReplayStorage',
@@ -13,7 +13,7 @@ export default {
   },
   data() {
     const vm = this
-    const storageOptions = getReplayStorageOptions()
+    const storageOptions = this.getReplayStorageOptions()
     return {
       replayActions: {
         canCreate: this.$hasPerm('terminal.add_replaystorage'),
@@ -91,7 +91,7 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('sessions.SetToDefault'),
-                  can: this.$hasPerm('terminal.change_replaystorage'),
+                  can: (value) => this.$hasPerm('terminal.change_replaystorage') && value.row.type.value !== 'sftp',
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultReplayStorage(row.id).then(data => {
@@ -110,6 +110,19 @@ export default {
     }
   },
   methods: {
+    getReplayStorageOptions() {
+      const options = []
+      const storages = Object.values(STORAGE_TYPE_META_MAP)
+      for (const s of storages) {
+        if (s.name === 'sftp' && !this.$hasLicense()) continue
+        const option = {
+          name: s.name,
+          title: s.title
+        }
+        options.push(option)
+      }
+      return options
+    }
   }
 }
 </script>

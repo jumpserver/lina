@@ -109,7 +109,8 @@
       "ExecutionList": "実行リスト",
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
-      "RecipientHelpText": "現在はメール送信のみをサポートしており、受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます"
+      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
+      "RecipientServer": "受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
     "AutoCreate": "自動作成",
@@ -498,7 +499,7 @@
     "AddPassKey": "パスキー（通行鍵）を追加"
   },
   "common": {
-    "BelongAll": "すべての",
+    "BelongAll": "すべてが含まれています",
     "Enterprise": "企業版",
     "SyncTask": "同期任務です",
     "New": "新筑",
@@ -734,6 +735,7 @@
     "InputNumber": "数字の種類をお願いします。。",
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
+    "SyncUser": "ユーザーを同期する",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -902,7 +904,7 @@
     "IsActive": "アクティブです",
     "LessEqualThan": "以下または等しい",
     "OtherRules": "他のルール",
-    "BelongTo": "所属する",
+    "BelongTo": "どれも含まれます",
     "GreatEqualThan": "以上または等しい",
     "PasswordRule": "パスワードのルール",
     "Uppercase": "大文字",
@@ -914,7 +916,8 @@
     "WordSep": "",
     "Selection": "選択可能",
     "PageNext": "次のページ",
-    "Selected": "選択済み"
+    "Selected": "選択済み",
+    "ExcludeSymbol": "記号を除外する"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -1302,7 +1305,7 @@
     "OnlineSession": "オンラインセッション",
     "OnlineUserDevices": "オンラインデバイス",
     "CreateCommandStorage": "コマンドストアの作成",
-    "CreateReplayStorage": "録画ストレージの作成",
+    "CreateReplayStorage": "オブジェクトストレージを作成する",
     "Dashboard": "ダッシュボード",
     "DatabaseApp": "データベース",
     "DatabaseAppCreate": "データベースアプリケーションの作成",
@@ -1373,7 +1376,7 @@
     "ApplicationPermissionDetail": "アプリライセンスの詳細",
     "ApplicationPermissionUpdate": "アプリ認可ルールの更新",
     "RemoteAppUpdate": "リモートアプリケーションの更新",
-    "ReplayStorageUpdate": "録画保存の更新",
+    "ReplayStorageUpdate": "オブジェクトストレージを更新する",
     "Detail": "詳細",
     "SessionOffline": "履歴セッション",
     "SessionOnline": "オンラインセッション",
@@ -1406,6 +1409,7 @@
     "UserGuide": "ユーザーウィザード",
     "UserList": "ユーザーリスト",
     "UserProfile": "個人情報",
+    "UserSession": "ユーザーセッション",
     "UserUpdate": "ユーザーの更新",
     "Users": "ユーザー管理",
     "WebFTP": "ファイル管理",
@@ -1472,6 +1476,7 @@
   },
   "terminal": {
     "Offline": "オフライン",
+    "Active": "アクティブ",
     "OnlineSessionHelpMsg": "セッションが現在のユーザーのオンラインセッションであるため、現在のセッションをオフラインできません。現在はWebログイン済みのユーザーのみが記録されています。",
     "OfflineSuccessMsg": "オフラインに成功しました",
     "BulkOffline": "オフライン",
@@ -1541,7 +1546,7 @@
     "remoteAddr": "リモートアドレス",
     "replay": "リプレイ",
     "replaySession": "再生セッション",
-    "replayStorage": "録画保存",
+    "replayStorage": "オブジェクトストレージ",
     "riskLevel": "リスクレベル",
     "session": "会話",
     "sshPort": "SSHポート",
@@ -1775,6 +1780,7 @@
     "securityPasswordSpecialChar": "特殊文字を含む必要があります",
     "securityPasswordUpperCase": "大文字を含む必要があります",
     "securityServiceAccountRegistration": "端末登録",
+    "Storage": "設定を保存する",
     "siteUrl": "現在のサイトURL",
     "technologyConsult": "技術コンサルティング",
     "terminalAssetListPageSize": "資産ページングのページ数あたり",
@@ -1800,6 +1806,7 @@
     "dingTalkTest": "テスト",
     "weComTest": "テスト",
     "FeiShu": "本を飛ばす",
+    "Slack": "Slack",
     "SMS": "SMS設定",
     "feiShuTest": "テスト",
     "setting": "設定",
@@ -1817,7 +1824,8 @@
     "Applets": "リモート アプリケーション",
     "sync": "同期",
     "AccountStorage": "アカウントストレージ",
-    "Passkey": "パスキー"
+    "Passkey": "パスキー",
+    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。"
   },
   "tickets": {
     "BatchApproval": "大量承認です",
@@ -1945,6 +1953,7 @@
     "WeCom": "企業wechat",
     "DingTalk": "ホッチキス",
     "FeiShu": "本を飛ばす",
+    "Slack": "Slack",
     "FingerPrint": "指紋",
     "FirstLogin": "初回ログイン",
     "OrgUser": "組織ユーザー",
@@ -1957,6 +1966,7 @@
     "setWeCom": "企業のwechat認証を設定する",
     "setDingTalk": "ホッチキス認証の設定",
     "setFeiShu": "飛書認証を設定する",
+    "setSlack": "Slack認証を設定します",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "アカウントをより安全にするために、マルチファクタ认证を有効にします。 <Br/> 有効にすると、次回のログイン時に多因子認証バインディングプロセスに入ります。また、 (個人情報-> クイック修正-> 多因子設定の変更) もできます。で直接紐付けます",
       "MFAOfUserFirstLoginUserGuidePage": "あなたと会社の安全を守るために、あなたのアカウント、パスワード、鍵などの重要な機密情報を大切に保管してください (例: 複雑なパスワードを設定し、多因子認証を有効にする) <br> メールボックス、携帯電話番号、微信などの個人情報は、ユーザー認証やプラットフォーム内部のメッセージ通知としてのみ使用されています。",
@@ -2174,6 +2184,8 @@
       "KingSoftCloud": "金山雲",
       "Azure": "Azure(中国)",
       "Azure_Int": "Azure (国際)",
+      "SCP": "SCP",
+      "ApsaraStack": "Apsara Stack",
       "HostnameStrategy": "資産を生成するためにホスト名。例: 1. インスタンス名 (instanceDemo) 2.インスタンス名と一部IP (下位2桁) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "資産情報を最新の状態に保つ",
       "AccountCreate": "アカウントの作成",
@@ -2308,7 +2320,8 @@
       "CrontabOfCreateUpdatePage": "例: 毎週日曜日03:05に <5 3 * * 0> <br/> 5桁のLinux crontab式を使用して、時分割日月曜日> (<a href = \"https://tool.lu/crontab/\" target = \"_ ツール </a>) <br/> 定期実行とサイクル実行を同時に設定している場合は、優先的に定期実行を使って",
       "IntervalOfCreateUpdatePage": "単位: 時",
       "UsernameOfCreateUpdatePage": "ターゲットホスト上のユーザーのユーザー名存在する場合は、ユーザーパスワードを変更します存在しない場合は、ユーザーを追加してパスワードを設定します"
-    }
+    },
+    "Beian": "ファイリング"
   },
   "applets": {
     "PublishStatus": "投稿ステータス",

@@ -109,7 +109,8 @@
       "ExecutionList": "Execution list",
       "Reason": "Reason",
       "AccountBackup": "Account backup",
-      "RecipientHelpText": "Currently, only email sending is supported. If both recipients A and B are set, the account key will be split into two parts: front and back"
+      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
+      "RecipientServer": "Receiving server"
     },
     "DynamicUsername": "Dynamic username",
     "AutoCreate": "Auto create",
@@ -498,7 +499,7 @@
     "AddPassKey": "AddPassKey"
   },
   "common": {
-    "BelongAll": "Include all",
+    "BelongAll": "Contains all",
     "WordSep": " ",
     "Enterprise": "Enterprise",
     "SyncTask": "Synchronization task",
@@ -733,6 +734,7 @@
     "Failed": "Failed",
     "Pending": "Pending",
     "ClickCopy": "Click copy",
+    "SyncUser": "Sync User",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
@@ -904,18 +906,19 @@
     "IsActive": "Is active",
     "LessEqualThan": "Less than or equal to",
     "OtherRules": "Other rules",
-    "BelongTo": "Belong to",
+    "BelongTo": "Contains any",
     "GreatEqualThan": "Greater than or equal to",
     "PasswordRule": "PasswordRule",
     "Uppercase": "Uppercase",
     "Length": "Length",
     "Digit": "Digit",
     "Lowercase": "Lowercase",
-    "SpecialSymbol": "SpecialSymbol",
     "PagePrev": "Previous",
     "Selection": "Selection",
     "PageNext": "Next",
-    "Selected": "Selected"
+    "Selected": "Selected",
+    "SpecialSymbol": "Special symbol",
+    "ExcludeSymbol": "Exclude symbol"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1296,7 +1299,7 @@
     "FileTransfer": "File transfer",
     "OnlineSession": "Online session",
     "CreateCommandStorage": "Create command storage",
-    "CreateReplayStorage": "Create replay storage",
+    "CreateReplayStorage": "Create object storage",
     "Dashboard": "Dashboard",
     "DatabaseApp": "Database Apps",
     "DatabaseAppCreate": "Database app create",
@@ -1368,7 +1371,7 @@
     "ApplicationPermissionDetail": "Application permission detail",
     "ApplicationPermissionUpdate": "Application permission update",
     "RemoteAppUpdate": "Remote app update",
-    "ReplayStorageUpdate": "Replay storage update",
+    "ReplayStorageUpdate": "Replay object update",
     "Detail": "Detail",
     "Activity": "Activity",
     "SessionOffline": "Sessions offline",
@@ -1397,6 +1400,7 @@
     "UserGuide": "UserGuide",
     "UserList": "Users",
     "UserProfile": "User profile",
+    "UserSession": "User Session",
     "UserUpdate": "User update",
     "Users": "Users",
     "WebFTP": "WebFTP",
@@ -1479,6 +1483,7 @@
   "terminal": {
     "OnlineSessionHelpMsg": "The current session cannot be offline because it is an online session of the current user. Currently, only users who have logged in through web mode are recorded.",
     "Offline": "Offline",
+    "Active": "Active",
     "OfflineSuccessMsg": "Offline success",
     "BulkOffline": "Bulk offline",
     "Marketplace": "Marketplace",
@@ -1547,7 +1552,7 @@
     "remoteAddr": "Remote addr",
     "replay": "replay",
     "replaySession": "Replay session",
-    "replayStorage": "Replay storage",
+    "replayStorage": "Object storage",
     "riskLevel": "Risk level",
     "session": "Session",
     "sshPort": "SSH port",
@@ -1770,6 +1775,7 @@
     "securityPasswordSpecialChar": "Must contain special characters",
     "securityPasswordUpperCase": "Must contain capital letters",
     "securityServiceAccountRegistration": "Service account registration",
+    "Storage": "Storage",
     "siteUrl": "Current SITE URL",
     "technologyConsult": "Technology Consult",
     "terminalAssetListPageSize": "List page size",
@@ -1796,6 +1802,7 @@
     "weComTest": "Test",
     "FeiShu": "FeiShu",
     "feiShuTest": "Test",
+    "Slack": "Slack",
     "setting": "Setting",
     "OtherAuth": "Other Auth",
     "OAuth2LogoTip": "Tip: Authentication service provider (recommended image size: 64px*64px)",
@@ -1825,7 +1832,8 @@
     "BasicTools": "Basic tool",
     "sync": "Sync",
     "AccountStorage": "Account Storage",
-    "Passkey": "Passkey"
+    "Passkey": "Passkey",
+    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage."
   },
   "tickets": {
     "BatchApproval": "Batch approval",
@@ -1952,6 +1960,7 @@
     "setWeCom": "Set wecom login",
     "setDingTalk": "Set dingtalk login",
     "setFeiShu": "Set feishu login",
+    "setSlack": "Set Slack login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
     "Email": "Email",
@@ -1959,6 +1968,7 @@
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
     "FeiShu": "FeiShu",
+    "Slack": "Slack",
     "FingerPrint": "Fingerprint",
     "FirstLogin": "First login",
     "InviteUser": "Invite user",
@@ -2178,6 +2188,8 @@
       "JDCloud": "JD Cloud",
       "Azure": "Azure(China)",
       "Azure_Int": "Azure(International)",
+      "SCP": "SCP",
+      "ApsaraStack": "Apsara Stack",
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
       "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",
@@ -2317,7 +2329,8 @@
     "officialWebsite": "Official website link",
     "Template": {
       "Template": "Template"
-    }
+    },
+    "Beian": "Registration"
   },
   "applets": {
     "PublishStatus": "Publish status",

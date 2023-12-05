@@ -5,6 +5,7 @@ export const OSS = 'oss'
 export const AZURE = 'azure'
 export const OBS = 'obs'
 export const COS = 'cos'
+export const SFTP = 'sftp'
 
 export const STORAGE_TYPE_META_MAP = {
   [S3]: {
@@ -41,18 +42,10 @@ export const STORAGE_TYPE_META_MAP = {
     name: COS,
     title: 'COS',
     meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
+  },
+  [SFTP]: {
+    name: SFTP,
+    title: 'SFTP',
+    meta: ['SFTP_HOST', 'SFTP_PORT', 'SFTP_USERNAME', 'STP_SECRET_TYPE', 'SFTP_PASSWORD', 'STP_PRIVATE_KEY', 'STP_PASSPHRASE', 'SFTP_ROOT_PATH']
   }
-}
-
-export function getReplayStorageOptions() {
-  const options = []
-  const storages = Object.values(STORAGE_TYPE_META_MAP)
-  for (const s of storages) {
-    const option = {
-      name: s.name,
-      title: s.title
-    }
-    options.push(option)
-  }
-  return options
 }

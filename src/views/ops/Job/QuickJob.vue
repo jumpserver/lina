@@ -230,7 +230,11 @@ export default {
             icon: 'save',
             tip: this.$t('ops.SaveCommand'),
             callback: (val, setting) => {
-              this.showOpenAdhocSaveDialog = true
+              if (!this.command) {
+                return this.$message.error(this.$t('ops.RequiredContent'))
+              } else {
+                this.showOpenAdhocSaveDialog = true
+              }
             }
           },
           help: {
