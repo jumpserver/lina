@@ -737,6 +737,8 @@
     "Pending": "Pending",
     "ClickCopy": "Click copy",
     "SyncUser": "Sync User",
+    "Reconnect": "Reconnect",
+    "NewChat": "New Chat",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
@@ -752,6 +754,8 @@
       "hasImportErrorItemMsg": "There is an error item, click the x icon to view the details, and continue to import after editing",
       "ImportFail": "Import failed"
     },
+    "ChatHello": "Hello! What help can I offer you?",
+    "ConnectionDropped": "Connection dropped",
     "isValid": "Is valid",
     "nav": {
       "TempPassword": "Temporary password",
@@ -1722,6 +1726,7 @@
     "MailSend": "Mail send",
     "LDAPServerInfo": "LDAP Server",
     "LDAPUser": "LDAP User",
+    "ChatAI": "ChatAI",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",

@@ -738,6 +738,8 @@
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
     "SyncUser": "ユーザーを同期する",
+    "Reconnect": "再接続",
+    "NewChat": "新しいチャット",
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -753,6 +755,8 @@
       "dragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",
       "hasImportErrorItemMsg": "インポート失敗項目があります。左側のxをクリックして失敗原因を確認し、表をクリックして編集した後、失敗項目のインポートを続けることができます"
     },
+    "ChatHello": "こんにちは！私はあなたを助けることができますか？",
+    "ConnectionDropped": "接続が切断されました",
     "fileType": "ファイルタイプ",
     "isValid": "有効",
     "nav": {
@@ -1722,6 +1726,7 @@
     "MailSend": "メール送信",
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
+    "ChatAI": "ChatAI",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",

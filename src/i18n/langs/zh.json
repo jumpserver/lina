@@ -789,6 +789,8 @@
     "Receivers": "接收人",
     "ClickCopy": "点击复制",
     "SyncUser": "同步用户",
+    "Reconnect": "重新连接",
+    "NewChat": "新聊天",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -804,6 +806,8 @@
       "dragUploadFileInfo": "将文件拖到此处，或点击此处上传",
       "hasImportErrorItemMsg": "存在导入失败项，点击左侧 x 查看失败原因，点击表格编辑后，可以继续导入失败项"
     },
+    "ChatHello": "你好！我能为你提供什么帮助？",
+    "ConnectionDropped": "连接已断开",
     "fileType": "文件类型",
     "isValid": "有效",
     "nav": {
@@ -1717,6 +1721,7 @@
     "MailSend": "邮件发送",
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
+    "ChatAI": "ChatAI",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",

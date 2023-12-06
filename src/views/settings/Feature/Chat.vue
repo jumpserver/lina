@@ -1,7 +1,7 @@
 <template>
   <div>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" />
+      <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
     </IBox>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/IBox/index.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -53,6 +54,20 @@ export default {
       submitMethod() {
         return 'patch'
       }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'publicSettings'
+    ])
+  },
+  methods: {
+    submitSuccess(res) {
+      const setting = { ...this.publicSettings, ...res }
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'publicSettings',
+        value: setting || {}
+      })
     }
   }
 }
