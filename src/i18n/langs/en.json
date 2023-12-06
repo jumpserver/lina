@@ -1159,7 +1159,10 @@
     "Add": "Add",
     "SuccessfulOperation": "Successful operation",
     "Modify": "Modify",
-    "AdhocUpdate": "Update Adhoc"
+    "AdhocUpdate": "Update Adhoc",
+    "Transfer": "Transfer",
+    "UploadDir": "Upload Directory",
+    "RequiredUploadFile": "Please upload files！"
   },
   "perms": {
     "": "",
@@ -1480,7 +1483,8 @@
     "OnlineUserDevices": "OnlineUserDevices",
     "More": "More ..",
     "VirtualAppDetail": "Virtual App Detail",
-    "AppProviderDetail": "Provider Detail"
+    "AppProviderDetail": "Provider Detail",
+    "BulkTransfer": "Bulk Transfer"
   },
   "rbac": {
     "Permissions": "Permissions",

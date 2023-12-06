@@ -1157,7 +1157,10 @@
     "Add": "追加",
     "SuccessfulOperation": "成功した操作",
     "Modify": "改訂",
-    "AdhocUpdate": "更新コマンド"
+    "AdhocUpdate": "更新コマンド",
+    "Transfer": "ファイルを転送する",
+    "UploadDir": "アップロードディレクトリ",
+    "RequiredUploadFile": "ファイルをアップロードしてください！"
   },
   "perms": {
     "": "",
@@ -1472,7 +1475,8 @@
     "CloudCreate": "アセット作成 - クラウドプラットフォーム",
     "DatabaseUpdate": "アセット更新 - データベース",
     "CloudUpdate": "アセット更新 - クラウドプラットフォーム",
-    "More": "さらに.."
+    "More": "さらに..",
+    "BulkTransfer": "bulk transfer"
   },
   "rbac": {
     "Permissions": "権限",
