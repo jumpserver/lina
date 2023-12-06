@@ -139,6 +139,9 @@ export default {
             },
             width: '80px'
           },
+          is_locked: {
+            label: this.$t('sessions.is_locked')
+          },
           actions: {
             prop: 'actions',
             label: this.$t('common.Actions'),

@@ -1578,6 +1578,7 @@
     "test": "Test",
     "type": "Type",
     "user": "Use",
+    "is_locked": "Is Locked",
     "riskLevels": {
       "common": "common"
     },
