@@ -1566,6 +1566,7 @@
     "test": "テスト",
     "type": "タイプ",
     "user": "ユーザー",
+    "is_locked": "一時停止するかどうか",
     "riskLevels": {
       "common": "普通"
     },

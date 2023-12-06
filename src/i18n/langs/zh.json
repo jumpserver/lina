@@ -1555,6 +1555,7 @@
     "test": "测试",
     "type": "类型",
     "user": "用户",
+    "is_locked": "是否暂停",
     "riskLevels": {
       "common": "普通"
     },
