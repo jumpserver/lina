@@ -917,7 +917,11 @@
     "Selection": "選択可能",
     "PageNext": "次のページ",
     "Selected": "選択済み",
-    "ExcludeSymbol": "記号を除外する"
+    "ExcludeSymbol": "記号を除外する",
+    "VirtualApps": "仮想アプリ",
+    "ImageName": "イメージ名",
+    "ID": "ID",
+    "Ports": "ポート"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
