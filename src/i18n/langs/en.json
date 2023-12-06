@@ -118,6 +118,8 @@
     "TaskID": "Task ID",
     "AccountTemplate": "Account template",
     "Sync": "Sync",
+    "SyncDelete": "Sync delete",
+    "BulkSyncDelete": "Bulk sync delete",
     "SyncUpdateAccountInfo": "Sync update account info",
     "AddAccountResult": "Add account result",
     "AutoPush": "Auto Push",

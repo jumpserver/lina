@@ -1,19 +1,34 @@
 <template>
-  <TreeTable :header-actions="headerActions" :table-config="tableConfig" :tree-setting="treeSetting" />
+  <div>
+    <RemoveAccount
+      v-if="showDeleteAccountDialog"
+      :accounts="gatherAccounts"
+      :visible.sync="showDeleteAccountDialog"
+    />
+    <TreeTable
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :tree-setting="treeSetting"
+    />
+  </div>
 </template>
 
 <script>
 import TreeTable from '@/components/Table/TreeTable'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 
 export default {
   components: {
-    TreeTable
+    TreeTable,
+    RemoveAccount
   },
   data() {
     const vm = this
     return {
+      showDeleteAccountDialog: false,
+      gatherAccounts: {},
       treeSetting: {
         showMenu: false,
         showRefresh: true,
@@ -66,8 +81,8 @@ export default {
               moreActionsTitle: this.$t('common.More'),
               extraActions: [
                 {
-                  name: 'View',
-                  title: this.$t('common.Sync'),
+                  name: 'Sync',
+                  title: this.$t('accounts.Sync'),
                   can: this.$hasPerm('accounts.add_gatheredaccount') && !this.$store.getters.currentOrgIsRoot,
                   type: 'primary',
                   callback: ({ row }) => {
@@ -77,6 +92,19 @@ export default {
                     ).then(res => {
                       this.$message.success(this.$tc('common.SyncSuccessMsg'))
                     }).catch(() => {
+                    })
+                  }
+                },
+                {
+                  name: 'SyncDelete',
+                  title: this.$t('accounts.SyncDelete'),
+                  can: this.$hasPerm('accounts.remove_account') && !this.$store.getters.currentOrgIsRoot,
+                  type: 'danger',
+                  callback: ({ row }) => {
+                    vm.gatherAccounts = [row]
+                    vm.showDeleteAccountDialog = false
+                    setTimeout(() => {
+                      vm.showDeleteAccountDialog = true
                     })
                   }
                 }
@@ -103,7 +131,9 @@ export default {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.add_gatheredaccount')
             },
             callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => { return v.id })
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
               this.$axios.post(
                 `/api/v1/accounts/gathered-accounts/sync-accounts/`,
                 { gathered_account_ids: ids }
@@ -113,6 +143,22 @@ export default {
                 this.$message.error(this.$tc('common.bulkSyncErrorMsg' + ' ' + err))
               })
             }.bind(this)
+          },
+          {
+            name: 'BulkSyncDelete',
+            title: this.$t('common.BulkSyncDelete'),
+            type: 'primary',
+            icon: 'fa fa-exchange',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account')
+            },
+            callback: function({ selectedRows }) {
+              vm.gatherAccounts = selectedRows
+              vm.showDeleteAccountDialog = false
+              setTimeout(() => {
+                vm.showDeleteAccountDialog = true
+              })
+            }
           }
         ]
       }
