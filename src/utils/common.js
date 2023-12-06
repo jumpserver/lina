@@ -400,4 +400,11 @@ export function getQueryFromPath(path) {
   return Object.fromEntries(url.searchParams)
 }
 
+export const pageScroll = _.throttle((id) => {
+  const dom = document.getElementById(id)
+  if (dom) {
+    dom.scrollTop = dom?.scrollHeight
+  }
+}, 200)
+
 export { BASE_URL }
