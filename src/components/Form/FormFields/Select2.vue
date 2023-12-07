@@ -227,20 +227,18 @@ export default {
       deep: true
     },
     iOptions(val) {
-      if (val.length === 0) {
-        this.remote = false
-      } else {
-        this.remote = true
-      }
+      this.remote = val.length !== 0
     }
   },
   async mounted() {
     if (!this.initialized) {
       await this.initialSelect()
+      console.log('Options: ', this.iOptions.length)
       setTimeout(() => {
         this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
+        this.$emit('initialized', true)
       }, 100)
     }
     this.$nextTick(() => {
@@ -325,6 +323,7 @@ export default {
     },
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
+      console.log('Ajax: ', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
           this.$log.debug('Start init select2 value, ', this.value)
