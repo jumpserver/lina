@@ -118,6 +118,8 @@
     "TaskID": "タスク ID",
     "AccountTemplate": "账号模版",
     "Sync": "同期",
+    "SyncDelete": "同期削除",
+    "BulkSyncDelete": "一括同期削除",
     "SyncUpdateAccountInfo": "アカウント情報の同期更新",
     "AddAccountResult": "账号批量添加结果",
     "AutoPush": "自動プッシュ",
