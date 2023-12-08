@@ -30,7 +30,7 @@ export default {
     return {
       host: {},
       config: {
-        url: '/api/v1/terminal/app-providers/',
+        url: '/api/v1/terminal/app-providers',
         activeMenu: 'Detail',
         submenu: [
           {
