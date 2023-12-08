@@ -10,15 +10,15 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="2">
         {{ this.$t('common.CronTab.from') }}
-        <el-input-number v-model="cycle01" :min="1" :max="12" /> -
-        <el-input-number v-model="cycle02" :min="1" :max="12" /> {{ this.$t('common.CronTab.month') }}
+        <el-input-number v-model="cycle01" :max="12" :min="1" size="mini" /> -
+        <el-input-number v-model="cycle02" :max="12" :min="1" size="mini" /> {{ this.$t('common.CronTab.month') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('common.CronTab.every') }}
-        <el-input-number v-model="average02" :min="1" :max="12" /> {{ this.$t('common.CronTab.month') }}{{ this.$t('common.CronTab.executeOnce') }}
+        <el-input-number v-model="average02" :max="12" :min="1" size="mini" /> {{ this.$t('common.CronTab.month') }}{{ this.$t('common.CronTab.executeOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -27,8 +27,8 @@
         {{ this.$t('common.CronTab.appoint') }}
         <el-select
           v-model="checkboxList"
-          clearable
           :placeholder="$tc('common.CronTab.manyChoose')"
+          clearable
           multiple
           style="width:100%"
         >

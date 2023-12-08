@@ -6,7 +6,7 @@
     :show-confirm="false"
     :title="$tc('assets.AddAccount')"
     :visible.sync="iVisible"
-    width="70%"
+    width="800px"
   >
     <AccountCreateForm
       :account="account"

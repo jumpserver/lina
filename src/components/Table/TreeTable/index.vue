@@ -86,6 +86,10 @@ export default {
     treeTabConfig: {
       type: Object,
       default: () => ({})
+    },
+    treeWidth: {
+      type: String,
+      default: () => '20%'
     }
   },
   data() {

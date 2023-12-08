@@ -71,7 +71,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .detail-content {
-  padding: 10px;
+  padding: 20px 10px;
   max-height: 60vh;
   overflow-y: auto;
 }
@@ -85,4 +85,7 @@ export default {
   }
 }
 
+.detail-item:first-child {
+  border-top: 1px solid #EBEEF5;
+}
 </style>

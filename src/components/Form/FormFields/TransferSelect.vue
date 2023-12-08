@@ -9,7 +9,7 @@
       v-on="$listeners"
       @focus.stop.prevent="handleFocus"
     />
-    <Dialog v-if="showTransfer" :title="title" :visible.sync="showTransfer" width="730px" @confirm="handleTransConfirm">
+    <Dialog v-if="showTransfer" :title="label" :visible.sync="showTransfer" width="730px" @confirm="handleTransConfirm">
       <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
     </Dialog>
   </div>
@@ -21,7 +21,7 @@ import krryPaging from '@/components/Libs/Krry/paging/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 
 export default {
-  name: 'TransSelect',
+  name: 'TransferSelect',
   components: { krryPaging, Select2, Dialog },
   props: {
     value: {
@@ -30,7 +30,7 @@ export default {
     },
     url: {
       type: String,
-      required: true
+      default: ''
     },
     transformOption: {
       type: Function,
@@ -41,6 +41,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    label: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -48,6 +52,7 @@ export default {
     const transformOption = vm.transformOption || vm.ajax.transformOption || ((item) => {
       return { label: item.name, value: item.id }
     })
+    const url = vm.url || vm.ajax.url
     const getPageData = async({ pageIndex, pageSize, keyword }) => {
       const limit = pageSize
       const offset = (pageIndex - 1) * pageSize
@@ -59,7 +64,6 @@ export default {
       if (keyword) {
         params['search'] = keyword
       }
-      const url = vm.url
       const data = await this.$axios.get(url, { params })
       return data['results'].map(item => {
         const n = transformOption(item)
@@ -68,13 +72,12 @@ export default {
     }
     return {
       showTransfer: false,
-      title: 'Select',
       selectInitialized: false,
       select2: {
         options: [],
         multiple: true,
         ajax: {
-          url: this.url || this.ajax.url,
+          url: url,
           transformOption: transformOption
         }
       },
@@ -110,8 +113,7 @@ export default {
         return _.uniq(value)
       },
       set(val) {
-        console.log('Value changed: ', val)
-        this.$emit('input', _.uniq(val))
+        this.$emit('input', val)
       }
     }
   },
@@ -120,18 +122,15 @@ export default {
       this.$emit('input', val)
     },
     handleFocus() {
-      console.log('SHow transfer ')
       this.$refs.select2.selectRef.blur()
       this.pagingTransfer.selectedData = this.$refs.select2.iOptions.map(item => {
         return { id: item.value, label: item.label }
       }).filter(item => {
         return this.iValue.includes(item.id)
       })
-      console.log('Selected data: ', this.pagingTransfer.selectedData)
       this.showTransfer = true
     },
     handleSelectInitialed() {
-      console.log('Options: ')
       this.selectInitialized = true
     },
     handleTransConfirm() {

@@ -3,8 +3,8 @@
     <el-col :md="14" :sm="24">
       <ListTable
         ref="ListTable"
-        :table-config="tableConfig"
         :header-actions="headerActions"
+        :table-config="tableConfig"
       />
     </el-col>
     <el-col :md="10" :sm="24">
@@ -16,6 +16,7 @@
 <script>
 import { ListTable, RelationCard } from '@/components'
 import { mapGetters } from 'vuex'
+import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -61,9 +62,9 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope.value}-role-bindings/?role=${this.object.id}`,
-        columns: this.object.scope.value === 'system' ? ['user_display', 'actions'] : ['user_display', 'org_name', 'actions'],
+        columns: this.object.scope.value === 'system' ? ['user_display', 'delete_action'] : ['user_display', 'org_name', 'delete_action'],
         columnsShow: {
-          min: ['user_display', 'actions']
+          min: ['user_display', 'delete_action']
         },
         columnsMeta: {
           user_display: {
@@ -72,7 +73,29 @@ export default {
               return row.user.name
             }
           },
+          delete_action: {
+            prop: 'id',
+            label: this.$t('common.Actions'),
+            align: 'center',
+            width: 150,
+            objects: 'all',
+            formatter: DeleteActionFormatter,
+            formatterArgs: {
+              disabled: false
+            },
+            onDelete: function(col, row, cellValue, reload) {
+              this.$axios.delete(
+                `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`,
+              ).then(res => {
+                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                reload()
+              }).catch(error => {
+                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+              })
+            }.bind(this)
+          },
           actions: {
+            has: false,
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,

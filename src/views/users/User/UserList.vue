@@ -22,6 +22,7 @@ import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -65,6 +66,14 @@ export default {
           username: {
             formatter: (row) => {
               return row['username'].replace(' ', '*')
+            }
+          },
+          groups: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'UserDetail'
+              }
             }
           },
           system_roles: {

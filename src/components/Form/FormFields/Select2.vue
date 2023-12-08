@@ -233,7 +233,6 @@ export default {
   async mounted() {
     if (!this.initialized) {
       await this.initialSelect()
-      console.log('Options: ', this.iOptions.length)
       setTimeout(() => {
         this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
@@ -323,7 +322,6 @@ export default {
     },
     async initialSelect() {
       // this.$log.debug('Select ajax config', this.iAjax)
-      console.log('Ajax: ', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
           this.$log.debug('Start init select2 value, ', this.value)

@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import ObjectSelect2 from '@/components/Form/FormFields/NestedObjectSelect2.vue'
 import NestedField from '@/components/Form/AutoDataForm/components/NestedField.vue'
 import Switcher from '@/components/Form/FormFields/Switcher.vue'
 import rules from '@/components/Form/DataForm/rules'
 import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
+import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 import { assignIfNot } from '@/utils/common'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 
@@ -45,13 +45,14 @@ export class FormFieldGenerator {
         break
       case 'field':
         type = ''
-        field.component = Select2
+        field.component = TransferSelect
         if (fieldRemoteMeta.required) {
           field.el.clearable = false
         }
-        if (fieldRemoteMeta.child && fieldRemoteMeta.child.type === 'nested object') {
-          field.component = ObjectSelect2
-        }
+        field.el.label = field.label
+        // if (fieldRemoteMeta.child && fieldRemoteMeta.child.type === 'nested object') {
+        //   field.component = ObjectSelect2
+        // }
         break
       case 'string':
         type = 'input'
@@ -75,7 +76,8 @@ export class FormFieldGenerator {
         field.component = ObjectSelect2
         break
       case 'm2m_related_field':
-        field.component = ObjectSelect2
+        field.component = TransferSelect
+        field.el.label = field.label
         break
       case 'nested object':
         type = 'nestedField'

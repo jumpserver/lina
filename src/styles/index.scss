@@ -292,9 +292,14 @@ input[type=file] {
 }
 
 .el-link--default {
-    color: #1c84c6 !important;
+  color: #1c84c6 !important;
+  font-weight: 300;
 }
 
 .el-link.is-underline:hover:after  {
   border-bottom: 1px solid #007bff !important;
+}
+
+.el-dialog__title {
+  font-size: 16px;
 }
