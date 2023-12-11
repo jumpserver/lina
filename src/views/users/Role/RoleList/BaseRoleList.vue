@@ -49,6 +49,23 @@ export default {
               }
             }
           },
+          users_amount: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute({ row }) {
+                return {
+                  name: 'RoleDetail',
+                  query: {
+                    activeTab: 'RoleUsers',
+                    scope: row.scope.value
+                  },
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
+            }
+          },
           builtin: {
             width: '100px',
             formatterArgs: {

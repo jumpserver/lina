@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     iWidth() {
-      return this.$store.getters.isMobile ? '80%' : this.width
+      return this.$store.getters.isMobile ? '1000px' : this.width
     }
   },
   methods: {

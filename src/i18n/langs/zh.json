@@ -875,7 +875,7 @@
       "WeekOrTime": "星期/时间"
     },
     "CronTab": {
-      "newCron": "生成 cron",
+      "newCron": "生成 Cron",
       "timeExpression": "时间表达式",
       "cronExpression": "crontab完整表达式",
       "min": "分钟",

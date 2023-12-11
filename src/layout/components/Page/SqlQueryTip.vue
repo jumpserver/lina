@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-tag
-      v-for="item in sqlQueryCounter"
+      v-for="item in sqlQueryCounter || []"
       :key="item.url"
       :type="getType(item)"
       size="small"

@@ -64,7 +64,6 @@ export default {
               delete data[k]
             }
           })
-          console.log('data: ', data)
           return data
         },
         submitMethod() {

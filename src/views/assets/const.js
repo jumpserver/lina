@@ -119,23 +119,6 @@ export const assetFieldsMeta = (vm) => {
         clearable: true
       }
     },
-    labels: {
-      el: {
-        ajax: {
-          url: '/api/v1/assets/labels/',
-          transformOption: (item) => {
-            return { label: `${item.name}:${item.value}`, value: item.id }
-          }
-        },
-        allowCreate: true
-      },
-      on: {
-        change: ([event], updateForm) => {
-          const selects = filterSelectValues(event)
-          updateForm({ labels: selects })
-        }
-      }
-    },
     is_active: {
       type: 'switch'
     },
