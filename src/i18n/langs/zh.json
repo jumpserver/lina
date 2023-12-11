@@ -1149,7 +1149,8 @@
     "TaskDispatch": "任务下发成功",
     "Transfer": "传输",
     "UploadDir": "上传目录",
-    "RequiredUploadFile": "请上传文件！"
+    "RequiredUploadFile": "请上传文件！",
+    "DuplicateFileExists": "存在同名文件"
   },
   "perms": {
     "": "",

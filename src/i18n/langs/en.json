@@ -1162,7 +1162,8 @@
     "AdhocUpdate": "Update Adhoc",
     "Transfer": "Transfer",
     "UploadDir": "Upload Directory",
-    "RequiredUploadFile": "Please upload files！"
+    "RequiredUploadFile": "Please upload files！",
+    "DuplicateFileExists": "Duplicate file exists"
   },
   "perms": {
     "": "",

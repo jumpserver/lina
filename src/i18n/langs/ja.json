@@ -1160,7 +1160,8 @@
     "AdhocUpdate": "更新コマンド",
     "Transfer": "ファイルを転送する",
     "UploadDir": "アップロードディレクトリ",
-    "RequiredUploadFile": "ファイルをアップロードしてください！"
+    "RequiredUploadFile": "ファイルをアップロードしてください！",
+    "DuplicateFileExists": "重複したファイルが存在する"
   },
   "perms": {
     "": "",

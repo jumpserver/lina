@@ -46,6 +46,7 @@
                 :value.sync="files"
                 :auto-upload="false"
                 :on-change="onFileChange"
+                :on-remove="onFileChange"
                 drag
                 multiple
                 action=""
@@ -301,9 +302,28 @@ export default {
       const secondPart = fullName.slice(-maxLength / 2)
       return firstPart + '...' + secondPart
     },
+    renderSameFile(file, fileList) {
+      const filenameList = fileList.map((file) => file.name)
+      const filenameCount = _.countBy(filenameList)
+      // 找出同名文件
+      this.$nextTick(() => {
+        const fileElementList = document.getElementsByClassName('el-upload-list__item-name')
+        if (fileElementList && fileElementList.length > 0) {
+          for (const ele of fileElementList) {
+            if (filenameCount[ele.outerText] > 1) {
+              this.$message.error(this.$tc('ops.DuplicateFileExists'))
+              ele.style = 'background-color:var(--color-danger)'
+            } else {
+              ele.style = ''
+            }
+          }
+        }
+      })
+    },
     onFileChange(file, fileList) {
       file.name = this.truncateFileName(file.name)
       this.files = fileList
+      this.renderSameFile(file, fileList)
     },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
