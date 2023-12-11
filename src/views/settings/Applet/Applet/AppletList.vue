@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-row :gutter="20">
+      <el-col :md="24" :sm="24">
+        <el-alert type="success">
+          {{ $t('terminal.AppletHelpText') }}
+        </el-alert>
+      </el-col>
+    </el-row>
     <CardTable ref="CardTable" v-bind="$data" />
     <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>

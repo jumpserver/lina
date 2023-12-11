@@ -1500,6 +1500,7 @@
     "UploadSucceed": "Upload succeed",
     "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
+    "AppletHelpText": "During the upload process, if the application does not exist, the application is created; if it already exists, the application is updated.",
     "AppletHostSelectHelpMessage": "When connecting assets, the selection of the applet host is random. If you want to assign a specific one, you can specify the label AppletHost:AppletHostName in the asset label",
     "AppletHosts": "Remote hosts",
     "uploadZipTips": "Please upload zip file",
