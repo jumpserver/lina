@@ -90,7 +90,8 @@ export default {
         form,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
-          disableFlashErrorMsg: true
+          disableFlashErrorMsg: true,
+          params: { update: true }
         }
       ).then(res => {
         this.isFinished = true
