@@ -740,6 +740,7 @@
     "Reconnect": "Reconnect",
     "NewChat": "New Chat",
     "Chat": "Chat",
+    "CollapseSidebar": "Collapse the sidebar",
     "introduction": {
       "ConceptTitle": "🤔 Explain a complex concept",
       "ConceptContent": "Tell me something about the Big Bang so that I can explain it to my 5-year-old child",

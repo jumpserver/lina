@@ -90,9 +90,10 @@ export default {
   },
   methods: {
     initWebSocket() {
+      const api = '/kael/chat/system/'
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-      const path = `${protocol}://${window.location.host}/kael/chat/system/`
-      const localPath = process.env.VUE_APP_KAEL_WS + '/kael/chat/system/'
+      const path = `${protocol}://${window.location.host}${api}`
+      const localPath = process.env.VUE_APP_KAEL_WS + api
       const url = process.env.NODE_ENV === 'development' ? localPath : path
       createWebSocket(url, this.onWebSocketMessage)
     },
@@ -174,15 +175,8 @@ export default {
       }
     },
     onStopHandle() {
-      const { protocol, host } = window.location
-      const { NODE_ENV, VUE_APP_KAEL_WS } = process.env || {}
-      const api = '/kael/chat/system/interrupt_current_ask/'
-      const path = `${protocol}://${host}`
-      const index = VUE_APP_KAEL_WS.indexOf('//')
-      const localPath = protocol + VUE_APP_KAEL_WS.substring(index, VUE_APP_KAEL_WS.length) + api
-      const url = NODE_ENV === 'development' ? localPath : path
       this.$axios.post(
-        url,
+        '/kael/chat/system/interrupt_current_ask/',
         { id: this.currentConversationId || '' }
       ).finally(() => {
         removeLoadingMessageInChat()
