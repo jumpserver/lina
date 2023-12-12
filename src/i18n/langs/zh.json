@@ -1142,6 +1142,8 @@
     "AdhocDetail": "命令详情",
     "Queue": "队列",
     "State": "状态",
+    "ExecuteCycle": "执行周期",
+    "ExpectedNextExecuteTime": "预计下次执行时间",
     "LastPublishedTime": "最后发布时间",
     "Variable": "变量",
     "Description": "描述",
@@ -1161,7 +1163,11 @@
     "Comment": "备注",
     "History": "执行历史",
     "UseParameterDefine": "定义参数",
-    "TaskDispatch": "任务下发成功"
+    "TaskDispatch": "任务下发成功",
+    "Transfer": "传输",
+    "UploadDir": "上传目录",
+    "RequiredUploadFile": "请上传文件！",
+    "DuplicateFileExists": "存在同名文件"
   },
   "perms": {
     "": "",
@@ -1472,7 +1478,8 @@
     "CannotAccess": "无法访问当前页面",
     "GoHomePage": "去往首页",
     "VirtualAppDetail": "虚拟应用详情",
-    "AppProviderDetail": "应用提供者详情"
+    "AppProviderDetail": "应用提供者详情",
+    "BulkTransfer": "批量传输"
   },
   "rbac": {
     "Permissions": "权限",
@@ -1730,7 +1737,7 @@
     "MailSend": "邮件发送",
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
-    "ChatAI": "ChatAI",
+    "ChatAI": "聊天 AI",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",

@@ -1,18 +1,18 @@
 <template>
   <el-row :gutter="10">
     <el-col :span="18">
-      <OfflineList :url="url" />
+      <BaseList :url="url" :columns-show="columnsShow" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import OfflineList from '@/views/sessions/SessionList/OfflineList.vue'
+import BaseList from '@/views/sessions/SessionList/BaseList.vue'
 
 export default {
   name: 'AssetsSession',
   components: {
-    OfflineList
+    BaseList
   },
   props: {
     object: {
@@ -22,7 +22,14 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/terminal/sessions/?asset_id=${this.object.id}&order=-date_end&is_finished=1`
+      url: `/api/v1/terminal/sessions/?asset_id=${this.object.id}&order=is_finished,-date_end`,
+      columnsShow: {
+        min: ['id'],
+        default: [
+          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
+          'command_amount', 'date_start', 'duration'
+        ]
+      }
     }
   }
 

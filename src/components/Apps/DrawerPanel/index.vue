@@ -205,6 +205,7 @@ export default {
     width: 22px;
     height: 22px;
     transform: translateY(10%);
+    margin-left: 3px;
   }
 }
 </style>

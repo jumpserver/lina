@@ -8,7 +8,7 @@
     :title="$tc('assets.PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     v-bind="$attrs"
-    width="70%"
+    width="800px"
     v-on="$listeners"
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
