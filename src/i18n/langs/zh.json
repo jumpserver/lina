@@ -1152,7 +1152,11 @@
     "Comment": "备注",
     "History": "执行历史",
     "UseParameterDefine": "定义参数",
-    "TaskDispatch": "任务下发成功"
+    "TaskDispatch": "任务下发成功",
+    "Transfer": "传输",
+    "UploadDir": "上传目录",
+    "RequiredUploadFile": "请上传文件！",
+    "DuplicateFileExists": "存在同名文件"
   },
   "perms": {
     "": "",
@@ -1463,7 +1467,8 @@
     "CannotAccess": "无法访问当前页面",
     "GoHomePage": "去往首页",
     "VirtualAppDetail": "虚拟应用详情",
-    "AppProviderDetail": "应用提供者详情"
+    "AppProviderDetail": "应用提供者详情",
+    "BulkTransfer": "批量传输"
   },
   "rbac": {
     "Permissions": "权限",
