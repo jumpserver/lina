@@ -89,7 +89,7 @@ export default {
     margin-top: 16px;
     border: 1px solid #DCDFE6;
     border-radius: 12px;
-    &:hover {
+    &:has(.el-textarea__inner:focus) {
       border: 1px solid var(--color-primary);
     }
     &>>> .el-textarea {

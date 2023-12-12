@@ -2,7 +2,10 @@
   <div class="chat">
     <div class="container">
       <div class="header">
-        <span class="title">{{ title }}</span>
+        <div class="left">
+          <img :src="robotUrl" alt="">
+          <span class="title">{{ title }}</span>
+        </div>
         <span class="new" @click="onNewChat">
           <i class="el-icon-plus" />
           <span>{{ $tc('common.NewChat') }}</span>
@@ -23,6 +26,7 @@
 <script>
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
+import { getInputFocus } from './useChat.js'
 
 export default {
   components: {
@@ -32,12 +36,15 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Chat'
+      default: function() {
+        return this.$t('common.Chat')
+      }
     }
   },
   data() {
     return {
       active: 'chat',
+      robotUrl: require('../../../assets/img/robot-assistant.png'),
       submenu: [
         {
           name: 'chat',
@@ -56,6 +63,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.component.initWebSocket()
         this.$refs.component.initChatMessage()
+        getInputFocus()
       })
     }
   }
@@ -80,8 +88,17 @@ export default {
       padding: 0 16px;
       overflow: hidden;
       border-bottom: 1px solid #ececec;
-      .title {
-        display: inline-block;
+      .left {
+        img {
+          width: 22px;
+          height: 22px;
+          vertical-align: sub;
+        }
+        .title {
+          display: inline-block;
+          font-size: 18px;
+          color: black;
+        }
       }
       .new {
         display: inline-block;
@@ -101,6 +118,8 @@ export default {
     }
     .content {
       flex: 1;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
   }
