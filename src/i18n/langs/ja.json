@@ -1178,7 +1178,10 @@
     "Transfer": "ファイルを転送する",
     "UploadDir": "アップロードディレクトリ",
     "RequiredUploadFile": "ファイルをアップロードしてください！",
-    "DuplicateFileExists": "重複したファイルが存在する"
+    "DuplicateFileExists": "重複したファイルが存在する",
+    "NoFiles": "まだファイルがありません",
+    "uploadFileLthHelpText": "200MB 未満のファイルのみアップロードできます",
+    "FileSizeExceedsLimit": "ファイルサイズが制限を超えています"
   },
   "perms": {
     "": "",

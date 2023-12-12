@@ -55,6 +55,10 @@
                 <div class="el-upload__text">
                   {{ $t('common.imExport.dragUploadFileInfo') }}
                 </div>
+                <br>
+                <span>
+                  {{ $t('ops.uploadFileLthHelpText') }}
+                </span>
               </el-upload>
               <el-progress v-if="ShowProgress" :percentage="progressLength" />
             </el-card>
@@ -94,6 +98,7 @@ import { TreeTable } from '@/components'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getJob, getTaskDetail, JobUploadFile } from '@/api/ops'
+import { formatFileSize } from '@/utils/common'
 
 export default {
   name: 'BulkTransfer',
@@ -197,6 +202,7 @@ export default {
   mounted() {
     this.enableWS()
     this.initData()
+    this.handleFileList(null, [])
   },
   methods: {
     async initData() {
@@ -294,7 +300,7 @@ export default {
       return { hosts, nodes }
     },
     truncateFileName(fullName) {
-      const maxLength = 140 // 显示的最大字符数
+      const maxLength = 130 // 显示的最大字符数
       if (fullName.length <= maxLength) {
         return fullName
       }
@@ -302,14 +308,28 @@ export default {
       const secondPart = fullName.slice(-maxLength / 2)
       return firstPart + '...' + secondPart
     },
-    renderSameFile(file, fileList) {
+    handleFileList(file, fileList) {
       const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
-      // 找出同名文件
       this.$nextTick(() => {
+        const emptyFileTip = document.getElementsByClassName('empty-file-tip')
+        if (emptyFileTip.length > 0) {
+          emptyFileTip[0].style = 'display:none'
+        }
         const fileElementList = document.getElementsByClassName('el-upload-list__item-name')
         if (fileElementList && fileElementList.length > 0) {
           for (const ele of fileElementList) {
+            // 显示文件大小
+            if (file.name === ele.outerText) {
+              ele.insertAdjacentHTML('beforeend',
+                `<i style="color: #1ab394;float: right;font-weight:normal">${formatFileSize(file.size)}</i>`)
+            }
+            // 文件大小超出限制
+            if (file.size > 200 * 1024 * 1024) {
+              this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
+              ele.style = 'background-color:var(--color-danger)'
+            }
+            // 同名文件提示
             if (filenameCount[ele.outerText] > 1) {
               this.$message.error(this.$tc('ops.DuplicateFileExists'))
               ele.style = 'background-color:var(--color-danger)'
@@ -317,13 +337,18 @@ export default {
               ele.style = ''
             }
           }
+        } else {
+          const emptyFileElementList = document.getElementsByClassName('el-upload-list--text')[0]
+          const text = this.$tc('ops.NoFiles')
+          emptyFileElementList.insertAdjacentHTML('afterbegin',
+            `<div class="empty-file-tip" style="color: #c5c9cc;font-size: 18px;display: flex;justify-content: center;align-items: center;height: 100%">${text}</div>`)
         }
       })
     },
     onFileChange(file, fileList) {
       file.name = this.truncateFileName(file.name)
       this.files = fileList
-      this.renderSameFile(file, fileList)
+      this.handleFileList(file, fileList)
     },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
@@ -469,11 +494,9 @@ export default {
     list-style: none;
     width: 100%;
     height: 180px;
-  }
-
-  > > > .el-upload-list:not(:empty) {
     border: 1px dashed #d9d9d9;
     overflow-y: auto;
+    font-weight: 500;
   }
 }
 </style>

@@ -1167,7 +1167,10 @@
     "Transfer": "传输",
     "UploadDir": "上传目录",
     "RequiredUploadFile": "请上传文件！",
-    "DuplicateFileExists": "存在同名文件"
+    "DuplicateFileExists": "存在同名文件",
+    "NoFiles": "暂无文件",
+    "uploadFileLthHelpText": "只能上传小于200MB文件",
+    "FileSizeExceedsLimit": "文件大小超出限制"
   },
   "perms": {
     "": "",
