@@ -1129,6 +1129,8 @@
     "AdhocDetail": "命令详情",
     "Queue": "队列",
     "State": "状态",
+    "ExecuteCycle": "执行周期",
+    "ExpectedNextExecuteTime": "预计下次执行时间",
     "LastPublishedTime": "最后发布时间",
     "Variable": "变量",
     "Description": "描述",
