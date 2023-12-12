@@ -12,7 +12,7 @@
             type="default"
             @click="item.callback()"
           >
-            <i :class="item.icon" />
+            <svg-icon :icon-class="item.icon" />
           </el-button>
         </el-tooltip>
       </div>
@@ -37,7 +37,8 @@ export default {
     },
     xtermConfig: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -56,21 +57,21 @@ export default {
       toolbar: [
         {
           tip: this.$tc('ops.ScrollToTop'),
-          icon: 'fa fa-arrow-up',
+          icon: 'arrow-up',
           callback: () => {
             this.xterm.scrollToTop()
           }
         },
         {
           tip: this.$tc('ops.ScrollToBottom'),
-          icon: 'fa fa-arrow-down',
+          icon: 'arrow-down',
           callback: () => {
             this.xterm.scrollToBottom()
           }
         },
         {
           tip: this.$tc('ops.ClearScreen'),
-          icon: 'fa fa-refresh',
+          icon: 'refresh',
           callback: () => {
             this.xterm.reset()
           }

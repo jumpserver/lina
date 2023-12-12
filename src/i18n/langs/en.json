@@ -1180,7 +1180,10 @@
     "Transfer": "Transfer",
     "UploadDir": "Upload Directory",
     "RequiredUploadFile": "Please upload files！",
-    "DuplicateFileExists": "Duplicate file exists"
+    "DuplicateFileExists": "Duplicate file exists",
+    "NoFiles": "No Files",
+    "uploadFileLthHelpText": "Only files smaller than 200MB can be uploaded",
+    "FileSizeExceedsLimit": "File size exceeds limit"
   },
   "perms": {
     "": "",
