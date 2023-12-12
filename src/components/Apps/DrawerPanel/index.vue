@@ -196,6 +196,9 @@ export default {
     // left: -52px !important;
     // width: 52px !important;
     background-color: rgba(182, 181, 186, .9);
+    img {
+      filter: grayscale(1);
+    }
   }
   i {
     font-size: 20px;

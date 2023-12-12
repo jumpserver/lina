@@ -48,7 +48,7 @@ export default {
       submenu: [
         {
           name: 'chat',
-          label: 'chat',
+          label: this.$t('common.Chat'),
           icon: 'chat'
         }
       ]
