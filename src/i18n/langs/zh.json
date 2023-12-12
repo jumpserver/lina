@@ -791,6 +791,15 @@
     "SyncUser": "同步用户",
     "Reconnect": "重新连接",
     "NewChat": "新聊天",
+    "Chat": "聊天",
+    "introduction": {
+      "ConceptTitle": "🤔 解释一个复杂的概念",
+      "ConceptContent": "告诉我一些关于大爆炸的事情，这样我就可以向我 5 岁的孩子解释",
+      "IdeaTitle": "🧠 集思广益前所未有的想法",
+      "IdeaContent": "请为我朋友的生日提供 10 个礼物创意",
+      "ArticleTitle": "💭 立即获得朗朗上口的标题",
+      "ArticleContent": "为我撰写有关 ChatGPT 用例的文章生成五个朗朗上口的标题"
+    },
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",

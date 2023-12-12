@@ -1,7 +1,27 @@
 <template>
   <div class="chat-content">
     <div id="scrollRef" class="chat-list">
+      <div v-if="showIntroduction" class="introduction">
+        <div v-for="(item, index) in introduction" :key="index" class="introduction-item">
+          <div class="head">
+            <i v-if="item.icon" :class="item.icon" />
+            <span class="title">{{ item.title }}</span>
+          </div>
+          <div class="content">
+            {{ item.content }}
+            <i class="fa fa-arrow-right" />
+          </div>
+        </div>
+      </div>
       <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" />
+      <el-button
+        v-if="isLoading && socket && socket.readyState === 1"
+        round
+        size="small"
+        class="stop"
+        icon="fa fa-stop-circle-o"
+        @click="onStopHandle"
+      >{{ $tc('common.Stop') }}</el-button>
     </div>
     <div class="input-box">
       <ChatInput @send="onSendHandle" />
@@ -36,11 +56,28 @@ export default {
   },
   data() {
     return {
-      currentConversationId: ''
+      socket: {},
+      currentConversationId: '',
+      showIntroduction: false,
+      introduction: [
+        {
+          title: this.$t('common.introduction.ConceptTitle'),
+          content: this.$t('common.introduction.ConceptContent')
+        },
+        {
+          title: this.$t('common.introduction.IdeaTitle'),
+          content: this.$t('common.introduction.IdeaContent')
+        },
+        {
+          title: this.$t('common.introduction.ArticleTitle'),
+          content: this.$t('common.introduction.ArticleContent')
+        }
+      ]
     }
   },
   computed: {
     ...mapState({
+      isLoading: state => state.chat.loading,
       activeChat: state => state.chat.activeChat
     })
   },
@@ -58,6 +95,18 @@ export default {
       const localPath = process.env.VUE_APP_KAEL_WS + '/kael/chat/system/'
       const url = process.env.NODE_ENV === 'development' ? localPath : path
       createWebSocket(url, this.onWebSocketMessage)
+    },
+    initChatMessage() {
+      this.showIntroduction = true
+      const chat = {
+        message: {
+          content: this.$t('common.ChatHello'),
+          role: 'assistant',
+          create_time: new Date()
+        }
+      }
+      newChatAndAddMessageById(chat)
+      setLoading(false)
     },
     onWebSocketMessage(data) {
       if (data.type === 'message') {
@@ -91,19 +140,10 @@ export default {
       this.socketReadyStateSuccess = false
       setLoading(true)
     },
-    initChatMessage() {
-      const chat = {
-        message: {
-          content: this.$t('common.ChatHello'),
-          role: 'assistant',
-          create_time: new Date()
-        }
-      }
-      newChatAndAddMessageById(chat)
-      setLoading(false)
-    },
     onSendHandle(value) {
-      if (ws.readyState === 1) {
+      this.showIntroduction = false
+      this.socket = ws || {}
+      if (ws?.readyState === 1) {
         this.socketReadyStateSuccess = true
         const chat = {
           message: {
@@ -132,6 +172,22 @@ export default {
         this.socketReadyStateSuccess = false
         setLoading(true)
       }
+    },
+    onStopHandle() {
+      const { protocol, host } = window.location
+      const { NODE_ENV, VUE_APP_KAEL_WS } = process.env || {}
+      const api = '/kael/chat/system/interrupt_current_ask/'
+      const path = `${protocol}://${host}`
+      const index = VUE_APP_KAEL_WS.indexOf('//')
+      const localPath = protocol + VUE_APP_KAEL_WS.substring(index, VUE_APP_KAEL_WS.length) + api
+      const url = NODE_ENV === 'development' ? localPath : path
+      this.$axios.post(
+        url,
+        { id: this.currentConversationId || '' }
+      ).finally(() => {
+        removeLoadingMessageInChat()
+        setLoading(false)
+      })
     }
   }
 }
@@ -143,11 +199,45 @@ export default {
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  .introduction {
+    padding: 16px 14px 0;
+    .introduction-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-top: 16px;
+      background-color: var(--menu-hover);
+      &:first-child {
+        margin-top: 0;
+      }
+      .head {
+        margin-bottom: 2px;
+        .title {
+          font-weight: 500;
+          color: #373739;
+        }
+      }
+      .content {
+        display: inline-block;
+        color: #a7a7ab;
+        word-wrap: break-word;
+      }
+    }
+  }
   .chat-list {
     flex: 1;
+    position: relative;
     padding: 0 15px;
     overflow-y: auto;
     user-select: text;
+    .stop {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      >>> i {
+        margin-right: 4px;
+      }
+    }
   }
   .input-box {
     height: 154px;
