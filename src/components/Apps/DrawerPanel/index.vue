@@ -198,8 +198,8 @@ export default {
     line-height: 45px;
   }
   img {
-    width: 24px;
-    height: 24px;
+    width: 23px;
+    height: 23px;
     transform: translateY(10%);
     margin-left: 3px;
   }

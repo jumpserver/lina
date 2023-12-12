@@ -303,3 +303,8 @@ input[type=file] {
 .el-dialog__title {
   font-size: 16px;
 }
+
+.el-input--mini .el-input__inner::placeholder {
+  font-size: 13px;
+  font-weight: 400;
+}
