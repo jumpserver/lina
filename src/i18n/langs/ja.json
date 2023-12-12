@@ -1733,7 +1733,7 @@
     "MailSend": "メール送信",
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
-    "ChatAI": "ChatAI",
+    "ChatAI": "チャットAI",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
