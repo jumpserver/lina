@@ -1108,6 +1108,8 @@
     "SaveAdhoc": "保存コマンド",
     "AdhocManage": "コマンド管理",
     "LastPublishedTime": "最終公開",
+    "ExecuteCycle": "実行サイクル",
+    "ExpectedNextExecuteTime": "次回実行予定時刻",
     "CloseConfirmMessage": "ファイルが変更されました，保存しますか？",
     "privilegeOnly": "特権アカウントのみを選択",
     "UploadPlaybook": "アップロード Playbook",
