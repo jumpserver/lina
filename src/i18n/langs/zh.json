@@ -1610,6 +1610,7 @@
     "Passkey": "Passkey",
     "BlockedIPS": "已锁定的 IP",
     "ViewBlockedIPSHelpText": "查看已被锁定的 IP 列表",
+    "LockedIP": "已锁定 IP {count} 个",
     "Unblock": "解锁",
     "BulkUnblock": "批量解锁",
     "AppOps": "任务中心",

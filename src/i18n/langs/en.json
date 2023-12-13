@@ -1628,6 +1628,7 @@
   "setting": {
     "BlockedIPS": "Blocked IPS",
     "ViewBlockedIPSHelpText": "View the list of locked IPs",
+    "LockedIP": "Locked IPs {count}",
     "Unblock": "Unblock",
     "BulkUnblock": "BulkUnblock",
     "AppOps": "Task center",

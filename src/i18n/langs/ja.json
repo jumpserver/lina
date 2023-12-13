@@ -1616,6 +1616,7 @@
   "setting": {
     "BlockedIPS": "ロックされたIP",
     "ViewBlockedIPSHelpText": "ロックされたIPリストの表示",
+    "LockedIP": "ロックされた IP {count} 個",
     "Unblock": "ロック解除",
     "BulkUnblock": "一括ロック解除",
     "AppOps": "タスクセンター",
