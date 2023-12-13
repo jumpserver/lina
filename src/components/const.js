@@ -16,6 +16,7 @@ export const attrMatchOptions = [
   { label: i18n.t('common.NotEqual'), value: 'not' },
   { label: i18n.t('common.MatchIn'), value: 'in' },
   { label: i18n.t('common.Contains'), value: 'contains' },
+  { label: i18n.t('common.Exclude'), value: 'exclude' },
   { label: i18n.t('common.Startswith'), value: 'startswith' },
   { label: i18n.t('common.Endswith'), value: 'endswith' },
   { label: i18n.t('common.Regex'), value: 'regex' },
