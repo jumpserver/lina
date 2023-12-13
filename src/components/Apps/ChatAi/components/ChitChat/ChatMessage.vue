@@ -14,7 +14,7 @@
           <span v-if="isSystemError" class="error">
             {{ item.message.content }}
           </span>
-          <span v-else class="text">
+          <span v-else class="chat-text">
             <MessageText :message="item.message" />
           </span>
         </div>

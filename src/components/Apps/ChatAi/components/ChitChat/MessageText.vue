@@ -34,13 +34,13 @@ export default {
   computed: {
     text() {
       const value = this.message?.content || ''
-      if (value) {
-        return this.markdown.render(value)
+      if (value && this.markdown) {
+        return this.markdown?.render(value)
       }
       return value
     }
   },
-  created() {
+  mounted() {
     this.init()
   },
   updated() {
