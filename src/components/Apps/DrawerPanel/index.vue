@@ -1,7 +1,7 @@
 <template>
   <div ref="drawer" :class="{show: show}" class="drawer">
-    <div class="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" />
-    <div class="drawer-panel" :style="{'width': width}">
+    <div :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
+    <div :style="{'width': width}" class="drawer-panel">
       <div v-show="!show" ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
         <img v-else :src="icon" alt="">
@@ -142,7 +142,6 @@ export default {
   height: 100vh;
   user-select: none;
   border-radius: 20px 0 0 20px;
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, .05);
   transition: transform .25s cubic-bezier(.7, .3, .1, 1);
   box-shadow: 0 0 8px 4px #00000014;
   transform: translate(100%);
@@ -195,10 +194,6 @@ export default {
     left: -52px !important;
     width: 52px !important;
     transform: scale(1.1);
-    background-color: rgba(182, 181, 186, .9);
-    img {
-      filter: grayscale(1);
-    }
   }
   i {
     font-size: 20px;

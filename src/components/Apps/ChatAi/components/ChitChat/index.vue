@@ -9,7 +9,6 @@
           </div>
           <div class="content">
             {{ item.content }}
-            <i class="fa fa-arrow-right" />
           </div>
         </div>
       </div>
@@ -18,10 +17,10 @@
     <div class="input-box">
       <el-button
         v-if="isLoading && socket && socket.readyState === 1"
-        round
-        size="small"
         class="stop"
         icon="fa fa-stop-circle-o"
+        round
+        size="small"
         @click="onStopHandle"
       >{{ $tc('common.Stop') }}</el-button>
       <ChatInput @send="onSendHandle" />
@@ -33,7 +32,7 @@
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapState } from 'vuex'
-import { createWebSocket, closeWebSocket, ws, onSend } from '@/utils/socket'
+import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/socket'
 import { getInputFocus, useChat } from '../../useChat.js'
 
 const {
@@ -67,10 +66,6 @@ export default {
         {
           title: this.$t('common.introduction.IdeaTitle'),
           content: this.$t('common.introduction.IdeaContent')
-        },
-        {
-          title: this.$t('common.introduction.ArticleTitle'),
-          content: this.$t('common.introduction.ArticleContent')
         }
       ]
     }
