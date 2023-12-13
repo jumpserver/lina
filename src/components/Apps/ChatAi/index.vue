@@ -37,7 +37,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('common.Chat')
+        return this.$t('setting.ChatAI')
       }
     }
   },

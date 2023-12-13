@@ -743,12 +743,7 @@
     "Chat": "チャット",
     "CollapseSidebar": "サイドバーを閉じる",
     "introduction": {
-      "ConceptTitle": "🤔 複雑な概念を説明する",
-      "ConceptContent": "ビッグバンについて教えてください。5歳の子供に説明することができます",
-      "IdeaTitle": "🧠 これまでにないアイデアを集めて考える",
-      "IdeaContent": "友達の誕生日に10個のプレゼントアイデアを提供してください",
-      "ArticleTitle": "💭 すぐに朗らかなタイトルを手に入れる",
-      "ArticleContent": "ChatGPTの使用例に関する記事を作成するために、5つの朗々としたタイトルを生成します"
+
     },
     "imExport": {
       "ExportAll": "すべてをエクスポート",

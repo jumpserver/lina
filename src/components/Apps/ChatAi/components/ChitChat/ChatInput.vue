@@ -3,15 +3,16 @@
     <div class="chat-input">
       <el-input
         v-model="value"
-        type="textarea"
         :disabled="isLoading"
-        @compositionstart="isIM = true"
+        :placeholder="$t('common.EnterMessage')"
+        type="textarea"
         @compositionend="isIM = false"
+        @compositionstart="isIM = true"
         @keypress.native="onKeyEnter"
       />
       <div class="input-action">
         <span class="right">
-          <i class="fa fa-send" :class="{'active': value }" @click="onSendHandle" />
+          <i :class="{'active': value }" class="fa fa-send" @click="onSendHandle" />
         </span>
       </div>
     </div>
@@ -21,6 +22,7 @@
 <script>
 import { mapState } from 'vuex'
 import { useChat } from '../../useChat.js'
+
 const { setLoading } = useChat()
 
 export default {

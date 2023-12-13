@@ -792,14 +792,13 @@
     "Reconnect": "重新连接",
     "NewChat": "新聊天",
     "Chat": "聊天",
+    "EnterMessage": "请输入问题， Enter 发送",
     "CollapseSidebar": "收起侧边栏",
     "introduction": {
-      "ConceptTitle": "🤔 解释一个复杂的概念",
-      "ConceptContent": "告诉我一些关于大爆炸的事情，这样我就可以向我 5 岁的孩子解释",
-      "IdeaTitle": "🧠 集思广益前所未有的想法",
-      "IdeaContent": "请为我朋友的生日提供 10 个礼物创意",
-      "ArticleTitle": "💭 立即获得朗朗上口的标题",
-      "ArticleContent": "为我撰写有关 ChatGPT 用例的文章生成五个朗朗上口的标题"
+      "ConceptTitle": "\uD83E\uDD14 查询命令",
+      "ConceptContent": "如何使用 mysql 命令连接数据库?",
+      "IdeaTitle": "\uD83C\uDF31 部署项目",
+      "IdeaContent": "如何在 CentOS 上部署 Docker?"
     },
     "imExport": {
       "ExportAll": "导出所有",
@@ -1742,7 +1741,7 @@
     "MailSend": "邮件发送",
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
-    "ChatAI": "聊天 AI",
+    "ChatAI": "智能问答",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",
