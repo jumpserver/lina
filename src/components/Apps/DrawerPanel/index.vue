@@ -189,12 +189,12 @@ export default {
   pointer-events: auto;
   color: #fff;
   background-color: #FFFFFF;
-  // transition: width, .2s ease .2s;
   box-shadow: 0 0 8px 4px #00000014;
   cursor: pointer;
   &:hover {
-    // left: -52px !important;
-    // width: 52px !important;
+    left: -52px !important;
+    width: 52px !important;
+    transform: scale(1.1);
     background-color: rgba(182, 181, 186, .9);
     img {
       filter: grayscale(1);

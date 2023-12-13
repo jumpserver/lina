@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div class="top">
-      <el-tooltip effect="dark" placement="left" :content="$tc('common.CollapseSidebar')">
-        <svg-icon icon-class="collapse" @click="onClose" />
-      </el-tooltip>
+      <svg-icon icon-class="collapse" @click="onClose" />
     </div>
     <el-tabs v-model="active" :tab-position="'right'" @tab-click="handleClick">
       <el-tab-pane v-for="(item) in submenu" :key="item.name" :name="item.name">
