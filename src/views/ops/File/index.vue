@@ -18,12 +18,12 @@
           <div class="upload_input">
             <el-autocomplete
               v-model="runas_input.value"
-              :placeholder="runas_input.placeholder"
               :fetch-suggestions="runas_input.el.query"
-              style="display: inline-block; margin: 0 2px"
+              :placeholder="runas_input.placeholder"
               size="mini"
-              @select="runas_input.callback(runas_input.value)"
+              style="display: inline-block; margin: 0 2px"
               @change="runas_input.callback(runas_input.value)"
+              @select="runas_input.callback(runas_input.value)"
             />
           </div>
           <div class="upload_input">{{ $t('ops.UploadDir') }}:</div>
@@ -43,13 +43,13 @@
               <el-upload
                 v-if="ready"
                 ref="upload"
-                :value.sync="files"
                 :auto-upload="false"
                 :on-change="onFileChange"
                 :on-remove="onFileChange"
+                :value.sync="files"
+                action=""
                 drag
                 multiple
-                action=""
               >
                 <i class="el-icon-upload" />
                 <div class="el-upload__text">
@@ -68,9 +68,10 @@
             <span>
               <span><b>{{ $tc('common.Status') }}: </b></span>
               <span
-                :class="{'status_success':executionInfo.status==='success',
-                         'status_warning':executionInfo.status==='timeout',
-                         'status_danger':executionInfo.status==='failed'
+                :class="{
+                  'status_success':executionInfo.status==='success',
+                  'status_warning':executionInfo.status==='timeout',
+                  'status_danger':executionInfo.status==='failed'
                 }"
               >{{ $tc('ops.' + executionInfo.status) }}</span>
             </span>
@@ -79,12 +80,13 @@
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
-          <div style="border-left: 20px white solid">
+          <div class="output">
             <Term
               ref="xterm"
               :show-tool-bar="true"
+              :xterm-config="xtermConfig"
             />
-
+            <div style="height: 2px" />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
@@ -116,6 +118,8 @@ export default {
         status: '',
         timeCost: 0,
         cancel: 0
+      },
+      xtermConfig: {
       },
       DataZTree: 0,
       runas: '',
@@ -341,7 +345,8 @@ export default {
           const emptyFileElementList = document.getElementsByClassName('el-upload-list--text')[0]
           const text = this.$tc('ops.NoFiles')
           emptyFileElementList.insertAdjacentHTML('afterbegin',
-            `<div class="empty-file-tip" style="color: #c5c9cc;font-size: 18px;display: flex;justify-content: center;align-items: center;height: 100%">${text}</div>`)
+            `<div class="empty-file-tip" style="color: #c5c9cc;font-size: 18px;display: flex;justify-content: center;align-items: center;height: 100%">
+            ${text}</div>`)
         }
       })
     },
@@ -478,7 +483,7 @@ export default {
     display: flex;
   }
 
-  > > > .el-upload {
+  >>> .el-upload {
     width: 400px;
 
     flex-direction: column;
@@ -498,5 +503,14 @@ export default {
     overflow-y: auto;
     font-weight: 500;
   }
+}
+
+.output {
+  background: white;
+}
+
+.output >>> #terminal {
+  border: dashed 1px #d9d9d9;
+  margin: 0 20px 20px;
 }
 </style>
