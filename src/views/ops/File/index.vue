@@ -5,35 +5,35 @@
         <div class="transition-box" style="width: calc(100% - 17px);">
           <div class="upload_input">
             <el-button
-              :disabled="run_button.disabled"
-              :type="run_button.el&&run_button.el.type"
+              :disabled="runButton.disabled"
+              :type="runButton.el&&runButton.el.type"
               size="mini"
               style="display: inline-block; margin: 0 2px"
-              @click="run_button.callback()"
+              @click="runButton.callback()"
             >
-              <i :class="run_button.icon" style="margin-right: 4px;" />{{ run_button.name }}
+              <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
             </el-button>
           </div>
           <div class="upload_input">{{ $t('users.Users') }}:</div>
           <div class="upload_input">
             <el-autocomplete
-              v-model="runas_input.value"
-              :fetch-suggestions="runas_input.el.query"
-              :placeholder="runas_input.placeholder"
+              v-model="runAsInput.value"
+              :fetch-suggestions="runAsInput.el.query"
+              :placeholder="runAsInput.placeholder"
               size="mini"
               style="display: inline-block; margin: 0 2px"
-              @change="runas_input.callback(runas_input.value)"
-              @select="runas_input.callback(runas_input.value)"
+              @change="runAsInput.callback(runAsInput.value)"
+              @select="runAsInput.callback(runAsInput.value)"
             />
           </div>
           <div class="upload_input">{{ $t('ops.UploadDir') }}:</div>
           <div class="upload_input">
             <el-input
-              v-if="dst_path_input.type==='input'"
-              v-model="dst_path"
-              :placeholder="dst_path_input.placeholder"
+              v-if="dstPathInput.type==='input'"
+              v-model="dstPath"
+              :placeholder="dstPathInput.placeholder"
               size="mini"
-              @change="dst_path_input.callback(dst_path_input.value)"
+              @change="dstPathInput.callback(dstPathInput.value)"
             />
           </div>
           <div
@@ -45,8 +45,7 @@
                 ref="upload"
                 :auto-upload="false"
                 :on-change="onFileChange"
-                :on-remove="onFileChange"
-                :value.sync="files"
+                :value.sync="uploadFileList"
                 action=""
                 drag
                 multiple
@@ -59,8 +58,25 @@
                 <span>
                   {{ $t('ops.uploadFileLthHelpText') }}
                 </span>
+                <div slot="file" slot-scope="{file}">
+                  <li tabindex="0" class="el-upload-list__item is-ready">
+                    <a class="el-upload-list__item-name" :style="sameFileStyle(file)">
+                      <i class="el-icon-document" />{{ file.name }}
+                      <i style="color: #1ab394;float: right;font-weight:normal">
+                        {{ formatFileSize(file.size) }}
+                        <i class="el-icon-close" @click="removeFile(file)" />
+                      </i>
+                    </a>
+                  </li>
+                </div>
               </el-upload>
               <el-progress v-if="ShowProgress" :percentage="progressLength" />
+              <div
+                v-if="uploadFileList.length===0"
+                class="empty-file-tip"
+              >
+                {{ $tc('ops.NoFiles') }}
+              </div>
             </el-card>
           </div>
           <b>{{ $tc('ops.output') }}:</b>
@@ -119,12 +135,11 @@ export default {
         timeCost: 0,
         cancel: 0
       },
-      xtermConfig: {
-      },
+      xtermConfig: {},
       DataZTree: 0,
       runas: '',
-      dst_path: '',
-      run_button: {
+      dstPath: '',
+      runButton: {
         type: 'button',
         name: this.$t('ops.Transfer'),
         align: 'left',
@@ -137,7 +152,7 @@ export default {
           this.execute()
         }
       },
-      runas_input: {
+      runAsInput: {
         name: this.$t('ops.runAs'),
         align: 'left',
         value: '',
@@ -163,7 +178,7 @@ export default {
           this.runas = option
         }
       },
-      dst_path_input: {
+      dstPathInput: {
         type: 'input',
         name: this.$t('ops.runningPath'),
         align: 'left',
@@ -173,8 +188,6 @@ export default {
           this.chdir = val
         }
       },
-      files: null,
-      src_paths: [],
       treeSetting: {
         treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
         searchUrl: '/api/v1/perms/users/self/assets/tree/',
@@ -192,7 +205,8 @@ export default {
       iShowTree: true,
       progressLength: 0,
       ShowProgress: false,
-      upload_interval: null
+      upload_interval: null,
+      uploadFileList: []
     }
   },
   computed: {
@@ -206,9 +220,9 @@ export default {
   mounted() {
     this.enableWS()
     this.initData()
-    this.handleFileList(null, [])
   },
   methods: {
+    formatFileSize,
     async initData() {
       this.recoverStatus()
     },
@@ -217,8 +231,8 @@ export default {
         this.currentTaskId = this.$route.query.taskId
         getTaskDetail(this.currentTaskId).then(data => {
           getJob(data.job_id).then(res => {
-            this.runas_input.value = res.runas
-            this.runas_input.callback(res.runas)
+            this.runAsInput.value = res.runas
+            this.runAsInput.callback(res.runas)
             this.executionInfo.status = data['status']
             this.executionInfo.timeCost = data['time_cost']
             this.setCostTimeInterval()
@@ -283,8 +297,8 @@ export default {
     },
 
     setCostTimeInterval() {
-      this.run_button.icon = 'fa fa-spinner fa-spin'
-      this.run_button.disabled = true
+      this.runButton.icon = 'fa fa-spinner fa-spin'
+      this.runButton.disabled = true
       this.executionInfo.cancel = setInterval(() => {
         this.executionInfo.timeCost += 0.1
       }, 100)
@@ -315,49 +329,36 @@ export default {
     handleFileList(file, fileList) {
       const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
-      this.$nextTick(() => {
-        const emptyFileTip = document.getElementsByClassName('empty-file-tip')
-        if (emptyFileTip.length > 0) {
-          emptyFileTip[0].style = 'display:none'
-        }
-        const fileElementList = document.getElementsByClassName('el-upload-list__item-name')
-        if (fileElementList && fileElementList.length > 0) {
-          for (const ele of fileElementList) {
-            // 显示文件大小
-            if (file.name === ele.outerText) {
-              ele.insertAdjacentHTML('beforeend',
-                `<i style="color: #1ab394;float: right;font-weight:normal">${formatFileSize(file.size)}</i>`)
-            }
-            // 文件大小超出限制
-            if (file.size > 200 * 1024 * 1024) {
-              this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
-              ele.style = 'background-color:var(--color-danger)'
-            }
-            // 同名文件提示
-            if (filenameCount[ele.outerText] > 1) {
-              this.$message.error(this.$tc('ops.DuplicateFileExists'))
-              ele.style = 'background-color:var(--color-danger)'
-            } else {
-              ele.style = ''
-            }
-          }
-        } else {
-          const emptyFileElementList = document.getElementsByClassName('el-upload-list--text')[0]
-          const text = this.$tc('ops.NoFiles')
-          emptyFileElementList.insertAdjacentHTML('afterbegin',
-            `<div class="empty-file-tip" style="color: #c5c9cc;font-size: 18px;display: flex;justify-content: center;align-items: center;height: 100%">
-            ${text}</div>`)
-        }
-      })
+      if (filenameCount[file.name] > 1) {
+        this.$message.error(this.$tc('ops.DuplicateFileExists'))
+        file.is_same = true
+      }
+    },
+    sameFileStyle(file) {
+      if (file.is_same) {
+        return { backgroundColor: 'var(--color-danger)' }
+      }
+      return ''
+    },
+    checkFileSize(file) {
+      const isLt200M = file.size / 1024 / 1024 < 200
+      if (!isLt200M) {
+        this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
+      }
+      return isLt200M
     },
     onFileChange(file, fileList) {
+      this.checkFileSize(file)
       file.name = this.truncateFileName(file.name)
-      this.files = fileList
+      this.uploadFileList = fileList
       this.handleFileList(file, fileList)
+    },
+    removeFile(file) {
+      this.uploadFileList.splice(this.uploadFileList.indexOf(file), 1)
     },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
-      if (!this.files) {
+      if (!this.uploadFileList) {
         this.$message.error(this.$tc('ops.RequiredUploadFile'))
         return
       }
@@ -373,7 +374,7 @@ export default {
         assets: hosts,
         nodes: nodes,
         module: 'shell',
-        args: JSON.stringify({ dst_path: this.dst_path }),
+        args: JSON.stringify({ dst_path: this.dstPath }),
         type: 'upload_file',
         runas: this.runas,
         runas_policy: 'skip',
@@ -388,7 +389,7 @@ export default {
         this.progressLength = 0
         this.ShowProgress = true
         const form = new FormData()
-        for (const file of this.files) {
+        for (const file of this.uploadFileList) {
           form.append('files', file.raw)
           form.append('job_id', res.id)
         }
@@ -415,9 +416,9 @@ export default {
       this.executionInfo.timeCost = 0
       this.progressLength = 0
       this.ShowProgress = false
-      this.run_button.disabled = false
+      this.runButton.disabled = false
       clearInterval(this.upload_interval)
-      this.run_button.icon = 'fa fa-play'
+      this.runButton.icon = 'fa fa-play'
     }
   }
 }
@@ -483,7 +484,7 @@ export default {
     display: flex;
   }
 
-  >>> .el-upload {
+  > > > .el-upload {
     width: 400px;
 
     flex-direction: column;
@@ -491,6 +492,14 @@ export default {
     .el-upload-dragger {
       width: 100%;
     }
+  }
+
+  .empty-file-tip {
+    position: relative;
+    bottom: 100px;
+    left: 58%;
+    font-size: 18px;
+    color: #c5c9cc;
   }
 
   > > > .el-upload-list {
@@ -509,7 +518,7 @@ export default {
   background: white;
 }
 
-.output >>> #terminal {
+.output > > > #terminal {
   border: dashed 1px #d9d9d9;
   margin: 0 20px 20px;
 }
