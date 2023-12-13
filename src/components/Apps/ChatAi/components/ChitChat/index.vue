@@ -90,12 +90,12 @@ export default {
   },
   methods: {
     initWebSocket() {
-      const { NODE_ENV, VUE_APP_KAEL_HOST } = process.env
+      const { NODE_ENV, VUE_APP_KAEL_HOST } = process.env || {}
       const api = '/kael/chat/system/'
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
       const path = `${protocol}://${window.location.host}${api}`
-      const index = VUE_APP_KAEL_HOST.indexOf('://')
-      const localPath = protocol + VUE_APP_KAEL_HOST.substring(index, VUE_APP_KAEL_HOST.length) + api
+      const index = VUE_APP_KAEL_HOST?.indexOf('://')
+      const localPath = protocol + VUE_APP_KAEL_HOST?.substring(index, VUE_APP_KAEL_HOST?.length) + api
       const url = NODE_ENV === 'development' ? localPath : path
       createWebSocket(url, this.onWebSocketMessage)
     },
@@ -222,7 +222,7 @@ export default {
   .chat-list {
     flex: 1;
     position: relative;
-    padding: 0 15px;
+    padding: 0 15px 15px;
     overflow-y: auto;
     user-select: text;
   }
