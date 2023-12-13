@@ -14,6 +14,8 @@
         </div>
       </div>
       <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" />
+    </div>
+    <div class="input-box">
       <el-button
         v-if="isLoading && socket && socket.readyState === 1"
         round
@@ -22,8 +24,6 @@
         icon="fa fa-stop-circle-o"
         @click="onStopHandle"
       >{{ $tc('common.Stop') }}</el-button>
-    </div>
-    <div class="input-box">
       <ChatInput @send="onSendHandle" />
     </div>
   </div>
@@ -90,11 +90,13 @@ export default {
   },
   methods: {
     initWebSocket() {
+      const { NODE_ENV, VUE_APP_KAEL_HOST } = process.env
       const api = '/kael/chat/system/'
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
       const path = `${protocol}://${window.location.host}${api}`
-      const localPath = process.env.VUE_APP_KAEL_WS + api
-      const url = process.env.NODE_ENV === 'development' ? localPath : path
+      const index = VUE_APP_KAEL_HOST.indexOf('://')
+      const localPath = protocol + VUE_APP_KAEL_HOST.substring(index, VUE_APP_KAEL_HOST.length) + api
+      const url = NODE_ENV === 'development' ? localPath : path
       createWebSocket(url, this.onWebSocketMessage)
     },
     initChatMessage() {
@@ -176,7 +178,7 @@ export default {
     },
     onStopHandle() {
       this.$axios.post(
-        '/kael/chat/system/interrupt_current_ask/',
+        '/kael/chat/interrupt_current_ask/',
         { id: this.currentConversationId || '' }
       ).finally(() => {
         removeLoadingMessageInChat()
@@ -223,21 +225,23 @@ export default {
     padding: 0 15px;
     overflow-y: auto;
     user-select: text;
-    .stop {
-      position: absolute;
-      bottom: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      >>> i {
-        margin-right: 4px;
-      }
-    }
   }
   .input-box {
+    position: relative;
     height: 154px;
     padding: 0 15px;
     margin-bottom: 15px;
     border-top: 1px solid #ececec;
+  }
+  .stop {
+    position: absolute;
+    top: -36px;
+    left: 50%;
+    z-index: 11;
+    transform: translateX(-50%);
+    >>> i {
+      margin-right: 4px;
+    }
   }
 }
 </style>
