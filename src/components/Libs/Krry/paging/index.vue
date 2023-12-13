@@ -35,6 +35,7 @@
         class="el-transfer__button"
         icon="el-icon-arrow-right"
         size="mini"
+        type="primary"
         @click="addData"
       />
     </div>
@@ -366,7 +367,7 @@ export default {
         }
       } else {
         this.$refs.noSelect.asyncSearch = false
-        this.getData(1)
+        await this.getData(1)
       }
     },
     async getData(pageIndex) {
@@ -382,7 +383,7 @@ export default {
       if (Array.isArray(resData) && resData.length) {
         this.asyncDataList = resData
         this.notSelectDataList = resData
-        this.initData()
+        this.initData(true)
         this.isLastPage = resData.length < this.pageSize
       } else {
         this.notSelectDataList = []

@@ -227,11 +227,7 @@ export default {
       deep: true
     },
     iOptions(val) {
-      if (val.length === 0) {
-        this.remote = false
-      } else {
-        this.remote = true
-      }
+      this.remote = val.length !== 0
     }
   },
   async mounted() {
@@ -241,6 +237,7 @@ export default {
         this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
+        this.$emit('initialized', true)
       }, 100)
     }
     this.$nextTick(() => {

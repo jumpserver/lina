@@ -52,3 +52,12 @@ export function createJob(form) {
     data: form
   })
 }
+
+export function JobUploadFile(form) {
+  return request({
+    url: '/api/v1/ops/jobs/upload/',
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: form
+  })
+}

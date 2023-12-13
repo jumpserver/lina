@@ -8,7 +8,6 @@
     :title="title"
     :visible.sync="iVisible"
     v-bind="$attrs"
-    width="70%"
     v-on="$listeners"
   >
     <AccountCreateUpdateForm

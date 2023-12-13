@@ -1,13 +1,19 @@
 <template>
   <div>
     <div class="box">
-      <el-input v-model="input" clearable @focus="showDialog" @clear="onClear" />
+      <el-input v-model="input" clearable @clear="onClear" @focus="showDialog" />
     </div>
-    <el-dialog :title="$tc('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
+    <el-dialog
+      :title="$tc('common.CronTab.newCron')"
+      :visible.sync="showCron"
+      append-to-body
+      top="8vh"
+      width="650px"
+    >
       <Crontab
         :expression="expression"
-        @hide="showCron = false"
         @fill="crontabFill"
+        @hide="showCron = false"
       />
     </el-dialog>
   </div>

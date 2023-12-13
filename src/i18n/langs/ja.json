@@ -740,6 +740,18 @@
     "Receivers": "受取人",
     "ClickCopy": "クリックしてコピー",
     "SyncUser": "ユーザーを同期する",
+    "Reconnect": "再接続",
+    "NewChat": "新しいチャット",
+    "Chat": "チャット",
+    "CollapseSidebar": "サイドバーを閉じる",
+    "introduction": {
+      "ConceptTitle": "🤔 複雑な概念を説明する",
+      "ConceptContent": "ビッグバンについて教えてください。5歳の子供に説明することができます",
+      "IdeaTitle": "🧠 これまでにないアイデアを集めて考える",
+      "IdeaContent": "友達の誕生日に10個のプレゼントアイデアを提供してください",
+      "ArticleTitle": "💭 すぐに朗らかなタイトルを手に入れる",
+      "ArticleContent": "ChatGPTの使用例に関する記事を作成するために、5つの朗々としたタイトルを生成します"
+    },
     "imExport": {
       "ExportAll": "すべてをエクスポート",
       "ExportOnlyFiltered": "検索結果のみエクスポート",
@@ -755,6 +767,8 @@
       "dragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",
       "hasImportErrorItemMsg": "インポート失敗項目があります。左側のxをクリックして失敗原因を確認し、表をクリックして編集した後、失敗項目のインポートを続けることができます"
     },
+    "ChatHello": "こんにちは！私はあなたを助けることができますか？",
+    "ConnectionDropped": "接続が切断されました",
     "fileType": "ファイルタイプ",
     "isValid": "有効",
     "nav": {
@@ -1107,6 +1121,8 @@
     "SaveAdhoc": "保存コマンド",
     "AdhocManage": "コマンド管理",
     "LastPublishedTime": "最終公開",
+    "ExecuteCycle": "実行サイクル",
+    "ExpectedNextExecuteTime": "次回実行予定時刻",
     "CloseConfirmMessage": "ファイルが変更されました，保存しますか？",
     "privilegeOnly": "特権アカウントのみを選択",
     "UploadPlaybook": "アップロード Playbook",
@@ -1162,7 +1178,14 @@
     "Add": "追加",
     "SuccessfulOperation": "成功した操作",
     "Modify": "改訂",
-    "AdhocUpdate": "更新コマンド"
+    "AdhocUpdate": "更新コマンド",
+    "Transfer": "ファイルを転送する",
+    "UploadDir": "アップロードディレクトリ",
+    "RequiredUploadFile": "ファイルをアップロードしてください！",
+    "DuplicateFileExists": "重複したファイルが存在する",
+    "NoFiles": "まだファイルがありません",
+    "uploadFileLthHelpText": "200MB 未満のファイルのみアップロードできます",
+    "FileSizeExceedsLimit": "ファイルサイズが制限を超えています"
   },
   "perms": {
     "": "",
@@ -1477,7 +1500,8 @@
     "CloudCreate": "アセット作成 - クラウドプラットフォーム",
     "DatabaseUpdate": "アセット更新 - データベース",
     "CloudUpdate": "アセット更新 - クラウドプラットフォーム",
-    "More": "さらに.."
+    "More": "さらに..",
+    "BulkTransfer": "bulk transfer"
   },
   "rbac": {
     "Permissions": "権限",
@@ -1496,6 +1520,7 @@
     "UploadFailed": "アップロードに失敗しました",
     "AppletHostSelectHelpMessage": "アセットを接続する際、アプリケーションのデプロイホストの選択はランダムです。特定のアセットに固定のデプロイホストを割り当てたい場合は、AppletHost: <ホスト名>」というラベルを指定してください。",
     "Applets": "リモートアプリケーション",
+    "AppletHelpText": "アップロード プロセス中に、アプリケーションが存在しない場合はアプリケーションが作成され、すでに存在する場合はアプリケーションが更新されます。",
     "AppletHosts": "アプリケーションパブリッシャ",
     "uploadZipTips": "zip形式のファイルをアップロードしてください",
     "HostDeployment": "パブリッシャーの導入",
@@ -1724,6 +1749,7 @@
     "MailSend": "メール送信",
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
+    "ChatAI": "チャットAI",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",

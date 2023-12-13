@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-tabs type="border-card">
-      <el-tab-pane v-if="shouldHide('min')" :label="$tc('common.CronTab.min')">
+      <el-tab-pane v-if="shouldHide('min')" :label="$tc('common.CronTab.min')" class="crontab-panel">
         <CrontabMin
           ref="cronmin"
           :check="checkNumber"
@@ -59,38 +59,38 @@
             <td>
               <el-input
                 v-model.trim="contabValueObj.min"
-                min="0"
                 max="5"
-                size="small"
+                min="0"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                size="mini"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.hour"
-                size="small"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                size="mini"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.day"
-                size="small"
                 onkeyup="value=value.replace(/[^\0-9\\-\*\,]/g,'')"
+                size="mini"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.month"
-                size="small"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                size="mini"
               />
             </td>
             <td>
               <el-input
                 v-model.trim="contabValueObj.week"
-                size="small"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
+                size="mini"
               />
             </td>
           </tbody>
@@ -130,7 +130,7 @@ import CrontabWeek from './components/Crontab-Week.vue'
 import CrontabResult from './components/Crontab-Result.vue'
 
 export default {
-  name: 'Vcrontab',
+  name: 'VCrontab',
   components: {
     CrontabMin,
     CrontabHour,
@@ -385,9 +385,9 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang='scss' scoped>
 .pop_btn {
-  text-align: center;
+  float: right;
   margin-top: 20px;
 }
 
@@ -451,6 +451,12 @@ export default {
   line-height: 24px;
   height: 10em;
   overflow-y: auto;
+}
+
+.crontab-panel {
+  >>> .el-input-number {
+    margin: 0 5px
+  }
 }
 
 .el-form-item--mini.el-form-item,

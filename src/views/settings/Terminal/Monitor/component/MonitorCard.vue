@@ -98,7 +98,8 @@ export default {
         tinker: 'Tinker',
         chen: 'Chen',
         kael: 'Kael',
-        video_worker: 'Video-Worker'
+        video_worker: 'Video-Worker',
+        panda: 'Panda'
       }
       return nameMapper[this.componentMetric.type]
     },

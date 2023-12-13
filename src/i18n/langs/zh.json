@@ -792,6 +792,18 @@
     "Receivers": "接收人",
     "ClickCopy": "点击复制",
     "SyncUser": "同步用户",
+    "Reconnect": "重新连接",
+    "NewChat": "新聊天",
+    "Chat": "聊天",
+    "CollapseSidebar": "收起侧边栏",
+    "introduction": {
+      "ConceptTitle": "🤔 解释一个复杂的概念",
+      "ConceptContent": "告诉我一些关于大爆炸的事情，这样我就可以向我 5 岁的孩子解释",
+      "IdeaTitle": "🧠 集思广益前所未有的想法",
+      "IdeaContent": "请为我朋友的生日提供 10 个礼物创意",
+      "ArticleTitle": "💭 立即获得朗朗上口的标题",
+      "ArticleContent": "为我撰写有关 ChatGPT 用例的文章生成五个朗朗上口的标题"
+    },
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -807,6 +819,8 @@
       "dragUploadFileInfo": "将文件拖到此处，或点击此处上传",
       "hasImportErrorItemMsg": "存在导入失败项，点击左侧 x 查看失败原因，点击表格编辑后，可以继续导入失败项"
     },
+    "ChatHello": "你好！我能为你提供什么帮助？",
+    "ConnectionDropped": "连接已断开",
     "fileType": "文件类型",
     "isValid": "有效",
     "nav": {
@@ -878,7 +892,7 @@
       "WeekOrTime": "星期/时间"
     },
     "CronTab": {
-      "newCron": "生成 cron",
+      "newCron": "生成 Cron",
       "timeExpression": "时间表达式",
       "cronExpression": "crontab完整表达式",
       "min": "分钟",
@@ -1132,6 +1146,8 @@
     "AdhocDetail": "命令详情",
     "Queue": "队列",
     "State": "状态",
+    "ExecuteCycle": "执行周期",
+    "ExpectedNextExecuteTime": "预计下次执行时间",
     "LastPublishedTime": "最后发布时间",
     "Variable": "变量",
     "Description": "描述",
@@ -1151,7 +1167,14 @@
     "Comment": "备注",
     "History": "执行历史",
     "UseParameterDefine": "定义参数",
-    "TaskDispatch": "任务下发成功"
+    "TaskDispatch": "任务下发成功",
+    "Transfer": "传输",
+    "UploadDir": "上传目录",
+    "RequiredUploadFile": "请上传文件！",
+    "DuplicateFileExists": "存在同名文件",
+    "NoFiles": "暂无文件",
+    "uploadFileLthHelpText": "只能上传小于200MB文件",
+    "FileSizeExceedsLimit": "文件大小超出限制"
   },
   "perms": {
     "": "",
@@ -1462,7 +1485,8 @@
     "CannotAccess": "无法访问当前页面",
     "GoHomePage": "去往首页",
     "VirtualAppDetail": "虚拟应用详情",
-    "AppProviderDetail": "应用提供者详情"
+    "AppProviderDetail": "应用提供者详情",
+    "BulkTransfer": "批量传输"
   },
   "rbac": {
     "Permissions": "权限",
@@ -1482,6 +1506,7 @@
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
+    "AppletHelpText": "在上传过程中，如果应用不存在，则创建该应用；如果已存在，则进行应用更新。",
     "AppletHosts": "应用发布机",
     "AppletHostSelectHelpMessage": "连接资产时，应用发布机选择是随机的(但优先选择上次使用的)，如果想为某个资产固定发布机，可以指定标签 <发布机:发布机名称> 或 <AppletHost:发布机名称>; <br>连接该发布机选择账号时，以下情况会选择用户的 <b>同名账号 或 专有账号(js开头)</b>，否则使用公用账号(jms开头)：<br>&nbsp;  1. 发布机和应用都支持并发; <br>&nbsp; 2. 发布机支持并发，应用不支持并发，当前应用没有使用专有账号; <br>&nbsp; 3. 发布机不支持并发，应用支持并发或不支持，没有任一应用使用专有账号; <br> 注意: 应用支不支持并发是开发者决定，主机支不支持是发布机配置中的 单用户单会话决定",
     "uploadZipTips": "请上传 zip 格式的文件",
@@ -1719,6 +1744,7 @@
     "MailSend": "邮件发送",
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
+    "ChatAI": "聊天 AI",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",

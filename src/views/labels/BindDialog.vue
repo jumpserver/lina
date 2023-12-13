@@ -127,7 +127,6 @@ export default {
         }, 100)
         this.$emit('update:visible', false)
       })
-      console.log('Select resources: ', selectedData)
     },
     async getResourceTypes() {
       const resourceTypes = await this.$axios.get('/api/v1/labels/resource-types/')
@@ -146,7 +145,6 @@ export default {
           options: children
         })
       }
-      console.log(options)
       this.select2.options = options
     }
   }

@@ -73,7 +73,6 @@ export default {
                       return this.$axios.get(`/api/v1/perms/users/self/assets/${row.id}/`).then(res => {
                         const protocols = res.permed_protocols
                         const names = protocols.map(item => item.name).join(', ')
-                        console.log('Names: ', names)
                         return names
                       })
                     }
