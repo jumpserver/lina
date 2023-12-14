@@ -109,6 +109,8 @@ export default {
   }
   &>>> .code-block-wrapper {
     background: #1F2329;
+    padding: 2px 6px;
+    margin: 5px 0;
 
     .code-block-body {
       padding: 5px 10px 0;
@@ -118,7 +120,6 @@ export default {
       overflow: hidden;
       background: #353946;
       color: #c2d1e1;
-      padding: 2px 6px;
 
       .code-block-header__copy {
         float: right;
