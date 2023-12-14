@@ -1181,9 +1181,9 @@
     "Transfer": "Transfer",
     "UploadDir": "Upload Directory",
     "RequiredUploadFile": "Please upload files！",
-    "DuplicateFileExists": "Duplicate file exists",
+    "DuplicateFileExists": "Uploading files with the same name is not allowed. Please delete the existing file with the same name.",
     "NoFiles": "No Files",
-    "uploadFileLthHelpText": "Only files smaller than 200MB can be uploaded",
+    "uploadFileLthHelpText": "Only files smaller than {limit}MB can be uploaded",
     "FileSizeExceedsLimit": "File size exceeds limit"
   },
   "perms": {

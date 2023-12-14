@@ -56,7 +56,7 @@
                 </div>
                 <br>
                 <span>
-                  {{ $t('ops.uploadFileLthHelpText') }}
+                  {{ $t('ops.uploadFileLthHelpText', {limit: SizeLimitMb}) }}
                 </span>
                 <div slot="file" slot-scope="{file}">
                   <li tabindex="0" class="el-upload-list__item is-ready">
@@ -117,6 +117,7 @@ import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common'
+import store from '@/store'
 
 export default {
   name: 'BulkTransfer',
@@ -206,7 +207,8 @@ export default {
       progressLength: 0,
       ShowProgress: false,
       upload_interval: null,
-      uploadFileList: []
+      uploadFileList: [],
+      SizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB']
     }
   },
   computed: {
@@ -330,8 +332,9 @@ export default {
       const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
       if (filenameCount[file.name] > 1) {
-        this.$message.error(this.$tc('ops.DuplicateFileExists'))
         file.is_same = true
+      } else {
+        file.is_same = false
       }
     },
     sameFileStyle(file) {
@@ -341,11 +344,11 @@ export default {
       return ''
     },
     IsFileExceedsLimit(file) {
-      const isGt200M = file.size / 1024 / 1024 > 200
-      if (isGt200M) {
+      const isGtLimit = file.size / 1024 / 1024 > this.SizeLimitMb
+      if (isGtLimit) {
         this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
       }
-      return isGt200M
+      return isGtLimit
     },
     onFileChange(file, fileList) {
       file.name = this.truncateFileName(file.name)
@@ -358,6 +361,10 @@ export default {
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
+        if (file.is_same) {
+          this.$message.error(this.$tc('ops.DuplicateFileExists'))
+          return
+        }
         if (this.IsFileExceedsLimit(file)) {
           return
         }
