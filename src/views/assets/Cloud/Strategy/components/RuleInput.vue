@@ -56,7 +56,8 @@ export default {
               multiple: false,
               clearable: false,
               options: attrMatchOptions.filter((option) => {
-                if (strMatchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
+                const matchValues = strMatchValues.concat('exclude')
+                if (matchValues.indexOf(option.value) !== -1 && option.value !== 'in') {
                   return option
                 }
               })

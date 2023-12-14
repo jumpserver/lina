@@ -1,7 +1,7 @@
 <template>
   <div ref="drawer" :class="{show: show}" class="drawer">
-    <div class="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" />
-    <div class="drawer-panel" :style="{'width': width}">
+    <div :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
+    <div :style="{'width': width}" class="drawer-panel">
       <div v-show="!show" ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
         <img v-else :src="icon" alt="">
@@ -190,6 +190,7 @@ export default {
   background-color: #FFFFFF;
   box-shadow: 0 0 8px 4px #00000014;
   cursor: pointer;
+
   &:hover {
     left: -50px !important;
     width: 50px !important;

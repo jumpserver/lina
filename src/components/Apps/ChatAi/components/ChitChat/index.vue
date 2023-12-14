@@ -2,14 +2,13 @@
   <div class="chat-content">
     <div id="scrollRef" class="chat-list">
       <div v-if="showIntroduction" class="introduction">
-        <div v-for="(item, index) in introduction" :key="index" class="introduction-item">
+        <div v-for="(item, index) in introduction" :key="index" class="introduction-item" @click="sendIIntroduction(item)">
           <div class="head">
             <i v-if="item.icon" :class="item.icon" />
             <span class="title">{{ item.title }}</span>
           </div>
           <div class="content">
             {{ item.content }}
-            <i class="fa fa-arrow-right" />
           </div>
         </div>
       </div>
@@ -18,10 +17,10 @@
     <div class="input-box">
       <el-button
         v-if="isLoading && socket && socket.readyState === 1"
-        round
-        size="small"
         class="stop"
         icon="fa fa-stop-circle-o"
+        round
+        size="small"
         @click="onStopHandle"
       >{{ $tc('common.Stop') }}</el-button>
       <ChatInput @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
@@ -33,7 +32,7 @@
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapState } from 'vuex'
-import { createWebSocket, closeWebSocket, ws, onSend } from '@/utils/socket'
+import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/socket'
 import { getInputFocus, useChat } from '../../useChat.js'
 
 const {
@@ -68,10 +67,6 @@ export default {
         {
           title: this.$t('common.introduction.IdeaTitle'),
           content: this.$t('common.introduction.IdeaContent')
-        },
-        {
-          title: this.$t('common.introduction.ArticleTitle'),
-          content: this.$t('common.introduction.ArticleContent')
         }
       ]
     }
@@ -190,6 +185,10 @@ export default {
         removeLoadingMessageInChat()
         setLoading(false)
       })
+    },
+    sendIIntroduction(item) {
+      this.showIntroduction = false
+      this.onSendHandle(item.content)
     }
   }
 }
@@ -201,13 +200,21 @@ export default {
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+
   .introduction {
     padding: 16px 14px 0;
+
     .introduction-item {
       padding: 12px 14px;
       border-radius: 8px;
       margin-top: 16px;
       background-color: var(--menu-hover);
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 2px 2px #00000014;
+      }
+
       &:first-child {
         margin-top: 0;
       }

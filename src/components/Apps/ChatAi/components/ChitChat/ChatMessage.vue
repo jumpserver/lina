@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-item" :class="{'user-role': isUserRole}">
+  <div :class="{'user-role': isUserRole}" class="chat-item">
     <div class="avatar">
       <el-avatar :src="isUserRole ? userUrl : chatUrl" class="header-avatar" />
     </div>
@@ -21,9 +21,9 @@
         <div class="action">
           <el-tooltip
             v-if="isSystemError && isLoading"
+            :content="$tc('common.Reconnect')"
             effect="dark"
             placement="top"
-            :content="$tc('common.Reconnect')"
           >
             <svg-icon icon-class="refresh" @click="onRefresh" />
           </el-tooltip>
@@ -37,7 +37,6 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-
         </div>
       </div>
     </div>

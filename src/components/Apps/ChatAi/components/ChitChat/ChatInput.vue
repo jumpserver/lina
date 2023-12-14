@@ -16,6 +16,7 @@
         :placeholder="$tc('common.InputMessage')"
         @compositionstart="isIM = true"
         @compositionend="isIM = false"
+        @compositionstart="isIM = true"
         @keypress.native="onKeyEnter"
       />
       <div class="input-action">
@@ -31,6 +32,7 @@
 import { mapState } from 'vuex'
 import Select2 from '../../../../Form/FormFields/Select2.vue'
 import { useChat } from '../../useChat.js'
+
 const { setLoading } = useChat()
 
 export default {

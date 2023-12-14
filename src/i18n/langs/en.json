@@ -512,6 +512,8 @@
     "StrategyUpdate": "Update strategy",
     "StrategyDetail": "Strategy detail",
     "Rule": "Rule",
+    "RuleRelation": "Rule relation",
+    "RuleRelationHelpTips": "And: The action is performed only when all conditions are met; Or: If a condition is met, the action will be performed",
     "RuleCount": "Number of conditions",
     "ActionCount": "Number of actions",
     "PolicyName": "Policy name",
@@ -744,12 +746,10 @@
     "InputMessage": "Input message...",
     "CollapseSidebar": "Collapse the sidebar",
     "introduction": {
-      "ConceptTitle": "🤔 Explain a complex concept",
-      "ConceptContent": "Tell me something about the Big Bang so that I can explain it to my 5-year-old child",
-      "IdeaTitle": "🧠 Brainstorming unprecedented ideas",
-      "IdeaContent": "Please provide 10 gift ideas for my friend's birthday",
-      "ArticleTitle": "💭 Get a catchy title immediately",
-      "ArticleContent": "Generate five catchy titles for my article on ChatGPT use cases"
+      "ConceptTitle": "🤔 Python interpreter",
+      "ConceptContent": "I want you to act like a Python interpreter. I will give you Python code, and you will execute it. Do not provide any explanations. Do not respond with anything except the output of the code. ",
+      "IdeaTitle": "🌱  Linux Terminal",
+      "IdeaContent": "I want you to act as a linux terminal. I will type commands and you will reply with what the terminal should show. I want you to only reply with the terminal output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. When I need to tell you something in English, I will do so by putting text inside curly brackets {like this}. ."
     },
     "imExport": {
       "ExportAll": "Export all",
@@ -907,6 +907,7 @@
     "Regex": "Regex",
     "AttrValue": "Attribute Value",
     "Contains": "Contains",
+    "Exclude": "Exclude",
     "Match": "Match",
     "Spec": "Specific",
     "All": "All",
@@ -940,7 +941,8 @@
     "VirtualApps": "Virtual apps",
     "ImageName": "Image name",
     "ID": "ID",
-    "Ports": "Ports"
+    "Ports": "Ports",
+    "EnterMessage": "Please enter a question, press Enter to send"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -1183,9 +1185,9 @@
     "Transfer": "Transfer",
     "UploadDir": "Upload Directory",
     "RequiredUploadFile": "Please upload files！",
-    "DuplicateFileExists": "Duplicate file exists",
+    "DuplicateFileExists": "Uploading files with the same name is not allowed. Please delete the existing file with the same name.",
     "NoFiles": "No Files",
-    "uploadFileLthHelpText": "Only files smaller than 200MB can be uploaded",
+    "uploadFileLthHelpText": "Only files smaller than {limit}MB can be uploaded",
     "FileSizeExceedsLimit": "File size exceeds limit"
   },
   "perms": {
@@ -2101,7 +2103,8 @@
     "passwordExpired": "Password expired",
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible.",
-    "dateLastLogin": "Date last login"
+    "dateLastLogin": "Date last login",
+    "AddAllMembersWarningMsg": "Are you sure you want to add all members"
   },
   "notifications": {
     "MessageType": "Message Type",
@@ -2234,7 +2237,8 @@
       "SCP": "SCP",
       "ApsaraStack": "Apsara Stack",
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
-      "IsAlwaysUpdate": "Asset info is kept up-to-date",
+      "IsAlwaysUpdate": "Keep assets up to date",
+      "FullySynchronous": "Assets fully synchronized",
       "AccountCreate": "Create account",
       "AccountList": "Account list",
       "AccountUpdate": "Update account",
@@ -2244,7 +2248,9 @@
       "Provider": "Provider",
       "Validity": "Validity",
       "SyncStrategy": "Synchronisation strategy",
-      "IsAlwaysUpdateHelpTips": "Whether the asset information, including Hostname, IP, Platform, and AdminUser, is updated synchronously each time a synchronization task is performed",
+      "IsAlwaysUpdateHelpTips": "Whether to synchronize asset information, including host name, IP address, system platform, network domain, and node information, each time a synchronization task is executed",
+      "FullySynchronousHelpTips": "Whether to continue synchronizing assets when the asset conditions do not meet the matching policy rules",
+      "StrategyHelpTips": "A unique asset attribute (such as platform) is determined based on the policy priority. If multiple asset attributes (such as nodes) can be configured, all policy actions are executed",
       "SyncInstanceTaskCreate": "Create sync task",
       "SyncInstanceTaskList": "Sync task list",
       "SyncInstanceTaskDetail": "Sync task detail",

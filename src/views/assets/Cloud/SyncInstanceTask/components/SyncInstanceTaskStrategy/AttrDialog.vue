@@ -27,7 +27,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => ({ name: '', priority: 50, strategy_rules: [], strategy_actions: [] })
+      default: () => ({ name: '', priority: 50, rule_relation: 'and', strategy_rules: [], strategy_actions: [] })
     },
     tableConfig: {
       type: Object,
@@ -39,10 +39,14 @@ export default {
       object: this.getObject(),
       fields: [
         [this.$t('common.BasicSetting'), ['name', 'priority']],
-        [this.$t('common.RuleSetting'), ['strategy_rules']],
+        [this.$t('common.RuleSetting'), ['rule_relation', 'strategy_rules']],
         [this.$t('common.ActionSetting'), ['strategy_actions']]
       ],
       fieldsMeta: {
+        rule_relation: {
+          label: this.$t('common.RuleRelation'),
+          helpTips: this.$t('common.RuleRelationHelpTips')
+        },
         strategy_rules: {
           label: this.$t('common.Rule'),
           component: RuleInput
@@ -77,7 +81,8 @@ export default {
       if (this.value?.id) {
         return {
           id: this.value.id, name: this.value.name, priority: this.value.priority,
-          strategy_rules: this.value.strategy_rules, strategy_actions: this.value.strategy_actions
+          strategy_rules: this.value.strategy_rules, strategy_actions: this.value.strategy_actions,
+          rule_relation: this.value.rule_relation
         }
       }
       return {}
