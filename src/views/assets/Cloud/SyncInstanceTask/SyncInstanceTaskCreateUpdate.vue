@@ -26,9 +26,9 @@ export default {
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
         [this.$t('xpack.Cloud.SaveSetting'), [
           'hostname_strategy', 'ip_network_segment_group',
-          'sync_ip_type', 'is_always_update'
+          'sync_ip_type', 'is_always_update', 'fully_synchronous'
         ]],
-        [this.$t('common.Actions'), ['strategy']],
+        [this.$t('xpack.Cloud.SyncStrategy'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -56,12 +56,17 @@ export default {
         },
         hostname_strategy: {
           rules: [rules.RequiredChange],
-          helpText: this.$t('xpack.Cloud.HostnameStrategy')
+          helpTips: this.$t('xpack.Cloud.HostnameStrategy')
         },
         is_always_update: {
           type: 'switch',
           label: this.$t('xpack.Cloud.IsAlwaysUpdate'),
           helpTips: this.$t('xpack.Cloud.IsAlwaysUpdateHelpTips')
+        },
+        fully_synchronous: {
+          type: 'switch',
+          label: this.$t('xpack.Cloud.FullySynchronous'),
+          helpTips: this.$t('xpack.Cloud.FullySynchronousHelpTips')
         },
         regions: {
           component: Select2,
@@ -101,7 +106,8 @@ export default {
         },
         strategy: {
           label: this.$t('common.Strategy'),
-          component: SyncInstanceTaskStrategy
+          component: SyncInstanceTaskStrategy,
+          helpTips: this.$t('xpack.Cloud.StrategyHelpTips')
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },

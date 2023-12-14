@@ -7,10 +7,10 @@
     v-bind="data.attrs"
   >
     <template v-if="data.helpTips" #label>
-      <el-tooltip placement="bottom" effect="light" popper-class="help-tips">
+      <el-tooltip placement="top" effect="light" popper-class="help-tips">
         <div slot="content" v-html="data.helpTips" />
         <el-button style="padding: 0">
-          <i class="fa fa-info-circle" />
+          <i class="fa fa-question-circle" />
         </el-button>
       </el-tooltip>
       {{ data.label }}
