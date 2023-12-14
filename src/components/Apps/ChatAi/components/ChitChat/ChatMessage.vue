@@ -141,9 +141,9 @@ export default {
       }
       .action {
         .svg-icon {
-          margin-top: 12px;
-          cursor: pointer;
+          transform: translateY(50%);
           margin-left: 3px;
+          cursor: pointer;
         }
         .el-dropdown {
           height: 32px;

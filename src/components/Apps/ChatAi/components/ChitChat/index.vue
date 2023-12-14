@@ -2,7 +2,7 @@
   <div class="chat-content">
     <div id="scrollRef" class="chat-list">
       <div v-if="showIntroduction" class="introduction">
-        <div v-for="(item, index) in introduction" :key="index" class="introduction-item" @click="sendIIntroduction(item)">
+        <div v-for="(item, index) in introduction" :key="index" class="introduction-item" @click="sendIntroduction(item)">
           <div class="head">
             <i v-if="item.icon" :class="item.icon" />
             <span class="title">{{ item.title }}</span>
@@ -97,6 +97,7 @@ export default {
     },
     initChatMessage() {
       this.showIntroduction = true
+      this.currentConversationId = ''
       const chat = {
         message: {
           content: this.$t('common.ChatHello'),
@@ -186,7 +187,7 @@ export default {
         setLoading(false)
       })
     },
-    sendIIntroduction(item) {
+    sendIntroduction(item) {
       this.showIntroduction = false
       this.onSendHandle(item.content)
     }
