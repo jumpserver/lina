@@ -2,7 +2,7 @@
   <div class="chat-content">
     <div id="scrollRef" class="chat-list">
       <div v-if="showIntroduction" class="introduction">
-        <div v-for="(item, index) in introduction" :key="index" class="introduction-item">
+        <div v-for="(item, index) in introduction" :key="index" class="introduction-item" @click="sendIIntroduction(item)">
           <div class="head">
             <i v-if="item.icon" :class="item.icon" />
             <span class="title">{{ item.title }}</span>
@@ -179,6 +179,10 @@ export default {
         removeLoadingMessageInChat()
         setLoading(false)
       })
+    },
+    sendIIntroduction(item) {
+      this.showIntroduction = false
+      this.onSendHandle(item.content)
     }
   }
 }
@@ -190,13 +194,21 @@ export default {
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+
   .introduction {
     padding: 16px 14px 0;
+
     .introduction-item {
       padding: 12px 14px;
       border-radius: 8px;
       margin-top: 16px;
       background-color: var(--menu-hover);
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 2px 2px #00000014;
+      }
+
       &:first-child {
         margin-top: 0;
       }
