@@ -135,7 +135,7 @@ export default {
       display: -webkit-box;
       .message-content {
         flex: 1;
-        padding: 8px 12px;
+        padding: 6px 10px;
         border-radius: 2px 12px 12px;
         background-color: #f0f1f5;
       }
@@ -148,12 +148,15 @@ export default {
         .el-dropdown {
           height: 32px;
           line-height: 37px;
-          margin-left: 4px;
           font-size: 13px;
           .el-dropdown-link {
             i {
+              padding: 4px 5px;
               font-size: 15px;
               color: #8d9091;
+              &:hover {
+                color: #7b8085
+              }
             }
           }
         }

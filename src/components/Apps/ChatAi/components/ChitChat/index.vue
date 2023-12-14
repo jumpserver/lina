@@ -23,7 +23,7 @@
         size="small"
         @click="onStopHandle"
       >{{ $tc('common.Stop') }}</el-button>
-      <ChatInput @send="onSendHandle" />
+      <ChatInput @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       socket: {},
+      prompt: [],
       currentConversationId: '',
       showIntroduction: false,
       introduction: [
@@ -152,6 +153,7 @@ export default {
         }
         const message = {
           content: value,
+          prompt: this.prompt,
           conversation_id: this.currentConversationId || ''
         }
         addChatMessageById(chat)
@@ -171,9 +173,13 @@ export default {
         setLoading(true)
       }
     },
+    onSelectPromptHandle(value) {
+      this.prompt = value
+      this.currentConversationId = ''
+    },
     onStopHandle() {
       this.$axios.post(
-        '/kael/chat/interrupt_current_ask/',
+        '/kael/interrupt_current_ask/',
         { id: this.currentConversationId || '' }
       ).finally(() => {
         removeLoadingMessageInChat()
@@ -229,20 +235,20 @@ export default {
   .chat-list {
     flex: 1;
     position: relative;
-    padding: 0 15px 15px;
+    padding: 0 15px 25px;
     overflow-y: auto;
     user-select: text;
   }
   .input-box {
     position: relative;
-    height: 154px;
+    height: 160px;
     padding: 0 15px;
     margin-bottom: 15px;
     border-top: 1px solid #ececec;
   }
   .stop {
     position: absolute;
-    top: -36px;
+    top: -37px;
     left: 50%;
     z-index: 11;
     transform: translateX(-50%);

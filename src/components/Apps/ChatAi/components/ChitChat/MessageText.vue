@@ -19,6 +19,7 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { copy } from '@/utils/common'
 
+/* eslint-disable vue/no-v-html */
 export default {
   props: {
     message: {
@@ -37,7 +38,7 @@ export default {
       if (value && this.markdown) {
         return this.markdown?.render(value)
       }
-      return value
+      return this.$xss.process(value)
     }
   },
   mounted() {
@@ -96,8 +97,14 @@ export default {
 <style lang="scss" scoped>
 .markdown-body {
   font-size: 13px;
+  &>>> p {
+    margin-bottom: 0 !important;
+  }
   &>>> pre {
-    padding: 10px;
+    padding: 6px 0;
+    .hljs.code-block-body {
+      border-radius: 4px;
+    }
   }
   background-color: transparent;
   &>>> .code-block-wrapper {
@@ -135,7 +142,7 @@ export default {
   margin-right: 5px;
   border-radius: 50%;
   vertical-align: middle;
-  background: rgb(182, 189, 198);
+  background: #676A6c;
   animation: load 1.2s ease infinite;
 }
 .loading-box span:last-child{

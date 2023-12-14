@@ -742,6 +742,8 @@
     "Reconnect": "Reconnect",
     "NewChat": "New Chat",
     "Chat": "Chat",
+    "Prompt": "Prompt",
+    "InputMessage": "Input message...",
     "CollapseSidebar": "Collapse the sidebar",
     "introduction": {
       "ConceptTitle": "🤔 Python interpreter",
