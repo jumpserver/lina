@@ -141,7 +141,6 @@ export default {
   min-width: 260px;
   height: 100vh;
   user-select: none;
-  border-radius: 20px 0 0 20px;
   transition: transform .25s cubic-bezier(.7, .3, .1, 1);
   box-shadow: 0 0 8px 4px #00000014;
   transform: translate(100%);
@@ -195,10 +194,6 @@ export default {
     left: -50px !important;
     width: 50px !important;
     transform: scale(1.06);
-    background-color: rgba(182, 181, 186, .9);
-    img {
-      filter: grayscale(1);
-    }
   }
   i {
     font-size: 20px;

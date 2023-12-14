@@ -796,7 +796,7 @@
     "NewChat": "新聊天",
     "Chat": "聊天",
     "Prompt": "提示词",
-    "InputMessage": "输入消息..."
+    "InputMessage": "输入消息...",
     "EnterMessage": "请输入问题， Enter 发送",
     "CollapseSidebar": "收起侧边栏",
     "introduction": {
