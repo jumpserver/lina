@@ -7,7 +7,7 @@
         <img v-else :src="icon" alt="">
       </div>
       <div class="drawer-panel-item">
-        <slot />
+        <slot :drawer-panel-visible="show" />
       </div>
     </div>
   </div>

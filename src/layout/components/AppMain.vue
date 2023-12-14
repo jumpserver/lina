@@ -6,7 +6,9 @@
       </keep-alive>
     </transition>
     <DrawerPanel v-if="chatAiEnabled" :icon="robotUrl" :modal="false" @toggle="onToggle">
-      <ChatGPT />
+      <template scope="panelData">
+        <ChatGPT :drawer-panel-visible="panelData.drawerPanelVisible" />
+      </template>
     </DrawerPanel>
   </section>
 </template>

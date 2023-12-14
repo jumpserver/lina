@@ -23,7 +23,7 @@
         size="small"
         @click="onStopHandle"
       >{{ $tc('common.Stop') }}</el-button>
-      <ChatInput @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
+      <ChatInput ref="chatInput" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       socket: {},
-      prompt: [],
+      prompt: '',
       currentConversationId: '',
       showIntroduction: false,
       introduction: [
@@ -77,14 +77,14 @@ export default {
       activeChat: state => state.chat.activeChat
     })
   },
-  mounted() {
-    this.initWebSocket()
-    this.initChatMessage()
-  },
   destroyed() {
     closeWebSocket()
   },
   methods: {
+    init() {
+      this.initWebSocket()
+      this.initChatMessage()
+    },
     initWebSocket() {
       const { NODE_ENV, VUE_APP_KAEL_HOST } = process.env || {}
       const api = '/kael/chat/system/'
@@ -96,8 +96,10 @@ export default {
       createWebSocket(url, this.onWebSocketMessage)
     },
     initChatMessage() {
+      this.prompt = ''
       this.showIntroduction = true
       this.currentConversationId = ''
+      this.$refs.chatInput.select.value = ''
       const chat = {
         message: {
           content: this.$t('common.ChatHello'),

@@ -180,9 +180,6 @@ export default {
         background-color: var(--menu-hover);
         border-radius: 12px 2px 12px 12px;
       }
-      .el-dropdown {
-        margin-right: 4px;
-      }
     }
   }
 }
