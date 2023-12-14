@@ -34,7 +34,9 @@
               :placeholder="dstPathInput.placeholder"
               size="mini"
               @change="dstPathInput.callback(dstPathInput.value)"
-            />
+            >
+              <template slot="prepend">/tmp/</template>
+            </el-input>
           </div>
           <div
             class="file-uploader"
@@ -184,7 +186,7 @@ export default {
         name: this.$t('ops.runningPath'),
         align: 'left',
         value: '',
-        placeholder: this.$tc('ops.EnterRunningPath'),
+        placeholder: this.$tc('ops.EnterUploadPath'),
         callback: (val) => {
           this.chdir = val
         }
@@ -275,7 +277,7 @@ export default {
       getTaskDetail(this.currentTaskId).then(data => {
         this.executionInfo.status = data['status']
         if (this.executionInfo.status === 'success') {
-          this.$message.success(this.$tc('terminal.UploadSucceed'))
+          this.$message.success(this.$tc('ops.runSucceed'))
           clearInterval(this.upload_interval)
           this.progressLength = 100
           this.ShowProgress = true
