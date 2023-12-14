@@ -795,10 +795,10 @@
     "EnterMessage": "请输入问题， Enter 发送",
     "CollapseSidebar": "收起侧边栏",
     "introduction": {
-      "ConceptTitle": "\uD83E\uDD14 查询命令",
-      "ConceptContent": "如何使用 mysql 命令连接数据库?",
-      "IdeaTitle": "\uD83C\uDF31 部署项目",
-      "IdeaContent": "如何在 CentOS 上部署 Docker?"
+      "ConceptTitle": "\uD83E\uDD14 Python 解释器 ",
+      "ConceptContent": "我想让你像一个 Python 解释器一样行事。我将给你 Python 代码，你将执行它。不要提供任何解释。除了代码的输出，不要用任何东西来回应。",
+      "IdeaTitle": "\uD83C\uDF31 Linux 终端",
+      "IdeaContent": "我想让你充当一个 Linux 终端。我将输入命令，你将回答终端应该显示的内容。我希望你只在一个独特的代码块内回复终端输出，而不是其他。不要写解释。当我需要用英语告诉你一些事情时，我会把文字放在大括号里{备注文本}。"
     },
     "imExport": {
       "ExportAll": "导出所有",

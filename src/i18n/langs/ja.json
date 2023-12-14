@@ -743,7 +743,10 @@
     "Chat": "チャット",
     "CollapseSidebar": "サイドバーを閉じる",
     "introduction": {
-
+      "ConceptTitle": "🤔 Python インタプリタ",
+      "IdeaContent": "私はあなたに Linux ターミナルの役割を果たしてもらいたいです。私はコマンドを入力し、ターミナルが表示すべき内容を返してもらいます。あなたにはユニークなコードブロック内でのみターミナルの出力に応答してほしいです。説明は書かないでください。私が何かを英語で伝える必要がある場合、中括弧で囲んでテキストを入れます {コメントテキスト}。",
+      "IdeaTitle": "🌱 Linux ターミナル",
+      "ConceptContent": "私はあなたに Python インタプリタのように行動してほしいです。私はPythonコードを提供し、それを実行してほしいです。説明は何も提供しないでください。コードの出力以外での応答は不要です。"
     },
     "imExport": {
       "ExportAll": "すべてをエクスポート",
@@ -932,7 +935,8 @@
     "VirtualApps": "仮想アプリ",
     "ImageName": "イメージ名",
     "ID": "ID",
-    "Ports": "ポート"
+    "Ports": "ポート",
+    "EnterMessage": "質問を入力してください、Enter キーを押して送信"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
@@ -1493,7 +1497,9 @@
     "DatabaseUpdate": "アセット更新 - データベース",
     "CloudUpdate": "アセット更新 - クラウドプラットフォーム",
     "More": "さらに..",
-    "BulkTransfer": "bulk transfer"
+    "BulkTransfer": "bulk transfer",
+    "AppProviderDetail": "アプリ提供者の詳細",
+    "VirtualAppDetail": "仮想アプリの詳細"
   },
   "rbac": {
     "Permissions": "権限",
@@ -1520,7 +1526,11 @@
     "DatabasePort": "データベース プロトコル ポート",
     "BasePort": "リスニング ポート",
     "Endpoint": "エンドポイント",
-    "ConnectMethod": "接続方式"
+    "ConnectMethod": "接続方式",
+    "Containers": "コンテナ",
+    "VirtualApp": "仮想アプリ",
+    "AppProvider": "アプリ提供者",
+    "VirtualAppDetail": "仮想アプリの詳細"
   },
   "sessions": {
     "DownloadFTPFileTip": "現在の動作がファイルに記録されていないか、ファイルサイズが閾値(デフォルトでは100M)を超えているか、対応するストレージに保存されていません。",
@@ -2077,7 +2087,8 @@
     "SetPublicKey": "SSH公開鍵の設定",
     "passwordExpired": "パスワードが期限切れです",
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
-    "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。"
+    "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
+    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",
