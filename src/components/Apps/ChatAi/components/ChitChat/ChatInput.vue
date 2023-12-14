@@ -11,17 +11,16 @@
     <div class="chat-input">
       <el-input
         v-model="inputValue"
-        type="textarea"
         :disabled="isLoading"
         :placeholder="$tc('common.InputMessage')"
-        @compositionstart="isIM = true"
+        type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
         @keypress.native="onKeyEnter"
       />
       <div class="input-action">
         <span class="right">
-          <i class="fa fa-send" :class="{'active': inputValue }" @click="onSendHandle" />
+          <i :class="{'active': inputValue }" class="fa fa-send" @click="onSendHandle" />
         </span>
       </div>
     </div>
