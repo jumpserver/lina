@@ -1188,7 +1188,9 @@
     "DuplicateFileExists": "Uploading files with the same name is not allowed. Please delete the existing file with the same name.",
     "NoFiles": "No Files",
     "uploadFileLthHelpText": "Only files smaller than {limit}MB can be uploaded",
-    "FileSizeExceedsLimit": "File size exceeds limit"
+    "FileSizeExceedsLimit": "File size exceeds limit",
+    "runSucceed": "Task executed successfully",
+    "EnterUploadPath": "Enter the upload path"
   },
   "perms": {
     "": "",

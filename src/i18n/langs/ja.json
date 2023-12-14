@@ -1186,7 +1186,9 @@
     "DuplicateFileExists": "同名のファイルのアップロードは許可されていません。同名のファイルを削除してください。",
     "NoFiles": "まだファイルがありません",
     "uploadFileLthHelpText": "{limit}MB 未満のファイルのみアップロードできます",
-    "FileSizeExceedsLimit": "ファイルサイズが制限を超えています"
+    "FileSizeExceedsLimit": "ファイルサイズが制限を超えています",
+    "runSucceed": "タスクが成功しました",
+    "EnterUploadPath": "アップロードパスを入力してください"
   },
   "perms": {
     "": "",

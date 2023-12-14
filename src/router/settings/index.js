@@ -130,7 +130,7 @@ export default {
           component: () => import('@/views/settings/Storage'),
           meta: {
             title: i18n.t('setting.Storage'),
-            icon: 'terminal-set',
+            icon: 'storage',
             permissions: ['settings.change_terminal']
           }
         },
