@@ -340,15 +340,14 @@ export default {
       }
       return ''
     },
-    checkFileSize(file) {
-      const isLt200M = file.size / 1024 / 1024 < 200
-      if (!isLt200M) {
+    IsFileExceedsLimit(file) {
+      const isGt200M = file.size / 1024 / 1024 > 200
+      if (isGt200M) {
         this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
       }
-      return isLt200M
+      return isGt200M
     },
     onFileChange(file, fileList) {
-      this.checkFileSize(file)
       file.name = this.truncateFileName(file.name)
       this.uploadFileList = fileList
       this.handleFileList(file, fileList)
@@ -358,6 +357,11 @@ export default {
     },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
+      for (const file of this.uploadFileList) {
+        if (this.IsFileExceedsLimit(file)) {
+          return
+        }
+      }
       if (!this.uploadFileList) {
         this.$message.error(this.$tc('ops.RequiredUploadFile'))
         return
