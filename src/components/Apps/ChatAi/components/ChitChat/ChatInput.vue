@@ -1,17 +1,26 @@
 <template>
   <div class="container">
+    <div class="chat-action">
+      <Select2
+        v-model="select.value"
+        :disabled="isLoading"
+        v-bind="select"
+        @change="onSelectChange"
+      />
+    </div>
     <div class="chat-input">
       <el-input
-        v-model="value"
+        v-model="inputValue"
         type="textarea"
         :disabled="isLoading"
+        :placeholder="$tc('common.InputMessage')"
         @compositionstart="isIM = true"
         @compositionend="isIM = false"
         @keypress.native="onKeyEnter"
       />
       <div class="input-action">
         <span class="right">
-          <i class="fa fa-send" :class="{'active': value }" @click="onSendHandle" />
+          <i class="fa fa-send" :class="{'active': inputValue }" @click="onSendHandle" />
         </span>
       </div>
     </div>
@@ -20,16 +29,29 @@
 
 <script>
 import { mapState } from 'vuex'
+import Select2 from '../../../../Form/FormFields/Select2.vue'
 import { useChat } from '../../useChat.js'
 const { setLoading } = useChat()
 
 export default {
+  components: { Select2 },
   props: {
   },
   data() {
     return {
       isIM: false,
-      value: ''
+      inputValue: '',
+      select: {
+        url: '/api/v1/settings/chatai-prompts/',
+        value: '',
+        multiple: false,
+        placeholder: this.$t('common.Prompt'),
+        ajax: {
+          transformOption: (item) => {
+            return { label: item.name, value: item.content }
+          }
+        }
+      }
     }
   },
   computed: {
@@ -52,11 +74,15 @@ export default {
       }
     },
     onSendHandle() {
-      if (!this.value) return
+      if (!this.inputValue) return
 
       setLoading(true)
-      this.$emit('send', this.value)
-      this.value = ''
+      this.$emit('send', this.inputValue)
+      this.inputValue = ''
+    },
+    onSelectChange(value) {
+      this.inputValue = value
+      this.$emit('select-prompt', value)
     }
   }
 }
@@ -67,18 +93,25 @@ export default {
   display: flex;
   height: 100%;
   flex-direction: column;
-  .action {
-    height: 44px;
-    line-height: 44px;
+  .chat-action {
     width: 100%;
+    margin: 6px 0;
     &>>> .el-select {
+      width: 50%;
       .el-input__inner {
         height: 28px;
         line-height: 28px;
         border-radius: 16px;
+        border-color: transparent;
         background-color: #f7f7f8;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.45);
+        &:hover {
+          background-color: #ededed;
+        }
+      }
+      .el-input__icon {
+        line-height: 0px;
       }
     }
   }
@@ -86,7 +119,6 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-top: 16px;
     border: 1px solid #DCDFE6;
     border-radius: 12px;
     &:has(.el-textarea__inner:focus) {

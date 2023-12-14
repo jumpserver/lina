@@ -792,6 +792,8 @@
     "Reconnect": "重新连接",
     "NewChat": "新聊天",
     "Chat": "聊天",
+    "Prompt": "提示词",
+    "InputMessage": "输入消息...",
     "CollapseSidebar": "收起侧边栏",
     "introduction": {
       "ConceptTitle": "🤔 解释一个复杂的概念",

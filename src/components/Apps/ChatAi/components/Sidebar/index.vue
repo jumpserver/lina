@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="top">
-      <svg-icon icon-class="collapse" @click="onClose" />
+    <div class="close-sidebar">
+      <i class="el-icon-close" @click="onClose" />
     </div>
     <el-tabs v-model="active" :tab-position="'right'" @tab-click="handleClick">
       <el-tab-pane v-for="(item) in submenu" :key="item.name" :name="item.name">
@@ -47,14 +47,19 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #f0f1f5;
-  .top {
+  .close-sidebar {
     text-align: center;
     font-size: 14px;
-    padding: 14px 0;
+    padding: 12px 0;
     cursor: pointer;
-    >>> .svg-icon {
+    i {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 4px;
+      border-radius: 2px;
       &:hover {
-        color: #7b8085;
+        color: var(--color-primary);
+        background: var(--menu-hover);
       }
     }
   }
