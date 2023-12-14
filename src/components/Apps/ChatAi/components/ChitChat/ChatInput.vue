@@ -62,13 +62,8 @@ export default {
   },
   methods: {
     onKeyEnter(event) {
-      if (!this.isIM) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-          event.preventDefault()
-          this.onSendHandle()
-        }
-      } else {
-        if (event.key === 'Enter' && event.ctrlKey) {
+      if (event.key === 'Enter') {
+        if ((!this.isIM && !event.shiftKey) || (this.isIM && event.ctrlKey)) {
           event.preventDefault()
           this.onSendHandle()
         }
