@@ -3,7 +3,7 @@
     <div class="chat-action">
       <Select2
         v-model="select.value"
-        :disabled="isLoading"
+        :disabled="isLoading || isSelectDisabled"
         v-bind="select"
         @change="onSelectChange"
       />
@@ -58,7 +58,10 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.chat.loading
-    })
+    }),
+    isSelectDisabled() {
+      return !!this.select.value
+    }
   },
   methods: {
     onKeyEnter(event) {
@@ -97,7 +100,7 @@ export default {
       .el-input__inner {
         height: 28px;
         line-height: 28px;
-        border-radius: 16px;
+        border-radius: 14px;
         border-color: transparent;
         background-color: #f7f7f8;
         font-size: 13px;

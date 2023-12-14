@@ -27,6 +27,7 @@
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
+import { ws } from '@/utils/socket'
 
 export default {
   components: {
@@ -39,6 +40,10 @@ export default {
       default: function() {
         return this.$t('setting.ChatAI')
       }
+    },
+    drawerPanelVisible: {
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
@@ -54,6 +59,13 @@ export default {
       ]
     }
   },
+  watch: {
+    drawerPanelVisible(value) {
+      if (value && !ws) {
+        this.$refs.component?.init()
+      }
+    }
+  },
   methods: {
     onClose() {
       this.$parent.show = false
@@ -61,8 +73,7 @@ export default {
     onNewChat() {
       this.active = 'chat'
       this.$nextTick(() => {
-        this.$refs.component.initWebSocket()
-        this.$refs.component.initChatMessage()
+        this.$refs.component?.init()
         getInputFocus()
       })
     }
