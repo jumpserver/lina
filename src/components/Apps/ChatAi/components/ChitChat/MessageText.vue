@@ -69,7 +69,7 @@ export default {
       this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
     },
     highlightBlock(str, lang) {
-      return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang"></span><span class="code-block-header__copy">${'Copy Code'}</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`
+      return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">${'Copy'}</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`
     },
     addCopyEvents() {
       const copyBtn = document.querySelectorAll('.code-block-header__copy')
@@ -100,17 +100,26 @@ export default {
   &>>> p {
     margin-bottom: 0 !important;
   }
+  background: inherit;
   &>>> pre {
-    padding: 6px 0;
+    padding: 0 0 6px 0;
     .hljs.code-block-body {
       border-radius: 4px;
     }
   }
-  background-color: transparent;
   &>>> .code-block-wrapper {
+    background: #1F2329;
+
+    .code-block-body {
+      padding: 5px 10px 0;
+    };
     .code-block-header {
       margin-bottom: 4px;
       overflow: hidden;
+      background: #353946;
+      color: #c2d1e1;
+      padding: 2px 6px;
+
       .code-block-header__copy {
         float: right;
         cursor: pointer;
@@ -146,7 +155,7 @@ export default {
   animation: load 1.2s ease infinite;
 }
 .loading-box span:last-child{
-  margin-right: 0px;
+  margin-right: 0;
 }
 @keyframes load{
   0%{
