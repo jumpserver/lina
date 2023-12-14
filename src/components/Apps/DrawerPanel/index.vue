@@ -141,7 +141,6 @@ export default {
   min-width: 260px;
   height: 100vh;
   user-select: none;
-  border-radius: 20px 0 0 20px;
   transition: transform .25s cubic-bezier(.7, .3, .1, 1);
   box-shadow: 0 0 8px 4px #00000014;
   transform: translate(100%);
@@ -190,6 +189,7 @@ export default {
   background-color: #FFFFFF;
   box-shadow: 0 0 8px 4px #00000014;
   cursor: pointer;
+
   &:hover {
     left: -52px !important;
     width: 52px !important;
