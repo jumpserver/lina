@@ -103,6 +103,10 @@ export default {
       type: Function,
       default: (obj, that) => {}
     },
+    allowCreate: {
+      type: Boolean,
+      default: false
+    },
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
@@ -146,6 +150,10 @@ export default {
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('common.AddSuccessMsg'))
       }
+    },
+    getHasObjects: {
+      type: Function,
+      default: null // (objectIds) => {}
     }
   },
   data() {
@@ -163,7 +171,8 @@ export default {
         options: this.objects,
         value: this.value,
         disabled: this.disabled,
-        disabledValues: []
+        disabledValues: [],
+        allowCreate: this.allowCreate
       }
     }
   },
@@ -258,9 +267,15 @@ export default {
         return
       }
       this.select2.disabledValues = this.hasObjectsId
-      const resp = await createSourceIdCache(this.hasObjectsId)
-      this.params.spm = resp.spm
-      await this.loadHasObjects()
+      if (this.getHasObjects) {
+        this.getHasObjects(this.hasObjectsId).then((data) => {
+          this.iHasObjects = data
+        })
+      } else {
+        const resp = await createSourceIdCache(this.hasObjectsId)
+        this.params.spm = resp.spm
+        await this.loadHasObjects()
+      }
     },
     removeObject(obj) {
       this.performDelete(obj, this).then(
