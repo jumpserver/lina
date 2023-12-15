@@ -941,7 +941,8 @@
     "ImageName": "イメージ名",
     "ID": "ID",
     "Ports": "ポート",
-    "EnterMessage": "質問を入力してください、Enter キーを押して送信"
+    "EnterMessage": "質問を入力してください、Enter キーを押して送信",
+    "Label": "ラベル"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",

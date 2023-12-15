@@ -942,7 +942,8 @@
     "ImageName": "Image name",
     "ID": "ID",
     "Ports": "Ports",
-    "EnterMessage": "Please enter a question, press Enter to send"
+    "EnterMessage": "Please enter a question, press Enter to send",
+    "Label": "Label"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

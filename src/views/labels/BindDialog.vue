@@ -6,6 +6,7 @@
     top="80px"
     v-bind="$attrs"
     width="768px"
+    @cancel="handleCancel"
     @confirm="handleConfirm"
     v-on="$listeners"
   >
@@ -110,6 +111,9 @@ export default {
       })
       this.$refs.pageTransfer.getData(1)
     },
+    handleCancel() {
+      this.$emit('update:visible', false)
+    },
     handleConfirm() {
       const selectedData = this.$refs.pageTransfer.getSelectedData()
       const data = {
@@ -117,15 +121,7 @@ export default {
       }
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
       this.$axios.put(url, data).then(res => {
-        this.pagingTransfer.selectedData = []
-        this.pagingTransfer.dataList = []
-        this.select2.value = ''
         this.$message.success('绑定成功')
-        this.transferLoading = true
-        setTimeout(() => {
-          this.transferLoading = false
-        }, 100)
-        this.$emit('update:visible', false)
       })
     },
     async getResourceTypes() {
