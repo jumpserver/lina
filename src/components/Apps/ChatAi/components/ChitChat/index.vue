@@ -37,6 +37,7 @@ import { getInputFocus, useChat } from '../../useChat.js'
 
 const {
   setLoading,
+  clearChats,
   addChatMessageById,
   addMessageToActiveChat,
   newChatAndAddMessageById,
@@ -179,6 +180,12 @@ export default {
     onSelectPromptHandle(value) {
       this.prompt = value
       this.currentConversationId = ''
+      this.showIntroduction = false
+      this.onSendHandle(value)
+    },
+    onNewChat() {
+      clearChats()
+      this.initChatMessage()
     },
     onStopHandle() {
       this.$axios.post(

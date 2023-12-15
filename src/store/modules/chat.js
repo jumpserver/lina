@@ -1,7 +1,6 @@
 
 const state = {
   loading: false,
-  tabNum: 0,
   activeTab: 0,
   chatsStore: [],
   activeChat: {}
@@ -22,6 +21,10 @@ const mutations = {
 
   addMessageToActiveChat(state, chat) {
     state.activeChat.chats?.push(chat)
+  },
+
+  clearChats(state) {
+    state.activeChat.chats = []
   },
 
   removeLoadingMessageInChat(state) {

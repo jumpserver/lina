@@ -80,7 +80,6 @@ export default {
       this.inputValue = ''
     },
     onSelectChange(value) {
-      this.inputValue = value
       this.$emit('select-prompt', value)
     }
   }
