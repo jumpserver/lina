@@ -1,8 +1,13 @@
 <template>
   <div>
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog :label="label" :visible.sync="bindVisible" />
-    <LabelResourcesDialog v-if="resDialogVisible" :label="label" :visible.sync="resDialogVisible" @addResource="handleAddResource" />
+    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" />
+    <LabelResourcesDialog
+      v-if="resDialogVisible"
+      :label="label"
+      :visible.sync="resDialogVisible"
+      @addResource="handleAddResource"
+    />
   </div>
 </template>
 

@@ -3,13 +3,16 @@
     <el-button
       v-if="showLabelButton"
       class="label-button"
+      plain
       size="small"
       @click="showSearchSelect"
     >
-      <i class="fa fa-tag" />
+      <svg-icon icon-class="tag" />
+      <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
       v-show="showLabelSearch"
+      ref="labelCascader"
       v-model="labelValue"
       :options="labelOptions"
       :placeholder="placeholder"
@@ -45,8 +48,6 @@ export default {
       this.$emit('labelSearch', newValue)
     }
   },
-  mounted() {
-  },
   methods: {
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
@@ -57,17 +58,15 @@ export default {
         const groupedLabelOptions = _.groupBy(data, 'name')
         const labelOptions = []
         for (const [key, labels] of Object.entries(groupedLabelOptions)) {
-          let children = _.sortBy(labels, 'value')
-          children = [{ id: '*', value: this.$t('common.All') }, ...children]
+          const all = { value: '*', label: this.$t('common.All') }
+          const children = _.sortBy(labels, 'value').map(label => ({
+            value: label.value,
+            label: label.value
+          }))
           labelOptions.push({
             value: key,
             label: key,
-            children: children.map(label => {
-              return {
-                value: label.id,
-                label: label.value
-              }
-            })
+            children: [all, ...children]
           })
         }
         this.labelOptions = _.sortBy(labelOptions, 'label')
@@ -77,6 +76,9 @@ export default {
       this.getLabelOptions()
       this.showLabelSearch = true
       this.showLabelButton = false
+      setTimeout(() => {
+        this.$refs.labelCascader.toggleDropDownVisible(true)
+      }, 100)
     }
   }
 }
@@ -88,7 +90,7 @@ export default {
 }
 
 .label-button {
-  padding:  10px 15px;
+  padding: 10px 13px 10px 12px;
 }
 
 .label-select {
