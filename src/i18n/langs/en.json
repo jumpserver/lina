@@ -1190,7 +1190,8 @@
     "uploadFileLthHelpText": "Only files smaller than {limit}MB can be uploaded",
     "FileSizeExceedsLimit": "File size exceeds limit",
     "runSucceed": "Task executed successfully",
-    "EnterUploadPath": "Enter the upload path"
+    "EnterUploadPath": "Enter the upload path",
+    "FileNameTooLong": "File name too long"
   },
   "perms": {
     "": "",

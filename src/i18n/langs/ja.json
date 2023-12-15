@@ -1188,7 +1188,8 @@
     "uploadFileLthHelpText": "{limit}MB 未満のファイルのみアップロードできます",
     "FileSizeExceedsLimit": "ファイルサイズが制限を超えています",
     "runSucceed": "タスクが成功しました",
-    "EnterUploadPath": "アップロードパスを入力してください"
+    "EnterUploadPath": "アップロードパスを入力してください",
+    "FileNameTooLong": "ファイル名が長すぎます"
   },
   "perms": {
     "": "",
