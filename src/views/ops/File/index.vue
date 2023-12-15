@@ -370,8 +370,12 @@ export default {
         if (this.IsFileExceedsLimit(file)) {
           return
         }
+        if (file.name.length > 128) {
+          this.$message.error(file.name + ' ' + this.$tc('ops.FileNameTooLong'))
+          return
+        }
       }
-      if (!this.uploadFileList) {
+      if (this.uploadFileList.length === 0) {
         this.$message.error(this.$tc('ops.RequiredUploadFile'))
         return
       }
@@ -417,7 +421,6 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
-          this.$router.replace({ query: { taskId: this.currentTaskId }})
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {
