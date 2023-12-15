@@ -35,6 +35,7 @@ export default {
     return {
       tableConfig: {
         url: url,
+        id: 'asset',
         columnsExclude: ['asset'],
         columnsExtra: ['delete_action'],
         columns: [
