@@ -41,6 +41,11 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
           type: 'bool'
         },
         {
+          name: 'is_first_login',
+          label: vm.$t('users.FirstLogin'),
+          type: 'bool'
+        },
+        {
           name: 'system_roles',
           label: vm.$t('users.SystemRoles'),
           type: 'm2m',
