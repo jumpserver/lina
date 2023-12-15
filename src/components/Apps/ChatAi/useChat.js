@@ -23,6 +23,10 @@ export function useChat() {
     store.commit('chat/addChatToStore', data)
   }
 
+  const clearChats = () => {
+    store.commit('chat/clearChats')
+  }
+
   const addMessageToActiveChat = (chat) => {
     store.commit('chat/addMessageToActiveChat', chat)
   }
@@ -69,6 +73,7 @@ export function useChat() {
     chatStore,
     setLoading,
     onNewChat,
+    clearChats,
     getInputFocus,
     addMessageToActiveChat,
     newChatAndAddMessageById,

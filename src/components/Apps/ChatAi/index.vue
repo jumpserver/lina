@@ -73,7 +73,7 @@ export default {
     onNewChat() {
       this.active = 'chat'
       this.$nextTick(() => {
-        this.$refs.component?.init()
+        this.$refs.component?.onNewChat()
         getInputFocus()
       })
     }
