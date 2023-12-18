@@ -15,6 +15,7 @@
 import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -31,10 +32,13 @@ export default {
       tableConfig: {
         url: '/api/v1/labels/labels/',
         columnsShow: {
-          default: ['name', 'value', 'res_count', 'date_created', 'date_updated', 'actions'],
+          default: ['name', 'value', 'res_count', 'date_created', 'action'],
           min: ['name', 'action']
         },
         columnsMeta: {
+          name: {
+            formatter: (row) => row.name
+          },
           res_count: {
             formatter: (row) => {
               const onClick = () => {
@@ -54,6 +58,9 @@ export default {
                   callback: ({ row }) => {
                     this.label = row
                     this.bindVisible = true
+                  },
+                  can: () => {
+                    return !this.currentOrgIsRoot
                   }
                 }
               ]
@@ -66,6 +73,9 @@ export default {
         createRoute: 'LabelCreate'
       }
     }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     handleClickResCount(row) {

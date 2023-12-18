@@ -383,7 +383,7 @@ export default {
       if (Array.isArray(resData) && resData.length) {
         this.asyncDataList = resData
         this.notSelectDataList = resData
-        this.initData(true)
+        this.initData(false)
         this.isLastPage = resData.length < this.pageSize
       } else {
         this.notSelectDataList = []
