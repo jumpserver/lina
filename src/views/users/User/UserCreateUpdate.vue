@@ -120,10 +120,7 @@ export default {
             ajax: {
               url: '/api/v1/rbac/system-roles/?id!=00000000-0000-0000-0000-000000000004',
               transformOption: (item) => {
-                if (item.name !== 'SystemComponent') {
-                  return { label: item.display_name, value: item.id }
-                }
-                return false
+                return { label: item.display_name, value: item.id }
               }
             }
           },
