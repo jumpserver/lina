@@ -32,8 +32,8 @@ export default {
       tableConfig: {
         url: '/api/v1/labels/labels/',
         columnsShow: {
-          default: ['name', 'value', 'res_count', 'date_created', 'action'],
-          min: ['name', 'action']
+          default: ['name', 'value', 'res_count', 'date_created', 'actions'],
+          min: ['name', 'actions']
         },
         columnsMeta: {
           name: {
