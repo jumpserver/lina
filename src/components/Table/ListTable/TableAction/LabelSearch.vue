@@ -1,7 +1,7 @@
 <template>
   <div class="label-search">
     <el-button
-      v-if="showLabelButton"
+      v-if="!showLabelSearch"
       class="label-button"
       plain
       size="small"
@@ -63,6 +63,27 @@ export default {
       console.log('Label search: ', labelSearch)
       this.$emit('labelSearch', labelSearch)
     }
+  },
+  mounted() {
+    this.$eventBus.$on('labelSearch', label => {
+      if (!label) {
+        this.labelValue = []
+        this.showLabelSearch = true
+        return
+      }
+      const labels = label.split(',').map(item => item.split(':'))
+      const notExistLabels = labels.filter(item => {
+        return !this.labelValue.find(label => label[0] === item[0] && label[1] === item[1])
+      })
+      this.labelValue = [...this.labelValue, ...notExistLabels]
+      this.getLabelOptions()
+      setTimeout(() => {
+        this.showLabelSearch = true
+      }, 500)
+    })
+  },
+  destroyed() {
+    this.$eventBus.$off('labelSearch')
   },
   methods: {
     getLabelOptions() {

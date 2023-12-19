@@ -1,25 +1,30 @@
 <template>
   <div>
-    <a class="tag" @click="showDialog=true">
+    <a class="label-formatter-col">
       <span v-if="!iLabels || iLabels.length === 0">
         <el-tag effect="plain" size="mini">
           <i class="fa fa-tag" /> -
         </el-tag>
       </span>
       <div v-else>
-        <el-tag
+        <div
           v-for="label of iLabels"
           :key="label"
-          :type="getLabelType(label)"
-          class="tag-formatter"
-          disable-transitions
-          effect="plain"
-          size="mini"
-          v-bind="formatterArgs.config"
         >
-          <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
-        </el-tag>
+          <el-tag
+            :type="getLabelType(label)"
+            class="tag-formatter"
+            disable-transitions
+            effect="plain"
+            size="mini"
+            v-bind="formatterArgs.config"
+            @click="handleLabelSearch(label)"
+          >
+            <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
+          </el-tag>
+        </div>
       </div>
+      <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
     </a>
     <Dialog
       v-if="showDialog"
@@ -97,6 +102,7 @@ export default {
   },
   data() {
     return {
+      focusOn: '',
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
       initial: [],
       iLabels: [],
@@ -131,6 +137,9 @@ export default {
     this.iLabels = [...this.initial]
   },
   methods: {
+    handleLabelSearch(label) {
+      this.$eventBus.$emit('labelSearch', label)
+    },
     getLabelType(tag) {
       return this.formatterArgs.getLabelType(tag)
     },
@@ -198,6 +207,14 @@ export default {
   }
 }
 
+.edit-btn {
+  display: none;
+  float: right;
+}
+.label-formatter-col:hover .edit-btn {
+  display: inline;
+}
+
 .tag-zone {
   margin: 20px 0 0 0;
   border: solid 1px #ebeef5;
@@ -223,7 +240,7 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-  display: table;
+  //display: table;
 }
 
 .tag-tip {
