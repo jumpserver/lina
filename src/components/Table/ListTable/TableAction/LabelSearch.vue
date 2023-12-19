@@ -16,11 +16,16 @@
       v-model="labelValue"
       :options="labelOptions"
       :placeholder="placeholder"
+      :props="labelProps"
       class="label-cascader"
       clearable
       filterable
       separator=": "
     >
+      <template slot-scope="{ node, data }">
+        <span>{{ data.label }}</span>
+        <span v-if="!node.isLeaf"> ({{ data.children.length -1 }}) </span>
+      </template>
       <i slot="prefix" class="el-input__icon el-icon-search" />
     </el-cascader>
   </div>
@@ -34,8 +39,11 @@ export default {
     return {
       showLabelButton: true,
       showLabelSearch: false,
+      labelProps: {
+        multiple: true
+      },
       labelOptions: [],
-      labelValue: '',
+      labelValue: [],
       placeholder: this.$t('labels.SelectLabelFilter')
     }
   },
@@ -45,7 +53,15 @@ export default {
         this.showLabelButton = true
         this.showLabelSearch = false
       }
-      this.$emit('labelSearch', newValue)
+
+      if (!newValue || newValue.length === 0) {
+        this.$emit('labelSearch', '')
+        return
+      }
+
+      const labelSearch = newValue.map(item => item.join(':')).join(',')
+      console.log('Label search: ', labelSearch)
+      this.$emit('labelSearch', labelSearch)
     }
   },
   methods: {
@@ -99,6 +115,8 @@ export default {
 .label-cascader {
   >>> .el-input__inner {
     font-size: 13px;
+  }
+  >>> .el-cascader__search-input {
   }
 }
 
