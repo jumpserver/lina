@@ -1,7 +1,7 @@
 <template>
   <div>
-    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" />
+    <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
+    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" @confirm="handleDialogConfirm" />
     <LabelResourcesDialog
       v-if="resDialogVisible"
       :label="label"
@@ -85,6 +85,10 @@ export default {
     handleAddResource() {
       this.bindVisible = true
       this.resDialogVisible = false
+    },
+    handleDialogConfirm() {
+      this.bindVisible = false
+      this.$refs.GenericListPage.reloadTable()
     }
   }
 }

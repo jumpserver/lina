@@ -603,6 +603,7 @@
     "Auth": "認証",
     "bind": "紐付け",
     "unbind": "バインド解除",
+    "BindSuccess": "バインド成功",
     "PushSelected": "選択したプッシュ",
     "PushSelectedSystemUsersToAsset": "選択したシステムユーザーをアセットにプッシュ",
     "TestSelected": "テストを選択した",
