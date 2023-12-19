@@ -127,12 +127,11 @@ export default {
       this.datePick(val)
     },
     handleLabelSearch(val) {
-      if (!val || val.length !== 2) {
-        this.searchTable({ label: '' })
+      if (!val || val.length === 0) {
+        this.searchTable({ labels: '' })
         return
       }
-      const [key, value] = val
-      this.searchTable({ label: `${key}:${value}` })
+      this.searchTable({ labels: val })
     }
   }
 }
