@@ -9,7 +9,14 @@
       v-on="$listeners"
       @focus.stop.prevent="handleFocus"
     />
-    <Dialog v-if="showTransfer" :title="label" :visible.sync="showTransfer" width="730px" @confirm="handleTransConfirm">
+    <Dialog
+      v-if="showTransfer"
+      :title="label"
+      :visible.sync="showTransfer"
+      width="730px"
+      @cancel="handleTransCancel"
+      @confirm="handleTransConfirm"
+    >
       <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
     </Dialog>
   </div>
@@ -132,6 +139,9 @@ export default {
     },
     handleSelectInitialed() {
       this.selectInitialized = true
+    },
+    handleTransCancel() {
+      this.showTransfer = false
     },
     handleTransConfirm() {
       const selectedData = this.$refs.pageTransfer.checkedData
