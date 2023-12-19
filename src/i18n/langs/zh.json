@@ -655,6 +655,7 @@
     "Auth": "认证",
     "bind": "绑定",
     "unbind": "解绑",
+    "BindSuccess": "绑定成功",
     "PushSelected": "推送所选",
     "PushSelectedSystemUsersToAsset": "推送所选系统用户到资产",
     "TestSelected": "测试所选",
