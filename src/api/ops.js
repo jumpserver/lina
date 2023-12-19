@@ -58,6 +58,7 @@ export function JobUploadFile(form) {
     url: '/api/v1/ops/jobs/upload/',
     method: 'post',
     headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 10 * 60 * 1000,
     data: form
   })
 }
