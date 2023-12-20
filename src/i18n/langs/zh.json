@@ -1860,7 +1860,8 @@
     "sync": "同步",
     "testHelpText": "请输入目的地址进行测试",
     "Storage": "存储设置",
-    "ReplayStorageCreateUpdateHelpMessage": "注意：目前 SFTP 存储仅支持账号备份，暂不支持录像存储。"
+    "ReplayStorageCreateUpdateHelpMessage": "注意：目前 SFTP 存储仅支持账号备份，暂不支持录像存储。",
+    "VirtualApp": "虚拟应用"
   },
   "tickets": {
     "BatchApproval": "批量审批",
