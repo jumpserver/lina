@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-button v-if="shouldFold" class="search-btn" plain size="mini" @click="handleManualSearch">
+    <el-button v-if="shouldFold" circle class="search-btn" size="mini" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
     <TagSearch v-else :options="iOption" v-bind="$attrs" @tagSearch="handleTagSearch" v-on="$listeners" />

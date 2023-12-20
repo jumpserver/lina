@@ -94,6 +94,8 @@ export default {
           'applications.match_application', 'rbac.view_workbench'
         ],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
+        'users.add_user': ['rbac.view_role'],
+        'users.change_user': ['rbac.view_role'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'

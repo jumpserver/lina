@@ -3,7 +3,6 @@
     <el-button
       v-if="!showLabelSearch"
       class="label-button"
-      plain
       size="small"
       @click="showSearchSelect"
     >
@@ -11,7 +10,7 @@
       <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
-      v-if="showLabelSearch"
+      v-else
       ref="labelCascader"
       v-model="labelValue"
       :options="labelOptions"
@@ -21,7 +20,9 @@
       clearable
       filterable
       separator=": "
-      @focus="handleCascaderExpandChange"
+      size="small"
+      @focus="handleCascaderFocus"
+      @visible-change="handleCascaderVisibleChange"
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
@@ -87,14 +88,22 @@ export default {
     this.$eventBus.$off('labelSearch')
   },
   methods: {
-    handleCascaderExpandChange(visible) {
-      console.log('Visable changed: ', visible)
-      if (!visible) {
+    handleCascaderFocus() {
+      this.setSearchFocus()
+    },
+    handleCascaderVisibleChange(visible) {
+      if (visible) {
+        setTimeout(() => {
+          this.$refs.labelCascader.updateStyle()
+        },)
         return
+      } else {
+        const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
+        input.style.height = '34px'
       }
-      setTimeout(() => {
-        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
-      })
+      if (this.labelValue.length === 0) {
+        this.showLabelSearch = false
+      }
     },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
@@ -119,15 +128,18 @@ export default {
         this.labelOptions = _.sortBy(labelOptions, 'label')
       })
     },
+    setSearchFocus() {
+      setTimeout(() => {
+        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+      }, 100)
+    },
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
       setTimeout(() => {
-        setTimeout(() => {
-          this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
-        })
         this.$refs.labelCascader.toggleDropDownVisible(true)
-      }, 100)
+        this.setSearchFocus()
+      }, 200)
     }
   }
 }
@@ -146,15 +158,29 @@ export default {
 }
 
 .label-cascader {
-  width: 400px;
+  width: 300px;
+  >>> .el-input--suffix.el-input {
+    input {
+      height: 34px;
+    }
+  }
   >>> .el-input__inner {
     font-size: 13px;
   }
   >>> .el-cascader__search-input {
     display: none;
+    margin: 0 0 2px 13px;
   }
   >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
     display: inline;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags {
+    flex-wrap: wrap;
+  }
+  >>> .el-cascader__tags {
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 }
 
