@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :close-on-click-modal="false"
-    :destory-on-close="true"
+    :destroy-on-close="true"
     :title="$tc('labels.BindResource')"
     top="80px"
     v-bind="$attrs"
