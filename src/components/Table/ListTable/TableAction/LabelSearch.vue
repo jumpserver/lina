@@ -11,7 +11,7 @@
       <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
-      v-show="showLabelSearch"
+      v-if="showLabelSearch"
       ref="labelCascader"
       v-model="labelValue"
       :options="labelOptions"
@@ -21,6 +21,7 @@
       clearable
       filterable
       separator=": "
+      @focus="handleCascaderExpandChange"
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
@@ -37,7 +38,6 @@ export default {
   name: 'LabelSearch',
   data() {
     return {
-      showLabelButton: true,
       showLabelSearch: false,
       labelProps: {
         multiple: true
@@ -50,7 +50,6 @@ export default {
   watch: {
     labelValue(newValue) {
       if (!newValue || newValue.length === 0) {
-        this.showLabelButton = true
         this.showLabelSearch = false
       }
 
@@ -60,8 +59,10 @@ export default {
       }
 
       const labelSearch = newValue.map(item => item.join(':')).join(',')
-      console.log('Label search: ', labelSearch)
       this.$emit('labelSearch', labelSearch)
+    },
+    showLabelSearch(newValue) {
+      this.$emit('showLabelSearch', newValue)
     }
   },
   mounted() {
@@ -86,6 +87,15 @@ export default {
     this.$eventBus.$off('labelSearch')
   },
   methods: {
+    handleCascaderExpandChange(visible) {
+      console.log('Visable changed: ', visible)
+      if (!visible) {
+        return
+      }
+      setTimeout(() => {
+        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+      })
+    },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
         return
@@ -112,8 +122,10 @@ export default {
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
-      this.showLabelButton = false
       setTimeout(() => {
+        setTimeout(() => {
+          this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+        })
         this.$refs.labelCascader.toggleDropDownVisible(true)
       }, 100)
     }
@@ -134,10 +146,15 @@ export default {
 }
 
 .label-cascader {
+  width: 400px;
   >>> .el-input__inner {
     font-size: 13px;
   }
   >>> .el-cascader__search-input {
+    display: none;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
+    display: inline;
   }
 }
 
