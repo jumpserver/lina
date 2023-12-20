@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :close-on-click-modal="false"
-    :destory-on-close="true"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"
