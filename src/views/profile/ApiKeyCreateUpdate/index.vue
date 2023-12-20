@@ -62,14 +62,13 @@ export default {
         return value
       },
       updateSuccessNextRoute: {
-        name: 'ApiKeyCreateUpdate'
+        name: 'ApiKey'
       }
     }
   },
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
