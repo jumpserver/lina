@@ -1874,7 +1874,8 @@
     "sync": "同期",
     "AccountStorage": "アカウントストレージ",
     "Passkey": "パスキー",
-    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。"
+    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。",
+    "VirtualApp": "仮想アプリケーション"
   },
   "tickets": {
     "BatchApproval": "大量承認です",

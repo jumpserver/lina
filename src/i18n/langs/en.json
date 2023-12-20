@@ -1882,7 +1882,8 @@
     "sync": "Sync",
     "AccountStorage": "Account Storage",
     "Passkey": "Passkey",
-    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage."
+    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage.",
+    "VirtualApp": "Virtual App"
   },
   "tickets": {
     "BatchApproval": "Batch approval",
