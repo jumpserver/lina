@@ -152,6 +152,7 @@ export default {
         groups: {
           el: {
             multiple: true,
+            disabled: this.$store.getters.currentOrgIsRoot,
             ajax: {
               url: '/api/v1/users/groups/'
             },
