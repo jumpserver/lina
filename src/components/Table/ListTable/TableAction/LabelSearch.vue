@@ -11,7 +11,7 @@
       <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
-      v-show="showLabelSearch"
+      v-else
       ref="labelCascader"
       v-model="labelValue"
       :options="labelOptions"
@@ -21,6 +21,7 @@
       clearable
       filterable
       separator=": "
+      size="small"
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
@@ -50,7 +51,6 @@ export default {
   watch: {
     labelValue(newValue) {
       if (!newValue || newValue.length === 0) {
-        this.showLabelButton = true
         this.showLabelSearch = false
       }
 
@@ -130,14 +130,12 @@ export default {
   padding: 10px 13px 10px 12px;
 }
 
-.label-select {
-}
-
 .label-cascader {
   >>> .el-input__inner {
     font-size: 13px;
   }
   >>> .el-cascader__search-input {
+    margin: 2px 0 2px 14px;
   }
 }
 
