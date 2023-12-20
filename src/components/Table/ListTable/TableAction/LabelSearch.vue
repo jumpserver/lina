@@ -3,7 +3,6 @@
     <el-button
       v-if="!showLabelSearch"
       class="label-button"
-      plain
       size="small"
       @click="showSearchSelect"
     >
@@ -22,6 +21,8 @@
       filterable
       separator=": "
       size="small"
+      @focus="handleCascaderFocus"
+      @visible-change="handleCascaderVisibleChange"
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
@@ -38,7 +39,6 @@ export default {
   name: 'LabelSearch',
   data() {
     return {
-      showLabelButton: true,
       showLabelSearch: false,
       labelProps: {
         multiple: true
@@ -60,8 +60,10 @@ export default {
       }
 
       const labelSearch = newValue.map(item => item.join(':')).join(',')
-      console.log('Label search: ', labelSearch)
       this.$emit('labelSearch', labelSearch)
+    },
+    showLabelSearch(newValue) {
+      this.$emit('showLabelSearch', newValue)
     }
   },
   mounted() {
@@ -86,6 +88,23 @@ export default {
     this.$eventBus.$off('labelSearch')
   },
   methods: {
+    handleCascaderFocus() {
+      this.setSearchFocus()
+    },
+    handleCascaderVisibleChange(visible) {
+      if (visible) {
+        setTimeout(() => {
+          this.$refs.labelCascader.updateStyle()
+        },)
+        return
+      } else {
+        const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
+        input.style.height = '34px'
+      }
+      if (this.labelValue.length === 0) {
+        this.showLabelSearch = false
+      }
+    },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
         return
@@ -109,13 +128,18 @@ export default {
         this.labelOptions = _.sortBy(labelOptions, 'label')
       })
     },
+    setSearchFocus() {
+      setTimeout(() => {
+        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+      }, 100)
+    },
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
-      this.showLabelButton = false
       setTimeout(() => {
         this.$refs.labelCascader.toggleDropDownVisible(true)
-      }, 100)
+        this.setSearchFocus()
+      }, 200)
     }
   }
 }
@@ -130,12 +154,33 @@ export default {
   padding: 10px 13px 10px 12px;
 }
 
+.label-select {
+}
+
 .label-cascader {
+  width: 300px;
+  >>> .el-input--suffix.el-input {
+    input {
+      height: 34px;
+    }
+  }
   >>> .el-input__inner {
     font-size: 13px;
   }
   >>> .el-cascader__search-input {
-    margin: 2px 0 2px 14px;
+    display: none;
+    margin: 0 0 2px 13px;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
+    display: inline;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags {
+    flex-wrap: wrap;
+  }
+  >>> .el-cascader__tags {
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 }
 

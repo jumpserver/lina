@@ -21,9 +21,11 @@
         <LabelSearch
           v-if="hasLabelSearch"
           @labelSearch="handleLabelSearch"
+          @showLabelSearch="handleLabelSearchShowChange"
         />
         <AutoDataSearch
           v-if="hasSearch"
+          :fold="foldSearch"
           class="right-side-item action-search"
           v-bind="iSearchTableConfig"
           @tagSearch="handleTagSearch"
@@ -96,7 +98,8 @@ export default {
   },
   data() {
     return {
-      keyword: ''
+      keyword: '',
+      foldSearch: false
     }
   },
   computed: {
@@ -132,6 +135,9 @@ export default {
         return
       }
       this.searchTable({ labels: val })
+    },
+    handleLabelSearchShowChange(val) {
+      this.foldSearch = val
     }
   }
 }
