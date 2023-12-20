@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="label-container">
     <a class="label-formatter-col">
       <span v-if="!iLabels || iLabels.length === 0">
         <el-tag effect="plain" size="mini">
@@ -24,13 +24,14 @@
           </el-tag>
         </div>
       </div>
-      <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
     </a>
+    <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
     <Dialog
       v-if="showDialog"
       :title="$tc('labels.BindLabel')"
       :visible.sync="showDialog"
       width="600px"
+      @cancel="handleCancel"
       @confirm="handleConfirm"
     >
       <el-row :gutter="1" class="tag-select">
@@ -170,6 +171,9 @@ export default {
       this.valueSelect2.value = ''
       this.$emit('input', this.iLabels)
     },
+    handleCancel() {
+      this.showDialog = false
+    },
     handleConfirm() {
       const origin = _.sortBy(this.initial)
       const current = _.sortBy(this.iLabels)
@@ -208,11 +212,26 @@ export default {
 }
 
 .edit-btn {
-  display: none;
-  float: right;
+  visibility: hidden;
+  position: relative;
+  & > i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
-.label-formatter-col:hover .edit-btn {
-  display: inline;
+
+.label-container {
+  display: flex;
+  .label-formatter-col {
+    flex: 1;
+    overflow: hidden;
+  }
+  &:hover {
+    .edit-btn {
+      visibility: visible;
+    }
+  }
 }
 
 .tag-zone {
@@ -224,10 +243,6 @@ export default {
   .tag-formatter {
     margin: 1px 3px;
     display: inline-block;
-  }
-
-  .el-tag {
-    // background: inherit;
   }
 }
 
