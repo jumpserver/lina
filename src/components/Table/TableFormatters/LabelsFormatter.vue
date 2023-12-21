@@ -1,7 +1,7 @@
 <template>
   <div class="label-container">
     <a class="label-formatter-col">
-      <span v-if="!iLabels || iLabels.length === 0">
+      <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top;">
         <el-tag effect="plain" size="mini">
           <i class="fa fa-tag" /> -
         </el-tag>
