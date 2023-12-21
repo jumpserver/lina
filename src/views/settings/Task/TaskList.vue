@@ -16,7 +16,7 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish'
+          'name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time'
         ],
         columnsMeta: {
           name: {
@@ -54,6 +54,20 @@ export default {
             width: '210px',
             formatter: (row) => {
               return row.last_published_time != null ? row.last_published_time : '-'
+            }
+          },
+          exec_cycle: {
+            label: this.$t('ops.ExecuteCycle'),
+            width: '120px',
+            formatter: (row) => {
+              return row.exec_cycle ? row.exec_cycle : '-'
+            }
+          },
+          next_exec_time: {
+            label: this.$t('ops.ExpectedNextExecuteTime'),
+            width: '210px',
+            formatter: (row) => {
+              return row.next_exec_time ? row.next_exec_time : '-'
             }
           },
           count: {

@@ -2,9 +2,9 @@
   <Dialog
     :title="$tc('assets.Assets')"
     custom-class="asset-select-dialog"
-    top="1vh"
+    top="2vh"
     v-bind="$attrs"
-    width="80vw"
+    width="1000px"
     @cancel="handleCancel"
     @close="handleClose"
     @confirm="handleConfirm"
@@ -158,7 +158,7 @@ export default {
     }
 
     .right {
-      height: calc(100vh - 200px);
+      min-height: 500px;
       overflow: auto;
     }
 

@@ -424,7 +424,7 @@ td .el-button.el-button--mini {
 }
 
 .el-dialog  .el-dialog__body {
-  max-height: 90vh;
+  max-height: 80vh;
   overflow: auto;
   padding: 30px;
 }

@@ -21,6 +21,7 @@ import SSO from './SSO'
 import SAML2 from './SAML2'
 import OAuth2 from './OAuth2'
 import Passkey from './Passkey.vue'
+import Slack from './Slack.vue'
 
 export default {
   components: {
@@ -37,7 +38,8 @@ export default {
     SSO,
     SAML2,
     OAuth2,
-    Passkey
+    Passkey,
+    Slack
   },
   data() {
     let extraBackends = []
@@ -72,6 +74,11 @@ export default {
           title: this.$t('setting.FeiShu'),
           name: 'FeiShu',
           key: 'AUTH_FEISHU'
+        },
+        {
+          title: this.$t('setting.Slack'),
+          name: 'Slack',
+          key: 'AUTH_SLACK'
         },
         {
           title: this.$t('setting.Radius'),

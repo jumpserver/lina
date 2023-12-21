@@ -26,7 +26,7 @@ export default [
   {
     path: 'commands',
     name: 'CommandList',
-    component: () => import('@/views/sessions/CommandList'),
+    component: () => import('@/views/sessions/CommandList/index'),
     meta: { title: i18n.t('route.Commands'), permissions: [] }
   },
   {

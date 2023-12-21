@@ -17,12 +17,17 @@ export default {
       url: '/api/v1/xpack/cloud/strategies/',
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('common.Strategy'), ['strategy_rules', 'strategy_actions']],
+        [this.$t('common.RuleSetting'), ['rule_relation', 'strategy_rules']],
+        [this.$t('common.ActionSetting'), ['strategy_actions']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         name: {
           rules: [RequiredChange, specialEmojiCheck]
+        },
+        rule_relation: {
+          label: this.$t('common.RuleRelation'),
+          helpTips: this.$t('common.RuleRelationHelpTips')
         },
         strategy_rules: {
           component: RuleInput

@@ -5,18 +5,48 @@
         <router-view :key="key" />
       </keep-alive>
     </transition>
+    <DrawerPanel v-if="chatAiEnabled" :icon="robotUrl" :modal="false" @toggle="onToggle">
+      <template scope="panelData">
+        <ChatGPT :drawer-panel-visible="panelData.drawerPanelVisible" />
+      </template>
+    </DrawerPanel>
   </section>
 </template>
 
 <script>
+import DrawerPanel from '@/components/Apps/DrawerPanel'
+import ChatGPT from '@/components/Apps/ChatAi'
+import { mapGetters } from 'vuex'
+import { getInputFocus } from '@/components/Apps/ChatAi/useChat'
+
 export default {
   name: 'AppMain',
+  components: {
+    ChatGPT,
+    DrawerPanel
+  },
   computed: {
+    ...mapGetters([
+      'publicSettings'
+    ]),
+    robotUrl() {
+      return require('../../assets/img/robot-assistant.png')
+    },
+    chatAiEnabled() {
+      return this.publicSettings?.CHAT_AI_ENABLED
+    },
     key() {
       return this.$route.path
     },
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
+    }
+  },
+  methods: {
+    onToggle(status) {
+      if (status) {
+        getInputFocus()
+      }
     }
   }
 }

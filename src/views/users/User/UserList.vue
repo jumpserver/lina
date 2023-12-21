@@ -22,6 +22,7 @@ import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -48,7 +49,6 @@ export default {
         },
         columnsExclude: [
           'password', 'password_strategy', 'public_key',
-          'is_otp_secret_key_bound', 'mfa_enabled', 'is_superuser',
           'mfa_force_enabled', 'is_service_account', 'avatar_url'
         ],
         columnsShow: {
@@ -65,6 +65,14 @@ export default {
           username: {
             formatter: (row) => {
               return row['username'].replace(' ', '*')
+            }
+          },
+          groups: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'UserDetail'
+              }
             }
           },
           system_roles: {
@@ -148,6 +156,7 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
         hasBulkDelete: hasDelete,
         canCreate: this.$hasPerm('users.add_user'),
         extraActions: [
@@ -166,7 +175,6 @@ export default {
         hasBulkUpdate: true,
         canBulkUpdate: ({ selectedRows }) => {
           return selectedRows.length > 0 &&
-            !vm.currentOrgIsRoot &&
             vm.$hasPerm('users.change_user')
         },
         handleBulkUpdate: ({ selectedRows }) => {
@@ -211,9 +219,9 @@ export default {
           fieldsMeta: {
             groups: {
               label: this.$t('users.UserGroups'),
-              hidden: () => vm.currentOrgIsRoot,
               el: {
                 multiple: true,
+                disabled: vm.$store.getters.currentOrgIsRoot,
                 ajax: {
                   url: '/api/v1/users/groups/'
                 },

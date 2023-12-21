@@ -62,17 +62,29 @@ export default {
       ]
     },
     {
-      path: 'external-elfinder',
+      path: '/workbench/file-manager',
+      name: 'FileManager',
       component: empty,
       meta: {
+        title: i18n.t('route.FileManager'),
+        icon: 'file',
         permissions: ['rbac.view_filemanager']
       },
       children: [
         {
+          path: 'bulk-Transfer',
+          name: 'BulkTransfer',
+          component: () => import('@/views/ops/File/index'),
+          meta: {
+            title: i18n.t('route.BulkTransfer'),
+            permissions: ['rbac.view_filemanager']
+          }
+        },
+        {
           path: `${BASE_URL}/koko/elfinder/sftp/`,
+          name: '',
           meta: {
             title: i18n.t('route.FileManager'),
-            icon: 'file',
             activeMenu: '/assets',
             permissions: ['rbac.view_filemanager']
           }

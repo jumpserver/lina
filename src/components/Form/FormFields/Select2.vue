@@ -172,7 +172,11 @@ export default {
         return params
       }
       const defaultTransformOption = (item) => {
-        return { label: item.name, value: item.id }
+        if (typeof item === 'object') {
+          return { label: item.name, value: item.id }
+        } else {
+          return { label: item, value: item }
+        }
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultFilterOption = (item) => {
@@ -207,6 +211,12 @@ export default {
     }
   },
   watch: {
+    disabled(newValue, oldValue) {
+      this.selectDisabled = newValue
+    },
+    options(newValue, oldValue) {
+      this.iOptions = newValue
+    },
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
@@ -217,11 +227,7 @@ export default {
       deep: true
     },
     iOptions(val) {
-      if (val.length === 0) {
-        this.remote = false
-      } else {
-        this.remote = true
-      }
+      this.remote = val.length !== 0
     }
   },
   async mounted() {
@@ -231,6 +237,7 @@ export default {
         this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
+        this.$emit('initialized', true)
       }, 100)
     }
     this.$nextTick(() => {
@@ -368,6 +375,7 @@ export default {
         this.refresh()
         this.$log.debug('Visible change, refresh select2')
       }
+      this.$emit('visible-change', visible)
     }
   }
 }

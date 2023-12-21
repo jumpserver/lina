@@ -18,9 +18,12 @@ export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
 export const ctyun_private = 'ctyun_private'
 export const openstack = 'openstack'
+export const zstack = 'zstack'
 export const nutanix = 'nutanix'
 export const vmware = 'vmware'
 export const fc = 'fc'
+export const scp = 'scp'
+export const apsara_stack = 'apsara_stack'
 export const lan = 'lan'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
@@ -114,6 +117,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     title: i18n.t('xpack.Cloud.OpenStack'),
     attrs: ['auth_url', 'user_domain_name', 'username', 'password']
   },
+  [zstack]: {
+    name: zstack,
+    title: i18n.t('xpack.Cloud.ZStack'),
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
+  },
   [fc]: {
     name: fc,
     title: i18n.t('xpack.Cloud.FC'),
@@ -123,6 +131,16 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: ctyun_private,
     title: i18n.t('xpack.Cloud.CTYunPrivate'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint', 'cert_file', 'key_file']
+  },
+  [scp]: {
+    name: scp,
+    title: i18n.t('xpack.Cloud.SCP'),
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
+  },
+  [apsara_stack]: {
+    name: apsara_stack,
+    title: i18n.t('xpack.Cloud.ApsaraStack'),
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [lan]: {
     name: lan,

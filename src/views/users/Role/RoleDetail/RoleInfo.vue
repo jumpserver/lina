@@ -80,7 +80,8 @@ export default {
         'view_audit': [],
         'view_workbench': [
           'authentication.view_connectiontoken', 'authentication.add_connectiontoken',
-          'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken'
+          'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken',
+          'ops.view_adhoc'
         ],
         'view_setting': ['settings.view_setting'],
         'cloud_import': ['assets.view_asset', 'assets.view_platform'],
@@ -93,6 +94,8 @@ export default {
           'applications.match_application', 'rbac.view_workbench'
         ],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
+        'users.add_user': ['rbac.view_role'],
+        'users.change_user': ['rbac.view_role'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'

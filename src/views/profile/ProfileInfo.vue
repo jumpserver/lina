@@ -102,6 +102,23 @@ export default {
           }
         },
         {
+          title: this.$t('users.setSlack'),
+          attrs: {
+            type: 'primary',
+            label: this.getLabel('slack'),
+            disabled: this.isDisabled('slack'),
+            showTip: this.isDisabled('slack'),
+            tip: this.$t('users.UnbindHelpText')
+          },
+          has: this.$store.getters.publicSettings.AUTH_SLACK,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'slack'
+              this.verifyDone()
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('users.SetMFA'),
           attrs: {
             type: 'primary',
@@ -209,6 +226,18 @@ export default {
             model: this.object?.receive_backends.indexOf('feishu') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: this.$t('setting.Slack'),
+          type: 'switch',
+          attrs: {
+            name: 'slack',
+            model: this.object?.receive_backends.indexOf('slack') !== -1
+          },
+          has: this.$store.getters.publicSettings.AUTH_SLACK,
           callbacks: {
             change: this.updateUserReceiveBackends
           }

@@ -33,6 +33,7 @@ export default {
     return {
       tableConfig: {
         url: url,
+        id: 'user',
         columnsExclude: ['user'],
         columnsExtra: ['delete_action'],
         columnsShow: {

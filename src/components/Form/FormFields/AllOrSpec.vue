@@ -53,7 +53,6 @@ export default {
     if (!this.value || this.value.length === 0) {
       return
     }
-    console.log('Value: ', this.value)
     if (this.value.indexOf('all') > -1) {
       this.type = 'all'
     } else {

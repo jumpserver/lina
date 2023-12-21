@@ -60,7 +60,7 @@ export default {
       extraQuery = {
         ...extraQuery,
         date_from: getDaysAgo(7).toISOString(),
-        date_to: getDayEnd().toISOString()
+        date_to: this.$moment(getDayEnd()).add(1, 'day').toISOString()
       }
       this.headerActions.datePicker = Object.assign({
         dateStart: extraQuery.date_from,

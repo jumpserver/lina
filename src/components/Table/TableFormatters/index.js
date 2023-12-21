@@ -11,6 +11,7 @@ import DialogDetailFormatter from './DialogDetailFormatter.vue'
 import EditableInputFormatter from './EditableInputFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
 import TagsFormatter from './TagsFormatter.vue'
+import LabelsFormatter from './LabelsFormatter.vue'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter.vue'
 import TwoTabFormatter from './TwoTabFormatter.vue'
 import ProtocolsFormatter from './ProtocolsFormatter.vue'
@@ -33,7 +34,8 @@ export default {
   ObjectRelatedFormatter,
   TwoTabFormatter,
   ProtocolsFormatter,
-  TagChoicesFormatter
+  TagChoicesFormatter,
+  LabelsFormatter
 }
 
 export {
@@ -53,5 +55,6 @@ export {
   ObjectRelatedFormatter,
   TwoTabFormatter,
   ProtocolsFormatter,
-  TagChoicesFormatter
+  TagChoicesFormatter,
+  LabelsFormatter
 }

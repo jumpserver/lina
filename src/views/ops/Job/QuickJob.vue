@@ -35,7 +35,12 @@
             </span>
           </span>
           <div style="padding-left: 30px; background-color: rgb(247 247 247)">
-            <Term ref="xterm" :show-tool-bar="true" style="border-left: solid 1px #dddddd" />
+            <Term
+              ref="xterm"
+              :show-tool-bar="true"
+              :xterm-config="xtermConfig"
+              style="border-left: solid 1px #dddddd"
+            />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
@@ -74,6 +79,8 @@ export default {
         status: '',
         timeCost: 0,
         cancel: 0
+      },
+      xtermConfig: {
       },
       showHelpDialog: false,
       showOpenAdhocDialog: false,

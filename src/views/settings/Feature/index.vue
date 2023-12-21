@@ -12,10 +12,12 @@ import Announcement from './Announcement.vue'
 import Vault from './Vault.vue'
 import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
+import Chat from './Chat.vue'
+import VirtualApp from './VirtualApp.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Announcement, Vault, Ticket, Ops },
+  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat, VirtualApp },
   data() {
     return {
       activeMenu: 'Announcement',
@@ -37,6 +39,16 @@ export default {
           title: this.$t('setting.AccountStorage'),
           name: 'Vault',
           hidden: !this.$hasPerm('settings.change_vault') || !this.$store.getters.hasValidLicense
+        },
+        {
+          title: this.$t('setting.ChatAI'),
+          name: 'Chat',
+          hidden: !this.$hasPerm('settings.change_vault')
+        },
+        {
+          title: this.$t('setting.VirtualApp'),
+          name: 'VirtualApp',
+          hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
       ]
     }

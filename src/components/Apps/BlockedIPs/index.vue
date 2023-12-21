@@ -5,10 +5,12 @@
         size="mini"
         type="primary"
         @click="onOpenDialog"
-      >{{ $tc('common.View') }}</el-button>
+      >
+        {{ $tc('common.View') }}
+        <span>({{ $tc('setting.LockedIP', ipCounts ) }})</span>
+      </el-button>
     </div>
     <Dialog
-      v-if="visible"
       :visible.sync="visible"
       :title="title"
       width="40%"
@@ -54,6 +56,7 @@ export default {
       remoteMeta: {},
       visible: false,
       form: this.value,
+      ipCounts: 0,
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -63,7 +66,15 @@ export default {
       }
     }
   },
+  created() {
+    this.getLockedIp()
+  },
   methods: {
+    getLockedIp() {
+      this.$axios.get('/api/v1/settings/security/block-ip/').then(res => {
+        this.ipCounts = res.count
+      })
+    },
     onOpenDialog() {
       this.visible = true
     }

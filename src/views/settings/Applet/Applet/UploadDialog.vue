@@ -90,7 +90,9 @@ export default {
         form,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
-          disableFlashErrorMsg: true
+          timeout: 10 * 60 * 1000,
+          disableFlashErrorMsg: true,
+          params: { update: true }
         }
       ).then(res => {
         this.isFinished = true
@@ -116,8 +118,9 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  >>> .el-upload {
+  > > > .el-upload {
     width: 100%;
+
     .el-upload-dragger {
       width: 100%;
     }

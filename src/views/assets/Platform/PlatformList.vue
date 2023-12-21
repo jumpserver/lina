@@ -90,6 +90,8 @@ export default {
         }
       },
       headerActions: {
+        hasLabelSearch: true,
+        hasBulkDelete: false,
         hasMoreActions: false,
         hasRightActions: true,
         createRoute: 'PlatformCreate',

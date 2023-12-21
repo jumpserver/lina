@@ -18,8 +18,14 @@
         v-on="$listeners"
       />
       <div :class="searchClass" class="search">
+        <LabelSearch
+          v-if="hasLabelSearch"
+          @labelSearch="handleLabelSearch"
+          @showLabelSearch="handleLabelSearchShowChange"
+        />
         <AutoDataSearch
           v-if="hasSearch"
+          :fold="foldSearch"
           class="right-side-item action-search"
           v-bind="iSearchTableConfig"
           @tagSearch="handleTagSearch"
@@ -41,12 +47,14 @@ import RightSide from './RightSide.vue'
 import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
+import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
+    LabelSearch,
     LeftSide,
     RightSide,
     AutoDataSearch,
@@ -57,6 +65,7 @@ export default {
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
+    hasLabelSearch: defaultFalse,
     datePicker: {
       type: Object,
       default: () => ({
@@ -89,7 +98,8 @@ export default {
   },
   data() {
     return {
-      keyword: ''
+      keyword: '',
+      foldSearch: false
     }
   },
   computed: {
@@ -118,12 +128,22 @@ export default {
     },
     handleDateChange(val) {
       this.datePick(val)
+    },
+    handleLabelSearch(val) {
+      if (!val || val.length === 0) {
+        this.searchTable({ labels: '' })
+        return
+      }
+      this.searchTable({ labels: val })
+    },
+    handleLabelSearchShowChange(val) {
+      this.foldSearch = val
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .table-header {
     /*display: flex;*/
     /*flex-direction: row;*/
@@ -232,4 +252,5 @@ export default {
   .filter-field.right-side-item.action-search {
     height: 34px;
   }
+
 </style>

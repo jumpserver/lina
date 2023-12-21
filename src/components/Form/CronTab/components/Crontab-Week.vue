@@ -10,8 +10,8 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('common.CronTab.cycleFromWeek') }}
-        <el-input-number v-model="cycle01" :min="1" :max="7" /> -
-        <el-input-number v-model="cycle02" :min="1" :max="7" />
+        <el-input-number v-model="cycle01" :max="7" :min="1" size="mini" /> -
+        <el-input-number v-model="cycle02" :max="7" :min="1" size="mini" />
       </el-radio>
     </el-form-item>
 
@@ -20,8 +20,8 @@
         {{ this.$t('common.CronTab.appoint') }}
         <el-select
           v-model="checkboxList"
-          clearable
           :placeholder="$tc('common.CronTab.manyChoose')"
+          clearable
           multiple
           style="width:100%"
         >

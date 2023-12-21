@@ -5,7 +5,7 @@
       :destroy-on-close="true"
       :title="$tc('common.Export')"
       :visible.sync="exportDialogShow"
-      width="70%"
+      width="700px"
       @cancel="handleExportCancel()"
       @confirm="handleExportConfirm()"
     >
@@ -21,7 +21,9 @@
               :disabled="!option.can"
               :label="option.value"
               style="padding: 10px 20px;"
-            >{{ option.label }}</el-radio>
+            >
+              {{ option.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="$tc('common.imExport.ExportRange')" :label-width="'100px'" class="export-form">

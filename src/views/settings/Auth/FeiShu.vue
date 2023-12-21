@@ -12,7 +12,7 @@ import BaseAuth from './Base'
 import { UpdateToken } from '@/components/Form/FormFields'
 
 export default {
-  name: 'Wecom',
+  name: 'Feishu',
   components: {
     BaseAuth
   },

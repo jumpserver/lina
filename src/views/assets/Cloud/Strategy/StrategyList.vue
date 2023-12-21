@@ -21,7 +21,7 @@ export default {
         },
         columns: [
           'name', 'priority', 'strategy_rules',
-          'strategy_actions', 'actions', 'user_actions'
+          'strategy_actions', 'actions', 'rule_relation'
         ],
         columnsMeta: {
           name: {

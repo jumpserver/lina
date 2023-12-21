@@ -80,6 +80,12 @@ export default {
         if (data['interval'] === '') {
           delete data['interval']
         }
+        if (!data?.is_password_divided_by_email) {
+          data['recipients_part_two'] = []
+        }
+        if (!data?.is_password_divided_by_obj_storage) {
+          data['obj_recipients_part_two'] = []
+        }
         return data
       }
     }

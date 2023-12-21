@@ -153,35 +153,32 @@ export default {
       labelConfig: {
         icon: 'fa-info',
         title: this.$t('assets.Label'),
+        allowCreate: true,
         objectsAjax: {
-          url: '/api/v1/assets/labels/',
+          url: '/api/v1/labels/labels/',
           transformOption: (item) => {
-            return { label: String(item.name) + ':' + String(item.value), value: item.id }
+            const label = String(item.name) + ':' + String(item.value)
+            return { label: label, value: label }
           }
         },
-        hasObjectsId: this.object.labels?.map(i => i.id) || [],
+        hasObjectsId: this.object.labels,
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.LabelRelation.iHasObjects
-          value.map(v => {
-            newData.push({ 'pk': v.value })
-          })
-
+          value.map(v => newData.push(v.label))
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          items.map(v => {
-            newData.push({ 'pk': v.value })
-          })
+          items.map(v => newData.push(v.label))
           return this.$axios.patch(relationUrl, { labels: newData })
+        },
+        getHasObjects: (ids) => {
+          return new Promise((resolve) => {
+            return resolve(ids.map(id => ({ value: id, label: id })))
+          })
         },
         performDelete: (item) => {
           const itemId = item.value
-          const newData = []
           const value = this.$refs.LabelRelation.iHasObjects
-          value.map(v => {
-            if (v.value !== itemId) {
-              newData.push({ 'pk': v.value })
-            }
-          })
+          const newData = value.filter(v => v.value !== itemId).map(v => v.value)
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { labels: newData })
         }

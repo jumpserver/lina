@@ -6,8 +6,8 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import {
   ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
-  ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, qcloud,
-  qcloud_lighthouse, qingcloud_private, ucloud, vmware
+  ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, zstack,
+  qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack
 } from '../const'
 
 export default {
@@ -154,12 +154,24 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
             },
             {
+              name: zstack,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[zstack].title
+            },
+            {
               name: nutanix,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
             },
             {
               name: fc,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[fc].title
+            },
+            {
+              name: scp,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[scp].title
+            },
+            {
+              name: apsara_stack,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[apsara_stack].title
             },
             {
               name: lan,

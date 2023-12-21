@@ -184,4 +184,25 @@ axiosRetry(service, {
   retries: 0
 })
 
+export function fetchAllData(url, params) {
+  const allData = []
+  function fetchPage(url) {
+    return service({
+      url,
+      method: 'get',
+      params: {
+        ...params
+      }
+    }).then(res => {
+      allData.push(...res.results)
+      if (res.next) {
+        return fetchPage(res.next)
+      } else {
+        return allData
+      }
+    })
+  }
+  return fetchPage(url)
+}
+
 export default service
