@@ -66,11 +66,11 @@
             <i class="fa fa-tag" /> <b>{{ getKey(label) }}</b>: {{ getValue(label) }}
           </el-tag>
         </div>
-      </div>
-      <div class="tag-tip">
-        <el-link @click="goToLabelList">
-          {{ $t('labels.LabelList') }} <i class="fa fa-external-link" />
-        </el-link>
+        <div class="tag-tip">
+          <el-link @click="goToLabelList">
+            {{ $t('labels.LabelList') }} <i class="fa fa-external-link" />
+          </el-link>
+        </div>
       </div>
     </Dialog>
   </div>
@@ -214,6 +214,7 @@ export default {
 .edit-btn {
   visibility: hidden;
   position: relative;
+  transition: all 1s;
   & > i {
     position: absolute;
     top: 50%;
@@ -224,7 +225,6 @@ export default {
 .label-container {
   display: flex;
   .label-formatter-col {
-    flex: 1;
     overflow: hidden;
   }
   &:hover {
