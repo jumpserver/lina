@@ -330,13 +330,11 @@ export default {
       const secondPart = fullName.slice(-maxLength / 2)
       return firstPart + '...' + secondPart
     },
-    handleFileList(file, fileList) {
+    handleSameFile(fileList) {
       const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
-      if (filenameCount[file.name] > 1) {
-        file.is_same = true
-      } else {
-        file.is_same = false
+      for (const file of fileList) {
+        file.is_same = filenameCount[file.name] > 1
       }
     },
     sameFileStyle(file) {
@@ -345,7 +343,7 @@ export default {
       }
       return ''
     },
-    IsFileExceedsLimit(file) {
+    isFileExceedsLimit(file) {
       const isGtLimit = file.size / 1024 / 1024 > this.SizeLimitMb
       if (isGtLimit) {
         this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
@@ -355,10 +353,11 @@ export default {
     onFileChange(file, fileList) {
       file.name = this.truncateFileName(file.name)
       this.uploadFileList = fileList
-      this.handleFileList(file, fileList)
+      this.handleSameFile(fileList)
     },
     removeFile(file) {
       this.uploadFileList.splice(this.uploadFileList.indexOf(file), 1)
+      this.handleSameFile(this.uploadFileList)
     },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
@@ -367,7 +366,7 @@ export default {
           this.$message.error(this.$tc('ops.DuplicateFileExists'))
           return
         }
-        if (this.IsFileExceedsLimit(file)) {
+        if (this.isFileExceedsLimit(file)) {
           return
         }
         if (file.name.length > 128) {
