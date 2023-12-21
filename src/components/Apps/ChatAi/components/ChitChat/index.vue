@@ -248,6 +248,9 @@ export default {
     padding: 0 15px 25px;
     overflow-y: auto;
     user-select: text;
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
   }
   .input-box {
     position: relative;
