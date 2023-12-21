@@ -221,7 +221,7 @@ export default {
               label: this.$t('users.UserGroups'),
               el: {
                 multiple: true,
-                disabled: !this.currentOrgIsRoot,
+                disabled: vm.$store.getters.currentOrgIsRoot,
                 ajax: {
                   url: '/api/v1/users/groups/'
                 },
