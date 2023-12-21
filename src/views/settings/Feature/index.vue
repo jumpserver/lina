@@ -13,10 +13,11 @@ import Vault from './Vault.vue'
 import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
 import Chat from './Chat.vue'
+import Ris from './Ris.vue'
 
 export default {
   name: 'Feature',
-  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat },
+  components: { TabPage, Announcement, Vault, Ticket, Ops, Chat, Ris },
   data() {
     return {
       activeMenu: 'Announcement',
@@ -43,6 +44,11 @@ export default {
           title: this.$t('setting.ChatAI'),
           name: 'Chat',
           hidden: !this.$hasPerm('settings.change_vault')
+        },
+        {
+          title: this.$t('setting.RisPAM'),
+          name: 'Ris',
+          hidden: !this.$hasPerm('settings.change_ris') || !this.$store.getters.hasValidLicense
         }
       ]
     }
