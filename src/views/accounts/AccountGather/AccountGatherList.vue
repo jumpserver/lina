@@ -146,7 +146,7 @@ export default {
           },
           {
             name: 'BulkSyncDelete',
-            title: this.$t('common.BulkSyncDelete'),
+            title: this.$t('accounts.BulkSyncDelete'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
