@@ -1763,6 +1763,7 @@
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
     "ChatAI": "チャットAI",
+    "Example": "例: {example}",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",

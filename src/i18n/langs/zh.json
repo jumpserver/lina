@@ -1752,6 +1752,7 @@
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
     "ChatAI": "智能问答",
+    "Example": "例: {example}",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",
