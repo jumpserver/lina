@@ -1757,6 +1757,7 @@
     "LDAPServerInfo": "LDAP Server",
     "LDAPUser": "LDAP User",
     "ChatAI": "Chat ai",
+    "Example": "Example: {example}",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",
