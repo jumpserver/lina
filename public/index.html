@@ -27,6 +27,9 @@
         if(pathname.indexOf('/ui') === -1) {
           window.location.href = window.location.origin + '/ui/#' + pathname
         }
+        if (pathname.startsWith('/ui/#/chat')) {
+          window.location.href = window.location.origin + pathname
+        }
       }
     </script>
     <div id="app"></div>

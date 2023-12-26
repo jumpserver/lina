@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i class="el-icon-close" @click="onClose" />
+      <i v-if="hasClose" class="el-icon-close" @click="onClose" />
     </div>
     <el-tabs v-model="active" :tab-position="'right'" @tab-click="handleClick">
       <el-tab-pane v-for="(item) in submenu" :key="item.name" :name="item.name">
@@ -21,6 +21,10 @@ export default {
     active: {
       type: String,
       default: 'chat'
+    },
+    hasClose: {
+      type: Boolean,
+      default: true
     },
     submenu: {
       type: Array,
@@ -48,9 +52,10 @@ export default {
   height: 100%;
   background-color: #f0f1f5;
   .close-sidebar {
+    height: 48px;
+    padding: 12px 0;
     text-align: center;
     font-size: 14px;
-    padding: 12px 0;
     cursor: pointer;
     i {
       font-size: 16px;
