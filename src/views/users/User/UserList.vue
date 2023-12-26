@@ -175,7 +175,6 @@ export default {
         hasBulkUpdate: true,
         canBulkUpdate: ({ selectedRows }) => {
           return selectedRows.length > 0 &&
-            !vm.currentOrgIsRoot &&
             vm.$hasPerm('users.change_user')
         },
         handleBulkUpdate: ({ selectedRows }) => {
@@ -220,9 +219,9 @@ export default {
           fieldsMeta: {
             groups: {
               label: this.$t('users.UserGroups'),
-              hidden: () => vm.currentOrgIsRoot,
               el: {
                 multiple: true,
+                disabled: vm.$store.getters.currentOrgIsRoot,
                 ajax: {
                   url: '/api/v1/users/groups/'
                 },

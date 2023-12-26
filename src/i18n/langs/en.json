@@ -604,6 +604,7 @@
     "TemplateAdd": "Template add",
     "TemplateHelpText": "When selecting a template to add, it will automatically create an account that does not exist under the asset and push it",
     "PleaseAgreeToTheTerms": "Please agree to the terms",
+    "BindSuccess": "Bind success",
     "PushSelected": "Push selected",
     "PushSelectedSystemUsersToAsset": "Push selected system users to asset",
     "TestSelected": "Test selected",
@@ -1758,6 +1759,7 @@
     "LDAPServerInfo": "LDAP Server",
     "LDAPUser": "LDAP User",
     "ChatAI": "Chat ai",
+    "Example": "Example: {example}",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",
@@ -1885,7 +1887,8 @@
     "RisPAM": "Ris PAM",
     "Account": "Account",
     "Passkey": "Passkey",
-    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage."
+    "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage.",
+    "VirtualApp": "Virtual App"
   },
   "tickets": {
     "BatchApproval": "Batch approval",

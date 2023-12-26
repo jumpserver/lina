@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :close-on-click-modal="false"
-    :destory-on-close="true"
+    :destroy-on-close="true"
     :title="$tc('labels.BindResource')"
     top="80px"
     v-bind="$attrs"
@@ -121,7 +121,8 @@ export default {
       }
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
       this.$axios.put(url, data).then(res => {
-        this.$message.success('绑定成功')
+        this.$message.success(this.$t('common.BindSuccess'))
+        this.$emit('confirm')
       })
     },
     async getResourceTypes() {

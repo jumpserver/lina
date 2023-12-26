@@ -49,6 +49,10 @@ export default {
         return {}
       }
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     label: {
       type: String,
       default: ''
@@ -83,6 +87,7 @@ export default {
       select2: {
         options: [],
         multiple: true,
+        disabled: this.disabled,
         ajax: {
           url: url,
           transformOption: transformOption

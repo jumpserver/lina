@@ -7,6 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
+import { Select2 } from '@/components'
 
 export default {
   components: {
@@ -114,6 +115,7 @@ export default {
           }
         },
         system_roles: {
+          component: Select2,
           label: this.$t('users.SystemRoles'),
           el: {
             multiple: true,
@@ -130,6 +132,7 @@ export default {
           value: []
         },
         org_roles: {
+          component: Select2,
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           el: {
             multiple: true,
@@ -152,6 +155,7 @@ export default {
         groups: {
           el: {
             multiple: true,
+            disabled: this.$store.getters.currentOrgIsRoot,
             ajax: {
               url: '/api/v1/users/groups/'
             },

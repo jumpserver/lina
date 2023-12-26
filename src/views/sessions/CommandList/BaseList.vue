@@ -155,7 +155,7 @@ export default {
         showRefresh: true,
         showAssets: false,
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}`,
+        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}&asset_id=${this.assetId}`,
         view: {
           // 添加禁用颜色区分
           fontCss: (treeId, treeNode) => {
@@ -201,14 +201,14 @@ export default {
     },
     handleTagChange(query) {
       const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
       this.$set(this.treeSetting, 'treeUrl', treeUrl)
     },
     handleFilterChange(query) {
       const _query = this.cleanUrl(query)
-      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
       this.$set(this.treeSetting, 'treeUrl', treeUrl)
@@ -218,7 +218,7 @@ export default {
         date_from: object[0].toISOString(),
         date_to: object[1].toISOString()
       }
-      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const url = `/api/v1/terminal/command-storages/tree/?real=1&asset_id=${this.assetId}`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
       const treeUrl = url + queryStr
       this.$set(this.treeSetting, 'treeUrl', treeUrl)

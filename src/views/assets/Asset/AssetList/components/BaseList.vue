@@ -258,7 +258,7 @@ export default {
             fa: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
-                !vm.currentOrgIsRoot &&
+                !this.$store.getters.currentOrgIsRoot &&
                 vm.$hasPerm('assets.change_asset')
             },
             callback: ({ selectedRows }) => {

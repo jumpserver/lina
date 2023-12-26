@@ -603,6 +603,7 @@
     "Auth": "認証",
     "bind": "紐付け",
     "unbind": "バインド解除",
+    "BindSuccess": "バインド成功",
     "PushSelected": "選択したプッシュ",
     "PushSelectedSystemUsersToAsset": "選択したシステムユーザーをアセットにプッシュ",
     "TestSelected": "テストを選択した",
@@ -1764,6 +1765,7 @@
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
     "ChatAI": "チャットAI",
+    "Example": "例: {example}",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
@@ -1877,7 +1879,8 @@
     "RisPAM": "斉治 PAM",
     "Account": "アカウント",
     "Passkey": "パスキー",
-    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。"
+    "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。",
+    "VirtualApp": "仮想アプリケーション"
   },
   "tickets": {
     "BatchApproval": "大量承認です",

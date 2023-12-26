@@ -1,9 +1,8 @@
 <template>
   <div class="label-search">
     <el-button
-      v-if="showLabelButton"
+      v-if="!showLabelSearch"
       class="label-button"
-      plain
       size="small"
       @click="showSearchSelect"
     >
@@ -11,16 +10,24 @@
       <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
-      v-show="showLabelSearch"
+      v-else
       ref="labelCascader"
       v-model="labelValue"
       :options="labelOptions"
       :placeholder="placeholder"
+      :props="labelProps"
       class="label-cascader"
       clearable
       filterable
       separator=": "
+      size="small"
+      @focus="handleCascaderFocus"
+      @visible-change="handleCascaderVisibleChange"
     >
+      <template slot-scope="{ node, data }">
+        <span>{{ data.label }}</span>
+        <span v-if="!node.isLeaf"> ({{ data.children.length -1 }}) </span>
+      </template>
       <i slot="prefix" class="el-input__icon el-icon-search" />
     </el-cascader>
   </div>
@@ -32,23 +39,72 @@ export default {
   name: 'LabelSearch',
   data() {
     return {
-      showLabelButton: true,
       showLabelSearch: false,
+      labelProps: {
+        multiple: true
+      },
       labelOptions: [],
-      labelValue: '',
+      labelValue: [],
       placeholder: this.$t('labels.SelectLabelFilter')
     }
   },
   watch: {
     labelValue(newValue) {
       if (!newValue || newValue.length === 0) {
-        this.showLabelButton = true
         this.showLabelSearch = false
       }
-      this.$emit('labelSearch', newValue)
+
+      if (!newValue || newValue.length === 0) {
+        this.$emit('labelSearch', '')
+        return
+      }
+
+      const labelSearch = newValue.map(item => item.join(':')).join(',')
+      this.$emit('labelSearch', labelSearch)
+    },
+    showLabelSearch(newValue) {
+      this.$emit('showLabelSearch', newValue)
     }
   },
+  mounted() {
+    this.$eventBus.$on('labelSearch', label => {
+      if (!label) {
+        this.labelValue = []
+        this.showLabelSearch = true
+        return
+      }
+      const labels = label.split(',').map(item => item.split(':'))
+      const notExistLabels = labels.filter(item => {
+        return !this.labelValue.find(label => label[0] === item[0] && label[1] === item[1])
+      })
+      this.labelValue = [...this.labelValue, ...notExistLabels]
+      this.getLabelOptions()
+      setTimeout(() => {
+        this.showLabelSearch = true
+      }, 500)
+    })
+  },
+  destroyed() {
+    this.$eventBus.$off('labelSearch')
+  },
   methods: {
+    handleCascaderFocus() {
+      this.setSearchFocus()
+    },
+    handleCascaderVisibleChange(visible) {
+      if (visible) {
+        setTimeout(() => {
+          this.$refs.labelCascader.updateStyle()
+        },)
+        return
+      } else {
+        const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
+        input.style.height = '34px'
+      }
+      if (this.labelValue.length === 0) {
+        this.showLabelSearch = false
+      }
+    },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
         return
@@ -72,13 +128,18 @@ export default {
         this.labelOptions = _.sortBy(labelOptions, 'label')
       })
     },
+    setSearchFocus() {
+      setTimeout(() => {
+        this.$refs.labelCascader.$el.getElementsByClassName('el-cascader__search-input')[0].focus()
+      }, 100)
+    },
     showSearchSelect() {
       this.getLabelOptions()
       this.showLabelSearch = true
-      this.showLabelButton = false
       setTimeout(() => {
         this.$refs.labelCascader.toggleDropDownVisible(true)
-      }, 100)
+        this.setSearchFocus()
+      }, 200)
     }
   }
 }
@@ -97,8 +158,29 @@ export default {
 }
 
 .label-cascader {
+  width: 300px;
+  >>> .el-input--suffix.el-input {
+    input {
+      height: 34px;
+    }
+  }
   >>> .el-input__inner {
     font-size: 13px;
+  }
+  >>> .el-cascader__search-input {
+    display: none;
+    margin: 0 0 2px 13px;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
+    display: inline;
+  }
+  >>> .el-input.is-focus + .el-cascader__tags {
+    flex-wrap: wrap;
+  }
+  >>> .el-cascader__tags {
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 }
 

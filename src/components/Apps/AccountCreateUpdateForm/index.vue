@@ -234,6 +234,7 @@ export default {
             return !formValue.push_now ||
               !automation.push_account_enabled ||
               !automation.ansible_enabled ||
+              (formValue.secret_type === 'ssh_key' && this.iPlatform.type.value === 'windows') ||
               !this.$hasPerm('accounts.push_account') ||
               this.addTemplate
           }

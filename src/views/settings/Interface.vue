@@ -226,7 +226,9 @@ export default {
         }
       }
       updateInterface(form).then(res => {
-        location.reload()
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       })
     }
   }

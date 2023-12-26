@@ -39,14 +39,14 @@ export default {
           title: this.$t('terminal.VirtualApp'),
           name: 'VirtualApp',
           hidden: () => {
-            return !store.getters.publicSettings['VIRTUAL_APP_ENABLED']
+            return !store.getters.publicSettings['VIRTUAL_APP_ENABLED'] || !this.$store.getters.hasValidLicense
           }
         },
         {
           title: this.$t('terminal.AppProvider'),
           name: 'AppProvider',
           hidden: () => {
-            return !store.getters.publicSettings['VIRTUAL_APP_ENABLED']
+            return !store.getters.publicSettings['VIRTUAL_APP_ENABLED'] || !this.$store.getters.hasValidLicense
           }
         }
       ]

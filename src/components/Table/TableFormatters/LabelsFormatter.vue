@@ -1,31 +1,37 @@
 <template>
-  <div>
-    <a class="tag" @click="showDialog=true">
-      <span v-if="!iLabels || iLabels.length === 0">
+  <div class="label-container">
+    <a class="label-formatter-col">
+      <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top;">
         <el-tag effect="plain" size="mini">
           <i class="fa fa-tag" /> -
         </el-tag>
       </span>
       <div v-else>
-        <el-tag
+        <div
           v-for="label of iLabels"
           :key="label"
-          :type="getLabelType(label)"
-          class="tag-formatter"
-          disable-transitions
-          effect="plain"
-          size="mini"
-          v-bind="formatterArgs.config"
         >
-          <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
-        </el-tag>
+          <el-tag
+            :type="getLabelType(label)"
+            class="tag-formatter"
+            disable-transitions
+            effect="plain"
+            size="mini"
+            v-bind="formatterArgs.config"
+            @click="handleLabelSearch(label)"
+          >
+            <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
+          </el-tag>
+        </div>
       </div>
     </a>
+    <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
     <Dialog
       v-if="showDialog"
       :title="$tc('labels.BindLabel')"
       :visible.sync="showDialog"
       width="600px"
+      @cancel="handleCancel"
       @confirm="handleConfirm"
     >
       <el-row :gutter="1" class="tag-select">
@@ -60,11 +66,11 @@
             <i class="fa fa-tag" /> <b>{{ getKey(label) }}</b>: {{ getValue(label) }}
           </el-tag>
         </div>
-      </div>
-      <div class="tag-tip">
-        <el-link @click="goToLabelList">
-          {{ $t('labels.LabelList') }} <i class="fa fa-external-link" />
-        </el-link>
+        <div class="tag-tip">
+          <el-link @click="goToLabelList">
+            {{ $t('labels.LabelList') }} <i class="fa fa-external-link" />
+          </el-link>
+        </div>
       </div>
     </Dialog>
   </div>
@@ -97,6 +103,7 @@ export default {
   },
   data() {
     return {
+      focusOn: '',
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
       initial: [],
       iLabels: [],
@@ -131,6 +138,9 @@ export default {
     this.iLabels = [...this.initial]
   },
   methods: {
+    handleLabelSearch(label) {
+      this.$eventBus.$emit('labelSearch', label)
+    },
     getLabelType(tag) {
       return this.formatterArgs.getLabelType(tag)
     },
@@ -160,6 +170,9 @@ export default {
       this.keySelect2.value = ''
       this.valueSelect2.value = ''
       this.$emit('input', this.iLabels)
+    },
+    handleCancel() {
+      this.showDialog = false
     },
     handleConfirm() {
       const origin = _.sortBy(this.initial)
@@ -198,6 +211,29 @@ export default {
   }
 }
 
+.edit-btn {
+  visibility: hidden;
+  position: relative;
+  transition: all 1s;
+  & > i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.label-container {
+  display: flex;
+  .label-formatter-col {
+    overflow: hidden;
+  }
+  &:hover {
+    .edit-btn {
+      visibility: visible;
+    }
+  }
+}
+
 .tag-zone {
   margin: 20px 0 0 0;
   border: solid 1px #ebeef5;
@@ -207,10 +243,6 @@ export default {
   .tag-formatter {
     margin: 1px 3px;
     display: inline-block;
-  }
-
-  .el-tag {
-    // background: inherit;
   }
 }
 
@@ -223,7 +255,7 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-  display: table;
+  //display: table;
 }
 
 .tag-tip {

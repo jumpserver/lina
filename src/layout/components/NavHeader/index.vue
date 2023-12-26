@@ -180,6 +180,10 @@ export default {
           font-size: 16px;
         }
 
+        & > > > i.el-dialog__close.el-icon-close {
+          color: #7c7e7f;
+        }
+
         & > > > .svg-icon {
           color: #FFF;
           font-size: 16px;

@@ -655,6 +655,7 @@
     "Auth": "认证",
     "bind": "绑定",
     "unbind": "解绑",
+    "BindSuccess": "绑定成功",
     "PushSelected": "推送所选",
     "PushSelectedSystemUsersToAsset": "推送所选系统用户到资产",
     "TestSelected": "测试所选",
@@ -1755,6 +1756,7 @@
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
     "ChatAI": "智能问答",
+    "Example": "例: {example}",
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用 Api key 签名请求头进行认证，每个请求的头部是不一样的， 相对于 Token 方式，更加安全，请查阅文档使用;<br>为降低泄露风险，Secret 仅在生成时可以查看, 每个用户最多支持创建 10 个",
@@ -1863,7 +1865,8 @@
     "sync": "同步",
     "testHelpText": "请输入目的地址进行测试",
     "Storage": "存储设置",
-    "ReplayStorageCreateUpdateHelpMessage": "注意：目前 SFTP 存储仅支持账号备份，暂不支持录像存储。"
+    "ReplayStorageCreateUpdateHelpMessage": "注意：目前 SFTP 存储仅支持账号备份，暂不支持录像存储。",
+    "VirtualApp": "虚拟应用"
   },
   "tickets": {
     "BatchApproval": "批量审批",

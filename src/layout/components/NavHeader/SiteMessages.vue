@@ -203,7 +203,7 @@ export default {
 
 <style lang="scss" scoped>
 .drawer {
-  height: calc(100% - 40px);
+  height: calc(100% - 0px);
 }
 
 .el-badge ::v-deep .el-badge__content.is-fixed {

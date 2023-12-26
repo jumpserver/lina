@@ -312,3 +312,7 @@ input[type=file] {
 .el-drawer.rtl, .drawer-panel {
   border-radius: 10px 0 0 10px;
 }
+
+.el-select-group__title {
+  color: $--color-primary !important;
+}

@@ -131,6 +131,9 @@ export default {
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
         resize: none;
+        &::-webkit-scrollbar {
+          width: 12px;
+        }
       }
     }
     .el-textarea.is-disabled + .input-action {

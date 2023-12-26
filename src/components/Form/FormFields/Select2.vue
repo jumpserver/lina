@@ -375,6 +375,7 @@ export default {
         this.refresh()
         this.$log.debug('Visible change, refresh select2')
       }
+      this.$emit('visible-change', visible)
     }
   }
 }
