@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="sidebar">
-      <Sidebar :active.sync="active" :submenu="submenu" />
+      <Sidebar v-bind="$attrs" :active.sync="active" :submenu="submenu" />
     </div>
   </div>
 </template>
@@ -62,11 +62,14 @@ export default {
   watch: {
     drawerPanelVisible(value) {
       if (value && !ws) {
-        this.$refs.component?.init()
+        this.initWebSocket()
       }
     }
   },
   methods: {
+    initWebSocket() {
+      this.$refs.component?.init()
+    },
     onClose() {
       this.$parent.show = false
     },
