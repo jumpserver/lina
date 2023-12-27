@@ -46,7 +46,7 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              const msg = `${this.$t('users.AddAllMembersWarningMsg')} ?`
+              const msg = this.$t('users.AddAllMembersWarningMsg')
               this.$confirm(msg, this.$tc('common.Info'), {
                 type: 'warning',
                 confirmButtonClass: 'el-button--danger',
@@ -60,7 +60,8 @@ export default {
                     window.location.reload()
                   })
                 }
-              }).catch(() => {})
+              }).catch(() => {
+              })
             }
           })
         }
