@@ -59,13 +59,8 @@ export function useChat() {
     addChatMessageById(chat)
   }
 
-  const removeLoadingAndAddMessageToChat = (chat) => {
-    store.commit('chat/removeLoadingMessageInChat')
-    store.commit('chat/addMessageToActiveChat', chat)
-  }
-
-  const updateChaMessageContentById = (id, content) => {
-    store.commit('chat/updateChaMessageContentById', { id, content })
+  const updateChaMessageContentById = (id, data) => {
+    store.commit('chat/updateChaMessageContentById', { id, data })
     pageScroll('scrollRef')
   }
 
@@ -78,7 +73,6 @@ export function useChat() {
     addMessageToActiveChat,
     newChatAndAddMessageById,
     removeLoadingMessageInChat,
-    removeLoadingAndAddMessageToChat,
     addChatMessageById,
     addTemporaryLoadingToChat,
     updateChaMessageContentById

@@ -38,10 +38,14 @@ const mutations = {
     }
   },
 
-  updateChaMessageContentById(state, { id, content }) {
+  updateChaMessageContentById(state, { id, data }) {
     const chats = state.activeChat.chats || []
     const filterChat = chats.filter((chat) => chat.message.id === id)?.[0] || {}
-    filterChat.message.content = content
+    if (Object.keys(filterChat).length > 0) {
+      filterChat.message.content = data.message.content
+    } else {
+      chats?.push(data)
+    }
   }
 }
 
