@@ -30,6 +30,7 @@
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看",
     "AutoCreate": "自动创建",
     "AccountExportTips": "导出信息中包含账号密文涉及敏感信息，导出的格式为一个加密的zip文件（若没有设置加密密码，请前往个人信息中设置文件加密密码）。",
+    "AccountDeleteConfirmMsg": "删除账号，是否继续？",
     "AccountPush": {
       "WindowsPushHelpText": "windows 资产暂不支持推送密钥",
       "AccountPushList": "账号推送",
@@ -1966,7 +1967,7 @@
     "KokoSettingUpdate": "Koko 配置设置",
     "UserSetting": "偏好设置",
     "AllMembers": "全部成员",
-    "AddAllMembersWarningMsg": "你确定要添加全部成员",
+    "AddAllMembersWarningMsg": "你确定要添加全部成员？",
     "UnbindHelpText": "本地用户为此认证来源用户，无法解绑",
     "SetStatus": "设置状态",
     "Set": "已设置",
