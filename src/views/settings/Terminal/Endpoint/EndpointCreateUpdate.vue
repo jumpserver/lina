@@ -30,7 +30,7 @@ export default {
           this.$t('terminal.DatabasePort'),
           [
             'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'oracle_port_range'
+            'redis_port', 'sqlserver_port', 'oracle_port_range'
           ]
         ],
         [this.$t('common.Other'), ['comment']]
