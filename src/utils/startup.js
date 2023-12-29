@@ -15,6 +15,17 @@ function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
 }
 
+function isRenewalExpired(renewalTime) {
+  const currentTimeStamp = Math.floor(new Date().getTime() / 1000)
+  const sessionExpireTimestamp = VueCookie.get('jms_session_expire_timestamp')
+
+  if (!sessionExpireTimestamp) {
+    return false
+  }
+  const timeDifferenceInSeconds = currentTimeStamp - parseInt(sessionExpireTimestamp, 10)
+  return timeDifferenceInSeconds > renewalTime
+}
+
 async function checkLogin({ to, from, next }) {
   if (whiteList.indexOf(to.path) !== -1) {
     next()
@@ -28,12 +39,16 @@ async function checkLogin({ to, from, next }) {
     return reject('No session mark found in cookie')
   } else if (sessionExpire === 'close') {
     let startTime = new Date().getTime()
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       const endTime = new Date().getTime()
       const delta = (endTime - startTime)
       startTime = endTime
       Vue.$log.debug('Set session expire: ', delta)
-      VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
+      if (!isRenewalExpired(120)) {
+        VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
+      } else {
+        clearInterval(intervalId)
+      }
     }, 10 * 1000)
   } else if (sessionExpire === 'age') {
     Vue.$log.debug('Session expire on age')
@@ -156,7 +171,9 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
 
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
-  if (store.getters.inited) { return true }
+  if (store.getters.inited) {
+    return true
+  }
   await store.dispatch('app/init')
 
   // set page title

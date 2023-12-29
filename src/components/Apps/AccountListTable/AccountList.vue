@@ -392,9 +392,18 @@ export default {
           can: this.$hasPerm('accounts.delete_account'),
           type: 'primary',
           callback: ({ row }) => {
-            this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-              this.$message.success(this.$tc('common.deleteSuccessMsg'))
-              this.$refs.ListTable.reloadTable()
+            const msg = this.$t('accounts.AccountDeleteConfirmMsg')
+            this.$confirm(msg, this.$tc('common.Info'), {
+              type: 'warning',
+              confirmButtonClass: 'el-button--danger',
+              beforeClose: async(action, instance, done) => {
+                if (action !== 'confirm') return done()
+                this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
+                  done()
+                  this.$refs.ListTable.reloadTable()
+                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                })
+              }
             })
           }
         }

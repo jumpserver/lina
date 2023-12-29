@@ -82,16 +82,18 @@
             </el-card>
           </div>
           <b>{{ $tc('ops.output') }}:</b>
-          <span v-if="executionInfo.status" style="float: right">
+          <span v-if="executionInfo.status && summary" style="float: right">
             <span>
               <span><b>{{ $tc('common.Status') }}: </b></span>
               <span
-                :class="{
-                  'status_success':executionInfo.status==='success',
-                  'status_warning':executionInfo.status==='timeout',
-                  'status_danger':executionInfo.status==='failed'
-                }"
-              >{{ $tc('ops.' + executionInfo.status) }}</span>
+                v-if="executionInfo.status==='timeout'"
+                class="status_warning"
+              >{{ $tc('ops.timeout') }}</span>
+              <span v-else>
+                <span class="status_success">{{ $tc('ops.success') + ': ' + summary.success }}</span>
+                <span class="status_warning">{{ $tc('ops.Skip') + ': ' + summary.skip }}</span>
+                <span class="status_danger">{{ $tc('ops.failed') + ': ' + summary.failed }}</span>
+              </span>
             </span>
             <span>
               <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
@@ -210,7 +212,12 @@ export default {
       ShowProgress: false,
       upload_interval: null,
       uploadFileList: [],
-      SizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB']
+      SizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
+      summary: {
+        'success': 0,
+        'failed': 0,
+        'skip': 0
+      }
     }
   },
   computed: {
@@ -273,9 +280,21 @@ export default {
         }
       }
     },
+    taskStatusStat(summary) {
+      const { ok, failures, dark, excludes, skipped } = summary
+
+      const failedKeys = Object.keys(failures)
+      const darkKeys = Object.keys(dark)
+      const excludesKeys = Object.keys(excludes)
+
+      this.summary['success'] = ok.length
+      this.summary['failed'] = failedKeys.length + darkKeys.length
+      this.summary['skip'] = excludesKeys.length + skipped.length
+    },
     getTaskStatus() {
       getTaskDetail(this.currentTaskId).then(data => {
         this.executionInfo.status = data['status']
+        this.taskStatusStat(data['summary'])
         if (this.executionInfo.status === 'success') {
           this.$message.success(this.$tc('ops.runSucceed'))
           clearInterval(this.upload_interval)
@@ -334,11 +353,11 @@ export default {
       const filenameList = fileList.map((file) => file.name)
       const filenameCount = _.countBy(filenameList)
       for (const file of fileList) {
-        file.is_same = filenameCount[file.name] > 1
+        file.isSame = filenameCount[file.name] > 1
       }
     },
     sameFileStyle(file) {
-      if (file.is_same) {
+      if (file.isSame) {
         return { backgroundColor: 'var(--color-danger)' }
       }
       return ''
@@ -362,7 +381,7 @@ export default {
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
-        if (file.is_same) {
+        if (file.isSame) {
           this.$message.error(this.$tc('ops.DuplicateFileExists'))
           return
         }
@@ -476,7 +495,7 @@ export default {
 }
 
 .status_success {
-  color: var(--color-success);
+  color: var(--color-primary);
 }
 
 .status_warning {

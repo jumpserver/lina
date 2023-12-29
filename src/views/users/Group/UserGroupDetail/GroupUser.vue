@@ -46,7 +46,7 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              const msg = `${this.$t('users.AddAllMembersWarningMsg')} ?`
+              const msg = this.$t('users.AddAllMembersWarningMsg')
               this.$confirm(msg, this.$tc('common.Info'), {
                 type: 'warning',
                 confirmButtonClass: 'el-button--danger',
@@ -60,7 +60,8 @@ export default {
                     window.location.reload()
                   })
                 }
-              }).catch(() => {})
+              }).catch(() => {
+              })
             }
           })
         }
@@ -85,6 +86,9 @@ export default {
             width: 150,
             objects: this.object.users,
             formatter: DeleteActionFormatter,
+            formatterArgs: {
+              disabled: !this.$hasPerm('users.change_usergroup')
+            },
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.delete(
                 '/api/v1/users/users-groups-relations/', {
@@ -133,6 +137,7 @@ export default {
         },
         showHasObjects: false,
         hasObjectsId: this.object.users,
+        disabled: !this.$hasPerm('users.change_usergroup'),
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const groupId = this.object.id

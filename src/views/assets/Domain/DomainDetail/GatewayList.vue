@@ -117,6 +117,7 @@ export default {
                   name: 'GatewayCreate',
                   query: {
                     domain: this.object.id,
+                    platform_type: row.type.value,
                     clone_from: row.id
                   }
                 }

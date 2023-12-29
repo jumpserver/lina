@@ -51,6 +51,22 @@ export default {
           ]
         ]
       ],
+      fieldsMeta: {
+        GPT_BASE_URL: {
+          el: {
+            autocomplete: 'new-password'
+          },
+          helpText: this.$t('setting.Example', { example: 'https://api.openai.com/v1' })
+        },
+        GPT_API_KEY: {
+          el: {
+            autocomplete: 'new-password'
+          }
+        },
+        GPT_PROXY: {
+          helpText: this.$t('setting.Example', { example: 'http://ip:port' })
+        }
+      },
       submitMethod() {
         return 'patch'
       }
