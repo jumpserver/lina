@@ -28,6 +28,9 @@ export default {
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {
+              getItem(item) {
+                return item.is_service_account ? null : item.name
+              },
               routeQuery: {
                 activeTab: 'GroupUser'
               }

@@ -80,8 +80,7 @@ export default {
         timeCost: 0,
         cancel: 0
       },
-      xtermConfig: {
-      },
+      xtermConfig: {},
       showHelpDialog: false,
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
@@ -484,7 +483,7 @@ export default {
 }
 
 .status_success {
-  color: var(--color-success);
+  color: var(--color-primary);
 }
 
 .status_warning {

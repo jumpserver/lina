@@ -124,7 +124,8 @@
     "AddAccountResult": "账号批量添加结果",
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
-    "VirtualAccounts": "仮想アカウント"
+    "VirtualAccounts": "仮想アカウント",
+    "AccountDeleteConfirmMsg": "アカウントを削除します，続行しますか？"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
@@ -1763,6 +1764,7 @@
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
     "ChatAI": "チャットAI",
+    "Example": "例: {example}",
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
@@ -2099,7 +2101,7 @@
     "passwordExpired": "パスワードが期限切れです",
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
     "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
-    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか"
+    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",
