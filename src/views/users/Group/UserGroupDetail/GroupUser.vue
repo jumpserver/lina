@@ -86,6 +86,9 @@ export default {
             width: 150,
             objects: this.object.users,
             formatter: DeleteActionFormatter,
+            formatterArgs: {
+              disabled: !this.$hasPerm('users.change_usergroup')
+            },
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.delete(
                 '/api/v1/users/users-groups-relations/', {
@@ -134,6 +137,7 @@ export default {
         },
         showHasObjects: false,
         hasObjectsId: this.object.users,
+        disabled: !this.$hasPerm('users.change_usergroup'),
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const groupId = this.object.id
