@@ -21,6 +21,7 @@ import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -44,11 +45,15 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
         columnsExtra: ['action'],
+        columns: [
+          'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
+          'accounts', 'is_expired', 'from_ticket', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users', 'user_groups', 'assets',
-            'nodes', 'accounts', 'is_valid', 'actions'
+            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
+            'nodes_amount', 'accounts', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
@@ -82,40 +87,40 @@ export default {
               showFalse: false
             }
           },
-          users: {
+          users_amount: {
             label: this.$t('perms.User'),
             width: '60px',
-            formatter: AmountFormatter,
+            formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
             }
           },
-          user_groups: {
+          user_groups_amount: {
             label: this.$t('perms.UserGroups'),
             width: '100px',
-            formatter: AmountFormatter,
+            formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
             }
           },
-          assets: {
+          assets_amount: {
             label: this.$t('perms.Asset'),
             width: '60px',
-            formatter: AmountFormatter,
+            formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
             }
           },
-          nodes: {
+          nodes_amount: {
             label: this.$t('perms.Node'),
             width: '60px',
-            formatter: AmountFormatter,
+            formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
