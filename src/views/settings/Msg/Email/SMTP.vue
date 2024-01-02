@@ -36,19 +36,16 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER',
-            'EMAIL_HOST_PASSWORD'
-          ]
-        ],
-        [
-          this.$t('setting.Security'),
-          [
-            'EMAIL_USE_SSL', 'EMAIL_USE_TLS'
+            'EMAIL_PROTOCOL', 'EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER',
+            'EMAIL_HOST_PASSWORD', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS'
           ]
         ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
+        EMAIL_PORT: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
+        },
         EMAIL_HOST_PASSWORD: {
           component: UpdateToken
         },
@@ -57,6 +54,12 @@ export default {
             type: 'textarea',
             rows: 3
           }
+        },
+        EMAIL_USE_SSL: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
+        },
+        EMAIL_USE_TLS: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
         }
       },
       url: '/api/v1/settings/setting/?category=email',
@@ -74,6 +77,9 @@ export default {
         }
         if (data['EMAIL_USE_TLS'] === null) {
           delete data['EMAIL_USE_TLS']
+        }
+        if (data['EMAIL_PORT'] === null) {
+          delete data['EMAIL_PORT']
         }
         return data
       }
