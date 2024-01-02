@@ -42,7 +42,6 @@ const {
   addMessageToActiveChat,
   newChatAndAddMessageById,
   removeLoadingMessageInChat,
-  removeLoadingAndAddMessageToChat,
   updateChaMessageContentById,
   addTemporaryLoadingToChat
 } = useChat()
@@ -120,12 +119,11 @@ export default {
       }
     },
     onChatMessage(data) {
-      if (!data.message.content && data.conversation_id) {
+      if (data.conversation_id) {
         setLoading(true)
-        removeLoadingAndAddMessageToChat(data)
+        removeLoadingMessageInChat()
         this.currentConversationId = data.conversation_id
-      } else {
-        updateChaMessageContentById(data.message.id, data.message.content)
+        updateChaMessageContentById(data.message.id, data)
       }
       if (data.message?.type === 'finish') {
         setLoading(false)
@@ -248,6 +246,9 @@ export default {
     padding: 0 15px 25px;
     overflow-y: auto;
     user-select: text;
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
   }
   .input-box {
     position: relative;

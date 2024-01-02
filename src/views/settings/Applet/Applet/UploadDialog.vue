@@ -90,7 +90,7 @@ export default {
         form,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
-          timeout: 10 * 60 * 1000,
+          timeout: 60 * 60 * 1000,
           disableFlashErrorMsg: true,
           params: { update: true }
         }

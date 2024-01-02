@@ -119,6 +119,20 @@ export const assetFieldsMeta = (vm) => {
         clearable: true
       }
     },
+    labels: {
+      name: 'labels',
+      label: vm.$t('assets.Label'),
+      type: 'm2m',
+      el: {
+        multiple: true,
+        url: '/api/v1/labels/labels/',
+        ajax: {
+          transformOption: (item) => {
+            return { label: `${item.name}:${item.value}`, value: `${item.name}:${item.value}` }
+          }
+        }
+      }
+    },
     is_active: {
       type: 'switch'
     },
