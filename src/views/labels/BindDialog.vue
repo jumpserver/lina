@@ -121,8 +121,10 @@ export default {
       }
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
       this.$axios.put(url, data).then(res => {
-        this.$message.success(this.$t('common.BindSuccess'))
-        this.$emit('confirm')
+        setTimeout(() => {
+          this.$message.success(this.$tc('common.BindSuccess'))
+          this.$emit('bind-success')
+        }, 100)
       })
     },
     async getResourceTypes() {

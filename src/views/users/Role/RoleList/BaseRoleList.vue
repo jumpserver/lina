@@ -31,25 +31,6 @@ export default {
           default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions']
         },
         columnsMeta: {
-          users_amount: {
-            label: this.$t('users.Users'),
-            width: '120px',
-            formatter: DetailFormatter,
-            formatterArgs: {
-              getRoute({ row }) {
-                return {
-                  name: 'RoleDetail',
-                  params: {
-                    id: row.id
-                  },
-                  query: {
-                    activeTab: 'RoleUsers',
-                    scope: vm.scope
-                  }
-                }
-              }
-            }
-          },
           display_name: {
             label: this.$t('common.Name'),
             formatter: DetailFormatter,
