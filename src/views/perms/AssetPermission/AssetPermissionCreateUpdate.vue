@@ -76,7 +76,11 @@ export default {
             required: false
           }],
           el: {
-            value: []
+            value: [],
+            treeSetting: {
+              showSearch: false,
+              showRefresh: false
+            }
           }
         },
         nodes: {
