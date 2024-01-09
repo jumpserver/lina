@@ -1863,7 +1863,11 @@
     "testHelpText": "请输入目的地址进行测试",
     "Storage": "存储设置",
     "ReplayStorageCreateUpdateHelpMessage": "注意：目前 SFTP 存储仅支持账号备份，暂不支持录像存储。",
-    "VirtualApp": "虚拟应用"
+    "VirtualApp": "虚拟应用",
+    "EnableRis": "开启齐治 PAM",
+    "RisHelpText": "1. 由于安全原因，需要配置文件中开启齐治 PAM。<br>2. 开启后，填写其他配置，进行测试。<br>3. 进行数据同步，同步是单向的，只会从齐治 PAM 同步到 JumpServer。<br>4. 二次修改齐治 PAM 配置后需重启服务。",
+    "RisPAM": "齐治 PAM",
+    "account": "账号信息"
   },
   "tickets": {
     "BatchApproval": "批量审批",

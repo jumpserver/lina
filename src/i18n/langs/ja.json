@@ -1877,7 +1877,11 @@
     "AccountStorage": "アカウントストレージ",
     "Passkey": "パスキー",
     "ReplayStorageCreateUpdateHelpMessage": "注: 現在、SFTP ストレージはアカウントのバックアップのみをサポートしており、ビデオ ストレージはサポートしていません。",
-    "VirtualApp": "仮想アプリケーション"
+    "VirtualApp": "仮想アプリケーション",
+    "EnableRis": "斉治PAMを開く",
+    "RisHelpText": "1.セキュリティ上の理由により、プロファイルで斉治PAMを開く必要がある。<br>2.他の構成を入力して、テストを行います。<br>3.データの同期を行い、同期は一方向であり、斉治PAMからJumpServerにのみ同期される。<br>4.PAM構成を2回変更すると、サービスを再起動する必要があります。",
+    "RisPAM": "斉治PAM",
+    "Account": "アカウント"
   },
   "tickets": {
     "BatchApproval": "大量承認です",

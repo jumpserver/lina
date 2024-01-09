@@ -1885,7 +1885,11 @@
     "AccountStorage": "Account Storage",
     "Passkey": "Passkey",
     "ReplayStorageCreateUpdateHelpMessage": "Note: Currently, SFTP storage only supports account backup and does not support video storage.",
-    "VirtualApp": "Virtual App"
+    "VirtualApp": "Virtual App",
+    "EnableRis": "Opening RIS PAM",
+    "RisHelpText": "1. Due to security reasons, it is necessary to enable Qizhi PAM in the configuration file.<Br>2. Fill in other configurations for testing.<Br>3. Perform data synchronization, which is unidirectional and only synchronizes from PAM to JumpServer.<Br>4. After modifying the PAM configuration for the second time, the service needs to be restarted.<Br>",
+    "RisPAM": "Ris PAM",
+    "Account": "Account"
   },
   "tickets": {
     "BatchApproval": "Batch approval",
