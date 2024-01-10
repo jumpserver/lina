@@ -169,6 +169,23 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   return new Promise((resolve, reject) => reject(''))
 }
 
+async function onI18nLoaded() {
+  return new Promise(resolve => {
+    const load = store.state.app.i18nLoaded
+    if (load) {
+      resolve()
+    }
+    const itv = setInterval(() => {
+      const load = store.state.app.i18nLoaded
+      if (load) {
+        clearInterval(itv)
+        console.log('I18n loaded')
+        resolve()
+      }
+    }, 100)
+  })
+}
+
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
@@ -185,6 +202,7 @@ export async function startup({ to, from, next }) {
   await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
+  await onI18nLoaded()
   await store.dispatch('assets/getAssetCategories')
   return true
 }

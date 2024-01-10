@@ -5,7 +5,7 @@ import zh from './zh.json'
 import en from './en.json'
 import ja from './ja.json'
 
-export default {
+const messages = {
   zh: {
     ...zhLocale,
     ...zh
@@ -19,3 +19,5 @@ export default {
     ...ja
   }
 }
+
+export default messages
