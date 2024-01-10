@@ -23,10 +23,10 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=vault',
       hasReset: false,
-      helpText: this.$t('setting.VaultHelpText'),
+      helpText: this.$t('VaultHelpText'),
       moreButtons: [
         {
-          title: this.$t('common.Test'),
+          title: this.$t('Test'),
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function(value, form, btn) {
@@ -42,7 +42,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.sync'),
+          title: this.$t('Sync'),
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
           callback: function(value, form, btn) {
@@ -60,8 +60,8 @@ export default {
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [this.$t('common.Basic'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('setting.AccountStorage'),
+        [this.$t('Basic'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']],
+        [this.$t('AccountStorage'),
           [
             'VAULT_ENABLED',
             'VAULT_HCP_HOST',
@@ -78,7 +78,7 @@ export default {
         },
         VAULT_ENABLED: {
           disabled: true,
-          label: this.$t('setting.EnableVaultStorage')
+          label: this.$t('EnableVaultStorage')
         },
         VAULT_HCP_HOST: {
           hidden: (formValue) => {

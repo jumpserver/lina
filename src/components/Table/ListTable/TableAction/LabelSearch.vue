@@ -7,7 +7,7 @@
       @click="showSearchSelect"
     >
       <svg-icon icon-class="tag" />
-      <span>{{ $t('common.Label') }}</span>
+      <span>{{ $t('Label') }}</span>
     </el-button>
     <el-cascader
       v-else
@@ -45,7 +45,7 @@ export default {
       },
       labelOptions: [],
       labelValue: [],
-      placeholder: this.$t('labels.SelectLabelFilter')
+      placeholder: this.$t('SelectLabelFilter')
     }
   },
   watch: {
@@ -114,7 +114,7 @@ export default {
         const groupedLabelOptions = _.groupBy(data, 'name')
         const labelOptions = []
         for (const [key, labels] of Object.entries(groupedLabelOptions)) {
-          const all = { value: '*', label: this.$t('common.All') }
+          const all = { value: '*', label: this.$t('All') }
           const children = _.sortBy(labels, 'value').map(label => ({
             value: label.value,
             label: label.value

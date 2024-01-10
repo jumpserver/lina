@@ -30,15 +30,15 @@ export default {
   data() {
     const defaultOptions = [
       {
-        label: this.$t('dashboard.Today'),
+        label: this.$t('Today'),
         value: '1'
       },
       {
-        label: this.$t('dashboard.Last7Days'),
+        label: this.$t('Last7Days'),
         value: '7'
       },
       {
-        label: this.$t('dashboard.Last30Days'),
+        label: this.$t('Last30Days'),
         value: '30'
       }
     ]

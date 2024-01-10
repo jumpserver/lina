@@ -5,21 +5,21 @@
         ref="ListTable"
         :asset="object"
         :has-clone="false"
+        :has-column-actions="false"
+        :has-delete-action="false"
         :has-export="false"
         :has-import="false"
-        :has-delete-action="false"
         :has-left-actions="false"
-        :has-column-actions="false"
         :url="url"
       />
     </el-col>
     <el-col :md="9" :sm="24">
-      <IBox :title="$tc('assets.Account')" type="primary">
+      <IBox :title="$tc('Account')" type="primary">
         <AccountFormatter
-          class="checkbox-accounts"
-          :value="object['accounts']"
           :assets="assetIds"
           :nodes="nodeIds"
+          :value="object['accounts']"
+          class="checkbox-accounts"
           @change="updateAccount"
         />
       </IBox>
@@ -28,8 +28,7 @@
 </template>
 
 <script>
-import { AccountListTable } from '@/components'
-import { IBox } from '@/components'
+import { AccountListTable, IBox } from '@/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 
 export default {
@@ -76,7 +75,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
 .checkbox-accounts >>> .el-checkbox-group {
   line-height: 40px;

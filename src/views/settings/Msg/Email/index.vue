@@ -28,25 +28,25 @@ export default {
     return {
       fields: [
         [
-          this.$t('setting.SMTP'),
+          this.$t('SMTP'),
           [
             'SMTP'
           ]
         ],
         [
-          this.$t('setting.MailSend'),
+          this.$t('MailSend'),
           [
             'EMAIL_FROM', 'EMAIL_SUBJECT_PREFIX'
           ]
         ],
         [
-          this.$t('setting.EmailContent'),
+          this.$t('EmailContent'),
           [
             'CREATE_USER_MSG'
           ]
         ],
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'EMAIL_RECIPIENT', 'EMAIL_SUFFIX'
           ]
@@ -70,11 +70,11 @@ export default {
           ]
         },
         CREATE_USER_MSG: {
-          label: this.$t('setting.CreateUserSetting'),
+          label: this.$t('CreateUserSetting'),
           component: EmailContent
         },
         SMTP: {
-          label: this.$t('setting.SMTP'),
+          label: this.$t('SMTP'),
           component: SMTP
         }
       },
@@ -83,7 +83,7 @@ export default {
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
-          title: this.$t('setting.emailTest'),
+          title: this.$t('EmailTest'),
           loading: false,
           callback: function(value, form, btn) {
             const testValue = {}

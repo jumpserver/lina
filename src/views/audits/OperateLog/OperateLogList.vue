@@ -5,7 +5,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true

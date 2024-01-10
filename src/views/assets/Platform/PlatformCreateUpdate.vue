@@ -43,15 +43,15 @@ export default {
         }
       },
       fields: [
-        [this.$t('common.Basic'), [
+        [this.$t('Basic'), [
           'name', 'category_type', 'charset',
           'domain_enabled'
         ]],
-        [this.$t('setting.Config'), [
+        [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method'
         ]],
-        [this.$t('common.Automations'), ['automation']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Automations'), ['automation']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: platformFieldsMeta(this),
       url: `/api/v1/assets/platforms/`,

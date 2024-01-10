@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
+    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("Setting") }} </el-button>
     <Dialog
       v-if="visible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('setting.SMTP')"
+      :title="$tc('SMTP')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
@@ -34,7 +34,7 @@ export default {
       encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
         [
-          this.$t('common.BasicInfo'),
+          this.$t('BasicInfo'),
           [
             'EMAIL_PROTOCOL', 'EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER',
             'EMAIL_HOST_PASSWORD', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS'

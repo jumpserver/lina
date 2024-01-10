@@ -21,8 +21,8 @@ export default {
       initial: {
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'value']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Basic'), ['name', 'value']],
+        [this.$t('Other'), ['comment']]
       ],
       url: '/api/v1/labels/labels/',
       fieldsMeta: {}

@@ -32,7 +32,7 @@ export default {
         },
         columnsMeta: {
           is_finished: {
-            label: this.$t('ops.isFinished'),
+            label: this.$t('IsFinished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
@@ -45,7 +45,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
+            label: this.$t('IsSuccess'),
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
@@ -61,7 +61,7 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
+            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -79,14 +79,14 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: this.$t('ops.output'),
+                  title: this.$t('Output'),
                   callback: function({ row, tableData }) {
                     openTaskPage(row.id)
                   }
                 },
                 {
                   name: 'run',
-                  title: this.$t('ops.RunAgain'),
+                  title: this.$t('RunAgain'),
                   type: 'primary',
                   callback: function({ row, tableData }) {
                     this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {

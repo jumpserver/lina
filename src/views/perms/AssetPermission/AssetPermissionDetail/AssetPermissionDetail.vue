@@ -29,7 +29,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.Active'),
+          title: this.$t('Active'),
           type: 'switch',
           attrs: {
             model: this.object.is_active,
@@ -41,9 +41,9 @@ export default {
                 `/api/v1/perms/asset-permissions/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -53,23 +53,23 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('perms.userCount'),
+          key: this.$t('UserCount'),
           value: this.object.users.length
         },
         {
-          key: this.$t('perms.userGroupCount'),
+          key: this.$t('UserGroupCount'),
           value: this.object.user_groups.length
         },
         {
-          key: this.$t('perms.assetCount'),
+          key: this.$t('AssetCount'),
           value: this.object.assets.length
         },
         {
-          key: this.$t('perms.nodeCount'),
+          key: this.$t('NodeCount'),
           value: this.object.nodes.length
         },
         {
-          key: this.$t('perms.Actions'),
+          key: this.$t('Actions'),
           value: this.object.actions,
           formatter(row, value) {
             const actionLabels = value.map(item => item.label.replace(/ \([^)]*\)/, ''))
@@ -91,23 +91,23 @@ export default {
       return [
 
         {
-          key: this.$t('common.DateStart'),
+          key: this.$t('DateStart'),
           value: this.object.date_start
         },
         {
-          key: this.$t('common.dateExpired'),
+          key: this.$t('DateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('DateCreated'),
           value: this.object.date_created
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('Comment'),
           value: this.object.comment
         }
       ]

@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
         ],
         columnsMeta: {
           'AccountBackupName': {
-            label: this.$t('common.DisplayName'),
+            label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
@@ -41,7 +41,7 @@ export default {
             id: ({ row }) => row.plan
           },
           timedelta: {
-            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
+            label: this.$t('TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
@@ -56,14 +56,14 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  title: this.$t('accounts.AccountChangeSecret.Log'),
+                  title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('accounts.AccountChangeSecret.Detail'),
+                  title: this.$t('Detail'),
                   type: 'info',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
@@ -78,11 +78,11 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('accounts.TaskID'),
+              label: this.$t('TaskID'),
               value: 'plan_id'
             },
             {
-              label: this.$t('common.DisplayName'),
+              label: this.$t('DisplayName'),
               value: 'plan__name'
             }
           ]

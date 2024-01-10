@@ -46,42 +46,42 @@ export default {
     if (this.$store.getters.hasValidLicense) {
       extraBackends = [
         {
-          title: this.$t('setting.OIDC'),
+          title: this.$t('OIDC'),
           name: 'OIDC',
           key: 'AUTH_OPENID'
         },
         {
-          title: this.$t('setting.SAML2'),
+          title: this.$t('SAML2'),
           name: 'SAML2',
           key: 'AUTH_SAML2'
         },
         {
-          title: this.$t('setting.OAuth2'),
+          title: this.$t('OAuth2'),
           name: 'OAuth2',
           key: 'AUTH_OAUTH2'
         },
         {
-          title: this.$t('setting.WeCom'),
+          title: this.$t('WeCom'),
           name: 'WeCom',
           key: 'AUTH_WECOM'
         },
         {
-          title: this.$t('setting.DingTalk'),
+          title: this.$t('DingTalk'),
           name: 'DingTalk',
           key: 'AUTH_DINGTALK'
         },
         {
-          title: this.$t('setting.FeiShu'),
+          title: this.$t('FeiShu'),
           name: 'FeiShu',
           key: 'AUTH_FEISHU'
         },
         {
-          title: this.$t('setting.Slack'),
+          title: this.$t('Slack'),
           name: 'Slack',
           key: 'AUTH_SLACK'
         },
         {
-          title: this.$t('setting.Radius'),
+          title: this.$t('Radius'),
           name: 'Radius',
           key: 'AUTH_RADIUS'
         }
@@ -92,21 +92,21 @@ export default {
       activeMenu: 'Basic',
       submenu: [
         {
-          title: this.$t('common.Basic'),
+          title: this.$t('Basic'),
           name: 'Basic'
         },
         {
-          title: this.$t('setting.Ldap'),
+          title: this.$t('Ldap'),
           name: 'LDAP',
           key: 'AUTH_LDAP'
         },
         {
-          title: this.$t('setting.CAS'),
+          title: this.$t('CAS'),
           name: 'CAS',
           key: 'AUTH_CAS'
         },
         {
-          title: this.$t('setting.Passkey'),
+          title: this.$t('Passkey'),
           name: 'Passkey',
           key: 'AUTH_PASSKEY'
         },

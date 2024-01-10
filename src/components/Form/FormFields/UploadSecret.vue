@@ -2,21 +2,21 @@
   <div class="">
     <el-input
       v-model="iValue"
-      type="textarea"
-      :rows="rows"
       :placeholder="placeholder"
+      :rows="rows"
+      type="textarea"
     />
     <el-upload
       ref="upload"
-      class="upload-secret"
-      :action="''"
       :accept="accept"
+      :action="''"
       :auto-upload="false"
+      :file-list="fileList"
       :limit="limit"
-      v-bind="$attrs"
       :on-change="handleChange"
       :on-remove="handleRemove"
-      :file-list="fileList"
+      class="upload-secret"
+      v-bind="$attrs"
     >
       <el-button size="mini" type="primary">
         {{ btnText }}
@@ -38,7 +38,7 @@ export default {
     btnText: {
       type: String,
       default: function() {
-        return this.$t('common.SelectFile')
+        return this.$t('SelectFile')
       }
     },
     rows: {

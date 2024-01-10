@@ -38,26 +38,26 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'UserInfo'
           },
           {
-            title: this.$t('users.tabs.grantedAssets'),
+            title: this.$t('GrantedAssets'),
             name: 'UserGrantedAssets',
             hidden: () => !vm.$hasPerm('perms.view_userassets')
           },
           {
-            title: this.$t('users.tabs.assetPermissionRules'),
+            title: this.$t('AssetPermissionRules'),
             name: 'UserAssetPermissionRules',
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('route.UserAclLists'),
+            title: this.$t('UserAclLists'),
             name: 'UserLoginAcl',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
           },
           {
-            title: this.$t('route.UserSession'),
+            title: this.$t('UserSession'),
             name: 'UserSession',
             hidden: () => !vm.$hasPerm('terminal.view_session')
           }

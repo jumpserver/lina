@@ -14,34 +14,34 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('common.Basic'), ['name', 'nodes']],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
+        [this.$t('Basic'), ['name', 'nodes']],
+        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
       hasDetailInMsg: false,
       fieldsMeta: {
         is_sync_account: {
           type: 'switch',
-          label: this.$t('accounts.AccountGather.IsSyncAccountLabel'),
-          helpText: this.$t('accounts.AccountGather.IsSyncAccountHelpText')
+          label: this.$t('IsSyncAccountLabel'),
+          helpText: this.$t('IsSyncAccountHelpText')
         },
         crontab: {
           component: CronTab,
           hidden: (formValue) => {
             return !formValue.is_periodic
           },
-          helpText: this.$t('accounts.AccountChangeSecret.HelpText.CrontabOfCreateUpdatePage')
+          helpText: this.$t('CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('accounts.AccountChangeSecret.CyclePerform'),
-          helpText: this.$t('accounts.AccountChangeSecret.HelpText.IntervalOfCreateUpdatePage'),
+          label: this.$t('CyclePerform'),
+          helpText: this.$t('IntervalOfCreateUpdatePage'),
           hidden: (formValue) => {
             return !formValue.is_periodic
           }
         },
         nodes: {
-          label: this.$tc('assets.Node'),
+          label: this.$tc('Node'),
           el: {
             multiple: true,
             value: [],
@@ -57,8 +57,8 @@ export default {
           type: 'switch'
         },
         recipients: {
-          label: i18n.t('accounts.AccountChangeSecret.Addressee'),
-          helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
+          label: i18n.t('Addressee'),
+          helpText: i18n.t('OnlyMailSend'),
           el: {
             value: [],
             ajax: {

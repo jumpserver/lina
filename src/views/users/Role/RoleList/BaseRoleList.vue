@@ -32,7 +32,7 @@ export default {
         },
         columnsMeta: {
           display_name: {
-            label: this.$t('common.Name'),
+            label: this.$t('Name'),
             formatter: DetailFormatter,
             formatterArgs: {
               permissions: [`rbac.view_${scopeRole}`],

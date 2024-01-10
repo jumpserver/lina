@@ -7,7 +7,7 @@ export default {
   redirect: '/profile/info',
   component: Layout,
   meta: {
-    title: i18n.t('route.UserProfile'),
+    title: i18n.t('UserProfile'),
     icon: 'personal',
     view: 'profile',
     type: 'view',
@@ -21,7 +21,7 @@ export default {
       name: 'ProfileInfo',
       component: () => import('@/views/profile/ProfileInfo'),
       meta: {
-        title: i18n.t('users.UserInformation'),
+        title: i18n.t('UserInformation'),
         icon: 'attestation',
         permissions: []
       }
@@ -31,7 +31,7 @@ export default {
       name: 'ProfileSetting',
       component: () => import('@/views/profile/ProfileUpdate/index'),
       meta: {
-        title: i18n.t('users.AuthSetting'),
+        title: i18n.t('AuthSetting'),
         icon: 'personal',
         permissions: []
       }
@@ -41,7 +41,7 @@ export default {
       name: 'UserSetting',
       component: () => import('@/views/profile/UserSettingUpdate/index'),
       meta: {
-        title: i18n.t('users.UserSetting'),
+        title: i18n.t('UserSetting'),
         icon: 'preference',
         permissions: []
       }
@@ -51,7 +51,7 @@ export default {
       component: () => import('@/views/profile/ProfileImprovement'),
       name: 'ProfileImprovement',
       hidden: true,
-      meta: { title: i18n.t('route.PersonalInformationImprovement'), permissions: [] }
+      meta: { title: i18n.t('PersonalInformationImprovement'), permissions: [] }
     },
     {
       path: '/profile/api-keys',
@@ -66,7 +66,7 @@ export default {
           component: () => import('@/views/profile/ApiKey'),
           name: 'ApiKey',
           icon: 'key',
-          meta: { title: i18n.t('common.nav.APIKey'), permissions: ['authentication.view_accesskey'] }
+          meta: { title: i18n.t('APIKey'), permissions: ['authentication.view_accesskey'] }
         },
         {
           path: ':id/update',
@@ -74,7 +74,7 @@ export default {
           name: 'ApiKeyCreateUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('common.nav.APIKey'),
+            title: i18n.t('APIKey'),
             permissions: ['authentication.change_accesskey'],
             activeMenu: '/profile/api-keys'
           }
@@ -86,7 +86,7 @@ export default {
       component: () => import('@/views/profile/TempPassword'),
       name: 'TempPassword',
       meta: {
-        title: i18n.t('common.nav.TempPassword'),
+        title: i18n.t('TempPassword'),
         icon: 'magic',
         hidden: ({ settings }) => !settings['AUTH_TEMP_TOKEN'],
         permissions: ['authentication.view_temptoken'],
@@ -98,7 +98,7 @@ export default {
       component: () => import('@/views/profile/ConnectionToken'),
       name: 'ConnectionToken',
       meta: {
-        title: i18n.t('common.nav.ConnectionToken'),
+        title: i18n.t('ConnectionToken'),
         icon: 'token',
         permissions: ['authentication.view_connectiontoken']
       }
@@ -108,7 +108,7 @@ export default {
       component: () => import('@/views/profile/PassKey.vue'),
       name: 'Passkey',
       meta: {
-        title: i18n.t('common.nav.PassKey'),
+        title: i18n.t('PassKey'),
         icon: 'passkey',
         hidden: ({ settings }) => !settings['AUTH_PASSKEY'],
         permissions: ['authentication.view_connectiontoken']

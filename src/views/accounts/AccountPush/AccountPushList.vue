@@ -49,26 +49,26 @@ export default {
             showOverflowTooltip: true,
             formatter: ({ username }) => {
               if (username === '@USER') {
-                return this.$t('accounts.DynamicUsername')
+                return this.$t('DynamicUsername')
               } else {
                 return username
               }
             }
           },
           assets_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.AssetAmount'),
+            label: vm.$t('AssetAmount'),
             width: '80px'
           },
           nodes_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
+            label: vm.$t('NodeAmount'),
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
+            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           password_strategy_display: {
-            label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
+            label: vm.$t('PasswordStrategy'),
             width: '220px',
             showOverflowTooltip: true
           },
@@ -98,7 +98,7 @@ export default {
             formatterArgs: {
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')

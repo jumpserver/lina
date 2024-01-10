@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="16" :sm="24">
-      <ListTable :table-config="config" :header-actions="headerConfig" />
+      <ListTable :header-actions="headerConfig" :table-config="config" />
     </el-col>
     <el-col :md="8" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
 </template>
@@ -46,7 +46,7 @@ export default {
             sortable: 'custom'
           },
           status: {
-            label: this.$t('common.Status'),
+            label: this.$t('Status'),
             formatter: (row) => {
               const typeMapper = {
                 'pending': 'success',
@@ -66,7 +66,7 @@ export default {
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: function(val) {
                     openTaskPage(val.row.task)
@@ -79,10 +79,10 @@ export default {
       },
       quickActions: [
         {
-          title: this.$t('assets.InitialDeploy'),
+          title: this.$t('InitialDeploy'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Deploy')
+            label: this.$t('Deploy')
           },
           callbacks: {
             click: function() {

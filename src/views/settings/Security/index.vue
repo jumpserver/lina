@@ -21,19 +21,19 @@ export default {
       activeMenu: 'Auth',
       submenu: [
         {
-          title: this.$t('setting.AuthSecurity'),
+          title: this.$t('AuthSecurity'),
           name: 'Auth'
         },
         {
-          title: this.$t('setting.AuthLimit'),
+          title: this.$t('AuthLimit'),
           name: 'AuthLimit'
         },
         {
-          title: this.$t('setting.PasswordSecurity'),
+          title: this.$t('PasswordSecurity'),
           name: 'Password'
         },
         {
-          title: this.$t('setting.SessionSecurity'),
+          title: this.$t('SessionSecurity'),
           name: 'Session'
         }
       ]

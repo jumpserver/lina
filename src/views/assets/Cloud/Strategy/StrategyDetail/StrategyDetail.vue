@@ -26,7 +26,7 @@ export default {
       detailFields: [
         'name', 'priority',
         {
-          key: this.$t('common.Rule'),
+          key: this.$t('Rule'),
           formatter: () => {
             const newArr = this.object.strategy_rules || []
             return (
@@ -41,7 +41,7 @@ export default {
           }
         },
         {
-          key: this.$t('common.Action'),
+          key: this.$t('Action'),
           formatter: () => {
             const newArr = this.object.strategy_actions || []
             return (

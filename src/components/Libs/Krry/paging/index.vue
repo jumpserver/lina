@@ -5,7 +5,7 @@
       :async="async"
       :async-search-flag="asyncSearchFlag"
       :data-show-list="notSelectDataList"
-      :filter-placeholder="filterPlaceholder[0] || $tc('common.Search')"
+      :filter-placeholder="filterPlaceholder[0] || $tc('Search')"
       :filterable="filterable"
       :highlight-color="highlightColor"
       :is-highlight="isHighlight"
@@ -14,7 +14,7 @@
       :page-size="pageSize"
       :page-texts="pageTexts"
       :show-clear-btn="showClearBtn"
-      :title="boxTitle[0] || $tc('common.Selection')"
+      :title="boxTitle[0] || $tc('Selection')"
       @check-district="noCheckSelect"
       @search-word="searchWord"
       @check-disable="checkDisable"
@@ -42,7 +42,7 @@
     <krry-box
       ref="hasSelect"
       :data-show-list="checkedData"
-      :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
+      :filter-placeholder="filterPlaceholder[1] || $tc('Search')"
       :filterable="filterable"
       :highlight-color="highlightColor"
       :is-highlight="isHighlight"
@@ -50,7 +50,7 @@
       :page-size="pageSize"
       :page-texts="pageTexts"
       :show-clear-btn="showClearBtn"
-      :title="boxTitle[1] || $tc('common.Selected')"
+      :title="boxTitle[1] || $tc('Selected')"
       @check-district="hasCheckSelect"
       @search-word="searchWord"
       @check-disable="checkDisable"
@@ -70,7 +70,7 @@ export default {
   props: {
     boxTitle: {
       type: Array,
-      // default: () => [this.$tc('common.Selection'), this.$tc('common.Selected')]
+      // default: () => [this.$tc('Selection'), this.$tc('Selected')]
       default: () => ['', '']
     },
     pageSize: {
@@ -92,12 +92,12 @@ export default {
     filterPlaceholder: {
       type: Array,
       default: () => ['', '']
-      // default: () => [this.$tc('common.Search'), this.$tc('common.Search')]
+      // default: () => [this.$tc('Search'), this.$tc('Search')]
     },
     pageTexts: {
       type: Array,
       default: () => ['', '']
-      // default: () => ['< ' + this.$tc('common.PagePrev'), this.$tc('common.PageNext') + ' >']
+      // default: () => ['< ' + this.$tc('PagePrev'), this.$tc('PageNext') + ' >']
     },
     sort: {
       type: Boolean,

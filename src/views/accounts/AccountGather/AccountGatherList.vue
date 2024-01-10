@@ -46,7 +46,7 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            label: vm.$t('assets.Asset'),
+            label: vm.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -78,11 +78,11 @@ export default {
             formatterArgs: {
               hasClone: false,
               hasUpdate: false, // can set function(row, value)
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'Sync',
-                  title: this.$t('accounts.Sync'),
+                  title: this.$t('Sync'),
                   can: this.$hasPerm('accounts.add_gatheredaccount') && !this.$store.getters.currentOrgIsRoot,
                   type: 'primary',
                   callback: ({ row }) => {
@@ -90,14 +90,14 @@ export default {
                       `/api/v1/accounts/gathered-accounts/sync-accounts/`,
                       { gathered_account_ids: [row.id] }
                     ).then(res => {
-                      this.$message.success(this.$tc('common.SyncSuccessMsg'))
+                      this.$message.success(this.$tc('SyncSuccessMsg'))
                     }).catch(() => {
                     })
                   }
                 },
                 {
                   name: 'SyncDelete',
-                  title: this.$t('accounts.SyncDelete'),
+                  title: this.$t('SyncDelete'),
                   can: this.$hasPerm('accounts.remove_account') && !this.$store.getters.currentOrgIsRoot,
                   type: 'danger',
                   callback: ({ row }) => {
@@ -124,7 +124,7 @@ export default {
         extraMoreActions: [
           {
             name: 'SyncSelected',
-            title: this.$t('common.SyncSelected'),
+            title: this.$t('SyncSelected'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
@@ -138,15 +138,15 @@ export default {
                 `/api/v1/accounts/gathered-accounts/sync-accounts/`,
                 { gathered_account_ids: ids }
               ).then(() => {
-                this.$message.success(this.$tc('common.SyncSuccessMsg'))
+                this.$message.success(this.$tc('SyncSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkSyncErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BulkSyncErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
             name: 'BulkSyncDelete',
-            title: this.$t('accounts.BulkSyncDelete'),
+            title: this.$t('BulkSyncDelete'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {

@@ -21,7 +21,7 @@
         <div class="action">
           <el-tooltip
             v-if="isSystemError && isLoading"
-            :content="$tc('common.Reconnect')"
+            :content="$tc('Reconnect')"
             effect="dark"
             placement="top"
           >
@@ -69,7 +69,7 @@ export default {
       dropdownOptions: [
         {
           action: 'copy',
-          label: this.$t('common.Copy')
+          label: this.$t('Copy')
         }
       ]
     }

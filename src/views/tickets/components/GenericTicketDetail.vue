@@ -1,16 +1,16 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="17" :sm="24">
-      <Details :detail-card-items="iDetailCardItems" :title="$tc('common.BasicInfo')" />
+      <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"
         :detail-card-items="specialCardItems"
-        :title="$tc('common.ApplyInfo')"
+        :title="$tc('ApplyInfo')"
       />
       <Details
         v-if="object.state.value === 'approved' && assignedCardItems.length > 0"
         :detail-card-items="assignedCardItems"
-        :title="$tc('tickets.AssignedInfo')"
+        :title="$tc('AssignedInfo')"
       />
       <slot id="MoreDetails" />
       <Comments :object="object" v-bind="$attrs" />
@@ -68,11 +68,11 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$tc('common.Number'),
+          key: this.$tc('Number'),
           value: object['serial_num']
         },
         {
-          key: this.$tc('tickets.status'),
+          key: this.$tc('Status'),
           value: object.state.value,
           formatter: (item, val) => {
             const tp = this.statusMap[val]
@@ -80,23 +80,23 @@ export default {
           }
         },
         {
-          key: this.$tc('tickets.type'),
+          key: this.$tc('Type'),
           value: object.type.label
         },
         {
-          key: this.$tc('tickets.user'),
+          key: this.$tc('User'),
           value: object.rel_snapshot.applicant
         },
         {
-          key: this.$tc('tickets.OrgName'),
+          key: this.$tc('OrgName'),
           value: object.org_name
         },
         {
-          key: this.$tc('common.DateCreated'),
+          key: this.$tc('DateCreated'),
           value: object.date_created
         },
         {
-          key: this.$tc('common.Comment'),
+          key: this.$tc('Comment'),
           value: object.comment
         }
       ]

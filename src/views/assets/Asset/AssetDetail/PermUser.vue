@@ -63,7 +63,7 @@ export default {
             width: '120px'
           },
           total_role_display: {
-            label: this.$t('users.Role')
+            label: this.$t('Role')
           },
           mfa_enabled: {
             label: 'MFA',
@@ -91,7 +91,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: vm.$t('assets.ViewPerm'),
+                  title: vm.$t('ViewPerm'),
                   name: 'view',
                   type: 'primary',
                   callback: function(data) {
@@ -111,17 +111,17 @@ export default {
       },
       UserGroupCardConfig: {
         icon: 'fa-users',
-        title: this.$t('perms.UserGroups'),
+        title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
         detailRoute: 'UserGroupDetail',
-        buttonTitle: this.$t('assets.ViewPerm'),
+        buttonTitle: this.$t('ViewPerm'),
         buttonClickCallback(obj) {
           vm.GenericListTableDialogConfig.visible = true
           vm.GenericListTableDialogConfig.tableConfig.url = `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/${obj.id}/permissions/`
         }
       },
       GenericListTableDialogConfig: {
-        title: this.$t('perms.Permissions'),
+        title: this.$t('Permissions'),
         visible: false,
         width: '60%',
         tableConfig: {
@@ -143,7 +143,7 @@ export default {
               }
             },
             users_amount: {
-              label: this.$t('perms.User'),
+              label: this.$t('User'),
               width: '60px',
               formatter: DetailFormatter,
               formatterArgs: {
@@ -154,7 +154,7 @@ export default {
               }
             },
             user_groups_amount: {
-              label: this.$t('perms.UserGroups'),
+              label: this.$t('UserGroups'),
               width: '100px',
               formatter: DetailFormatter,
               formatterArgs: {
@@ -165,7 +165,7 @@ export default {
               }
             },
             assets_amount: {
-              label: this.$t('perms.Asset'),
+              label: this.$t('Asset'),
               width: '60px',
               formatter: DetailFormatter,
               formatterArgs: {

@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       cardConfig: {
-        title: this.$t('common.RecentLogin')
+        title: this.$t('RecentLogin')
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',

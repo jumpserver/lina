@@ -99,12 +99,12 @@ export default {
                 {
                   name: 'TestConnection',
                   can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
-                  title: this.$t('assets.TestConnection'),
+                  title: this.$t('TestConnection'),
                   callback: function(val) {
                     this.visible = true
                     const port = val.row.protocols.find(item => item.name === 'ssh').port
                     if (!port) {
-                      return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                      return this.$message.error(this.$tc('BadRequestErrorMsg'))
                     } else {
                       this.port = port
                       this.cell = val.row.id

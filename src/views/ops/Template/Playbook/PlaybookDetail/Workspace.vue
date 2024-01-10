@@ -4,16 +4,16 @@
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="rMenu">
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
-          {{ $tc('ops.NewFile') }}
+          {{ $tc('NewFile') }}
         </li>
         <li id="m_create_directory" class="rmenu" tabindex="-1" @click="onCreate('directory')">
-          {{ $tc('ops.NewDirectory') }}
+          {{ $tc('NewDirectory') }}
         </li>
         <li id="m_rename" class="rmenu" tabindex="-1" @click="onRename">
-          {{ $tc('ops.Rename') }}
+          {{ $tc('Rename') }}
         </li>
         <li id="m_delete" class="rmenu" tabindex="-1" @click="onDelete">
-          {{ $tc('ops.Delete') }}
+          {{ $tc('Delete') }}
         </li>
       </template>
       <template slot="table">
@@ -78,7 +78,7 @@ export default {
             type: 'button',
             align: 'left',
             icon: 'fa fa-save',
-            tip: this.$tc('ops.Save'),
+            tip: this.$tc('Save'),
             el: {
               type: 'primary'
             },
@@ -90,7 +90,7 @@ export default {
             type: 'button',
             align: 'left',
             icon: 'fa fa-undo',
-            tip: this.$tc('ops.Reset'),
+            tip: this.$tc('Reset'),
             el: {
               type: 'primary'
             },
@@ -180,7 +180,7 @@ export default {
         if (this.closing) {
           this.remoteTab(editor.key)
         }
-        this.$message.success(this.$tc('ops.SaveSuccess'))
+        this.$message.success(this.$tc('SaveSuccess'))
       })
     },
     onCreate(type) {
@@ -209,9 +209,9 @@ export default {
       if (!node) {
         return
       }
-      this.$confirm(this.$tc('ops.DeleteConfirmMessage'), this.$tc('ops.Delete'), {
-        confirmButtonText: this.$tc('ops.Confirm'),
-        cancelButtonText: this.$tc('ops.Cancel'),
+      this.$confirm(this.$tc('DeleteConfirmMessage'), this.$tc('Delete'), {
+        confirmButtonText: this.$tc('Confirm'),
+        cancelButtonText: this.$tc('Cancel'),
         type: 'warning'
       }).then(() => {
         this.$axios.delete(`/api/v1/ops/playbook/${this.object.id}/file/?key=${node.id}`).then(() => {
@@ -221,7 +221,7 @@ export default {
           this.refreshTree()
           this.$message({
             type: 'success',
-            message: this.$tc('ops.DeleteSuccess')
+            message: this.$tc('DeleteSuccess')
           })
         })
       })
@@ -244,14 +244,14 @@ export default {
       const editor = this.openedEditor[key]
       let text = ''
       if (this.hasChange(editor)) {
-        text = this.$tc('ops.CloseConfirmMessage')
+        text = this.$tc('CloseConfirmMessage')
       } else {
         this.remoteTab(key)
         return
       }
-      this.$confirm(text, this.$tc('ops.CloseConfirm'), {
-        confirmButtonText: this.$tc('ops.Confirm'),
-        cancelButtonText: this.$tc('ops.Cancel'),
+      this.$confirm(text, this.$tc('CloseConfirm'), {
+        confirmButtonText: this.$tc('Confirm'),
+        cancelButtonText: this.$tc('Cancel'),
         type: 'warning'
       }).then(() => {
         this.closing = true

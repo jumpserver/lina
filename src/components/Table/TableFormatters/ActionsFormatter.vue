@@ -51,13 +51,13 @@ const defaultCloneCallback = function({ row, col }) {
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  let msg = this.$t('common.deleteWarningMsg')
+  let msg = this.$t('DeleteWarningMsg')
   const name = row.name || row.hostname
   if (name) {
     msg += ` "${name}" `
   }
   msg += ' ?'
-  const title = this.$t('common.Info')
+  const title = this.$t('Info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
     type: 'warning',
@@ -70,7 +70,7 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -111,7 +111,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$t('common.Update'),
+        title: this.$t('Update'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -120,7 +120,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$t('common.Delete'),
+        title: this.$t('Delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
@@ -129,7 +129,7 @@ export default {
       },
       {
         name: 'clone',
-        title: this.$t('common.Clone'),
+        title: this.$t('Clone'),
         type: 'info',
         has: colActions.hasClone,
         can: colActions.canClone,
@@ -141,7 +141,7 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: colActions.moreActionsTitle || this.$t('common.More')
+      moreActionsTitle: colActions.moreActionsTitle || this.$t('More')
     }
   },
   computed: {

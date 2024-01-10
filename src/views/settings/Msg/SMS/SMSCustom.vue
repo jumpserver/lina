@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.Custom')" />
+  <BaseSMS ref="baseSms" :config="$data" :title="$tc('Custom')" />
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
       visible: false,
       moreButtons: [
         {
-          title: this.$t('common.Test'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             btn.loading = true
@@ -37,13 +37,13 @@ export default {
       ],
       fields: [
         [
-          this.$t('common.BasicInfo'),
+          this.$t('BasicInfo'),
           [
             'CUSTOM_SMS_URL', 'CUSTOM_SMS_REQUEST_METHOD', 'CUSTOM_SMS_API_PARAMS'
           ]
         ],
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'SMS_TEST_PHONE'
           ]
@@ -51,9 +51,9 @@ export default {
       ],
       fieldsMeta: {
         'CUSTOM_SMS_API_PARAMS': {
-          label: this.$t('common.Params'),
+          label: this.$t('Params'),
           component: JsonEditor,
-          helpText: this.$t('setting.helpTip.CustomParams')
+          helpText: this.$t('CustomParams')
         },
         SMS_TEST_PHONE: {
           component: PhoneInput

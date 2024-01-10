@@ -23,9 +23,9 @@ export default {
           scope: scope
         },
         fields: [
-          [this.$t('common.Basic'), ['name', 'scope']],
-          [this.$t('perms.Permissions'), ['permissions']],
-          [this.$t('common.Other'), ['comment']]
+          [this.$t('Basic'), ['name', 'scope']],
+          [this.$t('Permissions'), ['permissions']],
+          [this.$t('Other'), ['comment']]
         ],
         fieldsMeta: {
           scope: {
@@ -35,7 +35,7 @@ export default {
           permissions: {
             component: TextReadonly,
             el: {
-              text: this.$t('users.HelpText.addRolePermissions'),
+              text: this.$t('AddRolePermissions'),
               bolder: false
             }
           }

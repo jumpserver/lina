@@ -22,7 +22,7 @@
         round
         size="small"
         @click="onStopHandle"
-      >{{ $tc('common.Stop') }}</el-button>
+      >{{ $tc('Stop') }}</el-button>
       <ChatInput ref="chatInput" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
     </div>
   </div>
@@ -61,12 +61,12 @@ export default {
       showIntroduction: false,
       introduction: [
         {
-          title: this.$t('common.introduction.ConceptTitle'),
-          content: this.$t('common.introduction.ConceptContent')
+          title: this.$t('ConceptTitle'),
+          content: this.$t('ConceptContent')
         },
         {
-          title: this.$t('common.introduction.IdeaTitle'),
-          content: this.$t('common.introduction.IdeaContent')
+          title: this.$t('IdeaTitle'),
+          content: this.$t('IdeaContent')
         }
       ]
     }
@@ -102,7 +102,7 @@ export default {
       this.$refs.chatInput.select.value = ''
       const chat = {
         message: {
-          content: this.$t('common.ChatHello'),
+          content: this.$t('ChatHello'),
           role: 'assistant',
           create_time: new Date()
         }
@@ -164,7 +164,7 @@ export default {
       } else {
         const chat = {
           message: {
-            content: this.$t('common.ConnectionDropped'),
+            content: this.$t('ConnectionDropped'),
             role: 'assistant',
             create_time: new Date()
           },

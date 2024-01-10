@@ -2,66 +2,66 @@
   <IBox v-if="session.id" v-loading="loading" class="box">
     <div slot="header" class="clearfix ibox-title">
       <i class="fa fa-rocket" />
-      {{ $t('sessions.session') }}
+      {{ $t('Session') }}
     </div>
     <div class="content">
       <el-row class="item">
         <el-col>
-          <span class="item-label">{{ $t('sessions.SessionID') }}：</span>
+          <span class="item-label">{{ $t('SessionID') }}：</span>
           <span class="item-value">{{ session.id }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.TargetResources') }}：</span>
+          <span class="item-label">{{ $t('TargetResources') }}：</span>
           <span class="item-value">{{ session.asset }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('assets.Account') }}：</span>
+          <span class="item-label">{{ $t('Account') }}：</span>
           <span class="item-value">{{ session.account }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.UseProtocol') }}：</span>
+          <span class="item-label">{{ $t('UseProtocol') }}：</span>
           <span class="item-value">{{ session.protocol }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.remoteAddr') }}：</span>
+          <span class="item-label">{{ $t('RemoteAddr') }}：</span>
           <span class="item-value">{{ session.remote_addr }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.SessionState') }}：</span>
-          <span class="item-value cur-color" :style="{ 'background': session.is_finished ? '#ed5565' : '#1ab394' }" />
+          <span class="item-label">{{ $t('SessionState') }}：</span>
+          <span :style="{ 'background': session.is_finished ? '#ed5565' : '#1ab394' }" class="item-value cur-color" />
         </el-col>
       </el-row>
     </div>
     <el-divider />
     <div class="bottom-btn">
       <el-button
-        type="danger"
-        size="small"
         :disabled="!session.can_terminate"
+        size="small"
+        type="danger"
         @click="onConnect"
       >
-        {{ $t('sessions.terminate') }}
+        {{ $t('Terminate') }}
       </el-button>
       <el-button
-        type="warning"
-        size="small"
         :disabled="!supportedLock"
+        size="small"
+        type="warning"
         @click="onToggleLock"
       >
         <template v-if="session.is_locked">
-          {{ $t('sessions.resume') }}
+          {{ $t('Resume') }}
         </template>
         <template v-else>
-          {{ $t('sessions.pause') }}
+          {{ $t('Pause') }}
         </template>
       </el-button>
       <el-button
-        type="primary"
-        size="small"
         :disabled="!session.can_join"
+        size="small"
+        type="primary"
         @click="onMonitor"
       >
-        {{ $t('sessions.Monitor') }}
+        {{ $t('Monitor') }}
       </el-button>
     </div>
   </IBox>
@@ -124,7 +124,7 @@ export default {
       const url = '/api/v1/terminal/tasks/kill-session-for-ticket/'
       const data = [this.session.id] || []
       this.$axios.post(url, data).then(res => {
-        this.$message.success(this.$tc('sessions.TerminateTaskSendSuccessMsg'))
+        this.$message.success(this.$tc('TerminateTaskSendSuccessMsg'))
         this.curTimer = setTimeout(() => {
           this.init()
         }, 50000)
@@ -143,8 +143,8 @@ export default {
         'session_id': this.session.id,
         'task_name': task_name
       }
-      const resumeMsg = this.$tc('sessions.ResumeTaskSendSuccessMsg')
-      const pauseMsg = this.$tc('sessions.PauseTaskSendSuccessMsg')
+      const resumeMsg = this.$tc('ResumeTaskSendSuccessMsg')
+      const pauseMsg = this.$tc('PauseTaskSendSuccessMsg')
       const msg = this.session.is_locked ? resumeMsg : pauseMsg
       this.$axios.post(url, data).then(res => {
         this.$message.success(msg)

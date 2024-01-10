@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('acl.UserLoginACLHelpMsg')
+      helpMsg: this.$t('UserLoginACLHelpMsg')
     }
   }
 }

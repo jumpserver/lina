@@ -5,7 +5,7 @@
         <el-input
           v-if="treeSetting.showSearch && showTreeSearch"
           v-model="treeSearchValue"
-          :placeholder="$tc('common.Search')"
+          :placeholder="$tc('Search')"
           class="fixed-tree-search"
           prefix-icon="fa fa-search"
           size="mini"
@@ -23,11 +23,11 @@
         </el-input>
       </div>
       <ul v-show="loading" class="ztree">
-        {{ this.$t('common.tree.Loading') }}...
+        {{ this.$t('Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
       <div v-if="treeSetting.treeUrl===''" class="tree-empty">
-        {{ this.$t('common.tree.Empty') }}
+        {{ this.$t('Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
@@ -120,7 +120,7 @@ export default {
       if (!res) res = []
       if (res?.length === 0) {
         res?.push({
-          name: this.$t('common.tree.Empty')
+          name: this.$t('Empty')
         })
       }
       this.treeSetting.treeUrl = treeUrl
@@ -265,7 +265,7 @@ export default {
       })
 
       if (matchedNodes.length < 1) {
-        let name = this.$t('common.Search')
+        let name = this.$t('Search')
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: false, open: false }
@@ -313,7 +313,7 @@ export default {
       }
       const searchUrl = `${treeUrl}${filterField}`
       this.$axios.get(searchUrl).then(nodes => {
-        let name = this.$t('common.Search')
+        let name = this.$t('Search')
         const assetsAmount = nodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }

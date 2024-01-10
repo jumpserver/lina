@@ -37,34 +37,34 @@ export default {
           },
           queue: {
             width: '120px',
-            label: this.$t('ops.Queue'),
+            label: this.$t('Queue'),
             formatter: (row) => {
               return row.meta.queue
             }
           },
           comment: {
             width: '300px',
-            label: this.$t('common.Comment'),
+            label: this.$t('Comment'),
             formatter: row => {
               return row.meta.comment ? row.meta.comment : '-'
             }
           },
           last_published_time: {
-            label: this.$t('ops.LastPublishedTime'),
+            label: this.$t('LastPublishedTime'),
             width: '210px',
             formatter: (row) => {
               return row.last_published_time != null ? row.last_published_time : '-'
             }
           },
           exec_cycle: {
-            label: this.$t('ops.ExecuteCycle'),
+            label: this.$t('ExecuteCycle'),
             width: '120px',
             formatter: (row) => {
               return row.exec_cycle ? row.exec_cycle : '-'
             }
           },
           next_exec_time: {
-            label: this.$t('ops.ExpectedNextExecuteTime'),
+            label: this.$t('ExpectedNextExecuteTime'),
             width: '210px',
             formatter: (row) => {
               return row.next_exec_time ? row.next_exec_time : '-'
@@ -72,7 +72,7 @@ export default {
           },
           count: {
             width: '80px',
-            label: `${this.$t('ops.success')}/${this.$t('ops.total')}`,
+            label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
                 <span Class='text-primary'>{row.summary.success}</span>/
@@ -81,7 +81,7 @@ export default {
             }
           },
           state: {
-            label: this.$t('ops.State'),
+            label: this.$t('State'),
             width: '60px',
             align: 'center',
             formatter: ChoicesFormatter,
@@ -99,11 +99,11 @@ export default {
               getTips: ({ cellValue }) => {
                 switch (cellValue) {
                   case 'green':
-                    return this.$t('ops.StatusGreen')
+                    return this.$t('StatusGreen')
                   case 'yellow':
-                    return this.$t('ops.StatusYellow')
+                    return this.$t('StatusYellow')
                   default:
-                    return this.$t('ops.StatusRed')
+                    return this.$t('StatusRed')
                 }
               }
             }
@@ -115,7 +115,7 @@ export default {
         hasMoreActions: false,
         extraActions: [
           {
-            title: this.$t('route.TaskMonitor'),
+            title: this.$t('TaskMonitor'),
             type: 'primary',
             callback: () => {
               window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)

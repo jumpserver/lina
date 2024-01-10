@@ -39,11 +39,11 @@ export default {
       encryptedFields: ['old_password', 'new_password', 'new_password_again'],
       fieldsMeta: {
         old_password: {
-          label: this.$t('users.OldPassword'),
+          label: this.$t('OldPassword'),
           component: PasswordInput
         },
         new_password: {
-          label: this.$t('users.NewPassword'),
+          label: this.$t('NewPassword'),
           rules: [rules.RequiredChange],
           component: UserPassword,
           el: {
@@ -51,7 +51,7 @@ export default {
           }
         },
         new_password_again: {
-          label: this.$t('users.ConfirmPassword'),
+          label: this.$t('ConfirmPassword'),
           component: PasswordInput
         }
       },

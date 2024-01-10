@@ -5,17 +5,17 @@
     :title="title"
     :visible.sync="iVisible"
     class="help-dialog"
-    width="50%"
     top="1vh"
+    width="50%"
   >
-    <p>{{ $t('ops.VariableHelpText') }}</p>
-    <table class="help-table" border="1">
+    <p>{{ $t('VariableHelpText') }}</p>
+    <table border="1" class="help-table">
       <tr>
-        <th>{{ $tc('ops.Variable') }}</th>
-        <th>{{ $tc('ops.Description') }}</th>
+        <th>{{ $tc('Variable') }}</th>
+        <th>{{ $tc('Description') }}</th>
       </tr>
       <tr v-for="(val, key, index) in variables" :key="index">
-        <td class="item-td text-link" :title="$tc('common.ClickCopy')" @click="onCopy(key)">
+        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
           <label class="item-label">{{ key }}</label>
         </td>
         <td><span>{{ val }}</span></td>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('ops.BuiltinVariable'),
+      title: this.$t('BuiltinVariable'),
       variables: {}
     }
   },

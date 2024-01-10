@@ -5,9 +5,9 @@
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
 import {
-  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
-  ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, zstack,
-  qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack
+  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
+  baiducloud, ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
+  qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, zstack
 } from '../const'
 
 export default {
@@ -50,11 +50,11 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  title: this.$t('assets.TestConnection'),
+                  title: this.$t('TestConnection'),
                   can: () => vm.$hasPerm('xpack.test_account'),
                   callback: function(val) {
                     this.$axios.get(`/api/v1/xpack/cloud/accounts/${val.row.id}/test-connective/`).then(res => {
-                      this.$message.success(this.$tc('common.TestSuccessMsg'))
+                      this.$message.success(this.$tc('TestSuccessMsg'))
                     })
                   }
                 }
@@ -79,7 +79,7 @@ export default {
               name: aliyun,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title,
               type: 'primary',
-              group: this.$t('common.PublicCloud'),
+              group: this.$t('PublicCloud'),
               can: true
             },
             {
@@ -134,7 +134,7 @@ export default {
             },
             {
               name: vmware,
-              group: this.$t('common.PrivateCloud'),
+              group: this.$t('PrivateCloud'),
               title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
             },
             {

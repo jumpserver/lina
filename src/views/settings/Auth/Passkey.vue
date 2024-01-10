@@ -21,7 +21,7 @@ export default {
         hasDetailInMsg: false,
         fields: [
           [
-            this.$t('common.BasicInfo'),
+            this.$t('BasicInfo'),
             [
               'AUTH_PASSKEY', 'FIDO_SERVER_ID', 'FIDO_SERVER_NAME'
             ]

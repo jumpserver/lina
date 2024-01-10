@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="execution" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="execution" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="execution" />
     </keep-alive>
@@ -27,7 +27,7 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'Info'
           }
         ],

@@ -9,26 +9,26 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="profile">
           <svg-icon class="icon" icon-class="attestation" />
-          {{ $t('common.nav.Profile') }}
+          {{ $t('Profile') }}
         </el-dropdown-item>
         <el-dropdown-item command="UserSetting">
           <svg-icon class="icon" icon-class="preference" />
-          {{ $t('users.UserSetting') }}
+          {{ $t('UserSetting') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
           <svg-icon class="icon" icon-class="key" />
-          {{ $t('common.nav.APIKey') }}
+          {{ $t('APIKey') }}
         </el-dropdown-item>
         <el-dropdown-item
           v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')"
           command="tempPassword"
         >
           <svg-icon class="icon" icon-class="unlock-one" />
-          {{ $t('common.nav.TempPassword') }}
+          {{ $t('TempPassword') }}
         </el-dropdown-item>
         <el-dropdown-item command="logout" divided>
           <svg-icon class="icon" icon-class="logout" />
-          {{ $t('common.nav.Logout') }}
+          {{ $t('Logout') }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>

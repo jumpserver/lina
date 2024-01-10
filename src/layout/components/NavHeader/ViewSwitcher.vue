@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      tipText: this.$t('common.ChangeViewHelpText'),
+      tipText: this.$t('ChangeViewHelpText'),
       showTip: true
     }
   },

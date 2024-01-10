@@ -109,7 +109,7 @@ export default {
         case 'actions':
           col = {
             prop: 'actions',
-            label: i18n.t('common.Actions'),
+            label: i18n.t('Actions'),
             align: 'center',
             width: '150px',
             formatter: ActionsFormatter,
@@ -117,12 +117,12 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = i18n.t('common.Validity')
+          col.label = i18n.t('Validity')
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
-              true: i18n.t('common.Yes'),
-              false: i18n.t('common.No')
+              true: i18n.t('Yes'),
+              false: i18n.t('No')
             }
           }
           col.width = '80px'
@@ -131,8 +131,8 @@ export default {
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
-              true: i18n.t('common.Active'),
-              false: i18n.t('common.Inactive')
+              true: i18n.t('Active'),
+              false: i18n.t('Inactive')
             }
           }
           col.width = '80px'
@@ -213,8 +213,8 @@ export default {
         }
         if (column.type === 'boolean') {
           col.filters = [
-            { text: i18n.t('common.Yes'), value: true },
-            { text: i18n.t('common.No'), value: false }
+            { text: i18n.t('Yes'), value: true },
+            { text: i18n.t('No'), value: false }
           ]
           col.sortable = false
           col['column-key'] = col.prop
@@ -274,6 +274,7 @@ export default {
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
+      col.label = col.label.toUpperCase()
       return col
     },
     generateTotalColumns() {

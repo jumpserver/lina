@@ -3,13 +3,13 @@
   <el-form size="small">
     <el-form-item>
       <el-radio v-model="radioValue" :label="1">
-        {{ this.$t('common.CronTab.week') }}，{{ this.$t('common.CronTab.wildcardsAllowed') }}[, - * /]
+        {{ this.$t('Week') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
-        {{ this.$t('common.CronTab.cycleFromWeek') }}
+        {{ this.$t('CycleFromWeek') }}
         <el-input-number v-model="cycle01" :max="7" :min="1" size="mini" /> -
         <el-input-number v-model="cycle02" :max="7" :min="1" size="mini" />
       </el-radio>
@@ -17,10 +17,10 @@
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="6">
-        {{ this.$t('common.CronTab.appoint') }}
+        {{ this.$t('Appoint') }}
         <el-select
           v-model="checkboxList"
-          :placeholder="$tc('common.CronTab.manyChoose')"
+          :placeholder="$tc('ManyChoose')"
           clearable
           multiple
           style="width:100%"
@@ -60,7 +60,7 @@ export default {
       average01: 1,
       average02: 1,
       checkboxList: [],
-      weekList: [this.$t('common.CronTab.Monday'), this.$t('common.CronTab.Tuesday'), this.$t('common.CronTab.Wednesday'), this.$t('common.CronTab.Thursday'), this.$t('common.CronTab.Friday'), this.$t('common.CronTab.Saturday'), this.$t('common.CronTab.Sunday')],
+      weekList: [this.$t('Monday'), this.$t('Tuesday'), this.$t('Wednesday'), this.$t('Thursday'), this.$t('Friday'), this.$t('Saturday'), this.$t('Sunday')],
       checkNum: this.$options.propsData.check
     }
   },

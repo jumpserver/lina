@@ -2,22 +2,22 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip :content="$tc('route.SiteMessageList')" effect="dark">
+        <el-tooltip :content="$tc('SiteMessageList')" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip :content="$tc('route.WebTerminal')" effect="dark">
+        <el-tooltip :content="$tc('WebTerminal')" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip :content="$tc('route.Ticket')" effect="dark">
+        <el-tooltip :content="$tc('Ticket')" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip :content="$tc('route.SystemSetting')" effect="dark">
+        <el-tooltip :content="$tc('SystemSetting')" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
@@ -57,6 +57,7 @@ import Organization from './Organization'
 import SystemSetting from './SystemSetting'
 import Logo from '../NavLeft/Logo'
 import Language from './Language'
+
 export default {
   components: {
     Hamburger,

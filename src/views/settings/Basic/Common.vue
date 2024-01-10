@@ -25,11 +25,11 @@ export default {
     return {
       fields: [
         [
-          this.$t('common.BasicInfo'), [
+          this.$t('BasicInfo'), [
             'SITE_URL' // 'USER_GUIDE_URL',
           ]
         ],
-        [this.$t('xpack.NavHelp'), [
+        [this.$t('NavHelp'), [
           'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL'
         ]]
       ],
@@ -39,12 +39,12 @@ export default {
         },
 
         HELP_DOCUMENT_URL: {
-          label: this.$t('xpack.helpDocument'),
-          helpText: this.$t('xpack.helpDocumentTip')
+          label: this.$t('HelpDocument'),
+          helpText: this.$t('HelpDocumentTip')
         },
         HELP_SUPPORT_URL: {
-          label: this.$t('xpack.helpSupport'),
-          helpText: this.$t('xpack.helpSupportTip')
+          label: this.$t('HelpSupport'),
+          helpText: this.$t('HelpSupportTip')
         }
       },
       successUrl: { name: 'Basic' },

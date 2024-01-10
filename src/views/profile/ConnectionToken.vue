@@ -19,7 +19,7 @@ export default {
   data() {
     const ajaxUrl = '/api/v1/authentication/connection-token/'
     return {
-      helpMessage: this.$t('setting.helpText.ConnectionTokenList'),
+      helpMessage: this.$t('ConnectionTokenList'),
       tableConfig: {
         url: ajaxUrl,
         columnsExtra: ['action'],
@@ -35,7 +35,7 @@ export default {
             formatter: ShowKeyCopyFormatter
           },
           action: {
-            label: this.$t('common.Action'),
+            label: this.$t('Action'),
             formatter: function(row) {
               return row.actions.map(item => {
                 return item.label
@@ -50,16 +50,16 @@ export default {
               extraActions: [
                 {
                   name: 'Expired',
-                  title: this.$t('setting.Expire'),
+                  title: this.$t('Expire'),
                   type: 'info',
                   can: ({ row }) => !row['is_expired'] && this.$hasPerm('authentication.expire_connectiontoken'),
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
                       this.reloadTable()
-                      this.$message.success(this.$tc('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
                     })
                   }.bind(this)
                 }

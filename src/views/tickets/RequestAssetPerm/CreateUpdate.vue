@@ -1,9 +1,9 @@
 <template>
   <GenericCreateUpdatePage
     v-if="!loading"
-    v-bind="$data"
-    :perform-submit="performSubmit"
     :create-success-next-route="createSuccessNextRoute"
+    :perform-submit="performSubmit"
+    v-bind="$data"
   />
 </template>
 
@@ -36,15 +36,15 @@ export default {
         apply_date_start: date_start,
         apply_assets: [],
         org_id: '',
-        apply_actions: [this.$t('perms.all')]
+        apply_actions: [this.$t('All')]
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'org_id']],
-        [this.$t('tickets.RequestPerm'), [
+        [this.$t('Basic'), ['title', 'org_id']],
+        [this.$t('RequestPerm'), [
           'apply_nodes', 'apply_assets', 'apply_accounts',
           'apply_actions', 'apply_date_start', 'apply_date_expired'
         ]],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         title: {
@@ -59,11 +59,11 @@ export default {
           }
         },
         apply_actions: {
-          label: this.$t('perms.Actions'),
-          helpText: this.$t('common.actionsTips')
+          label: this.$t('Actions'),
+          helpText: this.$t('ActionsTips')
         },
         apply_nodes: {
-          label: this.$t('perms.Node'),
+          label: this.$t('Node'),
           component: Select2,
           el: {
             value: [],
@@ -78,7 +78,7 @@ export default {
         },
         apply_assets: {
           type: 'assetSelect',
-          label: this.$t('perms.Asset'),
+          label: this.$t('Asset'),
           component: Select2,
           el: {
             value: [],
@@ -130,7 +130,7 @@ export default {
       cleanFormValue(value) {
         const apply_actions = value['apply_actions'] || []
         apply_actions.forEach((item, index) => {
-          if (item === this.$t('perms.all')) {
+          if (item === this.$t('All')) {
             apply_actions[index] = 'all'
           }
         })

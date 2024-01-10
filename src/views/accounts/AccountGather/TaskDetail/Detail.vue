@@ -27,15 +27,15 @@ export default {
       detailFields: [
         'id', 'name', 'is_periodic',
         {
-          key: this.$t('xpack.Cloud.RegularlyPerform'),
+          key: this.$t('RegularlyPerform'),
           value: this.object?.periodic_display || ''
         },
         {
-          key: this.$t('xpack.Cloud.DateLastSync'),
+          key: this.$t('DateLastSync'),
           value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
         },
         {
-          key: this.$t('xpack.Cloud.DateCreated'),
+          key: this.$t('DateCreated'),
           value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : ''
         },
         'comment'

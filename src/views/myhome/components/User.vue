@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
-      <span>{{ $t('common.nav.Profile') }}</span>
+      <span>{{ $t('Profile') }}</span>
     </div>
     <div class="content">
       <el-row :gutter="20">
@@ -10,10 +10,10 @@
         </el-col>
         <el-col :span="18">
           <ul>
-            <li><span class="title">{{ $t('audits.Username') }}</span>：<span>{{ users.name }}</span></li>
-            <li><span class="title">{{ $t('users.Email') }}</span>：<span>{{ users.email }}</span></li>
+            <li><span class="title">{{ $t('Username') }}</span>：<span>{{ users.name }}</span></li>
+            <li><span class="title">{{ $t('Email') }}</span>：<span>{{ users.email }}</span></li>
             <li>
-              <span class="title">{{ $t('audits.LoginDate') }}</span>：
+              <span class="title">{{ $t('LoginDate') }}</span>：
               <span>{{ users.last_login | date }}</span>
             </li>
           </ul>

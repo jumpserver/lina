@@ -12,35 +12,35 @@ export const CLIPBOARD_COPY_PASTE = 'clipboard_copy_paste'
 export const ACTIONS_FIELDS_MAP = {
   [ALL]: {
     name: ALL,
-    action: i18n.t('perms.all')
+    action: i18n.t('all')
   },
   [CONNECT]: {
     name: CONNECT,
-    action: i18n.t('perms.connect')
+    action: i18n.t('connect')
   },
   [UPLOAD_FILE]: {
     name: UPLOAD_FILE,
-    action: i18n.t('perms.uploadFile')
+    action: i18n.t('uploadFile')
   },
   [DOWNLOAD_FILE]: {
     name: DOWNLOAD_FILE,
-    action: i18n.t('perms.downloadFile')
+    action: i18n.t('downloadFile')
   },
   [UNDOWNLOAD]: {
     name: UNDOWNLOAD,
-    action: i18n.t('perms.upDownload')
+    action: i18n.t('upDownload')
   },
   [CLIPBOARD_COPY]: {
     name: CLIPBOARD_COPY,
-    action: i18n.t('perms.clipboardCopy')
+    action: i18n.t('clipboardCopy')
   },
   [CLIPBOARD_PASTE]: {
     name: CLIPBOARD_PASTE,
-    action: i18n.t('perms.clipboardPaste')
+    action: i18n.t('clipboardPaste')
   },
   [CLIPBOARD_COPY_PASTE]: {
     name: CLIPBOARD_COPY_PASTE,
-    action: i18n.t('perms.clipboardCopyPaste')
+    action: i18n.t('clipboardCopyPaste')
   }
 }
 

@@ -60,11 +60,11 @@ export default {
               hasUpdate: true,
               hasDelete: true,
               hasClone: this.hasClone,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   can: this.$hasPerm('accounts.view_accounttemplatesecret'),
                   type: 'primary',
                   callback: ({ row }) => {

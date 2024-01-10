@@ -3,15 +3,15 @@ import { CronTab } from '@/components'
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('accounts.ChangeAuthPlan.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
+    return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
 }
 
 function getAccountBackupFields() {
   const recipients_part_one = {
-    label: i18n.t('accounts.AccountChangeSecret.Addressee') + ' A',
-    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
+    label: i18n.t('Addressee') + ' A',
+    helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return formValue.backup_type !== 'email'
     },
@@ -27,8 +27,8 @@ function getAccountBackupFields() {
   }
 
   const recipients_part_two = {
-    label: i18n.t('accounts.AccountChangeSecret.Addressee') + ' B',
-    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
+    label: i18n.t('Addressee') + ' B',
+    helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return !(formValue.backup_type === 'email' && formValue.is_password_divided_by_email)
     },
@@ -43,8 +43,8 @@ function getAccountBackupFields() {
     }
   }
   const obj_recipients_part_one = {
-    label: i18n.t('accounts.AccountBackup.RecipientServer') + ' A',
-    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
+    label: i18n.t('RecipientServer') + ' A',
+    helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return formValue.backup_type !== 'object_storage'
     },
@@ -60,8 +60,8 @@ function getAccountBackupFields() {
   }
 
   const obj_recipients_part_two = {
-    label: i18n.t('accounts.AccountBackup.RecipientServer') + ' B',
-    helpText: i18n.t('accounts.AccountBackup.RecipientHelpText'),
+    label: i18n.t('RecipientServer') + ' B',
+    helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return !(formValue.backup_type === 'object_storage' && formValue.is_password_divided_by_obj_storage)
     },
@@ -83,19 +83,19 @@ function getAccountBackupFields() {
   const crontab = {
     type: 'cronTab',
     component: CronTab,
-    label: i18n.t('xpack.RegularlyPerform'),
+    label: i18n.t('RegularlyPerform'),
     hidden: (formValue) => {
       return formValue.is_periodic === false
     },
-    helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
+    helpText: i18n.t('CrontabOfCreateUpdatePage')
   }
 
   const interval = {
-    label: i18n.t('xpack.CyclePerform'),
+    label: i18n.t('CyclePerform'),
     hidden: (formValue) => {
       return formValue.is_periodic === false
     },
-    helpText: i18n.t('xpack.HelpText.IntervalOfCreateUpdatePage'),
+    helpText: i18n.t('IntervalOfCreateUpdatePage'),
     rules: [
       { validator: validatorInterval }
     ]

@@ -37,7 +37,7 @@ export default {
         excludes: ['actions'],
         columnsMeta: {
           'app.name': {
-            label: this.$t('common.Name'),
+            label: this.$t('Name'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.app.name,
@@ -49,10 +49,10 @@ export default {
             id: ({ row }) => row.app.id
           },
           'app.image_name': {
-            label: this.$t('common.ImageName')
+            label: this.$t('ImageName')
           },
           status: {
-            label: this.$t('applets.PublishStatus'),
+            label: this.$t('PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
                 'pending': 'success',
@@ -65,7 +65,7 @@ export default {
             }
           },
           date_updated: {
-            label: this.$t('ops.date')
+            label: this.$t('Date')
           },
           actions: {
             hidden: true,

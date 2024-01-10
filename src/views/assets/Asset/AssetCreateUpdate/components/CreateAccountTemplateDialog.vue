@@ -2,10 +2,10 @@
   <div>
     <Dialog
       v-if="isVisible"
-      :title="$tc('route.TemplateCreate')"
-      :visible.sync="isVisible"
       :show-cancel="false"
       :show-confirm="false"
+      :title="$tc('TemplateCreate')"
+      :visible.sync="isVisible"
       width="70%"
     >
       <GenericCreateUpdateForm v-bind="formConfig" />

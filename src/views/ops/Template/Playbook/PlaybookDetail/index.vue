@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="PlaybookDetail"
     :active-menu.sync="config.activeMenu"
+    :object.sync="PlaybookDetail"
     v-bind="config"
     v-on="$listeners"
   >
@@ -33,11 +33,11 @@ export default {
         activeMenu: 'PlaybookDetail',
         submenu: [
           {
-            title: this.$t('ops.PlaybookDetail'),
+            title: this.$t('PlaybookDetail'),
             name: 'PlaybookDetail'
           },
           {
-            title: this.$t('ops.Workspace'),
+            title: this.$t('Workspace'),
             name: 'Workspace'
           }
         ],

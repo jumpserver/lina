@@ -11,10 +11,10 @@
       v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
-        <el-form-item :label="$tc('assets.Name')">
+        <el-form-item :label="$tc('Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
-        <el-form-item :label="$tc('assets.Username')">
+        <el-form-item :label="$tc('Username')">
           <span>{{ account['username'] }}</span>
         </el-form-item>
         <el-form-item :label="secretTypeLabel">
@@ -27,16 +27,16 @@
             @input="onShowKeyCopyFormatterChange"
           />
         </el-form-item>
-        <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('assets.sshKeyFingerprint')">
+        <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('SshKeyFingerprint')">
           <span>{{ sshKeyFingerprint }}</span>
         </el-form-item>
-        <el-form-item :label="$tc('common.DateCreated')">
+        <el-form-item :label="$tc('DateCreated')">
           <span>{{ account['date_created'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="$tc('common.DateUpdated')">
+        <el-form-item :label="$tc('DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('accounts.PasswordRecord')">
+        <el-form-item v-if="showPasswordRecord" v-perms="'accounts.view_accountsecret'" :label="$tc('PasswordRecord')">
           <el-link
             :underline="false"
             type="success"
@@ -86,7 +86,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$tc('assets.AccountDetail')
+        return this.$tc('AccountDetail')
       }
     },
     showPasswordRecord: {
@@ -137,7 +137,7 @@ export default {
         secret: encryptPassword(this.modifiedSecret)
       }
       this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, params).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     },
     showSecretDialog() {

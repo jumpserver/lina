@@ -25,6 +25,7 @@
 
 <script>
 import DataCard from '../components/DataCard.vue'
+
 export default {
   components: {
     DataCard
@@ -41,21 +42,21 @@ export default {
 
     return {
       logConfig: {
-        title: this.$t('route.LoginLog'),
-        tip: this.$t('route.LoginLog'),
-        subTitle: this.$t('route.LoginLog') + this.$t('dashboard.Total'),
+        title: this.$t('LoginLog'),
+        tip: this.$t('LoginLog'),
+        subTitle: this.$t('LoginLog') + this.$t('Total'),
         icon: 'log',
         color: themeColor,
-        chartTitle: this.$t('dashboard.LogOfLoginSuccessNum'),
+        chartTitle: this.$t('LogOfLoginSuccessNum'),
         data: []
       },
       assetConfig: {
-        title: this.$t('route.Commands'),
-        tip: this.$t('route.Commands'),
-        subTitle: this.$t('route.Commands') + this.$t('dashboard.Total'),
+        title: this.$t('Commands'),
+        tip: this.$t('Commands'),
+        subTitle: this.$t('Commands') + this.$t('Total'),
         icon: 'session',
         color: '#ED612B',
-        chartTitle: this.$t('dashboard.DangerousCommandNum'),
+        chartTitle: this.$t('DangerousCommandNum'),
         data: []
       }
     }
@@ -79,8 +80,8 @@ export default {
       const LoginSucceeded = data.total_count_user_login_success_logs === 0 ? 0 : ((data.total_count_user_login_success_logs / data.total_count_user_login_logs) * 100).toFixed(0)
       const LoginFailed = LoginSucceeded === 100 ? 0 : 100 - LoginSucceeded
       const logs = [
-        { name: this.$t('dashboard.LoginSucceeded'), value: LoginSucceeded },
-        { name: this.$t('dashboard.LoginFailed'), value: LoginFailed }
+        { name: this.$t('LoginSucceeded'), value: LoginSucceeded },
+        { name: this.$t('LoginFailed'), value: LoginFailed }
       ]
       this.$set(this.logConfig, 'data', logs)
       this.$set(this.logConfig, 'total', data.total_count_user_login_logs)
@@ -90,8 +91,8 @@ export default {
       const dangerCommand = data.total_count_commands_danger === 0 ? 0 : ((data.total_count_commands_danger / data.total_count_commands) * 100).toFixed(0)
       const SafeCommand = dangerCommand === 100 ? 0 : 100 - dangerCommand
       const commandCounts = [
-        { name: this.$t('dashboard.DangerCommand'), value: dangerCommand },
-        { name: this.$t('dashboard.SafeCommand'), value: SafeCommand }
+        { name: this.$t('DangerCommand'), value: dangerCommand },
+        { name: this.$t('SafeCommand'), value: SafeCommand }
       ]
       this.$set(this.assetConfig, 'data', commandCounts)
       this.$set(this.assetConfig, 'total', data.total_count_commands)

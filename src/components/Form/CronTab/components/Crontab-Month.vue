@@ -3,31 +3,31 @@
   <el-form size="small">
     <el-form-item>
       <el-radio v-model="radioValue" :label="1">
-        {{ this.$t('common.CronTab.month') }}，{{ this.$t('common.CronTab.wildcardsAllowed') }}[, - * /]
+        {{ this.$t('Month') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="2">
-        {{ this.$t('common.CronTab.from') }}
+        {{ this.$t('From') }}
         <el-input-number v-model="cycle01" :max="12" :min="1" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="12" :min="1" size="mini" /> {{ this.$t('common.CronTab.month') }}
+        <el-input-number v-model="cycle02" :max="12" :min="1" size="mini" /> {{ this.$t('Month') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
-        {{ this.$t('common.CronTab.every') }}
-        <el-input-number v-model="average02" :max="12" :min="1" size="mini" /> {{ this.$t('common.CronTab.month') }}{{ this.$t('common.CronTab.executeOnce') }}
+        {{ this.$t('Every') }}
+        <el-input-number v-model="average02" :max="12" :min="1" size="mini" /> {{ this.$t('Month') }}{{ this.$t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="4">
-        {{ this.$t('common.CronTab.appoint') }}
+        {{ this.$t('Appoint') }}
         <el-select
           v-model="checkboxList"
-          :placeholder="$tc('common.CronTab.manyChoose')"
+          :placeholder="$tc('ManyChoose')"
           clearable
           multiple
           style="width:100%"

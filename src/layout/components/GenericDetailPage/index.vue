@@ -131,14 +131,14 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$t('common.Update'),
+          title: this.$t('Update'),
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$t('common.Delete'),
+          title: this.$t('Delete'),
           type: 'danger',
           plain: true,
           can: this.validActions.canDelete,
@@ -163,7 +163,7 @@ export default {
         return this.submenu
       }
       const activity = {
-        title: this.$t('common.Activity'),
+        title: this.$t('Activity'),
         name: 'ResourceActivity',
         hidden: () => !this.$hasPerm('audits.view_activitylog')
       }
@@ -180,8 +180,8 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$t('common.deleteWarningMsg') + ' ' + this.iTitle + ' ?'
-      const title = this.$t('common.Info')
+      const msg = this.$t('DeleteWarningMsg') + ' ' + this.iTitle + ' ?'
+      const title = this.$t('Info')
       const performDelete = () => {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
@@ -197,14 +197,14 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$tc('common.deleteSuccessMsg'))
+            this.$message.success(this.$tc('DeleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
             const errorDetail = error?.response?.data?.detail || ''
             if (errorDetail) {
               this.$message.error(errorDetail)
             } else {
-              this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+              this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
             }
           } finally {
             instance.confirmButtonLoading = false
@@ -235,7 +235,7 @@ export default {
         this.$emit('getObjectDone', data)
       }).catch(error => {
         if (error.response && error.response.status === 404) {
-          const msg = this.$t('common.ObjectNotFoundOrDeletedMsg')
+          const msg = this.$t('ObjectNotFoundOrDeletedMsg')
           this.$message.error(msg)
         } else {
           flashErrorMsg({ error, response: error.response })

@@ -7,7 +7,7 @@
 <script>
 import IBox from '@/components/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { updateAutomationParams, platformFieldsMeta, setAutomations } from '../const'
+import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -62,10 +62,10 @@ export default {
   methods: {
     submit(validValues) {
       if (!this.$hasPerm('assets.change_platform') || !this.isSystemAdmin) {
-        return this.$message.error(this.$tc('rbac.NoPermission'))
+        return this.$message.error(this.$tc('NoPermission'))
       }
       this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
   }

@@ -4,7 +4,7 @@
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$tc('rbac.Permissions')">
+      <IBox :title="$tc('Permissions')">
         <div style="height: 10%">
           <el-button
             :disabled="isDisabled"
@@ -13,7 +13,7 @@
             type="primary"
             @click="updatePermissions"
           >
-            {{ $t('common.Update') }}
+            {{ $t('Update') }}
           </el-button>
         </div>
         <div class="perm-tree">
@@ -167,13 +167,13 @@ export default {
       detailFields: [
         'display_name', 'scope_display', 'builtin', 'created_by',
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('DateCreated'),
           formatter: (item, val) => {
             return <span> {toSafeLocalDateStr(this.object.date_created)}</span>
           }
         },
         {
-          key: this.$t('common.DateUpdated'),
+          key: this.$t('DateUpdated'),
           formatter: (item, val) => {
             return <span> {toSafeLocalDateStr(this.object.date_updated)}</span>
           }
@@ -301,9 +301,9 @@ export default {
         permissions: permIds
       }
       this.$axios.patch(roleDetailUrl, data).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg') + error)
+        this.$message.error(this.$tc('UpdateErrorMsg') + error)
         this.$log.error(error)
       })
     }

@@ -43,14 +43,14 @@ export default {
             formatter: ArrayFormatter
           },
           is_periodic: {
-            label: vm.$t('accounts.AccountChangeSecret.Timer'),
+            label: vm.$t('Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
+            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           comment: {
@@ -82,7 +82,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   type: 'info',
                   can: this.$hasPerm('accounts.view_accountbackupexecution'),

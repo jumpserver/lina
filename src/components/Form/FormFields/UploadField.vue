@@ -2,7 +2,7 @@
   <div>
     <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="Onchange">
     <el-button size="mini" @click.native.stop="onUpLoad">
-      {{ this.$t('common.SelectFile') }}
+      {{ this.$t('SelectFile') }}
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>

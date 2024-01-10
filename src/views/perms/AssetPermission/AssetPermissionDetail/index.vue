@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="AssetPermission" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="AssetPermission" v-bind="config" v-on="$listeners" @tab-click="TabClick">
     <keep-alive>
       <component :is="config.activeMenu" :object="AssetPermission" />
     </keep-alive>
@@ -32,21 +32,21 @@ export default {
         activeMenu: 'AssetPermissionDetail',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'AssetPermissionDetail'
           },
           {
-            title: this.$t('perms.usersAndUserGroups'),
+            title: this.$t('UsersAndUserGroups'),
             name: 'AssetPermissionUser',
             hidden: () => !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
-            title: this.$t('perms.assetAndNode'),
+            title: this.$t('AssetAndNode'),
             name: 'AssetPermissionAsset',
             hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
-            title: this.$t('perms.permAccount'),
+            title: this.$t('PermAccount'),
             name: 'AssetPermissionAccount',
             hidden: () => !this.$hasPerm('accounts.view_account') || !this.$hasPerm('perms.change_assetpermission')
           }

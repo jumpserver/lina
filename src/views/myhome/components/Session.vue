@@ -14,7 +14,7 @@ export default {
     const vm = this
     return {
       cardConfig: {
-        title: this.$t('route.RecentSession')
+        title: this.$t('RecentSession')
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
@@ -24,7 +24,7 @@ export default {
         columnsMeta: {
           id: {
             prop: 'id',
-            label: this.$t('sessions.id'),
+            label: this.$t('Id'),
             align: 'center',
             width: '70px',
             formatter: function(row, column, cellValue, index) {
@@ -38,16 +38,16 @@ export default {
             }
           },
           asset: {
-            label: this.$t('sessions.target')
+            label: this.$t('Target')
           },
           command_amount: {
-            label: this.$t('sessions.command')
+            label: this.$t('Command')
           },
           remote_addr: {
-            label: this.$t('sessions.remoteAddr')
+            label: this.$t('RemoteAddr')
           },
           protocol: {
-            label: this.$t('sessions.protocol'),
+            label: this.$t('Protocol'),
             el: {
               disabled: false
             },

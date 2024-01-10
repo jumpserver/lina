@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -29,30 +29,30 @@ export default {
       activeMenu: 'Basic',
       submenu: [
         {
-          title: this.$t('setting.Basic'),
+          title: this.$t('Basic'),
           name: 'Basic'
         },
         {
-          title: this.$t('route.Terminal'),
+          title: this.$t('Terminal'),
           name: 'TerminalList',
           hidden: () => !this.$hasPerm('terminal.view_terminal')
         },
         {
-          title: this.$t('xpack.ComponentMonitor'),
+          title: this.$t('ComponentMonitor'),
           name: 'Monitor',
           hidden: () => {
             return !(this.$hasPerm('terminal.view_status') && this.$store.getters.hasValidLicense)
           }
         },
         {
-          title: this.$t('xpack.Endpoint'),
+          title: this.$t('Endpoint'),
           name: 'EndpointList',
           hidden: () => {
             return !this.$hasPerm('terminal.view_endpoint')
           }
         },
         {
-          title: this.$t('xpack.EndpointRule'),
+          title: this.$t('EndpointRule'),
           name: 'EndpointRuleList',
           hidden: () => {
             return !this.$hasPerm('terminal.view_endpointrule')

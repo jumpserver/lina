@@ -24,7 +24,7 @@ export default {
         activeMenu: 'AccountBackupPlanInfo',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'AccountBackupPlanInfo'
           }
         ],

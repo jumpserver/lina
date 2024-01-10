@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.HuaweiCloud')" />
+  <BaseSMS ref="baseSms" :config="$data" :title="$tc('HuaweiCloud')" />
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
       visible: false,
       moreButtons: [
         {
-          title: this.$t('common.Test'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             btn.loading = true
@@ -39,19 +39,19 @@ export default {
       ],
       fields: [
         [
-          this.$t('common.BasicInfo'),
+          this.$t('BasicInfo'),
           [
             'HUAWEI_APP_KEY', 'HUAWEI_APP_SECRET', 'HUAWEI_SMS_ENDPOINT'
           ]
         ],
         [
-          this.$t('setting.VerifySignTmpl'),
+          this.$t('VerifySignTmpl'),
           [
             'HUAWEI_SIGN_CHANNEL_NUM', 'HUAWEI_VERIFY_SIGN_NAME', 'HUAWEI_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'SMS_TEST_PHONE'
           ]
@@ -66,10 +66,10 @@ export default {
           component: UpdateToken
         },
         HUAWEI_SIGN_CHANNEL_NUM: {
-          label: this.$t('setting.SignChannelNum')
+          label: this.$t('SignChannelNum')
         },
         HUAWEI_SMS_ENDPOINT: {
-          label: this.$t('setting.AppEndpoint')
+          label: this.$t('AppEndpoint')
         },
         SMS_TEST_PHONE: {
           component: PhoneInput

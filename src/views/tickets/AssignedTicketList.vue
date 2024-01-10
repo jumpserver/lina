@@ -3,10 +3,10 @@
     <BaseTicketList ref="BaseTicketList" :url="url" v-bind="$data" />
     <Dialog
       v-if="isVisible"
-      :cancel-title="$tc('tickets.BatchReject')"
-      :confirm-title="$tc('tickets.BatchConsent')"
+      :cancel-title="$tc('BatchReject')"
+      :confirm-title="$tc('BatchConsent')"
       :destroy-on-close="true"
-      :title="$tc('tickets.BatchApproval')"
+      :title="$tc('BatchApproval')"
       :visible.sync="isVisible"
       width="70%"
       @cancel="onCancel"
@@ -44,7 +44,7 @@ export default {
         extraMoreActions: [
           {
             name: 'BatchApproval',
-            title: this.$t('tickets.BatchApproval'),
+            title: this.$t('BatchApproval'),
             can: ({ selectedRows }) => { return selectedRows.length > 0 },
             callback: function({ selectedRows }) {
               this.isVisible = true
@@ -105,14 +105,14 @@ export default {
           `/api/v1/tickets/${ticketType}/bulk/?action=${action}`,
           { tickets: data[ticketType] }
         ).then(res => {
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           if (current === dataLength) {
             this.$refs.BaseTicketList.reloadTable()
             this.isVisible = false
           }
         }).catch(err => {
           const errMsg = Object.values(err.response.data).join(', ')
-          this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
+          this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
         })
       }
     },
@@ -120,7 +120,7 @@ export default {
       const ticketType = item?.type?.value
       let detailFields = [
         {
-          key: this.$t('tickets.Applicant'),
+          key: this.$t('Applicant'),
           value: item?.applicant?.name
         }
       ]
@@ -128,15 +128,15 @@ export default {
         detailFields = detailFields.concat(
           [
             {
-              key: this.$t('tickets.ApplyFromCMDFilterRule'),
+              key: this.$t('ApplyFromCMDFilterRule'),
               value: item?.rel_snapshot?.apply_from_cmd_filter_acl
             },
             {
-              key: this.$t('tickets.ApplyFromSession'),
+              key: this.$t('ApplyFromSession'),
               value: item?.rel_snapshot?.apply_from_session
             },
             {
-              key: this.$t('tickets.ApplyRunUser'),
+              key: this.$t('ApplyRunUser'),
               value: item?.rel_snapshot?.apply_run_user
             }
           ]
@@ -145,11 +145,11 @@ export default {
         detailFields = detailFields.concat(
           [
             {
-              key: this.$t('assets.Asset'),
+              key: this.$t('Asset'),
               value: item?.rel_snapshot?.apply_assets.join(', ')
             },
             {
-              key: this.$t('assets.Node'),
+              key: this.$t('Node'),
               value: item?.rel_snapshot?.apply_nodes.join(', ')
             }
           ]
@@ -158,11 +158,11 @@ export default {
         detailFields = detailFields.concat(
           [
             {
-              key: this.$t('acl.apply_login_asset'),
+              key: this.$t('ApplyLoginAsset'),
               value: item?.rel_snapshot?.apply_login_asset
             },
             {
-              key: this.$t('acl.apply_login_user'),
+              key: this.$t('ApplyLoginUser'),
               value: item?.rel_snapshot?.apply_login_user
             }
           ]

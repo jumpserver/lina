@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
+    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("Setting") }} </el-button>
     <Dialog
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('setting.CreateUserSetting')"
+      :title="$tc('CreateUserSetting')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"

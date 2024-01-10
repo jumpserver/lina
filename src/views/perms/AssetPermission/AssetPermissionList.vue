@@ -32,7 +32,7 @@ export default {
   data() {
     const vm = this
     return {
-      helpMsg: this.$t('perms.AssetPermissionHelpMsg'),
+      helpMsg: this.$t('AssetPermissionHelpMsg'),
       treeSetting: {
         showMenu: false,
         showAssets: true,
@@ -65,10 +65,10 @@ export default {
             }
           },
           action: {
-            label: this.$t('common.Action'),
+            label: this.$t('Action'),
             formatter: function(row) {
               if (row.actions.length === 6) {
-                return vm.$t('common.All')
+                return vm.$t('All')
               }
               return row.actions.map(item => {
                 return item.label.replace(/ \([^)]*\)/, '')
@@ -81,14 +81,14 @@ export default {
             }
           },
           from_ticket: {
-            label: this.$t('perms.fromTicket'),
+            label: this.$t('FromTicket'),
             width: 100,
             formatterArgs: {
               showFalse: false
             }
           },
           users_amount: {
-            label: this.$t('perms.User'),
+            label: this.$t('User'),
             width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -98,7 +98,7 @@ export default {
             }
           },
           user_groups_amount: {
-            label: this.$t('perms.UserGroups'),
+            label: this.$t('UserGroups'),
             width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -108,7 +108,7 @@ export default {
             }
           },
           assets_amount: {
-            label: this.$t('perms.Asset'),
+            label: this.$t('Asset'),
             width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -118,7 +118,7 @@ export default {
             }
           },
           nodes_amount: {
-            label: this.$t('perms.Node'),
+            label: this.$t('Node'),
             width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -128,7 +128,7 @@ export default {
             }
           },
           accounts: {
-            label: this.$t('perms.Account'),
+            label: this.$t('Account'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {

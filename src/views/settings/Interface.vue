@@ -84,18 +84,18 @@ export default {
       isDev: process.env.NODE_ENV === 'development',
       themeConfigs: [],
       fields: [
-        [this.$t('common.Basic'), ['login_title', 'theme']],
+        [this.$t('Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
-        [this.$t('xpack.Images'), ['login_image']],
-        [this.$t('xpack.Beian'), ['beian_link', 'beian_text']]
+        [this.$t('Images'), ['login_image']],
+        [this.$t('Beian'), ['beian_link', 'beian_text']]
       ],
       fieldsMeta: {
         login_title: {
-          label: this.$t('xpack.loginTitle'),
-          helpText: this.$t('xpack.loginTitleTip')
+          label: this.$t('LoginTitle'),
+          helpText: this.$t('LoginTitleTip')
         },
         theme: {
-          label: this.$t('notifications.Subject'),
+          label: this.$t('Subject'),
           on: {
             change: ([value]) => {
               const themeColors = this.getSelectThemeConfig(value)
@@ -105,12 +105,12 @@ export default {
         },
         login_image: {
           component: UploadField,
-          label: this.$t('xpack.loginImage'),
+          label: this.$t('LoginImage'),
           el: {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.loginImageTip')
+            tip: this.$t('LoginImageTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -120,12 +120,12 @@ export default {
         },
         favicon: {
           component: UploadField,
-          label: this.$t('xpack.favicon'),
+          label: this.$t('Favicon'),
           el: {
             width: '5%',
             height: '5%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.faviconTip')
+            tip: this.$t('FaviconTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -135,12 +135,12 @@ export default {
         },
         logo_index: {
           component: UploadField,
-          label: this.$t('xpack.logoIndex'),
+          label: this.$t('LogoIndex'),
           el: {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoIndexTip')
+            tip: this.$t('LogoIndexTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -150,12 +150,12 @@ export default {
         },
         logo_logout: {
           component: UploadField,
-          label: this.$t('xpack.logoLogout'),
+          label: this.$t('LogoLogout'),
           el: {
             width: '5%',
             height: '5%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoLogoutTip')
+            tip: this.$t('LogoLogoutTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -170,12 +170,12 @@ export default {
       },
       moreButtons: [
         {
-          title: this.$t('xpack.RestoreButton'),
+          title: this.$t('RestoreButton'),
           callback: function(value, form) {
-            this.$confirm(this.$t('xpack.restoreDialogMessage'),
-              this.$t('xpack.restoreDialogTitle'), {
-                confirmButtonText: this.$t('common.Confirm'),
-                cancelButtonText: this.$t('common.Cancel'),
+            this.$confirm(this.$t('RestoreDialogMessage'),
+              this.$t('RestoreDialogTitle'), {
+                confirmButtonText: this.$t('Confirm'),
+                cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
               }).then(() => {
               restoreInterface().then(res => {
@@ -226,9 +226,9 @@ export default {
         }
       }
       updateInterface(form).then(res => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     }
   }

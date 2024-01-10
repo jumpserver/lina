@@ -16,10 +16,10 @@ export default {
       taskType: 'ping',
       fields: [{
         name: 'dest_ips',
-        label: this.$t('setting.DestinationIP'),
-        tip: this.$t('setting.helpTip.IP'),
+        label: this.$t('DestinationIP'),
+        tip: this.$t('IP'),
         el: {
-          placeholder: this.$t('setting.DestinationIP')
+          placeholder: this.$t('DestinationIP')
         }
       }],
       rules: {

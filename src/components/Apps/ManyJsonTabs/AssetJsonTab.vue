@@ -37,7 +37,7 @@ export default {
           ],
           columnsMeta: {
             name: {
-              label: this.$t('assets.Asset'),
+              label: this.$t('Asset'),
               formatter: (row) => {
                 const to = {
                   name: 'AssetDetail',

@@ -25,7 +25,7 @@ export default {
             }
           }
         },
-        helpMessage: this.$t('assets.WebHelpMessage')
+        helpMessage: this.$t('WebHelpMessage')
       }
     }
   }

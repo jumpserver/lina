@@ -34,7 +34,7 @@ export default {
             }
           },
           reviewers_amount: {
-            label: this.$t('common.ApproverNumbers')
+            label: this.$t('ApproverNumbers')
           },
           actions: {
             formatterArgs: {

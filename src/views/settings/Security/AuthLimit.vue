@@ -30,14 +30,14 @@ export default {
       visible: false,
       fields: [
         [
-          this.$t('common.UserLoginLimit'),
+          this.$t('UserLoginLimit'),
           [
             'SECURITY_LOGIN_LIMIT_COUNT',
             'SECURITY_LOGIN_LIMIT_TIME'
           ]
         ],
         [
-          this.$t('common.IPLoginLimit'),
+          this.$t('IPLoginLimit'),
           [
             'SECURITY_LOGIN_IP_LIMIT_COUNT',
             'SECURITY_LOGIN_IP_LIMIT_TIME',
@@ -47,7 +47,7 @@ export default {
           ]
         ],
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'USER_LOGIN_SINGLE_MACHINE_ENABLED',
             'ONLY_ALLOW_EXIST_USER_AUTH',
@@ -59,13 +59,13 @@ export default {
       fieldsMeta: {
         SECURITY_VIEW_BLOCKED_IPS: {
           component: BlockedIPs,
-          label: this.$t('setting.BlockedIPS'),
+          label: this.$t('BlockedIPS'),
           el: {
             method: 'push_account_method',
             assets: this.asset_ids,
             nodes: this.node_ids
           },
-          helpText: this.$t('setting.ViewBlockedIPSHelpText')
+          helpText: this.$t('ViewBlockedIPSHelpText')
         }
       },
       cleanFormValue(value) {

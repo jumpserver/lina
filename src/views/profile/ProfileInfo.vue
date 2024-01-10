@@ -8,12 +8,12 @@
         <el-col :md="10" :sm="24">
           <QuickActions
             :actions="authQuickActions"
-            :title="$tc('users.AuthSettings')"
+            :title="$tc('AuthSettings')"
             type="primary"
           />
           <QuickActions
             :actions="messageSubscriptionQuickActions"
-            :title="$tc('users.MessageSubscription')"
+            :title="$tc('MessageSubscription')"
             fa="fa-info-circle"
             style="margin-top: 15px"
             type="info"
@@ -51,13 +51,13 @@ export default {
       currentEdit: '',
       authQuickActions: [
         {
-          title: this.$t('users.setWeCom'),
+          title: this.$t('SetWeCom'),
           attrs: {
             type: 'primary',
             label: this.getLabel('wecom'),
             disabled: this.isDisabled('wecom'),
             showTip: this.isDisabled('wecom'),
-            tip: this.$t('users.UnbindHelpText')
+            tip: this.$t('UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -68,13 +68,13 @@ export default {
           }
         },
         {
-          title: this.$t('users.setDingTalk'),
+          title: this.$t('SetDingTalk'),
           attrs: {
             type: 'primary',
             label: this.getLabel('dingtalk'),
             disabled: this.isDisabled('dingtalk'),
             showTip: this.isDisabled('dingtalk'),
-            tip: this.$t('users.UnbindHelpText')
+            tip: this.$t('UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -85,13 +85,13 @@ export default {
           }
         },
         {
-          title: this.$t('users.setFeiShu'),
+          title: this.$t('SetFeiShu'),
           attrs: {
             type: 'primary',
             label: this.getLabel('feishu'),
             disabled: this.isDisabled('feishu'),
             showTip: this.isDisabled('feishu'),
-            tip: this.$t('users.UnbindHelpText')
+            tip: this.$t('UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -102,13 +102,13 @@ export default {
           }
         },
         {
-          title: this.$t('users.setSlack'),
+          title: this.$t('SetSlack'),
           attrs: {
             type: 'primary',
             label: this.getLabel('slack'),
             disabled: this.isDisabled('slack'),
             showTip: this.isDisabled('slack'),
-            tip: this.$t('users.UnbindHelpText')
+            tip: this.$t('UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_SLACK,
           callbacks: {
@@ -119,10 +119,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.SetMFA'),
+          title: this.$t('SetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Setting')
+            label: this.$t('Setting')
           },
           callbacks: {
             click: function() {
@@ -131,10 +131,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.UpdatePassword'),
+          title: this.$t('UpdatePassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Update'),
+            label: this.$t('Update'),
             disabled: !this.isUserFromSource('local')
           },
           callbacks: {
@@ -144,10 +144,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.UpdateSSHKey'),
+          title: this.$t('UpdateSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Update'),
+            label: this.$t('Update'),
             disabled: !this.$store.state.users.profile.can_public_key_auth
           },
           callbacks: {
@@ -157,10 +157,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.ResetPublicKeyAndDownload'),
+          title: this.$t('ResetPublicKeyAndDownload'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset'),
+            label: this.$t('Reset'),
             disabled: !this.$store.state.users.profile.can_public_key_auth
           },
           callbacks: {
@@ -172,7 +172,7 @@ export default {
       ],
       messageSubscriptionQuickActions: [
         {
-          title: this.$t('notifications.SiteMessage'),
+          title: this.$t('SiteMessage'),
           type: 'switch',
           attrs: {
             disabled: true,
@@ -184,7 +184,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.Email'),
+          title: this.$t('Email'),
           type: 'switch',
           attrs: {
             name: 'email',
@@ -195,7 +195,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.WeCom'),
+          title: this.$t('WeCom'),
           type: 'switch',
           attrs: {
             name: 'wecom',
@@ -207,7 +207,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.DingTalk'),
+          title: this.$t('DingTalk'),
           type: 'switch',
           attrs: {
             name: 'dingtalk',
@@ -219,7 +219,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.FeiShu'),
+          title: this.$t('FeiShu'),
           type: 'switch',
           attrs: {
             name: 'feishu',
@@ -231,7 +231,7 @@ export default {
           }
         },
         {
-          title: this.$t('setting.Slack'),
+          title: this.$t('Slack'),
           type: 'switch',
           attrs: {
             name: 'slack',
@@ -250,27 +250,27 @@ export default {
       return [
         {
           value: this.object.username,
-          key: this.$t('users.Username')
+          key: this.$t('Username')
         },
         {
           value: this.object.name,
-          key: this.$t('users.Name')
+          key: this.$t('Name')
         },
         {
           value: this.object.system_roles.map(item => item.display_name).join(' ｜ '),
-          key: this.$t('users.SystemRoles')
+          key: this.$t('SystemRoles')
         },
         {
           value: this.object.org_roles.map(item => item.display_name).join(' ｜ '),
-          key: this.$t('users.OrgRoles')
+          key: this.$t('OrgRoles')
         },
         {
           value: this.object.email,
-          key: this.$t('users.Email')
+          key: this.$t('Email')
         },
         {
           value: this.object.is_active,
-          key: this.$t('users.IsActive')
+          key: this.$t('IsActive')
         },
         {
           value: this.object,
@@ -283,35 +283,35 @@ export default {
         },
         {
           value: this.object.mfa_level.label,
-          key: this.$t('users.MfaLevel')
+          key: this.$t('MfaLevel')
         },
         {
           value: this.object.source.label,
-          key: this.$t('users.Source')
+          key: this.$t('Source')
         },
         {
           value: toSafeLocalDateStr(this.object.date_joined),
-          key: (this.$t('users.DateJoined'))
+          key: (this.$t('DateJoined'))
         },
         {
           value: toSafeLocalDateStr(this.object.last_login),
-          key: this.$t('users.DateLastLogin')
+          key: this.$t('DateLastLogin')
         },
         {
           value: toSafeLocalDateStr(this.object.date_password_last_updated),
-          key: this.$t('users.DatePasswordLastUpdated')
+          key: this.$t('DatePasswordLastUpdated')
         },
         {
           value: toSafeLocalDateStr(this.object.date_expired),
-          key: this.$t('users.DateExpired')
+          key: this.$t('DateExpired')
         },
         {
           value: this.object.groups.map(item => item.name).join(' ｜ '),
-          key: this.$t('users.UserGroups')
+          key: this.$t('UserGroups')
         },
         {
           value: this.object.comment,
-          key: this.$t('users.Comment')
+          key: this.$t('Comment')
         }
       ]
     },
@@ -333,7 +333,7 @@ export default {
       return !!this.$store.state.users.profile[`${sourceName}_id`]
     },
     getLabel(sourceName) {
-      return this.isBind(sourceName) ? this.$t('common.unbind') : this.$t('common.bind')
+      return this.isBind(sourceName) ? this.$t('Unbind') : this.$t('Bind')
     },
     isUserFromSource(sourceName) {
       return this.$store.state.users.profile.source.value === sourceName
@@ -346,10 +346,10 @@ export default {
         `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
         { 'receive_backends': this.getReceiveBackendList() }
       ).then(res => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.$store.dispatch('users/getProfile', true)
       }).catch(err => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
       })
     },
     getReceiveBackendList() {
@@ -370,7 +370,7 @@ export default {
           window.open(url, 'Bind', 'width=800,height=600')
         } else {
           this.$axios.post(url).then(res => {
-            this.$message.success(this.$tc('common.updateSuccessMsg'))
+            this.$message.success(this.$tc('UpdateSuccessMsg'))
             this.$store.dispatch('users/getProfile')
           })
         }

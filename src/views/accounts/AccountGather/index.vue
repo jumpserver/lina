@@ -4,6 +4,7 @@
 
 <script>
 import { TabPage } from '@/layout/components'
+
 export default {
   name: 'Index',
   components: {
@@ -15,19 +16,19 @@ export default {
         activeMenu: 'AccountGatherList',
         submenu: [
           {
-            title: this.$t('accounts.AccountGather.AccountGatherTaskList'),
+            title: this.$t('AccountGatherTaskList'),
             name: 'AccountGatherList',
             hidden: !this.$hasPerm('accounts.view_gatheredaccount'),
             component: () => import('@/views/accounts/AccountGather/AccountGatherList.vue')
           },
           {
-            title: this.$t('accounts.AccountGather.AccountGatherList'),
+            title: this.$t('AccountGatherList'),
             name: 'AccountGatherTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
             component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue')
           },
           {
-            title: this.$t('accounts.AccountGather.ExecutionList'),
+            title: this.$t('ExecutionList'),
             name: 'AccountGatherTaskExecutionList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution'),
             component: () => import('@/views/accounts/AccountGather/TaskDetail/TaskExecutionList.vue')

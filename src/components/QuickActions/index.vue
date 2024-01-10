@@ -27,7 +27,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('common.QuickUpdate')
+        return this.$t('QuickUpdate')
       }
     },
     actions: {

@@ -3,20 +3,20 @@
     <el-button
       v-if="hasButton"
       :disabled="!canSetting"
-      size="small"
-      class="setting"
       :icon="icon"
+      class="setting"
+      size="small"
       type="primary"
       @click="onSetting"
     />
     <Dialog
       v-if="isVisible"
-      width="60%"
-      :visible.sync="isVisible"
-      :title="title"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
+      :title="title"
+      :visible.sync="isVisible"
+      width="60%"
       @close="onDialogClose"
     >
       <AutoDataForm
@@ -24,8 +24,8 @@
         :form="form"
         class="data-form"
         v-bind="config"
-        v-on="$listeners"
         @submit="onSubmit"
+        v-on="$listeners"
       />
     </Dialog>
   </div>
@@ -49,7 +49,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('assets.PushParams')
+        return this.$t('PushParams')
       }
     },
     btnText: {

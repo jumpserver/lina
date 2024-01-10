@@ -3,11 +3,11 @@
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="$tc('setting.importLdapUserTitle')"
+      :title="$tc('ImportLdapUserTitle')"
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
+      <el-alert type="success"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
         :header-actions="headerActions"
@@ -16,7 +16,7 @@
       />
       <div slot="footer">
         <span v-show="showOrgSelect" class="org-select">
-          <span class="label">{{ $tc('common.ImportOrg') }}：</span>
+          <span class="label">{{ $tc('ImportOrg') }}：</span>
           <Select2
             ref="select2"
             v-model="select2.value"
@@ -25,19 +25,19 @@
           />
         </span>
         <el-button :loading="dialogLdapUserSyncStatus" size="small" type="primary" @click="SyncUserClick">
-          {{ $t('common.SyncUser') }}
+          {{ $t('SyncUser') }}
         </el-button>
         <el-button :loading="dialogLdapUserImportLoginStatus" size="small" type="primary" @click="importUserClick">
-          {{ $t('common.Import') }}
+          {{ $t('Import') }}
         </el-button>
         <el-button
           :loading="dialogLdapUserImportAllLoginStatus"
           size="small"
           type="primary"
           @click="importAllUserClick"
-        >{{ $t('common.ImportAll') }}
+        >{{ $t('ImportAll') }}
         </el-button>
-        <el-button size="small" @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
+        <el-button size="small" @click="hiddenDialog">{{ $t('Cancel') }}</el-button>
       </div>
     </Dialog>
   </div>
@@ -81,24 +81,24 @@ export default {
         columns: ['username', 'name', 'email', 'groups', 'existing'],
         columnsMeta: {
           username: {
-            label: this.$t('users.Username'),
+            label: this.$t('Username'),
             width: '180px'
           },
           name: {
-            label: this.$t('users.Name'),
+            label: this.$t('Name'),
             width: '180px'
           },
           groups: {
-            label: this.$t('users.UserGroups'),
+            label: this.$t('UserGroups'),
             formatter: function(row) {
               return <span> {row.groups.join(' | ')} </span>
             }
           },
           email: {
-            label: this.$t('users.Email')
+            label: this.$t('Email')
           },
           existing: {
-            label: this.$t('users.Existing'),
+            label: this.$t('Existing'),
             width: '120px'
           },
           actions: {
@@ -148,16 +148,16 @@ export default {
         username_list: selectIds
       }
       if (selectIds.length === 0) {
-        this.$message.error(this.$tc('setting.unselectedUser'))
+        this.$message.error(this.$tc('UnselectedUser'))
         this.dialogLdapUserImportLoginStatus = false
       } else if (org_ids.length === 0) {
-        this.$message.error(this.$tc('setting.unselectedOrg'))
+        this.$message.error(this.$tc('UnselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
         }).catch(error => {
-          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
+          const errorMessage = getErrorResponseMsg(error) || this.$t('ImportFail')
           this.$message.error(errorMessage)
         }).finally(() => {
           this.dialogLdapUserImportLoginStatus = false
@@ -172,13 +172,13 @@ export default {
         username_list: ['*']
       }
       if (org_ids.length === 0) {
-        this.$message.error(this.$tc('setting.unselectedOrg'))
+        this.$message.error(this.$tc('UnselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
         }).catch(error => {
-          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
+          const errorMessage = getErrorResponseMsg(error) || this.$t('ImportFail')
           this.$message.error(errorMessage)
         }).finally(() => {
           this.dialogLdapUserImportAllLoginStatus = false

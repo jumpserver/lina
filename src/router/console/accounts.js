@@ -6,7 +6,7 @@ export default [
     path: 'accounts',
     component: empty,
     meta: {
-      title: i18n.t('route.AssetAccount'),
+      title: i18n.t('AssetAccount'),
       app: 'accounts',
       permissions: ['accounts.view_account']
     },
@@ -17,7 +17,7 @@ export default [
         name: 'AssetAccountList',
         component: () => import('@/views/accounts/Account/index.vue'),
         meta: {
-          title: i18n.t('route.AssetAccount'),
+          title: i18n.t('AssetAccount'),
           app: 'accounts',
           permissions: ['accounts.view_account']
         }
@@ -26,7 +26,7 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
         name: 'AssetAccountDetail',
-        meta: { title: i18n.t('route.AssetAccountDetail') },
+        meta: { title: i18n.t('AssetAccountDetail') },
         hidden: true
       }
     ]
@@ -35,7 +35,7 @@ export default [
     path: 'virtual-accounts',
     component: empty,
     meta: {
-      title: i18n.t('route.VirtualAccount'),
+      title: i18n.t('VirtualAccount'),
       app: 'accounts',
       permissions: ['accounts.view_virtualaccount']
     },
@@ -47,7 +47,7 @@ export default [
         component: () => import('@/views/accounts/VirtualAccount/VirtualUpdate.vue'),
         name: 'VirtualAccountUpdate',
         meta: {
-          title: i18n.t('route.VirtualAccountUpdate'),
+          title: i18n.t('VirtualAccountUpdate'),
           activeMenu: '/console/accounts/accounts',
           action: 'update'
         },
@@ -58,7 +58,7 @@ export default [
         component: () => import('@/views/accounts/VirtualAccount/VirtualDetail/index.vue'),
         name: 'VirtualAccountDetail',
         meta: {
-          title: i18n.t('route.VirtualAccountDetail'),
+          title: i18n.t('VirtualAccountDetail'),
           activeMenu: '/console/accounts/accounts'
         }
       }
@@ -68,7 +68,7 @@ export default [
     path: 'account-template',
     component: empty,
     meta: {
-      title: i18n.t('route.AccountTemplate'),
+      title: i18n.t('AccountTemplate'),
       app: 'accounts',
       permissions: ['accounts.view_accounttemplate']
     },
@@ -79,7 +79,7 @@ export default [
         name: 'AccountTemplateList',
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
-          title: i18n.t('route.AccountTemplate'),
+          title: i18n.t('AccountTemplate'),
           permissions: ['accounts.view_accounttemplate']
         }
       },
@@ -88,7 +88,7 @@ export default [
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
         name: 'AccountTemplateCreate',
         meta: {
-          title: i18n.t('route.CreateAccountTemplate'),
+          title: i18n.t('CreateAccountTemplate'),
           action: 'create'
         },
         hidden: true
@@ -98,7 +98,7 @@ export default [
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
         name: 'AccountTemplateUpdate',
         meta: {
-          title: i18n.t('route.UpdateAccountTemplate'),
+          title: i18n.t('UpdateAccountTemplate'),
           action: 'update'
         },
         hidden: true
@@ -107,7 +107,7 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
         name: 'AccountTemplateDetail',
-        meta: { title: i18n.t('route.AccountTemplate') },
+        meta: { title: i18n.t('AccountTemplate') },
         hidden: true
       }
     ]
@@ -127,7 +127,7 @@ export default [
         component: () => import('@/views/accounts/AccountPush/index.vue'),
         name: 'AccountPushList',
         meta: {
-          title: i18n.t('accounts.AccountPush.AccountPushList'),
+          title: i18n.t('AccountPushList'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       },
@@ -137,7 +137,7 @@ export default [
         name: 'AccountPushCreate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountPush.AccountPushCreate'),
+          title: i18n.t('AccountPushCreate'),
           permissions: ['accounts.add_pushaccountautomation']
         }
       },
@@ -147,7 +147,7 @@ export default [
         name: 'AccountPushUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountPush.AccountPushUpdate'),
+          title: i18n.t('AccountPushUpdate'),
           permissions: ['accounts.change_pushaccountautomation']
         }
       },
@@ -157,7 +157,7 @@ export default [
         name: 'AccountPushDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountPush.AccountPushList'),
+          title: i18n.t('AccountPushList'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       },
@@ -167,7 +167,7 @@ export default [
         name: 'AccountPushExecutionList',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.AccountPush.ExecutionList'),
+          title: i18n.t('ExecutionList'),
           permissions: ['accounts.view_pushaccountexecution']
         }
       },
@@ -177,7 +177,7 @@ export default [
         name: 'AccountPushExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.ExecutionDetail'),
+          title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_pushaccountexecution']
         }
       }
@@ -188,7 +188,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('accounts.AccountGather.AccountGatherList'),
+      title: i18n.t('AccountGatherList'),
       app: 'accounts',
       licenseRequired: true
     },
@@ -198,7 +198,7 @@ export default [
         component: () => import('@/views/accounts/AccountGather/index.vue'),
         name: 'AccountGatherList',
         meta: {
-          title: i18n.t('accounts.AccountGather.AccountGatherTaskList'),
+          title: i18n.t('AccountGatherTaskList'),
           permissions: ['accounts.view_gatheredaccount']
         }
       },
@@ -208,7 +208,7 @@ export default [
         name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountGather.AccountGatherTaskCreate'),
+          title: i18n.t('AccountGatherTaskCreate'),
           permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
@@ -218,7 +218,7 @@ export default [
         name: 'AccountGatherTaskDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountGather.AccountGatherTaskDetail'),
+          title: i18n.t('AccountGatherTaskDetail'),
           permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
@@ -228,7 +228,7 @@ export default [
         name: 'AccountGatherTaskUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountGather.AccountGatherTaskUpdate'),
+          title: i18n.t('AccountGatherTaskUpdate'),
           action: 'update',
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
@@ -240,7 +240,7 @@ export default [
         name: 'AccountGatherTaskExecutionList',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountGather.ExecutionList'),
+          title: i18n.t('ExecutionList'),
           permissions: ['accounts.view_gatheraccountsexecution']
         }
       },
@@ -250,7 +250,7 @@ export default [
         name: 'AccountGatherExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountGather.ExecutionDetail'),
+          title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_gatheraccountsexecution']
         }
       }
@@ -261,7 +261,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
+      title: i18n.t('AccountChangeSecret'),
       app: 'accounts',
       licenseRequired: true
     },
@@ -271,7 +271,7 @@ export default [
         component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
         name: 'AccountChangeSecretList',
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
+          title: i18n.t('AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -281,7 +281,7 @@ export default [
         name: 'AccountChangeSecretCreate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.AssetChangeSecretCreate'),
+          title: i18n.t('AssetChangeSecretCreate'),
           permissions: ['accounts.add_changesecretautomation']
         }
       },
@@ -291,7 +291,7 @@ export default [
         name: 'AccountChangeSecretUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.AssetChangeSecretUpdate'),
+          title: i18n.t('AssetChangeSecretUpdate'),
           permissions: ['accounts.change_changesecretautomation']
         }
       },
@@ -301,7 +301,7 @@ export default [
         name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
+          title: i18n.t('AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -311,7 +311,7 @@ export default [
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.ExecutionList'),
+          title: i18n.t('ExecutionList'),
           permissions: ['accounts.view_changesecretexecution']
         }
       },
@@ -321,7 +321,7 @@ export default [
         name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('accounts.AccountChangeSecret.ExecutionDetail'),
+          title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_changesecretexecution']
         }
       }
@@ -332,7 +332,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('accounts.AccountBackup.AccountBackup'),
+      title: i18n.t('AccountBackup'),
       app: 'accounts',
       resource: 'accountbackupautomation',
       licenseRequired: true
@@ -343,7 +343,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/index.vue'),
         name: 'AccountBackupList',
         meta: {
-          title: i18n.t('accounts.AccountBackup.AccountBackup'),
+          title: i18n.t('AccountBackup'),
           permissions: ['accounts.view_accountbackupautomation']
         }
       },
@@ -352,7 +352,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
         meta: {
-          title: i18n.t('accounts.AccountBackup.AccountBackupCreate'),
+          title: i18n.t('AccountBackupCreate'),
           action: 'create'
         },
         hidden: true
@@ -362,7 +362,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
         meta: {
-          title: i18n.t('accounts.AccountBackup.AccountBackupUpdate'),
+          title: i18n.t('AccountBackupUpdate'),
           action: 'update'
         },
         hidden: true
@@ -371,21 +371,21 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
         name: 'AccountBackupPlanDetail',
-        meta: { title: i18n.t('accounts.AccountBackup.AccountBackup') },
+        meta: { title: i18n.t('AccountBackup') },
         hidden: true
       },
       {
         path: 'executions',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue'),
         name: 'AccountBackupPlanExecutionList',
-        meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
+        meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionDetail',
-        meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
+        meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       }
     ]

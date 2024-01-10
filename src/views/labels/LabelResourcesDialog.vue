@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :show-buttons="false"
-    :title="$tc('labels.BindResource')"
+    :title="$tc('BindResource')"
     destroy-on-close
     v-bind="$attrs"
     v-on="$listeners"

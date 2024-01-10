@@ -49,8 +49,8 @@ export default {
       templateDialogVisible: false,
       headerExtraActions: [
         {
-          name: this.$t('route.AccountTemplate'),
-          title: this.$t('route.AccountTemplate'),
+          name: this.$t('AccountTemplate'),
+          title: this.$t('AccountTemplate'),
           can: () => this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
           callback: () => {
             this.templateDialogVisible = true
@@ -73,7 +73,7 @@ export default {
       this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
-        this.$message.success(this.$tc('common.AddSuccessMsg'))
+        this.$message.success(this.$tc('AddSuccessMsg'))
       })
     }
   }

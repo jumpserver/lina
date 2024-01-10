@@ -1,12 +1,12 @@
 /* eslint-disable */
 <template>
   <div class="popup-result">
-    <p class="title">{{ this.$t('common.CronTab.runningTimes') }}</p>
+    <p class="title">{{ this.$t('RunningTimes') }}</p>
     <ul class="popup-result-scroll">
       <template v-if="isShow">
         <li v-for="item in resultList" :key="item">{{ item }}</li>
       </template>
-      <li v-else>{{ this.$t('common.CronTab.calculationResults') }}</li>
+      <li v-else>{{ this.$t('CalculationResults') }}</li>
     </ul>
   </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import parser from 'cron-parser'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'CrontabResult',
   props: {

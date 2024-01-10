@@ -35,11 +35,11 @@ export default {
             sortable: 'custom'
           },
           input: {
-            label: this.$t('sessions.command'),
+            label: this.$t('Command'),
             sortable: 'custom'
           },
           timestamp: {
-            label: this.$t('sessions.date'),
+            label: this.$t('Date'),
             width: '160px',
             sortable: 'custom',
             formatter: function(row) {

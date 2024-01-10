@@ -26,15 +26,15 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('acl.CommandGroup'),
+          key: this.$t('CommandGroup'),
           value: this.object.command_groups.map((item) => item.name).join(', ')
         },
         {
-          key: this.$t('acl.action'),
+          key: this.$t('Action'),
           value: this.object.action?.label
         },
         (this.object.action?.value === 'review' && {
-          key: this.$t('acl.reviewer'),
+          key: this.$t('Reviewer'),
           value: this.object?.reviewers.map((item) => item?.name).join(', ')
         }),
         'priority', 'is_active', 'comment'

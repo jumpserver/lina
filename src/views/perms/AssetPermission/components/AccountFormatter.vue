@@ -24,7 +24,7 @@
         />
         <span v-if="showAddTemplate">
           <el-button size="mini" type="primary" @click="showTemplateDialog=true">
-            {{ $t('common.TemplateAdd') }}
+            {{ $t('TemplateAdd') }}
           </el-button>
           <span class="help-block" style="display: inline">
             {{ addTemplateHelpText }}
@@ -35,7 +35,7 @@
 
     <Dialog
       v-if="showTemplateDialog"
-      :title="$tc('accounts.AccountTemplate')"
+      :title="$tc('AccountTemplate')"
       :visible.sync="showTemplateDialog"
       @cancel="handleAccountTemplateCancel"
       @confirm="handleAccountTemplateConfirm"
@@ -87,7 +87,7 @@ export default {
     addTemplateHelpText: {
       type: String,
       default() {
-        return this.$t('common.TemplateHelpText')
+        return this.$t('TemplateHelpText')
       }
     }
   },
@@ -97,27 +97,27 @@ export default {
       {
         label: AccountLabelMapper[AllAccount],
         value: AllAccount,
-        tip: this.$t('perms.AllAccountTip')
+        tip: this.$t('AllAccountTip')
       },
       {
         label: AccountLabelMapper[SpecAccount],
         value: SpecAccount,
-        tip: this.$t('perms.SpecAccountTip')
+        tip: this.$t('SpecAccountTip')
       },
       {
         label: AccountLabelMapper[ManualAccount],
         value: ManualAccount,
-        tip: this.$t('perms.ManualAccountTip')
+        tip: this.$t('ManualAccountTip')
       },
       {
         label: AccountLabelMapper[SameAccount],
         value: SameAccount,
-        tip: this.$t('perms.SameAccountTip')
+        tip: this.$t('SameAccountTip')
       },
       {
         label: AccountLabelMapper[AnonymousAccount],
         value: AnonymousAccount,
-        tip: this.$t('perms.AnonymousAccountTip')
+        tip: this.$t('AnonymousAccountTip')
       }
     ]
     return {

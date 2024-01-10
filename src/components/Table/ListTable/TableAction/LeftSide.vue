@@ -83,7 +83,7 @@ export default {
     },
     createTitle: {
       type: String,
-      default: () => i18n.t('common.Create')
+      default: () => i18n.t('Create')
     }
   },
   data() {
@@ -91,7 +91,7 @@ export default {
     return {
       defaultMoreActions: [
         {
-          title: this.$t('common.BatchDelete'),
+          title: this.$t('BatchDelete'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           icon: 'fa fa-trash-o',
@@ -101,7 +101,7 @@ export default {
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$t('common.BatchUpdate'),
+          title: this.$t('BatchUpdate'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           fa: 'batch-update',
@@ -161,7 +161,7 @@ export default {
       const invariantActions = [
         {
           name: 'batch',
-          title: this.$t('common.BatchProcessing', { 'Number': this.selectedRows.length }),
+          title: this.$t('BatchProcessing', { 'Number': this.selectedRows.length }),
           divided: true,
           has: function({ selectedRows }) {
             return selectedRows.length > 0
@@ -177,7 +177,7 @@ export default {
       })
       return {
         name: 'moreActions',
-        title: this.moreActionsTitle || this.$t('common.MoreActions'),
+        title: this.moreActionsTitle || this.$t('MoreActions'),
         dropdown: dropdown
       }
     },
@@ -205,8 +205,8 @@ export default {
       }
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
-      const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
-      const title = this.$tc('common.Info')
+      const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
+      const title = this.$tc('Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',
@@ -219,9 +219,9 @@ export default {
             await performDelete(selectedRows)
             done()
             reloadTable()
-            this.$message.success(this.$tc('common.bulkDeleteSuccessMsg'))
+            this.$message.success(this.$tc('BulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$tc('common.bulkDeleteErrorMsg') + error.message)
+            this.$message.error(this.$tc('BulkDeleteErrorMsg') + error.message)
           } finally {
             instance.confirmButtonLoading = false
           }

@@ -13,6 +13,7 @@
 
 <script>
 import DataCard from '../components/DataCard.vue'
+
 export default {
   components: {
     DataCard
@@ -23,23 +24,23 @@ export default {
 
     return {
       userConfig: {
-        title: this.$t('dashboard.UserData'),
-        tip: this.$t('dashboard.UserData'),
-        subTitle: this.$t('dashboard.UsersTotal'),
+        title: this.$t('UserData'),
+        tip: this.$t('UserData'),
+        subTitle: this.$t('UsersTotal'),
         icon: 'users',
         subIcon: 'broken-line',
         color: '#FFD260',
-        chartTitle: this.$t('dashboard.LoginUserToday'),
+        chartTitle: this.$t('LoginUserToday'),
         data: []
       },
       assetConfig: {
-        title: this.$t('dashboard.AssetData'),
-        tip: this.$t('dashboard.AssetData'),
-        subTitle: this.$t('dashboard.AssetsTotal'),
+        title: this.$t('AssetData'),
+        tip: this.$t('AssetData'),
+        subTitle: this.$t('AssetsTotal'),
         icon: 'assets',
         subIcon: 'broken-line',
         color: themeColor,
-        chartTitle: this.$t('dashboard.LoginAssetToday'),
+        chartTitle: this.$t('LoginAssetToday'),
         data: []
       }
     }
@@ -59,8 +60,8 @@ export default {
       const userActive = data.total_count_login_users === 0 ? 0 : ((data.total_count_login_users / data.total_count_users) * 100).toFixed(0)
       const userTotal = userActive === 100 ? 0 : 100 - userActive
       const users = [
-        { name: this.$t('dashboard.ActiveUser'), value: userActive },
-        { name: this.$t('dashboard.InActiveUser'), value: userTotal }
+        { name: this.$t('ActiveUser'), value: userActive },
+        { name: this.$t('InActiveUser'), value: userTotal }
       ]
       this.$set(this.userConfig, 'data', users)
       this.$set(this.userConfig, 'total', data.total_count_users)
@@ -70,8 +71,8 @@ export default {
       const assetActive = data.total_count_today_active_assets === 0 ? 0 : ((data.total_count_today_active_assets / data.total_count_assets) * 100).toFixed(0)
       const assetTotal = assetActive === 100 ? 0 : 100 - assetActive
       const assets = [
-        { name: this.$t('dashboard.ActiveAsset'), value: assetActive },
-        { name: this.$t('dashboard.InActiveAsset'), value: assetTotal }
+        { name: this.$t('ActiveAsset'), value: assetActive },
+        { name: this.$t('InActiveAsset'), value: assetTotal }
       ]
       this.$set(this.assetConfig, 'data', assets)
       this.$set(this.assetConfig, 'total', data.total_count_assets)

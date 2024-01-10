@@ -4,7 +4,7 @@
       v-if="iVisible"
       :close-on-click-modal="false"
       :destroy-on-close="true"
-      :title="$tc('assets.SelectTemplate')"
+      :title="$tc('SelectTemplate')"
       :visible.sync="iVisible"
       v-bind="$attrs"
       width="70%"
@@ -13,7 +13,7 @@
       v-on="$listeners"
     >
       <template>
-        <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+        <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </template>
     </Dialog>
     <CreateAccountTemplateDialog
@@ -159,7 +159,7 @@ export default {
       })
       if (status) {
         this.refTable.toggleRowSelection(row, false)
-        this.$message.error(this.$tc('accounts.SameTypeAccountTip'))
+        this.$message.error(this.$tc('SameTypeAccountTip'))
       }
       return status
     },

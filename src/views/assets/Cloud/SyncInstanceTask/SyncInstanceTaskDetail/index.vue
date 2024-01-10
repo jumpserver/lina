@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -11,6 +11,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import detail from './detail'
 import HistoryList from './HistoryList'
 import AssetList from './AssetList'
+
 export default {
   name: 'SyncInstanceTaskDetail',
   components: {
@@ -34,16 +35,16 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('xpack.Cloud.SyncInstanceTaskDetail'),
+            title: this.$t('SyncInstanceTaskDetail'),
             name: 'detail'
           },
           {
-            title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryList'),
+            title: this.$t('SyncInstanceTaskHistoryList'),
             name: 'HistoryList',
             hidden: () => !this.$hasPerm('xpack.view_syncinstancetaskexecution')
           },
           {
-            title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryAssetList'),
+            title: this.$t('SyncInstanceTaskHistoryAssetList'),
             name: 'AssetList',
             hidden: () => !this.$hasPerm('xpack.view_syncinstancedetail')
 

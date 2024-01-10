@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
-
-Vue.use(Router)
-
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -24,6 +21,21 @@ Vue.use(Router)
   }
  */
 import commonRoutes from './common'
+/**
+ * user routes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+// 权限路由
+import consoleViewRoutes from './console'
+import auditViewRoutes from './audit'
+import workbenchViewRoutes from './workbench'
+import ticketsRoutes from './tickets'
+import settingsRoutes from './settings'
+import profileRoutes from './profile'
+import { getPropView } from '@/utils/jms'
+import store from '@/store'
+
+Vue.use(Router)
 
 /**
  * constantRoutes
@@ -39,7 +51,7 @@ export const constantRoutes = [
     meta: {
       type: 'view',
       view: 'home',
-      title: i18n.t('route.Index')
+      title: i18n.t('Index')
     },
     children: [
       {
@@ -48,7 +60,7 @@ export const constantRoutes = [
         component: () => import('@/views/myhome/index'),
         meta: {
           icon: 'dashboard',
-          title: i18n.t('route.Overview')
+          title: i18n.t('Overview')
         },
         beforeEnter: async(to, from, next) => {
           const preferView = getPropView()
@@ -71,20 +83,6 @@ export const constantRoutes = [
   },
   ...commonRoutes
 ]
-
-/**
- * user routes
- * the routes that need to be dynamically loaded based on user roles
- */
-// 权限路由
-import consoleViewRoutes from './console'
-import auditViewRoutes from './audit'
-import workbenchViewRoutes from './workbench'
-import ticketsRoutes from './tickets'
-import settingsRoutes from './settings'
-import profileRoutes from './profile'
-import { getPropView } from '@/utils/jms'
-import store from '@/store'
 
 /**
  * admin

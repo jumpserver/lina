@@ -25,11 +25,11 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'GroupInfo'
           },
           {
-            title: this.$t('route.UserList'),
+            title: this.$t('UserList'),
             name: 'GroupUser'
           }
         ]

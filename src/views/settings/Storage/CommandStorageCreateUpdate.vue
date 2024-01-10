@@ -1,8 +1,8 @@
 <template>
   <GenericCreateUpdatePage
-    v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
+    v-bind="$data"
   />
 </template>
 
@@ -30,7 +30,7 @@ export default {
         }
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]
+        [this.$t('Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
@@ -38,7 +38,7 @@ export default {
           disabled: true
         },
         is_default: {
-          helpText: this.$t('sessions.SetToDefaultStorage')
+          helpText: this.$t('SetToDefaultStorage')
         },
         meta: {
           fields: ['HOSTS', 'INDEX_BY_DATE', 'INDEX', 'IGNORE_VERIFY_CERTS'],
@@ -50,11 +50,11 @@ export default {
                 replaceRule: '(https?:\/\/[^:@]+:)([^@]+)(@.+)'
               },
               rules: [RequiredChange],
-              helpText: this.$t('sessions.helpText.esUrl')
+              helpText: this.$t('EsUrl')
             },
             INDEX: {
               rules: [Required],
-              helpText: this.$t('sessions.helpText.esIndex')
+              helpText: this.$t('EsIndex')
             }
           }
         }

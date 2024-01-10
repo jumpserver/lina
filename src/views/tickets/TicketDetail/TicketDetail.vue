@@ -34,30 +34,30 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$t('tickets.Applicant'),
+          key: this.$t('Applicant'),
           value: object.rel_snapshot.applicant
         },
         {
-          key: this.$t('tickets.type'),
+          key: this.$t('Type'),
           value: object.type.lable
         },
         {
-          key: this.$t('tickets.status'),
+          key: this.$t('Status'),
           value: object.status,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
           }
         },
         {
-          key: this.$t('tickets.Assignees'),
+          key: this.$t('Assignees'),
           value: object.process_map[object.approval_step.value - 1].assignees_display.join(',')
         },
         {
-          key: this.$t('tickets.Assignee'),
+          key: this.$t('Assignee'),
           value: object.process_map[object.approval_step.value - 1].processor_display
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('DateCreated'),
           value: toSafeLocalDateStr(object.date_created)
         }
       ]

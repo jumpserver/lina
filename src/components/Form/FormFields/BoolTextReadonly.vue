@@ -14,13 +14,13 @@ export default {
     trueText: {
       type: String,
       default: function() {
-        return this.$t('common.Yes')
+        return this.$t('Yes')
       }
     },
     falseText: {
       type: String,
       default: function() {
-        return this.$t('common.No')
+        return this.$t('No')
       }
     }
 

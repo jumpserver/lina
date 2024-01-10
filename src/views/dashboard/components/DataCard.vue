@@ -9,8 +9,8 @@
         <div class="num">{{ config.total }}</div>
         <div class="add">
           <span class="add-num">
-            {{ $tc('dashboard.WeekAdd') }}：
-            <span style="font-size: 14px;" :class="{'increase': config.weekAdd > 0}">
+            {{ $tc('WeekAdd') }}：
+            <span :class="{'increase': config.weekAdd > 0}" style="font-size: 14px;">
               {{ config.weekAdd }}
             </span>
           </span>
@@ -29,6 +29,7 @@
 <script>
 import Title from './Title.vue'
 import RingChart from './RingChart'
+
 export default {
   components: {
     Title,

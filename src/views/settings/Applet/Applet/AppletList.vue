@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :md="24" :sm="24">
         <el-alert type="success">
-          {{ $t('terminal.AppletHelpText') }}
+          {{ $t('AppletHelpText') }}
         </el-alert>
       </el-col>
     </el-row>
@@ -33,14 +33,14 @@ export default {
         onCreate: () => {
           this.uploadDialogVisible = true
         },
-        createTitle: this.$t('common.Upload'),
+        createTitle: this.$t('Upload'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['version']
         },
         extraActions: [
           {
-            title: this.$t('terminal.Marketplace'),
+            title: this.$t('Marketplace'),
             icon: 'el-icon-shopping-bag-1',
             callback: () => {
               window.open('https://apps.fit2cloud.com/jumpserver')

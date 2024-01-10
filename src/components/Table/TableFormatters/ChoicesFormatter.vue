@@ -31,8 +31,8 @@ export default {
             false: 'text-danger'
           },
           textChoices: {
-            true: this.$t('common.Yes'),
-            false: this.$t('common.No')
+            true: this.$t('Yes'),
+            false: this.$t('No')
           },
           getKey({ row, cellValue }) {
             return (cellValue && typeof cellValue === 'object') ? cellValue.value : cellValue

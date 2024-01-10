@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import { ChoicesFormatter } from '@/components/Table/TableFormatters'
 
 export const connectivityMeta = {
-  label: i18n.t('assets.Connectivity'),
+  label: i18n.t('Connectivity'),
   formatter: ChoicesFormatter,
   formatterArgs: {
     faChoices: {

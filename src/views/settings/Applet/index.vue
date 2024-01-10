@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -13,6 +13,7 @@ import AppletHosts from './AppletHost/AppletHostList'
 import VirtualApp from './VirtualApp/VirtualAppList'
 import AppProvider from './AppProvider/AppProviderList'
 import store from '@/store'
+
 export default {
   name: 'Applet',
   components: {
@@ -27,23 +28,23 @@ export default {
       activeMenu: 'Applets',
       submenu: [
         {
-          title: this.$t('terminal.Applets'),
+          title: this.$t('Applets'),
           name: 'Applets'
         },
         {
-          title: this.$t('terminal.AppletHosts'),
+          title: this.$t('AppletHosts'),
           name: 'AppletHosts',
           hidden: () => !this.$hasPerm('terminal.view_applethost')
         },
         {
-          title: this.$t('terminal.VirtualApp'),
+          title: this.$t('VirtualApp'),
           name: 'VirtualApp',
           hidden: () => {
             return !store.getters.publicSettings['VIRTUAL_APP_ENABLED'] || !this.$store.getters.hasValidLicense
           }
         },
         {
-          title: this.$t('terminal.AppProvider'),
+          title: this.$t('AppProvider'),
           name: 'AppProvider',
           hidden: () => {
             return !store.getters.publicSettings['VIRTUAL_APP_ENABLED'] || !this.$store.getters.hasValidLicense

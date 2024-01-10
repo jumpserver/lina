@@ -10,7 +10,7 @@
       @confirm="onAttrDialogConfirm"
     />
     <el-button size="mini" type="primary" @click="handleCreate">
-      {{ this.$t('common.New') }}
+      {{ this.$t('New') }}
     </el-button>
   </div>
 </template>
@@ -41,11 +41,11 @@ export default {
       visible: false,
       tableConfig: {
         columns: [
-          { prop: 'name', label: this.$t('common.PolicyName') },
-          { prop: 'priority', label: this.$t('acl.priority') },
-          { prop: 'strategy_rules', label: this.$t('common.RuleCount'), formatter: tableFormatter('count') },
-          { prop: 'strategy_actions', label: this.$t('common.ActionCount'), formatter: tableFormatter('count') },
-          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
+          { prop: 'name', label: this.$t('PolicyName') },
+          { prop: 'priority', label: this.$t('Priority') },
+          { prop: 'strategy_rules', label: this.$t('RuleCount'), formatter: tableFormatter('count') },
+          { prop: 'strategy_actions', label: this.$t('ActionCount'), formatter: tableFormatter('count') },
+          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button
@@ -94,7 +94,7 @@ export default {
       for (let i = 0; i < totalData.length; i++) {
         if (totalData[i].id === value) {
           status = false
-          this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
+          this.$message.error(`${this.$tc('ExistError')}`)
           break
         }
       }

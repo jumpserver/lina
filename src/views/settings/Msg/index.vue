@@ -20,17 +20,17 @@ export default {
       activeMenu: 'Email',
       submenu: [
         {
-          title: this.$t('setting.Email'),
+          title: this.$t('Email'),
           name: 'Email',
           hidden: !this.$hasPerm('settings.change_email')
         },
         {
-          title: this.$t('setting.SMS'),
+          title: this.$t('SMS'),
           name: 'SMS',
           hidden: !this.$hasPerm('settings.change_sms') || !this.$store.getters.hasValidLicense
         },
         {
-          title: this.$t('setting.MsgSubscribe'),
+          title: this.$t('MsgSubscribe'),
           name: 'Subscribe',
           hidden: !this.$hasPerm('settings.change_systemmsgsubscription')
         }

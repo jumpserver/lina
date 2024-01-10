@@ -25,19 +25,19 @@ export default {
       TaskDetail: {},
       actions: {},
       config: {
-        title: this.$t('assets.PlatformDetail'),
+        title: this.$t('PlatformDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.Asset'),
+            title: this.$t('Asset'),
             name: 'Assets'
           },
           {
-            title: this.$t('common.Automations'),
+            title: this.$t('Automations'),
             name: 'Automation'
           }
         ],

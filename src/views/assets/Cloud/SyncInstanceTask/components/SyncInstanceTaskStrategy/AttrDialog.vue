@@ -3,7 +3,7 @@
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('common.Strategy')"
+    :title="$tc('Strategy')"
     v-bind="$attrs"
     width="80%"
     v-on="$listeners"
@@ -38,21 +38,21 @@ export default {
     return {
       object: this.getObject(),
       fields: [
-        [this.$t('common.BasicSetting'), ['name', 'priority']],
-        [this.$t('common.RuleSetting'), ['rule_relation', 'strategy_rules']],
-        [this.$t('common.ActionSetting'), ['strategy_actions']]
+        [this.$t('BasicSetting'), ['name', 'priority']],
+        [this.$t('RuleSetting'), ['rule_relation', 'strategy_rules']],
+        [this.$t('ActionSetting'), ['strategy_actions']]
       ],
       fieldsMeta: {
         rule_relation: {
-          label: this.$t('common.RuleRelation'),
-          helpTips: this.$t('common.RuleRelationHelpTips')
+          label: this.$t('RuleRelation'),
+          helpTips: this.$t('RuleRelationHelpTips')
         },
         strategy_rules: {
-          label: this.$t('common.Rule'),
+          label: this.$t('Rule'),
           component: RuleInput
         },
         strategy_actions: {
-          label: this.$t('common.Action'),
+          label: this.$t('Action'),
           component: ActionInput
         }
       },
@@ -93,7 +93,7 @@ export default {
         if (item[0]?.id) {
           this.$axios.delete(`/api/v1/xpack/cloud/${type}/${item[0]?.id}/`)
         }
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
         this.object[type] = this.fieldsMeta[type].el.tableConfig.totalData
       }
     }

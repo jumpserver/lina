@@ -1,10 +1,10 @@
 <template>
   <GenericCreateUpdatePage
-    :fields="fields"
-    :initial="initial"
-    :fields-meta="fieldsMeta"
-    :url="url"
     :create-success-next-route="createSuccessNextRoute"
+    :fields="fields"
+    :fields-meta="fieldsMeta"
+    :initial="initial"
+    :url="url"
     v-bind="$data"
   />
 </template>
@@ -18,12 +18,12 @@ export default {
   data() {
     const regexPlaceholder = 'rm.*|reboot|shutdown'
     const commandPlaceholder = 'rm\rreboot'
-    const commandHelpText = this.$t('assets.CommandFilterRuleContentHelpText')
+    const commandHelpText = this.$t('CommandFilterRuleContentHelpText')
     const vm = this
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'content', 'ignore_case', 'comment']]
+        [this.$t('Basic'), ['name', 'type', 'content', 'ignore_case', 'comment']]
       ],
       url: `/api/v1/acls/command-groups/`,
       createSuccessNextRoute: { name: 'CommandFilterAclList' },

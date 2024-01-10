@@ -18,7 +18,7 @@ export default {
       url: '/api/v1/settings/setting/?category=auth',
       fields: [
         [
-          this.$t('common.Basic'),
+          this.$t('Basic'),
           [
             'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
           ]

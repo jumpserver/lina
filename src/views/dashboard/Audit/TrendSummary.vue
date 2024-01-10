@@ -8,6 +8,7 @@
 <script>
 import Title from '../components/Title.vue'
 import ColumnChart from '../components/ColumnChart'
+
 export default {
   components: { Title, ColumnChart },
   props: {
@@ -19,13 +20,13 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('dashboard.UserLoginTrend'),
-        tip: this.$t('dashboard.UserLoginTrend')
+        title: this.$t('UserLoginTrend'),
+        tip: this.$t('UserLoginTrend')
       },
       columnChartConfig: {
         datesMetrics: [],
         primaryData: [0],
-        primaryName: this.$t('dashboard.LoginUserToday')
+        primaryName: this.$t('LoginUserToday')
       }
     }
   },

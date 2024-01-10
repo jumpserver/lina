@@ -33,8 +33,8 @@ export default {
     return {
       type: 'all', // all, selected
       types: [
-        { name: 'all', label: this.$t('common.All') },
-        { name: 'spec', label: this.$t('common.Spec') + this.$t('common.WordSep') + this.resource }
+        { name: 'all', label: this.$t('All') },
+        { name: 'spec', label: this.$t('Spec') + this.$t('WordSep') + this.resource }
       ],
       selected: []
     }

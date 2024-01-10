@@ -56,21 +56,21 @@ export default {
       }, this.xtermConfig)),
       toolbar: [
         {
-          tip: this.$tc('ops.ScrollToTop'),
+          tip: this.$tc('ScrollToTop'),
           icon: 'arrow-up',
           callback: () => {
             this.xterm.scrollToTop()
           }
         },
         {
-          tip: this.$tc('ops.ScrollToBottom'),
+          tip: this.$tc('ScrollToBottom'),
           icon: 'arrow-down',
           callback: () => {
             this.xterm.scrollToBottom()
           }
         },
         {
-          tip: this.$tc('ops.ClearScreen'),
+          tip: this.$tc('ClearScreen'),
           icon: 'refresh',
           callback: () => {
             this.xterm.reset()

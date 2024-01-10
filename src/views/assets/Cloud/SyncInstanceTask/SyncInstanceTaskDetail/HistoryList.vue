@@ -33,50 +33,50 @@ export default {
         columns: [
           {
             prop: 'summary.new',
-            label: this.$t('xpack.Cloud.NewCount')
+            label: this.$t('NewCount')
           },
           {
             prop: 'summary.unsync',
-            label: this.$t('xpack.Cloud.UnSyncCount')
+            label: this.$t('UnSyncCount')
           },
           {
             prop: 'summary.sync',
-            label: this.$t('xpack.Cloud.SyncedCount')
+            label: this.$t('SyncedCount')
           },
           {
             prop: 'summary.released',
-            label: this.$t('xpack.Cloud.ReleasedCount')
+            label: this.$t('ReleasedCount')
           },
           {
             prop: 'status',
-            label: this.$t('xpack.Cloud.Status'),
+            label: this.$t('Status'),
             formatter: row => {
               if (row.status === 1) {
-                return <el-tag type='primary' size='mini'>{this.$t('common.Success')}</el-tag>
+                return <el-tag type='primary' size='mini'>{this.$t('Success')}</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'>{this.$t('common.Failed')}</el-tag>
+                return <el-tag type='danger' size='mini'>{this.$t('Failed')}</el-tag>
               }
             }
           },
           {
             prop: 'date_sync',
-            label: this.$t('xpack.Cloud.DateSync'),
+            label: this.$t('DateSync'),
             formatter: DateFormatter
           },
           {
             prop: 'actions',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
-              moreActionsTitle: this.$t('xpack.Cloud.Log'),
+              moreActionsTitle: this.$t('Log'),
               hasClone: false,
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: function(val) {
                     openTaskPage(val.row.id)

@@ -30,19 +30,19 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.Name'),
+          key: this.$t('Name'),
           value: this.object.name
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('Comment'),
           value: this.object.meta.comment
         },
         {
-          key: this.$t('ops.Queue'),
+          key: this.$t('Queue'),
           value: this.object.meta.queue
         },
         {
-          key: this.$t('ops.LastPublishedTime'),
+          key: this.$t('LastPublishedTime'),
           value: this.object.last_published_time
         }
       ]

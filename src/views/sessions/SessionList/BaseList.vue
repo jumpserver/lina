@@ -44,7 +44,7 @@ export default {
         columnsMeta: {
           id: {
             prop: 'id',
-            label: this.$t('common.Number'),
+            label: this.$t('Number'),
             align: 'center',
             width: '80px',
             formatter: function(row, column, cellValue, index) {
@@ -98,7 +98,7 @@ export default {
             }
           },
           asset: {
-            label: this.$t('sessions.target'),
+            label: this.$t('Target'),
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: ({ row }) => {
@@ -121,7 +121,7 @@ export default {
             width: '140px'
           },
           protocol: {
-            label: this.$t('sessions.protocol'),
+            label: this.$t('Protocol'),
             width: '80px',
             sortable: false,
             formatter: null
@@ -133,18 +133,18 @@ export default {
             width: '150px'
           },
           duration: {
-            label: this.$t('sessions.duration'),
+            label: this.$t('Duration'),
             formatter: function(row) {
               return timeOffset(row.date_start, row.date_end)
             },
             width: '80px'
           },
           is_locked: {
-            label: this.$t('sessions.is_locked')
+            label: this.$t('IsLocked')
           },
           actions: {
             prop: 'actions',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             width: '160px',
             formatter: ActionsFormatter,
             formatterArgs: {

@@ -2,12 +2,12 @@
   <IBox>
     <GenericCreateUpdateForm
       v-if="!loading"
+      :clean-form-value="cleanFormValue"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
       :submit-method="submitMethod"
       :url="url"
-      :clean-form-value="cleanFormValue"
       class="password-update"
     />
   </IBox>
@@ -71,11 +71,11 @@ export default {
       if (this.category === 'lina') {
         fieldsMeta.basic.fieldsMeta = {
           has_secret_key: {
-            label: this.$t('users.SetStatus'),
+            label: this.$t('SetStatus'),
             component: BoolTextReadonly,
             el: {
-              trueText: this.$t('users.Set'),
-              falseText: this.$t('users.NotSet')
+              trueText: this.$t('Set'),
+              falseText: this.$t('NotSet')
             },
             disabled: true
           }

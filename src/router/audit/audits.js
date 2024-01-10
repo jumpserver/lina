@@ -7,7 +7,7 @@ export default [
     name: 'LoginLog',
     component: empty,
     meta: {
-      title: i18n.t('route.LoginLog'),
+      title: i18n.t('LoginLog'),
       permissions: ['audits.view_userloginlog']
     },
     children: [
@@ -16,7 +16,7 @@ export default [
         name: 'LoginLogList',
         component: () => import('@/views/audits/LoginLog/LoginLogList'),
         meta: {
-          title: i18n.t('route.LoginLog'),
+          title: i18n.t('LoginLog'),
           permissions: ['audits.view_userloginlog']
         }
       },
@@ -26,7 +26,7 @@ export default [
         component: () => import('@/views/audits/LoginLog/LoginLogDetail/index'),
         hidden: true,
         meta: {
-          title: i18n.t('route.LoginLog'),
+          title: i18n.t('LoginLog'),
           permissions: ['audits.view_userloginlog']
         }
       }
@@ -37,7 +37,7 @@ export default [
     name: '',
     component: empty,
     meta: {
-      title: i18n.t('route.OperateLog'),
+      title: i18n.t('OperateLog'),
       permissions: ['audits.view_operatelog']
     },
     children: [
@@ -46,7 +46,7 @@ export default [
         name: 'OperateLogList',
         component: () => import('@/views/audits/OperateLog/OperateLogList'),
         meta: {
-          title: i18n.t('route.OperateLog'),
+          title: i18n.t('OperateLog'),
           permissions: ['audits.view_operatelog']
         }
       },
@@ -56,7 +56,7 @@ export default [
         component: () => import('@/views/audits/OperateLog/OperateLogDetail/index'),
         hidden: true,
         meta: {
-          title: i18n.t('route.OperateLog'),
+          title: i18n.t('OperateLog'),
           permissions: ['audits.view_operatelog']
         }
       }
@@ -67,7 +67,7 @@ export default [
     name: 'PasswordChangeLog',
     component: () => import('@/views/audits/PasswordChangeLogList'),
     meta: {
-      title: i18n.t('route.PasswordChangeLog'),
+      title: i18n.t('PasswordChangeLog'),
       permissions: ['audits.view_passwordchangelog']
     }
   },
@@ -76,7 +76,7 @@ export default [
     name: 'JobExecutionLog',
     component: () => import('@/views/audits/JobExecutionLogList'),
     meta: {
-      title: i18n.t('route.JobExecutionLog'),
+      title: i18n.t('JobExecutionLog'),
       permissions: ['audits.view_joblog']
     }
   }

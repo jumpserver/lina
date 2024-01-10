@@ -25,7 +25,7 @@ export default {
       detailFields: [
         'name', 'type', 'comment',
         {
-          key: this.$t('ops.AverageTimeCost'),
+          key: this.$t('AverageTimeCost'),
           value: this.object.average_time_cost.toFixed(2) + 's'
         },
         'date_last_run', 'date_updated', 'date_created'

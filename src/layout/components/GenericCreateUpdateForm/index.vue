@@ -75,21 +75,21 @@ export default {
     createSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('common.createSuccessMsg')
+        return this.$t('CreateSuccessMsg')
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
       default: function() {
-        return this.$t('common.saveSuccessContinueMsg')
+        return this.$t('SaveSuccessContinueMsg')
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('common.updateSuccessMsg')
+        return this.$t('UpdateSuccessMsg')
       }
     },
     // 创建成功的跳转路由
@@ -359,10 +359,10 @@ export default {
           const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
           object = await this.getObjectDetail(url)
           if (object['name']) {
-            object.name = this.$t('common.cloneFrom') + object.name
+            object.name = this.$t('CloneFrom') + object.name
           } else if (object['hostname']) {
-            object.hostname = this.$t('common.cloneFrom') + object.hostname
-            object.name = this.$t('common.cloneFrom') + '' + object.name
+            object.hostname = this.$t('CloneFrom') + object.hostname
+            object.name = this.$t('CloneFrom') + '' + object.name
           }
         } else {
           object = await this.getObjectDetail(this.iUrl)

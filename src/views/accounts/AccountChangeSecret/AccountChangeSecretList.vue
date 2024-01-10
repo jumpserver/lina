@@ -50,14 +50,14 @@ export default {
             width: '120px'
           },
           is_periodic: {
-            label: vm.$t('accounts.AccountChangeSecret.Timer'),
+            label: vm.$t('Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
+            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           executed_amount: {
@@ -90,7 +90,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')

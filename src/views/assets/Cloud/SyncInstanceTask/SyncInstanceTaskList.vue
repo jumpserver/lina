@@ -38,7 +38,7 @@ export default {
             }
           },
           account: {
-            label: this.$t('xpack.Cloud.Account'),
+            label: this.$t('Account'),
             formatter: function(row) {
               return <span>{ row.account?.name }</span>
             }
@@ -54,7 +54,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   type: 'info',
                   can: () => vm.$hasPerm('xpack.add_syncinstancetaskexecution'),

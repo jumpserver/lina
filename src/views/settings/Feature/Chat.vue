@@ -23,7 +23,7 @@ export default {
       hasReset: false,
       moreButtons: [
         {
-          title: this.$t('common.Test'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             btn.loading = true
@@ -41,7 +41,7 @@ export default {
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         [
-          this.$t('setting.ChatAI'),
+          this.$t('ChatAI'),
           [
             'CHAT_AI_ENABLED',
             'GPT_MODEL',
@@ -56,7 +56,7 @@ export default {
           el: {
             autocomplete: 'new-password'
           },
-          helpText: this.$t('setting.Example', { example: 'https://api.openai.com/v1' })
+          helpText: this.$t('Example', { example: 'https://api.openai.com/v1' })
         },
         GPT_API_KEY: {
           el: {
@@ -64,7 +64,7 @@ export default {
           }
         },
         GPT_PROXY: {
-          helpText: this.$t('setting.Example', { example: 'http://ip:port' })
+          helpText: this.$t('Example', { example: 'http://ip:port' })
         }
       },
       submitMethod() {

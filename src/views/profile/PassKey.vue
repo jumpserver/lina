@@ -7,12 +7,12 @@
     />
     <Dialog
       :show-buttons="false"
-      :title="$tc('auth.AddPassKey')"
+      :title="$tc('AddPassKey')"
       :visible.sync="dialogVisible"
       width="600px"
     >
       <el-alert v-if="!isLocalUser" :closable="false" class="source-alert" type="error">
-        {{ $t('profile.PasskeyAddDisableInfo', {source: source.label}) }}
+        {{ $t('PasskeyAddDisableInfo', {source: source.label}) }}
       </el-alert>
       <AutoDataForm v-else v-bind="form" @submit="onAddConfirm" />
     </Dialog>
@@ -39,7 +39,7 @@ export default {
         fields: [
           {
             id: 'name',
-            label: this.$t('common.Name'),
+            label: this.$t('Name'),
             type: 'input',
             required: true,
             el: {
@@ -65,16 +65,16 @@ export default {
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.reloadTable()
-                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
                 })
               }.bind(this),
               extraActions: [
                 {
                   name: 'Enabled',
                   title: ({ row }) => {
-                    return row.is_active ? this.$t('common.Disable') : this.$t('common.Enable')
+                    return row.is_active ? this.$t('Disable') : this.$t('Enable')
                   },
                   type: 'info',
                   can: () => this.$hasPerm('authentication.change_passkey'),
@@ -83,9 +83,9 @@ export default {
                       { is_active: !row.is_active }
                     ).then(res => {
                       this.reloadTable()
-                      this.$message.success(this.$tc('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
                     })
                   }.bind(this)
                 }
@@ -104,8 +104,8 @@ export default {
         hasCreate: false,
         extraActions: [
           {
-            name: this.$t('setting.Create'),
-            title: this.$t('setting.Create'),
+            name: this.$t('Create'),
+            title: this.$t('Create'),
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_passkey'),
             callback: function() {
@@ -138,7 +138,7 @@ export default {
       }).then((res) => {
         this.dialogVisible = false
         this.reloadTable()
-        this.$message.success(this.$tc('common.createSuccessMsg'))
+        this.$message.success(this.$tc('CreateSuccessMsg'))
       }).catch((error) => {
         if (error.response?.status === 412) {
           return

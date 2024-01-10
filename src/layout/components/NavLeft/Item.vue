@@ -23,7 +23,10 @@ export default {
     }
 
     if (title) {
-      vnodes.push(<span slot='title'>{(title)}</span>)
+      const iTitle = title.split(' ').map(item => {
+        return _.capitalize(item)
+      }).join(' ')
+      vnodes.push(<span slot='title'>{iTitle}</span>)
     }
     return vnodes
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-alert :title="helpMessage" type="success" :closable="false" />
-    <BaseSMS ref="baseSms" :config="$data" :title="$tc('setting.Custom')" />
+    <el-alert :closable="false" :title="helpMessage" type="success" />
+    <BaseSMS ref="baseSms" :config="$data" :title="$tc('Custom')" />
   </div>
 </template>
 
@@ -17,13 +17,13 @@ export default {
   data() {
     const vm = this
     return {
-      helpMessage: this.$t('setting.helpTip.CustomFile'),
+      helpMessage: this.$t('CustomFile'),
       url: `/api/v1/settings/setting/?category=custom_file`,
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
         {
-          title: this.$t('common.Test'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             btn.loading = true
@@ -41,7 +41,7 @@ export default {
       ],
       fields: [
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'SMS_TEST_PHONE'
           ]

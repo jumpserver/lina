@@ -33,7 +33,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.Activate'),
+          title: this.$t('Activate'),
           type: 'switch',
           attrs: {
             model: this.object.is_active,
@@ -46,26 +46,26 @@ export default {
               vm.$axios.patch(url, data).catch(() => {
                 item.attrs.model = !v
               }).then(res => {
-                vm.$message.success(vm.$t('common.updateSuccessMsg'))
+                vm.$message.success(vm.$t('UpdateSuccessMsg'))
               }).catch(err => {
-                vm.$message.error(vm.$t('common.updateErrorMsg' + ' ' + err))
+                vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
               })
             }
           }
         },
         {
-          title: this.$t('users.quickUpdate.resetMFA'),
+          title: this.$t('ResetMFA'),
           attrs: {
             type: 'primary',
             disabled: !vm.$hasPerm('users.change_user'),
-            label: this.$t('common.Reset')
+            label: this.$t('Reset')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.quickUpdate.resetMFAWarningMsg')
-              const warnTitle = vm.$t('common.Info')
+              const warnMsg = vm.$t('ResetMFAWarningMsg')
+              const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
-              const successMsg = vm.$t('users.quickUpdate.resetMFAdSuccessMsg')
+              const successMsg = vm.$t('ResetMFAdSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -86,18 +86,18 @@ export default {
           }
         },
         {
-          title: this.$t('users.quickUpdate.resetPassword'),
+          title: this.$t('ResetPassword'),
           attrs: {
             type: 'primary',
             disabled: this.object.source.value !== 'local' || !vm.$hasPerm('users.change_user'),
-            label: this.$t('users.quickUpdate.send')
+            label: this.$t('Send')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.quickUpdate.resetPasswordWarningMsg')
-              const warnTitle = vm.$t('common.Info')
+              const warnMsg = vm.$t('ResetPasswordWarningMsg')
+              const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
-              const successMsg = vm.$t('users.quickUpdate.resetPasswordSuccessMsg')
+              const successMsg = vm.$t('ResetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -118,18 +118,18 @@ export default {
           }
         },
         {
-          title: this.$t('users.quickUpdate.resetSSHKey'),
+          title: this.$t('ResetSSHKey'),
           attrs: {
             type: 'primary',
             disabled: !this.$store.state.users.profile.can_public_key_auth || !vm.$hasPerm('users.change_user'),
-            label: this.$t('users.quickUpdate.send')
+            label: this.$t('Send')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.quickUpdate.resetSSHKeyWarningMsg')
-              const warnTitle = vm.$t('common.Info')
+              const warnMsg = vm.$t('ResetSSHKeyWarningMsg')
+              const warnTitle = vm.$t('Info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
-              const successMsg = vm.$t('users.quickUpdate.resetSSHKeySuccessMsg')
+              const successMsg = vm.$t('ResetSSHKeySuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -150,16 +150,16 @@ export default {
           }
         },
         {
-          title: this.$t('users.quickUpdate.unblockUser'),
+          title: this.$t('UnblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.quickUpdate.unblock'),
+            label: this.$t('Unblock'),
             disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
           },
           callbacks: {
             click: function(v, item) {
               const url = `/api/v1/users/users/${vm.object.id}/unblock/`
-              const unblockSuccessMsg = vm.$t('users.quickUpdate.unblockSuccessMsg')
+              const unblockSuccessMsg = vm.$t('UnblockSuccessMsg')
               vm.$axios.patch(url).then(() => {
                 item.attrs.disabled = !item.attrs.disabled
                 vm.$message.success(unblockSuccessMsg)
@@ -178,7 +178,7 @@ export default {
         },
         'id', 'name', 'username', 'email',
         {
-          key: this.$t('users.Phone'),
+          key: this.$t('Phone'),
           formatter: () => {
             const phoneObj = this.object.phone
             return <div>{phoneObj?.code} {phoneObj?.phone}</div>
@@ -186,7 +186,7 @@ export default {
         },
         'wecom_id', 'dingtalk_id', 'feishu_id',
         {
-          key: this.$t('users.Role'),
+          key: this.$t('Role'),
           formatter: (item, val) => {
             const rolesDisplay = this.object.org_roles.concat(this.object.system_roles || [])
             const dom = rolesDisplay.map(item => {
@@ -200,7 +200,7 @@ export default {
       ],
       relationConfig: {
         icon: 'fa-user',
-        title: this.$t('users.UserGroups'),
+        title: this.$t('UserGroups'),
         objectsAjax: {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },

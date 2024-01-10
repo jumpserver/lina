@@ -1,7 +1,7 @@
 <template>
   <GenericTicketDetail
-    :object="object"
     :detail-card-items="detailCardItems"
+    :object="object"
     :special-card-items="specialCardItems"
   />
 </template>
@@ -10,6 +10,7 @@
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
+
 export default {
   name: '',
   components: { GenericTicketDetail },
@@ -28,23 +29,23 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('tickets.type'),
+          key: this.$t('Type'),
           value: this.object.type.label
         },
         {
-          key: this.$t('tickets.ApprovalLevel'),
+          key: this.$t('ApprovalLevel'),
           value: this.object.approval_level.label
         },
         {
-          key: this.$t('common.CreatedBy'),
+          key: this.$t('CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('common.DateUpdated'),
+          key: this.$t('DateUpdated'),
           value: toSafeLocalDateStr(this.object.date_updated)
         }
       ]
@@ -52,19 +53,19 @@ export default {
     specialCardItems() {
       const approvalData = [
         {
-          key: this.$t('tickets.OneAssigneeType'),
+          key: this.$t('OneAssigneeType'),
           value: ''
         },
         {
-          key: this.$t('tickets.OneAssignee'),
+          key: this.$t('OneAssignee'),
           value: ''
         },
         {
-          key: this.$t('tickets.TwoAssigneeType'),
+          key: this.$t('TwoAssigneeType'),
           value: ''
         },
         {
-          key: this.$t('tickets.TwoAssignee'),
+          key: this.$t('TwoAssignee'),
           value: ''
         }]
       this.object.rules.forEach(item => {

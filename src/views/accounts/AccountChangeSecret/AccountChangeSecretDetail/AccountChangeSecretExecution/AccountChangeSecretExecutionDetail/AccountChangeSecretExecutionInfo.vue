@@ -26,25 +26,25 @@ export default {
       detailFields: [
         'id',
         {
-          key: this.$t('common.DisplayName'),
+          key: this.$t('DisplayName'),
           value: this.object.snapshot.name
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
+          key: this.$t('AssetAmount'),
           value: this.object.snapshot.asset_amount
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
+          key: this.$t('NodeAmount'),
           value: this.object.snapshot.node_amount
         },
         'trigger_display', 'date_start', 'date_finished',
         {
-          key: this.$t('accounts.AccountChangeSecret.MailRecipient'),
+          key: this.$t('MailRecipient'),
           value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('accounts.AccountChangeSecret.ContainAttachment') : ''}`).join(', ') : ''
+            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`).join(', ') : ''
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('Comment'),
           value: this.object.snapshot.common
         }
       ]

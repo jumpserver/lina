@@ -17,16 +17,16 @@ export default {
       config: {
         url: '/api/v1/terminal/virtual-apps/',
         fields: [
-          [this.$t('common.Basic'), ['name', 'image_name']],
-          [this.$t('assets.Protocol'), ['protocols']],
-          [this.$t('common.Other'), ['is_active', 'comment']]
+          [this.$t('Basic'), ['name', 'image_name']],
+          [this.$t('Protocol'), ['protocols']],
+          [this.$t('Other'), ['is_active', 'comment']]
         ],
         addFieldsMeta: {
           name: {
             rules: [Required, MatchExcludeParenthesis]
           },
           protocols: {
-            label: this.$t('assets.Protocols'),
+            label: this.$t('Protocols'),
             formatter: ProtocolsFormatter
           }
         },

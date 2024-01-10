@@ -9,7 +9,7 @@
         default-expand-all
         row-key="id"
       >
-        <el-table-column :label="$tc('notifications.MessageType')" width="230">
+        <el-table-column :label="$tc('MessageType')" width="230">
           <template v-slot="scope">
             <span>{{ scope.row.value }}</span>
           </template>
@@ -26,17 +26,17 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('notifications.Receivers')" show-overflow-tooltip>
+        <el-table-column :label="$tc('Receivers')" show-overflow-tooltip>
           <template v-slot="scope">
             <span v-if="!scope.row.children">
               {{ scope.row.receivers.map(item => item.name).join(', ') }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('common.Actions')" width="200">
+        <el-table-column :label="$tc('Actions')" width="200">
           <template v-slot="scope">
             <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
-              {{ $t('notifications.ChangeReceiver') }}
+              {{ $t('ChangeReceiver') }}
             </el-button>
           </template>
         </el-table-column>
@@ -45,7 +45,7 @@
       <SelectDialog
         v-if="dialogVisible"
         :selected-users="dialogSelectedUsers"
-        :title="$tc('notifications.ChangeReceiver')"
+        :title="$tc('ChangeReceiver')"
         :visible.sync="dialogVisible"
         @cancel="dialogVisible=false"
         @submit="onDialogSelectSubmit"

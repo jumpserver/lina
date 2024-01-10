@@ -38,7 +38,7 @@ export default {
           ],
           columnsMeta: {
             name: {
-              label: this.$t('common.Name'),
+              label: this.$t('Name'),
               formatter: (row) => {
                 const to = {
                   name: 'UserDetail',
@@ -52,7 +52,7 @@ export default {
               }
             },
             system_roles: {
-              label: this.$t('users.SystemRoles'),
+              label: this.$t('SystemRoles'),
               formatter: (row) => {
                 return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
               },
@@ -60,7 +60,7 @@ export default {
               columnKey: 'system_roles'
             },
             org_roles: {
-              label: this.$t('users.OrgRoles'),
+              label: this.$t('OrgRoles'),
               formatter: (row) => {
                 return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
               },

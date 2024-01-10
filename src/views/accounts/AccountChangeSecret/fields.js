@@ -4,7 +4,7 @@ import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormField
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('accounts.AccountChangeSecret.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
+    return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
 }
@@ -18,18 +18,18 @@ export const getChangeSecretFields = () => {
     secret_strategy: {
       type: 'radio-group',
       options: [],
-      label: i18n.t('accounts.AccountChangeSecret.PasswordStrategy'),
+      label: i18n.t('PasswordStrategy'),
       on: ([value], updateForm) => {
       }
     },
     secret: {
-      label: i18n.t('assets.Password'),
+      label: i18n.t('Password'),
       hidden: ({ secret_strategy, secret_type }) => {
         return secret_strategy !== 'specific' || secret_type !== 'password'
       }
     },
     ssh_key: {
-      label: i18n.t('assets.PrivateKey'),
+      label: i18n.t('PrivateKey'),
       el: {
         type: 'textarea',
         rows: 4
@@ -42,7 +42,7 @@ export const getChangeSecretFields = () => {
       hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
     },
     passphrase: {
-      label: i18n.t('assets.Passphrase'),
+      label: i18n.t('Passphrase'),
       component: UpdateToken,
       hidden: ({ secret_strategy, secret_type }) => {
         return (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
@@ -50,12 +50,12 @@ export const getChangeSecretFields = () => {
     },
     password_rules: {
       component: PasswordRule,
-      label: i18n.t('accounts.AccountChangeSecret.PasswordRule'),
+      label: i18n.t('PasswordRule'),
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     recipients: {
-      label: i18n.t('accounts.AccountChangeSecret.Addressee'),
-      helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
+      label: i18n.t('Addressee'),
+      helpText: i18n.t('OnlyMailSend'),
       el: {
         value: [],
         ajax: {
@@ -72,24 +72,24 @@ export const getChangeSecretFields = () => {
     crontab: {
       type: 'cronTab',
       component: CronTab,
-      label: i18n.t('xpack.RegularlyPerform'),
+      label: i18n.t('RegularlyPerform'),
       hidden: (formValue) => {
         return formValue.is_periodic === false
       },
-      helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
+      helpText: i18n.t('CrontabOfCreateUpdatePage')
     },
     interval: {
-      label: i18n.t('xpack.CyclePerform'),
+      label: i18n.t('CyclePerform'),
       hidden: (formValue) => {
         return formValue.is_periodic === false
       },
-      helpText: i18n.t('xpack.HelpText.IntervalOfCreateUpdatePage'),
+      helpText: i18n.t('IntervalOfCreateUpdatePage'),
       rules: [
         { validator: validatorInterval }
       ]
     },
     accounts: {
-      label: i18n.t('common.Username'),
+      label: i18n.t('Username'),
       component: TagInput
     }
   }

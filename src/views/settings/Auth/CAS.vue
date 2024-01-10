@@ -21,17 +21,17 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=cas',
         fields: [
-          [this.$t('common.Basic'), [
+          [this.$t('Basic'), [
             'AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION'
           ]],
-          [this.$t('common.Other'), [
+          [this.$t('Other'), [
             'CAS_LOGOUT_COMPLETELY', 'CAS_RENAME_ATTRIBUTES', 'CAS_CREATE_USER'
           ]]
         ],
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {
             component: JsonEditor,
-            label: this.$t('setting.authUserAttrMap'),
+            label: this.$t('AuthUserAttrMap'),
             rules: [JsonRequiredUserNameMapped]
           }
         },

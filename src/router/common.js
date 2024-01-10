@@ -11,7 +11,7 @@ export default [
     name: 'CeleryTaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },
@@ -21,7 +21,7 @@ export default [
     name: 'AnsibleTaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },
@@ -31,7 +31,7 @@ export default [
     name: 'TaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },

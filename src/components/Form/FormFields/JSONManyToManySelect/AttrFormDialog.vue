@@ -2,7 +2,7 @@
   <Dialog
     :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('common.SelectAttrs')"
+    :title="$tc('SelectAttrs')"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -51,7 +51,7 @@ export default {
         fields: [
           {
             id: 'name',
-            label: this.$t('common.AttrName'),
+            label: this.$t('AttrName'),
             type: 'select',
             options: this.attrs.map(attr => {
               let disabled = this.attrsAdded.includes(attr.name) && this.form.name !== attr.name
@@ -74,7 +74,7 @@ export default {
           },
           {
             id: 'match',
-            label: this.$t('common.Match'),
+            label: this.$t('Match'),
             type: 'select',
             options: attrMatchOptions,
             on: {
@@ -88,7 +88,7 @@ export default {
           },
           {
             id: 'value',
-            label: this.$t('common.AttrValue'),
+            label: this.$t('AttrValue'),
             component: ValueField,
             el: {
               match: attrMatchOptions[0].value,

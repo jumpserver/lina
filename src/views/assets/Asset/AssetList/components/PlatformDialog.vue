@@ -3,7 +3,7 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.SelectPlatforms')"
+    :title="$tc('SelectPlatforms')"
     :visible.sync="iVisible"
     top="1vh"
     width="60%"
@@ -61,7 +61,7 @@ export default {
       platforms: [],
       recentPlatformIds: [],
       activeType: 'host',
-      recentUsedLabel: this.$t('assets.RecentlyUsed'),
+      recentUsedLabel: this.$t('RecentlyUsed'),
       typeIconMapper: {
         linux: 'fa-linux',
         windows: 'fa-windows',

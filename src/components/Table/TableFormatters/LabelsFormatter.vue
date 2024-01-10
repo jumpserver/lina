@@ -28,7 +28,7 @@
     <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
     <Dialog
       v-if="showDialog"
-      :title="$tc('labels.BindLabel')"
+      :title="$tc('BindLabel')"
       :visible.sync="showDialog"
       width="600px"
       @cancel="handleCancel"
@@ -68,7 +68,7 @@
         </div>
         <div class="tag-tip">
           <el-link @click="goToLabelList">
-            {{ $t('labels.LabelList') }} <i class="fa fa-external-link" />
+            {{ $t('LabelList') }} <i class="fa fa-external-link" />
           </el-link>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default {
       iLabels: [],
       keySelect2: {
         url: '/api/v1/labels/labels/keys/',
-        placeholder: this.$t('labels.SelectKeyOrCreateNew'),
+        placeholder: this.$t('SelectKeyOrCreateNew'),
         // placeholder: this.$t('选择标签键或者创建新的'),
         allowCreate: true,
         value: '',
@@ -117,7 +117,7 @@ export default {
       },
       valueSelect2: {
         url: '/api/v1/labels/labels/?name=blank',
-        placeholder: this.$t('labels.SelectValueOrCreateNew'),
+        placeholder: this.$t('SelectValueOrCreateNew'),
         // placeholder: '选择标签值或者创建新的',
         allowCreate: true,
         value: '',

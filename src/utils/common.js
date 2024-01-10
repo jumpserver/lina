@@ -89,9 +89,9 @@ export function toSafeLocalDateStr(d) {
 export function forMatAction(vm, d) {
   d.forEach(function(item, index, arr) {
     if ([
-      vm.$t('perms.clipboardCopyPaste'),
-      vm.$t('perms.upDownload'),
-      vm.$t('perms.all')
+      vm.$t('ClipboardCopyPaste'),
+      vm.$t('UpDownload'),
+      vm.$t('All')
     ].includes(item)) {
       arr.splice(index, 1)
     }
@@ -256,7 +256,7 @@ export function getErrorResponseMsg(error) {
   let msg = ''
   let data = ''
   if (error?.response?.status === 500) {
-    data = i18n.t('common.ServerError')
+    data = i18n.t('ServerError')
   } else {
     data = error?.response && error?.response.data || error
   }
@@ -388,7 +388,7 @@ export const copy = _.throttle(function(value) {
   inputDom.select()
   document?.execCommand('copy')
   message({
-    message: i18n.t('common.CopySuccess'),
+    message: i18n.t('CopySuccess'),
     type: 'success',
     duration: 1000
   })

@@ -37,8 +37,8 @@ export default {
           ],
           fieldsMeta: {
             ip_group: {
-              label: this.$t('profile.AccessIP'),
-              helpText: this.$t('acl.ipGroupHelpText')
+              label: this.$t('AccessIP'),
+              helpText: this.$t('IpGroupHelpText')
             }
           }
         }

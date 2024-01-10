@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      helpMessage: this.$t('setting.EndpointListHelpMessage'),
+      helpMessage: this.$t('EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
         columnsExclude: ['magnus_listen_db_port'],

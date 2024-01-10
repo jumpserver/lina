@@ -3,7 +3,7 @@
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
     <Dialog
       :show-buttons="false"
-      :title="$tc('common.Setting')"
+      :title="$tc('Setting')"
       :visible.sync="visible"
     >
       <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
@@ -53,16 +53,16 @@ export default {
           'comment', 'actions'],
         columnsMeta: {
           'resource_statistics.users_amount': {
-            label: this.$t('xpack.Organization.users_amount')
+            label: this.$t('UsersAmount')
           },
           'resource_statistics.groups_amount': {
-            label: this.$t('xpack.Organization.groups_amount')
+            label: this.$t('GroupsAmount')
           },
           'resource_statistics.assets_amount': {
-            label: this.$t('xpack.Organization.assets_amount')
+            label: this.$t('AssetsAmount')
           },
           'resource_statistics.asset_perms_amount': {
-            label: this.$t('xpack.Organization.asset_perms_amount')
+            label: this.$t('AssetPermsAmount')
           },
           actions: {
             prop: 'id',
@@ -72,8 +72,8 @@ export default {
                 return !row.internal && vm.$hasPerm('orgs.delete_organization')
               },
               onDelete: function({ row, col, cellValue, reload }) {
-                const msg = this.$t('xpack.Organization.DeleteOrgMsg')
-                const title = this.$t('xpack.Organization.DeleteOrgTitle')
+                const msg = this.$t('DeleteOrgMsg')
+                const title = this.$t('DeleteOrgTitle')
                 this.$alert(msg, title, {
                   type: 'warning',
                   confirmButtonClass: 'el-button--danger',
@@ -87,7 +87,7 @@ export default {
                         .then(() => {
                           done()
                           reload()
-                          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                          this.$message.success(this.$tc('DeleteSuccessMsg'))
                         })
                     } finally {
                       instance.confirmButtonLoading = false
@@ -105,7 +105,7 @@ export default {
         canCreate: this.$hasPerm('orgs.add_organization'),
         extraActions: [
           {
-            title: this.$t('common.Setting'),
+            title: this.$t('Setting'),
             icon: 'el-icon-setting',
             callback: () => {
               this.visible = true

@@ -129,9 +129,9 @@ export default {
     },
     portPlaceholder() {
       if (this.settingReadonly) {
-        return this.$t('applications.port')
+        return this.$t('Port')
       } else {
-        return this.$t('assets.DefaultPort')
+        return this.$t('DefaultPort')
       }
     },
     iChoices() {

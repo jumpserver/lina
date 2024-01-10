@@ -40,10 +40,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('xpack.Cloud.RunTaskManually'),
+          title: this.$t('RunTaskManually'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.Execute'),
+            label: this.$t('Execute'),
             disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
           },
           callbacks: {
@@ -60,7 +60,7 @@ export default {
       ],
       strategyRelationConfig: {
         icon: 'fa-info',
-        title: this.$t('common.Strategy'),
+        title: this.$t('Strategy'),
         objectsAjax: {
           url: '/api/v1/xpack/cloud/strategies/',
           transformOption: (item) => {
@@ -97,24 +97,24 @@ export default {
       detailFields: [
         'name', 'account_display', 'node_display',
         {
-          key: this.$t('common.Strategy'),
+          key: this.$t('Strategy'),
           value: this.object.strategy?.map(item => item.name).join(', ')
         },
         {
-          key: this.$t('xpack.Cloud.IPNetworkSegment'),
+          key: this.$t('IPNetworkSegment'),
           value: this.object.ip_network_segment_group?.join(', ')
         },
         'is_always_update', 'is_periodic', 'periodic_display',
         {
-          key: this.$t('xpack.Cloud.DateLastSync'),
+          key: this.$t('DateLastSync'),
           value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
         },
         {
-          key: this.$t('xpack.Cloud.DateCreated'),
+          key: this.$t('DateCreated'),
           value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : ''
         },
         {
-          key: this.$t('xpack.Cloud.Region'),
+          key: this.$t('Region'),
           value: this.object.regions,
           formatter(row, value) {
             return (<div>{

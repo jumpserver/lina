@@ -16,19 +16,19 @@ export default {
         activeMenu: 'SyncInstanceTaskList',
         submenu: [
           {
-            title: this.$t('common.SyncTask'),
+            title: this.$t('SyncTask'),
             name: 'SyncInstanceTaskList',
             hidden: () => !this.$hasPerm('xpack.view_syncinstancetask'),
             component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskList.vue')
           },
           {
-            title: this.$t('xpack.Cloud.SyncStrategy'),
+            title: this.$t('SyncStrategy'),
             name: 'StrategyList',
             hidden: () => !this.$hasPerm('xpack.view_strategy'),
             component: () => import('@/views/assets/Cloud/Strategy/StrategyList.vue')
           },
           {
-            title: this.$t('xpack.Cloud.AccountList'),
+            title: this.$t('AccountList'),
             name: 'AccountList',
             hidden: () => !this.$hasPerm('xpack.view_account'),
             component: () => import('@/views/assets/Cloud/Account/AccountList.vue')

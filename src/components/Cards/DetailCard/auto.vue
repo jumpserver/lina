@@ -145,7 +145,7 @@ export default {
         } else if (fieldMeta.type === 'm2m_related_field') {
           value = value?.map(item => item['name']).join(', ')
         } else if (fieldMeta.type === 'boolean') {
-          value = value ? this.$t('common.Yes') : this.$t('common.No')
+          value = value ? this.$t('Yes') : this.$t('No')
         }
 
         if (value === undefined) {

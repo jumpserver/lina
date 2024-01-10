@@ -25,11 +25,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.DomainDetail'),
+            title: this.$t('DomainDetail'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.GatewayList'),
+            title: this.$t('GatewayList'),
             name: 'GatewayList',
             hidden: () => !this.$hasPerm('assets.view_gateway')
           }

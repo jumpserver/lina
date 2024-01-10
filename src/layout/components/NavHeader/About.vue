@@ -3,7 +3,7 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('common.About')"
+    :title="$tc('About')"
     :visible.sync="iVisible"
     class="about-dialog"
     top="10%"
@@ -52,7 +52,7 @@ export default {
         },
         {
           name: 'download',
-          label: this.$tc('common.DownloadCenter'),
+          label: this.$tc('DownloadCenter'),
           icon: 'fa fa-download'
         }
       ]
@@ -71,20 +71,20 @@ export default {
       }
     },
     versionType() {
-      return this.hasXPack ? this.$t('common.EnterpriseEdition') : this.$tc('common.CommunityEdition') + ' GPLv3'
+      return this.hasXPack ? this.$t('EnterpriseEdition') : this.$tc('CommunityEdition') + ' GPLv3'
     },
     items() {
       return [
         {
-          label: this.$t('common.Product'),
+          label: this.$t('Product'),
           value: 'JumpServer ' + this.versionType
         },
         {
-          label: this.$t('common.Version'),
+          label: this.$t('Version'),
           value: 'version-dev'
         },
         {
-          label: this.$t('common.PermissionCompany'),
+          label: this.$t('PermissionCompany'),
           value: this.corporation,
           has: this.hasXPack
         },

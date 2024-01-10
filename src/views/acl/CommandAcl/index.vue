@@ -20,13 +20,13 @@ export default {
         activeMenu: 'CommandFilterACL',
         submenu: [
           {
-            title: this.$t('acl.CommandFilterACL'),
+            title: this.$t('CommandFilterACL'),
             name: 'CommandFilterACL',
             hidden: !this.$hasPerm('acls.view_commandfilteracl'),
             component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue')
           },
           {
-            title: this.$t('acl.CommandGroup'),
+            title: this.$t('CommandGroup'),
             name: 'CommandGroup',
             hidden: !this.$hasPerm('acls.view_commandgroup'),
             component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupList.vue')

@@ -18,7 +18,7 @@ export default {
   data() {
     const ajaxUrl = '/api/v1/authentication/temp-tokens/'
     return {
-      helpMessage: this.$t('setting.helpText.TempPassword'),
+      helpMessage: this.$t('TempPassword'),
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
@@ -27,11 +27,11 @@ export default {
         ],
         columnsMeta: {
           secret: {
-            label: this.$t('common.nav.TempPassword'),
+            label: this.$t('TempPassword'),
             formatter: ShowKeyCopyFormatter
           },
           expire: {
-            label: this.$t('setting.Expired') + '( s )'
+            label: this.$t('Expired') + '( s )'
           },
           actions: {
             prop: '',
@@ -42,16 +42,16 @@ export default {
               extraActions: [
                 {
                   name: 'Expired',
-                  title: this.$t('setting.Expire'),
+                  title: this.$t('Expire'),
                   can: ({ row }) => row['is_valid'] && this.$hasPerm('authentication.change_temptoken'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
                       this.reloadTable()
-                      this.$message.success(this.$tc('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+                      this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
                     })
                   }.bind(this)
                 }
@@ -70,8 +70,8 @@ export default {
         hasCreate: false,
         extraActions: [
           {
-            name: this.$t('setting.Create'),
-            title: this.$t('setting.Create'),
+            name: this.$t('Create'),
+            title: this.$t('Create'),
             type: 'primary',
             can: this.$hasPerm('authentication.add_temptoken'),
             callback: function() {
@@ -79,9 +79,9 @@ export default {
                 `/api/v1/authentication/temp-tokens/`
               ).then(res => {
                 this.reloadTable()
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               }).catch(error => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
               })
             }.bind(this)
           }

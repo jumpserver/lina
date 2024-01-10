@@ -18,19 +18,19 @@
             :value.sync="command"
             style="margin-bottom: 20px"
           />
-          <b>{{ $tc('ops.output') }}:</b>
+          <b>{{ $tc('Output') }}:</b>
           <span v-if="executionInfo.status" style="float: right">
             <span>
-              <span><b>{{ $tc('common.Status') }}: </b></span>
+              <span><b>{{ $tc('Status') }}: </b></span>
               <span
                 :class="{'status_success':executionInfo.status==='success',
                          'status_warning':executionInfo.status==='timeout',
                          'status_danger':executionInfo.status==='failed'
                 }"
-              >{{ $tc('ops.' + executionInfo.status) }}</span>
+              >{{ $tc('' + executionInfo.status) }}</span>
             </span>
             <span>
-              <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
+              <span><b>{{ $tc('TimeDelta') }}: </b></span>
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
@@ -98,10 +98,10 @@ export default {
         left: {
           run: {
             type: 'button',
-            name: this.$t('ops.Run'),
+            name: this.$t('Run'),
             align: 'left',
             icon: 'fa fa-play',
-            tip: this.$t('ops.RunCommand'),
+            tip: this.$t('RunCommand'),
             disabled: this.$store.getters.currentOrgIsRoot,
             el: {
               type: 'primary'
@@ -112,11 +112,11 @@ export default {
           },
           runas: {
             type: 'input',
-            name: this.$t('ops.runAs'),
+            name: this.$t('RunAs'),
             align: 'left',
             value: '',
-            placeholder: this.$tc('ops.EnterRunUser'),
-            tip: this.$tc('ops.RunasHelpText'),
+            placeholder: this.$tc('EnterRunUser'),
+            tip: this.$tc('RunasHelpText'),
             el: {
               autoComplete: true,
               query: (query, cb) => {
@@ -140,20 +140,20 @@ export default {
           },
           runasPolicy: {
             type: 'select',
-            name: this.$t('ops.RunasPolicy'),
+            name: this.$t('RunasPolicy'),
             align: 'left',
             value: 'skip',
-            tip: this.$tc('ops.RunasPolicyHelpText'),
+            tip: this.$tc('RunasPolicyHelpText'),
             options: [
               {
-                label: this.$tc('ops.Skip'),
+                label: this.$tc('Skip'),
                 value: 'skip'
               }, {
-                label: this.$tc('ops.PrivilegedFirst'),
+                label: this.$tc('PrivilegedFirst'),
                 value: 'privileged_first'
               },
               {
-                label: this.$tc('ops.PrivilegedOnly'),
+                label: this.$tc('PrivilegedOnly'),
                 value: 'privileged_only'
               }
             ],
@@ -163,7 +163,7 @@ export default {
           },
           language: {
             type: 'select',
-            name: this.$t('ops.Language'),
+            name: this.$t('Language'),
             align: 'left',
             value: 'shell',
             options: [
@@ -196,7 +196,7 @@ export default {
           },
           timeout: {
             type: 'select',
-            name: this.$t('ops.Timeout'),
+            name: this.$t('Timeout'),
             align: 'left',
             value: 60,
             options: [
@@ -210,11 +210,11 @@ export default {
           },
           chdir: {
             type: 'input',
-            name: this.$t('ops.runningPath'),
+            name: this.$t('RunningPath'),
             align: 'left',
             value: '',
-            placeholder: this.$tc('ops.EnterRunningPath'),
-            tip: this.$tc('ops.RunningPathHelpText'),
+            placeholder: this.$tc('EnterRunningPath'),
+            tip: this.$tc('RunningPathHelpText'),
             callback: (val) => {
               this.chdir = val
             }
@@ -225,7 +225,7 @@ export default {
             type: 'button',
             align: 'right',
             icon: 'fa-folder-open',
-            tip: this.$t('ops.OpenCommand'),
+            tip: this.$t('OpenCommand'),
             callback: (val, setting) => {
               this.showOpenAdhocDialog = true
             }
@@ -234,10 +234,10 @@ export default {
             type: 'button',
             align: 'right',
             icon: 'save',
-            tip: this.$t('ops.SaveCommand'),
+            tip: this.$t('SaveCommand'),
             callback: (val, setting) => {
               if (!this.command) {
-                return this.$message.error(this.$t('ops.RequiredContent'))
+                return this.$message.error(this.$t('RequiredContent'))
               } else {
                 this.showOpenAdhocSaveDialog = true
               }
@@ -247,7 +247,7 @@ export default {
             type: 'button',
             align: 'right',
             icon: 'fa fa-question-circle',
-            tip: this.$t('ops.Help'),
+            tip: this.$t('Help'),
             callback: (val, setting) => {
               this.showHelpDialog = true
             }
@@ -361,7 +361,7 @@ export default {
       return `\r\n${msg}\r\n`
     },
     writeExecutionOutput() {
-      let msg = this.$t('assets.Pending')
+      let msg = this.$t('Pending')
       this.xterm.write(msg)
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
@@ -400,15 +400,15 @@ export default {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
       if (hosts.length === 0 && nodes.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
+        this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
       if (this.command.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredContent'))
+        this.$message.error(this.$tc('RequiredContent'))
         return
       }
       if (!this.runas) {
-        this.$message.error(this.$tc('ops.RequiredRunas'))
+        this.$message.error(this.$tc('RequiredRunas'))
         return
       }
 

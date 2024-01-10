@@ -33,7 +33,7 @@ export default {
         inline: true,
         hasSaveContinue: false,
         submitBtnSize: 'mini',
-        submitBtnText: this.$t('common.Add'),
+        submitBtnText: this.$t('Add'),
         hasReset: false,
         onSubmit: () => {},
         submitMethod: () => 'post',
@@ -140,10 +140,10 @@ export default {
       },
       tableConfig: {
         columns: [
-          { prop: 'attr', label: this.$t('common.ResourceType'), formatter: tableFormatter('resource_type') },
-          { prop: 'value', label: this.$t('common.Resource'), formatter: tableFormatter('resource', () => { return this.globalResource }) },
-          { prop: 'protocols', label: this.$t('common.Other'), formatter: tableFormatter('protocols') },
-          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
+          { prop: 'attr', label: this.$t('ResourceType'), formatter: tableFormatter('resource_type') },
+          { prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => { return this.globalResource }) },
+          { prop: 'protocols', label: this.$t('Other'), formatter: tableFormatter('protocols') },
+          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button
@@ -169,17 +169,17 @@ export default {
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('assets.Platform'), domain: this.$tc('assets.Domain')
+        platform: this.$tc('Platform'), domain: this.$tc('Domain')
       }
       this.tableConfig.totalData.map(item => {
         const iValue = item.value?.id || item.value
         const iAttr = item.attr?.value || item.attr
         if (iValue === data.value) {
           status = false
-          this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
+          this.$message.error(`${this.$tc('ExistError')}`)
         } else if (Object.keys(labelMap).indexOf(data?.attr) !== -1 && iAttr === data.attr) {
           status = false
-          this.$message.error(`${this.$tc('xpack.Cloud.UniqueError')}: ${labelMap[data.attr]}`)
+          this.$message.error(`${this.$tc('UniqueError')}: ${labelMap[data.attr]}`)
         }
       })
       return status
@@ -190,7 +190,7 @@ export default {
         if (item[0]?.id) {
           this.$axios.delete(`/api/v1/xpack/cloud/strategy-actions/${item[0].id}/`)
         }
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
       }
     }
   }

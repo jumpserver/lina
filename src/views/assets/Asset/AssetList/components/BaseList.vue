@@ -145,7 +145,7 @@ export default {
             formatter: ArrayFormatter
           },
           gathered_info: {
-            label: this.$t('assets.HardwareInfo'),
+            label: this.$t('HardwareInfo'),
             formatter: HostInfoFormatter,
             formatterArgs: {
               info: vm?.optionInfo,
@@ -172,7 +172,7 @@ export default {
               extraActions: [
                 {
                   name: 'Test',
-                  title: this.$t('common.Test'),
+                  title: this.$t('Test'),
                   can: ({ row }) =>
                     this.$hasPerm('assets.test_assetconnectivity') &&
                     !this.$store.getters.currentOrgIsRoot &&
@@ -183,7 +183,7 @@ export default {
                       this.GatewayVisible = true
                       const port = row.protocols.find(item => item.name === 'ssh').port
                       if (!port) {
-                        return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                        return this.$message.error(this.$tc('BadRequestErrorMsg'))
                       } else {
                         this.GatewayPort = port
                         this.GatewayCell = row.id
@@ -214,7 +214,7 @@ export default {
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
-            title: this.$t('common.BatchDisable'),
+            title: this.$t('BatchDisable'),
             type: 'primary',
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => {
@@ -225,16 +225,16 @@ export default {
                 return { pk: v.id, is_active: false }
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
                 this.$refs.ListTable.reloadTable()
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
             name: 'ActiveSelected',
-            title: this.$t('common.BatchActivate'),
+            title: this.$t('BatchActivate'),
             type: 'primary',
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => {
@@ -245,16 +245,16 @@ export default {
                 return { pk: v.id, is_active: true }
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
                 this.$refs.ListTable.reloadTable()
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
             name: 'actionUpdateSelected',
-            title: this.$t('common.BatchUpdate'),
+            title: this.$t('BatchUpdate'),
             fa: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&

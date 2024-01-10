@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="Account" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="Account" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="Account" />
     </keep-alive>
@@ -27,7 +27,7 @@ export default {
         activeMenu: 'AccountDetail',
         submenu: [
           {
-            title: this.$t('xpack.Cloud.AccountDetail'),
+            title: this.$t('AccountDetail'),
             name: 'AccountDetail'
           }
         ],

@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('acl.AssetLoginACLHelpMsg'),
+      helpMsg: this.$t('AssetLoginACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],

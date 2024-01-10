@@ -4,18 +4,18 @@
       <el-col :md="8" :sm="24">
         <div class="tableFilter">
           <el-radio-group v-model="importStatusFilter" size="small">
-            <el-radio-button label="all">{{ $t('common.Total') }}</el-radio-button>
-            <el-radio-button label="ok">{{ $t('common.Success') }}</el-radio-button>
-            <el-radio-button label="error">{{ $t('common.Failed') }}</el-radio-button>
-            <el-radio-button label="pending">{{ $t('common.Pending') }}</el-radio-button>
+            <el-radio-button label="all">{{ $t('Total') }}</el-radio-button>
+            <el-radio-button label="ok">{{ $t('Success') }}</el-radio-button>
+            <el-radio-button label="error">{{ $t('Failed') }}</el-radio-button>
+            <el-radio-button label="pending">{{ $t('Pending') }}</el-radio-button>
           </el-radio-group>
         </div>
       </el-col>
       <el-col :md="8" :sm="24" style="text-align: center">
-        <span class="summary-item summary-total"> {{ $t('common.Total') }}: {{ totalCount }}</span>
-        <span class="summary-item summary-success"> {{ $t('common.Success') }}: {{ successCount }}</span>
-        <span class="summary-item summary-failed"> {{ $t('common.Failed') }}: {{ failedCount }}</span>
-        <span class="summary-item summary-pending"> {{ $t('common.Pending') }}: {{ pendingCount }}</span>
+        <span class="summary-item summary-total"> {{ $t('Total') }}: {{ totalCount }}</span>
+        <span class="summary-item summary-success"> {{ $t('Success') }}: {{ successCount }}</span>
+        <span class="summary-item summary-failed"> {{ $t('Failed') }}: {{ failedCount }}</span>
+        <span class="summary-item summary-pending"> {{ $t('Pending') }}: {{ pendingCount }}</span>
       </el-col>
     </el-row>
     <div class="row">
@@ -24,7 +24,7 @@
     <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
       <div style="float: right">
-        <el-button size="small" @click="performCancel">{{ $t('common.Cancel') }}</el-button>
+        <el-button size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
         <el-button size="small" type="primary" @click="performImportAction">{{ importActionTitle }}</el-button>
       </div>
     </div>
@@ -81,10 +81,10 @@ export default {
       hasImport: false,
       hasContinueButton: false,
       importActions: {
-        import: this.$t('common.Import'),
-        continue: this.$t('common.Continue'),
-        stop: this.$t('common.Stop'),
-        finished: this.$t('common.Finished')
+        import: this.$t('Import'),
+        continue: this.$t('Continue'),
+        stop: this.$t('Stop'),
+        finished: this.$t('Finished')
       }
     }
   },
@@ -173,7 +173,7 @@ export default {
       const vm = this
       const columns = [{
         prop: '@status',
-        label: vm.$t('common.Status'),
+        label: vm.$t('Status'),
         width: '80px',
         align: 'center',
         formatter: StatusFormatter,
@@ -191,9 +191,9 @@ export default {
           },
           getTip(val) {
             if (val === 'ok') {
-              return vm.$t('common.Success')
+              return vm.$t('Success')
             } else if (val === 'pending') {
-              return vm.$t('common.Pending')
+              return vm.$t('Pending')
             } else if (val && val.name === 'error') {
               return val.error
             }
@@ -366,7 +366,7 @@ export default {
         this.importTaskStatus = 'done'
       }
       if (this.failedCount > 0) {
-        this.$message.error(this.$tc('common.imExport.hasImportErrorItemMsg') + '')
+        this.$message.error(this.$tc('HasImportErrorItemMsg') + '')
       }
     },
     async performUpdateObject(item) {

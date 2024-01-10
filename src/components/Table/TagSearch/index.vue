@@ -100,9 +100,9 @@ export default {
     },
     placeholder() {
       if (this.focus && this.filterKey) {
-        return this.$t('common.EnterForSearch')
+        return this.$t('EnterForSearch')
       }
-      return this.$t('common.Search')
+      return this.$t('Search')
     }
   },
   watch: {

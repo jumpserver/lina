@@ -63,20 +63,20 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('assets.Asset'), ['assets']],
-        [this.$t('accounts.AccountTemplate'), ['template']],
-        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
-        [this.$t('assets.Secret'), [
+        [this.$t('Asset'), ['assets']],
+        [this.$t('AccountTemplate'), ['template']],
+        [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
+        [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
           'access_key', 'passphrase', 'api_key'
         ]],
-        [this.$t('common.Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
+        [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
           rules: [Required],
           component: AssetSelect,
-          label: this.$t('assets.Asset'),
+          label: this.$t('Asset'),
           el: {
             multiple: false
           },
@@ -102,8 +102,8 @@ export default {
         },
         on_invalid: {
           rules: [Required],
-          label: this.$t('accounts.AccountPolicy'),
-          helpText: this.$t('accounts.BulkCreateStrategy'),
+          label: this.$t('AccountPolicy'),
+          helpText: this.$t('BulkCreateStrategy'),
           hidden: () => {
             return this.platform || this.asset
           }
@@ -168,40 +168,40 @@ export default {
           }
         },
         su_from_username: {
-          label: this.$t('assets.UserSwitchFrom'),
+          label: this.$t('UserSwitchFrom'),
           hidden: (formValue) => {
             return this.platform || this.asset || this.addTemplate
           }
         },
         password: {
-          label: this.$t('assets.Password'),
+          label: this.$t('Password'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'password' || this.addTemplate
         },
         ssh_key: {
-          label: this.$t('assets.PrivateKey'),
+          label: this.$t('PrivateKey'),
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         passphrase: {
-          label: this.$t('assets.Passphrase'),
+          label: this.$t('Passphrase'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key' || this.addTemplate
         },
         token: {
-          label: this.$t('assets.Token'),
+          label: this.$t('Token'),
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'token' || this.addTemplate
         },
         access_key: {
           id: 'access_key',
-          label: this.$t('assets.AccessKey'),
+          label: this.$t('AccessKey'),
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'access_key' || this.addTemplate
         },
         api_key: {
           id: 'api_key',
-          label: this.$t('assets.ApiKey'),
+          label: this.$t('ApiKey'),
           component: UploadSecret,
           hidden: (formValue) => formValue.secret_type !== 'api_key' || this.addTemplate
         },
@@ -213,7 +213,7 @@ export default {
           }
         },
         push_now: {
-          helpText: this.$t('accounts.AccountPush.WindowsPushHelpText'),
+          helpText: this.$t('WindowsPushHelpText'),
           hidden: (formValue) => {
             const automation = this.iPlatform.automation || {}
             return !automation.push_account_enabled ||
@@ -224,7 +224,7 @@ export default {
           }
         },
         params: {
-          label: this.$t('assets.PushParams'),
+          label: this.$t('PushParams'),
           component: AutomationParamsForm,
           el: {
             method: this.asset?.auto_config?.push_account_method
@@ -270,23 +270,23 @@ export default {
     setSecretTypeOptions() {
       const choices = [
         {
-          label: this.$t('assets.Password'),
+          label: this.$t('Password'),
           value: 'password'
         },
         {
-          label: this.$t('assets.SSHKey'),
+          label: this.$t('SSHKey'),
           value: 'ssh_key'
         },
         {
-          label: this.$t('assets.Token'),
+          label: this.$t('Token'),
           value: 'token'
         },
         {
-          label: this.$t('assets.AccessKey'),
+          label: this.$t('AccessKey'),
           value: 'access_key'
         },
         {
-          label: this.$t('assets.ApiKey'),
+          label: this.$t('ApiKey'),
           value: 'api_key'
         }
       ]

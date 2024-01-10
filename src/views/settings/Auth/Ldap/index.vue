@@ -32,21 +32,21 @@ export default {
       encryptedFields: ['AUTH_LDAP_BIND_PASSWORD'],
       fields: [
         [
-          this.$t('common.Basic'),
+          this.$t('Basic'),
           [
             'AUTH_LDAP', 'AUTH_LDAP_SERVER_URI',
             'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
           ]
         ],
         [
-          this.$t('setting.LDAPUser'),
+          this.$t('LDAPUser'),
           [
             'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER',
             'AUTH_LDAP_USER_ATTR_MAP'
           ]
         ],
         [
-          this.$t('common.Other'),
+          this.$t('Other'),
           [
             'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE'
           ]
@@ -68,7 +68,7 @@ export default {
         },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
-          label: this.$t('setting.authLdapUserAttrMap'),
+          label: this.$t('AuthLdapUserAttrMap'),
           rules: [JsonRequired]
         }
       },
@@ -76,7 +76,7 @@ export default {
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('setting.ldapConnectTest'),
+          title: this.$t('LdapConnectTest'),
           loading: false,
           callback: function(value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
@@ -99,19 +99,19 @@ export default {
           }.bind(this)
         },
         {
-          title: this.$t('setting.ldapLoginTest'),
+          title: this.$t('LdapLoginTest'),
           callback: function(value, form) {
             this.dialogTest = true
           }.bind(this)
         },
         {
-          title: this.$t('setting.ldapBulkImport'),
+          title: this.$t('LdapBulkImport'),
           callback: function(value, form) {
             this.dialogLdapUserImport = true
           }.bind(this)
         },
         {
-          title: this.$t('setting.SyncSetting'),
+          title: this.$t('SyncSetting'),
           callback: function(value, form) {
             this.dialogSyncSetting = true
           }.bind(this)

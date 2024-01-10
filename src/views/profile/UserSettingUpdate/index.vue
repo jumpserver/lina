@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="user" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
     </keep-alive>
@@ -11,6 +11,7 @@ import { GenericDetailPage } from '@/layout/components'
 import LunaUpdate from './LunaUpdate'
 import KokoUpdate from './KokoUpdate'
 import LinaUpdate from './LinaUpdate'
+
 export default {
   components: {
     GenericDetailPage,
@@ -22,7 +23,7 @@ export default {
     return {
       user: this.$store.state.users.profile,
       config: {
-        title: this.$t('common.Basic'),
+        title: this.$t('Basic'),
         activeMenu: 'LinaUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,
@@ -37,15 +38,15 @@ export default {
     getSubmenu() {
       return [
         {
-          title: this.$t('common.Basic'),
+          title: this.$t('Basic'),
           name: 'LinaUpdate'
         },
         {
-          title: this.$t('users.LunaSettingUpdate'),
+          title: this.$t('LunaSettingUpdate'),
           name: 'LunaUpdate'
         },
         {
-          title: this.$t('users.KokoSettingUpdate'),
+          title: this.$t('KokoSettingUpdate'),
           name: 'KokoUpdate'
         }
       ]

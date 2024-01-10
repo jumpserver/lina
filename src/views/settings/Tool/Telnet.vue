@@ -17,18 +17,18 @@ export default {
       fields: [
         {
           name: 'dest_ips',
-          label: this.$t('setting.DestinationIP'),
-          tip: this.$t('setting.helpTip.IP'),
+          label: this.$t('DestinationIP'),
+          tip: this.$t('IP'),
           el: {
-            placeholder: this.$t('setting.DestinationIP')
+            placeholder: this.$t('DestinationIP')
           }
         },
         {
           name: 'dest_port',
-          label: this.$t('setting.DestinationPort'),
+          label: this.$t('DestinationPort'),
           el: {
             type: 'number',
-            placeholder: this.$t('setting.DestinationPort')
+            placeholder: this.$t('DestinationPort')
           }
         }
       ],

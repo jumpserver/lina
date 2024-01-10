@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :show-cancel="false"
-    :title="$tc('ops.UploadPlaybook')"
+    :title="$tc('UploadPlaybook')"
     v-bind="$attrs"
     @confirm="onSubmit"
     v-on="$listeners"
@@ -24,7 +24,7 @@
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">
-            {{ $t('common.imExport.dragUploadFileInfo') }}
+            {{ $t('DragUploadFileInfo') }}
           </div>
           <div slot="tip" class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }" />
@@ -35,7 +35,7 @@
 ├── roles
 ├── vars
 ├── set_env.yml
-└── main.yml ({{ $tc('ops.RequiredEntryFile') }})
+└── main.yml ({{ $tc('RequiredEntryFile') }})
             </pre>
           </div>
         </el-upload>
@@ -77,7 +77,7 @@ export default {
       uploadPlaybook(form).then(res => {
         this.$emit('update:visible', false)
         this.$emit('completed')
-        this.$message.success(this.$tc('terminal.UploadSucceed'))
+        this.$message.success(this.$tc('UploadSucceed'))
       })
     }
   }

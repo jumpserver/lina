@@ -44,7 +44,7 @@ export default {
     confirmTitle: {
       type: String,
       default() {
-        return this.$t('common.Confirm')
+        return this.$t('Confirm')
       }
     },
     showCancel: {
@@ -54,7 +54,7 @@ export default {
     cancelTitle: {
       type: String,
       default() {
-        return this.$t('common.Cancel')
+        return this.$t('Cancel')
       }
     },
     showButtons: {

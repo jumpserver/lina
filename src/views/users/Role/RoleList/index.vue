@@ -20,13 +20,13 @@ export default {
         activeMenu: 'SysRoleList',
         submenu: [
           {
-            title: this.$t('route.SystemRole'),
+            title: this.$t('SystemRole'),
             name: 'SysRoleList',
             hidden: () => !this.$hasPerm('rbac.view_systemrole'),
             component: () => import('@/views/users/Role/RoleList/SysRoleList.vue')
           },
           {
-            title: this.$t('route.OrgRole'),
+            title: this.$t('OrgRole'),
             name: 'OrgRoleList',
             hidden: () => !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
             component: () => import('@/views/users/Role/RoleList/OrgRoleList.vue')
@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     Title() {
-      return this.$t('route.RoleList')
+      return this.$t('RoleList')
     }
   },
   mounted() {

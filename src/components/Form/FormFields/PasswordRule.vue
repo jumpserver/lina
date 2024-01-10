@@ -1,11 +1,11 @@
 <template>
   <div style="display: block">
     <el-button size="mini" type="primary" @click="visible=true">
-      {{ $t('common.Setting') }}
+      {{ $t('Setting') }}
     </el-button>
     <Dialog
       :destroy-on-close="true"
-      :title="$tc('common.PasswordRule')"
+      :title="$tc('PasswordRule')"
       :visible.sync="visible"
       width="600px"
       @cancel="handleCancel"
@@ -44,7 +44,7 @@ export default {
         fields: [
           {
             id: 'length',
-            label: this.$t('common.Length'),
+            label: this.$t('Length'),
             type: 'input-number',
             el: {
               min: 8,
@@ -53,27 +53,27 @@ export default {
           },
           {
             id: 'uppercase',
-            label: this.$t('common.Uppercase'),
+            label: this.$t('Uppercase'),
             type: 'switch'
           },
           {
             id: 'lowercase',
-            label: this.$t('common.Lowercase'),
+            label: this.$t('Lowercase'),
             type: 'switch'
           },
           {
             id: 'digit',
-            label: this.$t('common.Digit'),
+            label: this.$t('Digit'),
             type: 'switch'
           },
           {
             id: 'symbol',
-            label: this.$t('common.SpecialSymbol'),
+            label: this.$t('SpecialSymbol'),
             type: 'switch'
           },
           {
             id: 'exclude_symbols',
-            label: this.$t('common.ExcludeSymbol'),
+            label: this.$t('ExcludeSymbol'),
             type: 'input'
           }
         ]

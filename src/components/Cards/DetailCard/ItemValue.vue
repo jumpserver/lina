@@ -47,9 +47,9 @@ export default {
   methods: {
     toChoicesDisplay(value) {
       if (!value) {
-        return this.$t('common.No')
+        return this.$t('No')
       }
-      return this.$t('common.Yes')
+      return this.$t('Yes')
     },
     isDatetime(value) {
       if (typeof value !== 'string') {

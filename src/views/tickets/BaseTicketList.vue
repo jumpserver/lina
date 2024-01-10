@@ -46,11 +46,11 @@ export default {
         },
         columnsMeta: {
           serial_num: {
-            label: this.$t('common.Number'),
+            label: this.$t('Number'),
             sortable: 'custom'
           },
           title: {
-            label: this.$t('tickets.title'),
+            label: this.$t('Title'),
             formatter: DetailFormatter,
             sortable: 'custom',
             formatterArgs: {
@@ -71,14 +71,14 @@ export default {
             }
           },
           applicant: {
-            label: this.$t('tickets.user'),
+            label: this.$t('User'),
             sortable: 'custom',
             formatter: row => {
               return row['rel_snapshot'].applicant
             }
           },
           type: {
-            label: this.$t('tickets.type'),
+            label: this.$t('Type'),
             width: '160px',
             formatter: row => {
               return row.type.label
@@ -92,9 +92,9 @@ export default {
             formatterArgs: {
               getTagLabel({ row }) {
                 if (row.status.value === 'open') {
-                  return vm.$t('tickets.OpenStatus')
+                  return vm.$t('OpenStatus')
                 } else {
-                  return vm.$t('tickets.CloseStatus')
+                  return vm.$t('CloseStatus')
                 }
               },
               getTagType({ row }) {
@@ -107,7 +107,7 @@ export default {
             }
           },
           state: {
-            label: this.$t('tickets.action'),
+            label: this.$t('Action'),
             align: 'center',
             width: '90px',
             sortable: 'custom',
@@ -121,12 +121,12 @@ export default {
                 return mapper[row.state.value] || 'warning'
               },
               getTagLabel({ row }) {
-                return row.state.label || vm.$t('common.Pending')
+                return row.state.label || vm.$t('Pending')
               }
             }
           },
           date_created: {
-            label: this.$t('tickets.date'),
+            label: this.$t('Date'),
             sortable: 'custom',
             formatter: (row) => toSafeLocalDateStr(row.date_created),
             width: '160px'
@@ -143,53 +143,53 @@ export default {
           default: {
             state: {
               key: 'state',
-              label: this.$t('tickets.action'),
+              label: this.$t('Action'),
               value: 'pending',
-              valueLabel: this.$t('tickets.Pending')
+              valueLabel: this.$t('Pending')
             }
           },
           exclude: ['state', 'id', 'title', 'type'],
           options: [
             {
               value: 'state',
-              label: this.$t('tickets.action'),
+              label: this.$t('Action'),
               type: 'choice',
               children: [
                 {
                   default: true,
                   value: 'pending',
-                  label: this.$t('tickets.Pending')
+                  label: this.$t('Pending')
                 },
                 {
                   value: APPROVE,
-                  label: this.$t('tickets.Approved')
+                  label: this.$t('Approved')
                 },
                 {
                   value: REJECT,
-                  label: this.$t('tickets.Rejected')
+                  label: this.$t('Rejected')
                 }
               ]
             },
             {
               value: 'type',
-              label: this.$t('assets.Type'),
+              label: this.$t('Type'),
               type: 'choice',
               children: [
                 {
                   value: 'apply_asset',
-                  label: this.$t('tickets.ApplyAsset')
+                  label: this.$t('ApplyAsset')
                 },
                 {
                   value: 'login_confirm',
-                  label: this.$t('tickets.LoginConfirm')
+                  label: this.$t('LoginConfirm')
                 },
                 {
                   value: 'command_confirm',
-                  label: this.$t('tickets.CommandConfirm')
+                  label: this.$t('CommandConfirm')
                 },
                 {
                   value: 'login_asset_confirm',
-                  label: this.$t('tickets.LoginAssetConfirm')
+                  label: this.$t('LoginAssetConfirm')
                 }
               ]
             },
@@ -199,27 +199,27 @@ export default {
             },
             {
               value: 'title',
-              label: this.$t('tickets.title')
+              label: this.$t('Title')
             },
             {
               value: 'relevant_app',
-              label: this.$t('tickets.RelevantApp')
+              label: this.$t('RelevantApp')
             },
             {
               value: 'relevant_asset',
-              label: this.$t('tickets.RelevantAsset')
+              label: this.$t('RelevantAsset')
             },
             {
               value: 'relevant_system_user',
-              label: this.$t('tickets.RelevantCommand')
+              label: this.$t('RelevantCommand')
             },
             {
               value: 'relevant_command',
-              label: this.$t('tickets.RelevantSystemUser')
+              label: this.$t('RelevantSystemUser')
             }
           ]
         },
-        createTitle: this.$t('common.RequestTickets')
+        createTitle: this.$t('RequestTickets')
       }
     }
   },

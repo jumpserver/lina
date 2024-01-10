@@ -17,7 +17,7 @@ export default {
     const isUpdate = vm.$route.path.indexOf('/update') > -1 && vm.$route.params?.id
     const formFields = templateFields(vm)
     for (const [key, value] of formFields) {
-      if (key === vm.$t('assets.Secret')) {
+      if (key === vm.$t('Secret')) {
         isUpdate && value.push('is_sync_account')
       }
     }
@@ -33,7 +33,7 @@ export default {
       fieldsMeta: {
         ...templateFieldsMeta(vm),
         is_sync_account: {
-          label: this.$t('accounts.SyncUpdateAccountInfo'),
+          label: this.$t('SyncUpdateAccountInfo'),
           el: {
             icon: 'fa fa-external-link',
             type: 'primary',

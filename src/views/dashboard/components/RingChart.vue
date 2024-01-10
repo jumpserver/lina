@@ -2,8 +2,8 @@
   <div>
     <echarts
       ref="echarts"
-      :options="options"
       :autoresize="true"
+      :options="options"
     />
   </div>
 </template>
@@ -51,7 +51,7 @@ export default {
               fontSize: 24,
               color: '#646A73'
             },
-            subtext: this.$t('dashboard.Proportion') + percentage + '%',
+            subtext: this.$t('Proportion') + percentage + '%',
             subtextStyle: {
               fontSize: 12,
               color: '#646A73'

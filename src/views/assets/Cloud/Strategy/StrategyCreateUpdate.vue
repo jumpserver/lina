@@ -16,18 +16,18 @@ export default {
     return {
       url: '/api/v1/xpack/cloud/strategies/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('common.RuleSetting'), ['rule_relation', 'strategy_rules']],
-        [this.$t('common.ActionSetting'), ['strategy_actions']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('RuleSetting'), ['rule_relation', 'strategy_rules']],
+        [this.$t('ActionSetting'), ['strategy_actions']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         name: {
           rules: [RequiredChange, specialEmojiCheck]
         },
         rule_relation: {
-          label: this.$t('common.RuleRelation'),
-          helpTips: this.$t('common.RuleRelationHelpTips')
+          label: this.$t('RuleRelation'),
+          helpTips: this.$t('RuleRelationHelpTips')
         },
         strategy_rules: {
           component: RuleInput

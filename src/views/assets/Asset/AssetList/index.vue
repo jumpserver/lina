@@ -23,7 +23,7 @@ export default {
         submenu: [
           {
             name: 'all',
-            title: this.$t('assets.All'),
+            title: this.$t('All'),
             icon: 'fa-bars',
             component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
           },

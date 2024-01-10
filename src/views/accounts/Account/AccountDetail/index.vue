@@ -14,7 +14,7 @@
       v-if="AccountVisible"
       :account="account"
       :asset="account.asset"
-      :title="$tc('assets.UpdateAccount')"
+      :title="$tc('UpdateAccount')"
       :visible.sync="AccountVisible"
       @add="addAccountSuccess"
     />
@@ -41,7 +41,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'Detail'
           }
         ],

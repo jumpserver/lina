@@ -18,9 +18,9 @@ export default {
     return {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('accounts.AccountBackup.Types'), ['types']],
-        [this.$t('accounts.AccountBackup.Backup'),
+        [this.$t('Basic'), ['name']],
+        [this.$t('Types'), ['types']],
+        [this.$t('Backup'),
           [
             'backup_type',
             'is_password_divided_by_email',
@@ -32,8 +32,8 @@ export default {
             'zip_encrypt_password'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Other'), ['comment']]
       ],
       initial: {
         is_periodic: true,
@@ -53,7 +53,7 @@ export default {
         obj_recipients_part_two: fields.obj_recipients_part_two,
         types: {
           component: 'el-cascader',
-          label: this.$t('accounts.AccountBackup.Types'),
+          label: this.$t('Types'),
           remote: {
             request: () => vm.$axios.get('/api/v1/assets/categories/')
           },

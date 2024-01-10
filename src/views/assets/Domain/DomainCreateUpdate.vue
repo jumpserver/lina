@@ -15,14 +15,14 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'assets']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Basic'), ['name', 'assets']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('assets.Assets'),
+          label: this.$t('Assets'),
           el: {
             value: [],
             baseUrl: '/api/v1/assets/assets/?domain_enabled=true',

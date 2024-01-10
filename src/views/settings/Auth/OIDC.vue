@@ -22,11 +22,11 @@ export default {
         url: '/api/v1/settings/setting/?category=oidc',
         encryptedFields: ['AUTH_OPENID_CLIENT_SECRET'],
         fields: [
-          [this.$t('common.Basic'), [
+          [this.$t('Basic'), [
             'AUTH_OPENID', 'BASE_SITE_URL', 'AUTH_OPENID_CLIENT_ID',
             'AUTH_OPENID_CLIENT_SECRET', 'AUTH_OPENID_CLIENT_AUTH_METHOD'
           ]],
-          [this.$t('common.Params'), [
+          [this.$t('Params'), [
             'AUTH_OPENID_KEYCLOAK', 'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
             'AUTH_OPENID_PROVIDER_ENDPOINT', 'AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT',
             'AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT', 'AUTH_OPENID_PROVIDER_JWKS_ENDPOINT',
@@ -118,7 +118,7 @@ export default {
           },
           'AUTH_OPENID_USER_ATTR_MAP': {
             component: JsonEditor,
-            label: this.$t('setting.authLdapUserAttrMap'),
+            label: this.$t('AuthLdapUserAttrMap'),
             rules: [JsonRequired]
           }
         },

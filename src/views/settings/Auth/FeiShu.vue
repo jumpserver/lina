@@ -1,7 +1,7 @@
 <template>
   <BaseAuth
     :config="settings"
-    :title="$tc('setting.FeiShu')"
+    :title="$tc('FeiShu')"
     enable-field="AUTH_FEISHU"
     v-on="$listeners"
   />
@@ -24,7 +24,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('setting.feiShuTest'),
+            title: this.$t('FeiShuTest'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -42,7 +42,7 @@ export default {
         encryptedFields: ['FEISHU_APP_SECRET'],
         fields: [
           [
-            this.$t('common.BasicInfo'),
+            this.$t('BasicInfo'),
             [
               'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_VERSION'
             ]

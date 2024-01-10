@@ -52,12 +52,12 @@ export default {
       headerActions: {
         handleImportClick: ({ selectedRows }) => {
           this.$message.warning({
-            message: this.$t('assets.ImportMessage')
+            message: this.$t('ImportMessage')
           })
         }
       },
       addExtraMoreActions: [],
-      helpMessage: this.$t('assets.AssetListHelpMessage')
+      helpMessage: this.$t('AssetListHelpMessage')
     }
   },
   computed: {

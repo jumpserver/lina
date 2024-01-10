@@ -21,35 +21,35 @@ export default {
   data() {
     return {
       userConfig: {
-        title: this.$t('dashboard.LoginUserRanking'),
+        title: this.$t('LoginUserRanking'),
         url: '/api/v1/index/?dates_login_times_top10_users=1',
-        tip: this.$t('dashboard.LoginUserRanking'),
+        tip: this.$t('LoginUserRanking'),
         data: 'dates_login_times_top10_users',
         columns: [
           {
             prop: 'user',
-            label: this.$t('users.Username')
+            label: this.$t('Username')
           },
           {
             prop: 'total',
-            label: this.$t('dashboard.LoginCount'),
+            label: this.$t('LoginCount'),
             width: '80px'
           }
         ]
       },
       assetConfig: {
-        title: this.$t('dashboard.ActiveAssetRanking'),
+        title: this.$t('ActiveAssetRanking'),
         url: '/api/v1/index/?dates_login_times_top10_assets=1',
-        tip: this.$t('dashboard.ActiveAssetRanking'),
+        tip: this.$t('ActiveAssetRanking'),
         data: 'dates_login_times_top10_assets',
         columns: [
           {
             prop: 'asset',
-            label: this.$t('dashboard.AssetName')
+            label: this.$t('AssetName')
           },
           {
             prop: 'total',
-            label: this.$t('dashboard.NumberOfVisits'),
+            label: this.$t('NumberOfVisits'),
             width: '80px'
           }
         ]

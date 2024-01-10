@@ -46,7 +46,7 @@ export default {
         },
         columnsMeta: {
           asset_display: {
-            label: this.$t('perms.Asset'),
+            label: this.$t('Asset'),
             align: 'center'
           },
           actions: {
@@ -54,7 +54,7 @@ export default {
           },
           delete_action: {
             prop: 'asset',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             align: 'center',
             width: 150,
             objects: this.object.assets,
@@ -62,10 +62,10 @@ export default {
             onDelete: function(col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
               this.$axios.delete(url).then(res => {
-                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('DeleteSuccessMsg'))
                 this.$store.commit('common/reload')
               }).catch(error => {
-                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           }
@@ -86,7 +86,7 @@ export default {
       },
       assetRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.addAssetToThisPermission'),
+        title: this.$t('AddAssetToThisPermission'),
         hasObjectsId: this.object.assets?.map(i => i.id) || [],
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
@@ -105,13 +105,13 @@ export default {
         },
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.addNodeToThisPermission'),
+        title: this.$t('AddNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           transformOption: (item) => {
@@ -134,7 +134,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
@@ -151,7 +151,7 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
       }

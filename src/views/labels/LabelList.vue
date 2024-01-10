@@ -53,7 +53,7 @@ export default {
             formatterArgs: {
               extraActions: [
                 {
-                  title: this.$t('labels.BindResource'),
+                  title: this.$t('BindResource'),
                   name: 'bind',
                   callback: ({ row }) => {
                     this.label = row

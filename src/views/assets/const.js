@@ -19,7 +19,7 @@ export const filterSelectValues = (values) => {
         const inputValue = { name, value }
         selects.push(inputValue)
       } else {
-        message.error(i18n.t('assets.LabelInputFormatValidation'))
+        message.error(i18n.t('LabelInputFormatValidation'))
       }
     }
   })
@@ -50,7 +50,7 @@ export const assetFieldsMeta = (vm) => {
         choices: platformProtocols,
         instance: asset
       },
-      helpText: i18n.t('assets.AssetProtocolHelpText'),
+      helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
@@ -68,7 +68,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
-      label: i18n.t('assets.PlatformSimple'),
+      label: i18n.t('PlatformSimple'),
       el: {
         multiple: false,
         ajax: {
@@ -101,7 +101,7 @@ export const assetFieldsMeta = (vm) => {
     },
     accounts: {
       component: AssetAccounts,
-      label: i18n.t('assets.Accounts'),
+      label: i18n.t('Accounts'),
       el: {
         platform: {},
         default: []
@@ -121,7 +121,7 @@ export const assetFieldsMeta = (vm) => {
     },
     labels: {
       name: 'labels',
-      label: vm.$t('assets.Label'),
+      label: vm.$t('Label'),
       type: 'm2m',
       el: {
         multiple: true,
@@ -137,13 +137,13 @@ export const assetFieldsMeta = (vm) => {
       type: 'switch'
     },
     cluster: {
-      label: i18n.t('assets.Cluster')
+      label: i18n.t('Cluster')
     },
     url: {
       label: 'url'
     },
     comment: {
-      helpText: i18n.t('assets.CommentHelpText')
+      helpText: i18n.t('CommentHelpText')
     }
   }
 }
@@ -170,7 +170,7 @@ export const assetJSONSelectMeta = (vm) => {
     component: JSONManyToManySelect,
     el: {
       value: [],
-      resource: vm.$t('assets.Asset'),
+      resource: vm.$t('Asset'),
       select2: {
         url: '/api/v1/assets/assets/',
         ajax: {
@@ -182,18 +182,18 @@ export const assetJSONSelectMeta = (vm) => {
       attrs: [
         {
           name: 'name',
-          label: vm.$t('common.Name'),
+          label: vm.$t('Name'),
           inTable: true
         },
         {
           name: 'address',
-          label: vm.$t('assets.Address'),
+          label: vm.$t('Address'),
           type: 'ip',
           inTable: true
         },
         {
           name: 'nodes',
-          label: vm.$t('assets.Node'),
+          label: vm.$t('Node'),
           type: 'm2m',
           el: {
             url: '/api/v1/assets/nodes/',
@@ -206,7 +206,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'platform',
-          label: vm.$t('assets.Platform'),
+          label: vm.$t('Platform'),
           type: 'fk',
           el: {
             url: '/api/v1/assets/platforms/'
@@ -214,7 +214,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'category',
-          label: vm.$t('assets.Category'),
+          label: vm.$t('Category'),
           type: 'select',
           inTable: true,
           formatter: (row, column, cellValue) => cellValue.label,
@@ -224,7 +224,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'type',
-          label: vm.$t('assets.Type'),
+          label: vm.$t('Type'),
           type: 'select',
           inTable: true,
           formatter: (row, column, cellValue) => cellValue.label,
@@ -234,7 +234,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'protocols',
-          label: vm.$t('assets.Protocols'),
+          label: vm.$t('Protocols'),
           type: 'select',
           el: {
             options: protocols
@@ -242,7 +242,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'labels',
-          label: vm.$t('assets.Label'),
+          label: vm.$t('Label'),
           type: 'm2m',
           el: {
             multiple: true,
@@ -256,7 +256,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'comment',
-          label: vm.$t('common.Comment')
+          label: vm.$t('Comment')
         }
       ]
     }

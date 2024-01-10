@@ -49,7 +49,7 @@ export default {
           },
           delete_action: {
             prop: 'id',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             align: 'center',
             width: 150,
             objects: this.object.assets,
@@ -59,10 +59,10 @@ export default {
                 `/api/v1/accounts/change-secret/${this.object.id}/asset/remove/`,
                 { assets: [row.id] }
               ).then(res => {
-                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('DeleteSuccessMsg'))
                 this.$store.commit('common/reload')
               }).catch(error => {
-                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           },
@@ -89,7 +89,7 @@ export default {
       },
       assetRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('accounts.AccountChangeSecret.AddAsset'),
+        title: this.$t('AddAsset'),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
           return (this.object.assets?.map(i => i.id) || []).indexOf(row.id) === -1
@@ -103,13 +103,13 @@ export default {
         },
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('accounts.AccountChangeSecret.AddNode'),
+        title: this.$t('AddNode'),
         objectsAjax: {
           url: `/api/v1/assets/nodes/`,
           transformOption: (item) => {
@@ -130,7 +130,7 @@ export default {
         onAddSuccess: (objects, that) => {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           window.location.reload()
         },
         performDelete: (item) => {
@@ -147,7 +147,7 @@ export default {
             const i = that.select2.disabledValues.indexOf(obj.value)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
           window.location.reload()
           this.$refs.listTable.reloadTable()
         }

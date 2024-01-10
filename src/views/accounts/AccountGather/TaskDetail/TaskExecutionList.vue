@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -28,7 +28,7 @@ export default {
         ],
         columnsMeta: {
           'AccountGatherName': {
-            label: this.$t('common.DisplayName'),
+            label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
@@ -40,7 +40,7 @@ export default {
             id: ({ row }) => row.automation
           },
           timedelta: {
-            label: this.$t('ops.timeDelta'),
+            label: this.$t('TimeDelta'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             },
@@ -58,14 +58,14 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  title: this.$t('accounts.AccountChangeSecret.Log'),
+                  title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('accounts.AccountChangeSecret.Detail'),
+                  title: this.$t('Detail'),
                   type: 'info',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountGatherExecutionDetail', params: { id: row.id }})
@@ -80,11 +80,11 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('accounts.TaskID'),
+              label: this.$t('TaskID'),
               value: 'automation_id'
             },
             {
-              label: this.$t('common.DisplayName'),
+              label: this.$t('DisplayName'),
               value: 'automation__name'
             }
           ]

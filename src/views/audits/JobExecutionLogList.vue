@@ -39,7 +39,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('ops.output'),
+                  title: this.$t('Output'),
                   name: 'logging',
                   can: true,
                   callback: ({ row }) => {
@@ -50,7 +50,7 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
+            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -60,7 +60,7 @@ export default {
             }
           },
           is_finished: {
-            label: this.$t('ops.isFinished'),
+            label: this.$t('IsFinished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
@@ -73,7 +73,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
+            label: this.$t('IsSuccess'),
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
@@ -100,7 +100,7 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('audits.User'),
+              label: this.$t('User'),
               value: 'creator__name'
             }
           ]

@@ -6,7 +6,7 @@
     <el-col :md="16" :sm="24">
       <IBox title="README">
         <vue-markdown v-if="object.readme" :source="object.readme" />
-        <span v-else>{{ $tc('common.NoData') }}</span>
+        <span v-else>{{ $tc('NoData') }}</span>
       </IBox>
     </el-col>
   </el-row>
@@ -44,7 +44,7 @@ export default {
         },
         'name', 'display_name', 'author',
         {
-          key: this.$t('assets.Protocols'),
+          key: this.$t('Protocols'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.protocols.map((p, i) => {
@@ -54,7 +54,7 @@ export default {
           }
         },
         {
-          key: this.$t('assets.Label'),
+          key: this.$t('Label'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.tags.map((p, i) => {
@@ -64,11 +64,11 @@ export default {
           }
         },
         {
-          key: this.$t('assets.Type'),
+          key: this.$t('Type'),
           value: this.object.type.label
         },
         {
-          key: this.$t('common.Activate'),
+          key: this.$t('Activate'),
           formatter: () => {
             return <el-switch
               v-model={this.object.is_active}
@@ -79,9 +79,9 @@ export default {
                 vm.$axios.patch(url, data).catch(() => {
                   this.object.is_active = !v
                 }).then(res => {
-                  vm.$message.success(vm.$t('common.updateSuccessMsg'))
+                  vm.$message.success(vm.$t('UpdateSuccessMsg'))
                 }).catch(err => {
-                  vm.$message.error(vm.$t('common.updateErrorMsg' + ' ' + err))
+                  vm.$message.error(vm.$t('UpdateErrorMsg' + ' ' + err))
                 })
               }}
             />

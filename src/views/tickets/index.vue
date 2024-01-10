@@ -35,11 +35,11 @@ export default {
         activeMenu: 'MyTicketList',
         submenu: [
           {
-            title: this.$t('tickets.MyTickets'),
+            title: this.$t('MyTickets'),
             name: 'MyTicketList'
           },
           {
-            title: this.$t('tickets.AssignedMe'),
+            title: this.$t('AssignedMe'),
             name: 'AssignedTicketList'
           }
         ]

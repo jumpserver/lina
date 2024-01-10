@@ -25,13 +25,13 @@ export default {
         'can_public_key_auth': false
       },
       fields: [
-        [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), [
+        [this.$t('Account'), ['name', 'username', 'email', 'groups']],
+        [this.$t('Authentication'), [
           'password_strategy', 'update_password', 'password', 'need_update_password',
           'set_public_key', 'public_key', 'mfa_level', 'source'
         ]],
-        [this.$t('users.Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
-        [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
+        [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
+        [this.$t('Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
@@ -47,7 +47,7 @@ export default {
           ]
         },
         update_password: {
-          label: this.$t('users.UpdatePassword'),
+          label: this.$t('UpdatePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.update_password) {
@@ -73,7 +73,7 @@ export default {
           }
         },
         need_update_password: {
-          label: this.$t('users.needUpdatePasswordNextLogin'),
+          label: this.$t('NeedUpdatePasswordNextLogin'),
           type: 'checkbox-group',
           component: null, // 覆盖默认生成的 component
           el: {
@@ -96,7 +96,7 @@ export default {
           }
         },
         set_public_key: {
-          label: this.$t('users.SetPublicKey'),
+          label: this.$t('SetPublicKey'),
           type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.set_public_key) {
@@ -116,7 +116,7 @@ export default {
         },
         system_roles: {
           component: Select2,
-          label: this.$t('users.SystemRoles'),
+          label: this.$t('SystemRoles'),
           el: {
             multiple: true,
             ajax: {
@@ -150,7 +150,7 @@ export default {
               !this.$hasPerm('rbac.add_orgrolebinding') ||
               this.$store.getters.currentOrgIsRoot
           },
-          helpText: this.$t('users.HelpText.OrgRoleHelpText')
+          helpText: this.$t('OrgRoleHelpText')
         },
         groups: {
           el: {

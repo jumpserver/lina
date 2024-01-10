@@ -25,8 +25,8 @@ export default {
       visible: false,
       config: {
         fields: [
-          [this.$t('common.Basic'), ['TICKETS_ENABLED']],
-          [this.$t('perms.AssetPermission'), [
+          [this.$t('Basic'), ['TICKETS_ENABLED']],
+          [this.$t('AssetPermission'), [
             'TICKET_AUTHORIZE_DEFAULT_TIME',
             'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
           ]]

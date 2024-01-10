@@ -25,14 +25,14 @@
         {{ button.title }}
       </el-button>
       <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
-        {{ $t('common.Reset') }}
+        {{ $t('Reset') }}
       </el-button>
       <el-button
         v-if="defaultButton && hasSaveContinue"
         size="small"
         @click="submitForm('form', true)"
       >
-        {{ $t('common.SaveAndAddAnother') }}
+        {{ $t('SaveAndAddAnother') }}
       </el-button>
       <el-button
         v-if="defaultButton"
@@ -80,7 +80,7 @@ export default {
     submitBtnText: {
       type: String,
       default() {
-        return this.$t('common.Submit')
+        return this.$t('Submit')
       }
     },
     hasSaveContinue: {

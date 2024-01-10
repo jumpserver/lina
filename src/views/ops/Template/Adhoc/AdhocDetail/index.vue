@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="AdhocDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="AdhocDetail" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="AdhocDetail" />
     </keep-alive>
@@ -26,7 +26,7 @@ export default {
         activeMenu: 'AdhocDetail',
         submenu: [
           {
-            title: this.$t('ops.AdhocDetail'),
+            title: this.$t('AdhocDetail'),
             name: 'AdhocDetail'
           }
         ],

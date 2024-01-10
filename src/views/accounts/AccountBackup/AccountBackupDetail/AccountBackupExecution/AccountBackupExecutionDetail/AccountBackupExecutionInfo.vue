@@ -26,14 +26,14 @@ export default {
       detailFields: [
         'id',
         {
-          key: this.$t('accounts.AccountChangeSecret.TimeDelta'),
+          key: this.$t('TimeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
         },
         'date_start', 'is_success', 'reason',
         {
-          key: this.$t('accounts.AccountChangeSecret.MailRecipient'),
+          key: this.$t('MailRecipient'),
           value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('xpack.ChangeAuthPlan.ContainAttachment') : ''}`).join(', ') : ''
+            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`).join(', ') : ''
         }
       ]
     }

@@ -27,11 +27,11 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('assets.Assets'),
+          key: this.$t('Assets'),
           value: `${this.object.assets.length}`
         },
         {
-          key: this.$t('assets.Gateway'),
+          key: this.$t('Gateway'),
           value: `${this.object.gateways.length}`
         },
         'date_created', 'comment'

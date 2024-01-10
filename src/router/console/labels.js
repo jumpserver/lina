@@ -7,7 +7,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('route.Labels'),
+      title: i18n.t('Labels'),
       app: 'labels'
     },
     children: [
@@ -15,21 +15,21 @@ export default [
         path: '',
         component: () => import('@/views/labels/LabelList.vue'),
         name: 'LabelList',
-        meta: { title: i18n.t('route.LabelList') }
+        meta: { title: i18n.t('LabelList') }
       },
       {
         path: 'create',
         name: 'LabelCreate',
         component: () => import('@/views/labels/LabelCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.LabelCreate') }
+        meta: { title: i18n.t('LabelCreate') }
       },
       {
         path: ':id/update',
         name: 'LabelUpdate',
         component: () => import('@/views/labels/LabelCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.LabelUpdate') }
+        meta: { title: i18n.t('LabelUpdate') }
       }
     ]
   }

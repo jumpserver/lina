@@ -25,12 +25,12 @@ export default {
   data() {
     return {
       logConfig: {
-        title: this.$t('dashboard.LogData'),
-        tip: this.$t('dashboard.LogData')
+        title: this.$t('LogData'),
+        tip: this.$t('LogData')
       },
       sessionConfig: {
-        title: this.$t('dashboard.SessionData'),
-        tip: this.$t('dashboard.SessionData')
+        title: this.$t('SessionData'),
+        tip: this.$t('SessionData')
       },
       data: {
         total_count_user_login_logs: 0,
@@ -46,7 +46,7 @@ export default {
     LogItems() {
       return [
         {
-          title: this.$t('dashboard.LoginNum'),
+          title: this.$t('LoginNum'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_user_login_logs,
@@ -54,7 +54,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.OperationLogNum'),
+          title: this.$t('OperationLogNum'),
           body: {
             route: { name: `OperateLogList` },
             count: this.data.total_count_operate_logs,
@@ -62,7 +62,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.DeclassificationLogNum'),
+          title: this.$t('DeclassificationLogNum'),
           body: {
             route: { name: `PasswordChangeLog` },
             count: this.data.total_count_change_password_logs,
@@ -74,7 +74,7 @@ export default {
     sessionItems() {
       return [
         {
-          title: this.$t('dashboard.OnlineSessions'),
+          title: this.$t('OnlineSessions'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.data.total_count_online_sessions,
@@ -82,7 +82,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.HistoricalSessionNum'),
+          title: this.$t('HistoricalSessionNum'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OfflineList' }},
             count: this.data.total_count_history_sessions,
@@ -90,7 +90,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.FileTransferNum'),
+          title: this.$t('FileTransferNum'),
           body: {
             route: { name: `FtpLog` },
             count: this.data.total_count_ftp_logs,

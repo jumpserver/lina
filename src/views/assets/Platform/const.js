@@ -47,7 +47,7 @@ export const platformFieldsMeta = (vm) => {
         change_secret_params: {
           label: '',
           el: {
-            title: vm.$t('assets.ChangeSecretParams'),
+            title: vm.$t('ChangeSecretParams'),
             method: 'change_secret_posix'
           }
         },
@@ -56,7 +56,7 @@ export const platformFieldsMeta = (vm) => {
     },
     category_type: {
       type: 'cascader',
-      label: i18n.t('assets.Type'),
+      label: i18n.t('Type'),
       rules: [
         rules.Required
       ],
@@ -78,12 +78,12 @@ export const platformFieldsMeta = (vm) => {
       }
     },
     protocols: {
-      label: i18n.t('assets.SupportedProtocol'),
+      label: i18n.t('SupportedProtocol'),
       ...assetMeta.protocols,
       el: {
         choices: []
       },
-      helpText: i18n.t('assets.SupportedProtocolHelpText')
+      helpText: i18n.t('SupportedProtocolHelpText')
     },
     su_method: {
       type: 'select',

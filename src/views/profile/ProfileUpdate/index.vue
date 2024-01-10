@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="user" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
     </keep-alive>
@@ -25,7 +25,7 @@ export default {
     return {
       user: this.$store.state.users.profile,
       config: {
-        title: this.$t('users.ProfileSetting'),
+        title: this.$t('ProfileSetting'),
         activeMenu: 'ProfileUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,
@@ -39,16 +39,16 @@ export default {
     getSubmenu() {
       return [
         {
-          title: this.$t('users.ProfileSetting'),
+          title: this.$t('ProfileSetting'),
           name: 'ProfileUpdate'
         },
         {
-          title: this.$t('users.LoginPasswordSetting'),
+          title: this.$t('LoginPasswordSetting'),
           name: 'PasswordUpdate',
           disabled: this.$store.state.users.profile.source.value !== 'local'
         },
         {
-          title: this.$t('users.SSHKeySetting'),
+          title: this.$t('SSHKeySetting'),
           name: 'SSHUpdate',
           disabled: !this.$store.state.users.profile.can_public_key_auth
         }

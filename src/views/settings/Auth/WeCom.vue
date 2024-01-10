@@ -23,7 +23,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('setting.weComTest'),
+            title: this.$t('WeComTest'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -41,7 +41,7 @@ export default {
         encryptedFields: ['WECOM_SECRET'],
         fields: [
           [
-            this.$t('common.BasicInfo'),
+            this.$t('BasicInfo'),
             [
               'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID', 'WECOM_SECRET'
             ]

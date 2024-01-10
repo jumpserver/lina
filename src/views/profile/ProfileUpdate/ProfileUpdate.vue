@@ -29,8 +29,8 @@ export default {
       url: `/api/v1/users/profile/`,
       hasDetailInMsg: false,
       fields: [
-        [this.$t('users.Account'), ['username', 'name', 'email']],
-        [this.$t('common.Other'), ['phone', 'wechat']]
+        [this.$t('Account'), ['username', 'name', 'email']],
+        [this.$t('Other'), ['phone', 'wechat']]
       ],
       fieldsMeta: {
         username: {

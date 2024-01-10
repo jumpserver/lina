@@ -5,8 +5,8 @@
       v-else
       ref="editInput"
       v-model="realValue"
-      size="small"
       class="text edit-input"
+      size="small"
       @blur="onEditBlur"
     />
     <span v-if="realValue" class="action">
@@ -14,11 +14,11 @@
         <el-tooltip
           v-if="item.has"
           :key="index"
+          :content="item.tooltip"
           effect="dark"
           placement="top"
-          :content="item.tooltip"
         >
-          <i class="fa" :class="[item.class, item.icon]" @click="item.action()" />
+          <i :class="[item.class, item.icon]" class="fa" @click="item.action()" />
         </el-tooltip>
       </template>
     </span>
@@ -26,9 +26,8 @@
 </template>
 
 <script>
-import { downloadText } from '@/utils/common'
+import { copy, downloadText } from '@/utils/common'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import { copy } from '@/utils/common'
 
 export default {
   name: 'ShowKeyCopyFormatter',
@@ -78,25 +77,25 @@ export default {
           has: this.hasEdit && this.formatterArgs?.secretType === 'password',
           class: this.isEdit ? 'fa-check' : 'fa-pencil',
           action: this.onEdit,
-          tooltip: this.$t('common.Edit')
+          tooltip: this.$t('Edit')
         },
         {
           has: this.hasShow,
           class: this.isShow ? 'fa-eye-slash' : 'fa-eye',
           action: this.onShow,
-          tooltip: this.$t('common.View')
+          tooltip: this.$t('View')
         },
         {
           has: this.hasDownload,
           icon: 'fa-download',
           action: this.onDownload,
-          tooltip: this.$t('common.Download')
+          tooltip: this.$t('Download')
         },
         {
           has: this.hasCopy,
           icon: 'fa-clone',
           action: this.onCopy,
-          tooltip: this.$t('common.Copy')
+          tooltip: this.$t('Copy')
         }
       ]
       return actions

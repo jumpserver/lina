@@ -8,12 +8,12 @@
         <QuickActions
           v-if="object.id"
           :actions="quickActions"
-          :title="$tc('common.ConvenientOperate')"
+          :title="$tc('ConvenientOperate')"
           type="primary"
         />
       </el-col>
     </el-row>
-    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
@@ -44,10 +44,10 @@ export default {
       ],
       quickActions: [
         {
-          title: this.$t('audits.ChangeField'),
+          title: this.$t('ChangeField'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Detail')
+            label: this.$t('Detail')
           },
           callbacks: {
             click: function() {

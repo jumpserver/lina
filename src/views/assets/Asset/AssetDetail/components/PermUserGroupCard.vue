@@ -1,19 +1,19 @@
 <template>
   <IBox
     :fa="icon"
-    :type="type"
     :title="title"
+    :type="type"
     v-bind="$attrs"
   >
     <table class="card-table">
-      <div v-if="iObjects.length > 0" v-cloak>
+      <div v-cloak v-if="iObjects.length > 0">
         <tr v-for="obj of iObjects" :key="obj.value" class="item">
           <td>
             <el-tooltip
-              style="margin: 4px;"
-              effect="dark"
               :content="obj.label"
+              effect="dark"
               placement="left"
+              style="margin: 4px;"
             >
               <el-link class="detail" @click="goDetail(obj)">
                 {{ obj.label }}
@@ -23,8 +23,8 @@
           <td>
             <el-button
               size="mini"
-              type="primary"
               style="float: right"
+              type="primary"
               @click="buttonClickCallback(obj)"
             >
               {{ buttonTitle }}
@@ -32,8 +32,8 @@
           </td>
         </tr>
       </div>
-      <div v-else v-cloak style="text-align: center;">
-        {{ $t('common.NoData') }}
+      <div v-cloak v-else style="text-align: center;">
+        {{ $t('NoData') }}
       </div>
     </table>
   </IBox>

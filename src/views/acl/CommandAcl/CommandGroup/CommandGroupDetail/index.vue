@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="CommandGroup"
     :active-menu.sync="config.activeMenu"
+    :object.sync="CommandGroup"
     v-bind="config"
     v-on="$listeners"
   >
@@ -29,7 +29,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'Detail'
           }
         ],

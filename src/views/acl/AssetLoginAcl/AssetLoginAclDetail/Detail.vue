@@ -27,11 +27,11 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('acl.action'),
+          key: this.$t('Action'),
           value: this.object.action.label
         },
         {
-          key: this.$t('acl.reviewer'),
+          key: this.$t('Reviewer'),
           value: this.object.reviewers.map(item => item.name).join(', ')
         },
         'priority', 'date_created', 'created_by'

@@ -5,7 +5,7 @@
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('sessions.terminalUpdateStorage')"
+      :title="$tc('TerminalUpdateStorage')"
       :visible.sync="dialogSettings.visible"
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
@@ -39,7 +39,7 @@ export default {
           ],
           fieldsMeta: {
             command_storage: {
-              label: this.$t('sessions.commandStorage'),
+              label: this.$t('CommandStorage'),
               component: Select2,
               el: {
                 ajax: {
@@ -49,7 +49,7 @@ export default {
               }
             },
             replay_storage: {
-              label: this.$t('sessions.replayStorage'),
+              label: this.$t('ReplayStorage'),
               component: Select2,
               el: {
                 ajax: {
@@ -71,7 +71,7 @@ export default {
           },
           onSubmit: (validValues) => {
             const url = '/api/v1/terminal/terminals/'
-            const msg = this.$t('common.updateSuccessMsg')
+            const msg = this.$t('UpdateSuccessMsg')
             validValues = Object.values(validValues)
             this.$axios.patch(url, validValues).then((res) => {
               this.$message.success(msg)
@@ -115,7 +115,7 @@ export default {
             }
           },
           stat: {
-            label: this.$t('terminal.TerminalStat'),
+            label: this.$t('TerminalStat'),
             formatter: (row) => {
               if (!row?.stat) {
                 return ''
@@ -125,7 +125,7 @@ export default {
             }
           },
           load: {
-            label: this.$t('xpack.LoadStatus'),
+            label: this.$t('LoadStatus'),
             filterable: 'custom',
             sortable: false,
             formatterArgs: {
@@ -141,15 +141,15 @@ export default {
             sortable: 'custom'
           },
           is_active: {
-            label: this.$t('sessions.active'),
+            label: this.$t('Active'),
             width: '80px',
             align: 'center'
           },
           is_alive: {
-            label: this.$t('sessions.alive')
+            label: this.$t('Alive')
           },
           session_online: {
-            label: this.$t('sessions.session'),
+            label: this.$t('Session'),
             width: '80px'
           },
           actions: {

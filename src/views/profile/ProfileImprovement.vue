@@ -22,10 +22,10 @@ export default {
     return {
       url: `/api/v1/users/profile/`,
       fields: [
-        [this.$t('users.Account'), ['username', 'name', 'email']],
-        [this.$t('users.Authentication'), ['mfa_level', 'public_key']],
-        [this.$t('common.Other'), ['phone', 'wechat']],
-        [this.$t('users.TermsAndConditions'), ['terms']]
+        [this.$t('Account'), ['username', 'name', 'email']],
+        [this.$t('Authentication'), ['mfa_level', 'public_key']],
+        [this.$t('Other'), ['phone', 'wechat']],
+        [this.$t('TermsAndConditions'), ['terms']]
       ],
       fieldsMeta: {
         username: {
@@ -44,10 +44,10 @@ export default {
           hidden: (formValue) => {
             return formValue.mfa_level === 2
           },
-          helpText: this.$t('users.HelpText.MFAOfUserFirstLoginPersonalInformationImprovementPage')
+          helpText: this.$t('MFAOfUserFirstLoginPersonalInformationImprovementPage')
         },
         public_key: {
-          label: this.$t('users.SSHKey'),
+          label: this.$t('SSHKey'),
           el: {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
@@ -55,14 +55,14 @@ export default {
           hidden: (formValue) => {
             return formValue.source !== 'local'
           },
-          helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
+          helpText: this.$t('SSHKeyOfProfileSSHUpdatePage')
         },
         terms: {
-          label: this.$t('users.IAgree'),
+          label: this.$t('IAgree'),
           type: 'checkbox',
           checked: false,
           rules: [Required],
-          helpText: this.$t('users.HelpText.MFAOfUserFirstLoginUserGuidePage')
+          helpText: this.$t('MFAOfUserFirstLoginUserGuidePage')
         }
       },
       updateSuccessNextRoute: { name: 'UserGuide' },
@@ -75,13 +75,13 @@ export default {
       },
       performSubmit(validValues) {
         if (!validValues.terms) {
-          this.$message.error(this.$tc('common.PleaseAgreeToTheTerms'))
+          this.$message.error(this.$tc('PleaseAgreeToTheTerms'))
           return Promise.reject()
         }
         return this.$axios['patch'](this.url, validValues)
       },
       onPerformSuccess() {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.$store.dispatch('users/ifFirstLogin', false)
         setTimeout(() => this.$router.push({ name: 'ProfileInfo' }), 100)
       },

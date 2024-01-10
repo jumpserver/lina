@@ -8,7 +8,7 @@
     />
     <Dialog
       :show-cancel="false"
-      :title="$tc('profile.CreateAccessKey')"
+      :title="$tc('CreateAccessKey')"
       :visible.sync="visible"
       width="700px"
       @close="onClose"
@@ -46,8 +46,8 @@ export default {
     return {
       mfaUrl: '',
       mfaDialogVisible: false,
-      helpMessage: this.$t('setting.helpText.ApiKeyList'),
-      warningText: this.$t('profile.ApiKeyWarning'),
+      helpMessage: this.$t('ApiKeyList'),
+      warningText: this.$t('ApiKeyWarning'),
       visible: false,
       key: { id: '', secret: '' },
       tableConfig: {
@@ -68,11 +68,11 @@ export default {
             }
           },
           date_created: {
-            label: this.$t('common.DateCreated'),
+            label: this.$t('DateCreated'),
             formatter: DateFormatter
           },
           ip_group: {
-            label: this.$t('profile.AccessIP'),
+            label: this.$t('AccessIP'),
             formatter: ArrayFormatter
           },
           actions: {
@@ -82,16 +82,16 @@ export default {
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.reloadTable()
-                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                  this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
                 })
               }.bind(this),
               extraActions: [
                 {
                   name: 'Enabled',
                   title: ({ row }) => {
-                    return row.is_active ? this.$t('common.Disable') : this.$t('common.Enable')
+                    return row.is_active ? this.$t('Disable') : this.$t('Enable')
                   },
                   type: 'info',
                   can: () => this.$hasPerm('authentication.change_accesskey'),
@@ -100,9 +100,9 @@ export default {
                       { is_active: !row.is_active }
                     ).then(res => {
                       this.reloadTable()
-                      this.$message.success(this.$tc('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$t('common.updateErrorMsg') + ' ' + error)
+                      this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
                     })
                   }.bind(this)
                 }
@@ -119,8 +119,8 @@ export default {
         hasCreate: false,
         extraActions: [
           {
-            name: this.$t('setting.Create'),
-            title: this.$t('setting.Create'),
+            name: this.$t('Create'),
+            title: this.$t('Create'),
             type: 'primary',
             can: () => this.$hasPerm('authentication.add_accesskey'),
             callback: function() {

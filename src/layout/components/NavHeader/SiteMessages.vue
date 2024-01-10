@@ -9,16 +9,16 @@
       :before-close="handleClose"
       :modal="false"
       :size="width"
-      :title="$tc('notifications.SiteMessage')"
+      :title="$tc('SiteMessage')"
       :visible.sync="show"
       class="drawer"
       custom-class="site-msg"
       @open="getMessages"
     >
       <div slot="title">
-        <span>{{ $t('notifications.SiteMessage') }}</span>
+        <span>{{ $t('SiteMessage') }}</span>
         <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a style="vertical-align: sub;"> {{ $t('notifications.AllClickRead') }}</a>
+          <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
         </div>
       </div>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
@@ -41,7 +41,7 @@
                 {{ formatDate(msg.date_created) }}
               </span>
               <span v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
-                <a>{{ $t('notifications.MarkAsRead') }}</a>
+                <a>{{ $t('MarkAsRead') }}</a>
               </span>
             </el-col>
           </el-row>
@@ -51,14 +51,14 @@
         </div>
       </div>
       <div v-else class="no-msg">
-        {{ $t('notifications.NoUnreadMsg') }}
+        {{ $t('NoUnreadMsg') }}
       </div>
     </el-drawer>
 
     <Dialog
       v-if="msgDetailVisible"
       :close-on-click-modal="false"
-      :confirm-title="$tc('notifications.MarkAsRead')"
+      :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
       :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
@@ -133,7 +133,7 @@ export default {
       }
     },
     oneClickRead(msgs) {
-      this.$confirm(this.$tc('notifications.OneClickReadMsg'), this.$tc('common.Info'), {
+      this.$confirm(this.$tc('OneClickReadMsg'), this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -193,7 +193,7 @@ export default {
         }
       }
       ws.onerror = (error) => {
-        this.$message.error(this.$tc('common.ConnectWebSocketError'))
+        this.$message.error(this.$tc('ConnectWebSocketError'))
         this.$log.debug('site message ws error: ', error)
       }
     }

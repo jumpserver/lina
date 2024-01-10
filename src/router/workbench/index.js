@@ -10,7 +10,7 @@ export default {
   name: 'workbench',
   redirect: '/workbench/home',
   meta: {
-    title: i18n.t('common.nav.Workbench'),
+    title: i18n.t('Workbench'),
     type: 'view',
     view: 'workbench',
     icon: 'workbench',
@@ -28,7 +28,7 @@ export default {
       component: () => import('@/views/myhome'),
       meta: {
         icon: 'overview',
-        title: i18n.t('route.Overview'),
+        title: i18n.t('Overview'),
         permissions: []
       }
     },
@@ -38,7 +38,7 @@ export default {
       component: () => import('@/views/myassets'),
       meta: {
         icon: 'assets',
-        title: i18n.t('route.MyAssets'),
+        title: i18n.t('MyAssets'),
         permissions: ['perms.view_myassets']
       }
     },
@@ -53,7 +53,7 @@ export default {
         {
           path: `${BASE_URL}/luna/`,
           meta: {
-            title: i18n.t('route.WebTerminal'),
+            title: i18n.t('WebTerminal'),
             icon: 'web-terminal',
             activeMenu: '/assets',
             permissions: []
@@ -66,7 +66,7 @@ export default {
       name: 'FileManager',
       component: empty,
       meta: {
-        title: i18n.t('route.FileManager'),
+        title: i18n.t('FileManager'),
         icon: 'file',
         permissions: ['rbac.view_filemanager']
       },
@@ -76,7 +76,7 @@ export default {
           name: 'BulkTransfer',
           component: () => import('@/views/ops/File/index'),
           meta: {
-            title: i18n.t('route.BulkTransfer'),
+            title: i18n.t('BulkTransfer'),
             permissions: ['rbac.view_filemanager']
           }
         },
@@ -84,7 +84,7 @@ export default {
           path: `${BASE_URL}/koko/elfinder/sftp/`,
           name: '',
           meta: {
-            title: i18n.t('route.FileManager'),
+            title: i18n.t('FileManager'),
             activeMenu: '/assets',
             permissions: ['rbac.view_filemanager']
           }
@@ -96,7 +96,7 @@ export default {
       component: empty,
       name: 'JobCenter',
       meta: {
-        title: i18n.t('route.JobCenter'),
+        title: i18n.t('JobCenter'),
         icon: 'task-center',
         permissions: [],
         hidden: () => {
@@ -109,7 +109,7 @@ export default {
           name: 'QuickJob',
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
-            title: i18n.t('ops.QuickJob'),
+            title: i18n.t('QuickJob'),
             permissions: ['ops.view_job', 'ops.add_job', 'ops.add_jobexecution']
           }
         },
@@ -119,7 +119,7 @@ export default {
           component: empty,
           redirect: '',
           meta: {
-            title: i18n.t('route.JobList'),
+            title: i18n.t('JobList'),
             permissions: ['ops.view_job']
           },
           children: [
@@ -128,7 +128,7 @@ export default {
               name: 'JobList',
               component: () => import('@/views/ops/Job'),
               meta: {
-                title: i18n.t('route.JobList'),
+                title: i18n.t('JobList'),
                 permissions: ['ops.view_job']
               }
             },
@@ -138,7 +138,7 @@ export default {
               name: 'JobCreate',
               hidden: true,
               meta: {
-                title: i18n.t('route.JobCreate'),
+                title: i18n.t('JobCreate'),
                 permissions: ['ops.add_job'],
                 activeMenu: '/workbench/ops/job'
               }
@@ -149,7 +149,7 @@ export default {
               name: 'JobUpdate',
               hidden: true,
               meta: {
-                title: i18n.t('route.JobUpdate'),
+                title: i18n.t('JobUpdate'),
                 permissions: ['ops.change_job'],
                 activeMenu: '/workbench/ops/job'
               }
@@ -160,7 +160,7 @@ export default {
               name: 'JobDetail',
               hidden: true,
               meta: {
-                title: i18n.t('route.JobDetail'),
+                title: i18n.t('JobDetail'),
                 permissions: ['ops.view_job'],
                 activeMenu: '/workbench/ops/job'
               }
@@ -172,7 +172,7 @@ export default {
           name: 'Template',
           component: () => import('@/views/ops/Template'),
           meta: {
-            title: i18n.t('route.Template'),
+            title: i18n.t('Template'),
             permissions: ['ops.view_adhoc|ops.view_playbook']
           }
         },
@@ -181,7 +181,7 @@ export default {
           name: 'Execution',
           component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('route.Execution'),
+            title: i18n.t('Execution'),
             permissions: ['ops.view_jobexecution']
           }
         },
@@ -191,7 +191,7 @@ export default {
           name: 'ExecutionDetail',
           hidden: true,
           meta: {
-            title: i18n.t('ops.ExecutionDetail'),
+            title: i18n.t('ExecutionDetail'),
             permissions: ['ops.view_jobexecution'],
             activeMenu: '/workbench/ops/executions'
           }
@@ -202,7 +202,7 @@ export default {
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           hidden: true,
           meta: {
-            title: i18n.t('ops.AdhocUpdate'),
+            title: i18n.t('AdhocUpdate'),
             permissions: ['ops.change_adhoc'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -213,7 +213,7 @@ export default {
           hidden: true,
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           meta: {
-            title: i18n.t('ops.createAdhoc'),
+            title: i18n.t('createAdhoc'),
             permissions: ['ops.add_adhoc'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -224,7 +224,7 @@ export default {
           name: 'AdhocDetail',
           hidden: true,
           meta: {
-            title: i18n.t('route.AdhocDetail'),
+            title: i18n.t('AdhocDetail'),
             permissions: ['ops.view_adhoc'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -235,7 +235,7 @@ export default {
           hidden: true,
           component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
           meta: {
-            title: i18n.t('ops.CreatePlaybook'),
+            title: i18n.t('CreatePlaybook'),
             permissions: ['ops.add_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -246,7 +246,7 @@ export default {
           hidden: true,
           component: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate'),
           meta: {
-            title: i18n.t('ops.PlaybookUpdate'),
+            title: i18n.t('PlaybookUpdate'),
             permissions: ['ops.change_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -257,7 +257,7 @@ export default {
           name: 'PlaybookDetail',
           hidden: true,
           meta: {
-            title: i18n.t('ops.PlaybookDetail'),
+            title: i18n.t('PlaybookDetail'),
             permissions: ['ops.view_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
@@ -269,7 +269,7 @@ export default {
       name: 'SystemTools',
       component: () => import('@/views/settings/Tool'),
       meta: {
-        title: i18n.t('setting.SystemTools'),
+        title: i18n.t('SystemTools'),
         icon: 'tools',
         permissions: ['rbac.view_systemtools']
       }

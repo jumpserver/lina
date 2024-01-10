@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="plan" :active-menu.sync="config.activeMenu" v-bind="config">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="plan" v-bind="config">
     <keep-alive>
       <component :is="config.activeMenu" :object="plan" />
     </keep-alive>
@@ -23,7 +23,7 @@ export default {
         url: '/api/v1/accounts/push-account-automations',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('BasicInfo'),
             name: 'AccountPushInfo',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
           }

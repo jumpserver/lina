@@ -50,7 +50,7 @@
           <span v-html="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">{{ this.$t('common.NoData') }}</p>
+      <p v-else class="no-data">{{ this.$t('NoData') }}</p>
     </div>
     <div class="vip-footer">
       <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
@@ -131,8 +131,8 @@ export default {
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
       asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
-      defaultPrev: '< ' + this.$tc('common.PagePrev'),
-      defaultNext: this.$tc('common.PageNext') + ' >'
+      defaultPrev: '< ' + this.$tc('PagePrev'),
+      defaultNext: this.$tc('PageNext') + ' >'
     }
   },
   watch: {

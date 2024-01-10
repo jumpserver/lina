@@ -2,13 +2,13 @@
   <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
     <slot v-if="treeSetting.hasRightMenu" slot="rMenu">
       <li v-if="treeSetting.showCreate" id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
-        <i class="fa fa-plus-square-o" /> {{ this.$t('tree.CreateNode') }}
+        <i class="fa fa-plus-square-o" /> {{ this.$t('CreateNode') }}
       </li>
       <li v-if="treeSetting.showUpdate" id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
-        <i class="fa fa-pencil-square-o" /> {{ this.$t('tree.RenameNode') }}
+        <i class="fa fa-pencil-square-o" /> {{ this.$t('RenameNode') }}
       </li>
       <li v-if="treeSetting.showDelete" id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
-        <i class="fa fa-minus-square" /> {{ this.$t('tree.DeleteNode') }}
+        <i class="fa fa-minus-square" /> {{ this.$t('DeleteNode') }}
       </li>
       <slot name="rMenu" />
     </slot>
@@ -39,7 +39,7 @@ export default {
         showDelete: true,
         showUpdate: true,
         showSearch: false,
-        customTreeHeaderName: this.$t('assets.AssetTree'),
+        customTreeHeaderName: this.$t('AssetTree'),
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production')
@@ -155,11 +155,11 @@ export default {
       this.$axios.delete(
         `${this.treeSetting.nodeUrl}${currentNode.meta.data.id}/`
       ).then(() => {
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
         this.refreshTree()
       }).catch(() => {
-        // this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+        // this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
@@ -176,7 +176,7 @@ export default {
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         treeNode.meta.data = res
         this.zTree.updateNode(treeNode)
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).finally(() => {
         this.refreshTree()
       })
@@ -234,7 +234,7 @@ export default {
         return false
       }
       // TODO 修改默认确认框
-      const msg = this.$t('common.tree.DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
+      const msg = this.$t('DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
       return confirm(msg)
     },
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
@@ -248,9 +248,9 @@ export default {
           nodes: treeNodesIds
         }
       ).then((res) => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       }).finally()
     },
     createTreeNode: function() {
@@ -278,9 +278,9 @@ export default {
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         this.currentNodeId = node.meta.data.id || newNode.id
         this.zTree.editName(node)
-        this.$message.success(this.$tc('common.createSuccessMsg'))
+        this.$message.success(this.$tc('CreateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.createErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('CreateErrorMsg') + ' ' + error)
       })
     },
     refresh: function() {

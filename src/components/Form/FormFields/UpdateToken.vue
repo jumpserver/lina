@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-button v-show="!isShow" type="text" icon="el-icon-edit" @click="isShow=true">
+    <el-button v-show="!isShow" icon="el-icon-edit" type="text" @click="isShow=true">
       {{ text }}
     </el-button>
     <el-input
       v-show="isShow"
       v-model.trim="curValue"
-      show-password
+      :placeholder="placeholder"
       :type="type"
       autocomplete="new-password"
-      :placeholder="placeholder"
+      show-password
       @change="onChange"
     />
   </div>
@@ -29,7 +29,7 @@ export default {
     text: {
       type: String,
       default() {
-        return this.$t('common.Update')
+        return this.$t('Update')
       }
     },
     showInput: {

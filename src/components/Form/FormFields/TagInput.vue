@@ -17,12 +17,12 @@
       ref="SearchInput"
       v-model.trim="filterValue"
       :fetch-suggestions="autocomplete"
-      :placeholder="this.$t('common.EnterToContinue')"
+      :placeholder="this.$t('EnterToContinue')"
       :type="inputType"
       class="search-input"
       @blur="focus = false"
-      @focus="focus = true"
       @change="handleChange"
+      @focus="focus = true"
       @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
@@ -53,7 +53,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => i18n.t('perms.Input')
+      default: () => i18n.t('Input')
     },
     autocomplete: {
       type: Function,

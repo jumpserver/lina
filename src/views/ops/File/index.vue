@@ -14,7 +14,7 @@
               <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
             </el-button>
           </div>
-          <div class="upload_input">{{ $t('users.Users') }}:</div>
+          <div class="upload_input">{{ $t('Users') }}:</div>
           <div class="upload_input">
             <el-autocomplete
               v-model="runAsInput.value"
@@ -26,7 +26,7 @@
               @select="runAsInput.callback(runAsInput.value)"
             />
           </div>
-          <div class="upload_input">{{ $t('ops.UploadDir') }}:</div>
+          <div class="upload_input">{{ $t('UploadDir') }}:</div>
           <div class="upload_input">
             <el-input
               v-if="dstPathInput.type==='input'"
@@ -54,15 +54,15 @@
               >
                 <i class="el-icon-upload" />
                 <div class="el-upload__text">
-                  {{ $t('common.imExport.dragUploadFileInfo') }}
+                  {{ $t('DragUploadFileInfo') }}
                 </div>
                 <br>
                 <span>
-                  {{ $t('ops.uploadFileLthHelpText', {limit: SizeLimitMb}) }}
+                  {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
                 </span>
                 <div slot="file" slot-scope="{file}">
-                  <li tabindex="0" class="el-upload-list__item is-ready">
-                    <a class="el-upload-list__item-name" :style="sameFileStyle(file)">
+                  <li class="el-upload-list__item is-ready" tabindex="0">
+                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
                       <i class="el-icon-document" />{{ file.name }}
                       <i style="color: #1ab394;float: right;font-weight:normal">
                         {{ formatFileSize(file.size) }}
@@ -77,26 +77,26 @@
                 v-if="uploadFileList.length===0"
                 class="empty-file-tip"
               >
-                {{ $tc('ops.NoFiles') }}
+                {{ $tc('NoFiles') }}
               </div>
             </el-card>
           </div>
-          <b>{{ $tc('ops.output') }}:</b>
+          <b>{{ $tc('Output') }}:</b>
           <span v-if="executionInfo.status && summary" style="float: right">
             <span>
-              <span><b>{{ $tc('common.Status') }}: </b></span>
+              <span><b>{{ $tc('Status') }}: </b></span>
               <span
                 v-if="executionInfo.status==='timeout'"
                 class="status_warning"
-              >{{ $tc('ops.timeout') }}</span>
+              >{{ $tc('Timeout') }}</span>
               <span v-else>
-                <span class="status_success">{{ $tc('ops.success') + ': ' + summary.success }}</span>
-                <span class="status_warning">{{ $tc('ops.Skip') + ': ' + summary.skip }}</span>
-                <span class="status_danger">{{ $tc('ops.failed') + ': ' + summary.failed }}</span>
+                <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
+                <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
+                <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
               </span>
             </span>
             <span>
-              <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
+              <span><b>{{ $tc('TimeDelta') }}: </b></span>
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
@@ -146,7 +146,7 @@ export default {
       dstPath: '',
       runButton: {
         type: 'button',
-        name: this.$t('ops.Transfer'),
+        name: this.$t('Transfer'),
         align: 'left',
         icon: 'fa fa-play',
         disabled: this.$store.getters.currentOrgIsRoot,
@@ -158,10 +158,10 @@ export default {
         }
       },
       runAsInput: {
-        name: this.$t('ops.runAs'),
+        name: this.$t('RunAs'),
         align: 'left',
         value: '',
-        placeholder: this.$tc('ops.EnterRunUser'),
+        placeholder: this.$tc('EnterRunUser'),
         el: {
           autoComplete: true,
           query: (query, cb) => {
@@ -185,10 +185,10 @@ export default {
       },
       dstPathInput: {
         type: 'input',
-        name: this.$t('ops.runningPath'),
+        name: this.$t('RunningPath'),
         align: 'left',
         value: '',
-        placeholder: this.$tc('ops.EnterUploadPath'),
+        placeholder: this.$tc('EnterUploadPath'),
         callback: (val) => {
           this.chdir = val
         }
@@ -296,7 +296,7 @@ export default {
         this.executionInfo.status = data['status']
         this.taskStatusStat(data['summary'])
         if (this.executionInfo.status === 'success') {
-          this.$message.success(this.$tc('ops.runSucceed'))
+          this.$message.success(this.$tc('RunSucceed'))
           clearInterval(this.upload_interval)
           this.progressLength = 100
           this.ShowProgress = true
@@ -307,7 +307,7 @@ export default {
       return `\r\n${msg}\r\n`
     },
     writeExecutionOutput() {
-      let msg = this.$t('assets.Pending')
+      let msg = this.$t('Pending')
       this.xterm.write(msg)
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
@@ -365,7 +365,7 @@ export default {
     isFileExceedsLimit(file) {
       const isGtLimit = file.size / 1024 / 1024 > this.SizeLimitMb
       if (isGtLimit) {
-        this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
+        this.$message.error(this.$tc('FileSizeExceedsLimit'))
       }
       return isGtLimit
     },
@@ -382,27 +382,27 @@ export default {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
         if (file.isSame) {
-          this.$message.error(this.$tc('ops.DuplicateFileExists'))
+          this.$message.error(this.$tc('DuplicateFileExists'))
           return
         }
         if (this.isFileExceedsLimit(file)) {
           return
         }
         if (file.name.length > 128) {
-          this.$message.error(file.name + ' ' + this.$tc('ops.FileNameTooLong'))
+          this.$message.error(file.name + ' ' + this.$tc('FileNameTooLong'))
           return
         }
       }
       if (this.uploadFileList.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredUploadFile'))
+        this.$message.error(this.$tc('RequiredUploadFile'))
         return
       }
       if (hosts.length === 0 && nodes.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
+        this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
       if (!this.runas) {
-        this.$message.error(this.$tc('ops.RequiredRunas'))
+        this.$message.error(this.$tc('RequiredRunas'))
         return
       }
       const data = {

@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      helpMessage: this.$t('setting.EndpointRuleListHelpMessage'),
+      helpMessage: this.$t('EndpointRuleListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoint-rules/',
         columnsShow: {

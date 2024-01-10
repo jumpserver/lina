@@ -22,20 +22,20 @@ export default {
         ip_network_segment_group: ['*']
       },
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), [
+        [this.$t('Basic'), ['name']],
+        [this.$t('CloudSource'), ['account', 'regions']],
+        [this.$t('SaveSetting'), [
           'hostname_strategy', 'ip_network_segment_group',
           'sync_ip_type', 'is_always_update', 'fully_synchronous'
         ]],
-        [this.$t('xpack.Cloud.SyncStrategy'), ['strategy']],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('SyncStrategy'), ['strategy']],
+        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Other'), ['comment']]
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
         account: {
-          label: this.$t('xpack.Cloud.Account'),
+          label: this.$t('Account'),
           on: {
             change: ([event], updateForm) => {
               vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event?.pk}`
@@ -56,17 +56,17 @@ export default {
         },
         hostname_strategy: {
           rules: [rules.RequiredChange],
-          helpTips: this.$t('xpack.Cloud.HostnameStrategy')
+          helpTips: this.$t('HostnameStrategy')
         },
         is_always_update: {
           type: 'switch',
-          label: this.$t('xpack.Cloud.IsAlwaysUpdate'),
-          helpTips: this.$t('xpack.Cloud.IsAlwaysUpdateHelpTips')
+          label: this.$t('IsAlwaysUpdate'),
+          helpTips: this.$t('IsAlwaysUpdateHelpTips')
         },
         fully_synchronous: {
           type: 'switch',
-          label: this.$t('xpack.Cloud.FullySynchronous'),
-          helpTips: this.$t('xpack.Cloud.FullySynchronousHelpTips')
+          label: this.$t('FullySynchronous'),
+          helpTips: this.$t('FullySynchronousHelpTips')
         },
         regions: {
           component: Select2,
@@ -91,23 +91,23 @@ export default {
         },
         crontab: {
           component: CronTab,
-          label: this.$t('xpack.RegularlyPerform'),
+          label: this.$t('RegularlyPerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+          helpText: this.$t('CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('xpack.CyclePerform'),
+          label: this.$t('CyclePerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
+          helpText: this.$t('IntervalOfCreateUpdatePage')
         },
         strategy: {
-          label: this.$t('common.Strategy'),
+          label: this.$t('Strategy'),
           component: SyncInstanceTaskStrategy,
-          helpTips: this.$t('xpack.Cloud.StrategyHelpTips')
+          helpTips: this.$t('StrategyHelpTips')
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },

@@ -24,13 +24,13 @@ export default {
         }
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('users.Users'), ['users']],
-        [this.$t('assets.Asset'), ['assets']],
-        [this.$t('accounts.Accounts'), ['accounts']],
-        [this.$t('acl.Rules'), ['rules']],
-        [this.$t('common.Action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('Users'), ['users']],
+        [this.$t('Asset'), ['assets']],
+        [this.$t('Accounts'), ['accounts']],
+        [this.$t('Rules'), ['rules']],
+        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
@@ -43,11 +43,11 @@ export default {
           ],
           fieldsMeta: {
             ip_group: {
-              label: this.$t('acl.LoginIP'),
-              helpText: this.$t('acl.ipGroupHelpText')
+              label: this.$t('LoginIP'),
+              helpText: this.$t('IpGroupHelpText')
             },
             time_period: {
-              label: this.$t('common.timePeriod'),
+              label: this.$t('TimePeriod'),
               component: WeekCronSelect
             }
           }

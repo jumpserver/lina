@@ -1,25 +1,25 @@
 <template>
   <div>
     <el-link v-if="isUpdate(this)" :underline="false" type="default" @click="goToAssetAccountsPage()">
-      {{ $t('assets.InAssetDetail') }}
+      {{ $t('InAssetDetail') }}
     </el-link>
     <div v-else class="accounts el-data-table">
       <el-table :data="accounts" class="el-table--fit el-table--border">
-        <el-table-column :label="$tc('assets.Name')" prop="name" />
-        <el-table-column :label="$tc('assets.Username')" prop="username" />
-        <el-table-column :label="$tc('assets.Privileged')" prop="privileged">
+        <el-table-column :label="$tc('Name')" prop="name" />
+        <el-table-column :label="$tc('Username')" prop="username" />
+        <el-table-column :label="$tc('Privileged')" prop="privileged">
           <template v-slot="scope">
             <i v-if="scope.row['privileged']" class="fa fa-check text-primary" />
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('common.TemplateAdd')" prop="template">
+        <el-table-column :label="$tc('TemplateAdd')" prop="template">
           <template v-slot="scope">
             <i v-if="scope.row['template']" class="fa fa-check text-primary" />
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('common.Actions')" align="center" class-name="buttons" fixed="right" width="135">
+        <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
             <el-button :disabled="!!scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
@@ -28,10 +28,10 @@
       </el-table>
       <div class="actions">
         <el-button size="mini" type="primary" @click="onAddClick">
-          {{ $t('common.Add') }}
+          {{ $t('Add') }}
         </el-button>
         <el-button :disabled="!$hasPerm('accounts.view_accounttemplate')" size="mini" type="success" @click="onAddFromTemplateClick">
-          {{ $t('common.TemplateAdd') }}
+          {{ $t('TemplateAdd') }}
         </el-button>
       </div>
       <AddAccountDialog

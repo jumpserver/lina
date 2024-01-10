@@ -18,14 +18,14 @@
                 type="primary"
                 @click.native="onClick(activity)"
               >
-                {{ $tc('common.Detail') }}
+                {{ $tc('Detail') }}
               </el-link>
             </el-timeline-item>
           </el-timeline>
         </IBox>
       </el-col>
     </el-row>
-    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
@@ -49,10 +49,10 @@ export default {
   data() {
     return {
       activityUrl: `/api/v1/audits/activities/?resource_id=${this.object.id}`,
-      title: `${this.$t('common.Activity')} - ${this.$t('common.Last30')}`,
+      title: `${this.$t('Activity')} - ${this.$t('Last30')}`,
       activities: [
         {
-          content: this.$t('common.Now'),
+          content: this.$t('Now'),
           timestamp: this.$moment().format('YYYY-MM-DD HH:mm:ss'),
           type: 'primary'
         }

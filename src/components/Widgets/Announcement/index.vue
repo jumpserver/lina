@@ -1,16 +1,16 @@
 <template>
   <el-alert
     v-if="enabled && !isViewed()"
-    class="announcement"
-    type="success"
     :center="false"
     :title="title"
+    class="announcement"
+    type="success"
     @close="onClose"
   >
-    <MarkDown class="markdown" :value="announcement.content" />
+    <MarkDown :value="announcement.content" class="markdown" />
     <span v-if="announcement.link">
-      <el-link :href="announcement.link" target="_blank" type="info" class="link-more">
-        {{ $t('common.ViewMore') }}
+      <el-link :href="announcement.link" class="link-more" target="_blank" type="info">
+        {{ $t('ViewMore') }}
       </el-link>
       <i class="fa fa-external-link icon" />
     </span>
@@ -41,7 +41,7 @@ export default {
       return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject)
     },
     title() {
-      return this.$t('common.Announcement') + ': ' + this.announcement.subject
+      return this.$t('Announcement') + ': ' + this.announcement.subject
     }
   },
   methods: {

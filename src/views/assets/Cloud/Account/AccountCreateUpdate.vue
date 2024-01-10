@@ -42,9 +42,9 @@ export default {
       },
       url: '/api/v1/xpack/cloud/accounts/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'provider']],
+        [this.$t('Basic'), ['name', 'provider']],
         [this.$t(accountProviderAttrs.title), ['attrs']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         name: {
@@ -57,21 +57,21 @@ export default {
             // 必须放在最上面，下面特殊制定的字段才会覆盖默认
             ...setFieldAttrs(),
             service_account_key: {
-              label: this.$t('xpack.Cloud.ServerAccountKey'),
+              label: this.$t('ServerAccountKey'),
               component: UploadKey,
               el: {
                 toFormat: 'object'
               }
             },
             cert_file: {
-              label: this.$t('common.Certificate'),
+              label: this.$t('Certificate'),
               component: UploadKey,
               el: {
                 toFormat: 'object'
               }
             },
             key_file: {
-              label: this.$t('common.SecretKey'),
+              label: this.$t('SecretKey'),
               component: UploadKey,
               el: {
                 toFormat: 'object'
@@ -81,15 +81,15 @@ export default {
               rules: this.$route.params.id ? [] : [RequiredChange]
             },
             public_key: {
-              label: this.$t('common.PublicKey'),
+              label: this.$t('PublicKey'),
               rules: this.$route.params.id ? [] : [RequiredChange]
             },
             private_key: {
-              label: this.$t('common.PrivateKey'),
+              label: this.$t('PrivateKey'),
               rules: this.$route.params.id ? [] : [RequiredChange]
             },
             project: {
-              label: this.$t('common.Project')
+              label: this.$t('Project')
             }
           }
         },

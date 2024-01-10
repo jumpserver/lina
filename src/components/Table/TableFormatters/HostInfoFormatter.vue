@@ -1,12 +1,12 @@
 <template>
-  <DetailFormatter :row="row" :col="col">
+  <DetailFormatter :col="col" :row="row">
     <template>
       <el-popover
-        placement="top-start"
         :open-delay="parseInt('500')"
         :title="title"
-        width="400"
+        placement="top-start"
         trigger="hover"
+        width="400"
       >
         <el-row v-for="(item, key) of items" :key="key" class="detail-item">
           <el-col :span="12">{{ formatterArgs.info[key] }}</el-col>
@@ -21,6 +21,7 @@
 <script>
 import DetailFormatter from './DetailFormatter.vue'
 import BaseFormatter from './base.vue'
+
 export default {
   name: 'HostInfoFormatter',
   components: {
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     title() {
-      return `${this.$t('assets.HardwareInfo')}`
+      return `${this.$t('HardwareInfo')}`
     },
     items() {
       const cellValue = { ...this.cellValue }

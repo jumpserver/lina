@@ -80,7 +80,7 @@ export default {
               extraActions: [
                 {
                   name: 'test',
-                  title: this.$t('sessions.test'),
+                  title: this.$t('Test'),
                   type: 'primary',
                   can: vm.$hasPerm('terminal.view_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
@@ -95,15 +95,15 @@ export default {
                 },
                 {
                   name: 'set_to_default',
-                  title: this.$t('sessions.SetToDefault'),
+                  title: this.$t('SetToDefault'),
                   type: 'primary',
                   can: vm.$hasPerm('terminal.change_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultCommandStorage(row.id).then(data => {
                       vm.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$tc('sessions.SetSuccess'))
+                      this.$message.success(this.$tc('SetSuccess'))
                     }).catch(() => {
-                      this.$message.error(this.$tc('sessions.SetFailed'))
+                      this.$message.error(this.$tc('SetFailed'))
                     })
                   }
                 }

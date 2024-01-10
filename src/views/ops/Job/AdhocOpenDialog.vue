@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('ops.SelectAdhoc'),
+        title: this.$t('SelectAdhoc'),
         visible: false,
         width: '60%',
         tableConfig: {
@@ -36,7 +36,7 @@ export default {
           columns: ['name', 'module', 'args', 'comment', 'actions'],
           columnsMeta: {
             name: {
-              title: this.$tc('common.Name'),
+              title: this.$tc('Name'),
               formatter: (row) => {
                 return row?.name || '-'
               }
@@ -49,7 +49,7 @@ export default {
                 hasDelete: false,
                 extraActions: [
                   {
-                    title: this.$tc('common.Select'),
+                    title: this.$tc('Select'),
                     name: 'select',
                     can: true,
                     callback: ({ row }) => {

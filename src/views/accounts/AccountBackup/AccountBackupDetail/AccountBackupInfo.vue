@@ -31,10 +31,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
+          title: this.$t('ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.AccountChangeSecret.Execute')
+            label: this.$t('Execute')
           },
           callbacks: {
             click: function() {
@@ -52,14 +52,14 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
+          key: this.$t('RegularlyPerform'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
+          key: this.$t('CyclePerform'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
@@ -67,28 +67,28 @@ export default {
         },
         'date_created', 'date_updated', 'comment',
         {
-          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' A',
+          key: this.$t('Addressee') + ' A',
           value: this.object.recipients_part_one,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' B',
+          key: this.$t('Addressee') + ' B',
           value: this.object.recipients_part_two,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountBackup.RecipientServer') + ' A',
+          key: this.$t('RecipientServer') + ' A',
           value: this.object.obj_recipients_part_one,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountBackup.RecipientServer') + ' B',
+          key: this.$t('RecipientServer') + ' B',
           value: this.object.obj_recipients_part_two,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>

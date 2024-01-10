@@ -31,10 +31,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
+          title: this.$t('ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.AccountChangeSecret.Execute'),
+            label: this.$t('Execute'),
             disabled: !this.$hasPerm('accounts.add_changesecretexecution') || !this.object.is_active
           },
           callbacks: {
@@ -53,30 +53,30 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('accounts.AccountChangeSecret.Username'),
+          key: this.$t('Username'),
           value: this.object.accounts.join(', ')
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
+          key: this.$t('AssetAmount'),
           value: this.object.assets.length
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
+          key: this.$t('NodeAmount'),
           value: this.object.nodes.length
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.PasswordStrategy'),
+          key: this.$t('PasswordStrategy'),
           value: this.object.secret_strategy.label
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
+          key: this.$t('RegularlyPerform'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
+          key: this.$t('CyclePerform'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>

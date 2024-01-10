@@ -128,7 +128,7 @@ export default {
       showAddDialog: false,
       showAddTemplateDialog: false,
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('assets.AddAccount'),
+      accountCreateUpdateTitle: this.$t('AddAccount'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -161,7 +161,7 @@ export default {
             }
           },
           asset: {
-            label: this.$t('assets.Asset'),
+            label: this.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -192,7 +192,7 @@ export default {
             }
           },
           privileged: {
-            label: this.$t('assets.Privileged'),
+            label: this.$t('Privileged'),
             width: '120px',
             formatterArgs: {
               showText: false,
@@ -206,11 +206,11 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               hasClone: this.hasClone,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
@@ -225,7 +225,7 @@ export default {
                 },
                 {
                   name: 'ClearSecret',
-                  title: this.$t('common.ClearSecret'),
+                  title: this.$t('ClearSecret'),
                   can: this.$hasPerm('accounts.change_account'),
                   type: 'primary',
                   callback: ({ row }) => {
@@ -233,13 +233,13 @@ export default {
                       `/api/v1/accounts/accounts/clear-secret/`,
                       { account_ids: [row.id] }
                     ).then(() => {
-                      this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                      this.$message.success(this.$tc('ClearSuccessMsg'))
                     })
                   }
                 },
                 {
                   name: 'Test',
-                  title: this.$t('common.Test'),
+                  title: this.$t('Test'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.change_account') &&
@@ -256,7 +256,7 @@ export default {
                 },
                 {
                   name: 'Update',
-                  title: this.$t('common.Update'),
+                  title: this.$t('Update'),
                   can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     const data = {
@@ -266,7 +266,7 @@ export default {
                     vm.account = row
                     vm.iAsset = data
                     vm.showAddDialog = false
-                    vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
+                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
                     setTimeout(() => {
                       vm.showAddDialog = true
                     })
@@ -295,7 +295,7 @@ export default {
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true,
-          tips: this.$t('accounts.AccountExportTips')
+          tips: this.$t('AccountExportTips')
         },
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_account'),
@@ -304,7 +304,7 @@ export default {
         extraActions: [
           {
             name: 'add',
-            title: this.$t('common.Add'),
+            title: this.$t('Add'),
             type: 'primary',
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
@@ -314,14 +314,14 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
+                vm.accountCreateUpdateTitle = this.$t('AddAccount')
                 vm.showAddDialog = true
               })
             }
           },
           {
             name: 'add-template',
-            title: this.$t('common.TemplateAdd'),
+            title: this.$t('TemplateAdd'),
             has: !(this.platform || this.asset),
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
@@ -331,7 +331,7 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
+                vm.accountCreateUpdateTitle = this.$t('AddAccount')
                 vm.showAddTemplateDialog = true
               })
             }
@@ -341,7 +341,7 @@ export default {
         extraMoreActions: [
           {
             name: 'ClearSecrets',
-            title: this.$t('common.ClearSecret'),
+            title: this.$t('ClearSecret'),
             type: 'primary',
             fa: 'clean',
             can: ({ selectedRows }) => {
@@ -352,9 +352,9 @@ export default {
               this.$axios.patch(
                 '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: ids }).then(() => {
-                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                this.$message.success(this.$tc('ClearSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkClearErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BulkClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -388,12 +388,12 @@ export default {
       this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
         {
           name: 'Delete',
-          title: this.$t('common.Delete'),
+          title: this.$t('Delete'),
           can: this.$hasPerm('accounts.delete_account'),
           type: 'primary',
           callback: ({ row }) => {
-            const msg = this.$t('accounts.AccountDeleteConfirmMsg')
-            this.$confirm(msg, this.$tc('common.Info'), {
+            const msg = this.$t('AccountDeleteConfirmMsg')
+            this.$confirm(msg, this.$tc('Info'), {
               type: 'warning',
               confirmButtonClass: 'el-button--danger',
               beforeClose: async(action, instance, done) => {
@@ -401,7 +401,7 @@ export default {
                 this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
                   done()
                   this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
                 })
               }
             })

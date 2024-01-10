@@ -173,8 +173,9 @@ export class FormFieldGenerator {
     field = Object.assign(field, fieldMeta)
     field.el = el
     field.rules = rules
+    field.label = field.label.toUpperCase()
     _.set(field, 'attrs.error', '')
-    // Vue.$log.debug('Generate field: ', name, field)
+    Vue.$log.debug('Generate field: ', name, field)
     return field
   }
 

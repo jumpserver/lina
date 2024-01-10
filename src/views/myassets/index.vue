@@ -53,22 +53,22 @@ export default {
         columnsMeta: {
           name: {
             prop: 'name',
-            label: this.$t('assets.Name'),
+            label: this.$t('Name'),
             formatter: DialogDetailFormatter,
             formatterArgs: {
-              getDialogTitle: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDialogTitle: function({ col, row, cellValue }) { this.$t('AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
-                    key: this.$t('assets.Name'),
+                    key: this.$t('Name'),
                     value: row.name
                   },
                   {
-                    key: this.$t('assets.AssetAddress'),
+                    key: this.$t('AssetAddress'),
                     value: row.address
                   },
                   {
-                    key: this.$t('assets.Protocols'),
+                    key: this.$t('Protocols'),
                     formatter: () => {
                       return this.$axios.get(`/api/v1/perms/users/self/assets/${row.id}/`).then(res => {
                         const protocols = res.permed_protocols
@@ -78,23 +78,23 @@ export default {
                     }
                   },
                   {
-                    key: this.$t('assets.Category'),
+                    key: this.$t('Category'),
                     value: row.category.label
                   },
                   {
-                    key: this.$t('assets.Type'),
+                    key: this.$t('Type'),
                     value: row.type.label
                   },
                   {
-                    key: this.$t('assets.Platform'),
+                    key: this.$t('Platform'),
                     value: row.platform?.name || ''
                   },
                   {
-                    key: this.$t('common.Active'),
+                    key: this.$t('Active'),
                     value: row.is_active
                   },
                   {
-                    key: this.$t('assets.Comment'),
+                    key: this.$t('Comment'),
                     value: row.comment
                   }
                 ]
@@ -108,7 +108,7 @@ export default {
           },
           accounts: {
             align: 'center',
-            label: this.$t('assets.Account'),
+            label: this.$t('Account'),
             width: '120px',
             formatter: AccountShowFormatter,
             formatterArgs: {
@@ -184,14 +184,14 @@ export default {
       const url = '/api/v1/assets/favorite-assets/'
       this.$axios.post(url, data).then(() => {
         this.allFavorites.push({ asset: assetId })
-        this.$message.success(this.$i18n.t('common.CollectionSucceed'))
+        this.$message.success(this.$i18n.t('CollectionSucceed'))
       })
     },
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
         this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
-        this.$message.success(this.$i18n.t('common.CancelCollection'))
+        this.$message.success(this.$i18n.t('CancelCollection'))
       })
     },
     toggleFavorite(assetId) {

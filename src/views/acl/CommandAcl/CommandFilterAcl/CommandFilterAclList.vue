@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('acl.CommandFilterACLHelpMsg'),
+      helpMsg: this.$t('CommandFilterACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/command-filter-acls/',
         permissions: {
@@ -40,7 +40,7 @@ export default {
             }
           },
           command_groups: {
-            label: this.$t('acl.CommandGroup'),
+            label: this.$t('CommandGroup'),
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {

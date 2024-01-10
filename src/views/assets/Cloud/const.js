@@ -29,67 +29,67 @@ export const lan = 'lan'
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
     name: aliyun,
-    title: i18n.t('xpack.Cloud.Aliyun'),
+    title: i18n.t('Aliyun'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [aws_international]: {
     name: aws_international,
-    title: i18n.t('xpack.Cloud.AWS_Int'),
+    title: i18n.t('AWS_Int'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [aws_china]: {
     name: aws_china,
-    title: i18n.t('xpack.Cloud.AWS_China'),
+    title: i18n.t('AWS_China'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [huaweicloud]: {
     name: huaweicloud,
-    title: i18n.t('xpack.Cloud.HuaweiCloud'),
+    title: i18n.t('HuaweiCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [baiducloud]: {
     name: baiducloud,
-    title: i18n.t('xpack.Cloud.BaiduCloud'),
+    title: i18n.t('BaiduCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [jdcloud]: {
     name: jdcloud,
-    title: i18n.t('xpack.Cloud.JDCloud'),
+    title: i18n.t('JDCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [kingsoftcloud]: {
     name: kingsoftcloud,
-    title: i18n.t('xpack.Cloud.KingSoftCloud'),
+    title: i18n.t('KingSoftCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [qcloud]: {
     name: qcloud,
-    title: i18n.t('xpack.Cloud.Qcloud'),
+    title: i18n.t('Qcloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [qcloud_lighthouse]: {
     name: qcloud_lighthouse,
-    title: i18n.t('xpack.Cloud.QcloudLighthouse'),
+    title: i18n.t('QcloudLighthouse'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [azure]: {
     name: azure,
-    title: i18n.t('xpack.Cloud.Azure'),
+    title: i18n.t('Azure'),
     attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id']
   },
   [azure_international]: {
     name: azure_international,
-    title: i18n.t('xpack.Cloud.Azure_Int'),
+    title: i18n.t('Azure_Int'),
     attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id']
   },
   [gcp]: {
     name: gcp,
-    title: i18n.t('xpack.Cloud.GCP'),
+    title: i18n.t('GCP'),
     attrs: ['service_account_key']
   },
   [ucloud]: {
     name: ucloud,
-    title: i18n.t('xpack.Cloud.UCloud'),
+    title: i18n.t('UCloud'),
     attrs: ['base_url', 'public_key', 'private_key', 'project']
   },
   [vmware]: {
@@ -104,47 +104,47 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   },
   [qingcloud_private]: {
     name: qingcloud_private,
-    title: i18n.t('xpack.Cloud.QingyunPrivatecloud'),
+    title: i18n.t('QingyunPrivatecloud'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [huaweicloud_private]: {
     name: huaweicloud_private,
-    title: i18n.t('xpack.Cloud.HuaweiPrivatecloud'),
+    title: i18n.t('HuaweiPrivatecloud'),
     attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint']
   },
   [openstack]: {
     name: openstack,
-    title: i18n.t('xpack.Cloud.OpenStack'),
+    title: i18n.t('OpenStack'),
     attrs: ['auth_url', 'user_domain_name', 'username', 'password']
   },
   [zstack]: {
     name: zstack,
-    title: i18n.t('xpack.Cloud.ZStack'),
+    title: i18n.t('ZStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [fc]: {
     name: fc,
-    title: i18n.t('xpack.Cloud.FC'),
+    title: i18n.t('FC'),
     attrs: ['api_endpoint', 'username', 'password']
   },
   [ctyun_private]: {
     name: ctyun_private,
-    title: i18n.t('xpack.Cloud.CTYunPrivate'),
+    title: i18n.t('CTYunPrivate'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint', 'cert_file', 'key_file']
   },
   [scp]: {
     name: scp,
-    title: i18n.t('xpack.Cloud.SCP'),
+    title: i18n.t('SCP'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [apsara_stack]: {
     name: apsara_stack,
-    title: i18n.t('xpack.Cloud.ApsaraStack'),
+    title: i18n.t('ApsaraStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [lan]: {
     name: lan,
-    title: i18n.t('xpack.Cloud.LAN'),
+    title: i18n.t('LAN'),
     attrs: ['ip_group', 'test_port', 'test_timeout', 'hostname_prefix']
   }
 }

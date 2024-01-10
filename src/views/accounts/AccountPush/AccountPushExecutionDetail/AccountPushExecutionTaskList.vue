@@ -28,7 +28,7 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            label: this.$t('accounts.AccountChangeSecret.Asset'),
+            label: this.$t('Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
@@ -44,7 +44,7 @@ export default {
             }
           },
           account: {
-            label: this.$t('users.Username'),
+            label: this.$t('Username'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('accounts.view_account'),
@@ -60,7 +60,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('accounts.AccountChangeSecret.Success'),
+            label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -77,11 +77,11 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'Retry',
-                  title: this.$t('accounts.AccountChangeSecret.Retry'),
+                  title: this.$t('Retry'),
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
                   callback: ({ row }) => {

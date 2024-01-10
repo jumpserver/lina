@@ -30,23 +30,23 @@ export default {
       url: '/api/v1/accounts/push-account-automations/',
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['assets', 'nodes']],
+        [this.$t('Basic'), ['name']],
+        [this.$t('Asset'), ['assets', 'nodes']],
         [
-          this.$t('assets.Account'),
+          this.$t('Account'),
           [
             'accounts', 'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy', 'ssh_key',
             'passphrase', 'params'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          label: i18n.t('xpack.Asset'),
+          label: i18n.t('Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -62,7 +62,7 @@ export default {
           }
         },
         nodes: {
-          label: this.$tc('assets.Node'),
+          label: this.$tc('Node'),
           el: {
             multiple: true,
             ajax: {
@@ -96,13 +96,13 @@ export default {
         },
         params: {
           component: AutomationParams,
-          label: this.$t('assets.PushParams'),
+          label: this.$t('PushParams'),
           el: {
             method: 'push_account_method',
             assets: this.asset_ids,
             nodes: this.node_ids
           },
-          helpText: this.$t('accounts.AccountPush.ParamsHelpText')
+          helpText: this.$t('ParamsHelpText')
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },

@@ -66,7 +66,7 @@ export default {
         activeMenu: 'CustomTree',
         submenu: [
           {
-            title: this.$t('assets.AssetTree'),
+            title: this.$t('AssetTree'),
             name: 'CustomTree',
             treeSetting: {
               showAssets,
@@ -87,13 +87,13 @@ export default {
             }
           },
           {
-            title: this.$t('assets.BuiltinTree'),
+            title: this.$t('BuiltinTree'),
             name: 'BuiltinTree',
             treeSetting: {
               showRefresh: true,
               showAssets: false,
               showSearch: false,
-              customTreeHeaderName: this.$t('assets.BuiltinTree'),
+              customTreeHeaderName: this.$t('BuiltinTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
               treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,

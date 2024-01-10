@@ -23,12 +23,12 @@ export default {
         },
         columnsMeta: {
           assets_amount: {
-            label: this.$t('assets.Assets'),
+            label: this.$t('Assets'),
             width: '160px',
             formatter: DetailFormatter
           },
           gateway_count: {
-            label: this.$t('assets.Gateway'),
+            label: this.$t('Gateway'),
             formatter: DetailFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',
@@ -46,7 +46,7 @@ export default {
         hasLabelSearch: true,
         createRoute: 'DomainCreate'
       },
-      notice: this.$t('assets.DomainHelpMessage')
+      notice: this.$t('DomainHelpMessage')
     }
   }
 }

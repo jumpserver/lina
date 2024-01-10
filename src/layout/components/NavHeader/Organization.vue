@@ -1,7 +1,7 @@
 <template>
   <el-select
     :disabled="disabled"
-    :placeholder="$tc('common.Select')"
+    :placeholder="$tc('Select')"
     :value="currentOrgId"
     class="org-select organization"
     filterable
@@ -66,19 +66,19 @@ export default {
     ]),
     orgActionsGroup() {
       const orgActions = {
-        label: this.$t('xpack.Organization.OrganizationList'),
+        label: this.$t('OrganizationList'),
         options: [
           {
             id: 'create',
             icon: 'create',
             disabled: !this.$hasPerm('orgs.add_organization'),
-            name: this.$t('xpack.Organization.OrganizationCreate')
+            name: this.$t('OrganizationCreate')
           },
           {
             id: 'list',
             icon: 'list',
             disabled: !this.$hasPerm('orgs.view_organization'),
-            name: this.$t('xpack.Organization.OrganizationLists')
+            name: this.$t('OrganizationLists')
           }
         ]
       }
@@ -88,7 +88,7 @@ export default {
     },
     orgChoicesGroup() {
       return {
-        label: this.$t('xpack.Organization.AllOrganization'),
+        label: this.$t('AllOrganization'),
         options: this.usingOrgs
       }
     },

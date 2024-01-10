@@ -1,9 +1,9 @@
 <template>
   <Dialog
     v-if="showColumnSettingPopover"
-    :cancel-title="$tc('common.RestoreDefault')"
+    :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
-    :title="$tc('common.CustomCol')"
+    :title="$tc('CustomCol')"
     :visible.sync="showColumnSettingPopover"
     top="10%"
     width="50%"
@@ -11,7 +11,7 @@
     @confirm="handleColumnConfirm()"
   >
     <el-alert type="success">
-      {{ this.$t('common.TableColSettingInfo') }}
+      {{ this.$t('TableColSettingInfo') }}
     </el-alert>
     <el-checkbox-group
       v-model="iCurrentColumns"

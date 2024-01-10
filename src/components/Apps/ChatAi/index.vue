@@ -8,7 +8,7 @@
         </div>
         <span class="new" @click="onNewChat">
           <i class="el-icon-plus" />
-          <span>{{ $tc('common.NewChat') }}</span>
+          <span>{{ $tc('NewChat') }}</span>
         </span>
       </div>
       <div class="content">
@@ -38,7 +38,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('setting.ChatAI')
+        return this.$t('ChatAI')
       }
     },
     drawerPanelVisible: {
@@ -53,7 +53,7 @@ export default {
       submenu: [
         {
           name: 'chat',
-          label: this.$t('common.Chat'),
+          label: this.$t('Chat'),
           icon: 'chat'
         }
       ]

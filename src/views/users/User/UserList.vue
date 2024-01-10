@@ -77,7 +77,7 @@ export default {
           },
           system_roles: {
             width: '100px',
-            label: this.$t('users.SystemRoles'),
+            label: this.$t('SystemRoles'),
             formatter: (row) => {
               return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -86,7 +86,7 @@ export default {
           },
           org_roles: {
             width: '100px',
-            label: this.$t('users.OrgRoles'),
+            label: this.$t('OrgRoles'),
             formatter: (row) => {
               return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -143,7 +143,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: this.$t('users.Remove'),
+                  title: this.$t('Remove'),
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
@@ -161,8 +161,8 @@ export default {
         canCreate: this.$hasPerm('users.add_user'),
         extraActions: [
           {
-            name: this.$t('users.InviteUser'),
-            title: this.$t('users.InviteUser'),
+            name: this.$t('InviteUser'),
+            title: this.$t('InviteUser'),
             has: () => {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
@@ -183,7 +183,7 @@ export default {
         },
         extraMoreActions: [
           {
-            title: this.$t('common.BatchRemoval'),
+            title: this.$t('BatchRemoval'),
             name: 'BatchRemoval',
             has: hasRemove,
             fa: 'remove',
@@ -192,14 +192,14 @@ export default {
           },
           {
             name: 'BatchDisable',
-            title: this.$t('common.BatchDisable'),
+            title: this.$t('BatchDisable'),
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
-            title: this.$t('common.BatchActivate'),
+            title: this.$t('BatchActivate'),
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
@@ -218,7 +218,7 @@ export default {
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
-              label: this.$t('users.UserGroups'),
+              label: this.$t('UserGroups'),
               el: {
                 multiple: true,
                 disabled: vm.$store.getters.currentOrgIsRoot,
@@ -229,11 +229,11 @@ export default {
               }
             },
             date_expired: {
-              label: this.$t('common.dateExpired'),
+              label: this.$t('DateExpired'),
               hidden: () => false
             },
             comment: {
-              label: this.$t('common.Comment'),
+              label: this.$t('Comment'),
               hidden: () => false
             }
           }
@@ -271,7 +271,7 @@ export default {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
         reload()
-        this.$message.success(this.$tc('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('RemoveSuccessMsg'))
       })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
@@ -282,7 +282,7 @@ export default {
       const url = `${this.tableConfig.url}remove/?spm=` + data.spm
       this.$axios.post(url).then(() => {
         reloadTable()
-        this.$message.success(this.$tc('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('RemoveSuccessMsg'))
       })
     },
     reloadTable() {

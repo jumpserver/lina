@@ -16,7 +16,7 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-alert
-            :title="$tc('auth.ReLoginTitle')"
+            :title="$tc('ReLoginTitle')"
             center
             style="margin-bottom: 20px;"
             type="error"
@@ -26,7 +26,7 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-button class="confirm-btn" size="mini" type="primary" @click="logout">
-            {{ this.$t('auth.ReLogin') }}
+            {{ this.$t('ReLogin') }}
           </el-button>
         </el-col>
       </el-row>
@@ -73,7 +73,7 @@
       <el-row :gutter="24" style="margin: 10px auto;">
         <el-col :md="24" :sm="24">
           <el-button class="confirm-btn" size="mini" type="primary" @click="handleConfirm">
-            {{ this.$t('common.Confirm') }}
+            {{ this.$t('Confirm') }}
           </el-button>
         </el-col>
       </el-row>
@@ -100,11 +100,11 @@ export default {
   },
   data() {
     return {
-      title: this.$t('common.CurrentUserVerify'),
+      title: this.$t('CurrentUserVerify'),
       smsWidth: 0,
       subTypeSelected: '',
       inputPlaceholder: '',
-      smsBtnText: this.$t('common.SendVerificationCode'),
+      smsBtnText: this.$t('SendVerificationCode'),
       smsBtnDisabled: false,
       confirmTypeRequired: '',
       subTypeChoices: [],
@@ -146,7 +146,7 @@ export default {
             this.callback()
             this.visible = false
           }).catch(() => {
-            this.title = this.$t('auth.NeedReLogin')
+            this.title = this.$t('NeedReLogin')
             this.visible = true
           })
           return
@@ -158,7 +158,7 @@ export default {
         this.visible = true
       }).catch((err) => {
         const data = err.response?.data
-        const msg = data?.error || data?.detail || data?.msg || this.$t('common.GetConfirmTypeFailed')
+        const msg = data?.error || data?.detail || data?.msg || this.$t('GetConfirmTypeFailed')
         this.$message.error(msg)
         this.cancel(err)
       }).finally(() => {
@@ -170,11 +170,11 @@ export default {
     },
     sendSMSCode() {
       this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: 'sms' }).then(res => {
-        this.$message.success(this.$tc('common.VerificationCodeSent'))
+        this.$message.success(this.$tc('VerificationCodeSent'))
         let time = 60
         const interval = setInterval(() => {
           const originText = this.smsBtnText
-          this.smsBtnText = this.$t('common.Pending') + `: ${time}`
+          this.smsBtnText = this.$t('Pending') + `: ${time}`
           this.smsBtnDisabled = true
           time -= 1
 
@@ -191,7 +191,7 @@ export default {
         return this.logout()
       }
       if (this.subTypeSelected === 'otp' && this.secretValue.length !== 6) {
-        return this.$message.error(this.$tc('common.MFAErrorMsg'))
+        return this.$message.error(this.$tc('MFAErrorMsg'))
       }
       const data = {
         confirm_type: this.confirmTypeRequired,

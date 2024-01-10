@@ -40,13 +40,13 @@ export default {
         accounts: [AllAccount]
       },
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('perms.User'), ['users', 'user_groups']],
-        [this.$t('perms.Asset'), ['assets', 'nodes']],
-        [this.$t('assets.Account'), ['accounts']],
-        [this.$t('assets.Protocol'), ['protocols']],
-        [this.$t('perms.Actions'), ['actions']],
-        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
+        [this.$t('Basic'), ['name']],
+        [this.$t('User'), ['users', 'user_groups']],
+        [this.$t('Asset'), ['assets', 'nodes']],
+        [this.$t('Account'), ['accounts']],
+        [this.$t('Protocol'), ['protocols']],
+        [this.$t('Actions'), ['actions']],
+        [this.$t('Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       createSuccessNextRoute: { name: 'AssetPermissionDetail' },
@@ -71,7 +71,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('perms.Asset'),
+          label: this.$t('Asset'),
           rules: [{
             required: false
           }],
@@ -96,9 +96,9 @@ export default {
         },
         protocols: {
           component: ProtocolsSelect,
-          label: this.$t('assets.Protocols'),
+          label: this.$t('Protocols'),
           el: {
-            resource: this.$t('assets.Protocol'),
+            resource: this.$t('Protocol'),
             select2: {
               url: '/api/v1/assets/protocols/',
               ajax: {
@@ -122,17 +122,17 @@ export default {
           }
         },
         actions: {
-          label: this.$t('perms.Actions'),
-          helpText: this.$t('common.actionsTips')
+          label: this.$t('Actions'),
+          helpText: this.$t('ActionsTips')
         },
         date_start: {
-          label: this.$t('common.DateStart')
+          label: this.$t('DateStart')
         },
         date_expired: {
-          label: this.$t('common.dateExpired')
+          label: this.$t('DateExpired')
         },
         comment: {
-          label: this.$t('common.Comment')
+          label: this.$t('Comment')
         },
         is_active: {
           type: 'checkbox'

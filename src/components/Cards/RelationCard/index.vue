@@ -10,7 +10,7 @@
       <tr>
         <td colspan="2">
           <el-button :disabled="iDisabled" :loading="submitLoading" :type="type" size="small" @click="addObjects">
-            {{ $t('common.Add') }}
+            {{ $t('Add') }}
           </el-button>
         </td>
       </tr>
@@ -32,7 +32,7 @@
         <td colspan="2">
           <el-button :disabled="iDisabled" :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $t('common.More') }}
+            {{ $t('More') }}
           </el-button>
         </td>
       </tr>
@@ -119,7 +119,7 @@ export default {
           this.$log.debug('disabled values remove index: ', i)
           that.select2.disabledValues.splice(i, 1)
         }
-        that.$message.success(that.$t('common.RemoveSuccessMsg'))
+        that.$message.success(that.$t('RemoveSuccessMsg'))
       }
     },
     onDeleteFail: {
@@ -148,7 +148,7 @@ export default {
         that.$log.debug('Select value', that.select2.value)
         that.iHasObjects = [...that.iHasObjects, ...objects]
         that.$refs.select2.clearSelected()
-        that.$message.success(that.$t('common.AddSuccessMsg'))
+        that.$message.success(that.$t('AddSuccessMsg'))
       }
     },
     getHasObjects: {

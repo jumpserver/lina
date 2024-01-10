@@ -5,10 +5,10 @@
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
-      :url="url"
-      :submit-method="submitMethod"
       :more-buttons="moreButtons"
       :on-perform-success="onPerformSuccess"
+      :submit-method="submitMethod"
+      :url="url"
     />
   </IBox>
 </template>
@@ -33,16 +33,16 @@ export default {
     return {
       url: '/api/v1/users/profile/public-key/',
       fields: [
-        [this.$t('users.OldSSHKey'), ['public_key_comment', 'public_key_hash_md5']],
-        [this.$t('users.UpdateSSHKey'), ['public_key']]
+        [this.$t('OldSSHKey'), ['public_key_comment', 'public_key_hash_md5']],
+        [this.$t('UpdateSSHKey'), ['public_key']]
       ],
       fieldsMeta: {
         public_key_comment: {
-          label: this.$t('common.Name'),
+          label: this.$t('Name'),
           disabled: true
         },
         public_key_hash_md5: {
-          label: this.$t('users.FingerPrint'),
+          label: this.$t('FingerPrint'),
           disabled: true
         },
         public_key: {
@@ -51,12 +51,12 @@ export default {
             placeholder: 'ssh-rsa AAAA...',
             autosize: { minRows: 3 }
           },
-          helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
+          helpText: this.$t('SSHKeyOfProfileSSHUpdatePage')
         }
       },
       moreButtons: [
         {
-          title: this.$t('users.ResetAndDownloadSSHKey'),
+          title: this.$t('ResetAndDownloadSSHKey'),
           callback: function() {
             window.open(`/core/auth/profile/pubkey/generate/`, '_blank')
           }
@@ -70,7 +70,7 @@ export default {
     },
     onPerformSuccess() {
       this.$refs.GenericCreateUpdateForm.$refs.form.$refs.dataForm.resetForm('form')
-      this.$message.success(this.$tc('common.updateSuccessMsg'))
+      this.$message.success(this.$tc('UpdateSuccessMsg'))
     }
   }
 }

@@ -23,7 +23,7 @@ export default {
             }
           }
         },
-        helpMessage: this.$t('assets.CustomHelpMessage')
+        helpMessage: this.$t('CustomHelpMessage')
       }
     }
   }

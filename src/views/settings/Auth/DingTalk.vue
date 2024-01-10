@@ -22,7 +22,7 @@ export default {
         url: '/api/v1/settings/setting/?category=dingtalk',
         moreButtons: [
           {
-            title: this.$t('setting.dingTalkTest'),
+            title: this.$t('DingTalkTest'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -40,7 +40,7 @@ export default {
         encryptedFields: ['DINGTALK_APPSECRET'],
         fields: [
           [
-            this.$t('common.BasicInfo'),
+            this.$t('BasicInfo'),
             [
               'AUTH_DINGTALK', 'DINGTALK_AGENTID',
               'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'

@@ -10,10 +10,10 @@
       <DataTable :config="tableConfig" class="attr-list" />
       <div class="actions">
         <el-button size="mini" type="primary" @click="handleAttrAdd">
-          {{ $t('common.Add') }}
+          {{ $t('Add') }}
         </el-button>
         <span style="padding-left: 10px; font-size: 13px">
-          <span class="help-tips; ">{{ $t('common.MatchedCount') }}:</span>
+          <span class="help-tips; ">{{ $t('MatchedCount') }}:</span>
           <a class="text-link" style="padding: 0 5px;" @click="showAttrMatchTable">{{ attrMatchCount }}</a>
         </span>
       </div>
@@ -101,16 +101,16 @@ export default {
       ids: this.value.ids || [],
       editIndex: -1,
       types: [
-        { name: 'all', label: this.$t('common.All') + this.resource },
-        { name: 'ids', label: this.$t('common.Spec') + this.resource },
-        { name: 'attrs', label: this.$t('common.SelectByAttr') }
+        { name: 'all', label: this.$t('All') + this.resource },
+        { name: 'ids', label: this.$t('Spec') + this.resource },
+        { name: 'attrs', label: this.$t('SelectByAttr') }
       ],
       tableConfig: {
         columns: [
-          { prop: 'name', label: this.$t('common.AttrName'), formatter: tableFormatter('name') },
-          { prop: 'match', label: this.$t('common.Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('common.AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
-          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '120px', formatter: (row, col, cellValue, index) => {
+          { prop: 'name', label: this.$t('AttrName'), formatter: tableFormatter('name') },
+          { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
+          { prop: 'value', label: this.$t('AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
+          { prop: 'action', label: this.$t('Action'), align: 'center', width: '120px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button

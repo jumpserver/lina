@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="sessionData"
     :active-menu.sync="config.activeMenu"
+    :object.sync="sessionData"
     v-bind="config"
   >
     <keep-alive>
@@ -32,16 +32,16 @@ export default {
         activeMenu: 'SessionDetailInfo',
         submenu: [
           {
-            title: this.$t('route.Detail'),
+            title: this.$t('Detail'),
             name: 'SessionDetailInfo'
           },
           {
-            title: this.$t('sessions.command'),
+            title: this.$t('Command'),
             name: 'SessionCommands',
             hidden: () => !this.$hasPerm('terminal.view_command')
           },
           {
-            title: this.$t('sessions.Activity'),
+            title: this.$t('Activity'),
             name: 'SessionJoinRecords',
             hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
           }

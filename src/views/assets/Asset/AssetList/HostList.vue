@@ -33,8 +33,8 @@ export default {
         headerActions: {
           extraActions: [
             {
-              name: this.$t('xpack.Cloud.CloudSync'),
-              title: this.$t('xpack.Cloud.CloudSync'),
+              name: this.$t('CloudSync'),
+              title: this.$t('CloudSync'),
               has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
               callback: () => this.$router.push({ name: 'CloudCenter' })
             }
@@ -53,7 +53,7 @@ export default {
                 extraActions: [
                   {
                     name: 'Test',
-                    title: this.$t('common.Test'),
+                    title: this.$t('Test'),
                     can: ({ row }) =>
                       this.$hasPerm('assets.test_assetconnectivity') &&
                       !this.$store.getters.currentOrgIsRoot &&
@@ -64,7 +64,7 @@ export default {
                         this.GatewayVisible = true
                         const port = row.protocols.find(item => item.name === 'ssh').port
                         if (!port) {
-                          return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                          return this.$message.error(this.$tc('BadRequestErrorMsg'))
                         } else {
                           this.GatewayPort = port
                           this.GatewayCell = row.id

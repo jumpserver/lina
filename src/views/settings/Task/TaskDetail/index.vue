@@ -34,11 +34,11 @@ export default {
         activeMenu: 'TaskDetail',
         submenu: [
           {
-            title: this.$t('ops.taskDetail'),
+            title: this.$t('TaskDetail'),
             name: 'TaskDetail'
           },
           {
-            title: this.$t('ops.execution'),
+            title: this.$t('Execution'),
             name: 'TaskHistory',
             hidden: () => !this.$hasPerm('ops.view_celerytaskexecution')
           }

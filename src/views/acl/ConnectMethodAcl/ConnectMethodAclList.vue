@@ -10,7 +10,7 @@ export default {
   components: { GenericListPage },
   data() {
     return {
-      helpText: this.$t('acl.ConnectMethodACLHelpMsg'),
+      helpText: this.$t('ConnectMethodACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/connect-method-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],

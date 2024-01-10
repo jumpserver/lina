@@ -1,14 +1,14 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="$tc('ops.SaveAdhoc')"
-    :visible.sync="iVisible"
-    width="40%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('SaveAdhoc')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="40%"
   >
-    <GenericCreateUpdateForm v-if="ready" v-bind="$data" :on-perform-success="onSubmitSuccess" />
+    <GenericCreateUpdateForm v-if="ready" :on-perform-success="onSubmitSuccess" v-bind="$data" />
   </Dialog>
 </template>
 
@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     onSubmitSuccess() {
-      this.$message.success(this.$tc('ops.SaveCommandSuccess'))
+      this.$message.success(this.$tc('SaveCommandSuccess'))
       this.iVisible = false
     }
   }

@@ -44,7 +44,7 @@ export default {
             }
           },
           action: {
-            label: this.$t('common.Action'),
+            label: this.$t('Action'),
             formatter: function(row) {
               return row.actions.map(item => {
                 return item.label
@@ -57,14 +57,14 @@ export default {
             }
           },
           from_ticket: {
-            label: this.$t('perms.fromTicket'),
+            label: this.$t('FromTicket'),
             width: 100,
             formatterArgs: {
               showFalse: false
             }
           },
           users: {
-            label: this.$t('perms.User'),
+            label: this.$t('User'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -75,7 +75,7 @@ export default {
             }
           },
           user_groups: {
-            label: this.$t('perms.UserGroups'),
+            label: this.$t('UserGroups'),
             width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -86,7 +86,7 @@ export default {
             }
           },
           assets: {
-            label: this.$t('perms.Asset'),
+            label: this.$t('Asset'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -97,7 +97,7 @@ export default {
             }
           },
           nodes: {
-            label: this.$t('perms.Node'),
+            label: this.$t('Node'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -108,7 +108,7 @@ export default {
             }
           },
           accounts: {
-            label: this.$t('perms.Account'),
+            label: this.$t('Account'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {

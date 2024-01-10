@@ -15,7 +15,7 @@ export default {
   name: 'console',
   redirect: '/console/dashboard',
   meta: {
-    title: i18n.t('common.nav.Console'),
+    title: i18n.t('Console'),
     icon: 'console',
     view: 'console',
     type: 'view',
@@ -31,7 +31,7 @@ export default {
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',
-        title: i18n.t('route.Dashboard'),
+        title: i18n.t('Dashboard'),
         permissions: []
       }
     },
@@ -40,7 +40,7 @@ export default {
       component: empty,
       name: 'Users',
       meta: {
-        title: i18n.t('route.Users'),
+        title: i18n.t('Users'),
         icon: 'users'
       },
       children: UsersRoute
@@ -50,7 +50,7 @@ export default {
       component: empty,
       name: 'Assets',
       meta: {
-        title: i18n.t('route.Assets'),
+        title: i18n.t('Assets'),
         icon: 'assets'
       },
       children: AssetsRoute
@@ -60,7 +60,7 @@ export default {
       component: empty,
       name: 'Accounts',
       meta: {
-        title: i18n.t('route.Accounts'),
+        title: i18n.t('Accounts'),
         icon: 'accounts'
       },
       children: AccountRoutes
@@ -71,7 +71,7 @@ export default {
       name: 'Perms',
       alwaysShow: false,
       meta: {
-        title: i18n.t('route.Perms'),
+        title: i18n.t('Perms'),
         icon: 'permission'
       },
       children: PermsRoute
@@ -81,7 +81,7 @@ export default {
       component: empty,
       name: 'More',
       meta: {
-        title: i18n.t('route.More'),
+        title: i18n.t('More'),
         icon: 'more'
       },
       children: LabelRoutes

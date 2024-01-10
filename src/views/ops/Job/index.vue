@@ -50,14 +50,14 @@ export default {
             width: '240px'
           },
           summary: {
-            label: this.$t('ops.Summary(success/total)'),
+            label: this.$t('Summary(success/total)'),
             width: '140px',
             formatter: (row) => {
               return row.summary['success'] + '/' + row.summary['total']
             }
           },
           average_time_cost: {
-            label: this.$t('ops.AverageTimeCost'),
+            label: this.$t('AverageTimeCost'),
             width: '140px',
             formatter: (row) => {
               return row.average_time_cost.toFixed(2) + 's'
@@ -65,14 +65,14 @@ export default {
           },
           asset_amount: {
             width: '140px',
-            label: this.$t('ops.AssetAmount'),
+            label: this.$t('AssetAmount'),
             formatter: (row) => {
               return row.assets.length
             }
           },
           date_last_run: {
             width: '140px',
-            label: this.$t('ops.DateLastRun'),
+            label: this.$t('DateLastRun'),
             formatter: DateFormatter
           },
           actions: {
@@ -86,7 +86,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('ops.Run'),
+                  title: this.$t('Run'),
                   name: 'run',
                   can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
@@ -121,12 +121,12 @@ export default {
           dropdown: [
             {
               name: 'adhoc',
-              title: this.$t('ops.Command') + this.$t('ops.Job'),
+              title: this.$t('Command') + this.$t('Job'),
               has: true
             },
             {
               name: 'playbook',
-              title: 'Playbook' + this.$t('ops.Job'),
+              title: 'Playbook' + this.$t('Job'),
               has: true
             }
           ]

@@ -12,7 +12,7 @@
       <el-input
         v-model="inputValue"
         :disabled="isLoading"
-        :placeholder="$tc('common.InputMessage')"
+        :placeholder="$tc('InputMessage')"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
@@ -46,7 +46,7 @@ export default {
         url: '/api/v1/settings/chatai-prompts/',
         value: '',
         multiple: false,
-        placeholder: this.$t('common.Prompt'),
+        placeholder: this.$t('Prompt'),
         ajax: {
           transformOption: (item) => {
             return { label: item.name, value: item.content }

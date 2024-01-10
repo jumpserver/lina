@@ -16,7 +16,7 @@
             @click.native="onView(d)"
           >
             <span v-if="d.edition === 'enterprise'" class="enterprise">
-              {{ $t('common.Enterprise') }}
+              {{ $t('Enterprise') }}
             </span>
             <el-row :gutter="20">
               <el-col :span="8">
@@ -176,8 +176,8 @@ export default {
       viewFunc(obj)
     },
     onDelete(obj) {
-      const msg = `${this.$t('common.deleteWarningMsg')} "${obj.name}" ?`
-      this.$confirm(msg, this.$tc('common.Info'), {
+      const msg = `${this.$t('DeleteWarningMsg')} "${obj.name}" ?`
+      this.$confirm(msg, this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -186,7 +186,7 @@ export default {
           await deleteFunc(obj)
           done()
           this.reloadTable()
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
         }
       }).catch(() => {
         /* 取消*/

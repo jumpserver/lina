@@ -4,6 +4,7 @@
 
 <script>
 import { TabPage } from '@/layout/components'
+
 export default {
   name: 'Index',
   components: {
@@ -15,13 +16,13 @@ export default {
         activeMenu: 'AccountChangeSecretList',
         submenu: [
           {
-            title: this.$t('accounts.AccountChangeSecret.AccountChangeSecret'),
+            title: this.$t('AccountChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
             component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
           },
           {
-            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
+            title: this.$t('ExecutionList'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import(

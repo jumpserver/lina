@@ -29,23 +29,23 @@ export default {
       url: '/api/v1/accounts/change-secret-automations/',
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
+        [this.$t('Basic'), ['name']],
+        [this.$t('Asset'), ['accounts', 'assets', 'nodes']],
         [
-          this.$t('accounts.AccountChangeSecret.SecretKeyStrategy'),
+          this.$t('SecretKeyStrategy'),
           [
             'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy',
             'ssh_key', 'passphrase', 'params'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_active', 'recipients', 'comment']]
+        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Other'), ['is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          label: this.$t('xpack.Asset'),
+          label: this.$t('Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -61,7 +61,7 @@ export default {
           }
         },
         nodes: {
-          label: this.$t('xpack.Node'),
+          label: this.$t('Node'),
           el: {
             value: [],
             ajax: {
@@ -79,13 +79,13 @@ export default {
         },
         params: {
           component: AutomationParams,
-          label: this.$t('assets.ChangeSecretParams'),
+          label: this.$t('ChangeSecretParams'),
           el: {
             method: 'change_secret_method',
             assets: this.asset_ids,
             nodes: this.node_ids
           },
-          helpText: this.$t('accounts.AccountChangeSecret.ParamsHelpText')
+          helpText: this.$t('ParamsHelpText')
         }
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },

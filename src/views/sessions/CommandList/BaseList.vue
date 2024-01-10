@@ -66,7 +66,7 @@ export default {
             formatter: OutputExpandFormatter
           },
           risk_level: {
-            label: this.$t('sessions.riskLevel'),
+            label: this.$t('RiskLevel'),
             width: '105px',
             formatter: (row, col, cellValue) => {
               const display = row['risk_level'].label
@@ -87,14 +87,14 @@ export default {
             width: '140px'
           },
           session: {
-            label: this.$t('sessions.session'),
+            label: this.$t('Session'),
             formatter: DetailFormatter,
             width: '80px',
             formatterArgs: {
               openInNewPage: true,
               can: this.$hasPerm('terminal.view_session'),
               getTitle() {
-                return vm.$t('sessions.goto')
+                return vm.$t('Goto')
               },
               getRoute({ cellValue }) {
                 return {
@@ -105,7 +105,7 @@ export default {
             }
           },
           timestamp: {
-            label: this.$t('sessions.date'),
+            label: this.$t('Date'),
             width: '150px',
             sortable: 'custom',
             formatter: function(row) {
@@ -172,7 +172,7 @@ export default {
               return
             }
             if (!treeNode.valid) {
-              this.$message.error(this.$tc('sessions.EsDisabled'))
+              this.$message.error(this.$tc('EsDisabled'))
               return
             }
             this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`

@@ -1,9 +1,9 @@
 <template>
   <GenericCreateUpdatePage
     :create-success-next-route="successUrl"
+    :help-message="getHelpMessage()"
     :update-success-next-route="successUrl"
     v-bind="$data"
-    :help-message="getHelpMessage()"
   />
 </template>
 
@@ -39,9 +39,9 @@ export default {
         return `${url}?type=${storageType}`
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type']],
+        [this.$t('Basic'), ['name', 'type']],
         [storageTypeMeta.title, ['meta']],
-        [this.$t('common.Other'), ['is_default', 'comment']]
+        [this.$t('Other'), ['is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
@@ -63,7 +63,7 @@ export default {
           }
         },
         is_default: {
-          helpText: this.$t('sessions.SetToDefaultStorage'),
+          helpText: this.$t('SetToDefaultStorage'),
           hidden: (formValue) => formValue.type === 'sftp'
         }
       },
@@ -84,7 +84,7 @@ export default {
     if (this.$route.query.type === 'sftp' && !this.$hasLicense()) this.$router.push({ name: '404' })
   },
   methods: {
-    getHelpMessage() { if (!this.$hasLicense()) return ''; else return this.$t('setting.ReplayStorageCreateUpdateHelpMessage') }
+    getHelpMessage() { if (!this.$hasLicense()) return ''; else return this.$t('ReplayStorageCreateUpdateHelpMessage') }
   }
 }
 </script>

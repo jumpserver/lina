@@ -13,10 +13,10 @@
                 <span style="color: #a3a3a4;">{{ item.name }}</span>
                 <el-popover
                   v-if="componentMetric[item.key].length > 0"
-                  width="280"
-                  trigger="hover"
                   placement="bottom"
                   popper-class="monitor-popover"
+                  trigger="hover"
+                  width="280"
                 >
                   <ul>
                     <li v-for="(i, index) in componentMetric[item.key]" :key="index" @click="routeToList(i)">
@@ -32,7 +32,7 @@
                 </span>
               </span>
             </div>
-            <div class="progress" :class="componentMetric.type + '-progress'">
+            <div :class="componentMetric.type + '-progress'" class="progress">
               <div style="position: absolute; height: 100%; padding: 2px 0;">
                 <span v-for="(bar, index) in barArray" :key="index" class="box-bar" />
               </div>
@@ -42,7 +42,7 @@
         <el-col :md="5" :sm="24" style="padding-left: 10px;">
           <div class="session">
             <div class="session-title" style="">
-              {{ $t('dashboard.OnlineSessions') }}
+              {{ $t('OnlineSessions') }}
             </div>
             <div style="text-align: center;font-size: 22px;">
               <i class="fa fa-comments-o" style="color: #00c360;" />
@@ -106,30 +106,30 @@ export default {
     componentTypes() {
       const types = [
         {
-          name: this.$t('dashboard.Total'),
+          name: this.$t('Total'),
           key: 'total',
           color: '#13CE66'
         },
         {
-          name: this.$t('xpack.NormalLoad'),
+          name: this.$t('NormalLoad'),
           key: 'normal',
           color: '#13CE66',
           icon: 'el-icon-circle-check'
         },
         {
-          name: this.$t('xpack.HighLoad'),
+          name: this.$t('HighLoad'),
           key: 'high',
           color: '#E6A23C',
           icon: 'el-icon-bell'
         },
         {
-          name: this.$t('xpack.CriticalLoad'),
+          name: this.$t('CriticalLoad'),
           key: 'critical',
           color: '#FF4949',
           icon: 'el-icon-message-solid'
         },
         {
-          name: this.$t('xpack.Offline'),
+          name: this.$t('Offline'),
           key: 'offline',
           color: '#bfbaba',
           icon: 'el-icon-circle-close'

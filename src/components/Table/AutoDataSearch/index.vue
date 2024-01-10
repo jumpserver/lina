@@ -108,8 +108,8 @@ export default {
         }
         if (field.type === 'boolean') {
           option.children = [
-            { label: i18n.t('common.Yes'), value: true },
-            { label: i18n.t('common.No'), value: false }
+            { label: i18n.t('Yes'), value: true },
+            { label: i18n.t('No'), value: false }
           ]
         }
         if (option.value === 'id') {

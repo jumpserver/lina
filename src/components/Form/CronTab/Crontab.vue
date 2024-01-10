@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-tabs type="border-card">
-      <el-tab-pane v-if="shouldHide('min')" :label="$tc('common.CronTab.min')" class="crontab-panel">
+      <el-tab-pane v-if="shouldHide('min')" :label="$tc('Min')" class="crontab-panel">
         <CrontabMin
           ref="cronmin"
           :check="checkNumber"
@@ -11,7 +11,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('hour')" :label="$tc('common.CronTab.hour')">
+      <el-tab-pane v-if="shouldHide('hour')" :label="$tc('Hour')">
         <CrontabHour
           ref="cronhour"
           :check="checkNumber"
@@ -20,7 +20,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('day')" :label="$tc('common.CronTab.day')">
+      <el-tab-pane v-if="shouldHide('day')" :label="$tc('Day')">
         <CrontabDay
           ref="cronday"
           :check="checkNumber"
@@ -29,7 +29,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('month')" :label="$tc('common.CronTab.month')">
+      <el-tab-pane v-if="shouldHide('month')" :label="$tc('Month')">
         <CrontabMonth
           ref="cronmonth"
           :check="checkNumber"
@@ -38,7 +38,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('week')" :label="$tc('common.CronTab.week')">
+      <el-tab-pane v-if="shouldHide('week')" :label="$tc('Week')">
         <CrontabWeek
           ref="cronweek"
           :check="checkNumber"
@@ -50,7 +50,7 @@
 
     <div class="popup-main">
       <div class="popup-result">
-        <p class="title">{{ this.$t('common.CronTab.timeExpression') }}</p>
+        <p class="title">{{ this.$t('TimeExpression') }}</p>
         <table>
           <thead>
             <th v-for="item of tabTitles" :key="item" width="40">{{ item }}</th>
@@ -96,7 +96,7 @@
           </tbody>
         </table>
         <div style="margin: 0 auto; text-align: center">
-          <div style="font-size: 13px;">{{ this.$t('common.CronTab.cronExpression') }}</div>
+          <div style="font-size: 13px;">{{ this.$t('CronExpression') }}</div>
           <div style="font-size: 13px;">{{ contabValueString }}</div>
         </div>
       </div>
@@ -107,14 +107,14 @@
           size="small"
           @click="clearCron"
         >
-          {{ this.$t('common.Reset') }}
+          {{ this.$t('Reset') }}
         </el-button>
         <el-button
           size="small"
           type="primary"
           @click="submitFill"
         >
-          {{ this.$t('common.Confirm') }}
+          {{ this.$t('Confirm') }}
         </el-button>
       </div>
     </div>
@@ -155,7 +155,7 @@ export default {
   },
   data() {
     return {
-      tabTitles: [this.$t('common.CronTab.min'), this.$t('common.CronTab.hour'), this.$t('common.CronTab.day'), this.$t('common.CronTab.month'), this.$t('common.CronTab.week')],
+      tabTitles: [this.$t('Min'), this.$t('Hour'), this.$t('Day'), this.$t('Month'), this.$t('Week')],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {

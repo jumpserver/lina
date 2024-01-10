@@ -14,11 +14,11 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
-    const comp = this.$t('common.Component')
+    const comp = this.$t('Component')
     return {
       fields: [
         [
-          this.$t('common.Basic'),
+          this.$t('Basic'),
           [
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION'
           ]
@@ -47,10 +47,10 @@ export default {
       ],
       fieldsMeta: {
         TERMINAL_KOKO_SSH_ENABLED: {
-          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.EnableKoKoSSHHelpText')
+          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('EnableKoKoSSHHelpText')
         },
         TERMINAL_RAZOR_ENABLED: {
-          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.SettingInEndpointHelpText'),
+          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('SettingInEndpointHelpText'),
           hidden: () => {
             return !this.$store.getters.hasValidLicense
           },
@@ -59,7 +59,7 @@ export default {
           }
         },
         TERMINAL_MAGNUS_ENABLED: {
-          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.SettingInEndpointHelpText')
+          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('SettingInEndpointHelpText')
         }
       },
       getUrl: () => '/api/v1/settings/setting/?category=terminal',

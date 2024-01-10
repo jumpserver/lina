@@ -16,12 +16,12 @@ export default {
         activeMenu: 'AccountList',
         submenu: [
           {
-            title: this.$t('accounts.GeneralAccounts'),
+            title: this.$t('GeneralAccounts'),
             name: 'AccountList',
             component: () => import('@/views/accounts/Account/AccountList.vue')
           },
           {
-            title: this.$t('accounts.VirtualAccounts'),
+            title: this.$t('VirtualAccounts'),
             name: 'VirtualAccountList',
             component: () => import('@/views/accounts/VirtualAccount/VirtualList.vue')
           }

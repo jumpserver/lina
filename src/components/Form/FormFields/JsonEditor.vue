@@ -2,9 +2,9 @@
   <div class="json-editor">
     <JsonEditor
       v-model="resultInfo"
+      :class="{resize: resize === 'vertical'}"
       :mode="'code'"
       :show-btns="false"
-      :class="{resize: resize === 'vertical'}"
       @json-change="onJsonChange"
       @json-save="onJsonSave"
       @has-error="onError"
@@ -53,7 +53,7 @@ export default {
       }, 500)
     },
     onError: _.debounce(function(value) {
-      this.$message.error(this.$tc('common.FormatError'))
+      this.$message.error(this.$tc('FormatError'))
     }, 1500)
   }
 }

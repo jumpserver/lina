@@ -34,7 +34,7 @@ export default {
         ],
         columnsMeta: {
           is_finished: {
-            label: this.$t('ops.isFinished'),
+            label: this.$t('IsFinished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
@@ -47,7 +47,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
+            label: this.$t('IsSuccess'),
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
@@ -63,7 +63,7 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
+            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -81,7 +81,7 @@ export default {
               extraActions: [
                 {
                   name: 'showLog',
-                  title: this.$t('ops.output'),
+                  title: this.$t('Output'),
                   can: true,
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)

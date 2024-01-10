@@ -41,7 +41,7 @@
           </el-form-item>
         </div>
       </div>
-      <el-form-item :label="$tc('ops.output')">
+      <el-form-item :label="$tc('Output')">
         <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
       </el-form-item>
       <el-form-item>
@@ -51,7 +51,7 @@
           type="primary"
           @click="submitTest"
         >
-          {{ $t('common.Test') }}
+          {{ $t('Test') }}
         </el-button>
         <el-button
           v-if="hasStop"
@@ -60,7 +60,7 @@
           type="danger"
           @click="interruptTest"
         >
-          {{ $t('common.Stop') }}
+          {{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -135,11 +135,11 @@ export default {
         this.isTesting = true
       }
       this.ws.onerror = (e) => {
-        this.xterm.write(this.$tc('common.WebSocketDisconnect'))
+        this.xterm.write(this.$tc('WebSocketDisconnect'))
         this.isTesting = false
       }
       this.ws.onclose = (e) => {
-        this.xterm.write(this.$tc('common.TaskDone'))
+        this.xterm.write(this.$tc('TaskDone'))
         this.isTesting = false
       }
     },
