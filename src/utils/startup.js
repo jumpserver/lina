@@ -169,7 +169,7 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   return new Promise((resolve, reject) => reject(''))
 }
 
-async function onI18nLoaded() {
+function onI18nLoaded() {
   return new Promise(resolve => {
     const load = store.state.app.i18nLoaded
     if (load) {
@@ -197,12 +197,13 @@ export async function startup({ to, from, next }) {
   // await getOpenPublicSetting({ to, from, next })
   await getPublicSetting({ to, from, next }, true)
   await checkLogin({ to, from, next })
+  await onI18nLoaded()
+  console.log('...')
   await getPublicSetting({ to, from, next }, false)
   await changeCurrentViewIfNeed({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
-  await onI18nLoaded()
   await store.dispatch('assets/getAssetCategories')
   return true
 }

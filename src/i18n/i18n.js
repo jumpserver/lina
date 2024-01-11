@@ -35,7 +35,6 @@ axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}`)
     const data = res.data
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        console.log('i18n loaded123123123: ', key, data[key])
         i18n.mergeLocaleMessage(key, data[key])
       }
     }

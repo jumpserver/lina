@@ -3,6 +3,7 @@ import { constantRoutes, viewRoutes } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
 import { getResourceNameByPath, hasPermission } from '@/utils/jms'
+import i18n from '@/i18n/i18n'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -119,6 +120,11 @@ function cleanRoute(tmp, parent) {
   if (!tmp.meta.disableOrgsChange && parent.meta.disableOrgsChange !== undefined) {
     tmp.meta.disableOrgsChange = parent.meta.disableOrgsChange
   }
+
+  // 翻译一下 title 吧
+  if (tmp.meta.title) {
+    tmp.meta.title = i18n.t(tmp.meta.title)
+  }
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
   if (!tmp.meta.fullPath) {
@@ -205,7 +211,7 @@ const actions = {
       if (routes.length === 0) {
         console.error('No route find')
       } else {
-        Vue.$log.debug('All routes: ', routes)
+        Vue.$log.debug('All routes in vuex: ', routes)
       }
       commit('SET_ROUTES', { routes })
       resolve(routes)
