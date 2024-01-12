@@ -34,7 +34,7 @@ export default {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_ORG_IDS', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
+        fields: ['AUTH_LDAP_SYNC_ORG_IDS', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_SYNC_RECEIVERS'],
         fieldsMeta: {
           AUTH_LDAP_SYNC_ORG_IDS: {
             component: Select2,
@@ -63,6 +63,20 @@ export default {
           AUTH_LDAP_SYNC_INTERVAL: {
             rules: [Required],
             helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
+          },
+          AUTH_LDAP_SYNC_RECEIVERS: {
+            component: Select2,
+            label: this.$t('accounts.AccountChangeSecret.Addressee'),
+            el: {
+              value: [],
+              multiple: true,
+              ajax: {
+                url: '/api/v1/users/users/?fields_size=mini&oid=ROOT',
+                transformOption: (item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                }
+              }
+            }
           }
         },
         submitMethod: () => 'patch'
