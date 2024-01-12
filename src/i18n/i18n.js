@@ -27,7 +27,7 @@ Vue.prototype.$tr = (key) => {
   return i18n.t('' + key)
 }
 
-axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}`)
+axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
   .then((res) => {
     if (res.status !== 200) {
       return

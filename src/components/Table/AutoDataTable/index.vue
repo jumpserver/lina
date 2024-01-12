@@ -26,7 +26,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { newURL, replaceAllUUID } from '@/utils/common'
+import { capitalizeFirst, newURL, replaceAllUUID } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
@@ -274,7 +274,7 @@ export default {
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
-      col.label = col.label.toUpperCase()
+      col.label = capitalizeFirst(col.label)
       return col
     },
     generateTotalColumns() {

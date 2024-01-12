@@ -21,7 +21,7 @@
           >
             <span slot="label">
               <i v-if="item.icon" :class="item.icon" class="fa " />
-              {{ item.title }}
+              {{ capitalizeFirst(item.title) }}
               <slot :tab="item.name" name="badge" />
             </span>
           </el-tab-pane>
@@ -42,6 +42,7 @@
 <script>
 import Page from '../Page/'
 import merge from 'webpack-merge'
+import { capitalizeFirst } from '@/utils/common'
 
 const ACTIVE_TAB_KEY = 'activeTab'
 
@@ -62,7 +63,8 @@ export default {
   },
   data() {
     return {
-      loading: true
+      loading: true,
+      capitalizeFirst: capitalizeFirst
     }
   },
   computed: {
