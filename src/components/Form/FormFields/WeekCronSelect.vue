@@ -204,7 +204,12 @@ export default {
     },
     formatWeektime(col) {
       const timeStamp = 1542384000000 // '2018-11-17 00:00:00'
-      const beginStamp = timeStamp + col * 1800000 // col * 30 * 60 * 1000
+      const timezone = 8
+      const offsetGMT = new Date().getTimezoneOffset() // 本地时间和格林威治的时间差，单位为分钟
+      const nowDate = new Date(timeStamp).getTime()
+      const targetStamp = new Date(nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000).getTime()
+
+      const beginStamp = targetStamp + col * 1800000 // col * 30 * 60 * 1000
       const endStamp = beginStamp + 1800000
 
       const begin = this.formatDate(new Date(beginStamp), 'hh:mm')
