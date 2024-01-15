@@ -123,6 +123,7 @@ export const assetFieldsMeta = (vm) => {
       name: 'labels',
       label: vm.$t('assets.Label'),
       type: 'm2m',
+      component: Select2,
       el: {
         multiple: true,
         url: '/api/v1/labels/labels/',
