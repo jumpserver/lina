@@ -7,7 +7,6 @@ import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 import { assignIfNot } from '@/utils/common'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
-import Select2 from '@/components/Form/FormFields/Select2.vue'
 import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 
 export class FormFieldGenerator {
@@ -46,7 +45,7 @@ export class FormFieldGenerator {
         break
       case 'field':
         type = ''
-        field.component = Select2
+        field.component = ObjectSelect2
         if (fieldRemoteMeta.required) {
           field.el.clearable = false
         }
@@ -77,7 +76,7 @@ export class FormFieldGenerator {
         field.component = ObjectSelect2
         break
       case 'm2m_related_field':
-        field.component = Select2
+        field.component = ObjectSelect2
         field.el.label = field.label
         break
       case 'nested object':
