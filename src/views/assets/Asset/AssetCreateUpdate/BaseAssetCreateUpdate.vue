@@ -59,7 +59,7 @@ export default {
           [this.$t('common.Basic'), ['name', 'address', 'platform', 'nodes']],
           [this.$t('assets.Protocol'), ['protocols']],
           [this.$t('assets.Account'), ['accounts']],
-          [this.$t('common.Other'), ['domain', 'is_active', 'comment']]
+          [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
         performSubmit(validValues) {
