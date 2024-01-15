@@ -157,10 +157,16 @@ export default {
       headerActions: {
         hasLabelSearch: true,
         hasBulkDelete: true,
-        createRoute() {
-          return {
+        onCreate: () => {
+          const route = {
             name: 'AssetPermissionCreate',
             query: this.$route.query
+          }
+          if (vm.$route.query.node_id) {
+            const { href } = this.$router.resolve(route)
+            window.open(href, '_blank')
+          } else {
+            this.$router.push(route)
           }
         },
         handleImportClick: ({ selectedRows }) => {
@@ -169,7 +175,6 @@ export default {
             url: '/api/v1/perms/asset-permissions/'
           })
         },
-        createInNewPage: true,
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions
