@@ -97,8 +97,13 @@ export default {
         route.query.type = row.type.value
         route.query.category = row.type.category
       }
-      const { href } = vm.$router.resolve(route)
-      window.open(href, '_blank')
+      const createInNewPage = this.$route.query.node_id && routeAction === 'Create'
+      if (createInNewPage) {
+        const { href } = vm.$router.resolve(route)
+        window.open(href, '_blank')
+      } else {
+        this.$router.push(route)
+      }
     }
     const extraQuery = this.$route.params?.extraQuery || {}
     return {
