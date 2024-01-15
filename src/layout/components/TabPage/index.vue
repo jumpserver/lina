@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.page-submenu > > > .el-tabs__header {
+.page-submenu >>> .el-tabs__header {
   background-color: white;
   margin-left: -25px;
   padding-left: 25px;
@@ -160,15 +160,17 @@ export default {
   margin-top: -30px;
 
   .el-tabs__item {
-
     i {
       opacity: 0.6;
     }
   }
-
 }
 
-.page-submenu > > > .el-tabs__nav-wrap {
+.page-submenu >>> .el-tabs__nav-wrap {
   position: static;
+}
+
+.fa {
+  margin-right: 2px;
 }
 </style>

@@ -3,11 +3,11 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import store from '@/store'
 
-import UsersRoute from './users'
-import AssetsRoute from './assets'
-import PermsRoute from './perms'
-import AccountRoutes from './accounts'
-import LabelRoutes from './labels'
+import UsersMenu from './users'
+import AssetsMenu from './assets'
+import PermsMenu from './perms'
+import AccountMenus from './accounts'
+import LabelMenus from './labels'
 
 export default {
   path: '/console',
@@ -40,30 +40,30 @@ export default {
       component: empty,
       name: 'Users',
       meta: {
-        title: i18n.t('Users'),
+        title: i18n.t('MenuUsers'),
         icon: 'users'
       },
-      children: UsersRoute
+      children: UsersMenu
     },
     {
       path: '/console/assets',
       component: empty,
       name: 'Assets',
       meta: {
-        title: i18n.t('Assets'),
+        title: i18n.t('MenuAssets'),
         icon: 'assets'
       },
-      children: AssetsRoute
+      children: AssetsMenu
     },
     {
       path: '/console/accounts',
       component: empty,
       name: 'Accounts',
       meta: {
-        title: i18n.t('Accounts'),
+        title: i18n.t('MenuAccounts'),
         icon: 'accounts'
       },
-      children: AccountRoutes
+      children: AccountMenus
     },
     {
       path: '/console/perms',
@@ -71,20 +71,20 @@ export default {
       name: 'Perms',
       alwaysShow: false,
       meta: {
-        title: i18n.t('Perms'),
+        title: i18n.t('MenuPermissions'),
         icon: 'permission'
       },
-      children: PermsRoute
+      children: PermsMenu
     },
     {
       path: '/console/more',
       component: empty,
       name: 'More',
       meta: {
-        title: i18n.t('More'),
+        title: i18n.t('MenuMore'),
         icon: 'more'
       },
-      children: LabelRoutes
+      children: LabelMenus
     }
   ]
 }

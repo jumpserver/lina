@@ -60,7 +60,8 @@ export default {
         },
         columnsMeta: {
           source: {
-            width: '120px'
+            width: '120px',
+            collapsible: false
           },
           username: {
             formatter: (row) => {
@@ -76,7 +77,6 @@ export default {
             }
           },
           system_roles: {
-            width: '100px',
             label: this.$t('SystemRoles'),
             formatter: (row) => {
               return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
@@ -85,7 +85,6 @@ export default {
             columnKey: 'system_roles'
           },
           org_roles: {
-            width: '100px',
             label: this.$t('OrgRoles'),
             formatter: (row) => {
               return row['org_roles'].map(item => item['display_name']).join(', ') || '-'

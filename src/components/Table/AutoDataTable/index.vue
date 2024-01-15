@@ -261,6 +261,17 @@ export default {
       }
       return col
     },
+    setDefaultWidthIfNeed(col) {
+      const lang = this.$i18n.locale
+      let factor = 10
+      if (lang === 'zh') {
+        factor = 20
+      }
+      if (!col.width) {
+        col.minWidth = `${col.label.length * factor + 30}px`
+      }
+      return col
+    },
 
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
@@ -275,6 +286,7 @@ export default {
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
       col.label = capitalizeFirst(col.label)
+      col = this.setDefaultWidthIfNeed(col)
       return col
     },
     generateTotalColumns() {
