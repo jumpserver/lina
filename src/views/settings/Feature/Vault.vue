@@ -60,8 +60,8 @@ export default {
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [
-          this.$t('setting.AccountStorage'),
+        [this.$t('common.Basic'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']],
+        [this.$t('setting.AccountStorage'),
           [
             'VAULT_ENABLED',
             'VAULT_HCP_HOST',
@@ -71,6 +71,11 @@ export default {
         ]
       ],
       fieldsMeta: {
+        HISTORY_ACCOUNT_CLEAN_LIMIT: {
+          el: {
+            autocomplete: 'new-password'
+          }
+        },
         VAULT_ENABLED: {
           disabled: true,
           label: this.$t('setting.EnableVaultStorage')

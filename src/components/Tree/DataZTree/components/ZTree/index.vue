@@ -167,6 +167,9 @@ export default {
     },
     async refresh() {
       this.treeSearchValue = ''
+      if (this.treeSetting?.callback?.beforeRefresh) {
+        this.treeSetting.callback.beforeRefresh()
+      }
       if (this.treeSetting?.callback?.refresh) {
         await this.treeSetting.callback.refresh()
       }

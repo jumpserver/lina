@@ -17,6 +17,7 @@
       :table-config="tableConfig"
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
+      :tree-setting="treeSetting"
       class="tree-table"
       v-bind="$attrs"
     />
@@ -52,6 +53,10 @@ export default {
     disabled: {
       type: [Boolean, Function],
       default: false
+    },
+    treeSetting: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {

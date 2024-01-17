@@ -173,12 +173,14 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
+      this.$log.debug('ListTable: search table', attrs)
       this.$emit('TagSearch', attrs)
-      return this.dataTable?.search(attrs, true)
+      this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
     },
     filter(attrs) {
       this.$emit('TagFilter', attrs)
-      this.$refs.dataTable.$refs.dataTable.search(attrs, true)
+      this.$log.debug('ListTable: found filter change', attrs)
+      this.search(attrs)
     },
     hasActionPerm(action) {
       const permRequired = this.permissions[action]

@@ -40,8 +40,12 @@ export default {
         }
       },
       headerActions: {
+        hasImport: false,
         onCreate: () => {
           this.$emit('addResource')
+        },
+        searchConfig: {
+          getUrlQuery: false
         }
       }
     }

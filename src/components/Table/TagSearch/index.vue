@@ -10,14 +10,14 @@
     <el-tag
       v-for="(v, k) in filterTags"
       :key="k"
+      :disable-transitions="true"
       :name="k"
+      class="filter-tag"
       closable
       size="small"
-      class="filter-tag"
       type="info"
-      :disable-transitions="true"
-      @close="handleTagClose(k)"
       @click="handleTagClick(v,k)"
+      @close="handleTagClose(k)"
     >
       <strong v-if="v.label">{{ v.label + ':' }}</strong>
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
@@ -27,14 +27,14 @@
     <el-input
       ref="SearchInput"
       v-model="filterValue"
-      :placeholder="placeholder"
-      class="search-input"
       :class="options.length < 1 ? 'search-input2': ''"
+      :placeholder="placeholder"
       :validate-event="false"
+      class="search-input"
       suffix-icon="el-icon-search"
       @blur="focus = false"
-      @focus="focus = true"
       @change="handleConfirm"
+      @focus="focus = true"
       @keyup.enter.native="handleConfirm"
       @keyup.delete.native="handleDelete"
     />
@@ -119,6 +119,12 @@ export default {
           }
           this.filterTagSearch(routeFilter)
         }
+      },
+      deep: true
+    },
+    filterTags: {
+      handler() {
+        this.$emit('tag-search', this.filterMaps)
       },
       deep: true
     },
@@ -210,11 +216,6 @@ export default {
         ...asFilterTags,
         ...routeFilter
       }
-      if (Object.keys(this.filterTags).length > 0) {
-        setTimeout(() => {
-          return this.$emit('tagSearch', this.filterMaps)
-        }, 400)
-      }
     },
     getValueLabel(key, value) {
       for (const field of this.options) {
@@ -252,7 +253,7 @@ export default {
       if (this.getUrlQuery) {
         this.checkUrlFields(evt)
       }
-      this.$emit('tagSearch', this.filterMaps)
+      // this.$emit('tagSearch', this.filterMaps)
       return true
     },
     handleDelete() {
@@ -284,7 +285,7 @@ export default {
         valueLabel: this.valueLabel
       }
       this.$set(this.filterTags, this.filterKey, tag)
-      this.$emit('tagSearch', this.filterMaps)
+      // this.$emit('tagSearch', this.filterMaps)
 
       // 修改查询参数时改变url中保存的参数
       if (this.getUrlQuery) {

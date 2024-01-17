@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -110,7 +110,7 @@ export default {
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasMoreActions: false,
         hasExport: false,
         hasImport: false,
