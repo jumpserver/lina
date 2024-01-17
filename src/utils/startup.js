@@ -8,8 +8,6 @@ import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
 import request from '@/utils/request'
-import i18n from '@/i18n/i18n'
-import { MessageBox } from 'element-ui'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 
@@ -41,30 +39,12 @@ async function checkLogin({ to, from, next }) {
     return reject('No session mark found in cookie')
   } else if (sessionExpire === 'close') {
     let startTime = new Date().getTime()
-    this.newLoginHasOpen = false
     const intervalId = setInterval(() => {
       const endTime = new Date().getTime()
       const delta = (endTime - startTime)
       startTime = endTime
       Vue.$log.debug('Set session expire: ', delta)
-      const currentTimeStamp = Math.floor(endTime / 1000)
-      const sessionExpireTimestamp = VueCookie.get('jms_session_expire_timestamp')
-      if (currentTimeStamp >= parseInt(sessionExpireTimestamp, 10)) {
-        if (!this.newLoginHasOpen) {
-          this.newLoginHasOpen = true
-          MessageBox.confirm(
-            i18n.t('auth.LoginRequiredMsg'),
-            i18n.t('common.Info'),
-            {
-              confirmButtonText: i18n.t('auth.ReLogin'),
-              cancelButtonText: i18n.t('common.Cancel'),
-              type: 'warning'
-            }).finally(() => {
-            window.location = '/core/auth/logout/'
-            clearInterval(intervalId)
-          })
-        }
-      } else if (!isRenewalExpired(120)) {
+      if (!isRenewalExpired(120)) {
         VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
       } else {
         clearInterval(intervalId)
