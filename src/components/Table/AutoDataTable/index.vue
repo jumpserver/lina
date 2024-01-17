@@ -117,7 +117,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = i18n.t('Validity')
+          col.label = i18n.t('Valid')
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {

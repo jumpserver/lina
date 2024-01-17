@@ -91,7 +91,7 @@ export default {
     return {
       defaultMoreActions: [
         {
-          title: this.$t('BatchDelete'),
+          title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           icon: 'fa fa-trash-o',
@@ -101,7 +101,7 @@ export default {
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$t('BatchUpdate'),
+          title: this.$t('UpdateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
           fa: 'batch-update',

@@ -47,7 +47,6 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
         },
         {
           name: 'system_roles',
-          label: vm.$t('SystemRoles'),
           type: 'm2m',
           el: {
             url: '/api/v1/rbac/system-roles/?fields_size=mini',

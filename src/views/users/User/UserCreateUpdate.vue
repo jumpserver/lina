@@ -27,8 +27,8 @@ export default {
       fields: [
         [this.$t('Account'), ['name', 'username', 'email', 'groups']],
         [this.$t('Authentication'), [
-          'password_strategy', 'update_password', 'password', 'need_update_password',
-          'set_public_key', 'public_key', 'mfa_level', 'source'
+          'password_strategy', 'update_password', 'password',
+          'need_update_password', 'mfa_level', 'source'
         ]],
         [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
         [this.$t('Other'), ['phone', 'wechat', 'comment']]
@@ -47,7 +47,7 @@ export default {
           ]
         },
         update_password: {
-          label: this.$t('UpdatePassword'),
+          label: this.$t('ChangePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.update_password) {
@@ -73,7 +73,7 @@ export default {
           }
         },
         need_update_password: {
-          label: this.$t('NeedUpdatePasswordNextLogin'),
+          label: this.$t('RestPasswordNextLogin'),
           type: 'checkbox-group',
           component: null, // 覆盖默认生成的 component
           el: {
@@ -95,28 +95,8 @@ export default {
             return true
           }
         },
-        set_public_key: {
-          label: this.$t('SetPublicKey'),
-          type: 'checkbox',
-          hidden: (formValue) => {
-            if (formValue.set_public_key) {
-              return true
-            }
-            return this.$route.meta.action !== 'update'
-          }
-        },
-        public_key: {
-          type: 'input',
-          el: {
-            type: 'textarea'
-          },
-          hidden: (formValue) => {
-            return !formValue.set_public_key
-          }
-        },
         system_roles: {
           component: Select2,
-          label: this.$t('SystemRoles'),
           el: {
             multiple: true,
             ajax: {

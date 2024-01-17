@@ -77,7 +77,6 @@ export default {
             }
           },
           system_roles: {
-            label: this.$t('SystemRoles'),
             formatter: (row) => {
               return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -85,7 +84,6 @@ export default {
             columnKey: 'system_roles'
           },
           org_roles: {
-            label: this.$t('OrgRoles'),
             formatter: (row) => {
               return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -182,7 +180,7 @@ export default {
         },
         extraMoreActions: [
           {
-            title: this.$t('BatchRemoval'),
+            title: this.$t('RemoveSelected'),
             name: 'BatchRemoval',
             has: hasRemove,
             fa: 'remove',
@@ -191,14 +189,14 @@ export default {
           },
           {
             name: 'BatchDisable',
-            title: this.$t('BatchDisable'),
+            title: this.$t('DisableSelected'),
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
-            title: this.$t('BatchActivate'),
+            title: this.$t('ActivateSelected'),
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
