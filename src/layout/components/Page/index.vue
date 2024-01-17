@@ -71,6 +71,11 @@ export default {
   height: calc(100vh - 50px);
   overflow-y: auto;
   overflow-x: hidden;
+
+  .el-alert {
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
 }
 
 .go-back {

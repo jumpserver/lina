@@ -13,6 +13,7 @@
       ref="dialog"
       :base-node-url="baseNodeUrl"
       :base-url="baseUrl"
+      :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
       :value="value"
       :visible.sync="dialogVisible"
@@ -48,6 +49,10 @@ export default {
     value: {
       type: Array,
       default: () => []
+    },
+    treeSetting: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {

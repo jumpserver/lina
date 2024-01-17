@@ -19,8 +19,8 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('dashboard.UserLoginTrend'),
-        tip: this.$t('dashboard.UserLoginTrend')
+        title: this.$t('dashboard.SessionConnectTrend'),
+        tip: this.$t('dashboard.SessionConnectTrend')
       },
       columnChartConfig: {
         datesMetrics: [],

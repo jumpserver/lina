@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -14,25 +14,27 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
+        columns: ['name', 'users_amount', 'comment', 'actions'],
         columnsShow: {
-          default: ['name', 'users', 'comment', 'actions'],
+          default: ['name', 'users_amount', 'comment', 'actions'],
           min: ['name', 'action']
         },
         columnsMeta: {
           users_amount: {
             label: this.$t('users.Users'),
-            width: '120px'
-          },
-          users: {
-            label: this.$t('perms.User'),
-            width: '160px',
-            formatter: AmountFormatter,
+            width: '120px',
+            formatter: DetailFormatter,
             formatterArgs: {
-              getItem(item) {
-                return item.is_service_account ? null : item.name
-              },
-              routeQuery: {
-                activeTab: 'GroupUser'
+              getRoute({ row }) {
+                return {
+                  name: 'UserGroupDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    activeTab: 'GroupUser'
+                  }
+                }
               }
             }
           }

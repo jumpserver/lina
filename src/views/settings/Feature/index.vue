@@ -38,7 +38,7 @@ export default {
         {
           title: this.$t('setting.AccountStorage'),
           name: 'Vault',
-          hidden: !this.$hasPerm('settings.change_vault') || !this.$store.getters.hasValidLicense
+          hidden: !this.$store.getters.hasValidLicense
         },
         {
           title: this.$t('setting.ChatAI'),

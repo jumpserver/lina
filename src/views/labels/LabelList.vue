@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
-    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" @confirm="handleDialogConfirm" />
+    <BindDialog v-if="bindVisible" :label="label" :visible.sync="bindVisible" @bind-success="handleDialogConfirm" />
     <LabelResourcesDialog
       v-if="resDialogVisible"
       :label="label"

@@ -51,7 +51,7 @@ export default {
               fontSize: 24,
               color: '#646A73'
             },
-            subtext: this.$t('dashboard.Proportion') + percentage + '%',
+            subtext: this.$t('dashboard.Proportion') + ' ' + percentage + '%',
             subtextStyle: {
               fontSize: 12,
               color: '#646A73'
