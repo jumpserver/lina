@@ -25,7 +25,13 @@ export default {
           assets_amount: {
             label: this.$t('assets.Assets'),
             width: '160px',
-            formatter: DetailFormatter
+            formatter: DetailFormatter,
+            formatterArgs: {
+              permissions: 'assets.view_asset',
+              routeQuery: {
+                activeTab: 'AssetList'
+              }
+            }
           },
           gateway_count: {
             label: this.$t('assets.Gateway'),
