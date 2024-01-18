@@ -15,6 +15,7 @@ import { GenericDetailPage } from '@/layout/components'
 import SessionCommands from './SessionCommands'
 import SessionDetailInfo from './SessionDetailInfo'
 import SessionJoinRecords from './SessionJoinRecords'
+import SessionFTPLogs from './SessionFTPLogs'
 
 export default {
   name: 'SessionDetail',
@@ -22,7 +23,8 @@ export default {
     GenericDetailPage,
     SessionCommands,
     SessionDetailInfo,
-    SessionJoinRecords
+    SessionJoinRecords,
+    SessionFTPLogs
   },
   data() {
     return {
@@ -39,6 +41,11 @@ export default {
             title: this.$t('sessions.command'),
             name: 'SessionCommands',
             hidden: () => !this.$hasPerm('terminal.view_command')
+          },
+          {
+            title: this.$t('route.FileTransfer'),
+            name: 'SessionFTPLogs',
+            hidden: () => !this.$hasPerm('terminal.view_ftplog')
           },
           {
             title: this.$t('sessions.Activity'),
