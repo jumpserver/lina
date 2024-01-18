@@ -226,7 +226,7 @@ export default {
           openCommand: {
             type: 'button',
             align: 'right',
-            icon: 'fa-folder-open',
+            icon: 'load-file',
             tip: this.$t('ops.OpenCommand'),
             callback: (val, setting) => {
               this.showOpenAdhocDialog = true
@@ -235,7 +235,7 @@ export default {
           saveCommand: {
             type: 'button',
             align: 'right',
-            icon: 'save',
+            icon: 'save-line',
             tip: this.$t('ops.SaveCommand'),
             callback: (val, setting) => {
               if (!this.command) {
@@ -248,7 +248,7 @@ export default {
           help: {
             type: 'button',
             align: 'right',
-            icon: 'fa fa-question-circle',
+            icon: 'help',
             tip: this.$t('ops.Help'),
             callback: (val, setting) => {
               this.showHelpDialog = true
