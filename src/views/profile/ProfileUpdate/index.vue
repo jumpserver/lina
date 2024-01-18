@@ -29,6 +29,7 @@ export default {
         activeMenu: 'ProfileUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,
+        hasActivity: false,
         actions: {
           detailApiUrl: '/api/v1/users/profile/'
         }
