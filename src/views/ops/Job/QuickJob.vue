@@ -193,7 +193,9 @@ export default {
               this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
-          },
+          }
+        },
+        fold: {
           timeout: {
             type: 'select',
             name: this.$t('ops.Timeout'),
