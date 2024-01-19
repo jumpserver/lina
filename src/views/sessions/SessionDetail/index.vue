@@ -54,7 +54,7 @@ export default {
           }
         ],
         getObjectName: (obj) => { return obj.id },
-        hasActivity: false,
+        hasActivity: true,
         hasRightSide: false
       }
     }
