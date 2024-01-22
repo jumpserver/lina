@@ -21,7 +21,6 @@ import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -90,8 +89,9 @@ export default {
           users_amount: {
             label: this.$t('perms.User'),
             width: '60px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -100,8 +100,9 @@ export default {
           user_groups_amount: {
             label: this.$t('perms.UserGroups'),
             width: '100px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -110,8 +111,9 @@ export default {
           assets_amount: {
             label: this.$t('perms.Asset'),
             width: '60px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
@@ -120,8 +122,9 @@ export default {
           nodes_amount: {
             label: this.$t('perms.Node'),
             width: '60px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }

@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -15,34 +15,32 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],
-        columnsExtra: ['gateway_count'],
-        columns: ['name', 'assets_amount', 'gateway_count', 'comment', 'actions'],
+        columnsExtra: ['gateways'],
+        columns: ['name', 'assets_amount', 'gateways', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'assets_amount', 'gateway_count', 'comment', 'actions']
+          default: ['name', 'assets_amount', 'gateways', 'comment', 'actions']
         },
         columnsMeta: {
           assets_amount: {
             label: this.$t('assets.Assets'),
             width: '160px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               permissions: 'assets.view_asset',
               routeQuery: {
                 activeTab: 'AssetList'
               }
             }
           },
-          gateway_count: {
+          gateways: {
             label: this.$t('assets.Gateway'),
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',
               routeQuery: {
                 activeTab: 'GatewayList'
-              },
-              getTitle: function({ row }) {
-                return row.gateways.length
               }
             }
           }
