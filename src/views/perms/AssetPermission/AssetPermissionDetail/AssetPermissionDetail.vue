@@ -52,22 +52,10 @@ export default {
       url: `/api/v1/perms/asset-permissions/${this.object.id}`,
       detailFields: [
         'name',
-        {
-          key: this.$t('UserCount'),
-          value: this.object.users.length
-        },
-        {
-          key: this.$t('UserGroupCount'),
-          value: this.object.user_groups.length
-        },
-        {
-          key: this.$t('AssetCount'),
-          value: this.object.assets.length
-        },
-        {
-          key: this.$t('NodeCount'),
-          value: this.object.nodes.length
-        },
+        'users_amount',
+        'user_groups_amount',
+        'assets_amount',
+        'nodes_amount',
         {
           key: this.$t('Actions'),
           value: this.object.actions,

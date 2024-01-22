@@ -23,7 +23,6 @@ export default {
         },
         columnsMeta: {
           assets_amount: {
-            label: this.$t('Assets'),
             width: '160px',
             formatter: DetailFormatter
           },

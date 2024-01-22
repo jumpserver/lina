@@ -40,7 +40,6 @@ export default {
             }
           },
           command_groups: {
-            label: this.$t('CommandGroup'),
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {

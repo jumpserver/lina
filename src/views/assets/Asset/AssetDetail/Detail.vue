@@ -187,34 +187,20 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
-          'id', 'name',
-          {
-            key: this.$t('Category'),
-            value: this.object.category.label
-          },
-          {
-            key: this.$t('Type'),
-            value: this.object.type.label
-          },
-          'address',
-          {
-            key: this.$t('Protocols'),
-            value: this.object.protocols.map(
+          'id', 'name', 'category', 'type',
+          'address', 'platform', 'protocols', 'domain',
+          'is_active', 'date_created', 'date_updated',
+          'created_by', 'comment'
+        ],
+        formatters: {
+          protocols: () => {
+            return vm.object.protocols.map(
               i => (
                 this.object.address.startsWith('https://') ? 'https' : i.name
               ) + '/' + i.port
-            ).join(',')
-          },
-          {
-            key: this.$t('Domain'),
-            value: this.object.domain?.name || ''
-          },
-          {
-            key: this.$t('Platform'),
-            value: this.object.platform.name
-          },
-          'is_active', 'date_created', 'created_by', 'comment'
-        ]
+            ).join(', ')
+          }
+        }
       },
       specInfoConfig: {
         title: this.$t('SpecificInfo'),

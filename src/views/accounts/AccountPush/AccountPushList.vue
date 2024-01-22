@@ -64,7 +64,6 @@ export default {
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           password_strategy_display: {

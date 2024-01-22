@@ -28,7 +28,6 @@
 import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'RolePerms',
@@ -166,19 +165,7 @@ export default {
       url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
       detailFields: [
         'display_name', 'scope_display', 'builtin', 'created_by',
-        {
-          key: this.$t('DateCreated'),
-          formatter: (item, val) => {
-            return <span> {toSafeLocalDateStr(this.object.date_created)}</span>
-          }
-        },
-        {
-          key: this.$t('DateUpdated'),
-          formatter: (item, val) => {
-            return <span> {toSafeLocalDateStr(this.object.date_updated)}</span>
-          }
-        },
-        'comment'
+        'date_created', 'date_created', 'comment'
       ]
     }
   },

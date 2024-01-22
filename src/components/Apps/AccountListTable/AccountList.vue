@@ -161,7 +161,6 @@ export default {
             }
           },
           asset: {
-            label: this.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -192,7 +191,6 @@ export default {
             }
           },
           privileged: {
-            label: this.$t('Privileged'),
             width: '120px',
             formatterArgs: {
               showText: false,
