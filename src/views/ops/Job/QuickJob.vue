@@ -34,7 +34,7 @@
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
-          <div style="padding-left: 30px; background-color: rgb(247 247 247)">
+          <div class="xterm-container">
             <Term
               ref="xterm"
               :show-tool-bar="true"
@@ -442,6 +442,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.xterm-container {
+  padding-left: 30px;
+  background-color: rgb(247, 247, 247);
+  height: calc(100vh - 549px);
+  overflow: hidden;
+  & > div {
+    height: 100%;
+    &>>> .xterm {
+      height: calc(100% - 8px);
+      overflow-y: auto;
+    }
+  }
+}
 .mini-button {
   width: 12px;
   float: right;
