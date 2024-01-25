@@ -50,7 +50,7 @@
       "MailRecipient": "邮件收件人",
       "IsSuccess": "是否成功",
       "Reason": "原因",
-      "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分",
+      "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分。如用户未设置加密密码 - 请前往个人信息 -> 偏好设置中设置加密密码",
       "RecipientServer": "接收服务器"
     },
     "AccountChangeSecret": {

@@ -109,7 +109,7 @@
       "ExecutionList": "実行リスト",
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
-      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
+      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます。ユーザーが暗号化パスワードを設定していない場合-個人情報->プリファレンス設定で暗号化パスワードを設定してください",
       "RecipientServer": "受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
