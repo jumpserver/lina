@@ -109,7 +109,7 @@
       "ExecutionList": "Execution list",
       "Reason": "Reason",
       "AccountBackup": "Account backup",
-      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
+      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back. If the user has not set an encryption password, please go to Personal Information ->Preferences ->Set Encryption Password",
       "RecipientServer": "Receiving server"
     },
     "DynamicUsername": "Dynamic username",
