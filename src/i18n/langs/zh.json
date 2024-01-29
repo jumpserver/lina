@@ -1,5 +1,8 @@
 {
   "accounts": {
+    "BulkVerify": "批量测试可连接性",
+    "Test": "测试",
+    "QuickTest": "测试",
     "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
