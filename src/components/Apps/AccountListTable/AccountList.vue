@@ -239,7 +239,7 @@ export default {
                 },
                 {
                   name: 'Test',
-                  title: this.$t('common.Test'),
+                  title: this.$t('accounts.Test'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.change_account') &&
@@ -339,6 +339,25 @@ export default {
           ...this.headerExtraActions
         ],
         extraMoreActions: [
+          {
+            name: 'BulkVerify',
+            title: this.$t('accounts.BulkVerify'),
+            type: 'primary',
+            fa: 'fa-handshake-o',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.post(
+                '/api/v1/accounts/accounts/tasks/',
+                { action: 'verify', accounts: ids }).then(res => {
+                openTaskPage(res['task'])
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
           {
             name: 'ClearSecrets',
             title: this.$t('common.ClearSecret'),
