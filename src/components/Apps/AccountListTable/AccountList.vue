@@ -117,6 +117,10 @@ export default {
     headerExtraActions: {
       type: Array,
       default: () => []
+    },
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -138,9 +142,7 @@ export default {
           app: 'assets',
           resource: 'account'
         },
-        extraQuery: {
-          order: '-date_updated'
-        },
+        extraQuery: this.extraQuery,
         columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
