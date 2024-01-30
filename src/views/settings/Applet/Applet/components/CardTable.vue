@@ -31,7 +31,7 @@
                 </div>
                 <el-divider class="my-divider" />
                 <div class="comment">
-                  {{ d.comment }}
+                  {{ d.meta.comment }}
                 </div>
                 <el-tag v-for="tag of d.tags" :key="tag" size="mini">
                   {{ capitalize(tag) }}
