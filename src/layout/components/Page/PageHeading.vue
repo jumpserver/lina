@@ -66,6 +66,9 @@ export default {
     font-weight: 500;
     line-height: 32px;
     color: #1F2329;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .page-heading-right {

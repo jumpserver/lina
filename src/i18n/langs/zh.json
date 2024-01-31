@@ -1,6 +1,9 @@
 {
   "accounts": {
     "AccountBatchUpdate": "批量更新(同类型)",
+    "BulkVerify": "批量测试可连接性",
+    "Test": "测试",
+    "QuickTest": "测试",
     "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
@@ -803,7 +806,7 @@
     "InputMessage": "输入消息...",
     "EnterMessage": "请输入问题， Enter 发送",
     "CollapseSidebar": "收起侧边栏",
-    "crontabDiffError": "定期执行时间间隔必须大于十分钟！",
+    "crontabDiffError": "请确保定期执行的时间间隔不少于十分钟！",
     "introduction": {
       "ConceptTitle": "\uD83E\uDD14 Python 解释器 ",
       "ConceptContent": "我想让你像一个 Python 解释器一样行事。我将给你 Python 代码，你将执行它。不要提供任何解释。除了代码的输出，不要用任何东西来回应。",

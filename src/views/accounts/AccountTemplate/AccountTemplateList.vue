@@ -83,9 +83,13 @@ export default {
       },
       headerActions: {
         hasRefresh: true,
-        hasExport: false,
-        hasImport: false,
+        hasExport: this.$hasPerm('accounts.view_accounttemplatesecret'),
         hasMoreActions: false,
+        exportOptions: {
+          url: '/api/v1/accounts/account-template-secrets/',
+          mfaVerifyRequired: true,
+          tips: this.$t('accounts.AccountExportTips')
+        },
         createRoute: () => {
           return {
             name: 'AccountTemplateCreate'

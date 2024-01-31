@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -23,8 +23,9 @@ export default {
           users_amount: {
             label: this.$t('users.Users'),
             width: '120px',
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               getRoute({ row }) {
                 return {
                   name: 'UserGroupDetail',
