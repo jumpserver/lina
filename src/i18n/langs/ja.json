@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountBatchUpdate": "ロット更新(同じタイプです)",
     "Accounts": "アカウント",
     "SuFrom": "から",
     "AccountTemplateUpdateSecretHelpText": "アカウントリストには、テンプレートで作成されたアカウントが表示されます。暗号文を更新すると、テンプレートで作成されたアカウントの暗号文が更新されます。",
