@@ -8,6 +8,7 @@
 <script>
 import Title from '../components/Title.vue'
 import ColumnChart from '../components/ColumnChart'
+
 export default {
   components: { Title, ColumnChart },
   props: {
@@ -42,7 +43,7 @@ export default {
       const data = await this.$axios.get(`/api/v1/index/?dates_metrics=1&days=${this.days}`)
       const loginTotal = data?.dates_metrics_total_count_login
       this.columnChartConfig.datesMetrics = data.dates_metrics_date
-      if (loginTotal.length > 1) {
+      if (loginTotal.length > 0) {
         this.columnChartConfig.primaryData = loginTotal
       }
     }
