@@ -2104,7 +2104,8 @@
     "passwordExpired": "パスワードが期限切れです",
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
     "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
-    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？"
+    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？",
+    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",

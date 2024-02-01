@@ -133,6 +133,7 @@ export default {
         },
         org_roles: {
           component: Select2,
+          label: this.$t('users.OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           el: {
             multiple: true,
@@ -164,6 +165,10 @@ export default {
         },
         phone: {
           component: PhoneInput
+        },
+        is_active: {
+          label: this.$t('users.IsActive'),
+          el: {}
         }
       },
       submitMethod() {
@@ -200,7 +205,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot'])
+    ...mapGetters(['currentOrgIsRoot', 'currentUser'])
   },
   async mounted() {
     if (this.currentOrgIsRoot) {
@@ -212,6 +217,14 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
+      if (this.user.id === this.currentUser.id) {
+        const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
+        fieldsToUpdate.forEach(field => {
+          const msg = this.$t('users.disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
+          this.fieldsMeta[field].el.disabled = true
+          this.fieldsMeta[field].helpTips = msg
+        })
+      }
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
       if (this.$route.query.clone_from) {
         this.user.groups = []

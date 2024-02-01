@@ -2115,7 +2115,8 @@
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible.",
     "dateLastLogin": "Date last login",
-    "AddAllMembersWarningMsg": "Are you sure you want to add all members?"
+    "AddAllMembersWarningMsg": "Are you sure you want to add all members?",
+    "disallowSelfUpdateFields": "Not allowed to modify the current fields oneself"
   },
   "notifications": {
     "MessageType": "Message Type",

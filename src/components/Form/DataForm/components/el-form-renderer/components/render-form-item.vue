@@ -7,13 +7,11 @@
     v-bind="data.attrs"
   >
     <template v-if="data.helpTips" #label>
+      {{ data.label }}
       <el-tooltip placement="top" effect="light" popper-class="help-tips">
         <div slot="content" v-html="data.helpTips" />
-        <el-button style="padding: 0">
-          <i class="fa fa-question-circle" />
-        </el-button>
+        <i class="fa fa-question-circle-o" />
       </el-tooltip>
-      {{ data.label }}
     </template>
     <template v-if="readonly && hasReadonlyContent">
       <div
@@ -70,7 +68,8 @@
           :key="opt.label"
           v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
-        >{{ opt.label }}</el-radio>
+        >{{ opt.label }}
+        </el-radio>
       </template>
     </custom-component>
     <div v-if="data.helpText" class="help-block" v-html="data.helpText" />
