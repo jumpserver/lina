@@ -28,8 +28,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'org_name', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'name', 'org_name', 'periodic_display',
+            'executed_amount', 'actions'
           ]
         },
         columnsMeta: {

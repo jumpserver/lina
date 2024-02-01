@@ -174,7 +174,7 @@ export default {
           })
         },
         {
-          title: this.$t('UserSwitchFrom'),
+          title: this.$t('SwitchFrom'),
           type: 'updateSelect',
           attrs: {
             type: 'primary',

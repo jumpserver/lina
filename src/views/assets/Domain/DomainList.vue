@@ -16,18 +16,17 @@ export default {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],
         columnsExtra: ['gateway_count'],
-        columns: ['name', 'assets_amount', 'gateway_count', 'comment', 'actions'],
+        columns: ['name', 'assets_amount', 'gateways', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'assets_amount', 'gateway_count', 'comment', 'actions']
+          default: ['name', 'assets_amount', 'gateways', 'comment', 'actions']
         },
         columnsMeta: {
           assets_amount: {
             width: '160px',
             formatter: DetailFormatter
           },
-          gateway_count: {
-            label: this.$t('Gateway'),
+          gateways: {
             formatter: DetailFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',

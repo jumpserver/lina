@@ -77,8 +77,7 @@ export default {
           }
         },
         VAULT_ENABLED: {
-          disabled: true,
-          label: this.$t('EnableVaultStorage')
+          disabled: true
         },
         VAULT_HCP_HOST: {
           hidden: (formValue) => {

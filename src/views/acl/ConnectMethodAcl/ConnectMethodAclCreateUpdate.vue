@@ -33,7 +33,6 @@ export default {
         users: userJSONSelectMeta(this, true),
         connect_methods: {
           component: Select2,
-          label: this.$t('ConnectMethod'),
           el: {
             url: '/api/v1/terminal/components/connect-methods/?flat=1&limit=10&os=all',
             ajax: {

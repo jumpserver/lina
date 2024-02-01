@@ -66,7 +66,6 @@ export default {
             formatter: OutputExpandFormatter
           },
           risk_level: {
-            label: this.$t('RiskLevel'),
             width: '105px',
             formatter: (row, col, cellValue) => {
               const display = row['risk_level'].label
@@ -87,7 +86,6 @@ export default {
             width: '140px'
           },
           session: {
-            label: this.$t('Session'),
             formatter: DetailFormatter,
             width: '80px',
             formatterArgs: {

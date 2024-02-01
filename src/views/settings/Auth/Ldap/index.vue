@@ -68,7 +68,6 @@ export default {
         },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: JsonEditor,
-          label: this.$t('AuthLdapUserAttrMap'),
           rules: [JsonRequired]
         }
       },

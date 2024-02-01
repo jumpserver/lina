@@ -71,7 +71,6 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('Asset'),
           rules: [{
             required: false
           }],
@@ -96,7 +95,6 @@ export default {
         },
         protocols: {
           component: ProtocolsSelect,
-          label: this.$t('Protocols'),
           el: {
             resource: this.$t('Protocol'),
             select2: {
@@ -126,13 +124,10 @@ export default {
           helpText: this.$t('ActionsTips')
         },
         date_start: {
-          label: this.$t('DateStart')
         },
         date_expired: {
-          label: this.$t('DateExpired')
         },
         comment: {
-          label: this.$t('Comment')
         },
         is_active: {
           type: 'checkbox'

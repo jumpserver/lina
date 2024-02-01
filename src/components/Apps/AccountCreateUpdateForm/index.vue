@@ -168,7 +168,7 @@ export default {
           }
         },
         su_from_username: {
-          label: this.$t('UserSwitchFrom'),
+          label: this.$t('SwitchFrom'),
           hidden: (formValue) => {
             return this.platform || this.asset || this.addTemplate
           }

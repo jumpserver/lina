@@ -69,14 +69,12 @@ export default {
           value: this.object.secret_strategy.label
         },
         {
-          key: this.$t('RegularlyPerform'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('CyclePerform'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>

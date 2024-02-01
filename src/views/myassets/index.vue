@@ -53,7 +53,6 @@ export default {
         columnsMeta: {
           name: {
             prop: 'name',
-            label: this.$t('Name'),
             formatter: DialogDetailFormatter,
             formatterArgs: {
               getDialogTitle: function({ col, row, cellValue }) { this.$t('AssetDetail') }.bind(this),

@@ -118,7 +118,6 @@ export default {
           },
           'AUTH_OPENID_USER_ATTR_MAP': {
             component: JsonEditor,
-            label: this.$t('AuthLdapUserAttrMap'),
             rules: [JsonRequired]
           }
         },

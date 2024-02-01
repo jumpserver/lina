@@ -267,12 +267,11 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
-      if (!col.width) {
+      if (col && !col.width && col.label) {
         col.minWidth = `${col.label.length * factor + 30}px`
       }
       return col
     },
-
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}

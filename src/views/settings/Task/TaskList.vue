@@ -16,7 +16,8 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time'
+          'name', 'queue', 'count', 'state', 'date_last_publish',
+          'exec_cycle', 'next_exec_time'
         ],
         columnsMeta: {
           name: {
@@ -36,35 +37,31 @@ export default {
             has: false
           },
           queue: {
-            width: '120px',
             label: this.$t('Queue'),
+            width: '120px',
             formatter: (row) => {
               return row.meta.queue
             }
           },
           comment: {
             width: '300px',
-            label: this.$t('Comment'),
             formatter: row => {
               return row.meta.comment ? row.meta.comment : '-'
             }
           },
           last_published_time: {
-            label: this.$t('LastPublishedTime'),
             width: '210px',
             formatter: (row) => {
               return row.last_published_time != null ? row.last_published_time : '-'
             }
           },
           exec_cycle: {
-            label: this.$t('ExecuteCycle'),
             width: '120px',
             formatter: (row) => {
               return row.exec_cycle ? row.exec_cycle : '-'
             }
           },
           next_exec_time: {
-            label: this.$t('ExpectedNextExecuteTime'),
             width: '210px',
             formatter: (row) => {
               return row.next_exec_time ? row.next_exec_time : '-'

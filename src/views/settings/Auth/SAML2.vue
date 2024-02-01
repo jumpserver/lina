@@ -40,7 +40,6 @@ export default {
         fieldsMeta: {
           SAML2_IDP_METADATA_URL: {
             component: 'el-input',
-            label: this.$t('AuthSAML2MetadataUrl'),
             helpText: this.$t('IdpMetadataUrlHelpText')
           },
           SAML2_IDP_METADATA_XML: {
@@ -49,12 +48,10 @@ export default {
               type: 'textarea',
               rows: 4
             },
-            label: this.$t('AuthSAML2Xml'),
             helpText: this.$t('IdpMetadataHelpText')
           },
           SAML2_SP_ADVANCED_SETTINGS: {
             component: JsonEditor,
-            label: this.$t('AuthSAML2AdvancedSettings'),
             rules: [JsonRequired]
           },
           SAML2_SP_KEY_CONTENT: {
@@ -67,7 +64,6 @@ export default {
           },
           SAML2_RENAME_ATTRIBUTES: {
             component: JsonEditor,
-            label: this.$t('AuthUserAttrMap'),
             rules: [JsonRequired],
             helpText: this.$t('AuthSaml2UserAttrMapHelpText')
           }
