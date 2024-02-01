@@ -68,7 +68,6 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
-      label: i18n.t('PlatformSimple'),
       el: {
         multiple: false,
         ajax: {
@@ -101,7 +100,6 @@ export const assetFieldsMeta = (vm) => {
     },
     accounts: {
       component: AssetAccounts,
-      label: i18n.t('Accounts'),
       el: {
         platform: {},
         default: []

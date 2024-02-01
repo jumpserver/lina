@@ -110,8 +110,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'asset', 'privileged',
-        'secret_type', 'is_active', 'date_updated'
+        'name', 'username', 'asset', 'date_updated'
       ])
     },
     headerExtraActions: {
@@ -161,7 +160,6 @@ export default {
             }
           },
           asset: {
-            label: this.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -192,7 +190,6 @@ export default {
             }
           },
           privileged: {
-            label: this.$t('Privileged'),
             width: '120px',
             formatterArgs: {
               showText: false,

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+      <AutoDetailCard :fields="detailFields" :formatters="detailFormatters" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -169,6 +169,26 @@ export default {
         }
       ],
       url: `/api/v1/users/users/${this.object.id}`,
+      detailFormatters: {
+        phone: () => {
+          const phoneObj = vm.object.phone
+          return <div>{phoneObj?.code} {phoneObj?.phone}</div>
+        },
+        system_roles: () => {
+          const rolesDisplay = vm.object.system_roles || []
+          const dom = rolesDisplay.map(item => {
+            return <el-tag size='mini'>{item.display_name}</el-tag>
+          })
+          return <div>{dom}</div>
+        },
+        org_roles: () => {
+          const rolesDisplay = vm.object.org_roles || []
+          const dom = rolesDisplay.map(item => {
+            return <el-tag size='mini'>{item.display_name}</el-tag>
+          })
+          return <div>{dom}</div>
+        }
+      },
       detailFields: [
         {
           key: '',
@@ -176,26 +196,10 @@ export default {
             return <img src={this.object.avatar_url} alt='' height='50'/>
           }
         },
-        'id', 'name', 'username', 'email',
-        {
-          key: this.$t('Phone'),
-          formatter: () => {
-            const phoneObj = this.object.phone
-            return <div>{phoneObj?.code} {phoneObj?.phone}</div>
-          }
-        },
+        'id', 'name', 'username', 'email', 'phone',
         'wecom_id', 'dingtalk_id', 'feishu_id',
-        {
-          key: this.$t('Role'),
-          formatter: (item, val) => {
-            const rolesDisplay = this.object.org_roles.concat(this.object.system_roles || [])
-            const dom = rolesDisplay.map(item => {
-              return <el-tag size='mini'>{item.display_name}</el-tag>
-            })
-            return <div>{dom}</div>
-          }
-        },
-        'mfa_level', 'source', 'created_by', 'date_joined', 'date_expired',
+        'system_roles', 'org_roles', 'mfa_level', 'source',
+        'created_by', 'date_joined', 'date_expired',
         'date_password_last_updated', 'last_login', 'comment'
       ],
       relationConfig: {

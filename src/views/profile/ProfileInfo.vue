@@ -131,7 +131,7 @@ export default {
           }
         },
         {
-          title: this.$t('UpdatePassword'),
+          title: this.$t('ChangePassword'),
           attrs: {
             type: 'primary',
             label: this.$t('Update'),

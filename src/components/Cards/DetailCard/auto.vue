@@ -104,6 +104,16 @@ export default {
         let value = this.iObject[name]
         const label = fieldMeta.label
 
+        const formatter = this.formatters[name]
+        if (formatter) {
+          this.items.push({
+            key: label,
+            value: value,
+            formatter: formatter
+          })
+          continue
+        }
+
         if (Array.isArray(value)) {
           if (typeof value[0] === 'object') {
             value.forEach(item => {
@@ -136,11 +146,13 @@ export default {
         }
         if (value === null || value === '') {
           value = '-'
+        } else if (value === 0) {
+          value = 0
         } else if (fieldMeta.type === 'datetime') {
           value = toSafeLocalDateStr(value)
         } else if (fieldMeta.type === 'labeled_choice') {
           value = value?.['label']
-        } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object') {
+        } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object' || value?.name) {
           value = value?.['name']
         } else if (fieldMeta.type === 'm2m_related_field') {
           value = value?.map(item => item['name']).join(', ')
@@ -159,7 +171,7 @@ export default {
         const item = {
           key: label,
           value: value,
-          formatter: this.formatters[name] || defaultFormatter[name]
+          formatter: defaultFormatter[name]
         }
         this.items.push(item)
       }

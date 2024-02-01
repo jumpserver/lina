@@ -50,7 +50,6 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -60,7 +59,6 @@ export default {
             }
           },
           is_finished: {
-            label: this.$t('IsFinished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
@@ -73,7 +71,6 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('IsSuccess'),
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {

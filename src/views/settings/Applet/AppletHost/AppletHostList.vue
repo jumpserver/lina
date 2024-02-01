@@ -72,7 +72,6 @@ export default {
             }
           },
           protocols: {
-            label: this.$t('Protocols'),
             formatter: ProtocolsFormatter
           },
           actions: {

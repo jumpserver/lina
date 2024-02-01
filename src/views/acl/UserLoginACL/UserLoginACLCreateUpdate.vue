@@ -60,11 +60,9 @@ export default {
           ],
           fieldsMeta: {
             ip_group: {
-              label: this.$t('IpGroup'),
               helpText: this.$t('IpGroupHelpText')
             },
             time_period: {
-              label: this.$t('TimePeriod'),
               component: WeekCronSelect
             }
           }

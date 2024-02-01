@@ -24,12 +24,14 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
         columns: [
-          'id', 'job', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+          'id', 'job', 'material', 'job_type', 'is_finished', 'is_success',
+          'time_cost', 'date_created', 'actions'
         ],
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'id', 'job', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+            'id', 'job', 'material', 'job_type', 'is_finished', 'is_success',
+            'time_cost', 'date_created', 'actions'
           ]
         },
         columnsMeta: {
@@ -50,7 +52,6 @@ export default {
             }
           },
           job: {
-            label: this.$t('JobName'),
             formatter: (row) => {
               return <span>{row.job?.name || '-'}</span>
             }
@@ -62,7 +63,6 @@ export default {
             width: '96px'
           },
           is_finished: {
-            label: this.$t('IsFinished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
@@ -75,7 +75,6 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('IsSuccess'),
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
@@ -91,7 +90,6 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {

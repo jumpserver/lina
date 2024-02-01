@@ -139,7 +139,6 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('CommandGroupList'),
       app: 'acls',
       resource: 'commandgroup',
       activeMenu: '/console/perms/cmd-acls'

@@ -61,12 +61,10 @@ export default {
           },
           AUTH_OAUTH2_USER_ATTR_MAP: {
             component: JsonEditor,
-            label: this.$t('AuthUserAttrMap'),
             rules: [JsonRequired],
             helpText: this.$t('AuthUserAttrMapHelpText')
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {
-            label: this.$t('TokenHTTPMethod')
           }
         },
         submitMethod: () => 'patch',

@@ -87,13 +87,13 @@ export default {
             }
           },
           {
-            title: this.$t('BuiltinTree'),
+            title: this.$t('TypeTree'),
             name: 'BuiltinTree',
             treeSetting: {
               showRefresh: true,
               showAssets: false,
               showSearch: false,
-              customTreeHeaderName: this.$t('BuiltinTree'),
+              customTreeHeaderName: this.$t('TypeTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
               treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,

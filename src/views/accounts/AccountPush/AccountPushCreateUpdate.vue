@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
@@ -46,7 +45,6 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          label: i18n.t('Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -62,7 +60,6 @@ export default {
           }
         },
         nodes: {
-          label: this.$tc('Node'),
           el: {
             multiple: true,
             ajax: {

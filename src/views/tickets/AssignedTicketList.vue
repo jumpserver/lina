@@ -6,7 +6,7 @@
       :cancel-title="$tc('BatchReject')"
       :confirm-title="$tc('BatchConsent')"
       :destroy-on-close="true"
-      :title="$tc('BatchApproval')"
+      :title="$tc('ApprovalSelected')"
       :visible.sync="isVisible"
       width="70%"
       @cancel="onCancel"
@@ -44,7 +44,7 @@ export default {
         extraMoreActions: [
           {
             name: 'BatchApproval',
-            title: this.$t('BatchApproval'),
+            title: this.$t('ApproveSelected'),
             can: ({ selectedRows }) => { return selectedRows.length > 0 },
             callback: function({ selectedRows }) {
               this.isVisible = true

@@ -39,11 +39,9 @@ export default {
         },
 
         HELP_DOCUMENT_URL: {
-          label: this.$t('HelpDocument'),
           helpText: this.$t('HelpDocumentTip')
         },
         HELP_SUPPORT_URL: {
-          label: this.$t('HelpSupport'),
           helpText: this.$t('HelpSupportTip')
         }
       },

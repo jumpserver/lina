@@ -21,7 +21,6 @@ export default {
         },
         columnsMeta: {
           users_amount: {
-            label: this.$t('Users'),
             width: '120px',
             formatter: DetailFormatter,
             formatterArgs: {

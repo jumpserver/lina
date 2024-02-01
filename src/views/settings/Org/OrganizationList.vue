@@ -50,19 +50,24 @@ export default {
           'resource_statistics.groups_amount',
           'resource_statistics.assets_amount',
           'resource_statistics.asset_perms_amount',
-          'comment', 'actions'],
+          'actions'
+        ],
         columnsMeta: {
           'resource_statistics.users_amount': {
-            label: this.$t('UsersAmount')
+            label: this.$t('UsersAmount'),
+            width: '100px'
           },
           'resource_statistics.groups_amount': {
-            label: this.$t('GroupsAmount')
+            label: this.$t('GroupsAmount'),
+            width: '100px'
           },
           'resource_statistics.assets_amount': {
-            label: this.$t('AssetsAmount')
+            label: this.$t('AssetsAmount'),
+            width: '100px'
           },
           'resource_statistics.asset_perms_amount': {
-            label: this.$t('AssetPermsAmount')
+            label: this.$t('AssetPermsAmount'),
+            width: '100px'
           },
           actions: {
             prop: 'id',

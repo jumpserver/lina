@@ -22,7 +22,6 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('Assets'),
           el: {
             value: [],
             baseUrl: '/api/v1/assets/assets/?domain_enabled=true',

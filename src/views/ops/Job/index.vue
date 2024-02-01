@@ -57,7 +57,6 @@ export default {
             }
           },
           average_time_cost: {
-            label: this.$t('AverageTimeCost'),
             width: '140px',
             formatter: (row) => {
               return row.average_time_cost.toFixed(2) + 's'
@@ -72,7 +71,6 @@ export default {
           },
           date_last_run: {
             width: '140px',
-            label: this.$t('DateLastRun'),
             formatter: DateFormatter
           },
           actions: {

@@ -43,15 +43,13 @@ export default {
             }
           },
           is_periodic: {
-            label: vm.$t('Timer'),
             formatterArgs: {
               showFalse: false
             },
-            width: '80px'
+            filterable: false,
+            width: '100px'
           },
           periodic_display: {
-            label: vm.$t('TimerPeriod'),
-            width: 150
           },
           executed_amount: {
             formatter: DetailFormatter,

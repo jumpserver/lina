@@ -25,8 +25,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'is_active', 'actions'
+            'name', 'accounts', 'periodic_display',
+            'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -50,14 +50,12 @@ export default {
             width: '120px'
           },
           is_periodic: {
-            label: vm.$t('Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           executed_amount: {

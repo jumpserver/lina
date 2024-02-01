@@ -28,8 +28,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'org_name', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'name', 'org_name', 'periodic_display',
+            'executed_amount', 'actions'
           ]
         },
         columnsMeta: {
@@ -43,14 +43,12 @@ export default {
             formatter: ArrayFormatter
           },
           is_periodic: {
-            label: vm.$t('Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('TimerPeriod'),
             width: '150px'
           },
           comment: {

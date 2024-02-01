@@ -115,7 +115,6 @@ export default {
             }
           },
           stat: {
-            label: this.$t('TerminalStat'),
             formatter: (row) => {
               if (!row?.stat) {
                 return ''
@@ -125,7 +124,6 @@ export default {
             }
           },
           load: {
-            label: this.$t('LoadStatus'),
             filterable: 'custom',
             sortable: false,
             formatterArgs: {
@@ -141,16 +139,13 @@ export default {
             sortable: 'custom'
           },
           is_active: {
-            label: this.$t('Active'),
             width: '80px',
             align: 'center'
           },
           is_alive: {
-            label: this.$t('Alive')
           },
           session_online: {
-            label: this.$t('Session'),
-            width: '80px'
+            width: '120px'
           },
           actions: {
             formatterArgs: {

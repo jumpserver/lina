@@ -91,11 +91,9 @@ export default {
       ],
       fieldsMeta: {
         login_title: {
-          label: this.$t('LoginTitle'),
           helpText: this.$t('LoginTitleTip')
         },
         theme: {
-          label: this.$t('Subject'),
           on: {
             change: ([value]) => {
               const themeColors = this.getSelectThemeConfig(value)
@@ -105,7 +103,6 @@ export default {
         },
         login_image: {
           component: UploadField,
-          label: this.$t('LoginImage'),
           el: {
             width: '10%',
             height: '10%',
@@ -120,7 +117,6 @@ export default {
         },
         favicon: {
           component: UploadField,
-          label: this.$t('Favicon'),
           el: {
             width: '5%',
             height: '5%',
@@ -135,7 +131,6 @@ export default {
         },
         logo_index: {
           component: UploadField,
-          label: this.$t('LogoIndex'),
           el: {
             width: '10%',
             height: '10%',
@@ -150,7 +145,6 @@ export default {
         },
         logo_logout: {
           component: UploadField,
-          label: this.$t('LogoLogout'),
           el: {
             width: '5%',
             height: '5%',

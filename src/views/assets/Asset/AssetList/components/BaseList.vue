@@ -214,7 +214,7 @@ export default {
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
-            title: this.$t('BatchDisable'),
+            title: this.$t('DisableSelected'),
             type: 'primary',
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => {
@@ -234,7 +234,7 @@ export default {
           },
           {
             name: 'ActiveSelected',
-            title: this.$t('BatchActivate'),
+            title: this.$t('ActivateSelected'),
             type: 'primary',
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => {
@@ -254,7 +254,7 @@ export default {
           },
           {
             name: 'actionUpdateSelected',
-            title: this.$t('BatchUpdate'),
+            title: this.$t('UpdateSelected'),
             fa: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&

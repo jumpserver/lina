@@ -81,15 +81,12 @@ export default {
             }
           },
           from_ticket: {
-            label: this.$t('FromTicket'),
             width: 100,
             formatterArgs: {
               showFalse: false
             }
           },
           users_amount: {
-            label: this.$t('User'),
-            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -98,8 +95,6 @@ export default {
             }
           },
           user_groups_amount: {
-            label: this.$t('UserGroups'),
-            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -108,8 +103,6 @@ export default {
             }
           },
           assets_amount: {
-            label: this.$t('Asset'),
-            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -118,8 +111,6 @@ export default {
             }
           },
           nodes_amount: {
-            label: this.$t('Node'),
-            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -128,8 +119,6 @@ export default {
             }
           },
           accounts: {
-            label: this.$t('Account'),
-            width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
               getItem(item) {

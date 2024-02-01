@@ -25,13 +25,9 @@ export default {
     return {
       url: `/api/v1/assets/domains/${this.object.id}`,
       detailFields: [
-        'name',
+        'name', 'assets_amount',
         {
-          key: this.$t('Assets'),
-          value: `${this.object.assets.length}`
-        },
-        {
-          key: this.$t('Gateway'),
+          key: this.$t('Gateways amount'),
           value: `${this.object.gateways.length}`
         },
         'date_created', 'comment'

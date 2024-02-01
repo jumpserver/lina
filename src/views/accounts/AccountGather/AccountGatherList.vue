@@ -46,7 +46,6 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            label: vm.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',

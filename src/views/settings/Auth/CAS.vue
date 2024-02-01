@@ -31,7 +31,6 @@ export default {
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {
             component: JsonEditor,
-            label: this.$t('AuthUserAttrMap'),
             rules: [JsonRequiredUserNameMapped]
           }
         },

@@ -72,14 +72,12 @@ export const getChangeSecretFields = () => {
     crontab: {
       type: 'cronTab',
       component: CronTab,
-      label: i18n.t('RegularlyPerform'),
       hidden: (formValue) => {
         return formValue.is_periodic === false
       },
       helpText: i18n.t('CrontabOfCreateUpdatePage')
     },
     interval: {
-      label: i18n.t('CyclePerform'),
       hidden: (formValue) => {
         return formValue.is_periodic === false
       },

@@ -117,7 +117,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = i18n.t('Validity')
+          col.label = i18n.t('Valid')
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
@@ -267,12 +267,11 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
-      if (!col.width) {
+      if (col && !col.width && col.label) {
         col.minWidth = `${col.label.length * factor + 30}px`
       }
       return col
     },
-
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
