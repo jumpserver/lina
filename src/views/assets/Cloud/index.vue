@@ -28,7 +28,7 @@ export default {
             component: () => import('@/views/assets/Cloud/Strategy/StrategyList.vue')
           },
           {
-            title: this.$t('AccountList'),
+            title: this.$t('CloudAccountList'),
             name: 'AccountList',
             hidden: () => !this.$hasPerm('xpack.view_account'),
             component: () => import('@/views/assets/Cloud/Account/AccountList.vue')

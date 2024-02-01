@@ -85,11 +85,11 @@ export default {
       ]
     },
     {
-      path: '/settings/msg',
+      path: '/settings/notification',
       name: 'Msg',
       component: () => import('@/views/settings/Msg'),
       meta: {
-        title: i18n.t('Message'),
+        title: i18n.t('Notifications'),
         icon: 'email-set',
         permissions: ['settings.change_email']
       }
@@ -129,7 +129,7 @@ export default {
           name: 'Storage',
           component: () => import('@/views/settings/Storage'),
           meta: {
-            title: i18n.t('Storage'),
+            title: i18n.t('StorageSetting'),
             icon: 'storage',
             permissions: ['settings.change_terminal']
           }
