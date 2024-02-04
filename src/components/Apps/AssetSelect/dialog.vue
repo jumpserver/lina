@@ -110,6 +110,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasRightActions: false,
+        hasLabelSearch: true,
         searchConfig: {
           getUrlQuery: false
         }
