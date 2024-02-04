@@ -55,7 +55,7 @@ export default {
           min: ['name', 'username', 'actions'],
           default: [
             'name', 'username', 'email', 'groups', 'system_roles',
-            'org_roles', 'source', 'is_valid', 'actions'
+            'org_roles', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {

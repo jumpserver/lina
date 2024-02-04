@@ -9,7 +9,7 @@
     after
     custom-class="asset-select-dialog"
     top="15vh"
-    width="50vw"
+    width="800px"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"

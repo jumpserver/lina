@@ -8,6 +8,7 @@ import AssetsMenu from './assets'
 import PermsMenu from './perms'
 import AccountMenus from './accounts'
 import LabelMenus from './labels'
+import AclsMenus from './acls'
 
 export default {
   path: '/console',
@@ -61,7 +62,7 @@ export default {
       name: 'Accounts',
       meta: {
         title: i18n.t('MenuAccounts'),
-        icon: 'accounts'
+        icon: 'key'
       },
       children: AccountMenus
     },
@@ -69,12 +70,23 @@ export default {
       path: '/console/perms',
       component: empty,
       name: 'Perms',
-      alwaysShow: false,
       meta: {
         title: i18n.t('MenuPermissions'),
-        icon: 'permission'
+        icon: 'permission',
+        resource: 'assetpermission',
+        permissions: []
       },
-      children: PermsMenu
+      children: PermsMenu[0].children
+    },
+    {
+      path: '/console/acls',
+      component: empty,
+      name: 'Acls',
+      meta: {
+        title: i18n.t('MenuAcls'),
+        icon: 'acl'
+      },
+      children: AclsMenus
     },
     {
       path: '/console/more',

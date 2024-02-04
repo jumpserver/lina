@@ -60,6 +60,9 @@ export default {
           base: {
             width: '140px'
           },
+          internal: {
+            width: '100px'
+          },
           actions: {
             formatterArgs: {
               canClone: () => vm.$hasPerm('assets.add_platform'),

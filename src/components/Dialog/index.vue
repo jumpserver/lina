@@ -94,6 +94,10 @@ export default {
     border-radius: 0.3em;
     max-width: 1500px;
 
+    .form-group-header {
+      margin-left: 20px;
+    }
+
     .el-icon-circle-check {
       display: none;
     }
