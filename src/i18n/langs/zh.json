@@ -1,5 +1,6 @@
 {
   "accounts": {
+    "AccountBatchUpdate": "批量更新(同类型)",
     "BulkVerify": "批量测试可连接性",
     "Test": "测试",
     "QuickTest": "测试",
