@@ -42,8 +42,15 @@ export default {
         url: '/api/v1/accounts/gathered-accounts/',
         hasTree: true,
         columns: [
-          'asset', 'username', 'date_last_login', 'present', 'address_last_login', 'date_updated'
+          'asset', 'username', 'date_last_login', 'present',
+          'address_last_login', 'date_updated'
         ],
+        columnsShow: {
+          default: [
+            'asset', 'username', 'date_last_login', 'present',
+            'address_last_login'
+          ]
+        },
         columnsMeta: {
           asset: {
             formatter: function(row) {
@@ -62,10 +69,10 @@ export default {
             showOverflowTooltip: true
           },
           present: {
-            width: 80
+            width: '100px'
           },
           address_last_login: {
-            width: 120
+            width: '120px'
           },
           date_updated: {
             formatter: function(row, col, cell) {

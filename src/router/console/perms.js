@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import AclsMenus from './acls'
 
 export default [
   {
@@ -38,5 +39,6 @@ export default [
         meta: { title: i18n.t('AssetPermissionDetail'), permissions: ['perms.view_assetpermission'] }
       }
     ]
-  }
+  },
+  ...AclsMenus
 ]

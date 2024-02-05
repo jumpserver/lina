@@ -98,6 +98,14 @@ export default {
       margin-left: 20px;
     }
 
+    //.el-form-item__label {
+    //  width: 30% !important;
+    //}
+    //
+    //.el-form-item__content {
+    //  margin-left: 30% !important;
+    //}
+
     .el-icon-circle-check {
       display: none;
     }

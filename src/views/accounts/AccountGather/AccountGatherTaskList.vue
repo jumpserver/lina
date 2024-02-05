@@ -22,10 +22,16 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
-        columns: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions'],
+        columns: [
+          'name', 'nodes', 'is_periodic',
+          'periodic_display', 'executed_amount'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
+          default: [
+            'name', 'nodes', 'is_periodic',
+            'periodic_display', 'executed_amount'
+          ]
         },
         columnsMeta: {
           name: {
@@ -47,7 +53,7 @@ export default {
               showFalse: false
             },
             filterable: false,
-            width: '100px'
+            width: '120px'
           },
           periodic_display: {
           },

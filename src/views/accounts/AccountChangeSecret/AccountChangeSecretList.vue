@@ -60,6 +60,7 @@ export default {
           },
           executed_amount: {
             formatter: DetailFormatter,
+            width: '100px',
             formatterArgs: {
               route: 'AccountGatherList',
               can: vm.$hasPerm('accounts.view_changesecretexecution'),
