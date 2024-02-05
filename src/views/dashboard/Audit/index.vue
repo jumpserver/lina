@@ -65,7 +65,7 @@ export default {
     border-radius: 4px!important;
     padding: 4px 0!important;
     .el-radio-button__inner {
-      color: var(--color-primary)!important;
+      color: black!important;
       background-color: #FFF!important;
       border-radius: 4px!important;
     }

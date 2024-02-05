@@ -63,6 +63,9 @@ export default {
             label: vm.$t('NodeAmount'),
             width: '80px'
           },
+          is_periodic: {
+            width: '152px'
+          },
           periodic_display: {
             width: '150px'
           },

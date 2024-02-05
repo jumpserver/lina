@@ -112,8 +112,8 @@ export default {
           },
           hidden: (form) => {
             const fieldsMeta = this.fieldsMeta
-            fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
-            fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
+            fieldsMeta.apply_assets.el.ajax.url = `/api/v1/tickets/apply-assets/suggestions/?oid=${form['org_id']}`
+            fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/tickets/apply-nodes/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_accounts.el.oid = form['org_id']
           },
           on: {

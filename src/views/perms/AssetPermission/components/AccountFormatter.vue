@@ -1,5 +1,5 @@
 <template>
-  <el-form>
+  <el-form @submit.native.prevent>
     <el-form-item>
       <el-checkbox-group v-model="choicesSelected">
         <el-checkbox

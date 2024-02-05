@@ -60,6 +60,7 @@ export default {
     const showAssets = this.treeSetting?.showAssets || this.showAssets
     const treeUrlQuery = this.setTreeUrlQuery()
     const assetTreeUrl = `${this.treeUrl}?assets=${showAssets ? '1' : '0'}&${treeUrlQuery}`
+    const vm = this
 
     return {
       treeTabConfig: {
@@ -81,7 +82,13 @@ export default {
               nodeUrl: this.nodeUrl,
               treeUrl: assetTreeUrl,
               callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
+                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode),
+                beforeRefresh: () => {
+                  const query = { ...this.$route.query, node_id: '', asset_id: '' }
+                  setTimeout(() => {
+                    vm.$router.replace({ query: query })
+                  }, 100)
+                }
               },
               ...this.treeSetting
             }

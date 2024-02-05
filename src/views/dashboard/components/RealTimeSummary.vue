@@ -44,7 +44,7 @@ export default {
           }
         },
         {
-          title: this.$t('CurrentConnections'),
+          title: this.$t('CurrentConnectionUsers'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,

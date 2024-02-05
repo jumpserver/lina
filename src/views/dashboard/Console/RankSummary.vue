@@ -33,7 +33,7 @@ export default {
           {
             prop: 'total',
             label: this.$t('LoginCount'),
-            width: '80px'
+            width: '120px'
           }
         ]
       },
@@ -50,7 +50,7 @@ export default {
           {
             prop: 'total',
             label: this.$t('NumberOfVisits'),
-            width: '80px'
+            width: '140px'
           }
         ]
       }

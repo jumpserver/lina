@@ -37,6 +37,12 @@
       :result="createAccountResults"
       :visible.sync="showResultDialog"
     />
+    <AccountBulkUpdateDialog
+      v-if="updateSelectedDialogSetting.visible"
+      :visible.sync="updateSelectedDialogSetting.visible"
+      v-bind="updateSelectedDialogSetting"
+      @update="handleAccountBulkUpdate"
+    />
   </div>
 </template>
 
@@ -49,10 +55,12 @@ import AccountCreateUpdate from './AccountCreateUpdate.vue'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import ResultDialog from './BulkCreateResultDialog.vue'
+import AccountBulkUpdateDialog from '@/components/Apps/AccountListTable/AccountBulkUpdateDialog.vue'
 
 export default {
   name: 'AccountListTable',
   components: {
+    AccountBulkUpdateDialog,
     ResultDialog,
     ListTable,
     UpdateSecretInfo,
@@ -116,6 +124,10 @@ export default {
     headerExtraActions: {
       type: Array,
       default: () => []
+    },
+    extraQuery: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -137,9 +149,7 @@ export default {
           app: 'assets',
           resource: 'account'
         },
-        extraQuery: {
-          order: '-date_updated'
-        },
+        extraQuery: this.extraQuery,
         columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
@@ -337,6 +347,25 @@ export default {
         ],
         extraMoreActions: [
           {
+            name: 'BulkVerify',
+            title: this.$t('accounts.BulkVerify'),
+            type: 'primary',
+            fa: 'fa-handshake-o',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => { return v.id })
+              this.$axios.post(
+                '/api/v1/accounts/accounts/tasks/',
+                { action: 'verify', accounts: ids }).then(res => {
+                openTaskPage(res['task'])
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
+          {
             name: 'ClearSecrets',
             title: this.$t('ClearSecret'),
             type: 'primary',
@@ -354,6 +383,21 @@ export default {
                 this.$message.error(this.$tc('BulkClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
+          },
+          {
+            name: 'actionUpdateSelected',
+            title: this.$t('accounts.AccountBatchUpdate'),
+            fa: 'batch-update',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                !this.$store.getters.currentOrgIsRoot &&
+                vm.$hasPerm('accounts.change_account') &&
+                selectedRows.every(i => i.secret_type.value === selectedRows[0].secret_type.value)
+            },
+            callback: ({ selectedRows }) => {
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.visible = true
+            }
           }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
@@ -362,6 +406,10 @@ export default {
           exclude: ['asset']
         },
         hasSearch: true
+      },
+      updateSelectedDialogSetting: {
+        visible: false,
+        selectedRows: []
       }
     }
   },
@@ -429,6 +477,10 @@ export default {
       setTimeout(() => {
         this.showResultDialog = true
       }, 100)
+    },
+    handleAccountBulkUpdate() {
+      this.updateSelectedDialogSetting.visible = false
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

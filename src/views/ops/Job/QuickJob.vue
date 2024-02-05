@@ -34,7 +34,7 @@
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
-          <div style="padding-left: 30px; background-color: rgb(247 247 247)">
+          <div class="xterm-container">
             <Term
               ref="xterm"
               :show-tool-bar="true"
@@ -193,7 +193,9 @@ export default {
               this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
-          },
+          }
+        },
+        fold: {
           timeout: {
             type: 'select',
             name: this.$t('Timeout'),
@@ -224,7 +226,7 @@ export default {
           openCommand: {
             type: 'button',
             align: 'right',
-            icon: 'fa-folder-open',
+            icon: 'load-file',
             tip: this.$t('OpenCommand'),
             callback: (val, setting) => {
               this.showOpenAdhocDialog = true
@@ -233,7 +235,7 @@ export default {
           saveCommand: {
             type: 'button',
             align: 'right',
-            icon: 'save',
+            icon: 'save-line',
             tip: this.$t('SaveCommand'),
             callback: (val, setting) => {
               if (!this.command) {
@@ -246,7 +248,7 @@ export default {
           help: {
             type: 'button',
             align: 'right',
-            icon: 'fa fa-question-circle',
+            icon: 'help',
             tip: this.$t('Help'),
             callback: (val, setting) => {
               this.showHelpDialog = true
@@ -440,6 +442,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.xterm-container {
+  padding-left: 30px;
+  background-color: rgb(247, 247, 247);
+  height: calc(100vh - 549px);
+  overflow: hidden;
+  & > div {
+    height: 100%;
+    &>>> .xterm {
+      height: calc(100% - 8px);
+      overflow-y: auto;
+    }
+  }
+}
 .mini-button {
   width: 12px;
   float: right;

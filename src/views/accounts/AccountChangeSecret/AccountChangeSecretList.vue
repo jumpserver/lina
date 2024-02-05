@@ -53,7 +53,7 @@ export default {
             formatterArgs: {
               showFalse: false
             },
-            width: '80px'
+            width: '152px'
           },
           periodic_display: {
             width: '150px'
