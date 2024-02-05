@@ -34,7 +34,7 @@ export default {
             }
           },
           gateways: {
-            label: this.$t('assets.Gateway'),
+            label: this.$t('Gateways'),
             formatter: AmountFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',

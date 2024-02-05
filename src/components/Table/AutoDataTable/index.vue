@@ -267,7 +267,7 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
-      if (col && !col.width && col.label) {
+      if (col && !col.width && col.label && !col.minWidth) {
         col.minWidth = `${col.label.length * factor + 30}px`
       }
       return col
@@ -284,7 +284,7 @@ export default {
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
-      col.label = capitalizeFirst(col.label)
+      col.label = capitalizeFirst(col.label).replace(' Amount', '').replace('数量', '')
       col = this.setDefaultWidthIfNeed(col)
       return col
     },

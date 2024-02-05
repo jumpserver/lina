@@ -57,6 +57,7 @@ export default {
         },
         columnsMeta: {
           name: {
+            minWidth: '100px',
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
@@ -113,7 +114,6 @@ export default {
             }
           },
           nodes_amount: {
-            label: this.$t('perms.Node'),
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
