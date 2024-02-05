@@ -160,8 +160,12 @@ export default {
       }
 
       const router = { name: route, query }
-      const { href } = this.$router.resolve(router)
-      window.open(href, '_blank')
+      if (this.$route.query.node_id) {
+        const { href } = this.$router.resolve(router)
+        window.open(href, '_blank')
+      } else {
+        this.$router.push(router)
+      }
     }
   }
 }

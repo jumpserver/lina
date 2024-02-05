@@ -61,7 +61,7 @@ export default {
       name: 'Accounts',
       meta: {
         title: i18n.t('MenuAccounts'),
-        icon: 'accounts'
+        icon: 'key'
       },
       children: AccountMenus
     },
@@ -69,10 +69,11 @@ export default {
       path: '/console/perms',
       component: empty,
       name: 'Perms',
-      alwaysShow: false,
       meta: {
         title: i18n.t('MenuPermissions'),
-        icon: 'permission'
+        icon: 'permission',
+        resource: 'assetpermission',
+        permissions: []
       },
       children: PermsMenu
     },

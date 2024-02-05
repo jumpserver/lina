@@ -1,11 +1,11 @@
 import i18n from '@/i18n/i18n'
 
 export const Required = {
-  required: true, message: i18n.t('fieldRequiredError'), trigger: 'blur'
+  required: true, message: i18n.t('FieldRequiredError'), trigger: 'blur'
 }
 
 export const RequiredChange = {
-  required: true, message: i18n.t('fieldRequiredError'), trigger: 'change'
+  required: true, message: i18n.t('FieldRequiredError'), trigger: 'change'
 }
 
 export const EmailCheck = {

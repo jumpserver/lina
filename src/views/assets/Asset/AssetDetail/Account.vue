@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="24" :sm="24">
+      <el-col :md="14" :sm="24">
         <AccountListTable
           ref="ListTable"
           :asset="object"
@@ -20,17 +20,23 @@
           @onConfirm="onConfirm"
         />
       </el-col>
+      <el-col :md="10" :sm="24">
+        <QuickActions :actions="quickActions" :title="title" type="primary" />
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
 import { AccountListTable } from '@/components'
+import QuickActions from '@/components/QuickActions'
 import AccountTemplateDialog from '@/views/assets/Asset/AssetCreateUpdate/components/AccountTemplateDialog'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
+    QuickActions,
     AccountListTable,
     AccountTemplateDialog
   },
@@ -46,6 +52,7 @@ export default {
   },
   data() {
     return {
+      title: this.$t('accounts.QuickTest'),
       templateDialogVisible: false,
       headerExtraActions: [
         {
@@ -55,6 +62,25 @@ export default {
           callback: () => {
             this.templateDialogVisible = true
           }
+        }
+      ],
+      quickActions: [
+        {
+          title: this.$t('accounts.BulkVerify'),
+          attrs: {
+            type: 'primary',
+            label: this.$tc('accounts.Test')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.post(
+                `/api/v1/accounts/accounts/tasks/`,
+                { action: 'verify', assets: [this.object.id] }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }
+          })
         }
       ]
     }

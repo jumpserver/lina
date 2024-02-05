@@ -13,6 +13,7 @@
       v-if="showTransfer"
       :title="label"
       :visible.sync="showTransfer"
+      :close-on-click-modal="false"
       width="730px"
       @cancel="handleTransCancel"
       @confirm="handleTransConfirm"
@@ -125,13 +126,17 @@ export default {
         return _.uniq(value)
       },
       set(val) {
-        this.$emit('input', val)
+        this.emit(val)
       }
     }
   },
   methods: {
+    emit(val) {
+      const value = _.uniq(val)
+      this.$emit('input', value)
+    },
     onInputChange(val) {
-      this.$emit('input', val)
+      this.emit(val)
     },
     handleFocus() {
       this.$refs.select2.selectRef.blur()
@@ -154,7 +159,7 @@ export default {
         return { value: item.id, label: item.label }
       })
       this.select2.options = options
-      this.$emit('input', options.map(item => item.value))
+      this.emit(options.map(item => item.value))
       this.showTransfer = false
     }
   }

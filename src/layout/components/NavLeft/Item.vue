@@ -1,4 +1,6 @@
 <script>
+import { capitalizeFirst } from '@/utils/common'
+
 export default {
   name: 'MenuItem',
   functional: true,
@@ -24,7 +26,7 @@ export default {
 
     if (title) {
       const iTitle = title.split(' ').map(item => {
-        return _.capitalize(item)
+        return capitalizeFirst(item)
       }).join(' ')
       vnodes.push(<span slot='title'>{iTitle}</span>)
     }

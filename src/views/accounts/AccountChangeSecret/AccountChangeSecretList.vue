@@ -53,13 +53,14 @@ export default {
             formatterArgs: {
               showFalse: false
             },
-            width: '80px'
+            width: '152px'
           },
           periodic_display: {
             width: '150px'
           },
           executed_amount: {
             formatter: DetailFormatter,
+            width: '100px',
             formatterArgs: {
               route: 'AccountGatherList',
               can: vm.$hasPerm('accounts.view_changesecretexecution'),

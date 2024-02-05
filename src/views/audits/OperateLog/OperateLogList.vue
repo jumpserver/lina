@@ -34,7 +34,8 @@ export default {
           min: ['user', 'resource'],
           default: [
             'user', 'action_display', 'resource_type_display',
-            'resource', 'remote_addr', 'datetime', 'actions'
+            'resource', 'remote_addr', 'datetime', 'action',
+            'resource_type', 'actions'
           ]
         },
         columnsMeta: {

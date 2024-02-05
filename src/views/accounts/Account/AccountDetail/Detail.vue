@@ -104,7 +104,7 @@ export default {
               this.$axios.post(
                 `/api/v1/accounts/accounts/tasks/`,
                 {
-                  action: 'test',
+                  action: 'verify',
                   accounts: [this.object.id]
                 }
               ).then(res => {

@@ -21,7 +21,6 @@ import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -58,6 +57,7 @@ export default {
         },
         columnsMeta: {
           name: {
+            minWidth: '100px',
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
@@ -87,32 +87,37 @@ export default {
             }
           },
           users_amount: {
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
             }
           },
           user_groups_amount: {
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
             }
           },
           assets_amount: {
-            formatter: DetailFormatter,
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
             }
           },
           nodes_amount: {
-            formatter: DetailFormatter,
+            width: '60px',
+            formatter: AmountFormatter,
             formatterArgs: {
+              async: true,
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
@@ -146,10 +151,16 @@ export default {
       headerActions: {
         hasLabelSearch: true,
         hasBulkDelete: true,
-        createRoute() {
-          return {
+        onCreate: () => {
+          const route = {
             name: 'AssetPermissionCreate',
             query: this.$route.query
+          }
+          if (vm.$route.query.node_id) {
+            const { href } = this.$router.resolve(route)
+            window.open(href, '_blank')
+          } else {
+            this.$router.push(route)
           }
         },
         handleImportClick: ({ selectedRows }) => {
@@ -158,7 +169,6 @@ export default {
             url: '/api/v1/perms/asset-permissions/'
           })
         },
-        createInNewPage: true,
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions

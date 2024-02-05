@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -15,7 +15,7 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],
-        columnsExtra: ['gateway_count'],
+        columnsExtra: ['gateways'],
         columns: ['name', 'assets_amount', 'gateways', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
@@ -24,17 +24,22 @@ export default {
         columnsMeta: {
           assets_amount: {
             width: '160px',
-            formatter: DetailFormatter
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              permissions: 'assets.view_asset',
+              routeQuery: {
+                activeTab: 'AssetList'
+              }
+            }
           },
           gateways: {
-            formatter: DetailFormatter,
+            label: this.$t('Gateways'),
+            formatter: AmountFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',
               routeQuery: {
                 activeTab: 'GatewayList'
-              },
-              getTitle: function({ row }) {
-                return row.gateways.length
               }
             }
           }

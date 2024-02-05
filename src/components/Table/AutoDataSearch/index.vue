@@ -68,6 +68,9 @@ export default {
   },
   methods: {
     handleTagSearch(tags) {
+      if (_.isEqual(tags, this.tags)) {
+        return
+      }
       this.tags = tags
       if (tags.length === 0) {
         this.manualSearch = false

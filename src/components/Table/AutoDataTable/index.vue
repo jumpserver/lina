@@ -135,7 +135,7 @@ export default {
               false: i18n.t('Inactive')
             }
           }
-          col.width = '80px'
+          col.width = '100px'
           break
         case 'datetime':
         case 'date_start':
@@ -267,7 +267,7 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
-      if (col && !col.width && col.label) {
+      if (col && !col.width && col.label && !col.minWidth) {
         col.minWidth = `${col.label.length * factor + 30}px`
       }
       return col
@@ -277,14 +277,14 @@ export default {
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
       let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
 
-      col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col, colMeta)
+      col = this.generateColumnByName(name, col)
       col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
-      col.label = capitalizeFirst(col.label)
+      col.label = capitalizeFirst(col.label).replace(' Amount', '').replace('数量', '')
       col = this.setDefaultWidthIfNeed(col)
       return col
     },
