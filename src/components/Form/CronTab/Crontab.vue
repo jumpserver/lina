@@ -367,7 +367,7 @@ export default {
     submitFill() {
       const crontabDiffMin = this.crontabDiff / 1000 / 60
       if (crontabDiffMin > 0 && crontabDiffMin < 10) {
-        const msg = this.$tc('common.crontabDiffError')
+        const msg = this.$tc('CrontabDiffError')
         this.$message.error(msg)
         return
       }

@@ -88,7 +88,7 @@ export default {
         exportOptions: {
           url: '/api/v1/accounts/account-template-secrets/',
           mfaVerifyRequired: true,
-          tips: this.$t('accounts.AccountExportTips')
+          tips: this.$t('AccountExportTips')
         },
         createRoute: () => {
           return {

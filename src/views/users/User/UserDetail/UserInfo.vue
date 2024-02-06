@@ -53,38 +53,7 @@ export default {
             }
           }
         },
-        {
-          title: this.$t('ResetMFA'),
-          attrs: {
-            type: 'primary',
-            disabled: !vm.$hasPerm('users.change_user'),
-            label: this.$t('Reset')
-          },
-          callbacks: {
-            click: function() {
-              const warnMsg = vm.$t('ResetMFAWarningMsg')
-              const warnTitle = vm.$t('Info')
-              const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
-              const successMsg = vm.$t('ResetMFAdSuccessMsg')
-              vm.$confirm(warnMsg, warnTitle, {
-                type: 'warning',
-                confirmButtonClass: 'el-button--warning',
-                showCancelButton: true,
-                beforeClose: async(action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  instance.confirmButtonLoading = true
-                  try {
-                    await vm.$axios.get(url)
-                    done()
-                    vm.$message.success(successMsg)
-                  } finally {
-                    instance.confirmButtonLoading = false
-                  }
-                }
-              })
-            }
-          }
-        },
+
         {
           title: this.$t('ResetPassword'),
           attrs: {
@@ -139,6 +108,38 @@ export default {
                   instance.confirmButtonLoading = true
                   try {
                     await vm.$axios.patch(url, {})
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
+            }
+          }
+        },
+        {
+          title: this.$t('ResetMFA'),
+          attrs: {
+            type: 'primary',
+            disabled: !vm.$hasPerm('users.change_user'),
+            label: this.$t('Reset')
+          },
+          callbacks: {
+            click: function() {
+              const warnMsg = vm.$t('ResetMFAWarningMsg')
+              const warnTitle = vm.$t('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
+              const successMsg = vm.$t('ResetMFAdSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.get(url)
                     done()
                     vm.$message.success(successMsg)
                   } finally {

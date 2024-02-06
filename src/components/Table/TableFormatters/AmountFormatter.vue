@@ -62,7 +62,7 @@ export default {
     },
     items() {
       if (this.formatterArgs.async && !this.asyncGetDone) {
-        return [this.$t('common.tree.Loading') + '...']
+        return [this.$t('Loading') + '...']
       }
       const getItem = this.formatterArgs.getItem || (item => item.name)
       let data = this.data.map(item => getItem(item)) || []

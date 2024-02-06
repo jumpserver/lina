@@ -5,7 +5,7 @@ import Switcher from '@/components/Form/FormFields/Switcher.vue'
 import rules from '@/components/Form/DataForm/rules'
 import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
-import { assignIfNot, capitalizeFirst } from '@/utils/common'
+import { assignIfNot, toSentenceCase } from '@/utils/common'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 
@@ -172,7 +172,7 @@ export class FormFieldGenerator {
     field = Object.assign(field, fieldMeta)
     field.el = el
     field.rules = rules
-    field.label = capitalizeFirst(field.label)
+    field.label = toSentenceCase(field.label)
     _.set(field, 'attrs.error', '')
     Vue.$log.debug('Generate field: ', name, field)
     return field

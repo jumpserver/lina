@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('accounts.QuickTest'),
+      title: this.$t('QuickTest'),
       templateDialogVisible: false,
       headerExtraActions: [
         {
@@ -66,10 +66,10 @@ export default {
       ],
       quickActions: [
         {
-          title: this.$t('accounts.BulkVerify'),
+          title: this.$t('BulkVerify'),
           attrs: {
             type: 'primary',
-            label: this.$tc('accounts.Test')
+            label: this.$tc('Test')
           },
           callbacks: Object.freeze({
             click: () => {

@@ -26,7 +26,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { capitalizeFirst, newURL, replaceAllUUID } from '@/utils/common'
+import { newURL, replaceAllUUID, toSentenceCase } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
@@ -284,7 +284,10 @@ export default {
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
-      col.label = capitalizeFirst(col.label).replace(' Amount', '').replace('数量', '')
+      col.label = toSentenceCase(col.label)
+        .replace(' Amount', '')
+        .replace(' amount', '')
+        .replace('数量', '')
       col = this.setDefaultWidthIfNeed(col)
       return col
     },

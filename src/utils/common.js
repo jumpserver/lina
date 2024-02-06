@@ -415,11 +415,25 @@ export function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-export function capitalizeFirst(string) {
+export function toTitleCase(string) {
   if (!string) return string
   return string.trim().split(' ').map(item => {
     return item[0].toUpperCase() + item.slice(1)
   }).join(' ')
+}
+
+export function toSentenceCase(string) {
+  if (!string) return string
+  const s = string.trim().split(' ').map(item => {
+    if (item.length === 0) return ''
+    if (item.length === 1) return item.toLowerCase()
+
+    if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
+      return item
+    }
+    return item.toLowerCase()
+  }).join(' ')
+  return s[0].toUpperCase() + s.slice(1)
 }
 
 export { BASE_URL }

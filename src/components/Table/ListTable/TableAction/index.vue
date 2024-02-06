@@ -212,7 +212,7 @@ export default {
     &>>> .action-item.el-dropdown {
       height: 33px;
       &> .el-button {
-        height: 100%;
+        //height: 100%;
       }
     }
   }

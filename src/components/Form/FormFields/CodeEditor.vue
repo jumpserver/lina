@@ -19,12 +19,12 @@
           <el-autocomplete
             v-if="item.type === 'input' &&item.el && item.el.autoComplete"
             v-model="item.value"
-            :placeholder="item.placeholder"
             :fetch-suggestions="item.el.query"
+            :placeholder="item.placeholder"
             class="inline-input"
             size="mini"
-            @select="item.callback(item.value)"
             @change="item.callback(item.value)"
+            @select="item.callback(item.value)"
           />
           <el-input
             v-else-if="item.type==='input'"
@@ -94,10 +94,10 @@
       </div>
 
       <div v-if="toolbar.hasOwnProperty('fold')" class="fold">
-        <el-tooltip :content="$tc('common.MoreActions')" placement="top">
+        <el-tooltip :content="$tc('MoreActions')" placement="top">
           <i
-            class="fa"
             :class="[isFold ? 'fa-angle-double-right': 'fa-angle-double-down']"
+            class="fa"
             @click="onChangeFold"
           />
         </el-tooltip>

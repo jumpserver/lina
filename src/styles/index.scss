@@ -316,3 +316,16 @@ input[type=file] {
 .el-select-group__title {
   color: $--color-primary !important;
 }
+
+.el-button.el-button--small, .el-button--small.is-round {
+  font-weight: 400;
+  //line-height: 1.5;
+  padding: 8px 12px;
+}
+
+.el-button.el-button--mini, .el-button--mini.is-round {
+  font-weight: 400;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+}
+

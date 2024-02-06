@@ -79,7 +79,7 @@ export default [
         name: 'AccountTemplateList',
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
-          title: i18n.t('AccountTemplate'),
+          title: i18n.t('AccountTemplateList'),
           permissions: ['accounts.view_accounttemplate']
         }
       },

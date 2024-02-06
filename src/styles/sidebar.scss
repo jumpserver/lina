@@ -59,9 +59,11 @@
 
     .svg-icon {
       margin-right: 16px;
-      vertical-align: middle;
-      width: 13px;
-      height: 13px;
+      vertical-align: -0.15em;
+      fill: currentColor;
+      overflow: hidden;
+      width: 14px;
+      height: 14px;
     }
 
     .el-menu {

@@ -36,7 +36,7 @@ export default {
             hidden: () => !this.$hasPerm('assets.view_gateway')
           },
           {
-            title: this.$t('assets.AssetList'),
+            title: this.$t('AssetList'),
             name: 'AssetList',
             hidden: () => !this.$hasPerm('assets.view_asset')
           }

@@ -66,7 +66,7 @@ export default {
           },
           AUTH_LDAP_SYNC_RECEIVERS: {
             component: Select2,
-            label: this.$t('AccountChangeSecret.Addressee'),
+            label: this.$t('Address'),
             el: {
               value: [],
               multiple: true,

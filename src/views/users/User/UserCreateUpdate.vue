@@ -113,7 +113,7 @@ export default {
         },
         org_roles: {
           component: Select2,
-          label: this.$t('users.OrgRoles'),
+          label: this.$t('OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           el: {
             multiple: true,
@@ -147,7 +147,7 @@ export default {
           component: PhoneInput
         },
         is_active: {
-          label: this.$t('users.IsActive'),
+          label: this.$t('IsActive'),
           el: {}
         }
       },
@@ -200,7 +200,7 @@ export default {
       if (this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
         fieldsToUpdate.forEach(field => {
-          const msg = this.$t('users.disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
+          const msg = this.$t('disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
           this.fieldsMeta[field].el.disabled = true
           this.fieldsMeta[field].helpTips = msg
         })

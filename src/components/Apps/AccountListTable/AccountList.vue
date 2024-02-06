@@ -348,7 +348,7 @@ export default {
         extraMoreActions: [
           {
             name: 'BulkVerify',
-            title: this.$t('accounts.BulkVerify'),
+            title: this.$t('BulkVerify'),
             type: 'primary',
             fa: 'fa-handshake-o',
             can: ({ selectedRows }) => {
@@ -361,7 +361,7 @@ export default {
                 { action: 'verify', accounts: ids }).then(res => {
                 openTaskPage(res['task'])
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BulkVerifyErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
@@ -386,7 +386,7 @@ export default {
           },
           {
             name: 'actionUpdateSelected',
-            title: this.$t('accounts.AccountBatchUpdate'),
+            title: this.$t('AccountBatchUpdate'),
             fa: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&

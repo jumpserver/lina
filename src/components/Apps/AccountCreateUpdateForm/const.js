@@ -10,7 +10,7 @@ export const accountFieldsMeta = (vm) => {
     assets: {
       rules: [Required],
       component: AssetSelect,
-      label: vm.$t('assets.Asset'),
+      label: vm.$t('Asset'),
       el: {
         multiple: false
       },
@@ -36,14 +36,14 @@ export const accountFieldsMeta = (vm) => {
     },
     on_invalid: {
       rules: [Required],
-      label: vm.$t('accounts.AccountPolicy'),
-      helpText: vm.$t('accounts.BulkCreateStrategy'),
+      label: vm.$t('AccountPolicy'),
+      helpText: vm.$t('BulkCreateStrategy'),
       hidden: () => {
         return vm.platform || vm.asset
       }
     },
     name: {
-      label: vm.$t('common.Name'),
+      label: vm.$t('Name'),
       rules: [RequiredChange],
       on: {
         input: ([value], updateForm) => {
@@ -82,7 +82,7 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     privileged: {
-      label: vm.$t('assets.Privileged'),
+      label: vm.$t('Privileged'),
       hidden: () => {
         return vm.addTemplate
       }
@@ -104,13 +104,13 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     su_from_username: {
-      label: vm.$t('assets.UserSwitchFrom'),
+      label: vm.$t('UserSwitchFrom'),
       hidden: (formValue) => {
         return vm.platform || vm.asset || vm.addTemplate
       }
     },
     password: {
-      label: vm.$t('assets.Password'),
+      label: vm.$t('Password'),
       component: UpdateToken,
       hidden: (formValue) => {
         console.log('formValue: ', formValue)
@@ -118,29 +118,29 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     ssh_key: {
-      label: vm.$t('assets.PrivateKey'),
+      label: vm.$t('PrivateKey'),
       component: UploadSecret,
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
     passphrase: {
-      label: vm.$t('assets.Passphrase'),
+      label: vm.$t('Passphrase'),
       component: UpdateToken,
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
     token: {
-      label: vm.$t('assets.Token'),
+      label: vm.$t('Token'),
       component: UploadSecret,
       hidden: (formValue) => formValue.secret_type !== 'token' || vm.addTemplate
     },
     access_key: {
       id: 'access_key',
-      label: vm.$t('assets.AccessKey'),
+      label: vm.$t('AccessKey'),
       component: UploadSecret,
       hidden: (formValue) => formValue.secret_type !== 'access_key' || vm.addTemplate
     },
     api_key: {
       id: 'api_key',
-      label: vm.$t('assets.ApiKey'),
+      label: vm.$t('ApiKey'),
       component: UploadSecret,
       hidden: (formValue) => formValue.secret_type !== 'api_key' || vm.addTemplate
     },
@@ -152,7 +152,7 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     push_now: {
-      helpText: vm.$t('accounts.AccountPush.WindowsPushHelpText'),
+      helpText: vm.$t('AccountPush.WindowsPushHelpText'),
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
         return !automation.push_account_enabled ||
@@ -163,7 +163,7 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     params: {
-      label: vm.$t('assets.PushParams'),
+      label: vm.$t('PushParams'),
       component: AutomationParamsForm,
       el: {
         method: vm.asset?.auto_config?.push_account_method
@@ -179,10 +179,10 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     is_active: {
-      label: vm.$t('common.IsActive')
+      label: vm.$t('IsActive')
     },
     comment: {
-      label: vm.$t('common.Comment'),
+      label: vm.$t('Comment'),
       hidden: () => {
         return vm.addTemplate
       }

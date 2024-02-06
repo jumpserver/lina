@@ -80,7 +80,11 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$route.meta.title.replace('Detail', '').replace('详情', '')
+        const objectType = this.$route.meta.title
+          .replace('Details', '')
+          .replace('Detail', '')
+          .replace('详情', '')
+          .trim()
         this.$log.debug('Object is: ', obj)
         const titlePrefix = this.titlePrefix || objectType
         const objectName = this.getObjectName(obj)
@@ -132,6 +136,7 @@ export default {
         {
           name: 'update',
           title: this.$t('Update'),
+          icon: 'el-icon-edit-outline',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
@@ -141,6 +146,7 @@ export default {
           title: this.$t('Delete'),
           type: 'danger',
           plain: true,
+          icon: 'el-icon-delete',
           can: this.validActions.canDelete,
           has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
