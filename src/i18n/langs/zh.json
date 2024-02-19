@@ -1187,7 +1187,8 @@
     "FileSizeExceedsLimit": "文件大小超出限制",
     "runSucceed": "任务执行成功",
     "EnterUploadPath": "输入上传路径",
-    "FileNameTooLong": "文件名太长"
+    "FileNameTooLong": "文件名太长",
+    "StopJob": "停止作业"
   },
   "perms": {
     "": "",

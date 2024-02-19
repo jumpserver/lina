@@ -57,7 +57,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
-import { createJob, getJob, getTaskDetail } from '@/api/ops'
+import { createJob, StopJob, getJob, getTaskDetail } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -108,6 +108,20 @@ export default {
             },
             callback: () => {
               this.execute()
+            }
+          },
+          stop: {
+            type: 'button',
+            name: this.$t('common.Stop'),
+            align: 'left',
+            icon: 'fa fa-stop',
+            tip: this.$t('ops.StopJob'),
+            disabled: true,
+            el: {
+              type: 'danger'
+            },
+            callback: () => {
+              this.stop()
             }
           },
           runas: {
@@ -305,9 +319,8 @@ export default {
             this.toolbar.left.runasPolicy.callback(res.runas_policy.value)
             this.toolbar.left.language.value = res.module.value
             this.toolbar.left.language.callback(res.module.value)
-            this.toolbar.left.timeout.value = res.timeout
-            this.toolbar.left.timeout.callback(res.timeout)
-
+            this.toolbar.fold.timeout.value = res.timeout
+            this.toolbar.fold.timeout.callback(res.timeout)
             this.command = res.args
             this.executionInfo.status = data['status']
             this.executionInfo.timeCost = data['time_cost']
@@ -348,6 +361,7 @@ export default {
                 this.toolbar.left.run.icon = 'fa fa-play'
                 this.toolbar.left.run.disabled = false
                 this.getTaskStatus()
+                this.setStopBtn()
               }, 500)
               break
           }
@@ -435,7 +449,18 @@ export default {
         this.$router.replace({ query: { taskId: this.currentTaskId }})
         this.setCostTimeInterval()
         this.writeExecutionOutput()
+        this.setStopBtn()
       })
+    },
+    stop() {
+      StopJob({ task_id: this.currentTaskId }).then(() => {
+        this.xterm.write(this.wrapperError('Task has been canceled'))
+        this.getTaskStatus()
+        this.setStopBtn()
+      })
+    },
+    setStopBtn() {
+      this.toolbar.left.stop.disabled = this.executionInfo.status !== 'running'
     }
   }
 }
@@ -447,14 +472,17 @@ export default {
   background-color: rgb(247, 247, 247);
   height: calc(100vh - 549px);
   overflow: hidden;
+
   & > div {
     height: 100%;
-    &>>> .xterm {
+
+    & > > > .xterm {
       height: calc(100% - 8px);
       overflow-y: auto;
     }
   }
 }
+
 .mini-button {
   width: 12px;
   float: right;
