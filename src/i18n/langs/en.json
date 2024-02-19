@@ -1198,7 +1198,8 @@
     "FileSizeExceedsLimit": "File size exceeds limit",
     "runSucceed": "Task executed successfully",
     "EnterUploadPath": "Enter the upload path",
-    "FileNameTooLong": "File name too long"
+    "FileNameTooLong": "File name too long",
+    "StopJob": "Stop job"
   },
   "perms": {
     "": "",

@@ -1196,7 +1196,8 @@
     "FileSizeExceedsLimit": "ファイルサイズが制限を超えています",
     "runSucceed": "タスクが成功しました",
     "EnterUploadPath": "アップロードパスを入力してください",
-    "FileNameTooLong": "ファイル名が長すぎます"
+    "FileNameTooLong": "ファイル名が長すぎます",
+    "StopJob": "ジョブを停止"
   },
   "perms": {
     "": "",
