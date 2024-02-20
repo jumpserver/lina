@@ -35,7 +35,6 @@ export default {
   data() {
     const vm = this
     return {
-      title: this.$t('QuickAdd'),
       quickActions: [
         {
           title: this.$t('AllMembers'),

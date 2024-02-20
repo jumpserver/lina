@@ -64,7 +64,7 @@ export default {
           }
         },
         {
-          key: this.$t('Activate'),
+          key: this.$t('Active'),
           formatter: () => {
             return <el-switch
               v-model={this.object.is_active}

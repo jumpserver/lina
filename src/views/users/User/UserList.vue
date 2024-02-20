@@ -183,7 +183,7 @@ export default {
             title: this.$t('RemoveSelected'),
             name: 'BatchRemoval',
             has: hasRemove,
-            fa: 'remove',
+            icon: 'remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },

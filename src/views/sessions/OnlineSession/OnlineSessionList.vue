@@ -112,7 +112,7 @@ export default {
             name: 'OfflineSelected',
             title: this.$t('BulkOffline'),
             type: 'danger',
-            fa: 'clean',
+            icon: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('audits.offline_usersession')
             },

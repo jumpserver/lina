@@ -94,10 +94,10 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionColumnSetting', fa: 'system-setting', tip: this.$t('CustomCol'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
-        { name: 'actionImport', fa: 'upload', tip: this.$t('Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
-        { name: 'actionExport', fa: 'download', tip: this.$t('Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
-        { name: 'actionRefresh', fa: 'refresh', tip: this.$t('Refresh'), has: this.hasRefresh, callback: this.handleRefreshClick.bind(this) }
+        { name: 'actionColumnSetting', icon: 'system-setting', tip: this.$t('CustomCol'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
+        { name: 'actionImport', icon: 'upload', tip: this.$t('Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
+        { name: 'actionExport', icon: 'download', tip: this.$t('Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
+        { name: 'actionRefresh', icon: 'refresh', tip: this.$t('Refresh'), has: this.hasRefresh, callback: this.handleRefreshClick.bind(this) }
       ],
       dialogExportVisible: false
     }

@@ -104,7 +104,7 @@ export default {
           title: this.$t('UpdateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
-          fa: 'batch-update',
+          icon: 'batch-update',
           can: function({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {

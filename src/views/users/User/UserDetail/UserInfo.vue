@@ -33,7 +33,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('Activate'),
+          title: this.$t('Active'),
           type: 'switch',
           attrs: {
             model: this.object.is_active,

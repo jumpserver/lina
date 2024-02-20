@@ -133,7 +133,7 @@ export default {
               extraActions: [
                 {
                   name: 'connect',
-                  fa: 'fa-terminal',
+                  icon: 'fa-terminal',
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
@@ -143,7 +143,7 @@ export default {
                 {
                   name: 'favor',
                   type: 'info',
-                  fa: ({ row }) => {
+                  icon: ({ row }) => {
                     return this.checkFavorite(row.id) ? 'fa-star' : 'fa-star-o'
                   },
                   callback: ({ row }) => this.toggleFavorite(row.id)

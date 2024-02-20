@@ -350,7 +350,7 @@ export default {
             name: 'BulkVerify',
             title: this.$t('BulkVerify'),
             type: 'primary',
-            fa: 'fa-handshake-o',
+            icon: 'fa-handshake-o',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },
@@ -369,7 +369,7 @@ export default {
             name: 'ClearSecrets',
             title: this.$t('ClearSecret'),
             type: 'primary',
-            fa: 'clean',
+            icon: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
@@ -387,7 +387,7 @@ export default {
           {
             name: 'actionUpdateSelected',
             title: this.$t('AccountBatchUpdate'),
-            fa: 'batch-update',
+            icon: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !this.$store.getters.currentOrgIsRoot &&

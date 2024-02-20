@@ -260,7 +260,7 @@ export default {
           {
             name: 'actionUpdateSelected',
             title: this.$t('UpdateSelected'),
-            fa: 'batch-update',
+            icon: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !this.$store.getters.currentOrgIsRoot &&

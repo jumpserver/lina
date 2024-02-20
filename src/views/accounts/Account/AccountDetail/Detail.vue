@@ -52,7 +52,7 @@ export default {
       showViewSecretDialog: false,
       quickActions: [
         {
-          title: this.$t('Activate'),
+          title: this.$t('Active'),
           type: 'switcher',
           attrs: {
             model: vm.object.is_active,

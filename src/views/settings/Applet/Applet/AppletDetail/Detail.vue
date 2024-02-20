@@ -68,7 +68,7 @@ export default {
           value: this.object.type.label
         },
         {
-          key: this.$t('Activate'),
+          key: this.$t('Active'),
           formatter: () => {
             return <el-switch
               v-model={this.object.is_active}

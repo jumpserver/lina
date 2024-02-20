@@ -73,7 +73,7 @@ export default {
           }
         },
         need_update_password: {
-          label: this.$t('RestPasswordNextLogin'),
+          label: '',
           type: 'checkbox-group',
           component: null, // 覆盖默认生成的 component
           el: {
@@ -81,7 +81,7 @@ export default {
           },
           options: [
             {
-              label: '',
+              label: this.$t('ResetPasswordNextLogin'),
               value: true
             }
           ],

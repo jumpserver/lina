@@ -19,7 +19,7 @@
             :label="$tc('ChangeField')"
             :prop="fieldName"
             show-overflow-tooltip
-            width="100"
+            width="150"
           />
           <el-table-column
             :label="$tc('BeforeChange')"

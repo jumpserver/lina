@@ -6,12 +6,12 @@
         v-show="action.dropdown.length > 0"
         :key="action.name"
         class="action-item"
-        trigger="click"
         placement="bottom-start"
+        trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button class="more-action" :size="size" v-bind="cleanButtonAction(action)">
-          {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+        <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)">
+          {{ toSentenceCase(action.title) }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
           <template v-for="option in action.dropdown">
@@ -26,13 +26,14 @@
             <el-dropdown-item
               :key="option.name"
               :command="[option, action]"
-              v-bind="option"
+              class="dropdown-item"
+              v-bind="{...option, icon: ''}"
             >
-              <span v-if="option.fa">
-                <i v-if="option.fa.startsWith('fa-')" :class="'fa ' + option.fa" />
-                <svg-icon v-else :icon-class="option.fa" style="font-size: 14px; margin-right: 2px; margin-left: -2px;" />
+              <span v-if="option.icon" class="pre-icon">
+                <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
+                <svg-icon v-else :icon-class="option.icon" style="" />
               </span>
-              {{ option.title }}
+              {{ toSentenceCase(option.title) }}
             </el-dropdown-item>
           </template>
         </el-dropdown-menu>
@@ -42,17 +43,17 @@
         v-else
         :key="action.name"
         :size="size"
-        v-bind="cleanButtonAction(action)"
         class="action-item"
+        v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <span>
-            <span v-if="action.fa" style="vertical-align: initial;">
-              <i v-if="action.fa.startsWith('fa-')" :class="'fa ' + action.fa" />
-              <svg-icon v-else :icon-class="action.fa" style="font-size: 14px;" />
+            <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial;">
+              <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
+              <svg-icon v-else :icon-class="action.icon" style="font-size: 13px;" />
             </span>
-            {{ action.title }}
+            {{ toSentenceCase(action.title) }}
           </span>
         </el-tooltip>
       </el-button>
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'DataActions',
@@ -99,6 +101,9 @@ export default {
         callback = defaultCallback
       }
       return callback(option)
+    },
+    toSentenceCase(s) {
+      return toSentenceCase(s)
     },
     handleClick(action) {
       if (action && action.callback) {
@@ -167,6 +172,25 @@ export default {
   justify-content: center;
 }
 
+.dropdown-item {
+  .pre-icon {
+    width: 17px;
+    display: inline-block;
+  }
+
+  >>> i.fa {
+    font-size: 13px;
+    height: 13px;
+    width: 13px;
+    margin-right: 0;
+  }
+
+  >>> .svg-icon {
+    font-size: 13px;
+    height: 13px;
+    width: 13px;
+  }
+}
 .dropdown-menu-title {
   text-align: left;
   font-size: 12px;

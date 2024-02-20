@@ -57,15 +57,13 @@ export default {
             }
           },
           from_ticket: {
-            label: this.$t('FromTicket'),
             width: 100,
             formatterArgs: {
               showFalse: false
             }
           },
           users: {
-            label: this.$t('User'),
-            width: '60px',
+            width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',
@@ -75,7 +73,6 @@ export default {
             }
           },
           user_groups: {
-            label: this.$t('UserGroups'),
             width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -86,8 +83,7 @@ export default {
             }
           },
           assets: {
-            label: this.$t('Asset'),
-            width: '60px',
+            width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',
@@ -97,8 +93,7 @@ export default {
             }
           },
           nodes: {
-            label: this.$t('Node'),
-            width: '60px',
+            width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',
@@ -108,8 +103,7 @@ export default {
             }
           },
           accounts: {
-            label: this.$t('Account'),
-            width: '60px',
+            width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
               route: 'AssetPermissionDetail',

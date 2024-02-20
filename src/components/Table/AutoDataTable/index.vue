@@ -330,10 +330,30 @@ export default {
         }
         return has
       })
+
+      columns = this.orderingColumns(columns)
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns
       this.iConfig = config
+    },
+    orderingColumns(columns) {
+      const cols = _.cloneDeep(this.config.columns)
+      const defaults = _.get(this.config, 'columnsShow.default')
+      const ordering = (cols || defaults || []).map(item => {
+        let prop = item
+        if (typeof item === 'object') {
+          prop = item.prop
+        }
+        return prop
+      })
+      return _.sortBy(columns, (item) => {
+        if (item.prop === 'actions') {
+          return 1000
+        }
+        const i = ordering.indexOf(item.prop)
+        return i === -1 ? 999 : i
+      })
     },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
