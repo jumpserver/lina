@@ -32,6 +32,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showRefresh: true,
+        showSearch: true,
         showAssets: true,
         url: '/api/v1/accounts/gathered-accounts/',
         nodeUrl: '/api/v1/assets/nodes/',
@@ -119,7 +120,12 @@ export default {
         hasExport: false,
         searchConfig: {
           exclude: ['asset'],
-          options: []
+          options: [
+            {
+              label: this.$t('dashboard.AssetName'),
+              value: 'asset_name'
+            }
+          ]
         },
         extraMoreActions: [
           {
