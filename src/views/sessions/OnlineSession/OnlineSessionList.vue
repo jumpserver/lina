@@ -29,13 +29,13 @@ export default {
         columnsShow: {
           min: ['user_display', 'actions'],
           default: [
-            'user_display', 'backend_display', 'ip', 'city',
-            'user_agent', 'date_created', 'is_active', 'actions'
+            'user_display', 'backend_display', 'city',
+            'date_created', 'is_active', 'actions'
           ]
         },
         columns: [
-          'user_display', 'backend_display', 'ip', 'city', 'type',
-          'user_agent', 'date_created', 'is_active', 'date_expired', 'actions'
+          'user_display', 'backend_display', 'city', 'type',
+          'date_created', 'is_active', 'date_expired', 'actions'
         ],
         columnsMeta: {
           is_active: {
