@@ -58,7 +58,8 @@ export default {
           meta: {
             title: i18n.t('OrganizationCreate'),
             action: 'create',
-            permissions: ['orgs.add_organization']
+            permissions: ['orgs.add_organization'],
+            activeMenu: '/settings/orgs'
           }
         },
         {
@@ -69,7 +70,8 @@ export default {
           meta: {
             title: i18n.t('OrganizationUpdate'),
             action: 'update',
-            permissions: ['orgs.change_organization']
+            permissions: ['orgs.change_organization'],
+            activeMenu: '/settings/orgs'
           }
         },
         {

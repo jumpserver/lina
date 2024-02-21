@@ -6,6 +6,7 @@ const getDefaultState = () => {
     metaPromiseMap: {},
     isRouterAlive: true,
     sqlQueryCounter: [],
+    showSqlQueryCounter: true,
     confirmDialogVisible: false
   }
 }
@@ -81,6 +82,9 @@ const actions = {
   },
   showConfirmDialog({ commit, state }, show) {
     commit('setConfirmDialogVisible', show)
+  },
+  showSqlQueryCounter({ commit, state }, show) {
+    state.showSqlQueryCounter = show
   }
 }
 

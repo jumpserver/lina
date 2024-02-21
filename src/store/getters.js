@@ -30,6 +30,7 @@ const getters = {
   currentUserIsAdmin: state => state.users.isAdmin,
   hasValidLicense: state => state.settings.hasValidLicense,
   isSystemAdmin: state => state.users.profile.system_roles.some(i => (i?.id === '00000000-0000-0000-0000-000000000001')),
-  sqlQueryCounter: state => state.common.sqlQueryCounter
+  sqlQueryCounter: state => state.common.sqlQueryCounter,
+  showSqlQueryCounter: state => state.common.showSqlQueryCounter
 }
 export default getters

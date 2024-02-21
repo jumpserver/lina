@@ -10,8 +10,9 @@ import store from '@/store'
 
 Vue.use(VueI18n)
 const cookieLang = VueCookie.get('django_language')
+const storeLang = VueCookie.get('lang')
 const browserLang = navigator.systemLanguage || navigator.language
-let lang = cookieLang || browserLang || 'zh'
+let lang = cookieLang || storeLang || browserLang || 'zh'
 lang = lang.slice(0, 2)
 const i18n = new VueI18n({
   locale: lang,
