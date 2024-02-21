@@ -130,8 +130,8 @@ export default {
           ]
         },
         columnsMeta: {
-          type: { formatter: ChoicesFormatter },
-          category: { formatter: ChoicesFormatter },
+          type: { formatter: ChoicesFormatter, sortable: false },
+          category: { formatter: ChoicesFormatter, sortable: false },
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
