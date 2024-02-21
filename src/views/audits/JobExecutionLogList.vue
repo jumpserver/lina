@@ -21,13 +21,13 @@ export default {
           min: ['material', 'is_success'],
           default: [
             'creator_name', 'material', 'is_finished',
-            'is_success', 'time_cost', 'date_start',
+            'is_success', 'time_cost',
             'date_finished', 'actions'
           ]
         },
         columns: [
           'creator_name', 'material', 'is_finished',
-          'is_success', 'time_cost', 'date_start',
+          'is_success', 'time_cost',
           'date_finished', 'actions'
         ],
         columnsMeta: {

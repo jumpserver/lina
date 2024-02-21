@@ -28,7 +28,7 @@ export default {
           min: ['id', 'actions'],
           default: [
             'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
-            'command_amount', 'date_start', 'duration', 'actions'
+            'date_start', 'actions'
           ]
         }
       }
@@ -38,7 +38,7 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columnsExtra: ['index', 'duration'],
+        columnsExtra: ['duration'],
         columnsExclude: ['terminal'],
         columnsShow: this.columnsShow,
         columnsMeta: {
@@ -50,10 +50,11 @@ export default {
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
+              return <router-link {...{ attrs: route }} class='link'>{label}</router-link>
             }
           },
           user: {
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: ({ row }) => {
@@ -121,7 +122,7 @@ export default {
             width: '140px'
           },
           protocol: {
-            width: '80px',
+            width: '100px',
             sortable: false,
             formatter: null
           },
@@ -132,6 +133,7 @@ export default {
             width: '150px'
           },
           duration: {
+            label: this.$t('Duration'),
             formatter: function(row) {
               return timeOffset(row.date_start, row.date_end)
             },
@@ -166,13 +168,12 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style scoped>
-  .link {
-    color: var(--color-info);
-  }
+.link {
+  color: var(--color-info);
+}
 </style>

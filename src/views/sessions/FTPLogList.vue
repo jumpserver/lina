@@ -15,7 +15,7 @@ export default {
       tableConfig: {
         columnsShow: {
           default: [
-            'id', 'user', 'remote_addr', 'asset', 'account', 'operate',
+            'id', 'user', 'asset', 'account', 'operate',
             'filename', 'date_start', 'is_success', 'actions'
           ]
         },
@@ -28,7 +28,7 @@ export default {
             width: '100px'
           },
           is_success: {
-            width: '80px'
+            width: '100px'
           },
           actions: {
             width: '82px',
@@ -41,7 +41,9 @@ export default {
                   name: 'download',
                   title: this.$t('Download'),
                   type: 'primary',
-                  can: ({ row }) => { return row.has_file },
+                  can: ({ row }) => {
+                    return row.has_file
+                  },
                   tip: ({ row }) => {
                     return row.has_file ? this.$t('Download') : this.$t('DownloadFTPFileTip')
                   },
