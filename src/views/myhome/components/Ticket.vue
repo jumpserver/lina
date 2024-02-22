@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       cardConfig: {
-        title: this.$t('AssignedMe'),
+        title: this.$t('AwaitingMyApproval'),
         icon: 'fa-check-square-o',
         dataArr: []
       },

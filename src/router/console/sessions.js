@@ -38,8 +38,8 @@ export default [
   },
   {
     path: `${BASE_URL}/koko/elfinder/sftp/?`,
-    name: 'FileManager',
+    name: 'FileManagement',
     // component: () => window.open(`/koko/elfinder/sftp/?`),
-    meta: { title: i18n.t('FileManager') }
+    meta: { title: i18n.t('FileManagement') }
   }
 ]

@@ -63,10 +63,10 @@ export default {
     },
     {
       path: '/workbench/file-manager',
-      name: 'FileManager',
+      name: 'FileManagement',
       component: empty,
       meta: {
-        title: i18n.t('FileManager'),
+        title: i18n.t('FileManagement'),
         icon: 'file',
         permissions: ['rbac.view_filemanager']
       },
@@ -84,7 +84,7 @@ export default {
           path: `${BASE_URL}/koko/elfinder/sftp/`,
           name: '',
           meta: {
-            title: i18n.t('FileManager'),
+            title: i18n.t('FileManagement'),
             activeMenu: '/assets',
             permissions: ['rbac.view_filemanager']
           }
@@ -119,16 +119,16 @@ export default {
           component: empty,
           redirect: '',
           meta: {
-            title: i18n.t('JobList'),
+            title: i18n.t('JobManagement'),
             permissions: ['ops.view_job']
           },
           children: [
             {
               path: '',
-              name: 'JobList',
+              name: 'JobManagement',
               component: () => import('@/views/ops/Job'),
               meta: {
-                title: i18n.t('JobList'),
+                title: i18n.t('JobManagement'),
                 permissions: ['ops.view_job']
               }
             },
@@ -172,7 +172,7 @@ export default {
           name: 'Template',
           component: () => import('@/views/ops/Template'),
           meta: {
-            title: i18n.t('Template'),
+            title: i18n.t('TemplateManagement'),
             permissions: ['ops.view_adhoc|ops.view_playbook']
           }
         },
