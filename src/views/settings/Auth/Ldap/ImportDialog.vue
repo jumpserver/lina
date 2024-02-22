@@ -49,8 +49,6 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import ListTable from '@/components/Table/ListTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
-import { importLdapUser } from '@/api/settings'
-import { getErrorResponseMsg } from '@/utils/common'
 
 export default {
   name: 'ImportDialog',
@@ -154,14 +152,7 @@ export default {
         this.$message.error(this.$tc('setting.unselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
-        importLdapUser(data).then(res => {
-          this.$message.success(res.msg)
-        }).catch(error => {
-          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
-          this.$message.error(errorMessage)
-        }).finally(() => {
-          this.dialogLdapUserImportLoginStatus = false
-        })
+        this.importLdapUser(data)
       }
     },
     importAllUserClick() {
@@ -175,14 +166,24 @@ export default {
         this.$message.error(this.$tc('setting.unselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
-        importLdapUser(data).then(res => {
-          this.$message.success(res.msg)
-        }).catch(error => {
-          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
-          this.$message.error(errorMessage)
-        }).finally(() => {
-          this.dialogLdapUserImportAllLoginStatus = false
-        })
+        this.importLdapUser(data)
+      }
+    },
+    importLdapUser(data) {
+      this.enableWS()
+      this.ws.onopen = (e) => {
+        this.ws.send(JSON.stringify({ msg_type: 'import_user', ...data }))
+      }
+      this.ws.onmessage = (e) => {
+        const data = JSON.parse(e.data)
+        if (data.ok) {
+          this.$message.success(data.msg)
+          this.$refs.listTable.reloadTable()
+        } else {
+          this.$message.error(data.msg) || this.$t('common.imExport.ImportFail')
+        }
+        this.dialogLdapUserImportLoginStatus = false
+        this.dialogLdapUserImportAllLoginStatus = false
       }
     },
     enableWS() {
