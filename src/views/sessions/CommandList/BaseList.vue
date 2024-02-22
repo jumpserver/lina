@@ -51,8 +51,8 @@ export default {
           }
         },
         columns: [
-          'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
-          'asset', 'account', 'session', 'timestamp'
+          'expandCol', 'input', 'risk_level', 'user',
+          'asset', 'session', 'timestamp'
         ],
         extraQuery: {
           date_to: dateTo,
@@ -80,14 +80,14 @@ export default {
             has: false
           },
           asset: {
-            width: '140px'
+            width: '120px'
           },
           user: {
-            width: '140px'
+            width: '100px'
           },
           session: {
             formatter: DetailFormatter,
-            width: '80px',
+            width: '100px',
             formatterArgs: {
               openInNewPage: true,
               can: this.$hasPerm('terminal.view_session'),
@@ -104,7 +104,7 @@ export default {
           },
           timestamp: {
             label: this.$t('Date'),
-            width: '150px',
+            width: '130px',
             sortable: 'custom',
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
