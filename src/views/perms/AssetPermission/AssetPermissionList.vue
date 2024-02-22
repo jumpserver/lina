@@ -96,6 +96,7 @@ export default {
             }
           },
           user_groups_amount: {
+            width: 90,
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
@@ -114,7 +115,7 @@ export default {
             }
           },
           nodes_amount: {
-            width: '60px',
+            width: 80,
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
