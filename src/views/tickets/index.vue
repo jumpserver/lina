@@ -39,7 +39,7 @@ export default {
             name: 'MyTicketList'
           },
           {
-            title: this.$t('AssignedMe'),
+            title: this.$t('AwaitingMyApproval'),
             name: 'AssignedTicketList'
           }
         ]
