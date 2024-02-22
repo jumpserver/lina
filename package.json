@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
+    "@fontsource/open-sans": "^5.0.24",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@ztree/ztree_v3": "3.5.44",
     "axios": "0.21.1",

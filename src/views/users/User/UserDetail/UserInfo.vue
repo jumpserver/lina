@@ -198,8 +198,8 @@ export default {
           }
         },
         'id', 'name', 'username', 'email', 'phone',
-        'wecom_id', 'dingtalk_id', 'feishu_id',
         'system_roles', 'org_roles', 'mfa_level', 'source',
+        'wecom_id', 'dingtalk_id', 'feishu_id',
         'created_by', 'date_joined', 'date_expired',
         'date_password_last_updated', 'last_login', 'comment'
       ],

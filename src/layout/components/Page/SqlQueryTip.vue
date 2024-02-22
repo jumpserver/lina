@@ -20,8 +20,7 @@ export default {
   data() {
     return {
       loading: true,
-      licenseData: {},
-      show: true
+      licenseData: {}
     }
   },
   computed: {
@@ -31,7 +30,6 @@ export default {
     ])
   },
   mounted() {
-    console.log('showSqlQueryCounter', this.showSqlQueryCounter)
   },
   methods: {
     getType(item) {

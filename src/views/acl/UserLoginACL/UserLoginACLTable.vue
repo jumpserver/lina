@@ -24,7 +24,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'priority', 'is_active',
-            'action', 'comment', 'actions'
+            'action', 'actions'
           ]
         },
         columnsMeta: {
@@ -47,7 +47,6 @@ export default {
                   }
                 }
               }
-
             }
           }
         }

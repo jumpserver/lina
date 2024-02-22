@@ -165,7 +165,7 @@ export default {
       url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
       detailFields: [
         'display_name', 'scope_display', 'builtin', 'created_by',
-        'date_created', 'date_created', 'comment'
+        'date_created', 'date_updated', 'comment'
       ]
     }
   },

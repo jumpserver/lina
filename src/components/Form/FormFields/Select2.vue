@@ -391,4 +391,8 @@ export default {
   height: auto;
   white-space: normal;
 }
+
+.select2 >>> input::placeholder {
+  padding-left: 2px;
+}
 </style>

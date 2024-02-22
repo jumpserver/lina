@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="18">
-      <BaseList :url="url" :columns-show="columnsShow" />
+    <el-col :span="20">
+      <BaseList :columns-show="columnsShow" :url="url" />
     </el-col>
   </el-row>
 </template>

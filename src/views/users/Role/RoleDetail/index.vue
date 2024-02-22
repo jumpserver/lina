@@ -49,7 +49,7 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('RoleInfo'),
+            title: this.$t('BasicInfo'),
             name: 'RoleInfo'
           },
           {

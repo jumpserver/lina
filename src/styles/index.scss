@@ -27,13 +27,13 @@ body {
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   color: #676a6c;
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "open sans",  Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
 
 path {
-  fill: inherit!important;
+  fill: inherit !important;
 }
 
 label {
@@ -304,8 +304,7 @@ input[type=file] {
   font-size: 16px;
 }
 
-.el-input--mini .el-input__inner::placeholder {
-  font-size: 13px;
+.el-input__inner::placeholder {
   font-weight: 400;
 }
 

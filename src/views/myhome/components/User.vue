@@ -8,7 +8,7 @@
         <el-col :span="5" class="left">
           <el-avatar :size="40" :src="avatarUrl" class="avatar" fit="fill" />
         </el-col>
-        <el-col :span="18">
+        <el-col :span="20">
           <ul>
             <li><span class="title">{{ $t('Username') }}</span>：<span>{{ users.name }}</span></li>
             <li><span class="title">{{ $t('Email') }}</span>：<span>{{ users.email }}</span></li>
