@@ -27,7 +27,7 @@ body {
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   color: #676a6c;
-  font-family: "open sans",  Arial, sans-serif;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -325,3 +325,12 @@ input[type=file] {
   font-weight: 400;
 }
 
+button, input, optgroup, select, textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+.el-form {
+  label {
+    font-weight: 500;
+  }
+}

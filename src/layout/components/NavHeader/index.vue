@@ -246,7 +246,7 @@ export default {
   }
 
   .organization {
-    border-radius: 20px;
+    border-radius: 3px;
     background-color: rgba(255, 255, 255, .15);
     padding-left: 10px !important;
   }

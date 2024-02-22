@@ -156,6 +156,7 @@ export default {
   width: 1px;
   margin-left: 8px;
   border: .5px solid #FFF;
+  opacity: 0.4;
 }
 
 .organization {

@@ -8,6 +8,7 @@ import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 import { assignIfNot, toSentenceCase } from '@/utils/common'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
+import i18n from '@/i18n/i18n'
 
 export class FormFieldGenerator {
   constructor(emit) {
@@ -103,6 +104,7 @@ export class FormFieldGenerator {
         field.el.filterable = true
       }
     }
+
     field.type = type
     return field
   }
@@ -173,8 +175,23 @@ export class FormFieldGenerator {
     field.el = el
     field.rules = rules
     field.label = toSentenceCase(field.label)
+    field = this.setPlaceholder(field, remoteFieldMeta)
     _.set(field, 'attrs.error', '')
     Vue.$log.debug('Generate field: ', name, field)
+    return field
+  }
+
+  setPlaceholder(field, remoteFieldMeta) {
+    let label = field.label
+    if (!label) {
+      return field
+    }
+    label = label.toLowerCase()
+    if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {
+      field.el.placeholder = i18n.t('Please select a') + ' ' + _.trimEnd(label, 's')
+    } else if (field.type === 'input') {
+      field.el.placeholder = field.label
+    }
     return field
   }
 
