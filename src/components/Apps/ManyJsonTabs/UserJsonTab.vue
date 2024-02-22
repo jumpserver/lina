@@ -18,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -39,6 +40,7 @@ export default {
           columnsMeta: {
             name: {
               label: this.$t('Name'),
+              width: 90,
               formatter: (row) => {
                 const to = {
                   name: 'UserDetail',
