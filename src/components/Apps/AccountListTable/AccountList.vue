@@ -355,10 +355,13 @@ export default {
             type: 'primary',
             fa: 'fa-handshake-o',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && selectedRows[0].asset.type.value !== 'clickhouse' &&
+                selectedRows[0].asset.type.value !== 'redis'
             },
             callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => { return v.id })
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
               this.$axios.post(
                 '/api/v1/accounts/accounts/tasks/',
                 { action: 'verify', accounts: ids }).then(res => {
@@ -377,7 +380,9 @@ export default {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
             callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => { return v.id })
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
               this.$axios.patch(
                 '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: ids }).then(() => {

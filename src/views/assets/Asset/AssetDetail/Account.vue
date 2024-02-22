@@ -43,7 +43,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     url: {
       type: String,
@@ -71,6 +72,7 @@ export default {
             type: 'primary',
             label: this.$tc('accounts.Test')
           },
+          disabled: this.object.type.value === 'clickhouse' || this.object.type.value === 'redis',
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
