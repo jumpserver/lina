@@ -56,12 +56,6 @@ export default {
               return <span>{row.job?.name || '-'}</span>
             }
           },
-          material: {
-            width: '160px'
-          },
-          job_type: {
-            width: '96px'
-          },
           is_finished: {
             width: '96px',
             formatter: (row) => {

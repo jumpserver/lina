@@ -36,6 +36,7 @@ export default {
         ],
         columnsMeta: {
           name: {
+            width: '140px',
             formatterArgs: {
               can: true
             }
@@ -51,19 +52,16 @@ export default {
           },
           summary: {
             label: this.$t('Summary(success/total)'),
-            width: '140px',
             formatter: (row) => {
               return row.summary['success'] + '/' + row.summary['total']
             }
           },
           average_time_cost: {
-            width: '140px',
             formatter: (row) => {
               return row.average_time_cost.toFixed(2) + 's'
             }
           },
           asset_amount: {
-            width: '140px',
             label: this.$t('AssetAmount'),
             formatter: (row) => {
               return row.assets.length

@@ -53,10 +53,9 @@
                 multiple
               >
                 <i class="el-icon-upload" />
-                <div class="el-upload__text">
+                <div class="el-upload__text" style="margin-bottom: 10px">
                   {{ $t('DragUploadFileInfo') }}
                 </div>
-                <br>
                 <span>
                   {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
                 </span>
@@ -81,7 +80,7 @@
               </div>
             </el-card>
           </div>
-          <b>{{ $tc('Output') }}:</b>
+          <div style="margin-bottom: 5px;font-weight: bold">{{ $tc('Output') }}:</div>
           <span v-if="executionInfo.status && summary" style="float: right">
             <span>
               <span><b>{{ $tc('Status') }}: </b></span>
