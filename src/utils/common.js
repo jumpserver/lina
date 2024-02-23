@@ -424,6 +424,7 @@ export function toTitleCase(string) {
 
 export function toSentenceCase(string) {
   if (!string) return string
+  if (string.indexOf('/') > 0) return string
   const s = string.trim().split(' ').map(item => {
     if (item.length === 0) return ''
     if (item.length === 1) return item.toLowerCase()
