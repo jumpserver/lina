@@ -237,7 +237,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table > > > .risk-command {
+.command-list-table >>> .risk-command {
   background-color: oldlace;
 
   tr {

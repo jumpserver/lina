@@ -28,7 +28,7 @@ export default {
         url: '/api/v1/orgs/orgs',
         submenu: [
           {
-            title: this.$t('OrganizationDetail'),
+            title: this.$t('Basic'),
             name: 'OrganizationDetail'
           }
         ],
