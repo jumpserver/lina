@@ -16,7 +16,7 @@ export default {
         url: '/api/v1/ops/adhocs/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'module', 'comment', 'args', 'comment', 'date_created', 'actions']
+          default: ['name', 'module', 'args', 'comment', 'date_created', 'actions']
         },
         columnsMeta: {
           name: {
