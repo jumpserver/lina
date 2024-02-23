@@ -45,11 +45,6 @@ export default {
         'date_created', 'comment'
       ]
     }
-  },
-  computed: {
-    cardTitle() {
-      return this.object.name
-    }
   }
 }
 </script>
