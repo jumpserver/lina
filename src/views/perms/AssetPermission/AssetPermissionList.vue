@@ -96,7 +96,7 @@ export default {
             }
           },
           user_groups_amount: {
-            width: 90,
+            width: 100,
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
