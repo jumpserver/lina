@@ -259,23 +259,25 @@ export default {
     display: none;
   }
 
+  $mobileHeight: 40px;
+
   .active-mobile {
     display: none;
 
     & >>> .organization {
-      height: 48px;
-      line-height: 48px;
+      height: $mobileHeight;
+      line-height: $mobileHeight;
       padding-left: 8px;
       background: transparent;
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
       .el-input--prefix .el-input__inner {
-        height: 48px!important;
-        line-height: 48px!important;
+        height: $mobileHeight!important;
+        line-height: $mobileHeight!important;
       }
       .svg-icon {
         color: #FFF!important;
-        margin-right:0px!important;
+        margin-right: 0px!important;
       }
     }
 

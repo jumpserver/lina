@@ -25,6 +25,8 @@ $subMenuHover: var(--menu-hover);
 $subMenuActiveText: var(--menu-text-active);
 $sideBarWidth: 200px;
 
+$headerHeight: 40px;
+
 :export {
     color-primary: $--color-primary;
     color-success: $--color-success;

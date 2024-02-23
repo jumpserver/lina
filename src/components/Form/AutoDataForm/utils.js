@@ -182,13 +182,12 @@ export class FormFieldGenerator {
   }
 
   setPlaceholder(field, remoteFieldMeta) {
-    let label = field.label
+    const label = field.label
     if (!label) {
       return field
     }
-    label = label.toLowerCase()
     if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {
-      field.el.placeholder = i18n.t('Please select a') + ' ' + _.trimEnd(label, 's')
+      field.el.placeholder = i18n.t('Please select ') + label.toLowerCase()
     } else if (field.type === 'input') {
       field.el.placeholder = field.label
     }

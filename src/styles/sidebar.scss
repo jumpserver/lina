@@ -3,9 +3,9 @@
 #app {
   .main-container {
     position: relative;
-    top: 50px;
+    top: $headerHeight;
     min-height: 100%;
-    height: calc(100vh - 50px);
+    height: calc(100vh - #{$headerHeight});
     transition: margin-left .28s;
     margin-left: $sideBarWidth;
   }
@@ -17,7 +17,7 @@
     height: 100%;
     position: fixed;
     font-size: 0;
-    top: 50px;
+    top: $headerHeight;
     bottom: 0;
     left: 0;
     z-index: 1001;
@@ -43,7 +43,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 150px);
+        height: calc(100% - #{$headerHeight} - 40px - 50px); // header-height, view-header, footer-height
       }
     }
 

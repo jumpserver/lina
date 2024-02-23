@@ -331,6 +331,31 @@ button, input, optgroup, select, textarea {
 
 .el-form {
   label {
-    font-weight: 500;
+    font-weight: 400;
   }
+  .el-input__icon {
+    vertical-align: super
+  }
+}
+
+.el-table {
+  th {
+    .el-table__column-filter-trigger {
+      line-height: 24px;
+    }
+    .caret-wrapper {
+      height: 21px;
+
+      .sort-caret.ascending {
+        top: 0;
+      }
+      .sort-caret.descending {
+        bottom: 0;
+      }
+    }
+  }
+}
+
+.el-tabs__item > span {
+  padding: 6px;
 }

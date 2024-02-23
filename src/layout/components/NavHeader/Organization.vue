@@ -129,10 +129,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/styles/variables.scss';
+$height: 28px;
 
 .org-select {
   padding: 0 10px 0 18px;
-  line-height: 55px;
   background-color: #293846;
   color: white;
   font-weight: 600;
@@ -140,8 +140,8 @@ export default {
   //border-top: solid 1px rgb(47, 64, 80);
   ::v-deep .el-input {
     input.el-input__inner {
-      line-height: 55px;
-      height: 55px;
+      line-height: $height;
+      height: $height;
       background: none;
       border: none;
     }
@@ -160,8 +160,8 @@ export default {
 }
 
 .organization {
-  height: 32px;
-  line-height: 32px;
+  height: $height;
+  line-height: $height;
   background: transparent;
   color: #FFF;
 
@@ -170,12 +170,13 @@ export default {
   }
 
   & >>> .el-input--prefix .el-input__inner {
-    line-height: 32px !important;
-    height: 32px !important;
+    line-height: $height !important;
+    height: $height !important;
   }
 
   & >>> .el-input__icon {
     color: #606266;
+    line-height: $height;
   }
 
   & >>> .el-input .el-select__caret {
@@ -190,7 +191,12 @@ export default {
     color: #909399 !important;
     padding-left: 15px;
     font-size: 12px;
+    line-height: $height;
+  }
+
+  &>>> .el-select-dropdown__item {
     line-height: 30px;
+    height: 30px;
   }
 }
 

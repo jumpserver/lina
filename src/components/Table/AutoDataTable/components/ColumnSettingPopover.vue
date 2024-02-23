@@ -3,18 +3,17 @@
     v-if="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
-    :title="$tc('CustomCol')"
+    :title="$tc('TableSetting')"
     :visible.sync="showColumnSettingPopover"
     top="10%"
     width="50%"
     @cancel="restoreDefault()"
     @confirm="handleColumnConfirm()"
   >
-    <el-alert type="success">
-      {{ this.$t('TableColSettingInfo') }}
-    </el-alert>
+    <label>{{ this.$t('TableColSetting') }}</label>
     <el-checkbox-group
       v-model="iCurrentColumns"
+      class="column-setting"
     >
       <el-row>
         <el-col
@@ -89,4 +88,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.column-setting {
+  margin-left: 10px;
+}
 </style>

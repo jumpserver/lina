@@ -38,7 +38,7 @@
           <Logo v-if="showLogo" :collapse="false" />
         </div>
       </li>
-      <li v-if="orgsShow" class="left-item" style="margin-left: 21px; vertical-align: middle;">
+      <li v-if="orgsShow" class="left-item" style="margin-left: 21px;">
         <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
@@ -103,11 +103,10 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-  $header-height: 50px;
   .navbar {
     position: relative;
-    height: $header-height;
-    line-height: $header-height;
+    height: $headerHeight;
+    line-height: $headerHeight;
     overflow: hidden;
     background: var(--banner-bg);
 
@@ -115,15 +114,15 @@ export default {
       float: left;
 
       .left-item {
-        line-height: $header-height;
+        line-height: $headerHeight;
         display: inline-block;
         vertical-align: top;
 
         & > > > .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
-          line-height: $header-height;
-          height: $header-height;
+          line-height: $headerHeight;
+          height: $headerHeight;
         }
 
         & > > > .org-select {
@@ -143,8 +142,8 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
-      height: 50px;
-      line-height: 50px;
+      height: $headerHeight;
+      line-height: $headerHeight;
 
       .header-hover {
         &:hover {
@@ -153,7 +152,7 @@ export default {
       }
 
       .header-item {
-        line-height: $header-height;
+        line-height: $headerHeight;
         display: inline-block;
         padding-right: 10px;
         padding-left: 10px;
@@ -165,6 +164,13 @@ export default {
 
         & > > > .el-badge {
           vertical-align: top;
+
+          .el-badge__content {
+            top: 8px;
+            height: 15px;
+            line-height: 15px;
+            border: none;
+          }
         }
       }
 
@@ -205,7 +211,7 @@ export default {
   .hamburger-container {
     float: left;
     height: 26px;
-    margin: 12px;
+    margin: 6px;
     padding: 0 10px !important;
     line-height: 30px;
     border-radius: 4px;
@@ -215,6 +221,7 @@ export default {
     cursor: pointer;
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
+    opacity: 0.7;
 
     & > > > .svg-icon {
       font-size: 16px !important;

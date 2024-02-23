@@ -11,9 +11,9 @@
     />
     <Dialog
       v-if="showTransfer"
+      :close-on-click-modal="false"
       :title="label"
       :visible.sync="showTransfer"
-      :close-on-click-modal="false"
       width="730px"
       @cancel="handleTransCancel"
       @confirm="handleTransConfirm"
