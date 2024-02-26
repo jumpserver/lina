@@ -26,14 +26,12 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-function updatePlatformProtocols(vm, platformType, updateForm, isChange = false) {
+function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged = false) {
   setTimeout(() => vm.init().then(() => {
     const isCreate = vm?.$route?.meta.action === 'create'
     if (platformType === 'website') {
-      if (!isCreate && !isChange) {
-        // 更新+平台未改变 不用根据平台参数联动
-        return
-      }
+      const need_modify = isCreate || isPlatformChanged
+      if (!need_modify) return
       const platformProtocols = vm.platform.protocols
       const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
       updateForm({
