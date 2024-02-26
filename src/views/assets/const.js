@@ -26,6 +26,27 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
+function updatePlatformProtocols(vm, platformType, updateForm, isChange = false) {
+  setTimeout(() => vm.init().then(() => {
+    const isCreate = vm?.$route?.meta.action === 'create'
+    if (platformType === 'website') {
+      if (!isCreate && !isChange) {
+        // 更新+平台未改变 不用根据平台参数联动
+        return
+      }
+      const platformProtocols = vm.platform.protocols
+      const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
+      updateForm({
+        'autofill': setting.autofill ? setting.autofill : 'basic',
+        'password_selector': setting.password_selector,
+        'script': setting.script,
+        'submit_selector': setting.submit_selector,
+        'username_selector': setting.username_selector
+      })
+    }
+  }), 100)
+}
+
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
@@ -84,19 +105,10 @@ export const assetFieldsMeta = (vm) => {
           const url = window.location.href
           const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
           window.location.href = newURL
-          setTimeout(() => vm.init().then(() => {
-            if (platformType === 'website') {
-              const platformProtocols = vm.platform.protocols
-              const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
-              updateForm({
-                'autofill': setting.autofill ? setting.autofill : 'basic',
-                'password_selector': setting.password_selector,
-                'script': setting.script,
-                'submit_selector': setting.submit_selector,
-                'username_selector': setting.username_selector
-              })
-            }
-          }), 100)
+          updatePlatformProtocols(vm, platformType, updateForm, true)
+        },
+        input: ([event], updateForm) => {
+          updatePlatformProtocols(vm, platformType, updateForm)
         }
       }
     },
