@@ -28,7 +28,7 @@ export default {
     return {
       fields: [
         [
-          this.$t('SMTP'),
+          this.$t('Server'),
           [
             'SMTP'
           ]

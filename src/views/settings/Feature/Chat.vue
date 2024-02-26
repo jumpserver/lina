@@ -40,16 +40,11 @@ export default {
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [
-          this.$t('ChatAI'),
-          [
-            'CHAT_AI_ENABLED',
-            'GPT_MODEL',
-            'GPT_BASE_URL',
-            'GPT_API_KEY',
-            'GPT_PROXY'
-          ]
-        ]
+        'CHAT_AI_ENABLED',
+        'GPT_MODEL',
+        'GPT_BASE_URL',
+        'GPT_API_KEY',
+        'GPT_PROXY'
       ],
       fieldsMeta: {
         GPT_BASE_URL: {

@@ -25,9 +25,7 @@ export default {
       visible: false,
       config: {
         fields: [
-          [this.$t('Basic'), [
-            'SECURITY_COMMAND_EXECUTION', 'SECURITY_COMMAND_BLACKLIST'
-          ]]
+          'SECURITY_COMMAND_EXECUTION', 'SECURITY_COMMAND_BLACKLIST'
         ],
         fieldsMeta: {
         },

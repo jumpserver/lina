@@ -18,7 +18,7 @@
             :value.sync="command"
             style="margin-bottom: 20px"
           />
-          <b>{{ $tc('Output') }}:</b>
+          <div style="margin-bottom: 5px;font-weight: bold">{{ $tc('Output') }}:</div>
           <span v-if="executionInfo.status" style="float: right">
             <span>
               <span><b>{{ $tc('Status') }}: </b></span>
