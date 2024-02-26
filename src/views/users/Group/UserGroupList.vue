@@ -26,6 +26,9 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
+              getItem(item) {
+                return item.is_service_account ? null : item.name
+              },
               getRoute({ row }) {
                 return {
                   name: 'UserGroupDetail',
