@@ -109,7 +109,7 @@ export default {
         }
       }
       .el-input__icon {
-        line-height: 0px;
+        line-height: 0;
       }
     }
   }

@@ -191,7 +191,7 @@ td .el-button.el-button--mini {
 }
 
 .el-input--small .el-input__icon {
-  line-height: 34px;
+  line-height: 30px;
 }
 
 .option-group .el-select-dropdown__item.hover, .option-group .el-select-dropdown__item.selected {

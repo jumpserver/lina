@@ -307,6 +307,10 @@ export default {
       margin: 6px 14px;
       line-height: 0;
 
+      .el-input__inner {
+        height: 30px;
+      }
+
       .showClear {
         padding-right: 30px;
         border-radius: 0;

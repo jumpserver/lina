@@ -418,8 +418,5 @@ export default {
     padding: 5px;
   }
 }
-.el-transfer-panel__filter .el-input__inner {
-  border-radius: 0;
-}
 
 </style>

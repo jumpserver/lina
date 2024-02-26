@@ -146,7 +146,7 @@ export default {
   }
 
   .right-side-item {
-    padding-top: 4px;
+    padding-top: 2px;
   }
 
   .right-side-actions >>> .el-button {

@@ -144,10 +144,34 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+  $headerHeight: 30px;
+  $innerHeight: 28px;
   .table-header {
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: space-between;*/
+    >>> {
+      .el-cascader {
+        .el-input.el-input--suffix {
+          .el-input__inner {
+            height: calc(#{$innerHeight} - 1px);
+          }
+        }
+      }
+      .el-input__inner {
+        height: $innerHeight;
+      }
+
+      .el-input__suffix {
+        height: $innerHeight;
+        line-height: $headerHeight;
+      }
+
+      .el-cascader {
+        line-height: $innerHeight;
+      }
+
+       .el-input__icon {
+        line-height: $headerHeight;
+      }
+    }
   }
 
   .right-side-item {
@@ -178,7 +202,7 @@ export default {
   }
 
   .action-search >>> .el-cascader {
-    line-height: 32px !important;
+    line-height: $innerHeight !important;
   }
 
   .right-side-actions {
@@ -200,10 +224,6 @@ export default {
 
   .datepicker {
     margin-left: 10px;
-  }
-
-  .table-header {
-    line-height: 32px;
   }
 
   .left-side {
@@ -257,7 +277,7 @@ export default {
   }
 
   .filter-field.right-side-item.action-search {
-    height: 34px;
+    height: 30px;
   }
 
 </style>

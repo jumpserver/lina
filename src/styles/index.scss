@@ -139,9 +139,9 @@ h4 {
   padding-top: 10px;
 }
 
-.filter-field.right-side-item.action-search {
-  height: 36px;
-}
+//.filter-field.right-side-item.action-search {
+//  height: 36px;
+//}
 
 
 .el-dialog__body {
@@ -318,6 +318,7 @@ input[type=file] {
 
 .el-button.el-button--small, .el-button--small.is-round {
   font-weight: 400;
+  padding: 8px 12px;
 }
 
 .el-button.el-button--mini, .el-button--mini.is-round {
@@ -358,4 +359,14 @@ button, input, optgroup, select, textarea {
 
 .el-tabs__item > span {
   padding: 6px;
+}
+
+.el-form .el-input__inner, .el-dialog__body .el-input__inner {
+  height: 30px;
+}
+
+.el-input input::placeholder {
+  font-weight: 400 !important;
+  font-family: "Open Sans", sans-serif ;
+  font-size: 13px;
 }

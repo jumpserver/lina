@@ -6,15 +6,14 @@
     :clearable="clearable"
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
+    :filterable="true"
     :loading="!initialized"
     :multiple="multiple"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
     class="select2"
-    filterable
     popper-append-to-body
-    v-bind="$attrs"
     @change="onChange"
     v-on="$listeners"
     @visible-change="onVisibleChange"

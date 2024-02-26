@@ -12,7 +12,8 @@ export default {
 
 <style scoped>
   .wrapper-content {
-    padding: 24px 24px 22px;
+    padding: 12px 24px 22px;
+    max-width: 1200px;
   }
 
   .wrapper-content >>> .el-alert {

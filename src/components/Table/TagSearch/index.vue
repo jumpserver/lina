@@ -350,7 +350,6 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 3px;
     background-color:#fff;
-
   }
   .search-input  >>> .el-input__suffix {
     cursor: pointer;
@@ -400,10 +399,6 @@ export default {
   .filter-field >>> .el-cascader .el-input input {
     width: 0;
     border: none;
-  }
-
-  .filter-field >>> .el-input__inner {
-    height: 30px;
   }
 
   .el-cascader-menu__wrap {

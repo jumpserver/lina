@@ -99,7 +99,7 @@ export default {
         return
       } else {
         const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
-        input.style.height = '34px'
+        input.style.height = '30px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
@@ -151,7 +151,7 @@ export default {
 }
 
 .label-button {
-  padding: 10px 13px 10px 12px;
+  //padding: 10px 13px 10px 12px;
 }
 
 .label-select {
@@ -159,11 +159,7 @@ export default {
 
 .label-cascader {
   width: 300px;
-  >>> .el-input--suffix.el-input {
-    input {
-      height: 34px;
-    }
-  }
+
   >>> .el-input__inner {
     font-size: 13px;
   }
