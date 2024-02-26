@@ -60,15 +60,15 @@ export default {
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [this.$t('Basic'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('AccountStorage'),
+        [this.$t('Storage'),
           [
             'VAULT_ENABLED',
             'VAULT_HCP_HOST',
             'VAULT_HCP_TOKEN',
             'VAULT_HCP_MOUNT_POINT'
           ]
-        ]
+        ],
+        [this.$t('HistoryRecord'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']]
       ],
       fieldsMeta: {
         HISTORY_ACCOUNT_CLEAN_LIMIT: {
