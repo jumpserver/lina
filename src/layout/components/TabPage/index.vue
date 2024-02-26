@@ -158,6 +158,7 @@ export default {
   margin-right: -25px;
   padding-right: 25px;
   margin-top: -30px;
+  width: 100vw;
 
   .el-tabs__item {
     i {

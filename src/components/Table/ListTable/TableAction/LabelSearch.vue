@@ -98,7 +98,9 @@ export default {
         },)
         return
       } else {
-        const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
+        const input = this.$refs.labelCascader.$el
+          .getElementsByClassName('el-input--suffix')[0]
+          .querySelector('input')
         input.style.height = '30px'
       }
       if (this.labelValue.length === 0) {

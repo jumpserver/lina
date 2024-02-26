@@ -1,14 +1,14 @@
 <template>
   <el-form-item
     v-show="_show"
-    :prop="prop"
     :label="data.label"
+    :prop="prop"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
   >
-    <template v-if="data.helpTips" #label>
-      {{ data.label }}
-      <el-tooltip placement="top" effect="light" popper-class="help-tips">
+    <template #label>
+      <span>{{ data.label }}</span>
+      <el-tooltip v-if="data.helpTips" effect="light" placement="top" popper-class="help-tips">
         <div slot="content" v-html="data.helpTips" />
         <i class="fa fa-question-circle-o" />
       </el-tooltip>
@@ -33,9 +33,9 @@
     <custom-component
       v-else
       :component="data.component || `el-${data.type}`"
-      v-bind="componentProps"
-      :value="itemValue"
       :disabled="disabled || componentProps.disabled || readonly"
+      :value="itemValue"
+      v-bind="componentProps"
       v-on="listeners"
     >
       <template v-for="opt in options">
@@ -47,8 +47,8 @@
         <el-checkbox-button
           v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
           :key="opt.value"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
+          v-bind="opt"
         >
           {{ opt.label }}
         </el-checkbox-button>
@@ -56,8 +56,8 @@
         <el-checkbox
           v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
           :key="opt.value"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
+          v-bind="opt"
         >
           {{ opt.label }}
         </el-checkbox>
@@ -66,8 +66,8 @@
         <el-radio
           v-else-if="data.type === 'radio-group'"
           :key="opt.label"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
+          v-bind="opt"
         >{{ opt.label }}
         </el-radio>
       </template>

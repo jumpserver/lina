@@ -2,6 +2,7 @@
   <IBox :fa="fa" :title="title">
     <el-form class="content" label-position="left" label-width="25%">
       <el-form-item v-for="item in items" :key="item.key" :label="item.key">
+        <span slot="label"> {{ item.key }}</span>
         <ItemValue :value="item.value" class="item-value" v-bind="item" />
       </el-form-item>
     </el-form>
@@ -58,9 +59,14 @@ export default {
 
     >>> .el-form-item__label {
       padding-right: 8%;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      //white-space: nowrap;
+      //text-overflow: ellipsis;
       overflow: hidden;
+
+      span {
+        display: inline-block;
+        line-height: 1.5;
+      }
     }
 
     >>> .el-form-item__content {

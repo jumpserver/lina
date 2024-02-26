@@ -357,16 +357,29 @@ button, input, optgroup, select, textarea {
   }
 }
 
+.el-form .el-form-item__content {
+  font-size: 13px;
+}
+
 .el-tabs__item > span {
   padding: 6px;
 }
 
 .el-form .el-input__inner, .el-dialog__body .el-input__inner {
-  height: 30px;
+  height: 32px;
 }
 
 .el-input input::placeholder {
   font-weight: 400 !important;
   font-family: "Open Sans", sans-serif ;
   font-size: 13px;
+}
+
+.el-form-item__label {
+  overflow: hidden;
+
+  span {
+    display: inline-block;
+    line-height: 1.5;
+  }
 }
