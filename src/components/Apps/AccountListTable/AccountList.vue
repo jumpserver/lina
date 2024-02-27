@@ -139,7 +139,7 @@ export default {
       showAddDialog: false,
       showAddTemplateDialog: false,
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('AddAccount'),
+      accountCreateUpdateTitle: this.$t('Create'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -311,7 +311,7 @@ export default {
         extraActions: [
           {
             name: 'add',
-            title: this.$t('Add'),
+            title: this.$t('Create'),
             type: 'primary',
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
@@ -321,7 +321,7 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('AddAccount')
+                vm.accountCreateUpdateTitle = this.$t('Create')
                 vm.showAddDialog = true
               })
             }
@@ -338,7 +338,7 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('AddAccount')
+                vm.accountCreateUpdateTitle = this.$t('Create')
                 vm.showAddTemplateDialog = true
               })
             }
@@ -347,8 +347,8 @@ export default {
         ],
         extraMoreActions: [
           {
-            name: 'BulkVerify',
-            title: this.$t('BulkVerify'),
+            name: 'BatchTest',
+            title: this.$t('BatchTest'),
             type: 'primary',
             icon: 'fa-handshake-o',
             can: ({ selectedRows }) => {
@@ -366,7 +366,7 @@ export default {
             }.bind(this)
           },
           {
-            name: 'ClearSecrets',
+            name: 'ClearSecret',
             title: this.$t('ClearSecret'),
             type: 'primary',
             icon: 'clean',
