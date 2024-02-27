@@ -70,6 +70,10 @@ export default {
       type: String,
       default: ''
     },
+    pushAccountParams: {
+      type: Object,
+      default: () => ({})
+    },
     visible: {
       type: Boolean,
       default: false
@@ -135,6 +139,7 @@ export default {
         fieldsMeta: {}
       }
 
+      const param = this.pushAccountParams[method]
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
           let component = 'el-input'
@@ -143,6 +148,8 @@ export default {
               component = DynamicInput
               break
           }
+
+          v.default = param[k] || v.default
           const item = { ...v, component: component }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
