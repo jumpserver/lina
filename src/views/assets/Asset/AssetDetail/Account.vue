@@ -49,6 +49,12 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    extraQuickActions: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data() {
@@ -83,7 +89,8 @@ export default {
               })
             }
           })
-        }
+        },
+        ...this.extraQuickActions
       ]
     }
   },
