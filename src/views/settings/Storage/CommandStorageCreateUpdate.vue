@@ -30,7 +30,8 @@ export default {
         }
       },
       fields: [
-        [this.$t('Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]
+        [this.$t('Basic'), ['name', 'type', 'meta']],
+        [this.$t('Other'), ['is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {

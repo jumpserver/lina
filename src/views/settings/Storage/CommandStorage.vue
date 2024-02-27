@@ -44,6 +44,10 @@ export default {
         permissions: {
           resource: 'commandstorage'
         },
+        columns: [
+          'id', 'name', 'type', 'comment', 'is_default', 'actions'
+        ],
+        columnsExclude: ['meta'],
         columnsShow: {
           min: ['name', 'type', 'actions'],
           default: ['name', 'type', 'comment', 'is_default', 'actions']

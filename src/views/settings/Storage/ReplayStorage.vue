@@ -36,7 +36,7 @@ export default {
         },
         columnsExclude: ['meta'],
         columns: [
-          'name', 'type', 'comment', 'is_default', 'actions'
+          'id', 'name', 'type', 'comment', 'is_default', 'actions'
         ],
         columnsShow: {
           min: ['name', 'type', 'actions']
