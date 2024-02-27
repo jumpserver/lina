@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
 </template>
 
 <script>
@@ -25,7 +25,7 @@ export default {
         'can_public_key_auth': false
       },
       fields: [
-        [this.$t('Account'), ['name', 'username', 'email', 'groups']],
+        [this.$t('Basic'), ['name', 'username', 'email', 'groups']],
         [this.$t('Authentication'), [
           'password_strategy', 'update_password', 'password',
           'need_update_password', 'mfa_level', 'source'
@@ -219,5 +219,13 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.user-create-update >>> .el-form-item-need_update_password {
+  margin-top: -10px;
+
+  .el-form-item__content label {
+    line-height: 30px;
+  }
+}
+
 </style>

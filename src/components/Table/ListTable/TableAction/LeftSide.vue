@@ -126,6 +126,7 @@ export default {
           type: 'primary',
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
+          icon: 'plus',
           callback: this.onCreate || this.handleCreate
         }
       ]

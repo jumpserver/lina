@@ -8,7 +8,7 @@
   >
     <template #headingRightSide>
       <span v-if="hasRightSide">
-        <ActionsGroup slot="headingRightSide" :actions="pageActions" />
+        <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
       </span>
     </template>
     <slot />
@@ -137,6 +137,7 @@ export default {
           name: 'update',
           title: this.$t('Update'),
           icon: 'el-icon-edit-outline',
+          size: 'small',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
@@ -147,6 +148,7 @@ export default {
           type: 'danger',
           plain: true,
           icon: 'el-icon-delete',
+          size: 'small',
           can: this.validActions.canDelete,
           has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
@@ -258,18 +260,7 @@ export default {
 </script>
 
 <style scoped>
-  .page-submenu >>> .el-tabs__header {
-    background-color: white;
-    margin-left: -25px;
-    padding-left: 25px;
-    margin-right: -25px;
-    padding-right: 25px;
-    margin-top: -30px;
-    /*margin: 0;*/
-    /*background-color: #f3f3f4;*/
-  }
-
-  .page-submenu >>> .el-tabs__nav-wrap {
-    position: static;
+  .header-buttons {
+    z-index: 999;
   }
 </style>

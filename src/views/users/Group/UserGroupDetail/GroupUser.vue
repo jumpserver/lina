@@ -68,7 +68,7 @@ export default {
       tableConfig: {
         url: `/api/v1/users/users/?group_id=${this.object.id}`,
         columns: [
-          'name', 'username', 'email', 'is_valid', 'delete_action'
+          'name', 'username', 'is_valid', 'delete_action'
         ],
         columnsMeta: {
           name: {

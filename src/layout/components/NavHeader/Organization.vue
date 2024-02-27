@@ -10,7 +10,6 @@
   >
     <template slot="prefix">
       <svg-icon icon-class="organization" />
-      <span class="line" />
     </template>
 
     <el-option-group
@@ -78,7 +77,7 @@ export default {
             id: 'list',
             icon: 'list',
             disabled: !this.$hasPerm('orgs.view_organization'),
-            name: this.$t('OrganizationLists')
+            name: this.$t('OrganizationManage')
           }
         ]
       }
@@ -88,7 +87,7 @@ export default {
     },
     orgChoicesGroup() {
       return {
-        label: this.$t('AllOrganization'),
+        label: this.$t('ChangeOrganization'),
         options: this.usingOrgs
       }
     },
@@ -154,7 +153,7 @@ $height: 28px;
 
 .line {
   width: 1px;
-  margin-left: 8px;
+  margin-left: 5px;
   border: .5px solid #FFF;
   opacity: 0.4;
 }
