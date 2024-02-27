@@ -137,7 +137,7 @@ export default [
         name: 'AccountPushCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountPushCreate'),
+          title: i18n.t('Create'),
           permissions: ['accounts.add_pushaccountautomation']
         }
       },
@@ -147,7 +147,7 @@ export default [
         name: 'AccountPushUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountPushUpdate'),
+          title: i18n.t('Update'),
           permissions: ['accounts.change_pushaccountautomation']
         }
       },
@@ -208,7 +208,7 @@ export default [
         name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountGatherTaskCreate'),
+          title: i18n.t('Create'),
           permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
@@ -228,7 +228,7 @@ export default [
         name: 'AccountGatherTaskUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountGatherTaskUpdate'),
+          title: i18n.t('Update'),
           action: 'update',
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
@@ -352,7 +352,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
         meta: {
-          title: i18n.t('AccountBackupCreate'),
+          title: i18n.t('Create'),
           action: 'create'
         },
         hidden: true
@@ -362,7 +362,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
         meta: {
-          title: i18n.t('AccountBackupUpdate'),
+          title: i18n.t('Update'),
           action: 'update'
         },
         hidden: true

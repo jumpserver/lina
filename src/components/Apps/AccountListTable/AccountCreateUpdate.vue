@@ -53,7 +53,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('AddAccount')
+        return this.$t('Add')
       }
     }
   },

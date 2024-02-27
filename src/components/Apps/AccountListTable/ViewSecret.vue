@@ -86,7 +86,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$tc('AccountDetail')
+        return this.$tc('Detail')
       }
     },
     showPasswordRecord: {
