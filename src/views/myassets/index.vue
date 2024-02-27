@@ -138,7 +138,9 @@ export default {
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
-                    window.open(`/luna/?login_to=${row.id}`, '_blank')
+                    const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
+                    const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
+                    window.open(url, '_blank')
                   }
                 },
                 {
