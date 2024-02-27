@@ -7,7 +7,7 @@
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
   >
-    <template #label>
+    <template v-if="data.label" #label>
       <span>{{ data.label }}</span>
       <el-tooltip v-if="data.helpTips" effect="light" placement="top" popper-class="help-tips">
         <div slot="content" v-html="data.helpTips" />

@@ -277,7 +277,7 @@ export default {
       }
       .svg-icon {
         color: #FFF!important;
-        margin-right: 0px!important;
+        margin-right: 0!important;
       }
     }
 

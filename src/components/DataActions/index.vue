@@ -51,7 +51,7 @@
           <span>
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial;">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
-              <svg-icon v-else :icon-class="action.icon" style="font-size: 13px;" />
+              <svg-icon v-else :icon-class="action.icon" />
             </span>
             {{ toSentenceCase(action.title) }}
           </span>

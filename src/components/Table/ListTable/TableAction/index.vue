@@ -159,6 +159,10 @@ export default {
         height: $innerHeight;
       }
 
+      .el-button.el-button--primary {
+        border-color: #DCDFE6;
+      }
+
       .el-input__suffix {
         height: $innerHeight;
         line-height: $headerHeight;

@@ -258,8 +258,8 @@ export default {
     border: none;
     padding: 2px;
     font-size: 14px;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     color: #888;
     background-color: transparent;
     margin-left: 2px;
@@ -272,10 +272,10 @@ export default {
 
 .autoWidth-select > > > .el-input__prefix {
   position: relative;
-  left: 0px;
+  left: 0;
   box-sizing: border-box;
-  height: 28px;
-  line-height: 28px;
+  height: 30px;
+  line-height: 30px;
   visibility: hidden;
 }
 

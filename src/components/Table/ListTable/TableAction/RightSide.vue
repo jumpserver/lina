@@ -146,15 +146,14 @@ export default {
   }
 
   .right-side-item {
-    padding-top: 2px;
   }
 
   .right-side-actions >>> .el-button {
     border: none;
     padding: 5px;
     font-size: 14px;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     color: #888;
     background-color: transparent;
   }

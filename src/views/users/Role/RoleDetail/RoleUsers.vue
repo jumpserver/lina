@@ -70,7 +70,7 @@ export default {
           user_display: {
             label: this.$t('Name'),
             formatter: (row) => {
-              return row.user.name
+              return `${row.user.name}(${row.user.username})`
             }
           },
           delete_action: {

@@ -139,17 +139,15 @@ export default {
       }
     }
 
+    .header-item:hover,  .nav-logo:hover {
+      background: rgba(0, 0, 0, 12%);
+    }
+
     .navbar-right {
       float: right;
       margin-right: 10px;
       height: $headerHeight;
       line-height: $headerHeight;
-
-      .header-hover {
-        &:hover {
-          background-color: rgba(255, 255, 255, .2);
-        }
-      }
 
       .header-item {
         line-height: $headerHeight;
@@ -174,13 +172,9 @@ export default {
         }
       }
 
-      .header-icon {
+      .header-item {
         padding-left: 8px;
         padding-right: 8px;
-
-        &:hover {
-          background-color: rgba(255, 255, 255, .2);
-        }
 
         & > > > i {
           color: #FFF;
