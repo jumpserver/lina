@@ -2,6 +2,7 @@
   <el-button
     ref="deleteButton"
     :disabled="iDisabled"
+    :title="$t('Remove')"
     size="mini"
     type="danger"
     @click="onDelete(col, row, cellValue, reload)"
