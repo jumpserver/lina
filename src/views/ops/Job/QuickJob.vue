@@ -456,6 +456,9 @@ export default {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write(this.wrapperError('Task has been canceled'))
         this.getTaskStatus()
+      }).catch((e) => {
+        console.log(e)
+      }).finally(() => {
         this.setStopBtn()
       })
     },
