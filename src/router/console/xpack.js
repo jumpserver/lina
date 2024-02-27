@@ -46,7 +46,7 @@ const clouds = {
           name: 'AccountCreate',
           hidden: true,
           meta: {
-            title: i18n.t('AccountCreate'),
+            title: i18n.t('Create'),
             action: 'create',
             permissions: ['xpack.add_account']
           }
@@ -57,7 +57,7 @@ const clouds = {
           name: 'AccountUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('AccountUpdate'),
+            title: i18n.t('Update'),
             action: 'update',
             permissions: ['xpack.change_account']
           }
@@ -68,7 +68,7 @@ const clouds = {
           name: 'AccountDetail',
           hidden: true,
           meta: {
-            title: i18n.t('AccountDetail'),
+            title: i18n.t('Detail'),
             permissions: ['xpack.view_account']
           }
         }
