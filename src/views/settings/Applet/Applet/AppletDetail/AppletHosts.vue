@@ -35,7 +35,7 @@ export default {
         extraMoreActions: [
           {
             name: 'SyncSelected',
-            title: this.$t('BulkDeploy'),
+            title: this.$t('BatchDeployment'),
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0

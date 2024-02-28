@@ -366,7 +366,7 @@ export default {
             }.bind(this)
           },
           {
-            name: 'ClearSecret',
+            name: 'BatchClearSecret',
             title: this.$t('ClearSecret'),
             type: 'primary',
             icon: 'clean',
@@ -380,13 +380,13 @@ export default {
                 { account_ids: ids }).then(() => {
                 this.$message.success(this.$tc('ClearSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('BulkClearErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BatchClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'actionUpdateSelected',
-            title: this.$t('AccountBatchUpdate'),
+            name: 'BatchUpdate',
+            title: this.$t('BatchUpdate'),
             icon: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&

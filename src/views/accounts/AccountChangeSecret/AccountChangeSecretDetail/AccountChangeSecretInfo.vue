@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('ManualExecutePlan'),
+          title: this.$t('ManualExecution'),
           attrs: {
             type: 'primary',
             label: this.$t('Execute'),

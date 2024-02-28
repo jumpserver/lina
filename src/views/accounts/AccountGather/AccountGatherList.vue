@@ -71,9 +71,6 @@ export default {
           present: {
             width: '100px'
           },
-          address_last_login: {
-            width: '120px'
-          },
           date_updated: {
             formatter: function(row, col, cell) {
               return toSafeLocalDateStr(row.date_updated)
@@ -129,8 +126,8 @@ export default {
         },
         extraMoreActions: [
           {
-            name: 'SyncSelected',
-            title: this.$t('SyncSelected'),
+            name: 'BatchSync',
+            title: this.$t('BatchSync'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
@@ -146,13 +143,13 @@ export default {
               ).then(() => {
                 this.$message.success(this.$tc('SyncSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('BulkSyncErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BatchSyncErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'BulkSyncDelete',
-            title: this.$t('BulkSyncDelete'),
+            name: 'BatchSyncDelete',
+            title: this.$t('BatchSyncDelete'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
