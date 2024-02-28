@@ -149,7 +149,9 @@ export default {
               break
           }
 
-          v.default = param[k] || v.default
+          if (param) {
+            v.default = param[k] || v.default
+          }
           const item = { ...v, component: component }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
