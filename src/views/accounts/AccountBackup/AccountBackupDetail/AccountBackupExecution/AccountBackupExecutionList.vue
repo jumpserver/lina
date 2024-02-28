@@ -47,6 +47,9 @@ export default {
               return row.timedelta.toFixed(2) + 's'
             }
           },
+          is_success: {
+            width: '90px'
+          },
           actions: {
             formatterArgs: {
               hasDelete: false,

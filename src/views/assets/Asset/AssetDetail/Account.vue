@@ -66,7 +66,7 @@ export default {
       ],
       quickActions: [
         {
-          title: this.$t('BulkVerify'),
+          title: this.$t('BatchTest'),
           attrs: {
             type: 'primary',
             label: this.$tc('Test')

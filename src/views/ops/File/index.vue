@@ -123,7 +123,7 @@ import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BulkTransfer',
+  name: 'BatchTransfer',
   components: {
     TreeTable,
     Page,
