@@ -165,7 +165,7 @@ export default {
 
       .el-input__suffix {
         height: $innerHeight;
-        line-height: $headerHeight;
+        line-height: $innerHeight;
       }
 
       .el-cascader {

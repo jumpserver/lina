@@ -185,7 +185,7 @@ export default {
 
   .el-form ::v-deep .help-block {
     display: block;
-    margin-top: 5px;
+    margin-top: 2px;
     margin-bottom: 10px;
     color: #999;
     font-size: 12px;

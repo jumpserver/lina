@@ -8,8 +8,8 @@
     :visible.sync="setting.InviteDialogVisible"
     after
     custom-class="asset-select-dialog"
-    top="15vh"
-    width="700px"
+    top="8vh"
+    width="710px"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"

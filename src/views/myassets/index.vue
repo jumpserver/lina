@@ -43,7 +43,7 @@ export default {
         hasTree: true,
         columnsExclude: ['spec_info'],
         columnsShow: {
-          default: ['name', 'address', 'platform', 'accounts', 'connectivity', 'is_active', 'actions'],
+          default: ['name', 'address', 'platform', 'accounts', 'is_active', 'actions'],
           min: ['name', 'address', 'actions']
         },
         columns: [

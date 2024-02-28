@@ -73,8 +73,8 @@ export default {
   overflow-x: hidden;
 
   .el-alert {
-    margin-top: -10px;
-    margin-bottom: 10px;
+    margin-top: -5px;
+    margin-bottom: 5px;
   }
 }
 

@@ -139,6 +139,10 @@ export default {
       }
     }
 
+    >>> .el-link {
+      vertical-align: baseline;
+    }
+
     .header-item:hover,  .nav-logo:hover {
       background: rgba(0, 0, 0, 12%);
     }
@@ -250,6 +254,10 @@ export default {
     border-radius: 3px;
     background-color: rgba(255, 255, 255, .15);
     padding-left: 10px !important;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, .25);
+    }
   }
 </style>
 
