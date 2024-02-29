@@ -76,9 +76,9 @@ export default {
           title: this.$t('accounts.BulkVerify'),
           attrs: {
             type: 'primary',
-            label: this.$tc('accounts.Test')
+            label: this.$tc('accounts.Test'),
+            disabled: this.object.type.value === 'clickhouse' || this.object.type.value === 'redis'
           },
-          disabled: this.object.type.value === 'clickhouse' || this.object.type.value === 'redis',
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(

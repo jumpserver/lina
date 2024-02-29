@@ -12,7 +12,6 @@
           <component
             :is="iType"
             v-model="action.attrs.model"
-            :disabled="action.disabled"
             v-bind="action.attrs"
             v-on="callbacks"
           >
