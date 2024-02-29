@@ -43,14 +43,14 @@ export default {
             hidden: () => !this.$hasPerm('terminal.view_command')
           },
           {
-            title: this.$t('route.FileTransfer'),
-            name: 'SessionFTPLogs',
-            hidden: () => !this.$hasPerm('terminal.view_ftplog')
-          },
-          {
             title: this.$t('sessions.Activity'),
             name: 'SessionJoinRecords',
             hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
+          },
+          {
+            title: this.$t('route.FileTransfer'),
+            name: 'SessionFTPLogs',
+            hidden: () => !this.$hasPerm('audits.view_ftplog')
           }
         ],
         getObjectName: (obj) => { return obj.id },
