@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountBatchUpdate": "Batch update(same type)",
     "SuFrom": "Su from",
     "GenerateSuccessMsg": "Accounts generated successfully",
     "GenerateAccounts": "Regenerate accounts",
@@ -109,7 +110,7 @@
       "ExecutionList": "Execution list",
       "Reason": "Reason",
       "AccountBackup": "Account backup",
-      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back",
+      "RecipientHelpText": "If both recipients A and B are set, the account key will be split into two parts: front and back. If the user has not set an encryption password, please go to Personal Information ->Preferences ->Set Encryption Password",
       "RecipientServer": "Receiving server"
     },
     "DynamicUsername": "Dynamic username",
@@ -747,6 +748,7 @@
     "Prompt": "Prompt",
     "InputMessage": "Input message...",
     "CollapseSidebar": "Collapse the sidebar",
+    "crontabDiffError": "Please ensure that the interval for scheduled execution is no less than ten minutes!",
     "introduction": {
       "ConceptTitle": "🤔 Python interpreter",
       "ConceptContent": "I want you to act like a Python interpreter. I will give you Python code, and you will execute it. Do not provide any explanations. Do not respond with anything except the output of the code. ",
@@ -1196,7 +1198,8 @@
     "FileSizeExceedsLimit": "File size exceeds limit",
     "runSucceed": "Task executed successfully",
     "EnterUploadPath": "Enter the upload path",
-    "FileNameTooLong": "File name too long"
+    "FileNameTooLong": "File name too long",
+    "StopJob": "Stop job"
   },
   "perms": {
     "": "",
@@ -1601,7 +1604,8 @@
     "remoteAddr": "Remote addr",
     "replay": "replay",
     "replaySession": "Replay session",
-    "replayStorage": "Object storage",
+    "replayStorage": "Replay storage",
+    "objectStorage": "Object storage",
     "riskLevel": "Risk level",
     "session": "Session",
     "sshPort": "SSH port",
@@ -2114,7 +2118,8 @@
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible.",
     "dateLastLogin": "Date last login",
-    "AddAllMembersWarningMsg": "Are you sure you want to add all members?"
+    "AddAllMembersWarningMsg": "Are you sure you want to add all members?",
+    "disallowSelfUpdateFields": "Not allowed to modify the current fields oneself"
   },
   "notifications": {
     "MessageType": "Message Type",

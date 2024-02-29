@@ -174,7 +174,7 @@ export default {
 
 .handle-button {
   position: absolute;
-  top: 30%;
+  bottom: 20%;
   left: -48px;
   width: 48px;
   height: 45px;

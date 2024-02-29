@@ -2,7 +2,7 @@
   <div class="code-editor" style="font-size: 12px">
     <div class="toolbar">
       <div
-        v-for="(item,index) in toolbar.left"
+        v-for="(item,index) in iActions"
         :key="index"
         style="display: inline-block; margin: 0 2px"
       >
@@ -93,6 +93,16 @@
         </el-tooltip>
       </div>
 
+      <div v-if="toolbar.hasOwnProperty('fold')" class="fold">
+        <el-tooltip :content="$tc('common.MoreActions')" placement="top">
+          <i
+            class="fa"
+            :class="[isFold ? 'fa-angle-double-right': 'fa-angle-double-down']"
+            @click="onChangeFold"
+          />
+        </el-tooltip>
+      </div>
+
       <div class="right-side" style="float: right">
         <div
           v-for="(item,index) in toolbar.right"
@@ -154,9 +164,19 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      isFold: true
+    }
   },
   computed: {
+    iActions() {
+      let actions = this.toolbar.left || {}
+      const fold = this.toolbar.fold || {}
+      if (!this.isFold) {
+        actions = { ...actions, ...fold }
+      }
+      return actions
+    },
     iValue: {
       get() {
         return this.value
@@ -179,6 +199,9 @@ export default {
     }
   },
   methods: {
+    onChangeFold() {
+      this.isFold = !this.isFold
+    },
     getLabel(value, items) {
       for (const item of items) {
         if (item.value === value) {
@@ -203,6 +226,16 @@ export default {
   display: inline-block;
   padding: 3px 3px 3px 0;
   margin-bottom: 5px;
+}
+
+.fold {
+  display: inline-block;
+  padding-left: 4px;
+  i {
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+  }
 }
 
 > > > .CodeMirror pre.CodeMirror-line,

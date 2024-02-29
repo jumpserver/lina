@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    :close-on-click-modal="false"
     :title="$tc('assets.Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
@@ -109,6 +110,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasRightActions: false,
+        hasLabelSearch: true,
         searchConfig: {
           getUrlQuery: false
         }

@@ -1,5 +1,9 @@
 {
   "accounts": {
+    "AccountBatchUpdate": "批量更新(同类型)",
+    "BulkVerify": "批量测试可连接性",
+    "Test": "测试",
+    "QuickTest": "测试",
     "AutoPush": "自动推送",
     "GeneralAccounts": "普通账号",
     "VirtualAccounts": "虚拟账号",
@@ -50,7 +54,7 @@
       "MailRecipient": "邮件收件人",
       "IsSuccess": "是否成功",
       "Reason": "原因",
-      "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分",
+      "RecipientHelpText": "若收件人 A B 都设置，账号的密钥将被拆分成前后两部分。如用户未设置加密密码 - 请前往个人信息 -> 偏好设置中设置加密密码",
       "RecipientServer": "接收服务器"
     },
     "AccountChangeSecret": {
@@ -802,6 +806,7 @@
     "InputMessage": "输入消息...",
     "EnterMessage": "请输入问题， Enter 发送",
     "CollapseSidebar": "收起侧边栏",
+    "crontabDiffError": "请确保定期执行的时间间隔不少于十分钟！",
     "introduction": {
       "ConceptTitle": "\uD83E\uDD14 Python 解释器 ",
       "ConceptContent": "我想让你像一个 Python 解释器一样行事。我将给你 Python 代码，你将执行它。不要提供任何解释。除了代码的输出，不要用任何东西来回应。",
@@ -1182,7 +1187,8 @@
     "FileSizeExceedsLimit": "文件大小超出限制",
     "runSucceed": "任务执行成功",
     "EnterUploadPath": "输入上传路径",
-    "FileNameTooLong": "文件名太长"
+    "FileNameTooLong": "文件名太长",
+    "StopJob": "停止作业"
   },
   "perms": {
     "": "",
@@ -1577,7 +1583,8 @@
     "remoteAddr": "远端地址",
     "replay": "回放",
     "replaySession": "回放会话",
-    "replayStorage": "对象存储",
+    "replayStorage": "录像存储",
+    "objectStorage": "对象存储",
     "riskLevel": "风险等级",
     "session": "会话",
     "sshPort": "SSH端口",
@@ -2094,7 +2101,8 @@
     "SetPublicKey": "设置SSH公钥",
     "passwordExpired": "密码过期了",
     "passwordWillExpiredPrefixMsg": "密码即将在 ",
-    "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。"
+    "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。",
+    "disallowSelfUpdateFields": "不允许自己修改当前字段"
   },
   "notifications": {
     "MessageType": "消息类型",

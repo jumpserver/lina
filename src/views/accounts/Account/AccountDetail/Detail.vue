@@ -91,7 +91,7 @@ export default {
           title: this.$t('assets.TestAccountConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Test'),
+            label: this.$t('accounts.Test'),
             disabled: (
               !vm.$hasPerm('accounts.verify_account') ||
               !vm.object.asset.auto_config?.ansible_enabled ||
@@ -104,7 +104,7 @@ export default {
               this.$axios.post(
                 `/api/v1/accounts/accounts/tasks/`,
                 {
-                  action: 'test',
+                  action: 'verify',
                   accounts: [this.object.id]
                 }
               ).then(res => {

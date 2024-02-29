@@ -31,6 +31,16 @@ export default [
     name: 'TaskLog',
     hidden: true,
     meta: {
+      title: i18n.t('setting.ChatAI'),
+      permissions: []
+    }
+  },
+  {
+    path: '/chat/chat-ai/',
+    component: () => import('@/views/chat/ChatAi'),
+    name: 'ChatAi',
+    hidden: true,
+    meta: {
       title: i18n.t('route.CeleryTaskLog'),
       permissions: []
     }

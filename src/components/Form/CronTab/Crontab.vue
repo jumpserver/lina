@@ -100,7 +100,7 @@
           <div style="font-size: 13px;">{{ contabValueString }}</div>
         </div>
       </div>
-      <CrontabResult :ex="contabValueString" />
+      <CrontabResult :ex="contabValueString" @crontabDiffChange="crontabDiffChangeHandle" />
 
       <div class="pop_btn">
         <el-button
@@ -167,7 +167,8 @@ export default {
         week: '*'
         // year: "",
       },
-      newContabValueString: ''
+      newContabValueString: '',
+      crontabDiff: 0
     }
   },
   computed: {
@@ -364,6 +365,12 @@ export default {
     },
     // 填充表达式
     submitFill() {
+      const crontabDiffMin = this.crontabDiff / 1000 / 60
+      if (crontabDiffMin > 0 && crontabDiffMin < 10) {
+        const msg = this.$tc('common.crontabDiffError')
+        this.$message.error(msg)
+        return
+      }
       this.$emit('fill', this.contabValueString)
       this.hidePopup()
     },
@@ -381,6 +388,9 @@ export default {
       for (const j in this.contabValueObj) {
         this.changeRadio(j, this.contabValueObj[j])
       }
+    },
+    crontabDiffChangeHandle(diff) {
+      this.crontabDiff = diff
     }
   }
 }
@@ -454,7 +464,7 @@ export default {
 }
 
 .crontab-panel {
-  >>> .el-input-number {
+  > > > .el-input-number {
     margin: 0 5px
   }
 }

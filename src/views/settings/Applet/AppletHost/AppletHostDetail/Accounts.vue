@@ -1,27 +1,24 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <Account :columns-meta="columnsMeta" :object.sync="object" />
-    </el-col>
-    <el-col :md="8" :sm="24">
-      <QuickActions :actions="quickActions" type="primary" />
+    <el-col :md="24" :sm="24">
+      <Account :columns-meta="columnsMeta" :object.sync="object" :extra-quick-actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import Account from '@/views/assets/Asset/AssetDetail/Account'
-import { QuickActions } from '@/components'
 
 export default {
   name: 'Accounts',
   components: {
-    QuickActions, Account
+    Account
   },
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {

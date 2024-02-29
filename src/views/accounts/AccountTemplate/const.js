@@ -1,5 +1,5 @@
 import { getUuidUpdateFromUrl } from '@/utils/common'
-import { PasswordRule, UpdateToken } from '@/components/Form/FormFields'
+import { PasswordRule, UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2'
 import AutomationParams from '@/components/Apps/AutomationParams'
 import i18n from '@/i18n/i18n'
@@ -68,6 +68,7 @@ export const templateFieldsMeta = (vm) => {
         type: 'textarea',
         rows: 4
       },
+      component: UploadSecret,
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || formValue.secret_strategy === 'random'
     },
     passphrase: {

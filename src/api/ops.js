@@ -53,6 +53,14 @@ export function createJob(form) {
   })
 }
 
+export function StopJob(form) {
+  return request({
+    url: '/api/v1/ops/job-executions/stop/',
+    method: 'post',
+    data: form
+  })
+}
+
 export function JobUploadFile(form) {
   return request({
     url: '/api/v1/ops/jobs/upload/',
@@ -62,3 +70,4 @@ export function JobUploadFile(form) {
     data: form
   })
 }
+
