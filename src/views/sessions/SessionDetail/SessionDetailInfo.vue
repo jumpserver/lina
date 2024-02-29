@@ -61,7 +61,8 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('sessions.Monitor'),
-            disabled: !this.session['can_join'] || !vm.$hasPerm('terminal.monitor_session')
+            disabled: !this.session['can_join'] || !vm.$hasPerm('terminal.monitor_session') ||
+                vm.session.type.value === 'sftp'
           },
           callbacks: {
             click: function() {

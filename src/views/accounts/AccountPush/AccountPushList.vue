@@ -63,6 +63,9 @@ export default {
             label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px'
           },
+          is_periodic: {
+            width: '152px'
+          },
           periodic_display: {
             label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: '150px'

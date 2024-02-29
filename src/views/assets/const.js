@@ -26,6 +26,25 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
+function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged = false) {
+  setTimeout(() => vm.init().then(() => {
+    const isCreate = vm?.$route?.meta.action === 'create'
+    if (platformType === 'website') {
+      const need_modify = isCreate || isPlatformChanged
+      if (!need_modify) return
+      const platformProtocols = vm.platform.protocols
+      const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
+      updateForm({
+        'autofill': setting.autofill ? setting.autofill : 'basic',
+        'password_selector': setting.password_selector,
+        'script': setting.script,
+        'submit_selector': setting.submit_selector,
+        'username_selector': setting.username_selector
+      })
+    }
+  }), 100)
+}
+
 export const assetFieldsMeta = (vm) => {
   const platformProtocols = []
   const secretTypes = []
@@ -84,7 +103,10 @@ export const assetFieldsMeta = (vm) => {
           const url = window.location.href
           const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
           window.location.href = newURL
-          setTimeout(() => vm.init(), 100)
+          updatePlatformProtocols(vm, platformType, updateForm, true)
+        },
+        input: ([event], updateForm) => {
+          updatePlatformProtocols(vm, platformType, updateForm)
         }
       }
     },
@@ -160,7 +182,10 @@ export const assetJSONSelectMeta = (vm) => {
       categories.push({ value: category.value, label: category.label })
       _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
       for (const type of category.types) {
-        _protocols.push(...type.constraints.protocols?.map(item => ({ value: item.name, label: item.name.toUpperCase() })))
+        _protocols.push(...type.constraints.protocols?.map(item => ({
+          value: item.name,
+          label: item.name.toUpperCase()
+        })))
       }
     }
     types.push(..._.uniqBy(_types, 'value'))

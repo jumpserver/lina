@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountBatchUpdate": "ロット更新(同じタイプです)",
     "Accounts": "アカウント",
     "SuFrom": "から",
     "AccountTemplateUpdateSecretHelpText": "アカウントリストには、テンプレートで作成されたアカウントが表示されます。暗号文を更新すると、テンプレートで作成されたアカウントの暗号文が更新されます。",
@@ -109,7 +110,7 @@
       "ExecutionList": "実行リスト",
       "Reason": "理由",
       "AccountBackup": "アカウントのバックアップ",
-      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます",
+      "RecipientHelpText": "受信者A Bが設定されている場合、アカウントの鍵は前後2つに分割されます。ユーザーが暗号化パスワードを設定していない場合-個人情報->プリファレンス設定で暗号化パスワードを設定してください",
       "RecipientServer": "受信サーバー"
     },
     "DynamicUsername": "動的ユーザー名",
@@ -748,6 +749,7 @@
     "Prompt": "ヒント",
     "InputMessage": "メッセージの入力...",
     "CollapseSidebar": "サイドバーを閉じる",
+    "crontabDiffError": "定期実行の間隔が10分以上であることをご確認ください！",
     "introduction": {
       "ConceptTitle": "🤔 Python インタプリタ",
       "IdeaContent": "私はあなたに Linux ターミナルの役割を果たしてもらいたいです。私はコマンドを入力し、ターミナルが表示すべき内容を返してもらいます。あなたにはユニークなコードブロック内でのみターミナルの出力に応答してほしいです。説明は書かないでください。私が何かを英語で伝える必要がある場合、中括弧で囲んでテキストを入れます {コメントテキスト}。",
@@ -1194,7 +1196,8 @@
     "FileSizeExceedsLimit": "ファイルサイズが制限を超えています",
     "runSucceed": "タスクが成功しました",
     "EnterUploadPath": "アップロードパスを入力してください",
-    "FileNameTooLong": "ファイル名が長すぎます"
+    "FileNameTooLong": "ファイル名が長すぎます",
+    "StopJob": "ジョブを停止"
   },
   "perms": {
     "": "",
@@ -1595,7 +1598,8 @@
     "remoteAddr": "リモートアドレス",
     "replay": "リプレイ",
     "replaySession": "再生セッション",
-    "replayStorage": "オブジェクトストレージ",
+    "replayStorage": "ビデオ保存",
+    "objectStorage": "オブジェクトストレージ",
     "riskLevel": "リスクレベル",
     "session": "会話",
     "sshPort": "SSHポート",
@@ -2103,7 +2107,8 @@
     "passwordExpired": "パスワードが期限切れです",
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
     "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
-    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？"
+    "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？",
+    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",

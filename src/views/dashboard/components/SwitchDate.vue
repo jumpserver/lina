@@ -74,7 +74,7 @@ export default {
       box-shadow: 2px 1px 2px rgba(0 0 0 / 8%);
 
       .el-radio-button__inner {
-        color: var(--color-primary);
+        color: black;
         background-color: #FFF;
         border-radius: 4px;
         box-shadow: 0 2px 2px rgb(90 97 105 / 31%)!important;

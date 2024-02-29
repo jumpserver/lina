@@ -14,6 +14,7 @@
 <script>
 import parser from 'cron-parser'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'CrontabResult',
   props: {
@@ -51,6 +52,10 @@ export default {
           const cur = interval.next().toString()
           this.resultList.push(toSafeLocalDateStr(cur))
         }
+        const first = new Date(this.resultList[0])
+        const second = new Date(this.resultList[1])
+        const diff = Math.abs(second - first)
+        this.$emit('crontabDiffChange', diff)
       } catch (error) {
         this.isShow = false
         // debug(error, 'error')

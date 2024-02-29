@@ -209,6 +209,12 @@ export default {
   .left-side {
     float: left;
     display: block;
+    &>>> .action-item.el-dropdown {
+      height: 33px;
+      &> .el-button {
+        height: 100%;
+      }
+    }
   }
 
   .right-side {
