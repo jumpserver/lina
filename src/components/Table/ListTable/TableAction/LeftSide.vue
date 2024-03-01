@@ -136,6 +136,7 @@ export default {
           title: this.createTitle,
           type: 'primary',
           has: true,
+          icon: 'plus',
           can: this.canCreate,
           dropdown: [],
           callback: this.onCreate || this.handleCreate

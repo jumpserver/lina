@@ -105,6 +105,7 @@ export default {
           col.formatter = DetailFormatter
           col.sortable = 'custom'
           col.showOverflowTooltip = true
+          col.minWidth = '150px'
           break
         case 'actions':
           col = {
@@ -284,11 +285,22 @@ export default {
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
-      col.label = toSentenceCase(col.label)
+      col = this.updateLabelIfNeed(col)
+      col = this.setDefaultWidthIfNeed(col)
+      return col
+    },
+    updateLabelIfNeed(col) {
+      if (!col.label) {
+        return col
+      }
+      col.label = col.label
         .replace(' Amount', '')
         .replace(' amount', '')
         .replace('数量', '')
-      col = this.setDefaultWidthIfNeed(col)
+      if (col.label.startsWith('Is ')) {
+        col.label = col.label.replace('Is ', '')
+      }
+      col.label = toSentenceCase(col.label)
       return col
     },
     generateTotalColumns() {

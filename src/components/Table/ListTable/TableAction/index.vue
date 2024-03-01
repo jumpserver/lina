@@ -181,107 +181,98 @@ export default {
   .right-side-item {
   }
 
-  .right-side-actions >>> .el-button {
-    border: none;
-    padding: 5px;
-    font-size: 14px;
-    width: 26px;
-    height: 26px;
-    color: #888;
-    background-color: transparent;
-  }
-
-  .right-side-actions >>> .fa {
-    height: 16px;
-    width: 16px;
-  }
-
-  .right-side-actions >>> .el-button:hover {
-    background-color: rgb(0, 0, 0, 0.05);
-  }
-
-  .action-search >>> .el-input__suffix i {
-    font-weight: 500;
-    color: #888;
-  }
-
-  .action-search >>> .el-cascader {
-    line-height: $innerHeight !important;
-  }
-
   .right-side-actions {
     display: flex;
     padding-left: 10px;
     align-items: center;
     justify-content: center;
+    height: $headerHeight;
+
+    >>> .fa {
+      height: 16px;
+      width: 16px;
+    }
+
+    >>> .el-button:hover {
+      background-color: rgb(0, 0, 0, 0.05);
+    }
   }
 
-  .table-action-right-side {
-    display: flex;
-    justify-content: center;
-  }
+    .action-search >>> .el-input__suffix i {
+      font-weight: 500;
+      color: #888;
+    }
 
-  .export-item {
-    display: block;
-    padding: 5px 20px;
-  }
+    .action-search >>> .el-cascader {
+      line-height: $innerHeight !important;
+    }
 
-  .datepicker {
-    margin-left: 10px;
-  }
+    .table-action-right-side {
+      display: flex;
+      justify-content: center;
+    }
 
-  .left-side {
-    float: left;
-    display: block;
-    &>>> .action-item.el-dropdown {
-      &> .el-button {
-        height: 100%;
+    .export-item {
+      display: block;
+      padding: 5px 20px;
+    }
+
+    .datepicker {
+      margin-left: 10px;
+    }
+
+    .left-side {
+      float: left;
+      display: block;
+      &>>> .action-item.el-dropdown {
+        &> .el-button {
+          height: 100%;
+        }
+      }
+      >>> .el-button {
       }
     }
-    >>> .el-button {
+
+    .right-side {
+      float: right;
     }
-  }
 
-  .right-side {
-    float: right;
-  }
+    .search {
+      display: flex;
+      flex-direction: row;
+    }
 
-  .search {
-    display: flex;
-    flex-direction: row;
-  }
+    .mobile .search {
+      display: inherit;
+    }
 
-  .mobile .search {
-    display: inherit;
-  }
+    .mobile .search .datepicker {
+      margin-left: 0;
+    }
 
-  .mobile .search .datepicker {
-    margin-left: 0;
-  }
+    .search.left {
+      float: left;
+      padding: 0 !important;
+    }
 
-  .search.left {
-    float: left;
-    padding: 0 !important;
-  }
+    .search.right {
+      float: right;
+    }
 
-  .search.right {
-    float: right;
-  }
+    .mobile .search.right {
+      float: none;
+    }
 
-  .mobile .search.right {
-    float: none;
-  }
+    .mobile .search.right .action-search {
+      width: 100%;
+    }
 
-  .mobile .search.right .action-search {
-    width: 100%;
-  }
+    .mobile .right-side {
+      padding-top: 5px;
+    }
 
-  .mobile .right-side {
-    padding-top: 5px;
-  }
-
-  .filter-field.right-side-item.action-search {
-    height: 30px;
-  }
+    .filter-field.right-side-item.action-search {
+      height: 30px;
+    }
 
 </style>

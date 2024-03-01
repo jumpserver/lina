@@ -152,7 +152,7 @@ export default {
         v.has = this.cleanBoolean(v, 'has', true)
         v.can = this.cleanBoolean(v, 'can', true)
         v.callback = this.cleanCallback(v, 'callback')
-        v.fa = this.cleanValue(v, 'fa')
+        v.icon = this.cleanValue(v, 'icon')
         v.order = v.order || 100
         v.tip = this.cleanValue(v, 'tip')
         v.title = this.cleanValue(v, 'title')

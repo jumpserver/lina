@@ -359,9 +359,9 @@ export default {
           const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
           object = await this.getObjectDetail(url)
           if (object['name']) {
-            object.name = this.$t('CloneFrom') + object.name
+            object.name = this.$t('CloneFrom') + ' ' + object.name
           } else if (object['hostname']) {
-            object.hostname = this.$t('CloneFrom') + object.hostname
+            object.hostname = this.$t('CloneFrom') + ' ' + object.hostname
             object.name = this.$t('CloneFrom') + '' + object.name
           }
         } else {

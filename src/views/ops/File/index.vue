@@ -7,8 +7,8 @@
             <el-button
               :disabled="runButton.disabled"
               :type="runButton.el&&runButton.el.type"
-              size="mini"
-              style="display: inline-block; margin: 0 2px"
+              size="small"
+              style="display: inline-block; padding: 6px 10px"
               @click="runButton.callback()"
             >
               <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}

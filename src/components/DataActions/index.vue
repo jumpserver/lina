@@ -90,6 +90,16 @@ export default {
     }
   },
   methods: {
+    hasIcon(action, type = '') {
+      const icon = action.icon
+      if (!icon) {
+        return false
+      }
+      if (type) {
+        return icon.startsWith(type)
+      }
+      return true
+    },
     handleDropdownCallback(command) {
       const [option, dropdown] = command
       const defaultCallback = () => this.$log.debug('No callback found: ', option, dropdown)

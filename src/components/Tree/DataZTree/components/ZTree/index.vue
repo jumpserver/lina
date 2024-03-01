@@ -157,7 +157,7 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px">
+        <span style="float: right; margin-right: 10px; position: absolute">
           ${treeActions}
         </span>`
       if (rootNode) {
@@ -427,6 +427,12 @@ div.rMenu li {
     background-color: transparent;
     height: calc(100vh - 237px);
 
+    .level0 .node_name {
+      max-width: 120px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
     li {
       background-color: transparent !important;
 
@@ -442,7 +448,6 @@ div.rMenu li {
 }
 
 ::v-deep #tree-refresh {
-  margin-left: 3px;
 }
 
 ::v-deep .tree-banner-icon-zone {

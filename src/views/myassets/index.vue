@@ -12,6 +12,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { AccountShowFormatter, DialogDetailFormatter } from '@/components/Table/TableFormatters'
+import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 
 export default {
   components: {
@@ -122,6 +123,7 @@ export default {
           comment: {
             width: '100px'
           },
+          connectivity: connectivityMeta,
           actions: {
             width: '150px',
             align: 'center',

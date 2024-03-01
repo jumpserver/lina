@@ -15,9 +15,9 @@
           :label-content="item.labelContent"
           :name="item.name"
         >
-          <span slot="label">
-            <i v-if="item.icon" :class="item.icon" class="fa " />
-            {{ item.title }}
+          <span slot="label" class="tab-container">
+            <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
+            <span v-if="showText" class="tab-text">{{ item.title }}</span>
             <slot :tab="item.name" name="badge" />
           </span>
         </el-tab-pane>
@@ -67,7 +67,8 @@ export default {
     return {
       flag: false,
       componentKey: 1,
-      activeTreeSetting: {}
+      activeTreeSetting: {},
+      showText: true
     }
   },
   computed: {
@@ -101,8 +102,19 @@ export default {
     this.$eventBus.$on('treeComponentKey', () => {
       this.componentKey += 1
     })
+    this.hiddenTextIfNeed()
   },
   methods: {
+    hiddenTextIfNeed() {
+      const vm = this
+      const hideOverflowingText = _.debounce(function() {
+        const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
+        vm.showText = !tabs
+      }, 800)
+
+      hideOverflowingText()
+      window.addEventListener('resize', hideOverflowingText)
+    },
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()
     },
@@ -184,6 +196,10 @@ export default {
 
   .el-tabs__item.is-active {
     color:  var(--menu-text-active);
+  }
+  .el-tabs__item {
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 .only-submenu  {

@@ -30,11 +30,20 @@ export default {
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'id', 'job', 'material', 'job_type', 'is_finished', 'is_success',
+            'id', 'job', 'material', 'job_type', 'is_success',
             'time_cost', 'date_created', 'actions'
           ]
         },
         columnsMeta: {
+          job_type: {
+            width: '100px'
+          },
+          id: {
+            width: '100px',
+            formatter(row) {
+              return row.id.slice(0, 8)
+            }
+          },
           count: {
             width: '96px',
             formatter: (row) => {

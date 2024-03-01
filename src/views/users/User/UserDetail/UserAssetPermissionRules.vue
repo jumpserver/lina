@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="10">
-    <el-col :span="20">
+    <el-col ::md="20" :sm="24">
       <ListTable :header-actions="headerActions" :table-config="tableConfig" />
     </el-col>
   </el-row>
@@ -26,7 +26,6 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
-        hasSelection: false,
         hasTree: true,
         columnsExclude: ['actions'],
         columnsExtra: ['action'],

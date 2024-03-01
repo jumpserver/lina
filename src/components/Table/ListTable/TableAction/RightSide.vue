@@ -152,8 +152,6 @@ export default {
     border: none;
     padding: 5px;
     font-size: 14px;
-    width: 28px;
-    height: 28px;
     color: #888;
     background-color: transparent;
   }
@@ -177,6 +175,8 @@ export default {
     padding-left: 10px;
     align-items: center;
     justify-content:center;
+    height: 30px;
+    line-height: 30px;
   }
 
   .table-action-right-side {

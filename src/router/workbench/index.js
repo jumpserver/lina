@@ -84,7 +84,7 @@ export default {
           path: `${BASE_URL}/koko/elfinder/sftp/`,
           name: '',
           meta: {
-            title: i18n.t('FileManagement'),
+            title: i18n.t('FileExplorer'),
             activeMenu: '/assets',
             permissions: ['rbac.view_filemanager']
           }
@@ -181,7 +181,7 @@ export default {
           name: 'Execution',
           component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('Execution'),
+            title: i18n.t('Executions'),
             permissions: ['ops.view_jobexecution']
           }
         },

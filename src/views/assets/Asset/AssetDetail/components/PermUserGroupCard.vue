@@ -118,8 +118,8 @@ export default {
     font-size: 13px;
   }
   tr td {
-    line-height: 1.42857;
-    padding: 8px;
+    line-height: 1.2;
+    padding: 4px 8px;
     vertical-align: top;
     display: inline;
     overflow: hidden;
@@ -128,7 +128,7 @@ export default {
   }
   tr.item {
     border-bottom: 1px solid #e7eaec;
-    padding: 8px;
+    padding: 4px  8px;
     display: block;
     &:last-child {
        border-bottom: 0;

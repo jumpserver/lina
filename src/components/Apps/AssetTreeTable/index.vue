@@ -69,6 +69,7 @@ export default {
           {
             title: this.$t('AssetTree'),
             name: 'CustomTree',
+            icon: 'fa-tree',
             treeSetting: {
               showAssets,
               showMenu: false,
@@ -95,6 +96,7 @@ export default {
           },
           {
             title: this.$t('TypeTree'),
+            icon: 'fa-list-ul',
             name: 'BuiltinTree',
             treeSetting: {
               showRefresh: true,
