@@ -37,7 +37,7 @@ export const accountFieldsMeta = (vm) => {
     on_invalid: {
       rules: [Required],
       label: vm.$t('AccountPolicy'),
-      helpText: vm.$t('BulkCreateStrategy'),
+      helpText: vm.$t('AccountPolicyHelpText'),
       hidden: () => {
         return vm.platform || vm.asset
       }

@@ -53,7 +53,7 @@
                 multiple
               >
                 <i class="el-icon-upload" />
-                <div class="el-upload__text" style="margin-bottom: 10px">
+                <div class="el-upload__text" style="margin-bottom: 10px;padding: 0 5px 0 5px ">
                   {{ $t('DragUploadFileInfo') }}
                 </div>
                 <span>
@@ -123,7 +123,7 @@ import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BulkTransfer',
+  name: 'BatchTransfer',
   components: {
     TreeTable,
     Page,

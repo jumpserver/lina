@@ -72,11 +72,11 @@ export default {
       },
       children: [
         {
-          path: 'bulk-Transfer',
-          name: 'BulkTransfer',
+          path: 'batch-Transfer',
+          name: 'BatchTransfer',
           component: () => import('@/views/ops/File/index'),
           meta: {
-            title: i18n.t('BulkTransfer'),
+            title: i18n.t('BatchTransfer'),
             permissions: ['rbac.view_filemanager']
           }
         },

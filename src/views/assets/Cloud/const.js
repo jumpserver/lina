@@ -104,12 +104,12 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   },
   [qingcloud_private]: {
     name: qingcloud_private,
-    title: i18n.t('QingyunPrivatecloud'),
+    title: i18n.t('QingYunPrivateCloud'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   },
   [huaweicloud_private]: {
     name: huaweicloud_private,
-    title: i18n.t('HuaweiPrivatecloud'),
+    title: i18n.t('HuaweiPrivateCloud'),
     attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint']
   },
   [openstack]: {
