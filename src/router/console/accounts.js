@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import store from '@/store'
 
 export default [
   {
@@ -116,10 +117,12 @@ export default [
     path: 'account-push',
     component: empty,
     redirect: '',
+    name: 'AccountPush',
     meta: {
       app: 'accounts',
       name: 'AccountPushList',
-      resource: 'pushaccountautomation'
+      resource: 'pushaccountautomation',
+      hidden: () => store.getters.publicSettings.LITE
     },
     children: [
       {
@@ -190,6 +193,7 @@ export default [
     meta: {
       title: i18n.t('AccountGatherList'),
       app: 'accounts',
+      hidden: () => store.getters.publicSettings.LITE,
       licenseRequired: true
     },
     children: [
@@ -259,10 +263,10 @@ export default [
   {
     path: 'account-change-secret',
     component: empty,
-    redirect: '',
     meta: {
       title: i18n.t('AccountChangeSecret'),
       app: 'accounts',
+      hidden: () => store.getters.publicSettings.LITE,
       licenseRequired: true
     },
     children: [
@@ -335,6 +339,7 @@ export default [
       title: i18n.t('AccountBackup'),
       app: 'accounts',
       resource: 'accountbackupautomation',
+      hidden: () => store.getters.publicSettings.LITE,
       licenseRequired: true
     },
     children: [

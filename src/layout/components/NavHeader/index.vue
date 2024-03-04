@@ -162,6 +162,7 @@ export default {
 
         & > > > .svg-icon {
           color: #FFF !important;
+          font-size: 16px;
         }
 
         & > > > .el-badge {
@@ -174,24 +175,17 @@ export default {
             border: none;
           }
         }
-      }
-
-      .header-item {
-        padding-left: 8px;
-        padding-right: 8px;
-
         & > > > i {
           color: #FFF;
           font-size: 16px;
+
+          &.el-icon-arrow-down {
+            font-size: 13px;
+          }
         }
 
         & > > > i.el-dialog__close.el-icon-close {
           color: #7c7e7f;
-        }
-
-        & > > > .svg-icon {
-          color: #FFF;
-          font-size: 16px;
         }
       }
     }

@@ -91,7 +91,7 @@ export default {
     return {
       defaultMoreActions: [
         {
-          title: this.$t('BatchDelete'),
+          title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           icon: 'fa fa-trash-o',

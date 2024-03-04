@@ -23,6 +23,7 @@
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'Page',
@@ -49,7 +50,12 @@ export default {
   },
   computed: {
     iTitle() {
-      return this.title || this.$route.meta.title
+      let title = this.title || this.$route.meta.title
+      if (!title) {
+        title = this.$t('NoTitle')
+      }
+      title = toSentenceCase(title)
+      return title
     },
     gobackDisabled() {
       if (this.$route.path.endsWith('dashboard')) {

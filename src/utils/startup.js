@@ -35,9 +35,10 @@ async function checkLogin({ to, from, next }) {
 async function getPublicSetting({ to, from, next }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
-  if (!publicSettings || !isOpen) {
+  if (!publicSettings || Object.keys(publicSettings).length === 0 || !isOpen) {
     await store.dispatch('settings/getPublicSettings', isOpen)
   }
+  console.log('Get public setting done')
 }
 
 async function refreshCurrentOrg() {
@@ -163,7 +164,6 @@ export async function startup({ to, from, next }) {
   await getPublicSetting({ to, from, next }, true)
   await checkLogin({ to, from, next })
   await onI18nLoaded()
-  console.log('...')
   await getPublicSetting({ to, from, next }, false)
   await changeCurrentViewIfNeed({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
