@@ -27,7 +27,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'type', 'asset_amount', 'average_time_cost',
-            'summary', 'comment', 'date_last_run', 'actions'
+            'summary', 'date_last_run', 'actions'
           ]
         },
         columns: [
