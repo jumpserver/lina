@@ -175,9 +175,7 @@ export default {
     search(attrs) {
       this.$log.debug('ListTable: search table', attrs)
       this.$emit('TagSearch', attrs)
-      setTimeout(() => {
-        this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
-      }, 100)
+      this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
     },
     filter(attrs) {
       this.$emit('TagFilter', attrs)
