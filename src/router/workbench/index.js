@@ -181,7 +181,7 @@ export default {
           name: 'Execution',
           component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('Executions'),
+            title: i18n.t('ExecutionHistory'),
             permissions: ['ops.view_jobexecution']
           }
         },
