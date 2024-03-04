@@ -159,7 +159,9 @@ export default {
           },
           helpText: i18n.t('CrontabOfCreateUpdatePage')
         }
-      }
+      },
+      createSuccessNextRoute: { name: 'JobManagement' },
+      updateSuccessNextRoute: { name: 'JobManagement' }
     }
   },
   mounted() {
