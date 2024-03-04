@@ -212,10 +212,12 @@ export default {
         delete routeFilter.search
       }
       const asFilterTags = _.cloneDeep(this.filterTags)
-      this.filterTags = {
-        ...asFilterTags,
-        ...routeFilter
-      }
+      setTimeout(() => {
+        this.filterTags = {
+          ...asFilterTags,
+          ...routeFilter
+        }
+      }, 100)
     },
     getValueLabel(key, value) {
       for (const field of this.options) {
