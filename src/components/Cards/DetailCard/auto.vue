@@ -115,32 +115,30 @@ export default {
         }
 
         if (Array.isArray(value)) {
-          if (typeof value[0] === 'object') {
-            value.forEach(item => {
+          const tp = typeof value[0]
+          for (const [index, item] of value.entries()) {
+            let object = {}
+            if (tp === 'object') {
               const fieldName = `${name}.${item.name}`
               if (excludes.includes(fieldName)) {
-                return
+                continue
               }
-              this.items.push({
+              object = {
                 key: item.label,
                 value: item.value
-              })
-            })
-          } else if (typeof value[0] === 'string') {
-            value.forEach((item, index) => {
-              let data = {}
-              if (index === 0) {
-                data = {
-                  key: label,
-                  value: value[index]
-                }
-              } else {
-                data = {
-                  value: value[index]
-                }
               }
-              this.items.push(data)
-            })
+            } else if (tp === 'string') {
+              object = {
+                value: value[index]
+              }
+              if (index === 0) {
+                object['key'] = label
+              }
+            }
+            if (index !== value.length - 1) {
+              object['class'] = 'array-item'
+            }
+            this.items.push(object)
           }
           continue
         }

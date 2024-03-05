@@ -33,7 +33,7 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('Asset'),
+            title: this.$t('Assets'),
             name: 'Assets'
           },
           {

@@ -1,7 +1,7 @@
 <template>
   <IBox :fa="fa" :title="title">
     <el-form class="content" label-position="left" label-width="25%">
-      <el-form-item v-for="item in items" :key="item.key" :label="item.key">
+      <el-form-item v-for="item in items" :key="item.key" :class="item.class" :label="item.key">
         <span slot="label"> {{ formateLabel(item.key) }}</span>
         <ItemValue :value="item.value" class="item-value" v-bind="item" />
       </el-form-item>
@@ -60,6 +60,18 @@ export default {
 
     &:last-child {
       border-bottom: none;
+    }
+
+    &.array-item {
+      border-bottom: none;
+
+      >>> .el-form-item__content {
+        border-bottom: 1px dashed #EBEEF5
+      }
+
+      >>> .el-form-item__label:last-child {
+        border: 1px dashed #EBEEF5;
+      }
     }
 
     &:hover {

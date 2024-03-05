@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <DetailCard v-if="object" :items="detailItems" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions v-if="object" :actions="quickActions" type="primary" />
     </el-col>
   </el-row>

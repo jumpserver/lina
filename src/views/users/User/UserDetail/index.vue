@@ -54,7 +54,7 @@ export default {
           {
             title: this.$t('UserAclLists'),
             name: 'UserLoginAcl',
-            hidden: () => !vm.$hasPerm('acls.view_loginacl')
+            hidden: () => !vm.$hasPerm('acls.view_loginacl') || this.$store.getters.publicSettings.LITE
           },
           {
             title: this.$t('UserSession'),

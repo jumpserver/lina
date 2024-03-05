@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="14" :sm="24">
+      <el-col :md="15" :sm="24">
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="10" :sm="24">
-        <QuickActions :actions="quickActions" :title="title" type="primary" />
+      <el-col :md="9" :sm="24">
+        <QuickActions :actions="quickActions" type="primary" />
         <RelationCard v-bind="relationConfig" />
       </el-col>
     </el-row>

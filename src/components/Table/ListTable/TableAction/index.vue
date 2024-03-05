@@ -173,7 +173,13 @@ export default {
       }
 
        .el-input__icon {
-        line-height: $headerHeight;
+        line-height: $innerHeight;
+      }
+
+      .el-range-editor--small {
+        .el-input__icon, .el-range-separator {
+          line-height: 22px;
+        }
       }
     }
   }

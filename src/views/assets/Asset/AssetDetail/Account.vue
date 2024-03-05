@@ -1,10 +1,11 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="16" :sm="24">
+      <el-col :md="15" :sm="24">
         <AccountListTable
           ref="ListTable"
           :asset="object"
+          :columns-default="columnsDefault"
           :has-clone="false"
           :has-import="false"
           :has-left-actions="true"
@@ -20,7 +21,7 @@
           @onConfirm="onConfirm"
         />
       </el-col>
-      <el-col :md="8" :sm="24">
+      <el-col :md="9" :sm="24">
         <QuickActions :actions="quickActions" :title="title" type="primary" />
       </el-col>
     </el-row>
@@ -54,6 +55,7 @@ export default {
     return {
       title: this.$t('QuickTest'),
       templateDialogVisible: false,
+      columnsDefault: ['name', 'username', 'asset'],
       headerExtraActions: [
         {
           name: this.$t('AccountTemplate'),

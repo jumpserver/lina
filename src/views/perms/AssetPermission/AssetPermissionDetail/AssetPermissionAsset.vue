@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" class- />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
     </el-col>

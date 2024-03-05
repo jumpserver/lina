@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="16" :sm="24">
       <AutoDetailCard :object="object" :url="url" />
     </el-col>
   </el-row>
