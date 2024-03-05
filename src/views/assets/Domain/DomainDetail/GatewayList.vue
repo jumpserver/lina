@@ -42,8 +42,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'address', 'protocols', 'nodes_display',
-            'connectivity', 'comment', 'actions'
+            'name', 'address', 'protocols',
+            'connectivity', 'actions'
           ]
         },
         columnsMeta: {

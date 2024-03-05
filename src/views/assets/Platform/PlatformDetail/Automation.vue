@@ -1,7 +1,11 @@
 <template>
-  <IBox v-if="!loading">
-    <GenericCreateUpdateForm class="form" v-bind="$data" />
-  </IBox>
+  <el-row>
+    <el-col :md="24" :sm="24">
+      <IBox v-if="!loading">
+        <GenericCreateUpdateForm class="form" v-bind="$data" />
+      </IBox>
+    </el-col>
+  </el-row>
 </template>
 
 <script>

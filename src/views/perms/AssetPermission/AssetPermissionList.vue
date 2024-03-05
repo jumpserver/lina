@@ -57,7 +57,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            minWidth: '100px',
+            minWidth: '160px',
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'

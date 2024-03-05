@@ -116,7 +116,7 @@ export default {
           })
         },
         {
-          title: this.$t(`assets.AccountEnabled`),
+          title: this.$t('SuEnabled'),
           type: 'switch',
           attrs: {
             model: object['su_enabled'],
@@ -133,7 +133,7 @@ export default {
           })
         },
         {
-          title: this.$t(`assets.SyncProtocolToAsset`),
+          title: this.$t('SyncProtocolToAsset'),
           attrs: {
             type: 'primary',
             label: this.$t('Sync')
