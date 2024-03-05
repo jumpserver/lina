@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('common.Basic'), ['name', 'nodes']],
+        [this.$t('common.Basic'), ['name', 'nodes', 'assets']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
@@ -38,6 +38,19 @@ export default {
           helpText: this.$t('accounts.AccountChangeSecret.HelpText.IntervalOfCreateUpdatePage'),
           hidden: (formValue) => {
             return !formValue.is_periodic
+          }
+        },
+        assets: {
+          label: this.$tc('assets.Asset'),
+          el: {
+            multiple: true,
+            value: [],
+            ajax: {
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.address + ')', value: item.id }
+              },
+              url: '/api/v1/assets/assets/?gather_accounts_enabled=true'
+            }
           }
         },
         nodes: {
