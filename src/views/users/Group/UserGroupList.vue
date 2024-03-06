@@ -21,7 +21,6 @@ export default {
         },
         columnsMeta: {
           users_amount: {
-            width: '120px',
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,

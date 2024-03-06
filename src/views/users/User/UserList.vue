@@ -63,6 +63,9 @@ export default {
             width: '120px',
             collapsible: false
           },
+          email: {
+            'min-width': '120px'
+          },
           username: {
             formatter: (row) => {
               return row['username'].replace(' ', '*')

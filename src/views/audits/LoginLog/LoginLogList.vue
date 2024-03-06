@@ -25,23 +25,8 @@ export default {
         },
         url: '/api/v1/audits/login-logs/',
         columnsMeta: {
-          username: {
-            width: '120px'
-          },
-          backend_display: {
-            width: '120px'
-          },
           actions: {
             has: false
-          },
-          city: {
-            width: '120px'
-          },
-          reason_display: {
-            width: '120px'
-          },
-          datetime: {
-            width: '120px'
           }
         }
       },

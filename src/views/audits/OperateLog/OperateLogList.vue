@@ -39,20 +39,7 @@ export default {
           ]
         },
         columnsMeta: {
-          resource_type: {
-            width: '180px'
-          },
-          datetime: {
-            width: '160px'
-          },
-          remote_addr: {
-            width: '140px'
-          },
-          action_display: {
-            width: '70px'
-          },
           actions: {
-            width: '70px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false,

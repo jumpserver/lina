@@ -153,7 +153,7 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
-    line-height: 32px;
+    line-height: 30px;
 
     &:hover {
       border-color: #C0C4CC;
@@ -165,7 +165,7 @@ export default {
     }
 
     &>>> .el-autocomplete {
-      height: 30px;
+      height: 28px;
     }
   }
 
@@ -184,7 +184,7 @@ export default {
   }
 
   .filter-field >>> .el-input__inner {
-    height: 29px;
+    height: 28px;
   }
 
   .show-password {

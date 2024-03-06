@@ -8,8 +8,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable'
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
-import { UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
+import { AssetPermissionTableMeta, UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
 
 export default {
   name: 'UserAssetPermission',
@@ -32,101 +31,11 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users', 'user_groups', 'assets',
-            'nodes', 'accounts', 'is_valid', 'actions'
+            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
+            'nodes_amount', 'accounts', 'is_valid', 'actions'
           ]
         },
-        columnsMeta: {
-          name: {
-            formatterArgs: {
-              route: 'AssetPermissionDetail'
-            }
-          },
-          action: {
-            label: this.$t('Action'),
-            formatter: function(row) {
-              return row.actions.map(item => {
-                return item.label
-              }).join(', ')
-            }
-          },
-          is_expired: {
-            formatterArgs: {
-              showFalse: false
-            }
-          },
-          from_ticket: {
-            width: 100,
-            formatterArgs: {
-              showFalse: false
-            }
-          },
-          users: {
-            width: '100px',
-            formatter: AmountFormatter,
-            formatterArgs: {
-              route: 'AssetPermissionDetail',
-              routeQuery: {
-                activeTab: 'AssetPermissionUser'
-              }
-            }
-          },
-          user_groups: {
-            width: '100px',
-            formatter: AmountFormatter,
-            formatterArgs: {
-              route: 'AssetPermissionDetail',
-              routeQuery: {
-                activeTab: 'AssetPermissionUser'
-              }
-            }
-          },
-          assets: {
-            width: '100px',
-            formatter: AmountFormatter,
-            formatterArgs: {
-              route: 'AssetPermissionDetail',
-              routeQuery: {
-                activeTab: 'AssetPermissionAsset'
-              }
-            }
-          },
-          nodes: {
-            width: '100px',
-            formatter: AmountFormatter,
-            formatterArgs: {
-              route: 'AssetPermissionDetail',
-              routeQuery: {
-                activeTab: 'AssetPermissionAsset'
-              }
-            }
-          },
-          accounts: {
-            width: '100px',
-            formatter: AmountFormatter,
-            formatterArgs: {
-              route: 'AssetPermissionDetail',
-              getItem(item) {
-                return item
-              },
-              routeQuery: {
-                activeTab: 'AssetPermissionAccount'
-              }
-            }
-          },
-          actions: {
-            formatterArgs: {
-              updateRoute: 'AssetPermissionUpdate',
-              hasDelete: false,
-              hasClone: false,
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/perms/asset-permissions/${id}/`
-                return this.$axios.delete(url)
-              }
-            }
-          }
-        }
+        columnsMeta: AssetPermissionTableMeta
       },
       headerActions: {
         hasLeftActions: false,

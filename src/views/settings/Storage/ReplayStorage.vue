@@ -53,7 +53,7 @@ export default {
               showText: false
             },
             align: 'center',
-            width: '100px'
+            width: '150px'
           },
           comment: {
             sortable: 'custom'

@@ -21,14 +21,12 @@ export default {
           min: ['material', 'is_success'],
           default: [
             'creator_name', 'material', 'is_finished',
-            'is_success', 'time_cost',
-            'date_finished', 'actions'
+            'is_success', 'time_cost', 'date_finished', 'actions'
           ]
         },
         columns: [
           'creator_name', 'material', 'is_finished',
-          'is_success', 'time_cost',
-          'date_finished', 'actions'
+          'is_success', 'time_cost', 'date_finished', 'actions'
         ],
         columnsMeta: {
           actions: {
@@ -50,7 +48,6 @@ export default {
             }
           },
           time_cost: {
-            width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
@@ -59,19 +56,14 @@ export default {
             }
           },
           is_finished: {
-            width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
               }
               return <i Class='fa fa-times text-danger'/>
-            },
-            formatterArgs: {
-              width: '14px'
             }
           },
           is_success: {
-            width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -80,13 +72,7 @@ export default {
                 return <i Class='fa fa-check text-primary'/>
               }
               return <i Class='fa fa-times text-danger'/>
-            },
-            formatterArgs: {
-              width: '14px'
             }
-          },
-          date_start: {
-            width: '160px'
           }
         }
       },
