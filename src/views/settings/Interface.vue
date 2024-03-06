@@ -140,7 +140,8 @@ export default {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoIndexTip')
+            tip: this.$t('xpack.logoIndexTip'),
+            showBG: true
           },
           on: {
             fileChange: ([value], updateForm) => {
