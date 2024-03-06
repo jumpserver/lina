@@ -38,7 +38,6 @@ async function getPublicSetting({ to, from, next }, isOpen) {
   if (!publicSettings || Object.keys(publicSettings).length === 0 || !isOpen) {
     await store.dispatch('settings/getPublicSettings', isOpen)
   }
-  console.log('Get public setting done')
 }
 
 async function refreshCurrentOrg() {

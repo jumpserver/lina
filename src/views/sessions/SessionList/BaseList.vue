@@ -27,7 +27,7 @@ export default {
         return {
           min: ['id', 'actions'],
           default: [
-            'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
+            'id', 'user', 'asset', 'account', 'protocol',
             'date_start', 'actions'
           ]
         }

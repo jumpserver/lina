@@ -14,8 +14,8 @@ export default {
   },
   data() {
     return {
-      node_ids: [],
-      asset_ids: [],
+      nodeIds: [],
+      assetIds: [],
       isAssetType: '',
       initial: {
         is_periodic: this.$store.getters.hasValidLicense,
@@ -55,7 +55,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.asset_ids = value
+              this.assetIds = value
             }
           }
         },
@@ -71,7 +71,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.node_ids = value?.map(i => i.pk)
+              this.nodeIds = value?.map(i => i.pk)
             }
           }
         },
@@ -96,8 +96,8 @@ export default {
           label: this.$t('PushParams'),
           el: {
             method: 'push_account_method',
-            assets: this.asset_ids,
-            nodes: this.node_ids
+            assets: this.assetIds,
+            nodes: this.nodeIds
           },
           helpText: this.$t('ParamsHelpText')
         }
@@ -121,13 +121,13 @@ export default {
     }
   },
   watch: {
-    node_ids: {
+    nodeIds: {
       handler(val) {
         this.fieldsMeta.params.el.nodes = val
       },
       deep: true
     },
-    asset_ids: {
+    assetIds: {
       handler(val) {
         this.fieldsMeta.params.el.assets = val
       },

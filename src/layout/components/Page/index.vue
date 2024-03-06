@@ -51,6 +51,7 @@ export default {
   computed: {
     iTitle() {
       let title = this.title || this.$route.meta.title
+      console.log('title', this.$route.meta.title)
       if (!title) {
         title = this.$t('NoTitle')
       }

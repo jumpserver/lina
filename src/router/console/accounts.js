@@ -140,7 +140,7 @@ export default [
         name: 'AccountPushCreate',
         hidden: true,
         meta: {
-          title: i18n.t('Create'),
+          title: i18n.t('AccountPushCreate'),
           permissions: ['accounts.add_pushaccountautomation']
         }
       },
@@ -150,7 +150,7 @@ export default [
         name: 'AccountPushUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('Update'),
+          title: i18n.t('AccountPushUpdate'),
           permissions: ['accounts.change_pushaccountautomation']
         }
       },
@@ -212,7 +212,7 @@ export default [
         name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('Create'),
+          title: i18n.t('AccountGatherTaskCreate'),
           permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
@@ -232,7 +232,7 @@ export default [
         name: 'AccountGatherTaskUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('Update'),
+          title: i18n.t('AccountGatherTaskUpdate'),
           action: 'update',
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
@@ -357,7 +357,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
         meta: {
-          title: i18n.t('Create'),
+          title: i18n.t('AccountBackupPlanCreate'),
           action: 'create'
         },
         hidden: true
@@ -367,7 +367,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
         meta: {
-          title: i18n.t('Update'),
+          title: i18n.t('AccountBackupPlanUpdate'),
           action: 'update'
         },
         hidden: true
@@ -376,7 +376,7 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
         name: 'AccountBackupPlanDetail',
-        meta: { title: i18n.t('AccountBackup') },
+        meta: { title: i18n.t('AccountBackupPlanDetail') },
         hidden: true
       },
       {

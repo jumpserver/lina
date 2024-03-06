@@ -415,9 +415,14 @@ export function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
+const notUppercase = ['to', 'a', 'from']
+
 export function toTitleCase(string) {
   if (!string) return string
   return string.trim().split(' ').map(item => {
+    if (notUppercase.includes(item.toLowerCase())) {
+      return item
+    }
     return item[0].toUpperCase() + item.slice(1)
   }).join(' ')
 }

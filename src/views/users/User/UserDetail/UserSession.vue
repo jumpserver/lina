@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="10">
     <el-col :md="24" :sm="24">
-      <BaseList :cssssssssslumns-show="columnsShow" :url="url" />
+      <BaseList :columns-show="columnsShow" :url="url" />
     </el-col>
   </el-row>
 </template>
@@ -24,10 +24,10 @@ export default {
     return {
       url: `/api/v1/terminal/sessions/?user_id=${this.object.id}&order=is_finished,-date_end`,
       columnsShow: {
-        min: ['id'],
+        min: ['id', 'user', 'asset', 'account'],
         default: [
-          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
-          'command_amount', 'date_start', 'duration'
+          'id', 'user', 'asset', 'account', 'protocol',
+          'date_start', 'duration'
         ]
       }
     }
