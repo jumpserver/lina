@@ -157,6 +157,7 @@ export default {
         },
         columnsMeta: {
           name: {
+            width: '120px',
             formatter: function(row) {
               const to = {
                 name: 'AssetAccountDetail',
@@ -182,8 +183,10 @@ export default {
               }
             }
           },
+          username: {
+            width: '120px'
+          },
           secret_type: {
-            width: '100px',
             formatter: function(row) {
               return row.secret_type.label
             }
@@ -194,7 +197,7 @@ export default {
             }
           },
           has_secret: {
-            width: '100px',
+            width: '120px',
             formatterArgs: {
               showFalse: false
             }
