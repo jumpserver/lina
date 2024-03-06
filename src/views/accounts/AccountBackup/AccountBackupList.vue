@@ -45,14 +45,7 @@ export default {
           is_periodic: {
             formatterArgs: {
               showFalse: false
-            },
-            width: '80px'
-          },
-          periodic_display: {
-            width: '150px'
-          },
-          comment: {
-            width: '90px'
+            }
           },
           executed_amount: {
             formatter: DetailFormatter,
@@ -70,7 +63,6 @@ export default {
             }
           },
           actions: {
-            width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})

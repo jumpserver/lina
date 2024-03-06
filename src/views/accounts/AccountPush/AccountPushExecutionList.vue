@@ -42,25 +42,21 @@ export default {
           },
           asset_amount: {
             label: this.$t('AssetAmount'),
-            width: '120px',
             formatter: function(row) {
               return <span>{row.snapshot.asset_amount}</span>
             }
           },
           node_amount: {
             label: this.$t('NodeAmount'),
-            width: '120px',
             formatter: function(row) {
               return <span>{row.snapshot.node_amount}</span>
             }
           },
           status: {
-            label: this.$t('Result'),
-            width: '120px'
+            label: this.$t('Result')
           },
           timedelta: {
             label: this.$t('TimeDelta'),
-            width: '100px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }

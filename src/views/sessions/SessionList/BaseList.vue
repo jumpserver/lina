@@ -46,7 +46,6 @@ export default {
             prop: 'id',
             label: this.$t('Number'),
             align: 'center',
-            width: '80px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
@@ -54,7 +53,6 @@ export default {
             }
           },
           user: {
-            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: ({ row }) => {
@@ -88,7 +86,6 @@ export default {
             }
           },
           is_finished: {
-            width: '86px',
             formatterArgs: {
               showFalse: false
             }
@@ -112,32 +109,15 @@ export default {
               }
             }
           },
-          command_amount: {
-            width: '90px'
-          },
-          login_from: {
-            width: '115px'
-          },
-          remote_addr: {
-            width: '140px'
-          },
           protocol: {
-            width: '100px',
             sortable: false,
             formatter: null
-          },
-          date_start: {
-            width: '150px'
-          },
-          date_end: {
-            width: '150px'
           },
           duration: {
             label: this.$t('Duration'),
             formatter: function(row) {
               return timeOffset(row.date_start, row.date_end)
-            },
-            width: '80px'
+            }
           },
           is_locked: {
             label: this.$t('IsLocked')
@@ -145,7 +125,6 @@ export default {
           actions: {
             prop: 'actions',
             label: this.$t('Actions'),
-            width: '160px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,

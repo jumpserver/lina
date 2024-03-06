@@ -66,7 +66,7 @@ export default {
             }
           },
           builtin: {
-            width: '100px',
+            width: '150px',
             formatterArgs: {
               showFalse: false
             }

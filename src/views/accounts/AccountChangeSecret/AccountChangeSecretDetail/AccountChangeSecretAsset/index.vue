@@ -51,7 +51,6 @@ export default {
             prop: 'id',
             label: this.$t('Actions'),
             align: 'center',
-            width: 150,
             objects: this.object.assets,
             formatter: DeleteActionFormatter,
             onDelete: function(col, row, cellValue, reload) {

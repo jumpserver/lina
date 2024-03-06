@@ -38,17 +38,12 @@ export default {
         },
         columnsMeta: {
           privileged: {
-            width: '120px',
             formatterArgs: {
               showText: false,
               showFalse: false
             }
           },
-          secret_type: {
-            width: '120px'
-          },
           has_secret: {
-            width: '120px',
             formatterArgs: {
               showFalse: false,
               showText: false

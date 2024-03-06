@@ -66,7 +66,6 @@ export default {
             formatter: OutputExpandFormatter
           },
           risk_level: {
-            width: '105px',
             formatter: (row, col, cellValue) => {
               const display = row['risk_level'].label
               if (cellValue?.value === 0) {
@@ -79,15 +78,8 @@ export default {
           actions: {
             has: false
           },
-          asset: {
-            width: '120px'
-          },
-          user: {
-            width: '100px'
-          },
           session: {
             formatter: DetailFormatter,
-            width: '100px',
             formatterArgs: {
               openInNewPage: true,
               can: this.$hasPerm('terminal.view_session'),
@@ -104,7 +96,6 @@ export default {
           },
           timestamp: {
             label: this.$t('Date'),
-            width: '130px',
             sortable: 'custom',
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)

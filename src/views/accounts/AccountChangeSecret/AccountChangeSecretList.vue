@@ -46,21 +46,14 @@ export default {
               return <span> { row.secret_strategy.label } </span>
             }
           },
-          secret_type: {
-            width: '120px'
-          },
           is_periodic: {
             formatterArgs: {
               showFalse: false
             },
-            width: '152px'
-          },
-          periodic_display: {
             width: '150px'
           },
           executed_amount: {
             formatter: DetailFormatter,
-            width: '100px',
             formatterArgs: {
               route: 'AccountGatherList',
               can: vm.$hasPerm('accounts.view_changesecretexecution'),
@@ -75,11 +68,7 @@ export default {
               }
             }
           },
-          comment: {
-            width: '90px'
-          },
           actions: {
-            width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})

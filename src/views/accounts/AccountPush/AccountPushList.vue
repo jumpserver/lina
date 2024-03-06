@@ -56,22 +56,13 @@ export default {
             }
           },
           assets_amount: {
-            label: vm.$t('AssetAmount'),
-            width: '80px'
+            label: vm.$t('AssetAmount')
           },
           nodes_amount: {
-            label: vm.$t('NodeAmount'),
-            width: '80px'
-          },
-          is_periodic: {
-            width: '152px'
-          },
-          periodic_display: {
-            width: '150px'
+            label: vm.$t('NodeAmount')
           },
           password_strategy_display: {
             label: vm.$t('PasswordStrategy'),
-            width: '220px',
             showOverflowTooltip: true
           },
           executed_amount: {
@@ -89,14 +80,7 @@ export default {
               }
             }
           },
-          is_active: {
-            width: '87px'
-          },
-          comment: {
-            width: '90px'
-          },
           actions: {
-            width: '164px',
             formatterArgs: {
               extraActions: [
                 {

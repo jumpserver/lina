@@ -42,13 +42,9 @@ export default {
           },
           timedelta: {
             label: this.$t('TimeDelta'),
-            width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
-          },
-          is_success: {
-            width: '90px'
           },
           actions: {
             formatterArgs: {

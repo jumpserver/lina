@@ -21,17 +21,7 @@ export default {
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
-          remote_addr: {
-            width: '140px'
-          },
-          operate: {
-            width: '100px'
-          },
-          is_success: {
-            width: '100px'
-          },
           actions: {
-            width: '82px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
