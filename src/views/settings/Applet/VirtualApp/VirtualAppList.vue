@@ -28,7 +28,7 @@ export default {
         },
         createTitle: this.$t('common.Upload'),
         searchConfig: {
-          getUrlQuery: false,
+          getUrlQuery: true,
           exclude: ['version']
         },
         detailRoute: 'VirtualAppDetail',
