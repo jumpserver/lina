@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      this.$log.debug('Current nav is: ', this.config.activeMenu)
+      this.$log.debug('Current nav is: ', tab.name)
     }
   }
 }

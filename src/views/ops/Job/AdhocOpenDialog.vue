@@ -70,7 +70,7 @@ export default {
         hasColumnSetting: false,
         hasSearch: false,
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: true
         }
       }
     }

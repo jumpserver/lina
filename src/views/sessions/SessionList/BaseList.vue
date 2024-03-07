@@ -50,7 +50,7 @@ export default {
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
+              return <router-link {...{ attrs: route }} class='link'>{label}</router-link>
             }
           },
           user: {
@@ -162,19 +162,18 @@ export default {
         hasImport: false,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: false,
+          getUrlQuery: true,
           exclude: ['is_finished']
         }
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style scoped>
-  .link {
-    color: var(--color-info);
-  }
+.link {
+  color: var(--color-info);
+}
 </style>

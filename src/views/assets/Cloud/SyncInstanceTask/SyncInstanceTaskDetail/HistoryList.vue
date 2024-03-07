@@ -13,7 +13,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -25,7 +26,7 @@ export default {
         hasExport: false,
         hasSearch: true,
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: true
         }
       },
       tableConfig: {

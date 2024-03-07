@@ -45,7 +45,7 @@ export default {
           this.$emit('addResource')
         },
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: true
         }
       }
     }

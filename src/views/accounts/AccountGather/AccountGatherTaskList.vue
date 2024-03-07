@@ -104,7 +104,7 @@ export default {
         hasMoreActions: false,
         createRoute: 'AccountGatherTaskCreate',
         searchConfig: {
-          getUrlQuery: false
+          getUrlQuery: true
         }
       }
     }
