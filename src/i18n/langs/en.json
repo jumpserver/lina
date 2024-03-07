@@ -1,3 +1,6 @@
 {
-    "FieldRequiredError": "This field is required."
+    "FieldRequiredError": "This field is required.",
+    "SystemRoleHelpMsg": "System roles are roles that apply universally across all organizations within the platform. These roles allow you to define specific permissions and access levels for users across the entire system. Changes made to system roles will affect all organizations using the platform.",
+    "OrgRoleHelpMsg": "Organization roles are roles tailored to individual organizations within the platform. These roles are assigned when inviting users to join a particular organization and dictate their permissions and access levels within that organization. Unlike system roles, organization roles are customizable and apply only within the scope of the organization they are assigned to.",
+    "VirtualAccountHelpMsg": "Virtual accounts are specialized accounts with specific purposes when connecting assets."
 }

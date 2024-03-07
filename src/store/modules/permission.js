@@ -125,6 +125,9 @@ function cleanRoute(tmp, parent) {
   if (tmp.meta.title) {
     tmp.meta.title = i18n.t(tmp.meta.title)
   }
+  if (tmp.meta.menuTitle) {
+    tmp.meta.menuTitle = i18n.t(tmp.meta.menuTitle)
+  }
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
   if (!tmp.meta.fullPath) {

@@ -80,6 +80,7 @@ export default [
         name: 'AccountTemplateList',
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
+          menuTitle: i18n.t('Templates'),
           title: i18n.t('AccountTemplateList'),
           permissions: ['accounts.view_accounttemplate']
         }
@@ -131,6 +132,7 @@ export default [
         name: 'AccountPushList',
         meta: {
           title: i18n.t('AccountPushList'),
+          menuTitle: i18n.t('PushAccounts'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       },
@@ -202,6 +204,7 @@ export default [
         component: () => import('@/views/accounts/AccountGather/index.vue'),
         name: 'AccountGatherList',
         meta: {
+          menuTitle: i18n.t('GatherAccounts'),
           title: i18n.t('AccountGatherTaskList'),
           permissions: ['accounts.view_gatheredaccount']
         }
@@ -275,6 +278,7 @@ export default [
         component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
         name: 'AccountChangeSecretList',
         meta: {
+          menuTitle: i18n.t('ChangeCredentials'),
           title: i18n.t('AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
@@ -348,7 +352,8 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/index.vue'),
         name: 'AccountBackupList',
         meta: {
-          title: i18n.t('AccountBackup'),
+          menuTitle: i18n.t('BackupAccounts'),
+          title: i18n.t('AccountBackupPlanList'),
           permissions: ['accounts.view_accountbackupautomation']
         }
       },

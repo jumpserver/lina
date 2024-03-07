@@ -153,7 +153,7 @@ export default {
         crontab: {
           type: 'cronTab',
           component: CronTab,
-          label: i18n.t('RegularlyPerform'),
+          label: i18n.t('Crontab'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },

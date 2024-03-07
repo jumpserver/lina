@@ -28,6 +28,10 @@
         </template>
       </el-tabs>
 
+      <el-alert v-if="helpMessage" type="success">
+        <span class="announcement-main" v-html="helpMessage" />
+      </el-alert>
+
       <transition v-if="loading" appear mode="out-in" name="fade-transform">
         <slot>
           <keep-alive>
@@ -59,6 +63,10 @@ export default {
     activeMenu: {
       type: String,
       required: true
+    },
+    helpMessage: {
+      type: String,
+      default: ''
     }
   },
   data() {

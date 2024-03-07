@@ -54,7 +54,7 @@ export const getChangeSecretFields = () => {
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     recipients: {
-      label: i18n.t('Addressee'),
+      label: i18n.t('Recipient'),
       helpText: i18n.t('OnlyMailSend'),
       el: {
         value: [],

@@ -15,7 +15,7 @@ export default {
     return {
       fields: [
         [this.$t('Basic'), ['name', 'nodes']],
-        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
@@ -34,7 +34,7 @@ export default {
           helpText: this.$t('CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('CyclePerform'),
+          label: this.$t('Interval'),
           helpText: this.$t('IntervalOfCreateUpdatePage'),
           hidden: (formValue) => {
             return !formValue.is_periodic
@@ -57,7 +57,7 @@ export default {
           type: 'switch'
         },
         recipients: {
-          label: i18n.t('Addressee'),
+          label: i18n.t('Recipient'),
           helpText: i18n.t('OnlyMailSend'),
           el: {
             value: [],

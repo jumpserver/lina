@@ -143,6 +143,7 @@ $height: 28px;
       height: $height;
       background: none;
       border: none;
+      padding-left: 20px;
     }
   }
 }

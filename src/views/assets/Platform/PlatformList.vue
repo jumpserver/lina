@@ -2,6 +2,7 @@
   <TabPage
     v-if="!loading"
     :active-menu.sync="tab.activeMenu"
+    :help-message="platformPageHelpMsg"
     :submenu="tab.submenu"
     @tab-click="changeMoreCreates"
   >
@@ -24,6 +25,7 @@ export default {
     const vm = this
     return {
       loading: true,
+      platformPageHelpMsg: this.$t('PlatformPageHelpMsg'),
       tab: {
         submenu: [],
         activeMenu: 'host'

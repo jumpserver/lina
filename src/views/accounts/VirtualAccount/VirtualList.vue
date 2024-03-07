@@ -1,5 +1,8 @@
 <template>
-  <ListTable v-bind="config" />
+  <div>
+    <el-alert type="success">{{ $t("VirtualAccountHelpMsg") }}</el-alert>
+    <ListTable v-bind="config" />
+  </div>
 </template>
 
 <script>

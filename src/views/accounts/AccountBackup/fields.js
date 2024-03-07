@@ -10,7 +10,7 @@ const validatorInterval = (rule, value, callback) => {
 
 function getAccountBackupFields() {
   const recipients_part_one = {
-    label: i18n.t('Addressee') + ' A',
+    label: i18n.t('Recipient') + ' A',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return formValue.backup_type !== 'email'
@@ -27,7 +27,7 @@ function getAccountBackupFields() {
   }
 
   const recipients_part_two = {
-    label: i18n.t('Addressee') + ' B',
+    label: i18n.t('Recipient') + ' B',
     helpText: i18n.t('RecipientHelpText'),
     hidden: (formValue) => {
       return !(formValue.backup_type === 'email' && formValue.is_password_divided_by_email)
@@ -83,7 +83,7 @@ function getAccountBackupFields() {
   const crontab = {
     type: 'cronTab',
     component: CronTab,
-    label: i18n.t('RegularlyPerform'),
+    label: i18n.t('Crontab'),
     hidden: (formValue) => {
       return formValue.is_periodic === false
     },
@@ -91,7 +91,7 @@ function getAccountBackupFields() {
   }
 
   const interval = {
-    label: i18n.t('CyclePerform'),
+    label: i18n.t('Interval'),
     hidden: (formValue) => {
       return formValue.is_periodic === false
     },

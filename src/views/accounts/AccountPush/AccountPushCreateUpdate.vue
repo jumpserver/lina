@@ -39,7 +39,7 @@ export default {
             'passphrase', 'params'
           ]
         ],
-        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {

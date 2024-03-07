@@ -29,7 +29,7 @@ export default {
           'sync_ip_type', 'is_always_update', 'fully_synchronous'
         ]],
         [this.$t('SyncStrategy'), ['strategy']],
-        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['comment']]
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
@@ -91,14 +91,12 @@ export default {
         },
         crontab: {
           component: CronTab,
-          label: this.$t('RegularlyPerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
           helpText: this.$t('CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('CyclePerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },

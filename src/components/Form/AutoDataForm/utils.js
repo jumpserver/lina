@@ -165,7 +165,7 @@ export class FormFieldGenerator {
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
-    field.helpText = remoteFieldMeta['help_text']
+    field.helpText = toSentenceCase(remoteFieldMeta['help_text'])
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
@@ -175,6 +175,9 @@ export class FormFieldGenerator {
     field.el = el
     field.rules = rules
     field.label = toSentenceCase(field.label)
+    if (field.helpText) {
+      field.helpText = toSentenceCase(field.helpText)
+    }
     field = this.setPlaceholder(field, remoteFieldMeta)
     _.set(field, 'attrs.error', '')
     Vue.$log.debug('Generate field: ', name, field)

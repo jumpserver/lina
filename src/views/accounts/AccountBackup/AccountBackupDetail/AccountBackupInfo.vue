@@ -52,14 +52,14 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('RegularlyPerform'),
+          key: this.$t('Crontab'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('CyclePerform'),
+          key: this.$t('Interval'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
@@ -67,14 +67,14 @@ export default {
         },
         'date_created', 'date_updated', 'comment',
         {
-          key: this.$t('Addressee') + ' A',
+          key: this.$t('Recipient') + ' A',
           value: this.object.recipients_part_one,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>
           }
         },
         {
-          key: this.$t('Addressee') + ' B',
+          key: this.$t('Recipient') + ' B',
           value: this.object.recipients_part_two,
           formatter: (item, val) => {
             return <span>{val.map(item => item.name).join(', ')}</span>

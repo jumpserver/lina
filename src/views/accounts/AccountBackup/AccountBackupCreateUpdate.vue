@@ -32,7 +32,7 @@ export default {
             'zip_encrypt_password'
           ]
         ],
-        [this.$t('Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['comment']]
       ],
       initial: {

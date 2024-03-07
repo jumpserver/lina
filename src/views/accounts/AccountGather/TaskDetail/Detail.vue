@@ -27,7 +27,7 @@ export default {
       detailFields: [
         'id', 'name', 'is_periodic',
         {
-          key: this.$t('RegularlyPerform'),
+          key: this.$t('Crontab'),
           value: this.object?.periodic_display || ''
         },
         {

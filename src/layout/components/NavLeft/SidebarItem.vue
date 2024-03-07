@@ -7,14 +7,14 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :class="{'submenu-title-noDropdown':!isNest}" :index="resolvePath(onlyOneChild.path)" class="submenu-item">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="getItemTitle(onlyOneChild)" />
         </el-menu-item>
       </app-link>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" class="el-submenu-sidebar submenu-item" popper-append-to-body>
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -71,6 +71,9 @@ export default {
         }
       }
       return true
+    },
+    getItemTitle(item) {
+      return item.meta.menuTitle || item.meta.title
     },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
