@@ -29,8 +29,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -202,7 +201,7 @@ export default {
           hasLeftActions: false,
           hasColumnSetting: false,
           searchConfig: {
-            getUrlQuery: true
+            getUrlQuery: false
           }
         }
       }

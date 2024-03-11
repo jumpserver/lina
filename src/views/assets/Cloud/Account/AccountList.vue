@@ -68,7 +68,7 @@ export default {
         hasImport: false,
         hasMoreActions: false,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: false
         },
         moreCreates: {
           callback: (option) => {
@@ -184,9 +184,7 @@ export default {
   },
   methods: {
     createAccount(provider) {
-      return () => {
-        this.$router.push({ name: 'AccountCreate', query: { provider: provider }})
-      }
+      return () => { this.$router.push({ name: 'AccountCreate', query: { provider: provider }}) }
     }
   }
 

@@ -35,7 +35,7 @@ export default {
         },
         createTitle: this.$t('common.Upload'),
         searchConfig: {
-          getUrlQuery: true,
+          getUrlQuery: false,
           exclude: ['version']
         },
         extraActions: [

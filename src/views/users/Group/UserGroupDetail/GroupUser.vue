@@ -122,7 +122,7 @@ export default {
         hasImport: false,
         hasCreate: false,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: false
         },
         hasMoreActions: false
       },

@@ -41,6 +41,7 @@
 
 <script>
 import Page from '../Page/'
+import merge from 'webpack-merge'
 
 const ACTIVE_TAB_KEY = 'activeTab'
 
@@ -61,8 +62,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      tabRouterQuery: {}
+      loading: true
     }
   },
   computed: {
@@ -112,24 +112,15 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      const name = tab.name
       this.$emit('tab-click', tab)
-      this.$emit('update:activeMenu', name)
+      this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
-      let newQuery = {}
-      if (name in this.tabRouterQuery) {
-        newQuery = this.tabRouterQuery[name]
-      } else {
-        const query = _.cloneDeep(this.$route.query)
-        this.tabRouterQuery[this.iActiveMenu] = {
-          ...query,
-          activeTab: this.iActiveMenu
-        }
-        newQuery = { activeTab: name }
+
+      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+        this.$router.push({
+          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: '' })
+        })
       }
-      this.$nextTick(() => {
-        this.$router.replace({ query: newQuery })
-      })
     },
     getPropActiveTab() {
       let activeTab = ''

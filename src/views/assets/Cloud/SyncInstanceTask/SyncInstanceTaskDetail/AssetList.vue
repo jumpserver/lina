@@ -12,8 +12,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -28,7 +27,7 @@ export default {
         moreActionsTitle: this.$t('common.MoreActions'),
         moreActionsType: 'primary',
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: false
         },
         extraMoreActions: [
           {

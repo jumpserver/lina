@@ -112,7 +112,7 @@ export default {
         hasRightActions: false,
         hasLabelSearch: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: false
         }
       }
     }
