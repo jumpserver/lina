@@ -214,7 +214,7 @@ export default {
         },
         hasLabelSearch: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: false
         },
         extraMoreActions: [
           {

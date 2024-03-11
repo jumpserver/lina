@@ -89,7 +89,14 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      this.$log.debug('Current nav is: ', tab.name)
+      const query = _.cloneDeep(this.$route.query)
+      const newQuery = {
+        ...query,
+        activeTab: tab.name
+      }
+      this.$nextTick(() => {
+        this.$router.replace({ query: newQuery })
+      })
     }
   }
 }

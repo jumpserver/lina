@@ -410,7 +410,7 @@ export default {
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
-          getUrlQuery: true,
+          getUrlQuery: false,
           exclude: ['asset']
         },
         hasSearch: true
