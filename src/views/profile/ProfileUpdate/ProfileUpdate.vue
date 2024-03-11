@@ -30,7 +30,7 @@ export default {
       hasDetailInMsg: false,
       fields: [
         [this.$t('Account'), ['username', 'name', 'email']],
-        [this.$t('Other'), ['phone', 'wechat']]
+        [this.$t('Other'), ['phone']]
       ],
       fieldsMeta: {
         username: {

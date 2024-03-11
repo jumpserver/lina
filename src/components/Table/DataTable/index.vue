@@ -170,7 +170,8 @@ export default {
 <style lang="scss" scoped>
 .el-data-table {
   >>> .el-pagination.is-background .el-pager li {
-    margin: 0 1px ;
+    margin: 0 1px;
+    padding: 0 2px;
   }
 }
 </style>

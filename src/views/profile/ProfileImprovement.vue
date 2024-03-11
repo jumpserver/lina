@@ -24,7 +24,7 @@ export default {
       fields: [
         [this.$t('Account'), ['username', 'name', 'email']],
         [this.$t('Authentication'), ['mfa_level', 'public_key']],
-        [this.$t('Other'), ['phone', 'wechat']],
+        [this.$t('Other'), ['phone']],
         [this.$t('TermsAndConditions'), ['terms']]
       ],
       fieldsMeta: {

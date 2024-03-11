@@ -38,7 +38,7 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
         columns: [
-          'name', 'username', 'email', 'phone', 'wechat',
+          'name', 'username', 'email', 'phone',
           'groups_display', 'total_role_display', 'source',
           'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',

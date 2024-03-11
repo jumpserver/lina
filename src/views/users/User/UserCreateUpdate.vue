@@ -31,7 +31,7 @@ export default {
           'need_update_password', 'mfa_level', 'source'
         ]],
         [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
-        [this.$t('Other'), ['phone', 'wechat', 'comment']]
+        [this.$t('Other'), ['phone', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {

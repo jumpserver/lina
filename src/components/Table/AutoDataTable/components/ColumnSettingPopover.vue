@@ -20,7 +20,7 @@
           v-for="item in totalColumnsList"
           :key="item.prop"
           :span="8"
-          style="margin-top:5px;"
+          class="col-item"
         >
           <el-checkbox
             :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
@@ -87,8 +87,29 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .column-setting {
   margin-left: 10px;
+
+  .col-item {
+    margin-top: 5px;
+
+    >>> .el-checkbox {
+      width: 100%;
+
+      .el-checkbox__input {
+        line-height: 16px
+      }
+
+      .el-checkbox__label {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: calc(100% - 20px); // 20px is the width of the checkbox
+        line-height: 16px;
+        vertical-align: text-top;
+      }
+    }
+  }
 }
 </style>
