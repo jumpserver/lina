@@ -382,6 +382,7 @@ button, input, optgroup, select, textarea {
     display: inline-block;
     line-height: 1.5;
     vertical-align: middle;
+    word-break: break-word;
   }
 }
 .form-group-header {

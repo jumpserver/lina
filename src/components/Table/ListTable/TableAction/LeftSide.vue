@@ -151,6 +151,7 @@ export default {
     },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]
+      console.log('Moreactions: ', this.defaultActions)
       return cleanActions(actions, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
