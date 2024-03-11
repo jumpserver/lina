@@ -149,7 +149,7 @@ export default {
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionUser'
+                  tab: 'AssetPermissionUser'
                 }
               }
             },
@@ -160,7 +160,7 @@ export default {
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionUser'
+                  tab: 'AssetPermissionUser'
                 }
               }
             },
@@ -171,7 +171,7 @@ export default {
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionAsset'
+                  tab: 'AssetPermissionAsset'
                 }
               }
             }

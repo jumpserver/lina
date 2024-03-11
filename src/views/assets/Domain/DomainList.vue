@@ -29,7 +29,7 @@ export default {
               async: true,
               permissions: 'assets.view_asset',
               routeQuery: {
-                activeTab: 'AssetList'
+                tab: 'AssetList'
               }
             }
           },
@@ -39,7 +39,7 @@ export default {
             formatterArgs: {
               permissions: 'assets.view_gateway',
               routeQuery: {
-                activeTab: 'GatewayList'
+                tab: 'GatewayList'
               }
             }
           }

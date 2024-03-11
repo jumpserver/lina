@@ -45,7 +45,7 @@ export default {
               vm.$router.push({
                 name: 'AccountTemplateDetail',
                 query: {
-                  activeTab: 'Account'
+                  tab: 'Account'
                 }
               })
             }

@@ -208,7 +208,7 @@ export default {
       this.$router.replace({
         name: 'TerminalSetting',
         query: {
-          activeTab: 'TerminalList',
+          tab: 'TerminalList',
           name: name
         }
       })

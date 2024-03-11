@@ -75,7 +75,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'UserDetail'
+                tab: 'UserDetail'
               }
             }
           },

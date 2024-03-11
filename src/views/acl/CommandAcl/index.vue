@@ -42,7 +42,7 @@ export default {
       const query = _.cloneDeep(this.$route.query)
       const newQuery = {
         ...query,
-        activeTab: tab.name
+        tab: tab.name
       }
       this.$nextTick(() => {
         this.$router.replace({ query: newQuery })

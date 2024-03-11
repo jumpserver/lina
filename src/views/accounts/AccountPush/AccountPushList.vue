@@ -73,7 +73,7 @@ export default {
                 return {
                   name: 'AccountPushList',
                   query: {
-                    activeTab: 'AccountPushExecutionList',
+                    tab: 'AccountPushExecutionList',
                     automation_id: row.id
                   }
                 }

@@ -61,7 +61,7 @@ export default {
                 return {
                   name: 'AccountChangeSecretList',
                   query: {
-                    activeTab: 'AccountChangeSecretExecutionList',
+                    tab: 'AccountChangeSecretExecutionList',
                     automation_id: row.id
                   }
                 }

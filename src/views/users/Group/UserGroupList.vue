@@ -31,7 +31,7 @@ export default {
                     id: row.id
                   },
                   query: {
-                    activeTab: 'GroupUser'
+                    tab: 'GroupUser'
                   }
                 }
               }

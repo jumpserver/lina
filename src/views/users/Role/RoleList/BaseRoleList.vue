@@ -55,7 +55,7 @@ export default {
                 return {
                   name: 'RoleDetail',
                   query: {
-                    activeTab: 'RoleUsers',
+                    tab: 'RoleUsers',
                     scope: row.scope.value
                   },
                   params: {

@@ -48,7 +48,7 @@ import Page from '../Page/'
 import merge from 'webpack-merge'
 import { toSentenceCase } from '@/utils/common'
 
-const ACTIVE_TAB_KEY = 'activeTab'
+const ACTIVE_TAB_KEY = 'tab'
 
 export default {
   name: 'TabPage',
@@ -107,7 +107,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      const activeTab = to.query?.activeTab
+      const activeTab = to.query?.tab
       if (activeTab && this.iActiveMenu !== activeTab) {
         this.iActiveMenu = activeTab
         this.loading = false

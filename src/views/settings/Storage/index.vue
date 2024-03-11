@@ -41,7 +41,7 @@ export default {
     }
   },
   beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.path === from.path && to.query?.activeTab) {
+    if (to.name === from.name && to.path === from.path && to.query?.tab) {
       this.$store.commit('common/reload')
     }
     next()

@@ -36,7 +36,7 @@ export const AssetPermissionTableMeta = {
     minWidth: '160px',
     formatterArgs: {
       routeQuery: {
-        activeTab: 'AssetPermissionDetail'
+        tab: 'AssetPermissionDetail'
       }
     }
   },
@@ -67,7 +67,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       routeQuery: {
-        activeTab: 'AssetPermissionUser'
+        tab: 'AssetPermissionUser'
       }
     }
   },
@@ -77,7 +77,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       routeQuery: {
-        activeTab: 'AssetPermissionUser'
+        tab: 'AssetPermissionUser'
       }
     }
   },
@@ -86,7 +86,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       routeQuery: {
-        activeTab: 'AssetPermissionAsset'
+        tab: 'AssetPermissionAsset'
       }
     }
   },
@@ -96,7 +96,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       routeQuery: {
-        activeTab: 'AssetPermissionAsset'
+        tab: 'AssetPermissionAsset'
       }
     }
   },
@@ -109,7 +109,7 @@ export const AssetPermissionTableMeta = {
         }
       },
       routeQuery: {
-        activeTab: 'AssetPermissionAccount'
+        tab: 'AssetPermissionAccount'
       }
     }
   },

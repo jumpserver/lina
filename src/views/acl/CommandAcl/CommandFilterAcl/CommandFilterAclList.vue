@@ -48,7 +48,7 @@ export default {
                 return {
                   name: 'CommandFilterAclList',
                   query: {
-                    activeTab: 'CommandGroup',
+                    tab: 'CommandGroup',
                     command_filters: row.id
                   }
                 }
