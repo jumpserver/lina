@@ -99,6 +99,12 @@ export default {
         hasBulkUpdate: false
       }
     }
+  },
+  mounted() {
+    const plan_id = this.$route.query.plan_id
+    if (plan_id !== undefined) {
+      this.tableConfig.url = `${this.tableConfig.url}?plan_id=${plan_id}`
+    }
   }
 }
 </script>
