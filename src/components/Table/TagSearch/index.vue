@@ -57,7 +57,7 @@ export default {
     },
     getUrlQuery: {
       type: Boolean,
-      default: () => true
+      default: () => false
     },
     default: {
       type: Object,
@@ -213,12 +213,10 @@ export default {
         delete routeFilter.search
       }
       const asFilterTags = _.cloneDeep(this.filterTags)
-      setTimeout(() => {
-        this.filterTags = {
-          ...asFilterTags,
-          ...routeFilter
-        }
-      }, 100)
+      this.filterTags = {
+        ...asFilterTags,
+        ...routeFilter
+      }
     },
     getValueLabel(key, value) {
       for (const field of this.options) {
