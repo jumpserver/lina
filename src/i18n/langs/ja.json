@@ -2385,7 +2385,7 @@
       "IntervalOfCreateUpdatePage": "単位: 時",
       "UsernameOfCreateUpdatePage": "ターゲットホスト上のユーザーのユーザー名存在する場合は、ユーザーパスワードを変更します存在しない場合は、ユーザーを追加してパスワードを設定します"
     },
-    "Beian": "ファイリング"
+    "Footer": "フッター"
   },
   "applets": {
     "PublishStatus": "投稿ステータス",

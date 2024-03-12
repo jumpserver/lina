@@ -2297,6 +2297,6 @@
       "IntervalOfCreateUpdatePage": "单位：时",
       "UsernameOfCreateUpdatePage": "目标主机上用户的用户名；如果已️存在，修改用户密码；如果不存在，添加用户并设置密码；"
     },
-    "Beian": "备案"
+    "Footer": "页脚"
   }
 }
