@@ -57,7 +57,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
-import { createJob, getJob, getTaskDetail } from '@/api/ops'
+import { createJob, StopJob, getJob, getTaskDetail } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -108,6 +108,20 @@ export default {
             },
             callback: () => {
               this.execute()
+            }
+          },
+          stop: {
+            type: 'button',
+            name: this.$t('common.Stop'),
+            align: 'left',
+            icon: 'fa fa-stop',
+            tip: this.$t('ops.StopJob'),
+            disabled: true,
+            el: {
+              type: 'danger'
+            },
+            callback: () => {
+              this.stop()
             }
           },
           runas: {
@@ -343,9 +357,6 @@ export default {
           switch (event) {
             case 'end':
               setTimeout(() => {
-                clearInterval(this.executionInfo.cancel)
-                this.toolbar.left.run.icon = 'fa fa-play'
-                this.toolbar.left.run.disabled = false
                 this.getTaskStatus()
               }, 500)
               break
@@ -356,6 +367,7 @@ export default {
     getTaskStatus() {
       getTaskDetail(this.currentTaskId).then(data => {
         this.executionInfo.status = data['status']
+        this.setBtn()
       })
     },
     wrapperError(msg) {
@@ -434,7 +446,26 @@ export default {
         this.$router.replace({ query: { taskId: this.currentTaskId }})
         this.setCostTimeInterval()
         this.writeExecutionOutput()
+        this.setBtn()
       })
+    },
+    stop() {
+      StopJob({ task_id: this.currentTaskId }).then(() => {
+        this.xterm.write(this.wrapperError('Task has been canceled'))
+        this.getTaskStatus()
+      }).catch((e) => {
+        console.log(e)
+      }).finally(() => {
+        this.setBtn()
+      })
+    },
+    setBtn() {
+      if (this.executionInfo.status !== 'running') {
+        clearInterval(this.executionInfo.cancel)
+        this.toolbar.left.run.icon = 'fa fa-play'
+      }
+      this.toolbar.left.run.disabled = this.executionInfo.status === 'running'
+      this.toolbar.left.stop.disabled = this.executionInfo.status !== 'running'
     }
   }
 }
