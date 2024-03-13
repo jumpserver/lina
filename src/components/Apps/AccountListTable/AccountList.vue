@@ -139,7 +139,7 @@ export default {
       showAddDialog: false,
       showAddTemplateDialog: false,
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('Create'),
+      accountCreateUpdateTitle: this.$t('AddAccount'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -316,6 +316,7 @@ export default {
             name: 'add',
             title: this.$t('Create'),
             type: 'primary',
+            icon: 'plus',
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },

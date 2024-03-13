@@ -130,7 +130,7 @@ export const setAutomations = (vm) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
     // 设置 enableMethod className
-    _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'itemMethodKey')
+    _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'item-method')
     // 设置 enableParams Hidden
     _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
@@ -148,7 +148,7 @@ export const setAutomations = (vm) => {
     // 设置 enableParams label
     _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
     // 设置 enableParams className
-    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'itemParamsKey')
+    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'item-params')
     _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
     _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
     // }

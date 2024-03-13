@@ -161,6 +161,7 @@ export default {
 
   .el-form ::v-deep .el-form-item__content {
     width: 75%;
+    line-height: 35px;
   }
 
   .mobile.el-form ::v-deep .el-form-item__content {
@@ -169,6 +170,7 @@ export default {
 
   .el-form ::v-deep .el-form-item__label {
     padding: 0 30px 0 0;
+    line-height: 35px;
   }
 
   .el-form ::v-deep .el-form-item__error {

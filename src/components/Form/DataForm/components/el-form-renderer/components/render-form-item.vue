@@ -1,7 +1,7 @@
 <template>
   <el-form-item
     v-show="_show"
-    :class="'el-form-item-' + data.prop"
+    :class="'el-form-item-' + data.prop + ' ' + data.attrs.class || ''"
     :label="data.label"
     :prop="prop"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"

@@ -44,11 +44,11 @@ export default {
       },
       fields: [
         [this.$t('Basic'), [
-          'name', 'category_type', 'charset',
-          'domain_enabled'
+          'name', 'category_type'
         ]],
         [this.$t('Config'), [
-          'protocols', 'su_enabled', 'su_method'
+          'protocols', 'su_enabled', 'su_method',
+          'domain_enabled', 'charset'
         ]],
         [this.$t('Automations'), ['automation']],
         [this.$t('Other'), ['comment']]
@@ -174,7 +174,7 @@ export default {
   }
 }
 
->>> .itemMethodKey.el-form-item {
+>>> .item-method.el-form-item {
   display: inline-block;
   width: 100%;
   .el-form-item__content {
@@ -185,7 +185,7 @@ export default {
   }
 }
 
->>> .itemParamsKey.el-form-item {
+>>> .item-params.el-form-item {
   display: inline-block;
   position: absolute;
   right: 20px;

@@ -2,6 +2,7 @@
   <AutoDataForm
     v-if="!loading"
     ref="AutoDataForm"
+    :class="addTemplate? '': 'account-add'"
     v-bind="$data"
     @submit="confirm"
   />
@@ -58,9 +59,8 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('Asset'), ['assets']],
         [this.$t('AccountTemplate'), ['template']],
-        [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
+        [this.$t('Basic'), ['assets', 'name', 'username', 'privileged', 'su_from', 'su_from_username']],
         [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
           'access_key', 'passphrase', 'api_key'
@@ -145,5 +145,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+.account-add {
+  >>> .el-form-item {
+    margin-bottom: 5px;
+    .help-block {
+      margin-bottom: 5px;
+    }
+  }
+  >>> .form-group-header {
+    .hr-line-dashed {
+      margin: 5px 0;
+    }
+    h3 {
+      margin-bottom: 5px;
+    }
+  }
+}
 </style>
