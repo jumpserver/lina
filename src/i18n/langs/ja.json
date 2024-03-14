@@ -477,7 +477,8 @@
     "WebUpdate": "資産の更新 - Web",
     "DatabaseUpdate": "資産の更新 - データベース",
     "GPTCreate": "資産の作成 - GPT",
-    "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります"
+    "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります",
+    "OracleDBNameHelpText": "ヒント：Oracle データベースのサービス名（Service Name）を入力してください"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
