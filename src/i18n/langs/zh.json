@@ -469,7 +469,8 @@
     "NoSQLProtocol": "非关系数据库",
     "OtherProtocol": "其它协议",
     "PasswordOrToken": "密码 / 令牌",
-    "AppletHostDomainHelpText": "这里的网域属于 System 组织"
+    "AppletHostDomainHelpText": "这里的网域属于 System 组织",
+    "OracleDBNameHelpText": "提示：填写 Oracle 数据库的服务名称（Service Name）"
   },
   "audits": {
     "ChangeField": "变更字段",
