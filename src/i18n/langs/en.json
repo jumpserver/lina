@@ -478,7 +478,7 @@
     "DatabaseUpdate": "Update asset - Database",
     "GPTCreate": "Create asset - GPT",
     "AppletHostDomainHelpText": "These domains are in System Organization",
-    "OracleDBNameHelpText": "Tips: Enter the Service Name of the Oracle database"
+    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name"
   },
   "audits": {
     "ChangeField": "Change field",
