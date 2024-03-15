@@ -430,14 +430,23 @@ export function toTitleCase(string) {
 export function toSentenceCase(string) {
   if (!string) return string
   if (string.indexOf('/') > 0) return string
-  const s = string.trim().split(' ').map(item => {
+  const s = string.trim().split(' ').map((item, index) => {
     if (item.length === 0) return ''
     if (item.length === 1) return item.toLowerCase()
 
+    // 如果首字母大写，且第二个字母也大写，不处理
     if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
       return item
     }
-    return item.toLowerCase()
+
+    if (index === 0) {
+      return item[0].toUpperCase() + item.slice(1)
+    }
+    // 仅处理首字母大写，别的是小写的情况
+    if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
+      return item[0].toLowerCase() + item.slice(1)
+    }
+    return item
   }).join(' ')
   return s[0].toUpperCase() + s.slice(1)
 }

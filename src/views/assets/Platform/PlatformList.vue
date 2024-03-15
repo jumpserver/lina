@@ -142,6 +142,7 @@ export default {
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
       })
+      console.log('Category: ', this.headerActions.moreCreates.dropdown)
     },
     async setCategoriesTab() {
       const categoryIcon = {

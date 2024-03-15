@@ -151,7 +151,7 @@ export default {
       .el-cascader {
         .el-input.el-input--suffix {
           .el-input__inner {
-            height: calc(#{$innerHeight} - 1px);
+            height: calc(#{$headerHeight} - 1px);
           }
         }
       }

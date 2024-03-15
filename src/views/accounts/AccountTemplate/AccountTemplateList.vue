@@ -38,6 +38,7 @@ export default {
         },
         columnsMeta: {
           privileged: {
+            width: '120px',
             formatterArgs: {
               showText: false,
               showFalse: false

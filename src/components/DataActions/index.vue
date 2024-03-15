@@ -13,9 +13,9 @@
         <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)">
           <span v-if="action.icon" class="pre-icon">
             <i v-if="action.icon.startsWith('fa')" :class="'fa fa-fw ' + action.icon" />
-            <svg-icon v-else :icon-class="action.icon" style="" />
+            <svg-icon v-else :icon-class="action.icon" />
           </span>
-          {{ toSentenceCase(action.title) }}<i class="el-icon-arrow-down el-icon--right" />
+          {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
           <template v-for="option in action.dropdown">
@@ -35,9 +35,9 @@
             >
               <span v-if="option.icon" class="pre-icon">
                 <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
-                <svg-icon v-else :icon-class="option.icon" style="" />
+                <svg-icon v-else :icon-class="option.icon" />
               </span>
-              {{ toSentenceCase(option.title) }}
+              {{ option.title }}
             </el-dropdown-item>
           </template>
         </el-dropdown-menu>
@@ -57,7 +57,7 @@
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
               <svg-icon v-else :icon-class="action.icon" />
             </span>
-            {{ toSentenceCase(action.title) }}
+            {{ action.title }}
           </span>
         </el-tooltip>
       </el-button>
@@ -154,7 +154,7 @@ export default {
         if (!v) {
           continue
         }
-        const action = Object.assign({}, v)
+        const action = { ...v }
         // 是否拥有这个action
         const has = this.checkItem(action, 'has')
         delete action['has']
@@ -169,7 +169,6 @@ export default {
         action.disabled = !can
 
         if (action.dropdown) {
-          // const dropdown = this.cleanActions(action.dropdown)
           action.dropdown = this.cleanActions(action.dropdown)
         }
         cleanedActions.push(action)

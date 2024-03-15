@@ -158,7 +158,7 @@ export default {
       margin: 5px 0;
     }
     h3 {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
   }
 }

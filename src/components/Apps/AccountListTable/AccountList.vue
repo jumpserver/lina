@@ -27,7 +27,7 @@
       :account="account"
       :add-template="true"
       :asset="iAsset"
-      :title="accountCreateUpdateTitle"
+      :title="accountCreateByTemplateTitle"
       :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
@@ -140,6 +140,7 @@ export default {
       showAddTemplateDialog: false,
       createAccountResults: [],
       accountCreateUpdateTitle: this.$t('AddAccount'),
+      accountCreateByTemplateTitle: this.$t('AddAccountByTemplate'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -325,7 +326,6 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('Create')
                 vm.showAddDialog = true
               })
             }
@@ -342,7 +342,6 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('Create')
                 vm.showAddTemplateDialog = true
               })
             }
