@@ -1,6 +1,5 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
 
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
@@ -55,7 +54,6 @@ export default [
       title: i18n.t('AssetAclList'),
       licenseRequired: true,
       app: 'acls',
-      hidden: () => store.getters.publicSettings.LITE,
       resource: 'loginassetacl'
     },
     children: [
@@ -151,7 +149,6 @@ export default [
       licenseRequired: true,
       app: 'acls',
       disableOrgsChange: true,
-      hidden: () => store.getters.publicSettings.LITE,
       resource: 'connectmethodacl'
     },
     children: [
@@ -191,8 +188,8 @@ export default [
     meta: {
       title: i18n.t('UserLoginAclList'),
       app: 'acls',
+      licenseRequired: true,
       resource: 'loginacl',
-      hidden: () => store.getters.publicSettings.LITE,
       disableOrgsChange: true
     },
     children: [
