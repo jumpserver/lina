@@ -256,6 +256,7 @@
     "SecretType": "Secret type",
     "PrivilegedTemplate": "Privileged",
     "InitialDeploy": "Initial deploy",
+    "OnlyInitialDeploy": "Initial Setup",
     "Address": "Address",
     "PrivateKey": "Private key",
     "Secret": "Secret",

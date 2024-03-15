@@ -459,6 +459,7 @@
     "Token": "トークン",
     "GatewayList": "ゲートウェイ一覧",
     "InitialDeploy": "初期展開",
+    "OnlyInitialDeploy": "初期設定のみ",
     "PrivateKey": "鍵",
     "Category": "カテゴリー",
     "SSHPort": "SSH ポート",

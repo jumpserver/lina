@@ -116,6 +116,23 @@ export default {
           }
         },
         {
+          title: this.$t('assets.OnlyInitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Deploy')
+          },
+          callbacks: {
+            click: function() {
+              this.$axios.post(
+                `/api/v1/terminal/applet-host-deployments/`,
+                { host: this.object.id, install_applets: false }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('common.PublishAllApplets'),
           attrs: {
             type: 'primary',
