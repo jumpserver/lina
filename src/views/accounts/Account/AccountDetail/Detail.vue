@@ -174,7 +174,7 @@ export default {
           })
         },
         {
-          title: this.$t('SwitchFrom'),
+          title: this.$t('SuFrom'),
           type: 'updateSelect',
           attrs: {
             type: 'primary',

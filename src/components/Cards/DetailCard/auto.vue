@@ -1,14 +1,18 @@
 <template>
-  <DetailCard v-if="!loading && hasObject && items.length > 0" :items="items" v-bind="$attrs" />
+  <IBox v-if="loading" style="width: 100%; height: 200px" />
+  <div v-else>
+    <DetailCard v-if="hasObject && items.length > 0" :items="items" :loading="loading" v-bind="$attrs" />
+  </div>
 </template>
 
 <script>
 import DetailCard from './index.vue'
 import { copy, toSafeLocalDateStr } from '@/utils/common'
+import IBox from '@/components/IBox/index.vue'
 
 export default {
   name: 'AutoDetailCard',
-  components: { DetailCard },
+  components: { IBox, DetailCard },
   props: {
     object: {
       type: Object,

@@ -5,7 +5,6 @@
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
       <el-col :md="9" :sm="24">
-        <QuickActions :actions="quickActions" type="primary" />
         <RelationCard v-bind="relationConfig" />
       </el-col>
     </el-row>
@@ -14,14 +13,12 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'GroupUser',
   components: {
-    QuickActions,
     RelationCard,
     GenericListTable
   },
@@ -148,7 +145,9 @@ export default {
           })
           this.$axios.post(relationUrl, data)
           this.$message.success(this.$tc('AddSuccessMsg'))
-          window.location.reload()
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
         }
       }
     }

@@ -3,7 +3,7 @@
     <table class="CardTable" style="width: 100%;table-layout:fixed;">
       <tr>
         <td colspan="2">
-          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" v-bind="select2" />
+          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" show-select-all v-bind="select2" />
         </td>
       </tr>
       <slot />
@@ -142,6 +142,10 @@ export default {
       type: Function,
       default: (objects, that) => {}
     },
+    showAddAll: {
+      type: Boolean,
+      default: false
+    },
     onAddSuccess: {
       type: Function,
       default(objects, that) {
@@ -161,6 +165,7 @@ export default {
       iHasObjects: this.hasObjects || [],
       totalHasObjectsLength: 0,
       submitLoading: false,
+      selectAllDisabled: false,
       params: {
         page: 1,
         hasMore: false,
@@ -253,11 +258,13 @@ export default {
         }
       })
       data = this.iAjax.processResults.bind(this)(data)
-      data.results && data.results.forEach((v) => {
-        if (!this.hasObjects.find((item) => item.value === v.value)) {
-          this.iHasObjects.push(v)
-        }
-      })
+      if (data.results) {
+        data.results.forEach((v) => {
+          if (!this.iHasObjects.find((item) => item.value === v.value)) {
+            this.iHasObjects.push(v)
+          }
+        })
+      }
       // 如果还有其它页，继续获取, 如果没有就停止
       this.params.hasMore = !!data.pagination
       this.totalHasObjectsLength = data.total
@@ -292,6 +299,13 @@ export default {
       this.performAdd(objects, this).then(
         () => this.onAddSuccess(objects, this)
       )
+    },
+    async selectAll() {
+      this.selectAllDisabled = true
+      this.disabled = true
+      await this.$refs.select2.selectAll()
+      this.selectAllDisabled = false
+      this.disabled = false
     }
   }
 }

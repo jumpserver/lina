@@ -18,6 +18,9 @@
     v-on="$listeners"
     @visible-change="onVisibleChange"
   >
+    <div v-if="showSelectAll" class="el-select-dropdown__header">
+      <el-checkbox v-model="allSelected" @change="handleSelectAllChange">{{ $t('SelectAll') }}</el-checkbox>
+    </div>
     <el-option
       v-for="item in iOptions"
       :key="item.value"
@@ -25,6 +28,7 @@
       :label="item.label"
       :value="item.value"
     />
+
   </el-select>
 </template>
 
@@ -94,6 +98,10 @@ export default {
     collapseTagsCount: {
       type: Number,
       default: 10
+    },
+    showSelectAll: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -125,7 +133,8 @@ export default {
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
       initialOptions: [],
-      remote: true
+      remote: true,
+      allSelected: false
     }
   },
   computed: {
@@ -375,6 +384,25 @@ export default {
         this.$log.debug('Visible change, refresh select2')
       }
       this.$emit('visible-change', visible)
+    },
+    async loadAll() {
+      if (!this.iAjax.url) {
+        return
+      }
+      while (this.params.hasMore) {
+        await this.loadMore()
+      }
+    },
+    async selectAll() {
+      await this.loadAll()
+      this.iValue = this.iOptions.map((v) => v.value)
+    },
+    handleSelectAllChange(checked) {
+      if (checked) {
+        this.selectAll()
+      } else {
+        this.iValue = []
+      }
     }
   }
 }
@@ -393,5 +421,10 @@ export default {
 
 .select2 >>> input::placeholder {
   padding-left: 2px;
+}
+
+.el-select-dropdown__header {
+  padding: 10px 20px;
+  border-bottom: solid 1px #ebeef5;
 }
 </style>
