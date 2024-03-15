@@ -32,6 +32,8 @@
       "AccountGatherList": "収集タスク"
     },
     "AccountChangeSecret": {
+      "OldSecret": "古い秘密",
+      "NewSecret": "新しい秘密",
       "Result": "結果",
       "ParamsHelpText": "改密パラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "ExecutionTimes": "実行時間",

@@ -32,6 +32,8 @@
       "AccountGatherList": "Gather task"
     },
     "AccountChangeSecret": {
+      "OldSecret": "Old secret",
+      "NewSecret": "New secret",
       "Result": "Result",
       "ParamsHelpText": "The change secret parameter settings are currently only effective for assets with a platform type of host.",
       "ExecutionTimes": "Execution times",
