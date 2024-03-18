@@ -37,7 +37,7 @@
                     </el-tag>
                   </div>
                   <el-divider class="my-divider" />
-                  <div class="comment">
+                  <div :title="d.comment " class="comment">
                     {{ d.comment }}
                   </div>
                   <div class="tag-zone">

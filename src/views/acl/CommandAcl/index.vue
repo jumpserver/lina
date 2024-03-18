@@ -23,7 +23,8 @@ export default {
             title: this.$t('CommandFilterACL'),
             name: 'CommandFilterACL',
             hidden: !this.$hasPerm('acls.view_commandfilteracl'),
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue')
+            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue'),
+            helpTip: this.$t('CommandFilterACLHelpMsg')
           },
           {
             title: this.$t('CommandGroup'),
