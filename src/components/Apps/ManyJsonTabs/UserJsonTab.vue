@@ -40,7 +40,7 @@ export default {
           columnsMeta: {
             name: {
               label: this.$t('Name'),
-              width: 90,
+              width: 85,
               formatter: (row) => {
                 const to = {
                   name: 'UserDetail',

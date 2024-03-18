@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-alert type="success">{{ helpMsg }}</el-alert>
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 
@@ -70,8 +69,7 @@ export default {
       }
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 
