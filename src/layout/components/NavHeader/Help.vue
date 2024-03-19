@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dropdown :show-timeout="50" @command="handleCommand">
-      <span class="el-dropdown-link" style="vertical-align: middle;">
+      <span class="el-dropdown-link" style="vertical-align: baseline;">
         <svg-icon icon-class="question-mark" style="font-size: 16px;" />
       </span>
       <el-dropdown-menu slot="dropdown">

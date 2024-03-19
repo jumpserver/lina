@@ -149,9 +149,10 @@ export default {
   .table-header {
     >>> {
       .el-cascader {
+        line-height: $innerHeight;
         .el-input.el-input--suffix {
           .el-input__inner {
-            height: calc(#{$headerHeight} - 1px);
+            height: calc(#{$headerHeight} - 3px);
           }
         }
       }
@@ -165,10 +166,6 @@ export default {
 
       .el-input__suffix {
         height: $innerHeight;
-        line-height: $innerHeight;
-      }
-
-      .el-cascader {
         line-height: $innerHeight;
       }
 

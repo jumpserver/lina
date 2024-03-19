@@ -188,7 +188,7 @@ export default {
 >>> .item-params.el-form-item {
   display: inline-block;
   position: absolute;
-  right: 20px;
+  right: 18px;
 }
 </style>
 

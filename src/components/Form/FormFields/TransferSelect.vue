@@ -100,6 +100,7 @@ export default {
         filterable: true,
         async: true,
         dataList: [],
+        transferOnCheck: true,
         getPageData: function(pageIndex, pageSize) {
           return getPageData({ pageIndex, pageSize })
         },

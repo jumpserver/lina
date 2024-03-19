@@ -169,7 +169,8 @@ export default {
 
 <style lang="scss" scoped>
 .setting {
-  height: 34px;
-  padding-top: 10px;
+  margin-top: 1px;
+  height: 30px;
+  vertical-align: super;
 }
 </style>

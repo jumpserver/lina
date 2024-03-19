@@ -348,7 +348,7 @@ export default {
 }
 
 .input-button {
-  margin-top: 4px;
+  margin-top: 2px;
   display: flex;
   margin-left: 20px
 }

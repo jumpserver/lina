@@ -126,6 +126,10 @@ export default {
     showClearBtn: {
       type: Boolean,
       default: () => false
+    },
+    transferOnCheck: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -259,10 +263,14 @@ export default {
     // 未选中区域的选泽
     noCheckSelect(val) {
       this.noCheckData = val
+      if (this.transferOnCheck) {
+        setTimeout(() => this.addData(), 300)
+      }
     },
     // 已选中区域的选泽
     hasCheckSelect(val) {
       this.hasCheckData = val
+      setTimeout(() => this.deleteData(), 300)
     },
     // 关键：把未选择的数据当做已选择的过滤数组，把已选择的数据当做未选择的过滤数组，在全局data进行过滤，最后进行一次搜索
     // 添加至已选
