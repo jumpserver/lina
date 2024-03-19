@@ -1,18 +1,40 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable ref="regionTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <Dialog
+      :title="$tc('assets.TestConnection')"
+      :visible.sync="visible"
+      :confirm-title="$tc('assets.TestConnection')"
+      :loading-status="testLoading"
+      width="50"
+      @cancel="handleCancel()"
+      @confirm="handleConfirm()"
+    >
+      <el-form ref="regionFrom" label-width="auto" :model="account">
+        <el-form-item :label="$tc('xpack.Cloud.Region')" :rules="regionRules" prop="region">
+          <Select2 v-model="account.region" v-bind="select2" />
+        </el-form-item>
+      </el-form>
+    </Dialog>
+  </div>
 </template>
 
 <script type="text/jsx">
-import GenericListTable from '@/layout/components/GenericListTable'
 import {
   ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
   ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, zstack,
   qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack
 } from '../const'
+import rules from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components/Form/FormFields'
+import GenericListTable from '@/layout/components/GenericListTable'
+import Dialog from '@/components/Dialog/index.vue'
 
 export default {
   name: 'AccountList',
   components: {
+    Dialog,
+    Select2,
     GenericListTable
   },
   data() {
@@ -53,8 +75,15 @@ export default {
                   title: this.$t('assets.TestConnection'),
                   can: () => vm.$hasPerm('xpack.test_account'),
                   callback: function(val) {
-                    this.$axios.get(`/api/v1/xpack/cloud/accounts/${val.row.id}/test-connective/`).then(res => {
-                      this.$message.success(this.$tc('common.TestSuccessMsg'))
+                    this.$axios.get(
+                      `/api/v1/xpack/cloud/regions/?account_id=${val.row.id}`,
+                      { disableFlashErrorMsg: true }
+                    ).then(resp => {
+                      vm.visible = true
+                      vm.account.id = val.row.id
+                      vm.select2.options = resp.regions.map(r => ({ 'label': r.name, 'value': r.id }))
+                    }).catch(err => {
+                      vm.$message.error(err.response.data.msg)
                     })
                   }
                 }
@@ -179,12 +208,47 @@ export default {
             }
           ]
         }
-      }
+      },
+      account: {},
+      visible: false,
+      testLoading: false,
+      select2: {
+        allowCreate: true,
+        multiple: false
+      },
+      regionRules: [rules.Required]
     }
   },
   methods: {
-    createAccount(provider) {
-      return () => { this.$router.push({ name: 'AccountCreate', query: { provider: provider }}) }
+    valid(status) {
+      if (status !== 200) {
+        this.$message.error(this.$t('xpack.Cloud.AccountTestConnectionError'))
+        return 200
+      }
+      return status
+    },
+    handleCancel() {
+      this.visible = false
+    },
+    handleConfirm() {
+      this.$refs.regionFrom.validate(valid => {
+        if (valid) {
+          this.testLoading = true
+          this.$axios.get(
+            `/api/v1/xpack/cloud/accounts/${this.account.id}/test-connective/?region_id=${this.account.region}`,
+            { disableFlashErrorMsg: true }
+          ).then((resp) => {
+            this.$message.success(resp.msg)
+          }).catch(error => {
+            this.$message.error(error.response.msg)
+          }).finally(() => {
+            this.testLoading = false
+            this.$refs.regionTable.reloadTable()
+          })
+        } else {
+          return false
+        }
+      })
     }
   }
 
