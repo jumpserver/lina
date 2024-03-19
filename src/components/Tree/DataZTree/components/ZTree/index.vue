@@ -162,6 +162,7 @@ export default {
         </span>`
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
+        $rootNodeRef.css({ 'width': 'calc(100% - 68px)', 'overflow': 'hidden', 'text-overflow': 'ellipsis' })
         $rootNodeRef.after(icons)
       }
     },

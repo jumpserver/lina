@@ -256,6 +256,7 @@
     "SecretType": "Secret type",
     "PrivilegedTemplate": "Privileged",
     "InitialDeploy": "Initial deploy",
+    "OnlyInitialDeploy": "Initial Setup",
     "Address": "Address",
     "PrivateKey": "Private key",
     "Secret": "Secret",
@@ -477,7 +478,8 @@
     "WebUpdate": "Update asset - Web",
     "DatabaseUpdate": "Update asset - Database",
     "GPTCreate": "Create asset - GPT",
-    "AppletHostDomainHelpText": "These domains are in System Organization"
+    "AppletHostDomainHelpText": "These domains are in System Organization",
+    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name"
   },
   "audits": {
     "ChangeField": "Change field",
