@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountName": "Account name",
     "AccountBatchUpdate": "Batch update(same type)",
     "SuFrom": "Su from",
     "GenerateSuccessMsg": "Accounts generated successfully",
@@ -80,6 +81,7 @@
       "ExecutionDetail": "Execution detail",
       "Name": "Name",
       "Retry": "Retry",
+      "BatchRetry": "Batch retry",
       "Timer": "Timed execution",
       "Detail": "Detail",
       "TimeDelta": "Time delta",

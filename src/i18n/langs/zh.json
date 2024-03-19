@@ -1,5 +1,6 @@
 {
   "accounts": {
+    "AccountName": "账号名称",
     "AccountBatchUpdate": "批量更新(同类型)",
     "BulkVerify": "批量测试可连接性",
     "Test": "测试",
@@ -112,6 +113,7 @@
       "RegularlyPerform": "定期执行",
       "Result": "结果",
       "Retry": "重试",
+      "BatchRetry": "批量重试",
       "Success": "成功",
       "TaskList": "任务记录",
       "TimeDelta": "运行时间",
