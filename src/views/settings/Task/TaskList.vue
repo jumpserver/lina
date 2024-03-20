@@ -8,6 +8,7 @@ import { BASE_URL } from '@/utils/common'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
 export default {
+  name: 'TaskList',
   components: {
     ListTable
   },
@@ -16,7 +17,7 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time'
+          'name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled'
         ],
         columnsMeta: {
           name: {
@@ -31,9 +32,6 @@ export default {
                 return cellValue
               }
             }
-          },
-          actions: {
-            has: false
           },
           queue: {
             width: '120px',
@@ -107,6 +105,34 @@ export default {
                 }
               }
             }
+          },
+          actions: {
+            has: false
+          },
+          enabled: {
+            width: '80px',
+            label: `${this.$t('common.Enable')}/${this.$t('common.Disable')}`,
+            formatter: (row) => {
+              console.log(row.exec_cycle)
+              if (row.exec_cycle === undefined) {
+                return '-'
+              } else {
+                return <el-switch
+                  v-model={row.enabled}
+                  onChange={(v) => {
+                    const url = `/api/v1/ops/celery/period-tasks/${row.name}/`
+                    const data = { enabled: v }
+                    this.$axios.patch(url, data).catch(() => {
+                      row.enabled = !v
+                    }).then(res => {
+                      this.$message.success(this.$t('common.updateSuccessMsg'))
+                    }).catch(err => {
+                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                    })
+                  }}
+                />
+              }
+            }
           }
         }
       },
@@ -124,8 +150,7 @@ export default {
         ]
       }
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
