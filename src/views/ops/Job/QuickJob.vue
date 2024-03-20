@@ -18,7 +18,7 @@
             :value.sync="command"
             style="margin-bottom: 20px"
           />
-          <div style="margin-bottom: 5px;font-weight: bold">{{ $tc('Output') }}:</div>
+          <div style="margin-bottom: 5px;font-weight: bold;display: inline-block">{{ $tc('Output') }}:</div>
           <span v-if="executionInfo.status" style="float: right">
             <span>
               <span><b>{{ $tc('Status') }}: </b></span>
@@ -447,14 +447,17 @@ export default {
   background-color: rgb(247, 247, 247);
   height: calc(100vh - 549px);
   overflow: hidden;
+
   & > div {
     height: 100%;
-    &>>> .xterm {
+
+    & > > > .xterm {
       height: calc(100% - 8px);
       overflow-y: auto;
     }
   }
 }
+
 .mini-button {
   width: 12px;
   float: right;
