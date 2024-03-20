@@ -206,7 +206,6 @@ export default {
     height: 26px;
     margin: 6px;
     padding: 0 10px !important;
-    line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
     background-color: white;

@@ -137,6 +137,7 @@ export default {
       this.searchTable({ labels: val })
     },
     handleLabelSearchShowChange(val) {
+      console.log('handleLabelSearchShowChange', val)
       this.foldSearch = val
     }
   }

@@ -5,7 +5,7 @@
     :content="fields"
     :form="basicForm"
     :label-position="labelPosition"
-    label-width="20%"
+    label-width="25%"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -160,7 +160,7 @@ export default {
   }
 
   .el-form ::v-deep .el-form-item__content {
-    width: 75%;
+    width: 70%;
     line-height: 35px;
   }
 

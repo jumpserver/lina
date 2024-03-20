@@ -1,7 +1,6 @@
 <template>
   <div class="filter-field">
     <el-cascader
-      v-show="options.length > 0"
       ref="Cascade"
       :options="options"
       :props="config"
@@ -27,7 +26,6 @@
     <el-input
       ref="SearchInput"
       v-model="filterValue"
-      :class="options.length < 1 ? 'search-input2': ''"
       :placeholder="placeholder"
       :validate-event="false"
       class="search-input"
@@ -70,7 +68,8 @@ export default {
       valueLabel: '',
       emptyCount: 0,
       filterTags: this.default || {},
-      focus: false
+      focus: false,
+      showCascade: true
     }
   },
   computed: {

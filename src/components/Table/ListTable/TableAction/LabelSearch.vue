@@ -92,20 +92,22 @@ export default {
       this.setSearchFocus()
     },
     handleCascaderVisibleChange(visible) {
+      const input = this.$refs.labelCascader.$el
+        .getElementsByClassName('el-input--suffix')[0]
+        .querySelector('input')
       if (visible) {
         setTimeout(() => {
           this.$refs.labelCascader.updateStyle()
+          input.style.height = '30px'
         },)
         return
       } else {
-        const input = this.$refs.labelCascader.$el
-          .getElementsByClassName('el-input--suffix')[0]
-          .querySelector('input')
         input.style.height = '30px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
       }
+      this.$emit('showLabelSearch', this.showLabelSearch)
     },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
@@ -161,6 +163,11 @@ export default {
 
 .label-cascader {
   width: 300px;
+  height: 30px;
+
+  >>> .el-input input {
+    height: 30px;
+  }
 
   >>> .el-input__inner {
     font-size: 13px;

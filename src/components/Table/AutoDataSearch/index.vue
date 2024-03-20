@@ -50,7 +50,7 @@ export default {
       return _.uniqWith(options, _.isEqual)
     },
     shouldFold() {
-      return this.fold && this.tags.length === 0 && !this.manualSearch
+      return this.fold && (!this.tags.length || this.tags.length === 0) && !this.manualSearch
     }
   },
   watch: {
@@ -71,7 +71,7 @@ export default {
       if (_.isEqual(tags, this.tags)) {
         return
       }
-      this.tags = tags
+      this.tags = (tags || [])
       if (tags.length === 0) {
         this.manualSearch = false
       }
@@ -131,7 +131,7 @@ export default {
 
 <style lang='less' scoped>
 .search-btn {
-  margin-top: 4px;
+  margin-top: 1px;
   cursor: pointer;
   &:hover {
     color: #409eff;

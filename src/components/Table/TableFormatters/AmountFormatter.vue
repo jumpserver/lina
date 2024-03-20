@@ -11,7 +11,7 @@
         @show="getAsyncItems"
       >
         <div class="detail-content">
-          <div v-for="item of items" :key="getKey(item)" class="detail-item">
+          <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
             <span class="detail-item-name">{{ item }}</span>
           </div>
         </div>
@@ -77,9 +77,8 @@ export default {
     this.amount = this.formatterArgs.async ? this.cellValue : (this.cellValue || []).length
   },
   methods: {
-    getKey(item) {
-      const id = Math.random().toString(36).substring(16)
-      return id + item
+    getKey(item, index) {
+      return index + item
     },
     getDefaultUrl() {
       const url = new URL(this.url, location.origin)

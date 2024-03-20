@@ -149,6 +149,9 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
+          address: {
+            minWidth: '200px'
+          },
           gathered_info: {
             label: this.$t('HardwareInfo'),
             formatter: HostInfoFormatter,

@@ -1,7 +1,7 @@
 <template>
   <el-form-item
     v-show="_show"
-    :class="'el-form-item-' + data.prop + ' ' + (data.attrs.class || '')"
+    :class="classes"
     :label="data.label"
     :prop="prop"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
@@ -126,8 +126,7 @@ export default {
   data() {
     return {
       propsInner: {},
-      isBlurTrigger:
-        this.data.rules &&
+      isBlurTrigger: this.data.rules &&
         this.data.rules.some(rule => {
           return rule.required && rule.trigger === 'blur'
         })
@@ -145,6 +144,9 @@ export default {
     // 是否显示
     _show() {
       return !this.hiddenStatus && this.enableWhenStatus
+    },
+    classes() {
+      return 'el-form-item-' + this.data.prop + ' ' + (this.data.attrs?.class || '')
     },
     listeners() {
       const {

@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
 import { isSameView } from '@/utils/jms'
+import { toSentenceCase } from '@/utils/common'
 
 NProgress.configure({
   showSpinner: false
@@ -32,7 +33,7 @@ function generateViewRoutesIfChange({ to, from }) {
 function setPageTitle() {
   const currentRoute = router.currentRoute
   const loginTitle = store.getters.publicSettings['INTERFACE']['login_title']
-  const routeTitle = currentRoute.meta.title
+  const routeTitle = toSentenceCase(currentRoute.meta.title)
   if (routeTitle) {
     document.title = routeTitle + ' - ' + loginTitle
   }
