@@ -1,15 +1,24 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <RecordViewSecret
+      v-if="showViewSecretDialog"
+      :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
+    />
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 
 export default {
   name: 'AccountPushExecutionTaskList',
   components: {
+    RecordViewSecret,
     GenericListTable
   },
   props: {
@@ -20,7 +29,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      secretUrl: '',
+      showViewSecretDialog: false,
       tableConfig: {
         url: `/api/v1/accounts/push-account-records/?execution_id=${this.object.id}`,
         columns: [
@@ -79,6 +91,19 @@ export default {
               hasClone: false,
               moreActionsTitle: this.$t('common.More'),
               extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t('common.View'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    // debugger
+                    vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
+                    vm.showViewSecretDialog = false
+                    setTimeout(() => {
+                      vm.showViewSecretDialog = true
+                    })
+                  }
+                },
                 {
                   name: 'Retry',
                   title: this.$t('accounts.AccountChangeSecret.Retry'),

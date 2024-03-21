@@ -58,6 +58,8 @@
       "RecipientServer": "接收服务器"
     },
     "AccountChangeSecret": {
+      "OldSecret": "原密钥",
+      "NewSecret": "新密钥",
       "PasswordRule": "密码生成规则",
       "ParamsHelpText": "改密参数设置，目前仅对平台种类为主机的资产生效。",
       "ContainAttachment": "含附件",
