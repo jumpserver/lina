@@ -242,7 +242,7 @@ export default {
   }
 
   & > > > .el-button-ungroup .el-dropdown > .more-action {
-    height: 24.6px;
+    //height: 24.6px;
   }
 }
 

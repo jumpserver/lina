@@ -9,7 +9,7 @@
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
-    <PageContent>
+    <PageContent class="page-content">
       <el-alert v-if="helpMessage" type="success">
         <span class="announcement-main" v-html="helpMessage" />
       </el-alert>
@@ -75,12 +75,18 @@ export default {
 <style lang="scss" scoped>
 .page {
   height: calc(100vh - 50px);
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 
   .el-alert {
     margin-top: -5px;
     margin-bottom: 5px;
+  }
+
+  .page-content {
+    height: calc(100% - 50px);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 

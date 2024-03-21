@@ -4,7 +4,7 @@
       v-if="hasButton"
       :disabled="!canSetting"
       :icon="icon"
-      class="setting"
+      class="proto-setting"
       size="small"
       type="primary"
       @click="onSetting"
@@ -168,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.setting {
+.proto-setting {
   margin-top: 1px;
   height: 30px;
   vertical-align: super;

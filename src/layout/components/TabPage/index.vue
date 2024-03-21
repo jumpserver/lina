@@ -1,10 +1,10 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
 
-    <div>
+    <div style="height: 100%">
       <el-tabs
         v-if="tabIndices.length > 0"
         slot="submenu"
@@ -28,17 +28,18 @@
         </template>
       </el-tabs>
 
-      <el-alert v-if="helpMessage" type="success">
-        <span class="announcement-main" v-html="helpMessage" />
-      </el-alert>
-
-      <transition v-if="loading" appear mode="out-in" name="fade-transform">
-        <slot>
-          <keep-alive>
-            <component :is="computeActiveComponent" />
-          </keep-alive>
-        </slot>
-      </transition>
+      <div class="tab-page-content">
+        <el-alert v-if="helpMessage" type="success">
+          <span class="announcement-main" v-html="helpMessage" />
+        </el-alert>
+        <transition v-if="loading" appear mode="out-in" name="fade-transform">
+          <slot>
+            <keep-alive>
+              <component :is="computeActiveComponent" />
+            </keep-alive>
+          </slot>
+        </transition>
+      </div>
     </div>
   </Page>
 </template>
@@ -159,18 +160,33 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+
 .page-submenu >>> .el-tabs__header {
   background-color: white;
-  margin-left: -25px;
-  padding-left: 25px;
-  margin-right: -25px;
-  padding-right: 25px;
-  margin-top: -20px;
-  width: 100vw;
+  margin-top: -10px;
+  padding: 0 30px;
 
   .el-tabs__item {
     i {
       opacity: 0.6;
+    }
+  }
+}
+
+.tab-page {
+   >>> .page-content {
+     overflow-y: hidden;
+     padding: 0;
+  }
+
+  .tab-page-content {
+    padding: 12px 30px 22px;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+
+    .el-alert {
+      margin-top: -10px;
+      margin-bottom: 5px;
     }
   }
 }

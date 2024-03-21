@@ -77,8 +77,27 @@ export default {
 </script>
 
 <style scoped>
-.form >>> .el-select {
+.platform-form >>> {
+  .el-cascader {
+    width: 100%;
+  }
+}
+
+>>> .item-method.el-form-item {
+  display: inline-block;
   width: 100%;
+  .el-form-item__content {
+    width: calc(70% - 50px)
+  }
+  .el-select {
+    width: 100%;
+  }
+}
+
+>>> .item-params.el-form-item {
+  display: inline-block;
+  position: absolute;
+  right: 18px;
 }
 
 </style>

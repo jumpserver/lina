@@ -85,8 +85,8 @@
 
 
 td .el-button.el-button--mini {
-  padding: 1px 5px;
-  line-height: 1;
+  padding: 2px 4px;
+  line-height: 1.5;
 }
 
 .el-tabs__item.is-active, .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
