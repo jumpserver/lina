@@ -1,23 +1,25 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="12" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="12" :sm="24">
       <IBox :title="$tc('Permissions')">
-        <div style="height: 10%">
-          <el-button
-            :disabled="isDisabled"
-            size="small"
-            style="width: 100%;"
-            type="primary"
-            @click="updatePermissions"
-          >
-            {{ $t('Update') }}
-          </el-button>
-        </div>
-        <div class="perm-tree">
-          <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+        <div class="tree-zone">
+          <div style="height: 10%">
+            <el-button
+              :disabled="isDisabled"
+              size="small"
+              style="float: right"
+              type="primary"
+              @click="updatePermissions"
+            >
+              {{ $t('Update') }}
+            </el-button>
+          </div>
+          <div class="perm-tree">
+            <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+          </div>
         </div>
       </IBox>
     </el-col>
@@ -299,21 +301,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree > > > .ztree * {
-  background: white;
-}
+.perm-tree {
+  border: 1px solid #e8e8e8;
 
-.perm-tree > > > .ztree {
-  background: white !important;
-}
+  >>> {
+    .ztree * {
+      background: white;
+    }
+    .ztree {
+      background: white !important;
 
-.perm-tree > > > .checkbox_true_disable,
-.perm-tree > > > .checkbox_false_disable {
-  cursor: not-allowed !important;
-}
+      .button.chk {
+        //float: right;
+      }
+    }
 
-.perm-tree > > > .checkbox_true_disable:before,
-.perm-tree > > > .checkbox_false_disable:before {
-  color: #aaaaaa !important;
+    .checkbox_false_disable, .checkbox_true_disable {
+      cursor: not-allowed !important;
+    }
+
+    .checkbox_true_disable:before, .checkbox_false_disable:before {
+      color: #aaaaaa !important;
+    }
+  }
 }
 </style>

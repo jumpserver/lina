@@ -165,11 +165,19 @@ export default {
   background-color: white;
   margin-top: -10px;
   padding: 0 30px;
+  margin-bottom: 5px;
 
   .el-tabs__item {
     i {
       opacity: 0.6;
     }
+  }
+
+  .el-tabs__nav-next {
+    right: 10px;
+  }
+  .el-tabs__nav-prev {
+    left: 10px;
   }
 }
 
@@ -180,12 +188,12 @@ export default {
   }
 
   .tab-page-content {
-    padding: 12px 30px 22px;
+    padding: 10px 30px 22px;
     overflow-y: auto;
     height: calc(100% - 50px);
 
     .el-alert {
-      margin-top: -10px;
+      margin-top: 0;
       margin-bottom: 5px;
     }
   }
