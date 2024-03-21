@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountName": "Account name",
     "AccountBatchUpdate": "ロット更新(同じタイプです)",
     "Accounts": "アカウント",
     "SuFrom": "から",
@@ -80,6 +81,7 @@
       "ExecutionDetail": "実行の詳細",
       "Name": "名前",
       "Retry": "リトライ",
+      "BatchRetry": "一括リトライ",
       "Timer": "時限実行",
       "Detail": "詳細",
       "TimeDelta": "営業時間",
