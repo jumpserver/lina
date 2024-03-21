@@ -1,6 +1,6 @@
 <template>
   <el-form-item
-    v-show="_show"
+    v-if="_show"
     :class="classes"
     :label="data.label"
     :prop="prop"
@@ -26,6 +26,7 @@
         {{ itemValue }}
       </div>
       <div v-else-if="data.type === 'select'">
+        <span> is select</span>
         <template>
           {{ multipleValue }}
         </template>

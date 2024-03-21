@@ -400,7 +400,10 @@ button, input, optgroup, select, textarea {
   border-radius: 2px;
 }
 
-
 .el-select .el-input .el-select__caret {
   line-height: 1;
+}
+
+.el-select .el-input .el-input__inner {
+  height: 30px;
 }
