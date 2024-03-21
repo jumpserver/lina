@@ -561,6 +561,7 @@
     "Automations": "Automation",
     "Sync": "Sync",
     "Deploy": "Deploy",
+    "Uninstall": "Uninstall",
     "Detail": "Detail",
     "Selector": "Selector",
     "NoContent": "No content",

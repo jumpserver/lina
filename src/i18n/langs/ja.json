@@ -885,6 +885,7 @@
       "failedConditions": "条件に達していない結果!"
     },
     "Deploy": "配備",
+    "Uninstall": "アンインストールする",
     "Publish": "リリース",
     "Icon": "アイコン",
     "Automations": "オートメーション",

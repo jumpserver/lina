@@ -91,6 +91,20 @@ export default {
                       openTaskPage(res['task'])
                     })
                   }
+                },
+                {
+                  title: this.$t('common.Uninstall'),
+                  callback: function({ row }) {
+                    this.$axios.post(
+                      `/api/v1/terminal/applet-host-deployments/uninstall/`,
+                      {
+                        hosts: [row.host.id],
+                        applet_id: row.applet.id
+                      }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
                 }
               ]
             }
