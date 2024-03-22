@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import { ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common'
 import ListTable from '@/components/Table/ListTable/index.vue'
 
@@ -112,25 +112,18 @@ export default {
           enabled: {
             width: '80px',
             label: `${this.$t('common.Enable')}/${this.$t('common.Disable')}`,
-            formatter: (row) => {
-              console.log(row.exec_cycle)
-              if (row.exec_cycle === undefined) {
-                return '-'
-              } else {
-                return <el-switch
-                  v-model={row.enabled}
-                  onChange={(v) => {
-                    const url = `/api/v1/ops/celery/period-tasks/${row.name}/`
-                    const data = { enabled: v }
-                    this.$axios.patch(url, data).catch(() => {
-                      row.enabled = !v
-                    }).then(res => {
-                      this.$message.success(this.$t('common.updateSuccessMsg'))
-                    }).catch(err => {
-                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-                    })
-                  }}
-                />
+            formatter: SwitchFormatter,
+            formatterArgs: {
+              isDisplay(row) {
+                return row.exec_cycle !== undefined
+              },
+              getPatchUrl(row) {
+                return `/api/v1/ops/celery/period-tasks/${row.name}/`
+              },
+              getPatchData(row) {
+                return {
+                  enabled: !row.enabled
+                }
               }
             }
           }
