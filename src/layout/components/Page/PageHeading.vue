@@ -52,6 +52,7 @@ export default {
     height: 50px;
     line-height: 50px;
     background-color: #ffffff;
+    border-bottom: solid 1px #ebeef5;
     .el-row {
       width: 100%;
       position: absolute;

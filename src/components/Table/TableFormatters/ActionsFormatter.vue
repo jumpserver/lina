@@ -5,6 +5,7 @@
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
     :size="'mini'"
+    class="table-actions"
   />
 </template>
 
@@ -141,7 +142,7 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: colActions.moreActionsTitle || this.$t('More')
+      moreActionsTitle: colActions.moreActionsTitle || this.$t('...')
     }
   },
   computed: {
@@ -216,5 +217,10 @@ export default {
 </script>
 
 <style scoped>
+.table-actions >>> {
+  .el-icon-arrow-down {
+    display: none;
+  }
+}
 
 </style>

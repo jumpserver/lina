@@ -221,6 +221,11 @@ export default {
 
 .el-button-ungroup .action-item {
   margin-left: 4px;
+  line-height: 1;
+}
+
+.action-item.el-dropdown {
+  font-size: 11px;
 }
 
 .el-button-ungroup .action-item:first-child {

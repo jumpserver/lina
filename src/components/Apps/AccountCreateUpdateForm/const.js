@@ -151,7 +151,7 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     push_now: {
-      helpText: vm.$t('AccountPush.WindowsPushHelpText'),
+      helpText: vm.$t('WindowsPushHelpText'),
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
         return !automation.push_account_enabled ||

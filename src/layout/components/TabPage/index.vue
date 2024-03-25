@@ -182,6 +182,9 @@ export default {
 }
 
 .tab-page {
+  >>> .page-heading {
+    border-bottom: none;
+  }
    >>> .page-content {
      overflow-y: hidden;
      padding: 0;

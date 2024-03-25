@@ -51,7 +51,7 @@ export default {
             width: '240px'
           },
           summary: {
-            label: this.$t('Summary(success/total)'),
+            label: this.$t('Ok/total'),
             formatter: (row) => {
               return row.summary['success'] + '/' + row.summary['total']
             }

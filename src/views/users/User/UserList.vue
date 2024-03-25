@@ -297,7 +297,7 @@ export default {
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
-        vm.$message.success(vm.$t(`common.${actionType}SuccessMsg`))
+        vm.$message.success(vm.$t(`${actionType}SuccessMsg`))
       })
     },
     handleInviteDialogClose() {

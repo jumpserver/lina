@@ -21,13 +21,13 @@
 }
 
 .el-alert--info.is-light {
-  background-color: light-9;
-  color: light-2;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: info;
   border: 1px solid;
 }
 
 .el-alert--info .el-alert__description {
-  color: light-2;
+  color: info;
 }
 
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
@@ -87,6 +87,10 @@
 td .el-button.el-button--mini {
   padding: 2px 4px;
   line-height: 1.5;
+
+  .el-icon--right {
+      margin-bottom: 2px;
+  }
 }
 
 .el-tabs__item.is-active, .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {

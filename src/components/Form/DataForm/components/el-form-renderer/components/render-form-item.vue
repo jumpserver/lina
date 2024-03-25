@@ -26,7 +26,6 @@
         {{ itemValue }}
       </div>
       <div v-else-if="data.type === 'select'">
-        <span> is select</span>
         <template>
           {{ multipleValue }}
         </template>
