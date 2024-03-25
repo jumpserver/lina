@@ -2031,6 +2031,7 @@
     "setWeCom": "企業のwechat認証を設定する",
     "setDingTalk": "ホッチキス認証の設定",
     "setFeiShu": "飛書認証を設定する",
+    "setLark": "Lark認証を設定する",
     "setSlack": "Slack認証を設定します",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "アカウントをより安全にするために、マルチファクタ认证を有効にします。 <Br/> 有効にすると、次回のログイン時に多因子認証バインディングプロセスに入ります。また、 (個人情報-> クイック修正-> 多因子設定の変更) もできます。で直接紐付けます",
