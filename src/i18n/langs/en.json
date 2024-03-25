@@ -2025,6 +2025,7 @@
     "setWeCom": "Set wecom login",
     "setDingTalk": "Set dingtalk login",
     "setFeiShu": "Set feishu login",
+    "setLark": "Set lark login",
     "setSlack": "Set Slack login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
