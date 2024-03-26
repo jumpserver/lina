@@ -222,27 +222,29 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  & > > > .el-card__body {
-    padding: 0;
-  }
+  >>> {
+    .el-card__body {
+      padding: 0;
+    }
 
-  & > > > .el-table__header thead > tr > th {
-    background-color: white;
-  }
+    .el-table__header thead > tr > th {
+      background-color: white;
+    }
 
-  & > > > .el-table__row .cell {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    .el-table__row .cell {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
 
-  & > > > .el-table__expanded-cell pre {
-    max-height: 500px;
-    overflow-y: scroll;
-  }
+   .el-table__expanded-cell pre {
+      max-height: 500px;
+      overflow-y: scroll;
+    }
 
-  & > > > .el-button-ungroup .el-dropdown > .more-action {
-    //height: 24.6px;
+    .el-button-ungroup .el-dropdown > .more-action {
+      //height: 24.6px;
+    }
   }
 }
 

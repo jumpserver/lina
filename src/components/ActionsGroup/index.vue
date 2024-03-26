@@ -25,9 +25,7 @@ export default {
     },
     moreActionsTitle: {
       type: String,
-      default() {
-        return this.$t('MoreActions')
-      }
+      default: ''
     },
     moreActionsPlacement: {
       type: String,
@@ -46,8 +44,9 @@ export default {
     iMoreAction() {
       const defaultBtn = {
         name: 'moreActions',
-        title: this.$t('MoreActions'),
+        title: '',
         type: 'primary',
+        icon: 'el-icon-more',
         plain: true
       }
       const btn = {

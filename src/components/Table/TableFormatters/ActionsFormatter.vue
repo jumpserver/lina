@@ -112,7 +112,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$t('Update'),
+        title: this.$t('Edit'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -142,7 +142,8 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: colActions.moreActionsTitle || this.$t('...')
+      moreActionsTitle: ''
+      // moreActionsTitle: colActions.moreActionsTitle || null
     }
   },
   computed: {

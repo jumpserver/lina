@@ -4,7 +4,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('Add')"
+    :title="$tc('AddAccount')"
     :visible.sync="iVisible"
     width="800px"
   >

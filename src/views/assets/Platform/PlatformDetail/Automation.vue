@@ -87,7 +87,7 @@ export default {
   display: inline-block;
   width: 100%;
   .el-form-item__content {
-    width: calc(70% - 50px)
+    width: calc(80% - 50px);
   }
   .el-select {
     width: 100%;

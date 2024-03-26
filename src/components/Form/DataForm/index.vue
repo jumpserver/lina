@@ -155,12 +155,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .el-form {
+    margin-right: 60px;
+  }
   .el-form ::v-deep .el-form-item {
     margin-bottom: 12px;
   }
 
   .el-form ::v-deep .el-form-item__content {
-    width: 70%;
+    width: 75%;
     line-height: 35px;
   }
 
@@ -183,15 +186,6 @@ export default {
 
   .el-form.mobile ::v-deep .form-group-header {
     margin-left: 0;
-  }
-
-  .el-form ::v-deep .help-block {
-    display: block;
-    margin-top: 2px;
-    margin-bottom: 10px;
-    color: #999;
-    font-size: 12px;
-    line-height: 18px;
   }
 
   .el-form ::v-deep .help-block a {

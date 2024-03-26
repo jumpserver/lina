@@ -4,7 +4,7 @@
     :disabled="disabled"
     :fields="iFields"
     :form="value"
-    style="margin-left: -36%;margin-right: -6%"
+    style="margin-left: -36%"
     v-bind="kwargs"
     @change="updateValue($event)"
     @input="updateValue($event)"

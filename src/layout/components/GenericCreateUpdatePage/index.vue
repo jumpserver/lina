@@ -19,7 +19,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .ibox .el-card__body {
-  padding-top: 30px;
+>>> .ibox {
+  margin: 0 10px;
+
+  .el-card__body {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
 }
 </style>

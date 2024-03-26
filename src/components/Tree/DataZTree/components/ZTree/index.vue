@@ -427,8 +427,8 @@ div.rMenu li {
   > > > .ztree {
     overflow: auto;
     background-color: transparent;
-    height: calc(100% - 40px);
-    max-height: calc(100vh - 320px);
+    height: 100%;
+    max-height: calc(100vh - 220px);
 
     .level0 .node_name {
       max-width: 120px;
