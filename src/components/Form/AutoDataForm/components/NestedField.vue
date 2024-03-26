@@ -4,7 +4,7 @@
     :disabled="disabled"
     :fields="iFields"
     :form="value"
-    style="margin-left: -36%"
+    class="sub-form"
     v-bind="kwargs"
     @change="updateValue($event)"
     @input="updateValue($event)"
@@ -106,5 +106,9 @@ export default {
 </script>
 
 <style scoped>
+.sub-form {
+  margin-left: -33%;
+  margin-right: 10px;
+}
 
 </style>
