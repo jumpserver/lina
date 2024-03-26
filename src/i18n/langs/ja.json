@@ -483,7 +483,10 @@
     "DatabaseUpdate": "資産の更新 - データベース",
     "GPTCreate": "資産の作成 - GPT",
     "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります",
-    "OracleDBNameHelpText": "Oracle データベースの SID またはサービス名を入力してください"
+    "OracleDBNameHelpText": "Oracle データベースの SID またはサービス名を入力してください",
+    "Remove": "取り除く",
+    "AddGatewayInDomain": "ゲートウェイの追加",
+    "AddAssetInDomain": "アセットの追加"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",

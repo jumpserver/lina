@@ -483,7 +483,10 @@
     "DatabaseUpdate": "Update asset - Database",
     "GPTCreate": "Create asset - GPT",
     "AppletHostDomainHelpText": "These domains are in System Organization",
-    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name"
+    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name",
+    "Remove": "Remove",
+    "AddGatewayInDomain": "Add gateway",
+    "AddAssetInDomain": "Add asset"
   },
   "audits": {
     "ChangeField": "Change field",
