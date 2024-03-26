@@ -8,7 +8,7 @@
     />
     <div style="padding-top: 15px">
       <el-row :gutter="20">
-        <el-col v-for="(d, index) in totalData" :key="index" :span="6">
+        <el-col v-for="(d, index) in totalData" :key="index" :span="8">
           <el-card
             :body-style="{ 'text-align': 'center', 'padding': '20px' }"
             class="my-card"
@@ -20,7 +20,7 @@
             </span>
             <el-row :gutter="20">
               <el-col :span="8">
-                <img :src="d.icon" class="image">
+                <img :alt="d.display_name" :src="d.icon" class="image">
               </el-col>
               <el-col :span="16" style="text-align: left; padding: 5px 0">
                 <div class="one-line">

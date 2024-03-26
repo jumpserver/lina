@@ -213,6 +213,7 @@ export default {
 
   .auto-data-ztree {
     overflow: auto;
+    height: 100%;
     /*border-right: solid 1px red;*/
   }
 

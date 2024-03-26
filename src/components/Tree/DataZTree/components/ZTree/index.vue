@@ -422,11 +422,13 @@ div.rMenu li {
 
 .treebox {
   background-color: transparent;
+  height: calc(100% - 40px);
 
   > > > .ztree {
     overflow: auto;
     background-color: transparent;
-    height: calc(100vh - 237px);
+    height: calc(100% - 40px);
+    max-height: calc(100vh - 320px);
 
     .level0 .node_name {
       max-width: 120px;

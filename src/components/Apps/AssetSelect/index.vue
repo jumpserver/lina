@@ -139,8 +139,7 @@ export default {
       padding: 5px;
 
       .ztree {
-        min-height: 500px;
-        height: inherit !important;
+        height: 100%;
       }
     }
 
