@@ -11,7 +11,7 @@
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { APPROVE, REJECT } from './const'
+import { APPROVE, CLOSED, OPEN, REJECT } from './const'
 
 export default {
   name: 'TicketListTable',
@@ -42,7 +42,7 @@ export default {
         columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'state', 'status', 'date_created']
+          default: ['title', 'serial_num', 'type', 'state', 'date_created']
         },
         columnsMeta: {
           serial_num: {
@@ -91,11 +91,7 @@ export default {
             formatter: TagChoicesFormatter,
             formatterArgs: {
               getTagLabel({ row }) {
-                if (row.status.value === 'open') {
-                  return vm.$t('tickets.OpenStatus')
-                } else {
-                  return vm.$t('tickets.CloseStatus')
-                }
+                return row.status.label
               },
               getTagType({ row }) {
                 if (row.status.value === 'open') {
@@ -107,7 +103,6 @@ export default {
             }
           },
           state: {
-            label: this.$t('tickets.action'),
             align: 'center',
             width: '90px',
             sortable: 'custom',
@@ -115,8 +110,10 @@ export default {
             formatterArgs: {
               getTagType({ row }) {
                 const mapper = {
-                  [APPROVE]: 'success',
-                  [REJECT]: 'danger'
+                  [OPEN]: 'success',
+                  [APPROVE]: 'primary',
+                  [REJECT]: 'danger',
+                  [CLOSED]: 'info'
                 }
                 return mapper[row.state.value] || 'warning'
               },
@@ -140,36 +137,8 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
-          default: {
-            state: {
-              key: 'state',
-              label: this.$t('tickets.action'),
-              value: 'pending',
-              valueLabel: this.$t('tickets.Pending')
-            }
-          },
-          exclude: ['state', 'id', 'title', 'type'],
+          exclude: ['id', 'title', 'type'],
           options: [
-            {
-              value: 'state',
-              label: this.$t('tickets.action'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'pending',
-                  label: this.$t('tickets.Pending')
-                },
-                {
-                  value: APPROVE,
-                  label: this.$t('tickets.Approved')
-                },
-                {
-                  value: REJECT,
-                  label: this.$t('tickets.Rejected')
-                }
-              ]
-            },
             {
               value: 'type',
               label: this.$t('assets.Type'),
