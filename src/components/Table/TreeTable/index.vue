@@ -202,6 +202,7 @@ export default {
   .tree-table-content {
     .left {
       background: #f3f3f3;
+      height: 100%;
 
       &:hover {
         ~ .right .is-show {

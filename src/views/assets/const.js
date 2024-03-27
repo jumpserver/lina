@@ -119,7 +119,6 @@ export const assetFieldsMeta = (vm) => {
     },
     labels: {
       name: 'labels',
-      label: vm.$t('Label'),
       type: 'm2m',
       component: Select2,
       el: {

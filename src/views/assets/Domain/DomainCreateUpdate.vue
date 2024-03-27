@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import AssetSelect from '@/components/Apps/AssetSelect'
+import { TextReadonly } from '@/components/Form/FormFields'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -16,6 +17,7 @@ export default {
       initial: {},
       fields: [
         [this.$t('Basic'), ['name', 'assets']],
+        [this.$t('Gateway'), ['gateways']],
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -31,6 +33,13 @@ export default {
             canSelect: (row) => {
               return row.platform?.name !== 'Gateway'
             }
+          }
+        },
+        gateways: {
+          component: TextReadonly,
+          el: {
+            text: this.$t('AddInDetailText'),
+            bolder: false
           }
         }
       },

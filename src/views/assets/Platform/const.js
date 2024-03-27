@@ -129,6 +129,7 @@ export const setAutomations = (vm) => {
     _.set(autoFieldsMeta, `${itemMethodKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
+    _.set(autoFieldsMeta, `${itemEnabledKey}.attrs.class`, 'item-enable')
     // 设置 enableMethod className
     _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'item-method')
     // 设置 enableParams Hidden

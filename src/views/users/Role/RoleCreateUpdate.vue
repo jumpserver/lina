@@ -35,7 +35,7 @@ export default {
           permissions: {
             component: TextReadonly,
             el: {
-              text: this.$t('AddRolePermissions'),
+              text: this.$t('AddInDetailText'),
               bolder: false
             }
           }

@@ -76,28 +76,34 @@ export default {
 }
 </script>
 
-<style scoped>
-.platform-form >>> {
+<style lang='scss' scoped>
+>>> {
   .el-cascader {
     width: 100%;
   }
-}
 
->>> .item-method.el-form-item {
-  display: inline-block;
-  width: 100%;
-  .el-form-item__content {
-    width: calc(75% - 50px);
+  .item-enable.el-form-item {
+    //margin-bottom: 1px;
   }
-  .el-select {
-    width: 100%;
-  }
-}
 
->>> .item-params.el-form-item {
-  display: inline-block;
-  position: absolute;
-  right: 18px;
+  .item-method.el-form-item {
+    display: inline-block;
+    width: 100%;;
+    .el-form-item__content {
+      width: calc(75% - 50px);
+    }
+    .el-select {
+      width: 100%;
+    }
+    margin-top: -10px;
+  }
+
+  .item-params.el-form-item {
+    display: inline-block;
+    position: absolute;
+    right: 18px;
+    margin-top: -10px;
+  }
 }
 
 </style>

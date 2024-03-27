@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import Dialog from '../../../components/Dialog'
-import AutoDataForm from '../../../components/Form/AutoDataForm'
-import { DynamicInput } from '../../../components/Form/FormFields'
+import Dialog from '@/components/Dialog'
+import AutoDataForm from '@/components/Form/AutoDataForm'
+import { DynamicInput } from '@/components/Form/FormFields'
 
 export default {
   components: {
