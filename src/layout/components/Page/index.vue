@@ -92,7 +92,7 @@ export default {
 
 .go-back {
   border: none;
-  padding: 2px 2px;
+  padding: 4px;
 }
 
 .go-back >>> i {

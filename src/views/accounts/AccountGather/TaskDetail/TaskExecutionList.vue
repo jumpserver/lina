@@ -24,7 +24,8 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
-          'AccountGatherName', 'status', 'trigger', 'date_start', 'date_finished', 'actions'
+          'AccountGatherName', 'status', 'trigger', 'date_start',
+          'date_finished', 'actions'
         ],
         columnsMeta: {
           'AccountGatherName': {
@@ -89,16 +90,11 @@ export default {
             }
           ]
         },
-        hasSearch: true,
-        hasRefresh: true,
-        hasRightActions: true,
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasMoreActions: false,
         hasExport: false,
         hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasCreate: false
       }
     }
   }

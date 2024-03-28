@@ -86,16 +86,13 @@ export default {
             }
           ]
         },
-        hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasMoreActions: false,
         hasExport: false,
         hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasCreate: false
       }
     }
   }
