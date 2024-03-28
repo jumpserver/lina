@@ -71,7 +71,7 @@ export default {
             }
           },
           applicant: {
-            label: this.$t('tickets.user'),
+            label: this.$t('tickets.Applicant'),
             sortable: 'custom',
             formatter: row => {
               return row['rel_snapshot'].applicant
@@ -137,8 +137,16 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
-          exclude: ['id', 'title', 'type'],
+          exclude: ['id', 'title', 'type', 'applicant'],
           options: [
+            {
+              value: 'id',
+              label: 'ID'
+            },
+            {
+              value: 'title',
+              label: this.$t('tickets.title')
+            },
             {
               value: 'type',
               label: this.$t('assets.Type'),
@@ -163,24 +171,12 @@ export default {
               ]
             },
             {
-              value: 'id',
-              label: 'ID'
-            },
-            {
-              value: 'title',
-              label: this.$t('tickets.title')
-            },
-            {
-              value: 'relevant_app',
-              label: this.$t('tickets.RelevantApp')
+              value: 'applicant',
+              label: this.$t('tickets.Applicant')
             },
             {
               value: 'relevant_asset',
               label: this.$t('tickets.RelevantAsset')
-            },
-            {
-              value: 'relevant_system_user',
-              label: this.$t('tickets.RelevantCommand')
             },
             {
               value: 'relevant_command',
