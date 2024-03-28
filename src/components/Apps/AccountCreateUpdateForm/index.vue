@@ -75,11 +75,18 @@ export default {
     try {
       await this.getPlatform()
       this.setSecretTypeOptions()
+      this.getDefaultAssets()
     } finally {
       this.loading = false
     }
   },
   methods: {
+    async getDefaultAssets() {
+      const assetId = this.$route.query.asset_id
+      if (assetId && !this.form.name) {
+        this.form.assets = [assetId]
+      }
+    },
     async getPlatform() {
       if (this.platform) {
         this.iPlatform = this.platform
