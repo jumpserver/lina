@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       initial: {
-        is_periodic: true,
+        is_periodic: false,
         interval: 24,
         hostname_strategy: 'instance_name_partial_ip',
         ip_network_segment_group: ['*']

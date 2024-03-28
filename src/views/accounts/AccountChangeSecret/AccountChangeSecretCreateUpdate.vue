@@ -17,7 +17,7 @@ export default {
       node_ids: [],
       asset_ids: [],
       initial: {
-        is_periodic: true,
+        is_periodic: false,
         password_rules: {
           length: 30
         },

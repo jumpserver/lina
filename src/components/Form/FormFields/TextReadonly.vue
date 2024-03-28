@@ -1,6 +1,6 @@
 <template>
   <div :class="bolder ? 'bolder' : ''" class="input-text">
-    {{ value.toString() || text }}
+    {{ text || value.toString() }}
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   props: {
     value: {
-      type: [String, Boolean],
+      type: [String, Boolean, Object, Array],
       default: ''
     },
     text: {

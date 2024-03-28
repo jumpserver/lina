@@ -135,7 +135,7 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$t('Update'),
+          title: this.$t('Edit'),
           icon: 'el-icon-edit-outline',
           size: 'small',
           can: this.validActions.canUpdate,

@@ -12,7 +12,6 @@
           @input="treeSearchHandle"
         >
           <span slot="suffix">
-            <!-- <i class="fa fa-search" style="font-size: 14px; color: #676A6C;" /> -->
             <svg-icon
               :icon-class="'close'"
               class="icon"
@@ -22,7 +21,7 @@
           </span>
         </el-input>
       </div>
-      <ul v-show="loading" class="ztree">
+      <ul v-show="loading" class="zloading">
         {{ this.$t('Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
@@ -80,12 +79,29 @@ export default {
   mounted() {
     window.refresh = this.refresh
     window.onSearch = this.onSearch
-    this.initTree()
+    this.initTree().then(() => {
+      setTimeout(() => this.updateTreeHeight(), 1000)
+    })
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
   },
   methods: {
+    updateTreeHeight() {
+      const tree = document.getElementById(this.iZTreeID)
+      if (!tree) {
+        console.log('No tree found')
+        return
+      }
+      const dialog = document.getElementsByClassName('el-dialog__body')
+      if (dialog.length > 0) {
+        const dialogRect = dialog[0].getBoundingClientRect()
+        tree.style.height = `${dialogRect.height - 60}px`
+        return
+      }
+      const ztreeRect = tree.getBoundingClientRect()
+      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 20px)`
+    },
     async initTree(refresh = false) {
       const vm = this
       let treeUrl
@@ -428,7 +444,6 @@ div.rMenu li {
     overflow: auto;
     background-color: transparent;
     height: 100%;
-    max-height: calc(100vh - 220px);
 
     .level0 .node_name {
       max-width: 120px;

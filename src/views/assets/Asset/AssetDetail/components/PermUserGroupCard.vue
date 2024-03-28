@@ -114,7 +114,6 @@ export default {
     display: none!important;
   }
   b, strong {
-    font-weight: 700;
     font-size: 13px;
   }
   tr td {
@@ -130,11 +129,12 @@ export default {
     border-bottom: 1px solid #e7eaec;
     padding: 4px  8px;
     display: block;
-    &:last-child {
-       border-bottom: 0;
-    }
+    //&:last-child {
+    //   border-bottom: 0;
+    //}
   }
   .box-margin {
     margin-bottom: 20px;
   }
+
 </style>

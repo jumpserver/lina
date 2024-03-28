@@ -235,16 +235,20 @@ export default {
                   }
                 },
                 {
-                  name: 'ClearSecret',
-                  title: this.$t('ClearSecret'),
-                  can: this.$hasPerm('accounts.change_account'),
-                  type: 'primary',
+                  name: 'Update',
+                  title: this.$t('Edit'),
+                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/accounts/clear-secret/`,
-                      { account_ids: [row.id] }
-                    ).then(() => {
-                      this.$message.success(this.$tc('ClearSuccessMsg'))
+                    const data = {
+                      ...this.asset,
+                      ...row.asset
+                    }
+                    vm.account = row
+                    vm.iAsset = data
+                    vm.showAddDialog = false
+                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
+                    setTimeout(() => {
+                      vm.showAddDialog = true
                     })
                   }
                 },
@@ -266,20 +270,16 @@ export default {
                   }
                 },
                 {
-                  name: 'Update',
-                  title: this.$t('Update'),
-                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
+                  name: 'ClearSecret',
+                  title: this.$t('ClearSecret'),
+                  can: this.$hasPerm('accounts.change_account'),
+                  type: 'primary',
                   callback: ({ row }) => {
-                    const data = {
-                      ...this.asset,
-                      ...row.asset
-                    }
-                    vm.account = row
-                    vm.iAsset = data
-                    vm.showAddDialog = false
-                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
-                    setTimeout(() => {
-                      vm.showAddDialog = true
+                    this.$axios.patch(
+                      `/api/v1/accounts/accounts/clear-secret/`,
+                      { account_ids: [row.id] }
+                    ).then(() => {
+                      this.$message.success(this.$tc('ClearSuccessMsg'))
                     })
                   }
                 }

@@ -36,7 +36,7 @@ export default {
         [this.$t('Other'), ['comment']]
       ],
       initial: {
-        is_periodic: true,
+        is_periodic: false,
         interval: 24,
         categories: []
       },
