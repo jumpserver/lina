@@ -149,6 +149,7 @@ export default {
         'ops.add_job': ['assets.view_asset', 'assets.view_node', 'ops.view_adhoc', 'ops.view_playbook'],
         'ops.add_jobexecution': ['ops.view_celerytaskexecution'],
         'authentication.add_connectiontoken': ['rbac.view_webterminal'],
+        'labels.view_labeledresource': ['rbac.view_contenttype'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
