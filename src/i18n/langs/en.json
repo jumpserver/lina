@@ -2253,6 +2253,7 @@
       "ZStack": "ZStack",
       "GCP": "Google Cloud Platform",
       "UCloud": "UCloud Platform",
+      "Volcengine": "Volcengine",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",

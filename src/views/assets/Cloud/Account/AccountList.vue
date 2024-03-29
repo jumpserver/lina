@@ -23,7 +23,7 @@
 import {
   ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
   ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, zstack,
-  qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack
+  qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack, volcengine
 } from '../const'
 import rules from '@/components/Form/DataForm/rules'
 import { Select2 } from '@/components/Form/FormFields'
@@ -160,6 +160,10 @@ export default {
             {
               name: ucloud,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[ucloud].title
+            },
+            {
+              name: volcengine,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[volcengine].title
             },
             {
               name: vmware,

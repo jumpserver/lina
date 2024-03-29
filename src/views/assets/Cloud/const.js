@@ -14,6 +14,8 @@ export const azure = 'azure'
 export const azure_international = 'azure_international'
 export const ucloud = 'ucloud'
 
+export const volcengine = 'volcengine'
+
 export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
 export const ctyun_private = 'ctyun_private'
@@ -91,6 +93,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: ucloud,
     title: i18n.t('xpack.Cloud.UCloud'),
     attrs: ['base_url', 'public_key', 'private_key', 'project']
+  },
+  [volcengine]: {
+    name: volcengine,
+    title: i18n.t('xpack.Cloud.Volcengine'),
+    attrs: ['access_key_id', 'access_key_secret']
   },
   [vmware]: {
     name: vmware,
