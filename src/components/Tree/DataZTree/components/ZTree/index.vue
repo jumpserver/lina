@@ -391,6 +391,8 @@ div.rMenu li {
   text-shadow: none;
   top: 100%;
   z-index: 1000;
+  height: 300px;
+  overflow: auto;
 }
 
 .ztree ::v-deep .fa {

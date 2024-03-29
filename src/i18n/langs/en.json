@@ -483,7 +483,10 @@
     "DatabaseUpdate": "Update asset - Database",
     "GPTCreate": "Create asset - GPT",
     "AppletHostDomainHelpText": "These domains are in System Organization",
-    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name"
+    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name",
+    "Remove": "Remove",
+    "AddGatewayInDomain": "Add gateway",
+    "AddAssetInDomain": "Add asset"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -2025,6 +2028,7 @@
     "setWeCom": "Set wecom login",
     "setDingTalk": "Set dingtalk login",
     "setFeiShu": "Set feishu login",
+    "setLark": "Set lark login",
     "setSlack": "Set Slack login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",

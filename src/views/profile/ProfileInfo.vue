@@ -102,6 +102,23 @@ export default {
           }
         },
         {
+          title: this.$t('users.setLark'),
+          attrs: {
+            type: 'primary',
+            label: this.getLabel('lark'),
+            disabled: this.isDisabled('lark'),
+            showTip: this.isDisabled('lark'),
+            tip: this.$t('users.UnbindHelpText')
+          },
+          has: this.$store.getters.publicSettings.AUTH_LARK,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'lark'
+              this.verifyDone()
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('users.setSlack'),
           attrs: {
             type: 'primary',
@@ -226,6 +243,18 @@ export default {
             model: this.object?.receive_backends.indexOf('feishu') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: 'Lark',
+          type: 'switch',
+          attrs: {
+            name: 'lark',
+            model: this.object?.receive_backends.indexOf('lark') !== -1
+          },
+          has: this.$store.getters.publicSettings.AUTH_LARK,
           callbacks: {
             change: this.updateUserReceiveBackends
           }
