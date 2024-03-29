@@ -541,4 +541,10 @@ export default {
 .status_danger {
   color: var(--color-danger);
 }
+
+.tree-table-content {
+  > > > .left {
+    padding-top: 4px;
+  }
+}
 </style>
