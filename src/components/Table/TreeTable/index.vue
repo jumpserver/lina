@@ -4,7 +4,7 @@
       class="tree-table-content"
       style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;"
     >
-      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="left">
+      <div v-show="iShowTree" :class="iShowTree ? '' : 'hidden'" class="left">
         <component
           :is="component"
           :key="componentTreeKey"
@@ -159,6 +159,10 @@ export default {
     display: none;
   }
 
+  .hidden {
+    width: 0;
+  }
+
   .is-rotate {
     display: block;
     transform: rotate(180deg);
@@ -203,6 +207,12 @@ export default {
     .left {
       background: #f3f3f3;
       height: 100%;
+      width: 20%;
+
+      .data-z-tree {
+        margin-left: -20px;
+        width: calc(100% + 20px);
+      }
 
       &:hover {
         ~ .right .is-show {
@@ -222,7 +232,6 @@ export default {
     background: #f3f3f3;
     border: 1px solid #e0e0e0;
     border-radius: 3px;
-    margin-right: 2px;
   }
 
 </style>

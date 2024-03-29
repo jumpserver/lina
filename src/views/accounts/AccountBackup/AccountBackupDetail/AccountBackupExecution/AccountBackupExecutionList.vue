@@ -27,6 +27,12 @@ export default {
           'AccountBackupName', 'timedelta', 'trigger', 'date_start',
           'is_success', 'reason', 'actions'
         ],
+        columnsShow: {
+          default: [
+            'AccountBackupName', 'timedelta', 'date_start',
+            'is_success', 'reason', 'actions'
+          ]
+        },
         columnsMeta: {
           'AccountBackupName': {
             label: this.$t('DisplayName'),

@@ -15,7 +15,7 @@ export default {
     return {
       fields: [
         [this.$t('Basic'), ['name', 'nodes']],
-        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',

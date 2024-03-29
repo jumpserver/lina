@@ -24,7 +24,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
-          'AccountGatherName', 'status', 'trigger', 'date_start',
+          'AccountGatherName', 'status', 'date_start',
           'date_finished', 'actions'
         ],
         columnsMeta: {

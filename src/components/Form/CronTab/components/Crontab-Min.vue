@@ -3,7 +3,7 @@
   <el-form size="small">
     <el-form-item>
       <el-radio v-model="radioValue" :label="1" size="mini">
-        {{ this.$t('Min') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
+        {{ this.$t('Minute') }}，{{ this.$t('WildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
 
@@ -11,14 +11,14 @@
       <el-radio v-model="radioValue" :label="2">
         {{ this.$t('From') }}
         <el-input-number v-model="cycle01" :max="60" :min="0" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="60" :min="0" size="mini" /> {{ this.$t('Min') }}
+        <el-input-number v-model="cycle02" :max="60" :min="0" size="mini" /> {{ this.$t('Minute') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('From') }}
-        <el-input-number v-model="average02" :max="60" :min="1" size="mini" /> {{ this.$t('Min') }}{{ this.$t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="60" :min="1" size="mini" /> {{ this.$t('Minute') }} {{ this.$t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -158,7 +158,5 @@ export default {
 </script>
 
 <style scoped>
-	.el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
+
 </style>

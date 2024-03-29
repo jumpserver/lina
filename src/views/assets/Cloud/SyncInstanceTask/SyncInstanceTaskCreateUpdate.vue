@@ -29,7 +29,7 @@ export default {
           'sync_ip_type', 'is_always_update', 'fully_synchronous'
         ]],
         [this.$t('SyncStrategy'), ['strategy']],
-        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',

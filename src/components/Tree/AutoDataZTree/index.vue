@@ -324,7 +324,7 @@ export default {
 }
 
 .data-z-tree {
-  height: calc(100% - 54px);
+  //height: calc(100% - 54px);
 }
 
 .data-z-tree >>> .fa {

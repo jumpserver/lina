@@ -195,7 +195,7 @@ export default {
   position: static;
 
   .el-tabs__item.is-active {
-    color:  var(--menu-text-active);
+    //color:  var(--menu-text-active);
   }
   .el-tabs__item {
     padding-right: 0;

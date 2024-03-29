@@ -18,7 +18,7 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="4">
         {{ this.$t('Every') }}
-        <el-input-number v-model="average02" :max="31" :min="1" size="mini" /> {{ this.$t('Day') }}{{ this.$t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="31" :min="1" size="mini" /> {{ this.$t('Day') }} {{ this.$t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -190,7 +190,5 @@ export default {
 </script>
 
 <style scoped>
-	.el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
+
 </style>

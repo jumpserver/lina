@@ -95,12 +95,8 @@
             </td>
           </tbody>
         </table>
-        <div style="margin: 0 auto; text-align: center">
-          <div style="font-size: 13px;">{{ this.$t('CronExpression') }}</div>
-          <div style="font-size: 13px;">{{ contabValueString }}</div>
-        </div>
+        <CrontabResult :ex="contabValueString" @crontabDiffChange="crontabDiffChangeHandle" />
       </div>
-      <CrontabResult :ex="contabValueString" @crontabDiffChange="crontabDiffChangeHandle" />
 
       <div class="pop_btn">
         <el-button
@@ -398,7 +394,7 @@ export default {
 <style lang='scss' scoped>
 .pop_btn {
   float: right;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .popup-main {
@@ -424,7 +420,6 @@ export default {
   margin: 17px auto;
   padding: 10px 10px 10px;
   border: 1px solid #dcdfe6;
-  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
 }
 
 .popup-result .title {
@@ -448,12 +443,10 @@ export default {
 .popup-result table span {
   display: block;
   width: 100%;
-  font-family: arial;
   line-height: 30px;
   height: 30px;
   white-space: nowrap;
   overflow: hidden;
-  border: 1px solid #e8e8e8;
 }
 
 .popup-result-scroll {
@@ -463,14 +456,14 @@ export default {
   overflow-y: auto;
 }
 
-.crontab-panel {
-  > > > .el-input-number {
+ >>> {
+  .el-form-item--mini.el-form-item,
+  .el-form-item--small.el-form-item {
+    margin-bottom: 5px;
+  }
+
+   .el-input-number {
     margin: 0 5px
   }
-}
-
-.el-form-item--mini.el-form-item,
-.el-form-item--small.el-form-item {
-  margin-bottom: 10px;
 }
 </style>

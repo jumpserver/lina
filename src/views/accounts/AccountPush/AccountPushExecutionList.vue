@@ -27,6 +27,12 @@ export default {
           'PushUserName', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
         ],
+        columnsShow: {
+          default: [
+            'PushUserName', 'asset_amount', 'node_amount', 'status',
+            'date_start', 'date_finished', 'actions'
+          ]
+        },
         columnsMeta: {
           'PushUserName': {
             label: this.$t('DisplayName'),

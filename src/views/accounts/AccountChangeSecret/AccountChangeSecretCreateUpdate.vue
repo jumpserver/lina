@@ -39,7 +39,7 @@ export default {
             'ssh_key', 'passphrase', 'params'
           ]
         ],
-        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {

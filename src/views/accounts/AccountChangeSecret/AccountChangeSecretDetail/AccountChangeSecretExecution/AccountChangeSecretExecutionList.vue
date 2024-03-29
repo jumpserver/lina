@@ -27,6 +27,12 @@ export default {
           'ChangeSecretName', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
         ],
+        columnsShow: {
+          default: [
+            'ChangeSecretName', 'asset_amount', 'node_amount', 'status',
+            'date_start', 'date_finished', 'actions'
+          ]
+        },
         columnsMeta: {
           'ChangeSecretName': {
             label: this.$t('DisplayName'),

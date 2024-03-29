@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div class="popup-result">
+  <div class="popup-result-time">
     <p class="title">{{ this.$t('RunningTimes') }}</p>
     <ul class="popup-result-scroll">
       <template v-if="isShow">
@@ -65,3 +65,12 @@ export default {
 }
 
 </script>
+<style lang='scss' scoped>
+.popup-result-time {
+  margin-top: 10px;
+}
+.title {
+  margin-bottom: 0;
+}
+
+</style>

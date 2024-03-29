@@ -101,8 +101,8 @@ export default {
       ids: this.value.ids || [],
       editIndex: -1,
       types: [
-        { name: 'all', label: this.$t('All') + this.resource },
-        { name: 'ids', label: this.$t('Spec') + this.resource },
+        { name: 'all', label: this.$t('All') + ' ' + this.resource },
+        { name: 'ids', label: this.$t('Spec') + ' ' + this.resource },
         { name: 'attrs', label: this.$t('SelectByAttr') }
       ],
       tableConfig: {

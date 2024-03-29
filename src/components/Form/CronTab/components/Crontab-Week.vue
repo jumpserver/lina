@@ -181,7 +181,5 @@ export default {
 </script>
 
 <style scoped>
-	.el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
+
 </style>

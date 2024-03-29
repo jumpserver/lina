@@ -156,7 +156,7 @@ export default {
 
 <style lang="less" scoped>
   .el-form {
-    margin-right: 60px;
+    margin-right: 80px;
   }
   .el-form ::v-deep .el-form-item {
     margin-bottom: 12px;
