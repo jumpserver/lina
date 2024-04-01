@@ -27,7 +27,7 @@ export default {
         },
         rule_relation: {
           label: this.$t('RuleRelation'),
-          helpTips: this.$t('RuleRelationHelpTips')
+          helpTip: this.$t('RuleRelationhelpTip')
         },
         strategy_rules: {
           component: RuleInput

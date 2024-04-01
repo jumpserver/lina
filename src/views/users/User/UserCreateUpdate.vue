@@ -202,7 +202,7 @@ export default {
         fieldsToUpdate.forEach(field => {
           const msg = this.$t('disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
           this.fieldsMeta[field].el.disabled = true
-          this.fieldsMeta[field].helpTips = msg
+          this.fieldsMeta[field].helpTip = msg
         })
       }
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']

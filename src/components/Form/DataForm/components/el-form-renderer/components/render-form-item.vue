@@ -8,11 +8,11 @@
     v-bind="data.attrs"
   >
     <template v-if="data.label" #label>
-      <span>{{ data.label }}</span>
-      <el-tooltip v-if="data.helpTips" effect="light" placement="top" popper-class="help-tips">
-        <div slot="content" v-html="data.helpTips" />
-        <i class="fa fa-question-circle-o" />
+      <el-tooltip v-if="data.helpTip" effect="light" placement="top" popper-class="help-tips">
+        <div slot="content" v-html="data.helpTip" />
+        <i class="el-icon-warning-outline help-tip-icon" />
       </el-tooltip>
+      <span>{{ data.label }}</span>
     </template>
     <template v-if="readonly && hasReadonlyContent">
       <div
@@ -282,3 +282,12 @@ export default {
   }
 }
 </script>
+<style lang='scss'>
+.help-tip-icon {
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>

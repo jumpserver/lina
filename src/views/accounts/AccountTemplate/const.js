@@ -53,7 +53,8 @@ export const templateFieldsMeta = (vm) => {
     secret_strategy: {
       hidden: (formValue) => {
         return !canRandomSecretTypes.includes(formValue.secret_type)
-      }
+      },
+      helpTextAsTip: true
     },
     secret: {
       label: vm.$t('Password'),

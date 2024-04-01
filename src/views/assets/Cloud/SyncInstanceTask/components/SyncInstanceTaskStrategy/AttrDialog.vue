@@ -45,7 +45,7 @@ export default {
       fieldsMeta: {
         rule_relation: {
           label: this.$t('RuleRelation'),
-          helpTips: this.$t('RuleRelationHelpTips')
+          helpTip: this.$t('RuleRelationHelpTip')
         },
         strategy_rules: {
           label: this.$t('Rule'),

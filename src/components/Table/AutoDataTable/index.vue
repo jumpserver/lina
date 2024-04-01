@@ -187,16 +187,16 @@ export default {
       // this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
-    addHelpTipsIfNeed(col) {
-      const helpTips = col.helpTips
-      if (!helpTips) {
+    addHelpTipIfNeed(col) {
+      const helpTip = col.helpTip
+      if (!helpTip) {
         return col
       }
       col.renderHeader = (h, { column, $index }) => {
         return (
           <span>{column.label}
             <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTips}/>
+              <div slot='content' domPropsInnerHTML={helpTip}/>
               <el-button style='padding: 0'>
                 <i class='fa fa-info-circle'/>
               </el-button>
@@ -282,7 +282,7 @@ export default {
       col = this.generateColumnByName(name, col)
       col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
-      col = this.addHelpTipsIfNeed(col)
+      col = this.addHelpTipIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
       col = this.updateLabelIfNeed(col)

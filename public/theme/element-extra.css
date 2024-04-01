@@ -317,11 +317,16 @@ td .el-button.el-button--mini {
 
 .el-tooltip__popper.is-light {
   background: #FFF;
+  max-width: 500px;
   border: 1px solid #e7eaec;
+  box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .132), 0 .3px .9px 0 rgba(0, 0, 0, .108);
+  line-height: 1.5;
+  padding: 10px;
 }
 
 .el-tooltip__popper.is-light .popper__arrow {
-  border-bottom-color: #e7eaec !important;
+  border-bottom-color: #c2d1e1 !important;
+  border-top-color: #c2d1e1 !important;
 }
 
 .el-dialog__headerbtn .el-dialog__close {

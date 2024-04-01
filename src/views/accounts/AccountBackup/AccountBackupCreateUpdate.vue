@@ -18,8 +18,7 @@ export default {
     return {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
-        [this.$t('Basic'), ['name']],
-        [this.$t('Types'), ['types']],
+        [this.$t('Basic'), ['name', 'types']],
         [this.$t('Backup'),
           [
             'backup_type',

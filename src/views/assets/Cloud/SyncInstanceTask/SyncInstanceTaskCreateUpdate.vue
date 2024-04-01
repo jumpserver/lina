@@ -56,17 +56,17 @@ export default {
         },
         hostname_strategy: {
           rules: [rules.RequiredChange],
-          helpTips: this.$t('HostnameStrategy')
+          helpTip: this.$t('HostnameStrategy')
         },
         is_always_update: {
           type: 'switch',
           label: this.$t('IsAlwaysUpdate'),
-          helpTips: this.$t('IsAlwaysUpdateHelpTips')
+          helpTip: this.$t('IsAlwaysUpdateHelpTip')
         },
         fully_synchronous: {
           type: 'switch',
           label: this.$t('FullySynchronous'),
-          helpTips: this.$t('FullySynchronousHelpTips')
+          helpTip: this.$t('FullySynchronousHelpTip')
         },
         regions: {
           component: Select2,
@@ -105,7 +105,7 @@ export default {
         strategy: {
           label: this.$t('Strategy'),
           component: SyncInstanceTaskStrategy,
-          helpTips: this.$t('StrategyHelpTips')
+          helpTip: this.$t('StrategyHelpTip')
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
