@@ -37,8 +37,11 @@ export default {
           [
             'accounts', 'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase', 'params'
+            'passphrase'
           ]
+        ],
+        [
+          this.$t('Automation'), ['params']
         ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]

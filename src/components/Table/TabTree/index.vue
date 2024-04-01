@@ -134,7 +134,7 @@ export default {
     handleTabClick(tab) {
       this.componentKey = this.keyMap[tab.name]
       if (!this.componentKey) {
-        this.componentKey = tab.name
+        this.componentKey = this.$route.name + '_' + tab.name
       }
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
