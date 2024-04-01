@@ -177,7 +177,7 @@ export default {
           },
           language: {
             type: 'select',
-            name: this.$t('ops.Language'),
+            name: this.$t('ops.Module'),
             align: 'left',
             value: 'shell',
             options: [
@@ -201,6 +201,9 @@ export default {
               },
               {
                 label: 'SQL Server', value: 'sqlserver'
+              },
+              {
+                label: 'HUAWEI', value: 'huawei'
               }
             ],
             callback: (option) => {
