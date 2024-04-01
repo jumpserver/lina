@@ -27,9 +27,9 @@
         <div v-if="showTree" class="mini">
           <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
             <svg-icon
-              :icon-class="'double-left'"
               :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
               class="icon-left"
+              icon-class="double-left"
             />
           </div>
         </div>
@@ -188,7 +188,7 @@ export default {
     }
 
     .icon-left {
-      font-size: 14px;
+      font-size: 13px;
       margin-left: -1.1px;
     }
   }
@@ -205,9 +205,18 @@ export default {
 
   .tree-table-content {
     .left {
-      background: #f3f3f3;
       height: 100%;
       width: 20%;
+      //background: white;
+
+      >>> .treebox {
+        padding-left: 10px;
+        padding-bottom: 10px;
+      }
+
+      >>> .tab-text {
+        font-size: 13px;
+      }
 
       .data-z-tree {
         margin-left: -20px;
@@ -229,7 +238,7 @@ export default {
   }
 
   .transition-box.left {
-    background: #f3f3f3;
+    background: white;
     border: 1px solid #e0e0e0;
     border-radius: 3px;
   }

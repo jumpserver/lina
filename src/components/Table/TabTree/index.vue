@@ -68,7 +68,8 @@ export default {
       flag: false,
       componentKey: 1,
       activeTreeSetting: {},
-      showText: true
+      showText: true,
+      keyMap: {}
     }
   },
   computed: {
@@ -100,7 +101,7 @@ export default {
   async mounted() {
     this.iActiveMenu = await this.getPropActiveTab()
     this.$eventBus.$on('treeComponentKey', () => {
-      this.componentKey += 1
+      this.componentKey += '1'
     })
     this.hiddenTextIfNeed()
   },
@@ -131,7 +132,10 @@ export default {
       this.$emit('urlChange', url)
     },
     handleTabClick(tab) {
-      this.componentKey += 1
+      this.componentKey = this.keyMap[tab.name]
+      if (!this.componentKey) {
+        this.componentKey = tab.name
+      }
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)

@@ -2,9 +2,9 @@
   <TreeTable
     ref="TreeList"
     :active-menu.sync="treeTableConfig.activeMenu"
+    :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
-    component="TabTree"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -63,6 +63,7 @@ export default {
     const vm = this
 
     return {
+      treeComponent: 'TabTree',
       treeTabConfig: {
         activeMenu: 'CustomTree',
         submenu: [

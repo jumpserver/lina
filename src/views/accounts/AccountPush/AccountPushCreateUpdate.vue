@@ -19,7 +19,7 @@ export default {
       assetIds: [],
       isAssetType: '',
       initial: {
-        is_periodic: this.$store.getters.hasValidLicense,
+        is_periodic: false,
         password_rules: {
           length: 30
         },

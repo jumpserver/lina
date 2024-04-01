@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="treebox">
-      <div>
+      <div v-if="treeSetting.showSearch">
         <el-input
-          v-if="treeSetting.showSearch && showTreeSearch"
+          v-show="showTreeSearch"
           v-model="treeSearchValue"
           :placeholder="$tc('Search')"
           class="fixed-tree-search"
@@ -13,9 +13,9 @@
         >
           <span slot="suffix">
             <svg-icon
-              :icon-class="'close'"
               class="icon"
-              style="font-size: 14px;"
+              icon-class="close"
+              style="font-size: 12px;"
               @click="onClose"
             />
           </span>
@@ -67,7 +67,7 @@ export default {
       rMenu: '',
       init: false,
       loading: false,
-      showTreeSearch: JSON.parse(localStorage.getItem('showTreeSearch')) || false,
+      showTreeSearch: false,
       treeSearchValue: ''
     }
   },
@@ -155,7 +155,7 @@ export default {
     },
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
-      localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
+      // localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
     },
     onClose() {
       this.refresh()
@@ -173,7 +173,7 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px;">
+        <span style="float: right; margin-right: 10px;" class='tree-actions'>
           ${treeActions}
         </span>`
       if (rootNode) {
@@ -357,14 +357,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-::-webkit-scrollbar-track:horizontal {
-  background: #FFFFFF;
-  border-radius: 10px;
-}
 
 div.rMenu {
   position: absolute;
@@ -439,6 +431,12 @@ div.rMenu li {
 .treebox {
   background-color: transparent;
   height: calc(100% - 40px);
+
+  &:hover {
+    >>> .tree-action-btn {
+      display: inline;
+    }
+  }
 
   > > > .ztree {
     overflow: auto;
@@ -539,6 +537,14 @@ div.rMenu li {
   outline: none;
 }
 
+.refresh-btn {
+  padding: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  background: inherit;
+  border: none;
+}
+
 .tree-header {
   position: relative;
 
@@ -615,8 +621,8 @@ div.rMenu li {
   cursor: pointer;
 }
 
-.tree-action-btn {
-  padding: 0 2px;
-  color: red;
+::v-deep .tree-action-btn {
+  display: none;
 }
+
 </style>

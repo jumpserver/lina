@@ -5,7 +5,15 @@
 @import './fonts/font-awesome.min.css';
 
 ::-webkit-scrollbar {
-  width: 14px;
+  width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-track {
@@ -15,7 +23,7 @@
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
   box-shadow: 8px 10px 20px #C6C6C6 inset;
-  border: 3px solid rgba(0, 0, 0, 0);
+  border: 2px solid rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar-thumb:hover {
