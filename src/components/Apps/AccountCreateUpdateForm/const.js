@@ -38,6 +38,7 @@ export const accountFieldsMeta = (vm) => {
       rules: [Required],
       label: vm.$t('AccountPolicy'),
       helpText: vm.$t('AccountPolicyHelpText'),
+      helpTextAsTip: true,
       hidden: () => {
         return vm.platform || vm.asset
       }

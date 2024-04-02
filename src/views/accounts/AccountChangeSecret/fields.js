@@ -1,13 +1,6 @@
 import i18n from '@/i18n/i18n'
-import { CronTab } from '@/components'
 import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormFields'
-
-const validatorInterval = (rule, value, callback) => {
-  if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
-  }
-  callback()
-}
+import { crontab, interval, is_periodic } from '../const'
 
 export const getChangeSecretFields = () => {
   return {
@@ -66,26 +59,9 @@ export const getChangeSecretFields = () => {
         }
       }
     },
-    is_periodic: {
-      type: 'switch'
-    },
-    crontab: {
-      type: 'cronTab',
-      component: CronTab,
-      hidden: (formValue) => {
-        return formValue.is_periodic === false
-      },
-      helpText: i18n.t('CrontabOfCreateUpdatePage')
-    },
-    interval: {
-      hidden: (formValue) => {
-        return formValue.is_periodic === false
-      },
-      helpText: i18n.t('IntervalOfCreateUpdatePage'),
-      rules: [
-        { validator: validatorInterval }
-      ]
-    },
+    interval,
+    crontab,
+    is_periodic,
     accounts: {
       label: i18n.t('Username'),
       component: TagInput

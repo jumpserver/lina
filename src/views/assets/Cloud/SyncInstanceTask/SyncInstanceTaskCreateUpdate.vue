@@ -94,7 +94,8 @@ export default {
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: this.$t('CrontabOfCreateUpdatePage')
+          helpText: this.$t('CrontabOfCreateUpdatePage'),
+          helpTextAsTip: true
         },
         interval: {
           hidden: (formValue) => {

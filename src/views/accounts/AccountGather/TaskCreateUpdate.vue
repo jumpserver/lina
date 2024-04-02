@@ -4,8 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
+import { crontab, interval, is_periodic } from '@/views/accounts/const'
 
 export default {
   components: {
@@ -26,20 +26,9 @@ export default {
           label: this.$t('IsSyncAccountLabel'),
           helpText: this.$t('IsSyncAccountHelpText')
         },
-        crontab: {
-          component: CronTab,
-          hidden: (formValue) => {
-            return !formValue.is_periodic
-          },
-          helpText: this.$t('CrontabOfCreateUpdatePage')
-        },
-        interval: {
-          label: this.$t('Interval'),
-          helpText: this.$t('IntervalOfCreateUpdatePage'),
-          hidden: (formValue) => {
-            return !formValue.is_periodic
-          }
-        },
+        is_periodic,
+        crontab,
+        interval,
         nodes: {
           label: this.$tc('Node'),
           el: {
@@ -52,9 +41,6 @@ export default {
               url: '/api/v1/assets/nodes/'
             }
           }
-        },
-        is_periodic: {
-          type: 'switch'
         },
         recipients: {
           label: i18n.t('Recipient'),

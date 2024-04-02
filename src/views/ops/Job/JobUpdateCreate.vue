@@ -157,7 +157,8 @@ export default {
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: i18n.t('CrontabOfCreateUpdatePage')
+          helpText: i18n.t('CrontabOfCreateUpdatePage'),
+          helpTextAsTip: true
         }
       },
       createSuccessNextRoute: { name: 'JobManagement' },

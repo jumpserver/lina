@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
-import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
+import { crontab, interval, is_periodic } from '@/views/accounts/const'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -91,16 +91,9 @@ export default {
             readonly: true
           }
         },
-        is_periodic: {
-          type: 'switch',
-          disabled: !this.$store.getters.hasValidLicense
-        },
-        interval: {
-          component: InputWithUnit,
-          el: {
-            unit: 'hour'
-          }
-        },
+        is_periodic,
+        crontab,
+        interval,
         params: {
           component: AutomationParams,
           label: this.$t('PushParams'),

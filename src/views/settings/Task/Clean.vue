@@ -40,7 +40,8 @@ export default {
         AUTH_LDAP_SYNC_CRONTAB: {
           component: CronTab,
           label: this.$t('Crontab'),
-          helpText: this.$t('CrontabOfCreateUpdatePage')
+          helpText: this.$t('CrontabOfCreateUpdatePage'),
+          helpTextAsTip: true
         }
       },
       submitMethod() {
