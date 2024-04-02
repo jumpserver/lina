@@ -149,6 +149,7 @@ export default {
                   return AccountLabelMapper[item] || item
                 }
               },
+              cellValueToRemove: ['@SPEC'],
               routeQuery: {
                 activeTab: 'AssetPermissionAccount'
               }
