@@ -60,6 +60,9 @@ export default {
     title() {
       return this.formatterArgs.title || this.col.label.replace('amount', '').replace('数量', '')
     },
+    cellValueToRemove() {
+      return this.formatterArgs.cellValueToRemove || []
+    },
     items() {
       if (this.formatterArgs.async && !this.asyncGetDone) {
         return [this.$t('common.tree.Loading') + '...']
@@ -74,7 +77,11 @@ export default {
     }
   },
   async mounted() {
-    this.amount = this.formatterArgs.async ? this.cellValue : (this.cellValue || []).length
+    if (this.formatterArgs.async) {
+      this.amount = this.cellValue
+    } else {
+      this.amount = (this.cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+    }
   },
   methods: {
     getKey(item) {
@@ -109,13 +116,14 @@ export default {
   max-height: 60vh;
   overflow-y: auto;
 }
+
 .detail-item {
   border-bottom: 1px solid #EBEEF5;
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
-     background-color: #F5F7FA;
+    background-color: #F5F7FA;
   }
 }
 
