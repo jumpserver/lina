@@ -441,6 +441,15 @@ $tooltip-arrow-color: #c2d1e1;
   }
 }
 
+.el-button.el-button--default.help-msg-btn {
+  padding: 5px;
+  border: none;
+  i {
+    color: var(--color-info);
+    opacity: 1;
+  }
+}
+
 .page-help-content {
   padding: 8px;
   font-weight: 500;

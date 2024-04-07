@@ -20,7 +20,7 @@
             :name="item.name"
           >
             <span slot="label">
-              <i v-if="item.icon" :class="item.icon" class="fa " />
+              <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
               <el-tooltip v-if="item.helpMessage" effect="light" placement="bottom" popper-class="help-tips">
@@ -169,7 +169,7 @@ export default {
   margin-bottom: 5px;
 
   .el-tabs__item {
-    i {
+    i.pre-icon {
       opacity: 0.6;
     }
   }
@@ -209,14 +209,5 @@ export default {
 
 .fa {
   margin-right: 2px;
-}
-
-.el-button.el-button--default.help-msg-btn {
-  padding: 5px;
-  border: none;
-  color: var(--color-info);
-  i {
-    opacity: 1;
-  }
 }
 </style>

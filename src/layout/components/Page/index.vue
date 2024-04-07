@@ -107,12 +107,6 @@ export default {
   font-weight: 600;
 }
 
-.el-button.el-button--default.help-message {
-  padding: 5px;
-  color: #1c84c6;
-  border: none;
-}
-
 @media print {
   .disabled-when-print {
     display: none;
