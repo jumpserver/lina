@@ -451,7 +451,7 @@ export default {
   & > div {
     height: 100%;
 
-    & > > > .xterm {
+    & >>> .xterm {
       height: calc(100% - 8px);
       overflow-y: auto;
     }

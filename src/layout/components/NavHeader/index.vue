@@ -118,18 +118,18 @@ export default {
         display: inline-block;
         vertical-align: top;
 
-        & > > > .el-submenu__title {
+        & >>> .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $headerHeight;
           height: $headerHeight;
         }
 
-        & > > > .org-select {
+        & >>> .org-select {
           padding: 0;
         }
 
-        & > > > .svg-icon {
+        & >>> .svg-icon {
           color: #FFF !important;
         }
 
@@ -160,12 +160,12 @@ export default {
         padding-left: 10px;
         vertical-align: top;
 
-        & > > > .svg-icon {
+        & >>> .svg-icon {
           color: #FFF !important;
           font-size: 16px;
         }
 
-        & > > > .el-badge {
+        & >>> .el-badge {
           vertical-align: top;
 
           .el-badge__content {
@@ -175,7 +175,7 @@ export default {
             border: none;
           }
         }
-        & > > > i {
+        & >>> i {
           color: #FFF;
           font-size: 16px;
 
@@ -184,7 +184,7 @@ export default {
           }
         }
 
-        & > > > i.el-dialog__close.el-icon-close {
+        & >>> i.el-dialog__close.el-icon-close {
           color: #7c7e7f;
         }
       }
@@ -215,7 +215,7 @@ export default {
     -webkit-tap-highlight-color: transparent;
     opacity: 0.7;
 
-    & > > > .svg-icon {
+    & >>> .svg-icon {
       font-size: 16px !important;
       color: #fff !important;
     }
@@ -236,11 +236,11 @@ export default {
     }
   }
 
-  > > > .el-badge__content {
+  >>> .el-badge__content {
     color: var(--color-primary);
   }
 
-  > > > .el-badge__content--primary {
+  >>> .el-badge__content--primary {
     background-color: #fff;
   }
 

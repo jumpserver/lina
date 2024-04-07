@@ -54,7 +54,7 @@ ul, li {
 .box-card {
   margin-bottom: 20px;
 
-  & > > > .el-card__header {
+  & >>> .el-card__header {
     padding-top: 20px;
   }
 }
@@ -67,7 +67,7 @@ ul, li {
     height: 70px;
     text-align: center;
 
-    & > > > .el-avatar--large {
+    & >>> .el-avatar--large {
       width: 100%;
       height: 100%;
     }

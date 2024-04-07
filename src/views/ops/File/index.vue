@@ -517,7 +517,7 @@ export default {
     display: flex;
   }
 
-  > > > .el-upload {
+  >>> .el-upload {
     width: 400px;
 
     flex-direction: column;
@@ -535,7 +535,7 @@ export default {
     color: #c5c9cc;
   }
 
-  > > > .el-upload-list {
+  >>> .el-upload-list {
     margin-left: 20px;
     padding: 0 10px 0 10px;
     list-style: none;
@@ -551,7 +551,7 @@ export default {
   background: white;
 }
 
-.output > > > #terminal {
+.output >>> #terminal {
   border: dashed 1px #d9d9d9;
   margin: 0 20px 20px;
 }

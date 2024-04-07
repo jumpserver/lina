@@ -214,7 +214,7 @@ export default {
   padding: 0 25px 20px;
 }
 
-> > > .site-msg {
+>>> .site-msg {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
@@ -300,7 +300,7 @@ export default {
   font-size: 12px;
   display: block;
 
-  > > > .ticket-container {
+  >>> .ticket-container {
     .title {
       font-size: 12px;
     }
@@ -332,11 +332,11 @@ export default {
       line-height: 24px;
     }
 
-    & > > > a {
+    & >>> a {
       color: var(--color-success) !important;
     }
 
-    > > > .ticket-container {
+    >>> .ticket-container {
       height: 618px;
       flex-shrink: 0;
       border-radius: 4px;
@@ -418,7 +418,7 @@ export default {
   text-align: center;
 }
 
-> > > :focus {
+>>> :focus {
   outline: 0;
 }
 </style>

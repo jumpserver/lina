@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.App-Provider > > > .protocol {
+.App-Provider >>> .protocol {
   margin-left: 3px;
 }
 

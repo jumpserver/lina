@@ -134,7 +134,7 @@ export default {
     border-bottom: none;
   }
 
-  & > > > .el-icon-arrow-down {
+  & >>> .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
   }
@@ -207,7 +207,7 @@ export default {
   border-left: 4px solid var(--menu-text-active);
 }
 
-.menu-main.mobile-view-switch > > > .el-submenu__icon-arrow {
+.menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;
 }
 </style>

@@ -99,7 +99,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.password-update > > > .el-input {
+.password-update >>> .el-input {
   width: 600px;
   max-width: 600px;
 }

@@ -61,7 +61,7 @@ export default {
   border-radius: 4px;
   padding: 1px 4px;
 
-  & > > > .el-radio-button {
+  & >>> .el-radio-button {
     .el-radio-button__inner {
       border: none;
       color: #8F959E;
@@ -82,7 +82,7 @@ export default {
     }
   }
 
-  & > > > .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+  & >>> .el-radio-button__orig-radio:checked + .el-radio-button__inner {
     box-shadow: none;
   }
 }

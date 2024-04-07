@@ -93,11 +93,14 @@ export default {
         console.log('No tree found')
         return
       }
-      const dialog = document.getElementsByClassName('el-dialog__body')
-      if (dialog.length > 0) {
-        const dialogRect = dialog[0].getBoundingClientRect()
-        tree.style.height = `${dialogRect.height - 60}px`
-        return
+      const dialogs = document.getElementsByClassName('el-dialog__body')
+      if (dialogs.length > 0) {
+        const dialog = dialogs.find((d) => d.innerHtml.indexOf(this.iZTreeID) !== -1)
+        if (dialog) {
+          const dialogRect = dialog[dialog.length - 1].getBoundingClientRect()
+          tree.style.height = `${dialogRect.height - 60}px`
+          return
+        }
       }
       const ztreeRect = tree.getBoundingClientRect()
       tree.style.height = `calc(100vh - ${ztreeRect.top}px - 20px)`
@@ -438,7 +441,7 @@ div.rMenu li {
     }
   }
 
-  > > > .ztree {
+  >>> .ztree {
     overflow: auto;
     background-color: transparent;
     height: 100%;
@@ -461,9 +464,6 @@ div.rMenu li {
       }
     }
   }
-}
-
-::v-deep #tree-refresh {
 }
 
 ::v-deep .tree-banner-icon-zone {
@@ -564,7 +564,7 @@ div.rMenu li {
     background-color: #D7D8DC;
 
     .rotate {
-      transition: all .1 .8s;
+      transition: all 0.8s ease-in-out;
       transform: rotate(-90deg);
     }
 
@@ -585,21 +585,21 @@ div.rMenu li {
 .fixed-tree-search {
   margin-bottom: 10px;
 
-  & > > > .el-input__inner {
+  & >>> .el-input__inner {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
   }
 
-  & > > > .el-input__suffix {
+  & >>> .el-input__suffix {
     padding-right: 8px;
   }
 
-  & > > > .el-input__prefix {
+  & >>> .el-input__prefix {
     padding-left: 6px;
   }
 
-  & > > > .el-input__suffix-inner {
+  & >>> .el-input__suffix-inner {
     line-height: 30px;
   }
 }
