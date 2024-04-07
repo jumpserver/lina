@@ -1987,6 +1987,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "OrgRoleRelations": "しょぞくそしき",
     "LunaSettingUpdate": "Luna 設定更新",
     "KokoSettingUpdate": "Koko 設定更新",
     "UserSetting": "個人設定",
