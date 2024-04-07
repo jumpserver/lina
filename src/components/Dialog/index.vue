@@ -119,9 +119,14 @@ export default {
       justify-content: flex-end;
     }
   }
-
+  @media (max-width: 900px) {
+    .dialog >>> .el-dialog {
+      max-width: calc(100% - 30px);
+    }
+  }
   .dialog-footer >>> button.el-button {
     font-size: 13px;
     padding: 10px 20px;
   }
+
 </style>

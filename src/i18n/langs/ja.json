@@ -121,7 +121,7 @@
     "AutoCreate": "自動作成",
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
-    "AccountTemplate": "账号模版",
+    "AccountTemplate": "账号模板",
     "Sync": "同期",
     "SyncDelete": "同期削除",
     "BulkSyncDelete": "一括同期削除",
