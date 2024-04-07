@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-alert type="success">{{ $t('SystemRoleHelpMsg') }}</el-alert>
     <BaseRoleList scope="system" />
   </div>
 </template>

@@ -8,7 +8,7 @@
           <el-tooltip v-if="helpMessage" effect="light" placement="right" popper-class="help-tips">
             <div slot="content" class="page-help-content" v-html="helpMessage" />
             <span>
-              <el-button class="help-message">
+              <el-button class="help-msg-btn">
                 <i class="el-icon-info" />
               </el-button>
             </span>
