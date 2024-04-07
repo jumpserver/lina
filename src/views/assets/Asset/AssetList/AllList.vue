@@ -2,7 +2,7 @@
   <div>
     <AssetTreeTable
       ref="AssetTreeTable"
-      :help-message="helpMessage"
+      :help-tip="helpMessage"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     >

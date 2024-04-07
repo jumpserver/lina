@@ -1,5 +1,5 @@
 <template>
-  <Page :help-message="helpMsg">
+  <Page :help-tip="helpMsg">
     <UserLoginACLTable />
   </Page>
 

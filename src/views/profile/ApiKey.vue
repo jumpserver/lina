@@ -3,7 +3,7 @@
     <GenericListPage
       ref="GenericListTable"
       :header-actions="headerActions"
-      :help-message="helpMessage"
+      :help-tip="helpMessage"
       :table-config="tableConfig"
     />
     <Dialog

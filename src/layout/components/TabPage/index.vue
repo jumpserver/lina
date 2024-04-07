@@ -23,8 +23,8 @@
               <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
-              <el-tooltip v-if="item.helpMessage" effect="light" placement="bottom" popper-class="help-tips">
-                <div slot="content" class="page-help-content" v-html="item.helpMessage" />
+              <el-tooltip v-if="item.helpTip" effect="light" placement="bottom" popper-class="help-tips">
+                <div slot="content" class="page-help-content" v-html="item.helpTip" />
                 <span>
                   <el-button class="help-msg-btn">
                     <i class="el-icon-info" />
@@ -37,6 +37,9 @@
       </el-tabs>
 
       <div class="tab-page-content">
+        <el-alert v-if="helpMessage" type="success">
+          <span class="announcement-main" v-html="helpMessage" />
+        </el-alert>
         <transition v-if="loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
@@ -51,7 +54,6 @@
 
 <script>
 import Page from '../Page/'
-import merge from 'webpack-merge'
 import { toSentenceCase } from '@/utils/common'
 
 const ACTIVE_TAB_KEY = 'tab'
@@ -69,6 +71,10 @@ export default {
     activeMenu: {
       type: String,
       required: true
+    },
+    helpMessage: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -130,7 +136,7 @@ export default {
 
       if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
         this.$router.push({
-          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: '' })
+          query: { ...this.$route.query, [ACTIVE_TAB_KEY]: '' }
         })
       }
     },

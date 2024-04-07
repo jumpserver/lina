@@ -1,7 +1,7 @@
 <template>
   <GenericCreateUpdatePage
     :create-success-next-route="successUrl"
-    :help-message="getHelpMessage()"
+    :help-tip="getHelpMessage()"
     :update-success-next-route="successUrl"
     v-bind="$data"
   />

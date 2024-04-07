@@ -1,5 +1,5 @@
 <template>
-  <Page :help-message="helpMsg" v-bind="$attrs">
+  <Page :help-tip="helpMsg" v-bind="$attrs">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"

@@ -2,7 +2,7 @@
   <GenericListPage
     ref="GenericListPage"
     :header-actions="headerActions"
-    :help-message="helpMsg"
+    :help-tip="helpMsg"
     :table-config="tableConfig"
     :title="this.$t('OnlineUserDevices')"
   />

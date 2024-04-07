@@ -5,8 +5,8 @@
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
-          <el-tooltip v-if="helpMessage" effect="light" placement="right" popper-class="help-tips">
-            <div slot="content" class="page-help-content" v-html="helpMessage" />
+          <el-tooltip v-if="helpTip" effect="light" placement="right" popper-class="help-tips">
+            <div slot="content" class="page-help-content" v-html="helpTip" />
             <span>
               <el-button class="help-msg-btn">
                 <i class="el-icon-info" />
@@ -20,6 +20,9 @@
       </template>
     </PageHeading>
     <PageContent class="page-content">
+      <el-alert v-if="helpMessage" type="success">
+        <span class="announcement-main" v-html="helpMessage" />
+      </el-alert>
       <slot />
     </PageContent>
     <UserConfirmDialog />
@@ -45,6 +48,10 @@ export default {
       default: ''
     },
     helpMessage: {
+      type: String,
+      default: ''
+    },
+    helpTip: {
       type: String,
       default: ''
     },
