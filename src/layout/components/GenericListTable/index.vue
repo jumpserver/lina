@@ -23,5 +23,8 @@ export default {
 </script>
 
 <style scoped>
+.list-table {
+  margin-bottom: 20px;
+}
 
 </style>
