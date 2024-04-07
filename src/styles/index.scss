@@ -421,3 +421,28 @@ button, input, optgroup, select, textarea {
 button .el-icon--right {
   margin-left: 3px;
 }
+
+// 定义颜色变量
+$tooltip-arrow-color: #c2d1e1;
+
+// 使用 SCSS 的嵌套和变量来简化代码
+.el-tooltip__popper.is-light {
+  &[x-placement^=right] .popper__arrow {
+    border-right-color: $tooltip-arrow-color !important;
+  }
+  &[x-placement^=left] .popper__arrow {
+    border-left-color: $tooltip-arrow-color !important;
+  }
+  &[x-placement^=top] .popper__arrow {
+    border-top-color: $tooltip-arrow-color !important;
+  }
+  &[x-placement^=bottom] .popper__arrow {
+    border-bottom-color: $tooltip-arrow-color !important;
+  }
+}
+
+.page-help-content {
+  padding: 8px;
+  font-weight: 500;
+  font-size: 13px;
+}

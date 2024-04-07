@@ -1,18 +1,25 @@
 <template>
   <div class="page">
-    <PageHeading v-if="iTitle || helpMessage" class="disabled-when-print">
+    <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
       <el-button :disabled="gobackDisabled" class="go-back" icon="el-icon-back" @click="handleGoBack" />
       <slot name="title">
-        <span style="padding-left: 10px">{{ iTitle }}</span>
+        <span style="padding-left: 10px">
+          {{ iTitle }}
+          <el-tooltip v-if="helpMessage" effect="light" placement="right" popper-class="help-tips">
+            <div slot="content" class="page-help-content" v-html="helpMessage" />
+            <span>
+              <el-button class="help-message">
+                <i class="el-icon-info" />
+              </el-button>
+            </span>
+          </el-tooltip>
+        </span>
       </slot>
       <template #rightSide>
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
     <PageContent class="page-content">
-      <el-alert v-if="helpMessage" type="success">
-        <span class="announcement-main" v-html="helpMessage" />
-      </el-alert>
       <slot />
     </PageContent>
     <UserConfirmDialog />
@@ -98,6 +105,12 @@ export default {
 .go-back >>> i {
   font-size: 18px;
   font-weight: 600;
+}
+
+.el-button.el-button--default.help-message {
+  padding: 5px;
+  color: #1c84c6;
+  border: none;
 }
 
 @media print {

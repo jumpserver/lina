@@ -284,8 +284,6 @@ export default {
 </script>
 <style lang='scss'>
 .help-tip-icon {
-  font-weight: bold;
-
   &:hover {
     cursor: pointer;
   }

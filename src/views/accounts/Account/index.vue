@@ -23,7 +23,8 @@ export default {
           {
             title: this.$t('VirtualAccounts'),
             name: 'VirtualAccountList',
-            component: () => import('@/views/accounts/VirtualAccount/VirtualList.vue')
+            component: () => import('@/views/accounts/VirtualAccount/VirtualList.vue'),
+            helpMessage: this.$t('VirtualAccountHelpMsg')
           }
         ]
       }

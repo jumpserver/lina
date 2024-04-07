@@ -23,15 +23,20 @@
               <i v-if="item.icon" :class="item.icon" class="fa " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
+              <el-tooltip v-if="item.helpMessage" effect="light" placement="bottom" popper-class="help-tips">
+                <div slot="content" class="page-help-content" v-html="item.helpMessage" />
+                <span>
+                  <el-button class="help-msg-btn">
+                    <i class="el-icon-info" />
+                  </el-button>
+                </span>
+              </el-tooltip>
             </span>
           </el-tab-pane>
         </template>
       </el-tabs>
 
       <div class="tab-page-content">
-        <el-alert v-if="helpMessage" type="success">
-          <span class="announcement-main" v-html="helpMessage" />
-        </el-alert>
         <transition v-if="loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
@@ -64,10 +69,6 @@ export default {
     activeMenu: {
       type: String,
       required: true
-    },
-    helpMessage: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -208,5 +209,14 @@ export default {
 
 .fa {
   margin-right: 2px;
+}
+
+.el-button.el-button--default.help-msg-btn {
+  padding: 5px;
+  border: none;
+  color: var(--color-info);
+  i {
+    opacity: 1;
+  }
 }
 </style>
