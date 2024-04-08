@@ -18,10 +18,10 @@
         />
       </el-col>
       <el-col v-show="isShow" :span="span">
-        <VueMarkdown class="result-html" :source="iValue" :show="true" :html="true" />
+        <VueMarkdown class="result-html" :source="iValue" :show="true" :html="false" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else class="source" :source="iValue" :html="true" />
+    <VueMarkdown v-else class="source" :source="iValue" :html="false" />
   </div>
 </template>
 
