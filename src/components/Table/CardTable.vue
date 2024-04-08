@@ -119,6 +119,11 @@ export default {
       return this.$refs.pagination.getPageQuery(currentPage, pageSize)
     },
     getList() {
+      if (this.tableConfig.totalData) {
+        this.totalData = this.tableConfig.totalData
+        this.total = this.totalData.length
+        return
+      }
       if (!this.tableUrl) {
         return
       }

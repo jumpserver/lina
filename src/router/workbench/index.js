@@ -25,7 +25,7 @@ export default {
     {
       path: '/workbench/home',
       name: 'MyHome',
-      component: () => import('@/views/myhome'),
+      component: () => import('@/views/workbench/myhome'),
       meta: {
         icon: 'overview',
         title: i18n.t('Overview'),
@@ -35,7 +35,7 @@ export default {
     {
       path: '/workbench/assets',
       name: 'MyAssets',
-      component: () => import('@/views/myassets'),
+      component: () => import('@/views/workbench/myassets'),
       meta: {
         icon: 'assets',
         title: i18n.t('MyAssets'),

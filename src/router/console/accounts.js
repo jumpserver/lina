@@ -114,6 +114,16 @@ export default [
     ]
   },
   {
+    path: 'automations',
+    component: () => import('@/views/accounts/Automation/index.vue'),
+    name: 'AccountAutomation',
+    meta: {
+      title: i18n.t('Automations'),
+      name: 'Automations',
+      permissions: []
+    }
+  },
+  {
     path: 'account-push',
     component: empty,
     redirect: '',
@@ -182,6 +192,77 @@ export default [
         meta: {
           title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_pushaccountexecution']
+        }
+      }
+    ]
+  },
+  {
+    path: 'account-change-secret',
+    component: empty,
+    meta: {
+      title: i18n.t('AccountChangeSecret'),
+      app: 'accounts',
+      licenseRequired: true
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
+        name: 'AccountChangeSecretList',
+        meta: {
+          menuTitle: i18n.t('ChangeCredentials'),
+          title: i18n.t('AccountChangeSecret'),
+          permissions: ['accounts.view_changesecretautomation']
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        name: 'AccountChangeSecretCreate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AssetChangeSecretCreate'),
+          permissions: ['accounts.add_changesecretautomation']
+        }
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        name: 'AccountChangeSecretUpdate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AssetChangeSecretUpdate'),
+          permissions: ['accounts.change_changesecretautomation']
+        }
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
+        name: 'AccountChangeSecretDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountChangeSecret'),
+          permissions: ['accounts.view_changesecretautomation']
+        }
+      },
+      {
+        path: 'executions',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
+        name: 'AccountChangeSecretExecutionList',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionList'),
+          permissions: ['accounts.view_changesecretexecution']
+        }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
+        name: 'AccountChangeSecretExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionDetail'),
+          permissions: ['accounts.view_changesecretexecution']
         }
       }
     ]
@@ -260,77 +341,7 @@ export default [
       }
     ]
   },
-  {
-    path: 'account-change-secret',
-    component: empty,
-    meta: {
-      title: i18n.t('AccountChangeSecret'),
-      app: 'accounts',
-      licenseRequired: true
-    },
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
-        name: 'AccountChangeSecretList',
-        meta: {
-          menuTitle: i18n.t('ChangeCredentials'),
-          title: i18n.t('AccountChangeSecret'),
-          permissions: ['accounts.view_changesecretautomation']
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
-        name: 'AccountChangeSecretCreate',
-        hidden: true,
-        meta: {
-          title: i18n.t('AssetChangeSecretCreate'),
-          permissions: ['accounts.add_changesecretautomation']
-        }
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
-        name: 'AccountChangeSecretUpdate',
-        hidden: true,
-        meta: {
-          title: i18n.t('AssetChangeSecretUpdate'),
-          permissions: ['accounts.change_changesecretautomation']
-        }
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
-        name: 'AccountChangeSecretDetail',
-        hidden: true,
-        meta: {
-          title: i18n.t('AccountChangeSecret'),
-          permissions: ['accounts.view_changesecretautomation']
-        }
-      },
-      {
-        path: 'executions',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
-        name: 'AccountChangeSecretExecutionList',
-        hidden: true,
-        meta: {
-          title: i18n.t('ExecutionList'),
-          permissions: ['accounts.view_changesecretexecution']
-        }
-      },
-      {
-        path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
-        name: 'AccountChangeSecretExecutionDetail',
-        hidden: true,
-        meta: {
-          title: i18n.t('ExecutionDetail'),
-          permissions: ['accounts.view_changesecretexecution']
-        }
-      }
-    ]
-  },
+
   {
     path: 'account-backup',
     component: empty,

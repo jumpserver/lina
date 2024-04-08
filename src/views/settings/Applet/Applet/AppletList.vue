@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CardTable from './components/CardTable'
+import CardTable from '@/components/Table/CardTable'
 import UploadDialog from './UploadDialog'
 
 export default {

@@ -159,7 +159,7 @@ export default {
     margin-right: 80px;
   }
   .el-form ::v-deep .el-form-item {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .el-form ::v-deep .el-form-item__content {
