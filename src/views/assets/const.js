@@ -28,7 +28,7 @@ export const filterSelectValues = (values) => {
 
 function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged = false) {
   setTimeout(() => vm.init().then(() => {
-    const isCreate = vm?.$route?.meta.action === 'create'
+    const isCreate = vm?.$route?.meta.action === 'create' && vm?.$route?.query.clone_from === undefined
     if (platformType === 'website') {
       const need_modify = isCreate || isPlatformChanged
       if (!need_modify) return
