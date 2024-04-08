@@ -15,29 +15,32 @@
             shadow="hover"
             @click.native="onView(d)"
           >
-            <span v-if="d.edition === 'enterprise'" class="enterprise">
-              {{ $t('Enterprise') }}
-            </span>
-            <el-row :gutter="20">
-              <el-col :span="8">
-                <img :alt="d.display_name" :src="d.icon" class="image">
-              </el-col>
-              <el-col :span="16" style="text-align: left; padding: 5px 0">
-                <div class="one-line">
-                  <b>{{ d.display_name }}</b>
-                  <el-tag size="mini" style="margin-left: 5px">
-                    {{ d.version }}
+            <slot :index="index" :item="d">
+              <span v-if="d.edition === 'enterprise'" class="enterprise">
+                {{ $t('Enterprise') }}
+              </span>
+              <el-row :gutter="20">
+                <el-col :span="8" class="image">
+                  <img v-if="d.icon.startsWith('/')" :alt="d.display_name" :src="d.icon">
+                  <Icon v-else :icon="d.icon" />
+                </el-col>
+                <el-col :span="16" style="text-align: left; padding: 5px 0">
+                  <div class="one-line">
+                    <b>{{ d.display_name }}</b>
+                    <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
+                      {{ d.version }}
+                    </el-tag>
+                  </div>
+                  <el-divider class="my-divider" />
+                  <div class="comment">
+                    {{ d.comment }}
+                  </div>
+                  <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                    {{ capitalize(tag) }}
                   </el-tag>
-                </div>
-                <el-divider class="my-divider" />
-                <div class="comment">
-                  {{ d.comment }}
-                </div>
-                <el-tag v-for="tag of d.tags" :key="tag" size="mini">
-                  {{ capitalize(tag) }}
-                </el-tag>
-              </el-col>
-            </el-row>
+                </el-col>
+              </el-row>
+            </slot>
           </el-card>
         </el-col>
       </el-row>
@@ -55,6 +58,7 @@
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
+import Icon from '@/components/Widgets/Icon/index.vue'
 
 const defaultFirstPage = 1
 
@@ -62,7 +66,8 @@ export default {
   name: 'CardTable',
   components: {
     TableAction,
-    Pagination
+    Pagination,
+    Icon
   },
   props: {
     // 定义 table 的配置
@@ -212,10 +217,15 @@ export default {
 }
 
 .image {
-  width: 60px;
-  height: 60px;
-  display: block;
-  margin: 50% auto;
+  image, span {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: 50% auto;
+  }
+  i {
+    font-size: 18px;
+  }
 }
 
 .one-line {

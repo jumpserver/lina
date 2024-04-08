@@ -17,8 +17,15 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/terminal/applets/',
-        deletePerm: 'terminal.delete_applet'
+        totalData: [
+          {
+            id: 'abc',
+            display_name: '账号推送',
+            name: 'Pushing',
+            comment: '自动将账号创建在目标资产上',
+            icon: 'fa-plus'
+          }
+        ]
       },
       headerActions: {
         hasLeftActions: false,
