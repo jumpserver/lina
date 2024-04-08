@@ -35,7 +35,7 @@ export default {
   methods: {
     async getAsyncItems() {
       const userId = this.$route.params.id
-      const url = `api/v1/perms/users/${userId}/assets/${this.row.id}`
+      const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}`
       this.$axios.get(url).then(res => {
         this.accountData = res?.permed_accounts || []
       })
