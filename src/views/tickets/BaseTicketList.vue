@@ -171,7 +171,7 @@ export default {
               ]
             },
             {
-              value: 'applicant',
+              value: 'applicant_username_name',
               label: this.$t('tickets.Applicant')
             },
             {
