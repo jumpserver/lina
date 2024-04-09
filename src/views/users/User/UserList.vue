@@ -96,6 +96,19 @@ export default {
               return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
             }
           },
+          orgs_roles: {
+            columnKey: 'orgs_roles',
+            has: () => {
+              return this.$store.getters.currentOrgIsRoot
+            },
+            formatter: AmountFormatter,
+            filters: [],
+            formatterArgs: {
+              getItem(item) {
+                return item.key + ': ' + item.value.join(',')
+              }
+            }
+          },
           phone: {
             formatter: (row) => {
               const phoneObj = row.phone

@@ -68,7 +68,16 @@ export default {
         return [this.$t('common.tree.Loading') + '...']
       }
       const getItem = this.formatterArgs.getItem || (item => item.name)
-      let data = this.data.map(item => getItem(item)) || []
+      let data = []
+      if (Array.isArray(this.data)) {
+        data = this.data.map(item => getItem(item)) || []
+      } else {
+        // object {key: [value]}
+        data = Object.entries(this.data).map(([key, value]) => {
+          const item = { key: key, value: value }
+          return getItem(item)
+        }) || []
+      }
       data = data.filter(Boolean)
       return data
     },
@@ -80,7 +89,14 @@ export default {
     if (this.formatterArgs.async) {
       this.amount = this.cellValue
     } else {
-      this.amount = (this.cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+      let cellValue = []
+      if (Array.isArray(this.cellValue)) {
+        cellValue = this.cellValue
+      } else {
+        // object {key: [value]}
+        cellValue = Object.keys(this.cellValue)
+      }
+      this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
     }
   },
   methods: {
