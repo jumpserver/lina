@@ -1,5 +1,7 @@
 const xss = require('xss')
 
+import { isExternal } from '@/utils/validate'
+
 const options = {
   css: false,
   stripIgnoreTagBody: ['script'],
@@ -16,6 +18,11 @@ const options = {
     } else {
       if (tag === 'a') {
         return name + '="' + xss.escapeAttrValue(value) + '"'
+      }
+      if (tag === 'iframe' && name === 'src') {
+        if (!isExternal(value)) {
+          return name + '=""'
+        }
       }
     }
   }
