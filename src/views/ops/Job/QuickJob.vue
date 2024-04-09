@@ -412,7 +412,7 @@ export default {
       return { hosts, nodes }
     },
     execute() {
-      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
+      this.enableWS()
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
       if (hosts.length === 0 && nodes.length === 0) {
@@ -459,6 +459,7 @@ export default {
       }).catch((e) => {
         console.log(e)
       }).finally(() => {
+        this.ws.close()
         this.setBtn()
       })
     },
