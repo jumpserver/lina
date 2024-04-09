@@ -105,7 +105,7 @@ export default {
             filters: [],
             formatterArgs: {
               getItem(item) {
-                return item.key + ': ' + item.value.join(',')
+                return item.key + ': ' + item.value.join(', ')
               }
             }
           },
