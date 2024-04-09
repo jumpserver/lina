@@ -45,12 +45,16 @@ export default {
       formConfig: {
         url: `/api/v1/assets/assets/?domain=${this.$route.params.id}&exclude_platform=Gateway`,
         getUrl: () => {
-          return `/api/v1/assets/domains/${this.$route.params.id}/`
+          return `/api/v1/assets/assets/`
         },
         submitMethod: () => 'patch',
         hasReset: false,
         hasSaveContinue: false,
         createSuccessMsg: this.$t('common.AddSuccessMsg'),
+        updateSuccessNextRoute: {
+          name: 'DomainDetail',
+          params: { id: this.$route.params.id }
+        },
         fields: ['assets'],
         fieldsMeta: {
           assets: {
@@ -68,6 +72,14 @@ export default {
               }
             }
           }
+        },
+        cleanFormValue(values) {
+          const data = []
+          values.assets.forEach(item => {
+            const d = { id: item, domain: this.$route.params.id }
+            data.push(d)
+          })
+          return data
         }
       }
     }
