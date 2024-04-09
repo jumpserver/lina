@@ -1981,7 +1981,7 @@
     "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey"
   },
   "users": {
-    "OrgRoleRelations": "所属组织",
+    "OrgsAndRoles": "组织与角色",
     "LunaSettingUpdate": "Luna 配置设置",
     "KokoSettingUpdate": "Koko 配置设置",
     "UserSetting": "偏好设置",

@@ -196,7 +196,7 @@ export default {
           }
         },
         {
-          key: this.$t('users.OrgRoleRelations'),
+          key: this.$t('users.OrgsAndRoles'),
           has: this.$store.getters.currentOrgIsRoot,
           formatter: (item, val) => {
             const doms = []
@@ -207,8 +207,8 @@ export default {
               if (key.length >= allowKeyMaxLength) {
                 prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
               }
-              const domKey = <el-tag size='mini' type='success'>{prettyKey}</el-tag>
-              doms.push(domKey)
+              const item = prettyKey + ': ' + value.join(',')
+              doms.push([item, <br/>])
             })
             return <div>{doms}</div>
           }

@@ -1996,7 +1996,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
-    "OrgRoleRelations": "Organizations",
+    "OrgsAndRoles": "Organizations and roles",
     "LunaSettingUpdate": "Luna setting",
     "KokoSettingUpdate": "Koko setting",
     "UserSetting": "User setting",
