@@ -207,7 +207,7 @@ export default {
               if (key.length >= allowKeyMaxLength) {
                 prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
               }
-              const item = prettyKey + ': ' + value.join(',')
+              const item = prettyKey + ': ' + value.join(', ')
               doms.push([item, <br/>])
             })
             return <div>{doms}</div>
