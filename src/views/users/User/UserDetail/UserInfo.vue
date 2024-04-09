@@ -196,7 +196,7 @@ export default {
           }
         },
         {
-          key: this.$t('users.OrgRoleRelations'),
+          key: this.$t('users.OrgsAndRoles'),
           has: this.$store.getters.currentOrgIsRoot,
           formatter: (item, val) => {
             const doms = []
