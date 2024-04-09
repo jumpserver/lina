@@ -9,7 +9,7 @@ import Page from '@/layout/components/Page'
 import CardTable from '@/components/Table/CardTable'
 
 export default {
-  name: 'Applets',
+  name: 'ACLs',
   components: {
     CardTable,
     Page
@@ -20,32 +20,32 @@ export default {
       tableConfig: {
         totalData: [
           {
-            id: 'push-account',
-            display_name: this.$t('PushAccounts'),
-            name: 'AccountPushList',
-            comment: '自动将账号创建在目标资产上',
-            icon: 'push-account'
+            id: 'command-filter',
+            display_name: this.$t('CommandFilterACL'),
+            name: 'CommandFilterAclList',
+            comment: '过滤命令',
+            icon: 'filter'
           },
           {
-            id: 'change_secret',
-            display_name: this.$t('ChangeCredentials'),
-            name: 'AccountChangeSecretList',
+            id: 'connect-asset',
+            display_name: this.$t('UserLoginAclList'),
+            name: 'AssetAclList',
             comment: '更改账号凭证，并推送到资产上',
-            icon: 'change-password'
+            icon: 'connect'
           },
           {
-            id: 'gather_account',
-            display_name: this.$t('GatherAccounts'),
-            name: 'AccountGatherList',
+            id: 'connect-method',
+            display_name: this.$t('ConnectMethodAclList'),
+            name: 'ConnectMethodAclList',
             comment: '采集资产上的账号信息',
-            icon: 'gather-account'
+            icon: 'client'
           },
           {
-            id: 'backup_account',
-            display_name: this.$t('BackupAccounts'),
-            name: 'AccountBackupList',
+            id: 'UserLoginACL',
+            display_name: this.$t('UserLoginAclList'),
+            name: 'UserLoginAclList',
             comment: '备份账号到外部',
-            icon: 'backup-account'
+            icon: 'login'
           }
         ],
         onView: (item) => {
@@ -68,11 +68,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zone {
-  white-space: initial;
-
-  .el-tag {
-    margin-right: 3px;
-  }
+>>> .image img {
+  width: 40px;
+  height: 40px
 }
 </style>

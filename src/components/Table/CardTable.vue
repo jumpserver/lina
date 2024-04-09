@@ -20,8 +20,12 @@
                 {{ $t('Enterprise') }}
               </span>
               <el-row :gutter="20">
-                <el-col :span="8" class="image">
-                  <img v-if="d.icon.startsWith('/')" :alt="d.display_name" :src="d.icon">
+                <el-col v-if="d.icon" :span="8" class="image">
+                  <img
+                    v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
+                    :alt="d.display_name"
+                    :src="d.icon"
+                  >
                   <Icon v-else :icon="d.icon" />
                 </el-col>
                 <el-col :span="16" style="text-align: left; padding: 5px 0">
@@ -46,6 +50,7 @@
       </el-row>
     </div>
     <Pagination
+      v-if="pagination"
       ref="pagination"
       v-bind="$data"
       @currentSizeChange="handleCurrentChange"
@@ -57,7 +62,6 @@
 <script>
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 const defaultFirstPage = 1
@@ -78,6 +82,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    pagination: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -116,9 +124,6 @@ export default {
         iconClass = 'fa-times-circle'
       }
       return `<i class="fa ${iconClass}" />`
-    },
-    convertData(data) {
-      return toSafeLocalDateStr(data)
     },
     getPageQuery(currentPage, pageSize) {
       return this.$refs.pagination.getPageQuery(currentPage, pageSize)
@@ -217,14 +222,15 @@ export default {
 }
 
 .image {
-  image, span {
+  img, span {
     width: 60px;
     height: 60px;
     display: block;
     margin: 50% auto;
   }
-  i {
-    font-size: 18px;
+  span {
+    font-size: 36px;
+    color: black;
   }
 }
 

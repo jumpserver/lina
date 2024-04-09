@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden && (item.alwaysShow || !allChildrenHidden(item))">
+  <div v-if="!needHidden(item) && (item.alwaysShow || !allChildrenHidden(item))">
     <template
       v-if="hasOneShowingChild(item.children, item) &&
         (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
@@ -61,6 +61,13 @@ export default {
     return {}
   },
   methods: {
+    needHidden(item) {
+      let hidden = item.hidden
+      if (typeof item.hidden === 'function') {
+        hidden = item.hidden()
+      }
+      return hidden
+    },
     allChildrenHidden(item) {
       if (!item.children) {
         return false
