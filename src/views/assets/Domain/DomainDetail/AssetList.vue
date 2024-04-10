@@ -110,6 +110,7 @@ export default {
       }).then(() => {
         this.$axios.patch(`/api/v1/assets/assets/`, patch_data).then(() => {
           this.reloadTable()
+          this.$message.success(this.$t('common.RemoveSuccessMsg'))
         })
       }).catch(() => {
       })

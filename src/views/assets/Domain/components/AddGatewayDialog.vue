@@ -43,14 +43,18 @@ export default {
   data() {
     return {
       formConfig: {
-        url: `/api/v1/assets/assets/?domain=${this.$route.params.id}&platform=Gateway`,
         getUrl: () => {
-          return `/api/v1/assets/domains/${this.$route.params.id}/`
+          return '/api/v1/assets/assets/'
         },
         submitMethod: () => 'patch',
         hasReset: false,
         hasSaveContinue: false,
+        needGetObjectDetail: false,
         createSuccessMsg: this.$t('common.AddSuccessMsg'),
+        updateSuccessNextRoute: {
+          name: 'DomainDetail',
+          params: { id: this.$route.params.id }
+        },
         fields: ['gateways'],
         fieldsMeta: {
           gateways: {
@@ -60,9 +64,18 @@ export default {
               clearable: true,
               ajax: {
                 url: '/api/v1/assets/assets/?domain_enabled=true&platform=Gateway'
-              }
+              },
+              disabledValues: this.object.gateways.map(item => item.id)
             }
           }
+        },
+        cleanFormValue(values) {
+          const data = []
+          values.gateways.forEach(item => {
+            const d = { id: item.pk, domain: this.$route.params.id }
+            data.push(d)
+          })
+          return data
         }
       }
     }

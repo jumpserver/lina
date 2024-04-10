@@ -43,13 +43,13 @@ export default {
   data() {
     return {
       formConfig: {
-        url: `/api/v1/assets/assets/?domain=${this.$route.params.id}&exclude_platform=Gateway`,
         getUrl: () => {
-          return `/api/v1/assets/assets/`
+          return '/api/v1/assets/assets/'
         },
         submitMethod: () => 'patch',
         hasReset: false,
         hasSaveContinue: false,
+        needGetObjectDetail: false,
         createSuccessMsg: this.$t('common.AddSuccessMsg'),
         updateSuccessNextRoute: {
           name: 'DomainDetail',
@@ -68,7 +68,7 @@ export default {
                 domain_enabled: true
               },
               canSelect: (row) => {
-                return row.platform?.name !== 'Gateway'
+                return row.platform?.name !== 'Gateway' && this.object.assets.map(item => item.id).indexOf(row.id) === -1
               }
             }
           }
