@@ -9,7 +9,7 @@
       class="table"
       style="width: 100%"
     >
-      <el-table-column :label="$tc('Ranking')" width="60px">
+      <el-table-column :label="$tc('Ranking')" width="80px">
         <template v-slot="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>

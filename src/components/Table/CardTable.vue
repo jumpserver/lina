@@ -28,7 +28,7 @@
                   >
                   <Icon v-else :icon="d.icon" />
                 </el-col>
-                <el-col :span="16" style="text-align: left; padding: 5px 0">
+                <el-col :span="16" class="text-zone">
                   <div class="one-line">
                     <b>{{ d.display_name }}</b>
                     <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
@@ -39,9 +39,11 @@
                   <div class="comment">
                     {{ d.comment }}
                   </div>
-                  <el-tag v-for="tag of d.tags" :key="tag" size="mini">
-                    {{ capitalize(tag) }}
-                  </el-tag>
+                  <div class="tag-zone">
+                    <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                      {{ capitalize(tag) }}
+                    </el-tag>
+                  </div>
                 </el-col>
               </el-row>
             </slot>
@@ -246,6 +248,7 @@ export default {
   height: 50px;
   overflow: hidden;
   margin-bottom: 10px;
+  padding-right: 5px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -279,6 +282,19 @@ export default {
   padding: 3px 8px 4px 9px;
   font-size: 13px;
   border-radius: 3px 3px 3px 10px;
+}
+
+.tag-zone {
+  margin-top: 20px;
+
+  .el-tag {
+    margin-right: 3px;
+  }
+}
+
+.text-zone {
+  text-align: left;
+  height: 100%;
 }
 
 </style>

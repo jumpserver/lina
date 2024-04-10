@@ -323,10 +323,6 @@ export default {
   background-color: #f5f7fa;
 }
 
-.data-z-tree {
-  //height: calc(100% - 54px);
-}
-
 .data-z-tree >>> .fa {
   width: 10px;
   margin-right: 3px;

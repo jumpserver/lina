@@ -23,29 +23,33 @@ export default {
             id: 'push-account',
             display_name: this.$t('PushAccounts'),
             name: 'AccountPushList',
-            comment: '自动将账号创建在目标资产上',
-            icon: 'push-account'
+            comment: this.$t('PushAccountsHelpText'),
+            icon: 'push-account',
+            tags: ['ansible']
           },
           {
             id: 'change_secret',
             display_name: this.$t('ChangeCredentials'),
             name: 'AccountChangeSecretList',
-            comment: '更改账号凭证，并推送到资产上',
-            icon: 'change-password'
+            comment: this.$t('ChangeCredentialsHelpText'),
+            icon: 'change-password',
+            tags: ['ansible']
           },
           {
             id: 'gather_account',
             display_name: this.$t('GatherAccounts'),
             name: 'AccountGatherList',
-            comment: '采集资产上的账号信息',
-            icon: 'gather-account'
+            comment: this.$t('GatherAccountsHelpText'),
+            icon: 'gather-account',
+            tags: ['ansible']
           },
           {
             id: 'backup_account',
             display_name: this.$t('BackupAccounts'),
             name: 'AccountBackupList',
-            comment: '备份账号到外部',
-            icon: 'backup-account'
+            comment: this.$t('BackupAccountsHelpText'),
+            icon: 'backup-account',
+            tags: ['email', 'SFTP']
           }
         ],
         onView: (item) => {
@@ -68,11 +72,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zone {
-  white-space: initial;
+>>> .image {
+  padding-right: 0;
+}
 
-  .el-tag {
-    margin-right: 3px;
-  }
+>>> .el-tag {
+  margin: 0 3px 0 0;
 }
 </style>

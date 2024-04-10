@@ -23,29 +23,33 @@ export default {
             id: 'command-filter',
             display_name: this.$t('CommandFilterACL'),
             name: 'CommandFilterAclList',
-            comment: '过滤命令',
-            icon: 'filter'
+            comment: this.$t('CommandFilterACLHelpText'),
+            icon: 'filter',
+            tags: ['command']
           },
           {
             id: 'connect-asset',
-            display_name: this.$t('UserLoginAclList'),
+            display_name: this.$t('AssetAclList'),
             name: 'AssetAclList',
-            comment: '更改账号凭证，并推送到资产上',
-            icon: 'connect'
+            comment: this.$t('AssetLoginACLHelpText'),
+            icon: 'connect',
+            tags: ['asset']
           },
           {
             id: 'connect-method',
             display_name: this.$t('ConnectMethodAclList'),
             name: 'ConnectMethodAclList',
-            comment: '采集资产上的账号信息',
-            icon: 'client'
+            comment: this.$t('ConnectMethodACLHelpText'),
+            icon: 'client',
+            tags: ['client', 'cli']
           },
           {
             id: 'UserLoginACL',
             display_name: this.$t('UserLoginAclList'),
             name: 'UserLoginAclList',
-            comment: '备份账号到外部',
-            icon: 'login'
+            comment: this.$t('UserLoginACLHelpText'),
+            icon: 'login',
+            tags: ['login']
           }
         ],
         onView: (item) => {

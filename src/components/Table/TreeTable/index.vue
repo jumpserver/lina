@@ -207,7 +207,7 @@ export default {
     .left {
       height: 100%;
       width: 20%;
-      //background: white;
+      background: white;
 
       >>> .treebox {
         padding-left: 10px;

@@ -90,7 +90,6 @@ export default {
     updateTreeHeight() {
       const tree = document.getElementById(this.iZTreeID)
       if (!tree) {
-        console.log('No tree found')
         return
       }
       const dialogs = document.getElementsByClassName('el-dialog__body')
@@ -444,7 +443,7 @@ div.rMenu li {
   >>> .ztree {
     overflow: auto;
     background-color: transparent;
-    height: 100%;
+    height: calc(100vh - 40px);
 
     .level0 .node_name {
       max-width: 120px;
