@@ -59,6 +59,7 @@ export default {
         fieldsMeta: {
           gateways: {
             component: ObjectSelect2,
+            label: this.$t('assets.Gateway'),
             el: {
               multiple: true,
               clearable: true,
