@@ -131,12 +131,9 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
-        canCreate: false,
-        hasRefresh: true,
+        hasLeftActions: false,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
         onCreate: () => {
           this.uploadDialogVisible = true
         }

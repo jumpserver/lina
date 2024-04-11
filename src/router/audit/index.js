@@ -32,16 +32,6 @@ export default {
       }
     },
     {
-      path: '/audit/online-user-session',
-      component: () => import('@/views/sessions/OnlineSession/OnlineSessionList'),
-      name: 'OnlineSession',
-      meta: {
-        icon: 'users',
-        title: i18n.t('OnlineSession'),
-        permissions: ['audits.view_usersession']
-      }
-    },
-    {
       path: '/audit/sessions',
       component: empty,
       name: 'Sessions',
@@ -64,6 +54,16 @@ export default {
         permissions: []
       },
       children: LogRoutes
+    },
+    {
+      path: '/audit/online-user-session',
+      component: () => import('@/views/sessions/OnlineSession/OnlineSessionList'),
+      name: 'OnlineSession',
+      meta: {
+        icon: 'users',
+        title: i18n.t('OnlineSession'),
+        permissions: ['audits.view_usersession']
+      }
     }
   ]
 }
