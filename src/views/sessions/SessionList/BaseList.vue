@@ -37,7 +37,7 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columnsExtra: ['index', 'duration'],
+        columnsExtra: ['index'],
         columnsExclude: ['terminal'],
         columnsShow: this.columnsShow,
         columnsMeta: {
