@@ -1209,7 +1209,8 @@
     "runSucceed": "Task executed successfully",
     "EnterUploadPath": "Enter the upload path",
     "FileNameTooLong": "File name too long",
-    "StopJob": "Stop job"
+    "StopJob": "Stop job",
+    "StopLogOutput": "Task Canceled: The current task (currentTaskId) has been manually stopped. Since the progress of each task varies, the following is the final execution result of the task. A failed execution indicates that the task has been successfully stopped."
   },
   "perms": {
     "": "",
