@@ -80,14 +80,15 @@ export default {
     window.refresh = this.refresh
     window.onSearch = this.onSearch
     this.initTree().then(() => {
-      setTimeout(() => this.updateTreeHeight(), 1000)
+      setTimeout(() => this.updateTreeHeight(), 500)
     })
+    window.addEventListener('resize', this.updateTreeHeight)
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
   },
   methods: {
-    updateTreeHeight() {
+    updateTreeHeight: _.debounce(function() {
       const tree = document.getElementById(this.iZTreeID)
       if (!tree) {
         return
@@ -102,8 +103,9 @@ export default {
         }
       }
       const ztreeRect = tree.getBoundingClientRect()
-      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 20px)`
-    },
+      this.$log.debug('tree rect: ', ztreeRect)
+      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px)`
+    }, 100),
     async initTree(refresh = false) {
       const vm = this
       let treeUrl

@@ -187,20 +187,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .ztree,
->>> .ztree li,
->>> .ztree li ul,
-.tree-tab {
-}
->>> .ztree {
+>>> .data-z-tree {
   padding: 0;
 }
 .page-submenu >>> .el-tabs__nav-wrap {
   position: static;
-
-  .el-tabs__item.is-active {
-    //color:  var(--menu-text-active);
-  }
   .el-tabs__item {
     padding-right: 0;
     padding-left: 0;
@@ -213,6 +204,11 @@ export default {
   &>>> .el-tabs__item.is-active {
     text-align: left;
     padding: 0 20px;
+  }
+}
+>>> {
+  .ztree {
+    padding: 0;
   }
 }
 </style>

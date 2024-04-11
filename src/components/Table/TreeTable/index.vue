@@ -1,10 +1,12 @@
 <template>
   <el-collapse-transition>
-    <div
-      class="tree-table-content"
-      style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;"
-    >
-      <div v-show="iShowTree" :class="iShowTree ? '' : 'hidden'" class="left">
+    <div class="tree-table-content">
+      <div
+        v-show="iShowTree"
+        :class="iShowTree ? '' : 'hidden'"
+        :style="{width: treeWidth}"
+        class="left"
+      >
         <component
           :is="component"
           :key="componentTreeKey"
@@ -21,8 +23,9 @@
         </component>
       </div>
       <div
-        :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
+        :style="{'width': iShowTree ? ('calc(100% - ' + treeWidth + ')') : '100%'}"
         class="right"
+        style="display: flex"
       >
         <div v-if="showTree" class="mini">
           <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
@@ -89,7 +92,7 @@ export default {
     },
     treeWidth: {
       type: String,
-      default: () => '20%'
+      default: () => '23.6%'
     }
   },
   data() {
@@ -171,7 +174,7 @@ export default {
   .mini-button {
     position: absolute;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-100%, -50%);
     width: 13px;
     float: right;
     text-align: center;
@@ -204,9 +207,13 @@ export default {
   }
 
   .tree-table-content {
+    display: flex;
+    justify-items: center;
+    flex-wrap: nowrap;
+    justify-content:space-between;
+
     .left {
       height: 100%;
-      width: 20%;
       background: white;
 
       >>> .treebox {

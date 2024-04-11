@@ -323,8 +323,14 @@ export default {
   background-color: #f5f7fa;
 }
 
-.data-z-tree >>> .fa {
-  width: 10px;
-  margin-right: 3px;
+.data-z-tree {
+  padding: 10px 5px 0 20px;
+
+  >>> {
+    .fa {
+      width: 10px;
+      margin-right: 3px;
+    }
+  }
 }
 </style>

@@ -5,18 +5,18 @@
     </el-col>
     <el-col :md="12" :sm="24">
       <IBox :title="$tc('Permissions')">
+        <div style="height: 10%">
+          <el-button
+            :disabled="isDisabled"
+            size="small"
+            style="float: right; width: 100%"
+            type="primary"
+            @click="updatePermissions"
+          >
+            {{ $t('Update') }}
+          </el-button>
+        </div>
         <div class="tree-zone">
-          <div style="height: 10%">
-            <el-button
-              :disabled="isDisabled"
-              size="small"
-              style="float: right"
-              type="primary"
-              @click="updatePermissions"
-            >
-              {{ $t('Update') }}
-            </el-button>
-          </div>
           <div class="perm-tree">
             <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
           </div>
@@ -302,7 +302,6 @@ export default {
 
 <style lang="scss" scoped>
 .perm-tree {
-  border: 1px solid #e8e8e8;
 
   >>> {
     .ztree * {
