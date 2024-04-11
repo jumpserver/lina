@@ -7,6 +7,7 @@
         :style="{width: treeWidth}"
         class="left"
       >
+        <span v-if="component === 'AutoDataZTree'" class="title">Asset Tree</span>
         <component
           :is="component"
           :key="componentTreeKey"
@@ -248,6 +249,17 @@ export default {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 3px;
+  }
+
+  .title {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    width: 100%;
+    border-bottom: solid 2px var(--color-primary);
+    font-size: 13px;
+    font-weight: 600;
   }
 
 </style>

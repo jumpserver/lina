@@ -1,6 +1,6 @@
 <template>
   <div ref="drawer" :class="{show: show}" class="drawer">
-    <div :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
+    <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
     <div :style="{'width': width}" class="drawer-panel">
       <div v-show="!show" ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
@@ -55,7 +55,7 @@ export default {
   beforeDestroy() {
     const element = this.$refs.drawer
     element.remove()
-    window.removeEventListener('click', this.closeSidebar)
+    // window.removeEventListener('click', this.closeSidebar)
   },
   methods: {
     init() {
@@ -67,7 +67,6 @@ export default {
           const offsetY = dragBox.getBoundingClientRect().top
           const innerX = event.clientX - offsetX
           const innerY = event.clientY - offsetY
-
           clientOffset.clientX = event.clientX
           clientOffset.clientY = event.clientY
           document.onmousemove = function(event) {
@@ -105,7 +104,7 @@ export default {
       return difference <= threshold
     },
     addEventClick() {
-      window.addEventListener('click', this.closeSidebar)
+      // window.addEventListener('click', this.closeSidebar)
     },
     closeSidebar(evt) {
       const parent = evt.target.closest('.drawer-panel')
@@ -135,11 +134,11 @@ export default {
 
 .drawer-panel {
   position: fixed;
-  top: 0;
-  right: 0;
+  bottom: 100px;
+  right: 1px;
   width: 100%;
   min-width: 260px;
-  height: 100vh;
+  height: 400px;
   user-select: none;
   transition: transform .25s cubic-bezier(.7, .3, .1, 1);
   box-shadow: 0 0 8px 4px #00000014;

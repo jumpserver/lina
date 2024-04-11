@@ -14,7 +14,7 @@
               <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
             </el-button>
           </div>
-          <div class="upload_input">{{ $t('Users') }}:</div>
+          <div class="upload_input">{{ $t('Account') }}:</div>
           <div class="upload_input">
             <el-autocomplete
               v-model="runAsInput.value"
@@ -486,6 +486,10 @@ export default {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;
+}
+
+.upload_input >>> .el-input-group__prepend {
+  padding: 0 10px;
 }
 
 .tree-box {

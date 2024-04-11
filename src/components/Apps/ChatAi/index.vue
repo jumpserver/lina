@@ -1,4 +1,5 @@
 <template>
+
   <div class="chat">
     <div class="container">
       <div class="header">
@@ -18,7 +19,13 @@
       </div>
     </div>
     <div class="sidebar">
-      <Sidebar v-bind="$attrs" :active.sync="active" :submenu="submenu" />
+      <Sidebar
+        :active.sync="active"
+        :submenu="submenu"
+        v-bind="$attrs"
+        @close="onClose"
+        v-on="$listeners"
+      />
     </div>
   </div>
 </template>
@@ -73,6 +80,8 @@ export default {
     onClose() {
       this.$parent.show = false
     },
+    expandFull() {
+    },
     onNewChat() {
       this.active = 'chat'
       this.$nextTick(() => {
@@ -89,12 +98,15 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
+
   .container {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
     .header {
+      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);;
       display: flex;
       justify-content: space-between;
       height: 48px;

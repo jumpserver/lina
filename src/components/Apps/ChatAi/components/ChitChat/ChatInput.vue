@@ -1,41 +1,28 @@
 <template>
   <div class="container">
-    <div class="chat-action">
-      <Select2
-        v-model="select.value"
-        :disabled="isLoading || isSelectDisabled"
-        v-bind="select"
-        @change="onSelectChange"
-      />
-    </div>
     <div class="chat-input">
       <el-input
         v-model="inputValue"
         :disabled="isLoading"
         :placeholder="$tc('InputMessage')"
+        :rows="2"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
         @keypress.native="onKeyEnter"
       />
-      <div class="input-action">
-        <span class="right">
-          <i :class="{'active': inputValue }" class="fa fa-send" @click="onSendHandle" />
-        </span>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Select2 from '../../../../Form/FormFields/Select2.vue'
 import { useChat } from '../../useChat.js'
 
 const { setLoading } = useChat()
 
 export default {
-  components: { Select2 },
+  components: { },
   props: {
   },
   data() {
@@ -117,20 +104,14 @@ export default {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid #DCDFE6;
     border-radius: 12px;
-    &:has(.el-textarea__inner:focus) {
-      border: 1px solid var(--color-primary);
-    }
     &>>> .el-textarea {
       height: 100%;
       .el-textarea__inner {
         height: 100%;
         padding: 8px 10px;
-        border: none;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
         resize: none;
+        border-radius: 5px;
         &::-webkit-scrollbar {
           width: 12px;
         }
@@ -141,21 +122,6 @@ export default {
       cursor: no-drop;
       i {
         cursor: no-drop;
-      }
-    }
-    .input-action {
-      overflow: hidden;
-      padding: 0 16px 15px;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-      .right {
-        float: right;
-        .active {
-          color: var(--color-primary);
-        }
-        i {
-          cursor: pointer;
-        }
       }
     }
   }

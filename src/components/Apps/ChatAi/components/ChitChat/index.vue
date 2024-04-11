@@ -60,14 +60,14 @@ export default {
       currentConversationId: '',
       showIntroduction: false,
       introduction: [
-        {
-          title: this.$t('ConceptTitle'),
-          content: this.$t('ConceptContent')
-        },
-        {
-          title: this.$t('IdeaTitle'),
-          content: this.$t('IdeaContent')
-        }
+        // {
+        //   title: this.$t('ConceptTitle'),
+        //   content: this.$t('ConceptContent')
+        // },
+        // {
+        //   title: this.$t('IdeaTitle'),
+        //   content: this.$t('IdeaContent')
+        // }
       ]
     }
   },
@@ -252,10 +252,10 @@ export default {
   }
   .input-box {
     position: relative;
-    height: 160px;
+    height: 60px;
     padding: 0 15px;
     margin-bottom: 15px;
-    border-top: 1px solid #ececec;
+    //border-top: 1px solid #ececec;
   }
   .stop {
     position: absolute;
