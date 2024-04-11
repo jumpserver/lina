@@ -46,6 +46,7 @@ export default {
             {
               name: 'AddAsset',
               title: this.$t('common.Add'),
+              type: 'primary',
               callback: function() {
                 this.AddAssetSetting.AddAssetDialogVisible = true
               }.bind(this)
