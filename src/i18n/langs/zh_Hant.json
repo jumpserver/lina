@@ -1198,7 +1198,8 @@
     "runSucceed": "任務執行成功",
     "EnterUploadPath": "輸入上傳路徑",
     "FileNameTooLong": "檔案名太長",
-    "StopJob": "停止作業"
+    "StopJob": "停止作業",
+    "StopLogOutput": "任務已取消：當前任務（currentTaskId）已被手動停止。由於每個任務的執行進度不同，以下是任務的最終執行結果。執行失敗表示任務已成功停止。"
   },
   "perms": {
     "": "",

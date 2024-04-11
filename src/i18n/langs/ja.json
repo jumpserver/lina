@@ -1207,7 +1207,8 @@
     "runSucceed": "タスクが成功しました",
     "EnterUploadPath": "アップロードパスを入力してください",
     "FileNameTooLong": "ファイル名が長すぎます",
-    "StopJob": "ジョブを停止"
+    "StopJob": "ジョブを停止",
+    "StopLogOutput": "Task Canceled：現在のタスク（currentTaskId）は手動で停止されました。各タスクの進行状況が異なるため、以下はタスクの最終実行結果です。実行が失敗した場合は、タスクが正常に停止されました。"
   },
   "perms": {
     "": "",
