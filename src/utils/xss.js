@@ -18,6 +18,7 @@ const options = {
     if (['src', 'href'].indexOf(name) !== -1) {
       return name + '=' + value.replace('javascript:', 'java:').replace('data:', 'dt:')
     }
+    return name + '="' + xss.escapeAttrValue(value) + '"'
   }
 }
 const filter = new xss.FilterXSS(options)
