@@ -456,6 +456,7 @@ export default {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
             this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+        this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
         console.log(e)
