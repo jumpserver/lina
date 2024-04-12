@@ -1,33 +1,36 @@
 <template>
-
-  <div class="chat">
-    <div class="container">
-      <div class="header">
-        <div class="left">
-          <img :src="robotUrl" alt="">
-          <span class="title">{{ title }}</span>
+  <DrawerPanel ref="drawer" :expanded="expanded" :height="height" :icon="robotUrl" :modal="false" @toggle="onToggle">
+    <div class="chat">
+      <div class="container">
+        <div class="header">
+          <div class="left">
+            <img :src="robotUrl" alt="">
+            <span class="title">{{ title }}</span>
+          </div>
+          <span class="new" @click="onNewChat">
+            <i class="el-icon-plus" />
+            <span>{{ $tc('NewChat') }}</span>
+          </span>
         </div>
-        <span class="new" @click="onNewChat">
-          <i class="el-icon-plus" />
-          <span>{{ $tc('NewChat') }}</span>
-        </span>
+        <div class="content">
+          <keep-alive>
+            <component :is="active" ref="component" :expanded="expanded" />
+          </keep-alive>
+        </div>
       </div>
-      <div class="content">
-        <keep-alive>
-          <component :is="active" ref="component" />
-        </keep-alive>
+      <div class="sidebar">
+        <Sidebar
+          :active.sync="active"
+          :expanded="expanded"
+          v-bind="$attrs"
+          @close="onClose"
+          @compress="compress"
+          @expand="expandFull"
+          v-on="$listeners"
+        />
       </div>
     </div>
-    <div class="sidebar">
-      <Sidebar
-        :active.sync="active"
-        :submenu="submenu"
-        v-bind="$attrs"
-        @close="onClose"
-        v-on="$listeners"
-      />
-    </div>
-  </div>
+  </DrawerPanel>
 </template>
 
 <script>
@@ -35,9 +38,11 @@ import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import { ws } from '@/utils/socket'
+import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 
 export default {
   components: {
+    DrawerPanel,
     Chat,
     Sidebar
   },
@@ -56,31 +61,31 @@ export default {
   data() {
     return {
       active: 'chat',
-      robotUrl: require('../../../assets/img/robot-assistant.png'),
-      submenu: [
-        {
-          name: 'chat',
-          label: this.$t('Chat'),
-          icon: 'chat'
-        }
-      ]
+      robotUrl: require('@/assets/img/robot-assistant.png'),
+      height: '400px',
+      expanded: false
     }
   },
   watch: {
-    drawerPanelVisible(value) {
-      if (value && !ws) {
-        this.initWebSocket()
-      }
-    }
+  },
+  mounted() {
   },
   methods: {
     initWebSocket() {
-      this.$refs.component?.init()
+      if (!ws) {
+        this.$refs.component?.init()
+      }
     },
     onClose() {
-      this.$parent.show = false
+      this.$refs.drawer.show = false
     },
     expandFull() {
+      this.height = '100%'
+      this.expanded = true
+    },
+    compress() {
+      this.height = '400px'
+      this.expanded = false
     },
     onNewChat() {
       this.active = 'chat'
@@ -88,6 +93,12 @@ export default {
         this.$refs.component?.onNewChat()
         getInputFocus()
       })
+    },
+    onToggle(status) {
+      this.initWebSocket()
+      if (status) {
+        getInputFocus()
+      }
     }
   }
 }

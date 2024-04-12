@@ -3,8 +3,11 @@
     <div class="close-sidebar">
       <i v-if="hasClose" class="el-icon-close" @click="onClose" />
     </div>
-    <div class="close-sidebar">
-      <i class="fa fa-arrows-v" style="font-weight: 200" @click="handleExpand" />
+    <div v-if="!expanded" class="close-sidebar">
+      <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
+    </div>
+    <div v-if="expanded" class="close-sidebar">
+      <i class="fa fa-compress" style="font-weight: 200" @click="$emit('compress')" />
     </div>
   </div>
 </template>
@@ -23,6 +26,10 @@ export default {
     submenu: {
       type: Array,
       default: () => []
+    },
+    expanded: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

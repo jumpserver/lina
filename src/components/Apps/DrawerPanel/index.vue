@@ -1,8 +1,8 @@
 <template>
   <div ref="drawer" :class="{show: show}" class="drawer">
     <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
-    <div :style="{'width': width}" class="drawer-panel">
-      <div v-show="!show" ref="dragBox" class="handle-button">
+    <div ref="panel" :style="{width: width, height: height }" class="drawer-panel">
+      <div ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
         <img v-else :src="icon" alt="">
       </div>
@@ -12,7 +12,6 @@
     </div>
   </div>
 </template>
-
 <script>
 
 export default {
@@ -26,6 +25,10 @@ export default {
       type: String,
       default: '440px'
     },
+    height: {
+      type: String,
+      default: '400px'
+    },
     modal: {
       type: Boolean,
       default: true
@@ -33,11 +36,16 @@ export default {
     clickNotClose: {
       type: Boolean,
       default: false
+    },
+    expanded: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      show: false
+      show: false,
+      clientOffset: {}
     }
   },
   watch: {
@@ -46,6 +54,14 @@ export default {
         this.addEventClick()
       }
       this.$emit('toggle', this.show)
+    },
+    expanded(value) {
+      if (value) {
+        this.$refs.panel.style.top = '0px'
+      } else {
+        this.$refs.panel.style.top = 'auto'
+        this.$refs.panel.style.bottom = '2px'
+      }
     }
   },
   mounted() {
@@ -58,45 +74,57 @@ export default {
     // window.removeEventListener('click', this.closeSidebar)
   },
   methods: {
+    onMoveMouseDown(event) {
+      const dragBox = this.$refs.dragBox
+      const vm = this
+      const rect = dragBox.getBoundingClientRect()
+      const parentRect = dragBox.parentElement.getBoundingClientRect()
+      const clientOffset = this.clientOffset
+      clientOffset.clientX = event.clientX
+      clientOffset.clientY = event.clientY
+      console.log('mouse down')
+
+      const handleOnMouseMove = _.debounce(function(event) {
+        console.log('On mouse move')
+        const diffY = rect.top - parentRect.top
+        const maxY = window.innerHeight - parentRect.height
+        let parentY = event.clientY - diffY
+        if (parentY < 0) {
+          parentY = 0
+        } else if (parentY > maxY) {
+          parentY = maxY
+        }
+        if (vm.$refs.panel) {
+          vm.$refs.panel.style.top = parentY + 'px'
+        }
+      })
+
+      document.onmousemove = handleOnMouseMove
+      document.onmouseup = function() {
+        console.log('On doc mouse up')
+        document.removeEventListener('mousemove', handleOnMouseMove)
+        setTimeout(() => {
+          document.onmousemove = null
+          document.onmouseup = null
+        }, 0)
+      }
+    },
+
+    handleMouseMoveUp(event) {
+      const clientOffset = this.clientOffset
+      const clientX = event.clientX
+      const clientY = event.clientY
+      console.log('Mouse up')
+      if (this.isDifferenceWithinThreshold(clientX, clientOffset.clientX) &&
+        this.isDifferenceWithinThreshold(clientY, clientOffset.clientY)) {
+        this.show = !this.show
+      }
+    },
     init() {
       this.$nextTick(() => {
         const dragBox = this.$refs.dragBox
-        const clientOffset = {}
-        dragBox.addEventListener('mousedown', (event) => {
-          const offsetX = dragBox.getBoundingClientRect().left
-          const offsetY = dragBox.getBoundingClientRect().top
-          const innerX = event.clientX - offsetX
-          const innerY = event.clientY - offsetY
-          clientOffset.clientX = event.clientX
-          clientOffset.clientY = event.clientY
-          document.onmousemove = function(event) {
-            dragBox.style.left = event.clientX - innerX + 'px'
-            dragBox.style.top = event.clientY - innerY + 'px'
-            const dragDivTop = window.innerHeight - dragBox.getBoundingClientRect().height
-            const dragDivLeft = window.innerWidth - dragBox.getBoundingClientRect().width
-            dragBox.style.left = dragDivLeft + 'px'
-            dragBox.style.left = '-48px'
-            if (dragBox.getBoundingClientRect().top <= 0) {
-              dragBox.style.top = '0px'
-            }
-            if (dragBox.getBoundingClientRect().top >= dragDivTop) {
-              dragBox.style.top = dragDivTop + 'px'
-            }
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          document.onmouseup = function() {
-            document.onmousemove = null
-            document.onmouseup = null
-          }
-        }, false)
-        dragBox.addEventListener('mouseup', (event) => {
-          const clientX = event.clientX
-          const clientY = event.clientY
-          if (this.isDifferenceWithinThreshold(clientX, clientOffset.clientX) && this.isDifferenceWithinThreshold(clientY, clientOffset.clientY)) {
-            this.show = !this.show
-          }
-        })
+        dragBox.addEventListener('mousedown', this.onMoveMouseDown, false)
+        dragBox.addEventListener('mouseup', this.handleMouseMoveUp, false)
       })
     },
     isDifferenceWithinThreshold(num1, num2, threshold = 5) {
@@ -134,11 +162,10 @@ export default {
 
 .drawer-panel {
   position: fixed;
-  bottom: 100px;
-  right: 1px;
+  bottom: 1px;
+  right: -1px;
   width: 100%;
   min-width: 260px;
-  height: 400px;
   user-select: none;
   transition: transform .25s cubic-bezier(.7, .3, .1, 1);
   box-shadow: 0 0 8px 4px #00000014;
@@ -190,19 +217,21 @@ export default {
   cursor: pointer;
 
   &:hover {
-    left: -50px !important;
+    left: -52px !important;
     width: 50px !important;
     transform: scale(1.06);
   }
   i {
     font-size: 20px;
     line-height: 45px;
+    pointer-events: none;
   }
   img {
     width: 22px;
     height: 22px;
     transform: translateY(10%);
     margin-left: 3px;
+    pointer-events: none;
   }
 }
 </style>

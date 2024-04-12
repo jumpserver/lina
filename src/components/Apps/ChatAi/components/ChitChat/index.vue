@@ -23,7 +23,7 @@
         size="small"
         @click="onStopHandle"
       >{{ $tc('Stop') }}</el-button>
-      <ChatInput ref="chatInput" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
+      <ChatInput ref="chatInput" :expanded="expanded" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
     </div>
   </div>
 </template>
@@ -52,6 +52,10 @@ export default {
     ChatMessage
   },
   props: {
+    expanded: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -60,14 +64,6 @@ export default {
       currentConversationId: '',
       showIntroduction: false,
       introduction: [
-        // {
-        //   title: this.$t('ConceptTitle'),
-        //   content: this.$t('ConceptContent')
-        // },
-        // {
-        //   title: this.$t('IdeaTitle'),
-        //   content: this.$t('IdeaContent')
-        // }
       ]
     }
   },
@@ -252,7 +248,7 @@ export default {
   }
   .input-box {
     position: relative;
-    height: 60px;
+    //height: 60px;
     padding: 0 15px;
     margin-bottom: 15px;
     //border-top: 1px solid #ececec;

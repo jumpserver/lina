@@ -5,7 +5,7 @@
         v-model="inputValue"
         :disabled="isLoading"
         :placeholder="$tc('InputMessage')"
-        :rows="2"
+        :rows="expanded ? 3 :2"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
@@ -24,6 +24,10 @@ const { setLoading } = useChat()
 export default {
   components: { },
   props: {
+    expanded: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
