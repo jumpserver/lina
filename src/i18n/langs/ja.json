@@ -130,7 +130,10 @@
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
     "VirtualAccounts": "仮想アカウント",
-    "AccountDeleteConfirmMsg": "アカウントを削除します，続行しますか？"
+    "AccountDeleteConfirmMsg": "アカウントを削除します，続行しますか？",
+    "Test": "テスト",
+    "QuickTest": "クイックテスト",
+    "BulkVerify": "一括接続性テスト"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
