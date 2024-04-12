@@ -130,7 +130,10 @@
     "AutoPush": "Auto Push",
     "GeneralAccounts": "General Accounts",
     "VirtualAccounts": "Virtual Accounts",
-    "AccountDeleteConfirmMsg": "Delete account, do you want to continue?"
+    "AccountDeleteConfirmMsg": "Delete account, do you want to continue?",
+    "Test": "Test",
+    "QuickTest": "Quick Test",
+    "BulkVerify": "Bulk Verify Connectivity"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
