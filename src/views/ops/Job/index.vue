@@ -117,13 +117,11 @@ export default {
           dropdown: [
             {
               name: 'adhoc',
-              title: this.$t('Command') + this.$t('Job'),
-              has: true
+              title: this.$t('Command')
             },
             {
               name: 'playbook',
-              title: 'Playbook' + this.$t('Job'),
-              has: true
+              title: 'Playbook'
             }
           ]
         }

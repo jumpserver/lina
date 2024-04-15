@@ -80,12 +80,15 @@ export default {
     window.refresh = this.refresh
     window.onSearch = this.onSearch
     this.initTree().then(() => {
-      setTimeout(() => this.updateTreeHeight(), 500)
+      this.$nextTick(() => {
+        this.updateTreeHeight()
+      })
     })
     window.addEventListener('resize', this.updateTreeHeight)
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
+    window.removeEventListener('resize', this.updateTreeHeight)
   },
   methods: {
     updateTreeHeight: _.debounce(function() {
@@ -93,17 +96,16 @@ export default {
       if (!tree) {
         return
       }
-      const dialogs = document.getElementsByClassName('el-dialog__body')
+      const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
-        const dialog = dialogs.find((d) => d.innerHtml.indexOf(this.iZTreeID) !== -1)
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.iZTreeID) !== -1) || dialogs[dialogs.length - 1]
         if (dialog) {
-          const dialogRect = dialog[dialog.length - 1].getBoundingClientRect()
+          const dialogRect = dialog.getBoundingClientRect()
           tree.style.height = `${dialogRect.height - 60}px`
           return
         }
       }
       const ztreeRect = tree.getBoundingClientRect()
-      this.$log.debug('tree rect: ', ztreeRect)
       tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px)`
     }, 100),
     async initTree(refresh = false) {

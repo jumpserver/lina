@@ -415,7 +415,7 @@ export function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
-const notUppercase = ['to', 'a', 'from']
+const notUppercase = ['to', 'a', 'from', 'by']
 
 export function toTitleCase(string) {
   if (!string) return string
