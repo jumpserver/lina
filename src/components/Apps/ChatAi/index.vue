@@ -2,7 +2,7 @@
   <DrawerPanel ref="drawer" :expanded="expanded" :height="height" :icon="robotUrl" :modal="false" @toggle="onToggle">
     <div class="chat">
       <div class="container">
-        <div class="header">
+        <div ref="header" class="header" @mousedown="handleMoveMouseDown" @mouseup="handleMouseMoveUp">
           <div class="left">
             <img :src="robotUrl" alt="">
             <span class="title">{{ title }}</span>
@@ -63,7 +63,8 @@ export default {
       active: 'chat',
       robotUrl: require('@/assets/img/robot-assistant.png'),
       height: '400px',
-      expanded: false
+      expanded: false,
+      clientOffset: {}
     }
   },
   watch: {
@@ -71,6 +72,13 @@ export default {
   mounted() {
   },
   methods: {
+    handleMoveMouseDown(event) {
+      console.log('Event: ', event)
+      this.$refs.drawer.handleHeaderMoveDown(event)
+    },
+    handleMouseMoveUp(event) {
+      this.$refs.drawer.handleHeaderMoveUp(event)
+    },
     initWebSocket() {
       if (!ws) {
         this.$refs.component?.init()

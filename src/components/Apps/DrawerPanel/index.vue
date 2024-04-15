@@ -74,7 +74,13 @@ export default {
     // window.removeEventListener('click', this.closeSidebar)
   },
   methods: {
-    onMoveMouseDown(event) {
+    handleHeaderMoveUp(event) {
+      this.handleMouseMoveUp(event)
+    },
+    handleHeaderMoveDown(event) {
+      this.handleMoveMouseDown(event, true)
+    },
+    handleMoveMouseDown(event, isHeader = false) {
       const dragBox = this.$refs.dragBox
       const vm = this
       const rect = dragBox.getBoundingClientRect()
@@ -82,13 +88,15 @@ export default {
       const clientOffset = this.clientOffset
       clientOffset.clientX = event.clientX
       clientOffset.clientY = event.clientY
-      console.log('mouse down')
 
       const handleOnMouseMove = _.debounce(function(event) {
-        console.log('On mouse move')
         const diffY = rect.top - parentRect.top
         const maxY = window.innerHeight - parentRect.height
         let parentY = event.clientY - diffY
+        // 这个是拖动的 header, 不是 bar
+        if (isHeader) {
+          parentY = event.clientY - rect.height / 2
+        }
         if (parentY < 0) {
           parentY = 0
         } else if (parentY > maxY) {
@@ -101,7 +109,6 @@ export default {
 
       document.onmousemove = handleOnMouseMove
       document.onmouseup = function() {
-        console.log('On doc mouse up')
         document.removeEventListener('mousemove', handleOnMouseMove)
         setTimeout(() => {
           document.onmousemove = null
@@ -114,7 +121,6 @@ export default {
       const clientOffset = this.clientOffset
       const clientX = event.clientX
       const clientY = event.clientY
-      console.log('Mouse up')
       if (this.isDifferenceWithinThreshold(clientX, clientOffset.clientX) &&
         this.isDifferenceWithinThreshold(clientY, clientOffset.clientY)) {
         this.show = !this.show
@@ -123,7 +129,7 @@ export default {
     init() {
       this.$nextTick(() => {
         const dragBox = this.$refs.dragBox
-        dragBox.addEventListener('mousedown', this.onMoveMouseDown, false)
+        dragBox.addEventListener('mousedown', this.handleMoveMouseDown, false)
         dragBox.addEventListener('mouseup', this.handleMouseMoveUp, false)
       })
     },
