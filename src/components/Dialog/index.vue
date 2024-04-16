@@ -92,7 +92,7 @@ export default {
 <style lang="scss" scoped>
   .dialog >>> .el-dialog {
     border-radius: 0.3em;
-    max-width: 1500px;
+    max-width: min(100vw, 1500px);
 
     .el-icon-circle-check {
       display: none;

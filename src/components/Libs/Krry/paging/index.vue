@@ -1,61 +1,69 @@
 <template>
   <div class="krry-main">
-    <krry-box
-      ref="noSelect"
-      :async="async"
-      :async-search-flag="asyncSearchFlag"
-      :data-show-list="notSelectDataList"
-      :filter-placeholder="filterPlaceholder[0] || $tc('common.Search')"
-      :filterable="filterable"
-      :highlight-color="highlightColor"
-      :is-highlight="isHighlight"
-      :is-last-page="isLastPage"
-      :operate-id="0"
-      :page-size="pageSize"
-      :page-texts="pageTexts"
-      :show-clear-btn="showClearBtn"
-      :title="boxTitle[0] || $tc('common.Selection')"
-      @check-district="noCheckSelect"
-      @search-word="searchWord"
-      @check-disable="checkDisable"
-      @get-data="getData"
-      @get-data-by-keyword="getDataByKeyword"
-      @clear-input="clearQueryInp('left')"
-    />
-    <div class="opera">
-      <el-button
-        :disabled="disablePre"
-        class="el-transfer__button"
-        icon="el-icon-arrow-left"
-        size="mini"
-        @click="deleteData"
-      />
-      <el-button
-        :disabled="disableNex"
-        class="el-transfer__button"
-        icon="el-icon-arrow-right"
-        size="mini"
-        type="primary"
-        @click="addData"
-      />
-    </div>
-    <krry-box
-      ref="hasSelect"
-      :data-show-list="checkedData"
-      :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
-      :filterable="filterable"
-      :highlight-color="highlightColor"
-      :is-highlight="isHighlight"
-      :operate-id="1"
-      :page-size="pageSize"
-      :page-texts="pageTexts"
-      :show-clear-btn="showClearBtn"
-      :title="boxTitle[1] || $tc('common.Selected')"
-      @check-district="hasCheckSelect"
-      @search-word="searchWord"
-      @check-disable="checkDisable"
-      @clear-input="clearQueryInp('right')"
-    />
+    <el-row :gutter="10">
+      <el-col :md="10" :sm="24">
+        <krry-box
+          ref="noSelect"
+          :async="async"
+          :async-search-flag="asyncSearchFlag"
+          :data-show-list="notSelectDataList"
+          :filter-placeholder="filterPlaceholder[0] || $tc('common.Search')"
+          :filterable="filterable"
+          :highlight-color="highlightColor"
+          :is-highlight="isHighlight"
+          :is-last-page="isLastPage"
+          :operate-id="0"
+          :page-size="pageSize"
+          :page-texts="pageTexts"
+          :show-clear-btn="showClearBtn"
+          :title="boxTitle[0] || $tc('common.Selection')"
+          @check-district="noCheckSelect"
+          @search-word="searchWord"
+          @check-disable="checkDisable"
+          @get-data="getData"
+          @get-data-by-keyword="getDataByKeyword"
+          @clear-input="clearQueryInp('left')"
+        />
+      </el-col>
+      <el-col :md="4" :sm="24" class="buttons">
+        <div class="opera">
+          <el-button
+            :disabled="disablePre"
+            class="el-transfer__button"
+            icon="el-icon-arrow-left"
+            size="mini"
+            @click="deleteData"
+          />
+          <el-button
+            :disabled="disableNex"
+            class="el-transfer__button"
+            icon="el-icon-arrow-right"
+            size="mini"
+            type="primary"
+            @click="addData"
+          />
+        </div>
+      </el-col>
+      <el-col :md="10" :sm="24">
+        <krry-box
+          ref="hasSelect"
+          :data-show-list="checkedData"
+          :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
+          :filterable="filterable"
+          :highlight-color="highlightColor"
+          :is-highlight="isHighlight"
+          :operate-id="1"
+          :page-size="pageSize"
+          :page-texts="pageTexts"
+          :show-clear-btn="showClearBtn"
+          :title="boxTitle[1] || $tc('common.Selected')"
+          @check-district="hasCheckSelect"
+          @search-word="searchWord"
+          @check-disable="checkDisable"
+          @clear-input="clearQueryInp('right')"
+        />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -189,7 +197,7 @@ export default {
     }
   },
   created() {
-    this.async ? this.getData(1) : this.initData()
+    this.async ? this.getData(1, true) : this.initData(true)
   },
   methods: {
     // 分页数据，初始化数据，过滤已选数据
@@ -370,7 +378,7 @@ export default {
         await this.getData(1)
       }
     },
-    async getData(pageIndex) {
+    async getData(pageIndex, changed = false) {
       this.$nextTick(() => {
         // 设置异步分页的 pageIndex
         this.$refs.noSelect.asyncPageIndex = pageIndex
@@ -383,7 +391,8 @@ export default {
       if (Array.isArray(resData) && resData.length) {
         this.asyncDataList = resData
         this.notSelectDataList = resData
-        this.initData(false)
+        // 这里必须是 true，否则右侧不能搜索, 一搜索确认就不行了
+        this.initData(changed)
         this.isLastPage = resData.length < this.pageSize
       } else {
         this.notSelectDataList = []
@@ -401,18 +410,23 @@ export default {
 .inner-center {
   margin: 0 5px;
 }
+
+.buttons {
+  vertical-align: middle;
+}
 .opera {
   position: relative;
   display: inline-block;
   vertical-align: middle;
-  margin: 0 8px;
+  text-align: center;
+  margin: 180px 8px;
+  width: 100%;
 
   .el-button.is-circle {
     border-radius: 50%;
     padding: 12px;
     display: block;
     margin: 25px auto;
-
   }
   .el-transfer__button {
     padding: 5px;
