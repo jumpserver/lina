@@ -7,12 +7,13 @@
       :confirm-title="$tc('assets.TestConnection')"
       :loading-status="testLoading"
       width="50"
+      @close="handleCancel()"
       @cancel="handleCancel()"
       @confirm="handleConfirm()"
     >
-      <el-form ref="regionFrom" label-width="auto" :model="account">
+      <el-form ref="regionForm" label-width="auto" :model="account">
         <el-form-item :label="$tc('xpack.Cloud.Region')" :rules="regionRules" prop="region">
-          <Select2 v-model="account.region" v-bind="select2" />
+          <Select2 ref="regionSelect" v-model="account.region" v-bind="select2" />
         </el-form-item>
       </el-form>
     </Dialog>
@@ -233,9 +234,10 @@ export default {
     },
     handleCancel() {
       this.visible = false
+      this.$refs.regionSelect.clearSelected()
     },
     handleConfirm() {
-      this.$refs.regionFrom.validate(valid => {
+      this.$refs.regionForm.validate(valid => {
         if (valid) {
           this.testLoading = true
           this.$axios.get(
