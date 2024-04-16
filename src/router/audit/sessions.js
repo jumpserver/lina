@@ -10,6 +10,7 @@ export default [
       title: i18n.t('Sessions'),
       app: 'terminal',
       resource: 'session',
+      expanded: true,
       permissions: ['terminal.view_session']
     },
     children: [
@@ -36,7 +37,7 @@ export default [
     name: 'CommandList',
     component: () => import('@/views/sessions/CommandList/index'),
     meta: {
-      title: i18n.t('Commands'),
+      title: i18n.t('SessionCommands'),
       permissions: ['terminal.view_command']
     }
   },

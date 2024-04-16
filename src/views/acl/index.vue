@@ -32,7 +32,7 @@ export default {
             display_name: this.$t('AssetAclList'),
             name: 'AssetAclList',
             comment: this.$t('AssetLoginACLHelpText'),
-            icon: 'connect',
+            icon: 'assets',
             tags: ['asset']
           },
           {

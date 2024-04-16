@@ -181,7 +181,7 @@ export default {
     text-align: center;
     padding: 5px 0;
     border: 1px solid #DCDFE6;
-    background-color: #FFFFFF;
+    background-color: #fff;
     border-radius: 3px;
     cursor: pointer;
     height: 30px;

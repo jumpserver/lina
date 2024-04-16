@@ -96,6 +96,7 @@ export default {
       if (!tree) {
         return
       }
+      // 使用 dialog 的高度
       const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
         const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.iZTreeID) !== -1) || dialogs[dialogs.length - 1]
@@ -105,7 +106,16 @@ export default {
           return
         }
       }
+      // 使用 table 的高度
       const ztreeRect = tree.getBoundingClientRect()
+      const table = document.getElementsByClassName('el-card table-content')
+      if (table.length > 0) {
+        const tableRect = table[0].getBoundingClientRect()
+        if (tableRect.height > 300) {
+          tree.style.height = `min(calc(100vh - ${ztreeRect.top}px - 30px), calc(${tableRect.height}px - 25px))`
+        }
+        return
+      }
       tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px)`
     }, 100),
     async initTree(refresh = false) {
@@ -447,7 +457,7 @@ div.rMenu li {
   >>> .ztree {
     overflow: auto;
     background-color: transparent;
-    height: calc(100vh - 40px);
+    height: 648px;
 
     .level0 .node_name {
       max-width: 120px;

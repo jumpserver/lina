@@ -9,7 +9,8 @@ export default [
     component: empty, // Parent router-view
     redirect: '',
     meta: {
-      permissions: ['users.view_user']
+      permissions: ['users.view_user'],
+      expanded: true
     },
     children: [
       {

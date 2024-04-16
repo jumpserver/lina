@@ -7,14 +7,21 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :class="{'submenu-title-noDropdown':!isNest}" :index="resolvePath(onlyOneChild.path)" class="submenu-item">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="getItemTitle(onlyOneChild)" />
+          <item :children="item.children" :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="getItemTitle(onlyOneChild)" />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" class="el-submenu-sidebar submenu-item" popper-append-to-body>
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      class="el-submenu-sidebar submenu-item"
+      default-active="1"
+      popper-append-to-body
+    >
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
+        <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -34,6 +41,7 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import { toSentenceCase, toTitleCase } from '@/utils/common'
 
 export default {
   name: 'SidebarItem',
@@ -80,7 +88,13 @@ export default {
       return true
     },
     getItemTitle(item) {
-      return item.meta.menuTitle || item.meta.title
+      let title = item.meta.menuTitle || item.meta.title
+      if (item.children) {
+        title = toTitleCase(title)
+      } else {
+        title = toSentenceCase(title)
+      }
+      return title
     },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {

@@ -39,15 +39,15 @@ export default {
           ]
         },
         columnsMeta: {
+          user: {
+            'min-width': '120px'
+          },
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false,
-              canUpdate: false,
               hasDelete: false,
-              canDelete: false,
               hasClone: false,
-              canClone: false,
               extraActions: [
                 {
                   name: 'View',

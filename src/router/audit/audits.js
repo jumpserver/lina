@@ -33,6 +33,16 @@ export default [
     ]
   },
   {
+    path: 'password-change-log',
+    name: 'PasswordChangeLog',
+    component: () => import('@/views/audits/PasswordChangeLogList'),
+    meta: {
+      title: i18n.t('UserPasswordChangeLog'),
+      menuTitle: i18n.t('PasswordChangeLog'),
+      permissions: ['audits.view_passwordchangelog']
+    }
+  },
+  {
     path: 'operate-logs',
     name: '',
     component: empty,
@@ -61,15 +71,6 @@ export default [
         }
       }
     ]
-  },
-  {
-    path: 'password-change-log',
-    name: 'PasswordChangeLog',
-    component: () => import('@/views/audits/PasswordChangeLogList'),
-    meta: {
-      title: i18n.t('PasswordChangeLog'),
-      permissions: ['audits.view_passwordchangelog']
-    }
   },
   {
     path: 'job-execution-log',

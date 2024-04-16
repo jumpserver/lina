@@ -1,5 +1,4 @@
 <script>
-import { toTitleCase } from '@/utils/common'
 
 export default {
   name: 'MenuItem',
@@ -23,8 +22,7 @@ export default {
     }
 
     if (title) {
-      const iTitle = toTitleCase(title)
-      vNodes.push(<span slot='title'>{iTitle}</span>)
+      vNodes.push(<span slot='title'>{title}</span>)
     }
     return vNodes
   }
