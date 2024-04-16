@@ -57,7 +57,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
 import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
-import { createJob, StopJob, getJob, getTaskDetail } from '@/api/ops'
+import { createJob, getJob, getTaskDetail, StopJob } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -459,7 +459,7 @@ export default {
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
-        console.log(e)
+        this.$log.error(e)
       }).finally(() => {
         this.setBtn()
       })

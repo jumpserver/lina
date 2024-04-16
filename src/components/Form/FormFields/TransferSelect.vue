@@ -11,9 +11,10 @@
     />
     <Dialog
       v-if="showTransfer"
+      :close-on-click-modal="false"
       :title="label"
       :visible.sync="showTransfer"
-      :close-on-click-modal="false"
+      class="the-dialog"
       width="730px"
       @cancel="handleTransCancel"
       @confirm="handleTransConfirm"
@@ -154,7 +155,7 @@ export default {
       this.showTransfer = false
     },
     handleTransConfirm() {
-      const selectedData = this.$refs.pageTransfer.checkedData
+      const selectedData = this.$refs.pageTransfer.selectListCheck
       const options = selectedData.map(item => {
         return { value: item.id, label: item.label }
       })
