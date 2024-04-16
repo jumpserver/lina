@@ -91,7 +91,7 @@ export default {
       let treeUrl
       this.loading = true
       if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
-        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
+          this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
         treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
           ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
@@ -429,6 +429,13 @@ div.rMenu li {
     overflow: auto;
     background-color: transparent;
     height: calc(100vh - 237px);
+
+    .level0 .node_name {
+      max-width: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: inline-block;
+    }
 
     li {
       background-color: transparent !important;
