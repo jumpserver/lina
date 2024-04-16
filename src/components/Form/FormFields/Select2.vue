@@ -359,7 +359,7 @@ export default {
       })
     },
     clearSelected() {
-      this.iValue = []
+      this.iValue = this.multiple ? [] : ''
     },
     checkDisabled(item) {
       return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
