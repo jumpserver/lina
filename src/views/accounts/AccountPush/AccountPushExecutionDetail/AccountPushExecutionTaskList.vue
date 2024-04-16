@@ -34,7 +34,7 @@ export default {
       secretUrl: '',
       showViewSecretDialog: false,
       tableConfig: {
-        url: `/api/v1/accounts/push-account-records/?execution=${this.object.id}`,
+        url: `/api/v1/accounts/push-account-records/?execution_id=${this.object.id}`,
         columns: [
           'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
         ],
