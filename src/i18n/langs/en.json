@@ -2272,6 +2272,8 @@
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
       "IsAlwaysUpdate": "Keep assets up to date",
       "FullySynchronous": "Assets fully synchronized",
+      "ReleaseAssets": "Release assets",
+      "ReleaseAssetsHelpTips": "Whether to automatically delete assets synchronized through this task and released on the cloud at the end of the task",
       "AccountCreate": "Create account",
       "AccountList": "Account list",
       "AccountUpdate": "Update account",

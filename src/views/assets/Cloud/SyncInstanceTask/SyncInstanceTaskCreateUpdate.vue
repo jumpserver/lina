@@ -26,7 +26,7 @@ export default {
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
         [this.$t('xpack.Cloud.SaveSetting'), [
           'hostname_strategy', 'ip_network_segment_group',
-          'sync_ip_type', 'is_always_update', 'fully_synchronous'
+          'sync_ip_type', 'is_always_update', 'fully_synchronous', 'release_assets'
         ]],
         [this.$t('xpack.Cloud.SyncStrategy'), ['strategy']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
@@ -67,6 +67,11 @@ export default {
           type: 'switch',
           label: this.$t('xpack.Cloud.FullySynchronous'),
           helpTips: this.$t('xpack.Cloud.FullySynchronousHelpTips')
+        },
+        release_assets: {
+          type: 'switch',
+          label: this.$t('xpack.Cloud.ReleaseAssets'),
+          helpTips: this.$t('xpack.Cloud.ReleaseAssetsHelpTips')
         },
         regions: {
           component: Select2,
