@@ -421,6 +421,10 @@ export default {
   text-align: center;
   margin: 180px 8px;
   width: 100%;
+  @media screen and (max-width: 992px) {
+    margin: 8px 8px;
+    text-align:start
+  }
 
   .el-button.is-circle {
     border-radius: 50%;
