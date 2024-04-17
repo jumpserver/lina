@@ -527,6 +527,17 @@ export default {
 .tree-box {
   margin-right: 2px;
   border: 1px solid #e0e0e0;
+
+  > > > .ztree {
+    .level0 {
+      .node_name {
+        max-width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .output {
