@@ -1,26 +1,23 @@
 <template>
-  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
+  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title">
-        <span v-show="!isCollapse" style="margin-left: 5px;">
-          {{ isRouteMeta.title || '' }}
-        </span>
-
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
             placement="right-start"
             trigger="hover"
-            width="160"
           >
+            <span slot="reference" style="width: 100%">
+              <span v-show="!isCollapse" style="margin-left: 5px;">
+                {{ isRouteMeta.title || '' }}
+              </span>
+              <svg-icon class="icon" icon-class="switch" />
+            </span>
             <ViewSwitcher mode="vertical" @view-change="handleViewChange" />
-            <svg-icon slot="reference" class="icon" icon-class="switch" />
           </el-popover>
-        </span>
-        <span class="switch-view show-switch-view">
-          <svg-icon class="icon" icon-class="switch" @click="toggleSwitch" />
         </span>
       </div>
     </div>
@@ -179,11 +176,19 @@ export default {
     text-align: center;
   }
 
+  .collapsed {
+    text-align: left;
+    .nav-title {
+     .switch-view .icon {
+        margin-left: 0;
+      }
+    }
+  }
+
   .nav-title {
-    position: relative;
     box-sizing: border-box;
-    height: 50px;
-    padding: 14px 0 13px 20px;
+    height: 48px;
+    padding: 14px;
     font-size: 16px;
     font-weight: 500;
     color: #1F2329;
@@ -195,19 +200,14 @@ export default {
 
     .switch-view {
       padding: 6px;
-      position: absolute;
-      top: 50%;
       right: 16px;
       transform: translateY(-50%);
       z-index: 1;
       line-height: 10px;
       border-radius: 3px;
 
-      &:hover {
-        background: var(--menu-hover) !important;
-      }
-
       .icon {
+        margin-left: 60px;
         margin-right: 0 !important;
 
         &:hover {
@@ -215,14 +215,6 @@ export default {
         }
       }
     }
-
-    .active-switch-view {
-      display: inline-block;
-    }
-  }
-
-  .collapsed {
-    text-align: left;
   }
 
   .organizations {
@@ -284,7 +276,7 @@ export default {
     & >>> .organization {
       height: $mobileHeight;
       line-height: $mobileHeight;
-      padding-left: 8px;
+      padding-left: 20px;
       background: transparent;
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
@@ -317,7 +309,6 @@ export default {
       display: block;
     }
     .active-switch-view {
-      display: none!important;
     }
     .show-switch-view {
       display: block!important;

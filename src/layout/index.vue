@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { NavHeader, NavLeft, AppMain } from './components'
+import { AppMain, NavHeader, NavLeft } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -92,6 +92,7 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+
   @media print {
     .disabled-when-print{
       display: none;
@@ -112,8 +113,6 @@ export default {
     //.fixed-header{
     //  width: 100% !important;
     //}
-    //.hideSidebar .fixed-header{
-    //  width: 100% !important;
-    //}
+
   }
 </style>
