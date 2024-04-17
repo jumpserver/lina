@@ -63,6 +63,7 @@ export default {
 
       let userActive = loginUserCountDecimal.dividedBy(userCountDecimal).times(100)
       userActive = isNaN(userActive) ? 0 : userActive
+      userActive = userActive.toFixed(2)
       const userTotal = userActive === 100 ? 0 : 100 - userActive
       const users = [
         { name: this.$t('dashboard.ActiveUser'), value: userActive.toString() },
@@ -78,6 +79,7 @@ export default {
 
       let assetActive = ActiveAssetCountDecimal.dividedBy(AssetCountDecimal).times(100)
       assetActive = isNaN(assetActive) ? 0 : assetActive
+      assetActive = assetActive.toFixed(2)
       const assetTotal = assetActive === 100 ? 0 : 100 - assetActive
       const assets = [
         { name: this.$t('dashboard.ActiveAsset'), value: assetActive.toString() },

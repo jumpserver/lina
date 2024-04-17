@@ -36,6 +36,7 @@ export default {
 
       let percentage = activeDecimal.dividedBy(totalDecimal).times(100)
       percentage = isNaN(percentage) ? 0 : percentage
+      percentage = percentage.toFixed(2)
       return {
         title: [
           {
