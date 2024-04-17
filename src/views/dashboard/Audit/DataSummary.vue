@@ -82,6 +82,7 @@ export default {
 
       let LoginSucceeded = userLoginSuccessCountDecimal.dividedBy(userLoginCountDecimal).times(100)
       LoginSucceeded = isNaN(LoginSucceeded) ? 0 : LoginSucceeded
+      LoginSucceeded = LoginSucceeded.toFixed(2)
       const LoginFailed = LoginSucceeded === 100 ? 0 : 100 - LoginSucceeded
       const logs = [
         { name: this.$t('dashboard.LoginSucceeded'), value: LoginSucceeded.toString() },
@@ -97,6 +98,7 @@ export default {
 
       let dangerCommand = dangerCommandCountDecimal.dividedBy(commandCountDecimal).times(100)
       dangerCommand = isNaN(dangerCommand) ? 0 : dangerCommand
+      dangerCommand = dangerCommand.toFixed(2)
       const SafeCommand = dangerCommand === 100 ? 0 : 100 - dangerCommand
       const commandCounts = [
         { name: this.$t('dashboard.DangerCommand'), value: dangerCommand.toString() },
