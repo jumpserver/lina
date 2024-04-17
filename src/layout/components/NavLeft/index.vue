@@ -15,7 +15,7 @@
             trigger="hover"
             width="160"
           >
-            <ViewSwitcher mode="vertical" />
+            <ViewSwitcher mode="vertical" @view-change="handleViewChange" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
           </el-popover>
         </span>
@@ -125,6 +125,7 @@ export default {
   },
   mounted() {
     this.setViewIconAttention()
+    this.setLeastMenuOpen()
   },
   methods: {
     toggleSideBar() {
@@ -133,14 +134,29 @@ export default {
     toggleSwitch() {
       this.viewShown = true
     },
+    handleViewChange() {
+      setTimeout(() => {
+        this.setLeastMenuOpen()
+      }, 500)
+    },
+    setLeastMenuOpen() {
+      const hasOpened = document.querySelector('.el-submenu-sidebar.submenu-item.el-submenu.is-opened')
+      if (hasOpened) {
+        return
+      }
+      const el = document.querySelector('.el-submenu__title')
+      if (el) {
+        el.click()
+      }
+    },
     setViewIconAttention() {
       const t = setInterval(() => {
-        this.switchViewOtherClasses = this.switchViewOtherClasses ? '' : 'hover-switch-view'
+        this.switchViewOtherClasses = 'hover-switch-view'
       }, 1000)
       setTimeout(() => {
         clearInterval(t)
         this.switchViewOtherClasses = ''
-      }, 2000)
+      }, 3000)
     }
   }
 }
@@ -160,6 +176,7 @@ export default {
   .hover-switch-view {
     background: var(--menu-hover) !important;
     color: var(--color-primary);
+    text-align: center;
   }
 
   .nav-title {

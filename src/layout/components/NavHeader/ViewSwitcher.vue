@@ -114,6 +114,7 @@ export default {
         this.iShowTip = false
       }
       this.$router.push(routeName)
+      this.$emit('view-change', routeName)
     }
   }
 }
