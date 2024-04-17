@@ -179,6 +179,9 @@ export default {
   .collapsed {
     text-align: left;
     .nav-title {
+      &:hover {
+        background-color: var(--menu-hover);
+      }
      .switch-view .icon {
         margin-left: 0;
       }

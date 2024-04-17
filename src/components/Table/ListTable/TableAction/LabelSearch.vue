@@ -7,7 +7,6 @@
       @click="showSearchSelect"
     >
       <svg-icon icon-class="tag" />
-      <span style="padding-left: 2px">{{ $t('Label') }}</span>
     </el-button>
     <el-cascader
       v-else

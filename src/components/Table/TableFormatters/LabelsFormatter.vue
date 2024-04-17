@@ -12,6 +12,7 @@
           :key="label"
         >
           <el-tag
+            :title="getKey(label) + getValue(label)"
             :type="getLabelType(label)"
             class="tag-formatter"
             disable-transitions
@@ -255,6 +256,10 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   //display: table;
 }
 

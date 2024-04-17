@@ -112,8 +112,9 @@ export default {
             prop: 'actions',
             label: i18n.t('Actions'),
             align: 'center',
-            width: '150px',
+            width: '100px',
             formatter: ActionsFormatter,
+            fixed: 'right',
             formatterArgs: {}
           }
           break
@@ -144,6 +145,7 @@ export default {
           break
         case 'labels':
           col.formatter = LabelsFormatter
+          col.width = '200px'
           break
         case 'comment':
           col.showOverflowTooltip = true

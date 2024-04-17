@@ -2,7 +2,7 @@
   <div ref="drawer" :class="{show: show}" class="drawer">
     <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
     <div ref="panel" :style="{width: width, height: height }" class="drawer-panel">
-      <div ref="dragBox" class="handle-button">
+      <div v-show="!show" ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
         <img v-else :src="icon" alt="">
       </div>
