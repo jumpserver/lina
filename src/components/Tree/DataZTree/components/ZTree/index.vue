@@ -430,13 +430,6 @@ div.rMenu li {
     background-color: transparent;
     height: calc(100vh - 237px);
 
-    .level0 .node_name {
-      max-width: 100px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: inline-block;
-    }
-
     li {
       background-color: transparent !important;
 
