@@ -5,7 +5,7 @@
     trigger="click"
     @show="getAsyncItems"
   >
-    <div>
+    <div class="detail-content">
       <div v-for="account of accountData" :key="account.id" class="detail-item">
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
@@ -45,6 +45,11 @@ export default {
 </script>
 
 <style scoped>
+.detail-content {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
 .detail-item {
   border-bottom: 1px solid #EBEEF5;
   padding: 5px 0;
