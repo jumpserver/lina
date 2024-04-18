@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountName": "Account name",
     "AccountBatchUpdate": "Batch update(same type)",
     "SuFrom": "Su from",
     "GenerateSuccessMsg": "Accounts generated successfully",
@@ -32,6 +33,8 @@
       "AccountGatherList": "Gather task"
     },
     "AccountChangeSecret": {
+      "OldSecret": "Old secret",
+      "NewSecret": "New secret",
       "Result": "Result",
       "ParamsHelpText": "The change secret parameter settings are currently only effective for assets with a platform type of host.",
       "ExecutionTimes": "Execution times",
@@ -78,6 +81,7 @@
       "ExecutionDetail": "Execution detail",
       "Name": "Name",
       "Retry": "Retry",
+      "BatchRetry": "Batch retry",
       "Timer": "Timed execution",
       "Detail": "Detail",
       "TimeDelta": "Time delta",
@@ -126,7 +130,10 @@
     "AutoPush": "Auto Push",
     "GeneralAccounts": "General Accounts",
     "VirtualAccounts": "Virtual Accounts",
-    "AccountDeleteConfirmMsg": "Delete account, do you want to continue?"
+    "AccountDeleteConfirmMsg": "Delete account, do you want to continue?",
+    "Test": "Test",
+    "QuickTest": "Quick Test",
+    "BulkVerify": "Bulk Verify Connectivity"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "You can control whether commands can be executed on assets. Based on the rules, certain commands can be allowed while others are prohibited.",
@@ -256,6 +263,7 @@
     "SecretType": "Secret type",
     "PrivilegedTemplate": "Privileged",
     "InitialDeploy": "Initial deploy",
+    "OnlyInitialDeploy": "Initial Setup",
     "Address": "Address",
     "PrivateKey": "Private key",
     "Secret": "Secret",
@@ -477,7 +485,11 @@
     "WebUpdate": "Update asset - Web",
     "DatabaseUpdate": "Update asset - Database",
     "GPTCreate": "Create asset - GPT",
-    "AppletHostDomainHelpText": "These domains are in System Organization"
+    "AppletHostDomainHelpText": "These domains are in System Organization",
+    "OracleDBNameHelpText": "Tips: Enter the Oracle database's SID or Service Name",
+    "Remove": "Remove",
+    "AddGatewayInDomain": "Add gateway",
+    "AddAssetInDomain": "Add asset"
   },
   "audits": {
     "ChangeField": "Change field",
@@ -555,6 +567,7 @@
     "Automations": "Automation",
     "Sync": "Sync",
     "Deploy": "Deploy",
+    "Uninstall": "Uninstall",
     "Detail": "Detail",
     "Selector": "Selector",
     "NoContent": "No content",
@@ -1199,7 +1212,8 @@
     "runSucceed": "Task executed successfully",
     "EnterUploadPath": "Enter the upload path",
     "FileNameTooLong": "File name too long",
-    "StopJob": "Stop job"
+    "StopJob": "Stop job",
+    "StopLogOutput": "Task Canceled: The current task (currentTaskId) has been manually stopped. Since the progress of each task varies, the following is the final execution result of the task. A failed execution indicates that the task has been successfully stopped."
   },
   "perms": {
     "": "",
@@ -1477,7 +1491,7 @@
     "TicketsDone": "Ticket Done",
     "TemplateUpdate": "Update template",
     "Session": "Session",
-    "Templates": "模版管理",
+    "Templates": "Templates",
     "AssetUserList": "Asset user",
     "UserLoginACLUpdate": "Update User Login ACL",
     "JobCreate": "Create job",
@@ -1986,6 +2000,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "OrgsAndRoles": "Organizations and roles",
     "LunaSettingUpdate": "Luna setting",
     "KokoSettingUpdate": "Koko setting",
     "UserSetting": "User setting",
@@ -2018,6 +2033,7 @@
     "setWeCom": "Set wecom login",
     "setDingTalk": "Set dingtalk login",
     "setFeiShu": "Set feishu login",
+    "setLark": "Set lark login",
     "setSlack": "Set Slack login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
@@ -2241,6 +2257,7 @@
       "ZStack": "ZStack",
       "GCP": "Google Cloud Platform",
       "UCloud": "UCloud Platform",
+      "Volcengine": "Volcengine",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
@@ -2394,7 +2411,7 @@
     "Template": {
       "Template": "Template"
     },
-    "Beian": "Registration"
+    "Footer": "Footer"
   },
   "applets": {
     "PublishStatus": "Publish status",

@@ -4,7 +4,6 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/Table/ListTable'
-import { timeOffset } from '@/utils/common'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
@@ -38,7 +37,7 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columnsExtra: ['index', 'duration'],
+        columnsExtra: ['index'],
         columnsExclude: ['terminal'],
         columnsShow: this.columnsShow,
         columnsMeta: {
@@ -133,10 +132,6 @@ export default {
             width: '150px'
           },
           duration: {
-            label: this.$t('sessions.duration'),
-            formatter: function(row) {
-              return timeOffset(row.date_start, row.date_end)
-            },
             width: '80px'
           },
           is_locked: {
