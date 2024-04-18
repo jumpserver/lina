@@ -91,7 +91,7 @@ export default {
       let treeUrl
       this.loading = true
       if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
-        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
+          this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
         treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
           ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
@@ -162,6 +162,7 @@ export default {
         </span>`
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
+        $rootNodeRef.css({ 'width': 'calc(100% - 68px)', 'overflow': 'hidden', 'text-overflow': 'ellipsis' })
         $rootNodeRef.after(icons)
       }
     },
@@ -390,6 +391,8 @@ div.rMenu li {
   text-shadow: none;
   top: 100%;
   z-index: 1000;
+  height: 300px;
+  overflow: auto;
 }
 
 .ztree ::v-deep .fa {

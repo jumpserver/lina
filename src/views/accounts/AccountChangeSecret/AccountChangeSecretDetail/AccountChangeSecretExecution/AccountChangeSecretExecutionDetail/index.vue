@@ -9,13 +9,13 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import AccountChangeSecretExecutionInfo from './AccountChangeSecretExecutionInfo'
-import AccountChangeSecretExecutionTaskList from './AccountChangeSecretExecutionTaskList'
+import AccountChangeSecretRecord from './AccountChangeSecretRecord'
 
 export default {
   components: {
     GenericDetailPage,
     AccountChangeSecretExecutionInfo,
-    AccountChangeSecretExecutionTaskList
+    AccountChangeSecretRecord
   },
   data() {
     return {
@@ -35,7 +35,7 @@ export default {
           },
           {
             title: this.$t('accounts.AccountChangeSecret.TaskList'),
-            name: 'AccountChangeSecretExecutionTaskList',
+            name: 'AccountChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],

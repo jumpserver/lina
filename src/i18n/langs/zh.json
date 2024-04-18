@@ -1,5 +1,6 @@
 {
   "accounts": {
+    "AccountName": "账号名称",
     "AccountBatchUpdate": "批量更新(同类型)",
     "BulkVerify": "批量测试可连接性",
     "Test": "测试",
@@ -10,7 +11,7 @@
     "Accounts": "账号",
     "SuFrom": "切换自",
     "SelectAccount": "选择账号",
-    "AccountTemplateUpdateSecretHelpText": "账号列表展示通过模版创建的账号。更新密文时，会更新通过模版所创建账号的密文。",
+    "AccountTemplateUpdateSecretHelpText": "账号列表展示通过模板创建的账号。更新密文时，会更新通过模板所创建账号的密文。",
     "GenerateSuccessMsg": "账号生成成功",
     "GenerateAccounts": "重新生成账号",
     "UpdateSecret": "更新密文",
@@ -21,7 +22,7 @@
     "AddAccountResult": "账号批量添加结果",
     "AccountPolicy": "账号策略",
     "BulkCreateStrategy": "创建时对于不符合要求的账号，如：密钥类型不合规，唯一键约束，可选择以上策略。",
-    "AccountTemplate": "账号模版",
+    "AccountTemplate": "账号模板",
     "HistoryDate": "日期",
     "SameTypeAccountTip": "相同用户名、密钥类型的账号已存在",
     "TaskID": "任务 ID",
@@ -58,6 +59,8 @@
       "RecipientServer": "接收服务器"
     },
     "AccountChangeSecret": {
+      "OldSecret": "原密钥",
+      "NewSecret": "新密钥",
       "PasswordRule": "密码生成规则",
       "ParamsHelpText": "改密参数设置，目前仅对平台种类为主机的资产生效。",
       "ContainAttachment": "含附件",
@@ -110,6 +113,7 @@
       "RegularlyPerform": "定期执行",
       "Result": "结果",
       "Retry": "重试",
+      "BatchRetry": "批量重试",
       "Success": "成功",
       "TaskList": "任务记录",
       "TimeDelta": "运行时间",
@@ -276,11 +280,12 @@
     "Category": "类别",
     "AccountDetail": "账号详情",
     "Accounts": "账号列表",
-    "SelectTemplate": "选择模版",
+    "SelectTemplate": "选择模板",
     "InAssetDetail": "在资产详情中更新账号信息",
     "SecretType": "密文类型",
     "PrivilegedTemplate": "特权的",
-    "InitialDeploy": "初始化部署",
+    "InitialDeploy": "初始化安装部署",
+    "OnlyInitialDeploy": "仅初始化配置",
     "Address": "地址",
     "PrivateKey": "密钥",
     "Secret": "密码",
@@ -469,7 +474,11 @@
     "NoSQLProtocol": "非关系数据库",
     "OtherProtocol": "其它协议",
     "PasswordOrToken": "密码 / 令牌",
-    "AppletHostDomainHelpText": "这里的网域属于 System 组织"
+    "AppletHostDomainHelpText": "这里的网域属于 System 组织",
+    "OracleDBNameHelpText": "提示：填写 Oracle 数据库的SID或服务名称（Service Name）",
+    "Remove": "移除",
+    "AddGatewayInDomain": "添加网关",
+    "AddAssetInDomain": "添加资产"
   },
   "audits": {
     "ChangeField": "变更字段",
@@ -593,6 +602,7 @@
     "Automations": "自动化",
     "Sync": "同步",
     "Deploy": "部署",
+    "Uninstall": "卸载",
     "Detail": "详情",
     "Selector": "选择器",
     "NoContent": "暂无内容",
@@ -650,8 +660,8 @@
     "actionsTips": "各个权限作用协议不尽相同，点击权限后面的图标查看",
     "TableColSettingInfo": "请选择您想显示的列表详细信息。",
     "Add": "添加",
-    "TemplateAdd": "模版添加",
-    "TemplateHelpText": "选择模版添加时，会自动创建资产下不存在的账号并推送",
+    "TemplateAdd": "模板添加",
+    "TemplateHelpText": "选择模板添加时，会自动创建资产下不存在的账号并推送",
     "Task": "任务",
     "UpdateAssetDetail": "配置更多信息",
     "AddSuccessMsg": "添加成功",
@@ -1188,7 +1198,8 @@
     "runSucceed": "任务执行成功",
     "EnterUploadPath": "输入上传路径",
     "FileNameTooLong": "文件名太长",
-    "StopJob": "停止作业"
+    "StopJob": "停止作业",
+    "StopLogOutput": "Task Canceled：当前任务(currentTaskId)已手动停止，由于每个任务的执行进度不一样，下面是任务最终的执行结果，执行失败表示已成功停止任务执行。"
   },
   "perms": {
     "": "",
@@ -1319,9 +1330,9 @@
     "Accounts": "账号管理",
     "AssetAccount": "账号列表",
     "AssetAccountDetail": "账号详情",
-    "AccountTemplate": "账号模版",
-    "CreateAccountTemplate": "创建账号模版",
-    "UpdateAccountTemplate": "更新账号模版",
+    "AccountTemplate": "账号模板",
+    "CreateAccountTemplate": "创建账号模板",
+    "UpdateAccountTemplate": "更新账号模板",
     "AssetHistoryAccount": "资产历史账号",
     "ApplicationAccount": "应用账号",
     "Ticket": "工单",
@@ -1354,7 +1365,7 @@
     "BatchCommand": "批量命令",
     "BatchScript": "批量脚本",
     "Execution": "执行历史",
-    "Template": "模版管理",
+    "Template": "模板管理",
     "TicketsTodo": "待办工单",
     "TicketsDone": "已办工单",
     "TicketsNew": "提交工单",
@@ -1470,10 +1481,10 @@
     "TicketDetail": "工单详情",
     "TicketCreate": "创建工单",
     "Tickets": "工单列表",
-    "Templates": "模版管理",
-    "TemplateDetail": "模版详情",
-    "TemplateCreate": "创建模版",
-    "TemplateUpdate": "更新模版",
+    "Templates": "模板管理",
+    "TemplateDetail": "模板详情",
+    "TemplateCreate": "创建模板",
+    "TemplateUpdate": "更新模板",
     "UserCreate": "创建用户",
     "UserDetail": "用户详情",
     "UserFirstLogin": "首次登录",
@@ -1971,6 +1982,7 @@
     "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey"
   },
   "users": {
+    "OrgsAndRoles": "组织和角色",
     "LunaSettingUpdate": "Luna 配置设置",
     "KokoSettingUpdate": "Koko 配置设置",
     "UserSetting": "偏好设置",
@@ -2019,7 +2031,8 @@
     "setWeCom": "设置企业微信认证",
     "setDingTalk": "设置钉钉认证",
     "setFeiShu": "设置飞书认证",
-    "setSlack": "设置Slack认证",
+    "setLark": "设置 Lark 认证",
+    "setSlack": "设置 Slack 认证",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "启用多因子认证，使账号更加安全。<br/> 启用之后您将会在下次登录时进入多因子认证绑定流程；您也可以在（个人信息->快速修改->更改多因子设置）中直接绑定！",
       "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）<br/> 邮箱、手机号、微信等个人信息，仅作为用户认证和平台内部消息通知使用。",
@@ -2158,6 +2171,7 @@
       "ZStack": "ZStack",
       "GCP": "谷歌云",
       "UCloud": "UCloud优刻得",
+      "Volcengine": "火山引擎",
       "FC": "Fusion Compute",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
@@ -2219,7 +2233,7 @@
       "DeleteReleasedAssets": "删除已释放资产"
     },
     "Template": {
-      "Template": "模版管理"
+      "Template": "模板管理"
     },
     "Corporation": "公司",
     "Edition": "版本",
@@ -2297,6 +2311,6 @@
       "IntervalOfCreateUpdatePage": "单位：时",
       "UsernameOfCreateUpdatePage": "目标主机上用户的用户名；如果已️存在，修改用户密码；如果不存在，添加用户并设置密码；"
     },
-    "Beian": "备案"
+    "Footer": "页脚"
   }
 }

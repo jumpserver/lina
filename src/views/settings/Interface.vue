@@ -65,6 +65,7 @@ import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { getInterfaceInfo, previewThemes, restoreInterface, updateInterface } from '@/api/interface'
+import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
   name: 'InterfaceSettings',
@@ -87,7 +88,7 @@ export default {
         [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
         [this.$t('xpack.Images'), ['login_image']],
-        [this.$t('xpack.Beian'), ['beian_link', 'beian_text']]
+        [this.$t('xpack.Footer'), ['footer_content']]
       ],
       fieldsMeta: {
         login_title: {
@@ -140,7 +141,8 @@ export default {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoIndexTip')
+            tip: this.$t('xpack.logoIndexTip'),
+            showBG: true
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -161,6 +163,13 @@ export default {
             fileChange: ([value], updateForm) => {
               this.files['logo_logout'] = value
             }
+          }
+        },
+        footer_content: {
+          component: MarkDown,
+          el: {
+            preview: true,
+            rows: 5
           }
         }
       },

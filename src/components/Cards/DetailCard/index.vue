@@ -1,7 +1,7 @@
 <template>
   <IBox :fa="fa" :title="title">
     <el-form class="content" label-position="left" label-width="25%">
-      <el-form-item v-for="item in items" :key="item.key" :label="item.key">
+      <el-form-item v-for="item in iItems" :key="item.key" :label="item.key">
         <ItemValue :value="item.value" class="item-value" v-bind="item" />
       </el-form-item>
     </el-form>
@@ -34,6 +34,13 @@ export default {
     align: {
       type: String,
       default: 'left'
+    }
+  },
+  data() {
+    return {
+      iItems: this.items.filter(item => {
+        return !item.hasOwnProperty('has') || item.has === true
+      })
     }
   }
 }

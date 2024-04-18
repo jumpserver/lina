@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountName": "Account name",
     "AccountBatchUpdate": "ロット更新(同じタイプです)",
     "Accounts": "アカウント",
     "SuFrom": "から",
@@ -32,6 +33,8 @@
       "AccountGatherList": "収集タスク"
     },
     "AccountChangeSecret": {
+      "OldSecret": "古い秘密",
+      "NewSecret": "新しい秘密",
       "Result": "結果",
       "ParamsHelpText": "改密パラメータの設定は、プラットフォームの種類がホストである資産に対してのみ有効です。",
       "ExecutionTimes": "実行時間",
@@ -78,6 +81,7 @@
       "ExecutionDetail": "実行の詳細",
       "Name": "名前",
       "Retry": "リトライ",
+      "BatchRetry": "一括リトライ",
       "Timer": "時限実行",
       "Detail": "詳細",
       "TimeDelta": "営業時間",
@@ -117,7 +121,7 @@
     "AutoCreate": "自動作成",
     "AccountExportTips": "エクスポート情報には機密情報を含むアカウント暗号文が含まれており、エクスポートされたフォーマットは暗号化されたzipファイルです（暗号化パスワードが設定されていない場合は、個人情報にファイル暗号化パスワードを設定してください）。",
     "TaskID": "タスク ID",
-    "AccountTemplate": "账号模版",
+    "AccountTemplate": "账号模板",
     "Sync": "同期",
     "SyncDelete": "同期削除",
     "BulkSyncDelete": "一括同期削除",
@@ -126,7 +130,10 @@
     "AutoPush": "自動プッシュ",
     "GeneralAccounts": "一般アカウント",
     "VirtualAccounts": "仮想アカウント",
-    "AccountDeleteConfirmMsg": "アカウントを削除します，続行しますか？"
+    "AccountDeleteConfirmMsg": "アカウントを削除します，続行しますか？",
+    "Test": "テスト",
+    "QuickTest": "クイックテスト",
+    "BulkVerify": "一括接続性テスト"
   },
   "acl": {
     "CommandFilterACLHelpMsg": "コマンドフィルタリングを使用すると、コマンドがアセット上で実行されるかどうかを制御できます。ルールに基づいて、特定のコマンドは許可され、他のコマンドは禁止されることがあります。",
@@ -459,6 +466,7 @@
     "Token": "トークン",
     "GatewayList": "ゲートウェイ一覧",
     "InitialDeploy": "初期展開",
+    "OnlyInitialDeploy": "初期設定のみ",
     "PrivateKey": "鍵",
     "Category": "カテゴリー",
     "SSHPort": "SSH ポート",
@@ -477,7 +485,11 @@
     "WebUpdate": "資産の更新 - Web",
     "DatabaseUpdate": "資産の更新 - データベース",
     "GPTCreate": "資産の作成 - GPT",
-    "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります"
+    "AppletHostDomainHelpText": "これらのドメインはシステム組織にあります",
+    "OracleDBNameHelpText": "Oracle データベースの SID またはサービス名を入力してください",
+    "Remove": "取り除く",
+    "AddGatewayInDomain": "ゲートウェイの追加",
+    "AddAssetInDomain": "アセットの追加"
   },
   "audits": {
     "ChangeField": "フィールドを変更します",
@@ -879,6 +891,7 @@
       "failedConditions": "条件に達していない結果!"
     },
     "Deploy": "配備",
+    "Uninstall": "アンインストールする",
     "Publish": "リリース",
     "Icon": "アイコン",
     "Automations": "オートメーション",
@@ -1197,7 +1210,8 @@
     "runSucceed": "タスクが成功しました",
     "EnterUploadPath": "アップロードパスを入力してください",
     "FileNameTooLong": "ファイル名が長すぎます",
-    "StopJob": "ジョブを停止"
+    "StopJob": "ジョブを停止",
+    "StopLogOutput": "Task Canceled：現在のタスク（currentTaskId）は手動で停止されました。各タスクの進行状況が異なるため、以下はタスクの最終実行結果です。実行が失敗した場合は、タスクが正常に停止されました。"
   },
   "perms": {
     "": "",
@@ -1977,6 +1991,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "OrgsAndRoles": "そしきとやくわり",
     "LunaSettingUpdate": "Luna 設定更新",
     "KokoSettingUpdate": "Koko 設定更新",
     "UserSetting": "個人設定",
@@ -2024,6 +2039,7 @@
     "setWeCom": "企業のwechat認証を設定する",
     "setDingTalk": "ホッチキス認証の設定",
     "setFeiShu": "飛書認証を設定する",
+    "setLark": "Lark認証を設定する",
     "setSlack": "Slack認証を設定します",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "アカウントをより安全にするために、マルチファクタ认证を有効にします。 <Br/> 有効にすると、次回のログイン時に多因子認証バインディングプロセスに入ります。また、 (個人情報-> クイック修正-> 多因子設定の変更) もできます。で直接紐付けます",
@@ -2235,6 +2251,7 @@
       "CTYunPrivate": "天翼プライベート・クラウド",
       "GCP": "Googleクラウド",
       "UCloud": "UCloudユケデです",
+      "Volcengine": "Volcengine",
       "FC": "Fusion Compute",
       "LAN": "ローカルエリアネットワーク",
       "AWS_China": "AWS(中国)",
@@ -2385,7 +2402,7 @@
       "IntervalOfCreateUpdatePage": "単位: 時",
       "UsernameOfCreateUpdatePage": "ターゲットホスト上のユーザーのユーザー名存在する場合は、ユーザーパスワードを変更します存在しない場合は、ユーザーを追加してパスワードを設定します"
     },
-    "Beian": "ファイリング"
+    "Footer": "フッター"
   },
   "applets": {
     "PublishStatus": "投稿ステータス",

@@ -60,6 +60,10 @@ export default {
       type: Array,
       default: () => []
     },
+    addExtraMoreColActions: {
+      type: Array,
+      default: () => []
+    },
     helpMessage: {
       type: String,
       default: ''
@@ -202,7 +206,8 @@ export default {
                       })
                     }
                   }
-                }
+                },
+                ...this.addExtraMoreColActions
               ]
             }
           }

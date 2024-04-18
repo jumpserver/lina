@@ -19,7 +19,7 @@ export default {
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/audits/ftp-logs/?session_id=${this.$route.params.id}`,
+        url: `/api/v1/audits/ftp-logs/?session=${this.$route.params.id}`,
         columnsShow: {
           default: [
             'id', 'user', 'remote_addr', 'asset', 'account', 'operate',
@@ -47,7 +47,9 @@ export default {
                   name: 'download',
                   title: this.$t('sessions.download'),
                   type: 'primary',
-                  can: ({ row }) => { return row.has_file },
+                  can: ({ row }) => {
+                    return row.has_file
+                  },
                   tip: ({ row }) => {
                     return row.has_file ? this.$t('sessions.download') : this.$t('sessions.DownloadFTPFileTip')
                   },

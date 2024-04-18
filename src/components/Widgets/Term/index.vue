@@ -25,6 +25,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+import { downloadText } from '@/utils/common'
 
 export default {
   name: 'Term',
@@ -74,6 +75,16 @@ export default {
           icon: 'refresh',
           callback: () => {
             this.xterm.reset()
+          }
+        },
+        {
+          tip: this.$tc('common.Export'),
+          icon: 'download',
+          callback: () => {
+            this.xterm.selectAll()
+            const text = this.xterm.getSelection()
+            const filename = `shortcut_cmd_${this.$route.query?.taskId}.log`
+            downloadText(text, filename)
           }
         }
       ]

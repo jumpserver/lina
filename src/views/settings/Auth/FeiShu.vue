@@ -1,8 +1,8 @@
 <template>
   <BaseAuth
     :config="settings"
-    :title="$tc('setting.FeiShu')"
-    enable-field="AUTH_FEISHU"
+    :title="title"
+    enable-field="enableFieldName"
     v-on="$listeners"
   />
 </template>
@@ -16,20 +16,44 @@ export default {
   components: {
     BaseAuth
   },
+  props: {
+    category: {
+      type: String,
+      default: 'feishu'
+    },
+    title: {
+      type: String,
+      default() {
+        return this.$t('setting.Feishu')
+      }
+    },
+    encryptedFields: {
+      type: Array,
+      default: () => ['FEISHU_APP_SECRET']
+    },
+    formFields: {
+      type: Array,
+      default: () => ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET']
+    },
+    enableFieldName: {
+      type: String,
+      default: 'AUTH_FEISHU'
+    }
+  },
   data() {
     const vm = this
     return {
       settings: {
-        url: '/api/v1/settings/setting/?category=feishu',
+        url: `/api/v1/settings/setting/?category=${vm.category}`,
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('setting.feiShuTest'),
+            title: this.$t('common.Test'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
               vm.$axios.post(
-                '/api/v1/settings/feishu/testing/',
+                `/api/v1/settings/${vm.category}/testing/`,
                 value
               ).then(res => {
                 vm.$message.success(res['msg'])
@@ -39,25 +63,20 @@ export default {
             }
           }
         ],
-        encryptedFields: ['FEISHU_APP_SECRET'],
+        encryptedFields: this.encryptedFields,
         fields: [
           [
             this.$t('common.BasicInfo'),
-            [
-              'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_VERSION'
-            ]
+            this.formFields
           ]
         ],
-        fieldsMeta: {
-          FEISHU_APP_SECRET: {
-            component: UpdateToken
-          }
-        },
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
-          if (!data['FEISHU_APP_SECRET']) {
-            delete data['FEISHU_APP_SECRET']
-          }
+          this.encryptedFields.forEach(field => {
+            if (!data[field]) {
+              delete data[field]
+            }
+          })
           return data
         },
         submitMethod() {
@@ -65,6 +84,14 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.settings.fieldsMeta = this.encryptedFields.reduce((acc, field) => {
+      acc[field] = {
+        component: UpdateToken
+      }
+      return acc
+    }, {})
   },
   methods: {}
 }
