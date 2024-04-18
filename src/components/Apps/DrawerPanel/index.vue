@@ -223,9 +223,9 @@ export default {
   cursor: pointer;
 
   &:hover {
-    left: -52px !important;
+    left: -51px !important;
     width: 50px !important;
-    transform: scale(1.06);
+    transform: scale(1.01);
   }
   i {
     font-size: 20px;

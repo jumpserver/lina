@@ -12,7 +12,7 @@
           :key="label"
         >
           <el-tag
-            :title="getKey(label) + getValue(label)"
+            :title="getKey(label) + ': ' + getValue(label)"
             :type="getLabelType(label)"
             class="tag-formatter"
             disable-transitions

@@ -59,6 +59,9 @@ export default {
           ]
         },
         columnsMeta: {
+          mfa_level: {
+            width: '75px'
+          },
           source: {
             width: '120px',
             collapsible: false

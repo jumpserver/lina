@@ -99,8 +99,12 @@
             :filter-multiple="false"
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+            :title="col.label"
             v-bind="{align: columnsAlign, ...col}"
           >
+            <template #header>
+              <span :title="col.label">{{ col.label }}</span>
+            </template>
             <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
               <div
                 :is="col.formatter"
