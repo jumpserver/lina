@@ -30,7 +30,7 @@
       :validate-event="false"
       class="search-input"
       suffix-icon="el-icon-search"
-      @blur="focus = false"
+      @blur="handleBlur"
       @change="handleConfirm"
       @focus="focus = true"
       @keyup.enter.native="handleConfirm"
@@ -134,6 +134,10 @@ export default {
     }
   },
   methods: {
+    handleBlur() {
+      this.focus = false
+      this.$emit('blur')
+    },
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
     checkInTableColumns(options) {
       const searchFieldOptions = {}

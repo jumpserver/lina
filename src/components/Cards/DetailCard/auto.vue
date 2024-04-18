@@ -73,7 +73,7 @@ export default {
           if (val === '-') {
             return <span>{'-'}</span>
           }
-          return (<span style={{ cursor: 'pointer' }} onClick={() => copy(val)}>
+          return (<span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
             {val}
           </span>)
         }

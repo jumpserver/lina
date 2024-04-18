@@ -3,7 +3,14 @@
     <el-button v-if="shouldFold" circle class="search-btn" size="mini" @click="handleManualSearch">
       <svg-icon icon-class="search" />
     </el-button>
-    <TagSearch v-else :options="iOption" v-bind="$attrs" v-on="$listeners" @tag-search="handleTagSearch" />
+    <TagSearch
+      v-show="!shouldFold"
+      :options="iOption"
+      v-bind="$attrs"
+      @blur="handleBlur"
+      v-on="$listeners"
+      @tag-search="handleTagSearch"
+    />
   </span>
 </template>
 
@@ -50,7 +57,7 @@ export default {
       return _.uniqWith(options, _.isEqual)
     },
     shouldFold() {
-      return this.fold && (!this.tags.length || this.tags.length === 0) && !this.manualSearch
+      return this.fold && (!this.tags || this.tags.length === 0) && !this.manualSearch
     }
   },
   watch: {
@@ -76,6 +83,9 @@ export default {
         this.manualSearch = false
       }
       this.$emit('tagSearch', tags)
+    },
+    handleBlur() {
+      this.manualSearch = false
     },
     handleManualSearch() {
       this.manualSearch = true

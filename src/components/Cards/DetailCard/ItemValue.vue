@@ -92,7 +92,7 @@ export default {
       )
     }
     return (
-      <span>{this.displayValue}</span>
+      <span title={this.displayValue}>{this.displayValue}</span>
     )
   }
 }

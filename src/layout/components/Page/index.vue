@@ -106,7 +106,7 @@ export default {
 
 .go-back {
   border: none;
-  padding: 4px;
+  padding: 6px;
 }
 
 .go-back >>> i {
