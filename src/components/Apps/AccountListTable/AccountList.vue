@@ -356,7 +356,8 @@ export default {
             fa: 'fa-handshake-o',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
-                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1
+                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
+                  !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
