@@ -121,7 +121,7 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showConfirmDialog', _.debounce(this.performConfirm))
+    this.$eventBus.$on('showConfirmDialog', _.throttle(this.performConfirm, 500))
   },
   methods: {
     handleSubTypeChange(val) {
