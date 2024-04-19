@@ -19,6 +19,7 @@
         :key="view.name"
         :index="view.name"
       >
+        <span class="outline" />
         <svg-icon :icon-class="view.meta.icon" class="icons" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
@@ -189,6 +190,23 @@ export default {
   color: #606266 !important;
 }
 
+.el-menu-item {
+  &.is-active {
+    font-weight: bold;
+    color: var(--menu-text-active);
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: var(--menu-text-active);
+    }
+  }
+}
+
 .icons {
   vertical-align: middle !important;
   font-size: 16px;
@@ -200,15 +218,9 @@ export default {
 .icons-title {
   display: inline-block;
   font-size: 14px;
-}
 
-.el-menu-item.is-active {
-  font-weight: bold;
-  color: var(--menu-text-active);
-  border-left: 4px solid var(--menu-text-active);
-}
-
-.menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
-  right: 10px;
+  .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
+    right: 10px;
+  }
 }
 </style>

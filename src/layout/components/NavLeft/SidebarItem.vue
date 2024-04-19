@@ -6,8 +6,16 @@
         !item.alwaysShow"
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :class="{'submenu-title-noDropdown':!isNest}" :index="resolvePath(onlyOneChild.path)" class="submenu-item">
-          <item :children="item.children" :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="getItemTitle(onlyOneChild)" />
+        <el-menu-item
+          :class="{'submenu-title-noDropdown':!isNest}"
+          :index="resolvePath(onlyOneChild.path)"
+          class="submenu-item"
+        >
+          <item
+            :children="item.children"
+            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+            :title="getItemTitle(onlyOneChild)"
+          />
         </el-menu-item>
       </app-link>
     </template>
@@ -17,7 +25,6 @@
       ref="subMenu"
       :index="resolvePath(item.path)"
       class="el-submenu-sidebar submenu-item"
-      default-active="1"
       popper-append-to-body
     >
       <template slot="title">

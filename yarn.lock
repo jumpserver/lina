@@ -776,9 +776,9 @@
     "to-fast-properties" "^2.0.0"
 
 "@fontsource/open-sans@^5.0.24":
-  "integrity" "sha512-bIF+87vxfOPTyvnBKS+rCPmz/m66um3zCk1UdPv8RGBgwu6MMxwED0jpcbvyFSkfy0ApcdjfkDSAhlFTm/pgiw=="
-  "resolved" "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.0.24.tgz"
-  "version" "5.0.24"
+  "integrity" "sha512-tFTqx2TE9srmM3pMEHldw0lTglqhKwFX6PVDEL0OF9xNT0x5W9brsezFHhV/U36pQV9So7S0vo4yVpnLzBBQew=="
+  "resolved" "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.0.27.tgz"
+  "version" "5.0.27"
 
 "@gar/promisify@^1.0.1":
   "integrity" "sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw=="
@@ -2344,7 +2344,7 @@
 
 "axios@0.21.1":
   "integrity" "sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA=="
-  "resolved" "https://registry.npmmirror.com/axios/-/axios-0.21.1.tgz"
+  "resolved" "https://registry.npmjs.org/axios/-/axios-0.21.1.tgz"
   "version" "0.21.1"
   dependencies:
     "follow-redirects" "^1.10.0"

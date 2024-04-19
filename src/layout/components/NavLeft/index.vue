@@ -11,10 +11,12 @@
             trigger="hover"
           >
             <span slot="reference" style="width: 100%">
-              <span v-show="!isCollapse" style="margin-left: 5px;">
+              <span class="icon-zone">
+                <svg-icon class="icon" icon-class="switch" />
+              </span>
+              <span v-show="!isCollapse" class="view-title">
                 {{ isRouteMeta.title || '' }}
               </span>
-              <svg-icon class="icon" icon-class="switch" />
             </span>
             <ViewSwitcher mode="vertical" @view-change="handleViewChange" />
           </el-popover>
@@ -121,7 +123,7 @@ export default {
     }
   },
   mounted() {
-    this.setViewIconAttention()
+    // this.setViewIconAttention()
     this.setLeastMenuOpen()
   },
   methods: {
@@ -178,12 +180,20 @@ export default {
 
   .collapsed {
     text-align: left;
+
     .nav-title {
       &:hover {
         background-color: var(--menu-hover);
       }
-     .switch-view .icon {
-        margin-left: 0;
+
+      .switch-view {
+        .icon-zone {
+          float: none;
+          padding: 0;
+        }
+        .switch-view .icon {
+          margin-left: 0;
+        }
       }
     }
   }
@@ -209,12 +219,16 @@ export default {
       line-height: 10px;
       border-radius: 3px;
 
-      .icon {
-        margin-left: 60px;
-        margin-right: 0 !important;
+      .icon-zone {
+        float: right;
+        padding: 4px;
 
         &:hover {
           color: var(--color-primary);
+        }
+
+        .icon {
+          margin-right: 0 !important;
         }
       }
     }
@@ -271,6 +285,12 @@ export default {
     display: none;
   }
 
+  .view-title {
+    margin-left: 5px;
+    width: calc(100% - 10px);
+    display: inline-block
+  }
+
   $mobileHeight: 40px;
 
   .active-mobile {
@@ -299,11 +319,11 @@ export default {
 
     .mobile-view-switch {
       &>>> .el-menu-item.is-active {
-      color: var(--menu-text-active)!important;
-      .svg-icon {
         color: var(--menu-text-active)!important;
+        .svg-icon {
+          color: var(--menu-text-active)!important;
+        }
       }
-    }
     }
   }
 
