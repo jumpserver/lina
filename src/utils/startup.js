@@ -49,12 +49,18 @@ async function refreshCurrentOrg() {
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getProfile')
 
+  const delay = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   const usingOrgs = store.getters.usingOrgs
   if (!usingOrgs || usingOrgs.length === 0) {
     Vue.$log.debug('No using orgs, return: ', usingOrgs)
     return
   }
+
   await refreshCurrentOrg()
+  await delay(100)
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
     Vue.$log.error('Current org is null or not a object: ', currentOrg)
