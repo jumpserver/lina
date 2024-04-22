@@ -42,25 +42,6 @@ export default {
         permissions: ['perms.view_myassets']
       }
     },
-
-    {
-      path: `external-luna`,
-      component: empty,
-      meta: {
-        permissions: ['rbac.view_webterminal']
-      },
-      children: [
-        {
-          path: `${BASE_URL}/luna/`,
-          meta: {
-            title: i18n.t('WebTerminal'),
-            icon: 'web-terminal',
-            activeMenu: '/assets',
-            permissions: []
-          }
-        }
-      ]
-    },
     {
       path: '/workbench/file-manager',
       name: 'FileManagement',

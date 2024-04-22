@@ -168,7 +168,7 @@ export default {
           break
         case 'datetime':
           col.formatter = DateFormatter
-          col.width = '160px'
+          col.width = '175px'
           break
         case 'object_related_field':
           col.formatter = ObjectRelatedFormatter

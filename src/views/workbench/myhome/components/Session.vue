@@ -54,7 +54,7 @@ export default {
             sortable: false
           },
           actions: {
-            width: '150px',
+            width: '120px',
             align: 'center',
             formatterArgs: {
               hasDelete: false,
