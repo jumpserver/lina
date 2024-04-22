@@ -101,7 +101,7 @@ export default {
         route.query.type = row.type.value
         route.query.category = row.type.category
       }
-      const createInNewPage = this.$route.query.node_id && routeAction === 'Create'
+      const createInNewPage = this.$route.query.node_id
       if (createInNewPage) {
         const { href } = vm.$router.resolve(route)
         window.open(href, '_blank')
