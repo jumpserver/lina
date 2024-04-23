@@ -451,4 +451,25 @@ export function toSentenceCase(string) {
   return s[0].toUpperCase() + s.slice(1)
 }
 
+export function getRandomColor(s) {
+  // 将标签名称转换为哈希值，用作随机种子
+  const hash = hashCode(s)
+
+  // 生成随机颜色
+  const color = '#' + ('000000' + (hash & 0xffffff).toString(16)).slice(-6)
+  // 转换为十六进制颜色
+  return color
+}
+
+// 辅助函数：将字符串转换为哈希值
+// 辅助函数：将字符串转换为哈希值
+function hashCode(str) {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = (char + (hash << 6) + (hash << 16) - hash) & 0xffffffff
+  }
+  return hash
+}
+
 export { BASE_URL }
