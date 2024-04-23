@@ -141,6 +141,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+>>> .submenu-item.el-submenu {
+  border-left: 4px solid transparent;
+}
+
 .el-submenu.is-active {
   &>>> .svg-icon {
     color: var(--menu-text-active)!important;
