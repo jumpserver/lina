@@ -776,9 +776,9 @@
     "to-fast-properties" "^2.0.0"
 
 "@fontsource/open-sans@^5.0.24":
-  "integrity" "sha512-tFTqx2TE9srmM3pMEHldw0lTglqhKwFX6PVDEL0OF9xNT0x5W9brsezFHhV/U36pQV9So7S0vo4yVpnLzBBQew=="
-  "resolved" "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.0.27.tgz"
-  "version" "5.0.27"
+  "integrity" "sha512-hBvJHY76pJT/JynGUB5EXWhnzjYfLdcMn655J5p1v9lTT9HdQSy+keq2KPVXO2Htlg998BBa3p6u/jlrZ6w0kg=="
+  "resolved" "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.0.28.tgz"
+  "version" "5.0.28"
 
 "@gar/promisify@^1.0.1":
   "integrity" "sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw=="
