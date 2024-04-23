@@ -221,8 +221,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: true,
-        excludes: ['script']
+        showUndefine: true
       },
       customInfoConfig: {
         title: this.$t('common.CustomInfo'),
