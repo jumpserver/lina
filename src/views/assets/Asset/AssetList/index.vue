@@ -63,7 +63,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')
           },
           {
-            icon: 'fa-th',
+            icon: 'fa-cube',
             name: 'custom',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/CustomList.vue')

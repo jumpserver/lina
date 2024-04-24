@@ -91,7 +91,7 @@ export function changeMenuColor(themeColors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
 
-    if (key.includes('--color')) {
+    if (key === '--color-primary') {
       for (const [i, light] of lights.entries()) {
         const color = mix(white, currentColor.replace(/#/g, ''), light)
         elementStyle.setProperty(key + '-light' + '-' + i, color)
@@ -100,6 +100,9 @@ export function changeMenuColor(themeColors) {
         const color = mix(black, currentColor.replace(/#/g, ''), dark)
         elementStyle.setProperty(key + '-dark' + '-' + i, color)
       }
+    }
+
+    if (key.includes('--color')) {
       const lightColor = mix(white, currentColor.replace(/#/g, ''), 70)
       const darkColor = mix(black, currentColor.replace(/#/g, ''), 70)
       elementStyle.setProperty(key + '-light', lightColor)
