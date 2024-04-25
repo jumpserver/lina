@@ -1,12 +1,11 @@
 
 export let ws = null
-let lockReconnect = false
-const timeout = 10 * 1000
-let timeoutObj = null // 心跳心跳倒计时
-let serverTimeoutObj = null // 心跳倒计时
-let timeoutNum = null // 断开、重连倒计时
-let globalCallback = null // 监听服务端消息
 let globalUrl = null
+let timeoutNum = null
+let globalCallback = null
+let heartbeatInterval = null
+const timeout = 20 * 1000
+let lockReconnect = false
 
 /**
  * @param {String} url
@@ -36,60 +35,41 @@ export function onSend(message) {
 
 // 接受服务端消息
 export function onMessage(res) {
-  const msgData = res.data
-  if (typeof msgData !== 'object' && msgData !== 'Connect success' && msgData !== 'pong') {
+  const { data: msgData } = res
+  if (typeof msgData === 'object') {
+    return
+  }
+
+  try {
     let data = msgData.replace(/\ufeff/g, '')
-    try {
-      data = JSON.parse(data)
-      globalCallback(data)
-    } catch (error) {
-      console.log('返回心跳')
+    data = JSON.parse(data)
+    if (data.type === 'PONG' || data.type === 'PING') {
+      return
     }
-    reset()
+    data.message = JSON.parse(data.data)
+    if (globalCallback) {
+      globalCallback(data)
+    }
+  } catch (error) {
+    this.$log.error('socket onMessage error', error)
   }
 }
 
-// 连接失败
-export function onError() {
-  reconnect()
-}
-
-// 连接关闭
-export function onClose() {
-}
-
-// 断开关闭
-export function closeWebSocket() {
-  ws?.close()
-  ws = null
-  lockReconnect = false
-}
-
-// 发送心跳
 export function start() {
-  timeoutObj && clearTimeout(timeoutObj)
-  serverTimeoutObj && clearTimeout(serverTimeoutObj)
-  timeoutObj = setTimeout(function() {
-    if (ws?.readyState === 1) {
-      ws.send('ping')
-    } else {
-      // reconnect()
+  if (heartbeatInterval) clearInterval(heartbeatInterval)
+
+  heartbeatInterval = setInterval(() => {
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send('{"type": "PING"}')
     }
-    serverTimeoutObj = setTimeout(function() {
-      // 连接超时
-      // ws.close()
-    }, timeout)
   }, timeout)
 }
 
-// 重置心跳
 export function reset() {
-  clearTimeout(timeoutObj)
-  clearTimeout(serverTimeoutObj)
+  if (heartbeatInterval) clearInterval(heartbeatInterval)
   start()
 }
 
-// 重新连接
 export function reconnect() {
   if (lockReconnect) {
     return
@@ -101,4 +81,17 @@ export function reconnect() {
     createWebSocket()
     lockReconnect = false
   }, 10000)
+}
+
+export function onError() {
+  reconnect()
+}
+
+export function onClose() {
+}
+
+export function closeWebSocket() {
+  ws?.close()
+  ws = null
+  lockReconnect = false
 }

@@ -1,5 +1,13 @@
 <template>
   <div class="container">
+    <div class="chat-action">
+      <Select2
+        v-model="select.value"
+        :disabled="isLoading || isSelectDisabled"
+        v-bind="select"
+        @change="onSelectChange"
+      />
+    </div>
     <div class="chat-input">
       <el-input
         v-model="inputValue"
@@ -18,11 +26,12 @@
 <script>
 import { mapState } from 'vuex'
 import { useChat } from '../../useChat.js'
+import Select2 from '../../../../Form/FormFields/Select2.vue'
 
 const { setLoading } = useChat()
 
 export default {
-  components: { },
+  components: { Select2 },
   props: {
     expanded: {
       type: Boolean,
