@@ -61,7 +61,7 @@ export default {
     return {
       socket: {},
       prompt: '',
-      currentConversationId: '',
+      conversationId: '',
       showIntroduction: false,
       introduction: [
       ]
@@ -82,19 +82,19 @@ export default {
       this.initChatMessage()
     },
     initWebSocket() {
-      const { NODE_ENV, VUE_APP_KAEL_HOST } = process.env || {}
-      const api = '/kael/chat/system/'
+      const { NODE_ENV, VUE_APP_KOKO_HOST } = process.env || {}
+      const api = '/koko/ws/chat/system/'
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
       const path = `${protocol}://${window.location.host}${api}`
-      const index = VUE_APP_KAEL_HOST?.indexOf('://')
-      const localPath = protocol + VUE_APP_KAEL_HOST?.substring(index, VUE_APP_KAEL_HOST?.length) + api
+      const index = VUE_APP_KOKO_HOST?.indexOf('://')
+      const localPath = protocol + VUE_APP_KOKO_HOST?.substring(index, VUE_APP_KOKO_HOST?.length) + api
       const url = NODE_ENV === 'development' ? localPath : path
       createWebSocket(url, this.onWebSocketMessage)
     },
     initChatMessage() {
       this.prompt = ''
       this.showIntroduction = true
-      this.currentConversationId = ''
+      this.conversationId = ''
       this.$refs.chatInput.select.value = ''
       const chat = {
         message: {
@@ -115,10 +115,10 @@ export default {
       }
     },
     onChatMessage(data) {
-      if (data.conversation_id) {
+      if (data.id) {
         setLoading(true)
         removeLoadingMessageInChat()
-        this.currentConversationId = data.conversation_id
+        this.conversationId = data.id
         updateChaMessageContentById(data.message.id, data)
       }
       if (data.message?.type === 'finish') {
@@ -128,20 +128,18 @@ export default {
     },
     onSystemMessage(data) {
       data.message = {
-        content: data.system_message,
+        content: data.data,
         role: 'assistant',
         create_time: new Date()
       }
       removeLoadingMessageInChat()
       addMessageToActiveChat(data)
-      this.socketReadyStateSuccess = false
       setLoading(true)
     },
     onSendHandle(value) {
       this.showIntroduction = false
       this.socket = ws || {}
       if (ws?.readyState === 1) {
-        this.socketReadyStateSuccess = true
         const chat = {
           message: {
             content: value,
@@ -150,9 +148,9 @@ export default {
           }
         }
         const message = {
-          content: value,
+          data: value,
           prompt: this.prompt,
-          conversation_id: this.currentConversationId || ''
+          id: this.conversationId || ''
         }
         addChatMessageById(chat)
         onSend(message)
@@ -167,13 +165,12 @@ export default {
           type: 'error'
         }
         addChatMessageById(chat)
-        this.socketReadyStateSuccess = false
         setLoading(true)
       }
     },
     onSelectPromptHandle(value) {
       this.prompt = value
-      this.currentConversationId = ''
+      this.conversationId = ''
       this.showIntroduction = false
       this.onSendHandle(value)
     },
@@ -182,13 +179,13 @@ export default {
       this.initChatMessage()
     },
     onStopHandle() {
-      this.$axios.post(
-        '/kael/interrupt_current_ask/',
-        { id: this.currentConversationId || '' }
-      ).finally(() => {
-        removeLoadingMessageInChat()
-        setLoading(false)
-      })
+      const message = {
+        id: this.conversationId || '',
+        interrupt: true
+      }
+      onSend(message)
+      removeLoadingMessageInChat()
+      setLoading(false)
     },
     sendIntroduction(item) {
       this.showIntroduction = false
