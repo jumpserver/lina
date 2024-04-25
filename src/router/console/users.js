@@ -6,21 +6,21 @@ const globalSubmenu = () => import('@/layout/globalOrg.vue')
 export default [
   {
     path: 'users',
-    component: empty, // Parent router-view
-    redirect: '',
+    component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
+    name: 'UserList',
     meta: {
       permissions: ['users.view_user'],
-      expanded: true
+      title: i18n.t('UserList')
     },
     children: [
-      {
-        path: '',
-        component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
-        name: 'UserList',
-        meta: {
-          title: i18n.t('UserList')
-        }
-      },
+      // {
+      //   path: 'users',
+      //   component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
+      //   name: 'UserList',
+      //   meta: {
+      //     title: i18n.t('UserList')
+      //   }
+      // },
       {
         path: 'create',
         component: () => import('@/views/users/User/UserCreateUpdate.vue'), // Parent router-view

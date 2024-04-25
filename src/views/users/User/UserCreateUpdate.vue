@@ -1,9 +1,17 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  <el-drawer
+    :modal="false"
+    :visible="drawerVisible"
+    size="600px"
+    title="Create User"
+    @close="closeDrawer"
+  >
+    <GenericCreateUpdateForm v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  </el-drawer>
 </template>
 
 <script>
-import { GenericCreateUpdatePage } from '@/layout/components'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
@@ -11,11 +19,12 @@ import { Select2 } from '@/components'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdateForm
   },
   data() {
     return {
       loading: true,
+      drawerVisible: true, // 默认抽屉可见
       initial: {
         need_update_password: true,
         system_roles: [],
@@ -195,6 +204,15 @@ export default {
     this.loading = false
   },
   methods: {
+    closeDrawer() {
+      this.drawerVisible = false
+      // 可选：在抽屉关闭时重置路由到用户列表页
+      this.$router.back()
+    },
+    handleUserCreated() {
+      // 可选：在用户创建成功后执行的操作
+      this.closeDrawer() // 创建成功后关闭抽屉
+    },
     afterGetUser(user) {
       this.user = user
       if (this.user.id === this.currentUser.id) {

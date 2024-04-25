@@ -25,7 +25,7 @@ export default {
       type: Object,
       default() {
         return {
-          route: this.$route.name.replace('List', 'Detail'),
+          route: 'abc',
           getRoute: null,
           routeQuery: null,
           can: true,

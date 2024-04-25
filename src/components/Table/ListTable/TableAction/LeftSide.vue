@@ -27,6 +27,7 @@ export default {
     createRoute: {
       type: [String, Object, Function],
       default() {
+        console.log('This: ', this.$route)
         return this.$route.name?.replace('List', 'Create')
       }
     },
@@ -114,12 +115,8 @@ export default {
           },
           callback: this.handleBulkUpdate
         }
-      ]
-    }
-  },
-  computed: {
-    defaultActions() {
-      const defaultActions = [
+      ],
+      defaultActions: [
         {
           name: 'actionCreate',
           title: this.createTitle,
@@ -130,22 +127,10 @@ export default {
           callback: this.onCreate || this.handleCreate
         }
       ]
-      if (this.moreCreates) {
-        const defaultMoreCreate = {
-          name: 'actionMoreCreate',
-          title: this.createTitle,
-          type: 'primary',
-          has: true,
-          icon: 'plus',
-          can: this.canCreate,
-          dropdown: [],
-          callback: this.onCreate || this.handleCreate
-        }
-        const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
-        defaultActions.push(createCreateAction)
-      }
-      return defaultActions
-    },
+    }
+  },
+  computed: {
+
     iActions() {
       return [...this.actions, this.moreAction]
     },
@@ -189,6 +174,11 @@ export default {
   },
   methods: {
     handleCreate() {
+      // this.$router.push({
+      //   name: 'UserCreate'
+      // })
+      // return
+      console.log('This: ', this.$router)
       let route
       if (typeof this.createRoute === 'string') {
         route = { name: this.createRoute }
@@ -198,7 +188,7 @@ export default {
       } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
-      this.$log.debug('handle create')
+      this.$log.debug('handle create: ', route, this.createRoute)
       if (this.createInNewPage) {
         const { href } = this.$router.resolve(route)
         window.open(href, '_blank')

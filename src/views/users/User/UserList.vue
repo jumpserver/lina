@@ -1,18 +1,23 @@
 <template>
   <div>
-    <GenericListPage
-      ref="GenericListPage"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-    />
-    <GenericUpdateFormDialog
-      v-if="updateSelectedDialogSetting.visible"
-      :form-setting="updateSelectedDialogSetting.formSetting"
-      :selected-rows="updateSelectedDialogSetting.selectedRows"
-      :visible.sync="updateSelectedDialogSetting.visible"
-      @update="handleDialogUpdate"
-    />
-    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
+    <keep-alive include="UserList">
+      <div>
+        <GenericListPage
+          ref="GenericListPage"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+        />
+        <GenericUpdateFormDialog
+          v-if="updateSelectedDialogSetting.visible"
+          :form-setting="updateSelectedDialogSetting.formSetting"
+          :selected-rows="updateSelectedDialogSetting.selectedRows"
+          :visible.sync="updateSelectedDialogSetting.visible"
+          @update="handleDialogUpdate"
+        />
+        <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
+      </div>
+    </keep-alive>
+    <router-view /> <!-- 这里展示创建页面的路由组件 -->
   </div>
 </template>
 
@@ -42,6 +47,7 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      drawerVisible: false,
       tableConfig: {
         url: '/api/v1/users/users/',
         permissions: {
@@ -253,10 +259,19 @@ export default {
       'device', 'currentOrgIsDefault', 'currentUserIsSuperAdmin'
     ])
   },
+  watch: {
+    '$route'(route) {
+      this.drawerVisible = !this.drawerVisible
+      console.log('Route changed: ', route)
+    }
+  },
   mounted() {
     this.setRolesFilter()
   },
   methods: {
+    closeDrawer() {
+      this.drawerVisible = false
+    },
     setRolesFilter() {
       const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]
       for (const roleType of roleTypes) {

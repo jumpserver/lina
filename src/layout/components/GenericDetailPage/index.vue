@@ -120,7 +120,7 @@ export default {
       updateCallback: function(item) {
         this.defaultUpdate(item)
       },
-      updateRoute: this.$route.name.replace('Detail', 'Update')
+      updateRoute: 'abc'
     }
     return {
       detailApiUrl,
