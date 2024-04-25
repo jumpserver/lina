@@ -2124,7 +2124,8 @@
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
     "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
     "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？",
-    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません"
+    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません",
+    "GlobalDisableMfaMsg": "グローバルでの強制が有効になっています"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",

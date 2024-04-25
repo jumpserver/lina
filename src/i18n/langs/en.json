@@ -2135,7 +2135,8 @@
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible.",
     "dateLastLogin": "Date last login",
     "AddAllMembersWarningMsg": "Are you sure you want to add all members?",
-    "disallowSelfUpdateFields": "Not allowed to modify the current fields oneself"
+    "disallowSelfUpdateFields": "Not allowed to modify the current fields oneself",
+    "GlobalDisableMfaMsg": "Global enforcement has been enabled"
   },
   "notifications": {
     "MessageType": "Message Type",

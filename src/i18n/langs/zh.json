@@ -2115,7 +2115,8 @@
     "passwordExpired": "密码过期了",
     "passwordWillExpiredPrefixMsg": "密码即将在 ",
     "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。",
-    "disallowSelfUpdateFields": "不允许自己修改当前字段"
+    "disallowSelfUpdateFields": "不允许自己修改当前字段",
+    "GlobalDisableMfaMsg": "全局已强制开启"
   },
   "notifications": {
     "MessageType": "消息类型",
