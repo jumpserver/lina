@@ -74,8 +74,7 @@ export default {
   data() {
     return {
       viewShown: false,
-      switchViewOtherClasses: '',
-      defaultOpensMenu: []
+      switchViewOtherClasses: ''
     }
   },
   computed: {
@@ -83,6 +82,9 @@ export default {
       'currentViewRoute',
       'sidebar'
     ]),
+    defaultOpensMenu() {
+      return this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
