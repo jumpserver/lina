@@ -44,7 +44,7 @@ export default {
       logConfig: {
         title: this.$t('LoginLog'),
         tip: this.$t('LoginLog'),
-        subTitle: this.$t('LoginLog') + this.$t('Total'),
+        subTitle: this.$t('LoginLogTotal'),
         icon: 'log',
         color: themeColor,
         chartTitle: this.$t('LogOfLoginSuccessNum'),
@@ -53,7 +53,7 @@ export default {
       assetConfig: {
         title: this.$t('Commands'),
         tip: this.$t('Commands'),
-        subTitle: this.$t('Commands') + this.$t('Total'),
+        subTitle: this.$t('CommandsTotal'),
         icon: 'session',
         color: '#ED612B',
         chartTitle: this.$t('DangerousCommandNum'),
@@ -107,6 +107,7 @@ export default {
 .left, .right {
   display: inline-block;
 }
+
 .margin-top-16 {
   margin-top: 16px;
 }
