@@ -13,7 +13,7 @@
         >
           <item
             :children="item.children"
-            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
@@ -27,9 +27,15 @@
       class="el-submenu-sidebar submenu-item"
       popper-append-to-body
     >
+
+      <!-- :icon="item.meta && item.meta.icon" -->
       <template slot="title">
         <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
       </template>
+
+      <!--      <el-menu-item-group slot="title">-->
+      <!--        -->
+      <!--      </el-menu-item-group>-->
       <sidebar-item
         v-for="child in item.children"
         :key="child.path"
@@ -148,6 +154,69 @@ export default {
 .el-submenu.is-active {
   &>>> .svg-icon {
     color: var(--menu-text-active)!important;
+  }
+}
+
+.left-menu.el-menu--collapse.el-menu {
+
+  .submenu-item.el-submenu {
+    .svg-icon {
+      display: block;
+      transform: translateY(17px);
+    }
+  }
+}
+
+>>> .el-menu-item.submenu-title-noDropdown {
+  //padding-left: 10px !important;
+  font-size: 12px !important;
+
+  .svg-icon {
+    //display: none;
+    margin-right: 5px !important;
+  }
+
+  span {
+    display: inline-block;
+    border-bottom: 5px solid transparent;
+  }
+}
+
+>>> .el-submenu-sidebar.submenu-item {
+
+  .el-submenu__title {
+    //padding-left: 10px !important;
+    font-size: 12px !important;
+    color: #909399;
+
+    .svg-icon {
+      display: none;
+      //margin-right: 5px !important;
+    }
+
+    span {
+      display: inline-block;
+      border-bottom: 5px solid transparent;
+    }
+  }
+
+  .el-menu--inline {
+    margin-top: -10px !important;
+
+    .nest-menu {
+      height: 35px !important;
+
+      .submenu-item.el-menu-item {
+        height: 35px !important;
+        line-height: 35px !important;
+        padding: 0 52px;
+
+        span {
+          display: inline-block;
+          border-bottom: 5px solid transparent;
+        }
+      }
+    }
   }
 }
 </style>

@@ -31,7 +31,7 @@
   .el-menu-item, .el-submenu-sidebar .el-menu-item {
     background-color: $subMenuBg;
     color: $menuText;
-    list-style: circle inside;
+    //list-style: circle inside;
 
     &.submenu-title-noDropdown {
       list-style: none;
@@ -40,13 +40,13 @@
     &.is-active {
       color: $subMenuActiveText;
       font-weight: 400;
-      list-style-type: disc;
+      //list-style-type: disc;
     }
 
     &:hover {
       background-color: $subMenuHover !important;
       color: $subMenuActiveText;
-      list-style-type: disc;
+      //list-style-type: disc;
     }
 
     i {

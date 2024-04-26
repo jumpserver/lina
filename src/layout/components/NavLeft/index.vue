@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}">
+  <div :class="['nav-left-wrapper', {'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}]">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />

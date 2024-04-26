@@ -1,0 +1,208 @@
+@import "~@/styles/variables.scss";
+
+$mobileHeight: 40px;
+
+.nav-left-wrapper {
+  // nav header 部分
+  .nav-header {
+    overflow: hidden;
+    background-color: var(--color-primary);
+
+    .active-mobile {
+      display: none;
+
+      .organization {
+        height: $mobileHeight;
+        line-height: $mobileHeight;
+        padding-left: 20px;
+        background: transparent;
+        color: #fff;
+        border-bottom: 1px solid rgba(31, 35, 41, .15);
+        .el-input--prefix .el-input__inner {
+          height: $mobileHeight!important;
+          line-height: $mobileHeight!important;
+        }
+        .svg-icon {
+          color: #FFF!important;
+          margin-right: 0!important;
+        }
+      }
+
+      // todo)) 未找到与之匹配的标签
+      //.organizations {
+      //  height: 55px;
+      //}
+
+      // todo)) 未找到与之匹配的标签
+      //.title-label {
+      //  color: white !important;
+      //}
+
+      // todo)) 未找到与之匹配的标签
+      //.mobile-view-switch {
+      //  &>>> .el-menu-item.is-active {
+      //    color: var(--menu-text-active)!important;
+      //    .svg-icon {
+      //      color: var(--menu-text-active)!important;
+      //    }
+      //  }
+      //}
+    }
+
+    .nav-title {
+      height: 48px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1F2329;
+      white-space: nowrap;
+      background-color: var(--menu-bg);
+      cursor: pointer;
+      transition: all 0.3s;
+      box-sizing: border-box;
+      overflow: hidden;
+
+      .hover-switch-view {
+        text-align: center;
+        color: var(--color-primary);
+        background: var(--menu-hover) !important;
+      }
+
+      .switch-view {
+        padding: 6px;
+        right: 16px;
+        z-index: 1;
+        line-height: 10px;
+        border-radius: 3px;
+        transform: translateY(-50%);
+
+        .icon-zone {
+          float: right;
+          padding: 4px;
+
+          &:hover {
+            color: var(--color-primary);
+          }
+
+          icon {
+            margin-right: 0 !important;
+          }
+        }
+
+        .view-title {
+          margin-left: 5px;
+          width: calc(100% - 10px);
+          display: inline-block
+        }
+      }
+    }
+  }
+
+  // 滚动条
+  .el-scrollbar {
+    height: 100%;
+
+    .scrollbar-wrapper {
+      overflow-x: hidden !important;
+
+      // 菜单主体
+      .left-menu.el-menu {
+        height: 100%;
+        width: 100% !important;
+        border: none;
+      }
+
+
+    }
+
+    .el-scrollbar__bar.is-vertical {
+      right: 0;
+    }
+
+    .el-scrollbar__bar.is-horizontal {
+      display: none;
+    }
+  }
+
+
+
+  // nav footer 部分
+  .nav-footer {
+    display: block;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    margin-top: 2px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(31, 35, 41, 0.15);
+    background-color: $subMenuBg;
+
+    .toggle-bar {
+      width: 55px;
+      height: 100%;
+      bottom: 0;
+      left: 0;
+      top: auto;
+      border: 0;
+      z-index: 1000;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-bar:hover {
+      background-color: $subMenuHover;
+    }
+  }
+
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 10px;
+    background: #fff;
+    z-index: 100;
+
+    .is-show {
+      display: block!important;;
+    }
+  }
+
+  // todo)) 找不到与之对应的标签
+  //.show-switch-view {
+  //  display: none;
+  //}
+
+  // 折叠起来时的样式
+  &.collapsed {
+    text-align: left;
+
+    >>>.nav-title {
+      &:hover {
+        background-color: var(--menu-hover);
+      }
+
+      .switch-view {
+        .icon-zone {
+          float: none;
+          padding: 0;
+        }
+        .switch-view .icon {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .active-mobile {
+    display: block;
+  }
+
+  .show-switch-view {
+    display: block!important;
+  }
+}
