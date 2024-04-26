@@ -15,26 +15,6 @@
 
     <el-form-item v-if="hasButtons" class="form-buttons">
       <el-button
-        v-for="button in moreButtons"
-        :key="button.title"
-        :loading="button.loading"
-        size="small"
-        v-bind="button"
-        @click="handleClick(button)"
-      >
-        {{ button.title }}
-      </el-button>
-      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
-        {{ $t('Reset') }}
-      </el-button>
-      <el-button
-        v-if="defaultButton && hasSaveContinue"
-        size="small"
-        @click="submitForm('form', true)"
-      >
-        {{ $t('SaveAndAddAnother') }}
-      </el-button>
-      <el-button
         v-if="defaultButton"
         :disabled="!canSubmit"
         :loading="isSubmitting"
@@ -43,6 +23,26 @@
         @click="submitForm('form')"
       >
         {{ submitBtnText }}
+      </el-button>
+      <el-button
+        v-if="defaultButton && hasSaveContinue"
+        size="small"
+        @click="submitForm('form', true)"
+      >
+        {{ $t('SaveAndAddAnother') }}
+      </el-button>
+      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
+        {{ $t('Reset') }}
+      </el-button>
+      <el-button
+        v-for="button in moreButtons"
+        :key="button.title"
+        :loading="button.loading"
+        size="small"
+        v-bind="button"
+        @click="handleClick(button)"
+      >
+        {{ button.title }}
       </el-button>
     </el-form-item>
   </ElFormRender>

@@ -64,8 +64,8 @@
   }
 
   .el-submenu .el-menu-item {
-    height: 38px;
-    line-height: 38px;
+    height: 35px;
+    line-height: 35px;
     padding: 0 52px;
     min-width: 200px;
   }
@@ -94,6 +94,10 @@
 
   .navbar li.is-active, .navbar li.is-opened {
     border: none;
+  }
+
+  .submenu-item.el-submenu.is-opened {
+    border-top: solid 1px #efefef;
   }
 
   .nest-menu li.is-active {

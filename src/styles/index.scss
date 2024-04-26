@@ -93,6 +93,10 @@ div:focus {
   padding: 20px;
 }
 
+.el-tooltip__popper.is-light {
+  background-color: #ebeef5 !important;
+}
+
 .el-tooltip__popper.is-light.help-tips div span {
   padding: 50px;
 }
@@ -177,9 +181,6 @@ input[type=file] {
   table-layout: fixed !important;
 }
 
-.el-table__column-filter-trigger i {
-  color: #888888 !important;
-}
 
 .el-tooltip__popper.is-dark {
   max-width: 60% !important;

@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-vars */
 import router from './router'
-import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
 import { isSameView } from '@/utils/jms'
 import { toSentenceCase } from '@/utils/common'
 
-NProgress.configure({
-  showSpinner: false
-}) // NProgress Configuration
-
+// NProgress.configure({
+//   showSpinner: false
+// }) // NProgress Configuration
+//
 router.beforeEach(async(to, from, next) => {
   // start progress bar
-  NProgress.start()
+  // NProgress.start()
   try {
     await startup({ to, from, next })
     next()
@@ -43,6 +42,6 @@ router.afterEach(async(to, from) => {
   // finish progress bar
   await setPageTitle()
   await generateViewRoutesIfChange({ to, from })
-  NProgress.done()
+  // NProgress.done()
 })
 
