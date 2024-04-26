@@ -250,7 +250,7 @@ export default {
     padding-left: 10px !important;
 
     &:hover {
-      background-color: rgba(255, 255, 255, .25);
+      background-color: rgba(0, 0, 0, .12);
     }
   }
 </style>

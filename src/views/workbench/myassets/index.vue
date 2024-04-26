@@ -125,7 +125,7 @@ export default {
           },
           connectivity: connectivityMeta,
           actions: {
-            width: '150px',
+            width: '88px',
             align: 'center',
             formatterArgs: {
               hasDelete: false,

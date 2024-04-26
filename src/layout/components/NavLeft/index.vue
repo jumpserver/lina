@@ -33,7 +33,7 @@
         :default-openeds="defaultOpensMenu"
         :text-color="variables['menuText']"
         :text-weigth="variables['menuTextWeight']"
-        :unique-opened="true"
+        :unique-opened="false"
         class="left-menu"
         mode="vertical"
       >
@@ -80,9 +80,11 @@ export default {
   computed: {
     ...mapGetters([
       'currentViewRoute',
-      'defaultOpensMenu',
       'sidebar'
     ]),
+    defaultOpensMenu() {
+      return this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -162,6 +164,10 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
+  .left-menu >>> .el-submenu__title * {
+    vertical-align: inherit;
+  }
 
   .nav-header {
     overflow: hidden;

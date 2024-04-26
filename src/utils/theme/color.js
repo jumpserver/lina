@@ -84,9 +84,23 @@ export function changeMenuColor(themeColors) {
     colors['--menu-hover'] = menuHover
   }
 
+  const lights = [15, 40, 60, 80]
+  const darks = [15, 30, 40, 60]
+
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
+
+    if (key === '--color-primary') {
+      for (const [i, light] of lights.entries()) {
+        const color = mix(white, currentColor.replace(/#/g, ''), light)
+        elementStyle.setProperty(key + '-light' + '-' + i, color)
+      }
+      for (const [i, dark] of darks.entries()) {
+        const color = mix(black, currentColor.replace(/#/g, ''), dark)
+        elementStyle.setProperty(key + '-dark' + '-' + i, color)
+      }
+    }
 
     if (key.includes('--color')) {
       const lightColor = mix(white, currentColor.replace(/#/g, ''), 70)

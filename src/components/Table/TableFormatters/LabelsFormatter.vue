@@ -2,9 +2,7 @@
   <div class="label-container">
     <a class="label-formatter-col">
       <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top;">
-        <el-tag effect="plain" size="mini">
-          <i class="fa fa-tag" /> -
-        </el-tag>
+        -
       </span>
       <div v-else>
         <div
@@ -21,7 +19,9 @@
             v-bind="formatterArgs.config"
             @click="handleLabelSearch(label)"
           >
-            <i class="fa fa-tag" /> <b> {{ getKey(label) }}</b>: {{ getValue(label) }}
+            <span>
+              <b> {{ getKey(label) }}:</b> {{ getValue(label) }}
+            </span>
           </el-tag>
         </div>
       </div>
@@ -233,6 +233,9 @@ export default {
       visibility: visible;
     }
   }
+  .tag-formatter {
+    line-height: 16px;
+  }
 }
 
 .tag-zone {
@@ -256,11 +259,11 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-  max-width: 180px;
+  max-width: 160px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //display: table;
+  opacity: 0.8;
 }
 
 .tag-tip {

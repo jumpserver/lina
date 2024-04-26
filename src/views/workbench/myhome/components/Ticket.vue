@@ -50,6 +50,7 @@ export default {
               }
             }
           },
+
           actions: {
             has: false
           },
@@ -61,14 +62,14 @@ export default {
           },
           type: {
             label: this.$t('Type'),
-            width: '160px',
+            width: '130px',
             formatter: row => {
               return row.type.label
             }
           },
           status: {
             align: 'center',
-            width: '90px',
+            width: '120px',
             formatter: row => {
               if (row.status.value === 'open') {
                 return <el-tag type='primary' size='mini'> {this.$t('OpenStatus')}</el-tag>

@@ -152,7 +152,7 @@ export default {
         cloud: 'fa-cloud',
         web: 'fa-globe',
         gpt: 'fa-comment',
-        custom: 'fa-th'
+        custom: 'fa-cube'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')
       for (const item of state.assetCategories) {
