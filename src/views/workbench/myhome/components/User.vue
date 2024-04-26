@@ -10,10 +10,14 @@
         </el-col>
         <el-col ::md="20" :sm="24">
           <ul>
-            <li><span class="title">{{ $t('Username') }}</span>：<span>{{ users.name }}</span></li>
-            <li><span class="title">{{ $t('Email') }}</span>：<span>{{ users.email }}</span></li>
             <li>
-              <span class="title">{{ $t('LoginDate') }}</span>：
+              <span class="title">{{ $t('Username') }}：</span>
+              <span>{{ users.name }}</span></li>
+            <li>
+              <span class="title">{{ $t('Email') }}：</span>
+              <span>{{ users.email }}</span></li>
+            <li>
+              <span class="title">{{ $t('LoginDate') }}：</span>
               <span>{{ users.last_login | date }}</span>
             </li>
           </ul>
@@ -49,6 +53,16 @@ ul, li {
   padding: 0;
   margin: 0;
   list-style: none
+}
+
+li {
+  display: flex !important;
+  width: 100%;
+
+  span {
+    display: inline-block;
+    min-width: 100px;
+  }
 }
 
 .box-card {
