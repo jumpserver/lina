@@ -164,6 +164,7 @@ $height: 28px;
   line-height: $height;
   background: transparent;
   color: #FFF;
+  font-size: 13px;
 
   & >>> .el-input__prefix {
     left: 0;

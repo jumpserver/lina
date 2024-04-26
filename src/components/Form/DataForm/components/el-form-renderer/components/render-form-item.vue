@@ -8,7 +8,7 @@
     v-bind="data.attrs"
   >
     <template v-if="data.label" #label>
-      <el-tooltip v-if="data.helpTip" effect="light" placement="top" popper-class="help-tips">
+      <el-tooltip v-if="data.helpTip" effect="dark" placement="top" popper-class="help-tips">
         <div slot="content" v-html="data.helpTip" />
         <i class="el-icon-warning-outline help-tip-icon" />
       </el-tooltip>

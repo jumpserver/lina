@@ -82,8 +82,8 @@
   }
 
   .el-menu-item, .el-submenu__title {
-    height: 48px;
-    line-height: 48px;
+    height: 42px;
+    line-height: 42px;
     font-weight: 400;
     font-size: 13px;
   }
@@ -121,6 +121,6 @@
   }
 
   .nest-menu:last-child {
-    padding-bottom: 10px;
+    padding-bottom: 12px;
   }
 }

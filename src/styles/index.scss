@@ -93,10 +93,6 @@ div:focus {
   padding: 20px;
 }
 
-.el-tooltip__popper.is-light {
-  background-color: #ebeef5 !important;
-}
-
 .el-tooltip__popper.is-light.help-tips div span {
   padding: 50px;
 }
@@ -181,9 +177,9 @@ input[type=file] {
   table-layout: fixed !important;
 }
 
-
-.el-tooltip__popper.is-dark {
-  max-width: 60% !important;
+.el-tooltip__popper {
+  max-width: 500px !important;
+  line-height: 1.5;
 }
 
 .view-switcher {
@@ -453,7 +449,7 @@ $tooltip-arrow-color: #c2d1e1;
 
   i {
     color: var(--color-info);
-    opacity: 1;
+    opacity: 0.9;
   }
 }
 
@@ -461,6 +457,7 @@ $tooltip-arrow-color: #c2d1e1;
   padding: 8px;
   font-weight: 500;
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .help-tips {

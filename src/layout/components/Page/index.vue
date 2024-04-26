@@ -5,7 +5,7 @@
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
-          <el-tooltip v-if="helpTip" effect="light" placement="right" popper-class="help-tips">
+          <el-tooltip v-if="helpTip" effect="dark" placement="top" popper-class="help-tips">
             <div slot="content" class="page-help-content" v-html="helpTip" />
             <span>
               <el-button class="help-msg-btn">
@@ -98,7 +98,7 @@ export default {
   }
 
   .page-content {
-    height: calc(100% - 50px);
+    height: calc(100% - 90px);
     overflow-x: hidden;
     overflow-y: auto;
   }
