@@ -8,6 +8,7 @@
       >
         <el-tooltip :content="item.tip">
           <el-button
+            v-if="!item.isScrollButton || showScrollButton"
             size="mini"
             type="default"
             @click="item.callback()"
@@ -61,14 +62,16 @@ export default {
           icon: 'arrow-up',
           callback: () => {
             this.xterm.scrollToTop()
-          }
+          },
+          isScrollButton: true
         },
         {
           tip: this.$tc('ScrollToBottom'),
           icon: 'arrow-down',
           callback: () => {
             this.xterm.scrollToBottom()
-          }
+          },
+          isScrollButton: true
         },
         {
           tip: this.$tc('ClearScreen'),
@@ -87,7 +90,8 @@ export default {
             downloadText(text, filename)
           }
         }
-      ]
+      ],
+      showScrollButton: false
     }
   },
   mounted: function() {
@@ -97,6 +101,7 @@ export default {
     this.xterm.open(terminalContainer)
     fitAddon.fit()
     this.xterm.scrollToBottom()
+    this.xterm.onScroll(this.checkScroll)
   },
   beforeDestroy() {
     this.xterm.dispose()
@@ -107,6 +112,9 @@ export default {
     },
     write: function(val) {
       this.xterm.write(val)
+    },
+    checkScroll(position) {
+      this.showScrollButton = position > 0
     }
   }
 }
