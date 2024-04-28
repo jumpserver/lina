@@ -142,7 +142,7 @@ export default {
 
 <style lang="scss" scoped>
 >>> .submenu-item.el-submenu {
-  border-left: 4px solid transparent;
+//  border-left: 4px solid transparent;
 }
 
 .el-submenu.is-active {

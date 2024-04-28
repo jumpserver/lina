@@ -244,15 +244,6 @@ export default {
     height: 55px;
   }
 
-  .menu-wrap {
-    >>> .el-menu-item.submenu-item.submenu-title-noDropdown {
-      border-left: 4px solid transparent;
-    }
-    >>> .el-menu-item.submenu-item.is-active.submenu-title-noDropdown {
-      border-left: 4px solid var(--menu-text-active);
-    }
-  }
-
   .nav-footer {
     display: block;
     width: 100%;
