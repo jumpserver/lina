@@ -35,23 +35,23 @@ export default {
     {
       path: '/workbench/assets',
       name: 'MyAssets',
-      component: () => import('@/views/workbench/myassets'),
+      component: empty,
+      redirect: '',
       meta: {
         icon: 'assets',
         title: i18n.t('MyAssets'),
         permissions: ['perms.view_myassets']
-      }
-    },
-    {
-      path: '/workbench/file-manager',
-      name: 'FileManagement',
-      component: empty,
-      meta: {
-        title: i18n.t('FileManagement'),
-        icon: 'file',
-        permissions: ['rbac.view_filemanager']
       },
       children: [
+        {
+          path: '',
+          name: 'ConnectAssets',
+          component: () => import('@/views/workbench/myassets'),
+          meta: {
+            title: i18n.t('ConnectAssets'),
+            permissions: ['perms.view_myassets']
+          }
+        },
         {
           path: 'batch-Transfer',
           name: 'BatchTransfer',
