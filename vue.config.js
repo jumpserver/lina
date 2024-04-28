@@ -56,7 +56,7 @@ module.exports = {
         ws: true
       },
       '/koko/': {
-        target: 'http://127.0.0.1:5000',
+        target: process.env.VUE_APP_KOKO_HOST,
         changeOrigin: true,
         ws: true
       },
@@ -73,11 +73,6 @@ module.exports = {
       '/luna/': {
         target: 'http://127.0.0.1:4200',
         changeOrigin: true
-      },
-      '/kael/': {
-        target: process.env.VUE_APP_KAEL_HOST,
-        changeOrigin: true,
-        ws: true
       },
       '^/(core|static|media)/': {
         target: process.env.VUE_APP_CORE_HOST,
