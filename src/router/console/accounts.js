@@ -1,6 +1,5 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
 
 export default [
   {
@@ -121,16 +120,13 @@ export default [
     meta: {
       title: i18n.t('Automations'),
       name: 'Automations',
-      permissions: [],
-      licenseRequired: true
+      permissions: []
     }
   },
   {
     path: 'account-push',
     component: empty,
-    hidden: () => {
-      return store.getters.hasValidLicense
-    },
+    hidden: true,
     redirect: '',
     name: 'AccountPush',
     meta: {

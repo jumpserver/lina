@@ -1,6 +1,5 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
 
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
@@ -11,15 +10,14 @@ export default [
     component: () => import('@/views/acl/index.vue'),
     meta: {
       title: i18n.t('ACLs'),
-      permissions: [],
-      licenseRequired: true
+      permissions: []
     }
   },
   {
     path: 'cmd-acls',
     component: empty,
     redirect: '',
-    hidden: () => store.getters.hasValidLicense,
+    hidden: true,
     meta: {
       title: i18n.t('CommandFilterAclList'),
       app: 'acls',

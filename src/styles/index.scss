@@ -465,3 +465,9 @@ $tooltip-arrow-color: #c2d1e1;
     color: #1c84c6;
   }
 }
+
+.el-tooltip__popper.is-dark {
+  background: rgba(58, 60, 62, 0.9) !important;
+  color: #FFF;
+  line-height: 1.5;
+}

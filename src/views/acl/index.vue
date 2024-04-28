@@ -33,6 +33,7 @@ export default {
             name: 'AssetAclList',
             comment: this.$t('AssetLoginACLHelpText'),
             icon: 'assets',
+            edition: 'enterprise',
             tags: ['asset']
           },
           {
@@ -41,6 +42,7 @@ export default {
             name: 'ConnectMethodAclList',
             comment: this.$t('ConnectMethodACLHelpText'),
             icon: 'client',
+            edition: 'enterprise',
             tags: ['client', 'cli']
           },
           {
@@ -49,6 +51,7 @@ export default {
             name: 'UserLoginAclList',
             comment: this.$t('UserLoginACLHelpText'),
             icon: 'login',
+            edition: 'enterprise',
             tags: ['login']
           }
         ],

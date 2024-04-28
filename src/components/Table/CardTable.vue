@@ -11,6 +11,7 @@
         <el-col v-for="(d, index) in totalData" :key="index" :span="8">
           <el-card
             :body-style="{ 'text-align': 'center', 'padding': '20px' }"
+            :class="{'is-disabled': isDisabled(d)}"
             class="my-card"
             shadow="hover"
             @click.native="onView(d)"
@@ -65,6 +66,7 @@
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import Icon from '@/components/Widgets/Icon/index.vue'
+import { mapGetters } from 'vuex'
 
 const defaultFirstPage = 1
 
@@ -109,6 +111,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['hasValidLicense']),
     tableUrl() {
       return this.tableConfig.url || ''
     }
@@ -117,6 +120,9 @@ export default {
     this.getList()
   },
   methods: {
+    isDisabled(item) {
+      return item.edition === 'enterprise' && !this.hasValidLicense
+    },
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
     },
@@ -189,6 +195,9 @@ export default {
       )
     },
     onView(obj) {
+      if (this.isDisabled(obj)) {
+        return
+      }
       const viewFunc = this.tableConfig.onView || this.defaultPerformView
       viewFunc(obj)
     },
@@ -217,10 +226,33 @@ export default {
 .my-card {
   margin: 0 0 20px 0;
   position: relative;
+  cursor: pointer;
+
+  &.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    .closeIcon {
+      visibility: visible;
+    }
+  }
+
+  .closeIcon {
+    float: right;
+    display: block;
+    visibility: hidden;
+
+    i {
+      font-size: 20px;
+      cursor: pointer;
+    }
+  }
 }
 
 .my-divider {
-  margin: 10px 0
+  margin: 10px 0;
 }
 
 .image {
@@ -230,6 +262,7 @@ export default {
     display: block;
     margin: 50% auto;
   }
+
   span {
     font-size: 36px;
     color: black;
@@ -254,25 +287,6 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-.closeIcon {
-  float: right;
-  display: block;
-  visibility: hidden;
-
-  i {
-    font-size: 20px;
-    cursor: pointer;
-  }
-}
-
-.my-card:hover {
-  cursor: pointer;
-}
-
-.my-card:hover .closeIcon {
-  visibility: visible;
-}
-
 .enterprise {
   position: absolute;
   right: -1px;
@@ -281,7 +295,7 @@ export default {
   color: #fff;
   padding: 3px 8px 4px 9px;
   font-size: 13px;
-  border-radius: 3px 3px 3px 10px;
+  border-radius: 3px 3px 3px 8px;
 }
 
 .tag-zone {
@@ -296,5 +310,4 @@ export default {
   text-align: left;
   height: 100%;
 }
-
 </style>
