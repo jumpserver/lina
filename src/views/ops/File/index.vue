@@ -119,7 +119,7 @@
 import { TreeTable } from '@/components'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
-import { createJob, getJob, getTaskDetail, JobUploadFile } from '@/api/ops'
+import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
@@ -230,28 +230,9 @@ export default {
   },
   mounted() {
     this.enableWS()
-    this.initData()
   },
   methods: {
     formatFileSize,
-    async initData() {
-      this.recoverStatus()
-    },
-    recoverStatus() {
-      if (this.$route.query.taskId) {
-        this.currentTaskId = this.$route.query.taskId
-        getTaskDetail(this.currentTaskId).then(data => {
-          getJob(data.job_id).then(res => {
-            this.runAsInput.value = res.runas
-            this.runAsInput.callback(res.runas)
-            this.executionInfo.status = data['status']
-            this.executionInfo.timeCost = data['time_cost']
-            this.setCostTimeInterval()
-            this.writeExecutionOutput()
-          })
-        })
-      }
-    },
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
@@ -281,7 +262,7 @@ export default {
       }
     },
     taskStatusStat(summary) {
-      const { ok, failures, dark, excludes, skipped } = summary
+      const { ok = [], failures = [], dark = [], excludes = [], skipped = [] } = summary
 
       const failedKeys = Object.keys(failures)
       const darkKeys = Object.keys(dark)
@@ -439,6 +420,7 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
+          this.$router.replace({ query: { taskId: this.currentTaskId }})
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {
