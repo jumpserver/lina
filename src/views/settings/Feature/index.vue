@@ -14,6 +14,7 @@ import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
 import Chat from './Chat.vue'
 import VirtualApp from './VirtualApp.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Feature',
@@ -29,7 +30,7 @@ export default {
         {
           title: this.$t('Ticket'),
           name: 'Ticket',
-          hidden: !this.$store.getters.hasValidLicense
+          hidden: !this.ticketsEnabled
         },
         {
           title: this.$t('AppOps'),
@@ -51,6 +52,16 @@ export default {
           hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
       ]
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'publicSettings'
+    ]),
+    ticketsEnabled() {
+      return this.publicSettings['TICKETS_ENABLED'] &&
+        this.$hasLicense() &&
+        this.$hasPerm('tickets.view_ticket')
     }
   }
 }
