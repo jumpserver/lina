@@ -46,7 +46,8 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     options: {
       type: Array,
@@ -54,7 +55,7 @@ export default {
     },
     getUrlQuery: {
       type: Boolean,
-      default: () => true
+      default: () => false
     },
     default: {
       type: Object,

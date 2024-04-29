@@ -20,19 +20,20 @@
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'",
     "vue-i18n-report-json": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -o /tmp/abc.json",
     "vue-i18n-report-add-miss": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -a",
-    "diff-i18n": "python ./src/i18n/langs/i18n-util.py diff en ja",
-    "apply-i18n": "python ./src/i18n/langs/i18n-util.py apply en ja"
+    "diff-i18n": "python ./src/i18n/langs/i18n-util.py diff en ja zh_Hant",
+    "apply-i18n": "python ./src/i18n/langs/i18n-util.py apply en ja zh_Hant"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
     "@fontsource/open-sans": "^5.0.24",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@ztree/ztree_v3": "3.5.44",
-    "axios": "0.21.1",
+    "axios": "0.28.0",
     "axios-retry": "^3.1.9",
     "cron-parser": "^4.0.0",
     "crypto-js": "^4.1.1",
     "css-color-function": "^1.3.3",
+    "decimal.js": "^10.4.3",
     "deepmerge": "^4.2.2",
     "echarts": "4.7.0",
     "element-ui": "2.13.2",

@@ -6,7 +6,8 @@ i18n_report_path = '/tmp/abc.json'
 lang_paths = {
     'zh': 'zh.json',
     'en': 'en.json',
-    'ja': 'ja.json'
+    'ja': 'ja.json',
+    'zh_hant': 'zh_Hant.json'
 }
 
 

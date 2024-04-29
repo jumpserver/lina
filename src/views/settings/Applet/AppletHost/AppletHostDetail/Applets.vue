@@ -91,6 +91,20 @@ export default {
                       openTaskPage(res['task'])
                     })
                   }
+                },
+                {
+                  title: this.$t('common.Uninstall'),
+                  callback: function({ row }) {
+                    this.$axios.post(
+                      `/api/v1/terminal/applet-host-deployments/uninstall/`,
+                      {
+                        hosts: [row.host.id],
+                        applet_id: row.applet.id
+                      }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
                 }
               ]
             }
@@ -109,6 +123,23 @@ export default {
               this.$axios.post(
                 `/api/v1/terminal/applet-host-deployments/`,
                 { host: this.object.id }
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('assets.OnlyInitialDeploy'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Deploy')
+          },
+          callbacks: {
+            click: function() {
+              this.$axios.post(
+                `/api/v1/terminal/applet-host-deployments/`,
+                { host: this.object.id, install_applets: false }
               ).then(res => {
                 openTaskPage(res['task'])
               })

@@ -41,6 +41,13 @@ export default {
       default: '25%'
     }
   },
+  data() {
+    return {
+      iItems: this.items.filter(item => {
+        return !item.hasOwnProperty('has') || item.has === true
+      })
+    }
+  },
   methods: {
     formateLabel(label) {
       if (!label) {

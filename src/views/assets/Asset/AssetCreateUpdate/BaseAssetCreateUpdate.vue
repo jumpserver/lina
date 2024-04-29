@@ -131,7 +131,7 @@ export default {
       const { defaultConfig } = this
       const { node, platform } = this.$route?.query || {}
       const nodesInitial = node ? [node] : []
-      const platformId = platform || 1
+      const platformId = platform || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {

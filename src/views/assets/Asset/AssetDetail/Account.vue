@@ -44,11 +44,18 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     url: {
       type: String,
       default: ''
+    },
+    extraQuickActions: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data() {
@@ -71,7 +78,9 @@ export default {
           title: this.$t('BatchTest'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Test')
+            label: this.$tc('Test'),
+            disabled: ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(this.object.type.value) !== -1 ||
+              this.$store.getters.currentOrgIsRoot
           },
           callbacks: Object.freeze({
             click: () => {
@@ -83,7 +92,8 @@ export default {
               })
             }
           })
-        }
+        },
+        ...this.extraQuickActions
       ]
     }
   },

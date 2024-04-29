@@ -25,7 +25,7 @@
 
 <script>
 import DataCard from '../components/DataCard.vue'
-
+import Decimal from 'decimal.js'
 export default {
   components: {
     DataCard
@@ -77,18 +77,28 @@ export default {
           &total_count_commands=1
           &total_count_commands_danger=1
         `)
-      const LoginSucceeded = data.total_count_user_login_success_logs === 0 ? 0 : ((data.total_count_user_login_success_logs / data.total_count_user_login_logs) * 100).toFixed(0)
+      const userLoginSuccessCountDecimal = data.total_count_user_login_success_logs ? new Decimal(data.total_count_user_login_success_logs) : new Decimal(0)
+      const userLoginCountDecimal = data.total_count_user_login_logs ? new Decimal(data.total_count_user_login_logs) : new Decimal(0)
+
+      let LoginSucceeded = userLoginSuccessCountDecimal.dividedBy(userLoginCountDecimal).times(100)
+      LoginSucceeded = isNaN(LoginSucceeded) ? 0 : LoginSucceeded
+      LoginSucceeded = LoginSucceeded.toFixed(2)
       const LoginFailed = LoginSucceeded === 100 ? 0 : 100 - LoginSucceeded
       const logs = [
-        { name: this.$t('LoginSucceeded'), value: LoginSucceeded },
-        { name: this.$t('LoginFailed'), value: LoginFailed }
+        { name: this.$t('LoginSucceeded'), value: LoginSucceeded.toString() },
+        { name: this.$t('LoginFailed'), value: LoginFailed.toString() }
       ]
       this.$set(this.logConfig, 'data', logs)
       this.$set(this.logConfig, 'total', data.total_count_user_login_logs)
       this.$set(this.logConfig, 'active', data.total_count_user_login_success_logs)
       this.$set(this.logConfig, 'weekAdd', data.total_count_user_login_success_logs)
 
-      const dangerCommand = data.total_count_commands_danger === 0 ? 0 : ((data.total_count_commands_danger / data.total_count_commands) * 100).toFixed(0)
+      const dangerCommandCountDecimal = data.total_count_commands_danger ? new Decimal(data.total_count_commands_danger) : new Decimal(0)
+      const commandCountDecimal = data.total_count_commands ? new Decimal(data.total_count_commands) : new Decimal(0)
+
+      let dangerCommand = dangerCommandCountDecimal.dividedBy(commandCountDecimal).times(100)
+      dangerCommand = isNaN(dangerCommand) ? 0 : dangerCommand
+      dangerCommand = dangerCommand.toFixed(2)
       const SafeCommand = dangerCommand === 100 ? 0 : 100 - dangerCommand
       const commandCounts = [
         { name: this.$t('DangerCommand'), value: dangerCommand },

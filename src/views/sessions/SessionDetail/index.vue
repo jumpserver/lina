@@ -45,7 +45,7 @@ export default {
           {
             title: this.$t('FileTransfer'),
             name: 'SessionFTPLogs',
-            hidden: () => !this.$hasPerm('terminal.view_ftplog')
+            hidden: () => !this.$hasPerm('audits.view_ftplog')
           },
           {
             title: this.$t('Activity'),
@@ -54,7 +54,7 @@ export default {
           }
         ],
         getObjectName: (obj) => { return obj.id },
-        hasActivity: false,
+        hasActivity: true,
         hasRightSide: false
       }
     }

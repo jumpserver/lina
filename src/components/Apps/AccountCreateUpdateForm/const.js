@@ -165,15 +165,16 @@ export const accountFieldsMeta = (vm) => {
     params: {
       label: vm.$t('PushParams'),
       component: AutomationParamsForm,
-      el: {
-        method: vm.asset?.auto_config?.push_account_method
-      },
+      el: {},
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
+        vm.fieldsMeta.params.el.method = vm.iPlatform.automation.push_account_method
+        vm.fieldsMeta.params.el.pushAccountParams = vm.iPlatform.automation.push_account_params
         return !formValue.push_now ||
           !automation.push_account_enabled ||
           !automation.ansible_enabled ||
-          (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
+          (formValue.secret_type === 'ssh_key' &&
+            vm.iPlatform.type.value === 'windows') ||
           !vm.$hasPerm('accounts.push_account') ||
           vm.addTemplate
       }

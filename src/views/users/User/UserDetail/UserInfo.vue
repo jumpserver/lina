@@ -53,7 +53,6 @@ export default {
             }
           }
         },
-
         {
           title: this.$t('ResetPassword'),
           attrs: {
@@ -198,9 +197,28 @@ export default {
           }
         },
         'id', 'name', 'username', 'email', 'phone',
-        'system_roles', 'org_roles', 'mfa_level', 'source',
+        'system_roles', 'org_roles',
+        {
+          key: this.$t('users.OrgsAndRoles'),
+          has: this.$store.getters.currentOrgIsRoot,
+          formatter: (item, val) => {
+            const doms = []
+            const orgsRoles = this.object.orgs_roles
+            const allowKeyMaxLength = 50
+            Object.entries(orgsRoles).forEach(([key, value]) => {
+              let prettyKey = key
+              if (key.length >= allowKeyMaxLength) {
+                prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
+              }
+              const item = prettyKey + ': ' + value.join(', ')
+              doms.push([item, <br/>])
+            })
+            return <div>{doms}</div>
+          }
+        },
+        'mfa_level', 'source',
         'wecom_id', 'dingtalk_id', 'feishu_id',
-        'created_by', 'date_joined', 'date_expired',
+        'mfa_level', 'source', 'created_by', 'date_joined', 'date_expired',
         'date_password_last_updated', 'last_login', 'comment'
       ],
       relationConfig: {

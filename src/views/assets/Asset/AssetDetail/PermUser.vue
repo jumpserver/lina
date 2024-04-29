@@ -38,8 +38,8 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
         columns: [
-          'name', 'username', 'email', 'phone',
-          'groups_display', 'total_role_display', 'source',
+          'name', 'username', 'email', 'phone', 'wechat',
+          'groups_display', 'system_roles', 'org_roles', 'source',
           'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
@@ -62,8 +62,26 @@ export default {
           source: {
             width: '120px'
           },
-          total_role_display: {
-            label: this.$t('Role')
+          system_roles: {
+            width: '100px',
+            label: this.$t('SystemRoles'),
+            formatter: (row) => {
+              return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
+            },
+            filters: [],
+            columnKey: 'system_roles'
+          },
+          org_roles: {
+            width: '100px',
+            label: this.$t('OrgRoles'),
+            formatter: (row) => {
+              return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
+            },
+            filters: [],
+            columnKey: 'org_roles',
+            has: () => {
+              return this.$store.getters.hasValidLicense && !this.currentOrgIsRoot
+            }
           },
           mfa_enabled: {
             label: 'MFA',

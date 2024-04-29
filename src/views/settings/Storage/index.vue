@@ -23,7 +23,7 @@ export default {
       activeMenu: 'ReplayStorage',
       submenu: [
         {
-          title: this.$t('ReplayStorage'),
+          title: this.$t('ObjectStorage'),
           name: 'ReplayStorage',
           hidden: () => !this.$hasPerm('terminal.view_replaystorage')
         },

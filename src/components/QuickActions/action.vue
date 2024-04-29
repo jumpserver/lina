@@ -53,7 +53,8 @@ export default {
   },
   data() {
     return {
-      empty: () => {}
+      empty: () => {
+      }
     }
   },
   computed: {

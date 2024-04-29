@@ -20,6 +20,7 @@ export default {
           columns: ['name', 'username', 'comment'],
           columnsMeta: {
             name: {
+              sortable: false,
               formatterArgs: {
                 route: 'VirtualAccountDetail'
               }

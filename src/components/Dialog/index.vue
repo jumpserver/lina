@@ -92,7 +92,7 @@ export default {
 <style lang="scss" scoped>
   .dialog >>> .el-dialog {
     border-radius: 0.3em;
-    max-width: 1500px;
+    max-width: min(100vw, 1500px);
 
     .form-group-header {
       margin-left: 20px;
@@ -131,9 +131,14 @@ export default {
       justify-content: flex-end;
     }
   }
-
+  @media (max-width: 900px) {
+    .dialog >>> .el-dialog {
+      max-width: calc(100% - 30px);
+    }
+  }
   .dialog-footer >>> button.el-button {
     font-size: 13px;
     padding: 8px 12px;
   }
+
 </style>

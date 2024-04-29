@@ -26,7 +26,14 @@
         </div>
       </div>
     </a>
-    <a class="edit-btn" style="padding-left: 5px" @click="showDialog = true"> <i class="fa fa-edit" /></a>
+    <a
+      v-if="formatterArgs.showEditBtn"
+      class="edit-btn"
+      style="padding-left: 5px"
+      @click="showDialog = true"
+    >
+      <i class="fa fa-edit" />
+    </a>
     <Dialog
       v-if="showDialog"
       :title="$tc('BindLabel')"
@@ -97,7 +104,8 @@ export default {
           getLabels(cellValue) {
             return cellValue
           },
-          config: {}
+          config: {},
+          showEditBtn: true
         }
       }
     }

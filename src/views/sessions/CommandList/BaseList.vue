@@ -82,6 +82,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               openInNewPage: true,
+              removeColorOnClick: true,
               can: this.$hasPerm('terminal.view_session'),
               getTitle() {
                 return vm.$t('Goto')

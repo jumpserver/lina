@@ -23,13 +23,13 @@ export default {
           resource: 'gatheraccountsautomation'
         },
         columns: [
-          'name', 'nodes', 'is_periodic',
+          'name', 'nodes', 'assets', 'is_periodic',
           'periodic_display', 'executed_amount'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'nodes', 'is_periodic',
+            'name', 'nodes', 'assets', 'is_periodic',
             'periodic_display', 'executed_amount'
           ]
         },

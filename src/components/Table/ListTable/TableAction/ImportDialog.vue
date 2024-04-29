@@ -199,7 +199,8 @@ export default {
     },
     async getDownloadTemplateUrl(tp) {
       const template = this.importOption === 'create' ? 'import' : 'update'
-      let query = `format=${tp}&template=${template}`
+      const action = this.importOption === 'create' ? 'create' : 'partial_update'
+      let query = `format=${tp}&template=${template}&action=${action}`
       if (this.importOption === 'update' && this.selectedRows.length > 0) {
         const resources = []
         for (const item of this.selectedRows) {

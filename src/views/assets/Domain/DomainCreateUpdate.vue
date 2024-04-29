@@ -16,8 +16,7 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('Basic'), ['name', 'assets']],
-        [this.$t('Gateway'), ['gateways']],
+        [this.$t('Basic'), ['name', 'gateways', 'assets']],
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {

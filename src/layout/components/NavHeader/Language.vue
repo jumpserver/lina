@@ -28,6 +28,11 @@ export default {
           cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
         },
         {
+          title: '中文(繁體)',
+          code: 'zh_hant',
+          cookieCode: 'zh-hant' // cookie code是为了让后端知道当前语言
+        },
+        {
           title: 'English',
           code: 'en',
           cookieCode: 'en'
@@ -35,7 +40,7 @@ export default {
         {
           title: '日本語',
           code: 'ja',
-          cookieCode: 'ja'
+          cookieCode: 'ja' // cookie code是为了让后端知道当前语言
         }
       ]
     }
@@ -70,22 +75,32 @@ export default {
         this.$moment.locale('en')
       } else if (this.currentLang.code.indexOf('ja') > -1) {
         this.$moment.locale('ja')
+      } else if (this.currentLang.code.indexOf('zh_hant') > -1) {
+        this.$moment.locale('zh-tw')
       } else {
         this.$moment.locale('zh-cn')
       }
     },
     changeLangTo(item) {
       this.$i18n.locale = item.code
-      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode, { expires: '1Y' })
+      localStorage.setItem('lang', item.code)
+      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
       window.location.reload()
     },
     getLangCode() {
       let langCode = this.$cookie.get(this.LANG_COOKIE_NAME)
       if (!langCode) {
+        langCode = localStorage.lang
+      }
+      if (!langCode) {
         langCode = navigator.language || navigator.userLanguage
       }
-      langCode = langCode.substr(0, 2)
-      langCode = langCode.replace('zh', 'cn')
+      if (langCode === 'zh-hant') {
+        langCode = 'zh_hant'
+      } else {
+        langCode = langCode.slice(0, 2)
+        langCode = langCode.replace('zh', 'cn')
+      }
       return langCode
     }
   }

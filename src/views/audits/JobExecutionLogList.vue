@@ -20,13 +20,15 @@ export default {
         columnsShow: {
           min: ['material', 'is_success'],
           default: [
-            'creator_name', 'material', 'is_finished',
-            'is_success', 'time_cost', 'date_finished', 'actions'
+            'creator_name', 'material', 'job_type', 'is_finished',
+            'is_success', 'time_cost', 'date_start',
+            'date_finished', 'actions'
           ]
         },
         columns: [
-          'creator_name', 'material', 'is_finished',
-          'is_success', 'time_cost', 'date_finished', 'actions'
+          'creator_name', 'material', 'job_type', 'is_finished',
+          'is_success', 'time_cost', 'date_start',
+          'date_finished', 'actions'
         ],
         columnsMeta: {
           actions: {

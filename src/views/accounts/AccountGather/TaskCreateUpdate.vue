@@ -14,8 +14,8 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('Basic'), ['name', 'nodes']],
-        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
+        [this.$t('Basic'), ['name', 'nodes', 'assets']],
+        [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
@@ -29,6 +29,19 @@ export default {
         is_periodic,
         crontab,
         interval,
+        assets: {
+          label: this.$tc('assets.Asset'),
+          el: {
+            multiple: true,
+            value: [],
+            ajax: {
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.address + ')', value: item.id }
+              },
+              url: '/api/v1/assets/assets/?gather_accounts_enabled=true'
+            }
+          }
+        },
         nodes: {
           label: this.$tc('Node'),
           el: {

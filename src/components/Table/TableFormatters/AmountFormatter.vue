@@ -60,12 +60,24 @@ export default {
     title() {
       return this.formatterArgs.title || this.col.label.replace('amount', '').replace('数量', '')
     },
+    cellValueToRemove() {
+      return this.formatterArgs.cellValueToRemove || []
+    },
     items() {
       if (this.formatterArgs.async && !this.asyncGetDone) {
         return [this.$t('Loading') + '...']
       }
       const getItem = this.formatterArgs.getItem || (item => item.name)
-      let data = this.data.map(item => getItem(item)) || []
+      let data = []
+      if (Array.isArray(this.data)) {
+        data = this.data.map(item => getItem(item)) || []
+      } else {
+        // object {key: [value]}
+        data = Object.entries(this.data).map(([key, value]) => {
+          const item = { key: key, value: value }
+          return getItem(item)
+        }) || []
+      }
       data = data.filter(Boolean)
       return data
     },
@@ -74,7 +86,18 @@ export default {
     }
   },
   async mounted() {
-    this.amount = this.formatterArgs.async ? this.cellValue : (this.cellValue || []).length
+    if (this.formatterArgs.async) {
+      this.amount = this.cellValue
+    } else {
+      let cellValue = []
+      if (Array.isArray(this.cellValue)) {
+        cellValue = this.cellValue
+      } else {
+        // object {key: [value]}
+        cellValue = Object.keys(this.cellValue)
+      }
+      this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+    }
   },
   methods: {
     getKey(item, index) {
@@ -108,13 +131,14 @@ export default {
   max-height: 60vh;
   overflow-y: auto;
 }
+
 .detail-item {
   border-bottom: 1px solid #EBEEF5;
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
-     background-color: #F5F7FA;
+    background-color: #F5F7FA;
   }
 }
 

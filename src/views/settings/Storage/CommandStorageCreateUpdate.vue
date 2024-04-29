@@ -19,7 +19,7 @@ export default {
   data() {
     const commandType = this.$route.query.type || 'es'
     return {
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'CommandStorage' }},
+      successUrl: { name: 'Storage', params: { activeMenu: 'CommandStorage' }},
       initial: {
         type: commandType,
         doc_type: 'command',

@@ -16,6 +16,7 @@ import OIDC from './OIDC'
 import Radius from './Radius'
 import DingTalk from './DingTalk'
 import FeiShu from './FeiShu'
+import Lark from './Lark'
 import WeCom from './WeCom'
 import SSO from './SSO'
 import SAML2 from './SAML2'
@@ -34,6 +35,7 @@ export default {
     WeCom,
     DingTalk,
     FeiShu,
+    Lark,
     Radius,
     SSO,
     SAML2,
@@ -74,6 +76,11 @@ export default {
           title: this.$t('FeiShu'),
           name: 'FeiShu',
           key: 'AUTH_FEISHU'
+        },
+        {
+          title: 'Lark',
+          name: 'Lark',
+          key: 'AUTH_LARK'
         },
         {
           title: this.$t('Slack'),

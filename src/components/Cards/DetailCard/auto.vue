@@ -73,9 +73,11 @@ export default {
           if (val === '-') {
             return <span>{'-'}</span>
           }
-          return (<span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
-            {val}
-          </span>)
+          return (
+            <span style={{ cursor: 'pointer' }} onClick={() => copy(val)} title={val}>
+              {val}
+            </span>
+          )
         }
       }
       return formatter
@@ -123,13 +125,27 @@ export default {
           for (const [index, item] of value.entries()) {
             let object = {}
             if (tp === 'object') {
-              const fieldName = `${name}.${item.name}`
-              if (excludes.includes(fieldName)) {
-                continue
-              }
-              object = {
-                key: item.label,
-                value: item.value
+              const firstValue = value[0]
+              if (firstValue.hasOwnProperty('name')) {
+                value.forEach(item => {
+                  const fieldName = `${name}.${item.name}`
+                  if (excludes.includes(fieldName)) {
+                    return
+                  }
+                  object = {
+                    key: item.label,
+                    value: item.value
+                  }
+                })
+              } else {
+                const fieldName = `${name}.${item.name}`
+                if (excludes.includes(fieldName)) {
+                  continue
+                }
+                object = {
+                  key: item.label,
+                  value: item.value
+                }
               }
             } else if (tp === 'string') {
               object = {

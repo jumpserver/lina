@@ -1,19 +1,18 @@
 <template>
   <div :class="{'collapse':collapse}" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <a v-if="collapse" key="collapse" class="sidebar-logo-link" @click="handleClick">
         <img :src="logoSrc" alt="logo" class="sidebar-logo">
-      </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
+      </a>
+      <a v-else key="expand" class="sidebar-logo-link" @click="handleClick">
         <img :src="logoTextSrc" alt="logo" class="sidebar-logo-text">
-      </router-link>
+      </a>
     </transition>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   name: 'SidebarLogo',
   props: {
@@ -28,6 +27,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'viewRoutes',
       'publicSettings'
     ]),
     // eslint-disable-next-line vue/return-in-computed-property
@@ -39,6 +39,18 @@ export default {
     }
   },
   created() {
+  },
+  methods: {
+    handleClick() {
+      const currentPath = this.$route.path
+      const matchingRoute = this.viewRoutes.find(route => currentPath.startsWith(route.path))
+
+      if (matchingRoute) {
+        this.$router.push(matchingRoute.redirect)
+      } else {
+        this.$router.push('/')
+      }
+    }
   }
 }
 </script>

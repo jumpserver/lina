@@ -41,7 +41,7 @@ async function getPublicSetting({ to, from, next }, isOpen) {
 }
 
 async function refreshCurrentOrg() {
-  orgs.getCurrentOrg().then(org => {
+  return orgs.getCurrentOrg().then(org => {
     store.dispatch('users/setCurrentOrg', org)
   })
 }

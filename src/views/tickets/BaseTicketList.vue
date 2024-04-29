@@ -11,7 +11,7 @@
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { APPROVE, REJECT } from './const'
+import { APPROVE, CLOSED, OPEN, REJECT } from './const'
 
 export default {
   name: 'TicketListTable',
@@ -42,7 +42,7 @@ export default {
         columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'state', 'status', 'date_created']
+          default: ['title', 'serial_num', 'type', 'state', 'date_created']
         },
         columnsMeta: {
           serial_num: {
@@ -71,7 +71,7 @@ export default {
             }
           },
           applicant: {
-            label: this.$t('User'),
+            label: this.$t('Applicant'),
             sortable: 'custom',
             formatter: row => {
               return row['rel_snapshot'].applicant
@@ -91,11 +91,7 @@ export default {
             formatter: TagChoicesFormatter,
             formatterArgs: {
               getTagLabel({ row }) {
-                if (row.status.value === 'open') {
-                  return vm.$t('OpenStatus')
-                } else {
-                  return vm.$t('CloseStatus')
-                }
+                return row.status.label
               },
               getTagType({ row }) {
                 if (row.status.value === 'open') {
@@ -115,8 +111,10 @@ export default {
             formatterArgs: {
               getTagType({ row }) {
                 const mapper = {
-                  [APPROVE]: 'success',
-                  [REJECT]: 'danger'
+                  [OPEN]: 'success',
+                  [APPROVE]: 'primary',
+                  [REJECT]: 'danger',
+                  [CLOSED]: 'info'
                 }
                 return mapper[row.state.value] || 'warning'
               },
@@ -140,35 +138,15 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
-          default: {
-            state: {
-              key: 'state',
-              label: this.$t('Action'),
-              value: 'pending',
-              valueLabel: this.$t('Pending')
-            }
-          },
-          exclude: ['state', 'id', 'title', 'type'],
+          exclude: ['id', 'title', 'type', 'applicant'],
           options: [
             {
-              value: 'state',
-              label: this.$t('Action'),
-              type: 'choice',
-              children: [
-                {
-                  default: true,
-                  value: 'pending',
-                  label: this.$t('Pending')
-                },
-                {
-                  value: APPROVE,
-                  label: this.$t('Approved')
-                },
-                {
-                  value: REJECT,
-                  label: this.$t('Rejected')
-                }
-              ]
+              value: 'id',
+              label: 'ID'
+            },
+            {
+              value: 'title',
+              label: this.$t('tickets.title')
             },
             {
               value: 'type',
@@ -194,16 +172,8 @@ export default {
               ]
             },
             {
-              value: 'id',
-              label: 'ID'
-            },
-            {
-              value: 'title',
-              label: this.$t('Title')
-            },
-            {
-              value: 'relevant_app',
-              label: this.$t('RelevantApp')
+              value: 'applicant_username_name',
+              label: this.$t('tickets.Applicant')
             },
             {
               value: 'relevant_asset',

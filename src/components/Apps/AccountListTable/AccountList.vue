@@ -355,10 +355,14 @@ export default {
             type: 'primary',
             icon: 'fa-handshake-o',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 &&
+                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
+                  !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => { return v.id })
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
               this.$axios.post(
                 '/api/v1/accounts/accounts/tasks/',
                 { action: 'verify', accounts: ids }).then(res => {
@@ -377,7 +381,9 @@ export default {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
             callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => { return v.id })
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
               this.$axios.patch(
                 '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: ids }).then(() => {
