@@ -32,7 +32,6 @@
         />
         <DatetimeRangePicker
           v-if="hasDatePicker"
-          class="datepicker"
           v-bind="datePicker"
           @dateChange="handleDateChange"
         />
@@ -144,138 +143,101 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  $headerHeight: 30px;
-  $innerHeight: 28px;
-  .table-header {
-    >>> {
-      .el-cascader {
-        line-height: $innerHeight;
+$headerHeight: 30px;
+$innerHeight: 28px;
+
+.table-header {
+  .left-side {
+    display: block;
+    float: left;
+
+    ::v-deep .action-item.el-dropdown > .el-button {
+      height: 100%;
+    }
+  }
+
+  .right-side {
+    float: right;
+  }
+
+  .search {
+    display: flex;
+    flex-direction: row;
+
+    .right-side-item.action-search {
+      height: 30px;
+
+      ::v-deep .el-cascader {
+        line-height: $innerHeight !important;
+
         .el-input.el-input--suffix {
           .el-input__inner {
             height: calc(#{$headerHeight} - 3px);
           }
+
+          .el-input__suffix {
+            color: var(--el-icon-color) !important;
+
+            .el-input__suffix-inner {
+              line-height: 35px
+            }
+          }
         }
       }
-      .el-input__inner {
+
+      ::v-deep .search-input.el-input {
         height: $innerHeight;
-      }
 
-      .el-button.el-button--primary {
-        border-color: #DCDFE6;
-      }
-
-      .el-input__suffix {
-        height: $innerHeight;
-        line-height: $innerHeight;
-      }
-
-       .el-input__icon {
-        line-height: $innerHeight;
-      }
-
-      .el-range-editor--small {
-        .el-input__icon, .el-range-separator {
-          line-height: 22px;
-        }
-      }
-    }
-  }
-
-  .right-side-item {
-  }
-
-  .right-side-actions {
-    display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content: center;
-    height: $headerHeight;
-
-    >>> .fa {
-      height: 16px;
-      width: 16px;
-    }
-
-    >>> .el-button:hover {
-      background-color: rgb(0, 0, 0, 0.05);
-    }
-  }
-
-    .action-search >>> .el-input__suffix i {
-      font-weight: 500;
-      color: #888;
-    }
-
-    .action-search >>> .el-cascader {
-      line-height: $innerHeight !important;
-    }
-
-    .table-action-right-side {
-      display: flex;
-      justify-content: center;
-    }
-
-    .export-item {
-      display: block;
-      padding: 5px 20px;
-    }
-
-    .datepicker {
-      margin-left: 10px;
-    }
-
-    .left-side {
-      float: left;
-      display: block;
-      &>>> .action-item.el-dropdown {
-        &> .el-button {
+        .el-input__inner {
           height: 100%;
         }
+
+        .el-input__suffix {
+          height: $innerHeight;
+          line-height: $innerHeight;
+
+          i {
+            line-height: $innerHeight;
+            font-weight: 500;
+            color: var(--el-icon-color);
+          }
+        }
       }
-      >>> .el-button {
-      }
     }
+  }
 
-    .right-side {
-      float: right;
-    }
+  .search.left {
+    float: left;
+    padding: 0 !important;
+  }
 
-    .search {
-      display: flex;
-      flex-direction: row;
-    }
+  .search.right {
+    float: right;
+  }
+}
 
-    .mobile .search {
-      display: inherit;
-    }
+.export-item {
+  display: block;
+  padding: 5px 20px;
+}
 
-    .mobile .search .datepicker {
-      margin-left: 0;
-    }
+.mobile .search {
+  display: inherit;
+}
 
-    .search.left {
-      float: left;
-      padding: 0 !important;
-    }
+.mobile .search .datepicker {
+  margin-left: 0;
+}
 
-    .search.right {
-      float: right;
-    }
+.mobile .search.right {
+  float: none;
+}
 
-    .mobile .search.right {
-      float: none;
-    }
+.mobile .search.right .action-search {
+  width: 100%;
+}
 
-    .mobile .search.right .action-search {
-      width: 100%;
-    }
-
-    .mobile .right-side {
-      padding-top: 5px;
-    }
-
-    .filter-field.right-side-item.action-search {
-      height: 30px;
-    }
-
+.mobile .right-side {
+  padding-top: 5px;
+}
 </style>

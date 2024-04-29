@@ -353,6 +353,19 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 3px;
     background-color:#fff;
+
+    .filterTitle {
+      padding-right: 2px;
+      line-height: 100%;
+      text-align: center;
+      flex-shrink: 0;
+      border-collapse: separate;
+      box-sizing: border-box;
+      color: rgb(96, 98, 102);
+      display: inline;
+      font-size: 13px;
+      height: auto;
+    }
   }
   .search-input  >>> .el-input__suffix {
     cursor: pointer;
@@ -372,18 +385,6 @@ export default {
     font-size: 13px;
   }
 
-  .filterTitle {
-    padding-right: 2px;
-    line-height: 100%;
-    text-align: center;
-    flex-shrink: 0;
-    border-collapse: separate;
-    box-sizing: border-box;
-    color: rgb(96, 98, 102);
-    display: inline;
-    font-size: 13px;
-    height: auto;
-  }
   .filter-tag{
     margin: 2px 4px 2px 0;
   }

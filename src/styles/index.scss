@@ -35,7 +35,7 @@ body {
   height: calc(100% - 50px);
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
-  color: #676a6c;
+  color: var(--el-text-color);
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
@@ -348,6 +348,17 @@ button, input, optgroup, select, textarea {
   }
   .el-input__icon {
     vertical-align: super
+  }
+}
+
+.el-card .el-card__header {
+  color: var(--el-text-color);
+}
+
+.el-alert {
+  .el-alert__description,
+  .el-alert__title{
+    color: var(--el-text-color) !important;
   }
 }
 

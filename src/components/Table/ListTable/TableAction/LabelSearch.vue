@@ -33,7 +33,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'LabelSearch',
   data() {
@@ -151,6 +150,10 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
+
+  ::v-deep .svg-icon {
+    color: var(--el-icon-color) !important;
+  }
 }
 
 .label-button {

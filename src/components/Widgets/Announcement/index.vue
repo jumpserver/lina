@@ -60,23 +60,27 @@ export default {
 .announcement >>> .el-alert__content {
   width: 100%;
 }
+
 .announcement-main {
-  word-wrap:break-word;
+  word-wrap: break-word;
   white-space: pre-wrap;
 }
-.link-more {
-  font-size: 10px;
-  margin-left: 10px;
-  border-bottom: solid 1px;
-}
+
 .icon {
   vertical-align: text-bottom;
+  color: var(--color-info) !important;
 }
->>> .markdown-body {
+
+.markdown {
   background-color: transparent !important;
-  a {
+
+  .link-more {
+    font-size: 10px;
+    margin-left: 10px;
+    border-bottom: solid 1px;
     color: var(--color-info) !important;
   }
+
   h1, h2, h3, h4, h5 {
     margin-top: 0;
     margin-bottom: 10px;

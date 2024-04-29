@@ -182,30 +182,56 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 通用
 .layout {
   display: flex;
   justify-content: center;
-}
 
-.dropdown-item {
-  .pre-icon {
-    width: 17px;
-    display: inline-block;
+  .el-button {
+    color: var(--el-text-color) !important;
   }
 
-  >>> i.fa {
-    font-size: 13px;
-    height: 13px;
-    width: 13px;
-    margin-right: 0;
+  .el-button--primary.el-button {
+    color: #ffffff !important;
   }
 
-  >>> .svg-icon {
-    font-size: 13px;
-    height: 13px;
-    width: 13px;
+  .action-item.el-dropdown {
+    font-size: 11px;
+
+    .el-icon-arrow-down {
+      color: var(--el-icon-color) !important;
+    }
   }
 }
+
+// 下拉 options
+.el-dropdown-menu {
+  .dropdown-item {
+    .pre-icon {
+      width: 17px;
+      display: inline-block;
+    }
+
+    ::v-deep i.fa {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+      margin-right: 0;
+    }
+
+    ::v-deep .svg-icon {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+    }
+  }
+
+  .el-dropdown-menu__item:not(.is-disabled):hover {
+    color: #909399;
+    background-color: #FFFFFF;
+  }
+}
+
 .dropdown-menu-title {
   text-align: left;
   font-size: 12px;
@@ -226,13 +252,10 @@ export default {
   line-height: 1;
 }
 
-.action-item.el-dropdown {
-  font-size: 11px;
-}
-
 .el-button-ungroup .action-item:first-child {
   margin-left: 0;
 }
+
 ::v-deep .more-batch-processing {
   &.el-dropdown-menu__item--divided {
     margin-top: 0;
@@ -245,10 +268,6 @@ export default {
     &:before {
       height: 0;
     }
-  }
-  &.el-dropdown-menu__item:not(.is-disabled):hover {
-    color: #909399;
-    background-color: #FFFFFF;
   }
 }
 </style>

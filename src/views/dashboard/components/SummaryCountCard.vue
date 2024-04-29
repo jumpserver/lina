@@ -45,6 +45,7 @@ export default {
 .box {
   padding: 20px;
   background: #FFFFFF;
+
   .content {
     .el-col {
       padding-left: 16px;

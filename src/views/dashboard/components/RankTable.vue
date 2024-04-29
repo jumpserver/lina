@@ -74,12 +74,14 @@ export default {
   margin-top: 16px;
   padding: 20px;
   background: #fff;
+
   .head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
   }
 }
+
 >>> .el-table th, .el-table tr {
   background-color: #F5F6F7!important;
 

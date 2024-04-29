@@ -37,27 +37,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.summary-header {
+  color: var(--el-icon-color);
+
   .title {
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     line-height: 20px;
-    color: #646A73;
   }
-  .no-margins {
-    margin: 0 !important;
-  }
+}
+
+.no-margins {
+  margin: 0 !important;
+
   .num {
     font-style: normal;
     font-weight: 500;
     font-size: 24px;
     line-height: 40px;
-    color: #646A73;
+    color: var(--el-text-color);
   }
+
   .disabled-link {
     cursor: pointer;
     &:hover {
       color: var(--color-primary);
     }
   }
+}
 </style>
