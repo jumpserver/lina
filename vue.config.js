@@ -47,16 +47,16 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       '/api/': {
-        target: process.env.VUE_APP_CORE_HOST,
+        target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true
       },
       '/ws/': {
-        target: process.env.VUE_APP_CORE_WS,
+        target: process.env.VUE_APP_CORE_WS || 'ws://1237.0.0.1:8080',
         changeOrigin: true,
         ws: true
       },
       '/koko/': {
-        target: process.env.VUE_APP_KOKO_HOST,
+        target: process.env.VUE_APP_KOKO_HOST || 'http://127.0.0.1:5000',
         changeOrigin: true,
         ws: true
       },
@@ -75,7 +75,7 @@ module.exports = {
         changeOrigin: true
       },
       '^/(core|static|media)/': {
-        target: process.env.VUE_APP_CORE_HOST,
+        target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true
       }
     },

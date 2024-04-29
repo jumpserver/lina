@@ -31,9 +31,9 @@ import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 import ECharts from 'vue-echarts'
 import service from '@/utils/request'
+import request from '@/utils/request'
 import { message } from '@/utils/message'
 import xss from '@/utils/xss'
-import request from '@/utils/request'
 import ElTableTooltipPatch from '@/utils/elTableTooltipPatch.js'
 
 /**
@@ -94,7 +94,8 @@ new Vue({
 ;(function() {
   request({
     url: '/api/v1/authentication/user-session/',
-    method: 'get'
+    method: 'get',
+    disableFlashErrorMsg: true
   })
 })()
 
@@ -105,6 +106,7 @@ window.addEventListener('beforeunload', (event) => {
   IdBeforeunload = true
   request({
     url: '/api/v1/authentication/user-session/',
-    method: 'delete'
+    method: 'delete',
+    disableFlashErrorMsg: true
   })
 })
