@@ -151,44 +151,42 @@ export default {
 .label-search {
   margin-right: 10px;
 
+  ::v-deep .el-button.label-button {
+    height: 30px;
+  }
+
+  .label-cascader {
+    width: 300px;
+    line-height: 30px;
+
+    ::v-deep .el-input {
+      .el-input__inner {
+        height: 30px;
+        font-size: 13px;
+      }
+
+      .el-input__suffix {
+        color: var(--el-icon-color) !important; ;
+      }
+    }
+
+    ::v-deep .el-cascader__tags {
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      .el-tag.el-tag--info {
+        color: var(--el-text-color) !important;
+      }
+
+      .el-cascader__search-input {
+        display: none;
+      }
+    }
+  }
+
   ::v-deep .svg-icon {
     color: var(--el-icon-color) !important;
   }
 }
-
-.label-button {
-  //padding: 10px 13px 10px 12px;
-}
-
-.label-select {
-}
-
-.label-cascader {
-  width: 300px;
-  height: 30px;
-
-  >>> .el-input input {
-    height: 30px;
-  }
-
-  >>> .el-input__inner {
-    font-size: 13px;
-  }
-  >>> .el-cascader__search-input {
-    display: none;
-    margin: 0 0 2px 13px;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
-    display: inline;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags {
-    flex-wrap: wrap;
-  }
-  >>> .el-cascader__tags {
-    white-space: nowrap;
-    flex-wrap: nowrap;
-    overflow: hidden;
-  }
-}
-
 </style>

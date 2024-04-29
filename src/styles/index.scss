@@ -351,6 +351,10 @@ button, input, optgroup, select, textarea {
   }
 }
 
+.el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
+  color: var(--el-text-color) !important;
+}
+
 .el-card .el-card__header {
   color: var(--el-text-color);
 }

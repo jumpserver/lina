@@ -165,44 +165,7 @@ $innerHeight: 28px;
     flex-direction: row;
 
     .right-side-item.action-search {
-      height: 30px;
-
-      ::v-deep .el-cascader {
-        line-height: $innerHeight !important;
-
-        .el-input.el-input--suffix {
-          .el-input__inner {
-            height: calc(#{$headerHeight} - 3px);
-          }
-
-          .el-input__suffix {
-            color: var(--el-icon-color) !important;
-
-            .el-input__suffix-inner {
-              line-height: 35px
-            }
-          }
-        }
-      }
-
-      ::v-deep .search-input.el-input {
-        height: $innerHeight;
-
-        .el-input__inner {
-          height: 100%;
-        }
-
-        .el-input__suffix {
-          height: $innerHeight;
-          line-height: $innerHeight;
-
-          i {
-            line-height: $innerHeight;
-            font-weight: 500;
-            color: var(--el-icon-color);
-          }
-        }
-      }
+      height: $headerHeight;
     }
   }
 
