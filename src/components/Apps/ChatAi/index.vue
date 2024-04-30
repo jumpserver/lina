@@ -117,6 +117,7 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
+  pointer-events: auto;
 
   .container {
     flex: 1;
