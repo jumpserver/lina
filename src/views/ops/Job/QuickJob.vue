@@ -112,10 +112,10 @@ export default {
           },
           stop: {
             type: 'button',
-            name: this.$t('common.Stop'),
+            name: this.$t('Stop'),
             align: 'left',
             icon: 'fa fa-stop',
-            tip: this.$t('ops.StopJob'),
+            tip: this.$t('StopJob'),
             disabled: true,
             el: {
               type: 'danger'

@@ -87,7 +87,7 @@ export default {
         fieldsMeta['db_name']['rules'] = [rules.Required]
       }
       if (platform === 'oracle') {
-        fieldsMeta['db_name']['helpText'] = this.$t('assets.OracleDBNameHelpText')
+        fieldsMeta['db_name']['helpText'] = this.$t('OracleDBNameHelpText')
       }
       return fieldsMeta
     }

@@ -93,7 +93,7 @@ export default {
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
                     // debugger
@@ -137,26 +137,26 @@ export default {
           exclude: ['id', 'status'],
           options: [
             {
-              label: this.$t('accounts.AccountChangeSecret.Asset'),
+              label: this.$t('Asset'),
               value: 'asset_name'
             },
             {
-              label: this.$t('accounts.Accounts'),
+              label: this.$t('Accounts'),
               value: 'account_username'
             },
             {
               value: 'status',
-              label: this.$t('common.Status'),
+              label: this.$t('Status'),
               type: 'choice',
               children: [
                 {
                   default: true,
                   value: 'success',
-                  label: this.$t('common.Success')
+                  label: this.$t('Success')
                 },
                 {
                   value: 'failed',
-                  label: this.$t('common.Failed')
+                  label: this.$t('Failed')
                 }
               ]
             }
@@ -165,7 +165,7 @@ export default {
         extraMoreActions: [
           {
             name: 'BatchRetry',
-            title: this.$t('accounts.AccountChangeSecret.BatchRetry'),
+            title: this.$t('BatchRetry'),
             type: 'primary',
             fa: 'fa-retweet',
             can: ({ selectedRows }) => {

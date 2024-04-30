@@ -31,7 +31,7 @@ export default [
     name: 'TaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },

@@ -48,7 +48,7 @@
         <krry-box
           ref="hasSelect"
           :data-show-list="checkedData"
-          :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
+          :filter-placeholder="filterPlaceholder[1] || $tc('Search')"
           :filterable="filterable"
           :highlight-color="highlightColor"
           :is-highlight="isHighlight"
@@ -56,7 +56,7 @@
           :page-size="pageSize"
           :page-texts="pageTexts"
           :show-clear-btn="showClearBtn"
-          :title="boxTitle[1] || $tc('common.Selected')"
+          :title="boxTitle[1] || $tc('Selected')"
           @check-district="hasCheckSelect"
           @search-word="searchWord"
           @check-disable="checkDisable"

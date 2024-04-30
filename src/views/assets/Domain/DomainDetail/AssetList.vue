@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseList ref="AssetBaseList" v-bind="tableConfig" />
-    <AddAssetDialog :setting="AddAssetSetting" :object="object" @close="handleAddAssetDialogClose" />
+    <AddAssetDialog :object="object" :setting="AddAssetSetting" @close="handleAddAssetDialogClose" />
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
           extraActions: [
             {
               name: 'AddAsset',
-              title: this.$t('common.Add'),
+              title: this.$t('Add'),
               type: 'primary',
               callback: function() {
                 this.AddAssetSetting.AddAssetDialogVisible = true
@@ -55,8 +55,8 @@ export default {
         },
         addExtraMoreActions: [
           {
-            name: this.$t('common.BatchRemoval'),
-            title: this.$t('common.BatchRemoval'),
+            name: this.$t('BatchRemoval'),
+            title: this.$t('BatchRemoval'),
             type: 'primary',
             icon: 'fa fa-minus',
             can({ selectedRows }) {
@@ -71,7 +71,7 @@ export default {
           {
             order: 10,
             name: 'RemoveAsset',
-            title: this.$t('assets.Remove'),
+            title: this.$t('Remove'),
             callback: function(row) {
               this.removeAsset(row)
             }.bind(this)
@@ -98,7 +98,7 @@ export default {
             domain: null
           }
         })
-        msg = patch_data.length + ' ' + this.$t('common.rows')
+        msg = patch_data.length + ' ' + this.$t('rows')
       } else {
         patch_data = [{
           id: rows.row.id,
@@ -106,12 +106,12 @@ export default {
         }]
         msg = rows.row.name
       }
-      this.$confirm(this.$t('common.removeWarningMsg') + ' ' + msg + ' ?', {
+      this.$confirm(this.$t('removeWarningMsg') + ' ' + msg + ' ?', {
         type: 'warning'
       }).then(() => {
         this.$axios.patch(`/api/v1/assets/assets/`, patch_data).then(() => {
           this.reloadTable()
-          this.$message.success(this.$t('common.RemoveSuccessMsg'))
+          this.$message.success(this.$t('RemoveSuccessMsg'))
         })
       }).catch(() => {
       })

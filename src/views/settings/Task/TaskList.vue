@@ -107,7 +107,7 @@ export default {
           },
           enabled: {
             width: '80px',
-            label: `${this.$t('common.Enable')}/${this.$t('common.Disable')}`,
+            label: `${this.$t('Enable')}/${this.$t('Disable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {

@@ -125,7 +125,7 @@ export default {
           exclude: ['asset'],
           options: [
             {
-              label: this.$t('dashboard.AssetName'),
+              label: this.$t('AssetName'),
               value: 'asset_name'
             }
           ]

@@ -180,7 +180,7 @@ export default {
           this.$message.success(data.msg)
           this.$refs.listTable.reloadTable()
         } else {
-          this.$message.error(data.msg) || this.$t('common.imExport.ImportFail')
+          this.$message.error(data.msg) || this.$t('ImportFail')
         }
         this.dialogLdapUserImportLoginStatus = false
         this.dialogLdapUserImportAllLoginStatus = false

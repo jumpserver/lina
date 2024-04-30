@@ -227,7 +227,7 @@ export default {
           store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
       if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed) {
         this.fieldsMeta['mfa_level'].disabled = true
-        this.fieldsMeta['mfa_level'].helpText = this.$t('users.GlobalDisableMfaMsg')
+        this.fieldsMeta['mfa_level'].helpText = this.$t('GlobalDisableMfaMsg')
       }
     }
   }

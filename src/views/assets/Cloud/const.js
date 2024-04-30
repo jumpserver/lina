@@ -96,7 +96,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   },
   [volcengine]: {
     name: volcengine,
-    title: i18n.t('xpack.Cloud.Volcengine'),
+    title: i18n.t('Volcengine'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [vmware]: {

@@ -4,8 +4,7 @@
 
 <script type="text/jsx">
 import TreeTable from '../../Table/TreeTable/index.vue'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { AccountInfoFormatter } from '@/components/Table/TableFormatters'
+import { AccountInfoFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 
 export default {
@@ -76,7 +75,7 @@ export default {
             has: false
           },
           view_account: {
-            label: this.$t('assets.Account'),
+            label: this.$t('Account'),
             formatter: AccountInfoFormatter,
             width: '100px'
           },

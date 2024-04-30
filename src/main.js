@@ -30,7 +30,6 @@ import VueCookie from 'vue-cookie'
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 import ECharts from 'vue-echarts'
-import service from '@/utils/request'
 import request from '@/utils/request'
 import { message } from '@/utils/message'
 import xss from '@/utils/xss'
@@ -71,7 +70,7 @@ Vue.use(VueLogger, loggerOptions)
 
 Vue.component('echarts', ECharts)
 
-Vue.prototype.$axios = service
+Vue.prototype.$axios = request
 
 window._ = require('lodash')
 // Vue.set(Vue.prototype, '_', _)

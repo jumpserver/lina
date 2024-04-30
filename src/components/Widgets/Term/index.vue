@@ -78,7 +78,7 @@ export default {
           }
         },
         {
-          tip: this.$tc('common.Export'),
+          tip: this.$tc('Export'),
           icon: 'download',
           callback: () => {
             this.xterm.selectAll()

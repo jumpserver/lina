@@ -11,7 +11,7 @@
         :port="port"
         :visible.sync="visible"
       />
-      <AddGatewayDialog :setting="AddGatewaySetting" :object="object" @close="handleAddGatewayDialogClose" />
+      <AddGatewayDialog :object="object" :setting="AddGatewaySetting" @close="handleAddGatewayDialogClose" />
     </el-col>
   </div>
 </template>
@@ -107,7 +107,7 @@ export default {
                   name: 'RemoveGateWay',
                   order: 10,
                   can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
-                  title: this.$t('assets.Remove'),
+                  title: this.$t('Remove'),
                   callback: function(val) {
                     this.removeGateway(val)
                   }.bind(this)
@@ -149,8 +149,8 @@ export default {
         hasSearch: true,
         extraMoreActions: [
           {
-            name: this.$t('common.BatchRemoval'),
-            title: this.$t('common.BatchRemoval'),
+            name: this.$t('BatchRemoval'),
+            title: this.$t('BatchRemoval'),
             type: 'primary',
             icon: 'fa fa-minus',
             can({ selectedRows }) {
@@ -172,7 +172,7 @@ export default {
         extraActions: [
           {
             name: 'GatewayAdd',
-            title: this.$t('common.Add'),
+            title: this.$t('Add'),
             callback: function() {
               this.AddGatewaySetting.AddGatewayDialogVisible = true
             }.bind(this)
@@ -201,7 +201,7 @@ export default {
             domain: null
           }
         })
-        msg = patch_data.length + ' ' + this.$t('common.rows')
+        msg = patch_data.length + ' ' + this.$t('rows')
       } else {
         patch_data = [{
           id: rows.row.id,
@@ -209,12 +209,12 @@ export default {
         }]
         msg = rows.row.name
       }
-      this.$confirm(this.$t('common.removeWarningMsg') + ' ' + msg + ' ?', {
+      this.$confirm(this.$t('RemoveWarningMsg') + ' ' + msg + ' ?', {
         type: 'warning'
       }).then(() => {
         this.$axios.patch(`/api/v1/assets/gateways/`, patch_data).then(() => {
           this.reloadTable()
-          this.$message.success(this.$t('common.RemoveSuccessMsg'))
+          this.$message.success(this.$t('RemoveSuccessMsg'))
         })
       }).catch(() => {
       })

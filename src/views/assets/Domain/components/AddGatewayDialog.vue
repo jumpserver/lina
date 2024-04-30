@@ -1,15 +1,15 @@
 <template>
   <Dialog
     v-if="setting.AddGatewayDialogVisible"
-    :title="$tc('assets.AddGatewayInDomain')"
-    :visible.sync="setting.AddGatewayDialogVisible"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    custom-class="asset-select-dialog"
-    width="50vw"
-    top="15vh"
+    :title="$tc('assets.AddGatewayInDomain')"
+    :visible.sync="setting.AddGatewayDialogVisible"
     after
-    :destroy-on-close="true"
+    custom-class="asset-select-dialog"
+    top="15vh"
+    width="50vw"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
@@ -50,7 +50,7 @@ export default {
         hasReset: false,
         hasSaveContinue: false,
         needGetObjectDetail: false,
-        createSuccessMsg: this.$t('common.AddSuccessMsg'),
+        createSuccessMsg: this.$t('AddSuccessMsg'),
         updateSuccessNextRoute: {
           name: 'DomainDetail',
           params: { id: this.$route.params.id }
@@ -59,7 +59,7 @@ export default {
         fieldsMeta: {
           gateways: {
             component: ObjectSelect2,
-            label: this.$t('assets.Gateway'),
+            label: this.$t('Gateway'),
             el: {
               multiple: true,
               clearable: true,

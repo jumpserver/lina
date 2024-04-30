@@ -10,7 +10,7 @@
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
     </div>
-    <el-button slot="reference" size="mini" type="primary">{{ $t('common.View') }}</el-button>
+    <el-button slot="reference" size="mini" type="primary">{{ $t('View') }}</el-button>
   </el-popover>
 </template>
 

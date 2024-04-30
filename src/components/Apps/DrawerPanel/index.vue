@@ -219,6 +219,7 @@ export default {
   pointer-events: auto;
   color: #fff;
   background-color: #FFFFFF;
+  opacity: 0.9;
   box-shadow: 0 0 8px 4px #00000014;
   cursor: pointer;
 

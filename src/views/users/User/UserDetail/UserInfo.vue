@@ -199,7 +199,7 @@ export default {
         'id', 'name', 'username', 'email', 'phone',
         'system_roles', 'org_roles',
         {
-          key: this.$t('users.OrgsAndRoles'),
+          key: this.$t('OrgsAndRoles'),
           has: this.$store.getters.currentOrgIsRoot,
           formatter: (item, val) => {
             const doms = []

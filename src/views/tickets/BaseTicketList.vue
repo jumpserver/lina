@@ -146,7 +146,7 @@ export default {
             },
             {
               value: 'title',
-              label: this.$t('tickets.title')
+              label: this.$t('title')
             },
             {
               value: 'type',
@@ -173,7 +173,7 @@ export default {
             },
             {
               value: 'applicant_username_name',
-              label: this.$t('tickets.Applicant')
+              label: this.$t('Applicant')
             },
             {
               value: 'relevant_asset',
