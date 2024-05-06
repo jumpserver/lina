@@ -4,6 +4,7 @@ export default {
   render(h, { data, props }) {
     let children = []
     const align = props.align
+    console.log(props)
     if (props.columns) {
       children = props.columns.map(column =>
         h('el-data-table-column', {

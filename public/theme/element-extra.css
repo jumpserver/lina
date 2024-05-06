@@ -329,7 +329,7 @@ td .el-button.el-button--mini {
 }
 
 .el-table__header thead tr th {
-  border-bottom: 1px solid #e7e7e7 !important;
+  /*border-bottom: 1px solid #e7e7e7 !important;*/
 }
 
 .el-table .cell,

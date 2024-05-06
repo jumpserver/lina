@@ -233,13 +233,14 @@ export default {
 // 主要是 Table 中的操作列
 .layout.table-actions {
   .el-button {
-    padding: 2px 10px;
+    padding: 5px 10px;
     border: none;
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    padding: 2px 5px;
-    background-color: #1ab394;
+    padding: 5px 7px;
+    background-color: #E8F7F4;
+    color: #1ab394;
     border: none;
   }
 }

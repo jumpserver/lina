@@ -878,6 +878,10 @@ export default {
     if (this.totalData) {
       this.getList()
     }
+
+    console.log('tableAttrs', this.tableAttrs)
+    console.log(this.hasSelection)
+    console.log(this.columns)
   },
   methods: {
     getQuery() {

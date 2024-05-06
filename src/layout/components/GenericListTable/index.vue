@@ -26,5 +26,4 @@ export default {
 .list-table {
   margin-bottom: 20px;
 }
-
 </style>
