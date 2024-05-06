@@ -244,6 +244,7 @@ export default {
     border: none;
 
     &:hover {
+      color: #fff;
       background-color: #83CBBA;
     }
   }
