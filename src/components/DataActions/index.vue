@@ -242,6 +242,10 @@ export default {
     background-color: #E8F7F4;
     color: #1ab394;
     border: none;
+
+    &:hover {
+      background-color: #83CBBA;
+    }
   }
 }
 
