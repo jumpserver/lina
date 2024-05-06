@@ -143,8 +143,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-$headerHeight: 30px;
 $innerHeight: 28px;
+$headerHeight: 30px;
 
 .table-header {
   .left-side {

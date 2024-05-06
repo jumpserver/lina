@@ -47,32 +47,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .page-heading {
-    position: relative;
-    height: 50px;
-    line-height: 50px;
-    background-color: #ffffff;
-    border-bottom: solid 1px #ebeef5;
-    .el-row {
-      width: 100%;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 0 24px;
-    }
-  }
+.page-heading {
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+  background-color: #ffffff;
+  border-bottom: solid 1px #ebeef5;
 
-  .page-heading-left, h2 {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 32px;
-    color: #1F2329;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .el-row {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 24px;
   }
+}
 
-  .page-heading-right {
-    float: right;
-  }
+.page-heading-left,
+h2 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 32px;
+  color: var(--el-text-color);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.page-heading-right {
+  float: right;
+}
 </style>

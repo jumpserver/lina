@@ -155,44 +155,68 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-form {
-    margin-right: 80px;
-  }
-  .el-form ::v-deep .el-form-item {
-    margin-bottom: 10px;
-  }
+.el-form {
+  margin-right: 80px;
 
-  .el-form ::v-deep .el-form-item__content {
-    width: 75%;
-    line-height: 32px;
-  }
-
-  .mobile.el-form ::v-deep .el-form-item__content {
-    width: 100%;
-  }
-
-  .el-form ::v-deep .el-form-item__label {
-    padding: 0 30px 0 0;
-    line-height: 32px;
-  }
-
-  .el-form ::v-deep .el-form-item__error {
-    position: inherit;
-  }
-
-  .el-form ::v-deep .form-group-header {
+  ::v-deep .form-group-header {
     margin-left: 50px;
+    color: var(--el-text-color);
   }
 
-  .el-form.mobile ::v-deep .form-group-header {
-    margin-left: 0;
+  ::v-deep .el-form-item {
+    margin-bottom: 10px;
+
+    .el-form-item__label {
+      padding: 0 30px 0 0;
+      line-height: 32px;
+      color: var(--el-text-color);
+
+      i {
+        color: var(--el-icon-color);
+      }
+    }
+
+    .el-form-item__content {
+      width: 75%;
+      line-height: 32px;
+
+      .el-input .el-input__inner {
+        color: var(--el-text-color);
+        //border: 1px solid var(--el-input-border-color);
+      }
+
+      .el-form-item__error {
+        position: inherit;
+        color: var(--el-form-tip-text-color);
+      }
+
+      .help-block {
+        display: block;
+        margin-top: 2px;
+        margin-bottom: 5px;
+        color: var(--el-form-tip-text-color);
+        font-size: 12px;
+        line-height: 18px;
+        word-break: keep-all;
+
+        a {
+          color: var(--color-primary);
+        }
+      }
+    }
   }
 
-  .el-form ::v-deep .help-block a {
-    color: var(--color-primary);
-  }
-
-  .form-buttons {
+  ::v-deep .el-form-item.form-buttons {
     margin-top: 20px;
   }
+}
+
+.mobile.el-form ::v-deep .el-form-item__content {
+  width: 100%;
+}
+
+.el-form.mobile ::v-deep .form-group-header {
+  margin-left: 0;
+}
 </style>
+s

@@ -88,19 +88,6 @@ div:focus {
   }
 }
 
-// main-container global css
-.app-container {
-  padding: 20px;
-}
-
-.el-tooltip__popper.is-light {
-  background-color: #ebeef5 !important;
-}
-
-.el-tooltip__popper.is-light.help-tips div span {
-  padding: 50px;
-}
-
 .white-bg {
   background-color: #ffffff;
 }
@@ -146,6 +133,24 @@ h4 {
   font-size: 14px;
 }
 
+button, input, optgroup, select, textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+
+// 文字提示相关
+.el-tooltip__popper.is-light {
+  background-color: #ebeef5 !important;
+}
+
+.el-tooltip__popper.is-light.help-tips div span {
+  padding: 50px;
+}
+
 // 弹窗里的List table中的搜索框
 
 .el-dialog__body div.table-action-right-side {
@@ -176,11 +181,15 @@ input[type=file] {
   opacity: 80;
 }
 
+// 表格相关
+.el-data-table {
+
+}
+
 .el-table__body {
   width: 100%;
   table-layout: fixed !important;
 }
-
 
 .el-tooltip__popper.is-dark {
   max-width: 60% !important;
@@ -213,13 +222,6 @@ input[type=file] {
   overflow: auto;
 }
 
-.el-table .el-table__row > td > .cell.el-tooltip {
-  width: auto!important;
-}
-
-.el-table .el-table__row .show-full-content > .cell {
-  white-space: normal!important;
-}
 
 .el-input.is-disabled .el-input__inner {
   color: #737373 !important;
@@ -232,26 +234,85 @@ input[type=file] {
   }
 }
 
+// table 相关通用样式
 .el-data-table .el-table {
+  th {
+    .el-table__column-filter-trigger {
+      line-height: 24px;
+    }
+    .caret-wrapper {
+      height: 21px;
+
+      .sort-caret.ascending {
+        top: 0;
+      }
+      .sort-caret.descending {
+        bottom: 0;
+      }
+    }
+  }
+
+  .el-table__header > thead > tr {
+    .is-sortable {
+      padding: 5px 0;
+
+      .cell {
+        padding-top: 3px !important;
+      }
+    }
+
+    th {
+      padding: 6px 0;
+      background-color: #ffffff;
+      font-size: 13px;
+      line-height: 1.5;
+      border-right: none;
+
+      .cell {
+        white-space: nowrap !important;
+        overflow: hidden;
+
+        span {
+          color: var(--el-icon-color);
+        }
+
+        &:hover {
+          border-right: 2px solid #EBEEF5;
+        }
+      }
+
+      &:last-child {
+        border-right: solid 1px #EBEEF5 !important;
+      }
+    }
+  }
+
   .table {
     margin-top: 15px;
   }
 
   .el-table__row {
-    &.selected-row {
+    .show-full-content > .cell {
+      white-space: normal !important;
+    }
+
+    & .selected-row {
       background-color: #f5f7fa;
     }
 
     & > td {
-      line-height: 1.5;
       padding: 6px 0;
       font-size: 13px;
       border-right: none;
-      &:last-child {
-        border-right: solid 1px #EBEEF5 !important;
-      }
+      line-height: 1.5;
+      color:  var(--el-text-color);
+
       * {
         vertical-align: middle;
+      }
+
+      .cell.el-tooltip {
+        width: auto !important;
       }
 
       .el-checkbox {
@@ -263,36 +324,11 @@ input[type=file] {
         overflow: hidden;
         white-space: nowrap;
       }
-    }
-  }
 
-  .el-table__header > thead > tr > th {
-    padding: 6px 0;
-    background-color: #ffffff;
-    font-size: 13px;
-    line-height: 1.5;
-    border-right: none;
-
-    &:last-child {
-      border-right: solid 1px #EBEEF5 !important;
-    }
-
-    .cell {
-      white-space: nowrap !important;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      &:hover {
-        border-right: 2px solid #EBEEF5;
+      &:last-child {
+        border-right: 1px solid #EBEEF5 !important;
       }
     }
-  }
-}
-
-.el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
-  padding: 5px 0;
-
-  .cell {
-    padding-top: 3px!important;
   }
 }
 
@@ -338,19 +374,6 @@ input[type=file] {
   font-weight: 400;
 }
 
-button, input, optgroup, select, textarea {
-  font-family: "Open Sans", sans-serif !important;
-}
-
-.el-form {
-  label {
-    font-weight: 400;
-  }
-  .el-input__icon {
-    vertical-align: super
-  }
-}
-
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
   color: var(--el-text-color) !important;
 }
@@ -366,24 +389,6 @@ button, input, optgroup, select, textarea {
   }
 }
 
-.el-table {
-  th {
-    .el-table__column-filter-trigger {
-      line-height: 24px;
-    }
-    .caret-wrapper {
-      height: 21px;
-
-      .sort-caret.ascending {
-        top: 0;
-      }
-      .sort-caret.descending {
-        bottom: 0;
-      }
-    }
-  }
-}
-
 .el-form .el-form-item__content {
   font-size: 13px;
   line-height: 32px;
@@ -391,6 +396,15 @@ button, input, optgroup, select, textarea {
 
 .el-tabs__item > span {
   padding: 0 6px;
+}
+
+.el-form {
+  label {
+    font-weight: 400;
+  }
+  .el-input__icon {
+    vertical-align: super
+  }
 }
 
 .el-form .el-input__inner, .el-dialog__body .el-input__inner {

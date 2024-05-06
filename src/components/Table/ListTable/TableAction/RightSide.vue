@@ -122,8 +122,7 @@ export default {
       })
     },
     iExportOptions() {
-      const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
-      return options
+      return assignIfNot(this.exportOptions, { url: this.tableUrl })
     }
   },
   methods: {
@@ -139,7 +138,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.right-side-actions {
+.right-side-actions.right-side-item {
   display: flex;
   align-items: center;
   justify-content:center;
