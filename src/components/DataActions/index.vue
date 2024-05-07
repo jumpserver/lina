@@ -194,7 +194,6 @@ export default {
 
     &:first-child {
       margin-left: 0;
-      border: none;
     }
   }
 
@@ -233,7 +232,7 @@ export default {
 // 主要是 Table 中的操作列
 .layout.table-actions {
   .el-button {
-    padding: 5px 10px;
+    padding: 0 5px;
     border: none;
     color: #fff;
   }
