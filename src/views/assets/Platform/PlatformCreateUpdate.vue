@@ -193,7 +193,7 @@ export default {
      display: inline-block;
      position: absolute;
      right: 18px;
-    margin-top: -10px;
+    //margin-top: -10px;
   }
 }
 

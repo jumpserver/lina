@@ -85,14 +85,12 @@ export default {
       }
     }
 
-    &:hover {
-    }
-
-    >>> .el-form-item__label {
+    ::v-deep .el-form-item__label {
       padding-right: 8%;
       //white-space: nowrap;
       //text-overflow: ellipsis;
       overflow: hidden;
+      color: var(--el-icon-color);
 
       span {
         display: inline-block;
@@ -100,11 +98,12 @@ export default {
       }
     }
 
-    >>> .el-form-item__content {
+    ::v-deep .el-form-item__content {
+      color: var(--el-text-color);
       font-size: 13px;
     }
 
-    >>> .el-tag--mini {
+    ::v-deep .el-tag--mini {
       margin-right: 3px;
     }
   }

@@ -155,44 +155,155 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-form {
-    margin-right: 80px;
-  }
-  .el-form ::v-deep .el-form-item {
-    margin-bottom: 10px;
-  }
+.el-form {
+  margin-right: 80px;
 
-  .el-form ::v-deep .el-form-item__content {
-    width: 75%;
-    line-height: 32px;
-  }
-
-  .mobile.el-form ::v-deep .el-form-item__content {
-    width: 100%;
-  }
-
-  .el-form ::v-deep .el-form-item__label {
-    padding: 0 30px 0 0;
-    line-height: 32px;
-  }
-
-  .el-form ::v-deep .el-form-item__error {
-    position: inherit;
-  }
-
-  .el-form ::v-deep .form-group-header {
+  ::v-deep .form-group-header {
     margin-left: 50px;
+    color: var(--el-text-color);
   }
 
-  .el-form.mobile ::v-deep .form-group-header {
-    margin-left: 0;
+  ::v-deep .el-form-item {
+    margin-bottom: 10px;
+
+    .item-params {
+      margin-top: 0;
+    }
+
+    .el-form-item__label {
+      padding: 0 30px 0 0;
+      line-height: 32px;
+      color: var(--el-text-color);
+
+      i {
+        color: var(--el-icon-color);
+      }
+    }
+
+    .el-form-item__content {
+      width: 75%;
+      line-height: 32px;
+
+      // 禁用的输入框
+      .el-input.is-disabled .el-input__inner {
+        color: var(--el-icon-color) !important;
+        background-color: var(--el-disabled-background-color);
+      }
+
+      // 复合型输入框
+      .el-input.el-input-group {
+        .el-input-group__prepend {
+          border: 1px solid var(--el-input-border-color);
+          border-right: 0 !important;
+
+          .el-select {
+            border-radius: 4px;
+            border-bottom-right-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+
+            .el-input__inner {
+              border: none;
+            }
+          }
+        }
+
+        .el-input__inner {
+          border: 1px solid var(--el-input-border-color);
+          border-radius: 0;
+          color: var(--el-text-color);
+
+          &:focus {
+            border-color: #1ab394;
+          }
+        }
+
+        .el-input-group__append {
+          border: 1px solid var(--el-input-border-color);
+          border-left: 0 !important;
+        }
+      }
+
+      // 普通的输入框
+      .el-input .el-input__inner {
+        color: var(--el-text-color);
+        border-radius: 4px;
+        border: 1px solid var(--el-input-border-color);
+
+        &:focus {
+          border-color: #1ab394;
+        }
+      }
+
+      // 不符合校验规则的提示信息
+      .el-form-item__error {
+        position: inherit;
+        color: var(--el-form-tip-text-color);
+      }
+
+      .el-select {
+        // 选择 tag 时的额外自定义样式
+        .el-select__tags > span > .el-tag.el-tag--info {
+          .el-tag__close.el-icon-close {
+            margin-top: -1px !important;
+          }
+        }
+
+        // select 框点击时直接设置 focus 无法让边框显示绿色聚焦，只能通过聚焦时额外的 is-focus 判定
+        .el-input.is-focus .el-input__inner {
+          border-color: #1ab394;
+        }
+
+        // 选择普通 item 时的样式
+        .el-input .el-input__inner {
+          color: var(--el-text-color);
+
+          &:focus {
+            border-color: #1ab394;
+          }
+        }
+      }
+
+      // 文本域
+      .el-textarea .el-textarea__inner {
+        border: 1px solid var(--el-input-border-color);
+
+        &:focus {
+          border-color: #1ab394;
+        }
+      }
+
+      .el-data-table .el-table {
+        margin: 5px 0;
+        border-radius: 4px;
+        border: 1px solid var(--el-input-border-color);
+      }
+
+      .help-block {
+        display: block;
+        margin-top: 2px;
+        margin-bottom: 5px;
+        color: var(--el-form-tip-text-color);
+        font-size: 12px;
+        line-height: 18px;
+        word-break: keep-all;
+
+        a {
+          color: var(--color-primary);
+        }
+      }
+    }
   }
 
-  .el-form ::v-deep .help-block a {
-    color: var(--color-primary);
-  }
-
-  .form-buttons {
+  ::v-deep .el-form-item.form-buttons {
     margin-top: 20px;
   }
+}
+
+.mobile.el-form ::v-deep .el-form-item__content {
+  width: 100%;
+}
+
+.el-form.mobile ::v-deep .form-group-header {
+  margin-left: 0;
+}
 </style>

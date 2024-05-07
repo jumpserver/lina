@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
   .ibox {
     /*height: 100%;*/
     clear: both;
@@ -83,6 +83,6 @@ export default {
 
   .ibox >>> .el-card__body {
     padding: 15px 30px 20px 30px;
-    color: inherit;
+    color: var(--el-icon-color);
   }
 </style>

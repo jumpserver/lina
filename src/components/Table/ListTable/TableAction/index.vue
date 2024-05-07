@@ -144,138 +144,64 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  $headerHeight: 30px;
-  $innerHeight: 28px;
-  .table-header {
-    >>> {
-      .el-cascader {
-        line-height: $innerHeight;
-        .el-input.el-input--suffix {
-          .el-input__inner {
-            height: calc(#{$headerHeight} - 3px);
-          }
-        }
-      }
-      .el-input__inner {
-        height: $innerHeight;
-      }
+$innerHeight: 28px;
+$headerHeight: 30px;
 
-      .el-button.el-button--primary {
-        border-color: #DCDFE6;
-      }
+.table-header {
+  .left-side {
+    display: block;
+    float: left;
 
-      .el-input__suffix {
-        height: $innerHeight;
-        line-height: $innerHeight;
-      }
-
-       .el-input__icon {
-        line-height: $innerHeight;
-      }
-
-      .el-range-editor--small {
-        .el-input__icon, .el-range-separator {
-          line-height: 22px;
-        }
-      }
+    ::v-deep .action-item.el-dropdown > .el-button {
+      height: 100%;
     }
   }
 
-  .right-side-item {
+  .right-side {
+    float: right;
   }
 
-  .right-side-actions {
+  .search {
     display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content: center;
-    height: $headerHeight;
+    flex-direction: row;
 
-    >>> .fa {
-      height: 16px;
-      width: 16px;
-    }
-
-    >>> .el-button:hover {
-      background-color: rgb(0, 0, 0, 0.05);
+    .right-side-item.action-search {
+      height: $headerHeight;
     }
   }
 
-    .action-search >>> .el-input__suffix i {
-      font-weight: 500;
-      color: #888;
-    }
+  .search.left {
+    float: left;
+    padding: 0 !important;
+  }
 
-    .action-search >>> .el-cascader {
-      line-height: $innerHeight !important;
-    }
+  .search.right {
+    float: right;
+  }
+}
 
-    .table-action-right-side {
-      display: flex;
-      justify-content: center;
-    }
+.export-item {
+  display: block;
+  padding: 5px 20px;
+}
 
-    .export-item {
-      display: block;
-      padding: 5px 20px;
-    }
+.mobile .search {
+  display: inherit;
+}
 
-    .datepicker {
-      margin-left: 10px;
-    }
+.mobile .search .datepicker {
+  margin-left: 0;
+}
 
-    .left-side {
-      float: left;
-      display: block;
-      &>>> .action-item.el-dropdown {
-        &> .el-button {
-          height: 100%;
-        }
-      }
-      >>> .el-button {
-      }
-    }
+.mobile .search.right {
+  float: none;
+}
 
-    .right-side {
-      float: right;
-    }
+.mobile .search.right .action-search {
+  width: 100%;
+}
 
-    .search {
-      display: flex;
-      flex-direction: row;
-    }
-
-    .mobile .search {
-      display: inherit;
-    }
-
-    .mobile .search .datepicker {
-      margin-left: 0;
-    }
-
-    .search.left {
-      float: left;
-      padding: 0 !important;
-    }
-
-    .search.right {
-      float: right;
-    }
-
-    .mobile .search.right {
-      float: none;
-    }
-
-    .mobile .search.right .action-search {
-      width: 100%;
-    }
-
-    .mobile .right-side {
-      padding-top: 5px;
-    }
-
-    .filter-field.right-side-item.action-search {
-      height: 30px;
-    }
-
+.mobile .right-side {
+  padding-top: 5px;
+}
 </style>

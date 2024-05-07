@@ -182,73 +182,148 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// 通用
 .layout {
   display: flex;
   justify-content: center;
-}
+  max-height: 30px;
 
-.dropdown-item {
-  .pre-icon {
-    width: 17px;
-    display: inline-block;
-  }
+  .action-item {
+    margin-left: 5px;
+    line-height: 1;
 
-  >>> i.fa {
-    font-size: 13px;
-    height: 13px;
-    width: 13px;
-    margin-right: 0;
-  }
-
-  >>> .svg-icon {
-    font-size: 13px;
-    height: 13px;
-    width: 13px;
-  }
-}
-.dropdown-menu-title {
-  text-align: left;
-  font-size: 12px;
-  color: #909399;
-  line-height: 30px;
-  padding-left: 10px;
-  padding-top: 10px;
-  border-top: solid 1px #e4e7ed;
-}
-
-.dropdown-menu-title:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-.el-button-ungroup .action-item {
-  margin-left: 4px;
-  line-height: 1;
-}
-
-.action-item.el-dropdown {
-  font-size: 11px;
-}
-
-.el-button-ungroup .action-item:first-child {
-  margin-left: 0;
-}
-::v-deep .more-batch-processing {
-  &.el-dropdown-menu__item--divided {
-    margin-top: 0;
-    border-top: none;
-    color: #909399;
-    cursor: auto;
-    font-size: 12px;
-    line-height: 30px;
-    border-bottom: 1px solid #E4E7ED;
-    &:before {
-      height: 0;
+    &:first-child {
+      margin-left: 0;
+      border: none;
     }
   }
-  &.el-dropdown-menu__item:not(.is-disabled):hover {
+
+  .el-button {
+    color: var(--el-text-color);
+  }
+
+  .el-button--primary.el-button {
+    color: #ffffff ;
+  }
+}
+
+// 主要是左侧 LeftSide
+.layout.header-action {
+  .action-item.el-dropdown {
+    font-size: 11px;
+
+    .el-button--default {
+      ::v-deep .el-icon-arrow-down.el-icon--right {
+        color: var(--el-icon-color) !important;
+      }
+    }
+
+    .el-button--primary {
+      ::v-deep .el-icon-arrow-down.el-icon--right {
+        color: #ffffff !important;
+      }
+
+      &.el-dropdown-selfdefine {
+        border: none;
+      }
+    }
+  }
+}
+
+// 主要是 Table 中的操作列
+.layout.table-actions {
+  .el-button {
+    padding: 5px 10px;
+    border: none;
+    color: #fff;
+  }
+
+  ::v-deep .action-item.el-dropdown .el-button {
+    padding: 5px 7px;
+    background-color: #E8F7F4;
+    color: #1ab394;
+    border: none;
+
+    &:focus {
+      color: #fff;
+      background-color: #83CBBA !important;
+  }
+
+    &:hover {
+      color: #fff;
+      background-color: #83CBBA;
+    }
+  }
+}
+
+// 下拉 options
+.el-dropdown-menu {
+  ::v-deep .more-batch-processing {
+    text-align: center;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    &.el-dropdown-menu__item--divided {
+      margin-top: 0;
+      border-top: none;
+      color: var(--el-text-color);
+      cursor: auto;
+      font-size: 12px;
+      line-height: 30px;
+      border-bottom: 1px solid #E4E7ED;
+
+      &:before {
+        height: 0;
+      }
+    }
+  }
+
+  .dropdown-item {
+    color: var(--el-icon-color);
+
+    .pre-icon {
+      width: 17px;
+      display: inline-block;
+    }
+
+    ::v-deep i.fa {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+      margin-right: 0;
+    }
+
+    ::v-deep .svg-icon {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+    }
+  }
+
+  .el-dropdown-menu__item {
+    color: var(--el-icon-color);
+
+    &:not(.is-disabled):hover {
+      color: var(--el-text-color);
+      background-color: var(--el-disabled-background-color);
+    }
+  }
+
+  .dropdown-menu-title {
+    text-align: left;
+    font-size: 12px;
     color: #909399;
-    background-color: #FFFFFF;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-top: solid 1px #e4e7ed;
+
+    &:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
   }
 }
 </style>
