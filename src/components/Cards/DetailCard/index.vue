@@ -85,10 +85,8 @@ export default {
       }
     }
 
-    ::v-deep .el-form-item__label {
+    >>> .el-form-item__label {
       padding-right: 8%;
-      //white-space: nowrap;
-      //text-overflow: ellipsis;
       overflow: hidden;
       color: var(--el-icon-color);
 
@@ -101,6 +99,7 @@ export default {
     ::v-deep .el-form-item__content {
       color: var(--el-text-color);
       font-size: 13px;
+      line-height: 40px;
     }
 
     ::v-deep .el-tag--mini {

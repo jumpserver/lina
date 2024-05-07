@@ -1,7 +1,7 @@
 <template>
   <IBox v-if="loading" style="width: 100%; height: 200px" />
   <div v-else>
-    <DetailCard v-if="hasObject && items.length > 0" :items="items" :loading="loading" v-bind="$attrs" />
+    <DetailCard v-if="hasObject && items.length > 0" :items="validItems" :loading="loading" v-bind="$attrs" />
   </div>
 </template>
 
@@ -59,6 +59,9 @@ export default {
     },
     hasObject() {
       return Object.keys(this.iObject).length > 0
+    },
+    validItems() {
+      return this.items.filter(item => this.isHidden(item))
     }
   },
   async mounted() {
@@ -82,6 +85,77 @@ export default {
       }
       return formatter
     },
+    isHidden(item) {
+      let has = item.has
+      if (typeof has === 'function') {
+        has = has()
+      }
+      if (has === undefined) {
+        has = true
+      }
+      return has
+    },
+    parseValue(value, tp) {
+      if (value === null || value === '') {
+        value = '-'
+      } else if (value === 0) {
+        value = 0
+      } else if (tp === 'datetime') {
+        value = toSafeLocalDateStr(value)
+      } else if (tp === 'labeled_choice') {
+        value = value?.['label']
+      } else if (tp === 'related_field' || tp === 'nested object' || value?.name) {
+        value = value?.['name']
+      } else if (tp === 'm2m_related_field') {
+        value = value?.map(item => item['name']).join(', ')
+      } else if (tp === 'boolean') {
+        value = value ? this.$t('Yes') : this.$t('No')
+      }
+      return value
+    },
+    parseArrayValue(value, excludes, label) {
+      if (Array.isArray(value)) {
+        const tp = typeof value[0]
+        for (const [index, item] of value.entries()) {
+          let object = {}
+          if (tp === 'object') {
+            const firstValue = value[0]
+            if (firstValue.hasOwnProperty('name')) {
+              value.forEach(item => {
+                const fieldName = `${name}.${item.name}`
+                if (excludes.includes(fieldName)) {
+                  return
+                }
+                object = {
+                  key: item.label,
+                  value: item.value
+                }
+              })
+            } else {
+              const fieldName = `${name}.${item.name}`
+              if (excludes.includes(fieldName)) {
+                continue
+              }
+              object = {
+                key: item.label,
+                value: item.value
+              }
+            }
+          } else if (tp === 'string') {
+            object = {
+              value: value[index]
+            }
+            if (index === 0) {
+              object['key'] = label
+            }
+          }
+          if (index !== value.length - 1) {
+            object['class'] = 'array-item'
+          }
+          this.items.push(object)
+        }
+      }
+    },
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       let remoteMeta = data.actions['GET'] || {}
@@ -94,6 +168,7 @@ export default {
       const excludes = (this.excludes || []).concat(defaultExcludes)
       fields = fields.filter(item => !excludes.includes(item))
       const defaultFormatter = this.defaultFormatter(fields)
+
       for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
@@ -121,62 +196,10 @@ export default {
         }
 
         if (Array.isArray(value)) {
-          const tp = typeof value[0]
-          for (const [index, item] of value.entries()) {
-            let object = {}
-            if (tp === 'object') {
-              const firstValue = value[0]
-              if (firstValue.hasOwnProperty('name')) {
-                value.forEach(item => {
-                  const fieldName = `${name}.${item.name}`
-                  if (excludes.includes(fieldName)) {
-                    return
-                  }
-                  object = {
-                    key: item.label,
-                    value: item.value
-                  }
-                })
-              } else {
-                const fieldName = `${name}.${item.name}`
-                if (excludes.includes(fieldName)) {
-                  continue
-                }
-                object = {
-                  key: item.label,
-                  value: item.value
-                }
-              }
-            } else if (tp === 'string') {
-              object = {
-                value: value[index]
-              }
-              if (index === 0) {
-                object['key'] = label
-              }
-            }
-            if (index !== value.length - 1) {
-              object['class'] = 'array-item'
-            }
-            this.items.push(object)
-          }
+          this.parseArrayValue(value, excludes, label)
           continue
         }
-        if (value === null || value === '') {
-          value = '-'
-        } else if (value === 0) {
-          value = 0
-        } else if (fieldMeta.type === 'datetime') {
-          value = toSafeLocalDateStr(value)
-        } else if (fieldMeta.type === 'labeled_choice') {
-          value = value?.['label']
-        } else if (fieldMeta.type === 'related_field' || fieldMeta.type === 'nested object' || value?.name) {
-          value = value?.['name']
-        } else if (fieldMeta.type === 'm2m_related_field') {
-          value = value?.map(item => item['name']).join(', ')
-        } else if (fieldMeta.type === 'boolean') {
-          value = value ? this.$t('Yes') : this.$t('No')
-        }
+        value = this.parseValue(value, fieldMeta.type)
 
         if (value === undefined) {
           if (this.showUndefine) {

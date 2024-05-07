@@ -1,178 +1,54 @@
 <template>
-  <div>
-    <GenericTreeListPage
-      ref="GenericTreeListPage"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-      :tree-setting="treeSetting"
-    />
-  </div>
+  <Page>
+    <GrantedAssets :actions="actions" :table-url="tableUrl" :tree-url="treeUrl" />
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { AccountShowFormatter, DialogDetailFormatter } from '@/components/Table/TableFormatters'
-import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
+import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
+import Page from '@/layout/components/Page/index.vue'
 
 export default {
   components: {
-    GenericTreeListPage
+    Page,
+    GrantedAssets
   },
   data() {
     return {
-      allFavorites: [],
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showAssets: false,
-        url: '/api/v1/perms/users/self/users/assets/',
-        nodeUrl: '/api/v1/perms/users/self/nodes/',
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/',
-        callback: {
-          refresh: () => {},
-          onSelected: function(event, treeNode) {
-            if (treeNode.meta.type === 'node') {
-              const currentNodeId = treeNode.meta.data.id
-              this.tableConfig.url = `/api/v1/perms/users/self/nodes/${currentNodeId}/assets/?cache_policy=1`
-            }
-          }.bind(this)
-        }
-      },
-      tableConfig: {
-        url: '/api/v1/perms/users/self/assets/',
-        hasTree: true,
-        columnsExclude: ['spec_info'],
-        columnsShow: {
-          default: ['name', 'address', 'platform', 'accounts', 'is_active', 'actions'],
-          min: ['name', 'address', 'actions']
-        },
-        columns: [
-          'name', 'address', 'domain', 'platform', 'connectivity', 'is_active',
-          'nodes', 'org_name', 'created_by', 'labels', 'accounts', 'comment', 'actions'
-        ],
-        columnsMeta: {
-          name: {
-            prop: 'name',
-            formatter: DialogDetailFormatter,
-            formatterArgs: {
-              getDialogTitle: function({ col, row, cellValue }) { this.$t('AssetDetail') }.bind(this),
-              getDetailItems: function({ col, row, cellValue }) {
-                return [
-                  {
-                    key: this.$t('Name'),
-                    value: row.name
-                  },
-                  {
-                    key: this.$t('AssetAddress'),
-                    value: row.address
-                  },
-                  {
-                    key: this.$t('Protocols'),
-                    formatter: () => {
-                      return this.$axios.get(`/api/v1/perms/users/self/assets/${row.id}/`).then(res => {
-                        const protocols = res.permed_protocols
-                        const names = protocols.map(item => item.name).join(', ')
-                        return names
-                      })
-                    }
-                  },
-                  {
-                    key: this.$t('Category'),
-                    value: row.category.label
-                  },
-                  {
-                    key: this.$t('Type'),
-                    value: row.type.label
-                  },
-                  {
-                    key: this.$t('Platform'),
-                    value: row.platform?.name || ''
-                  },
-                  {
-                    key: this.$t('Active'),
-                    value: row.is_active
-                  },
-                  {
-                    key: this.$t('Comment'),
-                    value: row.comment
-                  }
-                ]
-              }.bind(this)
-            },
-            sortable: true
-          },
-          labels: {
-            formatterArgs: {
-              showEditBtn: false
-            }
-          },
-          address: {
-            sortable: 'custom',
-            width: '150px'
-          },
-          accounts: {
-            align: 'center',
-            label: this.$t('Account'),
-            width: '120px',
-            formatter: AccountShowFormatter,
-            formatterArgs: {
-              getUrl: ({ row }) => {
-                return `/api/v1/perms/users/self/assets/${row.id}/`
+      treeUrl: `/api/v1/perms/users/self/nodes/children/tree/`,
+      tableUrl: `/api/v1/perms/users/self/assets/`,
+      actions: {
+        width: '88px',
+        align: 'center',
+        formatterArgs: {
+          hasDelete: false,
+          loading: true,
+          hasClone: false,
+          hasUpdate: false,
+          extraActions: [
+            {
+              name: 'connect',
+              icon: 'fa-terminal',
+              type: 'primary',
+              can: ({ row }) => row.is_active,
+              callback: ({ row }) => {
+                const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
+                const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
+                window.open(url, '_blank')
               }
+            },
+            {
+              name: 'favor',
+              type: 'info',
+              icon: ({ row }) => {
+                return this.checkFavorite(row.id) ? 'fa-star' : 'fa-star-o'
+              },
+              callback: ({ row }) => this.toggleFavorite(row.id)
             }
-          },
-          platform: {
-            width: '120px'
-          },
-          comment: {
-            width: '100px'
-          },
-          connectivity: connectivityMeta,
-          actions: {
-            width: '88px',
-            align: 'center',
-            formatterArgs: {
-              hasDelete: false,
-              loading: true,
-              hasClone: false,
-              hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'connect',
-                  icon: 'fa-terminal',
-                  type: 'primary',
-                  can: ({ row }) => row.is_active,
-                  callback: ({ row }) => {
-                    const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
-                    const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
-                    window.open(url, '_blank')
-                  }
-                },
-                {
-                  name: 'favor',
-                  type: 'info',
-                  icon: ({ row }) => {
-                    return this.checkFavorite(row.id) ? 'fa-star' : 'fa-star-o'
-                  },
-                  callback: ({ row }) => this.toggleFavorite(row.id)
-                }
-              ]
-            }
-          }
-        },
-        tableAttrs: {
-          rowClassName({ row }) {
-            return !row.is_active ? 'row_disabled' : ''
-          }
+          ]
         }
       },
-      headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasLeftActions: false,
-        hasSearch: true
-      }
+      allFavorites: []
     }
   },
   mounted() {
@@ -180,7 +56,7 @@ export default {
   },
   methods: {
     refreshAllFavorites() {
-      const formatterArgs = this.tableConfig.columnsMeta.actions.formatterArgs
+      const formatterArgs = this.actions.formatterArgs
       formatterArgs.loading = true
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
@@ -192,14 +68,12 @@ export default {
       const url = '/api/v1/assets/favorite-assets/'
       this.$axios.post(url, data).then(() => {
         this.allFavorites.push({ asset: assetId })
-        this.$message.success(this.$i18n.t('CollectionSucceed'))
       })
     },
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
         this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
-        this.$message.success(this.$i18n.t('CancelCollection'))
       })
     },
     toggleFavorite(assetId) {
