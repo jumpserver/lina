@@ -51,6 +51,16 @@ ul, li {
   list-style: none
 }
 
+li {
+  display: flex !important;
+  width: 100%;
+
+  span {
+    display: inline-block;
+    min-width: 100px;
+  }
+}
+
 .box-card {
   margin-bottom: 20px;
 
@@ -82,7 +92,7 @@ ul, li {
     text-overflow: ellipsis;
 
     .title {
-      color: #303133;
+      color: var(--el-text-color);
     }
   }
 }

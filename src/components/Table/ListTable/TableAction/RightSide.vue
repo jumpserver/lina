@@ -122,8 +122,7 @@ export default {
       })
     },
     iExportOptions() {
-      const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
-      return options
+      return assignIfNot(this.exportOptions, { url: this.tableUrl })
     }
   },
   methods: {
@@ -138,50 +137,35 @@ export default {
 }
 </script>
 
-<style scoped>
-  .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+<style scoped lang="scss">
+.right-side-actions.right-side-item {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  padding-left: 10px;
+  height: 30px;
+  line-height: 30px;
 
-  .right-side-item {
-  }
-
-  .right-side-actions >>> .el-button {
+  ::v-deep .el-button {
     border: none;
     padding: 5px;
     font-size: 14px;
-    color: #888;
+    color: var(--el-icon-color);
     background-color: transparent;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
   }
 
-  .right-side-actions >>> .fa {
+  ::v-deep .fa {
     height: 16px;
     width: 16px;
   }
+}
 
-  .right-side-actions >>> .el-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .action-search >>> .el-input__suffix i {
-    font-weight: 500;
-    color: #888;
-  }
-
-  .right-side-actions {
-    display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content:center;
-    height: 30px;
-    line-height: 30px;
-  }
-
-  .table-action-right-side {
-    display: flex;
-    justify-content:center;
-  }
-
+.table-action-right-side {
+  display: flex;
+  justify-content:center;
+}
 </style>

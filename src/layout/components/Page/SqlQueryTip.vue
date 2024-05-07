@@ -1,5 +1,5 @@
 <template>
-  <el-alert v-show="showSqlQueryCounter" class="container" type="info" @close="handleClose">
+  <el-alert v-show="showSqlQueryCounter" class="container" :class="{ noContent }" type="info" @close="handleClose">
     <el-tag
       v-for="item in sqlQueryCounter || []"
       :key="item.url"
@@ -27,9 +27,10 @@ export default {
     ...mapGetters([
       'sqlQueryCounter',
       'showSqlQueryCounter'
-    ])
-  },
-  mounted() {
+    ]),
+    noContent() {
+      return this.sqlQueryCounter.length === 0
+    }
   },
   methods: {
     getType(item) {
@@ -57,4 +58,7 @@ export default {
   border: none !important;
 }
 
+.noContent {
+  display: none;
+}
 </style>

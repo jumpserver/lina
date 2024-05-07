@@ -88,6 +88,7 @@ export default {
     >>> .el-form-item__label {
       padding-right: 8%;
       overflow: hidden;
+      color: var(--el-icon-color);
 
       span {
         display: inline-block;
@@ -95,12 +96,13 @@ export default {
       }
     }
 
-    >>> .el-form-item__content {
+    ::v-deep .el-form-item__content {
+      color: var(--el-text-color);
       font-size: 13px;
       line-height: 40px;
     }
 
-    >>> .el-tag--mini {
+    ::v-deep .el-tag--mini {
       margin-right: 3px;
     }
   }
