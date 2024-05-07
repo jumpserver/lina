@@ -294,7 +294,6 @@ td .el-button.el-button--mini {
 
 .el-textarea__inner {
     color: var(--el-text-color);
-    border-radius: 4px;
 }
 
 .el-pagination.is-background .number {
