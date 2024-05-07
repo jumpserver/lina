@@ -230,6 +230,37 @@ export default {
   }
 }
 
+// header 中右侧按钮
+.layout.header-buttons {
+  margin-top: 4px;
+
+  .el-button--danger {
+    color: #ed5565;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .action-item {
+    line-height: 1;
+
+    &:first-child {
+      border: 1px solid #DCDFE6;
+      color: var(--el-text-color)
+    }
+
+    &.is-disabled {
+      color: var(--el-text-color);
+      background-color: var(--el-disabled-background-color);
+    }
+
+    &.el-button--danger.is-disabled {
+      color: #ffffff;
+    }
+  }
+}
+
 // 主要是 Table 中的操作列
 .layout.table-actions {
   .el-button {
