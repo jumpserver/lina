@@ -237,7 +237,6 @@ export default {
       // 不符合校验规则的提示信息
       .el-form-item__error {
         position: inherit;
-        color: var(--el-form-tip-text-color);
       }
 
       .el-select {
