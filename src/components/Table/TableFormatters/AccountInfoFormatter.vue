@@ -6,11 +6,14 @@
     @show="getAsyncItems"
   >
     <div class="detail-content">
+      <div v-if="accountData.length === 0" class="empty-item">
+        <span>{{ $t('No accounts') }}</span>
+      </div>
       <div v-for="account of accountData" :key="account.id" class="detail-item">
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
     </div>
-    <el-button slot="reference" size="mini" type="primary">{{ $t('View') }}</el-button>
+    <el-button slot="reference" size="mini" type="text">{{ $t('View') }}</el-button>
   </el-popover>
 </template>
 
@@ -34,7 +37,7 @@ export default {
   },
   methods: {
     async getAsyncItems() {
-      const userId = this.$route.params.id
+      const userId = this.$route.params.id || 'self'
       const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}`
       this.$axios.get(url).then(res => {
         this.accountData = res?.permed_accounts || []
@@ -48,6 +51,7 @@ export default {
 .detail-content {
   max-height: 150px;
   overflow-y: auto;
+  min-width: 300px;
 }
 
 .detail-item {
@@ -57,6 +61,14 @@ export default {
 
   &:hover {
     background-color: #F5F7FA;
+  }
+}
+
+.el-button--text {
+  color: var(--color-link);
+
+  &:hover {
+    color: var(--color-link);
   }
 }
 </style>

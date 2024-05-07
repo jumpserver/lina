@@ -200,10 +200,10 @@ export default {
                 label: 'PostgreSQL', value: 'postgresql'
               },
               {
-                label: 'SQL Server', value: 'sqlserver'
+                label: 'SQLServer', value: 'sqlserver'
               },
               {
-                label: 'HUAWEI', value: 'huawei'
+                label: 'CloudEngine', value: 'huawei'
               }
             ],
             callback: (option) => {

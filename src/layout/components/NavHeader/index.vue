@@ -246,11 +246,11 @@ export default {
 
   .organization {
     border-radius: 3px;
-    background-color: rgba(255, 255, 255, .15);
+    background-color: rgba(0, 0, 0, .12);
     padding-left: 10px !important;
 
     &:hover {
-      background-color: rgba(0, 0, 0, .12);
+      background-color: rgba(0, 0, 0, .18);
     }
   }
 </style>

@@ -85,13 +85,8 @@ export default {
       }
     }
 
-    &:hover {
-    }
-
     >>> .el-form-item__label {
       padding-right: 8%;
-      //white-space: nowrap;
-      //text-overflow: ellipsis;
       overflow: hidden;
 
       span {
@@ -102,6 +97,7 @@ export default {
 
     >>> .el-form-item__content {
       font-size: 13px;
+      line-height: 40px;
     }
 
     >>> .el-tag--mini {

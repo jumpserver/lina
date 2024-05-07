@@ -33,6 +33,10 @@ export default {
         vm.tableConfig.url = url
       }
     },
+    actions: {
+      type: Object,
+      default: null
+    },
     getShowUrl: {
       type: Function,
       default({ row, col }) {
@@ -62,7 +66,7 @@ export default {
         columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'address', 'accounts'],
-          default: ['name', 'address', 'platform', 'view_account', 'connectivity']
+          default: ['name', 'address', 'platform', 'connectivity', 'view_account', 'actions']
         },
         columnsMeta: {
           name: {
@@ -71,8 +75,14 @@ export default {
               route: 'AssetDetail'
             }
           },
+          labels: {
+            formatterArgs: {
+              showEditBtn: false
+            }
+          },
           actions: {
-            has: false
+            // has: this.actions !== null,
+            ...this.actions
           },
           view_account: {
             label: this.$t('Account'),
@@ -80,6 +90,11 @@ export default {
             width: '100px'
           },
           connectivity: connectivityMeta
+        },
+        tableAttrs: {
+          rowClassName({ row }) {
+            return !row.is_active ? 'row_disabled' : ''
+          }
         }
       },
       headerActions: {
@@ -102,4 +117,8 @@ export default {
 </script>
 
 <style scoped>
+.row_disabled,.row_disabled:hover,.row_disabled:hover > td{
+  cursor: not-allowed;
+  background-color:rgba(192,196,204,0.28) !important;
+}
 </style>

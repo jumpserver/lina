@@ -31,11 +31,7 @@
   .el-menu-item, .el-submenu-sidebar .el-menu-item {
     background-color: $subMenuBg;
     color: $menuText;
-    list-style: circle inside;
-
-    span {
-      //padding-left: 10px;
-    }
+    list-style: disc inside;
 
     &.submenu-title-noDropdown {
       list-style: none;
@@ -55,10 +51,6 @@
       background-color: $subMenuHover !important;
       color: $subMenuActiveText;
       list-style-type: disc;
-    }
-
-    i {
-      //color: $menuText;
     }
   }
 
