@@ -190,7 +190,8 @@ export default {
                   'height': '18px',
                   'line-height': '18px',
                   'font-size': '13.5px',
-                  'font-weight': ' 400'
+                  'font-weight': ' 400',
+                  'color': '#1c84c6'
                 }
               }, msg)
             ]),
@@ -332,6 +333,8 @@ export default {
       }
     },
     handleSubmit(values, formName, addContinue) {
+      console.log(this.onSubmit)
+      console.log(this.defaultOnSubmit)
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
       values = this.cleanFormValue(values)

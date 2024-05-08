@@ -58,7 +58,7 @@ export default {
     padding-bottom: 16px;
     border-bottom: 1px solid #EFF0F1;
 
-    .title,
+    .title > .content > .title,
     .num{
       color: var(--el-text-color);
     }

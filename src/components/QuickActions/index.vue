@@ -38,24 +38,27 @@ export default {
 }
 </script>
 
-<style scoped>
-  .quick-actions >>> table {
+<style scoped lang='scss'>
+.quick-actions {
+  ::v-deep table {
     width: 100%;
   }
-  .quick-actions >>> tr > td {
-    line-height: 1.43;
-    padding: 8px;
-    vertical-align: top;
-    font-size: 13px;
-    width: 50%;
-  }
 
-  .quick-actions >>> tr > td > span:last-child {
-    float: right;
-  }
-
-  .quick-actions >>> button {
+  ::v-deep button {
     padding: 4px 10px;
     font-size: 13px;
   }
+
+  ::v-deep tr > td {
+    width: 50%;
+    padding: 8px;
+    vertical-align: top;
+    line-height: 1.43;
+    font-size: 13px;
+
+    & > span:last-child {
+      float: right;
+    }
+  }
+}
 </style>

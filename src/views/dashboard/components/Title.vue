@@ -34,16 +34,18 @@ export default {
 <style lang="scss" scoped>
 .content {
   display: inline-block;
+
   .title {
     font-weight: 500;
     font-size: 16px;
-    color: #1F2329;
   }
+
   .icon {
     color: #BBBFC4;
     font-size: 16px;
     cursor: pointer;
   }
+
   .time {
     font-style: normal;
     font-weight: 400;
