@@ -134,7 +134,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
-          exclude: ['id', 'status'],
+          exclude: ['id', 'status', 'execution'],
           options: [
             {
               label: this.$t('Asset'),

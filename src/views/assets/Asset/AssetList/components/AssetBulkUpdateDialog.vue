@@ -57,7 +57,7 @@ export default {
               { required: false }
             ],
             label: this.$t('Platform'),
-            helpText: this.$t('BatchUpdatePlatformHelpText')
+            helpText: this.$t('UpdatePlatformHelpText')
           },
           nodes: {
             ...meta.nodes,
