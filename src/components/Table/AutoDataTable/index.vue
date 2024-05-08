@@ -13,6 +13,7 @@
       :current-columns="popoverColumns.currentCols"
       :min-columns="popoverColumns.minCols"
       :total-columns-list="popoverColumns.totalColumnsList"
+      :default-columns="popoverColumns.defaultCols"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -58,7 +59,8 @@ export default {
       popoverColumns: {
         totalColumnsList: [],
         minCols: [],
-        currentCols: []
+        currentCols: [],
+        defaultCols: []
       }
     }
   },
@@ -426,6 +428,8 @@ export default {
       })
       this.popoverColumns.currentCols = this.cleanedColumnsShow.show
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
+      this.popoverColumns.defaultCols = this.cleanedColumnsShow.default
+
       this.$log.debug('Popover cols: ', this.popoverColumns)
     },
     handlePopoverColumnsChange({ columns, url }) {
@@ -434,6 +438,7 @@ export default {
         columns = this.cleanedColumnsShow.default
       }
       this.popoverColumns.currentCols = columns
+
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}

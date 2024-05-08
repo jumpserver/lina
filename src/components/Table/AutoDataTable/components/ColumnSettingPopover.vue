@@ -10,10 +10,15 @@
     @cancel="restoreDefault()"
     @confirm="handleColumnConfirm()"
   >
-    <label>{{ this.$t('TableColSetting') }}</label>
+    <el-col style="margin-bottom: 5px">
+      <label>{{ this.$t('TableColSetting') }}</label>
+      <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" style="float: right" @change="handleCheckAllChange">全选</el-checkbox>
+    </el-col>
+
     <el-checkbox-group
       v-model="iCurrentColumns"
       class="column-setting"
+      @change="handleCheckedChange"
     >
       <el-row>
         <el-col
@@ -55,6 +60,10 @@ export default {
       type: Array,
       default: () => []
     },
+    defaultColumns: {
+      type: Array,
+      default: () => []
+    },
     url: {
       type: String,
       default: ''
@@ -62,15 +71,33 @@ export default {
   },
   data() {
     return {
+      checkAll: false,
       showColumnSettingPopover: false,
-      iCurrentColumns: ''
+      iCurrentColumns: '',
+      isIndeterminate: false
+    }
+  },
+  watch: {
+    currentColumns: {
+      handler(val) {
+        this.iCurrentColumns = val
+      }
     }
   },
   mounted() {
     this.$eventBus.$on('showColumnSettingPopover', ({ url }) => {
       if (url === this.url) {
+        this.checkAll = false
         this.showColumnSettingPopover = true
         this.iCurrentColumns = this.currentColumns
+      }
+
+      if (this.iCurrentColumns.length === this.totalColumnsList.length) {
+        this.checkAll = true
+        this.isIndeterminate = false
+      } else {
+        this.checkAll = false
+        this.isIndeterminate = true
       }
     })
   },
@@ -82,6 +109,22 @@ export default {
     restoreDefault() {
       this.showColumnSettingPopover = false
       this.$emit('columnsUpdate', { columns: null, url: this.url })
+    },
+    handleCheckAllChange(value) {
+      if (value) {
+        this.iCurrentColumns = this.totalColumnsList.reduce((prev, item) => {
+          return [...prev, (item.prop)]
+        }, [])
+        this.isIndeterminate = false
+      } else {
+        this.iCurrentColumns = this.defaultColumns
+        this.isIndeterminate = true
+      }
+    },
+    handleCheckedChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.totalColumnsList.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.totalColumnsList.length
     }
   }
 }
