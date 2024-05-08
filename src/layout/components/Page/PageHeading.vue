@@ -66,9 +66,9 @@ export default {
 .page-heading-left,
 h2 {
   font-size: 16px;
-  font-weight: 500;
-  line-height: 32px;
-  color: var(--el-text-color);
+  font-weight: 600;
+  line-height: 2;
+  color: var(--color-text-primary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

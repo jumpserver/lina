@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .summary-header {
-  color: var(--el-icon-color);
+  color: var(--color-icon-primary);
 
   .title {
     font-style: normal;
@@ -56,7 +56,7 @@ export default {
     font-weight: 500;
     font-size: 24px;
     line-height: 40px;
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
   }
 
   .disabled-link {

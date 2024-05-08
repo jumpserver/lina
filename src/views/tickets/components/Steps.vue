@@ -139,11 +139,11 @@ export default {
 
 .el-steps {
   .el-step__main .el-step__title {
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
   }
 
   .el-step__main .el-step__description {
-    color: var(--el-form-tip-text-color);
+    color: var(--color-help-text);
   }
 }
 </style>

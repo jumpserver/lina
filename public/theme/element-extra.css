@@ -34,7 +34,7 @@
     .el-pagination__total,
     .el-pagination__sizes,
     .el-pager {
-        color: var(--el-icon-color);
+        color: var(--color-icon-primary);
     }
 }
 
@@ -48,7 +48,7 @@
 .el-pagination.is-background .el-pager li {
     margin: 0 5px;
     background-color: #fff;
-    color: var(--el-icon-color);
+    color: var(--color-icon-primary);
     min-width: 28px;
     border-radius: 2px;
     border: 1px solid #DCDFE6;
@@ -237,7 +237,7 @@ td .el-button.el-button--mini {
 .el-tag.el-tag--info .el-tag__close {
     display: inline-block;
     margin-top: 3px;
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
     background-color: inherit;
 }
 
@@ -293,7 +293,7 @@ td .el-button.el-button--mini {
 }
 
 .el-textarea__inner {
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
 }
 
 .el-pagination.is-background .number {
@@ -437,7 +437,7 @@ td .el-button.el-button--mini {
 }
 
 .el-dialog .el-dialog__header .el-dialog__title {
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
 }
 
 .el-dialog  .el-dialog__body {
@@ -449,12 +449,12 @@ td .el-button.el-button--mini {
 .el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__body .el-input__inner,
 .el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__header .el-checkbox__label,
 .el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__body .el-checkbox-group .el-checkbox.el-transfer-panel__item {
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
 }
 
 .el-dialog .el-dialog__body .opera .el-button.is-disabled,
 .el-dialog .el-dialog__body .el-transfer-panel .vip-footer .el-button.is-disabled {
-    color: var(--el-input-border-color);
+    color: var(--color-input-border);
 }
 
 .el-dialog .el-dialog__body .opera .el-button.is-disabled.el-button--primary {

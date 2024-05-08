@@ -88,7 +88,7 @@ export default {
     >>> .el-form-item__label {
       padding-right: 8%;
       overflow: hidden;
-      color: var(--el-icon-color);
+      color: var(--color-icon-primary);
 
       span {
         display: inline-block;
@@ -97,7 +97,7 @@ export default {
     }
 
     ::v-deep .el-form-item__content {
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
       font-size: 13px;
       line-height: 40px;
     }

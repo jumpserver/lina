@@ -151,7 +151,7 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
-  border: 1px solid var(--el-disabled-background-color);
+  border: 1px solid var(--color-disabled-background);
   border-radius: 3px;
 
   ::v-deep .el-button.label-button {
@@ -170,7 +170,7 @@ export default {
       }
 
       .el-input__suffix {
-        color: var(--el-icon-color) !important; ;
+        color: var(--color-icon-primary) !important; ;
       }
     }
 
@@ -180,7 +180,7 @@ export default {
       overflow: hidden;
 
       .el-tag.el-tag--info {
-        color: var(--el-text-color) !important;
+        color: var(--color-text-primary) !important;
       }
 
       .el-cascader__search-input {
@@ -190,7 +190,7 @@ export default {
   }
 
   ::v-deep .svg-icon {
-    color: var(--el-icon-color) !important;
+    color: var(--color-icon-primary) !important;
   }
 }
 </style>

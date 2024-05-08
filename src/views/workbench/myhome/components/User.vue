@@ -92,7 +92,7 @@ li {
     text-overflow: ellipsis;
 
     .title {
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
     }
   }
 }

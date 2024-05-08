@@ -158,9 +158,13 @@ export default {
 .el-form {
   margin-right: 80px;
 
+  ::v-deep .el-input-group__prepend {
+    border-radius: 0;
+  }
+
   ::v-deep .form-group-header {
     margin-left: 50px;
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
   }
 
   ::v-deep .el-form-item {
@@ -173,10 +177,10 @@ export default {
     .el-form-item__label {
       padding: 0 30px 0 0;
       line-height: 32px;
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
 
       i {
-        color: var(--el-icon-color);
+        color: var(--color-icon-primary);
       }
     }
 
@@ -186,8 +190,8 @@ export default {
 
       // 禁用的输入框
       .el-input.is-disabled .el-input__inner {
-        color: var(--el-icon-color) !important;
-        background-color: var(--el-disabled-background-color);
+        color: var(--color-icon-primary) !important;
+        background-color: var(--color-disabled-background);
       }
 
       // 复合型输入框
@@ -207,18 +211,18 @@ export default {
 
         .el-input__inner {
           border-radius: 0;
-          color: var(--el-text-color);
+          color: var(--color-text-primary);
         }
 
         .el-input-group__append {
-          border: 1px solid var(--el-input-border-color);
+          border: 1px solid var(--color-input-border);
           border-left: 0 !important;
         }
       }
 
       // 普通的输入框
       .el-input .el-input__inner {
-        color: var(--el-text-color);
+        color: var(--color-text-primary);
       }
 
       // 不符合校验规则的提示信息
@@ -236,7 +240,7 @@ export default {
 
         // 选择普通 item 时的样式
         .el-input .el-input__inner {
-          color: var(--el-text-color);
+          color: var(--color-text-primary);
         }
       }
 
@@ -247,14 +251,14 @@ export default {
       .el-data-table .el-table {
         margin: 5px 0;
         border-radius: 4px;
-        border: 1px solid var(--el-input-border-color);
+        border: 1px solid var(--color-input-border);
       }
 
       .help-block {
         display: block;
         margin-top: 2px;
         margin-bottom: 5px;
-        color: var(--el-form-tip-text-color);
+        color: var(--color-help-text);
         font-size: 12px;
         line-height: 18px;
         word-break: keep-all;

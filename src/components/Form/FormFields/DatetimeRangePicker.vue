@@ -94,11 +94,11 @@ export default {
   ::v-deep .el-range-separator,
   ::v-deep .el-input__icon {
     line-height: 26px;
-    color: var(--el-icon-color) !important;
+    color: var(--color-icon-primary) !important;
   }
 
   ::v-deep .el-range-input {
-    color: var(--el-text-color) !important;
+    color: var(--color-text-primary) !important;
   }
 
   ::v-deep .el-range-input {

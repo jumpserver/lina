@@ -198,7 +198,7 @@ export default {
   }
 
   .el-button.el-button--default {
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
   }
 }
 
@@ -209,7 +209,7 @@ export default {
 
     .more-action.el-button--default {
       ::v-deep .el-icon-arrow-down.el-icon--right {
-        color: var(--el-icon-color) !important;
+        color: var(--color-icon-primary) !important;
       }
     }
 
@@ -261,7 +261,7 @@ export default {
     &.el-dropdown-menu__item--divided {
       margin-top: 0;
       border-top: none;
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
       cursor: auto;
       font-size: 12px;
       line-height: 30px;
@@ -274,7 +274,7 @@ export default {
   }
 
   .dropdown-item {
-    color: var(--el-icon-color);
+    color: var(--color-icon-primary);
 
     .pre-icon {
       width: 17px;
@@ -296,11 +296,11 @@ export default {
   }
 
   .el-dropdown-menu__item {
-    color: var(--el-icon-color);
+    color: var(--color-icon-primary);
 
     &:not(.is-disabled):hover {
-      color: var(--el-text-color);
-      background-color: var(--el-disabled-background-color);
+      color: var(--color-text-primary);
+      background-color: var(--color-disabled-background);
     }
   }
 

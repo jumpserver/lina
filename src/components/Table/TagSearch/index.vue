@@ -352,7 +352,7 @@ export default {
   align-items:  center;
   min-width: 198px;
   //height: 30px;
-  border: 1px solid var(--el-disabled-background-color);
+  border: 1px solid var(--color-disabled-background);
   border-radius: 4px;
   background-color: #fff;
   box-sizing: border-box;
@@ -368,7 +368,7 @@ export default {
     }
 
     ::v-deep .el-input__suffix {
-      color: var(--el-icon-color) !important;
+      color: var(--color-icon-primary) !important;
 
       .el-input__suffix-inner {
         line-height: 30px;
@@ -404,7 +404,7 @@ export default {
       i {
         line-height: 30px;
         font-weight: 500;
-        color: var(--el-icon-color);
+        color: var(--color-icon-primary);
       }
     }
 

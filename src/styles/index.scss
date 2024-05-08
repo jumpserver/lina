@@ -35,7 +35,7 @@ body {
   height: calc(100% - 50px);
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--el-text-color);
+  color: var(--color-text-primary);
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
@@ -233,11 +233,11 @@ input[type=file] {
 .el-timeline .el-timeline-item {
   .el-timeline-item__wrapper {
     .el-timeline-item__content {
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
     }
 
     .el-timeline-item__timestamp.is-bottom {
-      color: var(--el-form-tip-text-color);
+      color: var(--color-help-text);
     }
   }
 }
@@ -249,7 +249,7 @@ input[type=file] {
     font-size: 13px;
     line-height: 1.5;
     border-right: none;
-    color: var(--el-text-color);
+    color: var(--color-text-primary);
   }
 
   th {
@@ -283,7 +283,7 @@ input[type=file] {
   // 表头
   .el-table__header thead > tr > th {
     .cell {
-      color: var(--el-icon-color);
+      color: var(--color-text-primary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -319,7 +319,7 @@ input[type=file] {
         width: auto !important;
 
         .el-tooltip > span {
-          color: var(--el-text-color);
+          color: var(--color-text-primary);
         }
 
         .label-container .label-formatter-col div {
@@ -391,17 +391,17 @@ input[type=file] {
 }
 
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
-  color: var(--el-text-color) !important;
+  color: var(--color-text-primary) !important;
 }
 
 .el-card .el-card__header {
-  color: var(--el-text-color);
+  color: var(--color-text-primary);
 }
 
 .el-alert {
   .el-alert__description,
   .el-alert__title{
-    color: var(--el-text-color) !important;
+    color: var(--color-text-primary) !important;
   }
 }
 

@@ -137,7 +137,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .right-side-actions.right-side-item {
   display: flex;
   align-items: center;
@@ -150,7 +150,7 @@ export default {
     border: none;
     padding: 5px;
     font-size: 14px;
-    color: var(--el-icon-color);
+    color: var(--color-icon-primary);
     background-color: transparent;
 
     &:hover {

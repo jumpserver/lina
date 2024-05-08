@@ -60,7 +60,7 @@ export default {
 
     .title,
     .num{
-      color: var(--el-text-color);
+      color: var(--color-text-primary);
     }
 
     .title {
@@ -76,7 +76,7 @@ export default {
 
     .sub,
     .add {
-      color: var(--el-icon-color);
+      color: var(--color-icon-primary);
     }
 
     .sub {
