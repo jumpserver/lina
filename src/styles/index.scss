@@ -229,6 +229,19 @@ input[type=file] {
   }
 }
 
+// 步骤条
+.el-timeline .el-timeline-item {
+  .el-timeline-item__wrapper {
+    .el-timeline-item__content {
+      color: var(--el-text-color);
+    }
+
+    .el-timeline-item__timestamp.is-bottom {
+      color: var(--el-form-tip-text-color);
+    }
+  }
+}
+
 // table 相关通用样式
 .el-data-table .el-table {
   th,
