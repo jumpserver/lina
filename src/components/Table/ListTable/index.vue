@@ -218,7 +218,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .table-content {
   margin-top: 10px;
 

@@ -207,7 +207,7 @@ export default {
   .action-item.el-dropdown {
     font-size: 11px;
 
-    .el-button--default {
+    .more-action.el-button--default {
       ::v-deep .el-icon-arrow-down.el-icon--right {
         color: var(--el-icon-color) !important;
       }
@@ -228,16 +228,14 @@ export default {
 // 主要是 Table 中的操作列
 .layout.table-actions {
   .el-button {
-    padding: 0 5px;
-    border: none;
+    padding: 1px 5px;
     color: #fff;
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    padding: 5px 7px;
+    padding: 1px 5px;
     background-color: #E8F7F4;
     color: #1ab394;
-    border: none;
 
     &:focus {
       color: #fff;
