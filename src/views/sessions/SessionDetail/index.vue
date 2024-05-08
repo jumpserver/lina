@@ -34,7 +34,7 @@ export default {
         activeMenu: 'SessionDetailInfo',
         submenu: [
           {
-            title: this.$t('Detail'),
+            title: this.$t('Basic'),
             name: 'SessionDetailInfo'
           },
           {

@@ -29,7 +29,7 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('BasicInfo'),
+            title: this.$t('Basic'),
             name: 'AccountChangeSecretExecutionInfo',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
           },

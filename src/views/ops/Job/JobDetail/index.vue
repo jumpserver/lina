@@ -28,7 +28,7 @@ export default {
         activeMenu: 'JobDetail',
         submenu: [
           {
-            title: this.$t('AdhocDetail'),
+            title: this.$t('Basic'),
             name: 'JobDetail'
           },
           {

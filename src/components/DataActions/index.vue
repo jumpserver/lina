@@ -197,12 +197,8 @@ export default {
     }
   }
 
-  .el-button {
+  .el-button.el-button--default {
     color: var(--el-text-color);
-  }
-
-  .el-button--primary.el-button {
-    color: #ffffff ;
   }
 }
 

@@ -34,7 +34,7 @@ export default {
         activeMenu: 'TaskDetail',
         submenu: [
           {
-            title: this.$t('TaskDetail'),
+            title: this.$t('Basic'),
             name: 'TaskDetail'
           },
           {
