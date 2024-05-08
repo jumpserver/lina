@@ -68,7 +68,7 @@ export default {
         extraMoreActions: [
           {
             name: 'UnlockSelected',
-            title: this.$t('BatchUnblock'),
+            title: this.$t('UnblockSelected'),
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0

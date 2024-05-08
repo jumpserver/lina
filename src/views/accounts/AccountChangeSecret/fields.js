@@ -16,6 +16,9 @@ export const getChangeSecretFields = () => {
       }
     },
     secret: {
+      el: {
+        autocomplete: 'new-password'
+      },
       label: i18n.t('Password'),
       hidden: ({ secret_strategy, secret_type }) => {
         return secret_strategy !== 'specific' || secret_type !== 'password'

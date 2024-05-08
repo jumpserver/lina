@@ -132,8 +132,8 @@ export default {
         },
         extraMoreActions: [
           {
-            name: 'BatchSync',
-            title: this.$t('BatchSync'),
+            name: 'SyncSelected',
+            title: this.$t('SyncSelected'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
@@ -149,13 +149,13 @@ export default {
               ).then(() => {
                 this.$message.success(this.$tc('SyncSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('BatchSyncErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('SyncErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'BatchSyncDelete',
-            title: this.$t('BatchSyncDelete'),
+            name: 'SyncDeleteSelected',
+            title: this.$t('SyncDeleteSelected'),
             type: 'primary',
             icon: 'fa fa-exchange',
             can: ({ selectedRows }) => {
