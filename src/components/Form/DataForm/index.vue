@@ -193,11 +193,9 @@ export default {
       // 复合型输入框
       .el-input.el-input-group {
         .el-input-group__prepend {
-          border: 1px solid var(--el-input-border-color);
           border-right: 0 !important;
 
           .el-select {
-            border-radius: 4px;
             border-bottom-right-radius: 0 !important;
             border-top-right-radius: 0 !important;
 
@@ -208,13 +206,8 @@ export default {
         }
 
         .el-input__inner {
-          border: 1px solid var(--el-input-border-color);
           border-radius: 0;
           color: var(--el-text-color);
-
-          &:focus {
-            border-color: #1ab394;
-          }
         }
 
         .el-input-group__append {
@@ -226,18 +219,11 @@ export default {
       // 普通的输入框
       .el-input .el-input__inner {
         color: var(--el-text-color);
-        border-radius: 4px;
-        border: 1px solid var(--el-input-border-color);
-
-        &:focus {
-          border-color: #1ab394;
-        }
       }
 
       // 不符合校验规则的提示信息
       .el-form-item__error {
         position: inherit;
-        color: var(--el-form-tip-text-color);
       }
 
       .el-select {
@@ -248,28 +234,14 @@ export default {
           }
         }
 
-        // select 框点击时直接设置 focus 无法让边框显示绿色聚焦，只能通过聚焦时额外的 is-focus 判定
-        .el-input.is-focus .el-input__inner {
-          border-color: #1ab394;
-        }
-
         // 选择普通 item 时的样式
         .el-input .el-input__inner {
           color: var(--el-text-color);
-
-          &:focus {
-            border-color: #1ab394;
-          }
         }
       }
 
-      // 文本域
       .el-textarea .el-textarea__inner {
-        border: 1px solid var(--el-input-border-color);
-
-        &:focus {
-          border-color: #1ab394;
-        }
+        border-radius: 0;
       }
 
       .el-data-table .el-table {

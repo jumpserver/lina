@@ -106,7 +106,7 @@ export default {
       const generator = new FormFieldGenerator(this.$emit)
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
-      this.$log.debug('Total fields: ', this.totalFields)
+      this.$log.debug('Total fields: ', JSON.stringify(this.totalFields))
     },
     _cleanFormValue(form, remoteMeta) {
       if (!form) {

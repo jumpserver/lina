@@ -194,16 +194,11 @@ export default {
 
     &:first-child {
       margin-left: 0;
-      border: none;
     }
   }
 
-  .el-button {
+  .el-button.el-button--default {
     color: var(--el-text-color);
-  }
-
-  .el-button--primary.el-button {
-    color: #ffffff ;
   }
 }
 

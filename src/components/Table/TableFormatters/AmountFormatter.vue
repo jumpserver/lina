@@ -142,6 +142,10 @@ export default {
   }
 }
 
+>>> .detail {
+  padding: 0 5px;
+}
+
 .detail-item:first-child {
   //border-top: 1px solid #EBEEF5;
 }

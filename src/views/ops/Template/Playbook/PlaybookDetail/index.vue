@@ -33,7 +33,7 @@ export default {
         activeMenu: 'PlaybookDetail',
         submenu: [
           {
-            title: this.$t('PlaybookDetail'),
+            title: this.$t('Basic'),
             name: 'PlaybookDetail'
           },
           {
