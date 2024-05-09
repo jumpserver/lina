@@ -55,5 +55,14 @@ export default [
     beforeEnter: (to, from, next) => {
       next({ name: 'SessionDetail', params: to.params, query: to.query })
     }
+  },
+  {
+    path: '/terminal/components/loki/tail/',
+    component: () => import('@/views/settings/Terminal/ComponentLogTail/ComponentLogTail.vue'),
+    name: 'ComponentLogTail',
+    meta: {
+      title: i18n.t('ComponentsLogTail')
+    },
+    hidden: true
   }
 ]
