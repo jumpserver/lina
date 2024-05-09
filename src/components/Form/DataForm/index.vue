@@ -250,8 +250,6 @@ export default {
 
       .el-data-table .el-table {
         margin: 5px 0;
-        border-radius: 4px;
-        border: 1px solid var(--color-input-border);
       }
 
       .help-block {
