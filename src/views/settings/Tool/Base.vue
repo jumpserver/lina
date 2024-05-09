@@ -46,21 +46,20 @@
       </el-form-item>
       <el-form-item>
         <el-button
-          :loading="isTesting"
+          v-if="!isTesting"
           size="mini"
           type="primary"
           @click="submitTest"
         >
-          {{ $t('Test') }}
+          <i class="fa fa-play" style="margin-right: 4px;" />{{ $t('Test') }}
         </el-button>
         <el-button
-          v-if="hasStop"
-          :disabled="!isTesting"
+          v-if="hasStop && isTesting"
           size="mini"
           type="danger"
           @click="interruptTest"
         >
-          {{ $t('Stop') }}
+          <i class="fa fa-stop" style="margin-right: 4px;" />{{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
