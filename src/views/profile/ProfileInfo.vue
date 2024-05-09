@@ -51,7 +51,7 @@ export default {
       currentEdit: '',
       authQuickActions: [
         {
-          title: this.$t('SetWeCom'),
+          title: this.$t('WeComOAuth'),
           attrs: {
             type: 'primary',
             label: this.getLabel('wecom'),
@@ -68,7 +68,7 @@ export default {
           }
         },
         {
-          title: this.$t('SetDingTalk'),
+          title: this.$t('DingTalkOAuth'),
           attrs: {
             type: 'primary',
             label: this.getLabel('dingtalk'),
@@ -85,7 +85,7 @@ export default {
           }
         },
         {
-          title: this.$t('SetFeiShu'),
+          title: this.$t('FeiShuOAuth'),
           attrs: {
             type: 'primary',
             label: this.getLabel('feishu'),
@@ -102,7 +102,7 @@ export default {
           }
         },
         {
-          title: this.$t('SetLark'),
+          title: this.$t('LarkOAuth'),
           attrs: {
             type: 'primary',
             label: this.getLabel('lark'),
@@ -119,7 +119,7 @@ export default {
           }
         },
         {
-          title: this.$t('SetSlack'),
+          title: this.$t('SlackOAuth'),
           attrs: {
             type: 'primary',
             label: this.getLabel('slack'),
@@ -260,7 +260,7 @@ export default {
           }
         },
         {
-          title: this.$t('Slack'),
+          title: 'Slack',
           type: 'switch',
           attrs: {
             name: 'slack',
@@ -278,12 +278,20 @@ export default {
     detailCardItems() {
       return [
         {
+          value: this.object.name,
+          key: this.$t('Name')
+        },
+        {
           value: this.object.username,
           key: this.$t('Username')
         },
         {
-          value: this.object.name,
-          key: this.$t('Name')
+          value: this.object.email,
+          key: this.$t('Email')
+        },
+        {
+          value: this.object.groups.map(item => item.name).join(' ｜ '),
+          key: this.$t('UserGroups')
         },
         {
           value: this.object.system_roles.map(item => item.display_name).join(' ｜ '),
@@ -294,19 +302,11 @@ export default {
           key: this.$t('OrgRoles')
         },
         {
-          value: this.object.email,
-          key: this.$t('Email')
-        },
-        {
-          value: this.object.is_active,
-          key: this.$t('IsActive')
-        },
-        {
           value: this.object,
-          key: 'SSHKey',
+          key: 'SSH Key',
           formatter: (item, val) => {
-            const comment = val.public_key_comment
-            const md5 = val.public_key_hash_md5
+            const comment = val.public_key_comment || '-'
+            const md5 = val.public_key_hash_md5 || '-'
             return <span>{comment} <br/> {md5}</span>
           }
         },
@@ -319,8 +319,8 @@ export default {
           key: this.$t('Source')
         },
         {
-          value: toSafeLocalDateStr(this.object.date_joined),
-          key: (this.$t('DateJoined'))
+          value: this.object.is_active,
+          key: this.$t('IsActive')
         },
         {
           value: toSafeLocalDateStr(this.object.last_login),
@@ -331,12 +331,12 @@ export default {
           key: this.$t('DatePasswordLastUpdated')
         },
         {
-          value: toSafeLocalDateStr(this.object.date_expired),
-          key: this.$t('DateExpired')
+          value: toSafeLocalDateStr(this.object.date_joined),
+          key: (this.$t('DateJoined'))
         },
         {
-          value: this.object.groups.map(item => item.name).join(' ｜ '),
-          key: this.$t('UserGroups')
+          value: toSafeLocalDateStr(this.object.date_expired),
+          key: this.$t('DateExpired')
         },
         {
           value: this.object.comment,

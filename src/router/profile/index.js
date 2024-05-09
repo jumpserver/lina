@@ -7,7 +7,7 @@ export default {
   redirect: '/profile/info',
   component: Layout,
   meta: {
-    title: i18n.t('UserProfile'),
+    title: i18n.t('PersonalSettings'),
     icon: 'personal',
     view: 'profile',
     type: 'view',
@@ -21,7 +21,7 @@ export default {
       name: 'ProfileInfo',
       component: () => import('@/views/profile/ProfileInfo'),
       meta: {
-        title: i18n.t('UserInformation'),
+        title: i18n.t('Profile'),
         icon: 'attestation',
         permissions: []
       }

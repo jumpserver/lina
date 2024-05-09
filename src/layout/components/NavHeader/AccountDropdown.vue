@@ -9,11 +9,11 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="profile">
           <svg-icon class="icon" icon-class="attestation" />
-          {{ $t('Profile') }}
+          {{ $t('YourProfile') }}
         </el-dropdown-item>
         <el-dropdown-item command="UserSetting">
           <svg-icon class="icon" icon-class="preference" />
-          {{ $t('UserSetting') }}
+          {{ $t('YourPreference') }}
         </el-dropdown-item>
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
           <svg-icon class="icon" icon-class="key" />
