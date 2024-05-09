@@ -8,8 +8,7 @@
       >
         <el-tooltip :content="item.tip" :disabled="!item.tip" placement="top">
           <el-button
-            v-if="item.type ==='button'"
-            :disabled="item.disabled"
+            v-if="item.type ==='button' && !item.isVisible"
             :type="item.el&&item.el.type"
             size="mini"
             @click="item.callback()"
