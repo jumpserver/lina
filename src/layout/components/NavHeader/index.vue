@@ -38,7 +38,7 @@
           <Logo v-if="showLogo" :collapse="false" />
         </div>
       </li>
-      <li v-if="orgsShow" class="left-item" style="margin-left: 21px;">
+      <li v-if="orgsShow" class="left-item" style="margin-left: 20px;">
         <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
@@ -103,93 +103,12 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-  .navbar {
-    position: relative;
-    height: $headerHeight;
-    line-height: $headerHeight;
-    overflow: hidden;
-    background: var(--banner-bg);
-
-    .navbar-left {
-      float: left;
-
-      .left-item {
-        line-height: $headerHeight;
-        display: inline-block;
-        vertical-align: top;
-
-        & >>> .el-submenu__title {
-          font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-          padding: 0 8px;
-          line-height: $headerHeight;
-          height: $headerHeight;
-        }
-
-        & >>> .org-select {
-          padding: 0;
-        }
-
-        & >>> .svg-icon {
-          color: #FFF !important;
-        }
-
-        .nav-logo {
-          width: 200px;
-        }
-      }
-    }
-
-    >>> .el-link {
-      vertical-align: baseline;
-    }
-
-    .header-item:hover,  .nav-logo:hover {
-      background: rgba(0, 0, 0, 12%);
-    }
-
-    .navbar-right {
-      float: right;
-      margin-right: 10px;
-      height: $headerHeight;
-      line-height: $headerHeight;
-
-      .header-item {
-        line-height: $headerHeight;
-        display: inline-block;
-        padding-right: 10px;
-        padding-left: 10px;
-        vertical-align: top;
-
-        & >>> .svg-icon {
-          color: #FFF !important;
-          font-size: 16px;
-        }
-
-        & >>> .el-badge {
-          vertical-align: top;
-
-          .el-badge__content {
-            top: 8px;
-            height: 15px;
-            line-height: 15px;
-            border: none;
-          }
-        }
-        & >>> i {
-          color: #FFF;
-          font-size: 16px;
-
-          &.el-icon-arrow-down {
-            font-size: 13px;
-          }
-        }
-
-        & >>> i.el-dialog__close.el-icon-close {
-          color: #7c7e7f;
-        }
-      }
-    }
-  }
+.navbar {
+  position: relative;
+  height: $headerHeight;
+  line-height: $headerHeight;
+  overflow: hidden;
+  background-color: var(--banner-bg);
 
   ul {
     margin: 0;
@@ -199,14 +118,13 @@ export default {
   .is-show-menu {
     display: none;
   }
-
   .hamburger-container {
-    line-height: 26px;
     float: left;
-    height: 26px;
-    margin: 6px;
+    height: 30px;
+    margin: 5px;
     padding: 0 10px !important;
-    border-radius: 4px;
+    line-height: 30px;
+    border-radius: 5px;
     border-color: $--color-primary;
     background-color: white;
     color: #fff;
@@ -215,13 +133,143 @@ export default {
     -webkit-tap-highlight-color: transparent;
     opacity: 0.7;
 
-    & >>> .svg-icon {
+    ::v-deep .svg-icon {
       font-size: 16px !important;
       color: #fff !important;
     }
   }
 
-  @media screen and (max-width: 1006px) {
+  // 折叠按钮
+  .hamburger-container {
+    float: left;
+    height: 30px;
+    margin: 5px;
+    padding: 0 10px !important;
+    line-height: 30px;
+    border-radius: 5px;
+    border-color: $--color-primary;
+    background-color: white;
+    color: #fff;
+    cursor: pointer;
+    transition: .2s;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0.7;
+
+    ::v-deep .svg-icon {
+      font-size: 16px !important;
+      color: #fff !important;
+    }
+  }
+
+  .navbar-left {
+    float: left;
+    display: flex;
+    height: 100%;
+
+    .left-item {
+      display: flex;
+      align-items: center;
+      list-style: none;
+
+      .nav-logo {
+        width: 200px;
+
+        &:hover {
+          background: rgba(0, 0, 0, 12%);
+        }
+      }
+
+      .organization {
+        display: flex;
+        align-items: center;
+        line-height: 30px;
+        padding: 0 10px 0 15px !important;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, .15);
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, .12) !important;
+        }
+      }
+
+      // 未找到与之对应的
+      & >>> .el-submenu__title {
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 0 8px;
+        line-height: $headerHeight;
+        height: $headerHeight;
+      }
+
+      // 未找到与之对应的
+      & >>> .svg-icon {
+        color: #FFF !important;
+      }
+    }
+  }
+
+  .navbar-right {
+    float: right;
+    margin-right: 10px;
+    height: $headerHeight;
+    line-height: $headerHeight;
+
+    .header-item {
+      line-height: $headerHeight;
+      display: inline-block;
+      padding-right: 10px;
+      padding-left: 10px;
+      vertical-align: top;
+
+      & >>> .svg-icon {
+        color: #FFF !important;
+        font-size: 16px;
+      }
+
+      & >>> .el-badge {
+        vertical-align: top;
+
+        .el-link {
+          vertical-align: baseline;
+        }
+
+        .el-badge__content--primary {
+          background-color: #fff;
+        }
+
+        .el-badge__content {
+          top: 8px;
+          height: 15px;
+          line-height: 15px;
+          border: none;
+          color: var(--color-primary);
+        }
+      }
+
+      & >>> i {
+        color: #FFF;
+        font-size: 16px;
+
+        &.el-icon-arrow-down {
+          font-size: 13px;
+        }
+      }
+
+      & >>> i.el-dialog__close.el-icon-close {
+        color: #7c7e7f;
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 12%);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1006px) {
+  .navbar {
     .is-show-menu {
       display: block;
     }
@@ -229,29 +277,11 @@ export default {
       display: none;
     }
   }
+}
 
-  @media screen and (max-width: 480px) {
-    .active-menu {
-      display: none !important;;
-    }
+@media screen and (max-width: 480px) {
+  .active-menu {
+    display: none !important;;
   }
-
-  >>> .el-badge__content {
-    color: var(--color-primary);
-  }
-
-  >>> .el-badge__content--primary {
-    background-color: #fff;
-  }
-
-  .organization {
-    border-radius: 3px;
-    background-color: rgba(255, 255, 255, .15);
-    padding-left: 10px !important;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, .12);
-    }
-  }
+}
 </style>
-
