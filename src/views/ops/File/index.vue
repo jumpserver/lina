@@ -420,7 +420,7 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
-          this.$router.replace({ query: { taskId: this.currentTaskId }})
+          this.$router.replace({ query: { taskId: this.currentTaskId, type: 'file_upload' }})
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {
