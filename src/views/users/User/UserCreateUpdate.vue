@@ -93,7 +93,7 @@ export default {
             if (formValue.source !== 'local') {
               return true
             }
-            if (formValue.password_strategy === 'custom' || formValue.update_password || this.user.can_public_key_auth) {
+            if (formValue.update_password) {
               return false
             }
             return true
