@@ -446,7 +446,7 @@ export default {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = 'running'
         this.currentTaskId = res.task_id
-        this.$router.replace({ query: { taskId: this.currentTaskId }})
+        this.$router.replace({ query: { taskId: this.currentTaskId, type: 'shortcut_cmd' }})
         this.setCostTimeInterval()
         this.writeExecutionOutput()
         this.setBtn()
@@ -455,7 +455,7 @@ export default {
     stop() {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
-            this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+          this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
