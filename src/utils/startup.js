@@ -65,6 +65,12 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     await orgUtil.changeOrg(preOrg)
     return
   }
+  if (currentOrg.is_root && !currentOrg.autoEnter) {
+    setTimeout(() => {
+      orgUtil.change2PropOrg({ to, from, next })
+    }, 1000)
+    return
+  }
   if (!orgUtil.hasCurrentOrgPermission()) {
     Vue.$log.error('Not has current org permission: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })

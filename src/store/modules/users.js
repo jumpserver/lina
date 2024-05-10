@@ -1,5 +1,7 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
-import { getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal } from '@/utils/auth'
+import {
+  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
+} from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
@@ -157,6 +159,7 @@ const actions = {
     const globalOrg = {
       id: orgUtil.GLOBAL_ORG_ID,
       name: 'Global',
+      is_root: true,
       autoEnter: true
     }
     commit('SET_CURRENT_ORG', globalOrg)
