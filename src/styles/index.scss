@@ -147,7 +147,11 @@ button, input, optgroup, select, textarea {
   background-color: #ebeef5 !important;
 }
 
-.el-tooltip__popper.is-light.help-tips div span {
+.el-tooltip__popper div {
+  line-height: 1.5;
+}
+
+.el-tooltip__popper.help-tips div span {
   padding: 50px;
 }
 
@@ -512,4 +516,8 @@ $tooltip-arrow-color: #c2d1e1;
   a {
     color: #1c84c6;
   }
+}
+
+.el-upload--text {
+  font-size: 0.9em;
 }

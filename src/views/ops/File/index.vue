@@ -488,7 +488,7 @@ export default {
   border: 1px solid #eee;
 }
 
-.upload_input > > > .el-input-group__prepend {
+.upload_input >>> .el-input-group__prepend {
   padding: 0 10px;
 }
 
@@ -521,7 +521,7 @@ export default {
     display: flex;
   }
 
-  > > > .el-upload {
+  >>> .el-upload {
     width: 400px;
 
     flex-direction: column;
@@ -534,12 +534,12 @@ export default {
   .empty-file-tip {
     position: relative;
     bottom: 100px;
-    left: 58%;
+    left: 52%;
     font-size: 18px;
     color: #c5c9cc;
   }
 
-  > > > .el-upload-list {
+  >>> .el-upload-list {
     margin-left: 20px;
     padding: 0 10px 0 10px;
     list-style: none;
@@ -555,7 +555,7 @@ export default {
   background: white;
 }
 
-.output > > > #terminal {
+.output >>> #terminal {
   border: dashed 1px #d9d9d9;
   margin: 0 20px 20px;
 }

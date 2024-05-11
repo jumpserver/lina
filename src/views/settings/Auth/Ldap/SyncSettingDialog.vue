@@ -58,8 +58,7 @@ export default {
           },
           AUTH_LDAP_SYNC_CRONTAB: {
             component: CronTab,
-            helpText: this.$t('CrontabOfCreateUpdatePage'),
-            helpTextAsTip: true
+            helpTip: this.$t('CrontabOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_INTERVAL: {
             rules: [Required],

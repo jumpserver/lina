@@ -142,8 +142,8 @@ export default {
   }
 
   .el-menu-item {
-    height: 36px;
-    line-height: 26px;
+    height: 40px;
+    line-height: 36px;
     padding: 4px 24px;
 
     &:hover {
