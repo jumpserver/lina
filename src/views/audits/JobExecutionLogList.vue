@@ -21,8 +21,7 @@ export default {
           min: ['material', 'is_success'],
           default: [
             'creator_name', 'material', 'job_type', 'is_finished',
-            'is_success', 'time_cost', 'date_start',
-            'date_finished', 'actions'
+            'is_success', 'time_cost', 'date_start', 'actions'
           ]
         },
         columns: [
@@ -39,9 +38,10 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('Output'),
+                  title: this.$t('View'),
                   name: 'logging',
                   can: true,
+                  type: 'primary',
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)
                   }
