@@ -33,11 +33,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('BasicInfo'),
+            title: this.$t('Basic'),
             name: 'Detail'
           },
           {
-            title: this.$t('Users'),
+            title: this.$t('MenuUsers'),
             name: 'UserJsonTab'
           },
           {
@@ -45,8 +45,7 @@ export default {
             name: 'AssetJsonTab'
           }
         ],
-        actions: {
-        }
+        actions: {}
       }
     }
   }

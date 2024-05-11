@@ -151,41 +151,46 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
-}
+  border: 1px solid var(--color-disabled-background);
+  border-radius: 3px;
 
-.label-button {
-  //padding: 10px 13px 10px 12px;
-}
-
-.label-select {
-}
-
-.label-cascader {
-  width: 300px;
-  height: 30px;
-
-  >>> .el-input input {
+  ::v-deep .el-button.label-button {
     height: 30px;
+    border: none;
   }
 
-  >>> .el-input__inner {
-    font-size: 13px;
+  .label-cascader {
+    width: 300px;
+    line-height: 30px;
+
+    ::v-deep .el-input {
+      .el-input__inner {
+        height: 30px;
+        font-size: 13px;
+      }
+
+      .el-input__suffix {
+        color: var(--color-icon-primary) !important; ;
+      }
+    }
+
+    ::v-deep .el-cascader__tags {
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      .el-tag.el-tag--info {
+        color: var(--color-text-primary) !important;
+      }
+
+      .el-cascader__search-input {
+        display: none;
+      }
+    }
   }
-  >>> .el-cascader__search-input {
-    display: none;
-    margin: 0 0 2px 13px;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
-    display: inline;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags {
-    flex-wrap: wrap;
-  }
-  >>> .el-cascader__tags {
-    white-space: nowrap;
-    flex-wrap: nowrap;
-    overflow: hidden;
+
+  ::v-deep .svg-icon {
+    color: var(--color-icon-primary) !important;
   }
 }
-
 </style>

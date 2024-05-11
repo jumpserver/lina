@@ -35,7 +35,7 @@ body {
   height: calc(100% - 50px);
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
-  color: #676a6c;
+  color: var(--color-text-primary);
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
@@ -88,15 +88,6 @@ div:focus {
   }
 }
 
-// main-container global css
-.app-container {
-  padding: 20px;
-}
-
-.el-tooltip__popper.is-light.help-tips div span {
-  padding: 50px;
-}
-
 .white-bg {
   background-color: #ffffff;
 }
@@ -142,6 +133,24 @@ h4 {
   font-size: 14px;
 }
 
+button, input, optgroup, select, textarea {
+  font-family: "Open Sans", sans-serif !important;
+}
+
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+
+// 文字提示相关
+.el-tooltip__popper.is-light {
+  background-color: #ebeef5 !important;
+}
+
+.el-tooltip__popper.is-light.help-tips div span {
+  padding: 50px;
+}
+
 // 弹窗里的List table中的搜索框
 
 .el-dialog__body div.table-action-right-side {
@@ -177,9 +186,8 @@ input[type=file] {
   table-layout: fixed !important;
 }
 
-.el-tooltip__popper {
-  max-width: 500px !important;
-  line-height: 1.5;
+.el-tooltip__popper.is-dark {
+  max-width: 60% !important;
 }
 
 .view-switcher {
@@ -209,13 +217,6 @@ input[type=file] {
   overflow: auto;
 }
 
-.el-table .el-table__row > td > .cell.el-tooltip {
-  width: auto!important;
-}
-
-.el-table .el-table__row .show-full-content > .cell {
-  white-space: normal!important;
-}
 
 .el-input.is-disabled .el-input__inner {
   color: #737373 !important;
@@ -228,30 +229,106 @@ input[type=file] {
   }
 }
 
+// 步骤条
+.el-timeline .el-timeline-item {
+  .el-timeline-item__wrapper {
+    .el-timeline-item__content {
+      color: var(--color-text-primary);
+    }
+
+    .el-timeline-item__timestamp.is-bottom {
+      color: var(--color-help-text);
+    }
+  }
+}
+
+// table 相关通用样式
 .el-data-table .el-table {
+  th,
+  td {
+    font-size: 13px;
+    line-height: 1.5;
+    border-right: none;
+    color: var(--color-text-primary);
+  }
+
+  th {
+    padding: 8px 0;
+    border-bottom: 1px solid #e7e7e7 !important;
+
+    .caret-wrapper {
+      height: 21px;
+
+      .sort-caret.ascending {
+        top: 0;
+      }
+      .sort-caret.descending {
+        bottom: 0;
+      }
+    }
+
+    .el-table__column-filter-trigger {
+      line-height: 24px;
+    }
+  }
+
+  td {
+    padding: 6px 0;
+  }
+
   .table {
     margin-top: 15px;
   }
 
-  .el-table__row {
-    &.selected-row {
-      background-color: #f5f7fa;
+  // 表头
+  .el-table__header thead > tr > th {
+    .cell {
+      color: var(--color-text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        border-right: 2px solid #EBEEF5;
+      }
     }
 
-    & > td {
-      line-height: 1.5;
-      padding: 6px 0;
-      font-size: 13px;
-      border-right: none;
-      &:last-child {
-        border-right: solid 1px #EBEEF5 !important;
+    &:first-child {
+      .cell:hover {
+        border-right: none !important;
       }
+    }
+
+    &:last-child {
+      border-right: 1px solid #EBEEF5 !important;
+
+      .cell {
+        border-right: none;
+      }
+    }
+  }
+
+  // 表格主体
+  .el-table__row {
+    td {
       * {
         vertical-align: middle;
       }
 
-      .el-checkbox {
-        vertical-align: super;
+      .cell.el-tooltip {
+        width: auto !important;
+
+        .el-tooltip > span {
+          color: var(--color-text-primary);
+        }
+
+        .label-container .label-formatter-col div {
+          span {
+            b {
+              vertical-align: baseline !important;
+            }
+          }
+        }
       }
 
       & > div > span {
@@ -259,36 +336,15 @@ input[type=file] {
         overflow: hidden;
         white-space: nowrap;
       }
-    }
-  }
 
-  .el-table__header > thead > tr > th {
-    padding: 6px 0;
-    background-color: #ffffff;
-    font-size: 13px;
-    line-height: 1.5;
-    border-right: none;
-
-    &:last-child {
-      border-right: solid 1px #EBEEF5 !important;
-    }
-
-    .cell {
-      white-space: nowrap !important;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      &:hover {
-        border-right: 2px solid #EBEEF5;
+      &:last-child {
+        border-right: 1px solid #EBEEF5 !important;
       }
     }
-  }
-}
 
-.el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
-  padding: 5px 0;
-
-  .cell {
-    padding-top: 3px!important;
+    &.selected-row {
+      background-color: #f5f7fa;
+    }
   }
 }
 
@@ -334,34 +390,18 @@ input[type=file] {
   font-weight: 400;
 }
 
-button, input, optgroup, select, textarea {
-  font-family: "Open Sans", sans-serif !important;
+.el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
+  color: var(--color-text-primary) !important;
 }
 
-.el-form {
-  label {
-    font-weight: 400;
-  }
-  .el-input__icon {
-    vertical-align: super
-  }
+.el-card .el-card__header {
+  color: var(--color-text-primary);
 }
 
-.el-table {
-  th {
-    .el-table__column-filter-trigger {
-      line-height: 24px;
-    }
-    .caret-wrapper {
-      height: 21px;
-
-      .sort-caret.ascending {
-        top: 0;
-      }
-      .sort-caret.descending {
-        bottom: 0;
-      }
-    }
+.el-alert {
+  .el-alert__description,
+  .el-alert__title{
+    color: var(--color-text-primary) !important;
   }
 }
 
@@ -374,14 +414,23 @@ button, input, optgroup, select, textarea {
   padding: 0 6px;
 }
 
+.el-form {
+  label {
+    font-weight: 400;
+  }
+  .el-input__icon {
+    vertical-align: super
+  }
+}
+
 .el-form .el-input__inner, .el-dialog__body .el-input__inner {
   height: 30px;
   font-size: 13px;
 }
 
 .el-input input::placeholder {
-  font-weight: 300 !important;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400 !important;
+  font-family: "Open Sans", sans-serif ;
   font-size: 13px;
 }
 
@@ -449,7 +498,7 @@ $tooltip-arrow-color: #c2d1e1;
 
   i {
     color: var(--color-info);
-    opacity: 0.9;
+    opacity: 1;
   }
 }
 
@@ -457,17 +506,10 @@ $tooltip-arrow-color: #c2d1e1;
   padding: 8px;
   font-weight: 500;
   font-size: 13px;
-  line-height: 1.5;
 }
 
 .help-tips {
   a {
     color: #1c84c6;
   }
-}
-
-.el-tooltip__popper.is-dark {
-  background: rgba(58, 60, 62, 0.9) !important;
-  color: #FFF;
-  line-height: 1.5;
 }

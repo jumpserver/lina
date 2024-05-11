@@ -98,7 +98,7 @@ export default {
   }
 
   .page-content {
-    height: calc(100% - 90px);
+    height: calc(100% - 10px);
     overflow-x: hidden;
     overflow-y: auto;
   }
@@ -106,7 +106,7 @@ export default {
 
 .go-back {
   border: none;
-  padding: 6px;
+  padding: 4px;
 }
 
 .go-back >>> i {

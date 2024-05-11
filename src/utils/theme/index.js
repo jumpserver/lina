@@ -1,4 +1,4 @@
-import { changeMenuColor, generateColors, mix } from './color'
+import { changeMenuColor, generateColors, mix, setRootColors } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 
@@ -74,6 +74,7 @@ export function changeThemeColors(themeColors) {
       resolve()
     }
   }).then(() => {
+    setRootColors()
     changeMenuColor(themeColors)
     changeElementColor(themeColors)
   })
@@ -92,3 +93,4 @@ export function replaceStyleColors(data) {
 
   return data
 }
+

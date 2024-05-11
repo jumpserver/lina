@@ -84,21 +84,25 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .datepicker {
-    width: 233px;
+.datepicker {
+  margin-left: 10px;
+  width: 233px;
+  border: 1px solid #dcdee2;
+  border-radius: 3px;
+  height: 28px;
 
-    & >>> .el-range-input {
-      width: 49%;
-    }
+  ::v-deep .el-range-separator,
+  ::v-deep .el-input__icon {
+    line-height: 26px;
+    color: var(--color-icon-primary) !important;
   }
 
-  .el-input__inner {
-    border: 1px solid #dcdee2;
-    border-radius: 3px;
-    height: 32px;
+  ::v-deep .el-range-input {
+    color: var(--color-text-primary) !important;
   }
 
-  .el-date-editor ::v-deep .el-range-separator {
-    line-height: 28px;
+  ::v-deep .el-range-input {
+    width: 49%;
   }
+}
 </style>

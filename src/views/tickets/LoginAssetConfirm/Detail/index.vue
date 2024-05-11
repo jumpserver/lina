@@ -22,7 +22,7 @@ export default {
         url: '',
         submenu: [
           {
-            title: this.$t('TicketDetail'),
+            title: this.$t('Basic'),
             name: 'TicketDetail'
           }
         ],

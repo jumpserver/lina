@@ -24,7 +24,7 @@ export default {
 
   .el-card__body {
     padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 60px;
   }
 }
 </style>

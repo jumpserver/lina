@@ -48,7 +48,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('common.Test'),
+            title: this.$t('Test'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -66,7 +66,7 @@ export default {
         encryptedFields: this.encryptedFields,
         fields: [
           [
-            this.$t('common.BasicInfo'),
+            this.$t('BasicInfo'),
             this.formFields
           ]
         ],

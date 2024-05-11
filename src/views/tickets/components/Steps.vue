@@ -136,4 +136,14 @@ export default {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.el-steps {
+  .el-step__main .el-step__title {
+    color: var(--color-text-primary);
+  }
+
+  .el-step__main .el-step__description {
+    color: var(--color-help-text);
+  }
+}
 </style>

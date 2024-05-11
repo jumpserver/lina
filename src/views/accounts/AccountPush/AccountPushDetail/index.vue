@@ -23,7 +23,7 @@ export default {
         url: '/api/v1/accounts/push-account-automations',
         submenu: [
           {
-            title: this.$t('BasicInfo'),
+            title: this.$t('Basic'),
             name: 'AccountPushInfo',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
           }

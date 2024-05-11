@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td>{{ getActionTitle(action) }}:</td>
+    <td>{{ getActionTitle(action) }}</td>
     <td>
       <el-popover
         :content="action.attrs.tip"

@@ -1,22 +1,3 @@
-:root {
-  --color-primary: #1ab394;
-  --color-success: #2793d7;
-  --color-info: #1c84c6;
-  --color-warning: #f8ac59;
-  --color-danger: #ed5565;
-  --color-link: #1c84c6;
-  --color-text: #1F2329;
-  --color-text-2: #646a73;
-  --color-text-3: #8f959e;
-  --color-text-4: #bbbfc4;
-  --banner-bg: #148f76;
-  --submenu-bg: #ffffff;
-  --menu-bg: #ffffff;
-  --menu-text: #646A73;
-  --menu-text-active: #1ab394;
-  --menu-hover: #ffffff;
-}
-
 :export {
   --color-primary: #1ab394;
   --color-success: #2793d7;
@@ -24,6 +5,11 @@
   --color-warning: #f8ac59;
   --color-danger: #ed5565;
   --color-link: #1c84c6;
+  --color-text-primary: #292827;
+  --color-icon-primary: #605e5c;
+  --color-input-border: #BBBFC4;
+  --color-disabled-background: #dcdee2;
+  --color-help-text: #8F959E;
   --banner-bg: #148f76;
   --submenu-bg: #ffffff;
   --menu-bg: #ffffff;

@@ -19,7 +19,7 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
         columns: [
-          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol'
+          'id', 'user', 'asset', 'account', 'protocol'
         ],
         columnsMeta: {
           id: {

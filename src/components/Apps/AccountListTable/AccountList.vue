@@ -350,8 +350,8 @@ export default {
         ],
         extraMoreActions: [
           {
-            name: 'BatchTest',
-            title: this.$t('BatchTest'),
+            name: 'TestSelected',
+            title: this.$t('TestSelected'),
             type: 'primary',
             icon: 'fa-handshake-o',
             can: ({ selectedRows }) => {
@@ -389,13 +389,13 @@ export default {
                 { account_ids: ids }).then(() => {
                 this.$message.success(this.$tc('ClearSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('BatchClearErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'BatchUpdate',
-            title: this.$t('BatchUpdate'),
+            name: 'UpdateSelected',
+            title: this.$t('UpdateSelected'),
             icon: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&

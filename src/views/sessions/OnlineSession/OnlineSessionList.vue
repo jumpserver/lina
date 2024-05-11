@@ -110,7 +110,7 @@ export default {
         extraMoreActions: [
           {
             name: 'OfflineSelected',
-            title: this.$t('BatchOffline'),
+            title: this.$t('OfflineSelected'),
             type: 'danger',
             icon: 'clean',
             can: ({ selectedRows }) => {

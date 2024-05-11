@@ -53,30 +53,45 @@ export default {
   width: 100%;
   padding: 20px;
   background-color: #FFF;
+
   .card-content {
     padding-bottom: 16px;
     border-bottom: 1px solid #EFF0F1;
+
+    .title,
+    .num{
+      color: var(--color-text-primary);
+    }
+
+    .title {
+      margin-bottom: 12px;
+    }
+
+    .num {
+      font-weight: 500;
+      font-size: 32px;
+      line-height: 40px;
+      margin-bottom: 4px;
+    }
+
+    .sub,
+    .add {
+      color: var(--color-icon-primary);
+    }
+
+    .sub {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 20px;
+      margin-bottom: 4px;
+    }
+
+    .add {
+      display: flex;
+      justify-content: space-between;
+    }
   }
-  .title {
-    margin-bottom: 12px;
-  }
-  .sub {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 20px;
-    color: #646A73;
-    margin-bottom: 4px;
-  }
-  .num {
-    font-weight: 500;
-    font-size: 32px;
-    line-height: 40px;
-    margin-bottom: 4px;
-  }
-  .add {
-    display: flex;
-    justify-content: space-between;
-  }
+
   .custom {
     display: flex;
     justify-content: space-between;
@@ -84,16 +99,19 @@ export default {
     font-size: 32px;
     padding-bottom: 18px;
   }
+
   .ring {
     padding: 26px 0 10px;
     & >>> .echarts {
-      width: 100%!important;
-      height: 272px!important;
+      width: 100% !important;
+      height: 272px !important;
     }
   }
+
   .font {
     font-size: 18px;
   }
+
   .increase {
     color: var(--color-primary);
   }

@@ -347,30 +347,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .filter-field {
-    display: flex;
-    align-items:  center;
-    min-width: 198px;
-    border: 1px solid #dcdee2;
-    border-radius: 3px;
-    background-color:#fff;
-  }
-  .search-input  >>> .el-input__suffix {
-    cursor: pointer;
-  }
-  .search-input2 >>> .el-input__inner {
-    text-indent: 5px;
-  }
-  .search-input >>> .el-input__inner {
-    /*max-width:inherit !important;*/
+.filter-field {
+  display: flex;
+  align-items:  center;
+  min-width: 198px;
+  //height: 30px;
+  border: 1px solid var(--color-disabled-background);
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
 
-    max-width: 200px;
-    border: none;
-    padding-left: 5px;
-  }
-  .el-input >>> .el-input__inner{
-    border: none !important;
-    font-size: 13px;
+  .el-cascader {
+    line-height: 30px;
+
+    ::v-deep .el-input__inner {
+      width: 0;
+      height: 30px;
+      padding-right: 20px;
+      border: none;
+    }
+
+    ::v-deep .el-input__suffix {
+      color: var(--color-icon-primary) !important;
+
+      .el-input__suffix-inner {
+        line-height: 30px;
+      }
+    }
   }
 
   .filterTitle {
@@ -380,32 +383,52 @@ export default {
     flex-shrink: 0;
     border-collapse: separate;
     box-sizing: border-box;
-    color: rgb(96, 98, 102);
+    color: var(--el-text-icon);
     display: inline;
     font-size: 13px;
     height: auto;
   }
-  .filter-tag{
+
+  .filter-tag {
     margin: 2px 4px 2px 0;
   }
-  .el-icon--right{
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-  a {
-    color: #000;
-  }
 
-  .filter-field >>> .el-cascader .el-input--suffix .el-input__inner {
-    padding-right: 20px;
-  }
+  .search-input {
+    height: 30px;
 
-  .filter-field >>> .el-cascader .el-input input {
-    width: 0;
-    border: none;
-  }
+    ::v-deep .el-input__suffix {
+      height: 30px;
+      line-height: 30px;
+      cursor: pointer;
 
-  .el-cascader-menu__wrap {
-    height: inherit;
+      i {
+        line-height: 30px;
+        font-weight: 500;
+        color: var(--color-icon-primary);
+      }
+    }
+
+    ::v-deep .el-input__inner {
+      line-height: 30px;
+      height: 30px;
+      max-width: 200px;
+      border: none;
+      padding-left: 5px;
+      font-size: 13px;
+    }
   }
+}
+
+.search-input2 >>> .el-input__inner {
+  text-indent: 5px;
+}
+
+.el-icon--right{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+a {
+  color: #000;
+}
 </style>

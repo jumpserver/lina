@@ -93,7 +93,7 @@ export default {
                   }
                 },
                 {
-                  title: this.$t('common.Uninstall'),
+                  title: this.$t('Uninstall'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/uninstall/`,
@@ -130,10 +130,10 @@ export default {
           }
         },
         {
-          title: this.$t('assets.OnlyInitialDeploy'),
+          title: this.$t('OnlyInitialDeploy'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Deploy')
+            label: this.$t('Deploy')
           },
           callbacks: {
             click: function() {

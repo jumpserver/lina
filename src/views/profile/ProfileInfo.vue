@@ -125,7 +125,7 @@ export default {
             label: this.getLabel('slack'),
             disabled: this.isDisabled('slack'),
             showTip: this.isDisabled('slack'),
-            tip: this.$t('users.UnbindHelpText')
+            tip: this.$t('UnbindHelpText')
           },
           has: this.$store.getters.publicSettings.AUTH_SLACK,
           callbacks: {
@@ -411,6 +411,3 @@ export default {
   }
 }
 </script>
-
-<style lang='less' scoped>
-</style>

@@ -2,18 +2,18 @@
   <div>
     <GenericListTable ref="regionTable" :header-actions="headerActions" :table-config="tableConfig" />
     <Dialog
-      :title="$tc('TestConnection')"
-      :visible.sync="visible"
       :confirm-title="$tc('TestConnection')"
       :loading-status="testLoading"
+      :title="$tc('TestConnection')"
+      :visible.sync="visible"
       width="50"
+      @cancel="handleCancel()"
       @delete="onDelete()"
       @close="handleCancel()"
-      @cancel="handleCancel()"
       @confirm="handleConfirm()"
     >
-      <el-form ref="regionForm" label-width="auto" :model="account">
-        <el-form-item :label="$tc('Region')" :rules="regionRules" prop="region">
+      <el-form ref="regionForm" :model="account" label-width="auto">
+        <el-form-item :label="$tc('xpack.Cloud.Region')" :rules="regionRules" prop="region">
           <Select2 ref="regionSelect" v-model="account.region" v-bind="select2" />
         </el-form-item>
       </el-form>
@@ -23,9 +23,9 @@
 
 <script type="text/jsx">
 import {
-  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, azure, azure_international, baiducloud,
-  ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack, zstack,
-  qcloud, qcloud_lighthouse, qingcloud_private, ucloud, vmware, scp, apsara_stack, volcengine
+  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
+  baiducloud, ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
+  qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
 } from '../const'
 import rules from '@/components/Form/DataForm/rules'
 import { Select2 } from '@/components/Form/FormFields'

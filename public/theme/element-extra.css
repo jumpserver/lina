@@ -30,22 +30,30 @@
   color: info;
 }
 
+.el-pagination.is-background {
+    .el-pagination__total,
+    .el-pagination__sizes,
+    .el-pager {
+        color: var(--color-icon-primary);
+    }
+}
+
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
-  color: white;
+  color: #fff;
   background-color: primary;
 }
 
 .el-pagination.is-background .btn-next,
 .el-pagination.is-background .btn-prev,
 .el-pagination.is-background .el-pager li {
-  margin: 0 5px;
-  background-color: white;
-  color: #606266;
-  min-width: 28px;
-  border-radius: 2px;
-  border: 1px solid #DCDFE6;
-  font-size: 12px;
-  font-weight: 400;
+    margin: 0 5px;
+    background-color: #fff;
+    color: var(--color-icon-primary);
+    min-width: 28px;
+    border-radius: 2px;
+    border: 1px solid #DCDFE6;
+    font-size: 12px;
+    font-weight: 400;
 }
 
 .el-breadcrumb__inner,
@@ -227,8 +235,10 @@ td .el-button.el-button--mini {
 }
 
 .el-tag.el-tag--info .el-tag__close {
-  color: #333333!important;
-  background-color: inherit;
+    display: inline-block;
+    margin-top: 3px;
+    color: var(--color-text-primary);
+    background-color: inherit;
 }
 
 .el-tag.el-tag--info.is-hit {
@@ -283,7 +293,7 @@ td .el-button.el-button--mini {
 }
 
 .el-textarea__inner {
-  border-radius: 0;
+    color: var(--color-text-primary);
 }
 
 .el-pagination.is-background .number {
@@ -329,7 +339,7 @@ td .el-button.el-button--mini {
 }
 
 .el-table__header thead tr th {
-  border-bottom: 1px solid #e7e7e7 !important;
+  /*border-bottom: 1px solid #e7e7e7 !important;*/
 }
 
 .el-table .cell,
@@ -426,10 +436,29 @@ td .el-button.el-button--mini {
   flex-direction: column;
 }
 
+.el-dialog .el-dialog__header .el-dialog__title {
+    color: var(--color-text-primary);
+}
+
 .el-dialog  .el-dialog__body {
   max-height: 80vh;
   overflow: auto;
   padding: 30px;
+}
+
+.el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__body .el-input__inner,
+.el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__header .el-checkbox__label,
+.el-dialog .el-dialog__body .el-transfer-panel .el-transfer-panel__body .el-checkbox-group .el-checkbox.el-transfer-panel__item {
+    color: var(--color-text-primary);
+}
+
+.el-dialog .el-dialog__body .opera .el-button.is-disabled,
+.el-dialog .el-dialog__body .el-transfer-panel .vip-footer .el-button.is-disabled {
+    color: var(--color-input-border);
+}
+
+.el-dialog .el-dialog__body .opera .el-button.is-disabled.el-button--primary {
+    color: #fff;
 }
 
 .el-dialog .el-dialog__body form {

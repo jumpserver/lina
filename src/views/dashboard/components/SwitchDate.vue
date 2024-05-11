@@ -71,13 +71,12 @@ export default {
     &.is-active {
       border-radius: 4px;
       padding: 4px 0;
-      box-shadow: 2px 1px 2px rgba(0 0 0 / 8%);
 
       .el-radio-button__inner {
-        color: black;
+        color: var(--color-text-primary);
         background-color: #FFF;
         border-radius: 4px;
-        box-shadow: 0 2px 2px rgb(90 97 105 / 31%)!important;
+        box-shadow: 0 1px 2px rgba(31 35 41 / 12%) !important;
       }
     }
   }

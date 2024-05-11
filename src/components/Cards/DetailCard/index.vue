@@ -26,7 +26,7 @@ export default {
     },
     fa: {
       type: String,
-      default: 'fa-info-circle'
+      default: 'fa-info-circle-o'
     },
     items: {
       type: Array,
@@ -85,14 +85,10 @@ export default {
       }
     }
 
-    &:hover {
-    }
-
     >>> .el-form-item__label {
       padding-right: 8%;
-      //white-space: nowrap;
-      //text-overflow: ellipsis;
       overflow: hidden;
+      color: var(--color-icon-primary);
 
       span {
         display: inline-block;
@@ -100,11 +96,13 @@ export default {
       }
     }
 
-    >>> .el-form-item__content {
+    ::v-deep .el-form-item__content {
+      color: var(--color-text-primary);
       font-size: 13px;
+      line-height: 40px;
     }
 
-    >>> .el-tag--mini {
+    ::v-deep .el-tag--mini {
       margin-right: 3px;
     }
   }

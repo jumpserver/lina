@@ -102,7 +102,7 @@ export default {
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
-            disabled: this.$store.getters.currentOrgIsRoot,
+            isVisible: this.$store.getters.currentOrgIsRoot,
             el: {
               type: 'primary'
             },
@@ -112,11 +112,11 @@ export default {
           },
           stop: {
             type: 'button',
-            name: this.$t('common.Stop'),
+            name: this.$t('Stop'),
             align: 'left',
             icon: 'fa fa-stop',
-            tip: this.$t('ops.StopJob'),
-            disabled: true,
+            tip: this.$t('StopJob'),
+            isVisible: true,
             el: {
               type: 'danger'
             },
@@ -200,10 +200,10 @@ export default {
                 label: 'PostgreSQL', value: 'postgresql'
               },
               {
-                label: 'SQL Server', value: 'sqlserver'
+                label: 'SQLServer', value: 'sqlserver'
               },
               {
-                label: 'HUAWEI', value: 'huawei'
+                label: 'CloudEngine', value: 'huawei'
               }
             ],
             callback: (option) => {
@@ -391,7 +391,7 @@ export default {
 
     setCostTimeInterval() {
       this.toolbar.left.run.icon = 'fa fa-spinner fa-spin'
-      this.toolbar.left.run.disabled = true
+      this.toolbar.left.run.isVisible = true
       this.executionInfo.cancel = setInterval(() => {
         this.executionInfo.timeCost += 0.1
       }, 100)
@@ -469,8 +469,8 @@ export default {
         clearInterval(this.executionInfo.cancel)
         this.toolbar.left.run.icon = 'fa fa-play'
       }
-      this.toolbar.left.run.disabled = this.executionInfo.status === 'running'
-      this.toolbar.left.stop.disabled = this.executionInfo.status !== 'running'
+      this.toolbar.left.run.isVisible = this.executionInfo.status === 'running'
+      this.toolbar.left.stop.isVisible = this.executionInfo.status !== 'running'
     }
   }
 }

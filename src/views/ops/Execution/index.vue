@@ -120,6 +120,7 @@ export default {
                 {
                   title: this.$t('Output'),
                   name: 'logging',
+                  type: 'info',
                   can: true,
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)

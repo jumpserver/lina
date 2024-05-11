@@ -55,7 +55,7 @@ export default {
   }
 
   .quick-actions >>> button {
-    padding: 2px 10px;
+    padding: 4px 10px;
     font-size: 13px;
   }
 </style>

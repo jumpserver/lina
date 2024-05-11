@@ -54,7 +54,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$tc('common.ViewSecret')
+        return this.$tc('ViewSecret')
       }
     }
   },
