@@ -2,17 +2,18 @@
   <div>
     <GenericListTable ref="regionTable" :header-actions="headerActions" :table-config="tableConfig" />
     <Dialog
-      :title="$tc('assets.TestConnection')"
+      :title="$tc('TestConnection')"
       :visible.sync="visible"
-      :confirm-title="$tc('assets.TestConnection')"
+      :confirm-title="$tc('TestConnection')"
       :loading-status="testLoading"
       width="50"
+      @delete="onDelete()"
       @close="handleCancel()"
       @cancel="handleCancel()"
       @confirm="handleConfirm()"
     >
       <el-form ref="regionForm" label-width="auto" :model="account">
-        <el-form-item :label="$tc('xpack.Cloud.Region')" :rules="regionRules" prop="region">
+        <el-form-item :label="$tc('Region')" :rules="regionRules" prop="region">
           <Select2 ref="regionSelect" v-model="account.region" v-bind="select2" />
         </el-form-item>
       </el-form>
@@ -30,9 +31,10 @@ import rules from '@/components/Form/DataForm/rules'
 import { Select2 } from '@/components/Form/FormFields'
 import GenericListTable from '@/layout/components/GenericListTable'
 import Dialog from '@/components/Dialog/index.vue'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountList',
+  name: 'CloudAccountList',
   components: {
     Dialog,
     Select2,
@@ -70,6 +72,9 @@ export default {
               onUpdate: ({ row, col }) => {
                 vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider?.value }})
               },
+              afterDelete: () => {
+                this.getCloudPlatforms()
+              },
               extraActions: [
                 {
                   name: 'TestConnection',
@@ -87,6 +92,22 @@ export default {
                       vm.$message.error(err.response.data.msg)
                     })
                   }
+                },
+                {
+                  title: vm.$t('RunTaskManually'),
+                  name: 'execute',
+                  type: 'info',
+                  can: () => vm.$hasPerm('xpack.add_syncinstancetaskexecution'),
+                  callback: function(data) {
+                    const taskId = data.row.task?.id
+                    if (taskId) {
+                      this.$axios.get(`/api/v1/xpack/cloud/sync-instance-tasks/${taskId}/run/`).then(res => {
+                        openTaskPage(res['task'])
+                      })
+                    } else {
+                      this.$message.error(this.$t('ExecCloudSyncErrorMsg'))
+                    }
+                  }
                 }
               ]
             }
@@ -101,117 +122,11 @@ export default {
           getUrlQuery: false
         },
         moreCreates: {
+          loading: false,
           callback: (option) => {
             vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
           },
-          dropdown: [
-            {
-              name: aliyun,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title,
-              type: 'primary',
-              group: this.$t('PublicCloud'),
-              can: true
-            },
-            {
-              name: qcloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title,
-              type: 'primary',
-              can: true
-            },
-            {
-              name: qcloud_lighthouse,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud_lighthouse].title
-            },
-            {
-              name: huaweicloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
-            },
-            {
-              name: baiducloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[baiducloud].title
-            },
-            {
-              name: jdcloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[jdcloud].title
-            },
-            {
-              name: kingsoftcloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[kingsoftcloud].title
-            },
-            {
-              name: aws_china,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_china].title
-            },
-            {
-              name: aws_international,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title
-            },
-            {
-              name: azure,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
-            },
-            {
-              name: azure_international,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[azure_international].title
-            },
-            {
-              name: gcp,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
-            },
-            {
-              name: ucloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[ucloud].title
-            },
-            {
-              name: volcengine,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[volcengine].title
-            },
-            {
-              name: vmware,
-              group: this.$t('PrivateCloud'),
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
-            },
-            {
-              name: qingcloud_private,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[qingcloud_private].title
-            },
-            {
-              name: huaweicloud_private,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud_private].title
-            },
-            {
-              name: ctyun_private,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[ctyun_private].title
-            },
-            {
-              name: openstack,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
-            },
-            {
-              name: zstack,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[zstack].title
-            },
-            {
-              name: nutanix,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
-            },
-            {
-              name: fc,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[fc].title
-            },
-            {
-              name: scp,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[scp].title
-            },
-            {
-              name: apsara_stack,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[apsara_stack].title
-            },
-            {
-              name: lan,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[lan].title
-            }
-          ]
+          dropdown: []
         }
       },
       account: {},
@@ -224,10 +139,148 @@ export default {
       regionRules: [rules.Required]
     }
   },
+  mounted() {
+    this.getCloudPlatforms()
+  },
   methods: {
+    fitCloudPlatformAttr(platforms, data, group) {
+      const createdPlatform = []
+      const uncreatedPlatform = []
+      platforms.map((p) => {
+        let created = false
+        for (let i = 0; i < data?.length; i++) {
+          if (p.name === data[i].provider.value) {
+            p['can'] = false
+            created = true
+            createdPlatform.push(p)
+            break
+          }
+        }
+        if (!created) {
+          uncreatedPlatform.push(p)
+        }
+      })
+      const result = uncreatedPlatform.concat(createdPlatform)
+      result[0].group = group
+      return result
+    },
+    getCloudPlatforms() {
+      this.headerActions.moreCreates.loading = true
+      const publicPlatforms = [
+        {
+          name: aliyun,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title
+        },
+        {
+          name: qcloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title
+        },
+        {
+          name: qcloud_lighthouse,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud_lighthouse].title
+        },
+        {
+          name: huaweicloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
+        },
+        {
+          name: baiducloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[baiducloud].title
+        },
+        {
+          name: jdcloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[jdcloud].title
+        },
+        {
+          name: kingsoftcloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[kingsoftcloud].title
+        },
+        {
+          name: aws_china,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_china].title
+        },
+        {
+          name: aws_international,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title
+        },
+        {
+          name: azure,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
+        },
+        {
+          name: azure_international,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[azure_international].title
+        },
+        {
+          name: gcp,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
+        },
+        {
+          name: ucloud,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[ucloud].title
+        },
+        {
+          name: volcengine,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[volcengine].title
+        }
+      ]
+      const privatePlatforms = [
+        {
+          name: vmware,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
+        },
+        {
+          name: qingcloud_private,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[qingcloud_private].title
+        },
+        {
+          name: huaweicloud_private,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud_private].title
+        },
+        {
+          name: ctyun_private,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[ctyun_private].title
+        },
+        {
+          name: openstack,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
+        },
+        {
+          name: zstack,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[zstack].title
+        },
+        {
+          name: nutanix,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
+        },
+        {
+          name: fc,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[fc].title
+        },
+        {
+          name: scp,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[scp].title
+        },
+        {
+          name: apsara_stack,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[apsara_stack].title
+        },
+        {
+          name: lan,
+          title: ACCOUNT_PROVIDER_ATTRS_MAP[lan].title
+        }
+      ]
+      const url = '/api/v1/xpack/cloud/accounts/?fields_size=mini'
+      this.$axios.get(url).then((resp) => {
+        const pcPlatforms = this.fitCloudPlatformAttr(publicPlatforms, resp, this.$t('PublicCloud'))
+        const paPlatforms = this.fitCloudPlatformAttr(privatePlatforms, resp, this.$t('PrivateCloud'))
+        this.headerActions.moreCreates.dropdown = pcPlatforms.concat(paPlatforms)
+        this.headerActions.moreCreates.loading = false
+      })
+    },
     valid(status) {
       if (status !== 200) {
-        this.$message.error(this.$t('xpack.Cloud.AccountTestConnectionError'))
+        this.$message.error(this.$tc('TestAccountConnectionError'))
         return 200
       }
       return status

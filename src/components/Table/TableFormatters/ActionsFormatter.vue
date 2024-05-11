@@ -60,6 +60,7 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   msg += ' ?'
   const title = this.$t('Info')
   const performDelete = this.colActions.performDelete
+  const afterDelete = this.colActions.afterDelete
   this.$alert(msg, title, {
     type: 'warning',
     confirmButtonClass: 'el-button--danger',
@@ -71,6 +72,9 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
+        if (afterDelete instanceof Function) {
+          afterDelete({ row: row, col: col })
+        }
         this.$message.success(this.$tc('DeleteSuccessMsg'))
       } finally {
         instance.confirmButtonLoading = false
