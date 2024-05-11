@@ -3,45 +3,50 @@
     <div v-if="isDev" style="margin-bottom: 20px">
       <div class="dz">
         <el-button
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          size="small"
         >
-          {{ tp.toUpperCase() }}
+          {{ value }}
         </el-button>
       </div>
       <div class="dz">
         <el-button
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          size="small"
           disabled
         >
-          {{ tp.toUpperCase() }}
+          {{ value }}
         </el-button>
       </div>
-
       <div class="dz">
         <el-link
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          style="padding-right: 10px;"
         >
-          <span style="padding-right: 10px">{{ tp.toUpperCase() }}</span>
+          {{ value }}
         </el-link>
       </div>
       <div class="dz">
         <el-radio-group v-model="dz.radio">
-          <el-radio :label="3">备选项1</el-radio>
-          <el-radio :label="6">备选项2</el-radio>
-          <el-radio :label="9">备选项3</el-radio>
+          <el-radio v-for="i in 3" :key="i" :label="$tc('Options') + ` ${i}`" />
         </el-radio-group>
       </div>
-      <el-steps :active="1" :space="200" class="dz" finish-status="error">
-        <el-step title="已完成" />
-        <el-step title="进行中" />
-        <el-step title="步骤 3" />
-      </el-steps>
+      <div class="dz">
+        <el-steps :active="1" :space="100">
+          <el-step
+            v-for="(s, i) in stepStatus"
+            :key="s"
+            :title="$tc('Step') + ` ${i+1}`"
+            :status="s"
+          />
+        </el-steps>
+      </div>
       <div class="dz" />
     </div>
     <IBox v-if="!loading">
@@ -77,8 +82,13 @@ export default {
   data() {
     return {
       dz: {},
+      stepStatus: ['wait', 'success', 'finish', 'process', 'error'],
       loading: true,
       files: {},
+      examples: {
+        'primary': this.$t('Primary'), 'info': this.$t('Info'), 'warning': this.$t('Warning'),
+        'success': this.$t('Success'), 'danger': this.$t('Danger')
+      },
       interfaceInfo: {},
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },

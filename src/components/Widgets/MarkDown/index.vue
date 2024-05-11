@@ -118,10 +118,10 @@ export default {
 }
 .action-bar {
   position: relative;
-  height: 30px;
-  line-height: 30px;
+  height: 0;
   border: 1px solid #dcdfe6;
   border-bottom: none;
+  z-index: 999;
   .action {
     position: absolute;
     right: 6px;

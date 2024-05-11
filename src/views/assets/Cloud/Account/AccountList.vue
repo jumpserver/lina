@@ -8,12 +8,11 @@
       :visible.sync="visible"
       width="50"
       @cancel="handleCancel()"
-      @delete="onDelete()"
       @close="handleCancel()"
       @confirm="handleConfirm()"
     >
       <el-form ref="regionForm" :model="account" label-width="auto">
-        <el-form-item :label="$tc('xpack.Cloud.Region')" :rules="regionRules" prop="region">
+        <el-form-item :label="$tc('Region')" :rules="regionRules" prop="region">
           <Select2 ref="regionSelect" v-model="account.region" v-bind="select2" />
         </el-form-item>
       </el-form>
@@ -49,7 +48,7 @@ export default {
           app: 'xpack',
           resource: 'account'
         },
-        columnsExclude: ['attrs'],
+        columnsExclude: ['attrs', 'task'],
         columnsShow: {
           default: [
             'name', 'provider', 'comment', 'validity', 'actions'
