@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 
 export default {
   name: 'LabelSearch',
@@ -64,6 +65,10 @@ export default {
     showLabelSearch(newValue) {
       this.$emit('showLabelSearch', newValue)
     }
+  },
+  created() {
+    this.showLabelSearch = window.innerWidth < 992
+    this.listenViewPort()
   },
   mounted() {
     this.$eventBus.$on('labelSearch', label => {
@@ -143,6 +148,12 @@ export default {
         this.$refs.labelCascader.toggleDropDownVisible(true)
         this.setSearchFocus()
       }, 200)
+    },
+    listenViewPort() {
+      window.addEventListener('resize', debounce((e) => {
+        const viewPort = e?.target?.innerWidth
+        this.showLabelSearch = viewPort < 992
+      }, 100), false)
     }
   }
 }
@@ -151,22 +162,26 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
+  border-radius: 5px;
   border: 1px solid var(--color-disabled-background);
-  border-radius: 3px;
+  overflow: hidden;
 
   ::v-deep .el-button.label-button {
-    height: 30px;
+    height: 28px;
     border: none;
   }
 
   .label-cascader {
     width: 300px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
 
     ::v-deep .el-input {
       .el-input__inner {
-        height: 30px;
+        height: 28px !important;
+        line-height: 28px;
         font-size: 13px;
+        border: none;
       }
 
       .el-input__suffix {
