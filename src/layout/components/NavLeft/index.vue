@@ -136,9 +136,9 @@ export default {
       this.viewShown = true
     },
     handleViewChange() {
-      setTimeout(() => {
-        this.setLeastMenuOpen()
-      }, 500)
+      // setTimeout(() => {
+      //   this.setLeastMenuOpen()
+      // }, 500)
     },
     setLeastMenuOpen() {
       const hasOpened = document.querySelector('.el-submenu-sidebar.submenu-item.el-submenu.is-opened')

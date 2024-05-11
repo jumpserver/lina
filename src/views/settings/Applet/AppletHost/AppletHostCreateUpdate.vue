@@ -63,7 +63,7 @@ export default {
             hidden: () => {
               return !this.$store.getters.hasValidLicense
             },
-            helpText: this.$t('AppletHostDomainHelpText')
+            helpText: this.$t('AppletHostZoneHelpText')
           },
           nodes: {
             hidden: () => true

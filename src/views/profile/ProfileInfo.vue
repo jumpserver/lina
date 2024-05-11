@@ -194,7 +194,7 @@ export default {
           attrs: {
             disabled: true,
             name: 'site_msg',
-            model: this.object?.receive_backends.indexOf('site_msg') !== -1
+            model: this.object?.receive_backends?.indexOf('site_msg') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -205,7 +205,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'email',
-            model: this.object?.receive_backends.indexOf('email') !== -1
+            model: this.object?.receive_backends?.indexOf('email') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -216,7 +216,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'wecom',
-            model: this.object?.receive_backends.indexOf('wecom') !== -1
+            model: this.object?.receive_backends?.indexOf('wecom') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {

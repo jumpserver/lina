@@ -4,7 +4,7 @@ import { attrMatchOptions } from '@/components/const'
 export const resourceTypeOptions = [
   { label: i18n.t('Platform'), value: 'platform' },
   { label: i18n.t('Node'), value: 'node' },
-  { label: i18n.t('Domain'), value: 'domain' },
+  { label: i18n.t('Zone'), value: 'domain' },
   { label: i18n.t('AccountTemplate'), value: 'account_template' }
 ]
 

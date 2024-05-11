@@ -98,7 +98,7 @@ export default {
       const { object } = this
       const quickActions = [
         {
-          title: this.$t('DomainEnabled'),
+          title: this.$t('ZoneEnabled'),
           type: 'switch',
           attrs: {
             label: this.$t('Update'),

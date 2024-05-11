@@ -223,39 +223,40 @@ export default [
     ]
   },
   {
-    path: 'domains',
+    path: 'zones',
     component: empty,
     redirect: '',
     meta: {
+      resource: 'domain',
       permissions: ['assets.view_domain']
     },
     children: [
       {
         path: '',
-        name: 'DomainList',
+        name: 'ZoneList',
         component: () => import('@/views/assets/Domain/DomainList.vue'),
-        meta: { title: i18n.t('DomainList') }
+        meta: { title: i18n.t('ZoneList') }
       },
       {
         path: 'create',
-        name: 'DomainCreate',
+        name: 'ZoneCreate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('DomainCreate') }
+        meta: { title: i18n.t('ZoneCreate') }
       },
       {
         path: ':id/update',
-        name: 'DomainUpdate',
+        name: 'ZoneUpdate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('DomainUpdate') }
+        meta: { title: i18n.t('ZoneUpdate') }
       },
       {
         path: ':id',
-        name: 'DomainDetail',
+        name: 'ZoneDetail',
         component: () => import('@/views/assets/Domain/DomainDetail'),
         hidden: true,
-        meta: { title: i18n.t('DomainDetail') }
+        meta: { title: i18n.t('ZoneDetail') }
       }
     ]
   },

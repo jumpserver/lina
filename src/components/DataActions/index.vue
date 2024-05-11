@@ -274,7 +274,7 @@ export default {
   }
 
   .dropdown-item {
-    color: var(--color-icon-primary);
+    color: var(--color-text-primary);
 
     .pre-icon {
       width: 17px;
@@ -296,10 +296,12 @@ export default {
   }
 
   .el-dropdown-menu__item {
-    color: var(--color-icon-primary);
+
+    &.is-disabled {
+      color: var(--color-disabled-background);
+    }
 
     &:not(.is-disabled):hover {
-      color: var(--color-text-primary);
       background-color: var(--color-disabled-background);
     }
   }

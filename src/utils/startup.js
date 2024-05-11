@@ -60,6 +60,12 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     Vue.$log.error('Current org is null or not a object: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
+  if (currentOrg.is_root && !currentOrg.autoEnter) {
+    setTimeout(() => {
+      orgUtil.change2PropOrg({ to, from, next })
+    }, 1000)
+    return
+  }
   if (currentOrg.name === 'SystemSetting') {
     const preOrg = store.getters.preOrg
     await orgUtil.changeOrg(preOrg)
