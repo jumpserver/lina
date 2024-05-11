@@ -15,7 +15,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountBackupPlanInfo',
+  name: 'AccountBackupInfo',
   components: {
     AutoDetailCard,
     QuickActions

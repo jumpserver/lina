@@ -8,7 +8,7 @@ import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'AccountBackupPlanExecutionList',
+  name: 'AccountBackupExecutionList',
   components: {
     GenericListTable
   },
@@ -40,7 +40,7 @@ export default {
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountBackupPlanDetail',
+                name: 'AccountBackupDetail',
                 params: { id: row.plan }
               })
             },
@@ -71,7 +71,7 @@ export default {
                   title: this.$t('Detail'),
                   type: 'info',
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountBackupExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]

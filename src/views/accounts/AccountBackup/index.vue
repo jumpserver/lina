@@ -13,17 +13,17 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'AccountBackupPlanList',
+        activeMenu: 'AccountBackupList',
         submenu: [
           {
             title: this.$t('AccountBackup'),
-            name: 'AccountBackupPlanList',
+            name: 'AccountBackupList',
             hidden: !this.$hasPerm('accounts.view_accountbackupautomation'),
             component: () => import('@/views/accounts/AccountBackup/AccountBackupList.vue')
           },
           {
             title: this.$t('ExecutionList'),
-            name: 'AccountBackupPlanExecutionList',
+            name: 'AccountBackupExecutionList',
             hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
             component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue')
           }
