@@ -27,7 +27,7 @@ export default {
         ],
         columnsMeta: {
           secret: {
-            label: this.$t('TempPassword'),
+            label: this.$t('TempToken'),
             formatter: ShowKeyCopyFormatter
           },
           expire: {

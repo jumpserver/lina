@@ -35,7 +35,7 @@ export default {
             formatter: ShowKeyCopyFormatter
           },
           action: {
-            label: this.$t('Action'),
+            label: this.$t('PermAction'),
             formatter: function(row) {
               return row.actions.map(item => {
                 return item.label

@@ -101,18 +101,11 @@ export default {
         hasExport: false,
         hasImport: false,
         hasBulkDelete: false,
-        hasCreate: false,
-        extraActions: [
-          {
-            name: this.$t('Create'),
-            title: this.$t('Create'),
-            type: 'primary',
-            can: () => this.$hasPerm('authentication.add_passkey'),
-            callback: function() {
-              this.dialogVisible = true
-            }.bind(this)
-          }
-        ]
+        hasCreate: this.$hasPerm('authentication.add_passkey'),
+        canCreate: this.$hasPerm('authentication.add_passkey'),
+        onCreate: function() {
+          this.dialogVisible = true
+        }.bind(this)
       }
     }
   },

@@ -4,7 +4,7 @@
       v-if="!loading"
       :clean-form-value="cleanFormValue"
       :fields="fields"
-      :fields-meta="fieldsMeta"
+      :fields-meta="iFieldsMeta"
       :initial="object"
       :submit-method="submitMethod"
       :url="url"
@@ -16,10 +16,9 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
-import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly'
 
 export default {
-  name: 'AllPreferenceUpdate',
+  name: 'Base',
   components: {
     GenericCreateUpdateForm,
     IBox
@@ -31,13 +30,21 @@ export default {
     },
     category: {
       type: String,
-      default: 'luna'
+      default: 'lina'
+    },
+    fieldsExclude: {
+      type: Array,
+      default: () => []
+    },
+    fieldsMeta: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
       fields: [],
-      fieldsMeta: {},
+      iFieldsMeta: {},
       loading: true,
       url: `/api/v1/users/preference/?category=${this.category}`
     }
@@ -58,41 +65,49 @@ export default {
     },
     async setFormConfig() {
       const fields = []
-      const fieldsMeta = {}
+      let fieldsMeta = {}
       for (const k in this.remoteMeta) {
-        if (this.remoteMeta.hasOwnProperty(k)) {
-          fields.push([this.remoteMeta[k].label, [k]])
-          fieldsMeta[k] = { 'fields': Object.keys(this.remoteMeta[k].children).filter(
-            // todo: remove this when we have a better solution
-            (key) => key !== 'terminal_theme_name') }
+        const groupMeta = this.remoteMeta[k]
+        const groupLabel = groupMeta.label
+        const groupFields = Object.keys(groupMeta.children).filter(
+          (name) => this.fieldsExclude.indexOf(`${k}.${name}`) === -1
+        )
+        fields.push([groupLabel, [k]])
+        fieldsMeta[k] = {
+          fields: groupFields
         }
       }
 
-      if (this.category === 'lina') {
-        fieldsMeta.basic.fieldsMeta = {
-          has_secret_key: {
-            label: this.$t('SetStatus'),
-            component: BoolTextReadonly,
-            el: {
-              trueText: this.$t('Set'),
-              falseText: this.$t('NotSet')
-            },
-            disabled: true
-          }
-        }
-      }
+      fieldsMeta = this.mergeObjects({}, fieldsMeta, this.fieldsMeta)
+
       this.fields = fields
-      this.fieldsMeta = fieldsMeta
+      this.iFieldsMeta = fieldsMeta
+    },
+    cleanFormValue(value) {
+      this.fieldsExclude.forEach(name => {
+        const nameArray = name.split('.')
+        if (nameArray.length === 2) {
+          delete value[nameArray[0]][nameArray[1]]
+        } else {
+          delete value[nameArray[0]]
+        }
+      })
+      return value
     },
     submitMethod() {
       return 'patch'
     },
-    cleanFormValue(value) {
-      if (this.category === 'koko') {
-        // todo: remove this when we have a better solution
-        delete value['basic']['terminal_theme_name']
+    mergeObjects(target, ...sources) {
+      for (const source of sources) {
+        for (const key in source) {
+          if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+            this.mergeObjects(target[key], source[key])
+          } else {
+            target[key] = source[key]
+          }
+        }
       }
-      return value
+      return target
     }
   }
 }

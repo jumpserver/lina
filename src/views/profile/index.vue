@@ -13,11 +13,27 @@
           />
           <QuickActions
             :actions="messageSubscriptionQuickActions"
-            :title="$tc('MessageSubscription')"
+            :title="$tc('NotificationConfiguration')"
             fa="fa-info-circle"
             style="margin-top: 15px"
             type="info"
           />
+          <IBox fa="fa-edit" :title="$tc('InformationModification')">
+            <table>
+              <tr>
+                <td> {{ $t('Phone') }} </td>
+                <td><PhoneInput :value="object.phone" /></td>
+              </tr>
+            </table>
+            <el-button
+              size="small"
+              style="margin-top: 10px"
+              type="primary"
+              @click="updateProfile"
+            >
+              {{ $t('Update') }}
+            </el-button>
+          </IBox>
         </el-col>
       </el-row>
     </div>
@@ -25,6 +41,8 @@
 </template>
 
 <script type="text/jsx">
+import { IBox } from '@/components'
+import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
 import QuickActions from '@/components/QuickActions'
@@ -32,9 +50,10 @@ import { toSafeLocalDateStr } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'ProfileInfo',
   components: {
     Page,
+    IBox,
+    PhoneInput,
     DetailCard,
     QuickActions
   },
@@ -290,6 +309,17 @@ export default {
           key: this.$t('Email')
         },
         {
+          value: this.object.phone,
+          key: this.$t('Phone'),
+          formatter: (item, val) => {
+            if (val) {
+              return <span>{val.code} {val.phone}</span>
+            } else {
+              return '-'
+            }
+          }
+        },
+        {
           value: this.object.groups.map(item => item.name).join(' ｜ '),
           key: this.$t('UserGroups')
         },
@@ -358,6 +388,18 @@ export default {
     }
   },
   methods: {
+    updateProfile() {
+      const url = `/api/v1/users/profile/`
+      const data = {
+        phone: this.object.phone
+      }
+      this.$axios.patch(url, data).then(() => {
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
+      }).catch(err => {
+        const errMsg = err.request.response
+        this.$message.error(this.$tc('Error') + ': ' + errMsg)
+      })
+    },
     isBind(sourceName) {
       return !!this.$store.state.users.profile[`${sourceName}_id`]
     },
@@ -411,3 +453,19 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .ibox >>> table {
+    width: 100%;
+  }
+  .ibox >>> tr > td > span:first-child{
+    line-height: 1.43;
+    padding-right: 30px;
+    vertical-align: top;
+    font-size: 13px;
+    width: 50%;
+  }
+
+  .ibox >>> tr > td > span:last-child {
+    float: right;
+  }
+</style>
