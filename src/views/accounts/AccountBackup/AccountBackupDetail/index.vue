@@ -8,24 +8,24 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountBackupPlanInfo from './AccountBackupInfo.vue'
-import AccountBackupPlanExecutionList from './AccountBackupExecution/AccountBackupExecutionList.vue'
+import AccountBackupInfo from './AccountBackupInfo.vue'
+import AccountBackupExecutionList from './AccountBackupExecution/AccountBackupExecutionList.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountBackupPlanInfo,
-    AccountBackupPlanExecutionList
+    AccountBackupInfo,
+    AccountBackupExecutionList
   },
   data() {
     return {
       plan: { name: '', comment: '' },
       config: {
-        activeMenu: 'AccountBackupPlanInfo',
+        activeMenu: 'AccountBackupInfo',
         submenu: [
           {
             title: this.$t('Basic'),
-            name: 'AccountBackupPlanInfo'
+            name: 'AccountBackupInfo'
           }
         ],
         actions: {

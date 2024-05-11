@@ -382,7 +382,7 @@ export default [
         name: 'AccountBackupList',
         meta: {
           menuTitle: i18n.t('BackupAccounts'),
-          title: i18n.t('AccountBackupPlanList'),
+          title: i18n.t('AccountBackupList'),
           activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_accountbackupautomation']
         }
@@ -390,9 +390,9 @@ export default [
       {
         path: 'create',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
-        name: 'AccountBackupPlanCreate',
+        name: 'AccountBackupCreate',
         meta: {
-          title: i18n.t('AccountBackupPlanCreate'),
+          title: i18n.t('AccountBackupCreate'),
           activeMenu: '/console/accounts/automations',
           action: 'create'
         },
@@ -401,9 +401,9 @@ export default [
       {
         path: ':id/update',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
-        name: 'AccountBackupPlanUpdate',
+        name: 'AccountBackupUpdate',
         meta: {
-          title: i18n.t('AccountBackupPlanUpdate'),
+          title: i18n.t('AccountBackupUpdate'),
           activeMenu: '/console/accounts/automations',
           action: 'update'
         },
@@ -412,10 +412,10 @@ export default [
       {
         path: ':id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
-        name: 'AccountBackupPlanDetail',
+        name: 'AccountBackupDetail',
         activeMenu: '/console/accounts/automations',
         meta: {
-          title: i18n.t('AccountBackupPlanDetail'),
+          title: i18n.t('AccountBackupDetail'),
           activeMenu: '/console/accounts/automations'
         },
         hidden: true
@@ -423,14 +423,14 @@ export default [
       {
         path: 'executions',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue'),
-        name: 'AccountBackupPlanExecutionList',
+        name: 'AccountBackupExecutionList',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
-        name: 'AccountBackupPlanExecutionDetail',
+        name: 'AccountBackupExecutionDetail',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       }
