@@ -52,7 +52,7 @@ export default {
         needGetObjectDetail: false,
         createSuccessMsg: this.$t('AddSuccessMsg'),
         updateSuccessNextRoute: {
-          name: 'DomainDetail',
+          name: 'ZoneDetail',
           params: { id: this.$route.params.id }
         },
         fields: ['gateways'],

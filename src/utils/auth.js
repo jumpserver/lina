@@ -33,6 +33,7 @@ export function saveCurrentRoleLocal(username, role) {
 export function getCurrentOrgLocal(username) {
   const key = CURRENT_ORG_KEY + '_' + username
   const value = localStorage.getItem(key)
+  console.log('Local org: ', value)
   try {
     return JSON.parse(value)
   } catch (e) {

@@ -169,7 +169,7 @@ export default {
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('Platform'), domain: this.$tc('Domain')
+        platform: this.$tc('Platform'), domain: this.$tc('Zone')
       }
       this.tableConfig.totalData.map(item => {
         const iValue = item.value?.id || item.value

@@ -39,7 +39,7 @@ export default {
         }
       },
       createSuccessNextRoute: {
-        name: 'DomainDetail',
+        name: 'ZoneDetail',
         params: {
           id: this.$route.query.domain
         },
@@ -48,7 +48,7 @@ export default {
         }
       },
       updateSuccessNextRoute: {
-        name: 'DomainDetail',
+        name: 'ZoneDetail',
         params: {
           id: this.$route.query.domain
         },

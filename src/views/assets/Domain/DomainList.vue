@@ -47,9 +47,9 @@ export default {
       },
       headerActions: {
         hasLabelSearch: true,
-        createRoute: 'DomainCreate'
+        createRoute: 'ZoneCreate'
       },
-      notice: this.$t('DomainHelpMessage')
+      notice: this.$t('ZoneHelpMessage')
     }
   }
 }
