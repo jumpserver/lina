@@ -64,6 +64,7 @@ export default {
 
     return {
       accountId: '',
+      taskId: '',
       activeStep: 0,
       description: accountProviderAttrs.title,
       configSettings: {
@@ -135,11 +136,15 @@ export default {
           }
         },
         onPerformSuccess: (resp) => {
-          const url = vm.strategySettings.fieldsMeta.regions.el.url
-          vm.accountId = resp?.id
-          vm.strategySettings.fieldsMeta.regions.el.url = setUrlParam(url, 'account_id', vm.accountId)
-          if (resp?.task?.id) {
-            vm.strategySettings.url += `${resp.task.id}/`
+          let url = vm.strategySettings.fieldsMeta.regions.el.url
+          if (!vm.accountId) {
+            vm.accountId = resp?.id
+            url = setUrlParam(url, 'account_id', vm.accountId)
+            vm.strategySettings.fieldsMeta.regions.el.url = url
+          }
+          if (!vm.taskId) {
+            vm.taskId = resp?.task?.id
+            vm.strategySettings.url += `${vm.taskId}/`
           }
           this.activeStep = this.activeStep === 0 ? 1 : 0
         },
@@ -191,8 +196,8 @@ export default {
         fields: [
           [this.$t('CloudSource'), ['regions']],
           [this.$t('SaveSetting'), [
-            'hostname_strategy', 'ip_network_segment_group',
-            'sync_ip_type', 'is_always_update', 'fully_synchronous'
+            'hostname_strategy', 'ip_network_segment_group', 'sync_ip_type',
+            'is_always_update', 'fully_synchronous', 'release_assets'
           ]],
           [this.$t('SyncStrategy'), ['strategy']],
           [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']]
@@ -212,6 +217,11 @@ export default {
             type: 'switch',
             label: this.$t('FullySynchronous'),
             helpTip: this.$t('FullySynchronousHelpTip')
+          },
+          release_assets: {
+            type: 'switch',
+            label: this.$t('ReleaseAssets'),
+            helpTips: this.$t('ReleaseAssetsHelpTips')
           },
           regions: {
             component: Checkbox,

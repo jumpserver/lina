@@ -125,6 +125,10 @@ export default {
           }
         },
         {
+          key: this.$t('ReleaseAssets'),
+          value: this.object?.task.release_assets
+        },
+        {
           key: this.$t('DateLastSync'),
           value: this.object?.task?.date_last_sync ? toSafeLocalDateStr(this.object?.task.date_created) : ''
         },
