@@ -82,14 +82,16 @@
                     </a>
                   </li>
                 </div>
+                <div
+                  v-if="uploadFileList.length === 0"
+                  slot="tip"
+                  class="empty-file-tip"
+                >
+                  {{ $tc('NoFiles') }}
+                </div>
               </el-upload>
               <el-progress v-if="ShowProgress" :percentage="progressLength" />
-              <div
-                v-if="uploadFileList.length===0"
-                class="empty-file-tip"
-              >
-                {{ $tc('NoFiles') }}
-              </div>
+
             </el-card>
           </div>
           <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
@@ -532,48 +534,64 @@ export default {
 }
 
 .file-uploader {
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
+  min-width: 925px;
 
-  div > div:first-child {
-    display: flex;
-  }
+  ::v-deep .el-card__body {
+    div {
+      display: flex;
+      position: relative;
 
-  >>> .el-upload {
-    width: 400px;
+      .el-upload > .el-upload-dragger {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-    flex-direction: column;
+      .empty-file-tip {
+        position: absolute;
+        right: 20%;
+        top: 50%;
+        font-size: 18px;
+        color: #c5c9cc;
+        transform: translateY(-50%);
+      }
 
-    .el-upload-dragger {
-      width: 100%;
+      .el-upload-list {
+        margin-left: 20px;
+        padding: 0 10px 0 10px;
+        list-style: none;
+        width: 100%;
+        height: 180px;
+        border: 1px dashed #d9d9d9;
+        overflow-y: auto;
+        font-weight: 500;
+
+        .el-upload-list__item {
+          &:first-child {
+            margin-top: 5px;
+          }
+
+          .el-upload-list__item-name {
+            .el-icon-close {
+              position: relative;
+              top: 0;
+              left: 10px;
+            }
+          }
+        }
+      }
     }
-  }
-
-  .empty-file-tip {
-    position: relative;
-    bottom: 100px;
-    left: 52%;
-    font-size: 18px;
-    color: #c5c9cc;
-  }
-
-  >>> .el-upload-list {
-    margin-left: 20px;
-    padding: 0 10px 0 10px;
-    list-style: none;
-    width: 100%;
-    height: 180px;
-    border: 1px dashed #d9d9d9;
-    overflow-y: auto;
-    font-weight: 500;
   }
 }
 
 .output {
-  background: white;
+  min-width: 925px;
+  padding: 0 20px 20px;
+  background: #fff;
 }
 
 .output >>> #terminal {
   border: dashed 1px #d9d9d9;
-  margin: 0 20px 20px;
 }
 </style>
