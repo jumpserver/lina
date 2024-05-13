@@ -123,6 +123,7 @@ export default {
 
 <style scoped>
 .xterm {
+  overflow: auto;
   padding-left: 5px;
   background-color: #FFFFFF;
 }
