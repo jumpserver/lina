@@ -6,52 +6,49 @@
       :table-url="tableUrl"
       v-bind="headerActions"
     />
-    <div style="padding-top: 15px">
-      <el-row :gutter="20">
-        <el-col v-for="(d, index) in totalData" :key="index" :span="8">
-          <el-card
-            :body-style="{ 'text-align': 'center', 'padding': '20px' }"
-            :class="{'is-disabled': isDisabled(d)}"
-            class="my-card"
-            shadow="hover"
-            @click.native="onView(d)"
-          >
-            <slot :index="index" :item="d">
-              <span v-if="d.edition === 'enterprise'" class="enterprise">
-                {{ $t('Enterprise') }}
-              </span>
-              <el-row :gutter="20">
-                <el-col v-if="d.icon" :span="8" class="image">
-                  <img
-                    v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
-                    :alt="d.display_name"
-                    :src="d.icon"
-                  >
-                  <Icon v-else :icon="d.icon" />
-                </el-col>
-                <el-col :span="16" class="text-zone">
-                  <div class="one-line">
-                    <b>{{ d.display_name }}</b>
-                    <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
-                      {{ d.version }}
-                    </el-tag>
-                  </div>
-                  <el-divider class="my-divider" />
-                  <div :title="d.comment " class="comment">
-                    {{ d.comment }}
-                  </div>
-                  <div class="tag-zone">
-                    <el-tag v-for="tag of d.tags" :key="tag" size="mini">
-                      {{ capitalize(tag) }}
-                    </el-tag>
-                  </div>
-                </el-col>
-              </el-row>
-            </slot>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
+    <el-row :gutter="20" type="flex">
+      <el-col v-for="(d, index) in totalData" :key="index" :span="8">
+        <el-card
+          :body-style="{ 'text-align': 'center', 'padding': '20px' }"
+          :class="{'is-disabled': isDisabled(d)}"
+          class="my-card"
+          shadow="hover"
+          @click.native="onView(d)"
+        >
+          <slot :index="index" :item="d">
+            <span v-if="d.edition === 'enterprise'" class="enterprise">
+              {{ $t('Enterprise') }}
+            </span>
+            <el-row type="flex">
+              <el-col v-if="d.icon" :span="8" class="image">
+                <img
+                  v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
+                  :alt="d.display_name"
+                  :src="d.icon"
+                >
+                <Icon v-else :icon="d.icon" />
+              </el-col>
+              <el-col :span="16" class="text-zone">
+                <div class="one-line">
+                  <b>{{ d.display_name }}</b>
+                  <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
+                    {{ d.version }}
+                  </el-tag>
+                </div>
+                <div :title="d.comment " class="comment">
+                  {{ d.comment }}
+                </div>
+                <div class="tag-zone">
+                  <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                    {{ capitalize(tag) }}
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+          </slot>
+        </el-card>
+      </el-col>
+    </el-row>
     <Pagination
       v-if="pagination"
       ref="pagination"
@@ -223,68 +220,103 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.my-card {
-  margin: 0 0 20px 0;
-  position: relative;
-  cursor: pointer;
+.el-row {
+  margin-top: 15px;
+  flex-wrap: wrap;
 
-  &.is-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  .el-col {
+    margin-bottom: 15px;
+    min-width: 400px;
+    max-width: 600px;
+    min-height: 200px;
 
-  &:hover {
-    .closeIcon {
-      visibility: visible;
+    .my-card {
+      ::v-deep .el-card__body {
+        height: 100%;
+
+        .el-row {
+          margin-top: 0;
+          flex-wrap: nowrap;
+
+          .image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 60px;
+
+            img {
+              width: 60px;
+              height: 60px;
+            }
+          }
+
+          .text-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+            min-height: 0;
+
+            .one-line {
+              display: flex;
+              align-items: center;
+              padding-top: 15px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              cursor: pointer;
+            }
+
+            .comment {
+              display: -webkit-box;
+              height: 160px;
+              min-width: 210px;
+              font-size: 12px;
+              padding: 15px 0;
+              cursor: pointer;
+              overflow: hidden;
+              -webkit-line-clamp: 4;
+              -webkit-box-flex: 1;
+              -webkit-flex-grow: 1;
+              flex-grow: 1;
+              -webkit-flex-shrink: 1;
+              flex-shrink: 1;
+              -webkit-box-orient: vertical;
+              text-align: left;
+            }
+
+            .tag-zone {
+              display: flex;
+              height: 100%;
+              align-items: center;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      &.is-disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        .closeIcon {
+          visibility: visible;
+        }
+      }
+
+      .closeIcon {
+        float: right;
+        display: block;
+        visibility: hidden;
+
+        i {
+          font-size: 20px;
+          cursor: pointer;
+        }
+      }
     }
   }
-
-  .closeIcon {
-    float: right;
-    display: block;
-    visibility: hidden;
-
-    i {
-      font-size: 20px;
-      cursor: pointer;
-    }
-  }
-}
-
-.my-divider {
-  margin: 10px 0;
-}
-
-.image {
-  img, span {
-    width: 60px;
-    height: 60px;
-    display: block;
-    margin: 50% auto;
-  }
-
-  span {
-    font-size: 36px;
-    color: black;
-  }
-}
-
-.one-line {
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.comment {
-  font-size: 12px;
-  height: 50px;
-  overflow: hidden;
-  margin-bottom: 10px;
-  padding-right: 5px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
 }
 
 .enterprise {
@@ -296,18 +328,5 @@ export default {
   padding: 3px 8px 4px 9px;
   font-size: 13px;
   border-radius: 3px 3px 3px 8px;
-}
-
-.tag-zone {
-  margin-top: 20px;
-
-  .el-tag {
-    margin-right: 3px;
-  }
-}
-
-.text-zone {
-  text-align: left;
-  height: 100%;
 }
 </style>
