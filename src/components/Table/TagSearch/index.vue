@@ -368,6 +368,10 @@ export default {
 
     ::v-deep .el-input__suffix {
       color: var(--color-icon-primary) !important;
+
+      .el-input__suffix-inner .el-input__icon {
+        line-height: 30px;
+      }
     }
   }
 
