@@ -8,7 +8,7 @@ import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatt
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountBackupPlanList',
+  name: 'AccountBackupList',
   components: {
     GenericListTable
   },
@@ -36,7 +36,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountBackupPlanDetail'
+              route: 'AccountBackupDetail'
             }
           },
           types: {
@@ -55,7 +55,7 @@ export default {
                 return {
                   name: 'AccountBackupList',
                   query: {
-                    tab: 'AccountBackupPlanExecutionList',
+                    tab: 'AccountBackupExecutionList',
                     plan_id: row.id
                   }
                 }
@@ -65,10 +65,10 @@ export default {
           actions: {
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AccountBackupUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -96,7 +96,7 @@ export default {
         hasImport: false,
         createRoute: () => {
           return {
-            name: 'AccountBackupPlanCreate'
+            name: 'AccountBackupCreate'
           }
         }
       }
