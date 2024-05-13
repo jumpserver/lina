@@ -282,12 +282,11 @@ export default {
   }
 }
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
 .help-tips {
   opacity: 0.8;
   line-height: 2;
   width: 300px;
-
 }
 .help-tip-icon {
   &:hover {
