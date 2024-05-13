@@ -214,11 +214,6 @@ export default {
           border-radius: 0;
           color: var(--color-text-primary);
         }
-
-        .el-input-group__append {
-          border: 1px solid var(--color-input-border);
-          border-left: 0 !important;
-        }
       }
 
       // 普通的输入框
