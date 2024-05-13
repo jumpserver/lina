@@ -18,7 +18,7 @@ export default {
   data() {
     const ajaxUrl = '/api/v1/authentication/temp-tokens/'
     return {
-      helpMessage: this.$t('TempPassword'),
+      helpMessage: this.$t('TempPasswordTip'),
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
@@ -27,7 +27,7 @@ export default {
         ],
         columnsMeta: {
           secret: {
-            label: this.$t('TempPassword'),
+            label: this.$t('TempToken'),
             formatter: ShowKeyCopyFormatter
           },
           expire: {

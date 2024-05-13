@@ -7,29 +7,28 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="profile">
+        <el-dropdown-item command="ProfileIndex">
           <svg-icon class="icon" icon-class="attestation" />
-          {{ $t('Profile') }}
+          {{ $t('YourProfile') }}
         </el-dropdown-item>
-        <el-dropdown-item command="UserSetting">
+
+        <el-dropdown-item command="PasswordAndSSHKey">
+          <svg-icon class="icon" icon-class="personal" />
+          {{ $t('PasswordAndSSHKey') }}
+        </el-dropdown-item>
+
+        <!--  Preference -->
+        <el-dropdown-item command="Preferences" divided>
           <svg-icon class="icon" icon-class="preference" />
-          {{ $t('UserSetting') }}
+          {{ $t('Preferences') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
-          <svg-icon class="icon" icon-class="key" />
-          {{ $t('APIKey') }}
-        </el-dropdown-item>
-        <el-dropdown-item
-          v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')"
-          command="tempPassword"
-        >
-          <svg-icon class="icon" icon-class="unlock-one" />
-          {{ $t('TempPassword') }}
-        </el-dropdown-item>
+
+        <!-- logout -->
         <el-dropdown-item command="logout" divided>
           <svg-icon class="icon" icon-class="logout" />
           {{ $t('Logout') }}
         </el-dropdown-item>
+
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -56,21 +55,19 @@ export default {
   methods: {
     handleClick(val) {
       switch (val) {
-        case 'profile':
-          this.$router.push('/profile')
+        case 'ProfileIndex':
+          this.$router.push({ name: 'Profile' })
+          break
+        case 'PasswordAndSSHKey':
+          this.$router.push({ name: 'PasswordAndSSHKey' })
+          break
+        case 'Preferences':
+          this.$router.push({ name: 'Preferences' })
           break
         case 'logout':
           this.logout()
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
-        case 'apiKey':
-          this.$router.push('/profile/api-keys')
-          break
-        case 'tempPassword':
-          this.$router.push('/profile/temp-password')
-          break
-        case 'UserSetting':
-          this.$router.push('/profile/user/setting')
       }
     },
     logout() {
@@ -100,5 +97,6 @@ export default {
 
   .icon {
     font-size: 14px;
+    margin-right: 3px;
   }
 </style>

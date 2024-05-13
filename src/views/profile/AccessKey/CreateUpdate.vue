@@ -6,7 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 
 export default {
-  name: 'ApiKeyCreateUpdate',
+  name: 'AccessKeyCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -62,7 +62,7 @@ export default {
         return value
       },
       updateSuccessNextRoute: {
-        name: 'ApiKey'
+        name: 'AccessKey'
       }
     }
   },
