@@ -8,7 +8,7 @@ import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatt
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'HistoryList',
+  name: 'TaskHistoryList',
   components: { GenericListTable },
   props: {
     object: {
@@ -29,7 +29,7 @@ export default {
         }
       },
       tableConfig: {
-        url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/history/`,
+        url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/history/`,
         columns: [
           {
             prop: 'summary.new',
