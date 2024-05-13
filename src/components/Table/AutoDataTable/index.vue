@@ -443,7 +443,7 @@ export default {
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
       let tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
-      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用
+      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用.
       tableName = replaceAllUUID(tableName)
 
       _tableConfig[tableName] = {
