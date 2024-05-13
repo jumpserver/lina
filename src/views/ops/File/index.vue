@@ -1,5 +1,16 @@
 <template>
   <Page>
+    <el-alert
+      :center="false"
+      class="announcement"
+      type="success"
+    >
+      <span v-for="(tip,index) of FileTransferBootStepHelpTips" :key="index" style="padding-right: 24px">
+        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}</span>
+        {{ tip }}
+      </span>
+    </el-alert>
+
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -14,6 +25,7 @@
               <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
             </el-button>
           </div>
+          <span style="color: red">*</span>
           <div class="upload_input">{{ $t('Account') }}:</div>
           <div class="upload_input">
             <el-autocomplete
@@ -216,7 +228,12 @@ export default {
         'success': 0,
         'failed': 0,
         'skip': 0
-      }
+      },
+      FileTransferBootStepHelpTips: [
+        this.$tc('FileTransferBootStepHelpTips1'),
+        this.$tc('FileTransferBootStepHelpTips2'),
+        this.$tc('FileTransferBootStepHelpTips3')
+      ]
     }
   },
   computed: {
