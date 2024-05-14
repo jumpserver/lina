@@ -227,7 +227,7 @@ export default {
 
   .el-col {
     margin-bottom: 15px;
-    min-width: 400px;
+    min-width: 450px;
     max-width: 600px;
     min-height: 200px;
 
@@ -256,7 +256,6 @@ export default {
             flex-direction: column;
             align-items: flex-start;
             min-width: 0;
-            min-height: 0;
 
             .one-line {
               display: flex;
@@ -269,7 +268,7 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 160px;
+              height: 85px;
               min-width: 210px;
               font-size: 12px;
               padding: 15px 0;
@@ -277,8 +276,6 @@ export default {
               overflow: hidden;
               -webkit-line-clamp: 4;
               -webkit-box-flex: 1;
-              -webkit-flex-grow: 1;
-              flex-grow: 1;
               -webkit-flex-shrink: 1;
               flex-shrink: 1;
               -webkit-box-orient: vertical;
@@ -290,6 +287,7 @@ export default {
               height: 100%;
               align-items: center;
               cursor: pointer;
+              margin-top: 45px;
             }
           }
         }
