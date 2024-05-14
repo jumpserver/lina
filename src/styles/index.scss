@@ -223,6 +223,12 @@ input[type=file] {
   }
 }
 
+.el-popper.switch-org {
+  border-radius: 5px;
+  left: 220px !important;
+  max-width: 400px;
+}
+
 // 步骤条
 .el-timeline .el-timeline-item {
   .el-timeline-item__wrapper {

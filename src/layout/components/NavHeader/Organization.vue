@@ -3,7 +3,7 @@
     :disabled="disabled"
     :placeholder="$tc('Select')"
     :value="currentOrgId"
-    class="org-select organization"
+    class="org-select"
     filterable
     popper-class="switch-org"
     @change="changeOrg"
@@ -130,22 +130,47 @@ export default {
 @import '~@/styles/variables.scss';
 $height: 28px;
 
-.org-select {
-  padding: 0 10px 0 18px;
-  background-color: #293846;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
-  //border-top: solid 1px rgb(47, 64, 80);
-  ::v-deep .el-input {
-    input.el-input__inner {
-      line-height: $height;
-      height: $height;
-      background: none;
-      border: none;
-      padding-left: 20px;
+::v-deep .el-input {
+  .el-input__inner {
+    height: 30px;
+    line-height: 30px;
+    background: none;
+    border: none;
+    padding-left: 20px;
+  }
+
+  .el-input__prefix {
+    left: 0;
+  }
+
+  .el-input__suffix > .el-input__suffix-inner i {
+    color: #fff;
+  }
+}
+
+.el-select-dropdown.switch-org {
+  border-radius: 4px;
+
+  .option-group {
+    max-width: 400px;
+
+    ::v-deep .el-select-group__title {
+      color: var(--color-icon-primary);
+      padding-left: 15px;
+      font-size: 12px;
+      line-height: 30px;
+    }
+
+    ::v-deep .el-select-dropdown__item {
+      padding: 0 15px;
+      line-height: 30px;
+      height: 30px;
     }
   }
+}
+
+.org-select >>> .el-input.is-disabled .el-input__inner {
+  color: #ffffff !important;
 }
 
 .icon {
@@ -157,51 +182,5 @@ $height: 28px;
   margin-left: 5px;
   border: .5px solid #FFF;
   opacity: 0.4;
-}
-
-.organization {
-  height: $height;
-  line-height: $height;
-  background: transparent;
-  color: #FFF;
-  font-size: 13px;
-
-  & >>> .el-input__prefix {
-    left: 0;
-  }
-
-  & >>> .el-input--prefix .el-input__inner {
-    line-height: $height !important;
-    height: $height !important;
-  }
-
-  & >>> .el-input__icon {
-    color: #606266;
-    line-height: $height;
-  }
-
-  & >>> .el-input .el-select__caret {
-    color: #FFF;
-  }
-}
-
-.option-group {
-  max-width: 400px;
-
-  & >>> .el-select-group__title {
-    color: #909399 !important;
-    padding-left: 15px;
-    font-size: 12px;
-    line-height: $height;
-  }
-
-  &>>> .el-select-dropdown__item {
-    line-height: 30px;
-    height: 30px;
-  }
-}
-
-.org-select >>> .el-input.is-disabled .el-input__inner {
-  color: #ffffff !important;
 }
 </style>

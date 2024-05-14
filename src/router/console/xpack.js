@@ -26,7 +26,7 @@ const clouds = {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('AccountList'),
+        title: i18n.t('CloudAccountList'),
         permissions: ['xpack.view_account']
       },
       children: [
@@ -36,7 +36,7 @@ const clouds = {
           hidden: true,
           redirect: '/console/assets/cloud',
           meta: {
-            title: i18n.t('AccountList'),
+            title: i18n.t('CloudAccountList'),
             permissions: ['xpack.view_account']
           }
         },
@@ -46,7 +46,7 @@ const clouds = {
           name: 'AccountCreate',
           hidden: true,
           meta: {
-            title: i18n.t('Create'),
+            title: i18n.t('CloudAccountCreate'),
             action: 'create',
             permissions: ['xpack.add_account']
           }
@@ -57,7 +57,7 @@ const clouds = {
           name: 'AccountUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('Update'),
+            title: i18n.t('CloudAccountUpdate'),
             action: 'update',
             permissions: ['xpack.change_account']
           }
@@ -68,58 +68,8 @@ const clouds = {
           name: 'AccountDetail',
           hidden: true,
           meta: {
-            title: i18n.t('Detail'),
+            title: i18n.t('CloudAccountDetail'),
             permissions: ['xpack.view_account']
-          }
-        }
-      ]
-    },
-    {
-      path: 'sync-instance-tasks',
-      component: empty,
-      hidden: true,
-      meta: {
-        title: i18n.t('SyncInstanceTaskList'),
-        permissions: ['xpack.view_syncinstancetask']
-      },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/assets/Cloud/'),
-          name: 'SyncInstanceTaskList',
-          hidden: true,
-          meta: {
-            title: i18n.t('SyncInstanceTaskList'),
-            permissions: ['xpack.view_syncinstancetask']
-          }
-        },
-        {
-          path: 'create',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-          name: 'SyncInstanceTaskCreate',
-          hidden: true,
-          meta: {
-            title: i18n.t('SyncInstanceTaskCreate'),
-            permissions: ['xpack.add_syncinstancetask']
-          }
-        },
-        {
-          path: ':id/update',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-          name: 'SyncInstanceTaskUpdate',
-          hidden: true,
-          meta: {
-            title: i18n.t('SyncInstanceTaskUpdate'),
-            permissions: ['xpack.change_syncinstancetask']
-          }
-        },
-        {
-          path: ':id',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
-          name: 'SyncInstanceTaskDetail',
-          hidden: true,
-          meta: {
-            title: i18n.t('SyncInstanceTaskDetail')
           }
         }
       ]

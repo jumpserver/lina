@@ -7,7 +7,7 @@ import GenericListTable from '@/layout/components/GenericListTable/index'
 import { DateFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'AssetList',
+  name: 'TaskSyncAssetList',
   components: { GenericListTable },
   props: {
     object: {
@@ -40,7 +40,7 @@ export default {
         ]
       },
       tableConfig: {
-        url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/instances/`,
+        url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/instances/`,
         hasSelection: false,
         columns: [
           'instance_id',

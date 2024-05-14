@@ -21,7 +21,7 @@ import rules from '@/components/Form/DataForm/rules'
 import { PasswordInput } from '@/components/Form/FormFields'
 
 export default {
-  name: 'PasswordUpdate',
+  name: 'Password',
   components: {
     GenericCreateUpdateForm,
     IBox
