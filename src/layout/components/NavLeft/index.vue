@@ -23,7 +23,7 @@
         </span>
       </div>
     </div>
-    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
+    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper" height="100%">
       <el-menu
         :active-text-color="variables['menuActiveText']"
         :background-color="variables['menuBg']"
