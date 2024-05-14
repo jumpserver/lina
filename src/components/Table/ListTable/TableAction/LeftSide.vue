@@ -163,7 +163,7 @@ export default {
       const invariantActions = [
         {
           name: 'batch',
-          title: this.$t('BatchProcessing', { 'Number': this.selectedRows.length }),
+          title: this.$t('BatchProcessing', { 'number': this.selectedRows.length }),
           divided: true,
           has: function({ selectedRows }) {
             return selectedRows.length > 0
