@@ -165,10 +165,17 @@ export default {
       deep: true
     }
   },
+  deactivated() {
+    this.preURL = location.href
+  },
   activated() {
+    if (this.preURL === location.href) {
+      return
+    }
+    this.$log.info('Reload the table get latest data')
     setTimeout(() => {
       this.reloadTable()
-    })
+    }, 500)
   },
   methods: {
     handleSelectionChange(val) {
