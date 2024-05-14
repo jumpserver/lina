@@ -6,8 +6,8 @@
       :table-url="tableUrl"
       v-bind="headerActions"
     />
-    <el-row :gutter="20" type="flex">
-      <el-col v-for="(d, index) in totalData" :key="index" :span="8">
+    <el-row :gutter="10" class="the-row">
+      <el-col v-for="(d, index) in totalData" :key="index" :md="8" :sm="24">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '20px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -19,7 +19,7 @@
             <span v-if="d.edition === 'enterprise'" class="enterprise">
               {{ $t('Enterprise') }}
             </span>
-            <el-row type="flex">
+            <el-row>
               <el-col v-if="d.icon" :span="8" class="image">
                 <img
                   v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
@@ -50,7 +50,7 @@
       </el-col>
     </el-row>
     <Pagination
-      v-if="pagination"
+      v-show="pagination && total > paginationSize"
       ref="pagination"
       class="pagination"
       v-bind="$data"
@@ -96,9 +96,9 @@ export default {
       totalData: [],
       page: defaultFirstPage,
       extraQuery: {},
-      paginationSize: 8,
+      paginationSize: 9,
       paginationLayout: 'total, sizes, prev, pager, next',
-      paginationSizes: [8, 12, 20, 36, 52, 120],
+      paginationSizes: [9, 18, 27],
       axiosConfig: {
         raw: 1,
         params: {
@@ -221,33 +221,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-row {
+.the-row {
   margin-top: 15px;
-  flex-wrap: wrap;
+  max-width: 1600px;
+  text-align: center;
 
-  .el-col {
-    margin-bottom: 15px;
-    min-width: 400px;
-    max-width: 600px;
-    min-height: 200px;
-
+  .el-col, div {
     .my-card {
+      max-width: 400px;
+      min-width: 300px;
+      height: 240px;
+      position: relative;
+      margin-bottom: 20px;
+
       ::v-deep .el-card__body {
         height: 100%;
 
         .el-row {
           margin-top: 0;
           flex-wrap: nowrap;
+          height: 100%;
 
           .image {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-width: 60px;
+            height: 100%;
 
             img {
               width: 60px;
               height: 60px;
+            }
+
+            svg {
+              width: 40px;
+              height: 40px;
             }
           }
 
@@ -261,7 +269,7 @@ export default {
             .one-line {
               display: flex;
               align-items: center;
-              padding-top: 15px;
+              padding-top: 10px;
               text-overflow: ellipsis;
               white-space: nowrap;
               cursor: pointer;
@@ -269,13 +277,12 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 160px;
-              min-width: 210px;
+              height: 150px;
               font-size: 12px;
               padding: 15px 0;
               cursor: pointer;
               overflow: hidden;
-              -webkit-line-clamp: 4;
+              -webkit-line-clamp: 6;
               -webkit-box-flex: 1;
               -webkit-flex-grow: 1;
               flex-grow: 1;

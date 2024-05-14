@@ -29,10 +29,12 @@
       </template>
     </PageHeading>
     <PageContent class="page-content">
-      <el-alert v-if="helpMessage" type="success">
-        <span class="announcement-main" v-html="helpMessage" />
-      </el-alert>
-      <slot />
+      <div>
+        <el-alert v-if="helpMessage" type="success">
+          <span class="announcement-main" v-html="helpMessage" />
+        </el-alert>
+        <slot />
+      </div>
     </PageContent>
     <UserConfirmDialog />
   </div>
@@ -127,6 +129,10 @@ export default {
     height: calc(100% - 20px);
     overflow-x: hidden;
     overflow-y: auto;
+
+    ::v-deep > div {
+      margin-bottom: 50px;
+    }
   }
 }
 
