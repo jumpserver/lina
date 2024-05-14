@@ -52,6 +52,7 @@
     <Pagination
       v-if="pagination"
       ref="pagination"
+      class="pagination"
       v-bind="$data"
       @currentSizeChange="handleCurrentChange"
       @sizeChange="handleSizeChange"
@@ -329,4 +330,23 @@ export default {
   font-size: 13px;
   border-radius: 3px 3px 3px 8px;
 }
+
+.tag-zone {
+  margin-top: 20px;
+
+  .el-tag {
+    margin-right: 3px;
+  }
+}
+
+.text-zone {
+  text-align: left;
+  height: 100%;
+}
+
+.pagination {
+  padding-top: 10px;
+  border-top: 1px solid #e7eaec;
+}
+
 </style>

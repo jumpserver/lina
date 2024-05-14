@@ -8,7 +8,7 @@ import { Required } from '@/components/Form/DataForm/rules'
 import { PhoneInput } from '@/components/Form/FormFields'
 
 export default {
-  name: 'ProfileUpdate',
+  name: 'Improvement',
   components: {
     GenericCreateUpdatePage
   },

@@ -8,6 +8,7 @@
       :more-buttons="moreButtons"
       :on-perform-success="onPerformSuccess"
       :submit-method="submitMethod"
+      :after-get-form-value="afterGetFormValue"
       :url="url"
     />
   </IBox>
@@ -18,7 +19,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { IBox } from '@/components'
 
 export default {
-  name: 'SSHUpdate',
+  name: 'SSHKey',
   components: {
     GenericCreateUpdateForm,
     IBox
@@ -33,19 +34,16 @@ export default {
     return {
       url: '/api/v1/users/profile/public-key/',
       fields: [
-        [this.$t('OldSSHKey'), ['public_key_comment', 'public_key_hash_md5']],
-        [this.$t('UpdateSSHKey'), ['public_key']]
+        ['', ['current_public_key']],
+        ['', ['public_key']]
       ],
       fieldsMeta: {
-        public_key_comment: {
-          label: this.$t('Name'),
-          disabled: true
-        },
-        public_key_hash_md5: {
-          label: this.$t('FingerPrint'),
+        current_public_key: {
+          label: this.$t('OldPublicKey'),
           disabled: true
         },
         public_key: {
+          label: this.$t('NewPublicKey'),
           el: {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...',
@@ -65,6 +63,11 @@ export default {
     }
   },
   methods: {
+    afterGetFormValue(value) {
+      const publicKey = `${value['public_key_comment'] || '-'} (${value['public_key_hash_md5'] || '-'})`
+      value['current_public_key'] = publicKey
+      return value
+    },
     submitMethod() {
       return 'put'
     },

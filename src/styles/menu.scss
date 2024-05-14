@@ -11,7 +11,6 @@
 
   .el-submenu, .el-menu-item.submenu-title-noDropdown {
     background-color: $menuBg;
-    border-top: solid 1px $menuBg;
 
     .el-submenu__title {
       color: $menuText;
@@ -43,7 +42,7 @@
 
     &.is-active {
       color: $subMenuActiveText;
-      font-weight: 400;
+      font-weight: 500;
       list-style-type: disc;
     }
 
@@ -102,7 +101,7 @@
   }
 
   .submenu-item.el-submenu.is-opened {
-    border-top: solid 1px #efefef;
+    border-top: dotted 1px #ecedf2;
   }
 
   .nest-menu li.is-active {

@@ -159,6 +159,7 @@ $headerHeight: 30px;
 
   .right-side {
     float: right;
+    height: 30px;
   }
 
   .search {
@@ -166,7 +167,9 @@ $headerHeight: 30px;
     flex-direction: row;
 
     .right-side-item.action-search {
-      height: $headerHeight;
+      border: 1px solid var(--color-disabled-background);
+      border-radius: 5px;
+      overflow: hidden;
     }
   }
 
@@ -194,14 +197,42 @@ $headerHeight: 30px;
 }
 
 .mobile .search.right {
+  clear: both;
   float: none;
+  padding-top: 10px;
+
+  .label-search {
+    margin-right: 0;
+
+    ::v-deep .el-button.label-button {
+      border: 1px solid var(--color-disabled-background);
+    }
+
+    ::v-deep .label-cascader {
+      display: block;
+      width: 100%;
+    }
+  }
 }
 
 .mobile .search.right .action-search {
+  display: inline-block;
   width: 100%;
+  margin-top: 5px;
 }
 
 .mobile .right-side {
-  padding-top: 5px;
+  padding-top: 10px;
+}
+
+@media (max-width: 481px) {
+  .mobile .right-side {
+    float: left;
+    margin-left: -15px;
+  }
+
+  .mobile .left-side {
+    width: 100%;
+  }
 }
 </style>

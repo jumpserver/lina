@@ -8,28 +8,26 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import LunaUpdate from './LunaUpdate'
-import KokoUpdate from './KokoUpdate'
-import LinaUpdate from './LinaUpdate'
+import Password from './Password'
+import SSHKey from './SSHKey'
 
 export default {
   components: {
     GenericDetailPage,
-    LunaUpdate,
-    KokoUpdate,
-    LinaUpdate
+    Password,
+    SSHKey
   },
   data() {
     return {
       user: this.$store.state.users.profile,
       config: {
-        title: this.$t('Basic'),
-        activeMenu: 'LinaUpdate',
+        title: this.$t('PasswordAndSSHKey'),
+        activeMenu: 'Password',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         hasActivity: false,
         actions: {
-          detailApiUrl: '/api/v1/users/preference/?category=luna'
+          detailApiUrl: '/api/v1/users/profile/'
         }
       }
     }
@@ -38,16 +36,14 @@ export default {
     getSubmenu() {
       return [
         {
-          title: this.$t('Basic'),
-          name: 'LinaUpdate'
+          title: this.$t('LoginPasswordSetting'),
+          name: 'Password',
+          disabled: this.$store.state.users.profile.source.value !== 'local'
         },
         {
-          title: this.$t('LunaSettingUpdate'),
-          name: 'LunaUpdate'
-        },
-        {
-          title: this.$t('KokoSettingUpdate'),
-          name: 'KokoUpdate'
+          title: this.$t('LoginSSHKeySetting'),
+          name: 'SSHKey',
+          disabled: !this.$store.state.users.profile.can_public_key_auth
         }
       ]
     },

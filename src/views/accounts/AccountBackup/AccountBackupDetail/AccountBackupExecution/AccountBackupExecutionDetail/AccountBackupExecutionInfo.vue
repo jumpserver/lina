@@ -10,7 +10,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 
 export default {
-  name: 'AccountBackupPlanExecutionInfo',
+  name: 'AccountBackupExecutionInfo',
   components: {
     AutoDetailCard
   },

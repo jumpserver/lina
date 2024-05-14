@@ -7,9 +7,9 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item
-          :class="{'submenu-title-noDropdown':!isNest}"
+          :class="{'submenu-title-noDropdown':!isNest, 'level0': !isNest}"
           :index="resolvePath(onlyOneChild.path)"
-          class="submenu-item"
+          class="submenu-item level1-item"
         >
           <item
             :children="item.children"
@@ -24,7 +24,7 @@
       v-else
       ref="subMenu"
       :index="resolvePath(item.path)"
-      class="el-submenu-sidebar submenu-item"
+      class="el-submenu-sidebar submenu-item level0"
       popper-append-to-body
     >
       <template slot="title">

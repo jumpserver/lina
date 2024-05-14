@@ -98,7 +98,7 @@ export default {
   }
 
   .page-content {
-    height: calc(100% - 10px);
+    height: calc(100% - 20px);
     overflow-x: hidden;
     overflow-y: auto;
   }

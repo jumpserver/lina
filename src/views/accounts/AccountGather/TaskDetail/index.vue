@@ -12,7 +12,7 @@ import Detail from './Detail'
 import TaskExecutionList from './TaskExecutionList'
 
 export default {
-  name: 'SyncInstanceTaskDetail',
+  name: 'AccountGatherTaskDetail',
   components: {
     GenericDetailPage,
     TabPage,

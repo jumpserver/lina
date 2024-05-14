@@ -351,26 +351,25 @@ export default {
   display: flex;
   align-items:  center;
   min-width: 198px;
-  //height: 30px;
-  border: 1px solid var(--color-disabled-background);
-  border-radius: 4px;
   background-color: #fff;
-  box-sizing: border-box;
 
   .el-cascader {
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
 
-    ::v-deep .el-input__inner {
-      width: 0;
-      height: 30px;
-      padding-right: 20px;
-      border: none;
+    ::v-deep .el-input.el-input--suffix {
+       .el-input__inner {
+        width: 0;
+        height: 28px;
+        padding-right: 20px;
+        border: none;
+      }
     }
 
     ::v-deep .el-input__suffix {
       color: var(--color-icon-primary) !important;
 
-      .el-input__suffix-inner {
+      .el-input__suffix-inner .el-input__icon {
         line-height: 30px;
       }
     }
@@ -394,11 +393,9 @@ export default {
   }
 
   .search-input {
-    height: 30px;
+    height: 28px;
 
     ::v-deep .el-input__suffix {
-      height: 30px;
-      line-height: 30px;
       cursor: pointer;
 
       i {
@@ -409,8 +406,7 @@ export default {
     }
 
     ::v-deep .el-input__inner {
-      line-height: 30px;
-      height: 30px;
+      height: 28px;
       max-width: 200px;
       border: none;
       padding-left: 5px;

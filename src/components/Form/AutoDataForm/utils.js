@@ -162,12 +162,9 @@ export class FormFieldGenerator {
 
   afterGenerateField(field) {
     field.label = toSentenceCase(field.label)
-    if (field.helpText) {
-      field.helpText = toSentenceCase(field.helpText)
-    }
-    if ((!field.helpTip && field.helpText && field.helpTextAsTip) || field.component === Switcher) {
-      field.helpTip = field.helpText
-      field.helpText = ''
+    if (!field.helpText && field.helpTip && field.helpTipAsText) {
+      field.helpText = field.helpTip
+      field.helpTip = ''
     }
     return field
   }
@@ -177,7 +174,7 @@ export class FormFieldGenerator {
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
-    field.helpText = toSentenceCase(remoteFieldMeta['help_text'])
+    field.helpTip = toSentenceCase(remoteFieldMeta['help_text'])
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)

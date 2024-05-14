@@ -8,7 +8,7 @@ import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
-  name: 'AccountBackupPlanUpdate',
+  name: 'AccountBackupUpdate',
   components: {
     GenericCreateUpdatePage
   },

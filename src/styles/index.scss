@@ -146,21 +146,19 @@ button, input, optgroup, select, textarea {
 .el-tooltip__popper.is-light {
   background-color: #ebeef5 !important;
 }
-
-.el-tooltip__popper.is-light.help-tips div span {
-  padding: 50px;
+.el-tooltip__popper.is-dark {
+  max-width: 500px;
+  opacity: 0.8;
 }
 
-// 弹窗里的List table中的搜索框
+.el-tooltip__popper div {
+  line-height: 1.5;
+  padding: 5px;
+}
 
 .el-dialog__body div.table-action-right-side {
   padding-top: 10px;
 }
-
-//.filter-field.right-side-item.action-search {
-//  height: 36px;
-//}
-
 
 .el-dialog__body {
   padding-top: 10px;
@@ -184,10 +182,6 @@ input[type=file] {
 .el-table__body {
   width: 100%;
   table-layout: fixed !important;
-}
-
-.el-tooltip__popper.is-dark {
-  max-width: 60% !important;
 }
 
 .view-switcher {
@@ -512,4 +506,8 @@ $tooltip-arrow-color: #c2d1e1;
   a {
     color: #1c84c6;
   }
+}
+
+.el-upload--text {
+  font-size: 0.9em;
 }

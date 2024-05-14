@@ -157,6 +157,7 @@ export default {
 <style lang="less" scoped>
 .el-form {
   margin-right: 80px;
+  margin-bottom: 20px;
 
   ::v-deep .el-input-group__prepend {
     border-radius: 0;
@@ -212,11 +213,6 @@ export default {
         .el-input__inner {
           border-radius: 0;
           color: var(--color-text-primary);
-        }
-
-        .el-input-group__append {
-          border: 1px solid var(--color-input-border);
-          border-left: 0 !important;
         }
       }
 
