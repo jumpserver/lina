@@ -23,10 +23,11 @@ export default {
       'publicSettings'
     ]),
     key() {
-      return this.$route.path
-    },
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+      if (this.$route.name.toLowerCase().includes('list')) {
+        return this.$route.path
+      } else {
+        return new Date().getTime()
+      }
     }
   },
   methods: {

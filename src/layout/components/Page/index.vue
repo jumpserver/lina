@@ -101,6 +101,7 @@ export default {
     startLongPress() {
       this.longPressTimer = setTimeout(() => {
         this.showHistory = !this.showHistory
+        localStorage.setItem('showHistory', this.showHistory ? '1' : '0')
         // 在这里执行长按事件的操作
       }, 1000) // 设置长按持续时间，单位为毫秒
     },
