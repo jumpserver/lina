@@ -71,7 +71,6 @@ const mutations = {
     state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
-    console.log('Set current org: ', org)
     // 系统组织和全局组织不设置成 Pre org
     if (!state.currentOrg?.autoEnter) {
       state.preOrg = state.currentOrg

@@ -1,7 +1,7 @@
 <template>
   <section class="app-main">
     <transition mode="out-in" name="fade-transform">
-      <keep-alive :include="cachedViews">
+      <keep-alive :max="10">
         <router-view :key="key" />
       </keep-alive>
     </transition>
@@ -22,9 +22,6 @@ export default {
     ...mapGetters([
       'publicSettings'
     ]),
-    chatAiEnabled() {
-      return this.publicSettings?.CHAT_AI_ENABLED
-    },
     key() {
       return this.$route.path
     },
@@ -33,7 +30,6 @@ export default {
     }
   },
   methods: {
-
   }
 }
 </script>

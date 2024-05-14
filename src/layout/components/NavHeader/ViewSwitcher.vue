@@ -128,7 +128,7 @@ export default {
 
   ::v-deep .el-submenu .el-submenu__title {
     height: 40px;
-    line-height: 40px;
+    line-height: 32px;
     border-bottom: none;
   }
 
@@ -142,8 +142,9 @@ export default {
   }
 
   .el-menu-item {
-    height: 40px;
-    line-height: 36px;
+    height: 36px;
+    width: 160px;
+    line-height: 26px;
     padding: 4px 24px;
 
     &:hover {
@@ -192,7 +193,6 @@ export default {
 
 .el-menu-item {
   &.is-active {
-    font-weight: bold;
     color: var(--menu-text-active);
 
     &:before {

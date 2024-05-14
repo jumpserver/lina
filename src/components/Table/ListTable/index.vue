@@ -165,6 +165,11 @@ export default {
       deep: true
     }
   },
+  activated() {
+    setTimeout(() => {
+      this.reloadTable()
+    })
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val

@@ -73,7 +73,6 @@ export default {
   },
   methods: {
     handleMoveMouseDown(event) {
-      console.log('Event: ', event)
       this.$refs.drawer.handleHeaderMoveDown(event)
     },
     handleMouseMoveUp(event) {

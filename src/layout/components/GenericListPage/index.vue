@@ -13,6 +13,7 @@ export default {
   components: {
     Page, GenericListTable
   },
+
   methods: {
     reloadTable() {
       this.$refs.ListTable.reloadTable()

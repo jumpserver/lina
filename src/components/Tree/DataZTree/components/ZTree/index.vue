@@ -438,6 +438,7 @@ div.rMenu li {
   padding: 3px 20px;
   clear: both;
   white-space: nowrap;
+  width: 20px;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {

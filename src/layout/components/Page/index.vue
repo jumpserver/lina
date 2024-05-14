@@ -1,7 +1,16 @@
 <template>
   <div class="page">
+    <TagsView :show.sync="showHistory" />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
-      <el-button :disabled="gobackDisabled" class="go-back" icon="el-icon-back" @click="handleGoBack" />
+      <el-button
+        :disabled="gobackDisabled"
+        class="go-back"
+        icon="el-icon-back"
+        @click="handleGoBack"
+        @mouseleave="endLongPress"
+        @mouseup="endLongPress"
+        @mousedown.native="startLongPress"
+      />
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
@@ -33,6 +42,7 @@
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
+import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common'
 
 export default {
@@ -40,7 +50,8 @@ export default {
   components: {
     UserConfirmDialog,
     PageHeading,
-    PageContent
+    PageContent,
+    TagsView
   },
   props: {
     title: {
@@ -62,6 +73,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      showHistory: false
+    }
+  },
   computed: {
     iTitle() {
       let title = this.title || this.$route.meta.title
@@ -81,6 +97,15 @@ export default {
   methods: {
     handleGoBack() {
       this.goBack.bind(this)()
+    },
+    startLongPress() {
+      this.longPressTimer = setTimeout(() => {
+        this.showHistory = !this.showHistory
+        // 在这里执行长按事件的操作
+      }, 1000) // 设置长按持续时间，单位为毫秒
+    },
+    endLongPress() {
+      clearTimeout(this.longPressTimer)
     }
   }
 }

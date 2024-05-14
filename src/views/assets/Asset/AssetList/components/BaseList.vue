@@ -306,6 +306,14 @@ export default {
   watch: {
     optionInfo(iNew) {
       this.$set(this.defaultConfig.columnsMeta.gathered_info.formatterArgs, 'info', iNew)
+    },
+    $route(iNew, old) {
+      const tab = iNew.query.tab
+      const oldTab = old.query.tab
+      if (tab !== oldTab && tab !== 'all') {
+        iNew.query.node_id = ''
+        this.$router.push(iNew)
+      }
     }
   },
   methods: {

@@ -12,9 +12,7 @@ function getPropOrg() {
   if (defaultOrg) {
     return defaultOrg
   }
-  console.log('Orgs: ', orgs)
-  const org = orgs.filter(item => !item['is_root'] && item.id !== SYSTEM_ORG_ID)[0]
-  console.log('Prop org: ', org)
+  return orgs.filter(item => !item['is_root'] && item.id !== SYSTEM_ORG_ID)[0]
 }
 
 async function change2PropOrg() {

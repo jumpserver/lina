@@ -28,7 +28,6 @@ export default {
   },
   computed: {
     iUnit() {
-      console.log('Unit is:', this.unit)
       return this.displayMapper[this.unit] || this.unit
     }
   }
