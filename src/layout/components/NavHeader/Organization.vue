@@ -152,6 +152,8 @@ $height: 28px;
   border-radius: 4px;
 
   .option-group {
+    padding-right: 8px;
+    padding-left: 8px;
     max-width: 400px;
 
     ::v-deep .el-select-group__title {
