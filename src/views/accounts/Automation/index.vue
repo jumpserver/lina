@@ -21,7 +21,7 @@ export default {
         totalData: [
           {
             id: 'push-account',
-            display_name: this.$t('PushAccounts'),
+            display_name: this.$t('AccountPushList'),
             name: 'AccountPushList',
             comment: this.$t('PushAccountsHelpText'),
             icon: 'push-account',
@@ -47,7 +47,7 @@ export default {
           },
           {
             id: 'backup_account',
-            display_name: this.$t('BackupAccounts'),
+            display_name: this.$t('AccountBackup'),
             name: 'AccountBackupList',
             comment: this.$t('BackupAccountsHelpText'),
             icon: 'backup-account',
