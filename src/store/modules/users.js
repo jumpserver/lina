@@ -72,7 +72,7 @@ const mutations = {
   },
   SET_CURRENT_ORG(state, org) {
     // 系统组织和全局组织不设置成 Pre org
-    if (!state.currentOrg?.autoEnter) {
+    if (!state.currentOrg?.autoEnter && !state.currentOrg?.is_root) {
       state.preOrg = state.currentOrg
       setPreOrgLocal(state.username, state.currentOrg)
     }
@@ -144,7 +144,7 @@ const actions = {
     const systemOrg = {
       id: orgUtil.SYSTEM_ORG_ID,
       name: 'SystemSetting',
-      autoEnter: true
+      autoEnter: new Date().getTime()
     }
     commit('SET_CURRENT_ORG', systemOrg)
   },
@@ -160,7 +160,7 @@ const actions = {
       id: orgUtil.GLOBAL_ORG_ID,
       name: 'Global',
       is_root: true,
-      autoEnter: true
+      autoEnter: new Date().getTime()
     }
     commit('SET_CURRENT_ORG', globalOrg)
   },
