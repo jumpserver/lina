@@ -182,7 +182,7 @@ export default {
     padding: 5px 0;
     border: 1px solid #DCDFE6;
     background-color: #fff;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
     height: 30px;
 
@@ -248,7 +248,7 @@ export default {
   .transition-box.left {
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   .title {

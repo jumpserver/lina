@@ -162,8 +162,7 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
-  border-radius: 5px;
-  border: 1px solid var(--color-disabled-background);
+  border: 1px solid var(--color-border);
   overflow: hidden;
 
   ::v-deep .el-button.label-button {

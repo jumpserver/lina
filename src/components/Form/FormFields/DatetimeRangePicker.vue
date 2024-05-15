@@ -88,7 +88,7 @@ export default {
   margin-left: 10px;
   width: 233px;
   border: 1px solid #dcdee2;
-  border-radius: 3px;
+  border-radius: 2px;
   height: 28px;
 
   ::v-deep .el-range-separator,

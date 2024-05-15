@@ -383,11 +383,13 @@ input[type=file] {
 .el-button.el-button--small, .el-button--small.is-round {
   font-weight: 400;
   padding: 8px 12px;
+  border-radius: 2px;
 }
 
 .el-button.el-button--mini, .el-button--mini.is-round {
   font-size: 0.7rem;
   font-weight: 400;
+  border-radius: 2px;
 }
 
 .el-cascader__dropdown .el-cascader-panel .el-cascader-menu {
