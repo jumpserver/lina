@@ -223,7 +223,7 @@ export default {
       transform: translateY(-50%);
       z-index: 1;
       line-height: 10px;
-      border-radius: 3px;
+      border-radius: 2px;
 
       .icon-zone {
         float: right;

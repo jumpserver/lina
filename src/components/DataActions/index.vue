@@ -296,11 +296,9 @@ export default {
   }
 
   .el-dropdown-menu__item {
-
     &.is-disabled {
-      color: var(--color-disabled-background);
+      color: var(--color-disabled)
     }
-
     &:not(.is-disabled):hover {
       background-color: var(--color-disabled-background);
     }

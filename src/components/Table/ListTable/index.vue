@@ -172,7 +172,7 @@ export default {
     if (this.preURL === location.href) {
       return
     }
-    this.$log.info('Reload the table get latest data')
+    this.$log.info('Reload the table get latest data: pre ', this.preURL, ' current: ', location.href)
     setTimeout(() => {
       this.reloadTable()
     }, 500)

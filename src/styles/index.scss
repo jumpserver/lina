@@ -523,3 +523,12 @@ $tooltip-arrow-color: #c2d1e1;
 li.rmenu i.fa {
   width: 20px;
 }
+
+.el-pagination.is-background .el-select .el-input .el-input__inner {
+  border-radius: 2px;
+  height: 28px;
+}
+
+.el-checkbox__inner {
+  border-radius: 1px !important;
+}
