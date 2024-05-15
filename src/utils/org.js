@@ -62,7 +62,7 @@ async function changeOrg(org, reload = true, vm = null) {
     }
   }
   location.hash = '#' + path
-  setTimeout(() => location.reload(), 400)
+  setTimeout(() => location.reload(), 500)
 }
 
 function hasCurrentOrgPermission() {
