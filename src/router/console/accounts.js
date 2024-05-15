@@ -142,7 +142,7 @@ export default [
         name: 'AccountPushList',
         meta: {
           title: i18n.t('AccountPushList'),
-          menuTitle: i18n.t('PushAccounts'),
+          menuTitle: i18n.t('AccountPushList'),
           activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_pushaccountautomation']
         }
@@ -381,7 +381,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/index.vue'),
         name: 'AccountBackupList',
         meta: {
-          menuTitle: i18n.t('BackupAccounts'),
+          menuTitle: i18n.t('AccountBackup'),
           title: i18n.t('AccountBackupList'),
           activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_accountbackupautomation']
