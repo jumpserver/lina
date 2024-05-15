@@ -66,16 +66,6 @@ export const MatchExcludeParenthesis = {
   trigger: ['blur', 'change']
 }
 
-export default {
-  IpCheck,
-  Required,
-  RequiredChange,
-  EmailCheck,
-  specialEmojiCheck,
-  matchAlphanumericUnderscore,
-  MatchExcludeParenthesis
-}
-
 export const JsonRequired = {
   required: true,
   trigger: 'change',
@@ -104,4 +94,14 @@ export const JsonRequiredUserNameMapped = {
       callback(new Error(i18n.t('InvalidJson')))
     }
   }
+}
+
+export default {
+  IpCheck,
+  Required,
+  RequiredChange,
+  EmailCheck,
+  specialEmojiCheck,
+  matchAlphanumericUnderscore,
+  MatchExcludeParenthesis
 }

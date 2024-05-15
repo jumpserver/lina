@@ -73,7 +73,8 @@ export default {
     return {
       selectedRows: [],
       init: false,
-      extraQuery: extraQuery
+      extraQuery: extraQuery,
+      urlUpdated: {}
     }
   },
   computed: {
@@ -165,14 +166,16 @@ export default {
       deep: true
     }
   },
-  deactivated() {
-    this.preURL = location.href
+  mounted() {
+    this.urlUpdated[this.tableUrl] = location.href
   },
   activated() {
-    if (this.preURL === location.href) {
+    const preURL = this.urlUpdated[this.tableUrl]
+    if (!preURL || preURL === location.href) {
       return
     }
-    this.$log.info('Reload the table get latest data: pre ', this.preURL, ' current: ', location.href)
+    this.tableUrl[this.tableUrl] = location.href
+    this.$log.info('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
     setTimeout(() => {
       this.reloadTable()
     }, 500)
