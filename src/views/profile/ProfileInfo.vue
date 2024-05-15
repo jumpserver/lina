@@ -143,7 +143,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.location.href = `/core/auth/profile/mfa/`
+              window.open('/core/auth/profile/mfa/', '_blank')
             }
           }
         },
