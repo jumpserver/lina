@@ -44,7 +44,7 @@
             <BasicTree
               v-model="requestForm.actions"
               :tree="treeNodes"
-              style="width: 30% !important"
+              style="width: 100%"
             />
 
           </el-form-item>
