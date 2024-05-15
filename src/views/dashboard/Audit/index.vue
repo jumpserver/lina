@@ -52,23 +52,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.switch-date >>> .switch {
-  background: #DEE0E3!important;
-  .el-radio-button {
-    .el-radio-button__inner {
-      background: #DEE0E3!important;
-    }
-  }
-  .el-radio-button.is-active {
-    border-radius: 4px!important;
-    padding: 4px 0!important;
-    .el-radio-button__inner {
-      color: black!important;
-      background-color: #FFF!important;
-      border-radius: 4px!important;
-    }
-  }
-}
-</style>
