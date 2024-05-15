@@ -39,6 +39,7 @@
 
     .el-scrollbar {
       height: 100%;
+      overflow-y: auto;
     }
 
     &.has-logo {

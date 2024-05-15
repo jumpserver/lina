@@ -23,7 +23,7 @@
         </span>
       </div>
     </div>
-    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
+    <div class="menu-wrap el-scrollbar">
       <el-menu
         :active-text-color="variables['menuActiveText']"
         :background-color="variables['menuBg']"
@@ -44,7 +44,7 @@
           :item="route"
         />
       </el-menu>
-    </el-scrollbar>
+    </div>
     <div class="nav-footer">
       <div class="toggle-bar">
         <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
