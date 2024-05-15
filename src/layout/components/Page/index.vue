@@ -128,7 +128,7 @@ export default {
   .page-content {
     height: calc(100% - 20px);
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: auto !important;
 
     ::v-deep > div {
       margin-bottom: 50px;

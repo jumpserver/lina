@@ -211,7 +211,9 @@ export default {
   }
 
   .navbar-right {
+    display: flex;
     float: right;
+    align-items: center;
     margin-right: 10px;
     height: $headerHeight;
     line-height: $headerHeight;
@@ -224,6 +226,7 @@ export default {
       vertical-align: top;
 
       & >>> .svg-icon {
+        line-height: 40px;
         color: #FFF !important;
         font-size: 16px;
       }
