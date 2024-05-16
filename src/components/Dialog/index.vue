@@ -127,7 +127,7 @@ export default {
 
     &__footer {
       border-top: 1px solid #dee2e6;
-      padding: 16px;
+      padding: 16px 25px;
       justify-content: flex-end;
     }
   }

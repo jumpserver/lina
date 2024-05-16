@@ -221,7 +221,7 @@ $headerHeight: 30px;
 }
 
 .mobile .right-side {
-  padding-top: 10px;
+  padding-top: 3px;
 }
 
 @media (max-width: 481px) {

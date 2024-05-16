@@ -173,6 +173,7 @@ $height: 28px;
 
 .org-select >>> .el-input.is-disabled .el-input__inner {
   color: #ffffff !important;
+  background-color: transparent;
 }
 
 .icon {
