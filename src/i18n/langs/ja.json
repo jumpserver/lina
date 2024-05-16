@@ -2124,7 +2124,8 @@
     "passwordWillExpiredPrefixMsg": "パスワードはまもなく",
     "passwordWillExpiredSuffixMsg": "期限が切れた後、できるだけ早くパスワードを変更してください。",
     "AddAllMembersWarningMsg": "すべてのメンバーを追加してもよろしいですか？",
-    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません"
+    "disallowSelfUpdateFields": "現在のフィールドを自分で変更することは許可されていません",
+    "GlobalDisableMfaMsg": "グローバルでの強制が有効になっています"
   },
   "notifications": {
     "MessageType": "メッセージタイプ",
@@ -2267,6 +2268,8 @@
       "HostnameStrategy": "資産を生成するためにホスト名。例: 1. インスタンス名 (instanceDemo) 2.インスタンス名と一部IP (下位2桁) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "資産は常に最新です",
       "FullySynchronous": "資産完全にシンクロします",
+      "ReleaseAssets": "資産の同期解放",
+      "ReleaseAssetsHelpTips": "タスクの終了時に、このタスクを介して同期され、クラウド上で解放された資産を自動的に削除するかどうか",
       "AccountCreate": "アカウントの作成",
       "AccountList": "アカウントリスト",
       "AccountUpdate": "アカウントの更新",

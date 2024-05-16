@@ -46,7 +46,7 @@
     <div class="vip-footer">
       <el-button
         type="text"
-        :disabled="selectedDistrict.length > 0 ? false : true"
+        :disabled="selectedDistrict.length<=0"
         size="small"
         round
         @click="checkedSelected"
@@ -62,23 +62,29 @@ export default {
   components: {},
   props: {
     title: {
-      type: String
+      type: String,
+      default: () => ''
     },
     operation: {
-      type: String
+      type: String,
+      default: () => ''
     },
     operateId: {
-      type: Number
+      type: Number,
+      default: () => 0
     },
     // 区域数据
     districtList: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     filterable: {
-      type: Boolean
+      type: Boolean,
+      default: () => false
     },
     filterPlaceholder: {
-      type: String
+      type: String,
+      default: () => ''
     }
   },
   data() {

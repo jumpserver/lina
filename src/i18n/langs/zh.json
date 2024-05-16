@@ -2115,7 +2115,8 @@
     "passwordExpired": "密码过期了",
     "passwordWillExpiredPrefixMsg": "密码即将在 ",
     "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。",
-    "disallowSelfUpdateFields": "不允许自己修改当前字段"
+    "disallowSelfUpdateFields": "不允许自己修改当前字段",
+    "GlobalDisableMfaMsg": "全局已强制开启"
   },
   "notifications": {
     "MessageType": "消息类型",
@@ -2186,6 +2187,8 @@
       "HostnameStrategy": "用于生成资产主机名。例如：1. 实例名称 (instanceDemo)；2. 实例名称和部分IP(后两位) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "资产保持最新",
       "FullySynchronous": "资产完全同步",
+      "ReleaseAssets": "同步释放资产",
+      "ReleaseAssetsHelpTips": "是否在任务结束时，自动删除通过此任务同步下来且已经在云上释放的资产",
       "AccountCreate": "创建账户",
       "AccountList": "云账号",
       "AccountUpdate": "更新账户",

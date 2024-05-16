@@ -8,6 +8,7 @@ import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
+const autoEnterOrgs = ['00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000']
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
@@ -42,6 +43,10 @@ async function getPublicSetting({ to, from, next }, isOpen) {
 
 async function refreshCurrentOrg() {
   return orgs.getCurrentOrg().then(org => {
+    // Root 就不刷新本地的了, 会影响 autoEnter
+    if (autoEnterOrgs.indexOf(org.id) !== -1) {
+      return
+    }
     store.dispatch('users/setCurrentOrg', org)
   })
 }
@@ -60,9 +65,16 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     Vue.$log.error('Current org is null or not a object: ', currentOrg)
     await orgUtil.change2PropOrg({ to, from, next })
   }
-  if (currentOrg.name === 'SystemSetting') {
-    const preOrg = store.getters.preOrg
-    await orgUtil.changeOrg(preOrg)
+  const globalOrgPath = [
+    '/console/perms/login-acls/', '/console/users/roles/',
+    '/console/perms/connect-method-acls/', '/settings/'
+  ]
+  if (autoEnterOrgs.indexOf(currentOrg.id) !== -1 && currentOrg.autoEnter) {
+    const delta = new Date().getTime() - currentOrg.autoEnter
+    const notNeedChange = globalOrgPath.find(path => to.path.indexOf(path) === 0)
+    if (!notNeedChange && delta > 3000) {
+      await orgUtil.change2PropOrg({ to, from, next })
+    }
     return
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
