@@ -50,7 +50,7 @@ export default {
             formatterArgs: {
               showFalse: false
             },
-            width: '150px'
+            width: '180px'
           },
           executed_amount: {
             formatter: DetailFormatter,
