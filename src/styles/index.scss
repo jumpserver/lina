@@ -402,6 +402,10 @@ input[type=file] {
 }
 
 .el-alert {
+  &.el-alert--success.is-light {
+    color: var(--color-text-primary)
+  }
+
   .el-alert__description,
   .el-alert__title{
     color: var(--color-text-primary) !important;
