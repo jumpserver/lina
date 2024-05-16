@@ -28,15 +28,15 @@ export default {
         'id', 'name', 'is_periodic',
         {
           key: this.$t('Crontab'),
-          value: this.object?.periodic_display || ''
+          value: this.object?.periodic_display || '-'
         },
         {
           key: this.$t('DateLastSync'),
-          value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
+          value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : '-'
         },
         {
           key: this.$t('DateCreated'),
-          value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : ''
+          value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : '-'
         },
         'comment'
       ]
