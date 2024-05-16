@@ -21,7 +21,7 @@ export default {
       name: 'Profile',
       component: () => import('@/views/profile/index'),
       meta: {
-        title: i18n.t('Profile'),
+        title: i18n.t('YourProfile'),
         icon: 'attestation',
         permissions: []
       }
