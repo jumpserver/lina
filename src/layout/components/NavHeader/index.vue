@@ -190,6 +190,10 @@ export default {
         font-weight: 600;
         font-size: 15px;
 
+        ::v-deep .el-input.is-disabled > input {
+          background: none;
+        }
+
         &:hover {
           background-color: rgba(0, 0, 0, .12) !important;
         }
