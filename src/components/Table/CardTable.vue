@@ -286,12 +286,12 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 75px;
+              height: 110px;
               font-size: 12px;
               padding: 15px 0;
               cursor: pointer;
               overflow: hidden;
-              -webkit-line-clamp: 2;
+              -webkit-line-clamp: 3;
               -webkit-box-flex: 1;
               -webkit-flex-grow: 1;
               flex-grow: 1;
