@@ -132,8 +132,8 @@ $height: 28px;
 
 ::v-deep .el-input {
   .el-input__inner {
-    height: 30px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
     background: none;
     border: none;
     padding-left: 20px;
@@ -150,6 +150,8 @@ $height: 28px;
 
 .el-select-dropdown.switch-org {
   border-radius: 4px;
+  left: 220px !important;
+  max-width: 400px;
 
   .option-group {
     padding-right: 8px;

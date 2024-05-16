@@ -182,13 +182,17 @@ export default {
       .organization {
         display: flex;
         align-items: center;
-        line-height: 30px;
-        padding: 0 10px 0 15px !important;
-        border-radius: 5px;
+        line-height: 28px;
+        padding: 0 0 0 15px !important;
+        border-radius: 3px;
         background-color: rgba(255, 255, 255, .15);
         color: #fff;
         font-weight: 600;
         font-size: 15px;
+
+        ::v-deep .el-input.is-disabled > input {
+          background: none;
+        }
 
         &:hover {
           background-color: rgba(0, 0, 0, .12) !important;
