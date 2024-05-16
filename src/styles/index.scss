@@ -218,15 +218,16 @@ input[type=file] {
 
 @media screen and (max-width: 992px) {
   .el-select-dropdown.switch-org {
-    left: 0!important;
-    width: 100vw!important;
+    left: 0 !important;
+    width: 350px;
   }
 }
 
-.el-popper.switch-org {
-  border-radius: 5px;
-  left: 220px !important;
-  max-width: 400px;
+@media screen and (min-width: 992px) {
+  .el-select-dropdown.switch-org {
+    left: 220px !important;
+    max-width: 400px;
+  }
 }
 
 // 步骤条
