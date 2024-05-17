@@ -5,6 +5,7 @@
     :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
+    :tree-width="treeWidth"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -117,6 +118,9 @@ export default {
     }
   },
   computed: {
+    treeWidth() {
+      return this.treeSetting.notShowBuiltinTree ? '16%' : '24%'
+    },
     treeTableConfig() {
       if (this.treeSetting.notShowBuiltinTree) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
