@@ -33,7 +33,7 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
 
 export const AssetPermissionTableMeta = {
   name: {
-    minWidth: '160px',
+    minWidth: '120px',
     formatterArgs: {
       routeQuery: {
         tab: 'AssetPermissionDetail'
