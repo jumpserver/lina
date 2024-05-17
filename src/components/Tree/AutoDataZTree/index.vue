@@ -324,8 +324,6 @@ export default {
 }
 
 .data-z-tree {
-  padding: 10px 5px 0 20px;
-
   >>> {
     .fa {
       width: 10px;

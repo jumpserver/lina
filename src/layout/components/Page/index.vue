@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <TagsView :show.sync="showHistory" />
+    <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
       <el-button
         :disabled="gobackDisabled"
@@ -138,7 +138,7 @@ export default {
 
 .go-back {
   border: none;
-  padding: 4px;
+  padding: 6px;
 }
 
 .go-back >>> i {

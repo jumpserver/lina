@@ -92,8 +92,8 @@
 
 
 td .el-button.el-button--mini {
-  padding: 2px 4px;
-  line-height: 1.5;
+  padding: 3px 6px;
+  /*line-height: 1.5;*/
 
   .el-icon--right {
       margin-bottom: 2px;

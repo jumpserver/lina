@@ -409,7 +409,7 @@ export default {
       height: 28px;
       max-width: 200px;
       border: none;
-      padding-left: 5px;
+      padding-left: 1px;
       font-size: 13px;
     }
   }

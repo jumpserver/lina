@@ -337,7 +337,9 @@ export default {
         .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
         .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
-          this.isSubmitting = false
+          setTimeout(() => {
+            this.isSubmitting = false
+          }, 200)
         })
     },
     async getFormValue() {

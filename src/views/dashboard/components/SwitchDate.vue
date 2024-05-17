@@ -57,11 +57,11 @@ export default {
 
 <style lang="scss" scoped>
 .switch {
-  padding: 4px;
+  font-weight: 400;
 
   ::v-deep .el-radio-button {
     .el-radio-button__inner {
-      border: 1px solid var(--color-border);
+      border-right: 1px solid var(--color-border);
       color: var(--color-text-primary);
       background: #ffffff;
       border-radius: 0;

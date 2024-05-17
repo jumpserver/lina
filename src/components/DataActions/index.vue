@@ -228,19 +228,18 @@ export default {
 // 主要是 Table 中的操作列
 .layout.table-actions {
   .el-button {
-    padding: 1px 5px;
     color: #fff;
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    padding: 1px 5px;
+    padding: 3px 6px;
     background-color: #E8F7F4;
     color: #1ab394;
 
     &:focus {
       color: #fff;
       background-color: #83CBBA !important;
-  }
+    }
 
     &:hover {
       color: #fff;

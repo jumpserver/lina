@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="12" :sm="24">
+    <el-col :md="14" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="12" :sm="24">
+    <el-col :md="10" :sm="24">
       <IBox :title="$tc('Permissions')">
         <div style="height: 10%">
           <el-button

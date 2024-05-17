@@ -168,6 +168,10 @@ export default {
         font-weight: 600;
         font-size: 15px;
 
+        ::v-deep .el-input__inner {
+          padding-left: 25px;
+        }
+
         ::v-deep .el-input.is-disabled > input {
           background: none;
         }

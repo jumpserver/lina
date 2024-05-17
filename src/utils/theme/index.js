@@ -17,23 +17,24 @@ export function changeElementColor(themeColors) {
     `
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
+      const darken = mix('000000', value.replace(/#/g, ''), 10)
       colorsCssText = colorsCssText + `
         .el-button--${key}:focus {
-          background-color: ${value}!important;
-          border-color: ${value}!important;
+          background-color: ${darken}!important;
         }
         .el-button--${key}.is-disabled,
         .el-button--${key}.is-disabled:active,
-        .el-button--${key}.is-disabled:focus,
-        .el-button--${key}:hover{
+        .el-button--${key}.is-disabled:focus {
           background-color: ${blendColor}!important;
-          border-color: ${blendColor}!important;
+        }
+        .el-button--${key}:hover{
+          background-color: ${darken}!important;
         }
         .el-link.el-link--${key}{
           color: ${value}!important;
         }
         .el-link.el-link--${key}:hover {
-          color: ${blendColor}!important;
+          color: ${darken}!important;
         }
         .el-link.el-link--${key}.is-underline:hover:after,
         .el-link.el-link--${key}:after {

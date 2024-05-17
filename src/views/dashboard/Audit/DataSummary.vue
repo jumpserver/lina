@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="16">
-    <el-col :lg="12" :sm="12" class="margin-top-16">
+    <el-col :lg="12" :sm="12" class="margin-top-10">
       <DataCard :config="logConfig">
         <div class="custom">
           <span>{{ logConfig.total }}</span>
@@ -10,7 +10,7 @@
         </div>
       </DataCard>
     </el-col>
-    <el-col :lg="12" :sm="12" class="margin-top-16">
+    <el-col :lg="12" :sm="12" class="margin-top-10">
       <DataCard :config="assetConfig">
         <div class="custom">
           <span>{{ assetConfig.total }}</span>
@@ -26,6 +26,7 @@
 <script>
 import DataCard from '../components/DataCard.vue'
 import Decimal from 'decimal.js'
+
 export default {
   components: {
     DataCard
@@ -118,7 +119,7 @@ export default {
   display: inline-block;
 }
 
-.margin-top-16 {
-  margin-top: 16px;
+.margin-top-10 {
+  margin-top: 10px;
 }
 </style>

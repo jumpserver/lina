@@ -401,17 +401,6 @@ input[type=file] {
   color: var(--color-text-primary);
 }
 
-.el-alert {
-  &.el-alert--success.is-light {
-    color: var(--color-text-primary)
-  }
-
-  .el-alert__description,
-  .el-alert__title{
-    color: var(--color-text-primary) !important;
-  }
-}
-
 .el-form .el-form-item__content {
   font-size: 13px;
   line-height: 32px;
@@ -473,7 +462,7 @@ input[type=file] {
 }
 
 button .el-icon--right {
-  margin-left: 3px;
+  margin-left: 5px;
 }
 
 // 定义颜色变量
@@ -536,4 +525,12 @@ li.rmenu i.fa {
 
 .el-checkbox__inner {
   border-radius: 1px !important;
+}
+
+.el-button.el-button--primary {
+  border-color: var(--color-border);
+
+  &:hover {
+    border-color: var(--color-border);
+  }
 }
