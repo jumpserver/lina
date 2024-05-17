@@ -5,7 +5,8 @@
       :accounts="gatherAccounts"
       :visible.sync="showDeleteAccountDialog"
     />
-    <TreeTable
+    <AssetTreeTable
+      ref="AssetTreeTable"
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
@@ -14,14 +15,14 @@
 </template>
 
 <script>
-import TreeTable from '@/components/Table/TreeTable'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 
 export default {
   components: {
-    TreeTable,
+    AssetTreeTable,
     RemoveAccount
   },
   data() {
@@ -34,6 +35,7 @@ export default {
         showRefresh: true,
         showSearch: true,
         showAssets: true,
+        notShowBuiltinTree: true,
         url: '/api/v1/accounts/gathered-accounts/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
