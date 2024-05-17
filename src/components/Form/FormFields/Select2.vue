@@ -12,6 +12,7 @@
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
+    :class="transformed ? 'hidden-tag' : 'show-tag'"
     class="select2"
     popper-append-to-body
     @change="onChange"
@@ -134,7 +135,8 @@ export default {
       iOptions: this.options || [],
       initialOptions: [],
       remote: true,
-      allSelected: false
+      allSelected: false,
+      transformed: true
     }
   },
   computed: {
@@ -295,6 +297,10 @@ export default {
         validateStatus
       })
       data = processResults.bind(this)(data)
+      setTimeout(() => {
+        this.transformed = false
+      }, 100)
+
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
@@ -409,18 +415,31 @@ export default {
 
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 .select2 {
   width: 100%;
-}
 
-.select2 >>> .el-tag.el-tag--info {
-  height: auto;
-  white-space: normal;
-}
+  &.hidden-tag {
+    ::v-deep .el-select__tags {
+      opacity: 0;
+      cursor: not-allowed;
+    }
+  }
 
-.select2 >>> input::placeholder {
-  padding-left: 2px;
+  &.show-tag {
+    ::v-deep .el-select__tags {
+      opacity: 1;
+    }
+  }
+
+  ::v-deep .el-tag.el-tag--info {
+    height: auto;
+    white-space: normal;
+  }
+
+  ::v-deep input::placeholder {
+    padding-left: 2px;
+  }
 }
 
 .el-select-dropdown__header {
