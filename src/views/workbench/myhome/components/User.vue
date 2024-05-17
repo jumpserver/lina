@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
-      <span>{{ $t('Profile') }}</span>
+      <span>{{ $t('YourProfile') }}</span>
     </div>
     <div class="content">
       <el-row :gutter="20">

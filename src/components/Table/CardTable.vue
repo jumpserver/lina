@@ -286,7 +286,7 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 110px;
+              height: 120px;
               font-size: 12px;
               padding: 15px 0;
               cursor: pointer;

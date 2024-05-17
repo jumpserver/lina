@@ -72,14 +72,14 @@ export default {
           key: this.$t('Crontab'),
           value: this.object.crontab,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         {
           key: this.$t('Interval'),
           value: this.object.interval,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         'date_created', 'date_updated', 'comment', 'is_active'

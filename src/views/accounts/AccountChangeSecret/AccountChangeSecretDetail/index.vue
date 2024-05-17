@@ -23,6 +23,7 @@ export default {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
+        titlePrefix: this.$t('AccountChangeSecretDetail'),
         activeMenu: 'AccountChangeSecretInfo',
         url: '/api/v1/accounts/change-secret-automations',
         actions: {
