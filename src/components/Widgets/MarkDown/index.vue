@@ -119,7 +119,6 @@ export default {
 .action-bar {
   position: relative;
   height: 0;
-  border: 1px solid #dcdfe6;
   border-bottom: none;
   z-index: 999;
   .action {
