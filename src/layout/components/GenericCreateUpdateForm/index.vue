@@ -176,22 +176,16 @@ export default {
         const detailRoute = this.objectDetailRoute
         detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
+          msg = msg[0].toLowerCase() + msg.slice(1)
           this.$message({
             message: h('p', null, [
               h('el-link', {
                 on: {
                   click: () => this.$router.push(detailRoute)
                 },
-                style: { 'vertical-align': 'top' }
+                style: { 'vertical-align': 'top', 'margin-right': '5px' }
               }, msgLinkName),
               h('span', {
-                style: {
-                  'padding-left': '5px',
-                  'height': '18px',
-                  'line-height': '18px',
-                  'font-size': '13.5px',
-                  'font-weight': ' 400'
-                }
               }, msg)
             ]),
             type: 'success'

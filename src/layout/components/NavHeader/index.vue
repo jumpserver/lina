@@ -120,32 +120,10 @@ export default {
   }
   .hamburger-container {
     float: left;
-    height: 30px;
-    margin: 5px;
-    padding: 0 10px !important;
-    line-height: 30px;
-    border-radius: 5px;
-    border-color: $--color-primary;
-    background-color: white;
-    color: #fff;
-    cursor: pointer;
-    transition: .2s;
-    -webkit-tap-highlight-color: transparent;
-    opacity: 0.7;
-
-    ::v-deep .svg-icon {
-      font-size: 16px !important;
-      color: #fff !important;
-    }
-  }
-
-  // 折叠按钮
-  .hamburger-container {
-    float: left;
-    height: 30px;
-    margin: 5px;
-    padding: 0 10px !important;
-    line-height: 30px;
+    height: 25px;
+    line-height: 25px;
+    margin: 8px;
+    padding: 1px 8px !important;
     border-radius: 5px;
     border-color: $--color-primary;
     background-color: white;

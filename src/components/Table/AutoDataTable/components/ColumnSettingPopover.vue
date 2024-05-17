@@ -12,9 +12,10 @@
   >
     <el-col style="margin-bottom: 5px">
       <label>{{ this.$t('TableColSetting') }}</label>
-      <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" style="float: right" @change="handleCheckAllChange">全选</el-checkbox>
     </el-col>
-
+    <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" style="margin-left: 10px" @change="handleCheckAllChange">
+      {{ $t('All') }}
+    </el-checkbox>
     <el-checkbox-group
       v-model="iCurrentColumns"
       class="column-setting"

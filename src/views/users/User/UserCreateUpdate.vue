@@ -134,8 +134,7 @@ export default {
             return !this.$store.getters.hasValidLicense ||
                 !this.$hasPerm('rbac.add_orgrolebinding') ||
                 this.$store.getters.currentOrgIsRoot
-          },
-          helpText: this.$t('OrgRoleHelpText')
+          }
         },
         groups: {
           el: {
