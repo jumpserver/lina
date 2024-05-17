@@ -240,10 +240,6 @@ export default {
     }
   }
 
-  .organizations {
-    height: 55px;
-  }
-
   .nav-footer {
     display: block;
     width: 100%;
@@ -306,9 +302,10 @@ export default {
       height: $mobileHeight;
       line-height: $mobileHeight;
       padding-left: 20px;
-      background: transparent;
+      background: var(--color-primary-dark-1);
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
+
       .el-input--prefix .el-input__inner {
         height: $mobileHeight!important;
         line-height: $mobileHeight!important;
@@ -336,8 +333,6 @@ export default {
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
-    }
-    .active-switch-view {
     }
     .show-switch-view {
       display: block!important;

@@ -13,6 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -72,13 +73,13 @@ export default {
   width: 100%;
   height: $headerHeight;
   line-height: $headerHeight;
-  // background: #2b2f3a;
   text-align: center;
   overflow: hidden;
 
   & .sidebar-logo-link {
     height: 100%;
     width: 100%;
+    padding: 5px;
     display: inline-block;
 
     & .sidebar-logo {
@@ -90,7 +91,6 @@ export default {
 
     & .sidebar-logo-text {
       height: calc(#{$headerHeight} - 10px);
-      margin-top: 5px;
     }
 
     & .sidebar-title {

@@ -130,10 +130,14 @@ export default {
 @import '~@/styles/variables.scss';
 $height: 28px;
 
+.org-select {
+  line-height: $height;
+}
+
 ::v-deep .el-input {
   .el-input__inner {
-    height: 28px;
-    line-height: 28px;
+    height: $height;
+    line-height: $height;
     background: none;
     border: none;
     padding-left: 20px;
