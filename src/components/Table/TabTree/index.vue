@@ -195,6 +195,10 @@ export default {
   .el-tabs__item {
     padding-right: 0;
     padding-left: 0;
+
+    &:hover {
+      color: #1ab394;
+    }
   }
 }
 .only-submenu  {
