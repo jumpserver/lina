@@ -11,6 +11,7 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
+  name: 'CommandFilterAclList',
   components: {
     ListTable
   },

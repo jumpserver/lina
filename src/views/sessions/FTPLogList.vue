@@ -21,6 +21,7 @@ export default {
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
+          is_success: { width: '100px' },
           actions: {
             formatterArgs: {
               hasUpdate: false,
