@@ -124,6 +124,7 @@ export default {
           actions: {
             prop: 'actions',
             label: this.$t('Actions'),
+            width: '130px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
