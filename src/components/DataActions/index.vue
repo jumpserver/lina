@@ -190,7 +190,6 @@ export default {
 
   .action-item {
     margin-left: 5px;
-    line-height: 1;
 
     &:first-child {
       margin-left: 0;

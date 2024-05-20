@@ -19,16 +19,20 @@ export function changeElementColor(themeColors) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
       colorsCssText = colorsCssText + `
-        .el-button--${key}:focus {
+        .el-button--${key}{
+           border-color: var(--color-border);
+        }
+        .el-button--${key}:focus,
+        .el-button--${key}:active,
+        .el-button--${key}:hover {
           background-color: ${darken}!important;
+          border-color: var(--color-border)!important;
         }
         .el-button--${key}.is-disabled,
         .el-button--${key}.is-disabled:active,
         .el-button--${key}.is-disabled:focus {
           background-color: ${blendColor}!important;
-        }
-        .el-button--${key}:hover{
-          background-color: ${darken}!important;
+          border-color: var(--color-border);
         }
         .el-link.el-link--${key}{
           color: ${value}!important;

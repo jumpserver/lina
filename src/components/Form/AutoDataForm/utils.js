@@ -162,19 +162,22 @@ export class FormFieldGenerator {
 
   afterGenerateField(field) {
     field.label = toSentenceCase(field.label)
-    if (!field.helpText && field.helpTip && field.helpTipAsText) {
-      field.helpText = field.helpTip
-      field.helpTip = ''
+    if (!field.helpTip && field.helpText && field.helpTextAsTip) {
+      field.helpTip = field.helpText
+      field.helpText = ''
+    }
+    if (field.placeholder) {
+      field.el.placeholder = field.placeholder
     }
     return field
   }
 
   generateField(name, fieldsMeta, remoteFieldsMeta) {
-    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [] }
+    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [], helpTextAsTip: true }
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
-    field.helpTip = toSentenceCase(remoteFieldMeta['help_text'])
+    field.helpText = toSentenceCase(remoteFieldMeta['help_text'])
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
@@ -193,6 +196,11 @@ export class FormFieldGenerator {
   setPlaceholder(field, remoteFieldMeta) {
     const label = field.label
     if (!label) {
+      return field
+    }
+    if (field.helpText && field.helpTextAsPlaceholder) {
+      field.el.placeholder = field.helpText
+      field.helpText = ''
       return field
     }
     if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {

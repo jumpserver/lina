@@ -36,6 +36,12 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        name: {
+          helpTextAsPlaceholder: true
+        },
+        username: {
+          helpTextAsPlaceholder: true
+        },
         password_strategy: {
           hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
