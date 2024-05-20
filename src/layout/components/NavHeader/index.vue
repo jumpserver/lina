@@ -105,8 +105,6 @@ export default {
 
 .navbar {
   position: relative;
-  height: $headerHeight;
-  line-height: $headerHeight;
   overflow: hidden;
   background-color: var(--banner-bg);
 
@@ -201,15 +199,12 @@ export default {
     float: right;
     align-items: center;
     margin-right: 10px;
-    height: $headerHeight;
-    line-height: $headerHeight;
 
     .header-item {
+      display: flex;
       line-height: $headerHeight;
-      display: inline-block;
       padding-right: 10px;
       padding-left: 10px;
-      vertical-align: top;
 
       & >>> .svg-icon {
         line-height: 40px;
