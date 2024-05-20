@@ -1,5 +1,22 @@
 FROM node:16.20-bullseye-slim as stage-build
 ARG TARGETARCH
+
+ARG DEPENDENCIES="                    \
+        g++                           \
+        make                          \
+        python3"
+
+ARG APT_MIRROR=http://mirrors.ustc.edu.cn
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    set -ex \
+    && rm -f /etc/apt/apt.conf.d/docker-clean \
+    && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' >/etc/apt/apt.conf.d/keep-cache \
+    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get -y install --no-install-recommends ${DEPENDENCIES} \
+    && echo "no" | dpkg-reconfigure dash
+
 ARG NPM_REGISTRY="https://registry.npmmirror.com"
 
 WORKDIR /data
