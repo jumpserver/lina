@@ -250,6 +250,10 @@ export default {
         this.$emit('initialized', true)
       }, 100)
     }
+    // 由于在新增时有些 Select 会存在初始值，而有些没有，就会导致动态类名判断出现相反的情况
+    // 此处强制设置没有初始值的动态类名
+    if (this.iValue.length === 0) this.transformed = false
+
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
       const elFormItem = this.$refs.select?.elFormItem
