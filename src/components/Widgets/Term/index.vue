@@ -86,7 +86,7 @@ export default {
           callback: () => {
             this.xterm.selectAll()
             const text = this.xterm.getSelection()
-            const filename = `shortcut_cmd_${this.$route.query?.taskId}.log`
+            const filename = `${this.$route.query?.type}_${this.$route.query?.taskId}.log`
             downloadText(text, filename)
           }
         }
