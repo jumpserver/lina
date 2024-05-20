@@ -190,11 +190,16 @@ export default {
 >>> .data-z-tree {
   padding: 0;
 }
+
 .page-submenu >>> .el-tabs__nav-wrap {
   position: static;
   .el-tabs__item {
     padding-right: 0;
     padding-left: 0;
+
+    &:hover {
+      color: var(--color-primary);
+    }
   }
 }
 .only-submenu  {

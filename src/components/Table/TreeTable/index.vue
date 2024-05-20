@@ -209,13 +209,13 @@ export default {
 
   .tree-table-content {
     display: flex;
-    justify-items: center;
     flex-wrap: nowrap;
     justify-content:space-between;
+    align-items: flex-start;
 
     .left {
       height: 100%;
-      background: white;
+      background: #ffffff;
       color: var(--color-border);
 
       >>> .treebox {
