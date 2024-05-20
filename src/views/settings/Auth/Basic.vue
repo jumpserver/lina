@@ -20,7 +20,7 @@ export default {
         [
           this.$t('Basic'),
           [
-            'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
+            'EMAIL_SUFFIX', 'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
           ]
         ]
       ],

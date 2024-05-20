@@ -41,7 +41,7 @@ export default {
       ],
       fields: [
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]

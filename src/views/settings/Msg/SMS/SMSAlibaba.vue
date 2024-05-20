@@ -37,19 +37,19 @@ export default {
       ],
       fields: [
         [
-          this.$t('BasicInfo'),
+          this.$t('Basic'),
           [
             'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET'
           ]
         ],
         [
-          this.$t('VerifySignTmpl'),
+          this.$t('Template'),
           [
             'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]
