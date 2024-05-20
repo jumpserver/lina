@@ -434,8 +434,8 @@ input[type=file] {
   overflow: hidden;
 
   span {
+    line-height: inherit;
     display: inline-block;
-    line-height: 1.5;
     vertical-align: middle;
     word-break: break-word;
   }

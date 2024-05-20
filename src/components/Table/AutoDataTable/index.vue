@@ -11,9 +11,9 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
+      :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
       :total-columns-list="popoverColumns.totalColumnsList"
-      :default-columns="popoverColumns.defaultCols"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -67,10 +67,10 @@ export default {
   computed: {},
   watch: {
     config: {
-      handler: function(iNew, iOld) {
+      handler: _.debounce(function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
         this.$log.debug('AutoDataTable Config change found: ')
-      },
+      }, 200),
       deep: true
     }
   },

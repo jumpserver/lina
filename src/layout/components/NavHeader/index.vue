@@ -162,7 +162,7 @@ export default {
         align-items: center;
         padding: 0 0 0 15px !important;
         border-radius: 3px;
-        background-color: rgba(255, 255, 255, .15);
+        background-color: rgba(255, 255, 255, .10);
         color: #fff;
         font-weight: 600;
         font-size: 15px;

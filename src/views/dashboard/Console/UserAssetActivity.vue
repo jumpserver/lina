@@ -27,9 +27,9 @@ export default {
       },
       lineChartConfig: {
         datesMetrics: [],
-        primaryData: [0],
+        primaryData: [1],
         primaryName: this.$t('ActiveUsers'),
-        secondaryData: [0],
+        secondaryData: [1],
         secondaryName: this.$t('LoginAssets')
       }
     }
