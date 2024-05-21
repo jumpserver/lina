@@ -197,12 +197,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$btn-text-color: #ffffff;
+$color-btn-background: #E8F7F4;
+$color-btn-focus-background: #83CBBA;
+$color-divided: #E4E7ED;
+$color-drop-menu-title: #909399;
+$color-drop-menu-border: #e4e7ed;
+
 // 通用
 .layout {
-  display: flex;
-  justify-content: center;
-  max-height: 30px;
-
   .action-item {
     margin-left: 5px;
 
@@ -241,22 +244,32 @@ export default {
 
 // 主要是 Table 中的操作列
 .layout.table-actions {
+  display: flex;
+  align-items: flex-end;
+
   .el-button {
-    color: #fff;
+    display: flex;
+    align-items: center;
+    height: 20px !important;
+    padding: 2px 6px;
+    color: $btn-text-color;
+    border-color: var(--color-primary);
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    background-color: #E8F7F4;
-    color: #1ab394;
+    display: block;
+    color: var(--color-primary);
+    background-color: $color-btn-background;
+    border-color: $color-btn-focus-background;
 
     &:focus {
-      color: #fff;
-      background-color: #83CBBA !important;
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background !important;
     }
 
     &:hover {
-      color: #fff;
-      background-color: #83CBBA;
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background;
     }
   }
 }
@@ -277,7 +290,7 @@ export default {
       cursor: auto;
       font-size: 12px;
       line-height: 30px;
-      border-bottom: 1px solid #E4E7ED;
+      border-bottom: 1px solid $color-divided;
 
       &:before {
         height: 0;
@@ -313,6 +326,7 @@ export default {
       cursor: not-allowed;
       pointer-events: auto;
     }
+
     &:not(.is-disabled):hover {
       background-color: var(--color-disabled-background);
     }
@@ -321,11 +335,11 @@ export default {
   .dropdown-menu-title {
     text-align: left;
     font-size: 12px;
-    color: #909399;
+    color: $color-drop-menu-title;
     line-height: 30px;
     padding-left: 10px;
     padding-top: 10px;
-    border-top: solid 1px #e4e7ed;
+    border-top: solid 1px $color-drop-menu-border;
 
     &:first-child {
       padding-top: 0;
