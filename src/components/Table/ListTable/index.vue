@@ -94,11 +94,16 @@ export default {
       }
       const defaults = {}
       for (const [k, v] of Object.entries(actions)) {
-        let hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
-        if (v.checkRoot) {
-          hasPerm = hasPerm && !this.currentOrgIsRoot
+        const hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
+        if (!hasPerm) {
+          defaults[k] = this.$t('NoPermission')
+          continue
         }
-        defaults[k] = hasPerm
+        if (v.checkRoot && this.currentOrgIsRoot) {
+          defaults[k] = this.$t('NoPermissionInGlobal')
+          continue
+        }
+        defaults[k] = true
       }
       return Object.assign(defaults, this.headerActions)
     },
@@ -110,13 +115,22 @@ export default {
         extraQuery: this.extraQuery
       })
       const checkRoot = !(this.$route.meta?.disableOrgsChange === true)
+      const checkPermAndRoot = (action) => {
+        if (!this.hasActionPerm(action)) {
+          return this.$t('NoPermission')
+        }
+        if (checkRoot && this.currentOrgIsRoot) {
+          return this.$t('NoPermissionInGlobal')
+        }
+        return true
+      }
       const formatterArgs = {
         'columnsMeta.actions.formatterArgs.canUpdate': () => {
-          return this.hasActionPerm('change') && (!checkRoot || !this.currentOrgIsRoot)
+          return checkPermAndRoot('change')
         },
         'columnsMeta.actions.formatterArgs.canDelete': 'delete',
         'columnsMeta.actions.formatterArgs.canClone': () => {
-          return this.hasActionPerm('add') && (!checkRoot || !this.currentOrgIsRoot)
+          return checkPermAndRoot('add')
         },
         'columnsMeta.name.formatterArgs.can': 'view'
       }

@@ -29,18 +29,21 @@
             >
               {{ option.group }}
             </div>
-            <el-dropdown-item
-              :key="option.name"
-              :command="[option, action]"
-              class="dropdown-item"
-              v-bind="{...option, icon: ''}"
-            >
-              <span v-if="option.icon" class="pre-icon">
-                <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
-                <svg-icon v-else :icon-class="option.icon" />
-              </span>
-              {{ option.title }}
-            </el-dropdown-item>
+            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" open-delay="1000" placement="top">
+              <el-dropdown-item
+                :key="option.name"
+                :command="[option, action]"
+                :title="option.tip"
+                class="dropdown-item"
+                v-bind="{...option, icon: ''}"
+              >
+                <span v-if="option.icon" class="pre-icon">
+                  <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
+                  <svg-icon v-else :icon-class="option.icon" />
+                </span>
+                {{ option.title }}
+              </el-dropdown-item>
+            </el-tooltip>
           </template>
         </el-dropdown-menu>
       </el-dropdown>
@@ -53,7 +56,7 @@
         v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="1000" placement="top">
           <span>
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
@@ -108,6 +111,9 @@ export default {
     },
     handleDropdownCallback(command) {
       const [option, dropdown] = command
+      if (option.disabled) {
+        return
+      }
       const defaultCallback = () => this.$log.debug('No callback found: ', option, dropdown)
       let callback = option.callback
       if (!callback) {
@@ -122,6 +128,9 @@ export default {
       return toSentenceCase(s)
     },
     handleClick(action) {
+      if (action.disabled) {
+        return
+      }
       if (action && action.callback) {
         action.callback(action)
       } else {
@@ -168,7 +177,13 @@ export default {
 
         // 是否是disabled
         const can = this.checkItem(action, 'can')
-        action.disabled = !can
+        if (typeof can === 'string') {
+          action.disabled = true
+          action.tip = can
+        } else {
+          action.disabled = !can
+        }
+        delete action['can']
 
         if (action.dropdown) {
           action.dropdown = this.cleanActions(action.dropdown)
@@ -295,7 +310,9 @@ export default {
 
   .el-dropdown-menu__item {
     &.is-disabled {
-      color: var(--color-disabled)
+      color: var(--color-disabled);
+      cursor: not-allowed;
+      pointer-events: auto;
     }
     &:not(.is-disabled):hover {
       background-color: var(--color-disabled-background);
