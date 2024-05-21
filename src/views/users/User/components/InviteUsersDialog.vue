@@ -51,6 +51,7 @@ export default {
         fields: ['users', 'org_roles'],
         fieldsMeta: {
           users: {
+            helpTextAsTip: false,
             component: Select2,
             el: {
               ajax: {

@@ -246,7 +246,6 @@ export default {
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    //padding: 3px 6px;
     background-color: #E8F7F4;
     color: #1ab394;
 
