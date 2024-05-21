@@ -49,12 +49,12 @@ export default {
             formatter: (row) => {
               if (row.count) {
                 return <div>
-                  <el-tooltip content='success'><span Class='text-success'>{row.count.ok}&nbsp;</span></el-tooltip>
-                  <el-tooltip content='failed'><span Class='text-danger'>&nbsp;{row.count.failed}&nbsp;</span>
+                  <el-tooltip open-delay='1000' content='success'><span Class='text-success'>{row.count.ok}&nbsp;</span></el-tooltip>
+                  <el-tooltip open-delay='1000' content='failed'><span Class='text-danger'>&nbsp;{row.count.failed}&nbsp;</span>
                   </el-tooltip>
-                  <el-tooltip content='exclude'><span Class='text-warning'>&nbsp;{row.count.excludes}&nbsp;</span>
+                  <el-tooltip open-delay='1000' content='exclude'><span Class='text-warning'>&nbsp;{row.count.excludes}&nbsp;</span>
                   </el-tooltip>
-                  <el-tooltip content='total'><span Class='text-primary'>&nbsp;{row.count.total}</span></el-tooltip>
+                  <el-tooltip open-delay='1000' content='total'><span Class='text-primary'>&nbsp;{row.count.total}</span></el-tooltip>
                 </div>
               }
               return '-'

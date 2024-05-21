@@ -5,6 +5,7 @@
     :manual="true"
     class="item"
     effect="dark"
+    open-delay="500"
     placement="bottom-start"
   >
     <el-menu

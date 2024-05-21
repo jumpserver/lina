@@ -12,6 +12,7 @@
             <el-tooltip
               :content="obj.label"
               effect="dark"
+              open-delay="500"
               placement="left"
               style="margin: 4px;"
             >

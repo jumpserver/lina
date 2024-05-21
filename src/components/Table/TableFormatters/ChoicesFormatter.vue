@@ -1,6 +1,6 @@
 <template>
   <span>
-    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" effect="dark" placement="bottom">
+    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" effect="dark" open-delay="500" placement="bottom">
       <div slot="content" v-html="tips" />
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />

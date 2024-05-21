@@ -6,7 +6,7 @@
         :key="index"
         style="display: inline-block; margin: 0 2px"
       >
-        <el-tooltip :content="item.tip" :disabled="!item.tip" placement="top">
+        <el-tooltip :content="item.tip" :disabled="!item.tip" open-delay="500" placement="top">
           <el-button
             v-if="item.type ==='button' && !item.isVisible"
             :type="item.el&&item.el.type"
@@ -93,7 +93,7 @@
       </div>
 
       <div v-if="toolbar.hasOwnProperty('fold')" class="fold">
-        <el-tooltip :content="$tc('MoreActions')" placement="top">
+        <el-tooltip :content="$tc('MoreActions')" open-delay="500" placement="top">
           <i
             :class="[isFold ? 'fa-angle-double-right': 'fa-angle-double-down']"
             class="fa"
@@ -108,7 +108,7 @@
           :key="index"
           style="display: inline-block"
         >
-          <el-tooltip :content="item.tip">
+          <el-tooltip :content="item.tip" open-delay="500">
             <el-button
               v-if="item.type ==='button'"
               :disabled="item.disabled"

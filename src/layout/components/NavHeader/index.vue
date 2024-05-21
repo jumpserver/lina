@@ -2,22 +2,22 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip :content="$tc('SiteMessageList')" effect="dark">
+        <el-tooltip :content="$tc('SiteMessageList')" effect="dark" open-delay="500">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip :content="$tc('WebTerminal')" effect="dark">
+        <el-tooltip :content="$tc('WebTerminal')" effect="dark" open-delay="500">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip :content="$tc('Ticket')" effect="dark">
+        <el-tooltip :content="$tc('Ticket')" effect="dark" open-delay="500">
           <Tickets />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip :content="$tc('SystemSetting')" effect="dark">
+        <el-tooltip :content="$tc('SystemSetting')" effect="dark" open-delay="500">
           <SystemSetting />
         </el-tooltip>
       </li>

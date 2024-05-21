@@ -6,7 +6,7 @@
         :key="index"
         style="display: inline-block"
       >
-        <el-tooltip :content="item.tip">
+        <el-tooltip :content="item.tip" open-delay="500">
           <el-button
             v-if="!item.isScrollButton || showScrollButton"
             size="mini"

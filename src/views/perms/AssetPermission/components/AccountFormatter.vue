@@ -9,7 +9,7 @@
           @change="handleCheckboxCheck(i, $event)"
         >
           {{ i.label }}
-          <el-tooltip :content="i.tip" placement="top">
+          <el-tooltip :content="i.tip" open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
         </el-checkbox>

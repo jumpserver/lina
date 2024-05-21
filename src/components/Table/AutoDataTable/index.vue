@@ -199,7 +199,7 @@ export default {
       col.renderHeader = (h, { column, $index }) => {
         return (
           <span>{column.label}
-            <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
+            <el-tooltip open-delay='1000' placement='bottom' effect='light' popperClass='help-tips'>
               <div slot='content' domPropsInnerHTML={helpTip}/>
               <el-button style='padding: 0'>
                 <i class='fa fa-info-circle'/>
