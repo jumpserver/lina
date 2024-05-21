@@ -44,6 +44,9 @@ export default {
       return this.$t('RoleList')
     }
   },
+  activated() {
+    this.switchGlobalOrg(this.config.activeMenu === 'OrgRoleList')
+  },
   mounted() {
     this.switchGlobalOrg(this.config.activeMenu === 'OrgRoleList')
   },
@@ -63,7 +66,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
