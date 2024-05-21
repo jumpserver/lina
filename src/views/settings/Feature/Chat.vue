@@ -50,8 +50,7 @@ export default {
         GPT_BASE_URL: {
           el: {
             autocomplete: 'new-password'
-          },
-          helpText: this.$t('Example', { example: 'https://api.openai.com/v1' })
+          }
         },
         GPT_API_KEY: {
           el: {
@@ -59,7 +58,6 @@ export default {
           }
         },
         GPT_PROXY: {
-          helpText: this.$t('Example', { example: 'http://ip:port' })
         }
       },
       submitMethod() {
