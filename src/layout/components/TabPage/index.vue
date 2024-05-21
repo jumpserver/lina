@@ -56,8 +56,6 @@
 import Page from '../Page/'
 import { toSentenceCase } from '@/utils/common'
 
-const ACTIVE_TAB_KEY = 'tab'
-
 export default {
   name: 'TabPage',
   components: {
@@ -125,18 +123,22 @@ export default {
       }
     }
   },
-  created() {
+  activated() {
+    this.iActiveMenu = this.getPropActiveTab()
+  },
+  mounted() {
     this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
-      this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
 
-      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+      this.$cookie.set(this.$route.path, tab.name, 1)
+
+      if (this.$router.currentRoute.query[this.$route.path]) {
         this.$router.push({
-          query: { ...this.$route.query, [ACTIVE_TAB_KEY]: '' }
+          query: { ...this.$route.query, [this.$route.path]: '' }
         })
       }
     },
@@ -144,8 +146,8 @@ export default {
       let activeTab = ''
 
       const preActiveTabs = [
-        this.$route.query[ACTIVE_TAB_KEY],
-        this.$cookie.get(ACTIVE_TAB_KEY),
+        this.$route.query[this.$route.path],
+        this.$cookie.get(this.$route.path),
         this.activeMenu
       ]
 
