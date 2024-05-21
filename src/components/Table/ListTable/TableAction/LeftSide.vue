@@ -198,6 +198,7 @@ export default {
       } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
+
       this.$log.debug('handle create')
       if (this.createInNewPage) {
         const { href } = this.$router.resolve(route)

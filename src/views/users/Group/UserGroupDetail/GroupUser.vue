@@ -15,6 +15,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   name: 'GroupUser',
@@ -42,21 +43,23 @@ export default {
           },
           callbacks: Object.freeze({
             click: () => {
-              const msg = this.$t('AddAllMembersWarningMsg')
-              this.$confirm(msg, this.$tc('Info'), {
+              useConfirm({
+                msg: this.$t('AddAllMembersWarningMsg'),
+                title: this.$tc('Info'),
                 type: 'warning',
-                confirmButtonClass: 'el-button--danger',
-                beforeClose: async(action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  this.$axios.post(
-                    `/api/v1/users/groups/${this.object.id}/add-all-users/`,
-                  ).then(res => {
-                    this.$message.success(this.$tc('AddSuccessMsg'))
-                    done()
-                    window.location.reload()
-                  })
+                customOptions: {
+                  confirmButtonClass: 'el-button--danger',
+                  beforeClose: async(action, instance, done) => {
+                    if (action !== 'confirm') return done()
+                    this.$axios.post(
+                      `/api/v1/users/groups/${this.object.id}/add-all-users/`,
+                    ).then(res => {
+                      this.$message.success(this.$tc('AddSuccessMsg'))
+                      done()
+                      window.location.reload()
+                    })
+                  }
                 }
-              }).catch(() => {
               })
             }
           })

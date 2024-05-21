@@ -170,6 +170,7 @@ import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
 import merge from 'deepmerge'
+import { useConfirm } from '@/utils/useConfirm'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
@@ -1171,33 +1172,34 @@ export default {
      * @param {object|object[]} - 要删除的数据对象或数组
      */
     onDefaultDelete(data) {
-      this.$confirm(this.deleteMessage(data), this.$t('Info'), {
+      useConfirm({
+        msg: this.deleteMessage(data),
+        title: this.$t('Info'),
         type: 'warning',
-        confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
-          if (action !== 'confirm') return done()
+        customOptions: {
+          confirmButtonClass: 'el-button--danger',
+          beforeClose: async(action, instance, done) => {
+            if (action !== 'confirm') return done()
 
-          instance.confirmButtonLoading = true
+            instance.confirmButtonLoading = true
 
-          try {
-            await this.onDelete(data)
-            done()
-            this.onSuccess('delete', data)
+            try {
+              await this.onDelete(data)
+              done()
+              this.onSuccess('delete', data)
 
-            this.correctPage()
-            this.getList()
-          } catch (error) {
-            console.warn(error.message)
-            throw error
-          } finally {
-            instance.confirmButtonLoading = false
+              this.correctPage()
+              this.getList()
+            } catch (error) {
+              console.warn(error.message)
+              throw error
+            } finally {
+              instance.confirmButtonLoading = false
+            }
           }
         }
-      }).catch(() => {
-        /* 取消*/
       })
     },
-
     /**
      * 判断是否返回上一页
      * @public

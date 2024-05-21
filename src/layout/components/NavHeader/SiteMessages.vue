@@ -80,6 +80,7 @@
 <script>
 import { toSafeLocalDateStr } from '@/utils/common'
 import Dialog from '@/components/Dialog'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   name: 'SiteMessages',
@@ -133,16 +134,17 @@ export default {
       }
     },
     oneClickRead(msgs) {
-      this.$confirm(this.$tc('OneClickReadMsg'), this.$tc('Info'), {
+      useConfirm({
+        msg: this.$tc('OneClickReadMsg'),
+        title: this.$tc('Info'),
         type: 'warning',
-        confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
-          if (action !== 'confirm') return done()
-          this.markAsReadAll(msgs)
-          done()
+        customOptions: {
+          beforeClose: async(action, instance, done) => {
+            if (action !== 'confirm') return done()
+            this.markAsReadAll(msgs)
+            done()
+          }
         }
-      }).catch(() => {
-        /* 取消*/
       })
     },
     markAsReadAll(msgs) {

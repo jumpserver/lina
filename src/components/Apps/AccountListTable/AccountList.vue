@@ -56,6 +56,7 @@ import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import ResultDialog from './BulkCreateResultDialog.vue'
 import AccountBulkUpdateDialog from '@/components/Apps/AccountListTable/AccountBulkUpdateDialog.vue'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   name: 'AccountListTable',
@@ -446,17 +447,20 @@ export default {
           can: this.$hasPerm('accounts.delete_account'),
           type: 'primary',
           callback: ({ row }) => {
-            const msg = this.$t('AccountDeleteConfirmMsg')
-            this.$confirm(msg, this.$tc('Info'), {
+            useConfirm({
+              msg: this.$t('AccountDeleteConfirmMsg'),
+              title: this.$tc('Info'),
               type: 'warning',
-              confirmButtonClass: 'el-button--danger',
-              beforeClose: async(action, instance, done) => {
-                if (action !== 'confirm') return done()
-                this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-                  done()
-                  this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$tc('DeleteSuccessMsg'))
-                })
+              customOptions: {
+                confirmButtonClass: 'el-button--danger',
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
+                    done()
+                    this.$refs.ListTable.reloadTable()
+                    this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  })
+                }
               }
             })
           }

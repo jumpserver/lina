@@ -8,6 +8,7 @@
 <script>
 import BaseList from '../../Asset/AssetList/components/BaseList'
 import AddAssetDialog from '@/views/assets/Domain/components/AddAssetDialog.vue'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   components: {
@@ -106,14 +107,11 @@ export default {
         }]
         msg = rows.row.name
       }
-      this.$confirm(this.$t('removeWarningMsg') + ' ' + msg + ' ?', {
-        type: 'warning'
-      }).then(() => {
+      useConfirm({ msg: this.$t('removeWarningMsg') + ' ' + msg + ' ?' }, () => {
         this.$axios.patch(`/api/v1/assets/assets/`, patch_data).then(() => {
           this.reloadTable()
           this.$message.success(this.$t('RemoveSuccessMsg'))
         })
-      }).catch(() => {
       })
     },
     reloadTable() {

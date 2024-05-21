@@ -22,6 +22,7 @@ import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 import AddGatewayDialog from '@/views/assets/Domain/components/AddGatewayDialog'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   components: {
@@ -209,14 +210,14 @@ export default {
         }]
         msg = rows.row.name
       }
-      this.$confirm(this.$t('RemoveWarningMsg') + ' ' + msg + ' ?', {
-        type: 'warning'
-      }).then(() => {
+      useConfirm({
+        msg: this.$t('RemoveWarningMsg') + ' ' + msg + ' ?',
+        type: 'error'
+      }, () => {
         this.$axios.patch(`/api/v1/assets/gateways/`, patch_data).then(() => {
           this.reloadTable()
           this.$message.success(this.$t('RemoveSuccessMsg'))
         })
-      }).catch(() => {
       })
     },
     handleAddGatewayDialogClose() {

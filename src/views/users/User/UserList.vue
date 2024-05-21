@@ -23,6 +23,7 @@ import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   components: {
@@ -284,10 +285,17 @@ export default {
       }
     },
     removeUserFromOrg({ row, reload }) {
-      const url = `/api/v1/users/users/${row.id}/remove/`
-      this.$axios.post(url).then(() => {
-        reload()
-        this.$message.success(this.$tc('RemoveSuccessMsg'))
+      const tipMessage = {
+        msg: this.$t('RemoveWarningMsg'),
+        title: this.$t('Info')
+      }
+
+      useConfirm(tipMessage, () => {
+        const url = `/api/v1/users/users/${row.id}/remove/`
+        this.$axios.post(url).then(() => {
+          reload()
+          this.$message.success(this.$tc('RemoveSuccessMsg'))
+        })
       })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {

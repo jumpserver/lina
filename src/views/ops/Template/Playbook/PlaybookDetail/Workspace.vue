@@ -46,6 +46,7 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
 import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
 import { renameFile } from '@/api/ops'
+import { useConfirm } from '@/utils/useConfirm'
 
 export default {
   name: 'CommandExecution',
@@ -209,11 +210,18 @@ export default {
       if (!node) {
         return
       }
-      this.$confirm(this.$tc('DeleteConfirmMessage'), this.$tc('Delete'), {
-        confirmButtonText: this.$tc('Confirm'),
-        cancelButtonText: this.$tc('Cancel'),
-        type: 'warning'
-      }).then(() => {
+
+      const tipMessage = {
+        msg: this.$tc('DeleteConfirmMessage'),
+        title: this.$tc('Delete'),
+        type: 'warning',
+        customOptions: {
+          confirmButtonText: this.$tc('Confirm'),
+          cancelButtonText: this.$tc('Cancel')
+        }
+      }
+
+      useConfirm(tipMessage, () => {
         this.$axios.delete(`/api/v1/ops/playbook/${this.object.id}/file/?key=${node.id}`).then(() => {
           if (!node.isParent) {
             this.remoteTab(node.id)
@@ -249,14 +257,21 @@ export default {
         this.remoteTab(key)
         return
       }
-      this.$confirm(text, this.$tc('CloseConfirm'), {
-        confirmButtonText: this.$tc('Confirm'),
-        cancelButtonText: this.$tc('Cancel'),
-        type: 'warning'
-      }).then(() => {
+
+      const tipMessage = {
+        msg: text,
+        title: this.$tc('CloseConfirm'),
+        type: 'warning',
+        customOptions: {
+          confirmButtonText: this.$tc('Confirm'),
+          cancelButtonText: this.$tc('Cancel')
+        }
+      }
+
+      useConfirm(tipMessage, () => {
         this.closing = true
         this.onSave()
-      }).catch(() => {
+      }, () => {
         this.remoteTab(key)
       })
     },

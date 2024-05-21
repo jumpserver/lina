@@ -55,6 +55,7 @@
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { useConfirm } from '@/utils/useConfirm'
 
 const defaultFirstPage = 1
 
@@ -176,20 +177,21 @@ export default {
       viewFunc(obj)
     },
     onDelete(obj) {
-      const msg = `${this.$t('DeleteWarningMsg')} "${obj.name}" ?`
-      this.$confirm(msg, this.$tc('Info'), {
+      useConfirm({
+        msg: `${this.$t('DeleteWarningMsg')} "${obj.name}" ?`,
+        title: this.$tc('Info'),
         type: 'warning',
-        confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
-          if (action !== 'confirm') return done()
-          const deleteFunc = this.tableConfig.onDelete || this.defaultPerformDelete
-          await deleteFunc(obj)
-          done()
-          this.reloadTable()
-          this.$message.success(this.$tc('DeleteSuccessMsg'))
+        customOptions: {
+          confirmButtonClass: 'el-button--danger',
+          beforeClose: async(action, instance, done) => {
+            if (action !== 'confirm') return done()
+            const deleteFunc = this.tableConfig.onDelete || this.defaultPerformDelete
+            await deleteFunc(obj)
+            done()
+            this.reloadTable()
+            this.$message.success(this.$tc('DeleteSuccessMsg'))
+          }
         }
-      }).catch(() => {
-        /* 取消*/
       })
     }
   }
