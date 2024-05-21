@@ -14,7 +14,7 @@
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
-          <el-tooltip v-if="helpTip" effect="dark" open-delay="500" placement="top" popper-class="help-tips">
+          <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
             <div slot="content" class="page-help-content" v-html="helpTip" />
             <span>
               <el-button class="help-msg-btn">

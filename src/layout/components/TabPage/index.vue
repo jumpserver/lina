@@ -23,7 +23,7 @@
               <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
-              <el-tooltip v-if="item.helpTip" effect="dark" open-delay="500" placement="bottom" popper-class="help-tips">
+              <el-tooltip v-if="item.helpTip" :open-delay="500" effect="dark" placement="bottom" popper-class="help-tips">
                 <div slot="content" class="page-help-content" v-html="item.helpTip" />
                 <span>
                   <el-button class="help-msg-btn">

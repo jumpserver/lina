@@ -4,8 +4,8 @@
     <el-tooltip
       v-if="hasTip"
       :content="config.tip"
+      :open-delay="500"
       effect="dark"
-      open-delay="500"
       placement="top"
     >
       <i class="fa fa-exclamation-circle icon" />

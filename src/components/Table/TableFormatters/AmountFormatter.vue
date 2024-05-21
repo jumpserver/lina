@@ -2,8 +2,8 @@
   <DetailFormatter :col="col" :row="row">
     <template>
       <el-popover
+        ::open-delay="500"
         :disabled="!showItems"
-        :open-delay="500"
         :title="title"
         placement="top-start"
         trigger="hover"

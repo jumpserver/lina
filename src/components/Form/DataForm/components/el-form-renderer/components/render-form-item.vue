@@ -9,7 +9,7 @@
   >
     <template v-if="data.label" #label>
       <span>{{ data.label }}</span>
-      <el-tooltip v-if="data.helpTip" effect="dark" open-delay="500" placement="right" popper-class="help-tips">
+      <el-tooltip v-if="data.helpTip" :open-delay="500" effect="dark" placement="right" popper-class="help-tips">
         <div slot="content" v-html="data.helpTip" />
         <i class="fa fa-question-circle-o help-tip-icon" />
       </el-tooltip>

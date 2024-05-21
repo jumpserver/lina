@@ -29,7 +29,7 @@
             >
               {{ option.group }}
             </div>
-            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" open-delay="500" placement="top">
+            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" :open-delay="500" placement="top">
               <el-dropdown-item
                 :key="option.name"
                 :command="[option, action]"
@@ -56,7 +56,7 @@
         v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
+        <el-tooltip ::open-delay="500" :content="action.tip" :disabled="!action.tip" placement="top">
           <span>
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
@@ -246,7 +246,7 @@ export default {
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    padding: 3px 6px;
+    //padding: 3px 6px;
     background-color: #E8F7F4;
     color: #1ab394;
 

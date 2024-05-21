@@ -17,7 +17,7 @@
       <template v-if="showHasObjects">
         <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
           <td style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-            <el-tooltip :content="obj.label" effect="dark" open-delay="500" placement="left" style="margin: 4px;">
+            <el-tooltip :content="obj.label" :open-delay="500" effect="dark" placement="left" style="margin: 4px;">
               <b>{{ obj.label }}</b>
             </el-tooltip>
           </td>

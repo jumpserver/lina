@@ -148,7 +148,7 @@ export default {
 
   ::v-deep .el-button {
     border: none;
-    padding: 5px;
+    padding: 7px;
     font-size: 14px;
     color: var(--color-icon-primary);
     background-color: transparent;
