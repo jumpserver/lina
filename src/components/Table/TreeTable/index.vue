@@ -93,7 +93,7 @@ export default {
     },
     treeWidth: {
       type: String,
-      default: () => '24%'
+      default: () => '23.6%'
     }
   },
   data() {

@@ -119,7 +119,7 @@ export default {
   },
   computed: {
     treeWidth() {
-      return this.treeSetting.notShowBuiltinTree ? '16%' : '24%'
+      return '23.6%'
     },
     treeTableConfig() {
       if (this.treeSetting.notShowBuiltinTree) {
