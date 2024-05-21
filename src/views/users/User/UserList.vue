@@ -284,11 +284,15 @@ export default {
       }
     },
     removeUserFromOrg({ row, reload }) {
-      const url = `/api/v1/users/users/${row.id}/remove/`
-      this.$axios.post(url).then(() => {
-        reload()
-        this.$message.success(this.$tc('RemoveSuccessMsg'))
-      })
+      this.$confirm(this.$t('RemoveWarningMsg') + ' ' + row.name + ' ?', this.$tc('Info'), {
+        type: 'warning'
+      }).then(() => {
+        const url = `/api/v1/users/users/${row.id}/remove/`
+        this.$axios.post(url).then(() => {
+          reload()
+          this.$message.success(this.$tc('RemoveSuccessMsg'))
+        })
+      }).catch(() => {})
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
       const ids = selectedRows.map(v => {
