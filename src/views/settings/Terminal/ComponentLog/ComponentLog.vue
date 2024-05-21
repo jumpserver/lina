@@ -3,22 +3,6 @@
     <div :class="device" class="table-header clearfix">
       <div class="search left">
         <div class="search-input">
-          <el-select
-            v-model="selectComponents"
-            multiple
-            collapse-tags
-            :placeholder="$tc('Component')"
-            @change="selectChange"
-          >
-            <el-option
-              v-for="item in componentOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </div>
-        <div class="search-input">
           <el-input
             v-model="search"
             :placeholder="$tc('Search')"
@@ -40,77 +24,88 @@
         </div>
       </div>
     </div>
-    <div>
-      <el-table
-        v-loading="loading"
-        :data="componentLogs"
-      >
-        <el-table-column
-          prop="component"
-          header-align="center"
-          align="center"
-          :label="$tc('Component')"
-          width="120px"
-        />
-        <el-table-column
-          prop="message"
-          align="left"
-          :label="$tc('Message')"
-        />
-      </el-table>
+
+    <div v-loading="loading" class="cards">
+      <card-log
+        v-for="(card, index) in cardLogs"
+        :key="index"
+        :components="card.components"
+        :title="card.title"
+        :logs="card.logs"
+        :search="isearch"
+        class="card-log"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
-import { getDaysAgo, getDaysFuture, openWindow } from '@/utils/common'
+import { getDaysAgo, getDaysFuture } from '@/utils/common'
 import { debounce } from 'lodash'
 import { getLokiLog } from '@/api/component'
 import ActionsGroup from '@/components/ActionsGroup'
 import store from '@/store'
+import CardLog from './CardLog.vue'
 const all_components = []
 const components_ce = [
-  'web', 'core', 'koko', 'lion', 'magnus', 'chen',
-  'jms_web', 'jms_core', 'jms_celery', 'jms_receptor', 'jms_koko', 'jms_lion', 'jms_chen'
+  {
+    'title': 'Core',
+    'components': ['core', 'jms_core']
+  },
+  {
+    'title': 'Web',
+    'components': ['web', 'jms_web']
+  },
+  {
+    'title': 'Koko',
+    'components': ['koko', 'jms_koko']
+  },
+  {
+    'title': 'Lion',
+    'components': ['lion', 'jms_lion']
+  },
+  {
+    'title': 'Chen',
+    'components': ['chen', 'jms_chen']
+  },
+  {
+    'title': 'Magnus',
+    'components': ['magnus']
+  }
 ]
+
 const components_ee = [
-  'xrdp', 'razor',
-  'jms_razor', 'jms_xrdp'
+  {
+    'title': 'Razor',
+    'components': ['razor', 'jms_razor']
+  },
+  {
+    'title': 'Xrdp',
+    'components': ['xrdp', 'jms_xrdp']
+  }
 ]
 all_components.push(...components_ce)
 store.getters.hasValidLicense ? all_components.push(...components_ee) : null
-all_components.sort((a, b) => {
-  if (a.startsWith('jms_') && !b.startsWith('jms_')) {
-    return 1
-  }
-  if (!a.startsWith('jms_') && b.startsWith('jms_')) {
-    return -1
-  }
-  if (a.startsWith('jms_') && b.startsWith('jms_')) {
-    return a.replace('jms_', '').localeCompare(b.replace('jms_', ''))
-  }
-  return a.localeCompare(b)
-})
 
 export default {
   name: 'ComponentLog',
   components: {
     DatetimeRangePicker,
-    ActionsGroup
+    ActionsGroup,
+    CardLog
   },
   data() {
     return {
       loading: true,
-      selectComponents: [],
-      componentNames: all_components,
       search: '',
       isearch: '',
       datePicker: {
         dateStart: getDaysAgo(7).toISOString(),
         dateEnd: getDaysFuture(1).toISOString()
       },
-      lokiData: []
+      lokiData: [],
+      cards: all_components
     }
   },
   computed: {
@@ -122,13 +117,6 @@ export default {
           tip: this.$t('Refresh'),
           has: true,
           callback: this.refresh_component_logs.bind(this)
-        },
-        {
-          name: 'tailLog',
-          icon: 'file',
-          tip: this.$t('TailLog'),
-          has: this.selectComponents.length > 0,
-          callback: this.openTailLogWindow.bind(this)
         }
       ]
     },
@@ -138,36 +126,33 @@ export default {
       }
       return ''
     },
-    componentLogs() {
-      const data = this.lokiData.map(item => {
-        const component = item.stream['component']
-        return item.values.map(value => {
-          return { component: this.component_label(component), time: value[0], message: value[1] }
+    cardLogs() {
+      const cards = this.cards.map(card => {
+        return { title: card.title, components: card.components, logs: [] }
+      })
+      this.lokiData.forEach(item => {
+        const componentName = item.stream['component']
+        const log = item.values.map(value => {
+          return { component: componentName, time: value[0], message: value[1] }
+        })
+
+        cards.forEach(card => {
+          if (card.components.includes(componentName)) {
+            card.logs = card.logs.concat(log)
+          }
         })
       })
-      return [].concat(...data)
-    },
-    componentOptions() {
-      return this.componentNames.map(item => {
-        return {
-          value: item,
-          label: this.component_label(item)
-        }
+      // sort cards by logs length，the card with more logs will be displayed first
+      cards.sort((a, b) => {
+        return b.logs.length - a.logs.length
       })
+      return cards
     }
   },
   mounted() {
     this.refresh_component_logs()
   },
   methods: {
-    component_label(item) {
-      let label = item
-      if (label.startsWith('jms_')) {
-        label = label.replace('jms_', '')
-        label = `${label}_stdout`
-      }
-      return label
-    },
     handleDateChange: debounce(function(value) {
       this.datePicker = {
         dateStart: value[0].toISOString(),
@@ -188,28 +173,17 @@ export default {
       const data = {
         start: Math.floor(startTime / 1000),
         end: Math.floor(endTime / 1000),
-        search: this.isearch,
-        components: this.selectComponents.join('|')
+        search: this.isearch
       }
       this.loading = true
       getLokiLog(data)
         .then(response => {
           this.lokiData = response
-        })
-        .catch(error => {
-          console.log(error)
+        }).catch(error => {
+          this.$message.error(error)
         }).finally(() => {
           this.loading = false
         })
-    },
-    openTailLogWindow() {
-      const data = {
-        components: this.selectComponents.join('|'),
-        search: this.isearch
-      }
-      const params = new URLSearchParams(data)
-      const url = '/ui/#/terminal/components/loki/tail/?' + params.toString()
-      openWindow(url)
     }
   }
 }
@@ -302,5 +276,8 @@ $headerHeight: 30px;
     height: 16px;
     width: 16px;
   }
+}
+.card-log {
+  margin-bottom: 10px;
 }
 </style>

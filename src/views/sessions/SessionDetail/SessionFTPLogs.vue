@@ -1,9 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-  </el-row>
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -34,7 +30,7 @@ export default {
             width: '100px'
           },
           is_success: {
-            width: '80px'
+            width: '100px'
           },
           actions: {
             width: '82px',
