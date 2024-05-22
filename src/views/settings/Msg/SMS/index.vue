@@ -30,7 +30,7 @@ export default {
           ]
         ],
         [
-          this.$t('SMSProvider'), [
+          this.$t('Provider'), [
             'ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2', 'SMSCustom', 'SMSFileCustom'
           ]
         ]

@@ -3,7 +3,7 @@
     <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
     <Dialog
       :show-buttons="false"
-      :title="$tc('Setting')"
+      :title="$tc('General')"
       :visible.sync="visible"
     >
       <GenericCreateUpdateForm v-bind="form" @submitSuccess="visible=false" />
@@ -110,7 +110,7 @@ export default {
         canCreate: this.$hasPerm('orgs.add_organization'),
         extraActions: [
           {
-            title: this.$t('Setting'),
+            title: this.$t('Settings...'),
             icon: 'el-icon-setting',
             callback: () => {
               this.visible = true

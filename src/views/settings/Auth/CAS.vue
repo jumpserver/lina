@@ -24,8 +24,11 @@ export default {
           [this.$t('Basic'), [
             'AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION'
           ]],
+          [this.$t('Search'), [
+            'CAS_RENAME_ATTRIBUTES'
+          ]],
           [this.$t('Other'), [
-            'CAS_LOGOUT_COMPLETELY', 'CAS_RENAME_ATTRIBUTES', 'CAS_CREATE_USER'
+            'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {

@@ -39,7 +39,7 @@ export default {
           ]
         ],
         [
-          this.$t('LDAPUser'),
+          this.$t('Search'),
           [
             'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER',
             'AUTH_LDAP_USER_ATTR_MAP'

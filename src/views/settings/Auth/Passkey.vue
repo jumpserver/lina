@@ -20,12 +20,7 @@ export default {
         url: '/api/v1/settings/setting/?category=passkey',
         hasDetailInMsg: false,
         fields: [
-          [
-            this.$t('BasicInfo'),
-            [
-              'AUTH_PASSKEY', 'FIDO_SERVER_ID', 'FIDO_SERVER_NAME'
-            ]
-          ]
+          'AUTH_PASSKEY', 'FIDO_SERVER_ID', 'FIDO_SERVER_NAME'
         ],
         fieldsMeta: {
         },
