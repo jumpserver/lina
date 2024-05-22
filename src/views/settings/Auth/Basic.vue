@@ -17,14 +17,14 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=auth',
       fields: [
-        [
-          this.$t('Basic'),
-          [
-            'EMAIL_SUFFIX', 'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
-          ]
-        ]
+        'EMAIL_SUFFIX', 'FORGOT_PASSWORD_URL', 'LOGIN_REDIRECT_MSG_ENABLED'
       ],
       fieldsMeta: {
+        FORGOT_PASSWORD_URL: {
+          el: {
+            placeholder: this.$t('ForgotPasswordURL')
+          }
+        }
       },
       submitMethod() {
         return 'patch'

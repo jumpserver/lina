@@ -195,6 +195,9 @@ export class FormFieldGenerator {
     if (!label) {
       return field
     }
+    if (field.placeholder || field.el.placeholder) {
+      return field
+    }
     if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {
       field.el.placeholder = i18n.t('Please select ') + label.toLowerCase()
     } else if (field.type === 'input') {
