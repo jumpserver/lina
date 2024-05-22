@@ -173,7 +173,13 @@ export class FormFieldGenerator {
 
     let helpTextAsPlaceholder = field.helpTextAsPlaceholder
     const helpTextWordLength = helpText.split(' ').length
-    if ((helpTextWordLength <= 5 || helpText.length <= 10) && helpTextAsPlaceholder === undefined) {
+    const placeholderType = ['input', 'select', 'm2m_related_field']
+    const placeholderComponent = [ObjectSelect2]
+    if (helpTextAsPlaceholder !== undefined) {
+      helpTextAsPlaceholder = !!helpTextAsPlaceholder
+    } else if (placeholderType.indexOf(field.type) === -1 && placeholderComponent.indexOf(field.component) === -1) {
+      helpTextAsPlaceholder = false
+    } else if (helpTextWordLength <= 5 || helpText.length <= 10) {
       helpTextAsPlaceholder = true
     }
 
@@ -193,6 +199,16 @@ export class FormFieldGenerator {
     if (field.placeholder) {
       field.el.placeholder = field.placeholder
     }
+
+    // 设置 checkbox 的 tips
+    if (field.tips && ['checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
+      field.options.map(option => {
+        if (!option.tip && field.tips[option.value]) {
+          option.tip = field.tips[option.value]
+        }
+      })
+    }
+
     return field
   }
 

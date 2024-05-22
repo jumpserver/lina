@@ -82,6 +82,10 @@ export default {
   }
 }
 
+>>> .el-table td, .el-table th {
+  padding: 5px 0;
+}
+
 >>> .el-table th, .el-table tr {
   background-color: #F5F6F7!important;
 

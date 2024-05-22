@@ -61,6 +61,9 @@
           v-bind="opt"
         >
           {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="fa fa-question-circle-o" />
+          </el-tooltip>
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
@@ -69,7 +72,11 @@
           :key="opt.label"
           :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
-        >{{ opt.label }}
+        >
+          {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="fa fa-question-circle-o" />
+          </el-tooltip>
         </el-radio>
       </template>
     </custom-component>
