@@ -56,7 +56,7 @@
         v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip ::open-delay="500" :content="action.tip" :disabled="!action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
           <span>
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />

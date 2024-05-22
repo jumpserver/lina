@@ -160,12 +160,36 @@ export class FormFieldGenerator {
     return field
   }
 
+  setHelpText(field, remoteFieldMeta) {
+    const helpText = toSentenceCase(remoteFieldMeta['help_text'])
+    if (!helpText) {
+      return field
+    }
+
+    let helpTextAsTip = field.helpTextAsTip
+    if (helpTextAsTip === undefined && !helpText.startsWith('*')) {
+      helpTextAsTip = true
+    }
+
+    let helpTextAsPlaceholder = field.helpTextAsPlaceholder
+    const helpTextWordLength = helpText.split(' ').length
+    if ((helpTextWordLength <= 5 || helpText.length <= 10) && helpTextAsPlaceholder === undefined) {
+      helpTextAsPlaceholder = true
+    }
+
+    if (helpTextAsPlaceholder) {
+      field.placeholder = field.placeholder || helpText
+    } else if (helpTextAsTip) {
+      field.helpTip = field.helpTip || helpText
+    } else {
+      field.helpText = field.helpText || helpText
+    }
+    return field
+  }
+
   afterGenerateField(field) {
     field.label = toSentenceCase(field.label)
-    if (!field.helpTip && field.helpText && field.helpTextAsTip) {
-      field.helpTip = field.helpText
-      field.helpText = ''
-    }
+
     if (field.placeholder) {
       field.el.placeholder = field.placeholder
     }
@@ -173,11 +197,10 @@ export class FormFieldGenerator {
   }
 
   generateField(name, fieldsMeta, remoteFieldsMeta) {
-    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [], helpTextAsTip: true }
+    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [] }
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
-    field.helpText = toSentenceCase(remoteFieldMeta['help_text'])
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
@@ -186,6 +209,7 @@ export class FormFieldGenerator {
     field = Object.assign(field, fieldMeta)
     field.el = el
     field.rules = rules
+    field = this.setHelpText(field, remoteFieldMeta)
     field = this.setPlaceholder(field, remoteFieldMeta)
     field = this.afterGenerateField(field)
     _.set(field, 'attrs.error', '')
@@ -198,11 +222,7 @@ export class FormFieldGenerator {
     if (!label) {
       return field
     }
-    if (field.helpText && field.helpTextAsPlaceholder) {
-      field.el.placeholder = field.helpText
-      field.helpText = ''
-      return field
-    }
+
     if (field.placeholder || field.el.placeholder) {
       return field
     }

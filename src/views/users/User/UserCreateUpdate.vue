@@ -37,10 +37,8 @@ export default {
       url: '/api/v1/users/users/',
       fieldsMeta: {
         name: {
-          helpTextAsPlaceholder: true
         },
         username: {
-          helpTextAsPlaceholder: true
         },
         password_strategy: {
           hidden: (formValue) => {
@@ -143,6 +141,7 @@ export default {
           }
         },
         groups: {
+          helpTextAsPlaceholder: true,
           el: {
             multiple: true,
             disabled: this.$store.getters.currentOrgIsRoot,

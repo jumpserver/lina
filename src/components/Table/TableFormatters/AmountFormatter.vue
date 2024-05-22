@@ -2,8 +2,8 @@
   <DetailFormatter :col="col" :row="row">
     <template>
       <el-popover
-        ::open-delay="500"
         :disabled="!showItems"
+        :open-delay="500"
         :title="title"
         placement="top-start"
         trigger="hover"
@@ -129,11 +129,12 @@ export default {
 .detail-content {
   padding: 5px 10px;
   max-height: 60vh;
+  min-height: 200px;
   overflow-y: auto;
 }
 
 .detail-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid var(--color-border);
   padding: 5px 0;
   margin-bottom: 0;
 

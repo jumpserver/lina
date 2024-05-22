@@ -3,6 +3,7 @@
     ref="select"
     v-model="iValue"
     v-loadmore="loadMore"
+    :class="transformed ? 'hidden-tag' : 'show-tag'"
     :clearable="clearable"
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
@@ -10,9 +11,9 @@
     :loading="!initialized"
     :multiple="multiple"
     :options="iOptions"
+    :placeholder="placeholder"
     :remote="remote"
     :remote-method="filterOptions"
-    :class="transformed ? 'hidden-tag' : 'show-tag'"
     class="select2"
     popper-append-to-body
     @change="onChange"
@@ -35,6 +36,7 @@
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Select2',
@@ -103,6 +105,10 @@ export default {
     showSelectAll: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: i18n.t('Select')
     }
   },
   data() {
@@ -419,7 +425,7 @@ export default {
 
 </script>
 
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 .select2 {
   width: 100%;
 
