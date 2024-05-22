@@ -245,6 +245,7 @@ $color-drop-menu-border: #e4e7ed;
 // 主要是 Table 中的操作列
 .layout.table-actions {
   display: flex;
+  justify-content: center;
   align-items: flex-end;
 
   .el-button {
