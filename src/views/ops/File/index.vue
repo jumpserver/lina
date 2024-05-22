@@ -137,7 +137,7 @@ import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BatchTransfer',
+  name: 'FileTransfer',
   components: {
     AssetTreeTable,
     Page,
