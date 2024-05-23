@@ -84,11 +84,12 @@
       <el-alert
         v-if="data.helpText.startsWith('!')"
         :closable="false"
-        :title="data.helpText.replace(/^!/, '')"
         class="help-warning"
         show-icon
         type="info"
-      />
+      >
+        <span v-html="data.helpText.replace(/^!/, '')" />
+      </el-alert>
       <span v-else v-html="data.helpText" />
     </div>
   </el-form-item>
@@ -306,15 +307,10 @@ export default {
   width: 300px;
 }
 
-.help-block {
-  .help-warning {
-    i {
-      font-size: 12px;
-      color: var(--color-link);
-      padding-right: 2px;
-    }
+.help-block  {
+  ::v-deep .el-alert__icon {
+    font-size: 16px
   }
-
 }
 .help-tip-icon {
   &:hover {
