@@ -27,16 +27,16 @@
       ref="SearchInput"
       v-model="filterValue"
       :placeholder="placeholder"
+      :suffix-icon="suffixIcon"
       :validate-event="false"
       class="search-input"
-      :suffix-icon="suffixIcon"
       @blur="handleBlur"
       @change="handleConfirm"
       @focus="handleFocus"
       @keyup.enter.native="handleConfirm"
       @keyup.delete.native="handleDelete"
     />
-    <span class="keydown-focus" :class="isFocus ? 'is-focus ' : ''">t</span>
+    <span :class="isFocus ? 'is-focus ' : ''" class="keydown-focus">/</span>
   </div>
 
 </template>
@@ -347,7 +347,7 @@ export default {
     },
     handleKeyUp(event) {
       // 检查按下的键是否是"T"键
-      if (event.key === 'T' || event.key === 't') {
+      if (event.key === '/' || event.key === 't') {
         this.$refs.SearchInput.focus()
         this.suffixIcon = 'el-icon-search'
         this.isFocus = true
