@@ -4,7 +4,7 @@
       ref="echarts"
       :options="options"
       :autoresize="true"
-      heme="light"
+      theme="light"
       class="disabled-when-print"
       @finished="getDataUrl"
     />
@@ -223,9 +223,18 @@ export default {
       this.getMetricData()
     }
   },
+  mounted() {
+    this.getMetricData()
+  },
   methods: {
     getDataUrl() {
-      this.dataUrl = this.$refs.echarts.getDataURL({})
+      const instance = this.$refs.echarts.echartsInstance
+      if (instance) {
+        this.dataUrl = instance.getDataURL()
+      }
+    },
+    getMetricData() {
+      this.getDataUrl()
     }
   }
 }
