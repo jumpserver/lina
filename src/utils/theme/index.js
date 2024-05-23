@@ -47,6 +47,9 @@ export function changeElementColor(themeColors) {
         .el-tag--dark.el-tag--${key} {
           background-color: ${value} !important;
         }
+        .el-alert.el-alert--${key}.is-light {
+          background-color: var(--color-${key}-light-4);
+        }
       `
     }
   }

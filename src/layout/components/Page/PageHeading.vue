@@ -67,7 +67,7 @@ export default {
 h2 {
   font-size: 16px;
   font-weight: 600;
-  line-height: 2;
+  line-height: 50px;
   color: var(--color-text-primary);
   overflow: hidden;
   white-space: nowrap;
