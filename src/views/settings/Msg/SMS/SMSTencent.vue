@@ -37,19 +37,19 @@ export default {
       ],
       fields: [
         [
-          this.$t('BasicInfo'),
+          this.$t('Basic'),
           [
             'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID'
           ]
         ],
         [
-          this.$t('VerifySignTmpl'),
+          this.$t('Template'),
           [
             'TENCENT_VERIFY_SIGN_NAME', 'TENCENT_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]

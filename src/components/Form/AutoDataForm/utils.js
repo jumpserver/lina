@@ -239,7 +239,6 @@ export class FormFieldGenerator {
     if (!label) {
       return field
     }
-
     if (field.placeholder || field.el.placeholder) {
       return field
     }

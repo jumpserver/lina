@@ -283,4 +283,20 @@ export default {
   font-size: 12px;
   color: #999999;
 }
+
+::v-deep .el-checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+::v-deep .el-checkbox-group label:nth-child(1),
+::v-deep .el-checkbox-group label:nth-child(2) {
+  grid-row: 1 / 2;
+}
+
+::v-deep .el-checkbox-group label:nth-child(3),
+::v-deep .el-checkbox-group label:nth-child(4),
+::v-deep .el-checkbox-group label:nth-child(5) {
+  grid-row: 2 / 3;
+}
 </style>

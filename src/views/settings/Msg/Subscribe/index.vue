@@ -36,7 +36,7 @@
         <el-table-column :label="$tc('Actions')" width="200">
           <template v-slot="scope">
             <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
-              {{ $t('ChangeReceiver') }}
+              {{ $t('EditRecipient') }}
             </el-button>
           </template>
         </el-table-column>
@@ -45,7 +45,7 @@
       <SelectDialog
         v-if="dialogVisible"
         :selected-users="dialogSelectedUsers"
-        :title="$tc('ChangeReceiver')"
+        :title="$tc('EditRecipient')"
         :visible.sync="dialogVisible"
         @cancel="dialogVisible=false"
         @submit="onDialogSelectSubmit"

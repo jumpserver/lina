@@ -39,14 +39,14 @@ export default {
       ],
       fields: [
         [
-          this.$t('BasicInfo'),
+          this.$t('Basic'),
           [
             'CMPP2_HOST', 'CMPP2_PORT', 'CMPP2_SP_ID', 'CMPP2_SP_SECRET', 'CMPP2_SRC_ID', 'CMPP2_SERVICE_ID',
             'CMPP2_VERIFY_SIGN_NAME', 'CMPP2_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]

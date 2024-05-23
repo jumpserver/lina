@@ -24,25 +24,13 @@ export default {
   data() {
     return {
       fields: [
-        [
-          this.$t('BasicInfo'), [
-            'SITE_URL' // 'USER_GUIDE_URL',
-          ]
-        ],
-        [this.$t('NavHelp'), [
-          'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL'
-        ]]
+        [this.$t('Basic'), ['SITE_URL']], // 'USER_GUIDE_URL',]
+        [this.$t('Navigation'), ['HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL']]
       ],
       fieldsMeta: {
         SITE_URL: {
-          rules: [rules.Required]
-        },
-
-        HELP_DOCUMENT_URL: {
-          helpText: this.$t('HelpDocumentTip')
-        },
-        HELP_SUPPORT_URL: {
-          helpText: this.$t('HelpSupportTip')
+          rules: [rules.Required],
+          helpText: this.$t('SiteURLTip')
         }
       },
       successUrl: { name: 'Basic' },

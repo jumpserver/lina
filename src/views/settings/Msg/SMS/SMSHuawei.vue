@@ -39,19 +39,19 @@ export default {
       ],
       fields: [
         [
-          this.$t('BasicInfo'),
+          this.$t('Basic'),
           [
             'HUAWEI_APP_KEY', 'HUAWEI_APP_SECRET', 'HUAWEI_SMS_ENDPOINT'
           ]
         ],
         [
-          this.$t('VerifySignTmpl'),
+          this.$t('Template'),
           [
             'HUAWEI_SIGN_CHANNEL_NUM', 'HUAWEI_VERIFY_SIGN_NAME', 'HUAWEI_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]

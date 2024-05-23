@@ -6,7 +6,7 @@
 
     <div style="height: 100%">
       <el-tabs
-        v-if="tabIndices.length > 0"
+        v-if="tabIndices.length > 1"
         slot="submenu"
         v-model="iActiveMenu"
         class="page-submenu"

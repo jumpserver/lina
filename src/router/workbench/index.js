@@ -53,11 +53,11 @@ export default {
           }
         },
         {
-          path: 'batch-Transfer',
-          name: 'BatchTransfer',
+          path: 'file-transfer',
+          name: 'FileTransfer',
           component: () => import('@/views/ops/File/index'),
           meta: {
-            title: i18n.t('BatchTransfer'),
+            title: i18n.t('FileTransfer'),
             permissions: ['rbac.view_filemanager']
           }
         },
@@ -86,8 +86,8 @@ export default {
       },
       children: [
         {
-          path: 'quick-job',
-          name: 'QuickJob',
+          path: 'adhoc',
+          name: 'Adhoc',
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('QuickJob'),
