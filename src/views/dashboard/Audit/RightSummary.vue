@@ -114,7 +114,7 @@ export default {
 }
 
 .box {
-  margin-top: 16px;
+  margin-top: 10px;
   padding: 20px;
   background: #fff;
 

@@ -104,7 +104,7 @@ export default {
     padding: 26px 0 10px;
     & >>> .echarts {
       width: 100% !important;
-      height: 272px !important;
+      height: 278px !important;
     }
   }
 
