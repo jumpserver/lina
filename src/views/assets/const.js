@@ -163,7 +163,7 @@ export const assetFieldsMeta = (vm) => {
       label: 'url'
     },
     comment: {
-      helpText: i18n.t('CommentHelpText')
+      placeholder: i18n.t('CommentHelpText')
     }
   }
 }

@@ -62,7 +62,7 @@
         >
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="fa fa-question-circle-o" />
+            <i class="el-icon-warning-outline" />
           </el-tooltip>
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
@@ -75,7 +75,7 @@
         >
           {{ opt.label }}
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
-            <i class="fa fa-question-circle-o" />
+            <i class="el-icon-warning-outline" />
           </el-tooltip>
         </el-radio>
       </template>
