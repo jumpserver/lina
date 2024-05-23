@@ -11,8 +11,7 @@ import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 import i18n from '@/i18n/i18n'
 
 export class FormFieldGenerator {
-  constructor(emit) {
-    this.$emite = emit
+  constructor() {
     this.groups = []
   }
 
@@ -161,7 +160,7 @@ export class FormFieldGenerator {
   }
 
   setHelpText(field, remoteFieldMeta) {
-    const helpText = toSentenceCase(remoteFieldMeta['help_text'])
+    let helpText = toSentenceCase(remoteFieldMeta['help_text'])
     if (!helpText) {
       return field
     }
@@ -169,6 +168,8 @@ export class FormFieldGenerator {
     let helpTextAsTip = field.helpTextAsTip
     if (helpTextAsTip === undefined && !helpText.startsWith('*')) {
       helpTextAsTip = true
+    } else {
+      helpText = helpText.replace(/^\*/, '')
     }
 
     let helpTextAsPlaceholder = field.helpTextAsPlaceholder

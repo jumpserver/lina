@@ -103,7 +103,7 @@ export default {
       this.loading = false
     },
     generateColumns() {
-      const generator = new FormFieldGenerator(this.$emit)
+      const generator = new FormFieldGenerator()
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
       this.$log.debug('Total fields: ', this.totalFields)
