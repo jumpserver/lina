@@ -232,19 +232,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .echarts {
-    width: 100%;
-    height: 266px;
+.echarts {
+  width: 100%;
+  height: 272px;
+}
+
+@media print {
+  .disabled-when-print {
+    display: none;
   }
-  @media print {
-    .disabled-when-print{
-      display: none;
-    }
-    .enabled-when-print{
-      display: inherit !important;
-    }
-    .print-margin{
-      margin-top: 10px;
-    }
+  .enabled-when-print {
+    display: inherit !important;
   }
+  .print-margin {
+    margin-top: 10px;
+  }
+}
 </style>
