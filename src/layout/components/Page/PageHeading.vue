@@ -70,7 +70,6 @@ $origin-color: #ffffff;
       text-overflow: ellipsis;
     }
 
-
     .page-heading-right {
       display: flex;
       justify-content: flex-end;

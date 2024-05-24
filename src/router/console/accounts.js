@@ -8,6 +8,7 @@ export default [
     meta: {
       title: i18n.t('AssetAccount'),
       app: 'accounts',
+      icon: 'accounts',
       permissions: ['accounts.view_account']
     },
     redirect: '',
@@ -70,6 +71,7 @@ export default [
     meta: {
       title: i18n.t('AccountTemplate'),
       app: 'accounts',
+      icon: 'template',
       permissions: ['accounts.view_accounttemplate']
     },
     redirect: '',
@@ -120,6 +122,7 @@ export default [
     meta: {
       title: i18n.t('Automations'),
       name: 'Automations',
+      icon: 'automation',
       permissions: []
     }
   },

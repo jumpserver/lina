@@ -8,6 +8,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('LoginLog'),
+      icon: 'login',
       permissions: ['audits.view_userloginlog']
     },
     children: [
@@ -39,6 +40,7 @@ export default [
     meta: {
       title: i18n.t('UserPasswordChangeLog'),
       menuTitle: i18n.t('PasswordChangeLog'),
+      icon: 'password',
       permissions: ['audits.view_passwordchangelog']
     }
   },
@@ -48,6 +50,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('OperateLog'),
+      icon: 'operate-log',
       permissions: ['audits.view_operatelog']
     },
     children: [
@@ -78,6 +81,7 @@ export default [
     component: () => import('@/views/audits/JobExecutionLogList'),
     meta: {
       title: i18n.t('JobExecutionLog'),
+      icon: 'task',
       permissions: ['audits.view_joblog']
     }
   }

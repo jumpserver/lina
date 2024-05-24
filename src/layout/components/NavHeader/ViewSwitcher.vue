@@ -128,7 +128,7 @@ export default {
   border-right: none !important;
 
   ::v-deep .el-submenu .el-submenu__title {
-    height: 40px;
+    height: 38px;
     line-height: 32px;
     border-bottom: none;
   }

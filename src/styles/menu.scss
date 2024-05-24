@@ -1,10 +1,19 @@
 @import "./variables";
 
 $icon-width: 14px;
-$single-menu-height: 45px;
+$single-menu-height: 40px;
 @mixin hover_active {
   background-color: var(--menu-hover);
-  color: var(--menu-text-active);
+  color: var(--color-primary);
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--menu-text-active);
+  }
 }
 
 .el-menu {
@@ -16,13 +25,17 @@ $single-menu-height: 45px;
     &.el-submenu-sidebar {
       // 有子菜单项的 title
       .el-submenu__title {
-        height: 30px;
-        font-size: 11px;
+        height: 38px;
+        font-size: 12px;
         cursor: default;
-        font-weight: 600;
-        line-height: 30px;
+        font-weight: 300;
+        line-height: 38px;
         letter-spacing: .05em;
         color: var(--color-text-primary) !important;
+
+        .el-submenu__icon-arrow {
+          display: none;
+        }
 
         .svg-icon {
           display: none;
@@ -30,6 +43,10 @@ $single-menu-height: 45px;
 
         &:hover {
           background-color: #ffffff;
+
+          .el-submenu__icon-arrow {
+            display: inline;
+          }
         }
       }
 
@@ -44,15 +61,18 @@ $single-menu-height: 45px;
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            height: 45px;
+            height: 36px;
             padding: 20px !important;
-            line-height: 45px;
+            line-height: 36px;
             min-width: 200px;
-            font-size: 12px;
+            font-size: 13px;
 
-            &:hover,
+            &:hover {
+
+            }
             &.is-active {
-              @include hover_active
+              @include hover_active;
+
             }
 
             .svg-icon {

@@ -8,7 +8,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('AssetPermission'),
-      resource: 'assetpermission'
+      resource: 'assetpermission',
+      icon: 'permission'
     },
     children: [
       {
