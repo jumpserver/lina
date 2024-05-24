@@ -11,8 +11,7 @@ import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 import i18n from '@/i18n/i18n'
 
 export class FormFieldGenerator {
-  constructor(emit) {
-    this.$emite = emit
+  constructor() {
     this.groups = []
   }
 
@@ -161,7 +160,7 @@ export class FormFieldGenerator {
   }
 
   setHelpText(field, remoteFieldMeta) {
-    const helpText = toSentenceCase(remoteFieldMeta['help_text'])
+    let helpText = toSentenceCase(remoteFieldMeta['help_text'])
     if (!helpText) {
       return field
     }
@@ -169,11 +168,19 @@ export class FormFieldGenerator {
     let helpTextAsTip = field.helpTextAsTip
     if (helpTextAsTip === undefined && !helpText.startsWith('*')) {
       helpTextAsTip = true
+    } else {
+      helpText = helpText.replace(/^\*/, '')
     }
 
     let helpTextAsPlaceholder = field.helpTextAsPlaceholder
     const helpTextWordLength = helpText.split(' ').length
-    if ((helpTextWordLength <= 5 || helpText.length <= 10) && helpTextAsPlaceholder === undefined) {
+    const placeholderType = ['input', 'select', 'm2m_related_field']
+    const placeholderComponent = [ObjectSelect2]
+    if (helpTextAsPlaceholder !== undefined) {
+      helpTextAsPlaceholder = !!helpTextAsPlaceholder
+    } else if (placeholderType.indexOf(field.type) === -1 && placeholderComponent.indexOf(field.component) === -1) {
+      helpTextAsPlaceholder = false
+    } else if (helpTextWordLength <= 5 || helpText.length <= 10) {
       helpTextAsPlaceholder = true
     }
 
@@ -193,6 +200,16 @@ export class FormFieldGenerator {
     if (field.placeholder) {
       field.el.placeholder = field.placeholder
     }
+
+    // 设置 checkbox 的 tips
+    if (field.tips && ['checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
+      field.options.map(option => {
+        if (!option.tip && field.tips[option.value]) {
+          option.tip = field.tips[option.value]
+        }
+      })
+    }
+
     return field
   }
 
@@ -222,7 +239,6 @@ export class FormFieldGenerator {
     if (!label) {
       return field
     }
-
     if (field.placeholder || field.el.placeholder) {
       return field
     }

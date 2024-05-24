@@ -7,6 +7,7 @@
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
+            :open-delay="200"
             placement="right-start"
             trigger="hover"
           >

@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/assets/domains/${this.object.id}`,
+      url: `/api/v1/assets/domains/${this.object.id}/`,
       detailFields: [
         'name', 'assets_amount',
         {

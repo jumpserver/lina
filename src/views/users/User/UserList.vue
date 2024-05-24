@@ -147,11 +147,7 @@ export default {
             }
           },
           actions: {
-            el: {
-              fixed: 'right'
-            },
             formatterArgs: {
-              fixed: 'right',
               hasDelete: hasDelete,
               canUpdate: ({ row }) => {
                 return this.$hasPerm('users.change_user') &&

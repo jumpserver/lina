@@ -526,3 +526,24 @@ li.rmenu i.fa {
 .el-checkbox__inner {
   border-radius: 1px !important;
 }
+
+.el-alert.el-alert--info.is-light {
+  i.el-icon-info.is-big {
+    font-size: 16px;
+    width: 18px;
+  }
+}
+
+.el-card.no-border {
+  margin-bottom: 20px;
+
+  .el-card__header {
+    padding-top: 20px;
+    padding-bottom: 0;
+
+    border-bottom: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

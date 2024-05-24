@@ -8,7 +8,7 @@
       :visible.sync="showOpenAdhocSaveDialog"
     />
     <VariableHelpDialog :visible.sync="showHelpDialog" />
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <CodeEditor
@@ -45,12 +45,12 @@
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
       </template>
-    </TreeTable>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
@@ -65,7 +65,7 @@ export default {
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
-    TreeTable,
+    AssetTreeTable,
     Page,
     Term,
     CodeEditor
@@ -284,6 +284,7 @@ export default {
         showRefresh: true,
         showMenu: false,
         showSearch: true,
+        notShowBuiltinTree: true,
         check: {
           enable: true
         },

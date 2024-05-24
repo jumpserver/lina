@@ -24,7 +24,7 @@ export default {
       name: 'Basic',
       component: () => import('@/views/settings/Basic'),
       meta: {
-        title: i18n.t('Basic'),
+        title: i18n.t('BasicSettings'),
         icon: 'basic',
         permissions: ['settings.view_setting']
       }
@@ -414,7 +414,7 @@ export default {
       path: '/settings/tasks',
       component: empty,
       meta: {
-        title: i18n.t('TaskList'),
+        title: i18n.t('SystemTasks'),
         icon: 'tasks',
         permissions: ['ops.view_celerytask']
       },
@@ -424,7 +424,7 @@ export default {
           name: 'TaskList',
           component: () => import('@/views/settings/Task/index.vue'),
           meta: {
-            title: i18n.t('TaskList'),
+            title: i18n.t('SystemTasks'),
             permissions: ['ops.view_celerytask']
           }
         },

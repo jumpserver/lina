@@ -46,7 +46,10 @@ export default {
           }
         },
         mfa_level: {
-          disabled: false
+          disabled: false,
+          tips: {
+            2: this.$t('If force enable, user can not disable by themselves')
+          }
         },
         email: {
           rules: [

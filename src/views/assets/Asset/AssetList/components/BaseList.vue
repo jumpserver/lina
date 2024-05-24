@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert v-if="helpMessage" type="success">
+    <el-alert v-if="helpMessage" show-icon type="info">
       <span class="announcement-main" v-html="helpMessage" />
     </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />

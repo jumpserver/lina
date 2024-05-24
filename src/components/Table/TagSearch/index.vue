@@ -27,15 +27,16 @@
       ref="SearchInput"
       v-model="filterValue"
       :placeholder="placeholder"
+      :suffix-icon="suffixIcon"
       :validate-event="false"
       class="search-input"
-      suffix-icon="el-icon-search"
       @blur="handleBlur"
       @change="handleConfirm"
-      @focus="focus = true"
+      @focus="handleFocus"
       @keyup.enter.native="handleConfirm"
       @keyup.delete.native="handleDelete"
     />
+    <span :class="isFocus ? 'is-focus ' : ''" class="keydown-focus">/</span>
   </div>
 
 </template>
@@ -67,10 +68,12 @@ export default {
       filterKey: '',
       filterValue: '',
       valueLabel: '',
+      suffixIcon: '',
       emptyCount: 0,
       filterTags: this.default || {},
       focus: false,
-      showCascade: true
+      showCascade: true,
+      isFocus: false
     }
   },
   computed: {
@@ -134,9 +137,22 @@ export default {
       }
     }
   },
+  mounted() {
+    document.addEventListener('keyup', this.handleKeyUp)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keyup', this.handleKeyUp)
+  },
   methods: {
+    handleFocus() {
+      this.focus = true
+      this.isFocus = true
+      this.suffixIcon = 'el-icon-search'
+    },
     handleBlur() {
       this.focus = false
+      this.isFocus = false
+      this.suffixIcon = ''
       this.$emit('blur')
     },
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
@@ -329,6 +345,14 @@ export default {
       this.filterValue = v.value
       this.$refs.SearchInput.focus()
     },
+    handleKeyUp(event) {
+      // 检查按下的键是否是"T"键
+      if (event.key === '/' || event.key === 't') {
+        this.$refs.SearchInput.focus()
+        this.suffixIcon = 'el-icon-search'
+        this.isFocus = true
+      }
+    },
     // 删除查询条件时改变url
     checkUrlFields(evt) {
       let newQuery = _.omit(this.$route.query, evt)
@@ -347,11 +371,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$borderColor-neutral-muted: #afb8c133;
+$bgColor-muted: #f6f8fa;
+$origin-white-color: #ffffff;
+
 .filter-field {
+  position: relative;
   display: flex;
   align-items:  center;
-  min-width: 198px;
-  background-color: #fff;
+  min-width: 210px;
+  background-color: $origin-white-color;
 
   .el-cascader {
     height: 28px;
@@ -411,6 +440,25 @@ export default {
       border: none;
       padding-left: 1px;
       font-size: 13px;
+    }
+  }
+
+  .keydown-focus {
+    position: absolute;
+    right: 0;
+    display: inline-block;
+    margin-right: 10px;
+    padding: 3px 5px;
+    font-size: 11px;
+    color: var(--color-text-primary);
+    border: solid 1px $borderColor-neutral-muted;
+    border-radius: 6px;
+    line-height: 10px;
+    background-color: var(--bgColor-muted);
+    box-shadow: inset 0 -1px 0 $borderColor-neutral-muted;
+
+    &.is-focus {
+      display: none;
     }
   }
 }

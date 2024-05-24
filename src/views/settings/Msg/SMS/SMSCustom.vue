@@ -37,13 +37,13 @@ export default {
       ],
       fields: [
         [
-          this.$t('BasicInfo'),
+          this.$t('Basic'),
           [
             'CUSTOM_SMS_URL', 'CUSTOM_SMS_REQUEST_METHOD', 'CUSTOM_SMS_API_PARAMS'
           ]
         ],
         [
-          this.$t('Other'),
+          this.$t('Test'),
           [
             'SMS_TEST_PHONE'
           ]

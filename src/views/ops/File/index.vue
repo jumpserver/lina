@@ -11,7 +11,7 @@
       </span>
     </el-alert>
 
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <AssetTreeTable ref="AssetTreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <div class="upload_input">
@@ -124,12 +124,12 @@
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
       </template>
-    </TreeTable>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
@@ -137,9 +137,9 @@ import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BatchTransfer',
+  name: 'FileTransfer',
   components: {
-    TreeTable,
+    AssetTreeTable,
     Page,
     Term
   },
@@ -209,6 +209,7 @@ export default {
       treeSetting: {
         treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
         searchUrl: '/api/v1/perms/users/self/assets/tree/',
+        notShowBuiltinTree: true,
         showRefresh: true,
         showMenu: false,
         showSearch: true,
