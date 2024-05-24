@@ -251,10 +251,8 @@ $color-drop-menu-border: #e4e7ed;
   .el-button {
     display: flex;
     align-items: center;
-    height: 20px !important;
-    padding: 2px 6px;
+    padding: 3px 6px;
     color: $btn-text-color;
-    border-color: var(--color-primary);
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
