@@ -13,7 +13,7 @@
         >
           <item
             :children="item.children"
-            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
@@ -73,11 +73,13 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+    }
   },
   methods: {
     needHidden(item) {
       let hidden = item.hidden
+
       if (typeof item.hidden === 'function') {
         hidden = item.hidden()
       }
@@ -121,7 +123,7 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return true
       }
 
@@ -139,15 +141,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
->>> .submenu-item.el-submenu {
-//  border-left: 4px solid transparent;
-}
-
-.el-submenu.is-active {
-  &>>> .svg-icon {
-    color: var(--menu-text-active)!important;
-  }
-}
-</style>
