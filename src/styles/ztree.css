@@ -16,11 +16,10 @@ website:    http://code.google.com/p/jquerytree/
   margin: 0;
   font-size: 12px;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #f3f3f3;
 }
 .ztree {
   margin: 0;
-  padding: 5px;
+  padding-left: 0;
   color: #676a6c;
   background-color: #f3f3f3;
 }
