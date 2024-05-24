@@ -60,6 +60,6 @@ export default {
   display: inline-block;
 }
 ::v-deep path {
-  fill: inherit!important;
+  fill: inherit !important;
 }
 </style>
