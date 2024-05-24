@@ -127,7 +127,7 @@ $single-menu-height: 40px;
     .submenu-title-noDropdown .el-tooltip {
       display: flex !important;
       align-items: center !important;
-      min-width: 54px !important;
+      min-width: 55px !important;
 
       .svg-icon {
         display: block
@@ -135,6 +135,8 @@ $single-menu-height: 40px;
     }
 
     .submenu-item {
+      width: 55px;
+
       &.is-active {
         cursor: pointer;
         @include hover_active
@@ -152,7 +154,7 @@ $single-menu-height: 40px;
         }
 
         .svg-icon {
-          display: block;
+          //display: block;
         }
       }
     }
