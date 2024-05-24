@@ -373,6 +373,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.treebox {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-top: 15px;
+
+  .ztree {
+    width: 100%;
+    overflow: auto;
+    height: 648px;
+    background-color: #ffffff;
+
+    .level0 {
+      .node_name {
+        max-width: 120px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+
+    li {
+      background-color: transparent !important;
+
+      .button {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      ul {
+        background-color: transparent !important;
+      }
+    }
+  }
+
+  &:hover {
+    >>> .tree-action-btn {
+      display: inline;
+    }
+  }
+
+}
 
 div.rMenu {
   position: absolute;
@@ -445,41 +485,6 @@ div.rMenu li {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;
-}
-
-.treebox {
-  background-color: transparent;
-  height: calc(100% - 40px);
-
-  &:hover {
-    >>> .tree-action-btn {
-      display: inline;
-    }
-  }
-
-  >>> .ztree {
-    overflow: auto;
-    background-color: transparent;
-    height: 648px;
-
-    .level0 .node_name {
-      max-width: 120px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    li {
-      background-color: transparent !important;
-
-      .button {
-        background-color: rgba(0, 0, 0, 0);
-      }
-
-      ul {
-        background-color: transparent !important;
-      }
-    }
-  }
 }
 
 ::v-deep .tree-banner-icon-zone {
