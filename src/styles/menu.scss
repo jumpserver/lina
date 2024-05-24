@@ -23,6 +23,12 @@ $single-menu-height: 40px;
 .left-menu.el-menu {
   .submenu-item {
     &.el-submenu-sidebar {
+
+      &.is-opened {
+        .el-icon-arrow-down {
+          display: none;
+        }
+      }
       // 有子菜单项的 title
       .el-submenu__title {
         height: 38px;
@@ -33,10 +39,6 @@ $single-menu-height: 40px;
         letter-spacing: .05em;
         color: var(--color-text-primary) !important;
 
-        .el-submenu__icon-arrow {
-          display: none;
-        }
-
         .svg-icon {
           display: none;
         }
@@ -44,7 +46,7 @@ $single-menu-height: 40px;
         &:hover {
           background-color: #ffffff;
 
-          .el-submenu__icon-arrow {
+          .el-icon-arrow-down {
             display: inline;
           }
         }
