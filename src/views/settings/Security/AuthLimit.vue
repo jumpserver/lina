@@ -30,14 +30,14 @@ export default {
       visible: false,
       fields: [
         [
-          this.$t('UserLoginLimit'),
+          this.$t('User'),
           [
             'SECURITY_LOGIN_LIMIT_COUNT',
             'SECURITY_LOGIN_LIMIT_TIME'
           ]
         ],
         [
-          this.$t('IPLoginLimit'),
+          this.$t('IP'),
           [
             'SECURITY_LOGIN_IP_LIMIT_COUNT',
             'SECURITY_LOGIN_IP_LIMIT_TIME',

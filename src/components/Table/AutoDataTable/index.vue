@@ -166,7 +166,7 @@ export default {
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.width = '80px'
+          // col.width = '80px'
           break
         case 'datetime':
           col.formatter = DateFormatter
@@ -272,8 +272,15 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
+      let [sortable, filters] = [0, 0]
+      if (col && col?.sortable === 'custom') {
+        sortable = 10
+      }
+      if (col && col?.filters?.length > 0) {
+        filters = 12
+      }
       if (col && !col.width && col.label && !col.minWidth) {
-        col.minWidth = `${col.label.length * factor + 30}px`
+        col.minWidth = `${col.label.length * factor + sortable + filters + 30}px`
       }
       return col
     },

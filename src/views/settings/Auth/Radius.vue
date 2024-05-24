@@ -22,7 +22,7 @@ export default {
         encryptedFields: ['RADIUS_SECRET'],
         fields: [
           [this.$t('Basic'), ['AUTH_RADIUS', 'RADIUS_SERVER', 'RADIUS_PORT', 'RADIUS_SECRET']],
-          [this.$t('Other'), ['OTP_IN_RADIUS']]
+          [this.$t('MFA'), ['OTP_IN_RADIUS']]
         ],
         fieldsMeta: {
           RADIUS_SECRET: {
