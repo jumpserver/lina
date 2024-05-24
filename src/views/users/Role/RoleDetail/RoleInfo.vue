@@ -306,7 +306,7 @@ export default {
 
   >>> {
     .ztree * {
-      background: white;
+      //background: white;
     }
     .ztree {
       background: white !important;
