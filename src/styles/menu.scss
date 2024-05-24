@@ -11,7 +11,7 @@ $single-menu-height: 40px;
     top: 0;
     left: 0;
     bottom: 0;
-    width: 3px;
+    width: 4px;
     background-color: var(--menu-text-active);
   }
 }
@@ -32,9 +32,9 @@ $single-menu-height: 40px;
       // 有子菜单项的 title
       .el-submenu__title {
         height: 38px;
-        font-size: 12px;
+        font-size: 11px;
         cursor: default;
-        font-weight: 300;
+        font-weight: 500;
         line-height: 38px;
         letter-spacing: .05em;
         color: var(--color-text-primary) !important;
@@ -64,17 +64,13 @@ $single-menu-height: 40px;
             justify-content: flex-start;
             align-items: center;
             height: 36px;
-            padding: 20px !important;
+            padding: 19px !important;
             line-height: 36px;
             min-width: 200px;
             font-size: 13px;
 
-            &:hover {
-
-            }
             &.is-active {
               @include hover_active;
-
             }
 
             .svg-icon {
@@ -104,7 +100,7 @@ $single-menu-height: 40px;
       height: $single-menu-height;
       line-height: $single-menu-height;
       min-width: 200px;
-      font-size: 12px;
+      font-size: 13px;
 
       &:hover,
       &.is-active {
