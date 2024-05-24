@@ -63,7 +63,6 @@ export default {
           }
         },
         is_default: {
-          helpText: this.$t('SetToDefaultStorage'),
           hidden: (formValue) => formValue.type === 'sftp'
         }
       },

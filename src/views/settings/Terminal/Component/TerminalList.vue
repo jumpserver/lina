@@ -139,13 +139,11 @@ export default {
             sortable: 'custom'
           },
           is_active: {
-            width: '80px',
             align: 'center'
           },
           is_alive: {
           },
           session_online: {
-            width: '120px'
           },
           actions: {
             formatterArgs: {

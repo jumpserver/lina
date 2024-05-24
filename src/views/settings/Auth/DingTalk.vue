@@ -39,13 +39,8 @@ export default {
         ],
         encryptedFields: ['DINGTALK_APPSECRET'],
         fields: [
-          [
-            this.$t('BasicInfo'),
-            [
-              'AUTH_DINGTALK', 'DINGTALK_AGENTID',
-              'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
-            ]
-          ]
+          'AUTH_DINGTALK', 'DINGTALK_AGENTID',
+          'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
         ],
         fieldsMeta: {
           DINGTALK_APPSECRET: {

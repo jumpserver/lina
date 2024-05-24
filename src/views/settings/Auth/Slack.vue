@@ -41,12 +41,7 @@ export default {
         ],
         encryptedFields: ['SLACK_SECRET'],
         fields: [
-          [
-            this.$t('BasicInfo'),
-            [
-              'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
-            ]
-          ]
+          'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
         ],
         fieldsMeta: {
           SLACK_APP_SECRET: {

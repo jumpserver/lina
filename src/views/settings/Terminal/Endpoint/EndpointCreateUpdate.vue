@@ -21,13 +21,13 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'host']],
         [
-          this.$t('BasePort'),
+          this.$t('Port'),
           [
             'http_port', 'https_port', 'ssh_port', 'rdp_port'
           ]
         ],
         [
-          this.$t('DatabasePort'),
+          '',
           [
             'mysql_port', 'mariadb_port', 'postgresql_port',
             'redis_port', 'sqlserver_port', 'oracle_port_range'
