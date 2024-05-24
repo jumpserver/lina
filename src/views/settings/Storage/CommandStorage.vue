@@ -66,8 +66,7 @@ export default {
               showFalse: false,
               showText: false
             },
-            align: 'center',
-            width: '150px'
+            align: 'center'
           },
           actions: {
             formatterArgs: {

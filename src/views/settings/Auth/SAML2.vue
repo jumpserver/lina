@@ -23,18 +23,20 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=saml2',
         fields: [
-          [this.$t('Basic'), ['AUTH_SAML2']],
-          [this.$t('Certificate'), [
+          [this.$t('Basic'), [
+            'AUTH_SAML2',
             'SAML2_SP_KEY_CONTENT',
-            'SAML2_SP_CERT_CONTENT'
-          ]],
-          [this.$t('Params'), [
-            'SAML2_IDP_METADATA_URL', 'SAML2_IDP_METADATA_XML',
+            'SAML2_SP_CERT_CONTENT',
+            'SAML2_IDP_METADATA_URL',
+            'SAML2_IDP_METADATA_XML',
             'SAML2_SP_ADVANCED_SETTINGS'
+
+          ]],
+          [this.$t('Search'), [
+            'SAML2_RENAME_ATTRIBUTES'
           ]],
           [this.$t('Other'), [
-            'SAML2_LOGOUT_COMPLETELY', 'AUTH_SAML2_ALWAYS_UPDATE_USER',
-            'SAML2_RENAME_ATTRIBUTES'
+            'AUTH_SAML2_ALWAYS_UPDATE_USER', 'SAML2_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {
@@ -60,12 +62,11 @@ export default {
           },
           SAML2_SP_CERT_CONTENT: {
             component: UploadKey,
-            helpText: this.$t('AuthSAMLCertHelpText') + ' <a href="/core/auth/saml2/metadata/" target="_blank">查看</a>'
+            helpText: this.$t('AuthSAMLCertHelpText') + ` <a href="/core/auth/saml2/metadata/" target="_blank">${this.$t('View')}</a>`
           },
           SAML2_RENAME_ATTRIBUTES: {
             component: JsonEditor,
-            rules: [JsonRequired],
-            helpText: this.$t('AuthSaml2UserAttrMapHelpText')
+            rules: [JsonRequired]
           }
         },
         submitMethod: () => 'patch',

@@ -38,9 +38,6 @@ export default {
           type: 'select',
           disabled: true
         },
-        is_default: {
-          helpText: this.$t('SetToDefaultStorage')
-        },
         meta: {
           fields: ['HOSTS', 'INDEX_BY_DATE', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
