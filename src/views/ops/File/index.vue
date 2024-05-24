@@ -6,7 +6,7 @@
       type="success"
     >
       <span v-for="(tip,index) of FileTransferBootStepHelpTips" :key="index" style="padding-right: 24px">
-        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}</span>
+        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}.</span>
         {{ tip }}
       </span>
     </el-alert>
@@ -490,7 +490,7 @@ export default {
   border: 1px solid #eee;
 }
 
-.upload_input >>> .el-input-group__prepend {
+.upload_input ::v-deep .el-input-group__prepend {
   padding: 0 10px;
 }
 
@@ -574,7 +574,7 @@ export default {
   background: #fff;
 }
 
-.output >>> #terminal {
+.output ::v-deep #terminal {
   border: dashed 1px #d9d9d9;
 }
 </style>
