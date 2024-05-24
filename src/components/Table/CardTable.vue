@@ -229,7 +229,7 @@ export default {
   .el-col, div {
     .my-card {
       min-width: 330px;
-      height: 240px;
+      height: 210px;
       width: 100%;
       position: relative;
       margin-bottom: 20px;
@@ -286,12 +286,12 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 120px;
+              height: 150px;
               font-size: 12px;
-              padding: 15px 0;
+              padding: 10px 0;
               cursor: pointer;
               overflow: hidden;
-              -webkit-line-clamp: 3;
+              -webkit-line-clamp: 4;
               -webkit-box-flex: 1;
               -webkit-flex-grow: 1;
               flex-grow: 1;
@@ -303,7 +303,7 @@ export default {
 
             .tag-zone {
               display: flex;
-              height: 100%;
+              height: 30%;
               align-items: center;
               cursor: pointer;
             }
@@ -348,7 +348,7 @@ export default {
 }
 
 .tag-zone {
-  margin-top: 20px;
+  margin-top: 10px;
 
   .el-tag {
     margin-right: 3px;

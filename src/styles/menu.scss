@@ -1,6 +1,6 @@
 @import "./variables";
 
-$icon-width: 15px;
+$icon-width: 14px;
 $single-menu-height: 38px;
 @mixin hover_active {
   background-color: var(--menu-hover);
@@ -26,7 +26,7 @@ $single-menu-height: 38px;
 .left-menu.el-menu {
   .submenu-item {
     &.el-submenu-sidebar {
-      margin-top: 4px;
+      margin-top: 8px;
       &.is-opened {
         .el-icon-arrow-down {
           display: none;
@@ -34,13 +34,13 @@ $single-menu-height: 38px;
       }
       // 有子菜单项的 title
       .el-submenu__title {
-        height: 34px;
+        height: 30px;
         font-size: 11px;
         cursor: default;
-        font-weight: 500;
+        font-weight: 600;
         line-height: 30px;
         letter-spacing: .07em;
-        color: var(--color-text-primary) !important;
+        color: rgba(0, 0, 0, 0.6) !important;
 
         .svg-icon {
           display: none;

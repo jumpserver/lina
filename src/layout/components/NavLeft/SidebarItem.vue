@@ -48,7 +48,7 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
-import { toSentenceCase, toTitleCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'SidebarItem',
@@ -99,7 +99,7 @@ export default {
     getItemTitle(item) {
       let title = item.meta.menuTitle || item.meta.title
       if (item.children) {
-        title = toTitleCase(title)
+        title = title.toUpperCase()
       } else {
         title = toSentenceCase(title)
       }
