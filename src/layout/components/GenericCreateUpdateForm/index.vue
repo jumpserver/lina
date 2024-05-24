@@ -386,5 +386,4 @@ export default {
   .ibox >>> .el-card__body {
     padding-top: 30px;
   }
-
 </style>
