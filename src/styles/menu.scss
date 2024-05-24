@@ -1,10 +1,13 @@
 @import "./variables";
 
-$icon-width: 14px;
-$single-menu-height: 40px;
+$icon-width: 15px;
+$single-menu-height: 38px;
 @mixin hover_active {
   background-color: var(--menu-hover);
   color: var(--color-primary);
+}
+
+@mixin only_active {
   &:before {
     content: '';
     position: absolute;
@@ -23,7 +26,7 @@ $single-menu-height: 40px;
 .left-menu.el-menu {
   .submenu-item {
     &.el-submenu-sidebar {
-
+      margin-top: 4px;
       &.is-opened {
         .el-icon-arrow-down {
           display: none;
@@ -31,12 +34,12 @@ $single-menu-height: 40px;
       }
       // 有子菜单项的 title
       .el-submenu__title {
-        height: 38px;
+        height: 34px;
         font-size: 11px;
         cursor: default;
         font-weight: 500;
-        line-height: 38px;
-        letter-spacing: .05em;
+        line-height: 30px;
+        letter-spacing: .07em;
         color: var(--color-text-primary) !important;
 
         .svg-icon {
@@ -64,16 +67,22 @@ $single-menu-height: 40px;
             justify-content: flex-start;
             align-items: center;
             height: 36px;
-            padding: 19px !important;
+            padding: 19px 20px !important;
             line-height: 36px;
             min-width: 200px;
-            font-size: 13px;
+            font-size: 12px;
 
-            &.is-active {
+            &:hover,
+            &.is-active, {
               @include hover_active;
             }
 
+            &.is-active {
+              @include only_active;
+            }
+
             .svg-icon {
+              font-weight: 500;
               overflow: hidden;
               width: $icon-width;
               height: $icon-width;
@@ -100,11 +109,15 @@ $single-menu-height: 40px;
       height: $single-menu-height;
       line-height: $single-menu-height;
       min-width: 200px;
-      font-size: 13px;
+      font-size: 12px;
 
       &:hover,
       &.is-active {
        @include hover_active
+      }
+
+      &.is-active {
+        @include only_active;
       }
 
       .svg-icon {
@@ -165,9 +178,5 @@ $single-menu-height: 40px;
 
   .is-active i.fa {
     color: $menuActiveText;
-  }
-
-  .nest-menu:last-child {
-    padding-bottom: 10px;
   }
 }

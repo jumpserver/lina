@@ -151,10 +151,6 @@ export default {
     &:hover {
       background-color: var(--menu-hover);
     }
-
-    &:focus {
-      background-color: transparent;
-    }
   }
 }
 
@@ -195,6 +191,7 @@ export default {
 .el-menu-item {
   &.is-active {
     color: var(--menu-text-active);
+    background-color: var(--menu-hover);
 
     &:before {
       content: '';

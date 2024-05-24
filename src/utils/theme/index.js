@@ -18,6 +18,7 @@ export function changeElementColor(themeColors) {
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
+      const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
       colorsCssText = colorsCssText + `
         .el-button--${key}{
            border-color: var(--color-border);
@@ -48,7 +49,7 @@ export function changeElementColor(themeColors) {
           background-color: ${value} !important;
         }
         .el-alert.el-alert--${key}.is-light {
-          background-color: var(--color-${key}-light-4);
+          background-color: ${tooLightColor};
         }
       `
     }

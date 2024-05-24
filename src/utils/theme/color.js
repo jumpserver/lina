@@ -90,20 +90,23 @@ export function changeMenuColor(themeColors) {
     colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 
-  const lights = [15, 40, 60, 80, 90]
-  const darken = [15, 30, 40, 60, 80]
+  const lights = [15, 40, 60, 90]
+  const darken = [15, 30, 40, 80]
 
+  const colorsGenMore = ['--color-primary']
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
 
-    for (const [i, light] of lights.entries()) {
-      const color = mix(white, currentColor.replace(/#/g, ''), light)
-      elementStyle.setProperty(key + '-light' + '-' + i, color)
-    }
-    for (const [i, dark] of darken.entries()) {
-      const color = mix(black, currentColor.replace(/#/g, ''), dark)
-      elementStyle.setProperty(key + '-dark' + '-' + i, color)
+    if (colorsGenMore.includes(key)) {
+      for (const [i, light] of lights.entries()) {
+        const color = mix(white, currentColor.replace(/#/g, ''), light)
+        elementStyle.setProperty(key + '-light' + '-' + i, color)
+      }
+      for (const [i, dark] of darken.entries()) {
+        const color = mix(black, currentColor.replace(/#/g, ''), dark)
+        elementStyle.setProperty(key + '-dark' + '-' + i, color)
+      }
     }
 
     if (key.includes('--color')) {

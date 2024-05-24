@@ -248,18 +248,18 @@ export default {
             permissions: ['ops.view_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
+        },
+        {
+          path: '/workbench/system-tools',
+          name: 'SystemTools',
+          component: () => import('@/views/settings/Tool'),
+          meta: {
+            title: i18n.t('SystemTools'),
+            icon: 'tools',
+            permissions: ['rbac.view_systemtools']
+          }
         }
       ]
-    },
-    {
-      path: '/workbench/system-tools',
-      name: 'SystemTools',
-      component: () => import('@/views/settings/Tool'),
-      meta: {
-        title: i18n.t('SystemTools'),
-        icon: 'tools',
-        permissions: ['rbac.view_systemtools']
-      }
     }
   ]
 }
