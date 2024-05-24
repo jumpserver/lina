@@ -218,7 +218,7 @@ $origin-color: #ffffff;
       align-items: center;
       width: 100%;
       height: 50px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
       overflow: hidden;
       white-space: nowrap;
@@ -244,7 +244,7 @@ $origin-color: #ffffff;
           }
 
           .icon-zone {
-            margin-right: 5px;
+            margin-right: 15px;
 
             &:hover {
               color: var(--color-primary);
