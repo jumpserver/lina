@@ -69,6 +69,7 @@ export default {
             title: i18n.t('FileExplorer'),
             activeMenu: '/assets',
             icon: 'file-manager',
+            external: true,
             permissions: ['rbac.view_filemanager']
           }
         }

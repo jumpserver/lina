@@ -1,5 +1,5 @@
 <template>
-  <Page class="tab-page" v-bind="$attrs">
+  <Page v-if="!loading" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
@@ -46,7 +46,7 @@
         <el-alert v-if="helpMessage" type="success">
           <span class="announcement-main" v-html="helpMessage" />
         </el-alert>
-        <transition v-if="loading" appear mode="out-in" name="fade-transform">
+        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
               <component :is="computeActiveComponent" />
@@ -122,19 +122,16 @@ export default {
       const activeTab = to.query?.tab
       if (activeTab && this.iActiveMenu !== activeTab) {
         this.iActiveMenu = activeTab
-        this.loading = false
-        setTimeout(() => {
-          this.loading = true
-        })
       }
     }
   },
   activated() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
   },
-  mounted() {
-    console.log('Mounted ')
+  created() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
   },
   methods: {
     handleTabClick(tab) {
