@@ -18,6 +18,7 @@ import Telnet from './Telnet'
 import Nmap from './Nmap'
 import Tcpdump from './Tcpdump'
 import Traceroute from './Traceroute'
+import Basic from './Basic'
 
 export default {
   components: {
@@ -26,15 +27,20 @@ export default {
     Telnet,
     Nmap,
     Tcpdump,
-    Traceroute
+    Traceroute,
+    Basic
   },
   data() {
     return {
       timer: null,
       currentTime: '',
       loading: true,
-      activeMenu: 'Ping',
+      activeMenu: 'Basic',
       submenu: [
+        {
+          title: this.$t('Basic'),
+          name: 'Basic'
+        },
         {
           title: 'Ping',
           name: 'Ping'

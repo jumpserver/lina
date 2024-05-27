@@ -249,6 +249,9 @@ export default {
       path: '/workbench/system-tools',
       name: 'SystemTools',
       component: () => import('@/views/settings/Tool'),
+      hidden: () => {
+        return !store.getters.publicSettings['TOOL_USER_ENABLED']
+      },
       meta: {
         title: i18n.t('SystemTools'),
         icon: 'tools',
