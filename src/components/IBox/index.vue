@@ -82,7 +82,7 @@ export default {
   }
 
   .ibox >>> .el-card__body {
-    padding: 15px 30px 20px 30px;
+    padding: 30px 30px 20px 30px;
     color: var(--color-icon-primary);
   }
 </style>

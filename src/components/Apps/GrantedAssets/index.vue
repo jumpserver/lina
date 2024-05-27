@@ -1,16 +1,20 @@
 <template>
-  <TreeTable :header-actions="headerActions" :table-config="tableConfig" :tree-setting="treeSetting" />
+  <AssetTreeTable
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+    :tree-setting="treeSetting"
+  />
 </template>
 
 <script type="text/jsx">
-import TreeTable from '../../Table/TreeTable/index.vue'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import { AccountInfoFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 
 export default {
   name: 'GrantedAssets',
   components: {
-    TreeTable
+    AssetTreeTable
   },
   props: {
     treeUrl: {
@@ -54,6 +58,7 @@ export default {
         url: this.tableUrl,
         // ?assets=0不显示资产. =1显示资产
         treeUrl: this.treeUrl,
+        notShowBuiltinTree: true,
         callback: {
           onSelected: (event, node) => vm.onSelected(node, vm),
           refresh: vm.refreshObjectAssetPermission

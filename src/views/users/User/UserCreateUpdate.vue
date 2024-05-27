@@ -36,13 +36,20 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        name: {
+        },
+        username: {
+        },
         password_strategy: {
           hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
           }
         },
         mfa_level: {
-          disabled: false
+          disabled: false,
+          tips: {
+            2: this.$t('If force enable, user can not disable by themselves')
+          }
         },
         email: {
           rules: [
@@ -134,10 +141,10 @@ export default {
             return !this.$store.getters.hasValidLicense ||
                 !this.$hasPerm('rbac.add_orgrolebinding') ||
                 this.$store.getters.currentOrgIsRoot
-          },
-          helpText: this.$t('OrgRoleHelpText')
+          }
         },
         groups: {
+          helpTextAsPlaceholder: true,
           el: {
             multiple: true,
             disabled: this.$store.getters.currentOrgIsRoot,

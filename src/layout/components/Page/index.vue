@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <TagsView :show.sync="showHistory" />
+    <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
       <el-button
         :disabled="gobackDisabled"
@@ -14,7 +14,7 @@
       <slot name="title">
         <span style="padding-left: 10px">
           {{ iTitle }}
-          <el-tooltip v-if="helpTip" effect="dark" placement="top" popper-class="help-tips">
+          <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
             <div slot="content" class="page-help-content" v-html="helpTip" />
             <span>
               <el-button class="help-msg-btn">
@@ -128,7 +128,7 @@ export default {
   .page-content {
     height: calc(100% - 20px);
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: auto !important;
 
     ::v-deep > div {
       margin-bottom: 50px;
@@ -138,7 +138,7 @@ export default {
 
 .go-back {
   border: none;
-  padding: 4px;
+  padding: 6px;
 }
 
 .go-back >>> i {

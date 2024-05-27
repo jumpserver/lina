@@ -11,6 +11,7 @@ export default [
       app: 'terminal',
       resource: 'session',
       expanded: true,
+      icon: 'session',
       permissions: ['terminal.view_session']
     },
     children: [
@@ -38,6 +39,7 @@ export default [
     component: () => import('@/views/sessions/CommandList/index'),
     meta: {
       title: i18n.t('SessionCommands'),
+      icon: 'command',
       permissions: ['terminal.view_command']
     }
   },
@@ -47,7 +49,18 @@ export default [
     component: () => import('@/views/sessions/FTPLogList'),
     meta: {
       title: i18n.t('FileTransfer'),
+      icon: 'file-transfer',
       permissions: ['audits.view_ftplog']
+    }
+  },
+  {
+    path: '/audit/online-user-session',
+    component: () => import('@/views/sessions/OnlineSession/OnlineSessionList'),
+    name: 'OnlineSession',
+    meta: {
+      icon: 'device',
+      title: i18n.t('OnlineSession'),
+      permissions: ['audits.view_usersession']
     }
   }
 ]

@@ -10,7 +10,8 @@ export default [
     meta: {
       title: i18n.t('AssetList'),
       app: 'assets',
-      resource: 'asset'
+      resource: 'asset',
+      icon: 'assets'
     },
     children: [
       {
@@ -228,6 +229,7 @@ export default [
     redirect: '',
     meta: {
       resource: 'domain',
+      icon: 'zone',
       permissions: ['assets.view_domain']
     },
     children: [
@@ -294,7 +296,8 @@ export default [
     component: empty,
     meta: {
       permissions: ['assets.view_platform'],
-      resource: 'platform'
+      resource: 'platform',
+      icon: 'platform'
     },
     redirect: '',
     children: [

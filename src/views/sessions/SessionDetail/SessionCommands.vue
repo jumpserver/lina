@@ -1,9 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-  </el-row>
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>

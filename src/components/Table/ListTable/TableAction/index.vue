@@ -167,8 +167,7 @@ $headerHeight: 30px;
     flex-direction: row;
 
     .right-side-item.action-search {
-      border: 1px solid var(--color-disabled-background);
-      border-radius: 5px;
+      border: 1px solid var(--color-border);
       overflow: hidden;
     }
   }
@@ -205,7 +204,7 @@ $headerHeight: 30px;
     margin-right: 0;
 
     ::v-deep .el-button.label-button {
-      border: 1px solid var(--color-disabled-background);
+      border: 1px solid var(--color-border);
     }
 
     ::v-deep .label-cascader {
@@ -222,7 +221,7 @@ $headerHeight: 30px;
 }
 
 .mobile .right-side {
-  padding-top: 10px;
+  padding-top: 3px;
 }
 
 @media (max-width: 481px) {

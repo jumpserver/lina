@@ -32,17 +32,19 @@ export default {
             'AUTH_OAUTH2_CLIENT_ID', 'AUTH_OAUTH2_CLIENT_SECRET',
             'AUTH_OAUTH2_ACCESS_TOKEN_METHOD'
           ]],
-          [this.$t('Params'), [
+          [this.$t('Server'), [
             'AUTH_OAUTH2_SCOPE',
             'AUTH_OAUTH2_PROVIDER_AUTHORIZATION_ENDPOINT',
             'AUTH_OAUTH2_ACCESS_TOKEN_ENDPOINT',
             'AUTH_OAUTH2_PROVIDER_USERINFO_ENDPOINT',
             'AUTH_OAUTH2_PROVIDER_END_SESSION_ENDPOINT'
           ]],
-          [this.$t('Other'), [
-            'AUTH_OAUTH2_LOGOUT_COMPLETELY',
-            'AUTH_OAUTH2_ALWAYS_UPDATE_USER',
+          [this.$t('Search'), [
             'AUTH_OAUTH2_USER_ATTR_MAP'
+          ]],
+          [this.$t('Other'), [
+            'AUTH_OAUTH2_ALWAYS_UPDATE_USER',
+            'AUTH_OAUTH2_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {
@@ -61,8 +63,7 @@ export default {
           },
           AUTH_OAUTH2_USER_ATTR_MAP: {
             component: JsonEditor,
-            rules: [JsonRequired],
-            helpText: this.$t('AuthUserAttrMapHelpText')
+            rules: [JsonRequired]
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {
           }

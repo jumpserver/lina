@@ -17,7 +17,7 @@ import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
 import { assignIfNot } from '@/utils/common'
 
-const defaultTrue = { type: Boolean, default: true }
+const defaultTrue = { type: [Boolean, Function, String], default: true }
 
 export default {
   name: 'RightSide',
@@ -83,11 +83,11 @@ export default {
       default: () => []
     },
     canCreate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     },
     canBulkUpdate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     }
   },
@@ -148,7 +148,7 @@ export default {
 
   ::v-deep .el-button {
     border: none;
-    padding: 5px;
+    padding: 7px;
     font-size: 14px;
     color: var(--color-icon-primary);
     background-color: transparent;

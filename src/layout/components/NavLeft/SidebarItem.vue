@@ -13,7 +13,7 @@
         >
           <item
             :children="item.children"
-            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+            :icon="onlyOneChild.meta.icon||(item.meta && item.meta.icon)"
             :title="getItemTitle(onlyOneChild)"
           />
         </el-menu-item>
@@ -48,7 +48,7 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
-import { toSentenceCase, toTitleCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'SidebarItem',
@@ -73,11 +73,13 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+    }
   },
   methods: {
     needHidden(item) {
       let hidden = item.hidden
+
       if (typeof item.hidden === 'function') {
         hidden = item.hidden()
       }
@@ -97,7 +99,7 @@ export default {
     getItemTitle(item) {
       let title = item.meta.menuTitle || item.meta.title
       if (item.children) {
-        title = toTitleCase(title)
+        title = title.toUpperCase()
       } else {
         title = toSentenceCase(title)
       }
@@ -121,7 +123,7 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return true
       }
 
@@ -139,15 +141,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
->>> .submenu-item.el-submenu {
-//  border-left: 4px solid transparent;
-}
-
-.el-submenu.is-active {
-  &>>> .svg-icon {
-    color: var(--menu-text-active)!important;
-  }
-}
-</style>

@@ -11,6 +11,7 @@
           <td>
             <el-tooltip
               :content="obj.label"
+              :open-delay="500"
               effect="dark"
               placement="left"
               style="margin: 4px;"

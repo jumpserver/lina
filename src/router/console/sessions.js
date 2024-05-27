@@ -7,7 +7,7 @@ export default [
     path: 'sessions',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('Sessions'), permissions: [] },
+    meta: { title: i18n.t('Sessions'), permissions: [], icon: 'session' },
     children: [
       {
         path: '',

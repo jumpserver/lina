@@ -6,7 +6,7 @@
 
     <div style="height: 100%">
       <el-tabs
-        v-if="tabIndices.length > 0"
+        v-if="tabIndices.length > 1"
         slot="submenu"
         v-model="iActiveMenu"
         class="page-submenu"
@@ -23,7 +23,7 @@
               <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
-              <el-tooltip v-if="item.helpTip" effect="dark" placement="bottom" popper-class="help-tips">
+              <el-tooltip v-if="item.helpTip" :open-delay="500" effect="dark" placement="bottom" popper-class="help-tips">
                 <div slot="content" class="page-help-content" v-html="item.helpTip" />
                 <span>
                   <el-button class="help-msg-btn">
@@ -55,8 +55,6 @@
 <script>
 import Page from '../Page/'
 import { toSentenceCase } from '@/utils/common'
-
-const ACTIVE_TAB_KEY = 'tab'
 
 export default {
   name: 'TabPage',
@@ -125,18 +123,22 @@ export default {
       }
     }
   },
-  created() {
+  activated() {
+    this.iActiveMenu = this.getPropActiveTab()
+  },
+  mounted() {
     this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
-      this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
 
-      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+      this.$cookie.set(this.$route.path, tab.name, 1)
+
+      if (this.$router.currentRoute.query[this.$route.path]) {
         this.$router.push({
-          query: { ...this.$route.query, [ACTIVE_TAB_KEY]: '' }
+          query: { ...this.$route.query, [this.$route.path]: '' }
         })
       }
     },
@@ -144,8 +146,8 @@ export default {
       let activeTab = ''
 
       const preActiveTabs = [
-        this.$route.query[ACTIVE_TAB_KEY],
-        this.$cookie.get(ACTIVE_TAB_KEY),
+        this.$route.query[this.$route.path],
+        this.$cookie.get(this.$route.path),
         this.activeMenu
       ]
 

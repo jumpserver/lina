@@ -147,11 +147,7 @@ export default {
             }
           },
           actions: {
-            el: {
-              fixed: 'right'
-            },
             formatterArgs: {
-              fixed: 'right',
               hasDelete: hasDelete,
               canUpdate: ({ row }) => {
                 return this.$hasPerm('users.change_user') &&
@@ -284,11 +280,15 @@ export default {
       }
     },
     removeUserFromOrg({ row, reload }) {
-      const url = `/api/v1/users/users/${row.id}/remove/`
-      this.$axios.post(url).then(() => {
-        reload()
-        this.$message.success(this.$tc('RemoveSuccessMsg'))
-      })
+      this.$confirm(this.$t('RemoveWarningMsg') + ' ' + row.name + ' ?', this.$tc('Info'), {
+        type: 'warning'
+      }).then(() => {
+        const url = `/api/v1/users/users/${row.id}/remove/`
+        this.$axios.post(url).then(() => {
+          reload()
+          this.$message.success(this.$tc('RemoveSuccessMsg'))
+        })
+      }).catch(() => {})
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
       const ids = selectedRows.map(v => {
@@ -305,6 +305,12 @@ export default {
       this.$refs.GenericListPage.reloadTable()
     },
     bulkActionCallback(selectedRows, reloadTable, actionType) {
+      const msgs = {
+        'disable': 'DisableSuccessMsg',
+        'activate': 'ActivateSuccessMsg',
+        'remove': 'RemoveSuccessMsg',
+        'delete': 'DeleteSuccessMsg'
+      }
       const vm = this
       const url = '/api/v1/users/users/'
       const data = selectedRows.map(row => {
@@ -313,7 +319,7 @@ export default {
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
-        vm.$message.success(vm.$t(`${actionType}SuccessMsg`))
+        vm.$message.success(vm.$t(msgs[actionType]))
       })
     },
     handleInviteDialogClose() {

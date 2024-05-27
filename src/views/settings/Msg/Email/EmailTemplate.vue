@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("Setting") }} </el-button>
+    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{ $t("Settings...") }} </el-button>
     <Dialog
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('CreateUserSetting')"
+      :title="$tc('Template')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
@@ -21,7 +21,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { Dialog } from '@/components'
 
 export default {
-  name: 'EmailContent',
+  name: 'EmailTemplate',
   components: {
     GenericCreateUpdateForm,
     Dialog
@@ -30,8 +30,12 @@ export default {
     return {
       visible: false,
       fields: [
-        'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC',
-        'EMAIL_CUSTOM_USER_CREATED_BODY'
+        [this.$t('General'), ['EMAIL_SUBJECT_PREFIX']],
+        [this.$t('User creation'),
+          [
+            'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC', 'EMAIL_CUSTOM_USER_CREATED_BODY'
+          ]
+        ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {

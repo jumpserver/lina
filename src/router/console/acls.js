@@ -10,6 +10,7 @@ export default [
     component: () => import('@/views/acl/index.vue'),
     meta: {
       title: i18n.t('ACLs'),
+      icon: 'acl',
       permissions: []
     }
   },

@@ -6,12 +6,12 @@
       type="success"
     >
       <span v-for="(tip,index) of FileTransferBootStepHelpTips" :key="index" style="padding-right: 24px">
-        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}</span>
+        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}.</span>
         {{ tip }}
       </span>
     </el-alert>
 
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <AssetTreeTable ref="AssetTreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <div class="upload_input">
@@ -124,22 +124,22 @@
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
       </template>
-    </TreeTable>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
-import { createJob, getJob, getTaskDetail, JobUploadFile } from '@/api/ops'
+import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BatchTransfer',
+  name: 'FileTransfer',
   components: {
-    TreeTable,
+    AssetTreeTable,
     Page,
     Term
   },
@@ -209,6 +209,7 @@ export default {
       treeSetting: {
         treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
         searchUrl: '/api/v1/perms/users/self/assets/tree/',
+        notShowBuiltinTree: true,
         showRefresh: true,
         showMenu: false,
         showSearch: true,
@@ -248,28 +249,9 @@ export default {
   },
   mounted() {
     this.enableWS()
-    this.initData()
   },
   methods: {
     formatFileSize,
-    async initData() {
-      this.recoverStatus()
-    },
-    recoverStatus() {
-      if (this.$route.query.taskId) {
-        this.currentTaskId = this.$route.query.taskId
-        getTaskDetail(this.currentTaskId).then(data => {
-          getJob(data.job_id).then(res => {
-            this.runAsInput.value = res.runas
-            this.runAsInput.callback(res.runas)
-            this.executionInfo.status = data['status']
-            this.executionInfo.timeCost = data['time_cost']
-            this.setCostTimeInterval()
-            this.writeExecutionOutput()
-          })
-        })
-      }
-    },
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
@@ -299,7 +281,7 @@ export default {
       }
     },
     taskStatusStat(summary) {
-      const { ok, failures, dark, excludes, skipped } = summary
+      const { ok = [], failures = [], dark = [], excludes = [], skipped = [] } = summary
 
       const failedKeys = Object.keys(failures)
       const darkKeys = Object.keys(dark)
@@ -457,6 +439,7 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
+          this.$router.replace({ query: { taskId: this.currentTaskId, type: 'file_upload' }})
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {
@@ -485,7 +468,7 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: #FFFFFF;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .el-tree {
@@ -507,7 +490,7 @@ export default {
   border: 1px solid #eee;
 }
 
-.upload_input >>> .el-input-group__prepend {
+.upload_input ::v-deep .el-input-group__prepend {
   padding: 0 10px;
 }
 
@@ -591,7 +574,7 @@ export default {
   background: #fff;
 }
 
-.output >>> #terminal {
+.output ::v-deep #terminal {
   border: dashed 1px #d9d9d9;
 }
 </style>

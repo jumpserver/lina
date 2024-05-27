@@ -2,22 +2,22 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip :content="$tc('SiteMessageList')" effect="dark">
+        <el-tooltip :content="$tc('SiteMessageList')" :open-delay="500" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip :content="$tc('WebTerminal')" effect="dark">
+        <el-tooltip :content="$tc('WebTerminal')" :open-delay="500" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip :content="$tc('Ticket')" effect="dark">
+        <el-tooltip :content="$tc('Ticket')" :open-delay="500" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip :content="$tc('SystemSetting')" effect="dark">
+        <el-tooltip :content="$tc('SystemSetting')" :open-delay="500" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
@@ -105,8 +105,6 @@ export default {
 
 .navbar {
   position: relative;
-  height: $headerHeight;
-  line-height: $headerHeight;
   overflow: hidden;
   background-color: var(--banner-bg);
 
@@ -120,32 +118,10 @@ export default {
   }
   .hamburger-container {
     float: left;
-    height: 30px;
-    margin: 5px;
-    padding: 0 10px !important;
-    line-height: 30px;
-    border-radius: 5px;
-    border-color: $--color-primary;
-    background-color: white;
-    color: #fff;
-    cursor: pointer;
-    transition: .2s;
-    -webkit-tap-highlight-color: transparent;
-    opacity: 0.7;
-
-    ::v-deep .svg-icon {
-      font-size: 16px !important;
-      color: #fff !important;
-    }
-  }
-
-  // 折叠按钮
-  .hamburger-container {
-    float: left;
-    height: 30px;
-    margin: 5px;
-    padding: 0 10px !important;
-    line-height: 30px;
+    height: 25px;
+    line-height: 25px;
+    margin: 8px;
+    padding: 1px 8px !important;
     border-radius: 5px;
     border-color: $--color-primary;
     background-color: white;
@@ -182,13 +158,21 @@ export default {
       .organization {
         display: flex;
         align-items: center;
-        line-height: 30px;
-        padding: 0 10px 0 15px !important;
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, .15);
+        padding: 0 0 0 15px !important;
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, .10);
         color: #fff;
         font-weight: 600;
         font-size: 15px;
+        max-width: 250px;
+
+        ::v-deep .el-input__inner {
+          padding-left: 25px;
+        }
+
+        ::v-deep .el-input.is-disabled > input {
+          background: none;
+        }
 
         &:hover {
           background-color: rgba(0, 0, 0, .12) !important;
@@ -211,19 +195,19 @@ export default {
   }
 
   .navbar-right {
+    display: flex;
     float: right;
+    align-items: center;
     margin-right: 10px;
-    height: $headerHeight;
-    line-height: $headerHeight;
 
     .header-item {
+      display: flex;
       line-height: $headerHeight;
-      display: inline-block;
       padding-right: 10px;
       padding-left: 10px;
-      vertical-align: top;
 
       & >>> .svg-icon {
+        line-height: 40px;
         color: #FFF !important;
         font-size: 16px;
       }

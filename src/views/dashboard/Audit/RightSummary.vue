@@ -6,7 +6,7 @@
       </div>
       <LineChart v-bind="chartConfig" />
     </div>
-    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-16" />
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-10" />
   </div>
 </template>
 
@@ -109,12 +109,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.margin-top-16 {
-  margin-top: 16px;
+.margin-top-10 {
+  margin-top: 10px;
 }
 
 .box {
-  margin-top: 16px;
+  margin-top: 10px;
   padding: 20px;
   background: #fff;
 

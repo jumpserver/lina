@@ -92,7 +92,7 @@
 
 
 td .el-button.el-button--mini {
-  padding: 2px 4px;
+  padding: 1px 6px;
   line-height: 1.5;
 
   .el-icon--right {
@@ -463,6 +463,7 @@ td .el-button.el-button--mini {
 
 .el-dialog .el-dialog__body form {
   padding-right: 20px;
+  margin-right: 20px;
 }
 
 .el-dialog .el-dialog__footer {

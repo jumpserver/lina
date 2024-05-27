@@ -14,7 +14,6 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
-    const comp = this.$t('Component')
     return {
       fields: [
         [
@@ -24,7 +23,7 @@ export default {
           ]
         ],
         [
-          `SSH ${comp}(KoKo)`,
+          `SSH & KoKo`,
           [
             'TERMINAL_KOKO_SSH_ENABLED',
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
@@ -33,33 +32,26 @@ export default {
           ]
         ],
         [
-          `RDP ${comp}(Razor)`,
+          `RDP & Razor`,
           [
             'TERMINAL_RAZOR_ENABLED'
           ]
         ],
         [
-          `DB ${comp}(Magnus)`,
+          `DB & Magnus`,
           [
             'TERMINAL_MAGNUS_ENABLED'
           ]
         ]
       ],
       fieldsMeta: {
-        TERMINAL_KOKO_SSH_ENABLED: {
-          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('EnableKoKoSSHHelpText')
-        },
         TERMINAL_RAZOR_ENABLED: {
-          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('SettingInEndpointHelpText'),
           hidden: () => {
             return !this.$store.getters.hasValidLicense
           },
           el: {
             hiddenGroup: true
           }
-        },
-        TERMINAL_MAGNUS_ENABLED: {
-          helpText: this.$i18n.t('Info') + ': ' + this.$i18n.t('SettingInEndpointHelpText')
         }
       },
       getUrl: () => '/api/v1/settings/setting/?category=terminal',

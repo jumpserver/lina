@@ -1,6 +1,5 @@
 import { UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
-import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
@@ -8,11 +7,17 @@ export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
   return {
     assets: {
+      component: Select2,
+      label: vm.$t('Assets'),
       rules: [Required],
-      component: AssetSelect,
-      label: vm.$t('Asset'),
       el: {
-        multiple: false
+        multiple: true,
+        ajax: {
+          url: '/api/v1/assets/assets/',
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.address + ')', value: item.id }
+          }
+        }
       },
       hidden: () => {
         return vm.platform || vm.asset
@@ -151,7 +156,7 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     push_now: {
-      helpText: vm.$t('WindowsPushHelpText'),
+      helpTip: vm.$t('WindowsPushHelpText'),
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
         return !automation.push_account_enabled ||

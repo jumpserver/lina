@@ -130,10 +130,14 @@ export default {
 @import '~@/styles/variables.scss';
 $height: 28px;
 
+.org-select {
+  line-height: $height;
+}
+
 ::v-deep .el-input {
   .el-input__inner {
-    height: 30px;
-    line-height: 30px;
+    height: $height;
+    line-height: $height;
     background: none;
     border: none;
     padding-left: 20px;
@@ -150,8 +154,12 @@ $height: 28px;
 
 .el-select-dropdown.switch-org {
   border-radius: 4px;
+  left: 220px !important;
+  max-width: 400px;
 
   .option-group {
+    padding-right: 8px;
+    padding-left: 8px;
     max-width: 400px;
 
     ::v-deep .el-select-group__title {
@@ -171,6 +179,7 @@ $height: 28px;
 
 .org-select >>> .el-input.is-disabled .el-input__inner {
   color: #ffffff !important;
+  background-color: transparent;
 }
 
 .icon {

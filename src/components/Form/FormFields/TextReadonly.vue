@@ -31,7 +31,6 @@ export default {
   line-height: 32px;
   padding-left: 8px;
   height: 32px;
-  margin-top: 4px;
   font-size: 13px;
 }
 .bolder {

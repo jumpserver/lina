@@ -373,6 +373,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.treebox {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20px;
+  padding-top: 15px;
+
+  .ztree {
+    width: 100%;
+    overflow: auto;
+    height: 648px;
+    background-color: #ffffff;
+
+    .level0 {
+      .node_name {
+        max-width: 120px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+
+    li {
+      background-color: transparent !important;
+
+      .button {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      ul {
+        background-color: transparent !important;
+      }
+    }
+  }
+
+  &:hover {
+    >>> .tree-action-btn {
+      display: inline;
+    }
+  }
+
+}
 
 div.rMenu {
   position: absolute;
@@ -403,7 +443,7 @@ div.rMenu li {
   border: medium none;
   min-width: 160px;
   background-color: #fff;
-  border-radius: 3px;
+  border-radius: 2px;
   box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
   display: block;
   float: left;
@@ -428,7 +468,7 @@ div.rMenu li {
 }
 
 .dropdown-menu > li > a {
-  border-radius: 3px;
+  border-radius: 2px;
   color: inherit;
   line-height: 25px;
   margin: 4px;
@@ -445,41 +485,6 @@ div.rMenu li {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;
-}
-
-.treebox {
-  background-color: transparent;
-  height: calc(100% - 40px);
-
-  &:hover {
-    >>> .tree-action-btn {
-      display: inline;
-    }
-  }
-
-  >>> .ztree {
-    overflow: auto;
-    background-color: transparent;
-    height: 648px;
-
-    .level0 .node_name {
-      max-width: 120px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    li {
-      background-color: transparent !important;
-
-      .button {
-        background-color: rgba(0, 0, 0, 0);
-      }
-
-      ul {
-        background-color: transparent !important;
-      }
-    }
-  }
 }
 
 ::v-deep .tree-banner-icon-zone {
@@ -572,7 +577,7 @@ div.rMenu li {
     height: 30px;
     line-height: 30px;
     border-bottom: 1px solid #e0e0e0;
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 0 5px;
     box-sizing: border-box;
     overflow: hidden;

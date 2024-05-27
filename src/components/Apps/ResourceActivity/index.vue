@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       activityUrl: `/api/v1/audits/activities/?resource_id=${this.object.id}`,
-      title: `${this.$t('Activity')} - ${this.$t('Last30')}`,
+      title: `${this.$t('Last30')}`,
       activities: [
         {
           content: this.$t('Now'),

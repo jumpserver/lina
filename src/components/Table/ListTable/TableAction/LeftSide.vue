@@ -13,8 +13,8 @@ import DataActions from '@/components/DataActions/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
 
-const defaultTrue = { type: [Boolean, Function], default: true }
-const defaultFalse = { type: [Boolean, Function], default: false }
+const defaultTrue = { type: [Boolean, Function, String], default: true }
+const defaultFalse = { type: [Boolean, Function, String], default: false }
 export default {
   name: 'LeftSide',
   components: {
@@ -243,6 +243,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

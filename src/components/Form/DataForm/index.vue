@@ -198,18 +198,12 @@ export default {
 
       // 复合型输入框
       .el-input.el-input-group {
-        .el-input-group__prepend {
-          border-right: 0 !important;
-
-          .el-select {
-            border-bottom-right-radius: 0 !important;
-            border-top-right-radius: 0 !important;
-
-            .el-input__inner {
-              border: none;
-            }
+        .el-input-group__prepend .el-select {
+          .el-input__inner {
+            border: none;
+            height: 28px;
           }
-        }
+      }
 
         .el-input__inner {
           border-radius: 0;

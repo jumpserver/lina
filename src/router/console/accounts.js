@@ -8,6 +8,7 @@ export default [
     meta: {
       title: i18n.t('AssetAccount'),
       app: 'accounts',
+      icon: 'accounts',
       permissions: ['accounts.view_account']
     },
     redirect: '',
@@ -70,6 +71,7 @@ export default [
     meta: {
       title: i18n.t('AccountTemplate'),
       app: 'accounts',
+      icon: 'template',
       permissions: ['accounts.view_accounttemplate']
     },
     redirect: '',
@@ -79,7 +81,7 @@ export default [
         name: 'AccountTemplateList',
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
-          menuTitle: i18n.t('AccountTemplates'),
+          menuTitle: i18n.t('MenuAccountTemplates'),
           title: i18n.t('AccountTemplateList'),
           permissions: ['accounts.view_accounttemplate']
         }
@@ -120,6 +122,7 @@ export default [
     meta: {
       title: i18n.t('Automations'),
       name: 'Automations',
+      icon: 'automation',
       permissions: []
     }
   },
@@ -142,7 +145,7 @@ export default [
         name: 'AccountPushList',
         meta: {
           title: i18n.t('AccountPushList'),
-          menuTitle: i18n.t('PushAccounts'),
+          menuTitle: i18n.t('AccountPushList'),
           activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_pushaccountautomation']
         }
@@ -381,7 +384,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/index.vue'),
         name: 'AccountBackupList',
         meta: {
-          menuTitle: i18n.t('BackupAccounts'),
+          menuTitle: i18n.t('AccountBackup'),
           title: i18n.t('AccountBackupList'),
           activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_accountbackupautomation']

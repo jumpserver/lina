@@ -56,33 +56,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$origin-color: #ffffff;
+
 .switch {
-  background: #EFF0F1;
-  border-radius: 4px;
-  padding: 1px 4px;
+  font-weight: 400;
 
-  & >>> .el-radio-button {
-    .el-radio-button__inner {
-      border: none;
-      color: #8F959E;
-      background: #EFF0F1;
-    }
-
+  ::v-deep .el-radio-button {
     &.is-active {
-      border-radius: 4px;
-      padding: 4px 0;
-
       .el-radio-button__inner {
-        color: var(--color-text-primary);
-        background-color: #FFF;
-        border-radius: 4px;
-        box-shadow: 0 1px 2px rgba(31 35 41 / 12%) !important;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background-color: $origin-color;
       }
     }
   }
 
-  & >>> .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    box-shadow: none;
+  ::v-deep .el-radio-button {
+    .el-radio-button__inner {
+      color: var(--color-text-primary);
+      background: $origin-color;
+      border-radius: 0;
+    }
   }
 }
 </style>

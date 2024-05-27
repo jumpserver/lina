@@ -105,10 +105,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .sub-form {
   margin-left: -33%;
   margin-right: 10px;
 }
 
+@media screen and (max-width: 992px) {
+  .sub-form {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
 </style>

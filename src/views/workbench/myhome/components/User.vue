@@ -1,7 +1,7 @@
 <template>
-  <el-card class="box-card" shadow="never">
+  <el-card class="box-card no-border" shadow="never">
     <div slot="header" class="title">
-      <span>{{ $t('Profile') }}</span>
+      <span>{{ $t('YourProfile') }}</span>
     </div>
     <div class="content">
       <el-row :gutter="20">
@@ -10,10 +10,10 @@
         </el-col>
         <el-col ::md="20" :sm="24">
           <ul>
-            <li><span class="title">{{ $t('Username') }}</span>：<span>{{ users.name }}</span></li>
-            <li><span class="title">{{ $t('Email') }}</span>：<span>{{ users.email }}</span></li>
+            <li><span class="title">{{ $t('Username') }}:</span><span>{{ users.name }}</span></li>
+            <li><span class="title">{{ $t('Email') }}:</span><span>{{ users.email }}</span></li>
             <li>
-              <span class="title">{{ $t('LoginDate') }}</span>：
+              <span class="title">{{ $t('LoginDate') }}:</span>
               <span>{{ users.last_login | date }}</span>
             </li>
           </ul>
@@ -60,14 +60,14 @@ li {
     min-width: 100px;
   }
 }
-
-.box-card {
-  margin-bottom: 20px;
-
-  & >>> .el-card__header {
-    padding-top: 20px;
-  }
-}
+//
+//.box-card {
+//  margin-bottom: 20px;
+//
+//  & >>> .el-card__header {
+//    padding-top: 20px;
+//  }
+//}
 
 .content {
   overflow: hidden;

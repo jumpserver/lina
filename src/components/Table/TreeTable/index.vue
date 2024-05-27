@@ -116,6 +116,7 @@ export default {
   },
   mounted() {
     // debug(this.treeSetting)
+    console.log('component', this.component)
     this.initSetTableUrl()
   },
   methods: {
@@ -159,6 +160,69 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$origin-color: #ffffff;
+
+.tree-table-content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content:space-between;
+  align-items: flex-start;
+
+  .left {
+    height: 100%;
+    background: $origin-color;
+    color: var(--color-border);
+
+    // title 部分
+    .title {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 20px;
+      width: 100%;
+      border-bottom: solid 2px var(--color-primary);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+
+      &:hover {
+        cursor: pointer;
+        color: var(--color-primary);
+      }
+    }
+
+    .auto-data-ztree {
+      overflow: auto;
+      height: 100%;
+
+      &.tree-tab ::v-deep .page-submenu {
+        height: 40px;
+      }
+    }
+
+    // tree 部分
+    .data-z-tree {
+      //margin-left: -20px;
+      //width: calc(100% + 20px);
+
+      .treebox {
+        padding-left: 10px;
+        padding-bottom: 10px;
+      }
+    }
+
+    >>> .tab-text {
+      font-size: 13px;
+    }
+
+    &:hover {
+      ~ .right .is-show {
+        display: block !important;;
+      }
+    }
+  }
+}
+
   .is-show {
     display: none;
   }
@@ -182,7 +246,7 @@ export default {
     padding: 5px 0;
     border: 1px solid #DCDFE6;
     background-color: #fff;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
     height: 30px;
 
@@ -207,59 +271,10 @@ export default {
     width: 2px !important;
   }
 
-  .tree-table-content {
-    display: flex;
-    justify-items: center;
-    flex-wrap: nowrap;
-    justify-content:space-between;
-
-    .left {
-      height: 100%;
-      background: white;
-
-      >>> .treebox {
-        padding-left: 10px;
-        padding-bottom: 10px;
-      }
-
-      >>> .tab-text {
-        font-size: 13px;
-      }
-
-      .data-z-tree {
-        margin-left: -20px;
-        width: calc(100% + 20px);
-      }
-
-      &:hover {
-        ~ .right .is-show {
-          display: block !important;;
-        }
-      }
-    }
-  }
-
-  .auto-data-ztree {
-    overflow: auto;
-    height: 100%;
-    /*border-right: solid 1px red;*/
-  }
-
   .transition-box.left {
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 3px;
-  }
-
-  .title {
-    display: inline-block;
-    height: 40px;
-    line-height: 40px;
-    padding: 0 20px;
-    width: 100%;
-    border-bottom: solid 2px var(--color-primary);
-    font-size: 13px;
-    font-weight: 600;
+    border-radius: 2px;
   }
 
 </style>

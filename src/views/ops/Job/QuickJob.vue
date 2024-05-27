@@ -8,7 +8,7 @@
       :visible.sync="showOpenAdhocSaveDialog"
     />
     <VariableHelpDialog :visible.sync="showHelpDialog" />
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <CodeEditor
@@ -45,12 +45,12 @@
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
       </template>
-    </TreeTable>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
@@ -65,7 +65,7 @@ export default {
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
-    TreeTable,
+    AssetTreeTable,
     Page,
     Term,
     CodeEditor
@@ -284,6 +284,7 @@ export default {
         showRefresh: true,
         showMenu: false,
         showSearch: true,
+        notShowBuiltinTree: true,
         check: {
           enable: true
         },
@@ -446,7 +447,7 @@ export default {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = 'running'
         this.currentTaskId = res.task_id
-        this.$router.replace({ query: { taskId: this.currentTaskId }})
+        this.$router.replace({ query: { taskId: this.currentTaskId, type: 'shortcut_cmd' }})
         this.setCostTimeInterval()
         this.writeExecutionOutput()
         this.setBtn()
@@ -455,7 +456,7 @@ export default {
     stop() {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
-            this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+          this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
@@ -501,7 +502,7 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: #FFFFFF;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .el-tree {

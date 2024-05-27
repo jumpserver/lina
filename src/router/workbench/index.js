@@ -38,7 +38,6 @@ export default {
       component: empty,
       redirect: '',
       meta: {
-        icon: 'assets',
         title: i18n.t('MyAssets'),
         permissions: ['perms.view_myassets']
       },
@@ -48,16 +47,18 @@ export default {
           name: 'ConnectAssets',
           component: () => import('@/views/workbench/myassets'),
           meta: {
+            icon: 'assets',
             title: i18n.t('ConnectAssets'),
             permissions: ['perms.view_myassets']
           }
         },
         {
-          path: 'batch-Transfer',
-          name: 'BatchTransfer',
+          path: 'file-transfer',
+          name: 'FileTransfer',
           component: () => import('@/views/ops/File/index'),
           meta: {
-            title: i18n.t('BatchTransfer'),
+            title: i18n.t('FileTransfer'),
+            icon: 'file-transfer',
             permissions: ['rbac.view_filemanager']
           }
         },
@@ -67,6 +68,7 @@ export default {
           meta: {
             title: i18n.t('FileExplorer'),
             activeMenu: '/assets',
+            icon: 'file-manager',
             permissions: ['rbac.view_filemanager']
           }
         }
@@ -86,11 +88,12 @@ export default {
       },
       children: [
         {
-          path: 'quick-job',
-          name: 'QuickJob',
+          path: 'adhoc',
+          name: 'Adhoc',
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('QuickJob'),
+            icon: 'adhoc',
             permissions: ['ops.view_job', 'ops.add_job', 'ops.add_jobexecution']
           }
         },
@@ -101,6 +104,7 @@ export default {
           redirect: '',
           meta: {
             title: i18n.t('JobManagement'),
+            icon: 'task',
             permissions: ['ops.view_job']
           },
           children: [
@@ -154,6 +158,7 @@ export default {
           component: () => import('@/views/ops/Template'),
           meta: {
             title: i18n.t('TemplateManagement'),
+            icon: 'template',
             permissions: ['ops.view_adhoc|ops.view_playbook']
           }
         },
@@ -162,7 +167,8 @@ export default {
           name: 'Execution',
           component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('ExecutionHistory'),
+            title: i18n.t('ExecutionList'),
+            icon: 'history',
             permissions: ['ops.view_jobexecution']
           }
         },
@@ -242,18 +248,18 @@ export default {
             permissions: ['ops.view_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
+        },
+        {
+          path: '/workbench/system-tools',
+          name: 'SystemTools',
+          component: () => import('@/views/settings/Tool'),
+          meta: {
+            title: i18n.t('SystemTools'),
+            icon: 'tools',
+            permissions: ['rbac.view_systemtools']
+          }
         }
       ]
-    },
-    {
-      path: '/workbench/system-tools',
-      name: 'SystemTools',
-      component: () => import('@/views/settings/Tool'),
-      meta: {
-        title: i18n.t('SystemTools'),
-        icon: 'tools',
-        permissions: ['rbac.view_systemtools']
-      }
     }
   ]
 }

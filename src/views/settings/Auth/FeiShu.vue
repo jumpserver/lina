@@ -64,12 +64,7 @@ export default {
           }
         ],
         encryptedFields: this.encryptedFields,
-        fields: [
-          [
-            this.$t('BasicInfo'),
-            this.formFields
-          ]
-        ],
+        fields: this.formFields,
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
           this.encryptedFields.forEach(field => {

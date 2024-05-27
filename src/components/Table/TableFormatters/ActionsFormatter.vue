@@ -134,7 +134,7 @@ export default {
       },
       {
         name: 'clone',
-        title: this.$t('Clone'),
+        title: this.$t('Duplicate'),
         type: 'info',
         has: colActions.hasClone,
         can: colActions.canClone,
@@ -222,9 +222,11 @@ export default {
 </script>
 
 <style scoped>
-.table-actions >>> {
-  .el-icon-arrow-down {
-    display: none;
+.table-actions {
+  >>> {
+    .el-icon-arrow-down {
+      display: none;
+    }
   }
 }
 

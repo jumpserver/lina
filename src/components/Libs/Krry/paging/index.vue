@@ -428,7 +428,7 @@ export default {
   vertical-align: middle;
   text-align: center;
   margin: 180px 8px;
-  width: 100%;
+  width: calc(100% - 5px);
   @media screen and (max-width: 992px) {
     margin: 8px 8px;
     text-align:start

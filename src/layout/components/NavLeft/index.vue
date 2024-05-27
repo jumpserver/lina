@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}">
+  <div class="left-side-wrapper" :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
@@ -7,15 +7,16 @@
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover
+            :open-delay="200"
             placement="right-start"
             trigger="hover"
           >
             <span slot="reference" style="width: 100%">
-              <span class="icon-zone">
-                <svg-icon class="icon" icon-class="switch" />
-              </span>
               <span v-show="!isCollapse" class="view-title">
                 {{ isRouteMeta.title || '' }}
+              </span>
+              <span class="icon-zone">
+                <svg-icon class="icon" icon-class="switch" />
               </span>
             </span>
             <ViewSwitcher mode="vertical" @view-change="handleViewChange" />
@@ -23,19 +24,19 @@
         </span>
       </div>
     </div>
-    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
+    <div class="menu-wrap el-scrollbar">
       <el-menu
+        class="left-menu"
+        mode="vertical"
         :active-text-color="variables['menuActiveText']"
         :background-color="variables['menuBg']"
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="activeMenu"
-        :default-openeds="defaultOpensMenu"
+        :default-openeds="defaultMenu"
         :text-color="variables['menuText']"
         :text-weigth="variables['menuTextWeight']"
         :unique-opened="false"
-        class="left-menu"
-        mode="vertical"
       >
         <sidebar-item
           v-for="route in currentViewRoute.children"
@@ -44,7 +45,7 @@
           :item="route"
         />
       </el-menu>
-    </el-scrollbar>
+    </div>
     <div class="nav-footer">
       <div class="toggle-bar">
         <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
@@ -74,7 +75,8 @@ export default {
   data() {
     return {
       viewShown: false,
-      switchViewOtherClasses: ''
+      switchViewOtherClasses: '',
+      defaultMenu: []
     }
   },
   computed: {
@@ -82,9 +84,7 @@ export default {
       'currentViewRoute',
       'sidebar'
     ]),
-    defaultOpensMenu() {
-      return this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
-    },
+
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -127,18 +127,27 @@ export default {
   mounted() {
     // this.setViewIconAttention()
     this.setLeastMenuOpen()
+    this.defaultOpensMenu()
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+      this.$nextTick(() => {
+        if (!this.isCollapse) {
+          this.defaultOpensMenu()
+        }
+      })
     },
     toggleSwitch() {
       this.viewShown = true
     },
     handleViewChange() {
-      // setTimeout(() => {
-      //   this.setLeastMenuOpen()
-      // }, 500)
+      // 此处不使用 nextTick 的原因可能是由于子组件中切换 tag 需要触发异步的 dispatch
+      setTimeout(() => {
+      // this.setLeastMenuOpen()
+        this.defaultOpensMenu()
+        console.log('defaultMenu', this.defaultMenu)
+      }, 500)
     },
     setLeastMenuOpen() {
       const hasOpened = document.querySelector('.el-submenu-sidebar.submenu-item.el-submenu.is-opened')
@@ -158,123 +167,152 @@ export default {
         clearInterval(t)
         this.switchViewOtherClasses = ''
       }, 3000)
+    },
+    defaultOpensMenu() {
+      this.defaultMenu = this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-  @import "~@/styles/variables.scss";
+@import "~@/styles/variables.scss";
 
-  .left-menu >>> .el-submenu__title * {
-    vertical-align: inherit;
-  }
+$mobileHeight: 40px;
+$origin-color: #ffffff;
 
+.left-side-wrapper {
   .nav-header {
-    overflow: hidden;
-    background-color: var(--color-primary);
-  }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 
-  .nav-logo {
-    height: 50px;
-  }
+    .active-mobile {
+      display: none;
 
-  .hover-switch-view {
-    background: var(--menu-hover) !important;
-    color: var(--color-primary);
-    text-align: center;
-  }
+      ::v-deep .organization {
+        height: $mobileHeight;
+        padding-left: 20px;
+        background: var(--color-primary-dark-1);
+        color: $origin-color;
 
-  .collapsed {
-    text-align: left;
-
-    .nav-title {
-      &:hover {
-        background-color: var(--menu-hover);
-      }
-
-      .switch-view {
-        .icon-zone {
-          float: none;
-          padding: 0;
-        }
-        .switch-view .icon {
-          margin-left: 0;
-        }
-      }
-    }
-  }
-
-  .nav-title {
-    box-sizing: border-box;
-    height: 48px;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #1F2329;
-    overflow: hidden;
-    white-space: nowrap;
-    cursor: pointer;
-    background-color: var(--menu-bg);
-    transition: all 0.3s;
-
-    .switch-view {
-      padding: 6px;
-      right: 16px;
-      transform: translateY(-50%);
-      z-index: 1;
-      line-height: 10px;
-      border-radius: 3px;
-
-      .icon-zone {
-        float: right;
-        padding: 4px;
-
-        &:hover {
-          color: var(--color-primary);
+        .el-input--prefix {
+          display: flex;
+          align-items: center;
+          height: 40px;
+          line-height: 40px;
         }
 
-        .icon {
+        .svg-icon {
+          color: $origin-color !important;
           margin-right: 0 !important;
         }
       }
+
+      & >>> .title-label {
+        color: $origin-color !important;
+      }
+
+      .mobile-view-switch {
+        &>>> .el-menu-item.is-active {
+          color: var(--menu-text-active) !important;
+          .svg-icon {
+            color: var(--menu-text-active) !important;
+          }
+        }
+      }
+    }
+
+    .nav-title {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 50px;
+      font-size: 16px;
+      font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: var(--color-text-primary);
+      background-color: var(--menu-bg);
+      //border-bottom: 1px solid rgba(31, 35, 41, .15);
+
+      .switch-view {
+        width: 100%;
+        padding: 6px;
+
+        ::v-deep .el-popover__reference {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .view-title {
+            margin-left: 15px;
+            width: calc(100% - 10px);
+            display: inline-block
+          }
+
+          .icon-zone {
+            margin-right: 15px;
+
+            &:hover {
+              color: var(--color-primary);
+            }
+
+            .icon {
+              margin-right: 0 !important;
+            }
+          }
+        }
+      }
+
+      .hover-switch-view {
+        background: var(--menu-hover) !important;
+        color: var(--color-primary);
+        text-align: center;
+      }
     }
   }
 
-  .organizations {
-    height: 55px;
-  }
-
   .nav-footer {
-    display: block;
-    width: 100%;
-    height: 48px;
-    line-height: 48px;
-    margin-top: 2px;
-    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
     border-top: 1px solid rgba(31, 35, 41, 0.15);
     background-color: $subMenuBg;
 
     .toggle-bar {
-      width: 55px;
-      height: 100%;
-      bottom: 0;
-      left: 0;
-      top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 50px;
       border: 0;
-      z-index: 1000;
-      position: relative;
       cursor: pointer;
-    }
 
-    .toggle-bar:hover {
-      background-color: $subMenuHover;
+      ::v-deep .hamburger-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 0 !important;
+
+        .svg-icon {
+          margin-right: 0 !important;
+          transform: translateY(-25%);
+        }
+      }
+
+      &:hover {
+        background-color: $subMenuHover;
+      }
     }
   }
 
   .is-show {
     display: block!important;;
   }
-
   .mobile-menu {
     display: none;
     position: absolute;
@@ -287,60 +325,26 @@ export default {
     z-index: 100;
   }
 
-  .show-switch-view {
-    display: none;
-  }
-
-  .view-title {
-    margin-left: 5px;
-    width: calc(100% - 10px);
-    display: inline-block
-  }
-
-  $mobileHeight: 40px;
-
-  .active-mobile {
-    display: none;
-
-    & >>> .organization {
-      height: $mobileHeight;
-      line-height: $mobileHeight;
-      padding-left: 20px;
-      background: transparent;
-      color: #fff;
-      border-bottom: 1px solid rgba(31, 35, 41, .15);
-      .el-input--prefix .el-input__inner {
-        height: $mobileHeight!important;
-        line-height: $mobileHeight!important;
+  &.collapsed .nav-title .switch-view {
+    ::v-deep .el-popover__reference {
+      .icon-zone {
+        margin-right: 0;
       }
-      .svg-icon {
-        color: #FFF!important;
-        margin-right: 0!important;
+
+      .switch-view .icon {
+        margin-left: 0;
       }
     }
 
-    & >>> .title-label {
-      color: white !important;
-    }
-
-    .mobile-view-switch {
-      &>>> .el-menu-item.is-active {
-        color: var(--menu-text-active)!important;
-        .svg-icon {
-          color: var(--menu-text-active)!important;
-        }
-      }
+    &:hover {
+      color: var(--color-primary);
     }
   }
+}
 
-  @media screen and (max-width: 992px) {
-    .active-mobile {
-      display: block;
-    }
-    .active-switch-view {
-    }
-    .show-switch-view {
-      display: block!important;
-    }
+@media screen and (max-width: 992px) {
+  ::v-deep .active-mobile {
+    display: block !important;
   }
+}
 </style>

@@ -3,6 +3,7 @@
     ref="select"
     v-model="iValue"
     v-loadmore="loadMore"
+    :class="transformed ? 'hidden-tag' : 'show-tag'"
     :clearable="clearable"
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
@@ -10,6 +11,7 @@
     :loading="!initialized"
     :multiple="multiple"
     :options="iOptions"
+    :placeholder="placeholder"
     :remote="remote"
     :remote-method="filterOptions"
     class="select2"
@@ -34,6 +36,7 @@
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Select2',
@@ -102,6 +105,10 @@ export default {
     showSelectAll: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: i18n.t('Select')
     }
   },
   data() {
@@ -134,7 +141,8 @@ export default {
       iOptions: this.options || [],
       initialOptions: [],
       remote: true,
-      allSelected: false
+      allSelected: false,
+      transformed: true
     }
   },
   computed: {
@@ -248,6 +256,10 @@ export default {
         this.$emit('initialized', true)
       }, 100)
     }
+    // 由于在新增时有些 Select 会存在初始值，而有些没有，就会导致动态类名判断出现相反的情况
+    // 此处强制设置没有初始值的动态类名
+    if (this.iValue.length === 0) this.transformed = false
+
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
       const elFormItem = this.$refs.select?.elFormItem
@@ -295,6 +307,10 @@ export default {
         validateStatus
       })
       data = processResults.bind(this)(data)
+      setTimeout(() => {
+        this.transformed = false
+      }, 100)
+
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
@@ -409,18 +425,31 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .select2 {
   width: 100%;
-}
 
-.select2 >>> .el-tag.el-tag--info {
-  height: auto;
-  white-space: normal;
-}
+  &.hidden-tag {
+    ::v-deep .el-select__tags {
+      opacity: 0;
+      cursor: not-allowed;
+    }
+  }
 
-.select2 >>> input::placeholder {
-  padding-left: 2px;
+  &.show-tag {
+    ::v-deep .el-select__tags {
+      opacity: 1;
+    }
+  }
+
+  ::v-deep .el-tag.el-tag--info {
+    height: auto;
+    white-space: normal;
+  }
+
+  ::v-deep input::placeholder {
+    padding-left: 2px;
+  }
 }
 
 .el-select-dropdown__header {

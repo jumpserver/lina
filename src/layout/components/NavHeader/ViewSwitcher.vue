@@ -3,6 +3,7 @@
     v-model="iShowTip"
     :content="tipText"
     :manual="true"
+    :open-delay="500"
     class="item"
     effect="dark"
     placement="bottom-start"
@@ -124,10 +125,12 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  border-right: none !important;
+  border-right: solid 1px var(--color-border) !important;
+  border: solid 1px var(--color-border);
+  letter-spacing: 0.09em;
 
   ::v-deep .el-submenu .el-submenu__title {
-    height: 40px;
+    height: 38px;
     line-height: 32px;
     border-bottom: none;
   }
@@ -146,13 +149,10 @@ export default {
     width: 160px;
     line-height: 26px;
     padding: 4px 24px;
+    border-bottom: solid 1px var(--color-border);
 
     &:hover {
       background-color: var(--menu-hover);
-    }
-
-    &:focus {
-      background-color: transparent;
     }
   }
 }
@@ -194,6 +194,7 @@ export default {
 .el-menu-item {
   &.is-active {
     color: var(--menu-text-active);
+    background-color: var(--menu-hover);
 
     &:before {
       content: '';

@@ -10,7 +10,8 @@ export default [
     redirect: '',
     meta: {
       permissions: ['users.view_user'],
-      expanded: true
+      expanded: true,
+      icon: 'user-o'
     },
     children: [
       {
@@ -56,7 +57,8 @@ export default [
     redirect: '',
     meta: {
       resource: 'usergroup',
-      permissions: ['users.view_usergroup']
+      permissions: ['users.view_usergroup'],
+      icon: 'user-group'
     },
     children: [
       {
@@ -98,7 +100,8 @@ export default [
       permissions: ['rbac.view_orgrole | rbac.view_systemrole'],
       app: 'rbac',
       disableOrgsChange: true,
-      licenseRequired: true
+      licenseRequired: true,
+      icon: 'role'
     },
     children: [
       {

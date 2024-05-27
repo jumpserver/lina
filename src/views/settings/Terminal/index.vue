@@ -13,6 +13,7 @@ import TerminalList from './Component/TerminalList'
 import Monitor from './Monitor'
 import EndpointList from './Endpoint/EndpointList'
 import EndpointRuleList from './EndpointRule/EndpointRuleList'
+import ComponentLog from '@/views/settings/Terminal/ComponentLog/ComponentLog.vue'
 
 export default {
   components: {
@@ -21,7 +22,8 @@ export default {
     Monitor,
     TerminalList,
     EndpointList,
-    EndpointRuleList
+    EndpointRuleList,
+    ComponentLog
   },
   data() {
     return {
@@ -56,6 +58,13 @@ export default {
           name: 'EndpointRuleList',
           hidden: () => {
             return !this.$hasPerm('terminal.view_endpointrule')
+          }
+        },
+        {
+          title: this.$t('Log'),
+          name: 'ComponentLog',
+          hidden: () => {
+            return !this.$store.getters.publicSettings['LOKI_LOG_ENABLED']
           }
         }
       ]

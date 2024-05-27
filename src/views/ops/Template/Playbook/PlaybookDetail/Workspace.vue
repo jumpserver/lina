@@ -295,7 +295,7 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: #FFFFFF;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .el-tree {

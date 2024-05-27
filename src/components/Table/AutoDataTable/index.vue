@@ -11,9 +11,9 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
+      :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
       :total-columns-list="popoverColumns.totalColumnsList"
-      :default-columns="popoverColumns.defaultCols"
       :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
@@ -67,10 +67,10 @@ export default {
   computed: {},
   watch: {
     config: {
-      handler: function(iNew, iOld) {
+      handler: _.debounce(function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
         this.$log.debug('AutoDataTable Config change found: ')
-      },
+      }, 200),
       deep: true
     }
   },
@@ -166,7 +166,7 @@ export default {
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.width = '80px'
+          // col.width = '80px'
           break
         case 'datetime':
           col.formatter = DateFormatter
@@ -199,7 +199,7 @@ export default {
       col.renderHeader = (h, { column, $index }) => {
         return (
           <span>{column.label}
-            <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
+            <el-tooltip open-delay='1000' placement='bottom' effect='light' popperClass='help-tips'>
               <div slot='content' domPropsInnerHTML={helpTip}/>
               <el-button style='padding: 0'>
                 <i class='fa fa-info-circle'/>
@@ -272,8 +272,15 @@ export default {
       if (lang === 'zh') {
         factor = 20
       }
+      let [sortable, filters] = [0, 0]
+      if (col && col?.sortable === 'custom') {
+        sortable = 10
+      }
+      if (col && col?.filters?.length > 0) {
+        filters = 12
+      }
       if (col && !col.width && col.label && !col.minWidth) {
-        col.minWidth = `${col.label.length * factor + 30}px`
+        col.minWidth = `${col.label.length * factor + sortable + filters + 30}px`
       }
       return col
     },

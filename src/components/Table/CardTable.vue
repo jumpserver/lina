@@ -7,7 +7,7 @@
       v-bind="headerActions"
     />
     <el-row :gutter="10" class="the-row">
-      <el-col v-for="(d, index) in totalData" :key="index" :md="8" :sm="24">
+      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '20px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -235,9 +235,9 @@ export default {
 
   .el-col, div {
     .my-card {
-      max-width: 400px;
-      min-width: 300px;
-      height: 240px;
+      min-width: 330px;
+      height: 210px;
+      width: 100%;
       position: relative;
       margin-bottom: 20px;
 
@@ -275,21 +275,30 @@ export default {
 
             .one-line {
               display: flex;
+              flex-wrap: wrap;
               align-items: center;
               padding-top: 10px;
               text-overflow: ellipsis;
               white-space: nowrap;
               cursor: pointer;
+
+              b {
+                padding-right: 5px;
+              }
+
+              span {
+                margin-left: 0 !important;
+              }
             }
 
             .comment {
               display: -webkit-box;
               height: 150px;
               font-size: 12px;
-              padding: 15px 0;
+              padding: 10px 0;
               cursor: pointer;
               overflow: hidden;
-              -webkit-line-clamp: 6;
+              -webkit-line-clamp: 4;
               -webkit-box-flex: 1;
               -webkit-flex-grow: 1;
               flex-grow: 1;
@@ -301,7 +310,7 @@ export default {
 
             .tag-zone {
               display: flex;
-              height: 100%;
+              height: 30%;
               align-items: center;
               cursor: pointer;
             }
@@ -346,7 +355,7 @@ export default {
 }
 
 .tag-zone {
-  margin-top: 20px;
+  margin-top: 10px;
 
   .el-tag {
     margin-right: 3px;

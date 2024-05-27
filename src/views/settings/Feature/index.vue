@@ -46,7 +46,7 @@ export default {
           hidden: !this.$hasPerm('settings.change_vault')
         },
         {
-          title: this.$t('VirtualApp'),
+          title: this.$t('VirtualApps'),
           name: 'VirtualApp',
           hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
@@ -55,7 +55,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss' scoped>
-
-</style>

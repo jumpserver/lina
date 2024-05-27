@@ -87,11 +87,11 @@ export default {
       default: () => ''
     },
     canImportCreate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     },
     canImportUpdate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     }
   },

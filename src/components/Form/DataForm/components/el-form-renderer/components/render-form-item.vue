@@ -9,7 +9,7 @@
   >
     <template v-if="data.label" #label>
       <span>{{ data.label }}</span>
-      <el-tooltip v-if="data.helpTip" effect="dark" placement="right" popper-class="help-tips">
+      <el-tooltip v-if="data.helpTip" :open-delay="500" effect="dark" placement="right" popper-class="help-tips">
         <div slot="content" v-html="data.helpTip" />
         <i class="fa fa-question-circle-o help-tip-icon" />
       </el-tooltip>
@@ -61,6 +61,9 @@
           v-bind="opt"
         >
           {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="el-icon-warning-outline" />
+          </el-tooltip>
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
@@ -69,11 +72,26 @@
           :key="opt.label"
           :label="'value' in opt ? opt.value : opt.label"
           v-bind="opt"
-        >{{ opt.label }}
+        >
+          {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="el-icon-warning-outline" />
+          </el-tooltip>
         </el-radio>
       </template>
     </custom-component>
-    <div v-if="data.helpText" class="help-block" v-html="data.helpText" />
+    <div v-if="data.helpText" class="help-block">
+      <el-alert
+        v-if="data.helpText.startsWith('!')"
+        :closable="false"
+        class="help-warning"
+        show-icon
+        type="info"
+      >
+        <span v-html="data.helpText.replace(/^!/, '')" />
+      </el-alert>
+      <span v-else v-html="data.helpText" />
+    </div>
   </el-form-item>
 </template>
 <script>
@@ -287,6 +305,12 @@ export default {
   opacity: 0.8;
   line-height: 2;
   width: 300px;
+}
+
+.help-block  {
+  ::v-deep .el-alert__icon {
+    font-size: 16px
+  }
 }
 .help-tip-icon {
   &:hover {

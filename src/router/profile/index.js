@@ -21,7 +21,7 @@ export default {
       name: 'Profile',
       component: () => import('@/views/profile/index'),
       meta: {
-        title: i18n.t('Profile'),
+        title: i18n.t('YourProfile'),
         icon: 'attestation',
         permissions: []
       }
@@ -60,7 +60,7 @@ export default {
           component: () => import('@/views/profile/AccessKey/index'),
           name: 'AccessKey',
           icon: 'key',
-          meta: { title: i18n.t('AccessKeys'), permissions: ['authentication.view_accesskey'] }
+          meta: { title: i18n.t('AccessKey'), permissions: ['authentication.view_accesskey'] }
         },
         {
           path: ':id/update',
@@ -68,7 +68,7 @@ export default {
           name: 'AccessKeyCreateUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('AccessKeys'),
+            title: i18n.t('AccessKey'),
             permissions: ['authentication.change_accesskey'],
             activeMenu: '/profile/access-keys'
           }

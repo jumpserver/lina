@@ -36,7 +36,7 @@ export default {
         },
         columnsExclude: ['meta'],
         columns: [
-          'id', 'name', 'type', 'comment', 'is_default', 'actions'
+          'id', 'name', 'type', 'is_default', 'comment', 'actions'
         ],
         columnsShow: {
           min: ['name', 'type', 'actions']
@@ -52,8 +52,7 @@ export default {
               showFalse: false,
               showText: false
             },
-            align: 'center',
-            width: '150px'
+            align: 'center'
           },
           comment: {
             sortable: 'custom'

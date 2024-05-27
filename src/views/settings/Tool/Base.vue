@@ -8,7 +8,7 @@
               <el-form-item :label="item.label" :prop="item.name" label-width="80px">
                 <template #label>
                   {{ item.label }}
-                  <el-tooltip v-if="item.tip" :content="item.tip" placement="top">
+                  <el-tooltip v-if="item.tip" :content="item.tip" :open-delay="500" placement="top">
                     <i class="fa fa-question-circle-o" />
                   </el-tooltip>
                 </template>
@@ -27,7 +27,7 @@
           <el-form-item :label="field.label" :prop="field.name">
             <template #label>
               {{ field.label }}
-              <el-tooltip v-if="field.tip" :content="field.tip" placement="top">
+              <el-tooltip v-if="field.tip" :content="field.tip" :open-delay="500" placement="top">
                 <i class="fa fa-question-circle-o" />
               </el-tooltip>
             </template>

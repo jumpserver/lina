@@ -14,7 +14,7 @@ export default {
   props: {
     scope: {
       type: String,
-      default: 'org'
+      default: 'system'
     }
   },
   data() {

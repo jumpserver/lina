@@ -29,18 +29,21 @@
             >
               {{ option.group }}
             </div>
-            <el-dropdown-item
-              :key="option.name"
-              :command="[option, action]"
-              class="dropdown-item"
-              v-bind="{...option, icon: ''}"
-            >
-              <span v-if="option.icon" class="pre-icon">
-                <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
-                <svg-icon v-else :icon-class="option.icon" />
-              </span>
-              {{ option.title }}
-            </el-dropdown-item>
+            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" :open-delay="500" placement="top">
+              <el-dropdown-item
+                :key="option.name"
+                :command="[option, action]"
+                :title="option.tip"
+                class="dropdown-item"
+                v-bind="{...option, icon: ''}"
+              >
+                <span v-if="option.icon" class="pre-icon">
+                  <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
+                  <svg-icon v-else :icon-class="option.icon" />
+                </span>
+                {{ option.title }}
+              </el-dropdown-item>
+            </el-tooltip>
           </template>
         </el-dropdown-menu>
       </el-dropdown>
@@ -53,7 +56,7 @@
         v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
           <span>
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
@@ -108,6 +111,9 @@ export default {
     },
     handleDropdownCallback(command) {
       const [option, dropdown] = command
+      if (option.disabled) {
+        return
+      }
       const defaultCallback = () => this.$log.debug('No callback found: ', option, dropdown)
       let callback = option.callback
       if (!callback) {
@@ -122,6 +128,9 @@ export default {
       return toSentenceCase(s)
     },
     handleClick(action) {
+      if (action.disabled) {
+        return
+      }
       if (action && action.callback) {
         action.callback(action)
       } else {
@@ -168,7 +177,13 @@ export default {
 
         // 是否是disabled
         const can = this.checkItem(action, 'can')
-        action.disabled = !can
+        if (typeof can === 'string') {
+          action.disabled = true
+          action.tip = can
+        } else {
+          action.disabled = !can
+        }
+        delete action['can']
 
         if (action.dropdown) {
           action.dropdown = this.cleanActions(action.dropdown)
@@ -182,15 +197,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$btn-text-color: #ffffff;
+$color-btn-background: #E8F7F4;
+$color-btn-focus-background: #83CBBA;
+$color-divided: #E4E7ED;
+$color-drop-menu-title: #909399;
+$color-drop-menu-border: #e4e7ed;
+
 // 通用
 .layout {
-  display: flex;
-  justify-content: center;
-  max-height: 30px;
-
   .action-item {
     margin-left: 5px;
-    line-height: 1;
 
     &:first-child {
       margin-left: 0;
@@ -227,24 +244,31 @@ export default {
 
 // 主要是 Table 中的操作列
 .layout.table-actions {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
   .el-button {
-    padding: 1px 5px;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 3px 6px;
+    color: $btn-text-color;
   }
 
   ::v-deep .action-item.el-dropdown .el-button {
-    padding: 1px 5px;
-    background-color: #E8F7F4;
-    color: #1ab394;
+    display: block;
+    color: var(--color-primary);
+    background-color: $color-btn-background;
+    border-color: $color-btn-focus-background;
 
     &:focus {
-      color: #fff;
-      background-color: #83CBBA !important;
-  }
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background !important;
+    }
 
     &:hover {
-      color: #fff;
-      background-color: #83CBBA;
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background;
     }
   }
 }
@@ -265,7 +289,7 @@ export default {
       cursor: auto;
       font-size: 12px;
       line-height: 30px;
-      border-bottom: 1px solid #E4E7ED;
+      border-bottom: 1px solid $color-divided;
 
       &:before {
         height: 0;
@@ -296,9 +320,10 @@ export default {
   }
 
   .el-dropdown-menu__item {
-
     &.is-disabled {
-      color: var(--color-disabled-background);
+      color: var(--color-disabled);
+      cursor: not-allowed;
+      pointer-events: auto;
     }
 
     &:not(.is-disabled):hover {
@@ -309,11 +334,11 @@ export default {
   .dropdown-menu-title {
     text-align: left;
     font-size: 12px;
-    color: #909399;
+    color: $color-drop-menu-title;
     line-height: 30px;
     padding-left: 10px;
     padding-top: 10px;
-    border-top: solid 1px #e4e7ed;
+    border-top: solid 1px $color-drop-menu-border;
 
     &:first-child {
       padding-top: 0;

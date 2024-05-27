@@ -52,10 +52,6 @@ export default {
       url: `/api/v1/perms/asset-permissions/${this.object.id}`,
       detailFields: [
         'name',
-        'users_amount',
-        'user_groups_amount',
-        'assets_amount',
-        'nodes_amount',
         {
           key: this.$t('Actions'),
           value: this.object.actions,

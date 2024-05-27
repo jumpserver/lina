@@ -40,12 +40,7 @@ export default {
         ],
         encryptedFields: ['WECOM_SECRET'],
         fields: [
-          [
-            this.$t('BasicInfo'),
-            [
-              'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID', 'WECOM_SECRET'
-            ]
-          ]
+          'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID', 'WECOM_SECRET'
         ],
         fieldsMeta: {
           WECOM_SECRET: {
