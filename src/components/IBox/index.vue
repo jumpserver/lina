@@ -82,7 +82,7 @@ export default {
   }
 
   .ibox >>> .el-card__body {
-    padding: 30px 30px 20px 30px;
+    //padding: 30px 30px 20px 30px; // 这个设置会影响详情中的 quick update 和 relations
     color: var(--color-icon-primary);
   }
 </style>

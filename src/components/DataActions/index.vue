@@ -253,6 +253,10 @@ $color-drop-menu-border: #e4e7ed;
     align-items: center;
     padding: 3px 6px;
     color: $btn-text-color;
+
+    * {
+      vertical-align: baseline !important;
+    }
   }
 
   ::v-deep .action-item.el-dropdown .el-button {

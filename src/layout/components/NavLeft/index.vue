@@ -33,7 +33,7 @@
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="activeMenu"
-        :default-openeds="defaultMenu"
+        :default-openeds="defaultOpensMenu"
         :text-color="variables['menuText']"
         :text-weigth="variables['menuTextWeight']"
         :unique-opened="false"
@@ -84,7 +84,9 @@ export default {
       'currentViewRoute',
       'sidebar'
     ]),
-
+    defaultOpensMenu() {
+      return this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -125,9 +127,7 @@ export default {
     }
   },
   mounted() {
-    // this.setViewIconAttention()
     this.setLeastMenuOpen()
-    this.defaultOpensMenu()
   },
   methods: {
     toggleSideBar() {
@@ -145,8 +145,6 @@ export default {
       // 此处不使用 nextTick 的原因可能是由于子组件中切换 tag 需要触发异步的 dispatch
       setTimeout(() => {
       // this.setLeastMenuOpen()
-        this.defaultOpensMenu()
-        console.log('defaultMenu', this.defaultMenu)
       }, 500)
     },
     setLeastMenuOpen() {
@@ -158,18 +156,6 @@ export default {
       if (el) {
         el.click()
       }
-    },
-    setViewIconAttention() {
-      const t = setInterval(() => {
-        this.switchViewOtherClasses = 'hover-switch-view'
-      }, 1000)
-      setTimeout(() => {
-        clearInterval(t)
-        this.switchViewOtherClasses = ''
-      }, 3000)
-    },
-    defaultOpensMenu() {
-      this.defaultMenu = this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
     }
   }
 }
@@ -179,6 +165,9 @@ export default {
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
+$hover-bg-color: #e6e6e6;
+$hover-text-color: #606266;
+$hover-border-color: #d2d2d2;
 
 .left-side-wrapper {
   .nav-header {
@@ -246,31 +235,33 @@ $origin-color: #ffffff;
           display: flex;
           justify-content: center;
           align-items: center;
+          padding: 0 15px;
 
           .view-title {
-            margin-left: 15px;
             width: calc(100% - 10px);
             display: inline-block
           }
 
           .icon-zone {
-            margin-right: 15px;
-
-            &:hover {
-              color: var(--color-primary);
-            }
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            box-sizing: border-box;
 
             .icon {
+              width: 1.05em;
+              height: 1.05em;
               margin-right: 0 !important;
+            }
+
+            &:hover {
+              color: $hover-text-color;
+              border-color: $hover-border-color;
+              background-color: $hover-bg-color;
+              border-radius: 4px;
             }
           }
         }
-      }
-
-      .hover-switch-view {
-        background: var(--menu-hover) !important;
-        color: var(--color-primary);
-        text-align: center;
       }
     }
   }
@@ -305,7 +296,9 @@ $origin-color: #ffffff;
       }
 
       &:hover {
-        background-color: $subMenuHover;
+        color: $hover-text-color;
+        border-color: $hover-border-color;
+        background-color: $hover-bg-color;
       }
     }
   }
@@ -334,10 +327,6 @@ $origin-color: #ffffff;
       .switch-view .icon {
         margin-left: 0;
       }
-    }
-
-    &:hover {
-      color: var(--color-primary);
     }
   }
 }
