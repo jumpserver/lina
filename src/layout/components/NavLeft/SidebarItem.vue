@@ -20,25 +20,39 @@
       </app-link>
     </template>
 
-    <el-submenu
-      v-else
-      ref="subMenu"
-      :index="resolvePath(item.path)"
-      class="el-submenu-sidebar submenu-item level0"
-      popper-append-to-body
-    >
-      <template slot="title">
-        <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
-      </template>
-      <sidebar-item
-        v-for="child in item.children"
-        :key="child.path"
-        :base-path="resolvePath(child.path)"
-        :is-nest="true"
-        :item="child"
-        class="nest-menu"
-      />
-    </el-submenu>
+    <div v-else>
+      <div v-if="item.meta.level === 2" class="group-title" style="font-size: 12px">
+        <span>{{ getItemTitle(item) }}</span>
+        <sidebar-item
+          v-for="child in item.children"
+          :key="child.path"
+          :base-path="resolvePath(child.path)"
+          :is-nest="true"
+          :item="child"
+          class="nest-menu"
+        />
+      </div>
+      <el-submenu
+        v-else
+        ref="subMenu"
+        :index="resolvePath(item.path)"
+        class="el-submenu-sidebar submenu-item level0"
+        popper-append-to-body
+      >
+        <template slot="title">
+          <item v-if="item.meta" :children="item.children" :icon="item.meta && item.meta.icon" :title="getItemTitle(item)" />
+        </template>
+        <sidebar-item
+          v-for="child in item.children"
+          :key="child.path"
+          :base-path="resolvePath(child.path)"
+          :is-nest="true"
+          :item="child"
+          class="nest-menu"
+        />
+      </el-submenu>
+    </div>
+
   </div>
 </template>
 
