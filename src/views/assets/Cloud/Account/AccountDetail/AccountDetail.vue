@@ -1,20 +1,31 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
-      <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
-    </el-col>
-    <el-col :md="9" :sm="24">
-      <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard
-        ref="StrategyRelation"
-        v-perms="'xpack.change_strategy'"
-        style="margin-top: 15px"
-        type="info"
-        v-bind="strategyRelationConfig"
-      />
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :md="15" :sm="24">
+        <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+        <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
+      </el-col>
+      <el-col :md="9" :sm="24">
+        <QuickActions :actions="quickActions" type="primary" />
+        <RelationCard
+          ref="StrategyRelation"
+          v-perms="'xpack.change_strategy'"
+          style="margin-top: 15px"
+          type="info"
+          v-bind="strategyRelationConfig"
+        />
+      </el-col>
+    </el-row>
+    <Dialog
+      :title="$tc('Timer')"
+      :close-on-click-modal="false"
+      :destroy-on-close="true"
+      :visible.sync="showTimer"
+      :show-buttons="false"
+    >
+      <TimingPanel :object="object" :visible.sync="showTimer" />
+    </Dialog>
+  </div>
 </template>
 
 <script>
@@ -22,12 +33,17 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
+import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
+import Dialog from '@/components/Dialog'
 
 export default {
-  name: 'AccountDetail',
+  name: 'CloudAccountDetail',
   components: {
-    QuickActions, RelationCard,
+    Dialog,
+    TimingPanel,
+    QuickActions,
+    RelationCard,
     AutoDetailCard
   },
   props: {
@@ -38,9 +54,47 @@ export default {
   },
   data() {
     return {
+      showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
       excludes: ['attrs', 'task'],
       quickActions: [
+        {
+          title: this.$t('ReleaseAssets'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.task.release_assets,
+            tip: this.$t('ReleaseAssetsHelpTips'),
+            type: 'primary',
+            disabled: !this.hasEditPerm()
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
+                { 'release_assets': val }
+              ).then(res => {
+                this.$message.success(this.$t('UpdateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('Timer'),
+          attrs: {
+            model: this.object.task,
+            type: 'primary',
+            disabled: !this.hasEditPerm(),
+            label: this.$t('Modify')
+          },
+          callbacks: {
+            click: function(val) {
+              console.log('object: ', this.object)
+              this.showTimer = true
+            }.bind(this)
+          }
+        },
         {
           title: this.$t('RunTaskManually'),
           attrs: {
@@ -115,7 +169,7 @@ export default {
         },
         {
           key: this.$t('Region'),
-          value: this.object?.task.regions,
+          value: this.object.task?.regions,
           formatter(row, value) {
             return (<div>{
               value?.map((content) => {
@@ -140,7 +194,10 @@ export default {
       ]
     }
   },
-  computed: {
+  methods: {
+    hasEditPerm() {
+      return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask')
+    }
   }
 }
 </script>

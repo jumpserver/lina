@@ -36,8 +36,8 @@ export default {
           component: ActionInput
         }
       },
-      updateSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'StrategyList' }},
-      createSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'StrategyList' }},
+      updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
+      createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
       getUrl() {
         const id = this.$route.params?.id
         return id ? `${this.url}${id}/` : this.url

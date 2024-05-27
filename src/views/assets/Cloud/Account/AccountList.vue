@@ -1,79 +1,47 @@
 <template>
   <div>
-    <GenericListTable ref="regionTable" :header-actions="headerActions" :table-config="tableConfig" />
-    <Dialog
-      :confirm-title="$tc('TestConnection')"
-      :loading-status="testLoading"
-      :title="$tc('TestConnection')"
-      :visible.sync="visible"
-      width="50"
-      @cancel="handleCancel()"
-      @close="handleCancel()"
-      @confirm="handleConfirm()"
-    >
-      <el-form ref="regionForm" :model="account" label-width="auto">
-        <el-form-item :label="$tc('Region')" :rules="regionRules" prop="region">
-          <Select2 ref="regionSelect" v-model="account.region" v-bind="select2" />
-        </el-form-item>
-      </el-form>
-    </Dialog>
+    <CardTable ref="regionTable" :sub-component="subComponent" v-bind="$data" />
+    <CreateDialog
+      v-if="providerConfig.visible"
+      v-bind="providerConfig"
+      :visible.sync="providerConfig.visible"
+    />
   </div>
 </template>
 
 <script type="text/jsx">
 import {
-  ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
-  baiducloud, ctyun_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
+  aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
+  baiducloud, state_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
   qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
 } from '../const'
 import rules from '@/components/Form/DataForm/rules'
-import { Select2 } from '@/components/Form/FormFields'
-import GenericListTable from '@/layout/components/GenericListTable'
-import Dialog from '@/components/Dialog/index.vue'
 import { openTaskPage } from '@/utils/jms'
+import CreateDialog from './components/CreateDialog.vue'
+import CardTable from '@/components/Table/CardTable'
+import AccountPanel from './components/AccountPanel'
+import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 
 export default {
   name: 'CloudAccountList',
   components: {
-    Dialog,
-    Select2,
-    GenericListTable
+    CardTable,
+    CreateDialog
   },
   data() {
     const vm = this
     return {
+      colWidth: 6,
+      subComponent: AccountPanel,
       tableConfig: {
         url: '/api/v1/xpack/cloud/accounts/',
         permissions: {
           app: 'xpack',
           resource: 'account'
         },
-        columnsExclude: ['attrs', 'task'],
-        columnsShow: {
-          default: [
-            'name', 'provider', 'comment', 'validity', 'actions'
-          ]
-        },
         columnsMeta: {
-          name: {
-            sortable: true,
-            formatterArgs: {
-              route: 'AccountDetail'
-            }
-          },
-          provider: {
-            width: '120px'
-          },
           actions: {
             formatterArgs: {
-              updateRoute: 'AccountUpdate',
-              hasClone: false,
-              onUpdate: ({ row, col }) => {
-                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider?.value }})
-              },
-              afterDelete: () => {
-                this.getCloudPlatforms()
-              },
               extraActions: [
                 {
                   name: 'TestConnection',
@@ -114,8 +82,9 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
         hasImport: false,
+        hasExport: false,
+        hasColumnSetting: false,
         hasMoreActions: false,
         searchConfig: {
           getUrlQuery: false
@@ -125,8 +94,57 @@ export default {
           callback: (option) => {
             vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
           },
-          dropdown: []
+          dropdown: [
+            {
+              name: 'publicCloud',
+              title: this.$t('PublicCloud'),
+              icon: 'public-cloud',
+              callback: () => {
+                const providers = [
+                  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
+                  baiducloud, jdcloud, kingsoftcloud, aws_china,
+                  aws_international, azure, azure_international,
+                  gcp, ucloud, volcengine
+                ]
+                this.providerConfig.providers = providers.map(
+                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                )
+                this.providerConfig.visible = true
+              }
+            },
+            {
+              name: 'privateCloud',
+              icon: 'private-cloud',
+              title: this.$t('PrivateCloud'),
+              callback: () => {
+                const providers = [
+                  vmware, qingcloud_private, huaweicloud_private, state_private,
+                  openstack, zstack, nutanix, fc, scp, apsara_stack
+                ]
+                this.providerConfig.providers = providers.map(
+                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                )
+                this.providerConfig.visible = true
+              }
+            },
+            {
+              name: 'LAN',
+              title: this.$t('LAN'),
+              icon: 'computer',
+              callback: () => {
+                const providers = [lan]
+                this.providerConfig.providers = providers.map(
+                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                )
+                this.providerConfig.visible = true
+              }
+            }
+          ]
         }
+      },
+      providerConfig: {
+        visible: false,
+        providers: []
       },
       account: {},
       visible: false,
@@ -138,155 +156,13 @@ export default {
       regionRules: [rules.Required]
     }
   },
-  mounted() {
-    this.getCloudPlatforms()
-  },
   methods: {
-    fitCloudPlatformAttr(platforms, data, group) {
-      const createdPlatform = []
-      const uncreatedPlatform = []
-      platforms.map((p) => {
-        let created = false
-        for (let i = 0; i < data?.length; i++) {
-          if (p.name === data[i].provider.value) {
-            p['can'] = false
-            created = true
-            createdPlatform.push(p)
-            break
-          }
-        }
-        if (!created) {
-          uncreatedPlatform.push(p)
-        }
-      })
-      const result = uncreatedPlatform.concat(createdPlatform)
-      result[0].group = group
-      return result
-    },
-    getCloudPlatforms() {
-      this.headerActions.moreCreates.loading = true
-      const publicPlatforms = [
-        {
-          name: aliyun,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title
-        },
-        {
-          name: qcloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title
-        },
-        {
-          name: qcloud_lighthouse,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud_lighthouse].title
-        },
-        {
-          name: huaweicloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
-        },
-        {
-          name: baiducloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[baiducloud].title
-        },
-        {
-          name: jdcloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[jdcloud].title
-        },
-        {
-          name: kingsoftcloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[kingsoftcloud].title
-        },
-        {
-          name: aws_china,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_china].title
-        },
-        {
-          name: aws_international,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title
-        },
-        {
-          name: azure,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
-        },
-        {
-          name: azure_international,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[azure_international].title
-        },
-        {
-          name: gcp,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
-        },
-        {
-          name: ucloud,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[ucloud].title
-        },
-        {
-          name: volcengine,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[volcengine].title
-        }
-      ]
-      const privatePlatforms = [
-        {
-          name: vmware,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
-        },
-        {
-          name: qingcloud_private,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[qingcloud_private].title
-        },
-        {
-          name: huaweicloud_private,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud_private].title
-        },
-        {
-          name: ctyun_private,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[ctyun_private].title
-        },
-        {
-          name: openstack,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
-        },
-        {
-          name: zstack,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[zstack].title
-        },
-        {
-          name: nutanix,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
-        },
-        {
-          name: fc,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[fc].title
-        },
-        {
-          name: scp,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[scp].title
-        },
-        {
-          name: apsara_stack,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[apsara_stack].title
-        },
-        {
-          name: lan,
-          title: ACCOUNT_PROVIDER_ATTRS_MAP[lan].title
-        }
-      ]
-      const url = '/api/v1/xpack/cloud/accounts/?fields_size=mini'
-      this.$axios.get(url).then((resp) => {
-        const pcPlatforms = this.fitCloudPlatformAttr(publicPlatforms, resp, this.$t('PublicCloud'))
-        const paPlatforms = this.fitCloudPlatformAttr(privatePlatforms, resp, this.$t('PrivateCloud'))
-        this.headerActions.moreCreates.dropdown = pcPlatforms.concat(paPlatforms)
-        this.headerActions.moreCreates.loading = false
-      })
-    },
     valid(status) {
       if (status !== 200) {
         this.$message.error(this.$tc('TestAccountConnectionError'))
         return 200
       }
       return status
-    },
-    handleCancel() {
-      this.visible = false
-      this.$refs.regionSelect.clearSelected()
     },
     handleConfirm() {
       this.$refs.regionForm.validate(valid => {

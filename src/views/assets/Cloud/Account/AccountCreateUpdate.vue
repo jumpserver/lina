@@ -270,8 +270,8 @@ export default {
             callback: () => { this.activeStep = this.activeStep === 1 ? 0 : 1 }
           }
         ],
-        updateSuccessNextRoute: { name: 'CloudCenter' },
-        createSuccessNextRoute: { name: 'CloudCenter' },
+        updateSuccessNextRoute: { name: 'CloudAccountList' },
+        createSuccessNextRoute: { name: 'CloudAccountList' },
         cleanFormValue(value) {
           const ipNetworkSegments = value.ip_network_segment_group
           const strategy = value?.strategy || []

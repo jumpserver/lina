@@ -213,7 +213,9 @@ export default {
 
         this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
-          setTimeout(() => this.$router.push(route), 100)
+          if (this.$router.currentRoute.name !== route?.name) {
+            setTimeout(() => this.$router.push(route), 100)
+          }
         }
       }
     },
@@ -344,6 +346,7 @@ export default {
         .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
           this.isSubmitting = false
+          this.$emit('performFinished')
         })
     },
     async getFormValue() {

@@ -15,7 +15,7 @@ const clouds = {
     {
       path: '',
       component: () => import('@/views/assets/Cloud'),
-      name: 'CloudCenter',
+      name: 'CloudAccountList',
       hidden: true,
       meta: {
         title: i18n.t('CloudSync')
@@ -65,7 +65,7 @@ const clouds = {
         {
           path: ':id/',
           component: () => import('@/views/assets/Cloud/Account/AccountDetail/index'),
-          name: 'AccountDetail',
+          name: 'CloudAccountDetail',
           hidden: true,
           meta: {
             title: i18n.t('CloudAccountDetail'),

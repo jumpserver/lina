@@ -36,6 +36,7 @@
       </el-button>
       <el-button
         v-for="button in moreButtons"
+        v-show="!button.hidden"
         :key="button.title"
         :loading="button.loading"
         size="small"
