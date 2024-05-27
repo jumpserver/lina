@@ -38,7 +38,7 @@ export default {
     getSubmenu() {
       return [
         {
-          title: this.$t('GenericSetting'),
+          title: this.$t('General'),
           name: 'Lina'
         },
         {

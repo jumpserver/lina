@@ -17,15 +17,14 @@ export default {
       fields: [
         {
           name: 'dest_ips',
-          label: this.$t('DestinationIP'),
-          tip: this.$t('IP'),
+          label: this.$t('DA'),
           el: {
             placeholder: this.$t('DestinationIP')
           }
         },
         {
           name: 'dest_port',
-          label: this.$t('DestinationPort'),
+          label: this.$t('DP'),
           el: {
             type: 'number',
             placeholder: this.$t('DestinationPort')

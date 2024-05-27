@@ -248,9 +248,25 @@ export default {
             permissions: ['ops.view_playbook'],
             activeMenu: '/workbench/ops/templates'
           }
-        },
+        }
+      ]
+    },
+    {
+      path: '/workbench/system-tools',
+      component: empty,
+      name: 'More',
+      alwaysShow: true,
+      meta: {
+        title: i18n.t('MenuMore'),
+        icon: 'more',
+        permissions: [],
+        hidden: () => {
+          return !store.getters.publicSettings['TOOL_USER_ENABLED']
+        }
+      },
+      children: [
         {
-          path: '/workbench/system-tools',
+          path: '',
           name: 'SystemTools',
           component: () => import('@/views/settings/Tool'),
           meta: {
