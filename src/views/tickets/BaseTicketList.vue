@@ -79,14 +79,12 @@ export default {
           },
           type: {
             label: this.$t('Type'),
-            width: '160px',
             formatter: row => {
               return row.type.label
             }
           },
           status: {
             align: 'center',
-            width: '90px',
             sortable: 'custom',
             formatter: TagChoicesFormatter,
             formatterArgs: {
@@ -105,7 +103,6 @@ export default {
           state: {
             label: this.$t('Action'),
             align: 'center',
-            width: '90px',
             sortable: 'custom',
             formatter: TagChoicesFormatter,
             formatterArgs: {
@@ -126,8 +123,7 @@ export default {
           date_created: {
             label: this.$t('Date'),
             sortable: 'custom',
-            formatter: (row) => toSafeLocalDateStr(row.date_created),
-            width: '160px'
+            formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         }
       },
