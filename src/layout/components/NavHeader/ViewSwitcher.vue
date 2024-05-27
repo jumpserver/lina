@@ -125,7 +125,9 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  border-right: none !important;
+  border-right: solid 1px var(--color-border) !important;
+  border: solid 1px var(--color-border);
+  letter-spacing: 0.09em;
 
   ::v-deep .el-submenu .el-submenu__title {
     height: 38px;
@@ -147,6 +149,7 @@ export default {
     width: 160px;
     line-height: 26px;
     padding: 4px 24px;
+    border-bottom: solid 1px var(--color-border);
 
     &:hover {
       background-color: var(--menu-hover);

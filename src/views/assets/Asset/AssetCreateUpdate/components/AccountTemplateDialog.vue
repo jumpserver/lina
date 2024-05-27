@@ -70,7 +70,7 @@ export default {
             }
           },
           privileged: {
-            width: '100px'
+            width: '120px'
           },
           actions: {
             has: false
