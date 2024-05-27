@@ -534,6 +534,11 @@ li.rmenu i.fa {
   }
 }
 
+.el-table__header thead > tr > th {
+  background-color: white;
+  font-weight: 600;
+}
+
 .el-card.no-border {
   margin-bottom: 20px;
 

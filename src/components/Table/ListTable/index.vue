@@ -255,10 +255,6 @@ export default {
       padding: 0;
     }
 
-    .el-table__header thead > tr > th {
-      background-color: white;
-    }
-
     .el-table__row .cell {
       overflow: hidden;
       white-space: nowrap;

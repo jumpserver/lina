@@ -1,5 +1,5 @@
 <template>
-  <IBox :title="title" :type="type" v-bind="$attrs">
+  <IBox :title="title" :type="type" class="the-box" v-bind="$attrs">
     <table class="CardTable" style="width: 100%;table-layout:fixed;">
       <tr>
         <td colspan="2">
@@ -311,7 +311,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   b, strong {
     font-weight: 700;
     font-size: 13px;
@@ -328,5 +328,9 @@ export default {
   }
   .box-margin {
     margin-bottom: 20px;
+  }
+
+  .the-box ::v-deep .el-card__body {
+    padding: 20px;
   }
 </style>
