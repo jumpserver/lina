@@ -18,6 +18,7 @@ import Telnet from './Telnet'
 import Nmap from './Nmap'
 import Tcpdump from './Tcpdump'
 import Traceroute from './Traceroute'
+import Basic from './Basic'
 
 export default {
   components: {
@@ -26,15 +27,21 @@ export default {
     Telnet,
     Nmap,
     Tcpdump,
-    Traceroute
+    Traceroute,
+    Basic
   },
   data() {
     return {
       timer: null,
       currentTime: '',
       loading: true,
-      activeMenu: 'Ping',
+      activeMenu: 'Basic',
       submenu: [
+        {
+          title: this.$t('Basic'),
+          name: 'Basic',
+          hidden: () => !this.$route?.fullPath?.startsWith('/settings/tools')
+        },
         {
           title: 'Ping',
           name: 'Ping'
@@ -64,6 +71,7 @@ export default {
     }
   },
   created() {
+    console.log('>>>', this.$route)
     if (this.timer) {
       clearInterval(this.timer)
     }

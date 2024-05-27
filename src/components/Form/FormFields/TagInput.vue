@@ -17,7 +17,7 @@
       ref="SearchInput"
       v-model.trim="filterValue"
       :fetch-suggestions="autocomplete"
-      :placeholder="this.$t('EnterToContinue')"
+      :placeholder="this.iPlaceholder"
       :type="inputType"
       class="search-input"
       @blur="focus = false"
@@ -84,6 +84,12 @@ export default {
       isCheckShowPassword: this.replaceShowPassword,
       component: this.autocomplete ? 'el-autocomplete' : 'el-input'
     }
+  },
+  computed: {
+    iPlaceholder() {
+      return `${this.placeholder} ( ${this.$t('EnterToContinue')} )`
+    }
+
   },
   watch: {
     value(val) {

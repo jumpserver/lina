@@ -183,3 +183,13 @@ $single-menu-height: 38px;
     color: $menuActiveText;
   }
 }
+
+.el-menu--vertical .el-menu-item {
+  display: flex;
+  align-items: center;
+  height: 36px;
+
+  .svg-icon {
+    margin-right: 15px;
+  }
+}

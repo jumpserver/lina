@@ -375,9 +375,9 @@ export default {
 <style lang="scss" scoped>
 .treebox {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-  padding-left: 20px;
-  padding-top: 15px;
+  padding: 15px 20px 0 20px;
 
   .ztree {
     width: 100%;

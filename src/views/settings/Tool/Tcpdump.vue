@@ -22,8 +22,7 @@ export default {
         },
         {
           name: 'src_ips',
-          label: this.$t('SourceIP'),
-          tip: this.$t('IP'),
+          label: this.$t('SA'),
           el: {
             placeholder: this.$t('SourceIP')
           }
@@ -31,15 +30,15 @@ export default {
         {
           name: 'src_ports',
           component: TagInput,
-          label: this.$t('SourcePort'),
+          label: this.$t('SP'),
           el: {
-            inputType: 'number'
+            inputType: 'number',
+            placeholder: this.$t('SourcePort')
           }
         },
         {
           name: 'dest_ips',
-          label: this.$t('DestinationIP'),
-          tip: this.$t('IP'),
+          label: this.$t('DA'),
           el: {
             placeholder: this.$t('DestinationIP')
           }
@@ -47,9 +46,10 @@ export default {
         {
           name: 'dest_ports',
           component: TagInput,
-          label: this.$t('DestinationPort'),
+          label: this.$t('DP'),
           el: {
-            inputType: 'number'
+            inputType: 'number',
+            placeholder: this.$t('DestinationPort')
           }
         }
       ]
