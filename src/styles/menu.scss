@@ -31,6 +31,7 @@ $single-menu-height: 38px;
     align-items: center;
     height: $single-menu-height;
     color: var(--color-text-primary);
+    letter-spacing: 0.02em;
   }
 
   .submenu-title-noDropdown.level0 {
@@ -55,6 +56,7 @@ $single-menu-height: 38px;
   }
 
   .group-title {
+    margin-top: 5px;
     // 分组的 title 样式
     & > span {
       padding-left: 20px;
@@ -106,7 +108,6 @@ $single-menu-height: 38px;
           // 此处若不显示给出 line-height 则默认继承 ElUI 默认 56px 行高
           padding-left: 10px;
           line-height: 100%;
-          color: var(--color-text-primary);
         }
 
         // 处于选中状态的高亮样式

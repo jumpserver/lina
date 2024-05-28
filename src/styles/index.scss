@@ -35,6 +35,7 @@ body {
   height: calc(100% - 50px);
   overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
