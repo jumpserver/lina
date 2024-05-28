@@ -138,10 +138,10 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keyup', this.handleKeyUp)
+    document.addEventListener('keyup', this.handleKeyUp, true)
   },
   beforeDestroy() {
-    document.removeEventListener('keyup', this.handleKeyUp)
+    document.removeEventListener('keyup', this.handleKeyUp, true)
   },
   methods: {
     handleFocus() {
@@ -346,8 +346,8 @@ export default {
       this.$refs.SearchInput.focus()
     },
     handleKeyUp(event) {
-      // 检查按下的键是否是"T"键
-      if (event.key === '/' || event.key === 't') {
+      // 如果 classList 的长度为 0 表明没有获取到目标节点，也就是在全局没有遮罩层的时候
+      if (event.target.classList.length === 0 && (event.key === '/' || event.key === 't')) {
         this.$refs.SearchInput.focus()
         this.suffixIcon = 'el-icon-search'
         this.isFocus = true
