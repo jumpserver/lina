@@ -346,8 +346,9 @@ export default {
       this.$refs.SearchInput.focus()
     },
     handleKeyUp(event) {
-      // 检查按下的键是否是"T"键
-      if (event.key === '/' || event.key === 't') {
+      // 当目标对象为一个 length 为 0 的伪数组时表明此时是在全局情况下调用
+      // 若存在遮罩层等组件在调用时，其 length 将会为 1
+      if (event.target.classList.length === 0 && event.key === '/') {
         this.$refs.SearchInput.focus()
         this.suffixIcon = 'el-icon-search'
         this.isFocus = true
