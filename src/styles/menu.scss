@@ -32,6 +32,7 @@ $single-menu-height: 38px;
     height: $single-menu-height;
     color: var(--color-text-primary);
     letter-spacing: 0.02em;
+    font-size: 12px;
   }
 
   .submenu-title-noDropdown.level0 {
@@ -56,15 +57,15 @@ $single-menu-height: 38px;
   }
 
   .group-title {
-    margin-top: 5px;
+    color: var(--color-text-secondary);
     // 分组的 title 样式
     & > span {
-      padding-left: 20px;
+      display: block;
+      padding: 8px 0 2px 20px;
       font-size: 11px;
       font-weight: 600;
       line-height: 25px;
       letter-spacing: .07em;
-      color: rgba(0, 0, 0, 0.6)
     }
 
     .nest-menu {

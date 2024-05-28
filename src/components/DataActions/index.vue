@@ -251,11 +251,19 @@ $color-drop-menu-border: #e4e7ed;
   .el-button {
     display: flex;
     align-items: center;
-    padding: 3px 6px;
+    padding: 2px 6px;
     color: $btn-text-color;
 
     * {
       vertical-align: baseline !important;
+    }
+
+    // 不加上 border 感觉对不齐
+    &.el-button--primary {
+      border-color: var(--color-primary);
+      &:hover {
+        border-color: var(--color-primary) !important;
+      }
     }
   }
 

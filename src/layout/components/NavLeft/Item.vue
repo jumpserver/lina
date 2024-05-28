@@ -18,7 +18,7 @@ export default {
     const vNodes = []
 
     if (icon) {
-      if (icon.startsWith('fa')) {
+      if (icon.startsWith('fa-')) {
         vNodes.push(<i class={`fa ${icon}`} />)
       } else {
         vNodes.push(<svg-icon icon-class={icon}/>)
