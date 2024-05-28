@@ -230,13 +230,13 @@ $hover-border-color: #d2d2d2;
 
       .switch-view {
         width: 100%;
-        padding: 6px;
+        padding: 5px;
 
         ::v-deep .el-popover__reference {
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 0 15px;
+          padding: 0 10px 0 15px;
 
           .view-title {
             width: calc(100% - 10px);
