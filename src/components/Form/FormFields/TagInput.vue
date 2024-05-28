@@ -17,7 +17,7 @@
       ref="SearchInput"
       v-model.trim="filterValue"
       :fetch-suggestions="autocomplete"
-      :placeholder="this.iPlaceholder"
+      :placeholder="iPlaceholder"
       :type="inputType"
       class="search-input"
       @blur="focus = false"

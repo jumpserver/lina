@@ -128,11 +128,13 @@ export default {
       }
     },
     importTitle() {
+      let option = ''
       if (this.importOption === 'create') {
-        return this.$t('Import') + this.$t('Create')
+        option = this.$t('Create')
       } else {
-        return this.$t('Import') + this.$t('Update')
+        option = this.$t('Update')
       }
+      return `${this.$t('Import')} & ${option}`
     }
   },
   watch: {
