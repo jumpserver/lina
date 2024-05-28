@@ -22,7 +22,8 @@
 
     <div v-else>
       <div v-if="item.meta.level === 2" class="group-title" style="font-size: 12px">
-        <span>{{ getItemTitle(item) }}</span>
+        <el-divider v-if="collapse" />
+        <span v-else>{{ getItemTitle(item) }}</span>
         <sidebar-item
           v-for="child in item.children"
           :key="child.path"
@@ -52,7 +53,6 @@
         />
       </el-submenu>
     </div>
-
   </div>
 </template>
 
@@ -81,6 +81,10 @@ export default {
     basePath: {
       type: String,
       default: ''
+    },
+    collapse: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

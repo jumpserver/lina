@@ -43,6 +43,7 @@
           :key="route.path"
           :base-path="route.path"
           :item="route"
+          :collapse="isCollapse"
         />
       </el-menu>
     </div>
