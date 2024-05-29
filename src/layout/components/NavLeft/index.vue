@@ -146,7 +146,6 @@ export default {
       setTimeout(() => {
       // this.setLeastMenuOpen()
         this.defaultOpensMenu()
-        console.log('defaultMenu', this.defaultMenu)
       }, 500)
     },
     setLeastMenuOpen() {

@@ -100,7 +100,6 @@ export default {
     }
   },
   created() {
-    console.log('active: ', this.active)
   },
   methods: {
     enableWS() {

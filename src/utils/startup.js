@@ -156,7 +156,6 @@ function onI18nLoaded() {
       const load = store.state.app.i18nLoaded
       if (load) {
         clearInterval(itv)
-        console.log('I18n loaded')
         resolve()
       }
     }, 100)

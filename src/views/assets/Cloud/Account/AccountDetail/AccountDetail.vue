@@ -140,7 +140,6 @@ export default {
           },
           callbacks: {
             click: function(val) {
-              console.log('object: ', this.object)
               this.showTimer = true
             }.bind(this)
           }
