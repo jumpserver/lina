@@ -28,7 +28,7 @@
         class="right"
         style="display: flex"
       >
-        <div v-if="showTree" class="mini">
+        <div v-if="true" class="mini">
           <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
             <svg-icon
               :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
@@ -165,7 +165,6 @@ $origin-color: #ffffff;
   display: flex;
   flex-wrap: nowrap;
   justify-content:space-between;
-  align-items: flex-start;
 
   .left {
     height: 100%;

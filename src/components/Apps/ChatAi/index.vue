@@ -1,5 +1,13 @@
 <template>
-  <DrawerPanel ref="drawer" :expanded="expanded" :height="height" :icon="robotUrl" :modal="false" @toggle="onToggle">
+  <DrawerPanel
+    ref="drawer"
+    :default-show-panel="!!defaultShowPanel"
+    :expanded="expanded"
+    :height="height"
+    :icon="robotUrl"
+    :modal="false"
+    @toggle="onToggle"
+  >
     <div class="chat">
       <div class="container">
         <div ref="header" class="header" @mousedown="handleMoveMouseDown" @mouseup="handleMouseMoveUp">
@@ -53,6 +61,10 @@ export default {
         return this.$t('ChatAI')
       }
     },
+    defaultShowPanel: {
+      type: Boolean,
+      default: false
+    },
     drawerPanelVisible: {
       type: Boolean,
       default: () => false
@@ -70,8 +82,16 @@ export default {
   watch: {
   },
   mounted() {
+    this.handlePostMessage()
   },
   methods: {
+    handlePostMessage() {
+      window.addEventListener('message', (event) => {
+        if (event.data === 'show-chat-panel') {
+          this.$refs.drawer.show = true
+        }
+      })
+    },
     handleMoveMouseDown(event) {
       this.$refs.drawer.handleHeaderMoveDown(event)
     },

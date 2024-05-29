@@ -1,5 +1,5 @@
 <template>
-  <Page class="tab-page" v-bind="$attrs">
+  <Page v-if="!loading" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
@@ -23,7 +23,13 @@
               <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
-              <el-tooltip v-if="item.helpTip" :open-delay="500" effect="dark" placement="bottom" popper-class="help-tips">
+              <el-tooltip
+                v-if="item.helpTip"
+                :open-delay="500"
+                effect="dark"
+                placement="bottom"
+                popper-class="help-tips"
+              >
                 <div slot="content" class="page-help-content" v-html="item.helpTip" />
                 <span>
                   <el-button class="help-msg-btn">
@@ -40,7 +46,7 @@
         <el-alert v-if="helpMessage" type="success">
           <span class="announcement-main" v-html="helpMessage" />
         </el-alert>
-        <transition v-if="loading" appear mode="out-in" name="fade-transform">
+        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
               <component :is="computeActiveComponent" />
@@ -116,18 +122,16 @@ export default {
       const activeTab = to.query?.tab
       if (activeTab && this.iActiveMenu !== activeTab) {
         this.iActiveMenu = activeTab
-        this.loading = false
-        setTimeout(() => {
-          this.loading = true
-        })
       }
     }
   },
   activated() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
   },
-  mounted() {
+  created() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
   },
   methods: {
     handleTabClick(tab) {
@@ -146,7 +150,7 @@ export default {
       let activeTab = ''
 
       const preActiveTabs = [
-        this.$route.query[this.$route.path],
+        this.$route.query['tab'],
         this.$cookie.get(this.$route.path),
         this.activeMenu
       ]

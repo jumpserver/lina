@@ -2,7 +2,7 @@
   <div ref="drawer" :class="{show: show}" class="drawer">
     <div v-if="modal" :style="{'background-color': modal ? 'rgba(0, 0, 0, .3)' : 'transparent'}" class="modal" />
     <div ref="panel" :style="{width: width, height: height }" class="drawer-panel">
-      <div v-show="!show" ref="dragBox" class="handle-button">
+      <div v-show="!show && !defaultShowPanel" ref="dragBox" class="handle-button">
         <i v-if="icon.startsWith('fa') || icon.startsWith('el')" :class="show ? 'el-icon-close': icon" />
         <img v-else :src="icon" alt="">
       </div>
@@ -40,11 +40,15 @@ export default {
     expanded: {
       type: Boolean,
       default: false
+    },
+    defaultShowPanel: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      show: false,
+      show: this.defaultShowPanel,
       clientOffset: {}
     }
   },
@@ -53,6 +57,8 @@ export default {
       if (value && !this.clickNotClose) {
         this.addEventClick()
       }
+      const event = value ? 'show-chat-panel' : 'close-chat-panel'
+      window.parent.postMessage(event, '*')
       this.$emit('toggle', this.show)
     },
     expanded(value) {
@@ -116,7 +122,6 @@ export default {
         }, 0)
       }
     },
-
     handleMouseMoveUp(event) {
       const clientOffset = this.clientOffset
       const clientX = event.clientX
@@ -138,13 +143,6 @@ export default {
       return difference <= threshold
     },
     addEventClick() {
-      // window.addEventListener('click', this.closeSidebar)
-    },
-    closeSidebar(evt) {
-      const parent = evt.target.closest('.drawer-panel')
-      if (!parent && evt.target.className === 'modal') {
-        this.show = false
-      }
     },
     insertToBody() {
       const element = this.$refs.drawer

@@ -2,10 +2,6 @@
 
 $icon-width: 14px;
 $single-menu-height: 38px;
-@mixin hover_active {
-  background-color: var(--menu-hover);
-  color: var(--color-primary);
-}
 
 @mixin only_active {
   &:before {
@@ -18,168 +14,143 @@ $single-menu-height: 38px;
     background-color: var(--menu-text-active);
   }
 }
+@mixin collapse-active {
+  background-color: #e6e6e6;
+
+  &:before {
+    width: 0
+  }
+}
 
 .el-menu {
   border-right: none !important;
-}
+  background-color: inherit !important;
 
-.left-menu.el-menu {
-  .submenu-item {
-    &.el-submenu-sidebar {
-      margin-top: 8px;
-      &.is-opened {
-        .el-icon-arrow-down {
-          display: none;
-        }
-      }
-      // 有子菜单项的 title
-      .el-submenu__title {
-        height: 30px;
-        font-size: 11px;
-        cursor: default;
-        font-weight: 600;
-        line-height: 30px;
-        letter-spacing: .07em;
-        color: rgba(0, 0, 0, 0.6) !important;
+  // 通用 item 样式
+  .el-menu-item {
+    display: flex;
+    align-items: center;
+    height: $single-menu-height;
+    color: var(--color-text-primary);
+    letter-spacing: 0.02em;
+    font-size: 12px;
+  }
 
-        .svg-icon {
-          display: none;
-        }
-
-        &:hover {
-          background-color: #ffffff;
-
-          .el-icon-arrow-down {
-            display: inline;
-          }
-        }
-      }
-
-      // 子菜单项
-      .el-menu--inline {
-        background-color: $subMenuBg;
-
-        .nest-menu {
-          display: flex;
-
-          .el-menu-item {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            height: 36px;
-            padding: 19px 20px !important;
-            line-height: 36px;
-            min-width: 200px;
-            font-size: 12px;
-            letter-spacing: .03em;
-
-            &:hover,
-            &.is-active, {
-              @include hover_active;
-            }
-
-            &.is-active {
-              @include only_active;
-            }
-
-            .svg-icon {
-              font-weight: 500;
-              overflow: hidden;
-              width: $icon-width;
-              height: $icon-width;
-            }
-
-            span {
-              padding-left: 10px;
-            }
-          }
-        }
-      }
+  .submenu-title-noDropdown.level0 {
+    span {
+      padding-left: 10px;
+      line-height: 100%;
     }
 
-    // 当前菜单样式
-    &.is-active .el-submenu__title {
-      color: $menuActiveText;
+    .svg-icon {
+      width: $icon-width;
+      height: $icon-width;
     }
 
-    // 没有子菜单的项
-    &.submenu-title-noDropdown {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      height: $single-menu-height;
-      line-height: $single-menu-height;
-      min-width: 200px;
-      font-size: 12px;
-
-      &:hover,
-      &.is-active {
-       @include hover_active
-      }
-
-      &.is-active {
-        @include only_active;
-      }
-
-      .svg-icon {
-        //display: none;
-        width: $icon-width;
-        height: $icon-width;
-      }
+    &.is-active {
+      background-color: var(--menu-hover);
+      @include only_active;
 
       span {
-        padding-left: 10px;
+        color: var(--color-primary);
       }
     }
   }
 
-  // 折叠状态下
-  &.el-menu--collapse {
-    width: 100% !important;
-
-    .submenu-title-noDropdown,
-    .submenu-title-noDropdown .el-tooltip {
-      display: flex !important;
-      align-items: center !important;
-      min-width: 55px !important;
-
-      .svg-icon {
-        display: block
-      }
+  .group-title {
+    color: var(--color-text-secondary);
+    // 分组的 title 样式
+    & > span {
+      display: block;
+      padding: 10px 0 2px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 25px;
+      letter-spacing: .07em;
     }
 
-    .submenu-item {
-      width: 55px;
+    .nest-menu {
+      display: flex;
+      cursor: pointer;
 
-      &.is-active {
-        cursor: pointer;
-        @include hover_active
+      // 存在三级子菜单
+      .level0 {
+        min-width: 200px;
+
+        .el-submenu__title {
+          display: flex;
+          align-items: center;
+          height: $single-menu-height;
+
+          span {
+            padding-left: 10px;
+            line-height: 100%;
+          }
+        }
+
+        .el-menu--inline .nest-menu .el-menu-item {
+          height: $single-menu-height;
+
+          &.is-active {
+            @include only_active
+          }
+        }
+
       }
 
-      .el-submenu__title {
-        display: flex;
-        align-items: center;
-        height: $single-menu-height;
-
-        &:hover,
-        &.is-active {
-          cursor: pointer;
-          @include hover_active
-        }
+      // 没有三级子菜单的项
+      .level1-item {
 
         .svg-icon {
-          //display: block;
+          width: $icon-width;
+          height: $icon-width;
+        }
+
+        span {
+          // 此处若不显示给出 line-height 则默认继承 ElUI 默认 56px 行高
+          padding-left: 10px;
+          line-height: 100%;
+        }
+
+        // 处于选中状态的高亮样式
+        &.is-active {
+          background-color: var(--menu-hover);
+          @include only_active;
+
+          span {
+            color: var(--color-primary);
+          }
         }
       }
     }
   }
 
-  i.fa {
-    margin-right: 10px;
-    width: 13px;
-  }
+  // 折叠起来的样式
+  &.el-menu--collapse {
+    // 覆盖默认 64px 宽度
+    width: 55px;
 
-  .is-active i.fa {
-    color: $menuActiveText;
+    .level0 {
+      height: $single-menu-height;
+      line-height: $single-menu-height;
+    }
+
+    .group-title {
+      & > span {
+        display: none;
+      }
+
+      .el-divider.el-divider--horizontal {
+        margin: 12px 0 !important;
+      }
+
+      .level0 {
+        min-width: 55px;
+      }
+
+      .nest-menu .level1-item {
+        line-height: $single-menu-height;
+      }
+    }
   }
 }

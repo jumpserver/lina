@@ -16,8 +16,7 @@ export default {
       taskType: 'traceroute',
       fields: [{
         name: 'dest_ips',
-        label: this.$t('DestinationIP'),
-        tip: this.$t('IP'),
+        label: this.$t('DA'),
         el: {
           placeholder: this.$t('DestinationIP')
         }
