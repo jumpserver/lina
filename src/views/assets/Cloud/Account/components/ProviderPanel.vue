@@ -6,6 +6,7 @@
           shadow="hover"
           :class="selected === p.name ? 'active': ''"
           :body-style="{ padding: '15px', position: 'relative', height: '100px' }"
+          @dblclick.native="handleCardDBClick(p.name)"
           @click.native="handleCardClick(p.name)"
         >
           <el-image
@@ -57,6 +58,10 @@ export default {
   methods: {
     handleCardClick(platform) {
       this.$emit('update:selected', platform)
+    },
+    handleCardDBClick(platform) {
+      this.handleCardClick(platform)
+      this.handleNext()
     },
     handleNext() {
       const provider = this.providers.filter(p => p.name === this.selected)[0]

@@ -36,7 +36,7 @@ export default {
     function setFieldAttrs(provider) {
       const fieldsObject = {}
       const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key']
-      for (const item of ACCOUNT_PROVIDER_ATTRS_MAP[provider]?.attrs) {
+      for (const item of ACCOUNT_PROVIDER_ATTRS_MAP[provider].attrs) {
         fieldsObject[item] = {
           rules: updateNotRequiredFields.includes(item) && vm.object?.id ? [] : [RequiredChange]
         }
@@ -154,12 +154,6 @@ export default {
           const newValues = JSON.parse(JSON.stringify(values))
           newValues['attrs'] = encryptAttrsField(newValues.attrs)
           return newValues
-        },
-        afterGetFormValue(formValue) {
-          if (!formValue.attrs) {
-            return formValue
-          }
-          return formValue
         },
         addContinue: true
       }

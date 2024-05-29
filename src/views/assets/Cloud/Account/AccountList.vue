@@ -1,10 +1,10 @@
 <template>
   <div>
-    <CardTable ref="regionTable" :sub-component="subComponent" v-bind="$data" />
+    <CardTable ref="accountTable" :sub-component="subComponent" v-bind="$data" />
     <CreateDialog
-      v-if="providerConfig.visible"
+      v-if="visible"
       v-bind="providerConfig"
-      :visible.sync="providerConfig.visible"
+      :visible.sync="visible"
     />
   </div>
 </template>
@@ -16,7 +16,6 @@ import {
   qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
 } from '../const'
 import rules from '@/components/Form/DataForm/rules'
-import { openTaskPage } from '@/utils/jms'
 import CreateDialog from './components/CreateDialog.vue'
 import CardTable from '@/components/Table/CardTable'
 import AccountPanel from './components/AccountPanel'
@@ -38,47 +37,6 @@ export default {
         permissions: {
           app: 'xpack',
           resource: 'account'
-        },
-        columnsMeta: {
-          actions: {
-            formatterArgs: {
-              extraActions: [
-                {
-                  name: 'TestConnection',
-                  title: this.$t('TestConnection'),
-                  can: () => vm.$hasPerm('xpack.test_account'),
-                  callback: function(val) {
-                    this.$axios.get(
-                      `/api/v1/xpack/cloud/regions/?account_id=${val.row.id}`,
-                      { disableFlashErrorMsg: true }
-                    ).then(resp => {
-                      vm.visible = true
-                      vm.account.id = val.row.id
-                      vm.select2.options = resp.regions.map(r => ({ 'label': r.name, 'value': r.id }))
-                    }).catch(err => {
-                      vm.$message.error(err.response.data.msg)
-                    })
-                  }
-                },
-                {
-                  title: vm.$t('RunTaskManually'),
-                  name: 'execute',
-                  type: 'info',
-                  can: () => vm.$hasPerm('xpack.add_syncinstancetaskexecution'),
-                  callback: function(data) {
-                    const taskId = data.row.task?.id
-                    if (taskId) {
-                      this.$axios.get(`/api/v1/xpack/cloud/sync-instance-tasks/${taskId}/run/`).then(res => {
-                        openTaskPage(res['task'])
-                      })
-                    } else {
-                      this.$message.error(this.$t('ExecCloudSyncErrorMsg'))
-                    }
-                  }
-                }
-              ]
-            }
-          }
         }
       },
       headerActions: {
@@ -109,7 +67,7 @@ export default {
                 this.providerConfig.providers = providers.map(
                   (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                 )
-                this.providerConfig.visible = true
+                this.visible = true
               }
             },
             {
@@ -124,7 +82,7 @@ export default {
                 this.providerConfig.providers = providers.map(
                   (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                 )
-                this.providerConfig.visible = true
+                this.visible = true
               }
             },
             {
@@ -136,14 +94,13 @@ export default {
                 this.providerConfig.providers = providers.map(
                   (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                 )
-                this.providerConfig.visible = true
+                this.visible = true
               }
             }
           ]
         }
       },
       providerConfig: {
-        visible: false,
         providers: []
       },
       account: {},
@@ -156,6 +113,15 @@ export default {
       regionRules: [rules.Required]
     }
   },
+  watch: {
+    visible: {
+      handler(val) {
+        if (!val) {
+          this.$refs.accountTable.reloadTable()
+        }
+      }
+    }
+  },
   methods: {
     valid(status) {
       if (status !== 200) {
@@ -163,29 +129,8 @@ export default {
         return 200
       }
       return status
-    },
-    handleConfirm() {
-      this.$refs.regionForm.validate(valid => {
-        if (valid) {
-          this.testLoading = true
-          this.$axios.get(
-            `/api/v1/xpack/cloud/accounts/${this.account.id}/test-connective/?region_id=${this.account.region}`,
-            { disableFlashErrorMsg: true }
-          ).then((resp) => {
-            this.$message.success(resp.msg)
-          }).catch(error => {
-            this.$message.error(error.response.msg)
-          }).finally(() => {
-            this.testLoading = false
-            this.$refs.regionTable.reloadTable()
-          })
-        } else {
-          return false
-        }
-      })
     }
   }
-
 }
 </script>
 

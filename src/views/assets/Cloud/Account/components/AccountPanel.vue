@@ -107,7 +107,7 @@ export default {
   },
   computed: {
     iTask() {
-      return Object.assign({ strategy: [] }, this.object?.task)
+      return { ...{ strategy: [] }, ...this.object?.task }
     }
   },
   methods: {

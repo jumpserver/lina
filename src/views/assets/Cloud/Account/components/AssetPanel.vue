@@ -123,7 +123,6 @@ export default {
       }
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        console.log('data: ', data)
         if (data.action === 'sync_region') {
           this.addRegion(data.region_id)
         } else if (data.action === 'import') {
@@ -136,9 +135,7 @@ export default {
           this.linkIcon = 'el-icon-success'
           this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {
-          if (data?.msg) {
-            this.$message.error(data.msg)
-          }
+          this.$message.error(data?.msg)
         }
       }
     },
@@ -160,6 +157,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss' scoped>
-</style>
