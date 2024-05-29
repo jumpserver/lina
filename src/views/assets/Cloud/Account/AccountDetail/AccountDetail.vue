@@ -6,7 +6,8 @@
         <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
       </el-col>
       <el-col :md="9" :sm="24">
-        <QuickActions :actions="quickActions" type="primary" />
+        <QuickActions :actions="quickEditActions" type="primary" />
+        <QuickActions :actions="quickExecuteActions" type="primary" />
         <RelationCard
           ref="StrategyRelation"
           v-perms="'xpack.change_strategy'"
@@ -57,7 +58,7 @@ export default {
       showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
       excludes: ['attrs', 'task'],
-      quickActions: [
+      quickEditActions: [
         {
           title: this.$t('ReleaseAssets'),
           type: 'switcher',
@@ -81,6 +82,55 @@ export default {
           }
         },
         {
+          title: this.$t('IpType'),
+          type: 'updateSelect',
+          attrs: {
+            model: this.object.task.sync_ip_type,
+            type: 'primary',
+            multiple: false,
+            clearable: false,
+            showSelect: true,
+            options: [
+              { label: this.$t('PublicIp'), value: 1 },
+              { label: this.$t('PrivateIp'), value: 0 }
+            ],
+            disabled: !this.hasEditPerm()
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
+                { 'sync_ip_type': val }
+              ).then(res => {
+                this.$message.success(this.$t('UpdateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        }
+      ],
+      quickExecuteActions: [
+        {
+          title: this.$t('RunTaskManually'),
+          attrs: {
+            showTip: !this.object.task?.id,
+            tip: this.$t('ExecCloudSyncErrorMsg'),
+            type: 'primary',
+            label: this.$t('Execute'),
+            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
+          },
+          callbacks: {
+            click: function() {
+              this.$axios.get(
+                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/run/`
+              ).then(res => {
+                openTaskPage(res['task'])
+              })
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('Timer'),
           attrs: {
             model: this.object.task,
@@ -94,25 +144,6 @@ export default {
               this.showTimer = true
             }.bind(this)
           }
-        },
-        {
-          title: this.$t('RunTaskManually'),
-          attrs: {
-            showTip: !this.object.task?.id,
-            tip: this.$t('ExecCloudSyncErrorMsg'),
-            type: 'primary',
-            label: this.$t('Execute'),
-            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution') || !this.object.task?.id
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.get(
-                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/run/`
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
         }
       ],
       strategyRelationConfig: {
@@ -124,6 +155,11 @@ export default {
             return { label: item.name, value: item.id }
           }
         },
+        select2Config: {
+          quickAddCallback: () => {
+            window.open(this.$router.resolve({ name: 'CloudStrategyCreate' }).href, '_blank')
+          }
+        },
         hasObjectsId: this.object?.task?.strategy?.map(i => i.id) || [],
         performAdd: (items) => {
           const newData = []
@@ -131,7 +167,7 @@ export default {
           value.map(v => {
             newData.push(v.value)
           })
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           items.map(v => {
             newData.push(v.value)
           })
@@ -146,7 +182,7 @@ export default {
               newData.push(v.value)
             }
           })
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           return this.$axios.patch(relationUrl, { strategy: newData })
         }
       },
@@ -156,15 +192,7 @@ export default {
           value: this.object?.task?.strategy?.map(item => item.name).join(', ')
         },
         {
-          key: this.$t('IPNetworkSegment'),
-          value: this.object?.task?.ip_network_segment_group?.join(', ')
-        },
-        {
-          key: this.$t('IsAlwaysUpdate'),
-          value: this.object?.task?.is_always_update
-        },
-        {
-          key: this.$t('CyclePerform'),
+          key: this.$t('Timer'),
           value: this.object?.task?.is_periodic
         },
         {

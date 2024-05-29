@@ -9,7 +9,7 @@
     <el-row :gutter="10" class="the-row">
       <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
-          :body-style="{ 'text-align': 'center', 'padding': '20px' }"
+          :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
           class="my-card"
           shadow="hover"

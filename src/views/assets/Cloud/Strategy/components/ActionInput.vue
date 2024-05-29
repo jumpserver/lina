@@ -3,7 +3,7 @@
     :before-submit="beforeSubmit"
     :form-config="formConfig"
     :table-config="tableConfig"
-    class="attr-input"
+    class="action-input"
     @submit="onSubmit"
   />
 </template>
@@ -28,6 +28,10 @@ export default {
       resourceType: '',
       globalResource: {},
       globalProtocols: {},
+      nameOptions: [
+        { label: this.$t('InstanceName'), value: 'full_name' },
+        { label: this.$t('InstanceNamePartIp'), value: 'part_name' }
+      ],
       formConfig: {
         initial: { attr: '', value: '' },
         inline: true,
@@ -59,7 +63,8 @@ export default {
             on: {
               change: ([val], updateForm) => {
                 updateForm({ value: '' })
-                let url
+                let url = ''
+                let options = []
                 switch (val) {
                   case 'platform':
                     url = '/api/v1/assets/platforms/?category=host'
@@ -73,12 +78,16 @@ export default {
                   case 'account_template':
                     url = '/api/v1/accounts/account-templates/'
                     break
+                  case 'name_strategy':
+                    options = this.nameOptions
+                    break
                 }
                 if (val !== 'platform') {
                   this.formConfig.fieldsMeta.protocols.el.hidden = true
                 }
                 this.resourceType = val
                 this.formConfig.fieldsMeta.value.el.ajax.url = url
+                this.formConfig.fieldsMeta.value.el.options = options
               }
             }
           },
@@ -87,6 +96,7 @@ export default {
             component: Select2,
             rules: [Required],
             el: {
+              options: [],
               value: [],
               ajax: {
                 url: '',
@@ -162,14 +172,21 @@ export default {
       }
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.nameOptions.map((o) => { this.globalResource[o.value] = o.label })
+    },
     onSubmit() {
       this.$emit('input', this.tableConfig.totalData)
     },
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('Platform'), domain: this.$tc('Zone')
+        platform: this.$tc('Platform'), domain: this.$tc('Zone'),
+        name_strategy: this.$tc('NameStrategy')
       }
       this.tableConfig.totalData.map(item => {
         const iValue = item.value?.id || item.value
@@ -198,11 +215,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-form-item:nth-child(-n+3) {
+::v-deep .el-form-item:nth-child(-n+3) {
   width: 43.5%;
 }
->>> .el-form-item:last-child {
+::v-deep .el-form-item:last-child {
   width: 6%;
+}
+.action-input {
+  margin-top: -10px;
 }
 </style>
 

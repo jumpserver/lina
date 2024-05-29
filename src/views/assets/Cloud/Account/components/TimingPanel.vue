@@ -14,7 +14,7 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import { crontab, interval, is_periodic } from '@/views/accounts/const'
 
 export default {
-  name: 'TimingPanel',
+  name: 'ResultPanel',
   components: {
     GenericCreateUpdateForm
   },

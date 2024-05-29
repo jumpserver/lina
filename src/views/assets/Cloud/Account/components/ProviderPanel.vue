@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="12">
+    <el-row :gutter="12" style="min-height: 280px;">
       <el-col v-for="p in providers" :key="p.name" :span="6" style="margin-bottom: 10px">
         <el-card
           shadow="hover"

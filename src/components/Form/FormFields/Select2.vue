@@ -22,6 +22,10 @@
   >
     <div v-if="showSelectAll" class="el-select-dropdown__header">
       <el-checkbox v-model="allSelected" @change="handleSelectAllChange">{{ $t('SelectAll') }}</el-checkbox>
+      <div v-if="quickAddCallback" style="float: right">
+        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
+        <el-link style="margin-left: 5px;" icon="el-icon-refresh" :underline="false" @click="refresh" />
+      </div>
     </div>
     <el-option
       v-for="item in iOptions"
@@ -109,6 +113,10 @@ export default {
     placeholder: {
       type: String,
       default: i18n.t('Select')
+    },
+    quickAddCallback: {
+      type: Function,
+      default: null
     }
   },
   data() {

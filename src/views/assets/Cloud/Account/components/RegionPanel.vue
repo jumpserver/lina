@@ -5,7 +5,7 @@
       :underline="false"
       @click="handlerLinkClick"
     >
-      {{ regionText }}
+      {{ content }}
     </el-link>
     <Dialog
       :title="$tc('Region')"
@@ -58,19 +58,20 @@ export default {
   data() {
     return {
       regionVisible: false,
-      allRegions: []
-    }
-  },
-  computed: {
-    regionText() {
-      const count = this.regions.length || this.$tc('SelectAll')
-      return `${this.$tc('Modify')} [${count}]`
+      allRegions: [],
+      content: ''
     }
   },
   mounted() {
+    this.refreshContent()
   },
   methods: {
+    refreshContent() {
+      const count = this.regions.length || this.$t('SelectAll')
+      this.content = `${this.$t('Modify')} [${count}]`
+    },
     handlerLinkClick() {
+      this.content = this.$t('Loading')
       const authInfo = this.getAuthInfo()
       let method = 'get'
       let data = {}
@@ -86,6 +87,8 @@ export default {
         this.regionVisible = true
       }).catch(error => {
         this.$message.error(this.$tc('CloudRegionTip' + ' ' + error))
+      }).finally(() => {
+        this.refreshContent()
       })
     },
     handlerCardClick(regionId) {
@@ -96,6 +99,7 @@ export default {
         this.regions.push(regionId)
       }
       this.$emit('input', this.regions)
+      this.refreshContent()
     }
   }
 }

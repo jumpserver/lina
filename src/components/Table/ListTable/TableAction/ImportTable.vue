@@ -14,8 +14,19 @@
     <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
       <div style="float: right">
-        <el-button size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
+        <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
         <el-button size="small" type="primary" @click="performImportAction">{{ importActionTitle }}</el-button>
+        <el-button
+          v-for="button in moreButtons"
+          v-show="!button.hidden"
+          :key="button.title"
+          :loading="button.loading"
+          size="small"
+          v-bind="button"
+          @click="handleClick(button)"
+        >
+          {{ button.title }}
+        </el-button>
       </div>
     </div>
   </div>
@@ -60,6 +71,14 @@ export default {
     canEdit: {
       type: Boolean,
       default: () => true
+    },
+    showCancel: {
+      type: Boolean,
+      default: () => true
+    },
+    moreButtons: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -374,11 +393,6 @@ export default {
       }
     },
     async performUpload() {
-      if (this.tableConfig.hasSelection && this.elDataTable.selected.length === 0) {
-        this.$message.error(this.$tc('NoResourceImport'))
-        this.performStop()
-        return
-      }
       this.importTaskStatus = 'started'
       this.importStatusFilter = 'pending'
       while (!this.taskIsStopped()) {
@@ -449,6 +463,10 @@ export default {
     },
     addTableItem(item) {
       this.tableConfig.totalData.push(item)
+    },
+    handleClick(btn) {
+      const callback = btn.callback || function() {}
+      callback(btn)
     }
   }
 }

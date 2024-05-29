@@ -27,7 +27,7 @@ export default {
         },
         rule_relation: {
           label: this.$t('RuleRelation'),
-          helpTip: this.$t('RuleRelationhelpTip')
+          helpTip: this.$t('RuleRelationHelpTip')
         },
         strategy_rules: {
           component: RuleInput
@@ -50,7 +50,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .attr-input {
-  margin-top: -6px;
-}
 </style>

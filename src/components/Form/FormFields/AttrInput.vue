@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericCreateUpdateForm
-      class="attr-form"
+      class="attr-input"
       v-bind="formConfig"
       @submit="onSubmit"
     />
@@ -47,16 +47,17 @@ export default {
 
 <style lang="scss" scoped>
 
-.attr-form {
-  >>> .el-select {
-    width: 100%;
-  }
-  >>> .el-form-item__content {
-    width: 100%;
-  }
-  >>> .form-buttons {
-    margin: auto;
-  }
+::v-deep .el-select {
+  width: 100%;
+}
+::v-deep .el-form-item__content {
+  width: 100% !important;
+}
+::v-deep .form-buttons {
+  margin: 0 !important;
+}
+.attr-input {
+  margin-top: -10px;
 }
 </style>
 

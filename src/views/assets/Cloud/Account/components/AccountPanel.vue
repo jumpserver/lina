@@ -22,27 +22,12 @@
       <el-col :span="8" class="image">
         <Icon icon="computer" />
       </el-col>
-      <el-col :span="16">
-        <el-link :underline="false" type="primary" class="one">
-          <span class="title">{{ $tc('TotalSyncRegion') }}: </span>
-          <span class="content">{{ iTask.regions.length }}</span>
-        </el-link>
-        <el-link :underline="false" type="primary" class="one">
-          <span class="title">{{ $tc('TotalSyncAsset') }}: </span>
-          <span class="content">{{ iTask.instance_count || 0 }}</span>
-        </el-link>
-        <el-link :underline="false" type="primary" class="one">
-          <span class="title">{{ $tc('TotalSyncStrategy') }}: </span>
-          <span class="content">{{ iTask.strategy.length }}</span>
-        </el-link>
-        <el-link :underline="false" type="primary" class="one">
-          <span class="title">{{ $tc('DateJoined') }}: </span>
-          <span class="content">{{ toSafeLocalDateStr(object.date_created) }}</span>
-        </el-link>
-        <el-link :underline="false" type="primary" class="one">
-          <span class="title">{{ $tc('DateLastSync') }}: </span>
-          <span class="content">{{ toSafeLocalDateStr(iTask.date_last_sync) }}</span>
-        </el-link>
+      <el-col :span="16" style="padding: 0;">
+        <InfoPanel :title="$tc('TotalSyncRegion')" :content="iTask.regions.length" />
+        <InfoPanel :title="$tc('TotalSyncAsset')" :content="iTask.instance_count || 0" />
+        <InfoPanel :title="$tc('TotalSyncStrategy')" :content="iTask.strategy.length" />
+        <InfoPanel :title="$tc('DateJoined')" :content="toSafeLocalDateStr(object.date_created)" />
+        <InfoPanel :title="$tc('DateLastSync')" :content="toSafeLocalDateStr(iTask.date_last_sync)" />
       </el-col>
     </el-row>
     <Dialog
@@ -77,8 +62,9 @@
 <script>
 import Icon from '@/components/Widgets/Icon/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel'
-import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel'
+import AuthPanel from './AuthPanel'
+import AssetPanel from './AssetPanel'
+import InfoPanel from './InfoPanel'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -87,7 +73,8 @@ export default {
     Dialog,
     Icon,
     AuthPanel,
-    AssetPanel
+    AssetPanel,
+    InfoPanel
   },
   props: {
     object: {
@@ -120,7 +107,7 @@ export default {
   },
   computed: {
     iTask() {
-      return Object.assign(this.object?.task, { strategy: [] })
+      return Object.assign({ strategy: [] }, this.object?.task)
     }
   },
   methods: {
@@ -159,7 +146,7 @@ export default {
 
 <style scoped>
 .el-divider--horizontal {
-  margin: 15px 0;
+  margin: 10px 0;
 }
 .line {
   text-align: left;
@@ -177,13 +164,5 @@ export default {
     width: 40px;
     height: 40px;
   }
-}
-.one {
-  display: block;
-  text-align: left;
-  margin: 10px 0;
-}
-.content {
-  font-weight: bold;
 }
 </style>

@@ -11,7 +11,7 @@
       ref="importTable"
       v-bind="settings"
       @cancel="closeDialog"
-      @finish="closeDialog"
+      @finish="showResult"
     />
   </div>
 </template>
@@ -27,6 +27,10 @@ export default {
     ImportTable
   },
   props: {
+    active: {
+      type: Number,
+      default: null
+    },
     object: {
       type: Object,
       required: true
@@ -46,9 +50,18 @@ export default {
       linkIcon: 'el-icon-loading',
       alreadySync: [],
       settings: {
+        showCancel: !this.active,
         importOption: 'create',
         showButtons: true,
         canEdit: false,
+        moreButtons: [
+          {
+            title: this.$t('Next'),
+            type: 'primary',
+            hidden: !this.active,
+            callback: () => { this.$emit('update:active', 4) }
+          }
+        ],
         config: {
           hasSelection: true,
           persistSelection: false,
@@ -86,6 +99,9 @@ export default {
       deep: true
     }
   },
+  created() {
+    console.log('active: ', this.active)
+  },
   methods: {
     enableWS() {
       if (this.ws) { return }
@@ -98,6 +114,12 @@ export default {
         this.ws.send(JSON.stringify({
           action: 'sync_task', account_id: this.object.id
         }))
+      }
+      this.ws.onclose = () => {
+        this.$emit('update:visible', false)
+      }
+      this.ws.onerror = () => {
+        this.$message.error(this.$tc('ConnectWebSocketError'))
       }
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -112,9 +134,11 @@ export default {
         } else if (data.action === 'finished') {
           this.linkType = 'success'
           this.linkIcon = 'el-icon-success'
-          this.tip = `${this.$t('SyncSuccessMsg')}: ${this.alreadySync.join(', ')}`
+          this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {
-          this.$message.error(data.msg)
+          if (data?.msg) {
+            this.$message.error(data.msg)
+          }
         }
       }
     },
@@ -124,10 +148,13 @@ export default {
         this.tip = `${this.$t('SyncRegion')}: ${this.alreadySync.at(-1)}`
       }
     },
-    closeDialog() {
+    showResult() {
       if (this.ws) {
         this.ws.close()
       }
+      this.$emit('update:active', 4)
+    },
+    closeDialog() {
       this.$emit('update:visible', false)
     }
   }

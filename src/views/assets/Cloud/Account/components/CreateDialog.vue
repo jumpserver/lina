@@ -15,28 +15,21 @@
       <el-col :span="4" style="height: 300px;">
         <el-steps direction="vertical" :active="active">
           <el-step :description="firstStepDesc" />
-          <el-step :description="$tc('AuthConfig')" />
-          <el-step :description="$tc('SyncAction')" />
+          <el-step :description="$tc('Authentication')" />
+          <el-step :description="$tc('Sync')" />
+          <el-step :description="$tc('Result')" />
         </el-steps>
       </el-col>
       <el-col :span="20">
-        <ProviderPanel
-          v-if="active===1"
+        <component
+          :is="activeMenu"
+          :provider="iSelected"
           :providers="providers"
           :selected.sync="iSelected"
           :active.sync="active"
-          :visible.sync="iVisible"
-        />
-        <AuthPanel
-          v-if="active===2"
-          ref="authPanel"
           :object.sync="account"
-          :active.sync="active"
           :visible.sync="iVisible"
-          :provider="iSelected"
         />
-        <AssetPanel v-if="active===3" :object="account" :visible.sync="iVisible" />
-        <TimingPanel v-if="active===4" :object="account" :visible.sync="iVisible" />
       </el-col>
     </el-row>
   </Dialog>
@@ -47,7 +40,7 @@ import Dialog from '@/components/Dialog'
 import ProviderPanel from '@/views/assets/Cloud/Account/components/ProviderPanel'
 import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel'
 import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel'
-import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
+import ResultPanel from '@/views/assets/Cloud/Account/components/ResultPanel'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 
 export default {
@@ -56,7 +49,7 @@ export default {
     Dialog,
     AuthPanel,
     AssetPanel,
-    TimingPanel,
+    ResultPanel,
     ProviderPanel
   },
   props: {
@@ -71,6 +64,8 @@ export default {
   },
   data() {
     return {
+      activeMenuMap: { 1: 'ProviderPanel', 2: 'AuthPanel', 3: 'AssetPanel', 4: 'ResultPanel' },
+      activeMenu: 'ProviderPanel',
       selected: '',
       firstStepDesc: this.$tc('SelectPlatforms'),
       active: 1,
@@ -97,7 +92,12 @@ export default {
       }
     }
   },
-  mounted() {
+  watch: {
+    active: {
+      handler(v) {
+        this.activeMenu = this.activeMenuMap[v]
+      }
+    }
   },
   methods: {
   }

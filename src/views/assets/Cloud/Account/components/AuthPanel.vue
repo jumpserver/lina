@@ -120,16 +120,7 @@ export default {
         submitMethod: this.object?.id ? 'put' : 'post',
         moreButtons: [
           {
-            title: this.$tc('SyncTiming'),
-            type: 'primary',
-            loading: false,
-            hidden: this.object?.id,
-            callback: (value, form, btn) => {
-              this.submitForm(form, btn, 'timing')
-            }
-          },
-          {
-            title: this.$tc('SyncManual'),
+            title: this.$tc('Next'),
             type: 'primary',
             loading: false,
             hidden: this.object?.id,
@@ -190,9 +181,6 @@ export default {
       if (this.submitType === 'manual') {
         this.$emit('update:object', res)
         this.$emit('update:active', 3)
-      } else if (this.submitType === 'timing') {
-        this.$emit('update:object', res)
-        this.$emit('update:active', 4)
       }
     },
     handlePerformFinished() {
