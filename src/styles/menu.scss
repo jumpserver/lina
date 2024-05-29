@@ -15,7 +15,7 @@ $single-menu-height: 38px;
   }
 }
 @mixin collapse-active {
-  background-color: var(--menu-hover);
+  background-color: #e6e6e6;
 
   &:before {
     width: 0
@@ -24,6 +24,7 @@ $single-menu-height: 38px;
 
 .el-menu {
   border-right: none !important;
+  background-color: inherit !important;
 
   // 通用 item 样式
   .el-menu-item {
@@ -61,7 +62,7 @@ $single-menu-height: 38px;
     // 分组的 title 样式
     & > span {
       display: block;
-      padding: 8px 0 2px 20px;
+      padding: 10px 0 2px 20px;
       font-size: 11px;
       font-weight: 600;
       line-height: 25px;

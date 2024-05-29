@@ -257,14 +257,6 @@ $color-drop-menu-border: #e4e7ed;
     * {
       vertical-align: baseline !important;
     }
-
-    // 不加上 border 感觉对不齐
-    &.el-button--primary {
-      border-color: var(--color-primary);
-      &:hover {
-        border-color: var(--color-primary) !important;
-      }
-    }
   }
 
   ::v-deep .action-item.el-dropdown .el-button {

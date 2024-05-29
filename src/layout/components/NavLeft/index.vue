@@ -1,5 +1,5 @@
 <template>
-  <div class="left-side-wrapper" :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}">
+  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}" class="left-side-wrapper">
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
@@ -26,8 +26,6 @@
     </div>
     <div class="menu-wrap el-scrollbar">
       <el-menu
-        class="left-menu"
-        mode="vertical"
         :active-text-color="variables['menuActiveText']"
         :background-color="variables['menuBg']"
         :collapse="isCollapse"
@@ -37,13 +35,15 @@
         :text-color="variables['menuText']"
         :text-weigth="variables['menuTextWeight']"
         :unique-opened="false"
+        class="left-menu"
+        mode="vertical"
       >
         <sidebar-item
           v-for="route in currentViewRoute.children"
           :key="route.path"
           :base-path="route.path"
-          :item="route"
           :collapse="isCollapse"
+          :item="route"
         />
       </el-menu>
     </div>
@@ -226,7 +226,7 @@ $hover-border-color: #d2d2d2;
       transition: all 0.3s;
       color: var(--color-text-primary);
       background-color: var(--menu-bg);
-      //border-bottom: 1px solid rgba(31, 35, 41, .15);
+      border-bottom: 1px solid var(--color-border);
 
       .switch-view {
         width: 100%;
