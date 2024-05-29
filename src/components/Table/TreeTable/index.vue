@@ -116,7 +116,6 @@ export default {
   },
   mounted() {
     // debug(this.treeSetting)
-    console.log('component', this.component)
     this.initSetTableUrl()
   },
   methods: {

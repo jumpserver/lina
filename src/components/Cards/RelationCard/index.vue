@@ -107,6 +107,10 @@ export default {
       type: Boolean,
       default: false
     },
+    select2Config: {
+      type: Object,
+      default: () => {}
+    },
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
@@ -177,7 +181,8 @@ export default {
         value: this.value,
         disabled: this.disabled,
         disabledValues: [],
-        allowCreate: this.allowCreate
+        allowCreate: this.allowCreate,
+        ...this.select2Config
       }
     }
   },

@@ -46,7 +46,8 @@ export default {
           }
         ],
         actions: {
-          deleteSuccessRoute: 'CloudCenter',
+          hasUpdate: false,
+          deleteSuccessRoute: 'CloudAccountList',
           updateCallback: () => {
             const id = this.$route.params.id
             const routeName = 'AccountUpdate'

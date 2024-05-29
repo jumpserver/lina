@@ -207,7 +207,9 @@ export default {
 
         this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
-          setTimeout(() => this.$router.push(route), 100)
+          if (this.$router.currentRoute.name !== route?.name) {
+            setTimeout(() => this.$router.push(route), 100)
+          }
         }
       }
     },
@@ -339,6 +341,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.isSubmitting = false
+            this.$emit('performFinished')
           }, 200)
         })
     },

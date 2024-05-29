@@ -11,7 +11,7 @@
       v-on="$listeners"
     >
       <slot />
-      <div slot="footer" class="dialog-footer">
+      <div v-if="showButtons" slot="footer" class="dialog-footer">
         <slot name="footer">
           <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button v-if="showConfirm && showButtons" :loading="loadingStatus" size="small" type="primary" @click="onConfirm">

@@ -39,7 +39,9 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'CloudStrategyUpdate',
-              hasClone: false
+              hasClone: false,
+              canDelete: ({ row }) => { return row.name !== 'default' },
+              canUpdate: ({ row }) => { return row.name !== 'default' }
             }
           }
         }

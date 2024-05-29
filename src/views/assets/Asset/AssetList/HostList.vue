@@ -36,7 +36,7 @@ export default {
               name: this.$t('CloudSync'),
               title: this.$t('CloudSync'),
               has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
-              callback: () => this.$router.push({ name: 'CloudCenter' })
+              callback: () => this.$router.push({ name: 'CloudAccountList' })
             }
           ]
         },

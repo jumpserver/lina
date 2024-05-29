@@ -27,7 +27,7 @@ export default {
         },
         rule_relation: {
           label: this.$t('RuleRelation'),
-          helpTip: this.$t('RuleRelationhelpTip')
+          helpTip: this.$t('RuleRelationHelpTip')
         },
         strategy_rules: {
           component: RuleInput
@@ -36,8 +36,8 @@ export default {
           component: ActionInput
         }
       },
-      updateSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'StrategyList' }},
-      createSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'StrategyList' }},
+      updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
+      createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
       getUrl() {
         const id = this.$route.params?.id
         return id ? `${this.url}${id}/` : this.url
@@ -50,7 +50,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .attr-input {
-  margin-top: -6px;
-}
 </style>

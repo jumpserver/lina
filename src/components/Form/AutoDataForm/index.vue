@@ -144,11 +144,8 @@ export default {
       if (field.attrs.error === error) {
         error += '.'
       }
-      if (field.type === 'nestedField') {
-        field.el.errors = error
-      } else {
-        field.attrs.error = error
-      }
+      field.el.errors = error
+      field.attrs.error = error
     },
     groupHidden(group, i) {
       for (const field of group.fields) {

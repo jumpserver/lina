@@ -1,20 +1,32 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
-      <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
-    </el-col>
-    <el-col :md="9" :sm="24">
-      <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard
-        ref="StrategyRelation"
-        v-perms="'xpack.change_strategy'"
-        style="margin-top: 15px"
-        type="info"
-        v-bind="strategyRelationConfig"
-      />
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :md="15" :sm="24">
+        <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+        <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
+      </el-col>
+      <el-col :md="9" :sm="24">
+        <QuickActions :actions="quickEditActions" type="primary" />
+        <QuickActions :actions="quickExecuteActions" type="primary" />
+        <RelationCard
+          ref="StrategyRelation"
+          v-perms="'xpack.change_strategy'"
+          style="margin-top: 15px"
+          type="info"
+          v-bind="strategyRelationConfig"
+        />
+      </el-col>
+    </el-row>
+    <Dialog
+      :title="$tc('Timer')"
+      :close-on-click-modal="false"
+      :destroy-on-close="true"
+      :visible.sync="showTimer"
+      :show-buttons="false"
+    >
+      <TimingPanel :object="object" :visible.sync="showTimer" />
+    </Dialog>
+  </div>
 </template>
 
 <script>
@@ -22,12 +34,17 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
+import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
+import Dialog from '@/components/Dialog'
 
 export default {
-  name: 'AccountDetail',
+  name: 'CloudAccountDetail',
   components: {
-    QuickActions, RelationCard,
+    Dialog,
+    TimingPanel,
+    QuickActions,
+    RelationCard,
     AutoDetailCard
   },
   props: {
@@ -38,9 +55,62 @@ export default {
   },
   data() {
     return {
+      showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
       excludes: ['attrs', 'task'],
-      quickActions: [
+      quickEditActions: [
+        {
+          title: this.$t('ReleaseAssets'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.task.release_assets,
+            tip: this.$t('ReleaseAssetsHelpTips'),
+            type: 'primary',
+            disabled: !this.hasEditPerm()
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
+                { 'release_assets': val }
+              ).then(res => {
+                this.$message.success(this.$t('UpdateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('IpType'),
+          type: 'updateSelect',
+          attrs: {
+            model: this.object.task.sync_ip_type,
+            type: 'primary',
+            multiple: false,
+            clearable: false,
+            showSelect: true,
+            options: [
+              { label: this.$t('PublicIp'), value: 1 },
+              { label: this.$t('PrivateIp'), value: 0 }
+            ],
+            disabled: !this.hasEditPerm()
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
+                { 'sync_ip_type': val }
+              ).then(res => {
+                this.$message.success(this.$t('UpdateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        }
+      ],
+      quickExecuteActions: [
         {
           title: this.$t('RunTaskManually'),
           attrs: {
@@ -48,7 +118,7 @@ export default {
             tip: this.$t('ExecCloudSyncErrorMsg'),
             type: 'primary',
             label: this.$t('Execute'),
-            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution') || !this.object.task?.id
+            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
           },
           callbacks: {
             click: function() {
@@ -57,6 +127,20 @@ export default {
               ).then(res => {
                 openTaskPage(res['task'])
               })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('Timer'),
+          attrs: {
+            model: this.object.task,
+            type: 'primary',
+            disabled: !this.hasEditPerm(),
+            label: this.$t('Modify')
+          },
+          callbacks: {
+            click: function(val) {
+              this.showTimer = true
             }.bind(this)
           }
         }
@@ -70,6 +154,11 @@ export default {
             return { label: item.name, value: item.id }
           }
         },
+        select2Config: {
+          quickAddCallback: () => {
+            window.open(this.$router.resolve({ name: 'CloudStrategyCreate' }).href, '_blank')
+          }
+        },
         hasObjectsId: this.object?.task?.strategy?.map(i => i.id) || [],
         performAdd: (items) => {
           const newData = []
@@ -77,7 +166,7 @@ export default {
           value.map(v => {
             newData.push(v.value)
           })
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           items.map(v => {
             newData.push(v.value)
           })
@@ -92,7 +181,7 @@ export default {
               newData.push(v.value)
             }
           })
-          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`
           return this.$axios.patch(relationUrl, { strategy: newData })
         }
       },
@@ -102,20 +191,12 @@ export default {
           value: this.object?.task?.strategy?.map(item => item.name).join(', ')
         },
         {
-          key: this.$t('IPNetworkSegment'),
-          value: this.object?.task?.ip_network_segment_group?.join(', ')
-        },
-        {
-          key: this.$t('IsAlwaysUpdate'),
-          value: this.object?.task?.is_always_update
-        },
-        {
-          key: this.$t('CyclePerform'),
+          key: this.$t('Timer'),
           value: this.object?.task?.is_periodic
         },
         {
           key: this.$t('Region'),
-          value: this.object?.task.regions,
+          value: this.object.task?.regions,
           formatter(row, value) {
             return (<div>{
               value?.map((content) => {
@@ -140,7 +221,10 @@ export default {
       ]
     }
   },
-  computed: {
+  methods: {
+    hasEditPerm() {
+      return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask')
+    }
   }
 }
 </script>

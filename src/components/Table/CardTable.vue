@@ -9,43 +9,46 @@
     <el-row :gutter="10" class="the-row">
       <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
-          :body-style="{ 'text-align': 'center', 'padding': '20px' }"
+          :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
           class="my-card"
           shadow="hover"
           @click.native="onView(d)"
         >
-          <slot :index="index" :item="d">
-            <span v-if="d.edition === 'enterprise'" class="enterprise">
-              {{ $t('Enterprise') }}
-            </span>
-            <el-row>
-              <el-col v-if="d.icon" :span="8" class="image">
-                <img
-                  v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
-                  :alt="d.display_name"
-                  :src="d.icon"
-                >
-                <Icon v-else :icon="d.icon" />
-              </el-col>
-              <el-col :span="16" class="text-zone">
-                <div class="one-line">
-                  <b>{{ d.display_name }}</b>
-                  <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
-                    {{ d.version }}
-                  </el-tag>
-                </div>
-                <div :title="d.comment " class="comment">
-                  {{ d.comment }}
-                </div>
-                <div class="tag-zone">
-                  <el-tag v-for="tag of d.tags" :key="tag" size="mini">
-                    {{ capitalize(tag) }}
-                  </el-tag>
-                </div>
-              </el-col>
-            </el-row>
-          </slot>
+          <keep-alive>
+            <component :is="subComponent" v-if="subComponent" :object="d" @refresh="getList" />
+            <slot v-else :index="index" :item="d">
+              <span v-if="d.edition === 'enterprise'" class="enterprise">
+                {{ $t('Enterprise') }}
+              </span>
+              <el-row>
+                <el-col v-if="d.icon" :span="8" class="image">
+                  <img
+                    v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
+                    :alt="d.display_name"
+                    :src="d.icon"
+                  >
+                  <Icon v-else :icon="d.icon" />
+                </el-col>
+                <el-col :span="16" class="text-zone">
+                  <div class="one-line">
+                    <b>{{ d.display_name }}</b>
+                    <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
+                      {{ d.version }}
+                    </el-tag>
+                  </div>
+                  <div :title="d.comment " class="comment">
+                    {{ d.comment }}
+                  </div>
+                  <div class="tag-zone">
+                    <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+                      {{ capitalize(tag) }}
+                    </el-tag>
+                  </div>
+                </el-col>
+              </el-row>
+            </slot>
+          </keep-alive>
         </el-card>
       </el-col>
     </el-row>
@@ -88,6 +91,10 @@ export default {
     pagination: {
       type: Boolean,
       default: true
+    },
+    subComponent: {
+      type: Object,
+      default: () => null
     }
   },
   data() {
@@ -96,9 +103,9 @@ export default {
       totalData: [],
       page: defaultFirstPage,
       extraQuery: {},
-      paginationSize: 9,
+      paginationSize: 6,
       paginationLayout: 'total, sizes, prev, pager, next',
-      paginationSizes: [9, 18, 27],
+      paginationSizes: [6, 18, 27],
       axiosConfig: {
         raw: 1,
         params: {

@@ -60,7 +60,9 @@ export default {
   },
   methods: {
     editCell() {
-      this.inEditMode = true
+      if (this.formatterArgs.canEdit) {
+        this.inEditMode = true
+      }
     },
     getCellValue(val) {
       let v = ''

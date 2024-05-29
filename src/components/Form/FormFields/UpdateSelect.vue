@@ -32,7 +32,7 @@ export default {
   },
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       default: () => ''
     },
     label: {
@@ -66,7 +66,7 @@ export default {
   },
   created() {
     const { path } = this.$route
-    if (hasUUID(path) && this.value) {
+    if (hasUUID(path) && this.value && !this.showSelect) {
       this.iShowSelect = false
     }
   },
@@ -74,7 +74,7 @@ export default {
     onSelectChange(val) {
       const options = this.$refs.select2.options.filter(item => item.value === val)
       const label = options.length > 0 ? options[0].label : ''
-      this.iShowSelect = false
+      this.iShowSelect = this.showSelect
       this.iLabel = val ? label : '-'
     }
   }
