@@ -86,7 +86,7 @@ export default {
       'sidebar'
     ]),
     defaultOpensMenu() {
-      return this.currentViewRoute.children.filter(route => route.children).map(route => route.path)
+      return []
     },
     activeMenu() {
       const route = this.$route
@@ -128,7 +128,6 @@ export default {
     }
   },
   mounted() {
-    this.setLeastMenuOpen()
   },
   methods: {
     toggleSideBar() {

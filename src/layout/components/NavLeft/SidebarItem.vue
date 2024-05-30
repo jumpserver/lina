@@ -7,9 +7,9 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item
-          :class="{'submenu-title-noDropdown':!isNest, 'level0': !isNest}"
+          :class="{'submenu-title-noDropdown':!isNest, 'level1-menu': !isNest}"
           :index="resolvePath(onlyOneChild.path)"
-          class="submenu-item level1-item"
+          class="submenu-item level2-menu"
         >
           <item
             :children="item.children"
@@ -37,7 +37,7 @@
         v-else
         ref="subMenu"
         :index="resolvePath(item.path)"
-        class="el-submenu-sidebar submenu-item level0"
+        class="el-submenu-sidebar submenu-item level1-menu"
         popper-append-to-body
       >
         <template slot="title">
@@ -116,7 +116,7 @@ export default {
     },
     getItemTitle(item) {
       let title = item.meta.menuTitle || item.meta.title
-      if (item.children) {
+      if (item.meta.level === 2 && item.children) {
         title = title.toUpperCase()
       } else {
         title = toSentenceCase(title)

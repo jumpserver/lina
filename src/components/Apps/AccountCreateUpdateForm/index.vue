@@ -3,6 +3,7 @@
     v-if="!loading"
     ref="AutoDataForm"
     :class="addTemplate? '': 'account-add'"
+    :submit-btn-text="submitBtnText"
     v-bind="$data"
     @submit="confirm"
   />
@@ -45,6 +46,7 @@ export default {
     return {
       loading: true,
       usernameChanged: false,
+      submitBtnText: this.$t('Confirm'),
       iPlatform: {
         automation: {},
         su_enabled: false,

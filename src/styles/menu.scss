@@ -36,7 +36,7 @@ $single-menu-height: 38px;
     font-size: 12px;
   }
 
-  .submenu-title-noDropdown.level0 {
+  .submenu-title-noDropdown.level1-menu {
     span {
       padding-left: 10px;
       line-height: 100%;
@@ -70,11 +70,11 @@ $single-menu-height: 38px;
     }
 
     .nest-menu {
-      display: flex;
+      //display: flex;
       cursor: pointer;
 
       // 存在三级子菜单
-      .level0 {
+      .level1-menu {
         min-width: 200px;
 
         .el-submenu__title {
@@ -90,16 +90,20 @@ $single-menu-height: 38px;
 
         .el-menu--inline .nest-menu .el-menu-item {
           height: $single-menu-height;
+          list-style: disc;
+
+          span {
+            padding-left: 0;
+          }
 
           &.is-active {
             @include only_active
           }
         }
-
       }
 
-      // 没有三级子菜单的项
-      .level1-item {
+        // 没有三级子菜单的项
+      .level2-menu {
 
         .svg-icon {
           width: $icon-width;
@@ -130,7 +134,7 @@ $single-menu-height: 38px;
     // 覆盖默认 64px 宽度
     width: 55px;
 
-    .level0 {
+    .level1-menu {
       height: $single-menu-height;
       line-height: $single-menu-height;
     }
@@ -144,11 +148,11 @@ $single-menu-height: 38px;
         margin: 12px 0 !important;
       }
 
-      .level0 {
+      .level1-menu {
         min-width: 55px;
       }
 
-      .nest-menu .level1-item {
+      .nest-menu .level2-menu {
         line-height: $single-menu-height;
       }
     }
