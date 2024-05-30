@@ -301,7 +301,7 @@ export default {
       return this.$refs.xterm.xterm
     },
     ztree() {
-      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+      return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     }
   },
   mounted() {
@@ -487,7 +487,7 @@ export default {
   & > div {
     height: 100%;
 
-    & >>> .xterm {
+    & > > > .xterm {
       height: calc(100% - 8px);
       overflow-y: auto;
     }
