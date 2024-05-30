@@ -244,7 +244,7 @@ export default {
       return this.$refs.xterm.xterm
     },
     ztree() {
-      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+      return this.$refs.AssetTreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     }
   },
   mounted() {
