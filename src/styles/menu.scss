@@ -77,6 +77,10 @@ $single-menu-height: 38px;
       .level1-menu {
         min-width: 200px;
 
+        .el-menu.el-menu--inline {
+          padding: 5px 0;
+        }
+
         .el-submenu__title {
           display: flex;
           align-items: center;
@@ -94,6 +98,13 @@ $single-menu-height: 38px;
 
           span {
             padding-left: 0;
+
+            &::before {
+              content: '•'; /* 使用圆点符号 */
+              font-size: 15px;
+              position: absolute; /* 绝对定位伪元素 */
+              left: 25px; /* 调整伪元素位置 */
+            }
           }
 
           &.is-active {
@@ -137,6 +148,8 @@ $single-menu-height: 38px;
     .level1-menu {
       height: $single-menu-height;
       line-height: $single-menu-height;
+      display: inline-block;
+
     }
 
     .group-title {
