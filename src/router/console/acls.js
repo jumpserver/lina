@@ -8,7 +8,7 @@ export default [
     path: 'acls',
     name: 'ACLList',
     component: empty,
-    // component: () => import('@/views/acl/index.vue'),
+    redirect: 'cmd-acls',
     meta: {
       title: i18n.t('ACLs'),
       icon: 'acl',
@@ -19,11 +19,11 @@ export default [
         path: 'cmd-acls',
         component: empty,
         redirect: '',
+        name: 'CmdACL',
         meta: {
           title: i18n.t('CommandFilterAclList'),
           app: 'acls',
-          resource: 'commandfilteracl',
-          activeMenu: '/console/perms/acls'
+          resource: 'commandfilteracl'
         },
         children: [
           // Command Filter ACL
@@ -34,7 +34,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandFilterAclList'),
-              activeMenu: '/console/perms/acls'
+              activeMenu: ''
             }
           },
           {
@@ -42,21 +42,21 @@ export default [
             name: 'CommandFilterAclCreate',
             component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclCreate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('CommandFilterAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'CommandFilterAclDetail',
             component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclDetail/index'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclDetail'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('CommandFilterAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'CommandFilterAclUpdate',
             component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclUpdate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('CommandFilterAclUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -64,6 +64,7 @@ export default [
         path: 'login-asset-acls',
         component: empty,
         redirect: '',
+        name: 'LoginAssetAcls',
         meta: {
           title: i18n.t('AssetAclList'),
           licenseRequired: true,
@@ -75,28 +76,28 @@ export default [
             path: '',
             name: 'AssetAclList',
             component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
-            meta: { title: i18n.t('AssetAclList'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('AssetAclList'), activeMenu: '' }
           },
           {
             path: 'create',
             name: 'AssetAclCreate',
             component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclCreate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('AssetAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'AssetAclDetail',
             component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclDetail'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('AssetAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'AssetAclUpdate',
             component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclUpdate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('AssetAclUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -104,11 +105,12 @@ export default [
         path: 'cmd-groups',
         component: empty,
         redirect: '',
+        name: 'CmdGroups',
         hidden: true,
         meta: {
           app: 'acls',
           resource: 'commandgroup',
-          activeMenu: '/console/perms/acls'
+          activeMenu: ''
         },
         children: [
           // Command Group
@@ -119,7 +121,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupList'),
-              activeMenu: '/console/perms/acls'
+              activeMenu: ''
             }
           },
           {
@@ -129,7 +131,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupCreate'),
-              activeMenu: '/console/perms/acls'
+              activeMenu: ''
             }
           },
           {
@@ -139,7 +141,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupDetail'),
-              activeMenu: '/console/perms/acls'
+              activeMenu: ''
             }
           },
           {
@@ -149,7 +151,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupUpdate'),
-              activeMenu: '/console/perms/acls'
+              activeMenu: ''
             }
           }
         ]
@@ -158,6 +160,7 @@ export default [
         path: 'connect-method-acls',
         component: globalSubmenu,
         redirect: '',
+        name: 'ConnectMethodACL',
         meta: {
           title: i18n.t('ConnectMethodList'),
           licenseRequired: true,
@@ -170,28 +173,28 @@ export default [
             path: '',
             name: 'ConnectMethodAclList',
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclList.vue'),
-            meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '' }
           },
           {
             path: 'create',
             name: 'ConnectMethodAclCreate',
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('ConnectMethodAclCreate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('ConnectMethodAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'ConnectMethodAclDetail',
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclDetail/index'),
             hidden: true,
-            meta: { title: i18n.t('ConnectMethodAclDetail'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('ConnectMethodAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'ConnectMethodAclUpdate',
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -213,7 +216,7 @@ export default [
             name: 'UserLoginAclList',
             component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
             meta: {
-              title: i18n.t('UserLoginAclList'), activeMenu: '/console/perms/acls'
+              title: i18n.t('UserLoginAclList'), activeMenu: ''
             }
           },
           {
@@ -222,7 +225,7 @@ export default [
             component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
             meta: {
-              title: i18n.t('UserLoginAclCreate'), activeMenu: '/console/perms/acls'
+              title: i18n.t('UserLoginAclCreate'), activeMenu: ''
             }
           },
           {
@@ -231,7 +234,7 @@ export default [
             component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
             hidden: true,
             meta: {
-              title: i18n.t('UserLoginAclDetail'), activeMenu: '/console/perms/acls',
+              title: i18n.t('UserLoginAclDetail'), activeMenu: '',
               app: 'acls',
               resource: 'loginacl'
             }
@@ -241,7 +244,7 @@ export default [
             name: 'UserLoginAclUpdate',
             component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '/console/perms/acls' }
+            meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '' }
           }
         ]
       }

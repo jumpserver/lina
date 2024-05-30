@@ -91,6 +91,10 @@ function cleanRoute(tmp, parent) {
   const pathSlice = path.split('/')
   const pathValue = pathSlice[pathSlice.length - 1]
 
+  if (!tmp.name && tmp.meta.title) {
+    tmp.name = tmp.meta.title
+  }
+
   // 标识路由是哪个 view
   if (!tmp.meta.view) {
     tmp.meta.view = tmp.meta.level === 1 ? pathValue : parent.meta?.view

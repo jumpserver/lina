@@ -5,6 +5,7 @@ export default [
   {
     path: 'accounts',
     component: empty,
+    name: 'Account',
     meta: {
       title: i18n.t('AssetAccount'),
       app: 'accounts',
@@ -127,7 +128,6 @@ export default [
     },
     children: [
       {
-
         path: 'account-push',
         component: empty,
         redirect: '',
@@ -135,7 +135,6 @@ export default [
         meta: {
           app: 'accounts',
           name: 'AccountPushList',
-          activeMenu: '/console/accounts/automations',
           resource: 'pushaccountautomation'
         },
         children: [
@@ -146,7 +145,6 @@ export default [
             meta: {
               title: i18n.t('AccountPushList'),
               menuTitle: i18n.t('AccountPushList'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_pushaccountautomation']
             }
           },
@@ -157,7 +155,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountPushCreate'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.add_pushaccountautomation']
             }
           },
@@ -168,7 +166,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountPushUpdate'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.change_pushaccountautomation']
             }
           },
@@ -179,7 +177,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountPushList'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_pushaccountautomation']
             }
           },
@@ -190,7 +188,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('ExecutionList'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_pushaccountexecution']
             }
           },
@@ -201,7 +199,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('ExecutionDetail'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_pushaccountexecution']
             }
           }
@@ -210,10 +208,10 @@ export default [
       {
         path: 'account-change-secret',
         component: empty,
+        name: 'AccountChangeSecret',
         meta: {
           title: i18n.t('AccountChangeSecret'),
           app: 'accounts',
-          activeMenu: '/console/accounts/automations',
           licenseRequired: true
         },
         children: [
@@ -224,7 +222,6 @@ export default [
             meta: {
               menuTitle: i18n.t('ChangeCredentials'),
               title: i18n.t('AccountChangeSecret'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_changesecretautomation']
             }
           },
@@ -235,7 +232,6 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AssetChangeSecretCreate'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.add_changesecretautomation']
             }
           },
@@ -246,7 +242,6 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AssetChangeSecretUpdate'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.change_changesecretautomation']
             }
           },
@@ -257,7 +252,6 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountChangeSecret'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_changesecretautomation']
             }
           },
@@ -268,7 +262,6 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('ExecutionList'),
-              activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_changesecretexecution']
             }
           },
@@ -289,10 +282,11 @@ export default [
         component: empty,
         redirect: '',
         hidden: true,
+        name: 'AccountGather',
         meta: {
           title: i18n.t('AccountGatherList'),
           app: 'accounts',
-          activeMenu: '/console/accounts/automations',
+          // activeMenu: '/console/accounts/automations',
           licenseRequired: true
         },
         children: [
@@ -303,7 +297,7 @@ export default [
             meta: {
               menuTitle: i18n.t('GatherAccounts'),
               title: i18n.t('AccountGatherTaskList'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_gatheredaccount']
             }
           },
@@ -314,7 +308,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountGatherTaskCreate'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.add_gatheraccountsautomation']
             }
           },
@@ -325,7 +319,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('AccountGatherTaskDetail'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_gatheraccountsautomation']
             }
           },
@@ -348,7 +342,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('ExecutionList'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_gatheraccountsexecution']
             }
           },
@@ -359,7 +353,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('ExecutionDetail'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_gatheraccountsexecution']
             }
           }
@@ -368,6 +362,7 @@ export default [
       {
         path: 'account-backup',
         component: empty,
+        name: 'AccountBackup',
         redirect: '',
         meta: {
           title: i18n.t('AccountBackup'),
@@ -383,7 +378,7 @@ export default [
             meta: {
               menuTitle: i18n.t('AccountBackup'),
               title: i18n.t('AccountBackupList'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               permissions: ['accounts.view_accountbackupautomation']
             }
           },
@@ -393,7 +388,7 @@ export default [
             name: 'AccountBackupCreate',
             meta: {
               title: i18n.t('AccountBackupCreate'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               action: 'create'
             },
             hidden: true
@@ -404,7 +399,7 @@ export default [
             name: 'AccountBackupUpdate',
             meta: {
               title: i18n.t('AccountBackupUpdate'),
-              activeMenu: '/console/accounts/automations',
+              // activeMenu: '/console/accounts/automations',
               action: 'update'
             },
             hidden: true
@@ -413,7 +408,7 @@ export default [
             path: ':id',
             component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
             name: 'AccountBackupDetail',
-            activeMenu: '/console/accounts/automations',
+            // activeMenu: '/console/accounts/automations',
             meta: {
               title: i18n.t('AccountBackupDetail'),
               activeMenu: '/console/accounts/automations'

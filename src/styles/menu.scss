@@ -77,9 +77,16 @@ $single-menu-height: 38px;
       .level1-menu {
         min-width: 200px;
 
-        .el-menu.el-menu--inline {
-          padding: 5px 0;
+        &.el-submenu.is-opened {
+          border-bottom: solid 1px var(--color-border);
+          border-top: solid 1px var(--color-border);
         }
+
+        //&.el-submenu.is-active {
+        //  .el-submenu__title, li {
+        //    @include only_active
+        //  }
+        //}
 
         .el-submenu__title {
           display: flex;
