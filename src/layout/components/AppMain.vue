@@ -5,7 +5,7 @@
         <router-view :key="key" />
       </keep-alive>
     </transition>
-    <ChatGPT />
+    <ChatGPT v-if="chatAiEnabled" />
   </section>
 </template>
 
@@ -28,6 +28,9 @@ export default {
       } else {
         return new Date().getTime()
       }
+    },
+    chatAiEnabled() {
+      return this.publicSettings?.CHAT_AI_ENABLED
     }
   },
   methods: {

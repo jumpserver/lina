@@ -83,7 +83,7 @@ $single-menu-height: 38px;
       // 存在三级子菜单
       .level1-menu {
         &.el-submenu.is-opened {
-          border-bottom: solid 1px var(--color-border);
+          border-top: solid 1px var(--color-border);
         }
 
         &.el-submenu.is-active {

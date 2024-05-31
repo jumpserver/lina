@@ -377,7 +377,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 15px 20px 0 20px;
+  padding: 10px 10px 0 10px;
 
   .ztree {
     width: 100%;
