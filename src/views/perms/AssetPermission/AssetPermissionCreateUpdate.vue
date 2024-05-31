@@ -45,7 +45,7 @@ export default {
         [this.$t('Asset'), ['assets', 'nodes']],
         [this.$t('Account'), ['accounts']],
         [this.$t('Protocol'), ['protocols']],
-        [this.$t('Actions'), ['actions']],
+        [this.$t('Action'), ['actions']],
         [this.$t('Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
@@ -120,15 +120,12 @@ export default {
           }
         },
         actions: {
-          label: this.$t('Actions'),
+          label: this.$t('Action'),
           helpText: this.$t('ActionsTips')
         },
-        date_start: {
-        },
-        date_expired: {
-        },
-        comment: {
-        },
+        date_start: {},
+        date_expired: {},
+        comment: {},
         is_active: {
           type: 'checkbox'
         }
@@ -145,7 +142,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-tree {
+::v-deep .el-tree {
   padding: 10px 0;
 }
 
