@@ -96,7 +96,7 @@ export default {
             }
           },
           timestamp: {
-            label: this.$t('Date'),
+            label: this.$t('Datetime'),
             width: 180,
             sortable: 'custom',
             formatter: function(row) {
