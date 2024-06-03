@@ -53,7 +53,7 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('Actions'),
+          key: this.$t('Action'),
           value: this.object.actions,
           formatter(row, value) {
             const actionLabels = value.map(item => item.label.replace(/ \([^)]*\)/, ''))

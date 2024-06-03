@@ -46,7 +46,6 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          label: this.$t('Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -62,7 +61,6 @@ export default {
           }
         },
         nodes: {
-          label: this.$t('Node'),
           el: {
             value: [],
             ajax: {
@@ -80,13 +78,11 @@ export default {
         },
         params: {
           component: AutomationParams,
-          label: this.$t('ChangeSecretParams'),
           el: {
             method: 'change_secret_method',
             assets: this.asset_ids,
             nodes: this.node_ids
-          },
-          helpText: this.$t('ParamsHelpText')
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },

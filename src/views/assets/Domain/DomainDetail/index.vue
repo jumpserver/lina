@@ -28,7 +28,7 @@ export default {
         url: '/api/v1/assets/domains/',
         submenu: [
           {
-            title: this.$t('Detail'),
+            title: this.$t('Basic'),
             name: 'Detail'
           },
           {

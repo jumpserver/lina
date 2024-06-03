@@ -35,7 +35,6 @@ export default {
         columnsMeta: {
           is_finished: {
             label: this.$t('IsFinished'),
-            width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
@@ -48,7 +47,6 @@ export default {
           },
           is_success: {
             label: this.$t('IsSuccess'),
-            width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>

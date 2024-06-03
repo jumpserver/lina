@@ -281,7 +281,6 @@ export default [
         path: 'account-gather',
         component: empty,
         redirect: '',
-        hidden: true,
         name: 'AccountGather',
         meta: {
           title: i18n.t('AccountGatherList'),
