@@ -19,14 +19,12 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
         columns: [
-          'id', 'user', 'asset', 'account', 'protocol'
+          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol'
         ],
         columnsMeta: {
           id: {
             prop: 'id',
-            label: this.$t('Id'),
             align: 'center',
-            width: '70px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
@@ -38,9 +36,10 @@ export default {
             }
           },
           asset: {
-            label: this.$t('Target')
+            label: this.$t('Asset')
           },
           command_amount: {
+            align: 'center',
             label: this.$t('Command')
           },
           remote_addr: {
@@ -54,7 +53,6 @@ export default {
             sortable: false
           },
           actions: {
-            width: '120px',
             align: 'center',
             formatterArgs: {
               hasDelete: false,
