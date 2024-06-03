@@ -53,15 +53,15 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('Username'),
+          key: this.$t('Accounts'),
           value: this.object.accounts.join(', ')
         },
         {
-          key: this.$t('AssetAmount'),
+          key: this.$t('AssetsOfNumber'),
           value: this.object.assets.length
         },
         {
-          key: this.$t('NodeAmount'),
+          key: this.$t('NodeOfNumber'),
           value: this.object.nodes.length
         },
         {

@@ -30,11 +30,11 @@ export default {
           value: this.object.snapshot.name
         },
         {
-          key: this.$t('AssetAmount'),
+          key: this.$t('AssetsOfNumber'),
           value: this.object.snapshot.asset_amount
         },
         {
-          key: this.$t('NodeAmount'),
+          key: this.$t('NodeOfNumber'),
           value: this.object.snapshot.node_amount
         },
         'trigger_display', 'date_start', 'date_finished',

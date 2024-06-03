@@ -51,7 +51,6 @@ export const getChangeSecretFields = () => {
     },
     recipients: {
       label: i18n.t('Recipient'),
-      helpText: i18n.t('OnlyMailSend'),
       el: {
         value: [],
         ajax: {
@@ -66,7 +65,7 @@ export const getChangeSecretFields = () => {
     crontab,
     is_periodic,
     accounts: {
-      label: i18n.t('Username'),
+      label: i18n.t('Accounts'),
       component: TagInput
     }
   }
