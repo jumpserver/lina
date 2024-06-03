@@ -3,16 +3,16 @@
     <el-row :gutter="12" style="min-height: 280px;">
       <el-col v-for="p in providers" :key="p.name" :span="6" style="margin-bottom: 10px">
         <el-card
-          shadow="hover"
+          :body-style="{ padding: '15px', position: 'relative', height: '100px', point: 'cursor' }"
           :class="selected === p.name ? 'active': ''"
-          :body-style="{ padding: '15px', position: 'relative', height: '100px' }"
+          shadow="hover"
           @dblclick.native="handleCardDBClick(p.name)"
           @click.native="handleCardClick(p.name)"
         >
           <el-image
-            shape="square"
             :src="p.image"
             :style="p.imageCSS ? p.imageCSS : {'padding': '1.5em 0.5em'}"
+            shape="square"
           />
         </el-card>
       </el-col>

@@ -7,6 +7,9 @@
       v-bind="headerActions"
     />
     <el-row :gutter="10" class="the-row">
+      <IBox v-if="totalData.length === 0">
+        <el-empty :description="$t('NoData')" class="no-data" style="padding: 20px" />
+      </IBox>
       <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
@@ -68,12 +71,14 @@ import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import Icon from '@/components/Widgets/Icon/index.vue'
 import { mapGetters } from 'vuex'
+import IBox from '@/components/IBox/index.vue'
 
 const defaultFirstPage = 1
 
 export default {
   name: 'CardTable',
   components: {
+    IBox,
     TableAction,
     Pagination,
     Icon
@@ -370,6 +375,11 @@ export default {
 .pagination {
   padding-top: 10px;
   border-top: 1px solid #e7eaec;
+}
+
+.no-data {
+  width: 300px;
+  margin: 0 auto;
 }
 
 </style>

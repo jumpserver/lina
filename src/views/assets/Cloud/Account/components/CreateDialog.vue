@@ -3,17 +3,17 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
-    :title="$tc('CloudSyncConfig')"
     :show-buttons="false"
     :show-close="false"
+    :title="$tc('CloudSyncConfig')"
     :visible.sync="iVisible"
-    width="70%"
     v-bind="$attrs"
+    width="70%"
     v-on="$listeners"
   >
-    <el-row>
+    <el-row style="padding: 10px">
       <el-col :span="4" style="height: 300px;">
-        <el-steps direction="vertical" :active="active">
+        <el-steps :active="active" direction="vertical">
           <el-step :description="firstStepDesc" />
           <el-step :description="$tc('Authentication')" />
           <el-step :description="$tc('Sync')" />
@@ -23,11 +23,11 @@
       <el-col :span="20">
         <component
           :is="activeMenu"
+          :active.sync="active"
+          :object.sync="account"
           :provider="iSelected"
           :providers="providers"
           :selected.sync="iSelected"
-          :active.sync="active"
-          :object.sync="account"
           :visible.sync="iVisible"
         />
       </el-col>

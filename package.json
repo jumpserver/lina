@@ -36,7 +36,7 @@
     "decimal.js": "^10.4.3",
     "deepmerge": "^4.2.2",
     "echarts": "4.7.0",
-    "element-ui": "2.13.2",
+    "element-ui": "2.15.14",
     "eslint-plugin-html": "^6.0.0",
     "highlight.js": "^11.9.0",
     "install": "^0.13.0",

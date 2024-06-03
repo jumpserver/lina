@@ -4409,10 +4409,10 @@ element-theme-chalk@^2.13.1:
   resolved "https://registry.npmmirror.com/element-theme-chalk/-/element-theme-chalk-2.15.14.tgz"
   integrity sha512-jgMTD6Qg6UPRDjBzARl42xit7lfCg+gE8x+QaUmmrhWv2TsnFoerhOupn0smxKTfO0Oh9Kh53Q+thXeZO7/0rQ==
 
-element-ui@2.13.2:
-  version "2.13.2"
-  resolved "https://registry.npmmirror.com/element-ui/-/element-ui-2.13.2.tgz"
-  integrity sha512-r761DRPssMPKDiJZWFlG+4e4vr0cRG/atKr3Eqr8Xi0tQMNbtmYU1QXvFnKiFPFFGkgJ6zS6ASkG+sellcoHlQ==
+element-ui@2.15.14:
+  version "2.15.14"
+  resolved "https://registry.npmmirror.com/element-ui/-/element-ui-2.15.14.tgz#3c34df79467636592812d720d2e6784e7a6ec2ea"
+  integrity sha512-2v9fHL0ZGINotOlRIAJD5YuVB8V7WKxrE9Qy7dXhRipa035+kF7WuU/z+tEmLVPBcJ0zt8mOu1DKpWcVzBK8IA==
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
