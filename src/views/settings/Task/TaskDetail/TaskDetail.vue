@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     cardTitle() {
-      return this.object.meta.comment ? this.object.meta.comment : this.object.name
+      return this.$t('BasicInfo')
     },
     detailCardItems() {
       return [

@@ -32,7 +32,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('Detail'),
+            'title': this.$t('Basic'),
             'name': 'Detail'
           },
           {
