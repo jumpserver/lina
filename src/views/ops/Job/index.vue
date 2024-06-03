@@ -62,7 +62,7 @@ export default {
             }
           },
           asset_amount: {
-            label: this.$t('AssetAmount'),
+            label: this.$t('AssetsOfNumber'),
             formatter: (row) => {
               return row.assets.length
             }

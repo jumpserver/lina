@@ -47,13 +47,13 @@ export default {
             id: ({ row }) => row.automation
           },
           asset_amount: {
-            label: this.$t('AssetAmount'),
+            label: this.$t('AssetsOfNumber'),
             formatter: function(row) {
               return <span>{row.snapshot.asset_amount}</span>
             }
           },
           node_amount: {
-            label: this.$t('NodeAmount'),
+            label: this.$t('NodeOfNumber'),
             formatter: function(row) {
               return <span>{row.snapshot.node_amount}</span>
             }

@@ -112,7 +112,7 @@ export default {
           value: this.licenseData.date_expired
         },
         {
-          key: this.$t('AssetAmount'),
+          key: this.$t('AssetsOfNumber'),
           value: this.licenseData.asset_count !== null ? this.licenseData.asset_count + '' : ''
         },
         {

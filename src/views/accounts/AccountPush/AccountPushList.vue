@@ -56,10 +56,10 @@ export default {
             }
           },
           assets_amount: {
-            label: vm.$t('AssetAmount')
+            label: vm.$t('AssetsOfNumber')
           },
           nodes_amount: {
-            label: vm.$t('NodeAmount')
+            label: vm.$t('NodeOfNumber')
           },
           password_strategy_display: {
             label: vm.$t('PasswordStrategy'),
