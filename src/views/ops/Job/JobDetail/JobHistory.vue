@@ -34,7 +34,7 @@ export default {
         ],
         columnsMeta: {
           is_finished: {
-            label: this.$t('IsFinished'),
+            label: this.$t('Finished'),
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
