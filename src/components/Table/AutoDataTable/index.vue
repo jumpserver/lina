@@ -61,21 +61,38 @@ export default {
         minCols: [],
         currentCols: [],
         defaultCols: []
-      }
+      },
+      isDeactivated: false
     }
   },
   computed: {},
   watch: {
     config: {
       handler: _.debounce(function(iNew, iOld) {
+        if (this.isDeactivated) {
+          return
+        }
+        try {
+          if (JSON.stringify(iNew) === JSON.stringify(iOld)) {
+            return
+          }
+        } catch (error) {
+          this.$log.error('JsonStringify Error: ', error)
+        }
+
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found: ')
-      }, 200),
-      deep: true
+        this.$log.debug('AutoDataTable Config change found, ', this.isDeactivated)
+      }, 200)
     }
   },
   created() {
     this.optionUrlMetaAndGenCols()
+  },
+  deactivated() {
+    this.isDeactivated = true
+  },
+  activated() {
+    this.isDeactivated = false
   },
   methods: {
     async optionUrlMetaAndGenCols() {
@@ -397,7 +414,7 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      let tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
       tableName = replaceAllUUID(tableName)
       const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames

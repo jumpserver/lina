@@ -71,7 +71,6 @@ export default {
     }
   },
   created() {
-    console.log('>>>', this.$route)
     if (this.timer) {
       clearInterval(this.timer)
     }

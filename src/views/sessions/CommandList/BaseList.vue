@@ -15,7 +15,7 @@
 
 <script>
 import TreeTable from '@/components/Table/TreeTable/index.vue'
-import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/time'
 import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'

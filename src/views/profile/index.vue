@@ -18,7 +18,7 @@
             style="margin-top: 15px"
             type="info"
           />
-          <IBox fa="fa-edit" :title="$tc('InformationModification')">
+          <IBox :title="$tc('InformationModification')" fa="fa-edit">
             <table>
               <tr>
                 <td> {{ $t('Phone') }} </td>
@@ -46,7 +46,7 @@ import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import store from '@/store'
 
 export default {

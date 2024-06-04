@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/Table/ListTable'
-import { timeOffset } from '@/utils/common'
+import { timeOffset } from '@/utils/time'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {

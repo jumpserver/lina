@@ -7,22 +7,14 @@
       <div v-else>
         <div
           v-for="label of iLabels"
-          :key="label"
+          :key="label.id"
         >
-          <el-tag
-            :title="getKey(label) + ': ' + getValue(label)"
-            :type="getLabelType(label)"
+          <ILabel
+            :el="formatterArgs.config"
+            :label="label"
             class="tag-formatter"
-            disable-transitions
-            effect="plain"
-            size="mini"
-            v-bind="formatterArgs.config"
             @click="handleLabelSearch(label)"
-          >
-            <span>
-              <b> {{ getKey(label) }}:</b> {{ getValue(label) }}
-            </span>
-          </el-tag>
+          />
         </div>
       </div>
     </a>
@@ -59,20 +51,14 @@
       <div class="tag-zone">
         <span v-if="!iLabels || iLabels.length === 0"> - </span>
         <div v-else>
-          <el-tag
+          <ILabel
             v-for="label of iLabels"
-            :key="label"
-            :type="getLabelType(label)"
+            :key="label.id"
+            :el="formatterArgs.config"
+            :label="label"
             class="tag-formatter"
-            closable
-            disable-transitions
-            effect="plain"
-            size="small"
-            v-bind="formatterArgs.config"
             @close="handleCloseTag(label)"
-          >
-            <i class="fa fa-tag" /> <b>{{ getKey(label) }}</b>: {{ getValue(label) }}
-          </el-tag>
+          />
         </div>
         <div class="tag-tip">
           <el-link @click="goToLabelList">
@@ -88,10 +74,11 @@
 import BaseFormatter from './base.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import Dialog from '@/components/Dialog'
+import ILabel from '@/components/Widgets/ILabel'
 
 export default {
   name: 'LabelsFormatter',
-  components: { Select2, Dialog },
+  components: { Select2, Dialog, ILabel },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -140,8 +127,7 @@ export default {
       showDialog: false
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     this.initial = this.formatterArgs.getLabels(this.cellValue)
     this.iLabels = [...this.initial]
@@ -160,10 +146,11 @@ export default {
       this.valueSelect2.url = `/api/v1/labels/labels/?name=${val}`
     },
     getKey(tag) {
-      return tag.split(':')[0]
-    },
-    getValue(tag) {
-      return tag.split(':').slice(1).join(':')
+      if (typeof tag === 'string') {
+        return tag.split(':')[0]
+      } else {
+        return tag.name
+      }
     },
     handleAddLabel() {
       const key = this.keySelect2.value
@@ -192,7 +179,7 @@ export default {
       const path = new URL(this.url, location.origin).pathname
       const url = `${path}${this.row.id}/`
       this.$axios.patch(url, { labels: this.iLabels }).then(res => {
-        this.$message.success('修改成功')
+        this.$message.success(this.$tc('UpdateSuccess'))
         this.showDialog = false
       })
     },
@@ -207,6 +194,7 @@ export default {
 .tag {
   display: flex;
   flex-wrap: wrap;
+
   & > span {
     overflow: hidden;
     white-space: nowrap;
@@ -215,7 +203,7 @@ export default {
 }
 
 .tag-select {
-  >>> .el-input__inner::placeholder {
+  > > > .el-input__inner::placeholder {
     font-size: 13px;
   }
 }
@@ -224,6 +212,7 @@ export default {
   visibility: hidden;
   position: relative;
   transition: all 1s;
+
   & > i {
     position: absolute;
     top: 50%;
@@ -233,14 +222,17 @@ export default {
 
 .label-container {
   display: flex;
+
   .label-formatter-col {
     overflow: hidden;
   }
+
   &:hover {
     .edit-btn {
       visibility: visible;
     }
   }
+
   .tag-formatter {
     line-height: 16px;
   }
@@ -267,11 +259,7 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-  max-width: 160px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 0.8;
+
 }
 
 .tag-tip {

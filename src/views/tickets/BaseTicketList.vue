@@ -10,7 +10,7 @@
 <script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { APPROVE, CLOSED, OPEN, REJECT } from './const'
 
 export default {

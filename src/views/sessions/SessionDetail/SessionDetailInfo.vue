@@ -13,7 +13,7 @@
 import DetailCard from '@/components/Cards/DetailCard/index'
 import QuickActions from '@/components/QuickActions'
 import { terminateSession } from '@/api/sessions'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'SessionDetailInfo',

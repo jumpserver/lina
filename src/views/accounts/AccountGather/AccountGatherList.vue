@@ -16,7 +16,7 @@
 
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 

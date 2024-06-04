@@ -11,7 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
-import { getDayFuture } from '@/utils/common'
+import { getDayFuture } from '@/utils/time'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'

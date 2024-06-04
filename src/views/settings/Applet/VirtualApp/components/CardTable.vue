@@ -54,7 +54,7 @@
 <script>
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 const defaultFirstPage = 1
 

@@ -7,8 +7,10 @@
 
 <script>
 import DetailCard from './index.vue'
-import { copy, toSafeLocalDateStr } from '@/utils/common'
+import { copy } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import IBox from '@/components/IBox/index.vue'
+import LabelsDetailFormatter from '../Formatters/LabelsDetailFormatter.vue'
 
 export default {
   name: 'AutoDetailCard',
@@ -113,6 +115,12 @@ export default {
       }
       return value
     },
+    getComponentByName(name) {
+      if (name === 'labels') {
+        return LabelsDetailFormatter
+      }
+      return null
+    },
     parseArrayValue(value, excludes, label) {
       if (Array.isArray(value)) {
         const tp = typeof value[0]
@@ -184,6 +192,16 @@ export default {
 
         let value = this.iObject[name]
         const label = fieldMeta.label
+
+        const component = this.getComponentByName(name)
+        if (component) {
+          this.items.push({
+            key: label,
+            value: value,
+            component: component
+          })
+          continue
+        }
 
         const formatter = this.formatters[name]
         if (formatter) {

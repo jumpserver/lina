@@ -25,7 +25,7 @@
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
-        <span v-if="!node.isLeaf"> ({{ data.children.length -1 }}) </span>
+        <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
       <i slot="prefix" class="el-input__icon el-icon-search" />
     </el-cascader>
@@ -77,11 +77,7 @@ export default {
         this.showLabelSearch = true
         return
       }
-      const labels = label.split(',').map(item => item.split(':'))
-      const notExistLabels = labels.filter(item => {
-        return !this.labelValue.find(label => label[0] === item[0] && label[1] === item[1])
-      })
-      this.labelValue = [...this.labelValue, ...notExistLabels]
+      this.labelValue = [[label.name, label.value]]
       this.getLabelOptions()
       setTimeout(() => {
         this.showLabelSearch = true
@@ -184,7 +180,7 @@ export default {
       }
 
       .el-input__suffix {
-        color: var(--color-icon-primary) !important; ;
+        color: var(--color-icon-primary) !important;;
       }
     }
 

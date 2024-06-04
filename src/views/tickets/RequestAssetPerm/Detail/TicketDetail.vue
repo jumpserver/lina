@@ -56,7 +56,7 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'

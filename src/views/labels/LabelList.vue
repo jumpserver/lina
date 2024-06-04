@@ -32,7 +32,7 @@ export default {
       tableConfig: {
         url: '/api/v1/labels/labels/',
         columnsShow: {
-          default: ['name', 'value', 'res_count', 'date_created', 'actions'],
+          default: ['name', 'value', 'color', 'res_count', 'date_created', 'actions'],
           min: ['name', 'actions']
         },
         columnsMeta: {
@@ -46,6 +46,20 @@ export default {
               }
               return (
                 <el-link type='success' onClick={onClick}>{ row['res_count'] }</el-link>
+              )
+            }
+          },
+          color: {
+            formatter: (row) => {
+              const onChange = () => {
+                vm.$axios.patch(`/api/v1/labels/labels/${row.id}/`, { color: row.color })
+              }
+              return (
+                <el-color-picker
+                  v-model={row.color}
+                  size='small'
+                  onChange={onChange}
+                />
               )
             }
           },
@@ -96,6 +110,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.el-color-picker__trigger {
+  width: 30px;
+  height: 30px;
+  display: block
+}
 
 </style>
