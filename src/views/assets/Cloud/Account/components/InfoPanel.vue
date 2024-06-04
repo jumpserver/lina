@@ -1,6 +1,6 @@
 <template>
   <div class="panel-item">
-    <span>{{ title }}: </span>
+    <span>{{ title }}</span>
     <el-link :underline="false" type="primary">
       <span class="content">{{ content }}</span>
     </el-link>
@@ -33,12 +33,29 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.content {
-  font-weight: bold;
-  margin-left: 2px;
+@mixin textOverflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
+
 .panel-item {
-  margin: 6px 0;
-  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 0;
+  line-height: 20px;
+  @include textOverflow;
+
+  span {
+   @include textOverflow;
+    min-width: 120px;
+    text-align: left;
+  }
+
+  ::v-deep .content {
+    margin-left: 5px;
+    color: var(--color-text-primary);
+  }
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
-  <div style="height: 100%;">
-    <el-row :gutter="20" style="height: 6%;">
+  <div class="account-panel">
+    <el-row :gutter="20">
       <el-col :span="22">
         <div class="line">
-          <span style="font-weight: bold;">{{ object.name }}</span>
+          <span>{{ object.name }}</span>
         </div>
       </el-col>
-      <el-col :span="2" style="margin-top: -10px;" @click.native="handleClick($event)">
+      <el-col :span="2" @click.native="handleClick($event)">
         <el-dropdown>
           <el-link :underline="false" type="primary"><i class="el-icon-more el-icon--right" /></el-link>
           <el-dropdown-menu default="dropdown">
@@ -19,10 +19,10 @@
     </el-row>
     <el-divider />
     <el-row :gutter="20" style="height: 80%;">
-      <el-col :span="8" class="image">
-        <Icon icon="computer" />
+      <el-col :span="14" class="image">
+        <el-image :src="cloudImage" fit="contain" />
       </el-col>
-      <el-col :span="16" style="padding: 0;">
+      <el-col :span="16">
         <InfoPanel :content="iTask.regions.length" :title="$tc('TotalSyncRegion')" />
         <InfoPanel :content="iTask.instance_count || 0" :title="$tc('TotalSyncAsset')" />
         <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" />
@@ -60,18 +60,17 @@
 </template>
 
 <script>
-import Icon from '@/components/Widgets/Icon/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import AuthPanel from './AuthPanel'
 import AssetPanel from './AssetPanel'
 import InfoPanel from './InfoPanel'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 
 export default {
   name: 'AccountPanel',
   components: {
     Dialog,
-    Icon,
     AuthPanel,
     AssetPanel,
     InfoPanel
@@ -108,6 +107,9 @@ export default {
   computed: {
     iTask() {
       return { ...{ strategy: [] }, ...this.object?.task }
+    },
+    cloudImage() {
+      return ACCOUNT_PROVIDER_ATTRS_MAP[`${this.object.provider.value}`].image
     }
   },
   methods: {
@@ -144,25 +146,44 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-divider--horizontal {
-  margin: 10px 0;
-}
-.line {
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.image {
+<style scoped lang="scss">
+.account-panel {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   height: 100%;
 
-  svg {
-    width: 40px;
-    height: 40px;
+  & .el-row:first-of-type {
+    height: 30px !important;
+
+    .el-col-22 {
+      padding-left: 0 !important;
+
+      .line {
+        line-height: 30px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: bold;
+      }
+    }
+
+    .el-col-2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 30px;
+    }
+  }
+
+  .el-row {
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+  }
+
+  .el-divider--horizontal {
+    margin: 5px 0;
   }
 }
 </style>
