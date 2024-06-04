@@ -3,12 +3,12 @@
     <el-row :gutter="20" style="height: 6%;">
       <el-col :span="22">
         <div class="line">
-          {{ object.provider.label }} | <span style="font-weight: bold;">{{ object.name }}</span>
+          <span style="font-weight: bold;">{{ object.name }}</span>
         </div>
       </el-col>
       <el-col :span="2" style="margin-top: -10px;" @click.native="handleClick($event)">
         <el-dropdown>
-          <el-link type="primary" :underline="false"><i class="el-icon-more el-icon--right" /></el-link>
+          <el-link :underline="false" type="primary"><i class="el-icon-more el-icon--right" /></el-link>
           <el-dropdown-menu default="dropdown">
             <el-dropdown-item v-for="action in actions" :key="action.name" @click.native="action.callback">
               <i v-if="action.icon" :class="action.icon" /> {{ action.name }}
@@ -23,23 +23,23 @@
         <Icon icon="computer" />
       </el-col>
       <el-col :span="16" style="padding: 0;">
-        <InfoPanel :title="$tc('TotalSyncRegion')" :content="iTask.regions.length" />
-        <InfoPanel :title="$tc('TotalSyncAsset')" :content="iTask.instance_count || 0" />
-        <InfoPanel :title="$tc('TotalSyncStrategy')" :content="iTask.strategy.length" />
-        <InfoPanel :title="$tc('DateJoined')" :content="toSafeLocalDateStr(object.date_created)" />
-        <InfoPanel :title="$tc('DateLastSync')" :content="toSafeLocalDateStr(iTask.date_last_sync)" />
+        <InfoPanel :content="iTask.regions.length" :title="$tc('TotalSyncRegion')" />
+        <InfoPanel :content="iTask.instance_count || 0" :title="$tc('TotalSyncAsset')" />
+        <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" />
+        <InfoPanel :content="toSafeLocalDateStr(object.date_created)" :title="$tc('DateJoined')" />
+        <InfoPanel :content="toSafeLocalDateStr(iTask.date_last_sync)" :title="$tc('DateLastSync')" />
       </el-col>
     </el-row>
     <Dialog
       :destroy-on-close="true"
+      :show-buttons="false"
       :title="$tc('CloudAccountUpdate')"
       :visible.sync="updateVisible"
-      :show-buttons="false"
       v-on="$listeners"
     >
       <AuthPanel
-        :provider="object.provider.value"
         :object="object"
+        :provider="object.provider.value"
         :visible.sync="updateVisible"
         @submitSuccess="onSubmitSuccess"
       />
@@ -48,9 +48,9 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :destroy-on-close="true"
-      :title="$tc('SyncOnline')"
       :show-buttons="false"
       :show-close="false"
+      :title="$tc('SyncOnline')"
       :visible.sync="onlineSyncVisible"
       v-on="$listeners"
     >
