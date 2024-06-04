@@ -6,7 +6,16 @@
       </div>
       <div class="sub">{{ config.subTitle }}</div>
       <slot class="custom">
-        <div class="num">{{ config.total }}</div>
+        <div>
+          <template v-if="config.route">
+            <router-link :to="config.route">
+              <div class="num">{{ config.total }}</div>
+            </router-link>
+          </template>
+          <template v-else>
+            <div class="num">{{ config.total }}</div>
+          </template>
+        </div>
         <div class="add">
           <span class="add-num">
             {{ $tc('WeekAdd') }}：
