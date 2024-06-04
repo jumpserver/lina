@@ -18,7 +18,7 @@ export default [
       {
         path: 'cmd-acls',
         component: empty,
-        redirect: '',
+        redirect: 'cmd-acls/list',
         name: 'CmdACL',
         meta: {
           title: i18n.t('CommandFilterAclList'),
@@ -28,7 +28,7 @@ export default [
         children: [
           // Command Filter ACL
           {
-            path: '',
+            path: 'list',
             name: 'CommandFilterAclList',
             component: () => import('@/views/acl/CommandAcl/index'),
             hidden: true,
@@ -63,10 +63,10 @@ export default [
       {
         path: 'login-asset-acls',
         component: empty,
-        redirect: '',
-        name: 'LoginAssetAcls',
+        redirect: 'login-asset-acls/list',
+        // name: 'LoginAssetAcls',
         meta: {
-          title: i18n.t('AssetAclList'),
+          // title: i18n.t('AssetAclList'),
           licenseRequired: true,
           app: 'acls',
           resource: 'loginassetacl'
@@ -105,7 +105,7 @@ export default [
         path: 'cmd-groups',
         component: empty,
         redirect: '',
-        name: 'CmdGroups',
+        // name: 'CmdGroups',
         hidden: true,
         meta: {
           app: 'acls',
@@ -160,9 +160,9 @@ export default [
         path: 'connect-method-acls',
         component: globalSubmenu,
         redirect: '',
-        name: 'ConnectMethodACL',
+        // name: 'ConnectMethodACL',
         meta: {
-          title: i18n.t('ConnectMethodList'),
+          // title: i18n.t('ConnectMethodList'),
           licenseRequired: true,
           app: 'acls',
           disableOrgsChange: true,
@@ -204,7 +204,7 @@ export default [
         redirect: '',
         hidden: true,
         meta: {
-          title: i18n.t('UserLoginAclList'),
+          // title: i18n.t('UserLoginAclList'),
           app: 'acls',
           licenseRequired: true,
           resource: 'loginacl',

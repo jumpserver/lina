@@ -7,7 +7,7 @@ export default [
     redirect: '',
     component: empty,
     meta: {
-      title: i18n.t('Sessions'),
+      // title: i18n.t('Sessions'),
       app: 'terminal',
       resource: 'session',
       expanded: true,

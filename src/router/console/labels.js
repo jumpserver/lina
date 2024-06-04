@@ -7,7 +7,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('Tags'),
+      // title: i18n.t('Tags'),
       icon: 'tag',
       app: 'labels'
     },

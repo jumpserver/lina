@@ -7,7 +7,7 @@ const clouds = {
   redirect: '',
   hidden: true,
   meta: {
-    title: i18n.t('CloudSync'),
+    // title: i18n.t('CloudSync'),
     app: 'xpack',
     resource: 'account'
   },
@@ -26,7 +26,7 @@ const clouds = {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('CloudAccountList'),
+        // title: i18n.t('CloudAccountList'),
         permissions: ['xpack.view_account']
       },
       children: [
@@ -79,7 +79,7 @@ const clouds = {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('Strategy'),
+        // title: i18n.t('Strategy'),
         permissions: ['xpack.view_strategy']
       },
       children: [

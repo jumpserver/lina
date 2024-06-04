@@ -5,9 +5,9 @@ export default [
   {
     path: 'accounts',
     component: empty,
-    name: 'Account',
+    // name: 'Account',
     meta: {
-      title: i18n.t('AssetAccount'),
+      // title: i18n.t('AssetAccount'),
       app: 'accounts',
       icon: 'accounts',
       permissions: ['accounts.view_account']
@@ -70,7 +70,7 @@ export default [
     path: 'account-template',
     component: empty,
     meta: {
-      title: i18n.t('AccountTemplate'),
+      // title: i18n.t('AccountTemplate'),
       app: 'accounts',
       icon: 'template',
       permissions: ['accounts.view_accounttemplate']
@@ -119,7 +119,7 @@ export default [
   {
     path: 'automations',
     component: empty,
-    name: 'AccountAutomation',
+    // name: 'AccountAutomation',
     meta: {
       title: i18n.t('Automations'),
       name: 'Automations',
@@ -131,7 +131,7 @@ export default [
         path: 'account-push',
         component: empty,
         redirect: '',
-        name: 'AccountPush',
+        //  name: 'AccountPush',
         meta: {
           app: 'accounts',
           name: 'AccountPushList',
@@ -208,9 +208,9 @@ export default [
       {
         path: 'account-change-secret',
         component: empty,
-        name: 'AccountChangeSecret',
+        // name: 'AccountChangeSecret',
         meta: {
-          title: i18n.t('AccountChangeSecret'),
+          // title: i18n.t('AccountChangeSecret'),
           app: 'accounts',
           licenseRequired: true
         },
@@ -281,9 +281,9 @@ export default [
         path: 'account-gather',
         component: empty,
         redirect: '',
-        name: 'AccountGather',
+        // name: 'AccountGather',
         meta: {
-          title: i18n.t('AccountGatherList'),
+          // title: i18n.t('AccountGatherList'),
           app: 'accounts',
           // activeMenu: '/console/accounts/automations',
           licenseRequired: true
@@ -361,10 +361,10 @@ export default [
       {
         path: 'account-backup',
         component: empty,
-        name: 'AccountBackup',
+        // name: 'AccountBackup',
         redirect: '',
         meta: {
-          title: i18n.t('AccountBackup'),
+          // title: i18n.t('AccountBackup'),
           app: 'accounts',
           resource: 'accountbackupautomation',
           licenseRequired: true

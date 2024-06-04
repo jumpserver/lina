@@ -4,10 +4,10 @@ import empty from '@/layout/empty'
 export default [
   {
     path: 'login-logs',
-    name: 'LoginLog',
+    // name: 'LoginLog',
     component: empty,
     meta: {
-      title: i18n.t('LoginLog'),
+      // title: i18n.t('LoginLog'),
       icon: 'login',
       permissions: ['audits.view_userloginlog']
     },
@@ -49,7 +49,7 @@ export default [
     name: '',
     component: empty,
     meta: {
-      title: i18n.t('OperateLog'),
+      // title: i18n.t('OperateLog'),
       icon: 'operate-log',
       permissions: ['audits.view_operatelog']
     },

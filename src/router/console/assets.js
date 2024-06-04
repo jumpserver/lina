@@ -8,7 +8,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('AssetList'),
+      // title: i18n.t('AssetList'),
       app: 'assets',
       resource: 'asset',
       icon: 'assets'
@@ -123,7 +123,7 @@ export default [
     redirect: '',
     hidden: true,
     meta: {
-      title: i18n.t('networking'),
+      // title: i18n.t('networking'),
       app: 'assets',
       resource: 'asset'
     },

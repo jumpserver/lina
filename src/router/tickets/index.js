@@ -46,7 +46,7 @@ export default {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('Tickets'),
+        // title: i18n.t('Tickets'),
         icon: 'file-text-o',
         showOrganization: false
       },
@@ -119,7 +119,7 @@ export default {
       component: empty,
       redirect: '',
       meta: {
-        title: i18n.t('FlowSetUp'),
+        // title: i18n.t('FlowSetUp'),
         icon: 'ticket-flow',
         permissions: ['tickets.view_ticketflow'],
         resource: 'ticketflow'

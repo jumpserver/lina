@@ -121,7 +121,7 @@ export default {
       component: empty,
       redirect: '',
       meta: {
-        title: i18n.t('Storage'),
+        // title: i18n.t('Storage'),
         app: 'terminal',
         permissions: ['settings.change_terminal']
       },
@@ -187,7 +187,7 @@ export default {
       component: empty,
       redirect: '',
       meta: {
-        title: i18n.t('Terminal'),
+        // title: i18n.t('Terminal'),
         app: 'terminal',
         permissions: ['settings.change_terminal']
       },
@@ -273,7 +273,7 @@ export default {
       component: empty,
       redirect: '',
       meta: {
-        title: i18n.t('Applets'),
+        // title: i18n.t('Applets'),
         app: 'terminal',
         permissions: ['terminal.view_applet']
       },
@@ -414,7 +414,7 @@ export default {
       path: '/settings/tasks',
       component: empty,
       meta: {
-        title: i18n.t('SystemTasks'),
+        // title: i18n.t('SystemTasks'),
         icon: 'tasks',
         permissions: ['ops.view_celerytask']
       },

@@ -34,11 +34,11 @@ export default {
     },
     {
       path: '/workbench/assets',
-      name: 'MyAssets',
+      // name: 'MyAssets',
       component: empty,
       redirect: '',
       meta: {
-        title: i18n.t('MyAssets'),
+        // title: i18n.t('MyAssets'),
         permissions: ['perms.view_myassets']
       },
       children: [
@@ -100,11 +100,11 @@ export default {
         },
         {
           path: 'job',
-          name: 'Job',
+          // name: 'Job',
           component: empty,
           redirect: '',
           meta: {
-            title: i18n.t('JobManagement'),
+            // title: i18n.t('JobManagement'),
             icon: 'task',
             permissions: ['ops.view_job']
           },
