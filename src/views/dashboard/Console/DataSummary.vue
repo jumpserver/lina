@@ -31,7 +31,8 @@ export default {
         subIcon: 'broken-line',
         color: '#FFD260',
         chartTitle: this.$t('LoginUserToday'),
-        data: []
+        data: [],
+        route: { name: 'UserList' }
       },
       assetConfig: {
         title: this.$t('AssetData'),
@@ -41,7 +42,8 @@ export default {
         subIcon: 'broken-line',
         color: themeColor,
         chartTitle: this.$t('LoginAssetToday'),
-        data: []
+        data: [],
+        route: { name: 'AssetList' }
       }
     }
   },
