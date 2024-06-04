@@ -7,7 +7,7 @@ export default [
     path: 'asset-permissions',
     component: empty,
     meta: {
-      title: i18n.t('AssetPermission'),
+      // title: i18n.t('AssetPermission'),
       resource: 'assetpermission',
       icon: 'permission'
     },
