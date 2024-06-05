@@ -34,7 +34,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail'),
+        component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'),
         name: 'AssetPermissionDetail',
         hidden: true,
         meta: { title: i18n.t('AssetPermissionDetail'), permissions: ['perms.view_assetpermission'] }

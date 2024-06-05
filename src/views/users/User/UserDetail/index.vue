@@ -13,6 +13,7 @@ import UserGrantedAssets from './UserGrantedAssets'
 import UserInfo from './UserInfo'
 import UserLoginAcl from './UserLoginAcl.vue'
 import UserSession from './UserSession.vue'
+import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -22,6 +23,7 @@ export default {
     GenericDetailPage,
     UserGrantedAssets,
     UserAssetPermissionRules,
+    AssetPermissionDetail,
     UserSession
   },
   data() {
