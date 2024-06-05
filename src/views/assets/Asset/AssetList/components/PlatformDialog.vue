@@ -28,7 +28,8 @@
                 shadow="hover"
                 @click.native="createAsset(platform)"
               >
-                {{ platform.name }}
+                <img :src="loadImage(platform)" class="asset-icon" alt="icon">
+                <span class="platform-name">{{ platform.name }}</span>
               </el-card>
             </el-col>
           </el-collapse-item>
@@ -37,7 +38,6 @@
     </div>
   </Dialog>
 </template>
-
 <script>
 import Dialog from '@/components/Dialog'
 
@@ -123,6 +123,25 @@ export default {
     })
   },
   methods: {
+    loadImage(platform) {
+      const platformMap = {
+        'Huawei': 'huawei',
+        'Cisco': 'cisco',
+        'Gateway': 'gateway',
+        'macOS': 'macos',
+        'BSD': 'bsd',
+        'Vmware-vSphere': 'vmware'
+      }
+
+      const value = platformMap[platform.name] || platform.type.value
+
+      try {
+        return require(`@/assets/img/icons/${value}.png`)
+      } catch (error) {
+        this.$log.debug(`Image not found: ${value}.png`)
+        return require(`@/assets/img/icons/other.png`)
+      }
+    },
     loadRecentPlatformIds() {
       const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
       this.recentPlatformIds = recentPlatformIds
@@ -175,7 +194,7 @@ export default {
 .platform-item {
   margin: 5px 0;
 
-  & >>> .el-card__body {
+  & > > > .el-card__body {
     padding: 10px
   }
 
@@ -190,15 +209,35 @@ export default {
   font-weight: 500;
   color: #303133;
 }
->>> .el-collapse {
+
+> > > .el-collapse {
   border: none;
+
   .el-collapse-item:last-child {
     .el-collapse-item__header {
       border: none;
     }
+
     .el-collapse-item__wrap {
       border-bottom: none;
     }
   }
+}
+
+::v-deep .el-card__body {
+  display: flex;
+  align-items: center;
+}
+
+.asset-icon {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: -0.2em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.platform-name {
+  margin-left: 10px;
 }
 </style>

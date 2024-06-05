@@ -175,7 +175,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'ProfileSetting', query: { tab: 'PasswordUpdate' }})
+              this.$router.push({ name: 'PasswordAndSSHKey', query: { tab: 'Password' }})
             }.bind(this)
           }
         },
@@ -188,7 +188,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'ProfileSetting', query: { tab: 'SSHUpdate' }})
+              this.$router.push({ name: 'PasswordAndSSHKey', query: { tab: 'SSHKey' }})
             }.bind(this)
           }
         },
