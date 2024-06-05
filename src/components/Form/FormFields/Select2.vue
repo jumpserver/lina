@@ -249,9 +249,6 @@ export default {
       handler(newValue, oldValue) {
       },
       deep: true
-    },
-    iOptions(val) {
-      this.remote = val.length !== 0
     }
   },
   async mounted() {
