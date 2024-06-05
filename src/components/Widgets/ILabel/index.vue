@@ -73,6 +73,10 @@ export default {
 .tag-formatter {
   border: none;
 
+  span {
+    line-height: 20px;
+  }
+
   &.no-color {
     border: solid 1px var(--color-border);
   }

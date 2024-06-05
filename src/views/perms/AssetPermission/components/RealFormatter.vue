@@ -1,10 +1,9 @@
 <template>
   <el-form @submit.native.prevent>
     <el-form-item>
-      <el-checkbox-group v-model="choicesSelected">
-        <div class="group-title">资产上的账号</div>
-        <el-checkbox
-          v-for="(i) in choices.slice(0, 2)"
+      <el-radio-group v-model="choicesSelected">
+        <el-radio
+          v-for="(i) in choices"
           :key="i.label"
           :label="i.value"
           @change="handleCheckboxCheck(i, $event)"
@@ -13,39 +12,24 @@
           <el-tooltip :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
-        </el-checkbox>
-
-        <div v-if="showSpecAccounts" class="spec-accounts">
-          <TagInput
-            :autocomplete="autocomplete"
-            :tag-type="getTagType"
-            :value="specAccountsInput"
-            @change="handleTagChange"
-          />
-          <span v-if="showAddTemplate">
-            <el-button size="mini" type="primary" @click="showTemplateDialog=true">
-              {{ $t('TemplateAdd') }}
-            </el-button>
-            <span class="help-block" style="display: inline">
-              {{ addTemplateHelpText }}
-            </span>
+        </el-radio>
+      </el-radio-group>
+      <div v-if="showSpecAccounts" class="spec-accounts">
+        <TagInput
+          :autocomplete="autocomplete"
+          :tag-type="getTagType"
+          :value="specAccountsInput"
+          @change="handleTagChange"
+        />
+        <span v-if="showAddTemplate">
+          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
+            {{ $t('TemplateAdd') }}
+          </el-button>
+          <span class="help-block" style="display: inline">
+            {{ addTemplateHelpText }}
           </span>
-        </div>
-
-        <div class="group-title">虚拟账号</div>
-        <el-checkbox
-          v-for="(i) in choices.slice(2, )"
-          :key="i.label"
-          :label="i.value"
-          @change="handleCheckboxCheck(i, $event)"
-        >
-          {{ i.label }}
-          <el-tooltip :content="i.tip" :open-delay="500" placement="top">
-            <i class="fa fa-question-circle-o" />
-          </el-tooltip>
-        </el-checkbox>
-      </el-checkbox-group>
-
+        </span>
+      </div>
     </el-form-item>
 
     <Dialog
@@ -62,9 +46,7 @@
 
 <script>
 import { TagInput } from '@/components/Form/FormFields'
-import {
-  AccountLabelMapper, AllAccount, AnonymousAccount, ManualAccount, SameAccount, SpecAccount
-} from '@/views/perms/const'
+import { AccountLabelMapper, AllAccount, SpecAccount } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
 
@@ -95,10 +77,6 @@ export default {
       type: Boolean,
       default: true
     },
-    showVirtualAccount: {
-      type: Boolean,
-      default: true
-    },
     addTemplateHelpText: {
       type: String,
       default() {
@@ -118,31 +96,13 @@ export default {
         label: AccountLabelMapper[SpecAccount],
         value: SpecAccount,
         tip: this.$t('SpecAccountTip')
-      },
-      {
-        label: AccountLabelMapper[ManualAccount],
-        value: ManualAccount,
-        tip: this.$t('ManualAccountTip')
-      },
-      {
-        label: AccountLabelMapper[SameAccount],
-        value: SameAccount,
-        tip: this.$t('SameAccountTip')
-      },
-      {
-        label: AccountLabelMapper[AnonymousAccount],
-        value: AnonymousAccount,
-        tip: this.$t('AnonymousAccountTip')
       }
     ]
     return {
       ALL: AllAccount,
       SPEC: SpecAccount,
       showTemplateDialog: false,
-      choices: choices.filter(i => {
-        const isVirtualAccount = [SameAccount, ManualAccount, AnonymousAccount].includes(i.value)
-        return !(isVirtualAccount && !this.showVirtualAccount)
-      }),
+      choices: choices,
       choicesSelected: [this.ALL],
       specAccountsInput: [],
       specAccountsTemplate: [],
@@ -224,7 +184,7 @@ export default {
   },
   methods: {
     initDefaultChoice() {
-      const choicesSelected = this.value.filter(i => i.startsWith('@'))
+      const choicesSelected = this.value.filter(i => i === '@ALL')
       const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
       if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
         choicesSelected.push(this.SPEC)

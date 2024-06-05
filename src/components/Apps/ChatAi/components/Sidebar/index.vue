@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i v-if="hasClose" class="el-icon-close" @click="onClose" />
+      <i v-if="hasClose" class="el-icon-download" @click="onClose" />
     </div>
     <div v-if="!expanded" class="close-sidebar">
       <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
@@ -33,8 +33,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     onClose() {
@@ -66,7 +65,7 @@ export default {
       padding: 4px;
     }
 
-    i, .svg{
+    i, .svg {
       border-radius: 2px;
 
       &:hover {
@@ -76,10 +75,16 @@ export default {
     }
   }
 }
->>> .el-tabs {
+
+.el-icon-download {
+  transform: rotate(-90deg)
+}
+
+::v-deep .el-tabs {
   .el-tabs__item {
     padding: 0 10px;
     font-size: 14px;
+
     :hover {
       color: #7b8085;
     }
