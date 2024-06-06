@@ -1,12 +1,11 @@
 <template>
   <el-form @submit.native.prevent>
     <el-form-item>
-      <el-radio-group v-model="choicesSelected">
+      <el-radio-group v-model="choiceSelected" @input="handleRadioCheck">
         <el-radio
           v-for="(i) in choices"
           :key="i.label"
           :label="i.value"
-          @change="handleCheckboxCheck(i, $event)"
         >
           {{ i.label }}
           <el-tooltip :content="i.tip" :open-delay="500" placement="top">
@@ -103,7 +102,7 @@ export default {
       SPEC: SpecAccount,
       showTemplateDialog: false,
       choices: choices,
-      choicesSelected: [this.ALL],
+      choiceSelected: this.ALL,
       specAccountsInput: [],
       specAccountsTemplate: [],
       showSpecAccounts: false,
@@ -118,8 +117,7 @@ export default {
         tableConfig: {
           url: '/api/v1/accounts/account-templates/',
           columns: [
-            'name', 'username', 'has_secret', 'comment',
-            'date_created', 'date_updated'
+            'name', 'username', 'has_secret', 'comment'
           ],
           columnsMeta: {
             name: {
@@ -174,30 +172,14 @@ export default {
   },
   mounted() {
     this.initDefaultChoice()
-    setTimeout(() => {
-      if (this.value.length === 0) {
-        this.$emit('input', ['@ALL'])
-      } else {
-        this.$emit('input', this.value)
-      }
-    })
   },
   methods: {
     initDefaultChoice() {
-      const choicesSelected = this.value.filter(i => i === '@ALL')
-      const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
-      if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
-        choicesSelected.push(this.SPEC)
+      this.choiceSelected = this.value.indexOf(this.ALL) >= 0 ? this.ALL : this.SPEC
+      this.specAccountsInput = this.value.filter(i => !i.startsWith('@'))
+      if (this.choiceSelected === this.SPEC) {
         this.showSpecAccounts = true
       }
-      if (this.value.indexOf(this.SPEC) > -1) {
-        this.showSpecAccounts = true
-      }
-      if (choicesSelected.length === 0) {
-        choicesSelected.push(this.ALL)
-      }
-      this.choicesSelected = choicesSelected
-      this.specAccountsInput = specAccountsInput
     },
     handleAccountTemplateCancel() {
       this.showTemplateDialog = false
@@ -212,18 +194,8 @@ export default {
         this.outputValue()
       }, 100)
     },
-    handleCheckboxCheck(item, checked) {
-      if (item.value === this.SPEC) {
-        this.showSpecAccounts = checked
-      } else if (item.value === this.ALL) {
-        this.showSpecAccounts = checked ? false : checked
-      }
-      if (item.value === this.ALL) {
-        this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
-      }
-      if (item.value === this.SPEC) {
-        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
-      }
+    handleRadioCheck(item) {
+      this.showSpecAccounts = item === this.SPEC
       this.outputValue()
     },
     handleTagChange(val) {
@@ -231,10 +203,12 @@ export default {
       this.outputValue()
     },
     outputValue() {
-      let choicesSelected = this.choicesSelected
-      if (this.showSpecAccounts) {
+      let choicesSelected = []
+      if (this.choiceSelected === this.ALL) {
+        choicesSelected = [this.ALL]
+      } else {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
-        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput, ...templateIds]
+        choicesSelected = [...this.specAccountsInput, ...templateIds]
       }
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)

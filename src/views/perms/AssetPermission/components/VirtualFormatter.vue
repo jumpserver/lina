@@ -48,7 +48,6 @@ export default {
       }
     ]
     return {
-      showTemplateDialog: false,
       choices: choices,
       choicesSelected: []
     }
@@ -59,13 +58,16 @@ export default {
   methods: {
     initDefaultChoice() {
       this.choicesSelected = this.value.filter(i => {
-        return i.startsWith('@') && i !== '@ALL'
+        return i.startsWith('@')
+      }).filter(i => {
+        return !['@ALL', '@SPEC'].includes(i)
       })
     },
-    handleCheckboxCheck(item, checked) {
+    handleCheckboxCheck() {
       this.outputValue()
     },
     outputValue() {
+      console.log('outputValue', this.choicesSelected)
       this.$emit('input', this.choicesSelected)
       this.$emit('change', this.choicesSelected)
     }

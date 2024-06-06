@@ -81,7 +81,7 @@ export default {
       }
 
       return (
-        <span >
+        <span>
           <span>{label} </span>
           {helpText
             ? (<el-tooltip content={helpText} placement='top'>
@@ -95,14 +95,15 @@ export default {
 
 <style lang="scss" scoped>
 
-.el-tree-custom >>> {
+.el-tree-custom > > > {
   .help-tips {
     margin-left: 10px;
     font-size: 12px;
     color: #999;
   }
+
   .el-tree-node__content:hover {
-    background-color: inherit;
+    background-color: transparent;
   }
 }
 

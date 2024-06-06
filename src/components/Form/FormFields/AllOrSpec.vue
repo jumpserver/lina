@@ -33,8 +33,8 @@ export default {
     return {
       type: 'all', // all, selected
       types: [
-        { name: 'all', label: this.$t('All') },
-        { name: 'spec', label: this.$t('Spec') + this.$t('WordSep') + this.resource }
+        { name: 'all', label: this.$t('All') + this.$t('WordSep') + this.resourceLower },
+        { name: 'spec', label: this.$t('Spec') + this.$t('WordSep') + this.resourceLower }
       ],
       selected: []
     }
@@ -46,8 +46,10 @@ export default {
       } else {
         return this.selected
       }
+    },
+    resourceLower() {
+      return this.resource.toLowerCase()
     }
-
   },
   mounted() {
     if (!this.value || this.value.length === 0) {

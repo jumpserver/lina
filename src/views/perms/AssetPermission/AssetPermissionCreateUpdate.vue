@@ -151,7 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep .el-tree {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 </style>
