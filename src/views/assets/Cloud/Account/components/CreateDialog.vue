@@ -64,12 +64,17 @@ export default {
   },
   data() {
     return {
-      activeMenuMap: { 1: 'ProviderPanel', 2: 'AuthPanel', 3: 'AssetPanel', 4: 'ResultPanel' },
-      activeMenu: 'ProviderPanel',
-      selected: '',
-      firstStepDesc: this.$tc('SelectPlatforms'),
       active: 1,
-      account: {}
+      selected: '',
+      activeMenu: 'ProviderPanel',
+      firstStepDesc: this.$tc('SelectPlatforms'),
+      account: {},
+      activeMenuMap: {
+        1: 'ProviderPanel',
+        2: 'AuthPanel',
+        3: 'AssetPanel',
+        4: 'ResultPanel'
+      }
     }
   },
   computed: {
