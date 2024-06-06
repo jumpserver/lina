@@ -78,7 +78,7 @@ export default {
           actions: {
             formatterArgs: {
               hasClone: false,
-              updateRoute: 'ApiKeyCreateUpdate',
+              updateRoute: 'AccessKeyCreateUpdate',
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.reloadTable()
