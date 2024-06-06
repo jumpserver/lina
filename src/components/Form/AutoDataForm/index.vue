@@ -144,8 +144,11 @@ export default {
       if (field.attrs.error === error) {
         error += '.'
       }
-      field.el.errors = error
-      field.attrs.error = error
+
+      if (typeof error === 'string') {
+        field.el.errors = error
+        field.attrs.error = error
+      }
     },
     groupHidden(group, i) {
       for (const field of group.fields) {
