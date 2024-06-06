@@ -98,8 +98,6 @@ export default {
         this.activeMenu = this.activeMenuMap[v]
       }
     }
-  },
-  methods: {
   }
 }
 </script>
