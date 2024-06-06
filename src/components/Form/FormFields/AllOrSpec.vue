@@ -30,11 +30,12 @@ export default {
     }
   },
   data() {
+    const resourceDisplay = this.$t('WordSep') + this.resource.toLowerCase()
     return {
       type: 'all', // all, selected
       types: [
-        { name: 'all', label: this.$t('All') + this.$t('WordSep') + this.resourceLower },
-        { name: 'spec', label: this.$t('Spec') + this.$t('WordSep') + this.resourceLower }
+        { name: 'all', label: this.$t('All') + resourceDisplay },
+        { name: 'spec', label: this.$t('Spec') + resourceDisplay }
       ],
       selected: []
     }
@@ -46,9 +47,6 @@ export default {
       } else {
         return this.selected
       }
-    },
-    resourceLower() {
-      return this.resource.toLowerCase()
     }
   },
   mounted() {

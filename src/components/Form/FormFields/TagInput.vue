@@ -87,7 +87,7 @@ export default {
   },
   computed: {
     iPlaceholder() {
-      return `${this.placeholder} ( ${this.$t('EnterToContinue')} )`
+      return `${this.placeholder} (${this.$t('EnterToContinue')})`
     }
 
   },
@@ -165,31 +165,32 @@ export default {
       border-color: #C0C4CC;
     }
 
-    &>>> .el-tag {
+    & > > > .el-tag {
       margin-top: 1px;
       font-family: sans-serif !important;
     }
 
-    &>>> .el-autocomplete {
+    & > > > .el-autocomplete {
       height: 28px;
     }
   }
 
   .search-input {
     flex: 1;
-    &>>> .el-input__inner {
+
+    & > > > .el-input__inner {
       max-width: 100%;
       border: none;
       padding-left: 10px;
     }
   }
 
-  .el-input >>> .el-input__inner {
+  .el-input > > > .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
 
-  .filter-field >>> .el-input__inner {
+  .filter-field > > > .el-input__inner {
     height: 28px;
   }
 
@@ -197,6 +198,7 @@ export default {
     display: inherit;
     padding-right: 6px;
     cursor: pointer;
+
     &:hover {
       color: #999999;
     }

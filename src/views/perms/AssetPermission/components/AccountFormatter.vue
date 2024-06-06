@@ -1,10 +1,9 @@
 <template>
-  <el-form @submit.native.prevent>
+  <el-form class="account-content" @submit.native.prevent>
     <el-form-item>
       <el-checkbox-group v-model="choicesSelected">
-        <div class="group-title">资产上的账号</div>
         <el-checkbox
-          v-for="(i) in choices.slice(0, 2)"
+          v-for="(i) in choices"
           :key="i.label"
           :label="i.value"
           @change="handleCheckboxCheck(i, $event)"
@@ -16,6 +15,7 @@
         </el-checkbox>
 
         <div v-if="showSpecAccounts" class="spec-accounts">
+          <div class="group-title">{{ $t('SpecAccount') }}</div>
           <TagInput
             :autocomplete="autocomplete"
             :tag-type="getTagType"
@@ -26,26 +26,27 @@
             <el-button size="mini" type="primary" @click="showTemplateDialog=true">
               {{ $t('TemplateAdd') }}
             </el-button>
-            <span class="help-block" style="display: inline">
+            <span class="help-block">
               {{ addTemplateHelpText }}
             </span>
           </span>
         </div>
 
-        <div class="group-title">虚拟账号</div>
-        <el-checkbox
-          v-for="(i) in choices.slice(2, )"
-          :key="i.label"
-          :label="i.value"
-          @change="handleCheckboxCheck(i, $event)"
-        >
-          {{ i.label }}
-          <el-tooltip :content="i.tip" :open-delay="500" placement="top">
-            <i class="fa fa-question-circle-o" />
-          </el-tooltip>
-        </el-checkbox>
+        <div v-if="showVirtualAccountCheckbox">
+          <div class="group-title">{{ $t('VirtualAccounts') }}</div>
+          <el-checkbox
+            v-for="i in virtualAccounts"
+            :key="i.label"
+            :label="i.value"
+            @change="handleCheckboxCheck(i, $event)"
+          >
+            {{ i.label }}
+            <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+              <i class="fa fa-question-circle-o" />
+            </el-tooltip>
+          </el-checkbox>
+        </div>
       </el-checkbox-group>
-
     </el-form-item>
 
     <Dialog
@@ -108,6 +109,7 @@ export default {
   },
   data() {
     const vm = this
+    const virtual = '@VIRTUAL'
     const choices = [
       {
         label: AccountLabelMapper[AllAccount],
@@ -120,29 +122,36 @@ export default {
         tip: this.$t('SpecAccountTip')
       },
       {
-        label: AccountLabelMapper[ManualAccount],
-        value: ManualAccount,
-        tip: this.$t('ManualAccountTip')
-      },
-      {
-        label: AccountLabelMapper[SameAccount],
-        value: SameAccount,
-        tip: this.$t('SameAccountTip')
-      },
-      {
-        label: AccountLabelMapper[AnonymousAccount],
-        value: AnonymousAccount,
-        tip: this.$t('AnonymousAccountTip')
+        label: this.$t('VirtualAccounts'),
+        value: virtual,
+        tip: this.$t('VirtualAccountHelpMsg'),
+        disabled: !this.showVirtualAccount
       }
     ]
     return {
       ALL: AllAccount,
       SPEC: SpecAccount,
+      VIRTUAL: virtual,
       showTemplateDialog: false,
-      choices: choices.filter(i => {
-        const isVirtualAccount = [SameAccount, ManualAccount, AnonymousAccount].includes(i.value)
-        return !(isVirtualAccount && !this.showVirtualAccount)
-      }),
+      choices: choices,
+      virtualAccounts: [
+        {
+          label: AccountLabelMapper[ManualAccount],
+          value: ManualAccount,
+          tip: this.$t('ManualAccountTip')
+        },
+        {
+          label: AccountLabelMapper[SameAccount],
+          value: SameAccount,
+          tip: this.$t('SameAccountTip')
+        },
+        {
+          label: AccountLabelMapper[AnonymousAccount],
+          value: AnonymousAccount,
+          tip: this.$t('AnonymousAccountTip')
+        }
+      ],
+      virtualAccountsNames: [ManualAccount, SameAccount, AnonymousAccount],
       choicesSelected: [this.ALL],
       specAccountsInput: [],
       specAccountsTemplate: [],
@@ -212,6 +221,17 @@ export default {
       }
     }
   },
+  computed: {
+    showVirtualAccountCheckbox() {
+      if (!this.showVirtualAccount) {
+        return false
+      }
+      const hasVirtual = this.choicesSelected.filter(i => {
+        return i && i.startsWith('@') && i !== '@ALL' && i !== '@SPEC'
+      })
+      return hasVirtual.length > 0
+    }
+  },
   mounted() {
     this.initDefaultChoice()
     setTimeout(() => {
@@ -225,6 +245,8 @@ export default {
   methods: {
     initDefaultChoice() {
       const choicesSelected = this.value.filter(i => i.startsWith('@'))
+
+      // 是否添加特定账号选择
       const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
       if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
         choicesSelected.push(this.SPEC)
@@ -233,6 +255,16 @@ export default {
       if (this.value.indexOf(this.SPEC) > -1) {
         this.showSpecAccounts = true
       }
+
+      // 是否添加虚拟账号选择
+      const hasVirtual = this.value.filter(i => {
+        return i && i.startsWith('@') && i !== '@ALL' && i !== '@SPEC'
+      })
+      if (hasVirtual.length > 0 && !choicesSelected.includes(this.VIRTUAL)) {
+        this.choicesSelected = [...choicesSelected, this.VIRTUAL]
+      }
+
+      // 如果没有就设置 ALL
       if (choicesSelected.length === 0) {
         choicesSelected.push(this.ALL)
       }
@@ -260,9 +292,12 @@ export default {
       }
       if (item.value === this.ALL) {
         this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
-      }
-      if (item.value === this.SPEC) {
+      } else if (item.value === this.SPEC) {
         this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
+      } else if (item.value === this.VIRTUAL) {
+        if (!checked) {
+          this.choicesSelected = this.choicesSelected.filter(i => !this.virtualAccountsNames.includes(i))
+        }
       }
       this.outputValue()
     },
@@ -290,13 +325,9 @@ export default {
 
 .spec-accounts {
   ::v-deep {
-    .el-select {
+    .filter-field {
       width: 100%;
-      margin-bottom: 3px;
-    }
-
-    .help-block {
-      display: block !important;
+      margin-bottom: 3px !important;
     }
   }
 }
@@ -307,23 +338,19 @@ export default {
 }
 
 .group-title {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-secondary);
+  //border-bottom: dashed 1px var(--color-border);
+  margin-top: 5px;
+  font-weight: 500;
 }
 
-//::v-deep .el-checkbox-group {
-//  display: grid;
-//  grid-template-columns: repeat(3, 1fr);
-//}
-//
-//::v-deep .el-checkbox-group label:nth-child(1),
-//::v-deep .el-checkbox-group label:nth-child(2) {
-//  grid-row: 1 / 2;
-//}
-//
-//::v-deep .el-checkbox-group label:nth-child(3),
-//::v-deep .el-checkbox-group label:nth-child(4),
-//::v-deep .el-checkbox-group label:nth-child(5) {
-//  grid-row: 2 / 3;
-//}
+.account-content {
+  ::v-deep {
+    .el-form-item__content {
+      width: 90% !important;
+    }
+  }
+}
+
 </style>
