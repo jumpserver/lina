@@ -3,7 +3,12 @@
     <el-form :label-width="labelWidth" class="content" label-position="left">
       <el-form-item v-for="item in items" :key="item.key" :class="item.class" :label="item.key">
         <span slot="label"> {{ formateLabel(item.key) }}</span>
-        <ItemValue :value="item.value" class="item-value" v-bind="item" />
+        <span
+          :is="item.component"
+          v-if="item.component"
+          v-bind="{...item}"
+        />
+        <ItemValue v-else :value="item.value" class="item-value" v-bind="item" />
       </el-form-item>
     </el-form>
     <slot />

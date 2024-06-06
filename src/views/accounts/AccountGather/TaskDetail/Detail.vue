@@ -8,7 +8,7 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'Detail',

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import Dialog from '@/components/Dialog'
 
 export default {

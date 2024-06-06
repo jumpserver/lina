@@ -34,7 +34,8 @@
 
 <script>
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { getUpdateObjURL, sleep } from '@/utils/common'
+import { getUpdateObjURL } from '@/utils/common'
+import { sleep } from '@/utils/time'
 import { EditableInputFormatter, StatusFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 

@@ -8,7 +8,7 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
 
 export default {

@@ -64,7 +64,7 @@ import Dialog from '@/components/Dialog/index.vue'
 import AuthPanel from './AuthPanel'
 import AssetPanel from './AssetPanel'
 import InfoPanel from './InfoPanel'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 
 export default {

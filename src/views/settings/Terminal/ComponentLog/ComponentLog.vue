@@ -30,9 +30,9 @@
         v-for="(card, index) in cardLogs"
         :key="index"
         :components="card.components"
-        :title="card.title"
         :logs="card.logs"
         :search="isearch"
+        :title="card.title"
         class="card-log"
       />
     </div>
@@ -41,12 +41,13 @@
 
 <script>
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
-import { getDaysAgo, getDaysFuture } from '@/utils/common'
+import { getDaysAgo, getDaysFuture } from '@/utils/time'
 import { debounce } from 'lodash'
 import { getLokiLog } from '@/api/component'
 import ActionsGroup from '@/components/ActionsGroup'
 import store from '@/store'
 import CardLog from './CardLog.vue'
+
 const all_components = []
 const components_ce = [
   {

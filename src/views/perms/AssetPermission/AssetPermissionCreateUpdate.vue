@@ -11,10 +11,12 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
-import { getDayFuture } from '@/utils/common'
+import { getDayFuture } from '@/utils/time'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
+import RealFormatter from './components/RealFormatter.vue'
+import VirtualFormatter from './components/VirtualFormatter.vue'
 
 export default {
   name: 'AccountFormatter',
@@ -43,7 +45,7 @@ export default {
         [this.$t('Basic'), ['name']],
         [this.$t('User'), ['users', 'user_groups']],
         [this.$t('Asset'), ['assets', 'nodes']],
-        [this.$t('Account'), ['accounts']],
+        [this.$t('Account'), ['real_accounts', 'virtual_accounts']],
         [this.$t('Protocol'), ['protocols']],
         [this.$t('Action'), ['actions']],
         [this.$t('Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
@@ -118,6 +120,12 @@ export default {
             this.fieldsMeta.accounts.el.assets = formValue.assets
             this.fieldsMeta.accounts.el.nodes = formValue.nodes
           }
+        },
+        real_accounts: {
+          component: RealFormatter
+        },
+        virtual_accounts: {
+          component: VirtualFormatter
         },
         actions: {
           label: this.$t('Action'),

@@ -1,5 +1,5 @@
 <script type="text/jsx">
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'ItemValue',

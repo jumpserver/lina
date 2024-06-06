@@ -29,7 +29,7 @@ import IBox from '../../IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
-import { getDayEnd, getDaysAgo } from '@/utils/common'
+import { getDayEnd, getDaysAgo } from '@/utils/time'
 
 export default {
   name: 'ListTable',
@@ -74,9 +74,11 @@ export default {
       selectedRows: [],
       init: false,
       extraQuery: extraQuery,
-      urlUpdated: {}
+      urlUpdated: {},
+      isDeactivated: false
     }
   },
+
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     dataTable() {
@@ -111,6 +113,9 @@ export default {
       return this.iHeaderActions.has === undefined ? true : this.iHeaderActions.has
     },
     iTableConfig() {
+      if (this.isDeactivated) {
+        return
+      }
       const config = deepmerge(this.tableConfig, {
         extraQuery: this.extraQuery
       })
@@ -183,7 +188,11 @@ export default {
   mounted() {
     this.urlUpdated[this.tableUrl] = location.href
   },
+  deactivated() {
+    this.isDeactivated = true
+  },
   activated() {
+    this.isDeactivated = false
     const preURL = this.urlUpdated[this.tableUrl]
     if (!preURL || preURL === location.href) {
       return
@@ -250,7 +259,7 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  >>> {
+  > > > {
     .el-card__body {
       padding: 0;
     }
@@ -261,7 +270,7 @@ export default {
       text-overflow: ellipsis;
     }
 
-   .el-table__expanded-cell pre {
+    .el-table__expanded-cell pre {
       max-height: 500px;
       overflow-y: scroll;
     }

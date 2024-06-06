@@ -18,11 +18,11 @@
       </el-col>
     </el-row>
     <Dialog
-      :title="$tc('Timer')"
       :close-on-click-modal="false"
       :destroy-on-close="true"
-      :visible.sync="showTimer"
       :show-buttons="false"
+      :title="$tc('Timer')"
+      :visible.sync="showTimer"
     >
       <TimingPanel :object="object" :visible.sync="showTimer" />
     </Dialog>
@@ -31,7 +31,7 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'

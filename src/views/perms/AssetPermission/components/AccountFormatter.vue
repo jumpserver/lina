@@ -2,8 +2,39 @@
   <el-form @submit.native.prevent>
     <el-form-item>
       <el-checkbox-group v-model="choicesSelected">
+        <div class="group-title">资产上的账号</div>
         <el-checkbox
-          v-for="(i) in choices"
+          v-for="(i) in choices.slice(0, 2)"
+          :key="i.label"
+          :label="i.value"
+          @change="handleCheckboxCheck(i, $event)"
+        >
+          {{ i.label }}
+          <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+            <i class="fa fa-question-circle-o" />
+          </el-tooltip>
+        </el-checkbox>
+
+        <div v-if="showSpecAccounts" class="spec-accounts">
+          <TagInput
+            :autocomplete="autocomplete"
+            :tag-type="getTagType"
+            :value="specAccountsInput"
+            @change="handleTagChange"
+          />
+          <span v-if="showAddTemplate">
+            <el-button size="mini" type="primary" @click="showTemplateDialog=true">
+              {{ $t('TemplateAdd') }}
+            </el-button>
+            <span class="help-block" style="display: inline">
+              {{ addTemplateHelpText }}
+            </span>
+          </span>
+        </div>
+
+        <div class="group-title">虚拟账号</div>
+        <el-checkbox
+          v-for="(i) in choices.slice(2, )"
           :key="i.label"
           :label="i.value"
           @change="handleCheckboxCheck(i, $event)"
@@ -15,22 +46,6 @@
         </el-checkbox>
       </el-checkbox-group>
 
-      <div v-if="showSpecAccounts" class="spec-accounts">
-        <TagInput
-          :autocomplete="autocomplete"
-          :tag-type="getTagType"
-          :value="specAccountsInput"
-          @change="handleTagChange"
-        />
-        <span v-if="showAddTemplate">
-          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
-            {{ $t('TemplateAdd') }}
-          </el-button>
-          <span class="help-block" style="display: inline">
-            {{ addTemplateHelpText }}
-          </span>
-        </span>
-      </div>
     </el-form-item>
 
     <Dialog
@@ -269,13 +284,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.select >>> .el-input.el-input--suffix {
+.select ::v-deep .el-input.el-input--suffix {
   width: 100px
 }
 
 .spec-accounts {
-  >>> .el-select {
-    width: 100%;
+  ::v-deep {
+    .el-select {
+      width: 100%;
+      margin-bottom: 3px;
+    }
+
+    .help-block {
+      display: block !important;
+    }
   }
 }
 
@@ -284,19 +306,24 @@ export default {
   color: #999999;
 }
 
-::v-deep .el-checkbox-group {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.group-title {
+  font-size: 12px;
+  color: var(--color-text-secondary);
 }
 
-::v-deep .el-checkbox-group label:nth-child(1),
-::v-deep .el-checkbox-group label:nth-child(2) {
-  grid-row: 1 / 2;
-}
-
-::v-deep .el-checkbox-group label:nth-child(3),
-::v-deep .el-checkbox-group label:nth-child(4),
-::v-deep .el-checkbox-group label:nth-child(5) {
-  grid-row: 2 / 3;
-}
+//::v-deep .el-checkbox-group {
+//  display: grid;
+//  grid-template-columns: repeat(3, 1fr);
+//}
+//
+//::v-deep .el-checkbox-group label:nth-child(1),
+//::v-deep .el-checkbox-group label:nth-child(2) {
+//  grid-row: 1 / 2;
+//}
+//
+//::v-deep .el-checkbox-group label:nth-child(3),
+//::v-deep .el-checkbox-group label:nth-child(4),
+//::v-deep .el-checkbox-group label:nth-child(5) {
+//  grid-row: 2 / 3;
+//}
 </style>

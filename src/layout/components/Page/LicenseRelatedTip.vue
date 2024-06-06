@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { mapGetters } from 'vuex'
 
 export default {

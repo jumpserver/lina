@@ -20,7 +20,7 @@
 import { mapGetters } from 'vuex'
 import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
-import { getDayFuture } from '@/utils/common'
+import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 

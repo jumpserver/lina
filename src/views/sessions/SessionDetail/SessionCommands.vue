@@ -5,7 +5,7 @@
 <script>
 import ListTable from '@/components/Table/ListTable'
 import { OutputExpandFormatter } from '../formatters'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'SessionCommands',
