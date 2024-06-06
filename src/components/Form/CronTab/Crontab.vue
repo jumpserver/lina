@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div>
-    <el-tabs type="border-card">
+    <el-tabs class="tab-content">
       <el-tab-pane v-if="shouldHide('min')" :label="$tc('Min')" class="crontab-panel">
         <CrontabMin
           ref="cronmin"
@@ -456,14 +456,70 @@ export default {
   overflow-y: auto;
 }
 
- >>> {
+::v-deep {
   .el-form-item--mini.el-form-item,
   .el-form-item--small.el-form-item {
     margin-bottom: 5px;
   }
 
-   .el-input-number {
+  .el-input-number {
     margin: 0 5px
   }
+}
+
+.tab-content {
+  position: relative;
+  box-sizing: border-box;
+  line-height: 24px;
+  margin: 0 auto;
+  padding: 10px 10px 10px;
+  border: 1px solid #dcdfe6;
+}
+
+::v-deep .el-tabs__header {
+  background-color: white;
+  margin-top: -10px;
+  padding: 0 30px;
+  margin-bottom: 5px;
+
+  .el-tabs__item {
+    i.pre-icon {
+      opacity: 0.6;
+    }
+  }
+
+  .el-tabs__nav-next {
+    right: 10px;
+  }
+
+  .el-tabs__nav-prev {
+    left: 10px;
+  }
+}
+
+.tab-page {
+  ::v-deep .page-heading {
+    border-bottom: none;
+  }
+
+  ::v-deep .page-content {
+    overflow-y: hidden;
+    padding: 0;
+  }
+
+  .tab-page-content {
+    padding: 10px 30px 22px;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+
+    .el-alert {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+::v-deep .el-tabs__nav-wrap {
+  position: static;
 }
 </style>
