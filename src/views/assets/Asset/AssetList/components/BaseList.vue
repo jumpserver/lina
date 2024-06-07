@@ -223,6 +223,30 @@ export default {
         },
         extraMoreActions: [
           {
+            name: 'BulkVerify',
+            title: this.$t('common.BulkVerify'),
+            type: 'primary',
+            icon: 'fa fa-handshake-o',
+            can: ({ selectedRows }) =>
+              this.$hasPerm('assets.test_assetconnectivity') &&
+              !this.$store.getters.currentOrgIsRoot &&
+              selectedRows.length > 0 &&
+              selectedRows[0].auto_config?.ansible_enabled &&
+              selectedRows[0].auto_config?.ping_enabled,
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map(v => {
+                return v.id
+              })
+              this.$axios.post(
+                '/api/v1/assets/assets/tasks/',
+                { action: 'test', assets: ids }).then(res => {
+                openTaskPage(res['task'])
+              }).catch(err => {
+                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
+          {
             name: 'DeactiveSelected',
             title: this.$t('common.BatchDisable'),
             type: 'primary',
