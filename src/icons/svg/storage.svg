@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="42px" height="39px" viewBox="0 0 42 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="42px" height="39px" viewBox="0 0 42 39" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
     <title>storage</title>
-    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="storage" transform="translate(1, 1)">
-            <polygon id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round" points="40 24.00098 0 24.00098 0 37.00098 40 37.00098"></polygon>
-            <path d="M31.5,33.00098 C32.8807,33.00098 34,31.88168 34,30.50098 C34,29.12028 32.8807,28.00098 31.5,28.00098 C30.1193,28.00098 29,29.12028 29,30.50098 C29,31.88168 30.1193,33.00098 31.5,33.00098 Z" id="路径" fill="#646A73" fill-rule="nonzero"></path>
-            <polyline id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round" points="0 24.00078 5.03837 0 35.0205 0 40 24.00078"></polyline>
-            <path d="M15.006,11.02688 C12.8635,11.02688 11,12.51338 11,14.51378 C11,17.00078 13.0947,18.00078 15.6973,18.00078 C16.1437,18.00078 16.5567,18.00078 16.9768,18.00078" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M25.007,11.02688 C27.1039,11.02688 29,12.00038 29,14.51378 C29,17.00078 26.8902,18.00078 24.2877,18.00078 C23.8412,18.00078 23.4013,18.00078 22.9871,18.00078" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M25.0069,11.02708 C25.0069,8.04328 23.0231,6.00098 19.9998,6.00098 C16.9766,6.00098 15.0059,7.99368 15.0059,11.02708" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            <line x1="16" y1="18.00098" x2="24" y2="18.00098" id="路径" stroke="#646A73" stroke-width="2"></line>
-        </g>
-    </g>
+
+
+    <polygon id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round"
+             points="40 24.00098 0 24.00098 0 37.00098 40 37.00098"></polygon>
+    <path d="M31.5,33.00098 C32.8807,33.00098 34,31.88168 34,30.50098 C34,29.12028 32.8807,28.00098 31.5,28.00098 C30.1193,28.00098 29,29.12028 29,30.50098 C29,31.88168 30.1193,33.00098 31.5,33.00098 Z"
+          id="路径" fill="#646A73" fill-rule="nonzero"></path>
+    <polyline id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round"
+              points="0 24.00078 5.03837 0 35.0205 0 40 24.00078"></polyline>
+    <path d="M15.006,11.02688 C12.8635,11.02688 11,12.51338 11,14.51378 C11,17.00078 13.0947,18.00078 15.6973,18.00078 C16.1437,18.00078 16.5567,18.00078 16.9768,18.00078"
+          id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M25.007,11.02688 C27.1039,11.02688 29,12.00038 29,14.51378 C29,17.00078 26.8902,18.00078 24.2877,18.00078 C23.8412,18.00078 23.4013,18.00078 22.9871,18.00078"
+          id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M25.0069,11.02708 C25.0069,8.04328 23.0231,6.00098 19.9998,6.00098 C16.9766,6.00098 15.0059,7.99368 15.0059,11.02708"
+          id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    <line x1="16" y1="18.00098" x2="24" y2="18.00098" id="路径" stroke="#646A73" stroke-width="2"></line>
+
+
 </svg>
