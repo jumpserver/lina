@@ -244,24 +244,21 @@ export default {
   },
   methods: {
     initDefaultChoice() {
-      const choicesSelected = this.value.filter(i => i.startsWith('@'))
-
+      const choicesSelected = this.value.filter(i => {
+        return i.startsWith('@') && i !== this.SPEC && i !== this.VIRTUAL
+      })
       // 是否添加特定账号选择
-      const specAccountsInput = this.value.filter(i => !i.startsWith('@'))
+      const specAccountsInput = this.value.filter(i => !i.startsWith('@') && i !== this.SPEC)
       if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
         choicesSelected.push(this.SPEC)
         this.showSpecAccounts = true
       }
-      if (this.value.indexOf(this.SPEC) > -1) {
-        this.showSpecAccounts = true
-      }
-
       // 是否添加虚拟账号选择
       const hasVirtual = this.value.filter(i => {
         return i && i.startsWith('@') && i !== '@ALL' && i !== '@SPEC'
       })
       if (hasVirtual.length > 0 && !choicesSelected.includes(this.VIRTUAL)) {
-        this.choicesSelected = [...choicesSelected, this.VIRTUAL]
+        choicesSelected.push(this.VIRTUAL)
       }
 
       // 如果没有就设置 ALL

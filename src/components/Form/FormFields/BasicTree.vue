@@ -2,8 +2,8 @@
   <el-tree
     :data="iTree"
     :default-checked-keys="iValue"
-    :default-expand-all="true"
-    :default-expanded-keys="iValue"
+    :default-expand-all="expandAll"
+    :default-expanded-keys="defaultExpanded"
     :props="defaultProps"
     :render-content="renderContent"
     class="el-tree-custom"
@@ -27,6 +27,14 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    expandAll: {
+      type: Boolean,
+      default: true
+    },
+    defaultExpanded: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -95,7 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.el-tree-custom > > > {
+.el-tree-custom ::v-deep {
   .help-tips {
     margin-left: 10px;
     font-size: 12px;
@@ -104,6 +112,16 @@ export default {
 
   .el-tree-node__content:hover {
     background-color: transparent;
+  }
+
+  > .el-tree-node > {
+    .el-tree-node__content > .el-tree-node__expand-icon {
+      display: none;
+    }
+
+    .el-tree-node__children {
+      margin-left: -25px;
+    }
   }
 }
 
