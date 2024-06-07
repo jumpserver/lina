@@ -717,6 +717,7 @@
     "SyncSuccessMsg": "同期に成功しました",
     "SyncSelected": "選択した同期",
     "bulkDeploy": "一括デプロイ",
+    "BulkVerify": "一括テスト",
     "bulkSyncErrorMsg": "一括同期に失敗しました:",
     "bulkDeleteErrorMsg": "一括削除に失敗しました:",
     "bulkDeleteSuccessMsg": "一括削除に成功しました",

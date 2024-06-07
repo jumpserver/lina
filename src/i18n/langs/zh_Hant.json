@@ -771,6 +771,7 @@
     "BatchActivate": "批次啟用",
     "SyncSelected": "同步所選",
     "bulkDeploy": "批次部署",
+    "BulkVerify": "批次測試",
     "bulkDeleteErrorMsg": "批次刪除失敗: ",
     "bulkDeleteSuccessMsg": "批次刪除成功",
     "bulkRemoveErrorMsg": "批次移除失敗: ",
