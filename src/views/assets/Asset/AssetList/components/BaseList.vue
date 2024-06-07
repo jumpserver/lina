@@ -226,7 +226,7 @@ export default {
             name: 'BulkVerify',
             title: this.$t('common.BulkVerify'),
             type: 'primary',
-            icon: 'fa fa-handshake-o',
+            icon: 'fa fa-link',
             can: ({ selectedRows }) =>
               this.$hasPerm('assets.test_assetconnectivity') &&
               !this.$store.getters.currentOrgIsRoot &&
