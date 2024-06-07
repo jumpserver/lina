@@ -30,7 +30,7 @@ export default {
     },
     expandAll: {
       type: Boolean,
-      default: true
+      default: false
     },
     defaultExpanded: {
       type: Array,
@@ -60,6 +60,11 @@ export default {
       } else {
         return this.setTreeReadonly(this.tree)
       }
+    }
+  },
+  mounted() {
+    if (this.iTree && this.iTree.length > 0) {
+      this.defaultExpanded.push(this.iTree[0].value)
     }
   },
   methods: {
@@ -111,6 +116,10 @@ export default {
   }
 
   .el-tree-node__content:hover {
+    background-color: transparent;
+  }
+
+  .el-tree-node:focus > .el-tree-node__content {
     background-color: transparent;
   }
 

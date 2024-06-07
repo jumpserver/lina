@@ -14,6 +14,7 @@ $single-menu-height: 38px;
     background-color: var(--menu-text-active);
   }
 }
+
 @mixin collapse-active {
   background-color: #e6e6e6;
 
@@ -27,8 +28,8 @@ $single-menu-height: 38px;
   background-color: inherit !important;
 
   .svg-icon {
-    width: $icon-width;
-    height: $icon-width;
+    width: $icon-width !important;
+    height: $icon-width !important;
     margin-right: 10px;
   }
 
@@ -90,6 +91,7 @@ $single-menu-height: 38px;
           .el-submenu__title {
             color: var(--color-primary);
           }
+
           .el-submenu__title, li {
             @include only_active
           }
