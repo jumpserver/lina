@@ -111,6 +111,8 @@ website:    http://code.google.com/p/jquerytree/
   font-family: FontAwesome;
   padding-top: 10px;
 }
+
+
 .ztree li span.button.chk {
   margin: 0px;
   cursor: auto;

@@ -64,11 +64,11 @@ export default {
   },
   data() {
     return {
-      activeMenuMap: { 1: 'ProviderPanel', 2: 'AuthPanel', 3: 'AssetPanel', 4: 'ResultPanel' },
+      activeMenuMap: { 0: 'ProviderPanel', 1: 'AuthPanel', 2: 'AssetPanel', 3: 'ResultPanel' },
       activeMenu: 'ProviderPanel',
       selected: '',
       firstStepDesc: this.$tc('SelectPlatforms'),
-      active: 1,
+      active: 0,
       account: {}
     }
   },
@@ -101,3 +101,35 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+::v-deep .el-step {
+  .el-step__head {
+    &.is-process {
+      color: var(--color-primary);
+
+      .el-step__line {
+        background-color: var(--color-primary);
+      }
+
+      .el-step__icon {
+        border-color: var(--color-primary);
+      }
+    }
+
+    &.is-finish {
+      .el-step__line {
+        background-color: var(--color-primary);
+      }
+
+    }
+  }
+
+  .el-step__main {
+    .el-step__description.is-process,
+    .el-step__description.is-finish{
+      color: var(--color-primary);
+    }
+  }
+}
+</style>

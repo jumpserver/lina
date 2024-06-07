@@ -59,7 +59,7 @@ export default {
             title: this.$t('Next'),
             type: 'primary',
             hidden: !this.active,
-            callback: () => { this.$emit('update:active', 4) }
+            callback: () => { this.$emit('update:active', 3) }
           }
         ],
         config: {
