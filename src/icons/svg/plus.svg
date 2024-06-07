@@ -1,1 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="24" height="24" viewBox="0 0 48 48" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M24.0605 10L24.0239 38" stroke="#ffffff" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel"/><path d="M10 24L38 24" stroke="#ffffff" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="42px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>plus</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+        <g id="plus" transform="translate(1, 1)" fill="#FFFFFF" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="2">
+            <line x1="20.0864286" y1="0" x2="20.0341429" y2="40" id="路径"></line>
+            <line x1="0" y1="20" x2="40" y2="20" id="路径"></line>
+        </g>
+    </g>
+</svg>

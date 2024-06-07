@@ -1,1 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="24" height="24" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M8 10.5H40" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 19.5H40" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 28.5H40" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 37.5H40" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 19L16 24L8 29V19Z" stroke="#333" stroke-width="4" stroke-linejoin="round"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="37px" viewBox="0 0 42 37" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>arrow-to-left</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="arrow-to-left" transform="translate(1, 1)" fill="#000000" fill-rule="nonzero" stroke="#333333" stroke-width="2">
+            <line x1="0" y1="0.625" x2="40" y2="0.625" id="路径" stroke-linecap="round"></line>
+            <line x1="20" y1="11.875" x2="40" y2="11.875" id="路径" stroke-linecap="round"></line>
+            <line x1="20" y1="23.125" x2="40" y2="23.125" id="路径" stroke-linecap="round"></line>
+            <line x1="0" y1="34.375" x2="40" y2="34.375" id="路径" stroke-linecap="round"></line>
+            <polygon id="路径" points="0 11.25 10 17.5 0 23.75"></polygon>
+        </g>
+    </g>
+</svg>

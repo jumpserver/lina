@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M44 29H4V42H44V29Z" fill="none" stroke="#646A73" stroke-width="4" stroke-linejoin="round"/>
-    <path d="M35.5 38C36.8807 38 38 36.8807 38 35.5C38 34.1193 36.8807 33 35.5 33C34.1193 33 33 34.1193 33 35.5C33 36.8807 34.1193 38 35.5 38Z"
-          fill="#646A73"/>
-    <path d="M4 28.9998L9.03837 4.99902H39.0205L44 28.9998" stroke="#646A73" stroke-width="4" stroke-linejoin="round"/>
-    <path d="M19.006 16.0259C16.8635 16.0259 15 17.5124 15 19.5128C15 21.9998 17.0947 22.9998 19.6973 22.9998C20.1437 22.9998 20.5567 22.9998 20.9768 22.9998"
-          stroke="#646A73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M29.007 16.0259C31.1039 16.0259 33 16.9994 33 19.5128C33 21.9998 30.8902 22.9998 28.2877 22.9998C27.8412 22.9998 27.4013 22.9998 26.9871 22.9998"
-          stroke="#646A73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M29.0069 16.0261C29.0069 13.0423 27.0231 11 23.9998 11C20.9766 11 19.0059 12.9927 19.0059 16.0261"
-          stroke="#646A73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M20 23H28" stroke="#646A73" stroke-width="4"/>
+<svg width="42px" height="39px" viewBox="0 0 42 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>storage</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="storage" transform="translate(1, 1)">
+            <polygon id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round" points="40 24.00098 0 24.00098 0 37.00098 40 37.00098"></polygon>
+            <path d="M31.5,33.00098 C32.8807,33.00098 34,31.88168 34,30.50098 C34,29.12028 32.8807,28.00098 31.5,28.00098 C30.1193,28.00098 29,29.12028 29,30.50098 C29,31.88168 30.1193,33.00098 31.5,33.00098 Z" id="路径" fill="#646A73" fill-rule="nonzero"></path>
+            <polyline id="路径" stroke="#646A73" stroke-width="2" stroke-linejoin="round" points="0 24.00078 5.03837 0 35.0205 0 40 24.00078"></polyline>
+            <path d="M15.006,11.02688 C12.8635,11.02688 11,12.51338 11,14.51378 C11,17.00078 13.0947,18.00078 15.6973,18.00078 C16.1437,18.00078 16.5567,18.00078 16.9768,18.00078" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M25.007,11.02688 C27.1039,11.02688 29,12.00038 29,14.51378 C29,17.00078 26.8902,18.00078 24.2877,18.00078 C23.8412,18.00078 23.4013,18.00078 22.9871,18.00078" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M25.0069,11.02708 C25.0069,8.04328 23.0231,6.00098 19.9998,6.00098 C16.9766,6.00098 15.0059,7.99368 15.0059,11.02708" id="路径" stroke="#646A73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <line x1="16" y1="18.00098" x2="24" y2="18.00098" id="路径" stroke="#646A73" stroke-width="2"></line>
+        </g>
+    </g>
 </svg>

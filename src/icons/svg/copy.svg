@@ -1,4 +1,10 @@
-<svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="42px" height="52px" viewBox="0 0 42 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>copy</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="copy" transform="translate(1, 1)" stroke="#000000" stroke-width="0.1">
+            <path d="M30,5 L35,5 C37.7614237,5 40,7.23857625 40,10 L40,45 C40,47.7614237 37.7614237,50 35,50 L5,50 C2.23857625,50 0,47.7614237 0,45 L0,10 C0,7.23857625 2.23857625,5 5,5 L10,5" id="路径"></path>
+            <rect id="矩形" x="10" y="0" width="20" height="10" rx="0.0416666667"></rect>
+        </g>
+    </g>
 </svg>

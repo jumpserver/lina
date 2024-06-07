@@ -1,1 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="22.0476" width="34" height="22" rx="2" fill="none" stroke="#616266" stroke-width="4" stroke-linejoin="round"/><path d="M14 22V14.0047C13.9948 8.87022 17.9227 4.56718 23.0859 4.05117C28.249 3.53516 32.9673 6.97408 34 12.0059" stroke="#616266" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 30V36" stroke="#616266" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="51px" viewBox="0 0 44 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>unlock-one</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="unlock-one" transform="translate(2, 2)" stroke="#616266" stroke-width="2.66666667">
+            <rect id="矩形" x="0" y="21.2324701" width="40" height="25.8823529" rx="1.33333333"></rect>
+            <path d="M8.23528805,21.1764701 L8.23528805,11.7702348 C8.22917647,5.72967011 12.8502353,0.667270109 18.9245882,0.0601995203 C24.9988235,-0.546871068 30.5497647,3.49891717 31.7647059,9.4187054" id="路径" stroke-linecap="round"></path>
+            <line x1="20" y1="30.5882348" x2="20" y2="37.6470583" id="路径" stroke-linecap="round"></line>
+        </g>
+    </g>
+</svg>

@@ -2,7 +2,7 @@
   <div>
     <el-dropdown :show-timeout="50" @command="handleCommand">
       <span class="el-dropdown-link" style="vertical-align: baseline;">
-        <svg-icon icon-class="question-mark" style="font-size: 16px;" />
+        <svg-icon icon-class="question-mark" />
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="docs">{{ $t('Docs') }}</el-dropdown-item>

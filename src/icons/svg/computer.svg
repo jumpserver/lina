@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z" fill="currentColor"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="27px" viewBox="0 0 40 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>computer</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="computer" fill="#000000" fill-rule="nonzero">
+            <path d="M33.3333333,23.3333333 C35.1666667,23.3333333 36.65,21.8333333 36.65,20 L36.6666667,3.33333333 C36.6666667,1.5 35.1666667,0 33.3333333,0 L6.66666667,0 C4.83333333,0 3.33333333,1.5 3.33333333,3.33333333 L3.33333333,20 C3.33333333,21.8333333 4.83333333,23.3333333 6.66666667,23.3333333 L0,23.3333333 L0,26.6666667 L40,26.6666667 L40,23.3333333 L33.3333333,23.3333333 Z M6.66666667,3.33333333 L33.3333333,3.33333333 L33.3333333,20 L6.66666667,20 L6.66666667,3.33333333 Z" id="形状"></path>
+        </g>
+    </g>
+</svg>

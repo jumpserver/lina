@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M24 42V6" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M36 30L24 42L12 30" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="42px" height="62px" viewBox="0 0 42 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>arrow-down</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="arrow-down" transform="translate(1, 1)" stroke="#333333" stroke-width="2">
+            <line x1="20" y1="60" x2="20" y2="0" id="路径"></line>
+            <polyline id="路径" points="40 40 20 60 0 40"></polyline>
+        </g>
+    </g>
 </svg>

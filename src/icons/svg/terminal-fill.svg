@@ -1,1 +1,9 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1645509271413" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3715" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M0 128v768h1024V128H0z m242.816 577.536L192 654.72l154.304-154.368L192 346.048l50.816-50.816L448 500.352l-205.184 205.184z m584.32 13.248H512V640h315.072v78.72z" fill="#262626" p-id="3716"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="30px" viewBox="0 0 40 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>terminal-fill</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="terminal-fill" fill="#262626" fill-rule="nonzero">
+            <path d="M0,0 L0,30 L40,30 L40,0 L0,0 Z M9.485,22.56 L7.5,20.575 L13.5275,14.545 L7.5,8.5175 L9.485,6.5325 L17.5,14.545 L9.485,22.56 Z M32.31,23.0775 L20,23.0775 L20,20 L32.3075,20 L32.3075,23.075 L32.31,23.0775 Z" id="形状"></path>
+        </g>
+    </g>
+</svg>

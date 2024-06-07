@@ -1,1 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#646A73" d="M41 27V15H29" data-follow-stroke="#646A73"/><path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#646A73" d="m6 37 10.338-12.5 9.847 6L41 15" data-follow-stroke="#646A73"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="30px" viewBox="0 0 44 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>broken-line</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="broken-line" transform="translate(2, 2)" fill="#000000" fill-rule="nonzero" stroke="#646A73" stroke-width="4">
+            <polyline id="路径" points="40 13.7142857 40 0 26.2857143 0"></polyline>
+            <polyline id="路径" points="0 25.1428571 11.8148571 10.8571429 23.0685714 17.7142857 40 0"></polyline>
+        </g>
+    </g>
+</svg>

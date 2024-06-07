@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-  <rect x="4" y="8" width="40" height="32" rx="2" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M12 18L19 24L12 30" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M23 32H36" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="44px" height="36px" viewBox="0 0 44 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>terminal</title>
+    <g id="jumpserver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="terminal" transform="translate(2, 2)" stroke="#FFFFFF" stroke-width="2.66666667">
+            <rect id="矩形" x="0" y="0" width="40" height="32" rx="1.33333333"></rect>
+            <polyline id="路径" stroke-linecap="round" points="8 10 15 16 8 22"></polyline>
+            <line x1="19" y1="24" x2="32" y2="24" id="路径" stroke-linecap="round"></line>
+        </g>
+    </g>
 </svg>
