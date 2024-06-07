@@ -151,6 +151,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  cursor: pointer;
 
   & .el-row:first-of-type {
     height: 30px !important;
