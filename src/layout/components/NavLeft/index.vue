@@ -132,11 +132,6 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
-      this.$nextTick(() => {
-        if (!this.isCollapse) {
-          this.defaultOpensMenu()
-        }
-      })
     },
     toggleSwitch() {
       this.viewShown = true
@@ -292,7 +287,6 @@ $hover-border-color: #d2d2d2;
 
         .svg-icon {
           margin-right: 0 !important;
-          transform: translateY(-25%);
         }
       }
 

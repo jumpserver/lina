@@ -44,8 +44,8 @@
 
     &.has-logo {
       .el-scrollbar {
-        margin-top: 10px;
-        height: calc(100% - #{$headerHeight} - 40px - 52px - 10px); // header-height, view-header, footer-height, margin-top
+        margin-top: 5px;
+        height: calc(100% - #{$headerHeight} - 50px - 52px - 5px); // header-height, view-header, footer-height, margin-top
       }
     }
 

@@ -126,16 +126,10 @@ export default {
       border-radius: 5px;
       border-color: $--color-primary;
       background-color: white;
-      color: #fff;
+      color: var(--text-primary);
       cursor: pointer;
       transition: .2s;
-      -webkit-tap-highlight-color: transparent;
       opacity: 0.7;
-
-      ::v-deep .svg-icon {
-        font-size: 16px !important;
-        color: #fff !important;
-      }
     }
 
     .navbar-left {
