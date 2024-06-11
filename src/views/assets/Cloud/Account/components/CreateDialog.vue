@@ -67,7 +67,6 @@ export default {
       activeMenuMap: { 0: 'ProviderPanel', 1: 'AuthPanel', 2: 'AssetPanel', 3: 'ResultPanel' },
       activeMenu: 'ProviderPanel',
       selected: '',
-      activeMenu: 'ProviderPanel',
       firstStepDesc: this.$tc('SelectPlatforms'),
       active: 0,
       account: {}
