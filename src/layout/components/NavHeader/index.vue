@@ -103,169 +103,171 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-.navbar {
-  position: relative;
-  overflow: hidden;
-  background-color: var(--banner-bg);
+  .navbar {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--banner-bg);
 
-  ul {
-    margin: 0;
-    padding-inline-start: 0;
-  }
-
-  .is-show-menu {
-    display: none;
-  }
-  .hamburger-container {
-    float: left;
-    height: 25px;
-    line-height: 25px;
-    margin: 8px;
-    padding: 1px 8px !important;
-    border-radius: 5px;
-    border-color: $--color-primary;
-    background-color: white;
-    color: #fff;
-    cursor: pointer;
-    transition: .2s;
-    -webkit-tap-highlight-color: transparent;
-    opacity: 0.7;
-
-    ::v-deep .svg-icon {
-      font-size: 16px !important;
-      color: #fff !important;
+    ul {
+      margin: 0;
+      padding-inline-start: 0;
     }
-  }
 
-  .navbar-left {
-    float: left;
-    display: flex;
-    height: 100%;
+    .is-show-menu {
+      display: none;
+    }
 
-    .left-item {
+    .hamburger-container {
+      float: left;
+      height: 25px;
+      line-height: 25px;
+      margin: 8px;
+      padding: 1px 8px !important;
+      border-radius: 5px;
+      border-color: $--color-primary;
+      background-color: white;
+      color: #fff;
+      cursor: pointer;
+      transition: .2s;
+      -webkit-tap-highlight-color: transparent;
+      opacity: 0.7;
+
+      ::v-deep .svg-icon {
+        font-size: 16px !important;
+        color: #fff !important;
+      }
+    }
+
+    .navbar-left {
+      float: left;
       display: flex;
-      align-items: center;
-      list-style: none;
+      height: 100%;
 
-      .nav-logo {
-        width: 200px;
+      .left-item {
+        display: flex;
+        align-items: center;
+        list-style: none;
+
+        .nav-logo {
+          width: 200px;
+
+          &:hover {
+            background: rgba(0, 0, 0, 12%);
+          }
+        }
+
+        .organization {
+          display: flex;
+          align-items: center;
+          padding: 0 0 0 15px !important;
+          border-radius: 3px;
+          background-color: rgba(255, 255, 255, .10);
+          color: #fff;
+          font-weight: 600;
+          font-size: 15px;
+          max-width: 250px;
+
+          ::v-deep .el-input__inner {
+            padding-left: 25px;
+          }
+
+          ::v-deep .el-input.is-disabled > input {
+            background: none;
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 0, .12) !important;
+          }
+        }
+
+        // 未找到与之对应的
+        & ::v-deep .el-submenu__title {
+          font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          padding: 0 8px;
+          line-height: $headerHeight;
+          height: $headerHeight;
+        }
+
+        // 未找到与之对应的
+        & ::v-deep .svg-icon {
+          color: #FFF !important;
+        }
+      }
+    }
+
+    .navbar-right {
+      display: flex;
+      float: right;
+      align-items: center;
+      margin-right: 10px;
+
+      .header-item {
+        display: flex;
+        line-height: $headerHeight;
+        padding-right: 10px;
+        padding-left: 10px;
+
+        & ::v-deep .svg-icon {
+          line-height: 40px;
+          color: #FFF !important;
+          font-size: 15px;
+        }
+
+        & ::v-deep .el-badge {
+          vertical-align: top;
+
+          .el-link {
+            vertical-align: baseline;
+          }
+
+          .el-badge__content--primary {
+            background-color: #fff;
+          }
+
+          .el-badge__content {
+            top: 8px;
+            height: 15px;
+            line-height: 15px;
+            border: none;
+            color: var(--color-primary);
+          }
+        }
+
+        & ::v-deep i {
+          color: #FFF;
+          font-size: 16px;
+
+          &.el-icon-arrow-down {
+            font-size: 13px;
+          }
+        }
+
+        & ::v-deep i.el-dialog__close.el-icon-close {
+          color: #7c7e7f;
+        }
 
         &:hover {
           background: rgba(0, 0, 0, 12%);
         }
       }
+    }
+  }
 
-      .organization {
-        display: flex;
-        align-items: center;
-        padding: 0 0 0 15px !important;
-        border-radius: 3px;
-        background-color: rgba(255, 255, 255, .10);
-        color: #fff;
-        font-weight: 600;
-        font-size: 15px;
-        max-width: 250px;
-
-        ::v-deep .el-input__inner {
-          padding-left: 25px;
-        }
-
-        ::v-deep .el-input.is-disabled > input {
-          background: none;
-        }
-
-        &:hover {
-          background-color: rgba(0, 0, 0, .12) !important;
-        }
+  @media screen and (max-width: 1006px) {
+    .navbar {
+      .is-show-menu {
+        display: block;
       }
 
-      // 未找到与之对应的
-      & >>> .el-submenu__title {
-        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        padding: 0 8px;
-        line-height: $headerHeight;
-        height: $headerHeight;
-      }
-
-      // 未找到与之对应的
-      & >>> .svg-icon {
-        color: #FFF !important;
+      .navbar-left {
+        display: none;
       }
     }
   }
 
-  .navbar-right {
-    display: flex;
-    float: right;
-    align-items: center;
-    margin-right: 10px;
-
-    .header-item {
-      display: flex;
-      line-height: $headerHeight;
-      padding-right: 10px;
-      padding-left: 10px;
-
-      & >>> .svg-icon {
-        line-height: 40px;
-        color: #FFF !important;
-        font-size: 16px;
-      }
-
-      & >>> .el-badge {
-        vertical-align: top;
-
-        .el-link {
-          vertical-align: baseline;
-        }
-
-        .el-badge__content--primary {
-          background-color: #fff;
-        }
-
-        .el-badge__content {
-          top: 8px;
-          height: 15px;
-          line-height: 15px;
-          border: none;
-          color: var(--color-primary);
-        }
-      }
-
-      & >>> i {
-        color: #FFF;
-        font-size: 16px;
-
-        &.el-icon-arrow-down {
-          font-size: 13px;
-        }
-      }
-
-      & >>> i.el-dialog__close.el-icon-close {
-        color: #7c7e7f;
-      }
-
-      &:hover {
-        background: rgba(0, 0, 0, 12%);
-      }
+  @media screen and (max-width: 480px) {
+    .active-menu {
+      display: none !important;;
     }
   }
-}
-
-@media screen and (max-width: 1006px) {
-  .navbar {
-    .is-show-menu {
-      display: block;
-    }
-    .navbar-left {
-      display: none;
-    }
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .active-menu {
-    display: none !important;;
-  }
-}
 </style>
