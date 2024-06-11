@@ -92,7 +92,7 @@ export default {
       component: () => import('@/views/settings/Msg'),
       meta: {
         title: i18n.t('Notifications'),
-        icon: 'email-set',
+        icon: 'remind',
         permissions: ['settings.change_email']
       }
     },

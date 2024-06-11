@@ -76,7 +76,8 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     extraRightSideActions: {
       type: Array,
@@ -94,10 +95,34 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionSetting', icon: 'system-setting', tip: this.$t('TableSetting'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
-        { name: 'actionImport', icon: 'upload', tip: this.$t('Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
-        { name: 'actionExport', icon: 'download', tip: this.$t('Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
-        { name: 'actionRefresh', icon: 'refresh', tip: this.$t('Refresh'), has: this.hasRefresh, callback: this.handleRefreshClick.bind(this) }
+        {
+          name: 'actionSetting',
+          icon: 'system-setting',
+          tip: this.$t('TableSetting'),
+          has: this.hasColumnSetting,
+          callback: this.handleTableSettingClick.bind(this)
+        },
+        {
+          name: 'actionImport',
+          icon: 'upload',
+          tip: this.$t('Import'),
+          has: this.hasImport,
+          callback: this.handleImportClick.bind(this)
+        },
+        {
+          name: 'actionExport',
+          icon: 'download',
+          tip: this.$t('Export'),
+          has: this.hasExport,
+          callback: this.handleExportClick.bind(this)
+        },
+        {
+          name: 'actionRefresh',
+          icon: 'refresh',
+          tip: this.$t('Refresh'),
+          has: this.hasRefresh,
+          callback: this.handleRefreshClick.bind(this)
+        }
       ],
       dialogExportVisible: false
     }
@@ -141,7 +166,7 @@ export default {
 .right-side-actions.right-side-item {
   display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   padding-left: 10px;
   height: 30px;
   line-height: 30px;
@@ -149,7 +174,7 @@ export default {
   ::v-deep .el-button {
     border: none;
     padding: 7px;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-icon-primary);
     background-color: transparent;
 
@@ -166,6 +191,6 @@ export default {
 
 .table-action-right-side {
   display: flex;
-  justify-content:center;
+  justify-content: center;
 }
 </style>
