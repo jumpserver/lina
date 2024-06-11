@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="42px" height="37px" viewBox="0 0 42 37" version="1.1" xmlns="http://www.w3.org/2000/svg"
 >
-    <title>arrow-to-left</title>
-
-
     <line x1="0" y1="0.625" x2="40" y2="0.625" id="路径" stroke-linecap="round"></line>
     <line x1="20" y1="11.875" x2="40" y2="11.875" id="路径" stroke-linecap="round"></line>
     <line x1="20" y1="23.125" x2="40" y2="23.125" id="路径" stroke-linecap="round"></line>
     <line x1="0" y1="34.375" x2="40" y2="34.375" id="路径" stroke-linecap="round"></line>
     <polygon id="路径" points="0 11.25 10 17.5 0 23.75"></polygon>
-
-
 </svg>

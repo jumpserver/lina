@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="40px" height="30px" viewBox="0 0 40 30" version="1.1" xmlns="http://www.w3.org/2000/svg"
 >
-    <title>email</title>
-
-
     <polygon id="路径" points="2.5 2.2925 20 14.7925 37.5 2.2925 37.5 5.625 20 18.125 2.5 5.625"></polygon>
     <path d="M0,0 L0,30 L40,30 L40,0 L0,0 Z M37.5,27.5 L2.5,27.5 L2.5,2.5 L37.5,2.5 L37.5,27.5 Z" id="形状"></path>
-
-
 </svg>

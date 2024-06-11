@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="42px" height="42px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
 >
-    <title>close</title>
-
-
     <line x1="0" y1="0" x2="40" y2="40" id="路径"></line>
     <line x1="0" y1="40" x2="40" y2="0" id="路径"></line>
-
-
 </svg>

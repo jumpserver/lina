@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="42px" height="62px" viewBox="0 0 42 62" version="1.1" xmlns="http://www.w3.org/2000/svg"
 >
-    <title>arrow-up</title>
-
-
     <line x1="20" y1="0" x2="20" y2="60" id="路径"></line>
     <polyline id="路径" points="0 20 20 0 40 20"></polyline>
-
-
 </svg>

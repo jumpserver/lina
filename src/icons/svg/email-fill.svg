@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="42px" height="38px" viewBox="0 0 42 38" version="1.1" xmlns="http://www.w3.org/2000/svg"
 >
-    <title>email-fill</title>
-
-
     <polygon id="路径" stroke="#FFFFFF" points="0 37 40 37 40 13 0 13"></polygon>
     <polygon id="路径" stroke-opacity="0.2" stroke="#FFFFFF" points="0 37 40 37 40 13 0 13"></polygon>
     <polyline id="路径" stroke="#FFFFFF" stroke-linecap="round" points="0 13 20 28 40 13"></polyline>
@@ -19,6 +16,4 @@
     <line x1="8" y1="7" x2="32" y2="7" id="路径" stroke-opacity="0.2" stroke="#FFFFFF" stroke-linecap="round"></line>
     <line x1="12" y1="1" x2="28" y2="1" id="路径" stroke="#FFFFFF" stroke-linecap="round"></line>
     <line x1="12" y1="1" x2="28" y2="1" id="路径" stroke-opacity="0.2" stroke="#000000" stroke-linecap="round"></line>
-
-
 </svg>
