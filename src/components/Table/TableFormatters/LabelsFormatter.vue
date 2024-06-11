@@ -57,12 +57,13 @@
             :el="formatterArgs.config"
             :label="label"
             class="tag-formatter"
+            closable
             @close="handleCloseTag(label)"
           />
         </div>
         <div class="tag-tip">
           <el-link @click="goToLabelList">
-            {{ $t('LabelList') }} <i class="fa fa-external-link" />
+            {{ $t('TagList') }} <i class="fa fa-external-link" />
           </el-link>
         </div>
       </div>

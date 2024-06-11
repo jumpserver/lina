@@ -1,15 +1,16 @@
 <template>
   <el-tag
     :class="{'no-color': !label.color}"
+    :closable="closable"
     :color="label.color"
     :title="label.name + ': ' + label.value"
     class="tag-formatter"
     disable-transitions
     effect="plain"
     size="mini"
-    type="success"
     v-bind="el"
     @click="handleClick(label)"
+    v-on="$listeners"
   >
     <span :class="[getColor(label)]">
       <b> {{ getKey(label) }}:</b> {{ getValue(label) }}
@@ -30,6 +31,10 @@ export default {
     el: {
       type: Object,
       default: () => ({})
+    },
+    closable: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -45,7 +50,7 @@ export default {
     },
     getValue(tag) {
       if (typeof tag === 'string') {
-        return tag.split(':').slice(1).join(':')
+        return tag.split(':')?.slice(1).join(':')
       } else {
         return tag.value
       }
