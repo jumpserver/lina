@@ -259,7 +259,7 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  >>> {
+  ::v-deep {
     .el-card__body {
       padding: 0;
     }

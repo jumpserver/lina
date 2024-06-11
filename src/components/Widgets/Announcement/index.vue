@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.announcement >>> .el-alert__content {
+.announcement ::v-deep .el-alert__content {
   width: 100%;
 }
 

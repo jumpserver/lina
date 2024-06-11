@@ -79,12 +79,14 @@ export default {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #dee2e6;
-  &>>> th, td {
+
+  &::v-deep th, td {
     height: 40px;
     padding: 0 8px;
     text-align: left;
   }
-  &>>> .item-td, .item-label {
+
+  &::v-deep .item-td, .item-label {
     cursor: pointer;
     color: var(--color-primary);
   }

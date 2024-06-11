@@ -203,7 +203,7 @@ export default {
 }
 
 .tag-select {
-  > > > .el-input__inner::placeholder {
+  ::v-deep .el-input__inner::placeholder {
     font-size: 13px;
   }
 }

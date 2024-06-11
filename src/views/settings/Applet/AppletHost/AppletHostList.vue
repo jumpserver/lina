@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host >>> .protocol {
+.applet-host ::v-deep .protocol {
   margin-left: 3px;
 }
 

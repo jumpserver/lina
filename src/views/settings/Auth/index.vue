@@ -146,7 +146,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
->>> .el-tabs__item .fa {
+::v-deep .el-tabs__item .fa {
   font-size: 11px;
 }
 

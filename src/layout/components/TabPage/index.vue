@@ -174,7 +174,7 @@ export default {
 
 <style lang='scss' scoped>
 
-.page-submenu >>> .el-tabs__header {
+.page-submenu ::v-deep .el-tabs__header {
   background-color: white;
   margin-top: -10px;
   padding: 0 30px;
@@ -189,18 +189,20 @@ export default {
   .el-tabs__nav-next {
     right: 10px;
   }
+
   .el-tabs__nav-prev {
     left: 10px;
   }
 }
 
 .tab-page {
-  >>> .page-heading {
+  ::v-deep .page-heading {
     border-bottom: none;
   }
-   >>> .page-content {
-     overflow-y: hidden;
-     padding: 0;
+
+  ::v-deep .page-content {
+    overflow-y: hidden;
+    padding: 0;
   }
 
   .tab-page-content {
@@ -215,7 +217,7 @@ export default {
   }
 }
 
-.page-submenu >>> .el-tabs__nav-wrap {
+.page-submenu ::v-deep .el-tabs__nav-wrap {
   position: static;
 }
 

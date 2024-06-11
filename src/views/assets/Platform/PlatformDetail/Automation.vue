@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
->>> {
+::v-deep {
   .el-cascader {
     width: 100%;
   }
@@ -89,12 +89,15 @@ export default {
   .item-method.el-form-item {
     display: inline-block;
     width: 100%;;
+
     .el-form-item__content {
       width: calc(75% - 50px);
     }
+
     .el-select {
       width: 100%;
     }
+
     margin-top: -10px;
   }
 

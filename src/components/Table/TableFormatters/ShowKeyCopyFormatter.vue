@@ -168,7 +168,8 @@ export default {
       }
     }
   }
-  .edit-input >>> input {
+
+  .edit-input ::v-deep input {
     border-left: none;
     border-right: none;
     border-top: none;

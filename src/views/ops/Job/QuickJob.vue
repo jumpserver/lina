@@ -487,7 +487,7 @@ export default {
   & > div {
     height: 100%;
 
-    & > > > .xterm {
+    & ::v-deep .xterm {
       height: calc(100% - 8px);
       overflow-y: auto;
     }
@@ -529,7 +529,7 @@ export default {
   margin-right: 2px;
   border: 1px solid #e0e0e0;
 
-  > > > .ztree {
+  ::v-deep .ztree {
     .level0 {
       .node_name {
         max-width: 100px;
@@ -560,7 +560,7 @@ export default {
 }
 
 .tree-table-content {
-  > > > .left {
+  ::v-deep .left {
     padding-top: 4px;
   }
 }

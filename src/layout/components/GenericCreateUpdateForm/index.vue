@@ -185,8 +185,7 @@ export default {
                 },
                 style: { 'vertical-align': 'top', 'margin-right': '5px' }
               }, msgLinkName),
-              h('span', {
-              }, msg)
+              h('span', {}, msg)
             ]),
             type: 'success'
           })
@@ -386,7 +385,7 @@ export default {
 </script>
 
 <style scoped>
-  .ibox >>> .el-card__body {
+  .ibox ::v-deep .el-card__body {
     padding-top: 30px;
   }
 </style>

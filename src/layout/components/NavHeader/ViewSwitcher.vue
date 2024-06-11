@@ -137,15 +137,15 @@ export default {
     border-bottom: none;
   }
 
-  & >>> .el-icon-arrow-down {
+  & ::v-deep .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
   }
 
   .el-menu-item {
-    height: 36px;
+    height: 38px;
     width: 160px;
-    line-height: 26px;
+    line-height: 28px;
     padding: 4px 24px;
 
     &:hover {
@@ -188,23 +188,6 @@ export default {
   color: #606266 !important;
 }
 
-.el-menu-item {
-  &.is-active {
-    color: var(--menu-text-active);
-    background-color: var(--menu-hover);
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 3px;
-      background-color: var(--menu-text-active);
-    }
-  }
-}
-
 .icons {
   vertical-align: middle !important;
   font-size: 16px;
@@ -217,7 +200,7 @@ export default {
   display: inline-block;
   font-size: 14px;
 
-  .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
+  .menu-main.mobile-view-switch ::v-deep .el-submenu__icon-arrow {
     right: 10px;
   }
 }

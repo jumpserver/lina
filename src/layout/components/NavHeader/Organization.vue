@@ -128,6 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/styles/variables.scss';
+
 $height: 28px;
 
 .org-select {
@@ -177,7 +178,7 @@ $height: 28px;
   }
 }
 
-.org-select >>> .el-input.is-disabled .el-input__inner {
+.org-select ::v-deep .el-input.is-disabled .el-input__inner {
   color: #ffffff !important;
   background-color: transparent;
 }

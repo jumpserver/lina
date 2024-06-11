@@ -379,7 +379,7 @@ $origin-white-color: #ffffff;
 .filter-field {
   position: relative;
   display: flex;
-  align-items:  center;
+  align-items: center;
   min-width: 210px;
   background-color: $origin-white-color;
 
@@ -388,7 +388,7 @@ $origin-white-color: #ffffff;
     line-height: 28px;
 
     ::v-deep .el-input.el-input--suffix {
-       .el-input__inner {
+      .el-input__inner {
         width: 0;
         height: 28px;
         padding-right: 20px;
@@ -464,11 +464,11 @@ $origin-white-color: #ffffff;
   }
 }
 
-.search-input2 >>> .el-input__inner {
+.search-input2 ::v-deep .el-input__inner {
   text-indent: 5px;
 }
 
-.el-icon--right{
+.el-icon--right {
   margin-left: 5px;
   margin-right: 5px;
 }

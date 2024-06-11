@@ -22,7 +22,13 @@
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
-            <el-button :disabled="!!scope.row.template" icon="el-icon-edit" size="mini" type="primary" @click="onEditClick(scope.row)" />
+            <el-button
+              :disabled="!!scope.row.template"
+              icon="el-icon-edit"
+              size="mini"
+              type="primary"
+              @click="onEditClick(scope.row)"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -30,7 +36,12 @@
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('Add') }}
         </el-button>
-        <el-button :disabled="!$hasPerm('accounts.view_accounttemplate')" size="mini" type="success" @click="onAddFromTemplateClick">
+        <el-button
+          :disabled="!$hasPerm('accounts.view_accounttemplate')"
+          size="mini"
+          type="success"
+          @click="onAddFromTemplateClick"
+        >
           {{ $t('TemplateAdd') }}
         </el-button>
       </div>
@@ -155,7 +166,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-data-table >>> .el-table {
+.el-data-table ::v-deep .el-table {
   .table {
     margin-top: 15px;
   }
@@ -170,6 +181,7 @@ export default {
       padding: 6px 0;
       font-size: 13px;
       border-right: none;
+
       * {
         vertical-align: middle;
       }
@@ -192,20 +204,24 @@ export default {
     font-size: 13px;
     line-height: 1.5;
     border-right: none;
+
     .cell {
       white-space: nowrap !important;
       overflow: hidden;
       text-overflow: ellipsis;
+
       &:hover {
         border-right: 2px solid #EBEEF5;
       }
     }
   }
 }
-.el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
+
+.el-data-table ::v-deep .el-table .el-table__header > thead > tr .is-sortable {
   padding: 5px 0;
+
   .cell {
-    padding-top: 3px!important;
+    padding-top: 3px !important;
   }
 }
 </style>

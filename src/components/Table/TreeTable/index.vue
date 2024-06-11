@@ -164,7 +164,7 @@ $origin-color: #ffffff;
 .tree-table-content {
   display: flex;
   flex-wrap: nowrap;
-  justify-content:space-between;
+  justify-content: space-between;
 
   .left {
     height: 100%;
@@ -209,7 +209,7 @@ $origin-color: #ffffff;
       }
     }
 
-    >>> .tab-text {
+    ::v-deep .tab-text {
       font-size: 13px;
     }
 
@@ -221,58 +221,58 @@ $origin-color: #ffffff;
   }
 }
 
-  .is-show {
-    display: none;
-  }
+.is-show {
+  display: none;
+}
 
-  .hidden {
-    width: 0;
-  }
+.hidden {
+  width: 0;
+}
 
-  .is-rotate {
+.is-rotate {
+  display: block;
+  transform: rotate(180deg);
+}
+
+.mini-button {
+  position: absolute;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  width: 13px;
+  float: right;
+  text-align: center;
+  padding: 5px 0;
+  border: 1px solid #DCDFE6;
+  background-color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 30px;
+
+  &:hover {
     display: block;
-    transform: rotate(180deg);
+    border: 1px solid #d2d2d2;
   }
 
-  .mini-button {
-    position: absolute;
-    top: 50%;
-    transform: translate(-100%, -50%);
-    width: 13px;
-    float: right;
-    text-align: center;
-    padding: 5px 0;
-    border: 1px solid #DCDFE6;
-    background-color: #fff;
-    border-radius: 2px;
-    cursor: pointer;
-    height: 30px;
-
-    &:hover {
-      display: block;
-      border: 1px solid #d2d2d2;
-    }
-
-    .icon-left {
-      font-size: 13px;
-      margin-left: -1.1px;
-    }
+  .icon-left {
+    font-size: 13px;
+    margin-left: -1.1px;
   }
+}
 
-  .el-tree {
-    background-color: inherit !important;
-  }
+.el-tree {
+  background-color: inherit !important;
+}
 
-  .mini {
-    position: relative;
-    margin-right: 5px;
-    width: 2px !important;
-  }
+.mini {
+  position: relative;
+  margin-right: 5px;
+  width: 2px !important;
+}
 
-  .transition-box.left {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-  }
+.transition-box.left {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+}
 
 </style>

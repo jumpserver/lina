@@ -13,7 +13,12 @@
     <el-col style="margin-bottom: 5px">
       <label>{{ this.$t('TableColSetting') }}</label>
     </el-col>
-    <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" style="margin-left: 10px" @change="handleCheckAllChange">
+    <el-checkbox
+      v-model="checkAll"
+      :indeterminate="isIndeterminate"
+      style="margin-left: 10px"
+      @change="handleCheckAllChange"
+    >
       {{ $t('All') }}
     </el-checkbox>
     <el-checkbox-group
@@ -138,7 +143,7 @@ export default {
   .col-item {
     margin-top: 5px;
 
-    >>> .el-checkbox {
+    ::v-deep .el-checkbox {
       width: 100%;
 
       .el-checkbox__input {

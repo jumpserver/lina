@@ -156,16 +156,19 @@ export default {
 
 <style lang='scss' scoped>
 .account-add {
-  >>> .el-form-item {
+  ::v-deep .el-form-item {
     margin-bottom: 5px;
+
     .help-block {
       margin-bottom: 5px;
     }
   }
-  >>> .form-group-header {
+
+  ::v-deep .form-group-header {
     .hr-line-dashed {
       margin: 5px 0;
     }
+
     h3 {
       margin-bottom: 10px;
     }

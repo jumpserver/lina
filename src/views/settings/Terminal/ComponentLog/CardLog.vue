@@ -59,15 +59,17 @@ export default {
   overflow: scroll;
   display: block;
 }
-.log-table >>> td {
+
+.log-table ::v-deep td {
   padding: 5px 5px;
 }
 
-.log-table >>> tr {
+.log-table ::v-deep tr {
   overflow-x: auto;
   white-space: nowrap;
 }
-.log-card >>> .el-card__body {
+
+.log-card ::v-deep .el-card__body {
   padding: 10px 10px 5px;
 }
 

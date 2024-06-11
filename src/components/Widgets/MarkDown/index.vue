@@ -4,24 +4,24 @@
       <div class="action-bar">
         <div class="action">
           <span>
-            <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" @click="onView" />
+            <i :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" class="fa" @click="onView" />
           </span>
         </div>
       </div>
       <el-col :span="span" :style="{'height': height + 'px' }">
         <el-input
           v-model="iValue"
-          autosize
           :rows="rows"
+          autosize
           type="textarea"
           @change="onChange"
         />
       </el-col>
       <el-col v-show="isShow" :span="span">
-        <VueMarkdown class="result-html" :source="iValue" :show="true" :html="false" />
+        <VueMarkdown :html="false" :show="true" :source="iValue" class="result-html" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else class="source" :source="iValue" :html="false" />
+    <VueMarkdown v-else :html="false" :source="iValue" class="source" />
   </div>
 </template>
 
@@ -100,30 +100,36 @@ export default {
   font-size: 13px;
 }
 
->>> .el-textarea {
+::v-deep .el-textarea {
   height: 100% !important;
+
   .el-textarea__inner {
     min-height: 210px !important;
     height: 100% !important;
   }
 }
+
 .source {
   padding: 6px;
 }
+
 .result-html {
   min-height: 210px;
   margin-left: 4px;
   padding: 5px 10px;
   border: 1px solid #DCDFE6;
 }
+
 .action-bar {
   position: relative;
   height: 0;
   border-bottom: none;
   z-index: 999;
+
   .action {
     position: absolute;
     right: 6px;
+
     i {
       cursor: pointer;
     }

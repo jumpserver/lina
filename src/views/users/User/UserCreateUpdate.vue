@@ -36,10 +36,8 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
-        name: {
-        },
-        username: {
-        },
+        name: {},
+        username: {},
         password_strategy: {
           hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
@@ -139,8 +137,8 @@ export default {
           },
           hidden: () => {
             return !this.$store.getters.hasValidLicense ||
-                !this.$hasPerm('rbac.add_orgrolebinding') ||
-                this.$store.getters.currentOrgIsRoot
+              !this.$hasPerm('rbac.add_orgrolebinding') ||
+              this.$store.getters.currentOrgIsRoot
           }
         },
         groups: {
@@ -231,7 +229,7 @@ export default {
     disableMFAFieldIfNeed(user) {
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' &&
-          store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
+        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
       if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed) {
         this.fieldsMeta['mfa_level'].disabled = true
         this.fieldsMeta['mfa_level'].helpText = this.$t('GlobalDisableMfaMsg')
@@ -242,7 +240,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-create-update >>> .el-form-item-need_update_password {
+.user-create-update ::v-deep .el-form-item-need_update_password {
   margin-top: -10px;
 
   .el-form-item__content label {

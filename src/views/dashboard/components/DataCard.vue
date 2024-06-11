@@ -51,8 +51,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
@@ -68,7 +67,7 @@ export default {
     border-bottom: 1px solid #EFF0F1;
 
     .title,
-    .num{
+    .num {
       color: var(--color-text-primary);
     }
 
@@ -111,7 +110,8 @@ export default {
 
   .ring {
     padding: 26px 0 10px;
-    & >>> .echarts {
+
+    & ::v-deep .echarts {
       width: 100% !important;
       height: 278px !important;
     }

@@ -81,16 +81,16 @@ export default {
     &.array-item {
       border-bottom: none;
 
-      >>> .el-form-item__content {
+      ::v-deep .el-form-item__content {
         border-bottom: 1px dashed #EBEEF5
       }
 
-      >>> .el-form-item__label:last-child {
+      ::v-deep .el-form-item__label:last-child {
         border: 1px dashed #EBEEF5;
       }
     }
 
-    >>> .el-form-item__label {
+    ::v-deep .el-form-item__label {
       padding-right: 8%;
       overflow: hidden;
       color: var(--color-icon-primary);
@@ -115,6 +115,7 @@ export default {
   .item-value span {
     word-break: break-word;
   }
+
   .content {
     font-size: 13px;
     line-height: 2.5;

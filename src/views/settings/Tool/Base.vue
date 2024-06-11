@@ -82,7 +82,9 @@ export default {
   props: {
     hasStop: {
       type: Boolean,
-      default: () => { return true }
+      default: () => {
+        return true
+      }
     },
     taskType: {
       type: String,
@@ -90,7 +92,8 @@ export default {
     },
     rules: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     fields: {
       type: Array,
@@ -165,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-field >>> .el-input__inner {
+.filter-field ::v-deep .el-input__inner {
   height: 30px;
 }
 </style>

@@ -60,11 +60,12 @@ li {
     min-width: 100px;
   }
 }
+
 //
 //.box-card {
 //  margin-bottom: 20px;
 //
-//  & >>> .el-card__header {
+//  & ::v-deep .el-card__header {
 //    padding-top: 20px;
 //  }
 //}
@@ -77,7 +78,7 @@ li {
     height: 70px;
     text-align: center;
 
-    & >>> .el-avatar--large {
+    & ::v-deep .el-avatar--large {
       width: 100%;
       height: 100%;
     }

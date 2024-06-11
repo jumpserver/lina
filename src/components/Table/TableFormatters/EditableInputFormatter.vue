@@ -19,8 +19,7 @@ import BaseFormatter from './base.vue'
 
 export default {
   name: 'EditableInputFormatter',
-  components: {
-  },
+  components: {},
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -90,7 +89,7 @@ export default {
 </script>
 
 <style scoped>
-.editInput >>> .el-input__inner {
+.editInput ::v-deep .el-input__inner {
   padding: 2px;
   line-height: 12px;
 }

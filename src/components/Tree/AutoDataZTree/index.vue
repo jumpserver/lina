@@ -324,7 +324,7 @@ export default {
 }
 
 .data-z-tree {
-  >>> {
+  ::v-deep {
     .fa {
       width: 10px;
       margin-right: 3px;

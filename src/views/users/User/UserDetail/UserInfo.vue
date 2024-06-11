@@ -214,7 +214,7 @@ export default {
                 prettyKey = key.substring(0, allowKeyMaxLength - 3) + '...'
               }
               const item = prettyKey + ': ' + value.join(', ')
-              doms.push([item, <br />])
+              doms.push([item, <br/>])
             })
             return <div>{doms}</div>
           }
@@ -263,7 +263,7 @@ export default {
 </script>
 
 <style scoped>
-  .mfa-setting >>> .el-slider__runway {
+  .mfa-setting ::v-deep .el-slider__runway {
     margin-top: 0;
     margin-bottom: 0;
   }

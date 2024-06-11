@@ -466,7 +466,8 @@ export default {
       this.tableConfig.totalData.push(item)
     },
     handleClick(btn) {
-      const callback = btn.callback || function() {}
+      const callback = btn.callback || function() {
+      }
       callback(btn)
     }
   }
@@ -475,6 +476,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables";
+
 .summary-item {
   padding: 0 10px
 }
@@ -487,7 +489,7 @@ export default {
   color: $--color-danger;
 }
 
-.importTable >>> .cell {
+.importTable ::v-deep .cell {
   min-height: 20px;
   height: 100%;
   max-height: 160px;

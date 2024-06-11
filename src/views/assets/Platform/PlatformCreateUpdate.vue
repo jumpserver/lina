@@ -94,8 +94,7 @@ export default {
       defaultOptions: {}
     }
   },
-  watch: {
-  },
+  watch: {},
   async mounted() {
     try {
       await this.setCategories()
@@ -168,7 +167,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-form >>> {
+.platform-form ::v-deep {
   .el-cascader {
     width: 100%;
   }
@@ -180,19 +179,22 @@ export default {
   .item-method.el-form-item {
     display: inline-block;
     width: 100%;;
+
     .el-form-item__content {
       width: calc(75% - 50px);
     }
+
     .el-select {
       width: 100%;
     }
+
     margin-top: -10px;
   }
 
   .item-params.el-form-item {
-     display: inline-block;
-     position: absolute;
-     right: 18px;
+    display: inline-block;
+    position: absolute;
+    right: 18px;
     //margin-top: -10px;
   }
 }

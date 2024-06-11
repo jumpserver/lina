@@ -230,6 +230,7 @@ export default {
 .fold {
   display: inline-block;
   padding-left: 4px;
+
   i {
     font-weight: bold;
     font-size: 15px;
@@ -237,15 +238,15 @@ export default {
   }
 }
 
->>> .CodeMirror pre.CodeMirror-line,
->>> .CodeMirror-linenumber.CodeMirror-gutter-elt {
+::v-deep .CodeMirror pre.CodeMirror-line,
+::v-deep .CodeMirror-linenumber.CodeMirror-gutter-elt {
   line-height: 18px !important;
 }
 
 .runas-input {
   height: 28px;
 
-  >>> {
+  ::v-deep {
     .el-select {
       width: 100px;
     }
@@ -269,7 +270,7 @@ export default {
   min-width: 100px;
 }
 
-.autoWidth-select >>> .el-input__prefix {
+.autoWidth-select ::v-deep .el-input__prefix {
   position: relative;
   left: 0;
   box-sizing: border-box;
@@ -278,7 +279,7 @@ export default {
   visibility: hidden;
 }
 
-.autoWidth-select >>> input {
+.autoWidth-select ::v-deep input {
   position: absolute;
   padding-left: 0px;
   border: none;
@@ -289,7 +290,7 @@ export default {
   line-height: 27px;
 }
 
->>> .el-select {
+::v-deep .el-select {
   top: -1px;
 
   .el-input .el-select__caret {
@@ -297,7 +298,7 @@ export default {
   }
 }
 
->>> .el-button.el-button--default {
+::v-deep .el-button.el-button--default {
   background-color: #e6e6e6;
 }
 

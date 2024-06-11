@@ -130,8 +130,8 @@ export default {
             }
             query['format'] = exportTypeOption
             const queryStr =
-                (url.indexOf('?') > -1 ? '&' : '?') +
-                queryUtil.stringify(query, '=', '&')
+              (url.indexOf('?') > -1 ? '&' : '?') +
+              queryUtil.stringify(query, '=', '&')
             url = url + queryStr
             this.$log.debug('Export url: ', this.url, '=>', url)
             const a = document.createElement('a')
@@ -230,7 +230,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.command-list-table > > > .risk-command {
+.command-list-table ::v-deep .risk-command {
   background-color: oldlace;
 
   tr {

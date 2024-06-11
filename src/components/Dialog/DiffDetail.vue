@@ -98,7 +98,7 @@ export default {
     width: 100%;
     max-height: 80vh;
 
-    & >>> td {
+    & ::v-deep td {
       padding: 5px 0 !important;
     }
   }

@@ -144,7 +144,7 @@ export default {
     handleViewChange() {
       // 此处不使用 nextTick 的原因可能是由于子组件中切换 tag 需要触发异步的 dispatch
       setTimeout(() => {
-      // this.setLeastMenuOpen()
+        // this.setLeastMenuOpen()
       }, 500)
     },
     setLeastMenuOpen() {
@@ -198,13 +198,14 @@ $hover-border-color: #d2d2d2;
         }
       }
 
-      & >>> .title-label {
+      & ::v-deep .title-label {
         color: $origin-color !important;
       }
 
       .mobile-view-switch {
-        &>>> .el-menu-item.is-active {
+        &::v-deep .el-menu-item.is-active {
           color: var(--menu-text-active) !important;
+
           .svg-icon {
             color: var(--menu-text-active) !important;
           }
@@ -304,8 +305,9 @@ $hover-border-color: #d2d2d2;
   }
 
   .is-show {
-    display: block!important;;
+    display: block !important;;
   }
+
   .mobile-menu {
     display: none;
     position: absolute;

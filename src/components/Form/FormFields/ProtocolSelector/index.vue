@@ -327,7 +327,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-select >>> .el-input__inner {
+.el-select ::v-deep .el-input__inner {
   width: 120px;
   text-overflow: ellipsis;
   white-space: nowrap;

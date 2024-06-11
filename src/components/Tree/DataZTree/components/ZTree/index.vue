@@ -123,7 +123,7 @@ export default {
       let treeUrl
       this.loading = true
       if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
-          this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
+        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
         treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
           ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
@@ -407,7 +407,7 @@ export default {
   }
 
   &:hover {
-    >>> .tree-action-btn {
+    ::v-deep .tree-action-btn {
       display: inline;
     }
   }
@@ -606,21 +606,21 @@ div.rMenu li {
 .fixed-tree-search {
   margin-bottom: 10px;
 
-  & >>> .el-input__inner {
+  & ::v-deep .el-input__inner {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
   }
 
-  & >>> .el-input__suffix {
+  & ::v-deep .el-input__suffix {
     padding-right: 8px;
   }
 
-  & >>> .el-input__prefix {
+  & ::v-deep .el-input__prefix {
     padding-left: 6px;
   }
 
-  & >>> .el-input__suffix-inner {
+  & ::v-deep .el-input__suffix-inner {
     line-height: 30px;
   }
 }

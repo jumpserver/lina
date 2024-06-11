@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .image img {
+::v-deep .image img {
   width: 40px;
   height: 40px
 }

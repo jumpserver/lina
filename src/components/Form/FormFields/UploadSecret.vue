@@ -100,15 +100,18 @@ export default {
 <style lang="scss" scoped>
 .upload-secret {
   display: flex;
-  &>>> .el-list-enter-active,
-  &>>> .el-list-leave-active {
+
+  &::v-deep .el-list-enter-active,
+  &::v-deep .el-list-leave-active {
     transition: none;
   }
-  &>>> .el-list-enter,
-  &>>> .el-list-leave-active {
+
+  &::v-deep .el-list-enter,
+  &::v-deep .el-list-leave-active {
     opacity: 0;
   }
-  &>>> .el-upload-list {
+
+  &::v-deep .el-upload-list {
     height: 40px;
   }
 }

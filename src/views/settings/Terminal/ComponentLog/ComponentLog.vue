@@ -226,10 +226,11 @@ $headerHeight: 30px;
   .search.right {
     float: right;
   }
+
   padding-bottom: 10px;
 }
 
-.search-text >>>.el-input__inner{
+.search-text ::v-deep.el-input__inner {
   height: 30px;
 }
 
@@ -256,7 +257,7 @@ $headerHeight: 30px;
 .right-side-actions.right-side-item {
   display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   padding-left: 10px;
   height: 30px;
   line-height: 30px;
@@ -278,6 +279,7 @@ $headerHeight: 30px;
     width: 16px;
   }
 }
+
 .card-log {
   margin-bottom: 10px;
 }

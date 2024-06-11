@@ -39,10 +39,11 @@ export default {
 </script>
 
 <style scoped>
-  .quick-actions >>> table {
+  .quick-actions ::v-deep table {
     width: 100%;
   }
-  .quick-actions >>> tr > td {
+
+  .quick-actions ::v-deep tr > td {
     line-height: 1.43;
     padding: 8px;
     vertical-align: top;
@@ -50,11 +51,11 @@ export default {
     width: 50%;
   }
 
-  .quick-actions >>> tr > td > span:last-child {
+  .quick-actions ::v-deep tr > td > span:last-child {
     float: right;
   }
 
-  .quick-actions >>> button {
+  .quick-actions ::v-deep button {
     padding: 4px 10px;
     font-size: 13px;
   }

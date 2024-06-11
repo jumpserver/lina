@@ -454,10 +454,11 @@ export default {
 }
 </script>
 <style scoped>
-  .ibox >>> table {
+  .ibox ::v-deep table {
     width: 100%;
   }
-  .ibox >>> tr > td > span:first-child{
+
+  .ibox ::v-deep tr > td > span:first-child {
     line-height: 1.43;
     padding-right: 30px;
     vertical-align: top;
@@ -465,7 +466,7 @@ export default {
     width: 50%;
   }
 
-  .ibox >>> tr > td > span:last-child {
+  .ibox ::v-deep tr > td > span:last-child {
     float: right;
   }
 </style>

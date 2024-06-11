@@ -75,11 +75,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .image {
+::v-deep .image {
   padding-right: 0;
 }
 
->>> .el-tag {
+::v-deep .el-tag {
   margin: 0 3px 0 0;
 }
 </style>

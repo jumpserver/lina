@@ -28,7 +28,7 @@
                 shadow="hover"
                 @click.native="createAsset(platform)"
               >
-                <img :src="loadImage(platform)" class="asset-icon" alt="icon">
+                <img :src="loadImage(platform)" alt="icon" class="asset-icon">
                 <span class="platform-name">{{ platform.name }}</span>
               </el-card>
             </el-col>
@@ -194,7 +194,7 @@ export default {
 .platform-item {
   margin: 5px 0;
 
-  & > > > .el-card__body {
+  & ::v-deep .el-card__body {
     padding: 10px
   }
 
@@ -210,7 +210,7 @@ export default {
   color: #303133;
 }
 
-> > > .el-collapse {
+::v-deep .el-collapse {
   border: none;
 
   .el-collapse-item:last-child {

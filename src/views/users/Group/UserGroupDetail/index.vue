@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
->>> table.CardTable {
+::v-deep table.CardTable {
   table-layout: auto !important;
 }
 </style>

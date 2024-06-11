@@ -187,12 +187,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .data-z-tree {
+::v-deep .data-z-tree {
   padding: 0;
 }
 
-.page-submenu >>> .el-tabs__nav-wrap {
+.page-submenu ::v-deep .el-tabs__nav-wrap {
   position: static;
+
   .el-tabs__item {
     padding-right: 0;
     padding-left: 0;
@@ -202,16 +203,19 @@ export default {
     }
   }
 }
-.only-submenu  {
-  &>>> .el-tabs__active-bar {
-    transform: none!important;
+
+.only-submenu {
+  &::v-deep .el-tabs__active-bar {
+    transform: none !important;
   }
-  &>>> .el-tabs__item.is-active {
+
+  &::v-deep .el-tabs__item.is-active {
     text-align: left;
     padding: 0 20px;
   }
 }
->>> {
+
+::v-deep {
   .ztree {
     padding: 0;
   }

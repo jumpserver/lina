@@ -2,7 +2,12 @@
   <div class="chat-content">
     <div id="scrollRef" class="chat-list">
       <div v-if="showIntroduction" class="introduction">
-        <div v-for="(item, index) in introduction" :key="index" class="introduction-item" @click="sendIntroduction(item)">
+        <div
+          v-for="(item, index) in introduction"
+          :key="index"
+          class="introduction-item"
+          @click="sendIntroduction(item)"
+        >
           <div class="head">
             <i v-if="item.icon" :class="item.icon" />
             <span class="title">{{ item.title }}</span>
@@ -63,8 +68,7 @@ export default {
       prompt: '',
       conversationId: '',
       showIntroduction: false,
-      introduction: [
-      ]
+      introduction: []
     }
   },
   computed: {
@@ -219,13 +223,16 @@ export default {
       &:first-child {
         margin-top: 0;
       }
+
       .head {
         margin-bottom: 2px;
+
         .title {
           font-weight: 500;
           color: #373739;
         }
       }
+
       .content {
         display: inline-block;
         color: #a7a7ab;
@@ -233,16 +240,19 @@ export default {
       }
     }
   }
+
   .chat-list {
     flex: 1;
     position: relative;
     padding: 0 15px 25px;
     overflow-y: auto;
     user-select: text;
+
     &::-webkit-scrollbar {
       width: 12px;
     }
   }
+
   .input-box {
     position: relative;
     //height: 60px;
@@ -250,13 +260,15 @@ export default {
     margin-bottom: 15px;
     //border-top: 1px solid #ececec;
   }
+
   .stop {
     position: absolute;
     top: -37px;
     left: 50%;
     z-index: 11;
     transform: translateX(-50%);
-    >>> i {
+
+    ::v-deep i {
       margin-right: 4px;
     }
   }

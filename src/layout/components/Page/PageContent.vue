@@ -15,11 +15,11 @@ export default {
     padding: 12px 30px 22px;
   }
 
-  .wrapper-content >>> .el-alert {
+  .wrapper-content ::v-deep .el-alert {
     margin-bottom: 15px;
   }
 
-  .page-alert >>> .el-alert {
+  .page-alert ::v-deep .el-alert {
     margin-bottom: 20px;
   }
 </style>

@@ -244,21 +244,23 @@ export default {
 
 <style lang='scss' scoped>
   @import "~@/styles/variables";
+
   .error-msg {
     color: $--color-danger;
   }
+
   .error-msg.error-results {
     background-color: #f3f3f4;
     max-height: 200px;
     overflow: auto
   }
 
-  .file-uploader >>> .el-upload {
+  .file-uploader ::v-deep .el-upload {
     width: 100%;
     //padding-right: 150px;
   }
 
-  .file-uploader >>> .el-upload-dragger {
+  .file-uploader ::v-deep .el-upload-dragger {
     width: 100%;
   }
 
@@ -274,7 +276,7 @@ export default {
     }
   }
 
-  .importTable >>> .el-dialog__body {
+  .importTable ::v-deep .el-dialog__body {
     padding-bottom: 20px;
   }
 

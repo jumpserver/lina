@@ -201,7 +201,9 @@ export default {
         cellValue: this.cellValue,
         tableData: this.tableData
       }
-      return () => { return callback.bind(this)(attrs) }
+      return () => {
+        return callback.bind(this)(attrs)
+      }
     },
     cleanValue(item, attr) {
       const value = item[attr]
@@ -223,7 +225,7 @@ export default {
 
 <style scoped>
 .table-actions {
-  >>> {
+  ::v-deep {
     .el-icon-arrow-down {
       display: none;
     }

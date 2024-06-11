@@ -165,12 +165,12 @@ export default {
       border-color: #C0C4CC;
     }
 
-    & > > > .el-tag {
+    & ::v-deep .el-tag {
       margin-top: 1px;
       font-family: sans-serif !important;
     }
 
-    & > > > .el-autocomplete {
+    & ::v-deep .el-autocomplete {
       height: 28px;
     }
   }
@@ -178,19 +178,19 @@ export default {
   .search-input {
     flex: 1;
 
-    & > > > .el-input__inner {
+    & ::v-deep .el-input__inner {
       max-width: 100%;
       border: none;
       padding-left: 10px;
     }
   }
 
-  .el-input > > > .el-input__inner {
+  .el-input ::v-deep .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
 
-  .filter-field > > > .el-input__inner {
+  .filter-field ::v-deep .el-input__inner {
     height: 28px;
   }
 

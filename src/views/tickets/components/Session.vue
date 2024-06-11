@@ -163,7 +163,7 @@ export default {
     margin-top: 15px;
     margin-bottom: 15px;
 
-    & >>> .el-divider--horizontal {
+    & ::v-deep .el-divider--horizontal {
       margin: 10px 0;
     }
   }
@@ -181,7 +181,7 @@ export default {
       color: #676A6C;
     }
 
-    & >>> .el-col {
+    & ::v-deep .el-col {
       line-height: 24px;
     }
   }

@@ -31,7 +31,8 @@ export default {
         submitBtnSize: 'mini',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {},
+        onSubmit: () => {
+        },
         submitMethod: () => 'post',
         getUrl: () => '',
         fields: [['', ['attr', 'match', 'value']]],
@@ -74,19 +75,25 @@ export default {
           { prop: 'attr', label: this.$t('AttrName'), formatter: tableFormatter('attr') },
           { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
           { prop: 'value', label: this.$t('AttrValue'), formatter: tableFormatter('value') },
-          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div className='input-button'>
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={ this.handleDelete(index) }
-                />
-              </div>
-            )
-          } }
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return (
+                <div className='input-button'>
+                  <el-button
+                    icon='el-icon-minus'
+                    size='mini'
+                    style={{ 'flexShrink': 0 }}
+                    type='danger'
+                    onClick={this.handleDelete(index)}
+                  />
+                </div>
+              )
+            }
+          }
         ],
         totalData: this.value || [],
         hasPagination: false
@@ -111,10 +118,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-form-item:nth-child(-n+4) {
+::v-deep .el-form-item:nth-child(-n+4) {
   width: 29%;
 }
->>> .el-form-item:last-child {
+
+::v-deep .el-form-item:last-child {
   width: 6%;
 }
 </style>

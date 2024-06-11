@@ -141,7 +141,7 @@ export default {
   padding: 6px;
 }
 
-.go-back >>> i {
+.go-back ::v-deep i {
   font-size: 18px;
   font-weight: 600;
 }

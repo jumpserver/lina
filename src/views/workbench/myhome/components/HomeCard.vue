@@ -51,12 +51,12 @@ export default {
     },
     tableConfig: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     btnChange() {
@@ -68,7 +68,7 @@ export default {
 }
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
   #HomeCard {
     position: relative;
     width: 100%;
@@ -79,29 +79,41 @@ export default {
     &:nth-child(n) {
       margin-bottom: 20px;
     }
+
     .fa {
       position: absolute;
       right: -4px;
       top: -19px;
     }
+
     .fa:before {
       font-size: 110px;
       opacity: .1;
     }
+
     .others {
       width: 100%;
       height: auto;
       text-align: center;
+
       .icon {
         text-align: center;
         font-size: 30px;
       }
     }
   }
+
   .public-height {
     min-height: .1px;
   }
-  .ListTable >>> .el-data-table .el-pagination {
+
+  ::v-deep {
+    .el-card__body {
+      padding-top: 10px
+    }
+  }
+
+  .ListTable ::v-deep .el-data-table .el-pagination {
     display: none;
   }
 </style>
