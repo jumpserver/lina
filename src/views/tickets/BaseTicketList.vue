@@ -137,6 +137,14 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
+          default: {
+            state: {
+              key: 'state',
+              label: this.$t('tickets.action'),
+              value: 'pending',
+              valueLabel: this.$t('common.Open')
+            }
+          },
           exclude: ['id', 'title', 'type', 'applicant'],
           options: [
             {
@@ -180,7 +188,7 @@ export default {
             },
             {
               value: 'relevant_command',
-              label: this.$t('tickets.RelevantSystemUser')
+              label: this.$t('tickets.ApplyRunCommand')
             }
           ]
         },
