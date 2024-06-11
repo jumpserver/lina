@@ -121,7 +121,12 @@ export default {
       this.checkAll = checkedCount === this.allRegions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
-      const checkedRegion = this.allRegions.filter(item => value.includes(item.id))
+      const checkedRegion = this.allRegions
+        .filter(item => value.includes(item.id))
+        .reduce((acc, region) => {
+          acc[region.id] = region.name
+          return acc
+        }, {})
 
       this.$emit('input', checkedRegion)
       this.refreshContent()
