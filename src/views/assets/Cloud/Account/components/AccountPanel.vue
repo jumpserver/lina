@@ -19,10 +19,10 @@
     </el-row>
     <el-divider />
     <el-row :gutter="20" style="height: 80%;">
-      <el-col :span="14" class="image">
+      <el-col :span="5" class="image">
         <el-image :src="cloudImage" fit="contain" />
       </el-col>
-      <el-col :span="16">
+      <el-col :span="19">
         <InfoPanel :content="iTask.regions.length" :title="$tc('TotalSyncRegion')" />
         <InfoPanel :content="iTask.instance_count || 0" :title="$tc('TotalSyncAsset')" />
         <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" />

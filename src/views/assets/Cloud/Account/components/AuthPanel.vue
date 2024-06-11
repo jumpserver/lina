@@ -175,7 +175,7 @@ export default {
     handleSubmitSuccess(res) {
       if (this.submitType === 'manual') {
         this.$emit('update:object', res)
-        this.$emit('update:active', 3)
+        this.$emit('update:active', 2)
       }
     },
     handlePerformFinished() {

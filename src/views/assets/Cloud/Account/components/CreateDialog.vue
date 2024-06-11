@@ -64,17 +64,13 @@ export default {
   },
   data() {
     return {
-      active: 1,
+      activeMenuMap: { 0: 'ProviderPanel', 1: 'AuthPanel', 2: 'AssetPanel', 3: 'ResultPanel' },
+      activeMenu: 'ProviderPanel',
       selected: '',
       activeMenu: 'ProviderPanel',
       firstStepDesc: this.$tc('SelectPlatforms'),
-      account: {},
-      activeMenuMap: {
-        1: 'ProviderPanel',
-        2: 'AuthPanel',
-        3: 'AssetPanel',
-        4: 'ResultPanel'
-      }
+      active: 0,
+      account: {}
     }
   },
   computed: {
@@ -106,3 +102,35 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+::v-deep .el-step {
+  .el-step__head {
+    &.is-process {
+      color: var(--color-primary);
+
+      .el-step__line {
+        background-color: var(--color-primary);
+      }
+
+      .el-step__icon {
+        border-color: var(--color-primary);
+      }
+    }
+
+    &.is-finish {
+      .el-step__line {
+        background-color: var(--color-primary);
+      }
+
+    }
+  }
+
+  .el-step__main {
+    .el-step__description.is-process,
+    .el-step__description.is-finish{
+      color: var(--color-primary);
+    }
+  }
+}
+</style>

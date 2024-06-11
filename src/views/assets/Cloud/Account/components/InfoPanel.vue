@@ -49,7 +49,6 @@ export default {
 
   span {
    @include textOverflow;
-    min-width: 120px;
     text-align: left;
   }
 
@@ -57,5 +56,21 @@ export default {
     margin-left: 5px;
     color: var(--color-text-primary);
   }
+}
+
+html:lang(en) .panel-item span {
+  min-width: 160px;
+}
+
+html:lang(ja) .panel-item span {
+  min-width: 160px;
+}
+
+html:lang(cn) .panel-item span {
+  min-width: 120px;
+}
+
+html:lang(zh_hant) .panel-item span {
+  min-width: 120px;
 }
 </style>
