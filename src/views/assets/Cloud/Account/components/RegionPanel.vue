@@ -11,28 +11,40 @@
       :title="$tc('Region')"
       :visible.sync="regionVisible"
       :show-cancel="false"
-      width="'60'"
+      width="60%"
       @confirm="regionVisible=false"
     >
-      <el-row :gutter="12">
-        <el-col v-for="r in allRegions" :key="r.id" :span="6">
-          <el-card
-            shadow="hover"
-            class="region-card"
-            :class="regions.indexOf(r.id) !== -1 ? 'active': ''"
-            :body-style="{ padding: '6px' }"
-            @click.native="handlerCardClick(r.id)"
-          >
-            <span>{{ r.name }}</span>
-          </el-card>
+      <el-row>
+        <el-col>
+          <el-checkbox v-model="checkAll" @change="handleCheckedAllChange">
+            {{ $t('All') }}
+          </el-checkbox>
         </el-col>
       </el-row>
+      <el-checkbox-group
+        v-model="checkedRegion"
+        @change="handleCheckedRegionChange"
+      >
+        <el-row
+          v-for="r in allRegions"
+          :key="r.id"
+          type="flex"
+        >
+          <el-col>
+            <el-checkbox
+              :label="r.id"
+              :value="r.id"
+            >
+              {{ r.name }}
+            </el-checkbox>
+          </el-col>
+        </el-row>
+      </el-checkbox-group>
     </Dialog>
   </div>
 </template>
 
 <script>
-
 import { Dialog } from '@/components'
 import { encryptAttrsField } from '@/views/assets/Cloud/const'
 
@@ -57,9 +69,17 @@ export default {
   },
   data() {
     return {
-      regionVisible: false,
+      content: '',
+      checkedRegion: [],
       allRegions: [],
-      content: ''
+      checkAll: false,
+      regionVisible: false,
+      isIndeterminate: false
+    }
+  },
+  watch: {
+    checkedRegion() {
+      this.updateCheckedStatus()
     }
   },
   mounted() {
@@ -67,7 +87,7 @@ export default {
   },
   methods: {
     refreshContent() {
-      const count = this.regions.length || this.$t('SelectAll')
+      const count = this.checkedRegion.length || this.$t('SelectAll')
       this.content = `${this.$t('Modify')} [${count}]`
     },
     handlerLinkClick() {
@@ -85,34 +105,53 @@ export default {
       this.$axios[method](url, data).then(resp => {
         this.allRegions = resp?.regions
         this.regionVisible = true
+        this.updateCheckedStatus()
       }).catch(error => {
         this.$message.error(this.$tc('CloudRegionTip' + ' ' + error))
       }).finally(() => {
         this.refreshContent()
       })
     },
-    handlerCardClick(regionId) {
-      const index = this.regions.indexOf(regionId)
-      if (index !== -1) {
-        this.regions.splice(index, 1)
-      } else {
-        this.regions.push(regionId)
-      }
-      this.$emit('input', this.regions)
+    handleCheckedAllChange(val) {
+      this.checkedRegion = val ? this.allRegions.map(region => region.id) : []
+      this.isIndeterminate = false
+    },
+    handleCheckedRegionChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.allRegions.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
+
+      const checkedRegion = this.allRegions.filter(item => value.includes(item.id))
+
+      this.$emit('input', checkedRegion)
       this.refreshContent()
+    },
+    updateCheckedStatus() {
+      const checkedCount = this.checkedRegion.length
+      this.checkAll = checkedCount === this.allRegions.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
     }
   }
 }
 </script>
 
 <style lang='scss' scoped>
-.region-card {
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 6px;
+.el-checkbox {
+  margin-bottom: 10px;
 }
-.el-card.active {
-  color: var(--color-primary);
-  border: 1px solid;
+
+.el-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+
+  ::v-deep .el-col {
+
+    .el-checkbox {
+      display: flex;
+      align-items: center;
+      width: 250px;
+      height: 25px;
+    }
+  }
 }
 </style>
