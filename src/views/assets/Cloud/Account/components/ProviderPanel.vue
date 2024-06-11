@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <el-row :gutter="12" style="min-height: 280px;">
-      <el-col v-for="p in providers" :key="p.name" :span="6" style="margin-bottom: 10px">
+  <div class="cloud-select-wrap">
+    <el-row :gutter="12">
+      <el-col v-for="p in providers" :key="p.name" :style="p.imageCSS ? p.imageCSS : ''">
         <el-card
-          :body-style="{ padding: '15px', position: 'relative', height: '100px', point: 'cursor' }"
+          :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
           :class="selected === p.name ? 'active': ''"
           shadow="hover"
           @dblclick.native="handleCardDBClick(p.name)"
@@ -11,26 +11,30 @@
         >
           <el-image
             :src="p.image"
-            :style="p.imageCSS ? p.imageCSS : {'padding': '1.5em 0.5em'}"
+            fit="contain"
             shape="square"
           />
+          <el-tooltip :content="p.title" placement="top">
+            <div class="description">{{ p.title }}</div>
+          </el-tooltip>
         </el-card>
       </el-col>
     </el-row>
-    <el-button size="small" style="float: right;" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
-    <el-button
-      size="small"
-      style="float: right; margin-right: 10px;"
-      type="primary"
-      @click="handleNext"
-    >
-      {{ $tc('Next') }}
-    </el-button>
+    <el-row>
+      <el-button size="small" style="float: right;" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
+      <el-button
+        size="small"
+        style="float: right; margin-right: 10px;"
+        type="primary"
+        @click="handleNext"
+      >
+        {{ $tc('Next') }}
+      </el-button>
+    </el-row>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'ProviderPanel',
   components: {
@@ -53,8 +57,6 @@ export default {
     return {
     }
   },
-  mounted() {
-  },
   methods: {
     handleCardClick(platform) {
       this.$emit('update:selected', platform)
@@ -69,7 +71,7 @@ export default {
         this.$message.error(this.$tc('SelectProviderMsg'))
         return
       }
-      this.$emit('update:active', 2)
+      this.$emit('update:active', 1)
     },
     handleCancel() {
       this.$emit('update:visible', false)
@@ -79,16 +81,42 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-title {
-  display: inline-block;
-  line-height: 60px;
-  height: 60px;
-  position: absolute;
-  margin-left: 20px;
-}
+.cloud-select-wrap {
+  height: 300px;
 
-.el-card.active {
-  color: var(--color-primary);
-  border: 1px solid;
+  .el-row {
+    flex-direction: column;
+    flex-wrap: wrap;
+    cursor: pointer;
+
+    .el-col {
+      width: 270px;
+      margin-bottom: 20px;
+
+      .el-card.active {
+        color: var(--color-primary);
+        border: 1px solid;
+      }
+
+      ::v-deep .el-image {
+        overflow: unset;
+
+        img {
+          width: 70px;
+          height: 70px;
+        }
+      }
+
+      ::v-deep .description {
+        margin-left: 15px;
+        font-size: 15px;
+        word-break: keep-all;
+        white-space: normal;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color: var(--color-text-primary) !important;
+      }
+    }
+  }
 }
 </style>

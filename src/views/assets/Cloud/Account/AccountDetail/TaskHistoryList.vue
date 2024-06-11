@@ -64,6 +64,10 @@ export default {
             formatter: DateFormatter
           },
           {
+            prop: 'summary.triggerMode',
+            label: this.$t('TriggerMode')
+          },
+          {
             prop: 'actions',
             label: this.$t('Actions'),
             align: 'center',

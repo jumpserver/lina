@@ -63,6 +63,9 @@ export default {
   },
   mounted() {
     this.changeMomentLang()
+
+    const userLang = localStorage.getItem('lang')
+    document.documentElement.lang = userLang
   },
   methods: {
     changeLang() {

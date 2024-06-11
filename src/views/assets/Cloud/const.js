@@ -34,163 +34,152 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: aliyun,
     title: i18n.t('Aliyun'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/ali.png')
+    image: require('@/assets/img/cloud/ali.svg')
   },
   [aws_international]: {
     name: aws_international,
     title: i18n.t('AWS_Int'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/aws_international.png')
+    image: require('@/assets/img/cloud/aws_international.svg')
   },
   [aws_china]: {
     name: aws_china,
     title: i18n.t('AWS_China'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/aws_china.png')
+    image: require('@/assets/img/cloud/aws_china.svg')
   },
   [huaweicloud]: {
     name: huaweicloud,
     title: i18n.t('HuaweiCloud'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/huawei.png'),
-    imageCSS: { 'margin': '1em 0.5em' }
+    image: require('@/assets/img/cloud/huawei.svg')
   },
   [baiducloud]: {
     name: baiducloud,
     title: i18n.t('BaiduCloud'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/baidu.png')
+    image: require('@/assets/img/cloud/baidu.svg')
   },
   [jdcloud]: {
     name: jdcloud,
     title: i18n.t('JDCloud'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/jd.png')
+    image: require('@/assets/img/cloud/jd.svg')
   },
   [kingsoftcloud]: {
     name: kingsoftcloud,
     title: i18n.t('KingSoftCloud'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/kingsoft.png')
+    image: require('@/assets/img/cloud/kingsoft.svg')
   },
   [qcloud]: {
     name: qcloud,
     title: i18n.t('Qcloud'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/qcloud.png')
+    image: require('@/assets/img/cloud/qcloud.svg')
   },
   [qcloud_lighthouse]: {
     name: qcloud_lighthouse,
     title: i18n.t('QcloudLighthouse'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/qcloud_lighthouse.png'),
-    imageCSS: { 'margin': '1.8em 0.5em' }
+    image: require('@/assets/img/cloud/qcloud_lighthouse.svg')
   },
   [azure]: {
     name: azure,
     title: i18n.t('Azure'),
     attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id'],
-    image: require('@/assets/img/cloud/azure_china.png')
+    image: require('@/assets/img/cloud/azure_china.svg')
   },
   [azure_international]: {
     name: azure_international,
     title: i18n.t('Azure_Int'),
     attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id'],
-    image: require('@/assets/img/cloud/azure_international.png')
+    image: require('@/assets/img/cloud/azure_international.svg')
   },
   [gcp]: {
     name: gcp,
     title: i18n.t('GCP'),
     attrs: ['service_account_key'],
-    image: require('@/assets/img/cloud/gcp.png')
+    image: require('@/assets/img/cloud/gcp.svg')
   },
   [ucloud]: {
     name: ucloud,
     title: i18n.t('UCloud'),
     attrs: ['base_url', 'public_key', 'private_key', 'project'],
-    image: require('@/assets/img/cloud/ucloud.png'),
-    imageCSS: { 'margin': '0 15px' }
+    image: require('@/assets/img/cloud/ucloud.svg')
   },
   [volcengine]: {
     name: volcengine,
     title: i18n.t('Volcengine'),
     attrs: ['access_key_id', 'access_key_secret'],
-    image: require('@/assets/img/cloud/volcengine.png'),
-    imageCSS: { 'margin': '0 15px' }
+    image: require('@/assets/img/cloud/volcengine.svg')
   },
   [vmware]: {
     name: vmware,
     title: 'VMware',
     attrs: ['host', 'port', 'username', 'password'],
-    image: require('@/assets/img/cloud/vmware.png')
+    image: require('@/assets/img/cloud/vmware.svg')
   },
   [nutanix]: {
     name: nutanix,
     title: 'Nutanix',
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
-    image: require('@/assets/img/cloud/nutanix.png'),
-    imageCSS: { 'margin': '20px' }
+    image: require('@/assets/img/cloud/nutanix.svg')
   },
   [qingcloud_private]: {
     name: qingcloud_private,
     title: i18n.t('QingYunPrivateCloud'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
-    image: require('@/assets/img/cloud/qing.png')
+    image: require('@/assets/img/cloud/qing.svg')
   },
   [huaweicloud_private]: {
     name: huaweicloud_private,
     title: i18n.t('HuaweiPrivateCloud'),
     attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint'],
-    image: require('@/assets/img/cloud/huawei.png'),
-    imageCSS: { 'margin': '5px 15px' }
+    image: require('@/assets/img/cloud/huawei.svg')
   },
   [openstack]: {
     name: openstack,
     title: i18n.t('OpenStack'),
     attrs: ['auth_url', 'user_domain_name', 'username', 'password'],
-    image: require('@/assets/img/cloud/openstack.png'),
-    imageCSS: { padding: '1em' }
+    image: require('@/assets/img/cloud/openstack.svg')
   },
   [zstack]: {
     name: zstack,
     title: i18n.t('ZStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
-    image: require('@/assets/img/cloud/zstack.png'),
-    imageCSS: { 'background-color': '#007FDF', 'padding': '10px' }
+    image: require('@/assets/img/cloud/zstack.svg')
   },
   [fc]: {
     name: fc,
     title: i18n.t('FC'),
     attrs: ['api_endpoint', 'username', 'password'],
-    image: require('@/assets/img/cloud/huawei_fc.png'),
-    imageCSS: { 'margin': '10px' }
+    image: require('@/assets/img/cloud/huawei.svg')
   },
   [state_private]: {
     name: state_private,
     title: i18n.t('StatePrivate'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint', 'cert_file', 'key_file'],
-    image: require('@/assets/img/cloud/state.png'),
-    imageCSS: { padding: '1em' }
+    image: require('@/assets/img/cloud/state.svg')
   },
   [scp]: {
     name: scp,
     title: i18n.t('SCP'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
-    image: require('@/assets/img/cloud/scp.png'),
-    imageCSS: { padding: '1em' }
+    image: require('@/assets/img/cloud/scp.svg')
   },
   [apsara_stack]: {
     name: apsara_stack,
     title: i18n.t('ApsaraStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
-    image: require('@/assets/img/cloud/ali.png')
+    image: require('@/assets/img/cloud/ali.svg')
   },
   [lan]: {
     name: lan,
     title: i18n.t('LAN'),
     attrs: ['ip_group', 'test_port', 'test_timeout', 'hostname_prefix'],
-    image: require('@/assets/img/cloud/lan.png'),
-    imageCSS: { 'margin': '10px 15px' }
+    image: require('@/assets/img/cloud/lan.svg'),
+    imageCSS: { height: '250px' }
   }
 }
 
