@@ -8,7 +8,7 @@
     />
     <el-row :gutter="10" class="the-row">
       <IBox v-if="totalData.length === 0">
-        <el-empty :description="$t('NoData')" class="no-data" style="padding: 20px" />
+        <el-empty :description="$t('NoData')" class="no-data" :image-size="200" style="padding: 20px" />
       </IBox>
       <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
@@ -378,8 +378,11 @@ export default {
 }
 
 .no-data {
-  width: 300px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 65vh;
+  width: 100%;
 }
-
 </style>

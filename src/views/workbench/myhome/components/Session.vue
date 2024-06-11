@@ -36,16 +36,22 @@ export default {
             }
           },
           asset: {
+            width: 240,
             label: this.$t('Asset')
+          },
+          account: {
+            width: 180
           },
           command_amount: {
             align: 'center',
             label: this.$t('Command')
           },
           remote_addr: {
+            width: 180,
             label: this.$t('RemoteAddr')
           },
           protocol: {
+            width: 120,
             label: this.$t('Protocol'),
             el: {
               disabled: false
