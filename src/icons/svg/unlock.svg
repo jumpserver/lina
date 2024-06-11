@@ -1,1 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="22" width="36" height="22" rx="2" fill="none" stroke="#646a73" stroke-width="4" stroke-linejoin="round"/><path d="M14 22V14C14 8.47715 18.4772 4 24 4C29.5228 4 34 8.47715 34 14V22" stroke="#646a73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 30V36" stroke="#646a73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="48px" viewBox="0 0 44 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+    <rect id="矩形" x="0" y="20" width="40" height="24.4444444" rx="1.33333333"></rect>
+    <path d="M8.88888889,20 L8.88888889,11.1111111 C8.88888889,4.97461111 13.8635556,0 20,0 C26.1364444,0 31.1111111,4.97461111 31.1111111,11.1111111 L31.1111111,20"
+          id="路径" stroke-linecap="round"></path>
+    <line x1="20" y1="28.8888889" x2="20" y2="35.5555556" id="路径" stroke-linecap="round"></line>
+</svg>

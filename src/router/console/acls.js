@@ -16,6 +16,55 @@ export default [
     },
     children: [
       {
+        path: 'login-acls',
+        component: globalSubmenu,
+        redirect: '',
+        meta: {
+          title: i18n.t('UserLoginAclList'),
+          app: 'acls',
+          licenseRequired: true,
+          resource: 'loginacl',
+          disableOrgsChange: true
+        },
+        children: [
+          {
+            path: '',
+            name: 'UserLoginAclList',
+            component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
+            meta: {
+              title: i18n.t('UserLoginAclList'), activeMenu: ''
+            }
+          },
+          {
+            path: 'create',
+            name: 'UserLoginAclCreate',
+            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            hidden: true,
+            meta: {
+              title: i18n.t('UserLoginAclCreate'), activeMenu: ''
+            }
+          },
+          {
+            path: ':id',
+            name: 'UserLoginAclDetail',
+            component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
+            hidden: true,
+            meta: {
+              title: i18n.t('UserLoginAclDetail'), activeMenu: '',
+              app: 'acls',
+              resource: 'loginacl'
+            }
+          },
+          {
+            path: ':id/update',
+            name: 'UserLoginAclUpdate',
+            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '' }
+          }
+        ]
+      },
+      {
         path: 'cmd-acls',
         component: empty,
         redirect: '',
@@ -195,56 +244,6 @@ export default [
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '' }
-          }
-        ]
-      },
-      {
-        path: 'login-acls',
-        component: globalSubmenu,
-        redirect: '',
-        hidden: true,
-        meta: {
-          title: i18n.t('UserLoginAclList'),
-          app: 'acls',
-          licenseRequired: true,
-          resource: 'loginacl',
-          disableOrgsChange: true
-        },
-        children: [
-          {
-            path: '',
-            name: 'UserLoginAclList',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
-            meta: {
-              title: i18n.t('UserLoginAclList'), activeMenu: ''
-            }
-          },
-          {
-            path: 'create',
-            name: 'UserLoginAclCreate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
-            hidden: true,
-            meta: {
-              title: i18n.t('UserLoginAclCreate'), activeMenu: ''
-            }
-          },
-          {
-            path: ':id',
-            name: 'UserLoginAclDetail',
-            component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
-            hidden: true,
-            meta: {
-              title: i18n.t('UserLoginAclDetail'), activeMenu: '',
-              app: 'acls',
-              resource: 'loginacl'
-            }
-          },
-          {
-            path: ':id/update',
-            name: 'UserLoginAclUpdate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
-            hidden: true,
-            meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '' }
           }
         ]
       }

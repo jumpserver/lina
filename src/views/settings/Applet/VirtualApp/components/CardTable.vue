@@ -8,6 +8,9 @@
     />
     <div style="padding-top: 15px">
       <el-row :gutter="20">
+        <IBox v-if="totalData.length === 0" class="empty-box">
+          <el-empty />
+        </IBox>
         <el-col v-for="(d, index) in totalData" :key="index" :span="6">
           <el-card
             :body-style="{ 'text-align': 'center', 'padding': '20px' }"
@@ -55,12 +58,14 @@
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/time'
+import IBox from '@/components/IBox/index.vue'
 
 const defaultFirstPage = 1
 
 export default {
   name: 'CardTable',
   components: {
+    IBox,
     TableAction,
     Pagination
   },
@@ -247,6 +252,16 @@ export default {
 
 .my-card:hover .closeIcon {
   visibility: visible;
+}
+
+.empty-box ::v-deep .el-empty {
+  max-width: 200px;
+  margin: 0 auto;
+
+  .el-empty__description {
+    margin-top: 20px;
+    text-align: center;
+  }
 }
 
 .enterprise {

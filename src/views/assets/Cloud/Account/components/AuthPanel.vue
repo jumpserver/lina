@@ -153,6 +153,7 @@ export default {
         cleanFormValue(values) {
           const newValues = JSON.parse(JSON.stringify(values))
           newValues['attrs'] = encryptAttrsField(newValues.attrs)
+          newValues['provider'] = vm.provider
           return newValues
         },
         addContinue: true

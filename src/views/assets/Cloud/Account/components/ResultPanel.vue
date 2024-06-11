@@ -57,6 +57,7 @@ export default {
   methods: {
     handleClick() {
       this.$router.push({ name: 'CloudAccountDetail', params: { id: this.object.id }})
+      this.handleClose()
     },
     handleClose() {
       this.$emit('update:visible', false)

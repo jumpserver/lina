@@ -1,1 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="24" height="24" viewBox="0 0 48 48" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M24.0605 10L24.0239 38" stroke="#ffffff" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel"/><path d="M10 24L38 24" stroke="#ffffff" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+    <path fill-rule="evenodd"
+          d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"></path>
+</svg>

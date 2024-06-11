@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 8C8.92487 8 4 12.9249 4 19C4 30 17 40 24 42.3262C31 40 44 30 44 19C44 12.9249 39.0751 8 33 8C29.2797 8 25.9907 9.8469 24 12.6738C22.0093 9.8469 18.7203 8 15 8Z"
-          fill="none" stroke="#333" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
+<svg width="42px" height="37px" viewBox="0 0 42 37" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+    <path d="M11,0 C4.92487,0 0,4.9249 0,11 C0,22 13,32 20,34.3262 C27,32 40,22 40,11 C40,4.9249 35.0751,0 29,0 C25.2797,0 21.9907,1.8469 20,4.6738 C18.0093,1.8469 14.7203,0 11,0 Z"
+          id="路径"></path>
 </svg>

@@ -14,7 +14,7 @@
           </el-tooltip>
         </el-checkbox>
 
-        <div v-if="showSpecAccounts" class="spec-accounts">
+        <div v-if="showSpecAccounts" class="spec-accounts spec-zone">
           <div class="group-title">{{ $t('SpecAccount') }}</div>
           <TagInput
             :autocomplete="autocomplete"
@@ -32,7 +32,7 @@
           </span>
         </div>
 
-        <div v-if="showVirtualAccountCheckbox">
+        <div v-if="showVirtualAccountCheckbox" class="spec-zone">
           <div class="group-title">{{ $t('VirtualAccounts') }}</div>
           <el-checkbox
             v-for="i in virtualAccounts"
@@ -337,9 +337,16 @@ export default {
 .group-title {
   font-size: 13px;
   color: var(--color-text-secondary);
-  //border-bottom: dashed 1px var(--color-border);
-  margin-top: 5px;
   font-weight: 500;
+}
+
+.spec-zone {
+  border-bottom: dashed 1px var(--color-border);
+  padding-bottom: 5px;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .account-content {
