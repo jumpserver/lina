@@ -64,7 +64,7 @@ export default {
         }
         return text
       }
-      return '-'
+      return this.items?.distribution || '-'
     }
   }
 }
