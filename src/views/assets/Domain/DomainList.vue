@@ -28,8 +28,16 @@ export default {
             formatterArgs: {
               async: true,
               permissions: 'assets.view_asset',
-              routeQuery: {
-                tab: 'AssetList'
+              getRoute({ row }) {
+                return {
+                  name: 'ZoneDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'AssetList'
+                  }
+                }
               }
             }
           },
@@ -38,8 +46,16 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',
-              routeQuery: {
-                tab: 'GatewayList'
+              getRoute({ row }) {
+                return {
+                  name: 'ZoneDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'GatewayList'
+                  }
+                }
               }
             }
           }
