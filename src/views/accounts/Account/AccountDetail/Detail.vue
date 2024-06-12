@@ -40,7 +40,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -212,7 +213,7 @@ export default {
               name: 'AssetDetail',
               params: { id: this.object.asset.id }
             }
-            return <router-link to={route} >{ value }</router-link>
+            return <router-link to={route}>{value?.name}</router-link>
           },
           su_from: (item, value) => {
             return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
