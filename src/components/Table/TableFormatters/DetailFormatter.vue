@@ -71,7 +71,6 @@ export default {
         cellValue: this.cellValue
       })
     }
-
   },
   methods: {
     getDetailRoute() {
@@ -99,6 +98,9 @@ export default {
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
+        if (detailRoute.query.tab) {
+          detailRoute.query = detailRoute.query.tab
+        }
       }
       return detailRoute
     },

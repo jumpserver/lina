@@ -19,10 +19,10 @@
     </el-row>
     <el-divider />
     <el-row :gutter="20" style="height: 80%;">
-      <el-col :span="5" class="image">
+      <el-col :span="6" class="image">
         <el-image :src="cloudImage" fit="contain" />
       </el-col>
-      <el-col :span="19">
+      <el-col :span="18">
         <InfoPanel :content="iTask.regions.length" :title="$tc('TotalSyncRegion')" />
         <InfoPanel :content="iTask.instance_count || 0" :title="$tc('TotalSyncAsset')" />
         <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" />
@@ -31,6 +31,7 @@
       </el-col>
     </el-row>
     <Dialog
+      v-if="updateVisible"
       :destroy-on-close="true"
       :show-buttons="false"
       :title="$tc('CloudAccountUpdate')"
@@ -41,6 +42,7 @@
         :object="object"
         :provider="object.provider.value"
         :visible.sync="updateVisible"
+        origin="update"
         @submitSuccess="onSubmitSuccess"
       />
     </Dialog>
@@ -110,6 +112,22 @@ export default {
     },
     cloudImage() {
       return ACCOUNT_PROVIDER_ATTRS_MAP[`${this.object.provider.value}`].image
+    }
+  },
+  watch: {
+    onlineSyncVisible: {
+      handler(newValue) {
+        if (newValue === false) {
+          this.$emit('refresh')
+        }
+      }
+    },
+    updateVisible: {
+      handler(newValue) {
+        if (newValue === false) {
+          this.$emit('refresh')
+        }
+      }
     }
   },
   methods: {
