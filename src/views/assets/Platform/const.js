@@ -20,7 +20,8 @@ export const platformFieldsMeta = (vm) => {
         'change_secret_enabled', 'change_secret_method', 'change_secret_params',
         'push_account_enabled', 'push_account_method', 'push_account_params',
         'verify_account_enabled', 'verify_account_method', 'verify_account_params',
-        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params'
+        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params',
+        'remove_account_enabled', 'remove_account_method', 'remove_account_params'
       ],
       fieldsMeta: {
         ansible_config: {
@@ -28,12 +29,15 @@ export const platformFieldsMeta = (vm) => {
           hidden: (formValue) => !formValue['ansible_enabled']
         },
         gather_facts_enabled: {},
+        remove_account_enabled: {},
         ping_method: {},
         ping_params: {
           label: ''
         },
         gather_facts_method: {},
         push_account_method: {},
+        remove_account_method: {},
+        remove_account_params: {},
         push_account_params: {
           label: ''
         },
