@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     DeleteReleasedAssets() {
-      this.$axios.delete(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/released-assets/`).then(
+      this.$axios.delete(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/released-assets/`).then(
         res => {
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.GenericListTable.$refs.ListTable.reloadTable()
