@@ -22,7 +22,7 @@ export default {
             component: () => import('@/views/accounts/AccountGather/AccountGatherList.vue')
           },
           {
-            title: this.$t('AccountGatherList'),
+            title: this.$t('AccountGatherTaskList'),
             name: 'AccountGatherTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
             component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue')
