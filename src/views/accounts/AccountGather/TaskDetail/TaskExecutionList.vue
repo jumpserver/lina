@@ -24,11 +24,17 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
-          'AccountGatherName', 'status', 'date_start',
+          'automation', 'account_gather_name', 'status', 'date_start',
           'date_finished', 'actions'
         ],
         columnsMeta: {
-          'AccountGatherName': {
+          automation: {
+            label: this.$t('TaskID'),
+            formatter: function(row) {
+              return <span>{row.automation}</span>
+            }
+          },
+          account_gather_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {

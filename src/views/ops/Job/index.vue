@@ -7,7 +7,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import { openTaskPage } from '@/utils/jms'
 
@@ -37,8 +37,13 @@ export default {
         columnsMeta: {
           name: {
             width: '140px',
+            formatter: DetailFormatter,
             formatterArgs: {
-              can: true
+              can: true,
+              getRoute: ({ row }) => ({
+                name: 'JobDetail',
+                params: { id: row.id }
+              })
             }
           },
           type: {
