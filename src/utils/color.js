@@ -1,4 +1,3 @@
-
 export function randomColorBySeed(s) {
   // 将标签名称转换为哈希值，用作随机种子
   const hash = hashCode(s)
@@ -44,6 +43,9 @@ export function hexToRgb(hex) {
 
 // 判断颜色是否为深色的函数
 export function isDarkness(color) {
+  if (!color) {
+    return false
+  }
   const { r, g, b } = hexToRgb(color)
   // 计算亮度
   const brightness = 0.299 * r + 0.587 * g + 0.114 * b

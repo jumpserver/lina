@@ -3,6 +3,7 @@
     ref="select"
     v-model="iValue"
     v-loadmore="loadMore"
+    :allow-create="allowCreate"
     :class="transformed ? 'hidden-tag' : 'show-tag'"
     :clearable="clearable"
     :collapse-tags="collapseTags"
@@ -24,7 +25,7 @@
       <el-checkbox v-model="allSelected" @change="handleSelectAllChange">{{ $t('SelectAll') }}</el-checkbox>
       <div v-if="quickAddCallback" style="float: right">
         <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
-        <el-link style="margin-left: 5px;" icon="el-icon-refresh" :underline="false" @click="refresh" />
+        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
       </div>
     </div>
     <el-option
@@ -117,6 +118,10 @@ export default {
     quickAddCallback: {
       type: Function,
       default: null
+    },
+    allowCreate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

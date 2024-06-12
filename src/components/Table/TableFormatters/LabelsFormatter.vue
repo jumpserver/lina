@@ -141,7 +141,7 @@ export default {
       return this.formatterArgs.getLabelType(tag)
     },
     handleCloseTag(tag) {
-      this.iLabels = this.iLabels.filter(item => item !== tag)
+      this.iLabels = this.iLabels.filter(item => item.id !== tag.id)
     },
     handleKeyChanged(val) {
       this.valueSelect2.url = `/api/v1/labels/labels/?name=${val}`
@@ -159,14 +159,23 @@ export default {
       if (!key || !value) {
         return
       }
+
       const tag = `${key}:${value}`
-      if (this.iLabels.includes(tag)) {
+      const include = this.iLabels.find(item => `${item.key}:${item.value}` === tag)
+      if (include) {
         return
       }
-      this.iLabels.push(tag)
-      this.keySelect2.value = ''
-      this.valueSelect2.value = ''
-      this.$emit('input', this.iLabels)
+      const url = `/api/v1/labels/labels/?key=${key}&value=${value}`
+      this.$axios.get(url).then(res => {
+        if (res && res.length === 1) {
+          this.iLabels.push(res[0])
+        } else {
+          this.iLabels.push({ name: key, value: value })
+        }
+        this.keySelect2.value = ''
+        this.valueSelect2.value = ''
+        this.$emit('input', this.iLabels)
+      })
     },
     handleCancel() {
       this.showDialog = false
@@ -180,7 +189,7 @@ export default {
       const path = new URL(this.url, location.origin).pathname
       const url = `${path}${this.row.id}/`
       this.$axios.patch(url, { labels: this.iLabels }).then(res => {
-        this.$message.success(this.$tc('UpdateSuccess'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.showDialog = false
       })
     },

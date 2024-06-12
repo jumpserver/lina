@@ -273,7 +273,7 @@ $hover-border-color: #d2d2d2;
       align-items: center;
       justify-content: center;
       width: 54px;
-      height: 50px;
+      height: 40px;
       border: 0;
       cursor: pointer;
 

@@ -49,7 +49,9 @@ export default {
       }
     },
     getValue(tag) {
-      if (typeof tag === 'string') {
+      if (!tag) {
+        return ''
+      } else if (typeof tag === 'string') {
         return tag.split(':')?.slice(1).join(':')
       } else {
         return tag.value
@@ -83,7 +85,11 @@ export default {
   }
 
   &.no-color {
-    border: solid 1px var(--color-border);
+    border: solid 1px var(--color-primary);
+
+    span.black {
+      color: var(--color-primary);
+    }
   }
 
   max-width: 180px;
