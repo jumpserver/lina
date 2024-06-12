@@ -91,21 +91,27 @@ export default {
       this.content = `${this.$t('Modify')} [${count}]`
     },
     handlerLinkClick() {
-      this.content = this.$t('Loading')
       const authInfo = this.getAuthInfo()
       let method = 'get'
       let data = {}
       let url = `/api/v1/xpack/cloud/regions/?account_id=${authInfo}`
+
       if (typeof authInfo === 'object') {
         const attrs = JSON.parse(JSON.stringify(authInfo))
+
         method = 'post'
         url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}`
         data = { 'attrs': encryptAttrsField(attrs) }
       }
+      this.content = this.$t('Loading')
+
       this.$axios[method](url, data).then(resp => {
         this.allRegions = resp?.regions
-        this.regionVisible = true
-        this.updateCheckedStatus()
+        console.log(Object.getOwnPropertyNames(data.attrs).length)
+        if (this.allRegions.length && Object.getOwnPropertyNames(data.attrs).length > 0) {
+          this.regionVisible = true
+          this.updateCheckedStatus()
+        }
       }).catch(error => {
         this.$message.error(this.$tc('CloudRegionTip' + ' ' + error))
       }).finally(() => {

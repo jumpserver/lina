@@ -122,6 +122,9 @@ export default {
       }
     }
   },
+  activated() {
+    this.$refs.accountTable.reloadTable()
+  },
   methods: {
     valid(status) {
       if (status !== 200) {
