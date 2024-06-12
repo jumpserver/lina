@@ -29,6 +29,10 @@ export default {
     object: {
       type: Object,
       default: () => {}
+    },
+    origin: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -106,12 +110,12 @@ export default {
             el: {
               provider: this.provider,
               regions: this.object.task?.regions || [],
-              getAuthInfo: async() => {
+              getAuthInfo: () => {
                 if (this.object?.id) {
                   return this.object.id
                 }
                 const form = this.$refs.form.$refs.form.dataForm
-                await form.submitForm('form', true)
+                form.$refs.form.validate()
                 return form.getFormValue()['attrs']
               }
             }
@@ -161,8 +165,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
     submitForm(form, btn, submitType) {
       form.validate((valid) => {
@@ -171,6 +173,13 @@ export default {
         }
       })
       this.$refs.form.$refs.form.dataForm.submitForm('form', false)
+
+      if (this.origin === 'update') {
+        setTimeout(() => {
+          this.$emit('refresh')
+          this.$emit('update:visible', false)
+        }, 500)
+      }
       this.submitType = submitType
     },
     handleSubmitSuccess(res) {
