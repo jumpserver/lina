@@ -7,7 +7,7 @@
     @tab-click="changeMoreCreates"
   >
     <keep-alive>
-      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable ref="genericListTable" :header-actions="headerActions" :table-config="tableConfig" />
     </keep-alive>
   </TabPage>
 </template>
@@ -123,6 +123,9 @@ export default {
     url() {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
+  },
+  activated() {
+    this.$refs.genericListTable.reloadTable()
   },
   async mounted() {
     try {
