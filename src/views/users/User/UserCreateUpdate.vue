@@ -62,6 +62,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
+
             return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
         },
@@ -98,10 +99,13 @@ export default {
             if (formValue.source !== 'local') {
               return true
             }
-            if (formValue.update_password) {
+            if (formValue.password_strategy === 'custom') {
               return false
+            } else if (formValue.update_password) {
+              return false
+            } else {
+              return true
             }
-            return true
           }
         },
         system_roles: {
