@@ -25,7 +25,7 @@ export default {
       TaskDetail: {},
       config: {
         activeMenu: 'Detail',
-        url: '/api/v1/assets/domains/',
+        url: '/api/v1/assets/domains',
         submenu: [
           {
             title: this.$t('Basic'),

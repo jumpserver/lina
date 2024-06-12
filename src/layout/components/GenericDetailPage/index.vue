@@ -195,6 +195,7 @@ export default {
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)
       }
+
       this.$alert(msg, title, {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',

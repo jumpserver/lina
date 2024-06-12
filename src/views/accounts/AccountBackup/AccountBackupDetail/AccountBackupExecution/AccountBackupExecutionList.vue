@@ -24,17 +24,23 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'AccountBackupName', 'timedelta', 'trigger', 'date_start',
+          'automation', 'account_backup_name', 'timedelta', 'trigger', 'date_start',
           'is_success', 'reason', 'actions'
         ],
         columnsShow: {
           default: [
-            'AccountBackupName', 'timedelta', 'date_start',
+            'automation', 'account_backup_name', 'timedelta', 'date_start',
             'is_success', 'reason', 'actions'
           ]
         },
         columnsMeta: {
-          'AccountBackupName': {
+          automation: {
+            label: this.$t('TaskID'),
+            formatter: function(row) {
+              return <span>{row.plan}</span>
+            }
+          },
+          account_backup_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {

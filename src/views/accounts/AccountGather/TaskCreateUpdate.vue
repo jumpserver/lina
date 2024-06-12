@@ -30,7 +30,6 @@ export default {
         crontab,
         interval,
         assets: {
-          label: this.$tc('assets.Asset'),
           el: {
             multiple: true,
             value: [],
@@ -43,7 +42,6 @@ export default {
           }
         },
         nodes: {
-          label: this.$tc('Node'),
           el: {
             multiple: true,
             value: [],
