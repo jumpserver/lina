@@ -19,12 +19,13 @@
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
+  border: 1px solid #f0f0f0;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
   box-shadow: 8px 10px 20px #C6C6C6 inset;
-  border: 2px solid rgba(0, 0, 0, 0);
+  border-left: 2px solid rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -147,6 +148,7 @@ button, input, optgroup, select, textarea {
 .el-tooltip__popper.is-light {
   background-color: #ebeef5 !important;
 }
+
 .el-tooltip__popper.is-dark {
   max-width: 500px;
   opacity: 0.9;
@@ -264,6 +266,7 @@ input[type=file] {
       .sort-caret.ascending {
         top: 0;
       }
+
       .sort-caret.descending {
         bottom: 0;
       }
@@ -362,7 +365,7 @@ input[type=file] {
   font-weight: 300;
 }
 
-.el-link.is-underline:hover:after  {
+.el-link.is-underline:hover:after {
   border-bottom: 1px solid #007bff !important;
 }
 
@@ -415,6 +418,7 @@ input[type=file] {
   label {
     font-weight: 400;
   }
+
   .el-input__icon {
     vertical-align: super
   }
@@ -427,7 +431,7 @@ input[type=file] {
 
 .el-input input::placeholder {
   font-weight: 400 !important;
-  font-family: "Open Sans", sans-serif ;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
 }
 
@@ -474,12 +478,15 @@ $tooltip-arrow-color: #c2d1e1;
   &[x-placement^=right] .popper__arrow {
     border-right-color: $tooltip-arrow-color !important;
   }
+
   &[x-placement^=left] .popper__arrow {
     border-left-color: $tooltip-arrow-color !important;
   }
+
   &[x-placement^=top] .popper__arrow {
     border-top-color: $tooltip-arrow-color !important;
   }
+
   &[x-placement^=bottom] .popper__arrow {
     border-bottom-color: $tooltip-arrow-color !important;
   }

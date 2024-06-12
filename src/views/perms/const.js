@@ -66,6 +66,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionUser'
       }
@@ -76,6 +77,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionUser'
       }
@@ -85,6 +87,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
       }
@@ -95,6 +98,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
       }
@@ -108,6 +112,7 @@ export const AssetPermissionTableMeta = {
           return AccountLabelMapper[item] || item
         }
       },
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAccount'
       }

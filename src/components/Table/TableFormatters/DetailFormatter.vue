@@ -2,10 +2,10 @@
   <div>
     <img v-if="icon" :src="icon" alt="icon" class="icon">
     <el-link
+      :class="{ 'clicked': linkClicked }"
       :disabled="disabled"
       :type="col.type || 'info'"
       class="detail"
-      :class="{ 'clicked': linkClicked }"
       @click="goDetail"
     >
       <slot>
@@ -70,8 +70,11 @@ export default {
         row: this.row,
         cellValue: this.cellValue
       })
-    },
-    detailRoute() {
+    }
+
+  },
+  methods: {
+    getDetailRoute() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
       if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
@@ -96,22 +99,17 @@ export default {
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
-
-        if (detailRoute.query.tab) {
-          detailRoute.name = detailRoute.query.tab
-        }
       }
       return detailRoute
-    }
-  },
-  methods: {
+    },
     goDetail() {
+      const detailRoute = this.getDetailRoute()
       if (this.formatterArgs.openInNewPage) {
         this.linkClicked = this.formatterArgs.removeColorOnClick
-        const { href } = this.$router.resolve(this.detailRoute)
+        const { href } = this.$router.resolve(detailRoute)
         window.open(href, '_blank')
       } else {
-        this.$router.push(this.detailRoute)
+        this.$router.push(detailRoute)
       }
     }
   }
