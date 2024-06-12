@@ -24,17 +24,23 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-executions',
         columns: [
-          'ChangeSecretName', 'asset_amount', 'node_amount', 'status',
+          'automation', 'change_secret_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
         ],
         columnsShow: {
           default: [
-            'ChangeSecretName', 'asset_amount', 'node_amount', 'status',
+            'automation', 'change_secret_name', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },
         columnsMeta: {
-          'ChangeSecretName': {
+          automation: {
+            label: this.$t('TaskID'),
+            formatter: function(row) {
+              return <span>{row.automation}</span>
+            }
+          },
+          change_secret_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {

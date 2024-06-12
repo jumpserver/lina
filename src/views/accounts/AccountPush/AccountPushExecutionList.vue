@@ -24,17 +24,23 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
         columns: [
-          'PushUserName', 'asset_amount', 'node_amount', 'status',
+          'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
         ],
         columnsShow: {
           default: [
-            'PushUserName', 'asset_amount', 'node_amount', 'status',
+            'automation', 'push_user_name', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },
         columnsMeta: {
-          'PushUserName': {
+          automation: {
+            label: this.$t('TaskID'),
+            formatter: function(row) {
+              return <span>{row.automation}</span>
+            }
+          },
+          push_user_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
@@ -76,7 +82,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: 'accounts.view_pushaccountexecution',
+                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
