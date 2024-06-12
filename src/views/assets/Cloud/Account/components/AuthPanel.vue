@@ -106,11 +106,12 @@ export default {
             el: {
               provider: this.provider,
               regions: this.object.task?.regions || [],
-              getAuthInfo: () => {
+              getAuthInfo: async() => {
                 if (this.object?.id) {
                   return this.object.id
                 }
                 const form = this.$refs.form.$refs.form.dataForm
+                await form.submitForm('form', true)
                 return form.getFormValue()['attrs']
               }
             }
