@@ -241,7 +241,7 @@ export default {
   .el-col, div {
     .my-card {
       min-width: 330px;
-      height: 250px;
+      //height: 250px;
       width: 100%;
       position: relative;
       margin-bottom: 20px;

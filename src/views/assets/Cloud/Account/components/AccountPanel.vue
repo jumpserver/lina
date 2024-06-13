@@ -8,7 +8,9 @@
       </el-col>
       <el-col :span="2" @click.native="handleClick($event)">
         <el-dropdown>
-          <el-link :underline="false" type="primary"><i class="el-icon-more el-icon--right" /></el-link>
+          <el-link :underline="false" type="primary">
+            <i class="el-icon-more el-icon--right" style="color: var(--color-text-primary)" />
+          </el-link>
           <el-dropdown-menu default="dropdown">
             <el-dropdown-item v-for="action in actions" :key="action.name" @click.native="action.callback">
               <i v-if="action.icon" :class="action.icon" /> {{ action.name }}
@@ -18,15 +20,15 @@
       </el-col>
     </el-row>
     <el-divider />
-    <el-row :gutter="20" style="height: 80%;">
+    <el-row :gutter="20">
       <el-col :span="6" class="image">
         <el-image :src="cloudImage" fit="contain" />
       </el-col>
       <el-col :span="18">
         <InfoPanel :content="iTask.regions.length" :title="$tc('TotalSyncRegion')" />
         <InfoPanel :content="iTask.instance_count || 0" :title="$tc('TotalSyncAsset')" />
-        <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" />
-        <InfoPanel :content="toSafeLocalDateStr(object.date_created)" :title="$tc('DateJoined')" />
+        <!-- <InfoPanel :content="iTask.strategy.length" :title="$tc('TotalSyncStrategy')" /> -->
+        <!-- <InfoPanel :content="toSafeLocalDateStr(object.date_created)" :title="$tc('DateJoined')" /> -->
         <InfoPanel :content="toSafeLocalDateStr(iTask.date_last_sync)" :title="$tc('DateLastSync')" />
       </el-col>
     </el-row>
@@ -168,11 +170,12 @@ export default {
 .account-panel {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  //height: 100%;
   cursor: pointer;
 
   & .el-row:first-of-type {
     height: 30px !important;
+    padding: 0;
 
     .el-col-22 {
       padding-left: 0 !important;
@@ -199,6 +202,7 @@ export default {
     display: flex;
     align-items: center;
     margin: 0 !important;
+    padding: 25px 0;
   }
 
   .el-divider--horizontal {
