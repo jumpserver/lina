@@ -15,8 +15,9 @@
       ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
+      :sync-select-to-url="false"
       :table-config="tableConfig"
-      :tree-setting="treeSetting"
+      :tree-setting="iTreeSetting"
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
       class="tree-table"
@@ -115,6 +116,11 @@ export default {
           getUrlQuery: false
         }
       }
+    }
+  },
+  computed: {
+    iTreeSetting() {
+      return { ...this.treeSetting, selectSyncToRoute: false }
     }
   },
   methods: {

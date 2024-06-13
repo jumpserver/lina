@@ -40,6 +40,7 @@ export default {
         showUpdate: true,
         showSearch: false,
         customTreeHeaderName: this.$t('AssetTree'),
+        selectSyncToRoute: true,
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production')
@@ -59,11 +60,6 @@ export default {
           onDrop: this.onDrop.bind(this),
           refresh: this.refresh.bind(this),
           onAsyncSuccess: this.onAsyncSuccess.bind(this)
-          // 尚未定义的函数
-          // beforeClick
-          // beforeDrag
-          // onDrag
-          // beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
         },
         hasRightMenu: true
       },
@@ -130,7 +126,7 @@ export default {
         combinator = '&'
       }
       let url = ''
-      const query = Object.assign({}, this.$route.query)
+      const query = { ...this.$route.query }
       const objectId = treeNode.meta.data.id
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
@@ -143,7 +139,9 @@ export default {
         query['node'] = ''
         url = `${this.setting.url}${combinator}asset_id=${query.asset}&show_current_asset=${show_current_asset}`
       }
-      this.$router.push({ query })
+      if (this.setting.selectSyncToRoute) {
+        this.$router.push({ query })
+      }
       this.$emit('urlChange', url)
     },
     removeTreeNode: function() {
