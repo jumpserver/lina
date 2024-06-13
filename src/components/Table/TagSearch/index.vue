@@ -126,6 +126,7 @@ export default {
     filterTags: {
       handler() {
         this.$emit('tag-search', this.filterMaps)
+        this.$eventBus.$emit('TagSearch', this.filterMaps)
       },
       deep: true
     },
