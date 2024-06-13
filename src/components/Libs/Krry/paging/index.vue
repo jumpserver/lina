@@ -27,21 +27,24 @@
       </el-col>
       <el-col :md="4" :sm="24" class="buttons">
         <div class="opera">
-          <el-button
-            :disabled="disablePre"
-            class="el-transfer__button"
-            icon="el-icon-arrow-left"
-            size="mini"
-            @click="deleteData"
-          />
-          <el-button
-            :disabled="disableNex"
-            class="el-transfer__button"
-            icon="el-icon-arrow-right"
-            size="mini"
-            type="primary"
-            @click="addData"
-          />
+          <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
+          <templae v-else>
+            <el-button
+              :disabled="disablePre"
+              class="el-transfer__button"
+              icon="el-icon-arrow-left"
+              size="mini"
+              @click="deleteData"
+            />
+            <el-button
+              :disabled="disableNex"
+              class="el-transfer__button"
+              icon="el-icon-arrow-right"
+              size="mini"
+              type="primary"
+              @click="addData"
+            />
+          </templae>
         </div>
       </el-col>
       <el-col :md="10" :sm="24">
@@ -422,13 +425,22 @@ export default {
 .buttons {
   vertical-align: middle;
 }
+
 .opera {
   position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  margin: 180px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
   width: calc(100% - 5px);
+  height: 415px;
+
+  .arrow {
+    width: 1.25em;
+    height: 1.25em;
+    color: #888888;
+  }
+
   @media screen and (max-width: 992px) {
     margin: 8px 8px;
     text-align:start
