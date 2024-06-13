@@ -12,10 +12,9 @@
           @input="treeSearchHandle"
         >
           <span slot="suffix">
-            <svg-icon
-              class="icon"
-              icon-class="close"
-              style="font-size: 12px;"
+            <i
+              class="el-icon-close"
+              style="font-size: 12px; cursor: pointer"
               @click="onClose"
             />
           </span>
@@ -409,6 +408,11 @@ export default {
   &:hover {
     ::v-deep .tree-action-btn {
       display: inline;
+
+      &:hover {
+        box-shadow: none;
+        color: var(--color-text-primary) !important;
+      }
     }
   }
 
@@ -610,14 +614,25 @@ div.rMenu li {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
+    color: var(--color-text-primary)
   }
 
   & ::v-deep .el-input__suffix {
     padding-right: 8px;
+
+    .el-input__suffix-inner:hover {
+      color: var(--color-text-primary);
+    }
   }
 
   & ::v-deep .el-input__prefix {
-    padding-left: 6px;
+    display: flex;
+
+    .el-input__icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   & ::v-deep .el-input__suffix-inner {

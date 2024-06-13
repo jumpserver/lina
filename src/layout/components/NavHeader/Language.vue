@@ -63,9 +63,6 @@ export default {
   },
   mounted() {
     this.changeMomentLang()
-
-    const userLang = localStorage.getItem('lang')
-    document.documentElement.lang = userLang
   },
   methods: {
     changeLang() {
@@ -86,17 +83,13 @@ export default {
     },
     changeLangTo(item) {
       this.$i18n.locale = item.code
-      localStorage.setItem('lang', item.code)
-      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
+      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode, { expires: 365 })
       window.location.reload()
     },
     getLangCode() {
       let langCode = this.$cookie.get(this.LANG_COOKIE_NAME)
       if (!langCode) {
-        langCode = localStorage.lang
-      }
-      if (!langCode) {
-        langCode = navigator.language || navigator.userLanguage
+        langCode = navigator.systemLanguage || navigator.language || navigator.userLanguage
       }
       if (langCode === 'zh-hant') {
         langCode = 'zh_hant'

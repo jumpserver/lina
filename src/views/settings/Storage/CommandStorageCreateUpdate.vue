@@ -48,7 +48,8 @@ export default {
                 replaceRule: '(https?:\/\/[^:@]+:)([^@]+)(@.+)'
               },
               rules: [RequiredChange],
-              helpText: this.$t('EsUrl')
+              helpText: this.$t('EsUrl'),
+              helpTextAsPlaceholder: false
             },
             INDEX: {
               rules: [Required],
@@ -83,10 +84,8 @@ export default {
       }
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 
