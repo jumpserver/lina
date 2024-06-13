@@ -8,7 +8,7 @@
     :title="$tc('CloudSyncConfig')"
     :visible.sync="iVisible"
     v-bind="$attrs"
-    width="70%"
+    width="1051px"
     v-on="$listeners"
   >
     <el-row style="padding: 10px">
@@ -103,6 +103,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+::v-deep .el-dialog {
+  min-width: 1051px !important;
+  max-width: 1051px !important;
+}
 ::v-deep .el-step {
   .el-step__head {
     &.is-process {

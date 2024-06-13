@@ -1,5 +1,11 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="AssetPermission" v-bind="config" v-on="$listeners" @tab-click="TabClick">
+  <GenericDetailPage
+    :active-menu.sync="config.activeMenu"
+    :object.sync="AssetPermission"
+    v-bind="config"
+    v-on="$listeners"
+    @tab-click="TabClick"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="AssetPermission" />
     </keep-alive>
@@ -25,7 +31,8 @@ export default {
   data() {
     return {
       AssetPermission: {
-        name: '', users_amount: 0, user_groups_amount: 0, assets_amount: 0, nodes_amount: 0, system_users_amount: 0,
+        name: '', users_amount: 0, user_groups_amount: 0, assets_amount: 0,
+        nodes_amount: 0, system_users_amount: 0,
         date_start: '', date_expired: ''
       },
       config: {

@@ -8,6 +8,7 @@
       {{ content }}
     </el-link>
     <Dialog
+      :destroy-on-close="true"
       :title="$tc('Region')"
       :visible.sync="regionVisible"
       :show-cancel="false"
@@ -78,11 +79,18 @@ export default {
     }
   },
   watch: {
-    checkedRegion() {
-      this.updateCheckedStatus()
+    regions: {
+      immediate: true,
+      handler(newVal) {
+        this.checkedRegion = newVal
+        this.refreshContent()
+      }
     }
   },
   mounted() {
+    if (this.regions) {
+      this.checkedRegion = this.regions
+    }
     this.refreshContent()
   },
   methods: {
@@ -95,7 +103,6 @@ export default {
       let method = 'get'
       let data = {}
       let url = `/api/v1/xpack/cloud/regions/?account_id=${authInfo}`
-
       if (typeof authInfo === 'object') {
         const attrs = JSON.parse(JSON.stringify(authInfo))
 
@@ -103,15 +110,13 @@ export default {
         url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}`
         data = { 'attrs': encryptAttrsField(attrs) }
       }
+
       this.content = this.$t('Loading')
 
       this.$axios[method](url, data).then(resp => {
         this.allRegions = resp?.regions
-        console.log(Object.getOwnPropertyNames(data.attrs).length)
-        if (this.allRegions.length && Object.getOwnPropertyNames(data.attrs).length > 0) {
-          this.regionVisible = true
-          this.updateCheckedStatus()
-        }
+        this.regionVisible = true
+        this.updateCheckedStatus()
       }).catch(error => {
         this.$message.error(this.$tc('CloudRegionTip' + ' ' + error))
       }).finally(() => {

@@ -32,7 +32,7 @@ export default {
           hidden: !this.$store.getters.hasValidLicense
         },
         {
-          title: this.$t('AppOps'),
+          title: this.$t('JobCenter'),
           name: 'Ops'
         },
         {
