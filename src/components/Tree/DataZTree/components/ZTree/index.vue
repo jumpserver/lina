@@ -409,6 +409,11 @@ export default {
   &:hover {
     ::v-deep .tree-action-btn {
       display: inline;
+
+      &:hover {
+        box-shadow: none;
+        color: var(--color-text-primary) !important;
+      }
     }
   }
 
@@ -610,6 +615,7 @@ div.rMenu li {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
+    color: var(--color-text-primary)
   }
 
   & ::v-deep .el-input__suffix {
@@ -617,7 +623,13 @@ div.rMenu li {
   }
 
   & ::v-deep .el-input__prefix {
-    padding-left: 6px;
+    display: flex;
+
+    .el-input__icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   & ::v-deep .el-input__suffix-inner {
