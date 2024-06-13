@@ -12,10 +12,9 @@
           @input="treeSearchHandle"
         >
           <span slot="suffix">
-            <svg-icon
-              class="icon"
-              icon-class="close"
-              style="font-size: 12px;"
+            <i
+              class="el-icon-close"
+              style="font-size: 12px; cursor: pointer"
               @click="onClose"
             />
           </span>
@@ -620,6 +619,10 @@ div.rMenu li {
 
   & ::v-deep .el-input__suffix {
     padding-right: 8px;
+
+    .el-input__suffix-inner:hover {
+      color: var(--color-text-primary);
+    }
   }
 
   & ::v-deep .el-input__prefix {
