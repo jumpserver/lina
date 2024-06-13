@@ -8,17 +8,10 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="2">
-        {{ this.$t('common.CronTab.from') }}
-        <el-input-number v-model="cycle01" :max="60" :min="0" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="60" :min="0" size="mini" /> {{ this.$t('common.CronTab.min') }}
-      </el-radio>
-    </el-form-item>
-
-    <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('common.CronTab.from') }}
-        <el-input-number v-model="average02" :max="60" :min="1" size="mini" /> {{ this.$t('common.CronTab.min') }}{{ this.$t('common.CronTab.executeOnce') }}
+        <el-input-number v-model="average02" :max="60" :min="1" size="mini" />
+        {{ this.$t('common.CronTab.min') }}{{ this.$t('common.CronTab.executeOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -33,7 +26,7 @@
           size="small"
           style="width:100%"
         >
-          <el-option v-for="item in 60" :key="item" :value="item-1">{{ item-1 }}</el-option>
+          <el-option v-for="item in 60" :key="item" :value="item-1">{{ item - 1 }}</el-option>
         </el-select>
       </el-radio>
     </el-form-item>
@@ -158,7 +151,7 @@ export default {
 </script>
 
 <style scoped>
-	.el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
+.el-form-item--small.el-form-item {
+  margin-bottom: 10px;
+}
 </style>
