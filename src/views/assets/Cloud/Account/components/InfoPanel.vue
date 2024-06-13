@@ -59,7 +59,7 @@ export default {
 }
 
 html:lang(en) .panel-item span {
-  min-width: 160px;
+  min-width: 100px;
 }
 
 html:lang(ja) .panel-item span {
