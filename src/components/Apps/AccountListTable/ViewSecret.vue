@@ -10,7 +10,7 @@
       @confirm="accountConfirmHandle"
       v-on="$listeners"
     >
-      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
+      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">
         <el-form-item :label="$tc('Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -176,8 +176,14 @@ export default {
     }
 
     ::v-deep .el-form-item__label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
       padding-right: 20px;
       line-height: 30px;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
 
     ::v-deep .el-form-item__content {
