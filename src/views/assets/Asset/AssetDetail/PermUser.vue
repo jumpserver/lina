@@ -206,10 +206,13 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    $route: {
+      handler(newVal) {
+        newVal.fullPath.includes('/console/perms/asset-permissions/') && (this.GenericListTableDialogConfig.visible = false)
+      }
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

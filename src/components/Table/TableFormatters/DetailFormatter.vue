@@ -99,7 +99,7 @@ export default {
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
         if (detailRoute.query.tab) {
-          detailRoute.query = detailRoute.query.tab
+          detailRoute.name = detailRoute.query.tab
         }
       }
       return detailRoute
