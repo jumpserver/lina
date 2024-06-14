@@ -36,6 +36,7 @@
       v-if="showResultDialog"
       :result="createAccountResults"
       :visible.sync="showResultDialog"
+      @close-all="closeAll"
     />
     <AccountBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
@@ -481,15 +482,23 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     showBulkCreateResult(results) {
-      this.showResultDialog = false
-      this.createAccountResults = results
       setTimeout(() => {
         this.showResultDialog = true
-      }, 100)
+        this.createAccountResults = results
+      }, 350)
     },
     handleAccountBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    closeAll() {
+      setTimeout(() => {
+        this.showResultDialog = false
+      }, 350)
+
+      setTimeout(() => {
+        this.showAddDialog = false
+      }, 800)
     }
   }
 }
