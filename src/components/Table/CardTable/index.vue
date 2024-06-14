@@ -241,7 +241,6 @@ export default {
   .el-col, div {
     .my-card {
       min-width: 330px;
-      //height: 250px;
       width: 100%;
       position: relative;
       margin-bottom: 20px;
@@ -250,19 +249,20 @@ export default {
         height: 100%;
 
         .el-row {
-          margin-top: 0;
+          display: flex;
           flex-wrap: nowrap;
+          margin-top: 0;
           height: 100%;
 
           .image {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
 
             img {
               width: 60px;
               height: 60px;
+              object-fit: contain;
             }
 
             svg {
@@ -275,8 +275,6 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            min-width: 0;
-            min-height: 0;
 
             .one-line {
               display: flex;
@@ -298,17 +296,13 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 150px;
+              height: 80px;
               font-size: 12px;
               padding: 10px 0;
               cursor: pointer;
               overflow: hidden;
               -webkit-line-clamp: 4;
               -webkit-box-flex: 1;
-              -webkit-flex-grow: 1;
-              flex-grow: 1;
-              -webkit-flex-shrink: 1;
-              flex-shrink: 1;
               -webkit-box-orient: vertical;
               text-align: left;
             }
