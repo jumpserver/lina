@@ -6,6 +6,7 @@
 
 <script>
 import IBox from '@/components/IBox/index.vue'
+import rules from '@/components/Form/DataForm/rules'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 
 export default {
@@ -72,6 +73,12 @@ export default {
           },
           VERIFY_CODE_TTL: {
             label: this.$t('ExpirationTimeout')
+          },
+          SECURITY_UNCOMMON_USERS_TTL: {
+            rules: [
+              rules.LengthCheck,
+              rules.Required
+            ]
           }
         }
       }
@@ -79,7 +86,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
