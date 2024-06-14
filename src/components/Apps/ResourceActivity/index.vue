@@ -33,6 +33,7 @@
 import IBox from '@/components/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
 import { openTaskPage } from '@/utils/jms'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'ResourceActivity',
@@ -53,7 +54,7 @@ export default {
       activities: [
         {
           content: this.$t('Now'),
-          timestamp: this.$moment().format('YYYY-MM-DD HH:mm:ss'),
+          timestamp: toSafeLocalDateStr(this.$moment()),
           type: 'primary'
         }
       ]
@@ -65,9 +66,11 @@ export default {
   methods: {
     getActivities() {
       this.$axios.get(this.activityUrl).then(res => {
-        for (const i in res) {
-          this.activities.push(res[i])
-        }
+        const activities = res || []
+        activities.forEach(activity => {
+          activity.timestamp = toSafeLocalDateStr(activity.timestamp)
+          this.activities.push(activity)
+        })
       })
     },
     onClick(activity) {
