@@ -59,6 +59,14 @@ export default {
           ]
         },
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'UserDetail',
+              routeQuery: {
+                tab: 'UserInfo'
+              }
+            }
+          },
           mfa_level: {
             width: '75px'
           },

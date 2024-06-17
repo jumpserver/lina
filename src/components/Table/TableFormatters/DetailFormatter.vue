@@ -87,7 +87,9 @@ export default {
         console.error('No route found')
         return
       }
+
       let detailRoute = { replace: true }
+
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: this.row.id }
@@ -98,10 +100,6 @@ export default {
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
-
-        if (detailRoute.query.tab) {
-          detailRoute.name = detailRoute.query.tab
-        }
       }
       return detailRoute
     },
