@@ -13,14 +13,22 @@
     </div>
     <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
-      <div style="float: right">
+      <div class="btn-groups" style="float: right">
         <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
-        <el-button size="small" type="primary" @click="performImportAction">{{ importActionTitle }}</el-button>
+        <el-button
+          v-show="!disableImportBtn"
+          size="small"
+          type="primary"
+          @click="performImportAction"
+        >
+          {{ importActionTitle }}
+        </el-button>
         <el-button
           v-for="button in moreButtons"
           v-show="!button.hidden"
           :key="button.title"
           :loading="button.loading"
+          :disabled="disableImportBtn"
           size="small"
           v-bind="button"
           @click="handleClick(button)"
@@ -80,6 +88,10 @@ export default {
     moreButtons: {
       type: Array,
       default: () => []
+    },
+    disableImportBtn: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -495,4 +507,9 @@ export default {
   max-height: 160px;
 }
 
+.btn-groups {
+  ::v-deep .el-button.is-disabled {
+    cursor: not-allowed;
+  }
+}
 </style>
