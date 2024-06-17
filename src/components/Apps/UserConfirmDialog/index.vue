@@ -50,7 +50,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
-        <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
+        <el-col :md="24" :sm="24" style="display: flex; align-items: center; margin-bottom: 20px;">
           <el-input
             v-model="secretValue"
             :placeholder="inputPlaceholder"
@@ -61,7 +61,7 @@
             <el-button
               :disabled="smsBtnDisabled"
               size="mini"
-              style="line-height:20px; float: right;"
+              style="line-height: 14px; float: right;"
               type="primary"
               @click="sendSMSCode"
             >
@@ -175,18 +175,20 @@ export default {
       this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: 'sms' }).then(res => {
         this.$message.success(this.$tc('VerificationCodeSent'))
         let time = 60
-        const interval = setInterval(() => {
-          const originText = this.smsBtnText
-          this.smsBtnText = this.$t('Pending') + `: ${time}`
-          this.smsBtnDisabled = true
-          time -= 1
+        this.smsBtnDisabled = true
 
-          if (time === 0) {
-            this.smsBtnText = originText
-            this.smsBtnDisabled = false
+        const interval = setInterval(() => {
+          time -= 1
+          this.smsBtnText = `${this.$t('Pending')}: ${time}`
+
+          if (time <= 0) {
             clearInterval(interval)
+            this.smsBtnText = this.$t('SendVerificationCode')
+            this.smsBtnDisabled = false
           }
         }, 1000)
+      }).catch(() => {
+        this.$message.error(this.$tc('FailedToSendVerificationCode'))
       })
     },
     handleConfirm() {
