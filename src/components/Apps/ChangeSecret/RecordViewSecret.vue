@@ -11,7 +11,7 @@
       v-on="$listeners"
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
-        <el-form-item :label="$tc('accounts.AccountChangeSecret.OldSecret')">
+        <el-form-item :label="$tc('OldSecret')">
           <ShowKeyCopyFormatter
             :cell-value="secretInfo.old_secret"
             :col="{ formatterArgs: {
@@ -19,7 +19,7 @@
             }}"
           />
         </el-form-item>
-        <el-form-item :label="$tc('accounts.AccountChangeSecret.NewSecret')">
+        <el-form-item :label="$tc('NewSecret')">
           <ShowKeyCopyFormatter
             :cell-value="secretInfo.new_secret"
             :col="{ formatterArgs: {
