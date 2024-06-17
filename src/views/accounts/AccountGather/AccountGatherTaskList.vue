@@ -39,7 +39,7 @@ export default {
             formatterArgs: {
               route: 'AccountGatherTaskDetail',
               routeQuery: {
-                tab: 'Detail'
+                tab: 'AccountGatherTaskDetail'
               }
             }
           },
@@ -119,7 +119,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
