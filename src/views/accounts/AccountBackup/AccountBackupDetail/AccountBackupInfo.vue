@@ -27,7 +27,10 @@ export default {
       default: () => ({})
     }
   },
+  isEmail: false,
+
   data() {
+    this.isEmail = this.object.backup_type.value === 'email'
     return {
       quickActions: [
         {
@@ -70,28 +73,32 @@ export default {
           key: this.$t('Recipient') + ' A',
           value: this.object.recipients_part_one,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientA = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+            return <span>{recipientA}</span>
           }
         },
         {
           key: this.$t('Recipient') + ' B',
           value: this.object.recipients_part_two,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientB = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+            return <span>{recipientB}</span>
           }
         },
         {
           key: this.$t('RecipientServer') + ' A',
           value: this.object.obj_recipients_part_one,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientServerA = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+            return <span>{recipientServerA}</span>
           }
         },
         {
           key: this.$t('RecipientServer') + ' B',
           value: this.object.obj_recipients_part_two,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+            return <span>{recipientServerB}</span>
           }
         }
       ]
