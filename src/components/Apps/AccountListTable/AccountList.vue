@@ -465,6 +465,12 @@ export default {
       )
     }
   },
+  activated() {
+    // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
+    setTimeout(() => {
+      this.refresh()
+    })
+  },
   methods: {
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
@@ -499,6 +505,10 @@ export default {
       setTimeout(() => {
         this.showAddDialog = false
       }, 800)
+
+      setTimeout(() => {
+        this.refresh()
+      }, 1000)
     }
   }
 }
