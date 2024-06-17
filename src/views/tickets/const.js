@@ -38,29 +38,29 @@ export const STATE_MAP = {
 export const treeNodes = [
   {
     value: 'all',
-    label: i18n.t('all'),
+    label: i18n.t('All'),
     children: [
       {
         value: 'connect',
-        label: i18n.t('connect')
+        label: i18n.t('Connect')
       },
       {
         value: 'updownload',
-        label: i18n.t('FileTransfer'),
+        label: i18n.t('UpDownload'),
         children: [
           {
             value: 'upload',
-            label: i18n.t('uploadFile')
+            label: i18n.t('Upload')
           },
           {
             value: 'download',
-            label: i18n.t('downloadFile')
+            label: i18n.t('Download')
           }
         ]
       },
       {
         value: 'copy_paste',
-        label: i18n.t('clipboardCopyPaste'),
+        label: i18n.t('Clipboard'),
         children: [
           {
             value: 'copy',
