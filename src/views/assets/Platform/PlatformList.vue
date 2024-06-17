@@ -50,9 +50,18 @@ export default {
             }
           },
           su_enabled: {
-            width: '100px',
+            width: '130px',
             formatterArgs: {
               showFalse: false
+            }
+          },
+          su_method: {
+            width: '130px',
+            formatter: (row) => {
+              if (!row.su_enabled) {
+                return '-'
+              }
+              return row.su_method || '-'
             }
           },
           protocols: {
@@ -125,7 +134,9 @@ export default {
     }
   },
   activated() {
-    this.$refs.genericListTable.reloadTable()
+    setTimeout(() => {
+      this.$refs.genericListTable.reloadTable()
+    }, 500)
   },
   async mounted() {
     try {
