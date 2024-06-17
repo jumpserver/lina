@@ -98,6 +98,7 @@ export default {
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
+
         if (detailRoute.query.tab) {
           detailRoute.name = detailRoute.query.tab
         }
@@ -106,6 +107,7 @@ export default {
     },
     goDetail() {
       const detailRoute = this.getDetailRoute()
+
       if (this.formatterArgs.openInNewPage) {
         this.linkClicked = this.formatterArgs.removeColorOnClick
         const { href } = this.$router.resolve(detailRoute)
