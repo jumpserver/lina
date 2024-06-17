@@ -4,7 +4,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.AddAssetInDomain')"
+    :title="$tc('AddAssetInDomain')"
     :visible.sync="setting.AddAssetDialogVisible"
     after
     custom-class="asset-select-dialog"

@@ -204,7 +204,7 @@ export default {
         extraMoreActions: [
           {
             title: this.$t('RemoveSelected'),
-            name: 'BatchRemoval',
+            name: 'RemoveSelected',
             has: hasRemove,
             icon: 'remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),

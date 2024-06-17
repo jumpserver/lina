@@ -4,7 +4,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.AddGatewayInDomain')"
+    :title="$tc('AddGatewayInDomain')"
     :visible.sync="setting.AddGatewayDialogVisible"
     after
     custom-class="asset-select-dialog"

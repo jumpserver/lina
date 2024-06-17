@@ -149,8 +149,8 @@ export default {
         hasSearch: true,
         extraMoreActions: [
           {
-            name: this.$t('BatchRemoval'),
-            title: this.$t('BatchRemoval'),
+            name: this.$t('RemoveSelected'),
+            title: this.$t('RemoveSelected'),
             type: 'primary',
             icon: 'fa fa-minus',
             can({ selectedRows }) {
