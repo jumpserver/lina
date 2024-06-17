@@ -53,6 +53,7 @@ export default {
         showCancel: !this.active,
         importOption: 'create',
         showButtons: true,
+        disableImportBtn: false,
         canEdit: false,
         moreButtons: [
           {
@@ -99,8 +100,6 @@ export default {
       deep: true
     }
   },
-  created() {
-  },
   methods: {
     enableWS() {
       if (this.ws) { return }
@@ -110,6 +109,7 @@ export default {
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
       this.ws.onopen = (e) => {
+        this.settings.disableImportBtn = true
         this.ws.send(JSON.stringify({
           action: 'sync_task', account_id: this.object.id
         }))
@@ -132,6 +132,7 @@ export default {
         } else if (data.action === 'finished') {
           this.linkType = 'success'
           this.linkIcon = 'el-icon-success'
+          this.settings.disableImportBtn = false
           this.tip = `${this.$t('SyncSuccessMsg')}`
         } else {
           this.$message.error(data?.msg)
