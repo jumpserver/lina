@@ -102,5 +102,4 @@ export default {
 .form ::v-deep .form-buttons {
   padding-top: 30px;
 }
-
 </style>
