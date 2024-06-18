@@ -83,6 +83,10 @@ export default {
       type: String,
       default: ''
     },
+    type: {
+      type: String,
+      default: 'account'
+    },
     title: {
       type: String,
       default: function() {
@@ -136,7 +140,8 @@ export default {
         name: this.secretInfo.name,
         secret: encryptPassword(this.modifiedSecret)
       }
-      this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, params).then(() => {
+      const url = this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
+      this.$axios.patch(`${url}/${this.account.id}/`, params).then(() => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     },

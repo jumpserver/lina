@@ -6,6 +6,7 @@
       :account="account"
       :show-password-record="false"
       :url="secretUrl"
+      type="template"
       :visible.sync="showViewSecretDialog"
     />
   </div>
