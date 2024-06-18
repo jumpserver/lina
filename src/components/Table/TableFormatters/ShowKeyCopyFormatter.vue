@@ -1,6 +1,13 @@
 <template>
   <div class="content">
-    <pre v-if="!isEdit" class="text">{{ currentValue }}</pre>
+    <el-tooltip
+      v-if="!isEdit"
+      :content="currentValue"
+      placement="top"
+    >
+      <pre class="text" style="cursor: pointer">{{ currentValue }}</pre>
+    </el-tooltip>
+
     <el-input
       v-else
       ref="editInput"
@@ -9,6 +16,7 @@
       size="small"
       @blur="onEditBlur"
     />
+
     <span v-if="realValue" class="action">
       <template v-for="(item, index) in iActions">
         <el-tooltip
