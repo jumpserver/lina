@@ -113,7 +113,6 @@
               v-if="item.type ==='button'"
               :disabled="item.disabled"
               size="mini"
-              style="background-color: transparent"
               type="default"
               @click="item.callback()"
             >
@@ -256,13 +255,16 @@ export default {
 .right-side {
   .el-button {
     border: none;
-    padding: 2px;
+    padding: 5px;
     font-size: 14px;
     width: 28px;
     height: 28px;
-    color: #888;
-    background-color: transparent;
     margin-left: 2px;
+    background: none;
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
   }
 }
 
@@ -296,10 +298,6 @@ export default {
   .el-input .el-select__caret {
     color: #7a7c7f;
   }
-}
-
-::v-deep .el-button.el-button--default {
-  background-color: #e6e6e6;
 }
 
 .filter-label {

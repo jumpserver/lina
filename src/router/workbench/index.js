@@ -90,8 +90,8 @@ export default {
       children: [
         {
           path: 'adhoc',
-          name: 'Adhoc',
-          component: () => import('@/views/ops/Job/QuickJob'),
+          name: 'QuickAdhoc',
+          component: () => import('@/views/ops/Adhoc/QuickJob'),
           meta: {
             title: i18n.t('QuickJob'),
             icon: 'adhoc',
@@ -185,7 +185,7 @@ export default {
           }
         },
         {
-          path: 'adhoc/:id/update',
+          path: 'command/:id/update',
           name: 'AdhocUpdate',
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           hidden: true,
@@ -196,7 +196,7 @@ export default {
           }
         },
         {
-          path: 'adhoc/create',
+          path: 'command/create',
           name: 'AdhocCreate',
           hidden: true,
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
@@ -207,7 +207,7 @@ export default {
           }
         },
         {
-          path: 'adhoc/:id',
+          path: 'command/:id',
           component: () => import('@/views/ops/Template/Adhoc/AdhocDetail'),
           name: 'AdhocDetail',
           hidden: true,

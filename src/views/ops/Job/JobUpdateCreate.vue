@@ -11,7 +11,7 @@ import AssetSelect from '@/components/Apps/AssetSelect'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
-import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
+import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 
 export default {

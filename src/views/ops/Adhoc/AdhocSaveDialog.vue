@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/Dialog/index.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import CodeEditor from '@/components/Form/FormFields/CodeEditor'
+import CodeEditor from '@/components/Form/FormFields/CodeEditor.vue'
 
 export default {
   components: {

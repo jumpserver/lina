@@ -190,7 +190,7 @@ export default {
 
 .icons {
   vertical-align: middle !important;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   color: #1F2329;
   margin-right: 10px;
@@ -198,7 +198,7 @@ export default {
 
 .icons-title {
   display: inline-block;
-  font-size: 14px;
+  font-size: 13px;
 
   .menu-main.mobile-view-switch ::v-deep .el-submenu__icon-arrow {
     right: 10px;

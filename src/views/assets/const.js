@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
-import { JSONManyToManySelect, Select2 } from '@/components/Form/FormFields'
+import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
@@ -142,13 +142,13 @@ export const assetFieldsMeta = (vm) => {
     labels: {
       name: 'labels',
       type: 'm2m',
-      component: Select2,
+      component: NestedObjectSelect2,
       el: {
         multiple: true,
         url: '/api/v1/labels/labels/',
         ajax: {
           transformOption: (item) => {
-            return { label: `${item.name}:${item.value}`, value: `${item.name}:${item.value}` }
+            return { label: `${item.name}:${item.value}`, value: `${item.id}` }
           }
         }
       }

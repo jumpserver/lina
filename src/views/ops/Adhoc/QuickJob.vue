@@ -54,9 +54,9 @@ import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
-import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
-import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
-import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
+import AdhocOpenDialog from './AdhocOpenDialog.vue'
+import AdhocSaveDialog from './AdhocSaveDialog.vue'
+import VariableHelpDialog from './VariableHelpDialog.vue'
 import { createJob, getJob, getTaskDetail, StopJob } from '@/api/ops'
 
 export default {
@@ -243,7 +243,7 @@ export default {
           openCommand: {
             type: 'button',
             align: 'right',
-            icon: 'load-file',
+            icon: 'open',
             tip: this.$t('OpenCommand'),
             callback: (val, setting) => {
               this.showOpenAdhocDialog = true
@@ -252,7 +252,7 @@ export default {
           saveCommand: {
             type: 'button',
             align: 'right',
-            icon: 'save-line',
+            icon: 'save',
             tip: this.$t('SaveCommand'),
             callback: (val, setting) => {
               if (!this.command) {
@@ -265,7 +265,7 @@ export default {
           help: {
             type: 'button',
             align: 'right',
-            icon: 'help',
+            icon: 'info',
             tip: this.$t('Help'),
             callback: (val, setting) => {
               this.showHelpDialog = true
