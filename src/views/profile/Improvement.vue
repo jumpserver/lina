@@ -63,6 +63,7 @@ export default {
         }
       },
       updateSuccessNextRoute: { name: 'UserGuide' },
+      hasReset: false,
       cleanFormValue(value) {
         value = Object.assign({}, value, { is_first_login: false })
         if (value.mfa_level === 2) {
