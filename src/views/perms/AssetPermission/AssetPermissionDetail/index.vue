@@ -4,7 +4,7 @@
     :object.sync="AssetPermission"
     v-bind="config"
     v-on="$listeners"
-    @tab-click="TabClick"
+    @tab-click="handleTabClick"
   >
     <keep-alive>
       <component :is="config.activeMenu" :object="AssetPermission" />
@@ -62,17 +62,23 @@ export default {
     }
   },
   methods: {
-    TabClick(tab) {
+    handleTabClick(tab) {
+      const query = _.cloneDeep(this.$route.query)
+      const newQuery = {
+        ...query,
+        tab: tab.name
+      }
+
       if (tab.name !== 'AssetPermissionDetail') {
         this.$set(this.config, 'hasRightSide', false)
       } else {
         this.$set(this.config, 'hasRightSide', true)
       }
+
+      this.$nextTick(() => {
+        this.$router.replace({ query: newQuery })
+      })
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

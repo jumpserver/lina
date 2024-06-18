@@ -39,7 +39,7 @@ export default {
             formatterArgs: {
               route: 'AccountGatherTaskDetail',
               routeQuery: {
-                tab: 'Detail'
+                tab: 'AccountGatherTaskDetail'
               }
             }
           },
@@ -113,13 +113,9 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
-      this.$router.go(0)
-    }
+    // $route(to, from) {
+    // this.$router.go(0)
+    // }
   }
 }
 </script>
-
-<style>
-
-</style>

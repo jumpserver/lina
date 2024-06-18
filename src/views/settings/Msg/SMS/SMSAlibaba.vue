@@ -71,12 +71,6 @@ export default {
         return 'patch'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

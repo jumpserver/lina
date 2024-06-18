@@ -69,6 +69,7 @@ export default {
             }
           },
           actions: {
+            width: '120px',
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,

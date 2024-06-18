@@ -94,7 +94,8 @@ export default {
           return getPageData({ keyword, pageIndex, pageSize })
         },
         selectedData: [],
-        showClearBtn: true
+        showClearBtn: true,
+        transferOnCheck: true
       }
     }
   },

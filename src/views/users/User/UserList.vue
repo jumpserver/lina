@@ -59,6 +59,14 @@ export default {
           ]
         },
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'UserDetail',
+              routeQuery: {
+                tab: 'UserInfo'
+              }
+            }
+          },
           mfa_level: {
             width: '75px'
           },
@@ -196,7 +204,7 @@ export default {
         extraMoreActions: [
           {
             title: this.$t('RemoveSelected'),
-            name: 'BatchRemoval',
+            name: 'RemoveSelected',
             has: hasRemove,
             icon: 'remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
@@ -328,6 +336,16 @@ export default {
     },
     handleDialogUpdate() {
       this.updateSelectedDialogSetting.visible = false
+
+      // 此处必须显示重新赋值才能在更新用户时使得 Groups 数据重新刷新
+      this.tableConfig.columnsMeta.groups = {
+        formatter: AmountFormatter,
+        formatterArgs: {
+          routeQuery: {
+            tab: 'UserDetail'
+          }
+        }
+      }
       this.reloadTable()
     }
   }

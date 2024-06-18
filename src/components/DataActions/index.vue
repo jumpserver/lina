@@ -215,7 +215,7 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .el-button.el-button--default {
-    color: var(--color-text-primary);
+    color: var(--color-text-primary) !important;
   }
 }
 

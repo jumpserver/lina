@@ -14,6 +14,18 @@ export const EmailCheck = {
   trigger: ['blur', 'change']
 }
 
+export const LengthCheck = {
+  validator: (rule, value, callback) => {
+    if (value < 30) {
+      callback(new Error(`${i18n.t('MinNumber30')}`))
+    } else {
+      callback()
+    }
+  },
+  type: 'number',
+  trigger: ['blur', 'change']
+}
+
 export const IpCheck = {
   required: true,
   validator: (rule, value, callback) => {
@@ -99,6 +111,7 @@ export const JsonRequiredUserNameMapped = {
 export default {
   IpCheck,
   Required,
+  LengthCheck,
   RequiredChange,
   EmailCheck,
   specialEmojiCheck,

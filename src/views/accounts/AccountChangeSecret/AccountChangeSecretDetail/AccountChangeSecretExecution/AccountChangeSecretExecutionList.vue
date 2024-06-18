@@ -82,7 +82,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: 'accounts.view_changesecretexecution',
+                  can: this.$hasPerm('accounts.view_changesecretexecution'),
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])

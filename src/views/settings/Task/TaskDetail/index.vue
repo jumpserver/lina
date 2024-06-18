@@ -38,7 +38,7 @@ export default {
             name: 'TaskDetail'
           },
           {
-            title: this.$t('Executions'),
+            title: this.$t('ExecutionList'),
             name: 'TaskHistory',
             hidden: () => !this.$hasPerm('ops.view_celerytaskexecution')
           }
@@ -55,7 +55,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

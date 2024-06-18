@@ -10,7 +10,7 @@
       @confirm="accountConfirmHandle"
       v-on="$listeners"
     >
-      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
+      <el-form :model="secretInfo" class="password-form" label-position="right" label-width="130px">
         <el-form-item :label="$tc('Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -83,6 +83,10 @@ export default {
       type: String,
       default: ''
     },
+    type: {
+      type: String,
+      default: 'account'
+    },
     title: {
       type: String,
       default: function() {
@@ -136,7 +140,8 @@ export default {
         name: this.secretInfo.name,
         secret: encryptPassword(this.modifiedSecret)
       }
-      this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, params).then(() => {
+      const url = this.type === 'account' ? `/api/v1/accounts/accounts` : `/api/v1/accounts/account-templates`
+      this.$axios.patch(`${url}/${this.account.id}/`, params).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     },
@@ -176,8 +181,14 @@ export default {
     }
 
     ::v-deep .el-form-item__label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
       padding-right: 20px;
       line-height: 30px;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
 
     ::v-deep .el-form-item__content {

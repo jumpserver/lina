@@ -26,10 +26,10 @@
     <el-input
       ref="SearchInput"
       v-model="filterValue"
+      class="search-input"
       :placeholder="placeholder"
       :suffix-icon="suffixIcon"
       :validate-event="false"
-      class="search-input"
       @blur="handleBlur"
       @change="handleConfirm"
       @focus="handleFocus"

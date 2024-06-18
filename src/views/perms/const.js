@@ -35,6 +35,7 @@ export const AssetPermissionTableMeta = {
   name: {
     minWidth: '120px',
     formatterArgs: {
+      route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionDetail'
       }

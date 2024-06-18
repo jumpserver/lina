@@ -36,6 +36,7 @@
       v-if="showResultDialog"
       :result="createAccountResults"
       :visible.sync="showResultDialog"
+      @close-all="closeAll"
     />
     <AccountBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
@@ -464,6 +465,12 @@ export default {
       )
     }
   },
+  activated() {
+    // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
+    setTimeout(() => {
+      this.refresh()
+    }, 500)
+  },
   methods: {
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
@@ -481,15 +488,27 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     showBulkCreateResult(results) {
-      this.showResultDialog = false
-      this.createAccountResults = results
       setTimeout(() => {
         this.showResultDialog = true
-      }, 100)
+        this.createAccountResults = results
+      }, 350)
     },
     handleAccountBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    closeAll() {
+      setTimeout(() => {
+        this.showResultDialog = false
+      }, 350)
+
+      setTimeout(() => {
+        this.showAddDialog = false
+      }, 800)
+
+      setTimeout(() => {
+        this.refresh()
+      }, 1000)
     }
   }
 }

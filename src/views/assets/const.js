@@ -101,8 +101,15 @@ export const assetFieldsMeta = (vm) => {
           const pk = event.pk
           const url = window.location.href
           const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
-          window.location.href = newURL
-          updatePlatformProtocols(vm, platformType, updateForm, true)
+
+          if (url.includes('clone')) {
+            updatePlatformProtocols(vm, platformType, updateForm, true)
+          } else {
+            window.history.replaceState(null, null, newURL)
+            vm.$nextTick(() => {
+              updatePlatformProtocols(vm, platformType, updateForm, true)
+            })
+          }
         },
         input: ([event], updateForm) => {
           updatePlatformProtocols(vm, platformType, updateForm)

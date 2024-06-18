@@ -73,7 +73,6 @@ export default {
   computed: {
     detailCardItems() {
       return [
-
         {
           key: this.$t('DateStart'),
           value: this.object.date_start
