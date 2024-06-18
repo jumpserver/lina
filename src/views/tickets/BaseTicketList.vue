@@ -142,7 +142,7 @@ export default {
             },
             {
               value: 'title',
-              label: this.$t('title')
+              label: this.$t('Title')
             },
             {
               value: 'type',
