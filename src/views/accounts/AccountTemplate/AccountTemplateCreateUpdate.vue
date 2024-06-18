@@ -1,5 +1,8 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    @getObjectDone="getObjectDone"
+  />
 </template>
 
 <script>
@@ -21,7 +24,6 @@ export default {
         isUpdate && value.push('is_sync_account')
       }
     }
-
     return {
       initial: {
         secret_type: 'password',
@@ -66,10 +68,13 @@ export default {
       createSuccessNextRoute: { name: 'AccountTemplateList' },
       updateSuccessNextRoute: { name: 'AccountTemplateList' }
     }
+  },
+  methods: {
+    getObjectDone(obj) {
+      if (['token', 'access_key', 'api_key'].includes(obj.secret_type.value)) {
+        this.fieldsMeta.auto_push.el.disabled = true
+      }
+    }
   }
 }
 </script>
-
-<style>
-
-</style>
