@@ -2,11 +2,13 @@
   <div>
     <ActionsGroup :actions="rightSideActions" :is-fa="true" class="right-side-actions right-side-item" />
     <ImExportDialog
+      v-if="dialogExportVisible"
       :export-options="iExportOptions"
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
       v-bind="$attrs"
       @importDialogClose="onImportDialogClose"
+      @importDialogConfirm="onImportDialogConfirm"
     />
   </div>
 </template>
@@ -40,7 +42,10 @@ export default {
       default: function({ selectedRows }) {
         const { exportOptions, tableUrl } = this
         const url = exportOptions?.url ? exportOptions.url : tableUrl
-        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        })
       }
     },
     hasImport: defaultTrue,
@@ -53,7 +58,10 @@ export default {
       default: function({ selectedRows }) {
         const { importOptions, tableUrl } = this
         const url = importOptions?.url ? importOptions.url : tableUrl
-        this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
+        })
       }
     },
     hasColumnSetting: defaultTrue,
@@ -156,6 +164,15 @@ export default {
     },
     onImportDialogClose() {
       this.$emit('importDialogClose')
+      setTimeout(() => {
+        this.dialogExportVisible = false
+      }, 100)
+    },
+    onImportDialogConfirm() {
+      this.$emit('importDialogClose')
+      setTimeout(() => {
+        this.dialogExportVisible = false
+      }, 100)
       this.reloadTable()
     }
   }

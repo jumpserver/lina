@@ -145,7 +145,7 @@ export default {
         {
           label: this.$t('ExportOnlySelectedItems'),
           value: 'selected',
-          can: this.selectedRows.length > 0 && this.canExportSelected
+          can: this.hasSelected && this.canExportSelected
         },
         {
           label: this.$t('ExportOnlyFiltered'),
@@ -180,6 +180,15 @@ export default {
     showExportDialog() {
       if (!this.mfaVerifyRequired) {
         this.exportDialogShow = true
+
+        if (this.hasSelected) {
+          this.exportOption = 'selected'
+        }
+
+        if (this.tableHasQuery) {
+          this.exportOption = 'filtered'
+        }
+
         return
       }
       this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
@@ -221,12 +230,11 @@ export default {
     async handleExportConfirm() {
       await this.handleExport()
       this.exportDialogShow = false
+      this.$emit('importDialogConfirm')
     },
     handleExportCancel() {
-      const vm = this
-      setTimeout(() => {
-        vm.exportDialogShow = false
-      }, 100)
+      this.exportDialogShow = false
+      this.$emit('importDialogClose')
     },
     handleAuthMFAError() {
       this.mfaDialogShow = false

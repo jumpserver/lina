@@ -12,6 +12,7 @@
         @showAll="showAll"
       />
       <BaseList
+        ref="baseList"
         slot="table"
         :add-extra-more-actions="addExtraMoreActions"
         :header-actions="headerActions"
@@ -65,6 +66,11 @@ export default {
   },
   mounted() {
     this.treeRef = this.$refs.AssetTreeTable.$refs.TreeList
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.baseList.$refs.ListTable.reloadTable()
+    }, 500)
   },
   methods: {
     decorateRMenu() {
