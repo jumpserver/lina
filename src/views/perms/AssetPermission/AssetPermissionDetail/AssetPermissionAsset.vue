@@ -75,14 +75,9 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: true,
-        hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
+        hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        hasCreate: false,
-        hasMoreActions: false
+        hasImport: false
       },
       assetRelationConfig: {
         icon: 'fa-edit',

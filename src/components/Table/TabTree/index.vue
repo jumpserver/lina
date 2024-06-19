@@ -100,9 +100,6 @@ export default {
   },
   async mounted() {
     this.iActiveMenu = await this.getPropActiveTab()
-    this.$eventBus.$on('treeComponentKey', () => {
-      this.componentKey += '1'
-    })
     this.hiddenTextIfNeed()
   },
   methods: {

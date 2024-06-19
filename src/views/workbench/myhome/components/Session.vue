@@ -19,7 +19,7 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
         columns: [
-          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol'
+          'id', 'asset', 'account', 'remote_addr', 'protocol'
         ],
         columnsMeta: {
           id: {
@@ -36,11 +36,11 @@ export default {
             }
           },
           asset: {
-            width: 240,
+            'min-width': 200,
             label: this.$t('Asset')
           },
           account: {
-            width: 180
+            'min-width': 100
           },
           command_amount: {
             align: 'center',
@@ -51,7 +51,7 @@ export default {
             label: this.$t('RemoteAddr')
           },
           protocol: {
-            width: 120,
+            width: 100,
             label: this.$t('Protocol'),
             el: {
               disabled: false

@@ -33,29 +33,31 @@ export default {
       return this.publicSettings?.CHAT_AI_ENABLED
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
 .app-main {
   background-color: #f3f3f4;
-  height: 100%!important;
+  height: 100% !important;
   width: 100%;
   position: relative;
   overflow: auto;
   /*padding: 10px 20px 10px;*/
 }
-.fixed-header+.app-main {
+
+.fixed-header + .app-main {
   padding-top: 50px;
 }
+
 .hasTagsView {
   .app-main {
     /* 84 = navbar + tags-view = 50 + 34 */
     min-height: calc(100vh - 84px);
   }
-  .fixed-header+.app-main {
+
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

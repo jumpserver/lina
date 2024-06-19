@@ -7,7 +7,7 @@
         :style="{width: treeWidth}"
         class="left"
       >
-        <span v-if="component === 'AutoDataZTree'" class="title">Asset Tree</span>
+        <span v-if="component === 'AutoDataZTree'" class="title">{{ $t('AssetTree') }}</span>
         <component
           :is="component"
           :key="componentTreeKey"

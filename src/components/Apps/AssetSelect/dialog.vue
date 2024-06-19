@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     handleClose() {
-      this.$eventBus.$emit('treeComponentKey')
+      this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
     handleConfirm() {
       this.$emit('confirm', this.rowSelected, this.rowsAdd)
