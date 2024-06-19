@@ -54,7 +54,19 @@ export default {
             'nodes_amount', 'accounts', 'is_valid', 'actions'
           ]
         },
-        columnsMeta: AssetPermissionTableMeta
+        columnsMeta: {
+          ...AssetPermissionTableMeta,
+          actions: {
+            formatterArgs: {
+              updateRoute: 'AssetPermissionUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/perms/asset-permissions/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
+          }
+        }
       },
       headerActions: {
         hasLabelSearch: true,
@@ -104,7 +116,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
