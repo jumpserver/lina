@@ -201,7 +201,7 @@ export default {
     this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
     setTimeout(() => {
       this.reloadTable()
-    }, 500)
+    }, 300)
   },
   methods: {
     handleSelectionChange(val) {

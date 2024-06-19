@@ -1,5 +1,5 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -124,11 +124,10 @@ export default {
   methods: {
     hasPermNotBuiltin(row, perm) {
       return !row['builtin'] && this.$hasPerm(perm)
+    },
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
 </script>
-
-<style>
-
-</style>

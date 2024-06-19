@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 
 </template>
@@ -70,10 +70,10 @@ export default {
       }
     }
   },
-  computed: {}
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
+  }
 }
 </script>
-
-<style>
-
-</style>

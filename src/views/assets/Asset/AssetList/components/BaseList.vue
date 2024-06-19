@@ -316,6 +316,11 @@ export default {
       }
     }
   },
+  activated() {
+    setTimeout(() => {
+      this.$refs.ListTable.reloadTable()
+    }, 300)
+  },
   methods: {
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
