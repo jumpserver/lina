@@ -201,9 +201,6 @@ export default {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
   },
-  created() {
-    this.$eventBus.$on('TagSearch', this.handleTagSearchEvent)
-  },
   mounted() {
     setTimeout(() => {
       this.loading = false
@@ -212,14 +209,6 @@ export default {
   methods: {
     reloadTable() {
       this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
-    },
-    handleTagSearchEvent(tags) {
-      if (tags.hasOwnProperty('state')) {
-        const delimiter = this.url.indexOf('?') === -1 ? '?' : '&'
-        this.ticketTableConfig.url = `${this.url}${delimiter}state=${tags.state}`
-      } else {
-        this.ticketTableConfig.url = this.url
-      }
     }
   }
 }
