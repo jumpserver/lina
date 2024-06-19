@@ -66,7 +66,16 @@ export default {
   },
   methods: {
     async getResourcesCount() {
-      return this.$axios.get('/api/v1/index/?total_count=1')
+      return this.$axios.get(
+        '/api/v1/index/',
+        {
+          params: {
+            total_count_online_sessions: 1,
+            total_count_online_users: 1,
+            total_count_today_failed_sessions: 1
+          }
+        }
+      )
     }
   }
 }

@@ -137,6 +137,14 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
+          default: {
+            state: {
+              key: 'state',
+              label: this.$t('tickets.action'),
+              value: 'pending',
+              valueLabel: this.$t('common.Open')
+            }
+          },
           exclude: ['id', 'title', 'type', 'applicant'],
           options: [
             {
@@ -180,7 +188,7 @@ export default {
             },
             {
               value: 'relevant_command',
-              label: this.$t('tickets.RelevantSystemUser')
+              label: this.$t('tickets.ApplyRunCommand')
             }
           ]
         },
@@ -193,6 +201,9 @@ export default {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
   },
+  created() {
+    this.$eventBus.$on('TagSearch', this.handleTagSearchEvent)
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false
@@ -201,6 +212,14 @@ export default {
   methods: {
     reloadTable() {
       this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+    },
+    handleTagSearchEvent(tags) {
+      if (tags.hasOwnProperty('state')) {
+        const delimiter = this.url.indexOf('?') === -1 ? '?' : '&'
+        this.ticketTableConfig.url = `${this.url}${delimiter}state=${tags.state}`
+      } else {
+        this.ticketTableConfig.url = this.url
+      }
     }
   }
 }

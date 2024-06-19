@@ -353,7 +353,7 @@ export default {
             name: 'BulkVerify',
             title: this.$t('accounts.BulkVerify'),
             type: 'primary',
-            fa: 'fa-handshake-o',
+            fa: 'fa-link',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                   ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
