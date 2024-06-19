@@ -35,7 +35,6 @@ export default {
             sortable: 'custom'
           },
           timestamp: {
-            label: this.$t('Date'),
             width: '160px',
             sortable: 'custom',
             formatter: function(row) {

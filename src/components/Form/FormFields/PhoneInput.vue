@@ -5,7 +5,7 @@
         slot="prepend"
         :placeholder="$tc('Select')"
         :value="rawValue.code"
-        style="width: 90px;"
+        style="width: 75px;"
         @change="OnChange"
       >
         <el-option

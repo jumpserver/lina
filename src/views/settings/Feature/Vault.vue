@@ -90,6 +90,8 @@ export default {
           }
         },
         VAULT_HCP_MOUNT_POINT: {
+          helpText: this.$t('VaultHCPMountPoint'),
+          helpTextAsTip: true,
           hidden: (formValue) => {
             return !formValue.VAULT_ENABLED
           }
