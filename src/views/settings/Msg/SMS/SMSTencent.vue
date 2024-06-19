@@ -5,6 +5,7 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSTencent',
@@ -64,6 +65,7 @@ export default {
           component: UpdateToken
         },
         SMS_TEST_PHONE: {
+          rules: [Required],
           component: PhoneInput
         }
       },
@@ -71,12 +73,6 @@ export default {
         return 'put'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

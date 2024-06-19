@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input v-model="rawValue.phone" :placeholder="$tc('InputPhone')" @input="OnInputChange">
+    <el-input v-model="rawValue.phone" required :placeholder="$tc('InputPhone')" @input="OnInputChange">
       <el-select
         slot="prepend"
         :placeholder="$tc('Select')"

@@ -5,6 +5,7 @@
 <script>
 import BaseSMS from './Base.vue'
 import { JsonEditor, PhoneInput } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSCustom',
@@ -56,6 +57,7 @@ export default {
           helpText: this.$t('CustomParams')
         },
         SMS_TEST_PHONE: {
+          rules: [Required],
           component: PhoneInput
         }
       },
@@ -63,12 +65,6 @@ export default {
         return 'patch'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
