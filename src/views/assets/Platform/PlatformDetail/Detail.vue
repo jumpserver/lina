@@ -116,7 +116,7 @@ export default {
           })
         },
         {
-          title: this.$t('SuEnabled'),
+          title: this.$t('EnableDomain'),
           type: 'switch',
           attrs: {
             model: object['su_enabled'],

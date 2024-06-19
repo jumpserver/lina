@@ -73,6 +73,7 @@ export default {
             label: this.$t('Date')
           },
           actions: {
+            width: '160px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,

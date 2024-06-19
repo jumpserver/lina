@@ -5,6 +5,7 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'CMPP2',
@@ -57,6 +58,7 @@ export default {
           component: UpdateToken
         },
         SMS_TEST_PHONE: {
+          rules: [Required],
           component: PhoneInput
         }
       },
@@ -64,12 +66,6 @@ export default {
         return 'patch'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
