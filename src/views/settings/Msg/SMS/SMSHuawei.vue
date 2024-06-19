@@ -5,6 +5,7 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSHuawei',
@@ -72,6 +73,7 @@ export default {
           label: this.$t('AppEndpoint')
         },
         SMS_TEST_PHONE: {
+          rules: [Required],
           component: PhoneInput
         }
       },
@@ -79,12 +81,6 @@ export default {
         return 'put'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

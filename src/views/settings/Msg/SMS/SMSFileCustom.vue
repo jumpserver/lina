@@ -8,6 +8,7 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput } from '@/components/Form/FormFields'
+import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSFileCustom',
@@ -49,6 +50,7 @@ export default {
       ],
       fieldsMeta: {
         SMS_TEST_PHONE: {
+          rules: [Required],
           component: PhoneInput
         }
       },
@@ -56,12 +58,6 @@ export default {
         return 'patch'
       }
     }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>
