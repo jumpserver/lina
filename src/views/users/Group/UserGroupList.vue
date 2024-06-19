@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage ref="listPage" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -51,10 +51,11 @@ export default {
         createRoute: 'UserGroupCreate'
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listPage.reloadTable()
+    })
   }
 }
 </script>
-
-<style>
-
-</style>

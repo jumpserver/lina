@@ -10,6 +10,11 @@ export default {
   components: {
     ListTable
   },
+  activated() {
+    setTimeout(() => {
+      this.reloadTable()
+    }, 300)
+  },
   methods: {
     reloadTable() {
       this.$refs.ListTable.reloadTable()

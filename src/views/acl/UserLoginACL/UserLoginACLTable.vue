@@ -1,5 +1,5 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -59,10 +59,12 @@ export default {
         createRoute: 'UserLoginAclCreate'
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
   }
 }
 </script>
 
-<style>
-
-</style>

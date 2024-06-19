@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BaseRoleList scope="org" />
+    <BaseRoleList ref="roleList" scope="org" />
   </div>
 </template>
 
@@ -12,13 +12,10 @@ export default {
   components: {
     BaseRoleList
   },
-  data() {
-    return {
-    }
+  activated() {
+    setTimeout(() => {
+      this.$refs.roleList.reloadTable()
+    }, 300)
   }
 }
 </script>
-
-<style>
-
-</style>

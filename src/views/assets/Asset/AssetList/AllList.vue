@@ -67,11 +67,6 @@ export default {
   mounted() {
     this.treeRef = this.$refs.AssetTreeTable.$refs.TreeList
   },
-  activated() {
-    setTimeout(() => {
-      this.$refs.baseList.$refs.ListTable.reloadTable()
-    }, 500)
-  },
   methods: {
     decorateRMenu() {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
