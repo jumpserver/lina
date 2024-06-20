@@ -58,7 +58,7 @@ export const AssetPermissionTableMeta = {
     }
   },
   from_ticket: {
-    width: 100,
+    width: '130px',
     formatterArgs: {
       showFalse: false
     }

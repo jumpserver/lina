@@ -65,7 +65,7 @@ export default {
             }
           },
           count: {
-            width: '80px',
+            width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
@@ -106,7 +106,7 @@ export default {
             has: false
           },
           enabled: {
-            width: '80px',
+            width: '120px',
             label: `${this.$t('Enable')}/${this.$t('Disable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
