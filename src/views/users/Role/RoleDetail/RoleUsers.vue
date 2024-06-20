@@ -90,7 +90,10 @@ export default {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
                 reload()
               }).catch(error => {
-                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
+                this.$message.error({
+                  message: error.response.data.error,
+                  duration: 3000
+                })
               })
             }.bind(this)
           },
@@ -140,6 +143,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

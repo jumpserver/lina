@@ -126,7 +126,9 @@ export default {
       return !row['builtin'] && this.$hasPerm(perm)
     },
     reloadTable() {
-      this.$refs.ListTable.reloadTable()
+      setTimeout(() => {
+        this.$refs.ListTable.reloadTable()
+      }, 300)
     }
   }
 }
