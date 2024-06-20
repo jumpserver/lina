@@ -29,7 +29,8 @@ export default {
       submenu: [
         {
           title: this.$t('Applets'),
-          name: 'Applets'
+          name: 'Applets',
+          hidden: () => !this.$hasPerm('terminal.view_applet')
         },
         {
           title: this.$t('AppletHosts'),
