@@ -131,7 +131,7 @@ export default {
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm: _.throttle(function({ response, callback, cancel }) {
+    performConfirm({ response, callback, cancel }) {
       if (this.processing || this.visible) {
         return
       }
@@ -154,6 +154,7 @@ export default {
           })
           return
         }
+
         this.subTypeChoices = data.content
         const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
         this.subTypeSelected = defaultSubType.name
@@ -167,7 +168,7 @@ export default {
       }).finally(() => {
         this.processing = false
       })
-    }, 300),
+    },
     logout() {
       window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
@@ -198,15 +199,21 @@ export default {
       if (this.subTypeSelected === 'otp' && this.secretValue.length !== 6) {
         return this.$message.error(this.$tc('MFAErrorMsg'))
       }
+
       const data = {
         confirm_type: this.confirmTypeRequired,
         mfa_type: this.confirmTypeRequired === 'mfa' ? this.subTypeSelected : '',
         secret_key: this.secretValue
       }
-      this.$axios.post(`/api/v1/authentication/confirm/`, data).then(res => {
-        this.callback()
+
+      this.$axios.post(`/api/v1/authentication/confirm/`, data).then(() => {
         this.secretValue = ''
         this.visible = false
+        this.$nextTick(() => {
+          this.callback()
+        })
+      }).catch((err) => {
+        this.$message.error(err.message || this.$tc('ConfirmFailed'))
       })
     }
   }
@@ -231,5 +238,4 @@ export default {
     width: 100%;
     line-height: 20px;
   }
-
 </style>
