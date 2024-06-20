@@ -14,13 +14,13 @@ export default {
     Page, GenericListTable
   },
   activated() {
-    setTimeout(() => {
-      this.reloadTable()
-    }, 300)
+    this.reloadTable()
   },
   methods: {
     reloadTable() {
-      this.$refs.ListTable.reloadTable()
+      setTimeout(() => {
+        this.$refs.ListTable.reloadTable()
+      }, 300)
     }
   }
 }

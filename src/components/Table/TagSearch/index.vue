@@ -321,6 +321,8 @@ export default {
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''
+
+      this.$refs.SearchInput.blur()
     },
     handleTagClick(v, k) {
       let unableChange = false
