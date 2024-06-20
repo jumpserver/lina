@@ -143,6 +143,7 @@ export default {
 .search-btn {
   margin-top: 1px;
   cursor: pointer;
+
   &:hover {
     color: #409eff;
   }
