@@ -56,6 +56,10 @@ export default {
     let extraQuery = {
       ...(order && { order })
     }
+    if (!this.headerActions.hasSearch) {
+      // 没有搜索框，初始时触发下搜索
+      this.search({})
+    }
     if (this.headerActions.hasDatePicker) {
       extraQuery = {
         ...extraQuery,
@@ -175,7 +179,9 @@ export default {
     search(attrs) {
       this.$log.debug('ListTable: search table', attrs)
       this.$emit('TagSearch', attrs)
-      this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
+      setTimeout(() => {
+        this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
+      }, 100)
     },
     filter(attrs) {
       this.$emit('TagFilter', attrs)

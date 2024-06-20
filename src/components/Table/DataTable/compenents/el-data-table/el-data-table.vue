@@ -838,7 +838,6 @@ export default {
         if (!val) return
         this.page = defaultFirstPage
         // mounted处有updateForm的行为，所以至少在初始执行时要等到nextTick
-        this.$nextTick(this.getList)
       },
       immediate: true
     },
