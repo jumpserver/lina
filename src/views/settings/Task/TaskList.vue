@@ -132,6 +132,7 @@ export default {
           {
             title: this.$t('TaskMonitor'),
             type: 'primary',
+            can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
               window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
             }
