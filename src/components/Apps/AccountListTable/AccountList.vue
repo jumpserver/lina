@@ -208,7 +208,7 @@ export default {
             width: '120px',
             formatterArgs: {
               showText: false,
-              showFalse: false
+              showFalse: true
             }
           },
           connectivity: connectivityMeta,

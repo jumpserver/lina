@@ -128,7 +128,6 @@ export default {
         hasLeftActions: false
       },
       UserGroupCardConfig: {
-        icon: 'fa-users',
         title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
         detailRoute: 'UserGroupDetail',

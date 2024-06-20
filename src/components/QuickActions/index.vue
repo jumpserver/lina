@@ -22,7 +22,7 @@ export default {
   props: {
     fa: {
       type: String,
-      default: () => 'fa-edit'
+      default: ''
     },
     title: {
       type: String,
