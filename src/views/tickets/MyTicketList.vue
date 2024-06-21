@@ -4,7 +4,8 @@
 
 <script>
 import BaseTicketList from './BaseTicketList'
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
+
 export default {
   name: 'MyTicketList',
   components: {
@@ -12,6 +13,28 @@ export default {
   },
   data() {
     return {
+      extraTicketTableConfig: {
+        columnsShow: {
+          min: ['actions'],
+          default: ['actions']
+        },
+        columnsMeta: {
+          actions: {
+            prop: 'actions',
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasMoreActions: false,
+              onClone: ({row}) => {
+                this.$router.push({name: 'RequestAssetPermTicketCreateUpdate', params: {clone_from: row.id}})
+              },
+              canClone: ({row}) => {
+                return row.type.value === 'apply_asset'
+              }
+            }
+          }
+        }
+      },
       extraTicketAction: {
         moreCreates: {
           dropdown: [

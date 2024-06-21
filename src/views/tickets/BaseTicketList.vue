@@ -8,10 +8,10 @@
 </template>
 
 <script type="text/jsx">
-import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
-import { toSafeLocalDateStr } from '@/utils/common'
-import { APPROVE, CLOSED, OPEN, REJECT } from './const'
+import {GenericListPage} from '@/layout/components'
+import {DetailFormatter, TagChoicesFormatter} from '@/components/Table/TableFormatters'
+import {toSafeLocalDateStr} from '@/utils/common'
+import {APPROVE, CLOSED, OPEN, REJECT} from './const'
 
 export default {
   name: 'TicketListTable',
@@ -27,6 +27,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    extraTicketTableConfig: {
+      type: Object,
+      default: () => ({})
+    },
     extraQuery: {
       type: Object,
       default: () => ({})
@@ -36,7 +40,7 @@ export default {
     const vm = this
     return {
       loading: true,
-      ticketTableConfig: {
+      defaultTicketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
         columnsExclude: ['process_map', 'rel_snapshot'],
@@ -199,6 +203,9 @@ export default {
   computed: {
     iTicketAction() {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
+    },
+    ticketTableConfig() {
+      return _.mergeWith(this.defaultTicketTableConfig, this.extraTicketTableConfig, this.customizer)
     }
   },
   mounted() {
@@ -209,6 +216,11 @@ export default {
   methods: {
     reloadTable() {
       this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
+    },
+    customizer(objValue, srcValue) {
+      if (_.isArray(objValue)) {
+        return _.union(objValue, srcValue); // 使用 Lodash 的 union 方法进行数组去重合并
+      }
     }
   }
 }
