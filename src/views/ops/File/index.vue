@@ -162,7 +162,7 @@ export default {
         name: this.$t('Transfer'),
         align: 'left',
         icon: 'fa fa-play',
-        disabled: this.$store.getters.currentOrgIsRoot,
+        disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('ops.add_job'),
         el: {
           type: 'primary'
         },
