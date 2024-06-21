@@ -55,7 +55,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('/api/v1/ops/variables/help').then((data) => {
+    this.$axios.get('/api/v1/ops/variables/help/').then((data) => {
       this.variables = data
     })
   },
