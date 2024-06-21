@@ -60,7 +60,7 @@ export default {
           assets: {
             type: 'assetSelect',
             component: AssetSelect,
-            label: this.$t('Assets'),
+            label: this.$t('Asset'),
             el: {
               value: [],
               baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
