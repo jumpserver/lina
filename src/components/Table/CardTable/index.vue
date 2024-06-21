@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     isDisabled(item) {
-      return item.edition === 'enterprise' && !this.hasValidLicense
+      return item.edition.value === 'enterprise' && !this.hasValidLicense
     },
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
@@ -188,15 +188,19 @@ export default {
       this.getList()
     },
     defaultPerformView(obj) {
+      console.log(this.$route.name)
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const route = this.headerActions.detailRoute || defaultRoute
       let detailRoute = { replace: true }
+      console.log(route)
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: obj.id }
       } else {
         detailRoute = route
       }
+
+      console.log(defaultRoute)
       this.$router.push(detailRoute)
     },
     defaultPerformDelete(obj) {

@@ -273,7 +273,7 @@ export default {
     },
     {
       path: '/settings/applets',
-      component: () => import('@/views/settings/Applet'),
+      component: empty,
       redirect: '',
       meta: {
         title: i18n.t('Applets'),
