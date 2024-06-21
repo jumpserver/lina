@@ -98,7 +98,7 @@ export default {
         left: {
           run: {
             type: 'button',
-            name: this.$t('Run'),
+            name: '',
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
@@ -112,7 +112,7 @@ export default {
           },
           stop: {
             type: 'button',
-            name: this.$t('Stop'),
+            name: '',
             align: 'left',
             icon: 'fa fa-stop',
             tip: this.$t('StopJob'),
@@ -447,7 +447,7 @@ export default {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = 'running'
         this.currentTaskId = res.task_id
-        this.$router.replace({ query: { taskId: this.currentTaskId, type: 'shortcut_cmd' }})
+        this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
         this.setCostTimeInterval()
         this.writeExecutionOutput()
         this.setBtn()
@@ -456,7 +456,7 @@ export default {
     stop() {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
-          this.$tc('ops.StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+          this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
