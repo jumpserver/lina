@@ -41,7 +41,7 @@ export default {
             'name': 'Detail'
           },
           {
-            title: this.$t('Accounts'),
+            title: this.$t('AssetAccount'),
             name: 'Accounts'
           },
           {
