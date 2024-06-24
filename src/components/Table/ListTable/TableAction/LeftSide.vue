@@ -12,6 +12,7 @@ import i18n from '@/i18n/i18n'
 import DataActions from '@/components/DataActions/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
+import { getErrorResponseMsg } from '@/utils/common'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 const defaultFalse = { type: [Boolean, Function, String], default: false }
@@ -223,7 +224,8 @@ export default {
             reloadTable()
             this.$message.success(this.$tc('BulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$tc('BulkDeleteErrorMsg') + error.message)
+            const msg = getErrorResponseMsg(error)
+            this.$message.error(this.$tc('BulkDeleteErrorMsg') + msg)
           } finally {
             instance.confirmButtonLoading = false
           }

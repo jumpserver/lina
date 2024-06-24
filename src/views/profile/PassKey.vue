@@ -23,6 +23,7 @@
 import { GenericListPage } from '@/layout/components'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'
+import { getErrorResponseMsg } from '@/utils/common'
 
 export default {
   components: {
@@ -139,11 +140,7 @@ export default {
         if (error.response?.status === 412) {
           return
         }
-        let msg = error
-        if (error.response) {
-          const data = error.response.data
-          msg = data.error || data.msg || data
-        }
+        const msg = getErrorResponseMsg(error)
         alert(msg)
       })
     },

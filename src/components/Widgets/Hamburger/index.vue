@@ -27,7 +27,7 @@ export default {
 .hamburger {
   display: inline-block;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 13px;
   color: $menuText;
 }
 
