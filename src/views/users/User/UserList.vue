@@ -68,14 +68,17 @@ export default {
             }
           },
           mfa_level: {
-            width: '75px'
+            width: '130px'
           },
           source: {
             width: '120px',
             collapsible: false
           },
           email: {
-            'min-width': '120px'
+            'min-width': '160px'
+          },
+          'wecom_id': {
+            width: '120px'
           },
           username: {
             formatter: (row) => {
@@ -121,13 +124,14 @@ export default {
             }
           },
           phone: {
+            width: '120px',
             formatter: (row) => {
               const phoneObj = row.phone
               return <div>{phoneObj?.code}{phoneObj?.phone}</div>
             }
           },
           login_blocked: {
-            width: '90px',
+            width: '120px',
             formatterArgs: {
               showFalse: false
             }
@@ -138,13 +142,16 @@ export default {
             }
           },
           can_public_key_auth: {
-            width: '100px',
+            width: '230px',
             formatterArgs: {
               showFalse: false
             }
           },
+          date_password_last_updated: {
+            width: '230px'
+          },
           need_update_password: {
-            width: '100px',
+            width: '200px',
             formatterArgs: {
               showFalse: false
             }

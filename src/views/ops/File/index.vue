@@ -162,7 +162,7 @@ export default {
         name: this.$t('Transfer'),
         align: 'left',
         icon: 'fa fa-play',
-        disabled: this.$store.getters.currentOrgIsRoot,
+        disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('ops.add_job'),
         el: {
           type: 'primary'
         },
@@ -439,7 +439,7 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
-          this.$router.replace({ query: { taskId: this.currentTaskId, type: 'file_upload' }})
+          this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {

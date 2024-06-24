@@ -65,7 +65,7 @@ export default {
             }
           },
           count: {
-            width: '80px',
+            width: '130px',
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
@@ -106,7 +106,7 @@ export default {
             has: false
           },
           enabled: {
-            width: '80px',
+            width: '120px',
             label: `${this.$t('Enable')}/${this.$t('Disable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
@@ -132,6 +132,7 @@ export default {
           {
             title: this.$t('TaskMonitor'),
             type: 'primary',
+            can: this.$hasPerm('ops.view_taskmonitor'),
             callback: () => {
               window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`,)
             }

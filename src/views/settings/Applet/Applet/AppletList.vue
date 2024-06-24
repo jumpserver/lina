@@ -34,6 +34,7 @@ export default {
           this.uploadDialogVisible = true
         },
         createTitle: this.$t('Upload'),
+        hasCreate: this.$hasPerm('terminal.add_applet'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['version']

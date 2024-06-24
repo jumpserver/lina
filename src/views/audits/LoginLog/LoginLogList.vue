@@ -27,6 +27,9 @@ export default {
         columnsMeta: {
           actions: {
             has: false
+          },
+          mfa: {
+            width: '120px'
           }
         }
       },
@@ -42,7 +45,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

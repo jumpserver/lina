@@ -62,7 +62,6 @@ export default {
           helpText: this.$t('MFAOfUserFirstLoginUserGuidePage')
         }
       },
-      updateSuccessNextRoute: { name: 'UserGuide' },
       hasReset: false,
       cleanFormValue(value) {
         value = Object.assign({}, value, { is_first_login: false })
@@ -81,17 +80,12 @@ export default {
       onPerformSuccess() {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.$store.dispatch('users/ifFirstLogin', false)
-        setTimeout(() => this.$router.push({ name: 'ProfileInfo' }), 100)
+        setTimeout(() => this.$router.push({ name: 'home' }), 100)
       },
       submitMethod() {
         return 'put'
       }
     }
-  },
-  methods: {}
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -52,7 +52,7 @@ export default {
         },
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
-          'asset', 'session', 'timestamp'
+          'asset', 'account', 'session', 'timestamp'
         ],
         extraQuery: {
           date_to: dateTo,

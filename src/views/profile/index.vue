@@ -24,6 +24,10 @@
                 <td> {{ $t('Phone') }} </td>
                 <td><PhoneInput :value="object.phone" /></td>
               </tr>
+              <tr>
+                <td> {{ $t('WeChat') }} </td>
+                <td><el-input v-model="object.wechat" /></td>
+              </tr>
             </table>
             <el-button
               size="small"
@@ -391,7 +395,8 @@ export default {
     updateProfile() {
       const url = `/api/v1/users/profile/`
       const data = {
-        phone: this.object.phone
+        phone: this.object.phone,
+        wechat: this.object.wechat
       }
       this.$axios.patch(url, data).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))

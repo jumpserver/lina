@@ -93,7 +93,7 @@ export default {
       meta: {
         title: i18n.t('Notifications'),
         icon: 'remind',
-        permissions: ['settings.change_email']
+        permissions: ['settings.change_email | settings.change_sms | settings.change_systemmsgsubscription']
       }
     },
     {
@@ -103,7 +103,10 @@ export default {
       meta: {
         title: i18n.t('Features'),
         icon: 'feature',
-        permissions: ['settings.view_setting']
+        permissions: [
+          'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
+          'settings.change_chatai | settings.view_chatprompt | settings.change_virtualapp'
+        ]
       }
     },
     {
@@ -275,7 +278,7 @@ export default {
       meta: {
         title: i18n.t('Applets'),
         app: 'terminal',
-        permissions: ['terminal.view_applet']
+        permissions: ['terminal.view_applet | terminal.view_applethost']
       },
       children: [
         {
@@ -399,7 +402,6 @@ export default {
         permissions: ['settings.change_interface']
       }
     },
-
     {
       path: '/settings/tools',
       name: 'Tools',

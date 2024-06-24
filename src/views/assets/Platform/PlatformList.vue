@@ -50,13 +50,13 @@ export default {
             }
           },
           su_enabled: {
-            width: '130px',
+            width: '200px',
             formatterArgs: {
               showFalse: false
             }
           },
           su_method: {
-            width: '130px',
+            width: '200px',
             formatter: (row) => {
               if (!row.su_enabled) {
                 return '-'

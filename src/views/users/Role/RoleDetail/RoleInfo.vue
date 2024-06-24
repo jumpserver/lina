@@ -94,6 +94,8 @@ export default {
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
           'applications.match_application', 'rbac.view_workbench'
         ],
+        'terminal.view_sessionreplay': ['terminal.view_command'],
+        'rbac.view_filemanager': ['perms.view_myassets'],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.add_user': ['rbac.view_role'],
         'users.change_user': ['rbac.view_role'],
@@ -117,7 +119,6 @@ export default {
         'accounts.view_accountsecret': ['accounts.view_account'],
         'accounts.view_historyaccount': ['accounts.view_account', 'accounts.view_accountsecret'],
         'accounts.view_accounttemplatesecret': ['accounts.view_accounttemplate'],
-        'accounts.change_accounttemplatesecret': ['accounts.view_accounttemplate'],
         'accounts.view_historyaccountsecret': ['accounts.view_account', 'accounts.view_accountsecret'],
         'accounts.add_account': ['assets.view_asset'],
         'assets.gathereduser': ['assets.view_node'],
