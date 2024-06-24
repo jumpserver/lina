@@ -21,6 +21,7 @@ export default {
     }
   },
   data() {
+    this.isEmail = this.object.snapshot.backup_type === 'email'
     return {
       url: `/api/v1/accounts/account-backup-plan-executions/${this.object.id}/`,
       detailFields: [
@@ -31,9 +32,36 @@ export default {
         },
         'date_start', 'is_success', 'reason',
         {
-          key: this.$t('MailRecipient'),
-          value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('ContainAttachment') : ''}`).join(', ') : ''
+          key: this.$t('Recipient') + ' A',
+          value: this.object.snapshot.recipients_part_one,
+          formatter: (item, val) => {
+            const recipientA = this.isEmail ? Object.values(val).map(item => item[0].split('(')[0]).join(', ') : '-'
+            return <span>{recipientA}</span>
+          }
+        },
+        {
+          key: this.$t('Recipient') + ' B',
+          value: this.object.snapshot.recipients_part_two,
+          formatter: (item, val) => {
+            const recipientB = this.isEmail ? Object.values(val).map(item => item[0].split('(')[0]).join(', ') : '-'
+            return <span>{recipientB}</span>
+          }
+        },
+        {
+          key: this.$t('RecipientServer') + ' A',
+          value: this.object.snapshot.obj_recipients_part_one,
+          formatter: (item, val) => {
+            const recipientServerA = this.isEmail ? Object.values(val).map(item => item[0]).join(', ') : '-'
+            return <span>{recipientServerA}</span>
+          }
+        },
+        {
+          key: this.$t('RecipientServer') + ' B',
+          value: this.object.snapshot.obj_recipients_part_two,
+          formatter: (item, val) => {
+            const recipientServerB = this.isEmail ? Object.values(val).map(item => item[0]).join(', ') : '-'
+            return <span>{recipientServerB}</span>
+          }
         }
       ]
     }

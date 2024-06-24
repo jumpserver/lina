@@ -258,7 +258,7 @@ export default {
                   title: this.$t('Test'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
-                    this.$hasPerm('accounts.change_account') &&
+                    this.$hasPerm('accounts.verify_account') &&
                     row.asset['auto_config'].ansible_enabled &&
                     row.asset['auto_config'].ping_enabled,
                   callback: ({ row }) => {
