@@ -100,7 +100,7 @@ export default {
       this.data.total_count_job_logs = data?.total_count_job_logs
       this.data.total_count_job_logs_running = data?.total_count_job_logs_running
       this.data.total_count_job_logs_failed = data?.total_count_job_logs_failed
-      if (totalCountSession.length > 1) {
+      if (totalCountSession.length > 0) {
         this.chartConfig.secondaryData = totalCountSession
       }
     }

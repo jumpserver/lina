@@ -354,7 +354,7 @@ export default {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa-handshake-o',
+            icon: 'fa-link',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                   ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&

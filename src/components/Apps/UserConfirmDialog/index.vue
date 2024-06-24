@@ -82,6 +82,7 @@
 </template>
 <script>
 import Dialog from '@/components/Dialog/index.vue'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'UserConfirmDialog',
@@ -203,7 +204,7 @@ export default {
       const data = {
         confirm_type: this.confirmTypeRequired,
         mfa_type: this.confirmTypeRequired === 'mfa' ? this.subTypeSelected : '',
-        secret_key: this.secretValue
+        secret_key: this.confirmTypeRequired === 'password' ? encryptPassword(this.secretValue) : this.secretValue
       }
 
       this.$axios.post(`/api/v1/authentication/confirm/`, data).then(() => {

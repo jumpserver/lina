@@ -20,7 +20,7 @@
     </a>
     <a
       v-if="formatterArgs.showEditBtn"
-      class="edit-btn"
+      :class="[{ 'disabled-link': this.$store.getters.currentOrgIsRoot },'edit-btn']"
       style="padding-left: 5px"
       @click="showDialog = true"
     >
@@ -274,5 +274,12 @@ export default {
 
 .tag-tip {
   margin-top: 10px;
+}
+
+.disabled-link {
+  pointer-events: none;
+  color: grey;
+  cursor: default;
+  text-decoration: none;
 }
 </style>
