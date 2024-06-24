@@ -68,12 +68,14 @@ export default {
       const url = '/api/v1/assets/favorite-assets/'
       this.$axios.post(url, data).then(() => {
         this.allFavorites.push({ asset: assetId })
+        this.$message.success(this.$t('CollectionSucceed'))
       })
     },
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
         this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+        this.$message.success(this.$t('UnFavoriteSucceed'))
       })
     },
     toggleFavorite(assetId) {
@@ -98,17 +100,18 @@ export default {
 </script>
 
 <style>
-  .el-card {
-    border: 0 !important;
-  }
-  .row_disabled,.row_disabled:hover,.row_disabled:hover > td{
-    cursor: not-allowed;
-    background-color:rgba(192,196,204,0.28) !important;
-  }
+.el-card {
+  border: 0 !important;
+}
 
-  .link-more {
-    margin-left: 10px;
-    border-bottom: solid 1px;
-    font-size: 12px
-  }
+.row_disabled, .row_disabled:hover, .row_disabled:hover > td {
+  cursor: not-allowed;
+  background-color: rgba(192, 196, 204, 0.28) !important;
+}
+
+.link-more {
+  margin-left: 10px;
+  border-bottom: solid 1px;
+  font-size: 12px
+}
 </style>
