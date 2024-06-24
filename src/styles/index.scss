@@ -285,6 +285,11 @@ input[type=file] {
     margin-top: 15px;
   }
 
+  // 表格右侧操作列，可能会存在高度占不满的问题，此时按钮底部会出现边框，因此需要显示指定
+  .el-table__fixed-right {
+    height: 100% !important;
+  }
+
   // 表头
   .el-table__header thead > tr > th {
     .cell {
@@ -343,7 +348,12 @@ input[type=file] {
       }
 
       &:last-child {
+        padding: 0;
         border-right: 1px solid #EBEEF5 !important;
+
+        .cell {
+          vertical-align: unset;
+        }
       }
     }
 
