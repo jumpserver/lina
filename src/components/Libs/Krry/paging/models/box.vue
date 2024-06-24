@@ -47,7 +47,7 @@
           :title="item.label"
           class="el-transfer-panel__item"
         >
-          <span v-html="isHighlight ? filterHighlight(item.label) : item.label" />
+          <span v-sanitize="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
       <p v-else class="no-data">{{ this.$t('NoData') }}</p>

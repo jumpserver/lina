@@ -34,7 +34,7 @@ import request from '@/utils/request'
 import { message } from '@/utils/message'
 import xss from '@/utils/xss'
 import ElTableTooltipPatch from '@/utils/elTableTooltipPatch.js'
-
+import VSanitize from 'v-sanitize'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -78,6 +78,8 @@ window._ = require('lodash')
 Vue.prototype.$message = message
 
 Vue.prototype.$xss = xss
+
+Vue.use(VSanitize)
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = eventBus

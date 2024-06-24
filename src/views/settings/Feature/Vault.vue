@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert type="success" v-html="helpText" />
+    <el-alert v-sanitize="helpText" type="success" />
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>
@@ -38,7 +38,9 @@ export default {
               vm.$message.success(res['msg'])
             }).catch(() => {
               vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         },
         {
@@ -54,7 +56,9 @@ export default {
               openTaskPage(res['task'])
             }).catch(() => {
               vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         }
       ],

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert type="success" v-html="helpMessage" />
+    <el-alert v-sanitize="helpMessage" type="success" />
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>

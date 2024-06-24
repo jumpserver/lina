@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-alert v-if="helpMessage" show-icon type="info">
-      <span class="announcement-main" v-html="helpMessage" />
+      <span v-sanitize="helpMessage" class="announcement-main" />
     </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
     <PlatformDialog :category="category" :visible.sync="showPlatform" />

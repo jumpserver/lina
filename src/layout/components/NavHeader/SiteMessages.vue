@@ -46,7 +46,7 @@
             </el-col>
           </el-row>
           <div class="msg-item-txt">
-            <span v-html="msg.content.message" />
+            <span v-sanitize="msg.content.message" />
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <span v-html="currentMsg.content.message" />
+          <span v-sanitize="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>

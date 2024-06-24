@@ -10,7 +10,7 @@
     <template v-if="data.label" #label>
       <span>{{ data.label }}</span>
       <el-tooltip v-if="data.helpTip" :open-delay="500" effect="dark" placement="right" popper-class="help-tips">
-        <div slot="content" v-html="data.helpTip" />
+        <div slot="content" v-sanitize="data.helpTip" /> <!-- Noncompliant -->
         <i class="fa fa-question-circle-o help-tip-icon" />
       </el-tooltip>
     </template>
@@ -88,9 +88,9 @@
         show-icon
         type="info"
       >
-        <span v-html="data.helpText.replace(/^!/, '')" />
+        <span v-sanitize="data.helpText.replace(/^!/, '')" />
       </el-alert>
-      <span v-else v-html="data.helpText" />
+      <span v-else v-sanitiz="data.helpText" />
     </div>
   </el-form-item>
 </template>
@@ -304,11 +304,12 @@ export default {
   width: 300px;
 }
 
-.help-block  {
+.help-block {
   ::v-deep .el-alert__icon {
     font-size: 16px
   }
 }
+
 .help-tip-icon {
   &:hover {
     cursor: pointer;

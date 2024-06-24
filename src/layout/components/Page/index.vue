@@ -15,7 +15,7 @@
         <span style="padding-left: 10px">
           {{ iTitle }}
           <el-tooltip v-if="helpTip" :open-delay="500" effect="dark" placement="top" popper-class="help-tips">
-            <div slot="content" class="page-help-content" v-html="helpTip" />
+            <div slot="content" v-sanitize="helpTip" class="page-help-content" />
             <span>
               <el-button class="help-msg-btn">
                 <i class="el-icon-info" />
@@ -31,7 +31,7 @@
     <PageContent class="page-content">
       <div>
         <el-alert v-if="helpMessage" type="success">
-          <span class="announcement-main" v-html="helpMessage" />
+          <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
         <slot />
       </div>

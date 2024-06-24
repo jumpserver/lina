@@ -6,7 +6,7 @@
         <span />
         <span />
       </span>
-      <div v-else class="inline-block markdown-body" v-html="text" />
+      <div v-else v-sanitize="text" class="inline-block markdown-body" />
     </div>
   </div>
 </template>
@@ -19,7 +19,6 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { copy } from '@/utils/common'
 
-/* eslint-disable vue/no-v-html */
 export default {
   props: {
     message: {

@@ -30,7 +30,7 @@
                 placement="bottom"
                 popper-class="help-tips"
               >
-                <div slot="content" class="page-help-content" v-html="item.helpTip" />
+                <div slot="content" v-sanitize="item.helpTip" class="page-help-content" />
                 <span>
                   <el-button class="help-msg-btn">
                     <i class="el-icon-info" />
@@ -44,7 +44,7 @@
 
       <div class="tab-page-content">
         <el-alert v-if="helpMessage" type="success">
-          <span class="announcement-main" v-html="helpMessage" />
+          <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
         <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>

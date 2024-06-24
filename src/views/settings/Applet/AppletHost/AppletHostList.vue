@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-alert type="success">
-      <span v-html="$t('AppletHostSelectHelpMessage')" />
+      <span v-sanitize="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
     <ListTable class="applet-host" v-bind="$data" />
   </div>
