@@ -214,13 +214,20 @@ export default {
         return col
       }
       col.renderHeader = (h, { column, $index }) => {
+        const binds = {
+          props: {
+            placement: 'bottom',
+            effect: 'dark',
+            openDelay: 500,
+            popperClass: 'help-tips'
+          }
+        }
+
         return (
           <span>{column.label}
-            <el-tooltip open-delay='1000' placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTip}/>
-              <el-button style='padding: 0'>
-                <i class='fa fa-info-circle'/>
-              </el-button>
+            <el-tooltip {...binds}>
+              <div slot='content' v-sanitize={helpTip}/>
+              <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px'/>
             </el-tooltip>
           </span>
         )

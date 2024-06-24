@@ -303,7 +303,8 @@ export default {
           reload()
           this.$message.success(this.$tc('RemoveSuccessMsg'))
         })
-      }).catch(() => {})
+      }).catch(() => {
+      })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
       const ids = selectedRows.map(v => {
