@@ -68,7 +68,7 @@ export default {
           meta: {
             title: i18n.t('FileExplorer'),
             activeMenu: '/assets',
-            icon: 'file-manager',
+            icon: 'fa-external-link',
             external: true,
             permissions: ['rbac.view_filemanager']
           }

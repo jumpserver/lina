@@ -27,7 +27,7 @@ $single-menu-height: 38px;
   border-right: none !important;
   background-color: inherit !important;
 
-  .svg-icon {
+  .svg-icon, .el-icon, .fa {
     width: $icon-width !important;
     height: $icon-width !important;
     margin-right: 10px;
