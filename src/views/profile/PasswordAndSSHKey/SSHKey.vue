@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     afterGetFormValue(value) {
-      const publicKey = `${value['public_key_comment'] || '-'} (${value['public_key_hash_md5'] || '-'})`
+      const publicKey = value['public_key_hash_md5'] ? `${value['public_key_comment']} (${value['public_key_hash_md5']})` : ' '
       value['current_public_key'] = publicKey
       return value
     },
