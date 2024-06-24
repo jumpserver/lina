@@ -20,16 +20,16 @@ export default {
         hasSaveContinue: false,
         fieldsMeta: {},
         onPerformSuccess(res, method) {
-          const order_params = { params: { order: '-date_created' }}
+          const orderParams = { params: { order: '-date_created' }}
           switch (method) {
             case 'post':
               this.$store.dispatch('users/addAdminOrg', { id: res.id, name: res.name })
-              this.$message.success(this.$tc('common.createSuccessMsg'))
-              return this.$router.push({ name: 'OrganizationList', ...order_params })
+              this.$message.success(this.$tc('CreateSuccessMsg'))
+              return this.$router.push({ name: 'OrganizationList', ...orderParams })
             case 'put':
               this.$store.dispatch('users/modifyOrg', { id: res.id, name: res.name })
-              this.$message.success(this.$tc('common.updateSuccessMsg'))
-              return this.$router.push({ name: 'OrganizationList', ...order_params })
+              this.$message.success(this.$tc('UpdateSuccessMsg'))
+              return this.$router.push({ name: 'OrganizationList', ...orderParams })
           }
         }
       }

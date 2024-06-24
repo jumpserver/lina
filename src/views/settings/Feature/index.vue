@@ -23,30 +23,30 @@ export default {
       activeMenu: 'Announcement',
       submenu: [
         {
-          title: this.$t('setting.Announcement'),
+          title: this.$t('Announcement'),
           name: 'Announcement'
         },
         {
-          title: this.$t('setting.Ticket'),
+          title: this.$t('Ticket'),
           name: 'Ticket',
           hidden: !this.$store.getters.hasValidLicense
         },
         {
-          title: this.$t('setting.AppOps'),
+          title: this.$t('JobCenter'),
           name: 'Ops'
         },
         {
-          title: this.$t('setting.AccountStorage'),
+          title: this.$t('AccountStorage'),
           name: 'Vault',
           hidden: !this.$store.getters.hasValidLicense
         },
         {
-          title: this.$t('setting.ChatAI'),
+          title: this.$t('ChatAI'),
           name: 'Chat',
           hidden: !this.$hasPerm('settings.change_vault')
         },
         {
-          title: this.$t('setting.VirtualApp'),
+          title: this.$t('VirtualApps'),
           name: 'VirtualApp',
           hidden: !this.$hasPerm('settings.change_virtualapp') || !this.$store.getters.hasValidLicense
         }
@@ -55,7 +55,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss' scoped>
-
-</style>

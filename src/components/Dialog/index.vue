@@ -1,24 +1,32 @@
 <template>
-  <el-dialog
-    :append-to-body="true"
-    :modal-append-to-body="true"
-    :title="title"
-    :top="top"
-    :width="iWidth"
-    class="dialog"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <slot />
-    <div slot="footer" class="dialog-footer">
-      <slot name="footer">
-        <el-button v-if="showCancel && showButtons" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm && showButtons" :loading="loadingStatus" type="primary" @click="onConfirm">
-          {{ confirmTitle }}
-        </el-button>
-      </slot>
-    </div>
-  </el-dialog>
+  <transition name="dialog-fade">
+    <el-dialog
+      :append-to-body="true"
+      :modal-append-to-body="true"
+      :title="title"
+      :top="top"
+      :width="iWidth"
+      class="dialog"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <slot />
+      <div v-if="showButtons" slot="footer" class="dialog-footer">
+        <slot name="footer">
+          <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
+          <el-button
+            v-if="showConfirm && showButtons"
+            :loading="loadingStatus"
+            size="small"
+            type="primary"
+            @click="onConfirm"
+          >
+            {{ confirmTitle }}
+          </el-button>
+        </slot>
+      </div>
+    </el-dialog>
+  </transition>
 </template>
 
 <script>
@@ -44,7 +52,7 @@ export default {
     confirmTitle: {
       type: String,
       default() {
-        return this.$t('common.Confirm')
+        return this.$t('Confirm')
       }
     },
     showCancel: {
@@ -54,7 +62,7 @@ export default {
     cancelTitle: {
       type: String,
       default() {
-        return this.$t('common.Cancel')
+        return this.$t('Cancel')
       }
     },
     showButtons: {
@@ -90,9 +98,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog >>> .el-dialog {
+  .dialog ::v-deep .el-dialog {
     border-radius: 0.3em;
     max-width: min(100vw, 1500px);
+
+    .form-group-header {
+      margin-left: 20px;
+    }
 
     .el-icon-circle-check {
       display: none;
@@ -115,18 +127,29 @@ export default {
 
     &__footer {
       border-top: 1px solid #dee2e6;
-      padding: 16px;
+      padding: 16px 25px;
       justify-content: flex-end;
     }
   }
+
   @media (max-width: 900px) {
-    .dialog >>> .el-dialog {
+    .dialog ::v-deep .el-dialog {
       max-width: calc(100% - 30px);
     }
   }
-  .dialog-footer >>> button.el-button {
+
+  .dialog-footer ::v-deep button.el-button {
     font-size: 13px;
-    padding: 10px 20px;
+    padding: 8px 12px;
+  }
+
+  .dialog-fade-enter-active, .dialog-fade-leave-active {
+    transition: opacity 1s ease;
+  }
+
+  .dialog-fade-enter, .dialog-fade-leave-to /* .dialog-fade-leave-active 在 <2.1.8 中以及被重复声明 */
+  {
+    opacity: 0;
   }
 
 </style>

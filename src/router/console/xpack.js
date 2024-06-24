@@ -7,7 +7,7 @@ const clouds = {
   redirect: '',
   hidden: true,
   meta: {
-    title: i18n.t('xpack.Cloud.CloudSync'),
+    title: i18n.t('CloudSync'),
     app: 'xpack',
     resource: 'account'
   },
@@ -15,10 +15,10 @@ const clouds = {
     {
       path: '',
       component: () => import('@/views/assets/Cloud'),
-      name: 'CloudCenter',
+      name: 'CloudAccountList',
       hidden: true,
       meta: {
-        title: i18n.t('xpack.Cloud.CloudSync')
+        title: i18n.t('CloudSync')
       }
     },
     {
@@ -26,7 +26,7 @@ const clouds = {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('xpack.Cloud.AccountList'),
+        title: i18n.t('CloudAccountList'),
         permissions: ['xpack.view_account']
       },
       children: [
@@ -36,7 +36,7 @@ const clouds = {
           hidden: true,
           redirect: '/console/assets/cloud',
           meta: {
-            title: i18n.t('xpack.Cloud.AccountList'),
+            title: i18n.t('CloudAccountList'),
             permissions: ['xpack.view_account']
           }
         },
@@ -46,7 +46,7 @@ const clouds = {
           name: 'AccountCreate',
           hidden: true,
           meta: {
-            title: i18n.t('xpack.Cloud.AccountCreate'),
+            title: i18n.t('CloudAccountCreate'),
             action: 'create',
             permissions: ['xpack.add_account']
           }
@@ -57,7 +57,7 @@ const clouds = {
           name: 'AccountUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('xpack.Cloud.AccountUpdate'),
+            title: i18n.t('CloudAccountUpdate'),
             action: 'update',
             permissions: ['xpack.change_account']
           }
@@ -65,61 +65,11 @@ const clouds = {
         {
           path: ':id/',
           component: () => import('@/views/assets/Cloud/Account/AccountDetail/index'),
-          name: 'AccountDetail',
+          name: 'CloudAccountDetail',
           hidden: true,
           meta: {
-            title: i18n.t('xpack.Cloud.AccountDetail'),
+            title: i18n.t('CloudAccountDetail'),
             permissions: ['xpack.view_account']
-          }
-        }
-      ]
-    },
-    {
-      path: 'sync-instance-tasks',
-      component: empty,
-      hidden: true,
-      meta: {
-        title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
-        permissions: ['xpack.view_syncinstancetask']
-      },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/assets/Cloud/'),
-          name: 'SyncInstanceTaskList',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
-            permissions: ['xpack.view_syncinstancetask']
-          }
-        },
-        {
-          path: 'create',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-          name: 'SyncInstanceTaskCreate',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'),
-            permissions: ['xpack.add_syncinstancetask']
-          }
-        },
-        {
-          path: ':id/update',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-          name: 'SyncInstanceTaskUpdate',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'),
-            permissions: ['xpack.change_syncinstancetask']
-          }
-        },
-        {
-          path: ':id',
-          component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
-          name: 'SyncInstanceTaskDetail',
-          hidden: true,
-          meta: {
-            title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail')
           }
         }
       ]
@@ -129,7 +79,7 @@ const clouds = {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('xpack.Cloud.Strategy'),
+        title: i18n.t('Strategy'),
         permissions: ['xpack.view_strategy']
       },
       children: [
@@ -139,7 +89,7 @@ const clouds = {
           hidden: true,
           component: () => import('@/views/assets/Cloud/'),
           meta: {
-            title: i18n.t('xpack.Cloud.StrategyList'),
+            title: i18n.t('StrategyList'),
             permissions: ['xpack.view_strategy']
           }
         },
@@ -149,7 +99,7 @@ const clouds = {
           name: 'CloudStrategyCreate',
           hidden: true,
           meta: {
-            title: i18n.t('common.StrategyCreate'),
+            title: i18n.t('StrategyCreate'),
             action: 'create',
             permissions: ['xpack.add_strategy']
           }
@@ -160,7 +110,7 @@ const clouds = {
           name: 'CloudStrategyUpdate',
           hidden: true,
           meta: {
-            title: i18n.t('common.StrategyUpdate'),
+            title: i18n.t('StrategyUpdate'),
             permissions: ['xpack.change_strategy']
           }
         },
@@ -170,7 +120,7 @@ const clouds = {
           name: 'CloudStrategyDetail',
           hidden: true,
           meta: {
-            title: i18n.t('common.StrategyDetail'),
+            title: i18n.t('StrategyDetail'),
             permissions: ['xpack.view_strategy']
           }
         }

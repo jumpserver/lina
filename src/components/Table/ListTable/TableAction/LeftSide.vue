@@ -12,9 +12,10 @@ import i18n from '@/i18n/i18n'
 import DataActions from '@/components/DataActions/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
+import { getErrorResponseMsg } from '@/utils/common'
 
-const defaultTrue = { type: [Boolean, Function], default: true }
-const defaultFalse = { type: [Boolean, Function], default: false }
+const defaultTrue = { type: [Boolean, Function, String], default: true }
+const defaultFalse = { type: [Boolean, Function, String], default: false }
 export default {
   name: 'LeftSide',
   components: {
@@ -83,7 +84,7 @@ export default {
     },
     createTitle: {
       type: String,
-      default: () => i18n.t('common.Create')
+      default: () => i18n.t('Create')
     }
   },
   data() {
@@ -91,7 +92,7 @@ export default {
     return {
       defaultMoreActions: [
         {
-          title: this.$t('common.BatchDelete'),
+          title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           icon: 'fa fa-trash-o',
@@ -101,10 +102,10 @@ export default {
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$t('common.BatchUpdate'),
+          title: this.$t('UpdateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
-          fa: 'batch-update',
+          icon: 'batch-update',
           can: function({ selectedRows }) {
             let canBulkUpdate = vm.canBulkUpdate
             if (typeof canBulkUpdate === 'function') {
@@ -126,6 +127,7 @@ export default {
           type: 'primary',
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
+          icon: 'plus',
           callback: this.onCreate || this.handleCreate
         }
       ]
@@ -135,6 +137,7 @@ export default {
           title: this.createTitle,
           type: 'primary',
           has: true,
+          icon: 'plus',
           can: this.canCreate,
           dropdown: [],
           callback: this.onCreate || this.handleCreate
@@ -161,7 +164,7 @@ export default {
       const invariantActions = [
         {
           name: 'batch',
-          title: this.$t('common.BatchProcessing', { 'Number': this.selectedRows.length }),
+          title: this.$t('BatchProcessing', { 'number': this.selectedRows.length }),
           divided: true,
           has: function({ selectedRows }) {
             return selectedRows.length > 0
@@ -177,7 +180,7 @@ export default {
       })
       return {
         name: 'moreActions',
-        title: this.moreActionsTitle || this.$t('common.MoreActions'),
+        title: this.moreActionsTitle || this.$t('MoreActions'),
         dropdown: dropdown
       }
     },
@@ -205,8 +208,8 @@ export default {
       }
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
-      const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
-      const title = this.$tc('common.Info')
+      const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
+      const title = this.$tc('Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',
@@ -219,9 +222,10 @@ export default {
             await performDelete(selectedRows)
             done()
             reloadTable()
-            this.$message.success(this.$tc('common.bulkDeleteSuccessMsg'))
+            this.$message.success(this.$tc('BulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$tc('common.bulkDeleteErrorMsg') + error.message)
+            const msg = getErrorResponseMsg(error)
+            this.$message.error(this.$tc('BulkDeleteErrorMsg') + msg)
           } finally {
             instance.confirmButtonLoading = false
           }
@@ -241,6 +245,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

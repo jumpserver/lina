@@ -2,11 +2,12 @@
   <TabPage
     v-if="!loading"
     :active-menu.sync="tab.activeMenu"
+    :help-tip="platformPageHelpMsg"
     :submenu="tab.submenu"
     @tab-click="changeMoreCreates"
   >
     <keep-alive>
-      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable ref="genericListTable" :header-actions="headerActions" :table-config="tableConfig" />
     </keep-alive>
   </TabPage>
 </template>
@@ -24,6 +25,7 @@ export default {
     const vm = this
     return {
       loading: true,
+      platformPageHelpMsg: this.$t('PlatformPageHelpMsg'),
       tab: {
         submenu: [],
         activeMenu: 'host'
@@ -48,9 +50,18 @@ export default {
             }
           },
           su_enabled: {
-            width: '100px',
+            width: '200px',
             formatterArgs: {
               showFalse: false
+            }
+          },
+          su_method: {
+            width: '200px',
+            formatter: (row) => {
+              if (!row.su_enabled) {
+                return '-'
+              }
+              return row.su_method || '-'
             }
           },
           protocols: {
@@ -59,6 +70,9 @@ export default {
           },
           base: {
             width: '140px'
+          },
+          internal: {
+            width: '100px'
           },
           actions: {
             formatterArgs: {
@@ -119,6 +133,11 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
+  activated() {
+    setTimeout(() => {
+      this.$refs.genericListTable.reloadTable()
+    }, 500)
+  },
   async mounted() {
     try {
       await this.setCategoriesTab()
@@ -146,7 +165,7 @@ export default {
         cloud: 'fa-cloud',
         web: 'fa-globe',
         gpt: 'fa-comment',
-        custom: 'fa-th'
+        custom: 'fa-cube'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')
       for (const item of state.assetCategories) {
@@ -160,7 +179,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

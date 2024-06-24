@@ -1,44 +1,45 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import ACLRoutes from '@/router/console/acls'
+import AclsMenus from './acls'
 
 export default [
   {
     path: 'asset-permissions',
     component: empty,
     meta: {
-      title: i18n.t('route.AssetPermission'),
-      resource: 'assetpermission'
+      title: i18n.t('AssetPermission'),
+      resource: 'assetpermission',
+      icon: 'permission'
     },
     children: [
       {
         path: '',
         name: 'AssetPermissionList',
         component: () => import('@/views/perms/AssetPermission/AssetPermissionList'),
-        meta: { title: i18n.t('route.AssetPermission') }
+        meta: { title: i18n.t('AssetPermission'), permissions: ['perms.view_assetpermission'] }
       },
       {
         path: 'create',
         component: () => import('@/views/perms/AssetPermission/AssetPermissionCreateUpdate'),
         name: 'AssetPermissionCreate',
         hidden: true,
-        meta: { title: i18n.t('route.AssetPermissionCreate'), action: 'create' }
+        meta: { title: i18n.t('AssetPermissionCreate'), action: 'create', permissions: ['perms.add_assetpermission'] }
       },
       {
         path: ':id/update',
         component: () => import('@/views/perms/AssetPermission/AssetPermissionCreateUpdate.vue'),
         name: 'AssetPermissionUpdate',
         hidden: true,
-        meta: { title: i18n.t('route.AssetPermissionUpdate'), action: 'update' }
+        meta: { title: i18n.t('AssetPermissionUpdate'), action: 'update', permissions: ['perms.change_assetpermission'] }
       },
       {
         path: ':id',
-        component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail'),
+        component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'),
         name: 'AssetPermissionDetail',
         hidden: true,
-        meta: { title: i18n.t('route.AssetPermissionDetail') }
+        meta: { title: i18n.t('AssetPermissionDetail'), permissions: ['perms.view_assetpermission'] }
       }
     ]
   },
-  ...ACLRoutes
+  ...AclsMenus
 ]

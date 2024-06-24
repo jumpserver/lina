@@ -1,9 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-  </el-row>
+  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -34,7 +30,7 @@ export default {
             width: '100px'
           },
           is_success: {
-            width: '80px'
+            width: '100px'
           },
           actions: {
             width: '82px',
@@ -45,13 +41,13 @@ export default {
               extraActions: [
                 {
                   name: 'download',
-                  title: this.$t('sessions.download'),
+                  title: this.$t('Download'),
                   type: 'primary',
                   can: ({ row }) => {
                     return row.has_file
                   },
                   tip: ({ row }) => {
-                    return row.has_file ? this.$t('sessions.download') : this.$t('sessions.DownloadFTPFileTip')
+                    return row.has_file ? this.$t('Download') : this.$t('.DownloadFTPFileTip')
                   },
                   callback: function({ row }) {
                     // 跳转下载页面

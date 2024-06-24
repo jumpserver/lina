@@ -1,7 +1,7 @@
 <template>
   <BaseAuth
     :config="settings"
-    :title="$tc('setting.Slack')"
+    :title="$tc('Slack')"
     enable-field="AUTH_SLACK"
     v-on="$listeners"
   />
@@ -24,7 +24,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('common.Test'),
+            title: this.$t('Test'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -41,12 +41,7 @@ export default {
         ],
         encryptedFields: ['SLACK_SECRET'],
         fields: [
-          [
-            this.$t('common.BasicInfo'),
-            [
-              'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
-            ]
-          ]
+          'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
         ],
         fieldsMeta: {
           SLACK_APP_SECRET: {

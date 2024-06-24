@@ -1,10 +1,11 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="14" :sm="24">
+      <el-col :md="15" :sm="24">
         <AccountListTable
           ref="ListTable"
           :asset="object"
+          :columns-default="columnsDefault"
           :has-clone="false"
           :has-import="false"
           :has-left-actions="true"
@@ -20,7 +21,7 @@
           @onConfirm="onConfirm"
         />
       </el-col>
-      <el-col :md="10" :sm="24">
+      <el-col :md="9" :sm="24">
         <QuickActions :actions="quickActions" :title="title" type="primary" />
       </el-col>
     </el-row>
@@ -59,12 +60,13 @@ export default {
   },
   data() {
     return {
-      title: this.$t('accounts.QuickTest'),
+      title: this.$t('QuickTest'),
       templateDialogVisible: false,
+      columnsDefault: ['name', 'username', 'asset'],
       headerExtraActions: [
         {
-          name: this.$t('route.AccountTemplate'),
-          title: this.$t('route.AccountTemplate'),
+          name: this.$t('AccountTemplate'),
+          title: this.$t('AccountTemplate'),
           can: () => this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
           callback: () => {
             this.templateDialogVisible = true
@@ -73,12 +75,12 @@ export default {
       ],
       quickActions: [
         {
-          title: this.$t('accounts.BulkVerify'),
+          title: this.$t('BatchTest'),
           attrs: {
             type: 'primary',
-            label: this.$tc('accounts.Test'),
+            label: this.$tc('Test'),
             disabled: ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(this.object.type.value) !== -1 ||
-                this.$store.getters.currentOrgIsRoot
+              this.$store.getters.currentOrgIsRoot
           },
           callbacks: Object.freeze({
             click: () => {
@@ -109,13 +111,9 @@ export default {
       this.$axios.post(`/api/v1/accounts/accounts/`, data).then(() => {
         this.templateDialogVisible = false
         this.$refs.ListTable.addAccountSuccess()
-        this.$message.success(this.$tc('common.AddSuccessMsg'))
+        this.$message.success(this.$tc('AddSuccessMsg'))
       })
     }
   }
 }
 </script>
-
-<style lang='less' scoped>
-
-</style>

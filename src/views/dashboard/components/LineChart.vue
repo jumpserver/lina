@@ -4,7 +4,7 @@
       ref="echarts"
       :options="options"
       :autoresize="true"
-      heme="light"
+      theme="light"
       class="disabled-when-print"
       @finished="getDataUrl"
     />
@@ -223,28 +223,38 @@ export default {
       this.getMetricData()
     }
   },
+  mounted() {
+    this.getMetricData()
+  },
   methods: {
     getDataUrl() {
-      this.dataUrl = this.$refs.echarts.getDataURL({})
+      const instance = this.$refs.echarts.echartsInstance
+      if (instance) {
+        this.dataUrl = instance.getDataURL()
+      }
+    },
+    getMetricData() {
+      this.getDataUrl()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .echarts {
-    width: 100%;
-    height: 266px;
+.echarts {
+  width: 100%;
+  height: 272px;
+}
+
+@media print {
+  .disabled-when-print {
+    display: none;
   }
-  @media print {
-    .disabled-when-print{
-      display: none;
-    }
-    .enabled-when-print{
-      display: inherit !important;
-    }
-    .print-margin{
-      margin-top: 10px;
-    }
+  .enabled-when-print {
+    display: inherit !important;
   }
+  .print-margin {
+    margin-top: 10px;
+  }
+}
 </style>

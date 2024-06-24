@@ -7,7 +7,7 @@
         type="primary"
         @click="onOpenDialog"
       >
-        {{ $tc('common.Setting') }}
+        {{ $tc('Setting') }}
       </el-button>
     </div>
     <Dialog
@@ -50,7 +50,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('assets.PushParams')
+        return this.$t('PushParams')
       }
     },
     assets: {

@@ -11,6 +11,7 @@
     />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
+      :default-columns="popoverColumns.defaultCols"
       :min-columns="popoverColumns.minCols"
       :total-columns-list="popoverColumns.totalColumnsList"
       :url="config.url"
@@ -26,7 +27,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { newURL, replaceAllUUID } from '@/utils/common'
+import { newURL, replaceAllUUID, toSentenceCase } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
@@ -58,22 +59,40 @@ export default {
       popoverColumns: {
         totalColumnsList: [],
         minCols: [],
-        currentCols: []
-      }
+        currentCols: [],
+        defaultCols: []
+      },
+      isDeactivated: false
     }
   },
   computed: {},
   watch: {
     config: {
-      handler: function(iNew, iOld) {
+      handler: _.debounce(function(iNew, iOld) {
+        if (this.isDeactivated) {
+          return
+        }
+        try {
+          if (JSON.stringify(iNew) === JSON.stringify(iOld)) {
+            return
+          }
+        } catch (error) {
+          this.$log.error('JsonStringify Error: ', error)
+        }
+
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found: ')
-      },
-      deep: true
+        this.$log.debug('AutoDataTable Config change found, ', this.isDeactivated)
+      }, 200)
     }
   },
   created() {
     this.optionUrlMetaAndGenCols()
+  },
+  deactivated() {
+    this.isDeactivated = true
+  },
+  activated() {
+    this.isDeactivated = false
   },
   methods: {
     async optionUrlMetaAndGenCols() {
@@ -105,24 +124,26 @@ export default {
           col.formatter = DetailFormatter
           col.sortable = 'custom'
           col.showOverflowTooltip = true
+          col.minWidth = '150px'
           break
         case 'actions':
           col = {
             prop: 'actions',
-            label: i18n.t('common.Actions'),
+            label: i18n.t('Actions'),
             align: 'center',
-            width: '150px',
+            width: '100px',
             formatter: ActionsFormatter,
+            fixed: 'right',
             formatterArgs: {}
           }
           break
         case 'is_valid':
-          col.label = i18n.t('common.Validity')
+          col.label = i18n.t('Valid')
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
-              true: i18n.t('common.Yes'),
-              false: i18n.t('common.No')
+              true: i18n.t('Yes'),
+              false: i18n.t('No')
             }
           }
           col.width = '80px'
@@ -131,11 +152,11 @@ export default {
           col.formatter = ChoicesFormatter
           col.formatterArgs = {
             textChoices: {
-              true: i18n.t('common.Active'),
-              false: i18n.t('common.Inactive')
+              true: i18n.t('Active'),
+              false: i18n.t('Inactive')
             }
           }
-          col.width = '80px'
+          col.width = '100px'
           break
         case 'datetime':
         case 'date_start':
@@ -143,6 +164,7 @@ export default {
           break
         case 'labels':
           col.formatter = LabelsFormatter
+          col.width = '200px'
           break
         case 'comment':
           col.showOverflowTooltip = true
@@ -161,11 +183,11 @@ export default {
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
-          col.width = '80px'
+          // col.width = '80px'
           break
         case 'datetime':
           col.formatter = DateFormatter
-          col.width = '160px'
+          col.width = '175px'
           break
         case 'object_related_field':
           col.formatter = ObjectRelatedFormatter
@@ -186,19 +208,26 @@ export default {
       // this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
-    addHelpTipsIfNeed(col) {
-      const helpTips = col.helpTips
-      if (!helpTips) {
+    addHelpTipIfNeed(col) {
+      const helpTip = col.helpTip
+      if (!helpTip) {
         return col
       }
       col.renderHeader = (h, { column, $index }) => {
+        const binds = {
+          props: {
+            placement: 'bottom',
+            effect: 'dark',
+            openDelay: 500,
+            popperClass: 'help-tips'
+          }
+        }
+
         return (
           <span>{column.label}
-            <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTips}/>
-              <el-button style='padding: 0'>
-                <i class='fa fa-info-circle'/>
-              </el-button>
+            <el-tooltip {...binds}>
+              <div slot='content' v-sanitize={helpTip}/>
+              <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px'/>
             </el-tooltip>
           </span>
         )
@@ -213,8 +242,8 @@ export default {
         }
         if (column.type === 'boolean') {
           col.filters = [
-            { text: i18n.t('common.Yes'), value: true },
-            { text: i18n.t('common.No'), value: false }
+            { text: i18n.t('Yes'), value: true },
+            { text: i18n.t('No'), value: false }
           ]
           col.sortable = false
           col['column-key'] = col.prop
@@ -261,19 +290,52 @@ export default {
       }
       return col
     },
-
+    setDefaultWidthIfNeed(col) {
+      const lang = this.$i18n.locale
+      let factor = 10
+      if (lang === 'zh') {
+        factor = 20
+      }
+      let [sortable, filters] = [0, 0]
+      if (col && col?.sortable === 'custom') {
+        sortable = 10
+      }
+      if (col && col?.filters?.length > 0) {
+        filters = 12
+      }
+      if (col && !col.width && col.label && !col.minWidth) {
+        col.minWidth = `${col.label.length * factor + sortable + filters + 30}px`
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
       let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
 
-      col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col, colMeta)
+      col = this.generateColumnByName(name, col)
       col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
-      col = this.addHelpTipsIfNeed(col)
+      col = this.addHelpTipIfNeed(col)
       col = this.addFilterIfNeed(col)
       col = this.addOrderingIfNeed(col)
+      col = this.updateLabelIfNeed(col)
+      col = this.setDefaultWidthIfNeed(col)
+      return col
+    },
+    updateLabelIfNeed(col) {
+      if (!col.label) {
+        return col
+      }
+      col.label = col.label
+        .replace(' Amount', '')
+        .replace(' amount', '')
+        .replace('数量', '')
+      if (col.label.startsWith('Is ')) {
+        col.label = col.label.replace('Is ', '')
+      }
+      col.label = toSentenceCase(col.label)
       return col
     },
     generateTotalColumns() {
@@ -315,10 +377,30 @@ export default {
         }
         return has
       })
+
+      columns = this.orderingColumns(columns)
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns
       this.iConfig = config
+    },
+    orderingColumns(columns) {
+      const cols = _.cloneDeep(this.config.columns)
+      const defaults = _.get(this.config, 'columnsShow.default')
+      const ordering = (cols || defaults || []).map(item => {
+        let prop = item
+        if (typeof item === 'object') {
+          prop = item.prop
+        }
+        return prop
+      })
+      return _.sortBy(columns, (item) => {
+        if (item.prop === 'actions') {
+          return 1000
+        }
+        const i = ordering.indexOf(item.prop)
+        return i === -1 ? 999 : i
+      })
     },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
@@ -339,7 +421,7 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      let tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
       tableName = replaceAllUUID(tableName)
       const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
@@ -377,6 +459,8 @@ export default {
       })
       this.popoverColumns.currentCols = this.cleanedColumnsShow.show
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
+      this.popoverColumns.defaultCols = this.cleanedColumnsShow.default
+
       this.$log.debug('Popover cols: ', this.popoverColumns)
     },
     handlePopoverColumnsChange({ columns, url }) {
@@ -385,11 +469,12 @@ export default {
         columns = this.cleanedColumnsShow.default
       }
       this.popoverColumns.currentCols = columns
+
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
       let tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
-      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用
+      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用.
       tableName = replaceAllUUID(tableName)
 
       _tableConfig[tableName] = {
@@ -407,7 +492,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

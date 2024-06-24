@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard v-bind="detailBasicConfig" />
       <AutoDetailCard v-bind="detailSpecInfoConfig" />
       <AutoDetailCard v-bind="detailInfoConfig" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="LabelRelation"
@@ -42,7 +42,7 @@ export default {
     return {
       labelConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.Label'),
+        title: this.$t('Label'),
         allowCreate: true,
         objectsAjax: {
           url: '/api/v1/labels/labels/',
@@ -75,10 +75,10 @@ export default {
       },
       quickActions: [
         {
-          title: this.$t('assets.IsActive'),
+          title: this.$t('IsActive'),
           type: 'switch',
           attrs: {
-            label: this.$t('common.Test'),
+            label: this.$t('Test'),
             model: this.object.is_active,
             disabled: !vm.$hasPerm('assets.change_asset')
           },
@@ -88,18 +88,18 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
         },
         {
-          title: this.$t('assets.RefreshHardware'),
+          title: this.$t('RefreshHardware'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Refresh'),
+            label: this.$t('Refresh'),
             disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo')
           },
           callbacks: {
@@ -114,10 +114,10 @@ export default {
           }
         },
         {
-          title: this.$t('assets.TestAssetsConnective'),
+          title: this.$t('TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Test'),
+            label: this.$t('Test'),
             disabled: !vm.$hasPerm('assets.test_assetconnectivity')
           },
           callbacks: {
@@ -138,27 +138,27 @@ export default {
         fields: [
           'name',
           {
-            key: this.$t('assets.Category'),
+            key: this.$t('Category'),
             value: this.object.category.label
           },
           {
-            key: this.$t('assets.Type'),
+            key: this.$t('Type'),
             value: this.object.type.label
           },
           'address',
           {
-            key: this.$t('assets.Protocols'),
+            key: this.$t('Protocols'),
             value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
           },
           {
-            key: this.$t('assets.Platform'),
+            key: this.$t('Platform'),
             value: this.object.platform.name
           },
           'is_active', 'date_created', 'created_by', 'comment'
         ]
       },
       detailSpecInfoConfig: {
-        title: this.$t('common.SpecificInfo'),
+        title: this.$t('SpecificInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
@@ -167,7 +167,7 @@ export default {
       },
       detailInfoConfig: {
         url: `/api/v1/assets/hosts/${this.object.id}/`,
-        title: this.$t('assets.HardwareInfo'),
+        title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'info',
         showUndefine: false

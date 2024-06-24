@@ -6,10 +6,9 @@
         :key="index"
         style="display: inline-block; margin: 0 2px"
       >
-        <el-tooltip :content="item.tip" :disabled="!item.tip" placement="top">
+        <el-tooltip :content="item.tip" :disabled="!item.tip" :open-delay="500" placement="top">
           <el-button
-            v-if="item.type ==='button'"
-            :disabled="item.disabled"
+            v-if="item.type ==='button' && !item.isVisible"
             :type="item.el&&item.el.type"
             size="mini"
             @click="item.callback()"
@@ -19,12 +18,12 @@
           <el-autocomplete
             v-if="item.type === 'input' &&item.el && item.el.autoComplete"
             v-model="item.value"
-            :placeholder="item.placeholder"
             :fetch-suggestions="item.el.query"
+            :placeholder="item.placeholder"
             class="inline-input"
             size="mini"
-            @select="item.callback(item.value)"
             @change="item.callback(item.value)"
+            @select="item.callback(item.value)"
           />
           <el-input
             v-else-if="item.type==='input'"
@@ -94,10 +93,10 @@
       </div>
 
       <div v-if="toolbar.hasOwnProperty('fold')" class="fold">
-        <el-tooltip :content="$tc('common.MoreActions')" placement="top">
+        <el-tooltip :content="$tc('MoreActions')" :open-delay="500" placement="top">
           <i
-            class="fa"
             :class="[isFold ? 'fa-angle-double-right': 'fa-angle-double-down']"
+            class="fa"
             @click="onChangeFold"
           />
         </el-tooltip>
@@ -109,12 +108,11 @@
           :key="index"
           style="display: inline-block"
         >
-          <el-tooltip :content="item.tip">
+          <el-tooltip :content="item.tip" :open-delay="500">
             <el-button
               v-if="item.type ==='button'"
               :disabled="item.disabled"
               size="mini"
-              style="background-color: transparent"
               type="default"
               @click="item.callback()"
             >
@@ -231,6 +229,7 @@ export default {
 .fold {
   display: inline-block;
   padding-left: 4px;
+
   i {
     font-weight: bold;
     font-size: 15px;
@@ -238,15 +237,15 @@ export default {
   }
 }
 
-> > > .CodeMirror pre.CodeMirror-line,
-> > > .CodeMirror-linenumber.CodeMirror-gutter-elt {
+::v-deep .CodeMirror pre.CodeMirror-line,
+::v-deep .CodeMirror-linenumber.CodeMirror-gutter-elt {
   line-height: 18px !important;
 }
 
 .runas-input {
   height: 28px;
 
-  > > > {
+  ::v-deep {
     .el-select {
       width: 100px;
     }
@@ -256,13 +255,16 @@ export default {
 .right-side {
   .el-button {
     border: none;
-    padding: 2px;
+    padding: 5px;
     font-size: 14px;
-    width: 26px;
-    height: 26px;
-    color: #888;
-    background-color: transparent;
+    width: 28px;
+    height: 28px;
     margin-left: 2px;
+    background: none;
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
   }
 }
 
@@ -270,16 +272,16 @@ export default {
   min-width: 100px;
 }
 
-.autoWidth-select > > > .el-input__prefix {
+.autoWidth-select ::v-deep .el-input__prefix {
   position: relative;
-  left: 0px;
+  left: 0;
   box-sizing: border-box;
-  height: 28px;
-  line-height: 28px;
+  height: 30px;
+  line-height: 30px;
   visibility: hidden;
 }
 
-.autoWidth-select > > > input {
+.autoWidth-select ::v-deep input {
   position: absolute;
   padding-left: 0px;
   border: none;
@@ -290,16 +292,12 @@ export default {
   line-height: 27px;
 }
 
-> > > .el-select {
+::v-deep .el-select {
   top: -1px;
 
   .el-input .el-select__caret {
     color: #7a7c7f;
   }
-}
-
-> > > .el-button.el-button--default {
-  background-color: #e6e6e6;
 }
 
 .filter-label {

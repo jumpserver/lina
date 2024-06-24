@@ -6,7 +6,7 @@
       </div>
       <LineChart v-bind="chartConfig" />
     </div>
-    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-16" />
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-10" />
   </div>
 </template>
 
@@ -30,16 +30,16 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('dashboard.SessionTrend'),
-        tip: this.$t('dashboard.SessionTrend')
+        title: this.$t('SessionTrend'),
+        tip: this.$t('SessionTrend')
       },
       chartTitleConfig: {
-        title: this.$t('route.JobExecutionLog'),
-        tip: this.$t('route.JobExecutionLog')
+        title: this.$t('JobExecutionLog'),
+        tip: this.$t('JobExecutionLog')
       },
       chartConfig: {
         datesMetrics: [],
-        secondaryName: this.$t('dashboard.SessionsNum'),
+        secondaryName: this.$t('SessionsNum'),
         secondaryData: [0]
       },
       data: {
@@ -53,7 +53,7 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('dashboard.TotalJobLog'),
+          title: this.$t('TotalJobLog'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_job_logs,
@@ -61,7 +61,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.TotalJobRunning'),
+          title: this.$t('TotalJobRunning'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_job_logs_running,
@@ -69,7 +69,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.TotalJobFailed'),
+          title: this.$t('TotalJobFailed'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_job_logs_failed,
@@ -109,12 +109,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.margin-top-16 {
-  margin-top: 16px;
+.margin-top-10 {
+  margin-top: 10px;
 }
 
 .box {
-  margin-top: 16px;
+  margin-top: 10px;
   padding: 20px;
   background: #fff;
 

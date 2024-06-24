@@ -9,16 +9,16 @@
       :before-close="handleClose"
       :modal="false"
       :size="width"
-      :title="$tc('notifications.SiteMessage')"
+      :title="$tc('SiteMessage')"
       :visible.sync="show"
       class="drawer"
       custom-class="site-msg"
       @open="getMessages"
     >
       <div slot="title">
-        <span>{{ $t('notifications.SiteMessage') }}</span>
+        <span>{{ $t('SiteMessage') }}</span>
         <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a style="vertical-align: sub;"> {{ $t('notifications.AllClickRead') }}</a>
+          <a style="vertical-align: sub;"> {{ $t('AllClickRead') }}</a>
         </div>
       </div>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
@@ -41,24 +41,24 @@
                 {{ formatDate(msg.date_created) }}
               </span>
               <span v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
-                <a>{{ $t('notifications.MarkAsRead') }}</a>
+                <a>{{ $t('MarkAsRead') }}</a>
               </span>
             </el-col>
           </el-row>
           <div class="msg-item-txt">
-            <span v-html="msg.content.message" />
+            <span v-sanitize="msg.content.message" />
           </div>
         </div>
       </div>
       <div v-else class="no-msg">
-        {{ $t('notifications.NoUnreadMsg') }}
+        {{ $t('NoUnreadMsg') }}
       </div>
     </el-drawer>
 
     <Dialog
       v-if="msgDetailVisible"
       :close-on-click-modal="false"
-      :confirm-title="$tc('notifications.MarkAsRead')"
+      :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
       :visible.sync="msgDetailVisible"
       @cancel="cancelRead"
@@ -70,7 +70,7 @@
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <span v-html="currentMsg.content.message" />
+          <span v-sanitize="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import Dialog from '@/components/Dialog'
 
 export default {
@@ -133,7 +133,7 @@ export default {
       }
     },
     oneClickRead(msgs) {
-      this.$confirm(this.$tc('notifications.OneClickReadMsg'), this.$tc('common.Info'), {
+      this.$confirm(this.$tc('OneClickReadMsg'), this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -193,7 +193,7 @@ export default {
         }
       }
       ws.onerror = (error) => {
-        this.$message.error(this.$tc('common.ConnectWebSocketError'))
+        this.$message.error(this.$tc('ConnectWebSocketError'))
         this.$log.debug('site message ws error: ', error)
       }
     }
@@ -214,7 +214,7 @@ export default {
   padding: 0 25px 20px;
 }
 
-> > > .site-msg {
+::v-deep .site-msg {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
@@ -300,7 +300,7 @@ export default {
   font-size: 12px;
   display: block;
 
-  > > > .ticket-container {
+  ::v-deep .ticket-container {
     .title {
       font-size: 12px;
     }
@@ -332,11 +332,11 @@ export default {
       line-height: 24px;
     }
 
-    & > > > a {
+    & ::v-deep a {
       color: var(--color-success) !important;
     }
 
-    > > > .ticket-container {
+    ::v-deep .ticket-container {
       height: 618px;
       flex-shrink: 0;
       border-radius: 4px;
@@ -418,7 +418,7 @@ export default {
   text-align: center;
 }
 
-> > > :focus {
+::v-deep :focus {
   outline: 0;
 }
 </style>

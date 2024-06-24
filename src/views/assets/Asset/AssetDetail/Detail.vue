@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard v-bind="basicInfoConfig" />
       <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
       <AutoDetailCard v-bind="customInfoConfig" />
       <AutoDetailCard v-bind="gatheredInfoConfig" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="NodeRelation"
@@ -51,10 +51,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.IsActive'),
+          title: this.$t('IsActive'),
           type: 'switch',
           attrs: {
-            label: this.$t('common.Test'),
+            label: this.$t('Test'),
             model: this.object.is_active,
             disabled: !vm.$hasPerm('assets.change_asset')
           },
@@ -64,18 +64,18 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
         },
         {
-          title: this.$t('assets.RefreshHardware'),
+          title: this.$t('RefreshHardware'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Refresh'),
+            label: this.$t('Refresh'),
             disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo') ||
               !this.object['auto_config'].gather_facts_enabled ||
               !this.object['auto_config'].ansible_enabled ||
@@ -93,10 +93,10 @@ export default {
           }
         },
         {
-          title: this.$t('assets.TestAssetsConnective'),
+          title: this.$t('TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Test'),
+            label: this.$t('Test'),
             disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
               !this.object['auto_config'].ansible_enabled ||
               !this.object['auto_config']['ping_enabled'] ||
@@ -117,7 +117,7 @@ export default {
       ],
       nodeRelationConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.Node'),
+        title: this.$t('Node'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           transformOption: (item) => {
@@ -152,7 +152,7 @@ export default {
       },
       labelConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.Label'),
+        title: this.$t('Label'),
         allowCreate: true,
         objectsAjax: {
           url: '/api/v1/labels/labels/',
@@ -187,44 +187,30 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
-          'id', 'name',
-          {
-            key: this.$t('assets.Category'),
-            value: this.object.category.label
-          },
-          {
-            key: this.$t('assets.Type'),
-            value: this.object.type.label
-          },
-          'address',
-          {
-            key: this.$t('assets.Protocols'),
-            value: this.object.protocols.map(
+          'id', 'name', 'category', 'type',
+          'address', 'platform', 'protocols', 'domain',
+          'is_active', 'date_created', 'date_updated',
+          'created_by', 'comment'
+        ],
+        formatters: {
+          protocols: () => {
+            return vm.object.protocols.map(
               i => (
                 this.object.address.startsWith('https://') ? 'https' : i.name
               ) + '/' + i.port
-            ).join(',')
-          },
-          {
-            key: this.$t('assets.Domain'),
-            value: this.object.domain?.name || ''
-          },
-          {
-            key: this.$t('assets.Platform'),
-            value: this.object.platform.name
-          },
-          'is_active', 'date_created', 'created_by', 'comment'
-        ]
+            ).join(', ')
+          }
+        }
       },
       specInfoConfig: {
-        title: this.$t('common.SpecificInfo'),
+        title: this.$t('SpecificInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
         showUndefine: true
       },
       customInfoConfig: {
-        title: this.$t('common.CustomInfo'),
+        title: this.$t('CustomInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'custom_info',
@@ -232,7 +218,7 @@ export default {
       },
       gatheredInfoConfig: {
         url: `/api/v1/assets/hosts/${this.object.id}/`,
-        title: this.$t('assets.HardwareInfo'),
+        title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'gathered_info',
         showUndefine: false

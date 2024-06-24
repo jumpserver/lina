@@ -1,8 +1,8 @@
 <template>
   <Password
     :value="value"
-    v-bind="iAttrs"
     class="el-input password-input"
+    v-bind="iAttrs"
     @input="handleInput"
     v-on="$listeners"
   />
@@ -21,7 +21,8 @@ export default {
     },
     attrs: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -47,19 +48,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .password-input >>> .Password__badge--error {
+  .password-input ::v-deep .Password__badge--error {
     background-color: var(--color-danger);
   }
-  .password-input >>> .Password__strength-meter--fill[data-score="4"] {
+
+  .password-input ::v-deep .Password__strength-meter--fill[data-score="4"] {
     background: var(--color-success);
     width: 100%;
   }
 
-  .password-input >>> .Password__badge--success {
+  .password-input ::v-deep .Password__badge--success {
     background: var(--color-success);
   }
 
-  .password-input >>> .Password__strength-meter {
+  .password-input ::v-deep .Password__strength-meter {
     margin-bottom: 10px;
   }
 </style>

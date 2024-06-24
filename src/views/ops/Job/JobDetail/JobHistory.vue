@@ -34,8 +34,7 @@ export default {
         ],
         columnsMeta: {
           is_finished: {
-            label: this.$t('ops.isFinished'),
-            width: '96px',
+            label: this.$t('IsFinished'),
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
@@ -47,8 +46,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
-            width: '96px',
+            label: this.$t('IsSuccess'),
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -63,7 +61,7 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
+            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -81,7 +79,7 @@ export default {
               extraActions: [
                 {
                   name: 'showLog',
-                  title: this.$t('ops.output'),
+                  title: this.$t('Output'),
                   can: true,
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)

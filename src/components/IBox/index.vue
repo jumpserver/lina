@@ -36,14 +36,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
   .ibox {
     /*height: 100%;*/
     clear: both;
     padding: 0;
   }
 
-  .ibox >>> .el-card__header {
+  .ibox ::v-deep .el-card__header {
     border-color: #e7eaec;
     border-image: none;
     margin-bottom: 0;
@@ -81,8 +81,8 @@ export default {
     font-size: 14px;
   }
 
-  .ibox >>> .el-card__body {
-    padding: 15px 30px 20px 30px;
-    color: inherit;
+  .ibox ::v-deep .el-card__body {
+    //padding: 30px 30px 20px 30px; // 这个设置会影响详情中的 quick update 和 relations
+    color: var(--color-icon-primary);
   }
 </style>

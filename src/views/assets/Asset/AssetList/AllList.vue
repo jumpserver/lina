@@ -2,7 +2,7 @@
   <div>
     <AssetTreeTable
       ref="AssetTreeTable"
-      :help-message="helpMessage"
+      :help-tip="helpMessage"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     >
@@ -12,6 +12,7 @@
         @showAll="showAll"
       />
       <BaseList
+        ref="baseList"
         slot="table"
         :add-extra-more-actions="addExtraMoreActions"
         :header-actions="headerActions"
@@ -52,12 +53,12 @@ export default {
       headerActions: {
         handleImportClick: ({ selectedRows }) => {
           this.$message.warning({
-            message: this.$t('assets.ImportMessage')
+            message: this.$t('ImportMessage')
           })
         }
       },
       addExtraMoreActions: [],
-      helpMessage: this.$t('assets.AssetListHelpMessage')
+      helpMessage: this.$t('AssetListHelpMessage')
     }
   },
   computed: {
@@ -109,7 +110,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.asset-select-dialog > > > .transition-box:first-child {
+.asset-select-dialog ::v-deep .transition-box:first-child {
   background-color: #f3f3f3;
 }
 </style>

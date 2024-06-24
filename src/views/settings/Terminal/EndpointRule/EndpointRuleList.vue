@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert type="success" v-html="helpMessage" />
+    <el-alert v-sanitize="helpMessage" type="success" />
     <ListTable :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      helpMessage: this.$t('setting.EndpointRuleListHelpMessage'),
+      helpMessage: this.$t('EndpointRuleListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoint-rules/',
         columnsShow: {

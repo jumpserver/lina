@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-input v-model="rawValue.phone" :placeholder="$tc('users.inputPhone')" @input="OnInputChange">
+    <el-input v-model="rawValue.phone" required :placeholder="$tc('InputPhone')" @input="OnInputChange">
       <el-select
         slot="prepend"
+        :placeholder="$tc('Select')"
         :value="rawValue.code"
-        :placeholder="$tc('common.Select')"
-        style="width: 90px;"
+        style="width: 75px;"
         @change="OnChange"
       >
         <el-option
@@ -68,6 +68,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -1,9 +1,8 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="10" :sm="24" />
   </el-row>
 </template>
 
@@ -23,15 +22,11 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/assets/domains/${this.object.id}`,
+      url: `/api/v1/assets/domains/${this.object.id}/`,
       detailFields: [
-        'name',
+        'name', 'assets_amount',
         {
-          key: this.$t('assets.Assets'),
-          value: `${this.object.assets.length}`
-        },
-        {
-          key: this.$t('assets.Gateway'),
+          key: this.$t('Gateways amount'),
           value: `${this.object.gateways.length}`
         },
         'date_created', 'comment'

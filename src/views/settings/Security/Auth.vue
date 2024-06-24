@@ -6,6 +6,7 @@
 
 <script>
 import IBox from '@/components/IBox/index.vue'
+import rules from '@/components/Form/DataForm/rules'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 
 export default {
@@ -17,7 +18,7 @@ export default {
         url: '/api/v1/settings/setting/?category=security_auth',
         fields: [
           [
-            this.$t('common.Basic'),
+            this.$t('Basic'),
             [
               'SECURITY_LOGIN_CAPTCHA_ENABLED',
               'SECURITY_LOGIN_CHALLENGE_ENABLED',
@@ -71,7 +72,13 @@ export default {
             }
           },
           VERIFY_CODE_TTL: {
-            label: this.$t('setting.ExpirationTimeout')
+            label: this.$t('ExpirationTimeout')
+          },
+          SECURITY_UNCOMMON_USERS_TTL: {
+            rules: [
+              rules.LengthCheck,
+              rules.Required
+            ]
           }
         }
       }
@@ -79,7 +86,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

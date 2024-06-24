@@ -24,7 +24,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('setting.Feishu')
+        return this.$t('Feishu')
       }
     },
     encryptedFields: {
@@ -48,7 +48,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('common.Test'),
+            title: this.$t('Test'),
             loading: false,
             callback: function(value, form, btn) {
               btn.loading = true
@@ -64,12 +64,7 @@ export default {
           }
         ],
         encryptedFields: this.encryptedFields,
-        fields: [
-          [
-            this.$t('common.BasicInfo'),
-            this.formFields
-          ]
-        ],
+        fields: this.formFields,
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
           this.encryptedFields.forEach(field => {

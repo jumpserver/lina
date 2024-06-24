@@ -18,44 +18,40 @@ export default {
         {
           name: 'interfaces',
           component: TagInput,
-          label: this.$t('setting.Interface')
+          label: this.$t('Interface')
         },
-        [
-          {
-            name: 'src_ips',
-            label: this.$t('setting.SourceIP'),
-            tip: this.$t('setting.helpTip.IP'),
-            el: {
-              placeholder: this.$t('setting.SourceIP')
-            }
-          },
-          {
-            name: 'src_ports',
-            component: TagInput,
-            label: this.$t('setting.SourcePort'),
-            el: {
-              inputType: 'number'
-            }
+        {
+          name: 'src_ips',
+          label: this.$t('SA'),
+          el: {
+            placeholder: this.$t('SourceIP')
           }
-        ],
-        [
-          {
-            name: 'dest_ips',
-            label: this.$t('setting.DestinationIP'),
-            tip: this.$t('setting.helpTip.IP'),
-            el: {
-              placeholder: this.$t('setting.DestinationIP')
-            }
-          },
-          {
-            name: 'dest_ports',
-            component: TagInput,
-            label: this.$t('setting.DestinationPort'),
-            el: {
-              inputType: 'number'
-            }
+        },
+        {
+          name: 'src_ports',
+          component: TagInput,
+          label: this.$t('SP'),
+          el: {
+            inputType: 'number',
+            placeholder: this.$t('SourcePort')
           }
-        ]
+        },
+        {
+          name: 'dest_ips',
+          label: this.$t('DA'),
+          el: {
+            placeholder: this.$t('DestinationIP')
+          }
+        },
+        {
+          name: 'dest_ports',
+          component: TagInput,
+          label: this.$t('DP'),
+          el: {
+            inputType: 'number',
+            placeholder: this.$t('DestinationPort')
+          }
+        }
       ]
     }
   },

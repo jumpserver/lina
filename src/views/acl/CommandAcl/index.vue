@@ -20,13 +20,14 @@ export default {
         activeMenu: 'CommandFilterACL',
         submenu: [
           {
-            title: this.$t('acl.CommandFilterACL'),
+            title: this.$t('CommandFilterACL'),
             name: 'CommandFilterACL',
             hidden: !this.$hasPerm('acls.view_commandfilteracl'),
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue')
+            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue'),
+            helpTip: this.$t('CommandFilterACLHelpMsg')
           },
           {
-            title: this.$t('acl.CommandGroup'),
+            title: this.$t('CommandGroup'),
             name: 'CommandGroup',
             hidden: !this.$hasPerm('acls.view_commandgroup'),
             component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupList.vue')
@@ -42,7 +43,7 @@ export default {
       const query = _.cloneDeep(this.$route.query)
       const newQuery = {
         ...query,
-        activeTab: tab.name
+        tab: tab.name
       }
       this.$nextTick(() => {
         this.$router.replace({ query: newQuery })
@@ -51,7 +52,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

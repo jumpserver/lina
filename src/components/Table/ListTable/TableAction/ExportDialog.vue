@@ -3,7 +3,7 @@
     <Dialog
       v-if="exportDialogShow"
       :destroy-on-close="true"
-      :title="$tc('common.Export')"
+      :title="$tc('Export')"
       :visible.sync="exportDialogShow"
       width="700px"
       @cancel="handleExportCancel()"
@@ -13,7 +13,7 @@
         {{ tips }}
       </el-alert>
       <el-form label-position="left" style="padding-left: 20px">
-        <el-form-item :label="$tc('common.fileType' )" :label-width="'100px'">
+        <el-form-item :label="$tc('FileType' )" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
             <el-radio
               v-for="option of exportTypeOptions"
@@ -26,7 +26,7 @@
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="$tc('common.imExport.ExportRange')" :label-width="'100px'" class="export-form">
+        <el-form-item :label="$tc('ExportRange')" :label-width="'100px'" class="export-form">
           <el-radio-group v-model="exportOption">
             <el-radio
               v-for="option of exportOptions"
@@ -138,17 +138,17 @@ export default {
     exportOptions() {
       return [
         {
-          label: this.$t('common.imExport.ExportAll'),
+          label: this.$t('ExportAll'),
           value: 'all',
           can: this.canExportAll && !this.tableHasQuery
         },
         {
-          label: this.$t('common.imExport.ExportOnlySelectedItems'),
+          label: this.$t('ExportOnlySelectedItems'),
           value: 'selected',
-          can: this.selectedRows.length > 0 && this.canExportSelected
+          can: this.hasSelected && this.canExportSelected
         },
         {
-          label: this.$t('common.imExport.ExportOnlyFiltered'),
+          label: this.$t('ExportOnlyFiltered'),
           value: 'filtered',
           can: this.tableHasQuery && this.canExportFiltered
         }
@@ -180,6 +180,15 @@ export default {
     showExportDialog() {
       if (!this.mfaVerifyRequired) {
         this.exportDialogShow = true
+
+        if (this.hasSelected) {
+          this.exportOption = 'selected'
+        }
+
+        if (this.tableHasQuery) {
+          this.exportOption = 'filtered'
+        }
+
         return
       }
       this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
@@ -221,12 +230,11 @@ export default {
     async handleExportConfirm() {
       await this.handleExport()
       this.exportDialogShow = false
+      this.$emit('importDialogConfirm')
     },
     handleExportCancel() {
-      const vm = this
-      setTimeout(() => {
-        vm.exportDialogShow = false
-      }, 100)
+      this.exportDialogShow = false
+      this.$emit('importDialogClose')
     },
     handleAuthMFAError() {
       this.mfaDialogShow = false
@@ -242,7 +250,7 @@ export default {
     padding: 10px 20px;
   }
 
-  .export-form >>> .el-form-item__label {
+  .export-form ::v-deep .el-form-item__label {
     line-height: 2
   }
 </style>

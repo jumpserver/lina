@@ -32,11 +32,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('common.Detail'),
+            'title': this.$t('Basic'),
             'name': 'Detail'
           },
           {
-            'title': this.$t('terminal.AppletHosts'),
+            'title': this.$t('AppletHosts'),
             'name': 'AppletHosts'
           }
         ],
@@ -48,7 +48,7 @@ export default {
           },
           deleteSuccessRoute: 'Applets'
         },
-        titlePrefix: this.$tc('route.AppletDetail')
+        titlePrefix: this.$tc('AppletDetail')
       }
     }
   },

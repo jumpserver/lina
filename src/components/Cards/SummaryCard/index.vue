@@ -46,7 +46,7 @@ export default {
     font-weight: 600;
   }
 
-  .right-side >>> .el-tag {
+  .right-side ::v-deep .el-tag {
     font-weight: 600;
     padding: 3px 8px;
     text-shadow: none;
@@ -67,6 +67,7 @@ export default {
     border-style: solid solid none;
     border-width: 1px 0;
   }
+
   .no-margins {
     margin: 0 !important;
   }

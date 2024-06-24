@@ -37,7 +37,7 @@ export default {
     const exclude = ['device', 'cloud', 'web']
     const platformQuery = this.category === 'all' ? '' : this.category
     return {
-      tips: this.$t('assets.AssetBulkUpdateTips'),
+      tips: this.$t('AssetBulkUpdateTips'),
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
@@ -56,28 +56,28 @@ export default {
             rules: [
               { required: false }
             ],
-            label: this.$t('assets.Platform'),
-            helpText: this.$t('assets.BulkUpdatePlatformHelpText')
+            label: this.$t('Platform'),
+            helpText: this.$t('UpdatePlatformHelpText')
           },
           nodes: {
             ...meta.nodes,
-            label: this.$t('assets.Node')
+            label: this.$t('Node')
           },
           domain: {
             ...meta.domain,
-            label: this.$t('assets.Domain'),
+            label: this.$t('Zone'),
             disabled: exclude.includes(this.category)
           },
           labels: {
             ...meta.labels,
-            label: this.$t('assets.Label')
+            label: this.$t('Label')
           },
           is_active: {
             ...meta.is_active,
-            label: this.$t('common.Active')
+            label: this.$t('Active')
           },
           comment: {
-            label: this.$t('common.Comment'),
+            label: this.$t('Comment'),
             hidden: () => false
           }
         }

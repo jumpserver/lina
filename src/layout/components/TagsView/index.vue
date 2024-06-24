@@ -1,14 +1,14 @@
 <template>
-  <div id="tags-view-container" class="tags-view-container">
+  <el-alert v-show="show" id="tags-view-container" class="tags-view-container">
     <scroll-pane ref="scrollPane" class="tags-view-wrapper">
       <router-link
         v-for="tag in visitedViews"
-        ref="tag"
         :key="tag.path"
-        :class="isActive(tag)?'active':''"
+        ref="tag"
+        :class="isActive(tag) ? 'active' : '' "
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        tag="span"
         class="tags-view-item"
+        tag="span"
         @click.middle.native="!isAffix(tag)?closeSelectedTag(tag):''"
         @contextmenu.prevent.native="openMenu(tag,$event)"
       >
@@ -26,14 +26,21 @@
       <li @click="closeOthersTags">Close Others</li>
       <li @click="closeAllTags(selectedTag)">Close All</li>
     </ul>
-  </div>
+  </el-alert>
 </template>
 
 <script>
 import ScrollPane from './ScrollPane'
 import path from 'path'
+
 export default {
   components: { ScrollPane },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       visible: false,
@@ -52,7 +59,7 @@ export default {
     }
   },
   watch: {
-    $route() {
+    $route(iNew, iOld) {
       this.addTags()
       this.moveToCurrentTag()
     },
@@ -202,12 +209,14 @@ export default {
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
 .tags-view-container {
+  background-color: #f3f3f4 !important;
+  border: none !important;
   height: 34px;
   width: 100%;
-  margin-top: 5px;
-  background: #fff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  padding: 0;
+
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;

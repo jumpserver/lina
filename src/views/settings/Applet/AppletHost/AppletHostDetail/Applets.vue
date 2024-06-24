@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
+    <el-col :md="15" :sm="24">
       <ListTable :header-actions="headerConfig" :table-config="config" />
     </el-col>
-    <el-col :md="8" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
@@ -41,7 +41,7 @@ export default {
         ],
         columnsMeta: {
           'applet.display_name': {
-            label: this.$t('common.DisplayName'),
+            label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getIcon: ({ row }) => row.applet?.icon,
@@ -54,10 +54,10 @@ export default {
             id: ({ row }) => row.applet.id
           },
           'applet.version': {
-            label: this.$t('common.Version')
+            label: this.$t('Version')
           },
           status: {
-            label: this.$t('applets.PublishStatus'),
+            label: this.$t('PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
                 'pending': 'success',
@@ -70,16 +70,17 @@ export default {
             }
           },
           date_updated: {
-            label: this.$t('ops.date')
+            label: this.$t('Date')
           },
           actions: {
+            width: '160px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('common.Deploy'),
+                  title: this.$t('Deploy'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,
@@ -93,7 +94,7 @@ export default {
                   }
                 },
                 {
-                  title: this.$t('common.Uninstall'),
+                  title: this.$t('Uninstall'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/uninstall/`,
@@ -113,10 +114,10 @@ export default {
       },
       quickActions: [
         {
-          title: this.$t('assets.InitialDeploy'),
+          title: this.$t('InitialDeploy'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Deploy')
+            label: this.$t('Deploy')
           },
           callbacks: {
             click: function() {
@@ -130,10 +131,10 @@ export default {
           }
         },
         {
-          title: this.$t('assets.OnlyInitialDeploy'),
+          title: this.$t('OnlyInitialDeploy'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Deploy')
+            label: this.$t('Deploy')
           },
           callbacks: {
             click: function() {
@@ -147,10 +148,10 @@ export default {
           }
         },
         {
-          title: this.$t('common.PublishAllApplets'),
+          title: this.$t('PublishAllApplets'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Publish')
+            label: this.$t('Publish')
           },
           callbacks: {
             click: function() {

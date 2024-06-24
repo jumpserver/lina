@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
 </template>
 
 <script>
@@ -26,23 +26,28 @@ export default {
         'can_public_key_auth': false
       },
       fields: [
-        [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), [
-          'password_strategy', 'update_password', 'password', 'need_update_password',
-          'set_public_key', 'public_key', 'mfa_level', 'source'
+        [this.$t('Basic'), ['name', 'username', 'email', 'groups']],
+        [this.$t('Authentication'), [
+          'password_strategy', 'update_password', 'password',
+          'need_update_password', 'mfa_level', 'source'
         ]],
-        [this.$t('users.Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
-        [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
+        [this.$t('Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
+        [this.$t('Other'), ['phone', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        name: {},
+        username: {},
         password_strategy: {
           hidden: (formValue) => {
             return this.$route.params.id || formValue.source !== 'local'
           }
         },
         mfa_level: {
-          disabled: false
+          disabled: false,
+          tips: {
+            2: this.$t('If force enable, user can not disable by themselves')
+          }
         },
         email: {
           rules: [
@@ -51,12 +56,13 @@ export default {
           ]
         },
         update_password: {
-          label: this.$t('users.UpdatePassword'),
+          label: this.$t('ChangePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
             if (formValue.update_password) {
               return true
             }
+
             return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
         },
@@ -77,7 +83,7 @@ export default {
           }
         },
         need_update_password: {
-          label: this.$t('users.needUpdatePasswordNextLogin'),
+          label: '',
           type: 'checkbox-group',
           component: null, // 覆盖默认生成的 component
           el: {
@@ -85,7 +91,7 @@ export default {
           },
           options: [
             {
-              label: '',
+              label: this.$t('ResetPasswordNextLogin'),
               value: true
             }
           ],
@@ -93,34 +99,17 @@ export default {
             if (formValue.source !== 'local') {
               return true
             }
-            if (formValue.password_strategy === 'custom' || formValue.update_password || this.user.can_public_key_auth) {
+            if (formValue.password_strategy === 'custom') {
               return false
-            }
-            return true
-          }
-        },
-        set_public_key: {
-          label: this.$t('users.SetPublicKey'),
-          type: 'checkbox',
-          hidden: (formValue) => {
-            if (formValue.set_public_key) {
+            } else if (formValue.update_password) {
+              return false
+            } else {
               return true
             }
-            return this.$route.meta.action !== 'update'
-          }
-        },
-        public_key: {
-          type: 'input',
-          el: {
-            type: 'textarea'
-          },
-          hidden: (formValue) => {
-            return !formValue.set_public_key
           }
         },
         system_roles: {
           component: Select2,
-          label: this.$t('users.SystemRoles'),
           el: {
             multiple: true,
             ajax: {
@@ -137,7 +126,7 @@ export default {
         },
         org_roles: {
           component: Select2,
-          label: this.$t('users.OrgRoles'),
+          label: this.$t('OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           el: {
             multiple: true,
@@ -152,12 +141,12 @@ export default {
           },
           hidden: () => {
             return !this.$store.getters.hasValidLicense ||
-                !this.$hasPerm('rbac.add_orgrolebinding') ||
-                this.$store.getters.currentOrgIsRoot
-          },
-          helpText: this.$t('users.HelpText.OrgRoleHelpText')
+              !this.$hasPerm('rbac.add_orgrolebinding') ||
+              this.$store.getters.currentOrgIsRoot
+          }
         },
         groups: {
+          helpTextAsPlaceholder: true,
           el: {
             multiple: true,
             disabled: this.$store.getters.currentOrgIsRoot,
@@ -171,7 +160,7 @@ export default {
           component: PhoneInput
         },
         is_active: {
-          label: this.$t('users.IsActive'),
+          label: this.$t('IsActive'),
           el: {}
         }
       },
@@ -225,9 +214,9 @@ export default {
       if (this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
         fieldsToUpdate.forEach(field => {
-          const msg = this.$t('users.disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
+          const msg = this.$t('disallowSelfUpdateFields', { attr: this.fieldsMeta[field]['label'] })
           this.fieldsMeta[field].el.disabled = true
-          this.fieldsMeta[field].helpTips = msg
+          this.fieldsMeta[field].helpTip = msg
         })
       }
       this.fieldsMeta.password.el.userIsOrgAdmin = user['is_org_admin']
@@ -244,15 +233,23 @@ export default {
     disableMFAFieldIfNeed(user) {
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' &&
-          store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
+        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
       if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed) {
         this.fieldsMeta['mfa_level'].disabled = true
-        this.fieldsMeta['mfa_level'].helpText = this.$t('users.GlobalDisableMfaMsg')
+        this.fieldsMeta['mfa_level'].helpText = this.$t('GlobalDisableMfaMsg')
       }
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
+.user-create-update ::v-deep .el-form-item-need_update_password {
+  margin-top: -10px;
+
+  .el-form-item__content label {
+    line-height: 30px;
+  }
+}
+
 </style>

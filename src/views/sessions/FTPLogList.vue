@@ -15,23 +15,14 @@ export default {
       tableConfig: {
         columnsShow: {
           default: [
-            'id', 'user', 'remote_addr', 'asset', 'account', 'operate',
+            'id', 'user', 'asset', 'account', 'operate',
             'filename', 'date_start', 'is_success', 'actions'
           ]
         },
         url: '/api/v1/audits/ftp-logs/',
         columnsMeta: {
-          remote_addr: {
-            width: '140px'
-          },
-          operate: {
-            width: '100px'
-          },
-          is_success: {
-            width: '80px'
-          },
+          is_success: { width: '100px' },
           actions: {
-            width: '82px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
@@ -39,11 +30,13 @@ export default {
               extraActions: [
                 {
                   name: 'download',
-                  title: this.$t('sessions.download'),
+                  title: this.$t('Download'),
                   type: 'primary',
-                  can: ({ row }) => { return row.has_file },
+                  can: ({ row }) => {
+                    return row.has_file
+                  },
                   tip: ({ row }) => {
-                    return row.has_file ? this.$t('sessions.download') : this.$t('sessions.DownloadFTPFileTip')
+                    return row.has_file ? this.$t('Download') : this.$t('DownloadFTPFileTip')
                   },
                   callback: function({ row }) {
                     // 跳转下载页面

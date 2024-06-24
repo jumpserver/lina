@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="object"
     :active-menu.sync="config.activeMenu"
+    :object.sync="object"
     v-bind="config"
     v-on="$listeners"
   >
@@ -31,11 +31,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('Basic'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.Accounts'),
+            title: this.$t('Accounts'),
             name: 'Account',
             hidden: () => !this.$hasPerm('accounts.change_accounttemplate')
           }

@@ -1,140 +1,144 @@
 @import "./variables";
 
-.left-menu.el-menu {
-  .el-menu--inline {
-    background-color: $subMenuBg;
+$icon-width: 1.1em;
+$single-menu-height: 38px;
+
+@mixin only_active {
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--menu-text-active);
   }
+}
 
-  .el-menu-item, .el-submenu {
-    font-weight: 600;
+@mixin collapse-active {
+  background-color: #e6e6e6;
+
+  &:before {
+    width: 0
   }
+}
 
-  .el-submenu-sidebar.el-submenu.is-opened {
-    //box-shadow: 0 0 8px rgb(0 0 0 / 10%);
+.el-menu {
+  border-right: none !important;
+  background-color: inherit !important;
 
-    //* {
-    //  background-color: #f6f6f6 !important;
-    //}
-
-    border-top: solid 1px #f3f3f4;
-    //border-bottom: solid 1px #f3f3f4;
-  }
-
-  .el-submenu, .el-menu-item.submenu-title-noDropdown {
-    background-color: $menuBg;
-    border-top: solid 1px $menuBg;
-
-    .el-submenu__title {
-      color: $menuText;
-      font-weight: 400;
-
-      &:hover {
-        color: $menuActiveText;
-        background-color: $menuHover;
-      }
-
-      i {
-        color: $menuActiveText;
-      }
-    }
-  }
-
-  .el-menu-item, .el-submenu-sidebar .el-menu-item {
-    background-color: $subMenuBg;
-    color: $menuText;
-    list-style: circle inside;
-
-    &.submenu-title-noDropdown {
-      list-style: none;
-    }
-
-    &.is-active {
-      color: $subMenuActiveText;
-      font-weight: 400;
-      list-style-type: disc;
-    }
-
-    &:hover {
-      background-color: $subMenuHover !important;
-      color: $subMenuActiveText;
-      list-style-type: disc;
-    }
-
-    i {
-      //color: $menuText;
-    }
-  }
-
-  i.fa {
+  .svg-icon, .el-icon, .fa {
+    width: $icon-width !important;
+    height: $icon-width !important;
     margin-right: 10px;
-    width: 13px;
-  }
-
-  .is-active i.fa {
-    color: $menuActiveText;
   }
 
   .el-submenu .el-menu-item {
-    height: 38px;
-    line-height: 38px;
-    padding: 0 52px;
+    height: $single-menu-height;
+    line-height: $single-menu-height;
+  }
+
+  .el-submenu__title {
+    display: flex;
+    align-items: center;
+    height: $single-menu-height;
+    line-height: $single-menu-height;
+  }
+
+  // 通用 item 样式
+  .el-menu-item {
+    display: flex;
+    align-items: center;
+    height: $single-menu-height;
+    color: var(--color-text-primary);
+    letter-spacing: 0.02em;
+    font-size: 12px;
     min-width: 200px;
-  }
 
-  .nest-menu .el-submenu__title {
-    height: 30px;
-    line-height: 30px;
-    padding: 0 52px;
-    min-width: 200px;
-  }
+    &.is-active {
+      background-color: var(--menu-hover);
+      @include only_active;
 
-  .nest-menu li.is-opened, .nest-menu li.is-active {
-    border-left: none;
-  }
-
-  .el-menu-item, .el-submenu__title {
-    height: 48px;
-    line-height: 48px;
-    font-weight: 400;
-    font-size: 13px;
-  }
-
-  .el-menu-item:hover, .el-menu-item:focus {
-    color: $subMenuActiveText;
-  }
-
-  .navbar li.is-active, .navbar li.is-opened {
-    border: none;
-  }
-
-  .nest-menu li.is-active {
-    border: none;
-  }
-
-  li.is-opened, li.is-active {
-    //* {
-    //  background-color: var(--menu-hover) !important;
-    //}
-
-    border-left: 4px solid var(--menu-text-active);
-  }
-
-  .el-submenu-sidebar .el-menu-item {
-    background-color: $subMenuBg;
-  }
-
-  .el-submenu.is-opened {
-    background-color: $subMenuBg;
-
-    .el-submenu__title {
-    }
-
-    & .nest-menu {
-      background-color: $subMenuBg;
+      span {
+        color: var(--color-primary);
+      }
     }
   }
 
-  .nest-menu:last-child {
-    padding-bottom: 10px;
+  .group-title {
+    color: var(--color-text-secondary);
+    // 分组的 title 样式
+    & > span {
+      display: block;
+      padding: 10px 0 2px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 25px;
+      letter-spacing: .07em;
+    }
+
+    .nest-menu {
+      //display: flex;
+      cursor: pointer;
+
+      // 存在三级子菜单
+      .level1-menu {
+        &.el-submenu.is-opened {
+          border-top: solid 1px var(--color-border);
+        }
+
+        &.el-submenu.is-active {
+          .el-submenu__title {
+            color: var(--color-primary);
+          }
+
+          .el-submenu__title, li {
+            @include only_active
+          }
+        }
+
+        .el-menu--inline .nest-menu .el-menu-item {
+          span {
+            &::before {
+              content: '•'; /* 使用圆点符号 */
+              font-size: 15px;
+              position: absolute; /* 绝对定位伪元素 */
+              left: 25px; /* 调整伪元素位置 */
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 折叠起来的样式
+  &.el-menu--collapse {
+    // 覆盖默认 64px 宽度
+    width: 55px;
+
+    .level1-menu {
+      height: $single-menu-height;
+      line-height: $single-menu-height;
+      display: inline-block;
+
+    }
+
+    .group-title {
+      & > span {
+        display: none;
+      }
+
+      .el-divider.el-divider--horizontal {
+        margin: 12px 0 !important;
+      }
+
+      .level1-menu {
+        min-width: 55px;
+      }
+
+      .nest-menu .level2-menu {
+        line-height: $single-menu-height;
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@
   <Dialog
     :close-on-click-modal="false"
     :destroy-on-close="true"
-    :title="$tc('labels.BindResource')"
+    :title="$tc('BindResource')"
     top="80px"
     v-bind="$attrs"
     width="768px"
@@ -13,7 +13,7 @@
     <div style="padding: 0 20px 20px">
       <el-row>
         <div class="label-zone">
-          <label class="type-label" for="">{{ $t('labels.ResourceType') }}: </label>
+          <label class="type-label" for="">{{ $t('ResourceType') }}: </label>
         </div>
         <el-select v-model="select2.value" class="select2" @change="handleChangeType">
           <el-option-group
@@ -32,7 +32,7 @@
       </el-row>
       <el-row>
         <div class="label-zone">
-          <label class="table-label" for="">{{ $t('labels.SelectResource') }}: </label>
+          <label class="table-label" for="">{{ $t('SelectResource') }}: </label>
         </div>
         <krryPaging v-if="!transferLoading" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
       </el-row>
@@ -94,7 +94,8 @@ export default {
           return getPageData({ keyword, pageIndex, pageSize })
         },
         selectedData: [],
-        showClearBtn: true
+        showClearBtn: true,
+        transferOnCheck: true
       }
     }
   },
@@ -122,7 +123,7 @@ export default {
       const url = `/api/v1/labels/labels/${this.label.id}/resource-types/${this.select2.value}/resources/`
       this.$axios.put(url, data).then(res => {
         setTimeout(() => {
-          this.$message.success(this.$tc('common.BindSuccess'))
+          this.$message.success(this.$tc('BindSuccess'))
           this.$emit('bind-success')
         }, 100)
       })

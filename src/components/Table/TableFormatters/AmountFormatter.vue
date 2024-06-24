@@ -11,7 +11,7 @@
         @show="getAsyncItems"
       >
         <div class="detail-content">
-          <div v-for="item of items" :key="getKey(item)" class="detail-item">
+          <div v-for="[index, item] of Object.entries(items)" :key="getKey(item, index)" class="detail-item">
             <span class="detail-item-name">{{ item }}</span>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default {
     },
     items() {
       if (this.formatterArgs.async && !this.asyncGetDone) {
-        return [this.$t('common.tree.Loading') + '...']
+        return [this.$t('Loading') + '...']
       }
       const getItem = this.formatterArgs.getItem || (item => item.name)
       let data = []
@@ -100,9 +100,8 @@ export default {
     }
   },
   methods: {
-    getKey(item) {
-      const id = Math.random().toString(36).substring(16)
-      return id + item
+    getKey(item, index) {
+      return index + item
     },
     getDefaultUrl() {
       const url = new URL(this.url, location.origin)
@@ -130,17 +129,22 @@ export default {
 .detail-content {
   padding: 5px 10px;
   max-height: 60vh;
+  min-height: 200px;
   overflow-y: auto;
 }
 
 .detail-item {
-  border-bottom: 1px solid #EBEEF5;
+  border-bottom: 1px solid var(--color-border);
   padding: 5px 0;
   margin-bottom: 0;
 
   &:hover {
     background-color: #F5F7FA;
   }
+}
+
+::v-deep .detail {
+  padding: 0 5px;
 }
 
 .detail-item:first-child {

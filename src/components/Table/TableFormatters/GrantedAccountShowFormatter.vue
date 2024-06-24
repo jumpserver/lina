@@ -1,5 +1,5 @@
 <template>
-  <span v-if="!accounts"><a style="color: #1c84c6;" @click="showAccount">{{ this.$t('common.Show') }}</a></span>
+  <span v-if="!accounts"><a style="color: #1c84c6;" @click="showAccount">{{ this.$t('Show') }}</a></span>
   <span v-else>{{ accounts.toString() }}</span>
 </template>
 

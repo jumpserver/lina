@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <RelationCard type="primary" v-bind="userRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="groupRelationConfig" />
     </el-col>
@@ -41,12 +41,12 @@ export default {
         },
         columnsMeta: {
           user_display: {
-            label: this.$t('perms.User'),
+            label: this.$t('User'),
             align: 'center'
           },
           delete_action: {
             prop: 'user',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             align: 'center',
             width: 150,
             objects: this.object.users,
@@ -54,10 +54,10 @@ export default {
             onDelete: function(col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=${cellValue}`
               this.$axios.delete(url).then(res => {
-                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('DeleteSuccessMsg'))
                 this.$store.commit('common/reload')
               }).catch(error => {
-                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           },
@@ -79,7 +79,7 @@ export default {
       },
       userRelationConfig: {
         icon: 'fa-user',
-        title: this.$t('perms.addUserToThisPermission'),
+        title: this.$t('AddUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           transformOption: (item) => {
@@ -104,11 +104,12 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           this.$store.commit('common/reload')
+          // this.$refs.ListTable.reloadTable()
         }
       },
       groupRelationConfig: {
         icon: 'fa-group',
-        title: this.$t('perms.addUserGroupToThisPermission'),
+        title: this.$t('AddUserGroupToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
@@ -133,7 +134,7 @@ export default {
         onAddSuccess: (objects, that) => {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         onDeleteSuccess: (obj, that) => {
@@ -144,7 +145,7 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
       }
@@ -152,7 +153,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

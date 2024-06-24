@@ -7,7 +7,7 @@
           :async="async"
           :async-search-flag="asyncSearchFlag"
           :data-show-list="notSelectDataList"
-          :filter-placeholder="filterPlaceholder[0] || $tc('common.Search')"
+          :filter-placeholder="filterPlaceholder[0] || $tc('Search')"
           :filterable="filterable"
           :highlight-color="highlightColor"
           :is-highlight="isHighlight"
@@ -16,7 +16,7 @@
           :page-size="pageSize"
           :page-texts="pageTexts"
           :show-clear-btn="showClearBtn"
-          :title="boxTitle[0] || $tc('common.Selection')"
+          :title="boxTitle[0] || $tc('Selection')"
           @check-district="noCheckSelect"
           @search-word="searchWord"
           @check-disable="checkDisable"
@@ -27,28 +27,31 @@
       </el-col>
       <el-col :md="4" :sm="24" class="buttons">
         <div class="opera">
-          <el-button
-            :disabled="disablePre"
-            class="el-transfer__button"
-            icon="el-icon-arrow-left"
-            size="mini"
-            @click="deleteData"
-          />
-          <el-button
-            :disabled="disableNex"
-            class="el-transfer__button"
-            icon="el-icon-arrow-right"
-            size="mini"
-            type="primary"
-            @click="addData"
-          />
+          <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
+          <templae v-else>
+            <el-button
+              :disabled="disablePre"
+              class="el-transfer__button"
+              icon="el-icon-arrow-left"
+              size="mini"
+              @click="deleteData"
+            />
+            <el-button
+              :disabled="disableNex"
+              class="el-transfer__button"
+              icon="el-icon-arrow-right"
+              size="mini"
+              type="primary"
+              @click="addData"
+            />
+          </templae>
         </div>
       </el-col>
       <el-col :md="10" :sm="24">
         <krry-box
           ref="hasSelect"
           :data-show-list="checkedData"
-          :filter-placeholder="filterPlaceholder[1] || $tc('common.Search')"
+          :filter-placeholder="filterPlaceholder[1] || $tc('Search')"
           :filterable="filterable"
           :highlight-color="highlightColor"
           :is-highlight="isHighlight"
@@ -56,7 +59,7 @@
           :page-size="pageSize"
           :page-texts="pageTexts"
           :show-clear-btn="showClearBtn"
-          :title="boxTitle[1] || $tc('common.Selected')"
+          :title="boxTitle[1] || $tc('Selected')"
           @check-district="hasCheckSelect"
           @search-word="searchWord"
           @check-disable="checkDisable"
@@ -78,7 +81,7 @@ export default {
   props: {
     boxTitle: {
       type: Array,
-      // default: () => [this.$tc('common.Selection'), this.$tc('common.Selected')]
+      // default: () => [this.$tc('Selection'), this.$tc('Selected')]
       default: () => ['', '']
     },
     pageSize: {
@@ -100,12 +103,12 @@ export default {
     filterPlaceholder: {
       type: Array,
       default: () => ['', '']
-      // default: () => [this.$tc('common.Search'), this.$tc('common.Search')]
+      // default: () => [this.$tc('Search'), this.$tc('Search')]
     },
     pageTexts: {
       type: Array,
       default: () => ['', '']
-      // default: () => ['< ' + this.$tc('common.PagePrev'), this.$tc('common.PageNext') + ' >']
+      // default: () => ['< ' + this.$tc('PagePrev'), this.$tc('PageNext') + ' >']
     },
     sort: {
       type: Boolean,
@@ -134,6 +137,10 @@ export default {
     showClearBtn: {
       type: Boolean,
       default: () => false
+    },
+    transferOnCheck: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -267,10 +274,14 @@ export default {
     // 未选中区域的选泽
     noCheckSelect(val) {
       this.noCheckData = val
+      if (this.transferOnCheck) {
+        setTimeout(() => this.addData(), 300)
+      }
     },
     // 已选中区域的选泽
     hasCheckSelect(val) {
       this.hasCheckData = val
+      setTimeout(() => this.deleteData(), 300)
     },
     // 关键：把未选择的数据当做已选择的过滤数组，把已选择的数据当做未选择的过滤数组，在全局data进行过滤，最后进行一次搜索
     // 添加至已选
@@ -414,13 +425,22 @@ export default {
 .buttons {
   vertical-align: middle;
 }
+
 .opera {
   position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  margin: 180px 8px;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  width: calc(100% - 5px);
+  height: 415px;
+
+  .arrow {
+    width: 1.25em;
+    height: 1.25em;
+    color: #888888;
+  }
+
   @media screen and (max-width: 992px) {
     margin: 8px 8px;
     text-align:start
@@ -435,9 +455,6 @@ export default {
   .el-transfer__button {
     padding: 5px;
   }
-}
-.el-transfer-panel__filter .el-input__inner {
-  border-radius: 0;
 }
 
 </style>

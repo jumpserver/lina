@@ -31,6 +31,9 @@ export default {
           ]
         },
         columnsMeta: {
+          is_success: {
+            width: '150px'
+          },
           is_finished: {
             width: '150px',
             formatterArgs: {

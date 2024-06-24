@@ -1,14 +1,14 @@
 <template>
   <div class="error-404-container">
     <div class="error-404-text">
-      <h1 class="error-404-title">{{ $t('route.AjaxError404') }}</h1>
-      <p class="error-404-subtitle">{{ $t('route.CannotAccess') }}</p>
-      <a href="/ui/" class="el-button el-button--success error-button">
-        {{ $t('route.GoHomePage') }}
+      <h1 class="error-404-title">{{ $t('AjaxError404') }}</h1>
+      <p class="error-404-subtitle">{{ $t('CannotAccess') }}</p>
+      <a class="el-button el-button--success error-button" href="/ui/">
+        {{ $t('GoHomePage') }}
       </a>
     </div>
     <div class="error-404-image-container">
-      <img class="error-404-error-image" src="@/assets/img/robot.png" alt="page error">
+      <img alt="page error" class="error-404-error-image" src="@/assets/img/robot.png">
     </div>
   </div>
 </template>

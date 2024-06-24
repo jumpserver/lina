@@ -1,4 +1,4 @@
-import { changeMenuColor, generateColors, mix } from './color'
+import { changeMenuColor, generateColors, mix, setRootColors } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 
@@ -17,23 +17,29 @@ export function changeElementColor(themeColors) {
     `
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
+      const darken = mix('000000', value.replace(/#/g, ''), 10)
+      const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
       colorsCssText = colorsCssText + `
-        .el-button--${key}:focus {
-          background-color: ${value}!important;
-          border-color: ${value}!important;
+        .el-button--${key}{
+           border-color: var(--color-border);
+        }
+        .el-button--${key}:focus,
+        .el-button--${key}:active,
+        .el-button--${key}:hover {
+          background-color: ${darken}!important;
+          border-color: var(--color-border)!important;
         }
         .el-button--${key}.is-disabled,
         .el-button--${key}.is-disabled:active,
-        .el-button--${key}.is-disabled:focus,
-        .el-button--${key}:hover{
+        .el-button--${key}.is-disabled:focus {
           background-color: ${blendColor}!important;
-          border-color: ${blendColor}!important;
+          border-color: var(--color-border);
         }
         .el-link.el-link--${key}{
           color: ${value}!important;
         }
         .el-link.el-link--${key}:hover {
-          color: ${blendColor}!important;
+          color: ${darken}!important;
         }
         .el-link.el-link--${key}.is-underline:hover:after,
         .el-link.el-link--${key}:after {
@@ -41,6 +47,9 @@ export function changeElementColor(themeColors) {
         }
         .el-tag--dark.el-tag--${key} {
           background-color: ${value} !important;
+        }
+        .el-alert.el-alert--${key}.is-light {
+          background-color: ${tooLightColor};
         }
       `
     }
@@ -74,6 +83,7 @@ export function changeThemeColors(themeColors) {
       resolve()
     }
   }).then(() => {
+    setRootColors()
     changeMenuColor(themeColors)
     changeElementColor(themeColors)
   })
@@ -92,3 +102,4 @@ export function replaceStyleColors(data) {
 
   return data
 }
+

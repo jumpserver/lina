@@ -4,18 +4,18 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.TestGatewayTestConnection')"
+    :title="$tc('TestGatewayTestConnection')"
     :visible.sync="iVisible"
     top="35vh"
     width="40%"
   >
     <el-row :gutter="20">
       <el-col :md="4" :sm="24">
-        <div style="line-height: 34px">{{ $t('assets.SSHPort') }}</div>
+        <div style="line-height: 34px">{{ $t('SSHPort') }}</div>
       </el-col>
       <el-col :md="14" :sm="24">
         <el-input v-model="port" />
-        <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
+        <span class="help-tips help-block">{{ $t('TestGatewayHelpMessage') }}</span>
       </el-col>
       <el-col :md="4" :sm="24">
         <el-button
@@ -25,7 +25,7 @@
           type="primary"
           @click="dialogConfirm"
         >
-          {{ this.$t('common.Confirm') }}
+          {{ this.$t('Confirm') }}
         </el-button>
       </el-col>
     </el-row>
@@ -75,7 +75,7 @@ export default {
   methods: {
     dialogConfirm() {
       if (isNaN(this.port)) {
-        return this.$message.error(this.$tc('common.TestPortErrorMsg'))
+        return this.$message.error(this.$tc('TestPortErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/assets/gateways/${this.cell}/test-connective/`,

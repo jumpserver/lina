@@ -7,22 +7,31 @@
 </template>
 
 <script>
-import { GenericDetailPage } from '@/layout/components'
-import UserAssetPermissionRules from './UserAssetPermissionRules'
-import UserGrantedAssets from './UserGrantedAssets'
-import UserInfo from './UserInfo'
-import UserLoginAcl from './UserLoginAcl.vue'
-import UserSession from './UserSession.vue'
 import { mapGetters } from 'vuex'
+import { GenericDetailPage } from '@/layout/components'
+
+import UserInfo from './UserInfo'
+import UserSession from './UserSession.vue'
+import UserLoginAcl from './UserLoginAcl.vue'
+import UserGrantedAssets from './UserGrantedAssets'
+import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
+import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
+import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
+import AssetPermissionAccount from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAccount.vue'
+import UserAssetPermissionRules from './UserAssetPermissionRules'
 
 export default {
   components: {
     UserInfo,
+    UserSession,
     UserLoginAcl,
     GenericDetailPage,
     UserGrantedAssets,
-    UserAssetPermissionRules,
-    UserSession
+    AssetPermissionUser,
+    AssetPermissionAsset,
+    AssetPermissionDetail,
+    AssetPermissionAccount,
+    UserAssetPermissionRules
   },
   data() {
     const vm = this
@@ -38,26 +47,26 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('Basic'),
             name: 'UserInfo'
           },
           {
-            title: this.$t('users.tabs.grantedAssets'),
+            title: this.$t('GrantedAssets'),
             name: 'UserGrantedAssets',
             hidden: () => !vm.$hasPerm('perms.view_userassets')
           },
           {
-            title: this.$t('users.tabs.assetPermissionRules'),
+            title: this.$t('AssetPermissionRules'),
             name: 'UserAssetPermissionRules',
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('route.UserAclLists'),
+            title: this.$t('UserAclLists'),
             name: 'UserLoginAcl',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
           },
           {
-            title: this.$t('route.UserSession'),
+            title: this.$t('UserSession'),
             name: 'UserSession',
             hidden: () => !vm.$hasPerm('terminal.view_session')
           }
@@ -77,7 +86,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss' scoped>
-
-</style>

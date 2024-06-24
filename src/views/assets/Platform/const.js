@@ -20,7 +20,8 @@ export const platformFieldsMeta = (vm) => {
         'change_secret_enabled', 'change_secret_method', 'change_secret_params',
         'push_account_enabled', 'push_account_method', 'push_account_params',
         'verify_account_enabled', 'verify_account_method', 'verify_account_params',
-        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params'
+        'gather_accounts_enabled', 'gather_accounts_method', 'gather_accounts_params',
+        'remove_account_enabled', 'remove_account_method', 'remove_account_params'
       ],
       fieldsMeta: {
         ansible_config: {
@@ -28,12 +29,15 @@ export const platformFieldsMeta = (vm) => {
           hidden: (formValue) => !formValue['ansible_enabled']
         },
         gather_facts_enabled: {},
+        remove_account_enabled: {},
         ping_method: {},
         ping_params: {
           label: ''
         },
         gather_facts_method: {},
         push_account_method: {},
+        remove_account_method: {},
+        remove_account_params: {},
         push_account_params: {
           label: ''
         },
@@ -47,7 +51,7 @@ export const platformFieldsMeta = (vm) => {
         change_secret_params: {
           label: '',
           el: {
-            title: vm.$t('assets.ChangeSecretParams'),
+            title: vm.$t('ChangeSecretParams'),
             method: 'change_secret_posix'
           }
         },
@@ -56,7 +60,7 @@ export const platformFieldsMeta = (vm) => {
     },
     category_type: {
       type: 'cascader',
-      label: i18n.t('assets.Type'),
+      label: i18n.t('Type'),
       rules: [
         rules.Required
       ],
@@ -78,12 +82,12 @@ export const platformFieldsMeta = (vm) => {
       }
     },
     protocols: {
-      label: i18n.t('assets.SupportedProtocol'),
+      label: i18n.t('SupportedProtocol'),
       ...assetMeta.protocols,
       el: {
         choices: []
       },
-      helpText: i18n.t('assets.SupportedProtocolHelpText')
+      helpText: i18n.t('SupportedProtocolHelpText')
     },
     su_method: {
       type: 'select',
@@ -129,8 +133,9 @@ export const setAutomations = (vm) => {
     _.set(autoFieldsMeta, `${itemMethodKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
     })
+    _.set(autoFieldsMeta, `${itemEnabledKey}.attrs.class`, 'item-enable')
     // 设置 enableMethod className
-    _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'itemMethodKey')
+    _.set(autoFieldsMeta, `${itemMethodKey}.attrs.class`, 'item-method')
     // 设置 enableParams Hidden
     _.set(autoFieldsMeta, `${itemParamsKey}.hidden`, (formValue) => {
       return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
@@ -148,7 +153,7 @@ export const setAutomations = (vm) => {
     // 设置 enableParams label
     _.set(autoFieldsMeta, `${itemParamsKey}.label`, '')
     // 设置 enableParams className
-    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'itemParamsKey')
+    _.set(autoFieldsMeta, `${itemParamsKey}.attrs.class`, 'item-params')
     _.set(autoFieldsMeta, `${itemParamsKey}.component`, AutomationParamsSetting)
     _.set(autoFieldsMeta, `${itemParamsKey}.el.method`, initial[itemMethodKey])
     // }

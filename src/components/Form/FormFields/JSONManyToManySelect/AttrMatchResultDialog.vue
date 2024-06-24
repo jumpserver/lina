@@ -2,7 +2,7 @@
   <Dialog
     :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('common.MatchResult')"
+    :title="$tc('MatchResult')"
     :v-bind="$attrs"
     :v-on="$listeners"
     :visible.sync="iVisible"

@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage ref="listPage" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -21,8 +21,6 @@ export default {
         },
         columnsMeta: {
           users_amount: {
-            label: this.$t('users.Users'),
-            width: '120px',
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
@@ -36,7 +34,7 @@ export default {
                     id: row.id
                   },
                   query: {
-                    activeTab: 'GroupUser'
+                    tab: 'GroupUser'
                   }
                 }
               }
@@ -53,10 +51,11 @@ export default {
         createRoute: 'UserGroupCreate'
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listPage.reloadTable()
+    })
   }
 }
 </script>
-
-<style>
-
-</style>

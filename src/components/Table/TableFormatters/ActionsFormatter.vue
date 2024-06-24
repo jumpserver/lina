@@ -5,6 +5,7 @@
     :more-actions="moreActions"
     :more-actions-title="moreActionsTitle"
     :size="'mini'"
+    class="table-actions"
   />
 </template>
 
@@ -51,14 +52,15 @@ const defaultCloneCallback = function({ row, col }) {
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  let msg = this.$t('common.deleteWarningMsg')
+  let msg = this.$t('DeleteWarningMsg')
   const name = row.name || row.hostname
   if (name) {
     msg += ` "${name}" `
   }
   msg += ' ?'
-  const title = this.$t('common.Info')
+  const title = this.$t('Info')
   const performDelete = this.colActions.performDelete
+  const afterDelete = this.colActions.afterDelete
   this.$alert(msg, title, {
     type: 'warning',
     confirmButtonClass: 'el-button--danger',
@@ -70,7 +72,10 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        if (afterDelete instanceof Function) {
+          afterDelete({ row: row, col: col })
+        }
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -111,7 +116,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$t('common.Update'),
+        title: this.$t('Edit'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -120,7 +125,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$t('common.Delete'),
+        title: this.$t('Delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
@@ -129,7 +134,7 @@ export default {
       },
       {
         name: 'clone',
-        title: this.$t('common.Clone'),
+        title: this.$t('Duplicate'),
         type: 'info',
         has: colActions.hasClone,
         can: colActions.canClone,
@@ -141,7 +146,8 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: colActions.moreActionsTitle || this.$t('common.More')
+      moreActionsTitle: ''
+      // moreActionsTitle: colActions.moreActionsTitle || null
     }
   },
   computed: {
@@ -152,7 +158,7 @@ export default {
         v.has = this.cleanBoolean(v, 'has', true)
         v.can = this.cleanBoolean(v, 'can', true)
         v.callback = this.cleanCallback(v, 'callback')
-        v.fa = this.cleanValue(v, 'fa')
+        v.icon = this.cleanValue(v, 'icon')
         v.order = v.order || 100
         v.tip = this.cleanValue(v, 'tip')
         v.title = this.cleanValue(v, 'title')
@@ -195,7 +201,9 @@ export default {
         cellValue: this.cellValue,
         tableData: this.tableData
       }
-      return () => { return callback.bind(this)(attrs) }
+      return () => {
+        return callback.bind(this)(attrs)
+      }
     },
     cleanValue(item, attr) {
       const value = item[attr]
@@ -216,5 +224,11 @@ export default {
 </script>
 
 <style scoped>
-
+.table-actions {
+  ::v-deep {
+    .el-icon-arrow-down {
+      display: none;
+    }
+  }
+}
 </style>

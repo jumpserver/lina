@@ -13,25 +13,19 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'SyncInstanceTaskList',
+        activeMenu: 'CloudAccountList',
         submenu: [
           {
-            title: this.$t('common.SyncTask'),
-            name: 'SyncInstanceTaskList',
-            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask'),
-            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskList.vue')
+            title: this.$t('CloudAccountList'),
+            name: 'CloudAccountList',
+            hidden: () => !this.$hasPerm('xpack.view_account'),
+            component: () => import('@/views/assets/Cloud/Account/AccountList.vue')
           },
           {
-            title: this.$t('xpack.Cloud.SyncStrategy'),
+            title: this.$t('SyncStrategy'),
             name: 'StrategyList',
             hidden: () => !this.$hasPerm('xpack.view_strategy'),
             component: () => import('@/views/assets/Cloud/Strategy/StrategyList.vue')
-          },
-          {
-            title: this.$t('xpack.Cloud.AccountList'),
-            name: 'AccountList',
-            hidden: () => !this.$hasPerm('xpack.view_account'),
-            component: () => import('@/views/assets/Cloud/Account/AccountList.vue')
           }
         ],
         actions: {
@@ -42,7 +36,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

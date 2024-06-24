@@ -6,7 +6,7 @@
         <span />
         <span />
       </span>
-      <div v-else class="inline-block markdown-body" v-html="text" />
+      <div v-else v-sanitize="text" class="inline-block markdown-body" />
     </div>
   </div>
 </template>
@@ -19,12 +19,12 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { copy } from '@/utils/common'
 
-/* eslint-disable vue/no-v-html */
 export default {
   props: {
     message: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -86,7 +86,8 @@ export default {
       if (this.$refs.textRef) {
         const copyBtn = this.$refs.textRef.querySelectorAll('.code-block-header__copy')
         copyBtn.forEach((btn) => {
-          btn.removeEventListener('click', () => {})
+          btn.removeEventListener('click', () => {
+          })
         })
       }
     }
@@ -97,24 +98,31 @@ export default {
 <style lang="scss" scoped>
 .markdown-body {
   font-size: 13px;
-  &>>> p {
+
+  &::v-deep p {
     margin-bottom: 0 !important;
   }
+
   background: inherit;
-  &>>> pre {
+
+  &::v-deep pre {
     padding: 0 0 6px 0;
+
     .hljs.code-block-body {
       border-radius: 4px;
     }
   }
-  &>>> .code-block-wrapper {
+
+  &::v-deep .code-block-wrapper {
     background: #1F2329;
     padding: 2px 6px;
     margin: 5px 0;
 
     .code-block-body {
       padding: 5px 10px 0;
-    };
+    }
+  ;
+
     .code-block-header {
       margin-bottom: 4px;
       overflow: hidden;
@@ -124,11 +132,13 @@ export default {
       .code-block-header__copy {
         float: right;
         cursor: pointer;
+
         &:hover {
           color: #6e747b;
         }
       }
     }
+
     .hljs.code-block-body.javascript {
       .hljs-comment {
         display: block;
@@ -136,16 +146,20 @@ export default {
     }
   }
 }
->>> .link-style {
+
+::v-deep .link-style {
   color: #487bf4;
+
   &:hover {
     color: #275ee3;
   }
 }
-.loading-box{
+
+.loading-box {
   margin-left: 6px;
 }
-.loading-box span{
+
+.loading-box span {
   display: inline-block;
   width: 5px;
   height: 5px;
@@ -155,24 +169,29 @@ export default {
   background: #676A6c;
   animation: load 1.2s ease infinite;
 }
-.loading-box span:last-child{
+
+.loading-box span:last-child {
   margin-right: 0;
 }
-@keyframes load{
-  0%{
+
+@keyframes load {
+  0% {
     opacity: 1;
   }
-  100%{
+  100% {
     opacity: 0;
   }
 }
-.loading-box span:nth-child(1){
+
+.loading-box span:nth-child(1) {
   animation-delay: 0.23s;
 }
-.loading-box span:nth-child(2){
+
+.loading-box span:nth-child(2) {
   animation-delay: 0.36s;
 }
-.loading-box span:nth-child(3){
+
+.loading-box span:nth-child(3) {
   animation-delay: 0.49s;
 }
 </style>

@@ -13,14 +13,15 @@ export default {
   components: {
     Page, GenericListTable
   },
+  activated() {
+    this.reloadTable()
+  },
   methods: {
     reloadTable() {
-      this.$refs.ListTable.reloadTable()
+      setTimeout(() => {
+        this.$refs.ListTable.reloadTable()
+      }, 300)
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

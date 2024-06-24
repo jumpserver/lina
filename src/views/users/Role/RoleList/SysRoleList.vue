@@ -1,5 +1,7 @@
 <template>
-  <BaseRoleList scope="system" />
+  <div>
+    <BaseRoleList ref="roleList" scope="system" />
+  </div>
 </template>
 
 <script>
@@ -10,13 +12,8 @@ export default {
   components: {
     BaseRoleList
   },
-  data() {
-    return {
-    }
+  activated() {
+    this.$refs.roleList.reloadTable()
   }
 }
 </script>
-
-<style>
-
-</style>

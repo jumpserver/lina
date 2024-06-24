@@ -7,9 +7,11 @@ export default [
     redirect: '',
     component: empty,
     meta: {
-      title: i18n.t('route.Sessions'),
+      title: i18n.t('Sessions'),
       app: 'terminal',
       resource: 'session',
+      expanded: true,
+      icon: 'session',
       permissions: ['terminal.view_session']
     },
     children: [
@@ -18,7 +20,7 @@ export default [
         name: 'SessionList',
         component: () => import('@/views/sessions/SessionList'),
         meta: {
-          title: i18n.t('route.SessionList'),
+          title: i18n.t('SessionList'),
           permissions: ['terminal.view_session']
         }
       },
@@ -27,7 +29,7 @@ export default [
         name: 'SessionDetail',
         component: () => import('@/views/sessions/SessionDetail'),
         hidden: true,
-        meta: { title: i18n.t('route.SessionDetail') }
+        meta: { title: i18n.t('SessionDetail') }
       }
     ]
   },
@@ -36,7 +38,8 @@ export default [
     name: 'CommandList',
     component: () => import('@/views/sessions/CommandList/index'),
     meta: {
-      title: i18n.t('route.Commands'),
+      title: i18n.t('SessionCommands'),
+      icon: 'command',
       permissions: ['terminal.view_command']
     }
   },
@@ -45,8 +48,19 @@ export default [
     name: 'FtpLog',
     component: () => import('@/views/sessions/FTPLogList'),
     meta: {
-      title: i18n.t('route.FileTransfer'),
+      title: i18n.t('FileTransfer'),
+      icon: 'file-transfer',
       permissions: ['audits.view_ftplog']
+    }
+  },
+  {
+    path: '/audit/online-user-session',
+    component: () => import('@/views/sessions/OnlineSession/OnlineSessionList'),
+    name: 'OnlineSession',
+    meta: {
+      icon: 'device',
+      title: i18n.t('OnlineSession'),
+      permissions: ['audits.view_usersession']
     }
   }
 ]

@@ -7,7 +7,8 @@ export default [
     name: 'LoginLog',
     component: empty,
     meta: {
-      title: i18n.t('route.LoginLog'),
+      title: i18n.t('LoginLog'),
+      icon: 'login',
       permissions: ['audits.view_userloginlog']
     },
     children: [
@@ -16,7 +17,7 @@ export default [
         name: 'LoginLogList',
         component: () => import('@/views/audits/LoginLog/LoginLogList'),
         meta: {
-          title: i18n.t('route.LoginLog'),
+          title: i18n.t('LoginLog'),
           permissions: ['audits.view_userloginlog']
         }
       },
@@ -26,38 +27,8 @@ export default [
         component: () => import('@/views/audits/LoginLog/LoginLogDetail/index'),
         hidden: true,
         meta: {
-          title: i18n.t('route.LoginLog'),
+          title: i18n.t('LoginLog'),
           permissions: ['audits.view_userloginlog']
-        }
-      }
-    ]
-  },
-  {
-    path: 'operate-logs',
-    name: '',
-    component: empty,
-    meta: {
-      title: i18n.t('route.OperateLog'),
-      permissions: ['audits.view_operatelog']
-    },
-    children: [
-      {
-        path: '',
-        name: 'OperateLogList',
-        component: () => import('@/views/audits/OperateLog/OperateLogList'),
-        meta: {
-          title: i18n.t('route.OperateLog'),
-          permissions: ['audits.view_operatelog']
-        }
-      },
-      {
-        path: ':id',
-        name: 'OperateLogDetail',
-        component: () => import('@/views/audits/OperateLog/OperateLogDetail/index'),
-        hidden: true,
-        meta: {
-          title: i18n.t('route.OperateLog'),
-          permissions: ['audits.view_operatelog']
         }
       }
     ]
@@ -67,16 +38,50 @@ export default [
     name: 'PasswordChangeLog',
     component: () => import('@/views/audits/PasswordChangeLogList'),
     meta: {
-      title: i18n.t('route.PasswordChangeLog'),
+      title: i18n.t('UserPasswordChangeLog'),
+      menuTitle: i18n.t('PasswordChangeLog'),
+      icon: 'password',
       permissions: ['audits.view_passwordchangelog']
     }
+  },
+  {
+    path: 'operate-logs',
+    name: '',
+    component: empty,
+    meta: {
+      title: i18n.t('OperateLog'),
+      icon: 'operate-log',
+      permissions: ['audits.view_operatelog']
+    },
+    children: [
+      {
+        path: '',
+        name: 'OperateLogList',
+        component: () => import('@/views/audits/OperateLog/OperateLogList'),
+        meta: {
+          title: i18n.t('OperateLog'),
+          permissions: ['audits.view_operatelog']
+        }
+      },
+      {
+        path: ':id',
+        name: 'OperateLogDetail',
+        component: () => import('@/views/audits/OperateLog/OperateLogDetail/index'),
+        hidden: true,
+        meta: {
+          title: i18n.t('OperateLog'),
+          permissions: ['audits.view_operatelog']
+        }
+      }
+    ]
   },
   {
     path: 'job-execution-log',
     name: 'JobExecutionLog',
     component: () => import('@/views/audits/JobExecutionLogList'),
     meta: {
-      title: i18n.t('route.JobExecutionLog'),
+      title: i18n.t('JobExecutionLog'),
+      icon: 'task',
       permissions: ['audits.view_joblog']
     }
   }

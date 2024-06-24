@@ -56,10 +56,10 @@ export default {
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
-          [this.$t('common.Basic'), ['name', 'address', 'platform', 'nodes']],
-          [this.$t('assets.Protocol'), ['protocols']],
-          [this.$t('assets.Account'), ['accounts']],
-          [this.$t('common.Other'), ['domain', 'labels', 'is_active', 'comment']]
+          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes']],
+          [this.$t('Protocol'), ['protocols']],
+          [this.$t('Account'), ['accounts']],
+          [this.$t('Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: assetFieldsMeta(this),
         performSubmit(validValues) {

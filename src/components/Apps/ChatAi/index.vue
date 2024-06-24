@@ -1,26 +1,44 @@
 <template>
-  <div class="chat">
-    <div class="container">
-      <div class="header">
-        <div class="left">
-          <img :src="robotUrl" alt="">
-          <span class="title">{{ title }}</span>
+  <DrawerPanel
+    ref="drawer"
+    :default-show-panel="!!defaultShowPanel"
+    :expanded="expanded"
+    :height="height"
+    :icon="robotUrl"
+    :modal="false"
+    @toggle="onToggle"
+  >
+    <div class="chat">
+      <div class="container">
+        <div ref="header" class="header" @mousedown="handleMoveMouseDown" @mouseup="handleMouseMoveUp">
+          <div class="left">
+            <img :src="robotUrl" alt="">
+            <span class="title">{{ title }}</span>
+          </div>
+          <span class="new" @click="onNewChat">
+            <i class="el-icon-plus" />
+            <span>{{ $tc('NewChat') }}</span>
+          </span>
         </div>
-        <span class="new" @click="onNewChat">
-          <i class="el-icon-plus" />
-          <span>{{ $tc('common.NewChat') }}</span>
-        </span>
+        <div class="content">
+          <keep-alive>
+            <component :is="active" ref="component" :expanded="expanded" />
+          </keep-alive>
+        </div>
       </div>
-      <div class="content">
-        <keep-alive>
-          <component :is="active" ref="component" />
-        </keep-alive>
+      <div class="sidebar">
+        <Sidebar
+          :active.sync="active"
+          :expanded="expanded"
+          v-bind="$attrs"
+          @close="onClose"
+          @compress="compress"
+          @expand="expandFull"
+          v-on="$listeners"
+        />
       </div>
     </div>
-    <div class="sidebar">
-      <Sidebar v-bind="$attrs" :active.sync="active" :submenu="submenu" />
-    </div>
-  </div>
+  </DrawerPanel>
 </template>
 
 <script>
@@ -28,9 +46,11 @@ import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import { ws } from '@/utils/socket'
+import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 
 export default {
   components: {
+    DrawerPanel,
     Chat,
     Sidebar
   },
@@ -38,8 +58,12 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('setting.ChatAI')
+        return this.$t('ChatAI')
       }
+    },
+    defaultShowPanel: {
+      type: Boolean,
+      default: false
     },
     drawerPanelVisible: {
       type: Boolean,
@@ -49,29 +73,46 @@ export default {
   data() {
     return {
       active: 'chat',
-      robotUrl: require('../../../assets/img/robot-assistant.png'),
-      submenu: [
-        {
-          name: 'chat',
-          label: this.$t('common.Chat'),
-          icon: 'chat'
-        }
-      ]
+      robotUrl: require('@/assets/img/robot-assistant.png'),
+      height: '400px',
+      expanded: false,
+      clientOffset: {}
     }
   },
   watch: {
-    drawerPanelVisible(value) {
-      if (value && !ws) {
-        this.initWebSocket()
-      }
-    }
+  },
+  mounted() {
+    this.handlePostMessage()
   },
   methods: {
+    handlePostMessage() {
+      window.addEventListener('message', (event) => {
+        if (event.data === 'show-chat-panel') {
+          this.$refs.drawer.show = true
+        }
+      })
+    },
+    handleMoveMouseDown(event) {
+      this.$refs.drawer.handleHeaderMoveDown(event)
+    },
+    handleMouseMoveUp(event) {
+      this.$refs.drawer.handleHeaderMoveUp(event)
+    },
     initWebSocket() {
-      this.$refs.component?.init()
+      if (!ws) {
+        this.$refs.component?.init()
+      }
     },
     onClose() {
-      this.$parent.show = false
+      this.$refs.drawer.show = false
+    },
+    expandFull() {
+      this.height = '100%'
+      this.expanded = true
+    },
+    compress() {
+      this.height = '400px'
+      this.expanded = false
     },
     onNewChat() {
       this.active = 'chat'
@@ -79,6 +120,12 @@ export default {
         this.$refs.component?.onNewChat()
         getInputFocus()
       })
+    },
+    onToggle(status) {
+      this.initWebSocket()
+      if (status) {
+        getInputFocus()
+      }
     }
   }
 }
@@ -89,12 +136,16 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
+  pointer-events: auto;
+
   .container {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
     .header {
+      background: linear-gradient(90deg, #ebf1ff 24.34%, #e5fbf8 56.18%, #f2ebfe 90.18%);;
       display: flex;
       justify-content: space-between;
       height: 48px;

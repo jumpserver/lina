@@ -47,10 +47,10 @@
           :title="item.label"
           class="el-transfer-panel__item"
         >
-          <span v-html="isHighlight ? filterHighlight(item.label) : item.label" />
+          <span v-sanitize="isHighlight ? filterHighlight(item.label) : item.label" />
         </el-checkbox>
       </el-checkbox-group>
-      <p v-else class="no-data">{{ this.$t('common.NoData') }}</p>
+      <p v-else class="no-data">{{ this.$t('NoData') }}</p>
     </div>
     <div class="vip-footer">
       <el-button :disabled="disabledPre" class="v-page" plain small @click="prev">
@@ -131,8 +131,8 @@ export default {
       asyncSearch: false, // 要执行异步搜索的标记
       asyncPageIndex: 1, // 异步分页的 pageIndex
       asyncSearchPageIndex: 1, // 异步搜索的 pageIndex,
-      defaultPrev: '< ' + this.$tc('common.PagePrev'),
-      defaultNext: this.$tc('common.PageNext') + ' >'
+      defaultPrev: '< ' + this.$tc('PagePrev'),
+      defaultNext: this.$tc('PageNext') + ' >'
     }
   },
   watch: {
@@ -169,11 +169,11 @@ export default {
     handleKeyword() {
       this.asyncSearchPageIndex = 1
       this.asyncSearchFlag &&
-        this.$emit(
-          'get-data-by-keyword',
-          this.searchWord,
-          this.asyncSearchPageIndex
-        )
+      this.$emit(
+        'get-data-by-keyword',
+        this.searchWord,
+        this.asyncSearchPageIndex
+      )
     },
     // 分页数据
     initData() {
@@ -294,11 +294,12 @@ export default {
     .el-checkbox {
       display: inline-block;
 
-      >>> .el-checkbox__label {
+      ::v-deep .el-checkbox__label {
         font-size: 14px;
       }
     }
   }
+
   .el-transfer-panel__body {
     height: 335px;
     //padding: 6px 0;
@@ -307,10 +308,15 @@ export default {
       margin: 6px 14px;
       line-height: 0;
 
+      .el-input__inner {
+        height: 30px;
+      }
+
       .showClear {
         padding-right: 30px;
         border-radius: 0;
       }
+
       .clear-input {
         position: absolute;
         height: 100%;
@@ -336,9 +342,11 @@ export default {
       }
     }
   }
+
   .el-checkbox-group {
     height: 295px;
     overflow: auto;
+
     &.expand {
       height: 290px;
     }
@@ -348,16 +356,17 @@ export default {
       line-height: 28px;
       height: 28px;
 
-      >>> .el-checkbox__label  {
+      ::v-deep .el-checkbox__label {
         font-weight: 400;
-        line-height: 28px ;
+        line-height: 28px;
       }
 
-      >>> .el-checkbox__input {
+      ::v-deep .el-checkbox__input {
         top: 7px;
       }
     }
   }
+
   .check-number {
     position: absolute;
     right: 15px;
@@ -366,6 +375,7 @@ export default {
     font-size: 12px;
     font-weight: 400;
   }
+
   .no-data {
     font-size: 14px;
     margin: 0;
@@ -375,6 +385,7 @@ export default {
     color: #909399;
     text-align: center;
   }
+
   .vip-footer {
     display: flex;
     position: relative;
@@ -388,6 +399,7 @@ export default {
       margin: 0;
       border-radius: 0;
       padding: 10px 15px;
+
       &:first-child {
         border-right: 1px solid #ebeef5;
       }

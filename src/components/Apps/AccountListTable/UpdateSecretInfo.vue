@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :destroy-on-close="true"
-    :title="$tc('assets.UpdateAssetUserToken')"
+    :title="$tc('UpdateAssetUserToken')"
     :visible.sync="visible"
     width="50"
     @cancel="handleCancel()"
@@ -9,19 +9,19 @@
     v-on="$listeners"
   >
     <el-form label-position="right" label-width="90px">
-      <el-form-item :label="$tc('assets.Name')">
+      <el-form-item :label="$tc('Name')">
         <el-input v-model="account['asset_name']" readonly />
       </el-form-item>
-      <el-form-item :label="$tc('assets.Username')">
+      <el-form-item :label="$tc('Username')">
         <el-input v-model="account['username']" readonly />
       </el-form-item>
-      <el-form-item :label="$tc('assets.Password')">
+      <el-form-item :label="$tc('Password')">
         <UpdateToken v-model="authInfo.password" />
       </el-form-item>
-      <el-form-item :label="$tc('assets.SSHSecretKey')">
+      <el-form-item :label="$tc('SSHSecretKey')">
         <UploadKey @input="getFile" />
       </el-form-item>
-      <el-form-item :label="$tc('assets.Passphrase')">
+      <el-form-item :label="$tc('Passphrase')">
         <UpdateToken v-model="authInfo.passphrase" />
       </el-form-item>
     </el-form>
@@ -75,12 +75,12 @@ export default {
         { disableFlashErrorMsg: true }
       ).then(res => {
         this.authInfo = { password: '', private_key: '' }
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.$emit('updateAuthDone', res)
         this.$emit('update:visible', false)
       }).catch(err => {
         const errMsg = Object.values(err.response.data).join(', ')
-        this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
+        this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
         this.$emit('update:visible', true)
       })
     },

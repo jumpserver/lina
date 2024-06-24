@@ -2,7 +2,7 @@
   <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <div>
       <el-alert v-if="currentTime" :closable="false" type="success">
-        {{ `${this.$t('setting.ServerTime')}: ${currentTime}` }}
+        {{ `${this.$t('ServerTime')}: ${currentTime}` }}
       </el-alert>
       <keep-alive>
         <component :is="activeMenu" />
@@ -18,6 +18,7 @@ import Telnet from './Telnet'
 import Nmap from './Nmap'
 import Tcpdump from './Tcpdump'
 import Traceroute from './Traceroute'
+import Basic from './Basic'
 
 export default {
   components: {
@@ -26,15 +27,21 @@ export default {
     Telnet,
     Nmap,
     Tcpdump,
-    Traceroute
+    Traceroute,
+    Basic
   },
   data() {
     return {
       timer: null,
       currentTime: '',
       loading: true,
-      activeMenu: 'Ping',
+      activeMenu: 'Basic',
       submenu: [
+        {
+          title: this.$t('Basic'),
+          name: 'Basic',
+          hidden: () => !this.$route?.fullPath?.startsWith('/settings/tools')
+        },
         {
           title: 'Ping',
           name: 'Ping'

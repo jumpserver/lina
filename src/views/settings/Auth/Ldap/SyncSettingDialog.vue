@@ -3,7 +3,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('setting.SyncSetting')"
+    :title="$tc('SyncSetting')"
     top="10%"
     v-bind="$attrs"
     width="50%"
@@ -58,15 +58,14 @@ export default {
           },
           AUTH_LDAP_SYNC_CRONTAB: {
             component: CronTab,
-            helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+            helpTip: this.$t('CrontabOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_INTERVAL: {
             rules: [Required],
-            helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
+            helpText: this.$t('IntervalOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_RECEIVERS: {
             component: Select2,
-            label: this.$t('accounts.AccountChangeSecret.Addressee'),
             el: {
               value: [],
               multiple: true,

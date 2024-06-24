@@ -26,7 +26,7 @@ export default {
         onCreate: () => {
           this.uploadDialogVisible = true
         },
-        createTitle: this.$t('common.Upload'),
+        createTitle: this.$t('Upload'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['version']

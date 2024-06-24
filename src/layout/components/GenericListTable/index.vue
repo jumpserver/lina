@@ -10,9 +10,10 @@ export default {
   components: {
     ListTable
   },
-  computed: {
-  },
-  created() {
+  activated() {
+    setTimeout(() => {
+      this.reloadTable()
+    }, 300)
   },
   methods: {
     reloadTable() {
@@ -22,6 +23,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.list-table {
+  margin-bottom: 20px;
+}
 </style>

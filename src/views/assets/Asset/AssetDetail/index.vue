@@ -37,26 +37,26 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.AssetDetail'),
+            title: this.$t('Basic'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.AccountList'),
+            title: this.$t('AccountList'),
             name: 'Account',
             hidden: () => !this.$hasPerm('accounts.view_account')
           },
           {
-            title: this.$t('assets.PermUserList'),
+            title: this.$t('PermUserList'),
             name: 'PermUserList',
             hidden: () => !this.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('route.SessionList'),
+            title: this.$t('SessionList'),
             name: 'AssetSession',
             hidden: () => !this.$hasPerm('terminal.view_session')
           },
           {
-            title: this.$t('route.Commands'),
+            title: this.$t('Commands'),
             name: 'AssetCommand',
             hidden: () => !this.$hasPerm('terminal.view_command')
           }
@@ -81,7 +81,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

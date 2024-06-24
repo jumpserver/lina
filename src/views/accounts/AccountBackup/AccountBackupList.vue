@@ -8,7 +8,7 @@ import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatt
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountBackupPlanList',
+  name: 'AccountBackupList',
   components: {
     GenericListTable
   },
@@ -28,33 +28,24 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'org_name', 'is_periodic',
-            'periodic_display', 'executed_amount', 'actions'
+            'name', 'org_name', 'periodic_display',
+            'executed_amount', 'actions'
           ]
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountBackupPlanDetail'
+              route: 'AccountBackupDetail'
             }
           },
           types: {
             formatter: ArrayFormatter
           },
           is_periodic: {
-            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
-            },
-            width: '80px'
-          },
-          periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
-            width: '150px'
-          },
-          comment: {
-            width: '90px'
+            }
           },
           executed_amount: {
             formatter: DetailFormatter,
@@ -64,7 +55,7 @@ export default {
                 return {
                   name: 'AccountBackupList',
                   query: {
-                    activeTab: 'AccountBackupPlanExecutionList',
+                    tab: 'AccountBackupExecutionList',
                     plan_id: row.id
                   }
                 }
@@ -72,17 +63,16 @@ export default {
             }
           },
           actions: {
-            width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupPlanUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AccountBackupUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   type: 'info',
                   can: this.$hasPerm('accounts.view_accountbackupexecution'),
@@ -106,7 +96,7 @@ export default {
         hasImport: false,
         createRoute: () => {
           return {
-            name: 'AccountBackupPlanCreate'
+            name: 'AccountBackupCreate'
           }
         }
       }

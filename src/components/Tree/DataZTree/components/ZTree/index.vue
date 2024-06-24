@@ -1,33 +1,31 @@
 <template>
   <div>
     <div class="treebox">
-      <div>
+      <div v-if="treeSetting.showSearch">
         <el-input
-          v-if="treeSetting.showSearch && showTreeSearch"
+          v-show="showTreeSearch"
           v-model="treeSearchValue"
-          :placeholder="$tc('common.Search')"
+          :placeholder="$tc('Search')"
           class="fixed-tree-search"
           prefix-icon="fa fa-search"
           size="mini"
           @input="treeSearchHandle"
         >
           <span slot="suffix">
-            <!-- <i class="fa fa-search" style="font-size: 14px; color: #676A6C;" /> -->
-            <svg-icon
-              :icon-class="'close'"
-              class="icon"
-              style="font-size: 14px;"
+            <i
+              class="el-icon-close"
+              style="font-size: 12px; cursor: pointer"
               @click="onClose"
             />
           </span>
         </el-input>
       </div>
-      <ul v-show="loading" class="ztree">
-        {{ this.$t('common.tree.Loading') }}...
+      <ul v-show="loading" class="zloading">
+        {{ this.$t('Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" :key="iZTreeID" class="ztree" />
       <div v-if="treeSetting.treeUrl===''" class="tree-empty">
-        {{ this.$t('common.tree.Empty') }}
+        {{ this.$t('Empty') }}
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
@@ -68,7 +66,7 @@ export default {
       rMenu: '',
       init: false,
       loading: false,
-      showTreeSearch: JSON.parse(localStorage.getItem('showTreeSearch')) || false,
+      showTreeSearch: false,
       treeSearchValue: ''
     }
   },
@@ -80,18 +78,51 @@ export default {
   mounted() {
     window.refresh = this.refresh
     window.onSearch = this.onSearch
-    this.initTree()
+    this.initTree().then(() => {
+      this.$nextTick(() => {
+        this.updateTreeHeight()
+      })
+    })
+    window.addEventListener('resize', this.updateTreeHeight)
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
+    window.removeEventListener('resize', this.updateTreeHeight)
   },
   methods: {
+    updateTreeHeight: _.debounce(function() {
+      const tree = document.getElementById(this.iZTreeID)
+      if (!tree) {
+        return
+      }
+      // 使用 dialog 的高度
+      const dialogs = [...document.getElementsByClassName('el-dialog__body')]
+      if (dialogs.length > 0) {
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.iZTreeID) !== -1) || dialogs[dialogs.length - 1]
+        if (dialog) {
+          const dialogRect = dialog.getBoundingClientRect()
+          tree.style.height = `${dialogRect.height - 60}px`
+          return
+        }
+      }
+      // 使用 table 的高度
+      const ztreeRect = tree.getBoundingClientRect()
+      const table = document.getElementsByClassName('el-card table-content')
+      if (table.length > 0) {
+        const tableRect = table[0].getBoundingClientRect()
+        if (tableRect.height > 300) {
+          tree.style.height = `min(calc(100vh - ${ztreeRect.top}px - 30px), calc(${tableRect.height}px - 25px))`
+        }
+        return
+      }
+      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px)`
+    }, 100),
     async initTree(refresh = false) {
       const vm = this
       let treeUrl
       this.loading = true
       if (refresh && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 &&
-          this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
+        this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1
       ) {
         treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1)
           ? `${this.treeSetting.treeUrl}?rebuild_tree=1`
@@ -120,7 +151,7 @@ export default {
       if (!res) res = []
       if (res?.length === 0) {
         res?.push({
-          name: this.$t('common.tree.Empty')
+          name: this.$t('Empty')
         })
       }
       this.treeSetting.treeUrl = treeUrl
@@ -139,7 +170,7 @@ export default {
     },
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
-      localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
+      // localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
     },
     onClose() {
       this.refresh()
@@ -157,7 +188,7 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px">
+        <span style="float: right; margin-right: 10px;" class='tree-actions'>
           ${treeActions}
         </span>`
       if (rootNode) {
@@ -269,7 +300,7 @@ export default {
       })
 
       if (matchedNodes.length < 1) {
-        let name = this.$t('common.Search')
+        let name = this.$t('Search')
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: false, open: false }
@@ -317,7 +348,7 @@ export default {
       }
       const searchUrl = `${treeUrl}${filterField}`
       this.$axios.get(searchUrl).then(nodes => {
-        let name = this.$t('common.Search')
+        let name = this.$t('Search')
         const assetsAmount = nodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
@@ -341,13 +372,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
+.treebox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px 10px 0 10px;
 
-::-webkit-scrollbar-track:horizontal {
-  background: #FFFFFF;
-  border-radius: 10px;
+  .ztree {
+    width: 100%;
+    overflow: auto;
+    height: 648px;
+    background-color: #ffffff;
+
+    .level0 {
+      .node_name {
+        max-width: 120px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+
+    li {
+      background-color: transparent !important;
+
+      .button {
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      ul {
+        background-color: transparent !important;
+      }
+    }
+  }
+
+  &:hover {
+    ::v-deep .tree-action-btn {
+      display: inline;
+
+      &:hover {
+        box-shadow: none;
+        color: var(--color-text-primary) !important;
+      }
+    }
+  }
+
 }
 
 div.rMenu {
@@ -379,7 +447,7 @@ div.rMenu li {
   border: medium none;
   min-width: 160px;
   background-color: #fff;
-  border-radius: 3px;
+  border-radius: 2px;
   box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
   display: block;
   float: left;
@@ -404,7 +472,7 @@ div.rMenu li {
 }
 
 .dropdown-menu > li > a {
-  border-radius: 3px;
+  border-radius: 2px;
   color: inherit;
   line-height: 25px;
   margin: 4px;
@@ -414,38 +482,13 @@ div.rMenu li {
   padding: 3px 20px;
   clear: both;
   white-space: nowrap;
+  width: 20px;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   color: #262626;
   text-decoration: none;
   background-color: #f5f5f5;
-}
-
-.treebox {
-  background-color: transparent;
-
-  > > > .ztree {
-    overflow: auto;
-    background-color: transparent;
-    height: calc(100vh - 237px);
-
-    li {
-      background-color: transparent !important;
-
-      .button {
-        background-color: rgba(0, 0, 0, 0);
-      }
-
-      ul {
-        background-color: transparent !important;
-      }
-    }
-  }
-}
-
-::v-deep #tree-refresh {
-  margin-left: 3px;
 }
 
 ::v-deep .tree-banner-icon-zone {
@@ -519,6 +562,14 @@ div.rMenu li {
   outline: none;
 }
 
+.refresh-btn {
+  padding: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  background: inherit;
+  border: none;
+}
+
 .tree-header {
   position: relative;
 
@@ -530,7 +581,7 @@ div.rMenu li {
     height: 30px;
     line-height: 30px;
     border-bottom: 1px solid #e0e0e0;
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 0 5px;
     box-sizing: border-box;
     overflow: hidden;
@@ -538,7 +589,7 @@ div.rMenu li {
     background-color: #D7D8DC;
 
     .rotate {
-      transition: all .1 .8s;
+      transition: all 0.8s ease-in-out;
       transform: rotate(-90deg);
     }
 
@@ -559,21 +610,32 @@ div.rMenu li {
 .fixed-tree-search {
   margin-bottom: 10px;
 
-  & > > > .el-input__inner {
+  & ::v-deep .el-input__inner {
     border-radius: 4px;
     background: #fafafa;
     padding-right: 32px;
+    color: var(--color-text-primary)
   }
 
-  & > > > .el-input__suffix {
+  & ::v-deep .el-input__suffix {
     padding-right: 8px;
+
+    .el-input__suffix-inner:hover {
+      color: var(--color-text-primary);
+    }
   }
 
-  & > > > .el-input__prefix {
-    padding-left: 6px;
+  & ::v-deep .el-input__prefix {
+    display: flex;
+
+    .el-input__icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
-  & > > > .el-input__suffix-inner {
+  & ::v-deep .el-input__suffix-inner {
     line-height: 30px;
   }
 }
@@ -595,8 +657,8 @@ div.rMenu li {
   cursor: pointer;
 }
 
-.tree-action-btn {
-  padding: 0 2px;
-  color: red;
+::v-deep .tree-action-btn {
+  display: none;
 }
+
 </style>

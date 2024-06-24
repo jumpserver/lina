@@ -6,12 +6,18 @@
         v-show="action.dropdown.length > 0"
         :key="action.name"
         class="action-item"
-        trigger="click"
         placement="bottom-start"
+        trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button class="more-action" :size="size" v-bind="cleanButtonAction(action)">
-          {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+        <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)">
+          <span v-if="action.icon && !action.icon.startsWith('el-')" class="pre-icon">
+            <i v-if="action.icon.startsWith('fa')" :class="'fa fa-fw ' + action.icon" />
+            <svg-icon v-else :icon-class="action.icon" />
+          </span>
+          <span v-if="action.title">
+            {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+          </span>
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
           <template v-for="option in action.dropdown">
@@ -23,17 +29,21 @@
             >
               {{ option.group }}
             </div>
-            <el-dropdown-item
-              :key="option.name"
-              :command="[option, action]"
-              v-bind="option"
-            >
-              <span v-if="option.fa">
-                <i v-if="option.fa.startsWith('fa-')" :class="'fa ' + option.fa" />
-                <svg-icon v-else :icon-class="option.fa" style="font-size: 14px; margin-right: 2px; margin-left: -2px;" />
-              </span>
-              {{ option.title }}
-            </el-dropdown-item>
+            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" :open-delay="500" placement="top">
+              <el-dropdown-item
+                :key="option.name"
+                :command="[option, action]"
+                :title="option.tip"
+                class="dropdown-item"
+                v-bind="{...option, icon: ''}"
+              >
+                <span v-if="option.icon" class="pre-icon">
+                  <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
+                  <svg-icon v-else :icon-class="option.icon" />
+                </span>
+                {{ option.title }}
+              </el-dropdown-item>
+            </el-tooltip>
           </template>
         </el-dropdown-menu>
       </el-dropdown>
@@ -42,15 +52,15 @@
         v-else
         :key="action.name"
         :size="size"
-        v-bind="cleanButtonAction(action)"
         class="action-item"
+        v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
           <span>
-            <span v-if="action.fa" style="vertical-align: initial;">
-              <i v-if="action.fa.startsWith('fa-')" :class="'fa ' + action.fa" />
-              <svg-icon v-else :icon-class="action.fa" style="font-size: 14px;" />
+            <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
+              <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
+              <svg-icon v-else :icon-class="action.icon" />
             </span>
             {{ action.title }}
           </span>
@@ -61,6 +71,7 @@
 </template>
 
 <script>
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'DataActions',
@@ -88,8 +99,21 @@ export default {
     }
   },
   methods: {
+    hasIcon(action, type = '') {
+      const icon = action.icon
+      if (!icon) {
+        return false
+      }
+      if (type) {
+        return icon.startsWith(type)
+      }
+      return true
+    },
     handleDropdownCallback(command) {
       const [option, dropdown] = command
+      if (option.disabled) {
+        return
+      }
       const defaultCallback = () => this.$log.debug('No callback found: ', option, dropdown)
       let callback = option.callback
       if (!callback) {
@@ -100,7 +124,13 @@ export default {
       }
       return callback(option)
     },
+    toSentenceCase(s) {
+      return toSentenceCase(s)
+    },
     handleClick(action) {
+      if (action.disabled) {
+        return
+      }
       if (action && action.callback) {
         action.callback(action)
       } else {
@@ -135,7 +165,7 @@ export default {
         if (!v) {
           continue
         }
-        const action = Object.assign({}, v)
+        const action = { ...v }
         // 是否拥有这个action
         const has = this.checkItem(action, 'has')
         delete action['has']
@@ -147,10 +177,15 @@ export default {
 
         // 是否是disabled
         const can = this.checkItem(action, 'can')
-        action.disabled = !can
+        if (typeof can === 'string') {
+          action.disabled = true
+          action.tip = can
+        } else {
+          action.disabled = !can
+        }
+        delete action['can']
 
         if (action.dropdown) {
-          // const dropdown = this.cleanActions(action.dropdown)
           action.dropdown = this.cleanActions(action.dropdown)
         }
         cleanedActions.push(action)
@@ -162,49 +197,157 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$btn-text-color: #ffffff;
+$color-btn-background: #E8F7F4;
+$color-btn-focus-background: #83CBBA;
+$color-divided: #E4E7ED;
+$color-drop-menu-title: #909399;
+$color-drop-menu-border: #e4e7ed;
+
+// 通用
 .layout {
-  display: flex;
-  justify-content: center;
-}
+  .action-item {
+    margin-left: 5px;
 
-.dropdown-menu-title {
-  text-align: left;
-  font-size: 12px;
-  color: #909399;
-  line-height: 30px;
-  padding-left: 10px;
-  padding-top: 10px;
-  border-top: solid 1px #e4e7ed;
-}
-
-.dropdown-menu-title:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-.el-button-ungroup .action-item {
-  margin-left: 4px;
-}
-
-.el-button-ungroup .action-item:first-child {
-  margin-left: 0;
-}
-::v-deep .more-batch-processing {
-  &.el-dropdown-menu__item--divided {
-    margin-top: 0;
-    border-top: none;
-    color: #909399;
-    cursor: auto;
-    font-size: 12px;
-    line-height: 30px;
-    border-bottom: 1px solid #E4E7ED;
-    &:before {
-      height: 0;
+    &:first-child {
+      margin-left: 0;
     }
   }
-  &.el-dropdown-menu__item:not(.is-disabled):hover {
-    color: #909399;
-    background-color: #FFFFFF;
+
+  .el-button.el-button--default {
+    color: var(--color-text-primary) !important;
+  }
+}
+
+// 主要是左侧 LeftSide
+.layout.header-action {
+  .action-item.el-dropdown {
+    font-size: 11px;
+
+    .more-action.el-button--default {
+      ::v-deep .el-icon-arrow-down.el-icon--right {
+        color: var(--color-icon-primary) !important;
+      }
+    }
+
+    .el-button--primary {
+      ::v-deep .el-icon-arrow-down.el-icon--right {
+        color: #ffffff !important;
+      }
+
+      &.el-dropdown-selfdefine {
+        border: none;
+      }
+    }
+  }
+}
+
+// 主要是 Table 中的操作列
+.layout.table-actions {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  .el-button {
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    color: $btn-text-color;
+
+    * {
+      vertical-align: baseline !important;
+    }
+  }
+
+  ::v-deep .action-item.el-dropdown .el-button {
+    display: block;
+    color: var(--color-primary);
+    background-color: $color-btn-background;
+    border-color: $color-btn-focus-background;
+
+    &:focus {
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background !important;
+    }
+
+    &:hover {
+      color: $btn-text-color;
+      background-color: $color-btn-focus-background;
+    }
+  }
+}
+
+// 下拉 options
+.el-dropdown-menu {
+  ::v-deep .more-batch-processing {
+    text-align: center;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    &.el-dropdown-menu__item--divided {
+      margin-top: 0;
+      border-top: none;
+      color: var(--color-text-primary);
+      cursor: auto;
+      font-size: 12px;
+      line-height: 30px;
+      border-bottom: 1px solid $color-divided;
+
+      &:before {
+        height: 0;
+      }
+    }
+  }
+
+  .dropdown-item {
+    color: var(--color-text-primary);
+
+    .pre-icon {
+      width: 17px;
+      display: inline-block;
+    }
+
+    ::v-deep i.fa {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+      margin-right: 0;
+    }
+
+    ::v-deep .svg-icon {
+      font-size: 13px;
+      height: 13px;
+      width: 13px;
+    }
+  }
+
+  .el-dropdown-menu__item {
+    &.is-disabled {
+      color: var(--color-disabled);
+      cursor: not-allowed;
+      pointer-events: auto;
+    }
+
+    &:not(.is-disabled):hover {
+      background-color: var(--color-disabled-background);
+    }
+  }
+
+  .dropdown-menu-title {
+    text-align: left;
+    font-size: 12px;
+    color: $color-drop-menu-title;
+    line-height: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-top: solid 1px $color-drop-menu-border;
+
+    &:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
   }
 }
 </style>

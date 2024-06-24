@@ -10,7 +10,7 @@ const state = {
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
-  publicSettings: null,
+  publicSettings: {},
   hasValidLicense: false,
   themeColors: JSON.parse(localStorage.getItem('themeColors')) || {}
 }

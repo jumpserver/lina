@@ -12,7 +12,7 @@ export default {
     return {
       url: '/api/v1/assets/webs/',
       addFields: [
-        [this.$t('common.Selector'), [
+        [this.$t('Selector'), [
           'autofill', 'username_selector',
           'password_selector', 'submit_selector',
           'script'

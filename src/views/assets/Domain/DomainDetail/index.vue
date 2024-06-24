@@ -25,18 +25,19 @@ export default {
       TaskDetail: {},
       config: {
         activeMenu: 'Detail',
+        url: '/api/v1/assets/domains',
         submenu: [
           {
-            title: this.$t('assets.DomainDetail'),
+            title: this.$t('Basic'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.GatewayList'),
+            title: this.$t('GatewayList'),
             name: 'GatewayList',
             hidden: () => !this.$hasPerm('assets.view_gateway')
           },
           {
-            title: this.$t('assets.AssetList'),
+            title: this.$t('AssetList'),
             name: 'AssetList',
             hidden: () => !this.$hasPerm('assets.view_asset')
           }

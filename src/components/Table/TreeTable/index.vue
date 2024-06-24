@@ -1,10 +1,13 @@
 <template>
   <el-collapse-transition>
-    <div
-      class="tree-table-content"
-      style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;"
-    >
-      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="left">
+    <div class="tree-table-content">
+      <div
+        v-show="iShowTree"
+        :class="iShowTree ? '' : 'hidden'"
+        :style="{width: treeWidth}"
+        class="left"
+      >
+        <span v-if="component === 'AutoDataZTree'" class="title">{{ $t('AssetTree') }}</span>
         <component
           :is="component"
           :key="componentTreeKey"
@@ -21,15 +24,16 @@
         </component>
       </div>
       <div
-        :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
+        :style="{'width': iShowTree ? ('calc(100% - ' + treeWidth + ')') : '100%'}"
         class="right"
+        style="display: flex"
       >
-        <div v-if="showTree" class="mini">
+        <div v-if="true" class="mini">
           <div :class="{'is-show': iShowTree}" class="mini-button" @click="iShowTree = !iShowTree">
             <svg-icon
-              :icon-class="'double-left'"
               :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
               class="icon-left"
+              icon-class="double-left"
             />
           </div>
         </div>
@@ -89,7 +93,7 @@ export default {
     },
     treeWidth: {
       type: String,
-      default: () => '20%'
+      default: () => '23.6%'
     }
   },
   data() {
@@ -155,72 +159,120 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .is-show {
-    display: none;
-  }
+$origin-color: #ffffff;
 
-  .is-rotate {
-    display: block;
-    transform: rotate(180deg);
-  }
+.tree-table-content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 
-  .mini-button {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 13px;
-    float: right;
-    text-align: center;
-    padding: 5px 0;
-    border: 1px solid #DCDFE6;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    cursor: pointer;
-    height: 30px;
+  .left {
+    height: 100%;
+    background: $origin-color;
+    color: var(--color-border);
 
-    &:hover {
-      display: block;
-      border: 1px solid #d2d2d2;
-    }
-
-    .icon-left {
-      font-size: 14px;
-      margin-left: -1.1px;
-    }
-  }
-
-  .el-tree {
-    background-color: inherit !important;
-  }
-
-  .mini {
-    position: relative;
-    margin-right: 5px;
-    width: 2px !important;
-  }
-
-  .tree-table-content {
-    .left {
-      background: #f3f3f3;
+    // title 部分
+    .title {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 20px;
+      width: 100%;
+      border-bottom: solid 2px var(--color-primary);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-primary);
 
       &:hover {
-        ~ .right .is-show {
-          display: block !important;;
-        }
+        cursor: pointer;
+        color: var(--color-primary);
+      }
+    }
+
+    .auto-data-ztree {
+      overflow: auto;
+      height: 100%;
+
+      &.tree-tab ::v-deep .page-submenu {
+        height: 40px;
+      }
+    }
+
+    // tree 部分
+    .data-z-tree {
+      //margin-left: -20px;
+      //width: calc(100% + 20px);
+
+      .treebox {
+        padding-left: 10px;
+        padding-bottom: 10px;
+      }
+    }
+
+    ::v-deep .tab-text {
+      font-size: 13px;
+    }
+
+    &:hover {
+      ~ .right .is-show {
+        display: block !important;;
       }
     }
   }
+}
 
-  .auto-data-ztree {
-    overflow: auto;
-    /*border-right: solid 1px red;*/
+.is-show {
+  display: none;
+}
+
+.hidden {
+  width: 0;
+}
+
+.is-rotate {
+  display: block;
+  transform: rotate(180deg);
+}
+
+.mini-button {
+  position: absolute;
+  top: 50%;
+  transform: translate(-100%, -50%);
+  width: 13px;
+  float: right;
+  text-align: center;
+  padding: 5px 0;
+  border: 1px solid #DCDFE6;
+  background-color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 30px;
+
+  &:hover {
+    display: block;
+    border: 1px solid #d2d2d2;
   }
 
-  .transition-box.left {
-    background: #f3f3f3;
-    border: 1px solid #e0e0e0;
-    border-radius: 3px;
-    margin-right: 2px;
+  .icon-left {
+    font-size: 13px;
+    margin-left: -1.1px;
   }
+}
+
+.el-tree {
+  background-color: inherit !important;
+}
+
+.mini {
+  position: relative;
+  margin-right: 5px;
+  width: 2px !important;
+}
+
+.transition-box.left {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+}
 
 </style>

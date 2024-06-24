@@ -18,12 +18,6 @@ export default {
           default: ['user', 'change_by', 'remote_addr', 'datetime']
         },
         columnsMeta: {
-          remote_addr: {
-            width: '140px'
-          },
-          datetime: {
-            width: '180px'
-          },
           actions: {
             has: false
           }

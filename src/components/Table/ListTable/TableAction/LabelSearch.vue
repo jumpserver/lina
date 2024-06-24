@@ -7,7 +7,6 @@
       @click="showSearchSelect"
     >
       <svg-icon icon-class="tag" />
-      <span>{{ $t('common.Label') }}</span>
     </el-button>
     <el-cascader
       v-else
@@ -26,7 +25,7 @@
     >
       <template slot-scope="{ node, data }">
         <span>{{ data.label }}</span>
-        <span v-if="!node.isLeaf"> ({{ data.children.length -1 }}) </span>
+        <span v-if="!node.isLeaf"> ({{ data.children.length - 1 }}) </span>
       </template>
       <i slot="prefix" class="el-input__icon el-icon-search" />
     </el-cascader>
@@ -34,6 +33,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 
 export default {
   name: 'LabelSearch',
@@ -45,7 +45,7 @@ export default {
       },
       labelOptions: [],
       labelValue: [],
-      placeholder: this.$t('labels.SelectLabelFilter')
+      placeholder: this.$t('SelectLabelFilter')
     }
   },
   watch: {
@@ -66,6 +66,10 @@ export default {
       this.$emit('showLabelSearch', newValue)
     }
   },
+  created() {
+    this.showLabelSearch = window.innerWidth < 992
+    this.listenViewPort()
+  },
   mounted() {
     this.$eventBus.$on('labelSearch', label => {
       if (!label) {
@@ -73,11 +77,7 @@ export default {
         this.showLabelSearch = true
         return
       }
-      const labels = label.split(',').map(item => item.split(':'))
-      const notExistLabels = labels.filter(item => {
-        return !this.labelValue.find(label => label[0] === item[0] && label[1] === item[1])
-      })
-      this.labelValue = [...this.labelValue, ...notExistLabels]
+      this.labelValue = [[label.name, label.value]]
       this.getLabelOptions()
       setTimeout(() => {
         this.showLabelSearch = true
@@ -92,18 +92,22 @@ export default {
       this.setSearchFocus()
     },
     handleCascaderVisibleChange(visible) {
+      const input = this.$refs.labelCascader.$el
+        .getElementsByClassName('el-input--suffix')[0]
+        .querySelector('input')
       if (visible) {
         setTimeout(() => {
           this.$refs.labelCascader.updateStyle()
+          input.style.height = '30px'
         },)
         return
       } else {
-        const input = this.$refs.labelCascader.$el.getElementsByClassName('el-input--suffix')[0].querySelector('input')
-        input.style.height = '34px'
+        input.style.height = '30px'
       }
       if (this.labelValue.length === 0) {
         this.showLabelSearch = false
       }
+      this.$emit('showLabelSearch', this.showLabelSearch)
     },
     getLabelOptions() {
       if (this.labelOptions.length > 0) {
@@ -114,7 +118,7 @@ export default {
         const groupedLabelOptions = _.groupBy(data, 'name')
         const labelOptions = []
         for (const [key, labels] of Object.entries(groupedLabelOptions)) {
-          const all = { value: '*', label: this.$t('common.All') }
+          const all = { value: '*', label: this.$t('All') }
           const children = _.sortBy(labels, 'value').map(label => ({
             value: label.value,
             label: label.value
@@ -140,6 +144,12 @@ export default {
         this.$refs.labelCascader.toggleDropDownVisible(true)
         this.setSearchFocus()
       }, 200)
+    },
+    listenViewPort() {
+      window.addEventListener('resize', debounce((e) => {
+        const viewPort = e?.target?.innerWidth
+        this.showLabelSearch = viewPort < 992
+      }, 100), false)
     }
   }
 }
@@ -148,40 +158,49 @@ export default {
 <style lang='scss' scoped>
 .label-search {
   margin-right: 10px;
-}
+  border: 1px solid var(--color-border);
+  overflow: hidden;
 
-.label-button {
-  padding: 10px 13px 10px 12px;
-}
+  ::v-deep .el-button.label-button {
+    height: 28px;
+    border: none;
+  }
 
-.label-select {
-}
+  .label-cascader {
+    width: 300px;
+    height: 28px;
+    line-height: 28px;
 
-.label-cascader {
-  width: 300px;
-  >>> .el-input--suffix.el-input {
-    input {
-      height: 34px;
+    ::v-deep .el-input {
+      .el-input__inner {
+        height: 28px !important;
+        line-height: 28px;
+        font-size: 13px;
+        border: none;
+      }
+
+      .el-input__suffix {
+        color: var(--color-icon-primary) !important;;
+      }
+    }
+
+    ::v-deep .el-cascader__tags {
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      overflow: hidden;
+
+      .el-tag.el-tag--info {
+        color: var(--color-text-primary) !important;
+      }
+
+      .el-cascader__search-input {
+        display: none;
+      }
     }
   }
-  >>> .el-input__inner {
-    font-size: 13px;
-  }
-  >>> .el-cascader__search-input {
-    display: none;
-    margin: 0 0 2px 13px;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags .el-cascader__search-input {
-    display: inline;
-  }
-  >>> .el-input.is-focus + .el-cascader__tags {
-    flex-wrap: wrap;
-  }
-  >>> .el-cascader__tags {
-    white-space: nowrap;
-    flex-wrap: nowrap;
-    overflow: hidden;
+
+  ::v-deep .svg-icon {
+    color: var(--color-icon-primary) !important;
   }
 }
-
 </style>

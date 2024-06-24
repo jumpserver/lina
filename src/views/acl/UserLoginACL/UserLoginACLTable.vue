@@ -1,5 +1,5 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'priority', 'is_active',
-            'action', 'comment', 'actions'
+            'action', 'actions'
           ]
         },
         columnsMeta: {
@@ -34,7 +34,7 @@ export default {
             }
           },
           reviewers_amount: {
-            label: this.$t('common.ApproverNumbers')
+            label: this.$t('ApproverNumbers')
           },
           actions: {
             formatterArgs: {
@@ -47,7 +47,6 @@ export default {
                   }
                 }
               }
-
             }
           }
         }
@@ -60,10 +59,12 @@ export default {
         createRoute: 'UserLoginAclCreate'
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
   }
 }
 </script>
 
-<style>
-
-</style>

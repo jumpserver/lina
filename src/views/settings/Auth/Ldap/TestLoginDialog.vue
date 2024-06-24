@@ -3,7 +3,7 @@
     :destroy-on-close="true"
     :loading-status="testLdapLoginStatus"
     :show-cancel="false"
-    :title="$tc('setting.testLdapLoginTitle') "
+    :title="$tc('TestLdapLoginTitle') "
     v-bind="$attrs"
     @confirm="testUserLoginClick()"
     v-on="$listeners"
@@ -13,17 +13,17 @@
       label-position="right"
       label-width="17%"
     >
-      <el-form-item :label="$tc('setting.username')">
+      <el-form-item :label="$tc('Username')">
         <el-input
           v-model="userLoginForm.username"
-          :placeholder="$tc('setting.usernamePlaceholder')"
+          :placeholder="$tc('UsernamePlaceholder')"
           autocomplete="off"
         />
       </el-form-item>
-      <el-form-item :label="$tc('setting.password')">
+      <el-form-item :label="$tc('Password')">
         <el-input
           v-model="userLoginForm.password"
-          :placeholder="$tc('setting.passwordPlaceholder')"
+          :placeholder="$tc('PasswordPlaceholder')"
           autocomplete="off"
           type="password"
         />

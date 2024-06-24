@@ -2,6 +2,8 @@
   <AutoDataForm
     v-if="!loading"
     ref="AutoDataForm"
+    :class="addTemplate? '': 'account-add'"
+    :submit-btn-text="submitBtnText"
     v-bind="$data"
     @submit="confirm"
   />
@@ -44,6 +46,7 @@ export default {
     return {
       loading: true,
       usernameChanged: false,
+      submitBtnText: this.$t('Confirm'),
       iPlatform: {
         automation: {},
         su_enabled: false,
@@ -58,14 +61,13 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('assets.Asset'), ['assets']],
-        [this.$t('accounts.AccountTemplate'), ['template']],
-        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username']],
-        [this.$t('assets.Secret'), [
+        [this.$t('AccountTemplate'), ['template']],
+        [this.$t('Basic'), ['assets', 'name', 'username', 'privileged', 'su_from', 'su_from_username']],
+        [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
           'access_key', 'passphrase', 'api_key'
         ]],
-        [this.$t('common.Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
+        [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: accountFieldsMeta(this),
       hasSaveContinue: false
@@ -100,23 +102,23 @@ export default {
     setSecretTypeOptions() {
       const choices = [
         {
-          label: this.$t('assets.Password'),
+          label: this.$t('Password'),
           value: 'password'
         },
         {
-          label: this.$t('assets.SSHKey'),
+          label: this.$t('SSHKey'),
           value: 'ssh_key'
         },
         {
-          label: this.$t('assets.Token'),
+          label: this.$t('Token'),
           value: 'token'
         },
         {
-          label: this.$t('assets.AccessKey'),
+          label: this.$t('AccessKey'),
           value: 'access_key'
         },
         {
-          label: this.$t('assets.ApiKey'),
+          label: this.$t('ApiKey'),
           value: 'api_key'
         }
       ]
@@ -152,5 +154,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
+.account-add {
+  ::v-deep .el-form-item {
+    margin-bottom: 5px;
+
+    .help-block {
+      margin-bottom: 5px;
+    }
+  }
+
+  ::v-deep .form-group-header {
+    .hr-line-dashed {
+      margin: 5px 0;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+    }
+  }
+}
 </style>

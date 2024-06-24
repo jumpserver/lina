@@ -2,16 +2,17 @@ import i18n from '@/i18n/i18n'
 import { attrMatchOptions } from '@/components/const'
 
 export const resourceTypeOptions = [
-  { label: i18n.t('assets.Platform'), value: 'platform' },
-  { label: i18n.t('assets.Node'), value: 'node' },
-  { label: i18n.t('assets.Domain'), value: 'domain' },
-  { label: i18n.t('accounts.AccountTemplate'), value: 'account_template' }
+  { label: i18n.t('Platform'), value: 'platform' },
+  { label: i18n.t('Node'), value: 'node' },
+  { label: i18n.t('Zone'), value: 'domain' },
+  { label: i18n.t('AccountTemplate'), value: 'account_template' },
+  { label: i18n.t('NameStrategy'), value: 'name_strategy' }
 ]
 
 export const instanceAttrOptions = [
-  { label: i18n.t('xpack.Cloud.InstanceName'), value: 'instance_name' },
-  { label: i18n.t('xpack.Cloud.InstancePlatformName'), value: 'instance_platform' },
-  { label: i18n.t('xpack.Cloud.InstanceAddress'), value: 'instance_address' }
+  { label: i18n.t('InstanceName'), value: 'instance_name' },
+  { label: i18n.t('InstancePlatformName'), value: 'instance_platform' },
+  { label: i18n.t('InstanceAddress'), value: 'instance_address' }
 ]
 
 export const tableFormatter = (colName, getResourceLabel) => {

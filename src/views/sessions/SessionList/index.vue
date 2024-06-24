@@ -13,6 +13,7 @@
 import { TabPage } from '@/layout/components'
 import OnlineList from './OnlineList'
 import OfflineList from './OfflineList'
+
 export default {
   name: 'Index',
   components: {
@@ -26,11 +27,11 @@ export default {
         activeMenu: 'OnlineList',
         submenu: [
           {
-            title: this.$t('route.SessionOnline'),
+            title: this.$t('SessionOnline'),
             name: 'OnlineList'
           },
           {
-            title: this.$t('route.SessionOffline'),
+            title: this.$t('SessionOffline'),
             name: 'OfflineList'
           }
         ]
@@ -39,7 +40,7 @@ export default {
   },
   computed: {
     Title() {
-      return this.$t('route.Sessions')
+      return this.$t('Sessions')
     }
   },
   mounted() {

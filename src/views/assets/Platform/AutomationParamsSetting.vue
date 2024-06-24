@@ -3,20 +3,20 @@
     <el-button
       v-if="hasButton"
       :disabled="!canSetting"
-      size="small"
-      class="setting"
       :icon="icon"
+      class="proto-setting"
+      size="small"
       type="primary"
       @click="onSetting"
     />
     <Dialog
       v-if="isVisible"
-      width="60%"
-      :visible.sync="isVisible"
-      :title="title"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
+      :title="title"
+      :visible.sync="isVisible"
+      width="60%"
       @close="onDialogClose"
     >
       <AutoDataForm
@@ -24,17 +24,17 @@
         :form="form"
         class="data-form"
         v-bind="config"
-        v-on="$listeners"
         @submit="onSubmit"
+        v-on="$listeners"
       />
     </Dialog>
   </div>
 </template>
 
 <script>
-import Dialog from '../../../components/Dialog'
-import AutoDataForm from '../../../components/Form/AutoDataForm'
-import { DynamicInput } from '../../../components/Form/FormFields'
+import Dialog from '@/components/Dialog'
+import AutoDataForm from '@/components/Form/AutoDataForm'
+import { DynamicInput } from '@/components/Form/FormFields'
 
 export default {
   components: {
@@ -49,7 +49,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('assets.PushParams')
+        return this.$t('PushParams')
       }
     },
     btnText: {
@@ -177,8 +177,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.setting {
-  height: 34px;
-  padding-top: 10px;
+.proto-setting {
+  margin-top: 1px;
+  height: 30px;
+  vertical-align: super;
 }
 </style>

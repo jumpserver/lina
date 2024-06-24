@@ -3,8 +3,9 @@
     <span class="title">{{ config.title }}</span>
     <el-tooltip
       v-if="hasTip"
-      effect="dark"
       :content="config.tip"
+      :open-delay="500"
+      effect="dark"
       placement="top"
     >
       <i class="fa fa-exclamation-circle icon" />

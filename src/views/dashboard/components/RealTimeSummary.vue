@@ -4,9 +4,9 @@
       <Title :config="config" />
     </div>
     <div class="content">
-      <el-row type="flex" justify="space-between">
+      <el-row justify="space-between" type="flex">
         <el-col v-for="item of summaryItems" :key="item.title" :md="8" :sm="12" :xs="12">
-          <SummaryCard :title="item.title" :body="item.body" />
+          <SummaryCard :body="item.body" :title="item.title" />
         </el-col>
       </el-row>
     </div>
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('dashboard.RealTimeData'),
-        tip: this.$t('dashboard.RealTimeData')
+        title: this.$t('RealTimeData'),
+        tip: this.$t('RealTimeData')
       },
       counter: {
         total_count_online_sessions: '.',
@@ -36,7 +36,7 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('dashboard.OnlineSessions'),
+          title: this.$t('OnlineSessions'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_sessions,
@@ -44,7 +44,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.CurrentConnectionUsers'),
+          title: this.$t('CurrentConnectionUsers'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,
@@ -52,7 +52,7 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.TodayFailedConnections'),
+          title: this.$t('TodayFailedConnections'),
           body: {
             count: this.counter.total_count_today_failed_sessions,
             disabled: true

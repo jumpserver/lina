@@ -35,7 +35,7 @@ export default {
         extraMoreActions: [
           {
             name: 'SyncSelected',
-            title: this.$t('common.bulkDeploy'),
+            title: this.$t('BatchDeployment'),
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
@@ -62,7 +62,7 @@ export default {
         ],
         columnsMeta: {
           'host.display_name': {
-            label: this.$t('common.DisplayName'),
+            label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.host.name,
@@ -74,10 +74,10 @@ export default {
             id: ({ row }) => row.host.id
           },
           'applet.version': {
-            label: this.$t('common.Version')
+            label: this.$t('Version')
           },
           status: {
-            label: this.$t('applets.PublishStatus'),
+            label: this.$t('PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
                 'pending': 'success',
@@ -90,7 +90,7 @@ export default {
             }
           },
           date_updated: {
-            label: this.$t('ops.date')
+            label: this.$t('Date')
           },
           actions: {
             formatterArgs: {
@@ -99,7 +99,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('common.Deploy'),
+                  title: this.$t('Deploy'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,

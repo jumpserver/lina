@@ -1,5 +1,5 @@
 <template>
-  <Page :help-message="helpMsg">
+  <Page :help-tip="helpMsg">
     <UserLoginACLTable />
   </Page>
 
@@ -16,12 +16,8 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('acl.UserLoginACLHelpMsg')
+      helpMsg: this.$t('UserLoginACLHelpMsg')
     }
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -17,12 +17,12 @@
       ref="SearchInput"
       v-model.trim="filterValue"
       :fetch-suggestions="autocomplete"
-      :placeholder="this.$t('common.EnterToContinue')"
+      :placeholder="iPlaceholder"
       :type="inputType"
       class="search-input"
       @blur="focus = false"
-      @focus="focus = true"
       @change="handleChange"
+      @focus="focus = true"
       @select="handleSelect"
       @keyup.enter.native="handleConfirm"
     />
@@ -53,7 +53,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => i18n.t('perms.Input')
+      default: () => i18n.t('Input')
     },
     autocomplete: {
       type: Function,
@@ -84,6 +84,12 @@ export default {
       isCheckShowPassword: this.replaceShowPassword,
       component: this.autocomplete ? 'el-autocomplete' : 'el-input'
     }
+  },
+  computed: {
+    iPlaceholder() {
+      return `${this.placeholder} (${this.$t('EnterToContinue')})`
+    }
+
   },
   watch: {
     value(val) {
@@ -153,44 +159,46 @@ export default {
     border: 1px solid #dcdee2;
     border-radius: 1px;
     background-color: #fff;
-    line-height: 32px;
+    line-height: 30px;
 
     &:hover {
       border-color: #C0C4CC;
     }
 
-    &>>> .el-tag {
+    & ::v-deep .el-tag {
       margin-top: 1px;
       font-family: sans-serif !important;
     }
 
-    &>>> .el-autocomplete {
-      height: 30px;
+    & ::v-deep .el-autocomplete {
+      height: 28px;
     }
   }
 
   .search-input {
     flex: 1;
-    &>>> .el-input__inner {
+
+    & ::v-deep .el-input__inner {
       max-width: 100%;
       border: none;
       padding-left: 10px;
     }
   }
 
-  .el-input >>> .el-input__inner {
+  .el-input ::v-deep .el-input__inner {
     border: none !important;
     font-size: 13px;
   }
 
-  .filter-field >>> .el-input__inner {
-    height: 29px;
+  .filter-field ::v-deep .el-input__inner {
+    height: 28px;
   }
 
   .show-password {
     display: inherit;
     padding-right: 6px;
     cursor: pointer;
+
     &:hover {
       color: #999999;
     }

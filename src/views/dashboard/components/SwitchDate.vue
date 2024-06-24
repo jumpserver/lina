@@ -30,15 +30,15 @@ export default {
   data() {
     const defaultOptions = [
       {
-        label: this.$t('dashboard.Today'),
+        label: this.$t('Today'),
         value: '1'
       },
       {
-        label: this.$t('dashboard.Last7Days'),
+        label: this.$t('Last7Days'),
         value: '7'
       },
       {
-        label: this.$t('dashboard.Last30Days'),
+        label: this.$t('Last30Days'),
         value: '30'
       }
     ]
@@ -56,34 +56,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$origin-color: #ffffff;
+
 .switch {
-  background: #EFF0F1;
-  border-radius: 4px;
-  padding: 1px 4px;
+  font-weight: 400;
 
-  & > > > .el-radio-button {
-    .el-radio-button__inner {
-      border: none;
-      color: #8F959E;
-      background: #EFF0F1;
-    }
-
+  ::v-deep .el-radio-button {
     &.is-active {
-      border-radius: 4px;
-      padding: 4px 0;
-      box-shadow: 2px 1px 2px rgba(0 0 0 / 8%);
-
       .el-radio-button__inner {
-        color: black;
-        background-color: #FFF;
-        border-radius: 4px;
-        box-shadow: 0 2px 2px rgb(90 97 105 / 31%)!important;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background-color: $origin-color;
       }
     }
   }
 
-  & > > > .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    box-shadow: none;
+  ::v-deep .el-radio-button {
+    .el-radio-button__inner {
+      color: var(--color-text-primary);
+      background: $origin-color;
+      border-radius: 0;
+    }
   }
 }
 </style>

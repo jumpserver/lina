@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="plan" :active-menu.sync="config.activeMenu" v-bind="config">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="plan" v-bind="config">
     <keep-alive>
       <component :is="config.activeMenu" :object="plan" />
     </keep-alive>
@@ -23,6 +23,7 @@ export default {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
+        titlePrefix: this.$t('AccountChangeSecretDetail'),
         activeMenu: 'AccountChangeSecretInfo',
         url: '/api/v1/accounts/change-secret-automations',
         actions: {
@@ -31,12 +32,12 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('Basic'),
             name: 'AccountChangeSecretInfo',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
           },
           {
-            title: this.$t('accounts.AccountChangeSecret.AssetAndNode'),
+            title: this.$t('AssetAndNode'),
             name: 'AccountChangeSecretAsset',
             hidden: () => !this.$hasPerm('accounts.change_changesecretautomation')
           }

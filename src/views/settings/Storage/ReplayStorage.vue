@@ -36,7 +36,7 @@ export default {
         },
         columnsExclude: ['meta'],
         columns: [
-          'name', 'type', 'comment', 'is_default', 'actions'
+          'id', 'name', 'type', 'is_default', 'comment', 'actions'
         ],
         columnsShow: {
           min: ['name', 'type', 'actions']
@@ -52,8 +52,7 @@ export default {
               showFalse: false,
               showText: false
             },
-            align: 'center',
-            width: '100px'
+            align: 'center'
           },
           comment: {
             sortable: 'custom'
@@ -75,7 +74,7 @@ export default {
               extraActions: [
                 {
                   name: 'test',
-                  title: this.$t('sessions.test'),
+                  title: this.$t('Test'),
                   can: vm.$hasPerm('terminal.view_replaystorage'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
@@ -90,15 +89,15 @@ export default {
                 },
                 {
                   name: 'set_to_default',
-                  title: this.$t('sessions.SetToDefault'),
+                  title: this.$t('SetToDefault'),
                   can: (value) => this.$hasPerm('terminal.change_replaystorage') && value.row.type.value !== 'sftp',
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultReplayStorage(row.id).then(data => {
                       vm.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$tc('sessions.SetSuccess'))
+                      this.$message.success(this.$tc('SetSuccess'))
                     }).catch(() => {
-                      this.$message.error(this.$tc('sessions.SetFailed'))
+                      this.$message.error(this.$tc('SetFailed'))
                     })
                   }
                 }

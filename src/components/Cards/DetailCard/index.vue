@@ -1,8 +1,14 @@
 <template>
   <IBox :fa="fa" :title="title">
-    <el-form class="content" label-position="left" label-width="25%">
-      <el-form-item v-for="item in iItems" :key="item.key" :label="item.key">
-        <ItemValue :value="item.value" class="item-value" v-bind="item" />
+    <el-form :label-width="labelWidth" class="content" label-position="left">
+      <el-form-item v-for="item in items" :key="item.key" :class="item.class" :label="item.key">
+        <span slot="label"> {{ formateLabel(item.key) }}</span>
+        <span
+          :is="item.component"
+          v-if="item.component"
+          v-bind="{...item}"
+        />
+        <ItemValue v-else :value="item.value" class="item-value" v-bind="item" />
       </el-form-item>
     </el-form>
     <slot />
@@ -20,12 +26,12 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('common.BasicInfo')
+        return this.$t('BasicInfo')
       }
     },
     fa: {
       type: String,
-      default: 'fa-info-circle'
+      default: 'fa-info-circle-o'
     },
     items: {
       type: Array,
@@ -34,6 +40,10 @@ export default {
     align: {
       type: String,
       default: 'left'
+    },
+    labelWidth: {
+      type: String,
+      default: '25%'
     }
   },
   data() {
@@ -41,6 +51,14 @@ export default {
       iItems: this.items.filter(item => {
         return !item.hasOwnProperty('has') || item.has === true
       })
+    }
+  },
+  methods: {
+    formateLabel(label) {
+      if (!label) {
+        return label
+      }
+      return label.replace(' amount', '').replace('数量', '')
     }
   }
 }
@@ -60,21 +78,36 @@ export default {
       border-bottom: none;
     }
 
-    &:hover {
+    &.array-item {
+      border-bottom: none;
+
+      ::v-deep .el-form-item__content {
+        border-bottom: 1px dashed #EBEEF5
+      }
+
+      ::v-deep .el-form-item__label:last-child {
+        border: 1px dashed #EBEEF5;
+      }
     }
 
-    >>> .el-form-item__label {
+    ::v-deep .el-form-item__label {
       padding-right: 8%;
-      white-space: nowrap;
-      text-overflow: ellipsis;
       overflow: hidden;
+      color: var(--color-icon-primary);
+
+      span {
+        display: inline-block;
+        line-height: 1.5;
+      }
     }
 
-    >>> .el-form-item__content {
+    ::v-deep .el-form-item__content {
+      color: var(--color-text-primary);
       font-size: 13px;
+      line-height: 40px;
     }
 
-    >>> .el-tag--mini {
+    ::v-deep .el-tag--mini {
       margin-right: 3px;
     }
   }
@@ -82,6 +115,7 @@ export default {
   .item-value span {
     word-break: break-word;
   }
+
   .content {
     font-size: 13px;
     line-height: 2.5;

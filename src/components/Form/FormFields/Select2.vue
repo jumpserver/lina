@@ -3,22 +3,31 @@
     ref="select"
     v-model="iValue"
     v-loadmore="loadMore"
+    :allow-create="allowCreate"
+    :class="transformed ? 'hidden-tag' : 'show-tag'"
     :clearable="clearable"
     :collapse-tags="collapseTags"
     :disabled="!!selectDisabled"
+    :filterable="true"
     :loading="!initialized"
     :multiple="multiple"
     :options="iOptions"
+    :placeholder="placeholder"
     :remote="remote"
     :remote-method="filterOptions"
     class="select2"
-    filterable
     popper-append-to-body
-    v-bind="$attrs"
     @change="onChange"
     v-on="$listeners"
     @visible-change="onVisibleChange"
   >
+    <div v-if="showSelectAll" class="el-select-dropdown__header">
+      <el-checkbox v-model="allSelected" @change="handleSelectAllChange">{{ $t('SelectAll') }}</el-checkbox>
+      <div v-if="quickAddCallback" style="float: right">
+        <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
+        <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
+      </div>
+    </div>
     <el-option
       v-for="item in iOptions"
       :key="item.value"
@@ -26,11 +35,13 @@
       :label="item.label"
       :value="item.value"
     />
+
   </el-select>
 </template>
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Select2',
@@ -95,6 +106,22 @@ export default {
     collapseTagsCount: {
       type: Number,
       default: 10
+    },
+    showSelectAll: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: i18n.t('Select')
+    },
+    quickAddCallback: {
+      type: Function,
+      default: null
+    },
+    allowCreate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -126,7 +153,9 @@ export default {
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
       initialOptions: [],
-      remote: true
+      remote: true,
+      allSelected: false,
+      transformed: true
     }
   },
   computed: {
@@ -237,6 +266,10 @@ export default {
         this.$emit('initialized', true)
       }, 100)
     }
+    // 由于在新增时有些 Select 会存在初始值，而有些没有，就会导致动态类名判断出现相反的情况
+    // 此处强制设置没有初始值的动态类名
+    if (Array.isArray(this.iValue) && this.iValue.length === 0) this.transformed = false
+
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
       const elFormItem = this.$refs.select?.elFormItem
@@ -284,6 +317,10 @@ export default {
         validateStatus
       })
       data = processResults.bind(this)(data)
+      setTimeout(() => {
+        this.transformed = false
+      }, 100)
+
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
@@ -373,19 +410,60 @@ export default {
         this.$log.debug('Visible change, refresh select2')
       }
       this.$emit('visible-change', visible)
+    },
+    async loadAll() {
+      if (!this.iAjax.url) {
+        return
+      }
+      while (this.params.hasMore) {
+        await this.loadMore()
+      }
+    },
+    async selectAll() {
+      await this.loadAll()
+      this.iValue = this.iOptions.map((v) => v.value)
+    },
+    handleSelectAllChange(checked) {
+      if (checked) {
+        this.selectAll()
+      } else {
+        this.iValue = []
+      }
     }
   }
 }
 
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .select2 {
   width: 100%;
+
+  &.hidden-tag {
+    ::v-deep .el-select__tags {
+      opacity: 0;
+      cursor: not-allowed;
+    }
+  }
+
+  &.show-tag {
+    ::v-deep .el-select__tags {
+      opacity: 1;
+    }
+  }
+
+  ::v-deep .el-tag.el-tag--info {
+    height: auto;
+    white-space: normal;
+  }
+
+  ::v-deep input::placeholder {
+    padding-left: 2px;
+  }
 }
 
-.select2 >>> .el-tag.el-tag--info {
-  height: auto;
-  white-space: normal;
+.el-select-dropdown__header {
+  padding: 10px 20px;
+  border-bottom: solid 1px #ebeef5;
 }
 </style>

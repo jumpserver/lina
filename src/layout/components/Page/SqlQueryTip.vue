@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <el-alert v-show="showSqlQueryCounter" class="container" :class="{ noContent }" type="info" @close="handleClose">
     <el-tag
       v-for="item in sqlQueryCounter || []"
       :key="item.url"
@@ -9,7 +9,7 @@
     >
       {{ item.url }}: <b>{{ item.count }}</b>
     </el-tag>
-  </div>
+  </el-alert>
 </template>
 
 <script>
@@ -25,10 +25,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sqlQueryCounter'
-    ])
-  },
-  mounted() {
+      'sqlQueryCounter',
+      'showSqlQueryCounter'
+    ]),
+    noContent() {
+      return this.sqlQueryCounter.length === 0
+    }
   },
   methods: {
     getType(item) {
@@ -39,6 +41,9 @@ export default {
       } else {
         return 'success'
       }
+    },
+    handleClose() {
+      this.$store.dispatch('common/showSqlQueryCounter', false)
     }
   }
 }
@@ -49,6 +54,11 @@ export default {
   padding: 5px;
   width: 100%;
   overflow: hidden;
+  background-color: #f3f3f4 !important;
+  border: none !important;
 }
 
+.noContent {
+  display: none;
+}
 </style>

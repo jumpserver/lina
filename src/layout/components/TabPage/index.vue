@@ -1,12 +1,12 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page v-if="!loading" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
 
-    <div>
+    <div style="height: 100%">
       <el-tabs
-        v-if="tabIndices.length > 0"
+        v-if="tabIndices.length > 1"
         slot="submenu"
         v-model="iActiveMenu"
         class="page-submenu"
@@ -20,30 +20,47 @@
             :name="item.name"
           >
             <span slot="label">
-              <i v-if="item.icon" :class="item.icon" class="fa " />
-              {{ item.title }}
+              <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
+              {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
+              <el-tooltip
+                v-if="item.helpTip"
+                :open-delay="500"
+                effect="dark"
+                placement="bottom"
+                popper-class="help-tips"
+              >
+                <div slot="content" v-sanitize="item.helpTip" class="page-help-content" />
+                <span>
+                  <el-button class="help-msg-btn">
+                    <i class="el-icon-info" />
+                  </el-button>
+                </span>
+              </el-tooltip>
             </span>
           </el-tab-pane>
         </template>
       </el-tabs>
 
-      <transition v-if="loading" appear mode="out-in" name="fade-transform">
-        <slot>
-          <keep-alive>
-            <component :is="computeActiveComponent" />
-          </keep-alive>
-        </slot>
-      </transition>
+      <div class="tab-page-content">
+        <el-alert v-if="helpMessage" type="success">
+          <span v-sanitize="helpMessage" class="announcement-main" />
+        </el-alert>
+        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
+          <slot>
+            <keep-alive>
+              <component :is="computeActiveComponent" />
+            </keep-alive>
+          </slot>
+        </transition>
+      </div>
     </div>
   </Page>
 </template>
 
 <script>
 import Page from '../Page/'
-import merge from 'webpack-merge'
-
-const ACTIVE_TAB_KEY = 'activeTab'
+import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'TabPage',
@@ -58,11 +75,16 @@ export default {
     activeMenu: {
       type: String,
       required: true
+    },
+    helpMessage: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      loading: true
+      loading: true,
+      toSentenceCase: toSentenceCase
     }
   },
   computed: {
@@ -97,28 +119,30 @@ export default {
   },
   watch: {
     $route(to, from) {
-      const activeTab = to.query?.activeTab
+      const activeTab = to.query?.tab
       if (activeTab && this.iActiveMenu !== activeTab) {
         this.iActiveMenu = activeTab
-        this.loading = false
-        setTimeout(() => {
-          this.loading = true
-        })
       }
     }
   },
+  activated() {
+    this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
+  },
   created() {
     this.iActiveMenu = this.getPropActiveTab()
+    this.loading = false
   },
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
-      this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
 
-      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+      this.$cookie.set(this.$route.path, tab.name, 1)
+
+      if (this.$router.currentRoute.query[this.$route.path]) {
         this.$router.push({
-          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: '' })
+          query: { ...this.$route.query, [this.$route.path]: '' }
         })
       }
     },
@@ -126,8 +150,8 @@ export default {
       let activeTab = ''
 
       const preActiveTabs = [
-        this.$route.query[ACTIVE_TAB_KEY],
-        this.$cookie.get(ACTIVE_TAB_KEY),
+        this.$route.query['tab'],
+        this.$cookie.get(this.$route.path),
         this.activeMenu
       ]
 
@@ -149,24 +173,55 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.page-submenu > > > .el-tabs__header {
+
+.page-submenu ::v-deep .el-tabs__header {
   background-color: white;
-  margin-left: -25px;
-  padding-left: 25px;
-  margin-right: -25px;
-  padding-right: 25px;
-  margin-top: -30px;
+  margin-top: -10px;
+  padding: 0 30px;
+  margin-bottom: 5px;
 
   .el-tabs__item {
-
-    i {
+    i.pre-icon {
       opacity: 0.6;
     }
   }
 
+  .el-tabs__nav-next {
+    right: 10px;
+  }
+
+  .el-tabs__nav-prev {
+    left: 10px;
+  }
 }
 
-.page-submenu > > > .el-tabs__nav-wrap {
+.tab-page {
+  ::v-deep .page-heading {
+    border-bottom: none;
+  }
+
+  ::v-deep .page-content {
+    overflow-y: hidden;
+    padding: 0;
+  }
+
+  .tab-page-content {
+    padding: 10px 30px 22px;
+    overflow-y: auto;
+    height: calc(100% - 50px);
+
+    .el-alert {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.page-submenu ::v-deep .el-tabs__nav-wrap {
   position: static;
+}
+
+.fa {
+  margin-right: 2px;
 }
 </style>

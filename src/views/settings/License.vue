@@ -2,18 +2,18 @@
   <Page v-bind="$attrs">
     <div v-if="!loading">
       <el-alert v-if="!hasValidLicense" type="success">
-        {{ this.$t('setting.ImportLicenseTip') }}
+        {{ this.$t('ImportLicenseTip') }}
       </el-alert>
       <el-row :gutter="20">
-        <el-col :md="14" :sm="24">
+        <el-col :md="15" :sm="24">
           <DetailCard :items="detailItems" :title="cardTitle" />
         </el-col>
-        <el-col :md="10" :sm="24">
+        <el-col :md="9" :sm="24">
           <QuickActions :actions="quickActions" type="primary" />
         </el-col>
       </el-row>
       <Dialog
-        :title="$tc('setting.ImportLicense')"
+        :title="$tc('ImportLicense')"
         :visible.sync="dialogLicenseImport"
         top="20vh"
         width="600px"
@@ -21,7 +21,7 @@
         @confirm="importLicense"
       >
         <div style="padding-bottom: 10px">
-          {{ this.$t('setting.LicenseFile') }}
+          {{ this.$t('LicenseFile') }}
         </div>
         <input type="file" @change="fileChange">
       </Dialog>
@@ -59,10 +59,10 @@ export default {
       licenseFile: {},
       quickActions: [
         {
-          title: this.$t('setting.ImportLicense'),
+          title: this.$t('ImportLicense'),
           attrs: {
             type: 'primary',
-            label: this.$t('setting.import'),
+            label: this.$t('Import'),
             disabled: false
           },
           callbacks: {
@@ -70,10 +70,10 @@ export default {
           }
         },
         {
-          title: this.$t('setting.technologyConsult'),
+          title: this.$t('TechnologyConsult'),
           attrs: {
             type: 'primary',
-            label: this.$t('setting.consult')
+            label: this.$t('Consult')
           },
           callbacks: {
             click: this.consultAction
@@ -93,38 +93,38 @@ export default {
       if (!this.hasValidLicense) {
         return [
           {
-            key: this.$t('setting.License'),
-            value: this.$t('setting.communityEdition')
+            key: this.$t('License'),
+            value: this.$t('CommunityEdition')
           }
         ]
       }
       return [
         {
-          key: this.$t('setting.SubscriptionID'),
+          key: this.$t('SubscriptionID'),
           value: this.licenseData.subscription_id
         },
         {
-          key: this.$t('setting.Corporation'),
+          key: this.$t('Corporation'),
           value: this.licenseData.corporation
         },
         {
-          key: this.$t('setting.Expired'),
+          key: this.$t('Expired'),
           value: this.licenseData.date_expired
         },
         {
-          key: this.$t('setting.AssetCount'),
+          key: this.$t('AssetsOfNumber'),
           value: this.licenseData.asset_count !== null ? this.licenseData.asset_count + '' : ''
         },
         {
-          key: this.$t('setting.Edition'),
+          key: this.$t('Edition'),
           value: this.licenseData.edition
         },
         {
-          key: this.$t('assets.SerialNumber'),
+          key: this.$t('SerialNumber'),
           value: this.licenseData?.serial_no || ''
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('Comment'),
           value: this.licenseData?.remark || ''
         }
       ]

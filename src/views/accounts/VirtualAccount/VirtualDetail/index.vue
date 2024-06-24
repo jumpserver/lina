@@ -26,7 +26,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('common.Detail'),
+            title: this.$t('Basic'),
             name: 'Detail'
           }
         ]

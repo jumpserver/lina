@@ -49,10 +49,10 @@ export default {
   methods: {
     onChange(val) {
       this.$axios.patch(this.patchUrl, this.patchData).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$t('updateSuccessMsg'))
       }).catch(err => {
         this.value = !val
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+        this.$message.error(this.$t('updateErrorMsg' + ' ' + err))
       })
     }
   }

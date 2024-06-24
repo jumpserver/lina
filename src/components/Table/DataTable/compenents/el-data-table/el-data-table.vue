@@ -99,8 +99,12 @@
             :filter-multiple="false"
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+            :title="col.label"
             v-bind="{align: columnsAlign, ...col}"
           >
+            <template #header>
+              <span :title="col.label">{{ col.label }}</span>
+            </template>
             <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
               <div
                 :is="col.formatter"
@@ -362,7 +366,7 @@ export default {
     newText: {
       type: String,
       default: function() {
-        return this.$t('ops.Add')
+        return this.$t('Add')
       }
     },
     /**
@@ -371,7 +375,7 @@ export default {
     editText: {
       type: String,
       default: function() {
-        return this.$t('ops.Modify')
+        return this.$t('Modify')
       }
     },
     /**
@@ -380,7 +384,7 @@ export default {
     viewText: {
       type: String,
       default: function() {
-        return this.$t('ops.View')
+        return this.$t('View')
       }
     },
     /**
@@ -389,7 +393,7 @@ export default {
     deleteText: {
       type: String,
       default: function() {
-        return this.$t('ops.Delete')
+        return this.$t('Delete')
       }
     },
     /**
@@ -400,7 +404,7 @@ export default {
     deleteMessage: {
       type: Function,
       default() {
-        return this.$t('ops.Confirm') + this.deleteText + '?'
+        return this.$t('Confirm') + this.deleteText + '?'
       }
     },
     /**
@@ -459,7 +463,7 @@ export default {
     onSuccess: {
       type: Function,
       default() {
-        return this.$message.success(this.$t('ops.SuccessfulOperation'))
+        return this.$message.success(this.$t('SuccessfulOperation'))
       }
     },
     /**
@@ -1167,7 +1171,7 @@ export default {
      * @param {object|object[]} - 要删除的数据对象或数组
      */
     onDefaultDelete(data) {
-      this.$confirm(this.deleteMessage(data), this.$t('common.Info'), {
+      this.$confirm(this.deleteMessage(data), this.$t('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {

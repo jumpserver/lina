@@ -2,6 +2,7 @@
   <el-button
     ref="deleteButton"
     :disabled="iDisabled"
+    :title="$t('Remove')"
     size="mini"
     type="danger"
     @click="onDelete(col, row, cellValue, reload)"
@@ -35,10 +36,10 @@ export default {
     defaultOnDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
       })
     },
     onDelete(col, row, cellValue, reload) {

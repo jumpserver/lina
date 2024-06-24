@@ -27,7 +27,7 @@
       :account="account"
       :add-template="true"
       :asset="iAsset"
-      :title="accountCreateUpdateTitle"
+      :title="accountCreateByTemplateTitle"
       :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
@@ -36,6 +36,7 @@
       v-if="showResultDialog"
       :result="createAccountResults"
       :visible.sync="showResultDialog"
+      @close-all="closeAll"
     />
     <AccountBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
@@ -118,8 +119,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'asset', 'privileged',
-        'secret_type', 'is_active', 'date_updated'
+        'name', 'username', 'asset', 'date_updated'
       ])
     },
     headerExtraActions: {
@@ -140,7 +140,8 @@ export default {
       showAddDialog: false,
       showAddTemplateDialog: false,
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('assets.AddAccount'),
+      accountCreateUpdateTitle: this.$t('AddAccount'),
+      accountCreateByTemplateTitle: this.$t('AddAccountByTemplate'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -158,6 +159,7 @@ export default {
         },
         columnsMeta: {
           name: {
+            width: '120px',
             formatter: function(row) {
               const to = {
                 name: 'AssetAccountDetail',
@@ -171,7 +173,6 @@ export default {
             }
           },
           asset: {
-            label: this.$t('assets.Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -184,8 +185,10 @@ export default {
               }
             }
           },
+          username: {
+            width: '120px'
+          },
           secret_type: {
-            width: '100px',
             formatter: function(row) {
               return row.secret_type.label
             }
@@ -196,17 +199,16 @@ export default {
             }
           },
           has_secret: {
-            width: '100px',
+            width: '120px',
             formatterArgs: {
               showFalse: false
             }
           },
           privileged: {
-            label: this.$t('assets.Privileged'),
             width: '120px',
             formatterArgs: {
               showText: false,
-              showFalse: false
+              showFalse: true
             }
           },
           connectivity: connectivityMeta,
@@ -216,11 +218,11 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               hasClone: this.hasClone,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
@@ -234,25 +236,29 @@ export default {
                   }
                 },
                 {
-                  name: 'ClearSecret',
-                  title: this.$t('common.ClearSecret'),
-                  can: this.$hasPerm('accounts.change_account'),
-                  type: 'primary',
+                  name: 'Update',
+                  title: this.$t('Edit'),
+                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/accounts/clear-secret/`,
-                      { account_ids: [row.id] }
-                    ).then(() => {
-                      this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                    const data = {
+                      ...this.asset,
+                      ...row.asset
+                    }
+                    vm.account = row
+                    vm.iAsset = data
+                    vm.showAddDialog = false
+                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
+                    setTimeout(() => {
+                      vm.showAddDialog = true
                     })
                   }
                 },
                 {
                   name: 'Test',
-                  title: this.$t('accounts.Test'),
+                  title: this.$t('Test'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
-                    this.$hasPerm('accounts.change_account') &&
+                    this.$hasPerm('accounts.verify_account') &&
                     row.asset['auto_config'].ansible_enabled &&
                     row.asset['auto_config'].ping_enabled,
                   callback: ({ row }) => {
@@ -265,20 +271,16 @@ export default {
                   }
                 },
                 {
-                  name: 'Update',
-                  title: this.$t('common.Update'),
-                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
+                  name: 'ClearSecret',
+                  title: this.$t('ClearSecret'),
+                  can: this.$hasPerm('accounts.change_account'),
+                  type: 'primary',
                   callback: ({ row }) => {
-                    const data = {
-                      ...this.asset,
-                      ...row.asset
-                    }
-                    vm.account = row
-                    vm.iAsset = data
-                    vm.showAddDialog = false
-                    vm.accountCreateUpdateTitle = this.$t('assets.UpdateAccount')
-                    setTimeout(() => {
-                      vm.showAddDialog = true
+                    this.$axios.patch(
+                      `/api/v1/accounts/accounts/clear-secret/`,
+                      { account_ids: [row.id] }
+                    ).then(() => {
+                      this.$message.success(this.$tc('ClearSuccessMsg'))
                     })
                   }
                 }
@@ -305,7 +307,7 @@ export default {
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true,
-          tips: this.$t('accounts.AccountExportTips')
+          tips: this.$t('AccountExportTips')
         },
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_account'),
@@ -314,8 +316,9 @@ export default {
         extraActions: [
           {
             name: 'add',
-            title: this.$t('common.Add'),
+            title: this.$t('Create'),
             type: 'primary',
+            icon: 'plus',
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
@@ -324,14 +327,13 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddDialog = true
               })
             }
           },
           {
             name: 'add-template',
-            title: this.$t('common.TemplateAdd'),
+            title: this.$t('TemplateAdd'),
             has: !(this.platform || this.asset),
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
@@ -341,7 +343,6 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.accountCreateUpdateTitle = this.$t('assets.AddAccount')
                 vm.showAddTemplateDialog = true
               })
             }
@@ -350,10 +351,10 @@ export default {
         ],
         extraMoreActions: [
           {
-            name: 'BulkVerify',
-            title: this.$t('accounts.BulkVerify'),
+            name: 'TestSelected',
+            title: this.$t('TestSelected'),
             type: 'primary',
-            fa: 'fa-link',
+            icon: 'fa-link',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                   ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
@@ -368,15 +369,15 @@ export default {
                 { action: 'verify', accounts: ids }).then(res => {
                 openTaskPage(res['task'])
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('BulkVerifyErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'ClearSecrets',
-            title: this.$t('common.ClearSecret'),
+            name: 'BatchClearSecret',
+            title: this.$t('ClearSecret'),
             type: 'primary',
-            fa: 'clean',
+            icon: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('accounts.change_account')
             },
@@ -387,16 +388,16 @@ export default {
               this.$axios.patch(
                 '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: ids }).then(() => {
-                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                this.$message.success(this.$tc('ClearSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.bulkClearErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
           {
-            name: 'actionUpdateSelected',
-            title: this.$t('accounts.AccountBatchUpdate'),
-            fa: 'batch-update',
+            name: 'UpdateSelected',
+            title: this.$t('UpdateSelected'),
+            icon: 'batch-update',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 !this.$store.getters.currentOrgIsRoot &&
@@ -442,12 +443,12 @@ export default {
       this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
         {
           name: 'Delete',
-          title: this.$t('common.Delete'),
+          title: this.$t('Delete'),
           can: this.$hasPerm('accounts.delete_account'),
           type: 'primary',
           callback: ({ row }) => {
-            const msg = this.$t('accounts.AccountDeleteConfirmMsg')
-            this.$confirm(msg, this.$tc('common.Info'), {
+            const msg = this.$t('AccountDeleteConfirmMsg')
+            this.$confirm(msg, this.$tc('Info'), {
               type: 'warning',
               confirmButtonClass: 'el-button--danger',
               beforeClose: async(action, instance, done) => {
@@ -455,7 +456,7 @@ export default {
                 this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
                   done()
                   this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('DeleteSuccessMsg'))
                 })
               }
             })
@@ -463,6 +464,12 @@ export default {
         }
       )
     }
+  },
+  activated() {
+    // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
+    setTimeout(() => {
+      this.refresh()
+    }, 300)
   },
   methods: {
     onUpdateAuthDone(account) {
@@ -481,15 +488,27 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     showBulkCreateResult(results) {
-      this.showResultDialog = false
-      this.createAccountResults = results
       setTimeout(() => {
         this.showResultDialog = true
-      }, 100)
+        this.createAccountResults = results
+      }, 350)
     },
     handleAccountBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    closeAll() {
+      setTimeout(() => {
+        this.showResultDialog = false
+      }, 350)
+
+      setTimeout(() => {
+        this.showAddDialog = false
+      }, 800)
+
+      setTimeout(() => {
+        this.refresh()
+      }, 1000)
     }
   }
 }

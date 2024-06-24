@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="host"
     :active-menu.sync="config.activeMenu"
+    :object.sync="host"
     v-bind="config"
     v-on="$listeners"
   >
@@ -37,19 +37,19 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('common.Detail'),
+            'title': this.$t('Basic'),
             'name': 'Detail'
           },
           {
-            title: this.$t('assets.Accounts'),
+            title: this.$t('AssetAccount'),
             name: 'Accounts'
           },
           {
-            'title': this.$t('terminal.Applets'),
+            'title': this.$t('Applets'),
             'name': 'Applets'
           },
           {
-            'title': this.$t('terminal.HostDeployment'),
+            'title': this.$t('HostDeployment'),
             'name': 'Developments'
           }
         ],

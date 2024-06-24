@@ -1,16 +1,16 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="$tc('ops.NewFile')"
-    :visible.sync="iVisible"
-    width="20%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="true"
+    :title="$tc('NewFile')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="20%"
     @confirm="onConfirm"
   >
     <el-form>
-      <el-form-item :label="$tc('common.DisplayName')">
+      <el-form-item :label="$tc('DisplayName')">
         <el-input v-model="name" />
       </el-form-item>
     </el-form>

@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('common.Add') }}</el-button>
+          <el-button :disabled="disabled" :type="type" size="small" @click="addObjects">{{ $t('Add') }}</el-button>
         </td>
       </tr>
     </table>

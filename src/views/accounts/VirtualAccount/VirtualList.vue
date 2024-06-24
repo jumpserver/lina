@@ -1,5 +1,7 @@
 <template>
-  <ListTable v-bind="config" />
+  <div>
+    <ListTable v-bind="config" />
+  </div>
 </template>
 
 <script>

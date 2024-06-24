@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="14" :sm="24">
+      <el-col :md="15" :sm="24">
         <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       </el-col>
-      <el-col :md="10" :sm="24">
+      <el-col :md="9" :sm="24">
         <QuickActions
           v-if="object.id"
           :actions="quickActions"
-          :title="$tc('common.ConvenientOperate')"
+          :title="$tc('ConvenientOperate')"
           type="primary"
         />
       </el-col>
     </el-row>
-    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
@@ -44,10 +44,10 @@ export default {
       ],
       quickActions: [
         {
-          title: this.$t('audits.ChangeField'),
+          title: this.$t('ChangeField'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Detail')
+            label: this.$t('Detail')
           },
           callbacks: {
             click: function() {

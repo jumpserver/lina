@@ -11,7 +11,7 @@ import AssetSelect from '@/components/Apps/AssetSelect'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
-import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
+import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
@@ -26,11 +26,11 @@ export default {
       instantTask: false,
       url: '/api/v1/ops/jobs/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'instant']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
-        [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Basic'), ['name', 'type', 'instant']],
+        [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('Asset'), ['assets', 'runas', 'runas_policy']],
+        [this.$t('Plan'), ['run_after_save', 'is_periodic', 'crontab']],
+        [this.$t('Other'), ['comment']]
       ],
       initial: {
         type: 'adhoc',
@@ -45,7 +45,7 @@ export default {
       },
       fieldsMeta: {
         runas_policy: {
-          helpText: this.$tc('ops.RunasPolicyHelpText')
+          helpText: this.$tc('RunasPolicyHelpText')
         },
         name: {
           rules: [Required],
@@ -64,7 +64,7 @@ export default {
           }
         },
         module: {
-          label: this.$t('ops.Module'),
+          label: this.$t('Module'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },
@@ -93,7 +93,7 @@ export default {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('perms.Asset'),
+          label: this.$t('Asset'),
           rules: [Required],
           el: {
             baseUrl: '/api/v1/perms/users/self/assets/',
@@ -115,7 +115,7 @@ export default {
               {
                 type: 'button',
                 icon: 'fa-question-circle',
-                tip: this.$t('ops.SaveCommand'),
+                tip: this.$t('SaveCommand'),
                 align: 'right',
                 callback: () => {
                   this.showHelpDialog = true
@@ -125,7 +125,7 @@ export default {
           }
         },
         timeout: {
-          helpText: i18n.t('ops.TimeoutHelpText')
+          helpText: i18n.t('TimeoutHelpText')
         },
         instant: {
           hidden: () => {
@@ -133,7 +133,7 @@ export default {
           }
         },
         chdir: {
-          helpText: i18n.t('ops.ChdirHelpText'),
+          helpText: i18n.t('ChdirHelpText'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           }
@@ -153,13 +153,15 @@ export default {
         crontab: {
           type: 'cronTab',
           component: CronTab,
-          label: i18n.t('xpack.RegularlyPerform'),
+          label: i18n.t('Crontab'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
+          helpTip: i18n.t('CrontabOfCreateUpdatePage')
         }
-      }
+      },
+      createSuccessNextRoute: { name: 'JobManagement' },
+      updateSuccessNextRoute: { name: 'JobManagement' }
     }
   },
   mounted() {

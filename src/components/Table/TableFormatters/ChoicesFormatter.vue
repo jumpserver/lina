@@ -1,7 +1,7 @@
 <template>
   <span>
-    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" effect="dark" placement="bottom">
-      <div slot="content" v-html="tips" />
+    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" :open-delay="500" effect="dark" placement="bottom">
+      <div slot="content" v-sanitize="tips" />
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
         <span v-if="formatterArgs.showText">{{ text }}</span>
@@ -31,8 +31,8 @@ export default {
             false: 'text-danger'
           },
           textChoices: {
-            true: this.$t('common.Yes'),
-            false: this.$t('common.No')
+            true: this.$t('Yes'),
+            false: this.$t('No')
           },
           getKey({ row, cellValue }) {
             return (cellValue && typeof cellValue === 'object') ? cellValue.value : cellValue

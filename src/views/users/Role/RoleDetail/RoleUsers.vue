@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <ListTable
         ref="ListTable"
         :header-actions="headerActions"
         :table-config="tableConfig"
       />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>
@@ -35,7 +35,7 @@ export default {
       relationConfig: {
         disabled: !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`),
         icon: 'fa-user',
-        title: this.$t('common.Members'),
+        title: this.$t('Members'),
         objectsAjax: {
           url: `/api/v1/users/users/?fields_size=mini&order=name${this.object.scope.value === 'system' ? '&oid=root' : ''}`,
           transformOption: (item) => {
@@ -55,7 +55,7 @@ export default {
           return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: () => {
-          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           this.$refs.userRelation.$refs.select2.clearSelected()
         }
@@ -68,14 +68,14 @@ export default {
         },
         columnsMeta: {
           user_display: {
-            label: this.$t('users.Name'),
+            label: this.$t('Name'),
             formatter: (row) => {
-              return row.user.name
+              return `${row.user.name}(${row.user.username})`
             }
           },
           delete_action: {
             prop: 'id',
-            label: this.$t('common.Actions'),
+            label: this.$t('Actions'),
             align: 'center',
             width: 150,
             objects: 'all',
@@ -87,10 +87,13 @@ export default {
               this.$axios.delete(
                 `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`,
               ).then(res => {
-                this.$message.success(this.$tc('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('DeleteSuccessMsg'))
                 reload()
               }).catch(error => {
-                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error({
+                  message: error.response.data.detail,
+                  duration: 3000
+                })
               })
             }.bind(this)
           },
@@ -115,11 +118,11 @@ export default {
           exclude: ['user', 'scope', 'role', 'org'],
           options: [
             {
-              label: this.$t('users.Username'),
+              label: this.$t('Username'),
               value: 'user__username'
             },
             {
-              label: this.$t('perms.User'),
+              label: this.$t('User'),
               value: 'user__name'
             }
           ]
@@ -140,6 +143,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -2,102 +2,6 @@ import i18n from '@/i18n/i18n'
 import { message } from '@/utils/message'
 
 const _ = require('lodash')
-const moment = require('moment')
-
-function getTimeUnits(u) {
-  const units = {
-    'd': '天',
-    'h': '时',
-    'm': '分',
-    's': '秒'
-  }
-  if (getUserLang() === 'zh-CN') {
-    return units[u]
-  }
-  return u
-}
-
-export function timeOffset(a, b) {
-  const start = safeDate(a)
-  const end = safeDate(b)
-  const offset = (end - start) / 1000
-  return readableSecond(offset)
-}
-
-function readableSecond(offset) {
-  const days = offset / 3600 / 24
-  const hours = offset / 3600
-  const minutes = offset / 60
-  const seconds = offset
-
-  if (days > 1) {
-    return days.toFixed(1) + ' ' + getTimeUnits('d')
-  } else if (hours > 1) {
-    return hours.toFixed(1) + ' ' + getTimeUnits('h')
-  } else if (minutes > 1) {
-    return minutes.toFixed(1) + ' ' + getTimeUnits('m')
-  } else if (seconds >= 0) {
-    return seconds.toFixed(1) + ' ' + getTimeUnits('s')
-  }
-  return ''
-}
-
-function getUserLang() {
-  const userLangEN = document.cookie.indexOf('django_language=en')
-  if (userLangEN === -1) {
-    return 'zh-CN'
-  } else {
-    return 'en-US'
-  }
-}
-
-function safeDate(s) {
-  s = cleanDateStr(s)
-  return new Date(s)
-}
-
-function cleanDateStr(d) {
-  for (let i = 0; i < 3; i++) {
-    if (!isNaN(Date.parse(d))) {
-      return d
-    }
-    if (!isNaN(Number(d)) || !d) {
-      return d
-    }
-    switch (i) {
-      case 0:
-        d = d.split('/').join('-')
-        break
-      case 1:
-        d = d.split('+')[0].trimRight()
-        break
-      case 2:
-        d = d.replace(/-/g, '/')
-    }
-  }
-  return d
-}
-
-export function toSafeLocalDateStr(d) {
-  if ([null, undefined, ''].includes(d)) {
-    return '-'
-  }
-  const date = safeDate(d)
-  return moment(date).format('L LTS')
-}
-
-export function forMatAction(vm, d) {
-  d.forEach(function(item, index, arr) {
-    if ([
-      vm.$t('perms.clipboardCopyPaste'),
-      vm.$t('perms.upDownload'),
-      vm.$t('perms.all')
-    ].includes(item)) {
-      arr.splice(index, 1)
-    }
-  })
-  return d.join(', ')
-}
 
 export function getApiPath(that) {
   let pagePath = that.$route.path
@@ -138,23 +42,6 @@ export function confirm({ msg, title, perform, success, failed, type = 'warning'
   })
 }
 
-export function formatDate(inputTime) {
-  const date = new Date(inputTime)
-  const y = date.getFullYear()
-  let m = date.getMonth() + 1
-  m = m < 10 ? ('0' + m) : m
-  let d = date.getDate()
-  d = d < 10 ? ('0' + d) : d
-  let h = date.getHours()
-  h = h < 10 ? ('0' + h) : h
-  let minute = date.getMinutes()
-  let second = date.getSeconds()
-  minute = minute < 10 ? ('0' + minute) : minute
-  second = second < 10 ? ('0' + second) : second
-  // return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
-  return y + '-' + m + '-' + d + 'T' + h + ':' + minute + ':' + second
-}
-
 const uuidPattern = /[0-9a-zA-Z\-]{36}/
 const uuidRegex = /\/([a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12})\//
 
@@ -186,28 +73,6 @@ export function replaceAllUUID(string, replacement = '*') {
     string = string.replace(/[0-9a-zA-Z\-]{36}/g, replacement)
   }
   return string
-}
-
-export function getDaysAgo(days, now) {
-  if (!now) {
-    now = new Date()
-  }
-  return new Date(now.getTime() - 3600 * 1000 * 24 * days)
-}
-
-export function getDaysFuture(days, now) {
-  if (!now) {
-    now = new Date()
-  }
-  return new Date(now.getTime() + 3600 * 1000 * 24 * days)
-}
-
-export function getDayEnd(now) {
-  if (!now) {
-    now = new Date()
-  }
-  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-  return moment(zoneTime).utc().toDate()
 }
 
 export function setUrlParam(url, name, value) {
@@ -245,18 +110,11 @@ export function setRouterQuery(vm, url = '') {
   })
 }
 
-export function getDayFuture(days, now) {
-  if (!now) {
-    now = new Date()
-  }
-  return new Date(now.getTime() + 3600 * 1000 * 24 * days)
-}
-
 export function getErrorResponseMsg(error) {
   let msg = ''
   let data = ''
   if (error?.response?.status === 500) {
-    data = i18n.t('common.ServerError')
+    data = i18n.t('ServerError')
   } else {
     data = error?.response && error?.response.data || error
   }
@@ -272,10 +130,6 @@ export function getErrorResponseMsg(error) {
     return data
   }
   return msg
-}
-
-export function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time))
 }
 
 function customizer(objValue, srcValue) {
@@ -388,7 +242,7 @@ export const copy = _.throttle(function(value) {
   inputDom.select()
   document?.execCommand('copy')
   message({
-    message: i18n.t('common.CopySuccess'),
+    message: i18n.t('CopySuccess'),
     type: 'success',
     duration: 1000
   })
@@ -415,4 +269,39 @@ export function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
+const notUppercase = ['to', 'a', 'from', 'by']
+
+export function toTitleCase(string) {
+  if (!string) return string
+  return string.trim().split(' ').map(item => {
+    if (notUppercase.includes(item.toLowerCase())) {
+      return item
+    }
+    return item[0].toUpperCase() + item.slice(1)
+  }).join(' ')
+}
+
+export function toSentenceCase(string) {
+  if (!string) return string
+  if (string.indexOf('/') > 0) return string
+  const s = string.trim().split(' ').map((item, index) => {
+    if (item.length === 0) return ''
+    if (item.length === 1) return item.toLowerCase()
+
+    // 如果首字母大写，且第二个字母也大写，不处理
+    if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
+      return item
+    }
+
+    if (index === 0) {
+      return item[0].toUpperCase() + item.slice(1)
+    }
+    // 仅处理首字母大写，别的是小写的情况
+    if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
+      return item[0].toLowerCase() + item.slice(1)
+    }
+    return item
+  }).join(' ')
+  return s[0].toUpperCase() + s.slice(1)
+}
 export { BASE_URL }

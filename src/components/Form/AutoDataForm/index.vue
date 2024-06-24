@@ -103,7 +103,7 @@ export default {
       this.loading = false
     },
     generateColumns() {
-      const generator = new FormFieldGenerator(this.$emit)
+      const generator = new FormFieldGenerator()
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
       this.$log.debug('Total fields: ', this.totalFields)
@@ -144,9 +144,9 @@ export default {
       if (field.attrs.error === error) {
         error += '.'
       }
-      if (field.type === 'nestedField') {
+
+      if (typeof error === 'string') {
         field.el.errors = error
-      } else {
         field.attrs.error = error
       }
     },
@@ -165,7 +165,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

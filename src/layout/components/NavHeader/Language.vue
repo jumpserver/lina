@@ -4,7 +4,13 @@
       {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
     </span>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item v-for="item of supportLanguages" :key="item.code" @click.native="changeLangTo(item)">{{ item.title }}</el-dropdown-item>
+      <el-dropdown-item
+        v-for="item of supportLanguages"
+        :key="item.code"
+        @click.native="changeLangTo(item)"
+      >
+        {{ item.title }}
+      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -77,17 +83,13 @@ export default {
     },
     changeLangTo(item) {
       this.$i18n.locale = item.code
-      localStorage.setItem('lang', item.code)
-      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
+      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode, { expires: 365 })
       window.location.reload()
     },
     getLangCode() {
       let langCode = this.$cookie.get(this.LANG_COOKIE_NAME)
       if (!langCode) {
-        langCode = localStorage.lang
-      }
-      if (!langCode) {
-        langCode = navigator.language || navigator.userLanguage
+        langCode = navigator.systemLanguage || navigator.language || navigator.userLanguage
       }
       if (langCode === 'zh-hant') {
         langCode = 'zh_hant'

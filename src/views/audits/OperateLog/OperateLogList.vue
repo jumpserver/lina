@@ -5,7 +5,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <DiffDetail ref="DetailDialog" :title="$tc('route.OperateLog')" />
+    <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
@@ -39,32 +39,19 @@ export default {
           ]
         },
         columnsMeta: {
-          resource_type: {
-            width: '180px'
-          },
-          datetime: {
-            width: '160px'
-          },
-          remote_addr: {
-            width: '140px'
-          },
-          action_display: {
-            width: '70px'
+          user: {
+            'min-width': '120px'
           },
           actions: {
-            width: '70px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false,
-              canUpdate: false,
               hasDelete: false,
-              canDelete: false,
               hasClone: false,
-              canClone: false,
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.loading = true

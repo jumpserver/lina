@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -12,7 +12,7 @@ import Detail from './Detail'
 import TaskExecutionList from './TaskExecutionList'
 
 export default {
-  name: 'SyncInstanceTaskDetail',
+  name: 'AccountGatherTaskDetail',
   components: {
     GenericDetailPage,
     TabPage,
@@ -25,7 +25,7 @@ export default {
       config: {
         url: '/api/v1/accounts/gather-account-automations',
         activeMenu: 'Detail',
-        titlePrefix: this.$t('accounts.AccountGather.AccountGatherTaskList'),
+        titlePrefix: this.$t('AccountGatherDetail'),
         actions: {
           deleteSuccessRoute: 'AccountGatherList',
           canUpdate: 'accounts.change_gatheraccountsautomation',
@@ -33,7 +33,7 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('Basic'),
             name: 'Detail'
           }
         ],

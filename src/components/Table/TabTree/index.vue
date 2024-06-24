@@ -15,9 +15,9 @@
           :label-content="item.labelContent"
           :name="item.name"
         >
-          <span slot="label">
-            <i v-if="item.icon" :class="item.icon" class="fa " />
-            {{ item.title }}
+          <span slot="label" class="tab-container">
+            <i v-if="item.icon && !showText" :class="item.icon" class="tab-icon fa " />
+            <span v-if="showText" class="tab-text">{{ item.title }}</span>
             <slot :tab="item.name" name="badge" />
           </span>
         </el-tab-pane>
@@ -67,7 +67,9 @@ export default {
     return {
       flag: false,
       componentKey: 1,
-      activeTreeSetting: {}
+      activeTreeSetting: {},
+      showText: true,
+      keyMap: {}
     }
   },
   computed: {
@@ -98,11 +100,19 @@ export default {
   },
   async mounted() {
     this.iActiveMenu = await this.getPropActiveTab()
-    this.$eventBus.$on('treeComponentKey', () => {
-      this.componentKey += 1
-    })
+    this.hiddenTextIfNeed()
   },
   methods: {
+    hiddenTextIfNeed() {
+      const vm = this
+      const hideOverflowingText = _.debounce(function() {
+        const tabs = document.querySelector('.tree-tab .el-tabs__nav-wrap.is-scrollable')
+        vm.showText = !tabs
+      }, 800)
+
+      hideOverflowingText()
+      window.addEventListener('resize', hideOverflowingText)
+    },
     hideRMenu() {
       this.$refs.AutoDataZTree?.hideRMenu()
     },
@@ -119,7 +129,10 @@ export default {
       this.$emit('urlChange', url)
     },
     handleTabClick(tab) {
-      this.componentKey += 1
+      this.componentKey = this.keyMap[tab.name]
+      if (!this.componentKey) {
+        this.componentKey = this.$route.name + '_' + tab.name
+      }
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
@@ -171,28 +184,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .ztree,
->>> .ztree li,
->>> .ztree li ul,
-.tree-tab {
-}
->>> .ztree {
+::v-deep .data-z-tree {
   padding: 0;
 }
-.page-submenu >>> .el-tabs__nav-wrap {
+
+.page-submenu ::v-deep .el-tabs__nav-wrap {
   position: static;
 
-  .el-tabs__item.is-active {
-    color:  var(--menu-text-active);
+  .el-tabs__item {
+    padding-right: 0;
+    padding-left: 0;
+
+    &:hover {
+      color: var(--color-primary);
+    }
   }
 }
-.only-submenu  {
-  &>>> .el-tabs__active-bar {
-    transform: none!important;
+
+.only-submenu {
+  &::v-deep .el-tabs__active-bar {
+    transform: none !important;
   }
-  &>>> .el-tabs__item.is-active {
+
+  &::v-deep .el-tabs__item.is-active {
     text-align: left;
     padding: 0 20px;
+  }
+}
+
+::v-deep {
+  .ztree {
+    padding: 0;
   }
 }
 </style>

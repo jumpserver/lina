@@ -1,16 +1,15 @@
 <template>
   <el-select
     :disabled="disabled"
-    :placeholder="$tc('common.Select')"
+    :placeholder="$tc('Select')"
     :value="currentOrgId"
-    class="org-select organization"
+    class="org-select"
     filterable
     popper-class="switch-org"
     @change="changeOrg"
   >
     <template slot="prefix">
       <svg-icon icon-class="organization" />
-      <span class="line" />
     </template>
 
     <el-option-group
@@ -66,19 +65,19 @@ export default {
     ]),
     orgActionsGroup() {
       const orgActions = {
-        label: this.$t('xpack.Organization.OrganizationList'),
+        label: this.$t('OrganizationList'),
         options: [
           {
             id: 'create',
             icon: 'create',
             disabled: !this.$hasPerm('orgs.add_organization'),
-            name: this.$t('xpack.Organization.OrganizationCreate')
+            name: this.$t('OrganizationCreate')
           },
           {
             id: 'list',
             icon: 'list',
             disabled: !this.$hasPerm('orgs.view_organization'),
-            name: this.$t('xpack.Organization.OrganizationLists')
+            name: this.$t('OrganizationManage')
           }
         ]
       }
@@ -88,7 +87,7 @@ export default {
     },
     orgChoicesGroup() {
       return {
-        label: this.$t('xpack.Organization.AllOrganization'),
+        label: this.$t('ChangeOrganization'),
         options: this.usingOrgs
       }
     },
@@ -130,22 +129,58 @@ export default {
 <style lang="scss" scoped>
 @import '~@/styles/variables.scss';
 
+$height: 28px;
+
 .org-select {
-  padding: 0 10px 0 18px;
-  line-height: 55px;
-  background-color: #293846;
-  color: white;
-  font-weight: 600;
-  font-size: 15px;
-  //border-top: solid 1px rgb(47, 64, 80);
-  ::v-deep .el-input {
-    input.el-input__inner {
-      line-height: 55px;
-      height: 55px;
-      background: none;
-      border: none;
+  line-height: $height;
+}
+
+::v-deep .el-input {
+  .el-input__inner {
+    height: $height;
+    line-height: $height;
+    background: none;
+    border: none;
+    padding-left: 20px;
+  }
+
+  .el-input__prefix {
+    left: 0;
+  }
+
+  .el-input__suffix > .el-input__suffix-inner i {
+    color: #fff;
+  }
+}
+
+.el-select-dropdown.switch-org {
+  border-radius: 4px;
+  left: 220px !important;
+  max-width: 400px;
+
+  .option-group {
+    padding-right: 8px;
+    padding-left: 8px;
+    max-width: 400px;
+
+    ::v-deep .el-select-group__title {
+      color: var(--color-icon-primary);
+      padding-left: 15px;
+      font-size: 12px;
+      line-height: 30px;
+    }
+
+    ::v-deep .el-select-dropdown__item {
+      padding: 0 15px;
+      line-height: 30px;
+      height: 30px;
     }
   }
+}
+
+.org-select ::v-deep .el-input.is-disabled .el-input__inner {
+  color: #ffffff !important;
+  background-color: transparent;
 }
 
 .icon {
@@ -154,46 +189,8 @@ export default {
 
 .line {
   width: 1px;
-  margin-left: 8px;
+  margin-left: 5px;
   border: .5px solid #FFF;
-}
-
-.organization {
-  height: 32px;
-  line-height: 32px;
-  background: transparent;
-  color: #FFF;
-
-  & >>> .el-input__prefix {
-    left: 0;
-  }
-
-  & >>> .el-input--prefix .el-input__inner {
-    line-height: 32px !important;
-    height: 32px !important;
-  }
-
-  & >>> .el-input__icon {
-    color: #606266;
-  }
-
-  & >>> .el-input .el-select__caret {
-    color: #FFF;
-  }
-}
-
-.option-group {
-  max-width: 400px;
-
-  & >>> .el-select-group__title {
-    color: #909399 !important;
-    padding-left: 15px;
-    font-size: 12px;
-    line-height: 30px;
-  }
-}
-
-.org-select >>> .el-input.is-disabled .el-input__inner {
-  color: #ffffff !important;
+  opacity: 0.4;
 }
 </style>

@@ -16,8 +16,8 @@ export default {
         url: '/api/v1/accounts/virtual-accounts/',
         object: {},
         fields: [
-          [this.$t('common.Basic'), ['name', 'username']],
-          [this.$t('assets.Secret'), ['secret_from_login']]
+          [this.$t('Basic'), ['name', 'username']],
+          [this.$t('Secret'), ['secret_from_login']]
         ],
         fieldsMeta: {
           name: {

@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
@@ -31,10 +31,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
+          title: this.$t('ManualExecution'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.AccountChangeSecret.Execute'),
+            label: this.$t('Execute'),
             disabled: !this.$hasPerm('accounts.add_changesecretexecution') || !this.object.is_active
           },
           callbacks: {
@@ -53,33 +53,33 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('accounts.AccountChangeSecret.Username'),
+          key: this.$t('Accounts'),
           value: this.object.accounts.join(', ')
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
+          key: this.$t('AssetsOfNumber'),
           value: this.object.assets.length
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
+          key: this.$t('NodeOfNumber'),
           value: this.object.nodes.length
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.PasswordStrategy'),
+          key: this.$t('PasswordStrategy'),
           value: this.object.secret_strategy.label
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
+          key: this.$t('Crontab'),
           value: this.object.crontab,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
+          key: this.$t('Interval'),
           value: this.object.interval,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         'date_created', 'date_updated', 'comment', 'is_active'

@@ -21,8 +21,7 @@ export default {
           min: ['material', 'is_success'],
           default: [
             'creator_name', 'material', 'job_type', 'is_finished',
-            'is_success', 'time_cost', 'date_start',
-            'date_finished', 'actions'
+            'is_success', 'time_cost', 'date_start', 'actions'
           ]
         },
         columns: [
@@ -39,9 +38,10 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('ops.output'),
+                  title: this.$t('View'),
                   name: 'logging',
                   can: true,
+                  type: 'primary',
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)
                   }
@@ -50,8 +50,6 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
-            width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
                 return row.time_cost.toFixed(2) + 's'
@@ -60,21 +58,14 @@ export default {
             }
           },
           is_finished: {
-            label: this.$t('ops.isFinished'),
-            width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
               }
               return <i Class='fa fa-times text-danger'/>
-            },
-            formatterArgs: {
-              width: '14px'
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
-            width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -83,13 +74,7 @@ export default {
                 return <i Class='fa fa-check text-primary'/>
               }
               return <i Class='fa fa-times text-danger'/>
-            },
-            formatterArgs: {
-              width: '14px'
             }
-          },
-          date_start: {
-            width: '160px'
           }
         }
       },
@@ -100,7 +85,7 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('audits.User'),
+              label: this.$t('User'),
               value: 'creator__name'
             }
           ]

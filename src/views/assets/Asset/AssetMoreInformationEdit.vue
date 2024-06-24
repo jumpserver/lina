@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :perform-submit="performSubmit" />
+  <GenericCreateUpdatePage :perform-submit="performSubmit" v-bind="$data" />
 </template>
 
 <script>
@@ -14,8 +14,8 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'address']],
-        [this.$t('assets.Hardware'), ['gathered_info']]
+        [this.$t('Basic'), ['name', 'address']],
+        [this.$t('Hardware'), ['gathered_info']]
       ],
       fieldsMeta: {
         gathered_info: {

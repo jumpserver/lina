@@ -1,46 +1,46 @@
 <template>
   <GenericTicketDetail
-    :object="object"
-    :special-card-items="specialCardItems"
-    :assigned-card-items="assignedCardItems"
     :approve="handleApprove"
+    :assigned-card-items="assignedCardItems"
     :close="handleClose"
+    :object="object"
     :reject="handleReject"
+    :special-card-items="specialCardItems"
   >
     <IBox v-if="hasActionPerm && object.status.value !== 'closed'" class="box">
       <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-edit" /> {{ $tc('common.Actions') }}
+        <i class="fa fa-edit" /> {{ $tc('Actions') }}
       </div>
       <template>
-        <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
-          <el-form-item :label="$tc('assets.Node')">
-            <Select2 v-model="requestForm.nodes" v-bind="nodeSelect2" style="width: 50% !important" />
+        <el-form ref="requestForm" :model="requestForm" class="assets" label-position="left" label-width="140px">
+          <el-form-item :label="$tc('Node')">
+            <Select2 v-model="requestForm.nodes" style="width: 50% !important" v-bind="nodeSelect2" />
           </el-form-item>
-          <el-form-item :label="$tc('tickets.Asset')">
-            <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
+          <el-form-item :label="$tc('Asset')">
+            <Select2 v-model="requestForm.assets" style="width: 50% !important" v-bind="assetSelect2" />
           </el-form-item>
-          <el-form-item :label="$tc('perms.Account')" :rules="isRequired">
+          <el-form-item :label="$tc('Account')" :rules="isRequired">
             <AccountFormatter
               v-model="requestForm.accounts"
-              :nodes="requestForm.nodes"
               :assets="requestForm.assets"
+              :nodes="requestForm.nodes"
               :show-add-template="false"
               style="width: 50% !important"
             />
           </el-form-item>
-          <el-form-item :label="$tc('common.DateStart')" required>
+          <el-form-item :label="$tc('DateStart')" required>
             <el-date-picker
               v-model="requestForm.apply_date_start"
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$tc('common.dateExpired')" required>
+          <el-form-item :label="$tc('DateExpired')" required>
             <el-date-picker
               v-model="requestForm.apply_date_expired"
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$tc('assets.Action')">
+          <el-form-item :label="$tc('Action')">
             <BasicTree
               v-model="requestForm.actions"
               :tree="treeNodes"
@@ -56,7 +56,7 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
@@ -125,27 +125,27 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$tc('perms.Node'),
+          key: this.$tc('Node'),
           value: object.apply_nodes.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('tickets.Asset'),
+          key: this.$tc('Asset'),
           value: object.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('perms.Account'),
+          key: this.$tc('Account'),
           value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
         },
         {
-          key: this.$tc('assets.Action'),
+          key: this.$tc('Action'),
           value: object.apply_actions.map(item => item.label).join(', ')
         },
         {
-          key: this.$tc('common.DateStart'),
+          key: this.$tc('DateStart'),
           value: object.apply_date_start
         },
         {
-          key: this.$tc('common.dateExpired'),
+          key: this.$tc('DateExpired'),
           value: object.apply_date_expired
         }
       ]
@@ -155,7 +155,7 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$tc('tickets.PermissionName'),
+          key: this.$tc('PermissionName'),
           value: object.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id }}
@@ -167,27 +167,27 @@ export default {
           }
         },
         {
-          key: this.$tc('perms.Node'),
+          key: this.$tc('Node'),
           value: object.apply_nodes.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('assets.Asset'),
+          key: this.$tc('Asset'),
           value: object.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('perms.Account'),
+          key: this.$tc('Account'),
           value: object.apply_accounts.map(item => AccountLabelMapper[item] || item).join(', ')
         },
         {
-          key: this.$tc('assets.Action'),
+          key: this.$tc('Action'),
           value: object.apply_actions.map(item => item.label).join(', ')
         },
         {
-          key: this.$tc('common.DateStart'),
+          key: this.$tc('DateStart'),
           value: object.apply_date_start
         },
         {
-          key: this.$tc('common.dateExpired'),
+          key: this.$tc('DateExpired'),
           value: object.apply_date_expired
         }
       ]
@@ -216,9 +216,9 @@ export default {
       const accounts = this.requestForm.accounts
       if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
-          return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
+          return this.$message.error(this.$tc('SelectAtLeastOneAssetOrNodeErrMsg'))
         } else if (accounts.length === 0) {
-          return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
+          return this.$message.error(this.$tc('RequiredSystemUserErrMsg'))
         }
       }
       this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
@@ -230,10 +230,10 @@ export default {
         apply_date_start: this.requestForm.apply_date_start,
         apply_date_expired: this.requestForm.apply_date_expired
       }).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
         this.reloadPage()
       }).catch(() => {
-        this.$message.success(this.$tc('common.updateErrorMsg'))
+        this.$message.success(this.$tc('UpdateErrorMsg'))
       })
     },
     handleClose() {

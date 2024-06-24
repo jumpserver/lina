@@ -9,7 +9,7 @@
       class="table"
       style="width: 100%"
     >
-      <el-table-column :label="$tc('dashboard.ranking')" width="90px">
+      <el-table-column :label="$tc('Ranking')" width="80px">
         <template v-slot="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>
@@ -37,7 +37,8 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     url: {
       type: String,
@@ -74,18 +75,24 @@ export default {
   margin-top: 16px;
   padding: 20px;
   background: #fff;
+
   .head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
   }
 }
->>> .el-table th, .el-table tr {
-  background-color: #F5F6F7!important;
+
+::v-deep .el-table td, .el-table th {
+  padding: 5px 0;
+}
+
+::v-deep .el-table th, .el-table tr {
+  background-color: #F5F6F7 !important;
 
 }
 
->>> .el-table .cell {
+::v-deep .el-table .cell {
   white-space: nowrap;
 }
 </style>

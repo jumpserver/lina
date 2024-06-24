@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="24" :sm="24">
-      <Account :columns-meta="columnsMeta" :object.sync="object" :extra-quick-actions="quickActions" />
+      <Account :columns-meta="columnsMeta" :extra-quick-actions="quickActions" :object.sync="object" />
     </el-col>
   </el-row>
 </template>
@@ -28,23 +28,23 @@ export default {
           formatter: (row) => <span>{row.name}</span>
         },
         asset: {
-          label: this.$t('assets.Asset'),
+          label: this.$t('Asset'),
           formatter: (row) => <span>{row.asset.name}</span>
         }
       },
       quickActions: [
         {
-          title: this.$t('accounts.GenerateAccounts'),
+          title: this.$t('GenerateAccounts'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Generate')
+            label: this.$t('Generate')
           },
           callbacks: {
             click: function() {
               this.$axios.put(
                 `/api/v1/terminal/applet-hosts/${this.object.id}/generate-accounts/`,
               ).then(res => {
-                this.$message.success(this.$tc('accounts.GenerateSuccessMsg'))
+                this.$message.success(this.$tc('GenerateSuccessMsg'))
               })
             }.bind(this)
           }

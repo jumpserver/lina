@@ -5,6 +5,7 @@
 <script>
 import BaseTicketList from './BaseTicketList'
 import { mapGetters } from 'vuex'
+
 export default {
   name: 'MyTicketList',
   components: {
@@ -17,7 +18,7 @@ export default {
           dropdown: [
             {
               name: 'RequestAssetPerm',
-              title: this.$t('tickets.RequestAssetPerm'),
+              title: this.$t('RequestAssetPerm'),
               callback: () => this.$router.push({
                 name: 'RequestAssetPermTicketCreateUpdate'
               })

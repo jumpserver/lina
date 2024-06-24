@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import FlowRuleField from './FlowRuleField'
+
 export default {
   name: 'FlowCreateUpdate',
   components: {
@@ -14,15 +15,15 @@ export default {
     return {
       loading: true,
       fields: [
-        [this.$t('common.Basic'), ['type']],
-        [this.$t('common.ApprovaLevel'), ['approval_level', 'rules']]
+        [this.$t('Basic'), ['type']],
+        [this.$t('ApprovaLevel'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
         type: {
           disabled: true
         },
         rules: {
-          label: this.$t('tickets.ApprovalProcess'),
+          label: this.$t('ApprovalProcess'),
           component: FlowRuleField,
           el: {
             level: 1

@@ -3,7 +3,7 @@ import AccountFormatter from './components/AccountFormatter'
 
 function getFields() {
   const users = {
-    label: this.$t('users.Users'),
+    label: this.$t('Users'),
     hidden: () => false,
     el: {
       value: [],
@@ -17,7 +17,7 @@ function getFields() {
   }
 
   const user_groups = {
-    label: this.$t('users.UserGroups'),
+    label: this.$t('UserGroups'),
     hidden: () => false,
     el: {
       value: [],
@@ -29,7 +29,7 @@ function getFields() {
     type: 'assetSelect',
     hidden: () => false,
     component: AssetSelect,
-    label: this.$t('perms.Asset'),
+    label: this.$t('Asset'),
     rules: [{
       required: false
     }],
@@ -39,7 +39,7 @@ function getFields() {
   }
 
   const nodes = {
-    label: this.$t('perms.Node'),
+    label: this.$t('Node'),
     hidden: () => false,
     el: {
       value: [],
@@ -54,27 +54,27 @@ function getFields() {
 
   const accounts = {
     type: 'input',
-    label: this.$t('perms.Account'),
+    label: this.$t('Account'),
     component: AccountFormatter
   }
 
   const date_start = {
-    label: this.$t('common.DateStart'),
+    label: this.$t('DateStart'),
     hidden: () => false
   }
 
   const date_expired = {
-    label: this.$t('common.dateExpired'),
+    label: this.$t('DateExpired'),
     hidden: () => false
   }
 
   const is_active = {
-    label: this.$t('assets.IsActive'),
+    label: this.$t('IsActive'),
     type: 'checkbox'
   }
 
   const applications = {
-    label: this.$t('assets.Applications'),
+    label: this.$t('Applications'),
     hidden: () => false,
     el: {
       value: [],

@@ -3,6 +3,7 @@
     v-model="iShowTip"
     :content="tipText"
     :manual="true"
+    :open-delay="500"
     class="item"
     effect="dark"
     placement="bottom-start"
@@ -19,6 +20,7 @@
         :key="view.name"
         :index="view.name"
       >
+        <span class="outline" />
         <svg-icon :icon-class="view.meta.icon" class="icons" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
@@ -44,7 +46,7 @@ export default {
   },
   data() {
     return {
-      tipText: this.$t('common.ChangeViewHelpText'),
+      tipText: this.$t('ChangeViewHelpText'),
       showTip: true
     }
   },
@@ -114,6 +116,7 @@ export default {
         this.iShowTip = false
       }
       this.$router.push(routeName)
+      this.$emit('view-change', routeName)
     }
   }
 }
@@ -122,11 +125,11 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  border-right: none !important;
+  letter-spacing: 0.09em;
 
   ::v-deep .el-submenu .el-submenu__title {
-    height: 40px;
-    line-height: 40px;
+    height: 38px;
+    line-height: 32px;
     border-bottom: none;
   }
 
@@ -134,22 +137,19 @@ export default {
     border-bottom: none;
   }
 
-  & > > > .el-icon-arrow-down {
+  & ::v-deep .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
   }
 
   .el-menu-item {
-    height: 36px;
-    line-height: 26px;
+    height: 38px;
+    width: 160px;
+    line-height: 28px;
     padding: 4px 24px;
 
     &:hover {
       background-color: var(--menu-hover);
-    }
-
-    &:focus {
-      background-color: transparent;
     }
   }
 }
@@ -190,7 +190,7 @@ export default {
 
 .icons {
   vertical-align: middle !important;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   color: #1F2329;
   margin-right: 10px;
@@ -198,16 +198,10 @@ export default {
 
 .icons-title {
   display: inline-block;
-  font-size: 14px;
-}
+  font-size: 13px;
 
-.el-menu-item.is-active {
-  font-weight: bold;
-  color: var(--menu-text-active);
-  border-left: 4px solid var(--menu-text-active);
-}
-
-.menu-main.mobile-view-switch > > > .el-submenu__icon-arrow {
-  right: 10px;
+  .menu-main.mobile-view-switch ::v-deep .el-submenu__icon-arrow {
+    right: 10px;
+  }
 }
 </style>

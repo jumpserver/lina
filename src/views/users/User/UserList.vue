@@ -20,7 +20,7 @@
 import { mapGetters } from 'vuex'
 import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
-import { getDayFuture } from '@/utils/common'
+import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
@@ -54,12 +54,27 @@ export default {
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'email', 'groups', 'system_roles',
-            'org_roles', 'source', 'is_valid', 'actions'
+            'name', 'username', 'email',
+            'groups', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'UserDetail'
+            }
+          },
+          mfa_level: {
+            width: '130px'
+          },
           source: {
+            width: '120px',
+            collapsible: false
+          },
+          email: {
+            'min-width': '160px'
+          },
+          'wecom_id': {
             width: '120px'
           },
           username: {
@@ -71,13 +86,11 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'UserDetail'
+                tab: 'UserDetail'
               }
             }
           },
           system_roles: {
-            width: '100px',
-            label: this.$t('users.SystemRoles'),
             formatter: (row) => {
               return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -85,8 +98,6 @@ export default {
             columnKey: 'system_roles'
           },
           org_roles: {
-            width: '100px',
-            label: this.$t('users.OrgRoles'),
             formatter: (row) => {
               return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -110,13 +121,14 @@ export default {
             }
           },
           phone: {
+            width: '120px',
             formatter: (row) => {
               const phoneObj = row.phone
               return <div>{phoneObj?.code}{phoneObj?.phone}</div>
             }
           },
           login_blocked: {
-            width: '90px',
+            width: '120px',
             formatterArgs: {
               showFalse: false
             }
@@ -127,13 +139,16 @@ export default {
             }
           },
           can_public_key_auth: {
-            width: '100px',
+            width: '230px',
             formatterArgs: {
               showFalse: false
             }
           },
+          date_password_last_updated: {
+            width: '230px'
+          },
           need_update_password: {
-            width: '100px',
+            width: '200px',
             formatterArgs: {
               showFalse: false
             }
@@ -144,11 +159,7 @@ export default {
             }
           },
           actions: {
-            el: {
-              fixed: 'right'
-            },
             formatterArgs: {
-              fixed: 'right',
               hasDelete: hasDelete,
               canUpdate: ({ row }) => {
                 return this.$hasPerm('users.change_user') &&
@@ -156,7 +167,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: this.$t('users.Remove'),
+                  title: this.$t('Remove'),
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
@@ -174,8 +185,8 @@ export default {
         canCreate: this.$hasPerm('users.add_user'),
         extraActions: [
           {
-            name: this.$t('users.InviteUser'),
-            title: this.$t('users.InviteUser'),
+            name: this.$t('InviteUser'),
+            title: this.$t('InviteUser'),
             has: () => {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
@@ -196,23 +207,23 @@ export default {
         },
         extraMoreActions: [
           {
-            title: this.$t('common.BatchRemoval'),
-            name: 'BatchRemoval',
+            title: this.$t('RemoveSelected'),
+            name: 'RemoveSelected',
             has: hasRemove,
-            fa: 'remove',
+            icon: 'remove',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
             name: 'BatchDisable',
-            title: this.$t('common.BatchDisable'),
+            title: this.$t('DisableSelected'),
             icon: 'fa fa-ban',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
-            title: this.$t('common.BatchActivate'),
+            title: this.$t('ActivateSelected'),
             icon: 'fa fa-check-circle-o',
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
@@ -231,7 +242,7 @@ export default {
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
-              label: this.$t('users.UserGroups'),
+              label: this.$t('UserGroups'),
               el: {
                 multiple: true,
                 disabled: vm.$store.getters.currentOrgIsRoot,
@@ -242,11 +253,11 @@ export default {
               }
             },
             date_expired: {
-              label: this.$t('common.dateExpired'),
+              label: this.$t('DateExpired'),
               hidden: () => false
             },
             comment: {
-              label: this.$t('common.Comment'),
+              label: this.$t('Comment'),
               hidden: () => false
             }
           }
@@ -266,6 +277,9 @@ export default {
   mounted() {
     this.setRolesFilter()
   },
+  activated() {
+    this.reloadTable()
+  },
   methods: {
     setRolesFilter() {
       const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]
@@ -281,10 +295,15 @@ export default {
       }
     },
     removeUserFromOrg({ row, reload }) {
-      const url = `/api/v1/users/users/${row.id}/remove/`
-      this.$axios.post(url).then(() => {
-        reload()
-        this.$message.success(this.$tc('common.removeSuccessMsg'))
+      this.$confirm(this.$t('RemoveWarningMsg') + ' ' + row.name + ' ?', this.$tc('Info'), {
+        type: 'warning'
+      }).then(() => {
+        const url = `/api/v1/users/users/${row.id}/remove/`
+        this.$axios.post(url).then(() => {
+          reload()
+          this.$message.success(this.$tc('RemoveSuccessMsg'))
+        })
+      }).catch(() => {
       })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
@@ -295,13 +314,19 @@ export default {
       const url = `${this.tableConfig.url}remove/?spm=` + data.spm
       this.$axios.post(url).then(() => {
         reloadTable()
-        this.$message.success(this.$tc('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('RemoveSuccessMsg'))
       })
     },
     reloadTable() {
       this.$refs.GenericListPage.reloadTable()
     },
     bulkActionCallback(selectedRows, reloadTable, actionType) {
+      const msgs = {
+        'disable': 'DisableSuccessMsg',
+        'activate': 'ActivateSuccessMsg',
+        'remove': 'RemoveSuccessMsg',
+        'delete': 'DeleteSuccessMsg'
+      }
       const vm = this
       const url = '/api/v1/users/users/'
       const data = selectedRows.map(row => {
@@ -310,7 +335,7 @@ export default {
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
-        vm.$message.success(vm.$t(`common.${actionType}SuccessMsg`))
+        vm.$message.success(vm.$t(msgs[actionType]))
       })
     },
     handleInviteDialogClose() {
@@ -319,6 +344,16 @@ export default {
     },
     handleDialogUpdate() {
       this.updateSelectedDialogSetting.visible = false
+
+      // 此处必须显示重新赋值才能在更新用户时使得 Groups 数据重新刷新
+      this.tableConfig.columnsMeta.groups = {
+        formatter: AmountFormatter,
+        formatterArgs: {
+          routeQuery: {
+            tab: 'UserDetail'
+          }
+        }
+      }
       this.reloadTable()
     }
   }

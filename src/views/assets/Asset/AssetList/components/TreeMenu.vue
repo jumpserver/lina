@@ -8,7 +8,7 @@
       tabindex="-1"
       @click="rMenuAddAssetToNode"
     >
-      <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
+      <i class="fa fa-clone" />  {{ this.$t('AddAssetToNode') }}
     </li>
     <li
       id="m_move_asset_to_node"
@@ -17,7 +17,7 @@
       tabindex="-1"
       @click="rMenuMoveAssetToNode"
     >
-      <i class="fa fa-scissors" />  {{ this.$t('tree.MoveAssetToNode') }}
+      <i class="fa fa-scissors" />  {{ this.$t('MoveAssetToNode') }}
     </li>
     <li
       id="m_remove_asset_from_node"
@@ -26,7 +26,7 @@
       tabindex="-1"
       @click="rMenuRemoveAssetFromNode"
     >
-      <i class="fa fa-minus-square-o" />  {{ this.$t('tree.RemoveAssetFromNode') }}
+      <i class="fa fa-minus-square-o" />  {{ this.$t('RemoveAssetFromNode') }}
     </li>
     <li v-if="$hasPerm('assets.change_assetnodes')" class="divider" />
     <li
@@ -36,7 +36,7 @@
       tabindex="-1"
       @click="rMenuUpdateNodeAssetHardwareInfo"
     >
-      <i class="fa fa-refresh" />  {{ this.$t('tree.UpdateNodeAssetHardwareInfo') }}
+      <i class="fa fa-refresh" />  {{ this.$t('UpdateNodeAssetHardwareInfo') }}
     </li>
     <li
       id="m_test_node_asset_connectivity"
@@ -45,14 +45,14 @@
       tabindex="-1"
       @click="rMenuTestNodeAssetConnectivity"
     >
-      <i class="fa fa-link" />  {{ this.$t('tree.TestNodeAssetConnectivity') }}
+      <i class="fa fa-link" />  {{ this.$t('TestNodeAssetConnectivity') }}
     </li>
     <li v-if="$hasPerm('assets.change_assetnodes | assets.test_assetconnectivity')" class="divider" />
     <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetOnlyCurrentNode">
-      <i class="fa fa-indent" />  {{ this.$t('tree.ShowAssetOnlyCurrentNode') }}
+      <i class="fa fa-indent" />  {{ this.$t('ShowAssetOnlyCurrentNode') }}
     </li>
     <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetAllChildrenNode">
-      <i class="fa fa-align-justify" />  {{ this.$t('tree.ShowAssetAllChildrenNode') }}
+      <i class="fa fa-align-justify" />  {{ this.$t('ShowAssetAllChildrenNode') }}
     </li>
     <li class="divider" />
     <li
@@ -62,10 +62,10 @@
       tabindex="-1"
       @click="rCheckAssetsAmount"
     >
-      <i class="fa fa-clone" />  {{ this.$t('tree.CheckAssetsAmount') }}
+      <i class="fa fa-clone" />  {{ this.$t('CheckAssetsAmount') }}
     </li>
     <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
-      <i class="fa fa-info-circle" />  {{ this.$t('tree.ShowNodeInfo') }}
+      <i class="fa fa-info-circle" />  {{ this.$t('ShowNodeInfo') }}
     </li>
     <NodeAssetsUpdateDialog
       v-if="nodeAssetsUpdateDialog.visible"
@@ -75,7 +75,7 @@
     <Dialog
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('assets.NodeInformation')"
+      :title="$tc('NodeInformation')"
       :visible.sync="nodeInfoDialogSetting.dialogVisible"
       width="50%"
     >
@@ -155,7 +155,7 @@ export default {
       ).then((res) => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     },
     rMenuTestNodeAssetConnectivity() {
@@ -170,7 +170,7 @@ export default {
       ).then((res) => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     },
     rMenuShowAssetOnlyCurrentNode() {
@@ -199,11 +199,11 @@ export default {
         this.nodeInfoDialogSetting.items = [
           { key: 'id', label: 'ID', value: res.id },
           { key: 'key', label: 'KEY', value: res.key },
-          { key: 'name', label: this.$t('assets.Name'), value: res.name },
-          { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value }
+          { key: 'name', label: this.$t('Name'), value: res.name },
+          { key: 'fullName', label: this.$t('FullName'), value: res.full_value }
         ]
       } catch (error) {
-        this.$message.error(this.$tc('common.ErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('ErrorMsg' + ' ' + error))
       }
     },
     rCheckAssetsAmount() {
@@ -212,7 +212,7 @@ export default {
       ).then(res => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     },
     hideMenu() {

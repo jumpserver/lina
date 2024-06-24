@@ -4,20 +4,22 @@
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$tc('rbac.Permissions')">
+      <IBox :title="$tc('Permissions')">
         <div style="height: 10%">
           <el-button
             :disabled="isDisabled"
             size="small"
-            style="width: 100%;"
+            style="float: right; width: 100%"
             type="primary"
             @click="updatePermissions"
           >
-            {{ $t('common.Update') }}
+            {{ $t('Update') }}
           </el-button>
         </div>
-        <div class="perm-tree">
-          <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+        <div class="tree-zone">
+          <div class="perm-tree">
+            <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+          </div>
         </div>
       </IBox>
     </el-col>
@@ -28,7 +30,6 @@
 import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'RolePerms',
@@ -93,6 +94,8 @@ export default {
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
           'applications.match_application', 'rbac.view_workbench'
         ],
+        'terminal.view_sessionreplay': ['terminal.view_command'],
+        'rbac.view_filemanager': ['perms.view_myassets'],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.add_user': ['rbac.view_role'],
         'users.change_user': ['rbac.view_role'],
@@ -116,7 +119,6 @@ export default {
         'accounts.view_accountsecret': ['accounts.view_account'],
         'accounts.view_historyaccount': ['accounts.view_account', 'accounts.view_accountsecret'],
         'accounts.view_accounttemplatesecret': ['accounts.view_accounttemplate'],
-        'accounts.change_accounttemplatesecret': ['accounts.view_accounttemplate'],
         'accounts.view_historyaccountsecret': ['accounts.view_account', 'accounts.view_accountsecret'],
         'accounts.add_account': ['assets.view_asset'],
         'assets.gathereduser': ['assets.view_node'],
@@ -167,19 +169,7 @@ export default {
       url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
       detailFields: [
         'display_name', 'scope_display', 'builtin', 'created_by',
-        {
-          key: this.$t('common.DateCreated'),
-          formatter: (item, val) => {
-            return <span> {toSafeLocalDateStr(this.object.date_created)}</span>
-          }
-        },
-        {
-          key: this.$t('common.DateUpdated'),
-          formatter: (item, val) => {
-            return <span> {toSafeLocalDateStr(this.object.date_updated)}</span>
-          }
-        },
-        'comment'
+        'date_created', 'date_updated', 'comment'
       ]
     }
   },
@@ -302,9 +292,9 @@ export default {
         permissions: permIds
       }
       this.$axios.patch(roleDetailUrl, data).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg') + error)
+        this.$message.error(this.$tc('UpdateErrorMsg') + error)
         this.$log.error(error)
       })
     }
@@ -313,21 +303,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree > > > .ztree * {
-  background: white;
-}
+.perm-tree {
 
-.perm-tree > > > .ztree {
-  background: white !important;
-}
+  ::v-deep {
+    .ztree * {
+      //background: white;
+    }
 
-.perm-tree > > > .checkbox_true_disable,
-.perm-tree > > > .checkbox_false_disable {
-  cursor: not-allowed !important;
-}
+    .ztree {
+      background: white !important;
 
-.perm-tree > > > .checkbox_true_disable:before,
-.perm-tree > > > .checkbox_false_disable:before {
-  color: #aaaaaa !important;
+      .button.chk {
+        //float: right;
+      }
+    }
+
+    .checkbox_false_disable, .checkbox_true_disable {
+      cursor: not-allowed !important;
+    }
+
+    .checkbox_true_disable:before, .checkbox_false_disable:before {
+      color: #aaaaaa !important;
+    }
+  }
 }
 </style>

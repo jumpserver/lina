@@ -1,11 +1,11 @@
 <template>
   <div class="error-403-container">
     <div class="error-403-text">
-      <h1 class="error-403-title">{{ $t('route.NoPermission403') }}</h1>
-      <p class="error-403-subtitle">{{ $t('route.NoPermissionVew') }}</p>
+      <h1 class="error-403-title">{{ $t('NoPermission403') }}</h1>
+      <p class="error-403-subtitle">{{ $t('NoPermissionVew') }}</p>
     </div>
     <div class="error-403-image-container">
-      <img class="error-403-error-image" src="@/assets/img/robot.png" alt="page error">
+      <img alt="page error" class="error-403-error-image" src="@/assets/img/robot.png">
     </div>
   </div>
 </template>

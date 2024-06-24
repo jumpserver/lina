@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="16" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
@@ -26,7 +26,7 @@ export default {
       detailFields: [
         'name', 'priority',
         {
-          key: this.$t('common.Rule'),
+          key: this.$t('Rule'),
           formatter: () => {
             const newArr = this.object.strategy_rules || []
             return (
@@ -41,7 +41,7 @@ export default {
           }
         },
         {
-          key: this.$t('common.Action'),
+          key: this.$t('Action'),
           formatter: () => {
             const newArr = this.object.strategy_actions || []
             return (

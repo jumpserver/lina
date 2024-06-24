@@ -22,7 +22,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('acl.RuleDetail'),
+            title: this.$t('Basic'),
             name: 'Detail'
           }
         ],

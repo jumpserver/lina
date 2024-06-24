@@ -1,13 +1,6 @@
 import i18n from '@/i18n/i18n'
-import { CronTab } from '@/components'
 import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormFields'
-
-const validatorInterval = (rule, value, callback) => {
-  if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('accounts.AccountChangeSecret.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
-  }
-  callback()
-}
+import { crontab, interval, is_periodic } from '../const'
 
 export const getChangeSecretFields = () => {
   return {
@@ -18,18 +11,21 @@ export const getChangeSecretFields = () => {
     secret_strategy: {
       type: 'radio-group',
       options: [],
-      label: i18n.t('accounts.AccountChangeSecret.PasswordStrategy'),
+      label: i18n.t('PasswordStrategy'),
       on: ([value], updateForm) => {
       }
     },
     secret: {
-      label: i18n.t('assets.Password'),
+      el: {
+        autocomplete: 'new-password'
+      },
+      label: i18n.t('Password'),
       hidden: ({ secret_strategy, secret_type }) => {
         return secret_strategy !== 'specific' || secret_type !== 'password'
       }
     },
     ssh_key: {
-      label: i18n.t('assets.PrivateKey'),
+      label: i18n.t('PrivateKey'),
       el: {
         type: 'textarea',
         rows: 4
@@ -42,7 +38,7 @@ export const getChangeSecretFields = () => {
       hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
     },
     passphrase: {
-      label: i18n.t('assets.Passphrase'),
+      label: i18n.t('Passphrase'),
       component: UpdateToken,
       hidden: ({ secret_strategy, secret_type }) => {
         return (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
@@ -50,12 +46,11 @@ export const getChangeSecretFields = () => {
     },
     password_rules: {
       component: PasswordRule,
-      label: i18n.t('accounts.AccountChangeSecret.PasswordRule'),
+      label: i18n.t('PasswordRule'),
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     recipients: {
-      label: i18n.t('accounts.AccountChangeSecret.Addressee'),
-      helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
+      label: i18n.t('Recipient'),
       el: {
         value: [],
         ajax: {
@@ -66,30 +61,11 @@ export const getChangeSecretFields = () => {
         }
       }
     },
-    is_periodic: {
-      type: 'switch'
-    },
-    crontab: {
-      type: 'cronTab',
-      component: CronTab,
-      label: i18n.t('xpack.RegularlyPerform'),
-      hidden: (formValue) => {
-        return formValue.is_periodic === false
-      },
-      helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
-    },
-    interval: {
-      label: i18n.t('xpack.CyclePerform'),
-      hidden: (formValue) => {
-        return formValue.is_periodic === false
-      },
-      helpText: i18n.t('xpack.HelpText.IntervalOfCreateUpdatePage'),
-      rules: [
-        { validator: validatorInterval }
-      ]
-    },
+    interval,
+    crontab,
+    is_periodic,
     accounts: {
-      label: i18n.t('common.Username'),
+      label: i18n.t('Accounts'),
       component: TagInput
     }
   }

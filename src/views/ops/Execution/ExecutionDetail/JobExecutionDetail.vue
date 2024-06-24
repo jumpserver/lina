@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
-    <el-col v-if="hasSummary" :md="10" :sm="24">
+    <el-col v-if="hasSummary" :md="9" :sm="24">
       <IBox
         v-if="object.summary.ok"
-        :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` "
+        :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})` "
         type="success"
       >
         <el-collapse>
@@ -21,7 +21,7 @@
       </IBox>
       <IBox
         v-if="object.summary.excludes"
-        :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` "
+        :title="`${$tc('ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` "
         type="warning"
       >
         <el-collapse>
@@ -31,13 +31,13 @@
             :name="index"
             :title="key"
           >
-            <div>{{ $tc('ops.Reason') }}: {{ val }}</div>
+            <div>{{ $tc('Reason') }}: {{ val }}</div>
           </el-collapse-item>
         </el-collapse>
       </IBox>
       <IBox
         v-if="object.summary.failures"
-        :title="`${$tc('ops.FailedAsset')} (${Object.keys(Object.assign(object.summary.failures,object.summary.dark)).length})` "
+        :title="`${$tc('FailedAsset')} (${Object.keys(Object.assign(object.summary.failures,object.summary.dark)).length})` "
         type="danger"
       >
         <el-collapse>
@@ -47,13 +47,13 @@
             :name="index"
             :title="key"
           >
-            <div>{{ $tc('ops.Reason') }}: {{ val }}</div>
+            <div>{{ $tc('Reason') }}: {{ val }}</div>
           </el-collapse-item>
         </el-collapse>
       </IBox>
       <IBox
         v-if="object.summary.error"
-        :title="$tc('ops.SystemError') "
+        :title="$tc('SystemError') "
         type="danger"
       >
         {{ object.summary.error }}

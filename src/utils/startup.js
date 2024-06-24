@@ -36,7 +36,7 @@ async function checkLogin({ to, from, next }) {
 async function getPublicSetting({ to, from, next }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
-  if (!publicSettings || !isOpen) {
+  if (!publicSettings || Object.keys(publicSettings).length === 0 || !isOpen) {
     await store.dispatch('settings/getPublicSettings', isOpen)
   }
 }
@@ -146,6 +146,22 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   return new Promise((resolve, reject) => reject(''))
 }
 
+function onI18nLoaded() {
+  return new Promise(resolve => {
+    const load = store.state.app.i18nLoaded
+    if (load) {
+      resolve()
+    }
+    const itv = setInterval(() => {
+      const load = store.state.app.i18nLoaded
+      if (load) {
+        clearInterval(itv)
+        resolve()
+      }
+    }, 100)
+  })
+}
+
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
@@ -157,6 +173,7 @@ export async function startup({ to, from, next }) {
   // await getOpenPublicSetting({ to, from, next })
   await getPublicSetting({ to, from, next }, true)
   await checkLogin({ to, from, next })
+  await onI18nLoaded()
   await getPublicSetting({ to, from, next }, false)
   await changeCurrentViewIfNeed({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })

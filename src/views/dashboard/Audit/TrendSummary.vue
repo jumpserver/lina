@@ -20,13 +20,13 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('dashboard.SessionConnectTrend'),
-        tip: this.$t('dashboard.SessionConnectTrend')
+        title: this.$t('SessionConnectTrend'),
+        tip: this.$t('SessionConnectTrend')
       },
       columnChartConfig: {
         datesMetrics: [],
         primaryData: [0],
-        primaryName: this.$t('dashboard.LoginUserToday')
+        primaryName: this.$t('LoginUserToday')
       }
     }
   },

@@ -129,9 +129,9 @@ export default {
     },
     portPlaceholder() {
       if (this.settingReadonly) {
-        return this.$t('applications.port')
+        return this.$t('Port')
       } else {
-        return this.$t('assets.DefaultPort')
+        return this.$t('DefaultPort')
       }
     },
     iChoices() {
@@ -327,7 +327,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-select >>> .el-input__inner {
+.el-select ::v-deep .el-input__inner {
   width: 120px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -348,7 +348,7 @@ export default {
 }
 
 .input-button {
-  margin-top: 4px;
+  margin-top: 2px;
   display: flex;
   margin-left: 20px
 }

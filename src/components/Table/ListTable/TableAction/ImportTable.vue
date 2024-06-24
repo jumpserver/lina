@@ -1,31 +1,40 @@
 <template>
   <div>
-    <el-row>
-      <el-col :md="8" :sm="24">
-        <div class="tableFilter">
-          <el-radio-group v-model="importStatusFilter" size="small">
-            <el-radio-button label="all">{{ $t('common.Total') }}</el-radio-button>
-            <el-radio-button label="ok">{{ $t('common.Success') }}</el-radio-button>
-            <el-radio-button label="error">{{ $t('common.Failed') }}</el-radio-button>
-            <el-radio-button label="pending">{{ $t('common.Pending') }}</el-radio-button>
-          </el-radio-group>
-        </div>
-      </el-col>
-      <el-col :md="8" :sm="24" style="text-align: center">
-        <span class="summary-item summary-total"> {{ $t('common.Total') }}: {{ totalCount }}</span>
-        <span class="summary-item summary-success"> {{ $t('common.Success') }}: {{ successCount }}</span>
-        <span class="summary-item summary-failed"> {{ $t('common.Failed') }}: {{ failedCount }}</span>
-        <span class="summary-item summary-pending"> {{ $t('common.Pending') }}: {{ pendingCount }}</span>
-      </el-col>
-    </el-row>
+    <div class="tableFilter">
+      <el-radio-group v-model="importStatusFilter" size="small">
+        <el-radio-button label="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
+        <el-radio-button label="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
+        <el-radio-button label="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
+        <el-radio-button label="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
+      </el-radio-group>
+    </div>
     <div class="row">
       <el-progress :percentage="processedPercent" />
     </div>
     <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
-      <div style="float: right">
-        <el-button size="small" @click="performCancel">{{ $t('common.Cancel') }}</el-button>
-        <el-button size="small" type="primary" @click="performImportAction">{{ importActionTitle }}</el-button>
+      <div class="btn-groups" style="float: right">
+        <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
+        <el-button
+          v-show="!disableImportBtn"
+          size="small"
+          type="primary"
+          @click="performImportAction"
+        >
+          {{ importActionTitle }}
+        </el-button>
+        <el-button
+          v-for="button in moreButtons"
+          v-show="!button.hidden"
+          :key="button.title"
+          :loading="button.loading"
+          :disabled="disableImportBtn"
+          size="small"
+          v-bind="button"
+          @click="handleClick(button)"
+        >
+          {{ button.title }}
+        </el-button>
       </div>
     </div>
   </div>
@@ -33,7 +42,8 @@
 
 <script>
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { getUpdateObjURL, sleep } from '@/utils/common'
+import { getUpdateObjURL } from '@/utils/common'
+import { sleep } from '@/utils/time'
 import { EditableInputFormatter, StatusFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 
@@ -49,11 +59,39 @@ export default {
     },
     url: {
       type: String,
-      required: true
+      default: () => ''
     },
     importOption: {
       type: String,
       required: true
+    },
+    showButtons: {
+      type: Boolean,
+      default: () => true
+    },
+    config: {
+      type: Object,
+      default: () => ({})
+    },
+    performUploadObject: {
+      type: Function,
+      default: null
+    },
+    canEdit: {
+      type: Boolean,
+      default: () => true
+    },
+    showCancel: {
+      type: Boolean,
+      default: () => true
+    },
+    moreButtons: {
+      type: Array,
+      default: () => []
+    },
+    disableImportBtn: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -61,7 +99,7 @@ export default {
       columns: [],
       importStatusFilter: 'all',
       iTotalData: [],
-      tableConfig: {
+      defaultTableConfig: {
         hasSelection: false,
         // hasPagination: false,
         columns: [],
@@ -72,7 +110,8 @@ export default {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark'
+          tooltipEffect: 'dark',
+          maxHeight: this.tableHeight
         }
       },
       tableGenDone: false,
@@ -81,10 +120,10 @@ export default {
       hasImport: false,
       hasContinueButton: false,
       importActions: {
-        import: this.$t('common.Import'),
-        continue: this.$t('common.Continue'),
-        stop: this.$t('common.Stop'),
-        finished: this.$t('common.Finished')
+        import: this.$t('Import'),
+        continue: this.$t('Continue'),
+        stop: this.$t('Stop'),
+        finished: this.$t('Finished')
       }
     }
   },
@@ -150,6 +189,16 @@ export default {
     },
     elDataTable() {
       return this.$refs['dataTable'].dataTable
+    },
+    tableConfig() {
+      const tableDefaultConfig = this.defaultTableConfig
+      let tableAttrs = tableDefaultConfig.tableAttrs
+      if (this.config.tableAttrs) {
+        tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
+      }
+      const config = Object.assign(tableDefaultConfig, this.config)
+      config.tableAttrs = tableAttrs
+      return config
     }
   },
   watch: {
@@ -173,7 +222,7 @@ export default {
       const vm = this
       const columns = [{
         prop: '@status',
-        label: vm.$t('common.Status'),
+        label: vm.$t('Status'),
         width: '80px',
         align: 'center',
         formatter: StatusFormatter,
@@ -191,9 +240,9 @@ export default {
           },
           getTip(val) {
             if (val === 'ok') {
-              return vm.$t('common.Success')
+              return vm.$t('Success')
             } else if (val === 'pending') {
-              return vm.$t('common.Pending')
+              return vm.$t('Pending')
             } else if (val && val.name === 'error') {
               return val.error
             }
@@ -237,6 +286,7 @@ export default {
           formatter: EditableInputFormatter,
           showOverflowTooltip: true,
           formatterArgs: {
+            canEdit: this.canEdit,
             onEnter: ({ row, col, oldValue, newValue }) => {
               const prop = col.prop
               row['@status'] = 'pending'
@@ -337,7 +387,12 @@ export default {
       this.importTaskStatus = 'stopped'
     },
     async performUploadCurrentPageData() {
-      const currentData = this.elDataTable.getPageData()
+      let currentData
+      if (this.tableConfig.hasSelection) {
+        currentData = this.elDataTable.selected
+      } else {
+        currentData = this.elDataTable.getPageData()
+      }
       for (const item of currentData) {
         if (item['@status'] !== 'pending') {
           continue
@@ -345,7 +400,8 @@ export default {
         if (this.taskIsStopped()) {
           return
         }
-        await this.performUploadObject(item)
+        const handler = this.performUploadObject || this.defaultPerformUploadObject
+        await handler(item)
         await sleep(100)
       }
     },
@@ -362,11 +418,9 @@ export default {
           break
         }
       }
-      if (this.pendingCount === 0) {
-        this.importTaskStatus = 'done'
-      }
+      this.importTaskStatus = 'done'
       if (this.failedCount > 0) {
-        this.$message.error(this.$tc('common.imExport.hasImportErrorItemMsg') + '')
+        this.$message.error(this.$tc('HasImportErrorItemMsg') + '')
       }
     },
     async performUpdateObject(item) {
@@ -377,7 +431,7 @@ export default {
         { disableFlashErrorMsg: true }
       )
     },
-    async performUploadObject(item) {
+    async defaultPerformUploadObject(item) {
       let handler = this.performCreateObject
       if (this.importOption === 'update') {
         handler = this.performUpdateObject
@@ -419,6 +473,14 @@ export default {
       if (!inViewport) {
         parentTdRef.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' })
       }
+    },
+    addTableItem(item) {
+      this.tableConfig.totalData.push(item)
+    },
+    handleClick(btn) {
+      const callback = btn.callback || function() {
+      }
+      callback(btn)
     }
   }
 }
@@ -426,6 +488,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables";
+
 .summary-item {
   padding: 0 10px
 }
@@ -438,10 +501,15 @@ export default {
   color: $--color-danger;
 }
 
-.importTable >>> .cell {
+.importTable ::v-deep .cell {
   min-height: 20px;
   height: 100%;
   max-height: 160px;
 }
 
+.btn-groups {
+  ::v-deep .el-button.is-disabled {
+    cursor: not-allowed;
+  }
+}
 </style>

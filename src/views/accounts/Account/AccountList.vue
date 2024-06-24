@@ -47,11 +47,11 @@ export default {
       cursor: pointer;
     }
 
-    & >>> .table-content {
+    & ::v-deep .table-content {
       margin-left: 21px;
     }
 
-    & >>> .el-table__row {
+    & ::v-deep .el-table__row {
       height: 40px;
 
       & > td {

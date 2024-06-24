@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="24">
     <el-col :md="24" :sm="24">
-      <BaseList :url="url" :columns-show="columnsShow" />
+      <BaseList :columns-show="columnsShow" :url="url" />
     </el-col>
   </el-row>
 </template>
@@ -26,8 +26,8 @@ export default {
       columnsShow: {
         min: ['id'],
         default: [
-          'id', 'user', 'asset', 'account', 'remote_addr', 'protocol',
-          'command_amount', 'date_start', 'duration'
+          'id', 'user', 'asset', 'account',
+          'date_start', 'duration'
         ]
       }
     }

@@ -6,6 +6,7 @@
 
 <script>
 import i18n from '@/i18n/i18n'
+
 export default {
   name: 'RoleCheckbox',
   components: {},
@@ -19,13 +20,13 @@ export default {
       default: () =>
         [
           {
-            label: i18n.t('users.OrgAdmin'),
+            label: i18n.t('OrgAdmin'),
             value: 'Admin'
           }, {
-            label: i18n.t('users.OrgAuditor'),
+            label: i18n.t('OrgAuditor'),
             value: 'Auditor'
           }, {
-            label: i18n.t('users.OrgUser'),
+            label: i18n.t('OrgUser'),
             value: 'User'
           }
         ]

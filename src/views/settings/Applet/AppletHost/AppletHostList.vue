@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-alert type="success">
-      <span v-html="$t('terminal.AppletHostSelectHelpMessage')" />
+      <span v-sanitize="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
     <ListTable class="applet-host" v-bind="$data" />
   </div>
@@ -72,7 +72,6 @@ export default {
             }
           },
           protocols: {
-            label: this.$t('assets.Protocols'),
             formatter: ProtocolsFormatter
           },
           actions: {
@@ -87,7 +86,7 @@ export default {
               extraActions: [
                 {
                   name: 'Test',
-                  title: this.$t('common.Test'),
+                  title: this.$t('Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     this.$axios.post(
@@ -115,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host > > > .protocol {
+.applet-host ::v-deep .protocol {
   margin-left: 3px;
 }
 

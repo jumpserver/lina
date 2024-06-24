@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+  <TabPage :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -23,12 +23,12 @@ export default {
       activeMenu: 'ReplayStorage',
       submenu: [
         {
-          title: this.$t('sessions.objectStorage'),
+          title: this.$t('ObjectStorage'),
           name: 'ReplayStorage',
           hidden: () => !this.$hasPerm('terminal.view_replaystorage')
         },
         {
-          title: this.$t('sessions.commandStorage'),
+          title: this.$t('CommandStorage'),
           name: 'CommandStorage',
           hidden: () => !this.$hasPerm('terminal.view_commandstorage')
         }
@@ -41,7 +41,7 @@ export default {
     }
   },
   beforeRouteUpdate(to, from, next) {
-    if (to.name === from.name && to.path === from.path && to.query?.activeTab) {
+    if (to.name === from.name && to.path === from.path && to.query?.tab) {
       this.$store.commit('common/reload')
     }
     next()

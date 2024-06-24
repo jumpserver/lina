@@ -2,9 +2,9 @@
   <div class="json-editor">
     <JsonEditor
       v-model="resultInfo"
+      :class="{resize: resize === 'vertical'}"
       :mode="'code'"
       :show-btns="false"
-      :class="{resize: resize === 'vertical'}"
       @json-change="onJsonChange"
       @json-save="onJsonSave"
       @has-error="onError"
@@ -53,7 +53,7 @@ export default {
       }, 500)
     },
     onError: _.debounce(function(value) {
-      this.$message.error(this.$tc('common.FormatError'))
+      this.$message.error(this.$tc('FormatError'))
     }, 1500)
   }
 }
@@ -64,28 +64,29 @@ export default {
 
   .json-editor {
     .resize {
-      & > > > .jsoneditor {
-      resize: vertical;
-      cursor: s-resize;
+      & ::v-deep .jsoneditor {
+        resize: vertical;
+        cursor: s-resize;
       }
     }
-    & > > > .jsoneditor {
+
+    & ::v-deep .jsoneditor {
       border: 1px solid #e5e6e7;
     }
 
-    & > > > .jsoneditor-compact {
+    & ::v-deep .jsoneditor-compact {
       display: none;
     }
 
-    & > > > .jsoneditor-modes {
+    & ::v-deep .jsoneditor-modes {
       display: none;
     }
 
-    & > > > .jsoneditor-poweredBy {
+    & ::v-deep .jsoneditor-poweredBy {
       display: none;
     }
 
-    & > > > .jsoneditor-menu {
+    & ::v-deep .jsoneditor-menu {
       background: var(--color-primary);
       border-bottom: 1px solid var(--color-primary);
     }
