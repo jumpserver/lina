@@ -63,21 +63,11 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      const query = _.cloneDeep(this.$route.query)
-      const newQuery = {
-        ...query,
-        tab: tab.name
-      }
-
       if (tab.name !== 'AssetPermissionDetail') {
         this.$set(this.config, 'hasRightSide', false)
       } else {
         this.$set(this.config, 'hasRightSide', true)
       }
-
-      this.$nextTick(() => {
-        this.$router.replace({ query: newQuery })
-      })
     }
   }
 }

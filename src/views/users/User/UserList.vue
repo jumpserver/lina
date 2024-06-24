@@ -61,10 +61,7 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'UserDetail',
-              routeQuery: {
-                tab: 'UserInfo'
-              }
+              route: 'UserDetail'
             }
           },
           mfa_level: {
