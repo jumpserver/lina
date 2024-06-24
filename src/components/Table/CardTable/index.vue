@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     isDisabled(item) {
-      return item.edition.value === 'enterprise' && !this.hasValidLicense
+      return item.edition?.value === 'enterprise' && !this.hasValidLicense
     },
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
