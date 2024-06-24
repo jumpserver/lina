@@ -123,6 +123,9 @@ export default {
       this.$axios.get(url).then(res => {
         return this.makeCredReq(res)
       }).then((options) => {
+        if (!location.protocol.startsWith('https')) {
+          throw new Error(this.$tc('HTTPSRequiredForSupport'))
+        }
         return navigator.credentials.create(options)
       }).then((attestation) => {
         attestation['key_name'] = form.name
@@ -136,7 +139,12 @@ export default {
         if (error.response?.status === 412) {
           return
         }
-        alert(error)
+        let msg = error
+        if (error.response) {
+          const data = error.response.data
+          msg = data.error || data.msg || data
+        }
+        alert(msg)
       })
     },
     makeCredReq(makeCredReq) {
