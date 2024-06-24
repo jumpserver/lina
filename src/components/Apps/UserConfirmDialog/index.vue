@@ -132,7 +132,7 @@ export default {
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm({ response, callback, cancel }) {
+    performConfirm: _.throttle(function({ response, callback, cancel }) {
       if (this.processing || this.visible) {
         return
       }
@@ -155,7 +155,6 @@ export default {
           })
           return
         }
-
         this.subTypeChoices = data.content
         const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
         this.subTypeSelected = defaultSubType.name
@@ -169,7 +168,7 @@ export default {
       }).finally(() => {
         this.processing = false
       })
-    },
+    }, 500),
     logout() {
       window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
