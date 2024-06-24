@@ -1,6 +1,7 @@
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
 import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
+import store from '@/store'
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
@@ -35,7 +36,10 @@ export const interval = {
 }
 
 export const is_periodic = {
-  type: 'switch'
+  type: 'switch',
+  hidden: (formValue) => {
+    return !store.getters.hasValidLicense
+  }
 }
 
 export default {

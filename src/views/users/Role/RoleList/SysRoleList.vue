@@ -13,9 +13,7 @@ export default {
     BaseRoleList
   },
   activated() {
-    setTimeout(() => {
-      this.$refs.roleList.reloadTable()
-    }, 300)
+    this.$refs.roleList.reloadTable()
   }
 }
 </script>

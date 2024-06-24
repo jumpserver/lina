@@ -104,6 +104,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           this.$store.commit('common/reload')
+          // this.$refs.ListTable.reloadTable()
         }
       },
       groupRelationConfig: {

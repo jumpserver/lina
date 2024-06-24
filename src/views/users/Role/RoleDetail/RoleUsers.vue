@@ -91,7 +91,7 @@ export default {
                 reload()
               }).catch(error => {
                 this.$message.error({
-                  message: error.response.data.error,
+                  message: error.response.data.detail,
                   duration: 3000
                 })
               })

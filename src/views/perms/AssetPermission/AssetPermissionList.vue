@@ -108,6 +108,11 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
+  activated() {
+    setTimeout(() => {
+      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    }, 300)
+  },
   methods: {
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
