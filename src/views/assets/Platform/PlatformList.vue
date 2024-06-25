@@ -125,7 +125,8 @@ export default {
           },
           dropdown: []
         }
-      }
+      },
+      lastTab: ''
     }
   },
   computed: {
@@ -133,10 +134,14 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
+  deactivated() {
+    window.localStorage.setItem('lastTab', this.tab.activeMenu)
+  },
   activated() {
     setTimeout(() => {
+      this.tab.activeMenu = window.localStorage.getItem('lastTab')
       this.$refs.genericListTable.reloadTable()
-    }, 500)
+    }, 300)
   },
   async mounted() {
     try {

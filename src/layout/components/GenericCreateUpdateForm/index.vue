@@ -198,10 +198,12 @@ export default {
       type: Function,
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
+
         if (!(route.params && route.params.id)) {
           route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
         }
         route['query'] = deepmerge(route['query'], { 'order': this.extraQueryOrder, 'updated': new Date().getTime() })
+
         this.$emit('submitSuccess', res)
 
         this.emitPerformSuccessMsg(method, res, addContinue)
