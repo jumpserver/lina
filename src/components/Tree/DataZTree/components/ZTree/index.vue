@@ -107,15 +107,7 @@ export default {
       }
       // 使用 table 的高度
       const ztreeRect = tree.getBoundingClientRect()
-      const table = document.getElementsByClassName('el-card table-content')
-      if (table.length > 0) {
-        const tableRect = table[0].getBoundingClientRect()
-        if (tableRect.height > 300) {
-          tree.style.height = `min(calc(100vh - ${ztreeRect.top}px - 30px), calc(${tableRect.height}px - 25px))`
-        }
-        return
-      }
-      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px)`
+      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px - 25px)`
     }, 100),
     async initTree(refresh = false) {
       const vm = this
