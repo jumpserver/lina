@@ -8,7 +8,7 @@
     />
     <el-row :gutter="10" class="the-row">
       <IBox v-if="totalData.length === 0">
-        <el-empty :description="$t('NoData')" class="no-data" :image-size="200" style="padding: 20px" />
+        <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
       <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
@@ -188,19 +188,15 @@ export default {
       this.getList()
     },
     defaultPerformView(obj) {
-      console.log(this.$route.name)
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const route = this.headerActions.detailRoute || defaultRoute
       let detailRoute = { replace: true }
-      console.log(route)
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: obj.id }
       } else {
         detailRoute = route
       }
-
-      console.log(defaultRoute)
       this.$router.push(detailRoute)
     },
     defaultPerformDelete(obj) {
@@ -300,7 +296,7 @@ export default {
 
             .comment {
               display: -webkit-box;
-              height: 80px;
+              height: 120px;
               font-size: 12px;
               padding: 10px 0;
               cursor: pointer;

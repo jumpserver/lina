@@ -254,8 +254,8 @@ $origin-color: #ffffff;
   }
 
   .icon-left {
-    font-size: 13px;
-    margin-left: -1.1px;
+    font-size: 11px;
+    vertical-align: 0;
   }
 }
 

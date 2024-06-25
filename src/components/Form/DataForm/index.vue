@@ -1,5 +1,6 @@
 <template>
   <ElFormRender
+    :id="id"
     ref="form"
     :class="mobile? 'mobile' : 'desktop'"
     :content="fields"
@@ -22,7 +23,7 @@
         type="primary"
         @click="submitForm('form')"
       >
-        {{ submitBtnText }}
+        {{ iSubmitBtnText }}
       </el-button>
       <el-button
         v-if="defaultButton && hasSaveContinue"
@@ -81,7 +82,7 @@ export default {
     submitBtnText: {
       type: String,
       default() {
-        return this.$t('Submit')
+        return ''
       }
     },
     hasSaveContinue: {
@@ -108,7 +109,9 @@ export default {
   },
   data() {
     return {
-      basicForm: this.form
+      basicForm: this.form,
+      id: crypto.randomUUID(),
+      iSubmitBtnText: this.submitBtnText
     }
   },
   computed: {
@@ -122,7 +125,24 @@ export default {
       return this.mobile ? 'top' : 'right'
     }
   },
+  mounted() {
+    this.autoSetSubmitBtnText()
+  },
   methods: {
+    autoSetSubmitBtnText() {
+      if (this.iSubmitBtnText) {
+        return
+      }
+      const dialogs = [...document.getElementsByClassName('el-dialog__body')]
+      if (dialogs.length > 0) {
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.id) !== -1)
+        if (dialog) {
+          this.iSubmitBtnText = this.$t('Confirm')
+          return
+        }
+      }
+      this.iSubmitBtnText = this.$t('Submit')
+    },
     // 获取表单数据
     submitForm(formName, addContinue) {
       const form = this.$refs[formName]
@@ -203,7 +223,7 @@ export default {
             border: none;
             height: 28px;
           }
-      }
+        }
 
         .el-input__inner {
           border-radius: 0;

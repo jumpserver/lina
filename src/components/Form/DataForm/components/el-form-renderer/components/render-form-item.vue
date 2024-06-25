@@ -90,7 +90,7 @@
       >
         <span v-sanitize="data.helpText.replace(/^!/, '')" />
       </el-alert>
-      <span v-else v-sanitiz="data.helpText" />
+      <span v-else v-sanitize="data.helpText" />
     </div>
   </el-form-item>
 </template>
