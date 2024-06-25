@@ -28,11 +28,9 @@ export default {
     }
   },
   data() {
-    const id = this.object.id
-    const url = id ? `/api/v1/perms/asset-permissions/${id}/users/all/` : ''
     return {
       tableConfig: {
-        url: url,
+        url: '',
         id: 'user',
         columnsExclude: ['user'],
         columnsExtra: ['delete_action'],
@@ -104,7 +102,6 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           this.$store.commit('common/reload')
-          // this.$refs.ListTable.reloadTable()
         }
       },
       groupRelationConfig: {
@@ -148,6 +145,26 @@ export default {
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
+      }
+    }
+  },
+  watch: {
+    object: {
+      handler(newVal) {
+        this.updateTableConfigUrl(newVal.id)
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  mounted() {
+    this.updateTableConfigUrl(this.$route.params.id)
+  },
+  methods: {
+    // 对于 url 中的 id 值有可能会捕获到上一个页面路由对象中的 id 值，因此会导致权限报错
+    updateTableConfigUrl(id) {
+      if (id) {
+        this.tableConfig.url = `/api/v1/perms/asset-permissions/${id}/users/all/`
       }
     }
   }

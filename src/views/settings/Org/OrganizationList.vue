@@ -67,7 +67,7 @@ export default {
           },
           'resource_statistics.asset_perms_amount': {
             label: this.$t('AssetPermsAmount'),
-            width: '150px'
+            width: '200px'
           },
           actions: {
             prop: 'id',
