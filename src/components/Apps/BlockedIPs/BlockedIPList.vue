@@ -27,7 +27,7 @@ export default {
         ],
         columnsMeta: {
           ip: {
-            label: this.$t('Ip')
+            label: this.$t('IP')
           },
           actions: {
             formatterArgs: {
@@ -77,7 +77,9 @@ export default {
               vm.$axios.post(
                 '/api/v1/settings/security/unlock-ip/',
                 {
-                  ips: selectedRows.map(v => { return v.ip })
+                  ips: selectedRows.map(v => {
+                    return v.ip
+                  })
                 }
               ).then(res => {
                 vm.$message.success(vm.$tc('UnlockSuccessMsg'))
