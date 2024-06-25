@@ -1,7 +1,7 @@
 <template>
   <div class="krry-main">
     <el-row :gutter="10">
-      <el-col :md="10" :sm="24">
+      <el-col :md="11" :sm="24">
         <krry-box
           ref="noSelect"
           :async="async"
@@ -25,10 +25,10 @@
           @clear-input="clearQueryInp('left')"
         />
       </el-col>
-      <el-col :md="4" :sm="24" class="buttons">
+      <el-col :md="2" :sm="24" class="buttons">
         <div class="opera">
           <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
-          <templae v-else>
+          <template v-else>
             <el-button
               :disabled="disablePre"
               class="el-transfer__button"
@@ -44,10 +44,10 @@
               type="primary"
               @click="addData"
             />
-          </templae>
+          </template>
         </div>
       </el-col>
-      <el-col :md="10" :sm="24">
+      <el-col :md="11" :sm="24">
         <krry-box
           ref="hasSelect"
           :data-show-list="checkedData"
@@ -140,7 +140,7 @@ export default {
     },
     transferOnCheck: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
@@ -418,6 +418,7 @@ export default {
 .krry-main {
   min-width: 600px;
 }
+
 .inner-center {
   margin: 0 5px;
 }
@@ -431,8 +432,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10px;
-  width: calc(100% - 5px);
   height: 415px;
 
   .arrow {
@@ -443,7 +442,7 @@ export default {
 
   @media screen and (max-width: 992px) {
     margin: 8px 8px;
-    text-align:start
+    text-align: start
   }
 
   .el-button.is-circle {
@@ -452,6 +451,7 @@ export default {
     display: block;
     margin: 25px auto;
   }
+
   .el-transfer__button {
     padding: 5px;
   }

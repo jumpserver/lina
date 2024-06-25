@@ -101,8 +101,8 @@ export default {
       ids: this.value.ids || [],
       editIndex: -1,
       types: [
-        { name: 'all', label: this.$t('All') + ' ' + this.resource },
-        { name: 'ids', label: this.$t('Spec') + ' ' + this.resource },
+        { name: 'all', label: this.$t('All') + this.$t('WordSep') + this.resource.toLowerCase() },
+        { name: 'ids', label: this.$t('Spec') + this.$t('WordSep') + this.resource.toLowerCase() },
         { name: 'attrs', label: this.$t('SelectByAttr') }
       ],
       tableConfig: {
@@ -110,26 +110,32 @@ export default {
           { prop: 'name', label: this.$t('AttrName'), formatter: tableFormatter('name') },
           { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
           { prop: 'value', label: this.$t('AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
-          { prop: 'action', label: this.$t('Action'), align: 'center', width: '120px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div className='input-button'>
-                <el-button
-                  icon='el-icon-edit'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='primary'
-                  onClick={this.handleAttrEdit({ row, col, cellValue, index })}
-                />
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={this.handleAttrDelete({ row, col, cellValue, index })}
-                />
-              </div>
-            )
-          } }
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '120px',
+            formatter: (row, col, cellValue, index) => {
+              return (
+                <div className='input-button'>
+                  <el-button
+                    icon='el-icon-edit'
+                    size='mini'
+                    style={{ 'flexShrink': 0 }}
+                    type='primary'
+                    onClick={this.handleAttrEdit({ row, col, cellValue, index })}
+                  />
+                  <el-button
+                    icon='el-icon-minus'
+                    size='mini'
+                    style={{ 'flexShrink': 0 }}
+                    type='danger'
+                    onClick={this.handleAttrDelete({ row, col, cellValue, index })}
+                  />
+                </div>
+              )
+            }
+          }
         ],
         totalData: this.value.attrs || [],
         hasPagination: false

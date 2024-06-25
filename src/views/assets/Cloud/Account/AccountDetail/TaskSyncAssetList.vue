@@ -12,7 +12,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -46,7 +47,7 @@ export default {
           'instance_id',
           {
             prop: 'asset_ip',
-            label: this.$t('Ip')
+            label: this.$t('IP')
           },
           'region',
           {

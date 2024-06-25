@@ -26,7 +26,7 @@
           type="text"
           @change="handleKeyword"
         >
-        <span class="el-input__prefix" style="left: 0px">
+        <span class="el-input__prefix" style="left: 0">
           <i class="el-input__icon el-icon-search" />
         </span>
         <span v-if="searchWord && showClearBtn" class="clear-input">
@@ -288,7 +288,7 @@ export default {
 <style lang="scss" scoped>
 
 .district-panel {
-  width: 280px;
+  width: 298px;
 
   .el-transfer-panel__header {
     .el-checkbox {
@@ -302,7 +302,6 @@ export default {
 
   .el-transfer-panel__body {
     height: 335px;
-    //padding: 6px 0;
 
     .el-transfer-panel__filter {
       margin: 6px 14px;
