@@ -5,7 +5,7 @@
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('Template')"
+      :title="$tc('EmailTemplate')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
@@ -31,7 +31,7 @@ export default {
       visible: false,
       fields: [
         [this.$t('General'), ['EMAIL_SUBJECT_PREFIX']],
-        [this.$t('User creation'),
+        [this.$t('CreateUserContent'),
           [
             'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC', 'EMAIL_CUSTOM_USER_CREATED_BODY'
           ]

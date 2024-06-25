@@ -226,8 +226,8 @@ export default {
         },
         extraMoreActions: [
           {
-            name: 'BulkVerify',
-            title: this.$t('common.BulkVerify'),
+            name: 'TestSelected',
+            title: this.$t('TestSelected'),
             type: 'primary',
             icon: 'fa fa-link',
             can: ({ selectedRows }) =>

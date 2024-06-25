@@ -258,7 +258,7 @@ export default [
         name: 'ZoneDetail',
         component: () => import('@/views/assets/Domain/DomainDetail'),
         hidden: true,
-        meta: { title: i18n.t('ZoneDetail') }
+        meta: { title: i18n.t('Zone') }
       }
     ]
   },

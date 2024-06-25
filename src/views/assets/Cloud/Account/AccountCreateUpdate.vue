@@ -197,7 +197,7 @@ export default {
           [this.$t('CloudSource'), ['regions']],
           [this.$t('SaveSetting'), [
             'hostname_strategy', 'ip_network_segment_group', 'sync_ip_type',
-            'is_always_update', 'fully_synchronous', 'release_assets'
+            'is_always_update', 'fully_synchronous'
           ]],
           [this.$t('SyncStrategy'), ['strategy']],
           [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']]
@@ -217,11 +217,6 @@ export default {
             type: 'switch',
             label: this.$t('FullySynchronous'),
             helpTip: this.$t('FullySynchronousHelpTip')
-          },
-          release_assets: {
-            type: 'switch',
-            label: this.$t('ReleaseAssets'),
-            helpTips: this.$t('ReleaseAssetsHelpTips')
           },
           regions: {
             component: Checkbox,

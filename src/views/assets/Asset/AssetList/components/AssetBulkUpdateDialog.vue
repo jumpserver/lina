@@ -65,7 +65,7 @@ export default {
           },
           domain: {
             ...meta.domain,
-            label: this.$t('Zone'),
+            label: this.$tc('Zone'),
             disabled: exclude.includes(this.category)
           },
           labels: {

@@ -60,28 +60,6 @@ export default {
       excludes: ['attrs', 'task'],
       quickEditActions: [
         {
-          title: this.$t('ReleaseAssets'),
-          type: 'switcher',
-          attrs: {
-            model: this.object.task.release_assets,
-            tip: this.$t('ReleaseAssetsHelpTips'),
-            type: 'primary',
-            disabled: !this.hasEditPerm()
-          },
-          callbacks: {
-            change: function(val) {
-              this.$axios.patch(
-                `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
-                { 'release_assets': val }
-              ).then(res => {
-                this.$message.success(this.$t('UpdateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          }
-        },
-        {
           title: this.$t('IpType'),
           type: 'updateSelect',
           attrs: {
@@ -204,10 +182,6 @@ export default {
               })}
             </div>)
           }
-        },
-        {
-          key: this.$t('ReleaseAssets'),
-          value: this.object?.task.release_assets
         },
         {
           key: this.$t('DateLastSync'),
