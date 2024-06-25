@@ -68,8 +68,12 @@ export default {
         const url = setUrlParam(this.attr.el.url, 'ids', this.cellValue.join(','))
         const data = await this.$axios.get(url) || []
         if (data.length > 0) {
-          const displayField = this.attr.el.displayField || 'name'
-          this.value = data.map(item => item[displayField]).join(', ')
+          if (this.attr.name === 'labels') {
+            this.value = data.map(item => `${item.name}:${item.value}`).join(', ')
+          } else {
+            const displayField = this.attr.el.displayField || 'name'
+            this.value = data.map(item => item[displayField]).join(', ')
+          }
         }
       } else if (this.attr.type === 'select') {
         const options = this.attr.el.options || []

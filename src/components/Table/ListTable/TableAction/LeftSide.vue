@@ -1,6 +1,6 @@
 <template>
   <DataActions
-    v-if="hasLeftActions"
+    v-if="hasLeftActions && iActions.length > 0"
     :actions="iActions"
     class="header-action"
     v-bind="$attrs"
@@ -187,6 +187,9 @@ export default {
     hasSelectedRows() {
       return this.selectedRows.length > 0
     }
+  },
+  mounted() {
+    this.$emit('init-actions-done', this.iActions)
   },
   methods: {
     handleCreate() {

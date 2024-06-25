@@ -77,7 +77,7 @@ export default {
         this.showLabelSearch = true
         return
       }
-      this.labelValue = [[label.name, label.value]]
+      this.labelValue = [...this.labelValue, [label.name, label.value]]
       this.getLabelOptions()
       setTimeout(() => {
         this.showLabelSearch = true

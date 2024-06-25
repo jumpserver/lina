@@ -208,7 +208,7 @@ export default {
       this.selectedRows = val
     },
     reloadTable() {
-      this.dataTable.getList()
+      this.dataTable?.getList()
     },
     search(attrs) {
       this.$log.debug('ListTable: search table', attrs)
