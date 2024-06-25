@@ -31,9 +31,14 @@ export default {
   data() {
     return {
       AssetPermission: {
-        name: '', users_amount: 0, user_groups_amount: 0, assets_amount: 0,
-        nodes_amount: 0, system_users_amount: 0,
-        date_start: '', date_expired: ''
+        name: '',
+        users_amount: 0,
+        user_groups_amount: 0,
+        assets_amount: 0,
+        nodes_amount: 0,
+        system_users_amount: 0,
+        date_start: '',
+        date_expired: ''
       },
       config: {
         activeMenu: 'AssetPermissionDetail',
