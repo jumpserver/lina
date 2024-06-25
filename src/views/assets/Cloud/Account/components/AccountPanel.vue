@@ -12,7 +12,12 @@
             <i class="el-icon-more el-icon--right" style="color: var(--color-text-primary)" />
           </el-link>
           <el-dropdown-menu default="dropdown">
-            <el-dropdown-item v-for="action in actions" :key="action.name" @click.native="action.callback">
+            <el-dropdown-item
+              v-for="action in actions"
+              :key="action.name"
+              :class="{ 'is-disabled': action.disabled }"
+              @click.native="!action.disabled && action.callback"
+            >
               <i v-if="action.icon" :class="action.icon" /> {{ action.name }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -93,17 +98,20 @@ export default {
         {
           name: this.$tc('Update'),
           icon: 'el-icon-edit',
-          callback: this.handleUpdate
+          callback: this.handleUpdate,
+          disabled: !this.$hasPerm('xpack.change_account')
         },
         {
           name: this.$tc('Delete'),
           icon: 'el-icon-delete',
-          callback: this.handleDelete
+          callback: this.handleDelete,
+          disabled: !this.$hasPerm('xpack.delete_account')
         },
         {
           name: this.$tc('SyncOnline'),
           icon: 'el-icon-thumb',
-          callback: this.handleOnlineExecute
+          callback: this.handleOnlineExecute,
+          disabled: !this.$hasPerm('xpack.change_syncinstancetask')
         }
       ]
     }

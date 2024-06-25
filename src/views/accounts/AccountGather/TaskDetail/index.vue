@@ -28,8 +28,8 @@ export default {
         titlePrefix: this.$t('AccountGatherDetail'),
         actions: {
           deleteSuccessRoute: 'AccountGatherList',
-          canUpdate: 'accounts.change_gatheraccountsautomation',
-          canDelete: 'accounts.delete_gatheraccountsautomation'
+          canUpdate: this.$hasPerm('accounts.change_gatheraccountsautomation'),
+          canDelete: this.$hasPerm('accounts.delete_gatheraccountsautomation')
         },
         submenu: [
           {
