@@ -132,7 +132,7 @@ export default {
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
-    performConfirm: _.throttle(function({ response, callback, cancel }) {
+    performConfirm: _.debounce(function({ response, callback, cancel }) {
       if (this.processing || this.visible) {
         return
       }
