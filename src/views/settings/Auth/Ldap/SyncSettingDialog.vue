@@ -61,7 +61,6 @@ export default {
             helpTip: this.$t('CrontabOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_INTERVAL: {
-            rules: [Required],
             helpText: this.$t('IntervalOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_RECEIVERS: {
@@ -78,7 +77,13 @@ export default {
             }
           }
         },
-        submitMethod: () => 'patch'
+        submitMethod: () => 'patch',
+        cleanFormValue(value) {
+          if (value['AUTH_LDAP_SYNC_INTERVAL'] === '') {
+            value['AUTH_LDAP_SYNC_INTERVAL'] = null
+          }
+          return value
+        }
       }
     }
   },
