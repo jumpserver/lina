@@ -123,6 +123,7 @@ function ifConfirmRequired({ response, error }) {
   return new Promise((resolve, reject) => {
     const callback = () => resolve()
     const cancel = () => reject()
+
     eventBus.$emit('showConfirmDialog', { response, callback, cancel })
   })
 }
@@ -158,6 +159,7 @@ service.interceptors.response.use(
     const response = error.response
 
     const confirming = ifConfirmRequired({ response, error })
+
     if (confirming) {
       return new Promise((resolve, reject) => {
         confirming.then(() => {
