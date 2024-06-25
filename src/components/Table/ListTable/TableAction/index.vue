@@ -8,6 +8,7 @@
         class="left-side"
         v-bind="$attrs"
         v-on="$listeners"
+        @init-actions-done="handleActionsDone"
       />
       <RightSide
         v-if="hasRightActions"
@@ -99,7 +100,8 @@ export default {
   data() {
     return {
       keyword: '',
-      foldSearch: false
+      foldSearch: false,
+      iHasLeftActions: this.hasLeftActions
     }
   },
   computed: {
@@ -119,7 +121,7 @@ export default {
       return ''
     },
     searchClass() {
-      return this.hasLeftActions ? 'right' : 'left'
+      return this.iHasLeftActions ? 'right' : 'left'
     }
   },
   methods: {
@@ -138,6 +140,9 @@ export default {
     },
     handleLabelSearchShowChange(val) {
       this.foldSearch = val
+    },
+    handleActionsDone(actions) {
+      this.iHasLeftActions = actions.filter(i => i && i.has !== false).length > 0
     }
   }
 }
