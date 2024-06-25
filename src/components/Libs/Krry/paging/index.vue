@@ -28,7 +28,7 @@
       <el-col :md="4" :sm="24" class="buttons">
         <div class="opera">
           <svg-icon v-if="transferOnCheck" class="arrow" icon-class="arrow" />
-          <templae v-else>
+          <template v-else>
             <el-button
               :disabled="disablePre"
               class="el-transfer__button"
@@ -44,7 +44,7 @@
               type="primary"
               @click="addData"
             />
-          </templae>
+          </template>
         </div>
       </el-col>
       <el-col :md="10" :sm="24">
