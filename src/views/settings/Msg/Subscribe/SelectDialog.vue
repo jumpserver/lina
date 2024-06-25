@@ -68,7 +68,8 @@ export default {
           return results
         },
         selectedData: [],
-        showClearBtn: true
+        showClearBtn: true,
+        transferOnCheck: true
       }
     }
   },
