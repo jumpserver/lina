@@ -78,8 +78,11 @@ window._ = require('lodash')
 Vue.prototype.$message = message
 
 Vue.prototype.$xss = xss
-
-Vue.use(VSanitize)
+Vue.use(VSanitize, {
+  allowedClasses: {
+    '*': ['*']
+  }
+})
 
 // 注册全局事件总线
 Vue.prototype.$eventBus = eventBus
