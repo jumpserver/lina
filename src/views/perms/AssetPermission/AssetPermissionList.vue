@@ -83,12 +83,6 @@ export default {
             this.$router.push(route)
           }
         },
-        handleImportClick: ({ selectedRows }) => {
-          this.$eventBus.$emit('showImportDialog', {
-            selectedRows,
-            url: '/api/v1/perms/asset-permissions/'
-          })
-        },
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions
