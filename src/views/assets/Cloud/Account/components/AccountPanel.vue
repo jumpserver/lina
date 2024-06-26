@@ -15,8 +15,8 @@
             <el-dropdown-item
               v-for="action in actions"
               :key="action.name"
-              :class="{ 'is-disabled': action.disabled }"
-              @click.native="!action.disabled && action.callback"
+              :disabled="action.disabled"
+              @click.native="action.callback"
             >
               <i v-if="action.icon" :class="action.icon" /> {{ action.name }}
             </el-dropdown-item>
