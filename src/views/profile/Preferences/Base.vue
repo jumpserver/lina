@@ -114,8 +114,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.password-update ::v-deep .el-input {
-  width: 600px;
-  max-width: 600px;
-}
+
 </style>

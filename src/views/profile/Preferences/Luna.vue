@@ -13,7 +13,9 @@ export default {
   },
   data() {
     return {
-      category: 'luna'
+      category: 'luna',
+      // todo: remove this when we have a better solution
+      fieldsExclude: ['command_line.terminal_theme_name']
     }
   }
 }

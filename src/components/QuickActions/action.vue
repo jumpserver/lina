@@ -12,6 +12,7 @@
           <component
             :is="iType"
             v-model="action.attrs.model"
+            :title="label"
             v-bind="action.attrs"
             v-on="callbacks"
           >

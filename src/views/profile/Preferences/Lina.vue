@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
 import Base from './Base.vue'
 import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly'
 
@@ -16,7 +15,7 @@ export default {
     return {
       category: 'lina',
       fieldsMeta: {
-        basic: {
+        file: {
           fieldsMeta: {
             has_secret_key: {
               label: this.$t('Configured'),
