@@ -6,8 +6,11 @@ export default [
     path: 'login-logs',
     name: 'LoginLog',
     component: empty,
+    redirect: {
+      name: 'LoginLogList'
+    },
     meta: {
-      title: i18n.t('LoginLog'),
+      title: i18n.t('BaseLoginLog'),
       icon: 'login',
       permissions: ['audits.view_userloginlog']
     },
@@ -47,9 +50,12 @@ export default [
   {
     path: 'operate-logs',
     name: '',
+    redirect: {
+      name: 'OperateLogList'
+    },
     component: empty,
     meta: {
-      title: i18n.t('OperateLog'),
+      title: i18n.t('BaseOperateLog'),
       icon: 'operate-log',
       permissions: ['audits.view_operatelog']
     },

@@ -4,7 +4,9 @@ import empty from '@/layout/empty'
 export default [
   {
     path: 'sessions',
-    redirect: '',
+    redirect: {
+      name: 'SessionList'
+    },
     component: empty,
     meta: {
       title: i18n.t('Sessions'),

@@ -7,12 +7,14 @@ export default [
     component: empty,
     name: 'Account',
     meta: {
-      title: i18n.t('AssetAccount'),
+      title: i18n.t('BaseAssetAccount'),
       app: 'accounts',
       icon: 'accounts',
       permissions: ['accounts.view_account']
     },
-    redirect: '',
+    redirect: {
+      name: 'AssetAccountList'
+    },
     children: [
       {
         path: '',
@@ -69,13 +71,15 @@ export default [
   {
     path: 'account-template',
     component: empty,
+    redirect: {
+      name: 'AccountTemplateList'
+    },
     meta: {
       title: i18n.t('AccountTemplate'),
       app: 'accounts',
       icon: 'template',
       permissions: ['accounts.view_accounttemplate']
     },
-    redirect: '',
     children: [
       {
         path: '',
@@ -129,12 +133,14 @@ export default [
     children: [
       {
         path: 'account-push',
-        component: empty,
-        redirect: '',
         name: 'AccountPush',
+        component: empty,
+        redirect: {
+          name: 'AccountPushList'
+        },
         meta: {
           app: 'accounts',
-          name: 'AccountPushList',
+          name: 'BaseAccountPushList',
           resource: 'pushaccountautomation'
         },
         children: [
@@ -207,10 +213,13 @@ export default [
       },
       {
         path: 'account-change-secret',
-        component: empty,
         name: 'AccountChangeSecret',
+        component: empty,
+        redirect: {
+          name: 'AccountChangeSecretList'
+        },
         meta: {
-          title: i18n.t('AccountChangeSecret'),
+          title: i18n.t('BaseAccountChangeSecret'),
           app: 'accounts',
           licenseRequired: true
         },
@@ -280,7 +289,9 @@ export default [
       {
         path: 'account-gather',
         component: empty,
-        redirect: '',
+        redirect: {
+          name: 'AccountGatherList'
+        },
         name: 'AccountGather',
         meta: {
           title: i18n.t('AccountGatherList'),
@@ -362,7 +373,9 @@ export default [
         path: 'account-backup',
         component: empty,
         name: 'AccountBackup',
-        redirect: '',
+        redirect: {
+          name: 'AccountBackupList'
+        },
         meta: {
           title: i18n.t('AccountBackup'),
           app: 'accounts',

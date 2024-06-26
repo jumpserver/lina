@@ -122,9 +122,11 @@ export default {
     {
       path: '/settings/storage',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'Storage'
+      },
       meta: {
-        title: i18n.t('Storage'),
+        title: i18n.t('BaseStorage'),
         app: 'terminal',
         permissions: ['settings.change_terminal']
       },
@@ -188,9 +190,11 @@ export default {
     {
       path: '/settings/terminal',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'TerminalSetting'
+      },
       meta: {
-        title: i18n.t('Terminal'),
+        title: i18n.t('BaseTerminal'),
         app: 'terminal',
         permissions: ['settings.change_terminal']
       },
@@ -274,9 +278,11 @@ export default {
     {
       path: '/settings/applets',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'Applets'
+      },
       meta: {
-        title: i18n.t('Applets'),
+        title: i18n.t('BaseApplets'),
         app: 'terminal',
         permissions: ['terminal.view_applet | terminal.view_applethost']
       },
@@ -415,8 +421,11 @@ export default {
     {
       path: '/settings/tasks',
       component: empty,
+      redirect: {
+        name: 'TaskList'
+      },
       meta: {
-        title: i18n.t('SystemTasks'),
+        title: i18n.t('BaseSystemTasks'),
         icon: 'tasks',
         permissions: ['ops.view_celerytask']
       },
