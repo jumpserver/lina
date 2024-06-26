@@ -1,6 +1,7 @@
 <template>
   <div class="filter-field">
     <el-cascader
+      v-show="options.length > 0"
       ref="Cascade"
       :options="options"
       :props="config"
