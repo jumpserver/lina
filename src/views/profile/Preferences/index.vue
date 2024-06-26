@@ -9,14 +9,12 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import Luna from './Luna'
-import KoKo from './KoKo'
 import Lina from './Lina'
 
 export default {
   components: {
     GenericDetailPage,
     Luna,
-    KoKo,
     Lina
   },
   data() {
@@ -42,12 +40,8 @@ export default {
           name: 'Lina'
         },
         {
-          title: this.$t('LunaSetting'),
+          title: this.$t('WebTerminal'),
           name: 'Luna'
-        },
-        {
-          title: this.$t('KokoSetting'),
-          name: 'KoKo'
         }
       ]
     },

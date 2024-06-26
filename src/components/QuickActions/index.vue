@@ -56,7 +56,15 @@ export default {
   }
 
   .quick-actions ::v-deep button {
-    padding: 4px 10px;
+    padding: 4px 5px;
     font-size: 13px;
+    width: 65px;
+
+    span {
+      overflow: hidden;
+      white-space: nowrap; /* 控制文本不换行 */
+      text-overflow: ellipsis;
+      display: block;
+    }
   }
 </style>
