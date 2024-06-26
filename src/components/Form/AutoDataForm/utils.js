@@ -161,6 +161,7 @@ export class FormFieldGenerator {
 
   setHelpText(field, remoteFieldMeta) {
     let helpText = toSentenceCase(remoteFieldMeta['help_text'])
+
     if (!helpText) {
       return field
     }
@@ -177,11 +178,12 @@ export class FormFieldGenerator {
     const placeholderType = ['input', 'select', 'm2m_related_field']
     const placeholderComponent = [ObjectSelect2]
 
+    const systemLang = document.cookie.django_language
     if (helpTextAsPlaceholder !== undefined) {
       helpTextAsPlaceholder = !!helpTextAsPlaceholder
     } else if (placeholderType.indexOf(field.type) === -1 && placeholderComponent.indexOf(field.component) === -1) {
       helpTextAsPlaceholder = false
-    } else if (helpTextWordLength <= 5 || helpText.length <= 10) {
+    } else if ((helpTextWordLength <= 5 || helpText.length <= 10) && systemLang === 'en') {
       helpTextAsPlaceholder = true
     }
 
