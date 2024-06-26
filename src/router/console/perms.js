@@ -6,8 +6,11 @@ export default [
   {
     path: 'asset-permissions',
     component: empty,
+    redirect: {
+      name: 'AssetPermissionList'
+    },
     meta: {
-      title: i18n.t('AssetPermission'),
+      title: i18n.t('BaseAssetPermission'),
       resource: 'assetpermission',
       icon: 'permission'
     },

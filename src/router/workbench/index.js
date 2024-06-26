@@ -36,7 +36,9 @@ export default {
       path: '/workbench/assets',
       name: 'MyAssets',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'ConnectAssets'
+      },
       meta: {
         title: i18n.t('MyAssets'),
         permissions: ['perms.view_myassets']
@@ -102,9 +104,11 @@ export default {
           path: 'job',
           name: 'Job',
           component: empty,
-          redirect: '',
+          redirect: {
+            name: 'JobManagement'
+          },
           meta: {
-            title: i18n.t('JobManagement'),
+            title: i18n.t('BaseJobManagement'),
             icon: 'task',
             permissions: ['ops.view_job']
           },

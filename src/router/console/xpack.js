@@ -4,18 +4,20 @@ import i18n from '@/i18n/i18n'
 const clouds = {
   path: 'cloud',
   component: empty,
-  redirect: '',
+  redirect: {
+    name: 'CloudAccountList'
+  },
   hidden: true,
   meta: {
-    title: i18n.t('CloudSync'),
+    title: i18n.t('BaseCloudSync'),
     app: 'xpack',
     resource: 'account'
   },
   children: [
     {
       path: '',
-      component: () => import('@/views/assets/Cloud'),
       name: 'CloudAccountList',
+      component: () => import('@/views/assets/Cloud'),
       hidden: true,
       meta: {
         title: i18n.t('CloudSync')
@@ -25,8 +27,11 @@ const clouds = {
       path: 'account',
       component: empty,
       hidden: true,
+      redirect: {
+        name: 'AccountList'
+      },
       meta: {
-        title: i18n.t('CloudAccountList'),
+        title: i18n.t('BaseCloudAccountList'),
         permissions: ['xpack.view_account']
       },
       children: [
@@ -78,6 +83,9 @@ const clouds = {
       path: 'strategy',
       component: empty,
       hidden: true,
+      redirect: {
+        name: 'CloudStrategyList'
+      },
       meta: {
         title: i18n.t('Strategy'),
         permissions: ['xpack.view_strategy']

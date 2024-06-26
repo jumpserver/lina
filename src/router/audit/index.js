@@ -34,7 +34,7 @@ export default {
     {
       path: '/audit/sessions',
       component: empty,
-      name: 'Sessions',
+      name: 'AuditSessions',
       redirect: '/audit/sessions/sessions',
       meta: {
         title: i18n.t('SessionsAudit'),
@@ -55,6 +55,5 @@ export default {
       },
       children: LogRoutes
     }
-
   ]
 }

@@ -5,7 +5,9 @@ export default [
   {
     path: 'labels',
     component: empty,
-    redirect: '',
+    redirect: {
+      name: 'LabelList'
+    },
     meta: {
       title: i18n.t('Tags'),
       icon: 'tag',

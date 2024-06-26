@@ -6,9 +6,11 @@ export default [
   {
     path: 'assets',
     component: empty,
-    redirect: '',
+    redirect: {
+      name: 'AssetList'
+    },
     meta: {
-      title: i18n.t('AssetList'),
+      title: i18n.t('BaseAssetList'),
       app: 'assets',
       resource: 'asset',
       icon: 'assets'
@@ -123,7 +125,6 @@ export default [
     redirect: '',
     hidden: true,
     meta: {
-      title: i18n.t('networking'),
       app: 'assets',
       resource: 'asset'
     },
@@ -150,7 +151,6 @@ export default [
     redirect: '',
     hidden: true,
     meta: {
-      title: i18n.t('networking'),
       app: 'assets',
       resource: 'asset'
     },

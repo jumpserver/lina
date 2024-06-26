@@ -4,10 +4,12 @@ import i18n from '@/i18n/i18n'
 
 export default {
   path: '/tickets',
-  redirect: '/tickets/my-tickets',
+  redirect: {
+    name: 'MyTicketList'
+  },
   component: Layout,
   meta: {
-    title: i18n.t('Tickets'),
+    title: i18n.t('BaseTickets'),
     icon: 'ticket-list',
     view: 'tickets',
     type: 'view',
@@ -117,9 +119,11 @@ export default {
     {
       path: '/tickets/flow',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'TicketFlow'
+      },
       meta: {
-        title: i18n.t('FlowSetUp'),
+        title: i18n.t('BaseFlowSetUp'),
         icon: 'ticket-flow',
         permissions: ['tickets.view_ticketflow'],
         resource: 'ticketflow'
