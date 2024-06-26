@@ -137,9 +137,9 @@ export default {
           default: {
             state: {
               key: 'state',
-              label: this.$t('tickets.action'),
+              label: this.$t('Action'),
               value: 'pending',
-              valueLabel: this.$t('common.Open')
+              valueLabel: this.$t('Open')
             }
           },
           exclude: ['id', 'title', 'type', 'applicant'],
