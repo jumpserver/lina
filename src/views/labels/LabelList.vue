@@ -74,7 +74,7 @@ export default {
                     this.bindVisible = true
                   },
                   can: () => {
-                    return !this.currentOrgIsRoot
+                    return !this.currentOrgIsRoot && this.$hasPerm('labels.change_labeledresource')
                   }
                 }
               ]
