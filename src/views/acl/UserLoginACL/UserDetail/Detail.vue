@@ -85,7 +85,8 @@ export default {
         {
           key: this.$t('LoginConfirmUser'),
           value: this.object.reviewers.map(item => item.name).join(', ')
-        }
+        },
+        'comment'
       ]
     }
   },
