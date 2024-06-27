@@ -24,6 +24,7 @@
           :key="index"
           :content="item.tooltip"
           effect="dark"
+          open-delay="500"
           placement="top"
         >
           <i :class="[item.class, item.icon]" class="fa" @click="item.action()" />
