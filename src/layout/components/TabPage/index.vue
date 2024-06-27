@@ -156,7 +156,7 @@ export default {
       ]
 
       for (const preTab of preActiveTabs) {
-        const currentTab = typeof preTab === 'object' ? preTab?.name : preTab
+        const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
         for (const tabName of this.tabIndices) {
           const currentTabName = tabName?.name || ''
           if (currentTab?.toLowerCase() === currentTabName?.toLowerCase()) {

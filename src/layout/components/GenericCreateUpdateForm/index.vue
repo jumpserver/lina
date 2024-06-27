@@ -123,6 +123,12 @@ export default {
         return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       }
     },
+    cloneNameSuffix: {
+      type: String,
+      default: function() {
+        return this.$t('Duplicate').toLowerCase()
+      }
+    },
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
@@ -366,7 +372,7 @@ export default {
             name = object['hostname']
             attr = 'hostname'
           }
-          object[attr] = name + ' ' + this.$t('Duplicate')
+          object[attr] = name + '-' + this.cloneNameSuffix
         } else {
           object = await this.getObjectDetail(this.iUrl)
         }

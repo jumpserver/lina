@@ -4,6 +4,7 @@
       :after-get-form-value="afterGetFormValue"
       :after-get-remote-meta="handleAfterGetRemoteMeta"
       :clean-form-value="cleanFormValue"
+      :clone-name-suffix="1"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
