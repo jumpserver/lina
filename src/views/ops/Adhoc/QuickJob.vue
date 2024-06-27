@@ -18,28 +18,13 @@
             :value.sync="command"
             style="margin-bottom: 20px"
           />
-          <div style="margin-bottom: 5px;font-weight: bold;display: inline-block">{{ $tc('Output') }}:</div>
-          <span v-if="executionInfo.status" style="float: right">
-            <span>
-              <span><b>{{ $tc('Status') }}: </b></span>
-              <span
-                :class="{'status_success':executionInfo.status==='success',
-                         'status_warning':executionInfo.status==='timeout',
-                         'status_danger':executionInfo.status==='failed'
-                }"
-              >{{ $tc('' + executionInfo.status) }}</span>
-            </span>
-            <span>
-              <span><b>{{ $tc('TimeDelta') }}: </b></span>
-              <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
-            </span>
-          </span>
+          <span v-if="executionInfo.status" style="float: right" />
           <div class="xterm-container">
             <Term
               ref="xterm"
               :show-tool-bar="true"
               :xterm-config="xtermConfig"
-              style="border-left: solid 1px #dddddd"
+              :execution-info="executionInfo"
             />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
@@ -478,18 +463,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.xterm-container {
-  padding-left: 30px;
-  background-color: rgb(247, 247, 247);
-  height: calc(100vh - 549px);
-  overflow: hidden;
+$container-bg-color: #f7f7f7;
 
-  & > div {
-    height: 100%;
+.transition-box {
+  display: flex;
+  flex-direction: column;
 
-    & ::v-deep .xterm {
-      height: calc(100% - 8px);
-      overflow-y: auto;
+  .xterm-container {
+    margin-left: 30px;
+    height: calc(100vh - 549px);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background-color: $container-bg-color;
+    overflow: hidden;
+
+    & > div {
+      height: 100%;
+
+      & ::v-deep .xterm {
+        height: calc(100% - 8px);
+        overflow-y: auto;
+      }
     }
   }
 }
@@ -545,18 +539,6 @@ export default {
   padding-left: 30px;
   background-color: rgb(247 247 247);
   border: solid 1px #f3f3f3;;
-}
-
-.status_success {
-  color: var(--color-primary);
-}
-
-.status_warning {
-  color: var(--color-warning);
-}
-
-.status_danger {
-  color: var(--color-danger);
 }
 
 .tree-table-content {
