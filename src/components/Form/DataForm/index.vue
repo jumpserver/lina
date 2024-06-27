@@ -52,6 +52,7 @@
 
 <script>
 import ElFormRender from './components/el-form-renderer'
+import { randomString } from '@/utils/string'
 import { scrollToError } from '@/utils'
 
 export default {
@@ -110,7 +111,7 @@ export default {
   data() {
     return {
       basicForm: this.form,
-      id: crypto.randomUUID(),
+      id: randomString(16),
       iSubmitBtnText: this.submitBtnText
     }
   },
