@@ -75,7 +75,7 @@ export default {
                   title: vm.$t('Execute'),
                   name: 'execute',
                   type: 'info',
-                  can: this.$hasPerm('accounts.view_accountbackupexecution'),
+                  can: this.$hasPerm('accounts.add_accountbackupexecution'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
