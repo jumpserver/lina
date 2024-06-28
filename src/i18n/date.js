@@ -13,7 +13,7 @@ export default {
       hour: 'numeric', minute: 'numeric'
     }
   },
-  'cn': {
+  'zh': {
     short: {
       year: 'numeric', month: 'short', day: 'numeric'
     },
