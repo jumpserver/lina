@@ -1,5 +1,5 @@
-import store from '@/store'
 import { constantRoutes } from '@/router'
+import store from '@/store'
 import { openWindow } from './common'
 
 export function openTaskPage(taskId, taskType, taskUrl) {
