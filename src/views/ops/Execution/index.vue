@@ -22,6 +22,9 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
+        columnsExclude: [
+          'summary', 'parameters'
+        ],
         columnsShow: {
           min: ['material', 'actions'],
           default: [
