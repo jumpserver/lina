@@ -186,7 +186,7 @@ export default {
       let status = true
       const labelMap = {
         platform: this.$tc('Platform'), domain: this.$tc('Zone'),
-        name_strategy: this.$tc('NameStrategy')
+        name_strategy: this.$tc('Strategy')
       }
       this.tableConfig.totalData.map(item => {
         const iValue = item.value?.id || item.value
