@@ -54,7 +54,7 @@ export default {
           }
         },
         {
-          key: this.$t('Label'),
+          key: this.$t('Tags'),
           formatter: () => {
             const types = ['primary', 'success', 'warning', 'danger']
             const data = this.object.tags.map((p, i) => {

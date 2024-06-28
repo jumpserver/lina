@@ -42,7 +42,7 @@ export default {
     return {
       labelConfig: {
         icon: 'fa-info',
-        title: this.$t('Label'),
+        title: this.$t('Tags'),
         allowCreate: true,
         objectsAjax: {
           url: '/api/v1/labels/labels/',
