@@ -98,9 +98,9 @@ export default {
             type: 'primary',
             label: this.$t('Test'),
             disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
-              !this.object['auto_config'].ansible_enabled ||
-              !this.object['auto_config']['ping_enabled'] ||
-              this.$store.getters.currentOrgIsRoot
+                !this.object['auto_config'].ansible_enabled ||
+                !this.object['auto_config']['ping_enabled'] ||
+                this.$store.getters.currentOrgIsRoot
           },
           callbacks: {
             click: function() {
@@ -152,7 +152,7 @@ export default {
       },
       labelConfig: {
         icon: 'fa-info',
-        title: this.$t('Label'),
+        title: this.$t('Tags'),
         allowCreate: true,
         objectsAjax: {
           url: '/api/v1/labels/labels/',

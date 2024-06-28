@@ -28,7 +28,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('Label')
+        return this.$t('Tags')
       }
     },
     labels: {

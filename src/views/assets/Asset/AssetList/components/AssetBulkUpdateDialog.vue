@@ -70,7 +70,7 @@ export default {
           },
           labels: {
             ...meta.labels,
-            label: this.$t('Label')
+            label: this.$t('Tags')
           },
           is_active: {
             ...meta.is_active,
