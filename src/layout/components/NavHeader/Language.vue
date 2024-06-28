@@ -78,9 +78,9 @@ export default {
       }
     },
     changeLangTo(item) {
-      this.$i18n.locale = item.code
-      this.$cookie.set(this.langCookeName, item.cookieCode, { expires: 365 })
-      window.location.reload()
+      this.$axios.get(`/core/i18n/${item.cookieCode}/`).then(() => {
+        window.location.reload()
+      })
     }
   }
 }
