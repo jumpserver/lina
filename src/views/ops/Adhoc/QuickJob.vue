@@ -20,7 +20,7 @@
           />
           <span v-if="executionInfo.status" style="float: right" />
           <div class="xterm-container">
-            <Term
+            <QuickJobTerm
               ref="xterm"
               :show-tool-bar="true"
               :xterm-config="xtermConfig"
@@ -36,7 +36,7 @@
 
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
-import Term from '@/components/Widgets/Term'
+import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
 import AdhocOpenDialog from './AdhocOpenDialog.vue'
@@ -52,7 +52,7 @@ export default {
     AdhocOpenDialog,
     AssetTreeTable,
     Page,
-    Term,
+    QuickJobTerm,
     CodeEditor
   },
   data() {

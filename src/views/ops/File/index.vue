@@ -121,7 +121,7 @@
             />
             <div style="height: 2px" />
           </div>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          <div style="display: flex; margin-top:10px; justify-content: space-between" />
         </div>
       </template>
     </AssetTreeTable>
@@ -167,7 +167,9 @@ export default {
           type: 'primary'
         },
         callback: () => {
-          this.execute()
+          setTimeout(() => {
+            this.execute()
+          }, 300)
         }
       },
       runAsInput: {

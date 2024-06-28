@@ -139,7 +139,6 @@ $cursor: #fff;
   }
 }
 
-/* reset element-ui css */
 .login-container {
   .el-input {
     display: inline-block;
