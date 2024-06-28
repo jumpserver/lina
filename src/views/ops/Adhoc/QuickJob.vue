@@ -338,7 +338,7 @@ export default {
         const data = JSON.parse(e.data)
         if (data.hasOwnProperty('message')) {
           let message = data.message
-          message = message.replace(/Task ops\.tasks\.run_ops_job_execution.*/, '')
+          message = message.replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Task ops\.tasks\.run_ops_job_execution.*/, '')
           this.xterm.write(message)
         }
         if (data.hasOwnProperty('event')) {
@@ -441,7 +441,7 @@ export default {
     stop() {
       StopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
-          this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+            this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
