@@ -6,7 +6,7 @@ export const resourceTypeOptions = [
   { label: i18n.t('Node'), value: 'node' },
   { label: i18n.t('Zone'), value: 'domain' },
   { label: i18n.t('AccountTemplate'), value: 'account_template' },
-  { label: i18n.t('NameStrategy'), value: 'name_strategy' }
+  { label: i18n.t('Strategy'), value: 'name_strategy' }
 ]
 
 export const instanceAttrOptions = [
