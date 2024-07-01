@@ -61,7 +61,7 @@ export default {
               if (!row.su_enabled) {
                 return '-'
               }
-              return row.su_method || '-'
+              return row?.su_method?.label || '-'
             }
           },
           protocols: {
