@@ -90,14 +90,6 @@ export default {
         return value
       }
     }
-  },
-  mounted() {
-  },
-  methods: {
   }
 }
 </script>
-
-<style>
-
-</style>

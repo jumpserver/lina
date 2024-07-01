@@ -102,7 +102,10 @@ export default [
             name: 'CommandFilterAclDetail',
             component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclDetail/index'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclDetail'), activeMenu: '' }
+            meta: {
+              title: i18n.t('CommandFilterAclDetail'),
+              activeMenu: ''
+            }
           },
           {
             path: ':id/update',
