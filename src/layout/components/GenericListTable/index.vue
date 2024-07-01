@@ -10,9 +10,6 @@ export default {
   components: {
     ListTable
   },
-  activated() {
-
-  },
   methods: {
     reloadTable() {
       this.$refs.ListTable.reloadTable()

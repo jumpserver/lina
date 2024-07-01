@@ -107,10 +107,10 @@ export default {
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
         this.generateTotalColumns()
       }).then(() => {
-        //  根据当前列重新生成最终渲染表格
+        // 根据当前列重新生成最终渲染表格
         this.filterShowColumns()
       }).then(() => {
-        // 生成给子组件使用的TotalColList
+        // 生成给子组件使用的 TotalColList
         this.generatePopoverColumns()
       }).catch((error) => {
         this.$log.error('Error occur: ', error)
@@ -447,6 +447,7 @@ export default {
     },
     filterShowColumns() {
       this.cleanColumnsShow()
+
       this.iConfig.columns = this.totalColumns.filter(obj => {
         return this.cleanedColumnsShow.show.indexOf(obj.prop) > -1
       })
@@ -457,6 +458,7 @@ export default {
           return { prop: obj.prop, label: obj.label }
         }
       })
+
       this.popoverColumns.currentCols = this.cleanedColumnsShow.show
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
       this.popoverColumns.defaultCols = this.cleanedColumnsShow.default

@@ -7,6 +7,7 @@
     <template v-else>
       <el-table
         ref="table"
+        :key="tableKey"
         v-loading="loading"
         :data="data"
         :row-class-name="rowClassName"
@@ -761,7 +762,8 @@ export default {
       initExtraQuery: JSON.stringify(this.extraQuery || this.customQuery || {}),
       isSearchCollapse: false,
       showNoData: false,
-      innerQuery: {}
+      innerQuery: {},
+      tableKey: 0
     }
   },
   computed: {
@@ -859,6 +861,15 @@ export default {
         this.total = val.length
         this.getList()
       }
+    },
+    data: {
+      handler() {
+        // 确保数据变化后，视图能及时更新
+        this.$nextTick(() => {
+          this.refreshTable()
+        })
+      },
+      deep: true
     }
   },
   mounted() {
@@ -1288,6 +1299,9 @@ export default {
         this.innerQuery['direction'] = order
       }
       this.getList()
+    },
+    refreshTable() {
+      this.tableKey += 1
     }
   }
 }
