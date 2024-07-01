@@ -81,6 +81,20 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
           el: {
             url: '/api/v1/users/groups/?fields_size=mini'
           }
+        },
+        {
+          name: 'labels',
+          label: vm.$t('Tags'),
+          type: 'm2m',
+          el: {
+            multiple: true,
+            url: '/api/v1/assets/labels/',
+            ajax: {
+              transformOption: (item) => {
+                return { label: `${item.name}:${item.value}`, value: item.id }
+              }
+            }
+          }
         }
       ]
     }
