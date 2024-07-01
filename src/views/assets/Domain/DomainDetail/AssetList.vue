@@ -98,7 +98,7 @@ export default {
             domain: null
           }
         })
-        msg = patch_data.length + ' ' + this.$t('rows')
+        msg = patch_data.length + ' ' + this.$t('Rows')
       } else {
         patch_data = [{
           id: rows.row.id,
