@@ -41,7 +41,6 @@
 
 <script>
 import { createSourceIdCache } from '@/api/common'
-import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Select2',
@@ -113,7 +112,9 @@ export default {
     },
     placeholder: {
       type: String,
-      default: i18n.t('Select')
+      default: function() {
+        return this.$t('Select')
+      }
     },
     quickAddCallback: {
       type: Function,

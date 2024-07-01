@@ -41,7 +41,7 @@ export default {
           ]
         ],
         [
-          this.$t('Automation'), ['params']
+          this.$t('Automations'), ['params']
         ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]
