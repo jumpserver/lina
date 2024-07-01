@@ -264,6 +264,7 @@ export default {
       meta: {
         title: i18n.t('MenuMore'),
         icon: 'more',
+        permissions: [],
         hidden: () => {
           return !store.getters.publicSettings['TOOL_USER_ENABLED']
         }
