@@ -346,14 +346,16 @@ export default {
       this.updateSelectedDialogSetting.visible = false
 
       // 此处必须显示重新赋值才能在更新用户时使得 Groups 数据重新刷新
-      this.tableConfig.columnsMeta.groups = {
-        formatter: AmountFormatter,
-        formatterArgs: {
-          routeQuery: {
-            tab: 'UserDetail'
+      setTimeout(() => {
+        this.tableConfig.columnsMeta.groups = {
+          formatter: AmountFormatter,
+          formatterArgs: {
+            routeQuery: {
+              tab: 'UserDetail'
+            }
           }
         }
-      }
+      }, 300)
       this.reloadTable()
     }
   }
