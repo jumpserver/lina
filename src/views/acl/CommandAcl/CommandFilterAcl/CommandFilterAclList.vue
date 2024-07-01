@@ -2,7 +2,6 @@
   <div>
     <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
-
 </template>
 
 <script>

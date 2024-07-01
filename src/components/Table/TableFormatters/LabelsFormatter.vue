@@ -194,6 +194,7 @@ export default {
       })
     },
     goToLabelList() {
+      this.showDialog = false
       this.$router.push({ name: 'LabelList' })
     }
   }

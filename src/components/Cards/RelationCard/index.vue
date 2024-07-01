@@ -279,6 +279,7 @@ export default {
         return
       }
       this.select2.disabledValues = this.hasObjectsId
+
       if (this.getHasObjects) {
         this.getHasObjects(this.hasObjectsId).then((data) => {
           this.iHasObjects = data
