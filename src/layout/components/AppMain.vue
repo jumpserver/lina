@@ -24,7 +24,7 @@ export default {
     ]),
     key() {
       if (this.$route.name.toLowerCase().includes('list')) {
-        return this.$route.path
+        return _.trimEnd(this.$route.path, '/')
       } else {
         return new Date().getTime()
       }

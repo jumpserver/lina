@@ -11,10 +11,7 @@ export default {
     ListTable
   },
   activated() {
-    setTimeout(() => {
-      console.log('actived')
-      this.reloadTable()
-    }, 300)
+
   },
   methods: {
     reloadTable() {
