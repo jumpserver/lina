@@ -21,12 +21,16 @@
           <IBox :title="$tc('InformationModification')" fa="fa-edit">
             <table>
               <tr>
-                <td> {{ $t('Phone') }} </td>
-                <td><PhoneInput :value="object.phone" /></td>
+                <td> {{ $t('Phone') }}</td>
+                <td>
+                  <PhoneInput :value="object.phone" />
+                </td>
               </tr>
               <tr>
-                <td> {{ $t('WeChat') }} </td>
-                <td><el-input v-model="object.wechat" /></td>
+                <td> {{ $t('WeChat') }}</td>
+                <td>
+                  <el-input v-model="object.wechat" />
+                </td>
               </tr>
             </table>
             <el-button
@@ -324,16 +328,17 @@ export default {
           }
         },
         {
-          value: this.object.groups.map(item => item.name).join(' ｜ '),
+          value: this.object.groups?.map(item => item.name).join(' ｜ '),
           key: this.$t('UserGroups')
         },
         {
-          value: this.object.system_roles.map(item => item.display_name).join(' ｜ '),
+          value: this.object.system_roles?.map(item => item.display_name).join(' ｜ '),
           key: this.$t('SystemRoles')
         },
         {
-          value: this.object.org_roles.map(item => item.display_name).join(' ｜ '),
-          key: this.$t('OrgRoles')
+          value: this.object.org_roles?.map(item => item.display_name).join(' ｜ '),
+          key: this.$t('OrgRoles'),
+          has: !!this.object.org_roles
         },
         {
           value: this.object,
@@ -459,19 +464,19 @@ export default {
 }
 </script>
 <style scoped>
-  .ibox ::v-deep table {
-    width: 100%;
-  }
+.ibox ::v-deep table {
+  width: 100%;
+}
 
-  .ibox ::v-deep tr > td > span:first-child {
-    line-height: 1.43;
-    padding-right: 30px;
-    vertical-align: top;
-    font-size: 13px;
-    width: 50%;
-  }
+.ibox ::v-deep tr > td > span:first-child {
+  line-height: 1.43;
+  padding-right: 30px;
+  vertical-align: top;
+  font-size: 13px;
+  width: 50%;
+}
 
-  .ibox ::v-deep tr > td > span:last-child {
-    float: right;
-  }
+.ibox ::v-deep tr > td > span:last-child {
+  float: right;
+}
 </style>
