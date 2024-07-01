@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import DataForm from '@/components/Form/DataForm/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
+import DataForm from '@/components/Form/DataForm/index.vue'
 import ValueField from '@/components/Form/FormFields/JSONManyToManySelect/ValueField.vue'
 import { attrMatchOptions, typeMatchMapper } from '@/components/const'
 
@@ -128,7 +128,9 @@ export default {
       }
     },
     onAttrDialogConfirm(form) {
-      this.$emit('confirm', form)
+      setTimeout(() => {
+        this.$emit('confirm', form)
+      }, 300)
     },
     updateMatchOptions(attr) {
       if (!attr) {

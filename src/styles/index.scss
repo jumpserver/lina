@@ -570,3 +570,9 @@ li.rmenu i.fa {
     font-weight: 500;
   }
 }
+
+.el-alert__description {
+  a {
+    color: var(--color-link);
+  }
+}

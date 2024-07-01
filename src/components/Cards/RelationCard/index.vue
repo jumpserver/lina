@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import Select2 from '@/components/Form/FormFields/Select2.vue'
-import IBox from '../../IBox/index.vue'
 import { createSourceIdCache } from '@/api/common'
+import { Select2 } from '@/components/Form/FormFields'
+import IBox from '@/components/IBox/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
