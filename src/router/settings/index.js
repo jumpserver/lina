@@ -128,7 +128,7 @@ export default {
       meta: {
         title: i18n.t('BaseStorage'),
         app: 'terminal',
-        permissions: ['settings.change_terminal']
+        permissions: ['terminal.view_commandstorage | terminal.view_replaystorage']
       },
       children: [
         {

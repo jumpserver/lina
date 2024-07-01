@@ -46,7 +46,7 @@ export default {
         mfa_level: {
           disabled: false,
           tips: {
-            2: this.$t('If force enable, user can not disable by themselves')
+            2: this.$t('forceEnableMFAHelpText')
           }
         },
         email: {
