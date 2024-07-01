@@ -18,7 +18,7 @@ export default {
       return store.getters.workbenchOrgs.length > 0
     },
     showOrganization: true,
-    permissions: []
+    permissions: ['rbac.view_workbench']
   },
   children: [
     // 404 page must be placed at the end !!!
@@ -264,7 +264,6 @@ export default {
       meta: {
         title: i18n.t('MenuMore'),
         icon: 'more',
-        permissions: [],
         hidden: () => {
           return !store.getters.publicSettings['TOOL_USER_ENABLED']
         }
