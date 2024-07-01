@@ -119,7 +119,8 @@ export const AssetPermissionTableMeta = {
   actions: {
     formatterArgs: {
       updateRoute: 'AssetPermissionUpdate',
-      performDelete: ({ row, col }) => {
+      cloneRoute: 'AssetPermissionCreate',
+      performDelete: function({ row, col }) {
         const id = row.id
         const url = `/api/v1/perms/asset-permissions/${id}/`
         return this.$axios.delete(url)
