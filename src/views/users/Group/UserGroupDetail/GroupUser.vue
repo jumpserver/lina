@@ -5,7 +5,7 @@
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
       <el-col :md="9" :sm="24">
-        <RelationCard v-bind="relationConfig" />
+        <RelationCard ref="relationCard" v-bind="relationConfig" @addSuccess="addSuccess" />
       </el-col>
     </el-row>
   </div>
@@ -95,6 +95,11 @@ export default {
                 }
               ).then(res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
+
+                setTimeout(() => {
+                  this.$refs.relationCard.$refs.select2.refresh()
+                }, 300)
+
                 reload()
               }).catch(error => {
                 this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
@@ -143,13 +148,16 @@ export default {
               usergroup: groupId
             }
           })
-          this.$axios.post(relationUrl, data)
+
           this.$message.success(this.$tc('AddSuccessMsg'))
-          setTimeout(() => {
-            window.location.reload()
-          }, 1000)
+          return this.$axios.post(relationUrl, data)
         }
       }
+    }
+  },
+  methods: {
+    addSuccess() {
+      this.$refs.listTable.reloadTable()
     }
   }
 }

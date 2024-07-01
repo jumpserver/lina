@@ -114,15 +114,17 @@ export default {
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
-        // 从hasObjects中移除这个object
+        // 从 hasObjects 中移除这个object
         const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
         that.iHasObjects.splice(theRemoveIndex, 1)
-        // 从disabled values中移除这个value
+
+        // 从 disabled values 中移除这个 value
         while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
           const i = that.select2.disabledValues.indexOf(obj.value)
-          this.$log.debug('disabled values remove index: ', i)
+          that.$log.debug('disabled values remove index: ', i)
           that.select2.disabledValues.splice(i, 1)
         }
+
         that.$message.success(that.$t('RemoveSuccessMsg'))
       }
     },
@@ -157,6 +159,8 @@ export default {
         that.iHasObjects = [...that.iHasObjects, ...objects]
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
+        this.$refs.select2.refresh()
+        this.$emit('addSuccess')
       }
     },
     getHasObjects: {
@@ -291,9 +295,9 @@ export default {
       }
     },
     removeObject(obj) {
-      this.performDelete(obj, this).then(
-        () => this.onDeleteSuccess(obj, this)
-      ).catch(error => {
+      this.performDelete(obj, this).then(() => {
+        this.onDeleteSuccess(obj, this)
+      }).catch(error => {
         this.onDeleteFail(error, this)
       })
     },
@@ -303,7 +307,9 @@ export default {
         return
       }
       this.performAdd(objects, this).then(
-        () => this.onAddSuccess(objects, this)
+        () => {
+          this.onAddSuccess(objects, this)
+        }
       )
     },
     async selectAll() {
