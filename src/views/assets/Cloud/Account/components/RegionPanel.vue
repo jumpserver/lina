@@ -117,8 +117,8 @@ export default {
         this.allRegions = resp?.regions
         this.regionVisible = true
         this.updateCheckedStatus()
-      }).catch(error => {
-        this.$message.error(this.$tc('CloudRegionTip' + ' ' + error))
+      }).catch(() => {
+        this.$message.error(this.$tc('CloudRegionTip'))
       }).finally(() => {
         this.refreshContent()
       })

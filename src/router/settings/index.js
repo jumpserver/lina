@@ -304,7 +304,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('AppletDetail'),
-            permissions: ['settings.change_terminal'],
+            permissions: ['terminal.view_applet'],
             activeMenu: '/settings/applets'
           }
         },
