@@ -867,7 +867,8 @@ export default {
       if (query) {
         this.page = parseInt(query[this.pageKey])
         this.size = parseInt(query[this.pageSizeKey])
-        // 恢复查询条件，但对slot=search无效
+
+        // 恢复查询条件，但对 slot = search 无效
         if (this.$refs.searchForm) {
           delete query[this.pageKey]
           delete query[this.pageSizeKey]
@@ -878,6 +879,9 @@ export default {
     if (this.totalData) {
       this.getList()
     }
+  },
+  created() {
+    this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   methods: {
     getQuery() {
@@ -927,7 +931,7 @@ export default {
     getList({ loading = true } = {}) {
       const { url } = this
       if (url) {
-        return this.getListFromRemote({ loading: loading })
+        return this.debouncedGetListFromRemote({ loading })
       }
       if (this.totalData) {
         return this.getListFromStaticData({ loading: true })

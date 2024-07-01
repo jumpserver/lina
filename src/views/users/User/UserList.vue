@@ -277,9 +277,6 @@ export default {
   mounted() {
     this.setRolesFilter()
   },
-  activated() {
-    this.reloadTable()
-  },
   methods: {
     setRolesFilter() {
       const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]

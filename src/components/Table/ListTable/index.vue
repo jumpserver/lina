@@ -78,7 +78,6 @@ export default {
       isDeactivated: false
     }
   },
-
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     dataTable() {

@@ -174,10 +174,11 @@ export default {
         ]
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    }, 300)
   }
 }
 </script>
-
-<style>
-
-</style>
