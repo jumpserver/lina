@@ -13,7 +13,9 @@ export default {
     BaseRoleList
   },
   activated() {
-    this.$refs.roleList.reloadTable()
+    setTimeout(() => {
+      this.$refs.roleList.reloadTable()
+    })
   }
 }
 </script>

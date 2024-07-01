@@ -2,7 +2,7 @@
   <ElFormRender
     :id="id"
     ref="form"
-    :class="mobile? 'mobile' : 'desktop'"
+    :class="mobile ? 'mobile' : 'desktop'"
     :content="fields"
     :form="basicForm"
     :label-position="labelPosition"
@@ -11,8 +11,16 @@
     v-on="$listeners"
   >
     <!-- slot 透传 -->
-    <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
-    <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
+    <slot
+      v-for="item in fields"
+      :slot="`id:${item.id}`"
+      :name="`id:${item.id}`"
+    />
+    <slot
+      v-for="item in fields"
+      :slot="`$id:${item.id}`"
+      :name="`$id:${item.id}`"
+    />
 
     <el-form-item v-if="hasButtons" class="form-buttons">
       <el-button
@@ -30,10 +38,14 @@
         size="small"
         @click="submitForm('form', true)"
       >
-        {{ $t('SaveAndAddAnother') }}
+        {{ $t("SaveAndAddAnother") }}
       </el-button>
-      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">
-        {{ $t('Reset') }}
+      <el-button
+        v-if="defaultButton && hasReset"
+        size="small"
+        @click="resetForm('form')"
+      >
+        {{ $t("Reset") }}
       </el-button>
       <el-button
         v-for="button in moreButtons"
@@ -136,7 +148,7 @@ export default {
       }
       const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
-        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.id) !== -1)
+        const dialog = dialogs.find(d => d.innerHTML.indexOf(this.id) !== -1)
         if (dialog) {
           this.iSubmitBtnText = this.$t('Confirm')
           return
@@ -144,10 +156,14 @@ export default {
       }
       this.iSubmitBtnText = this.$t('Submit')
     },
-    // 获取表单数据
+    /**
+     * 提交表单数据
+     * @param {string} formName - 表单的引用名称
+     * @param {boolean} [addContinue] - 是否继续添加
+     */
     submitForm(formName, addContinue) {
       const form = this.$refs[formName]
-      form.validate((valid) => {
+      form.validate(valid => {
         if (valid) {
           this.$emit('submit', form.getFormValue(), form, addContinue)
         } else {
@@ -162,9 +178,11 @@ export default {
       this.$refs['form'].resetFields()
     },
     handleClick(button) {
-      const callback = button.callback || function(values, form) {
-        // debug('Click ', button.title, ': ', values)
-      }
+      const callback =
+        button.callback ||
+        function(values, form) {
+          // debug('Click ', button.title, ': ', values)
+        }
       const form = this.$refs['form']
       const values = form.getFormValue()
       callback(values, form, button)

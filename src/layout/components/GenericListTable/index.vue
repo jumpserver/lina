@@ -12,6 +12,7 @@ export default {
   },
   activated() {
     setTimeout(() => {
+      console.log('actived')
       this.reloadTable()
     }, 300)
   },

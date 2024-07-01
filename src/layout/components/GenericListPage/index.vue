@@ -13,14 +13,9 @@ export default {
   components: {
     Page, GenericListTable
   },
-  activated() {
-    this.reloadTable()
-  },
   methods: {
     reloadTable() {
-      setTimeout(() => {
-        this.$refs.ListTable.reloadTable()
-      }, 300)
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

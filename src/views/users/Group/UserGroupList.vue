@@ -51,11 +51,6 @@ export default {
         createRoute: 'UserGroupCreate'
       }
     }
-  },
-  activated() {
-    setTimeout(() => {
-      this.$refs.listPage.reloadTable()
-    })
   }
 }
 </script>
