@@ -85,21 +85,29 @@ export default {
       return this.amount !== 0 && this.amount !== ''
     }
   },
-  async mounted() {
-    if (this.formatterArgs.async) {
-      this.amount = this.cellValue
-    } else {
-      let cellValue = []
-      if (Array.isArray(this.cellValue)) {
-        cellValue = this.cellValue
-      } else {
-        // object {key: [value]}
-        cellValue = Object.keys(this.cellValue)
-      }
-      this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+  watch: {
+    cellValue() {
+      this.computeAmount()
     }
   },
+  async mounted() {
+    this.computeAmount()
+  },
   methods: {
+    computeAmount() {
+      if (this.formatterArgs.async) {
+        this.amount = this.cellValue
+      } else {
+        let cellValue = []
+        if (Array.isArray(this.cellValue)) {
+          cellValue = this.cellValue
+        } else {
+          // object {key: [value]}
+          cellValue = Object.keys(this.cellValue)
+        }
+        this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
+      }
+    },
     getKey(item, index) {
       return index + item
     },
