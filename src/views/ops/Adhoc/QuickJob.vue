@@ -472,6 +472,7 @@ $container-bg-color: #f7f7f7;
   .xterm-container {
     margin-left: 30px;
     height: calc(100vh - 549px);
+    min-height: 255px;
     border: 1px solid var(--color-border);
     border-radius: 5px;
     background-color: $container-bg-color;
