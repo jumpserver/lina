@@ -28,6 +28,7 @@
       ref="SearchInput"
       v-model="filterValue"
       class="search-input"
+      :class="options.length > 0 ? '' : 'no-options'"
       :placeholder="placeholder"
       :suffix-icon="suffixIcon"
       :validate-event="false"
@@ -444,6 +445,10 @@ $origin-white-color: #ffffff;
       border: none;
       padding-left: 1px;
       font-size: 13px;
+    }
+
+    &.no-options {
+      padding-left: 15px;
     }
   }
 
