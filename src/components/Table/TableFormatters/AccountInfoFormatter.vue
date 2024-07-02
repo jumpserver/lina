@@ -13,7 +13,7 @@
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
     </div>
-    <el-button slot="reference" size="mini" type="text">{{ $t('View') }}</el-button>
+    <el-button slot="reference" class="link-btn" size="mini" type="text">{{ $t('View') }}</el-button>
   </el-popover>
 </template>
 
@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-content {
   max-height: 150px;
   overflow-y: auto;
@@ -61,14 +61,6 @@ export default {
 
   &:hover {
     background-color: #F5F7FA;
-  }
-}
-
-.el-button--text {
-  color: var(--color-link);
-
-  &:hover {
-    color: var(--color-link);
   }
 }
 </style>

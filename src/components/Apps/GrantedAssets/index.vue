@@ -46,6 +46,10 @@ export default {
       default({ row, col }) {
         return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
       }
+    },
+    nameDisabled: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -55,6 +59,7 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
+        showSearch: false,
         url: this.tableUrl,
         // ?assets=0不显示资产. =1显示资产
         treeUrl: this.treeUrl,
@@ -77,7 +82,8 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AssetDetail'
+              route: 'AssetDetail',
+              can: !this.nameDisabled
             }
           },
           labels: {
@@ -86,11 +92,10 @@ export default {
             }
           },
           actions: {
-            // has: this.actions !== null,
             ...this.actions
           },
           view_account: {
-            label: this.$t('Account'),
+            label: this.$t('Accounts'),
             formatter: AccountInfoFormatter,
             width: '100px'
           },
@@ -122,8 +127,8 @@ export default {
 </script>
 
 <style scoped>
-.row_disabled,.row_disabled:hover,.row_disabled:hover > td{
+.row_disabled, .row_disabled:hover, .row_disabled:hover > td {
   cursor: not-allowed;
-  background-color:rgba(192,196,204,0.28) !important;
+  background-color: rgba(192, 196, 204, 0.28) !important;
 }
 </style>
