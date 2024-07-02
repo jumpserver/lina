@@ -37,7 +37,8 @@ export default {
           },
           {
             'title': this.$t('AppletHosts'),
-            'name': 'AppletHosts'
+            'name': 'AppletHosts',
+            hidden: !this.$hasPerm('terminal.view_appletpublication')
           }
         ],
         hasRightSide: true,
