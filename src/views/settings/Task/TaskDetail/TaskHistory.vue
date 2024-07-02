@@ -69,7 +69,7 @@ export default {
             }
           },
           actions: {
-            width: '120px',
+            width: '150px',
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,
