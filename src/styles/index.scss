@@ -576,3 +576,13 @@ li.rmenu i.fa {
     color: var(--color-link);
   }
 }
+
+.link-btn {
+  span {
+    color: var(--color-link);
+  }
+
+  &:hover, &:focus {
+    color: var(--color-link);
+  }
+}
