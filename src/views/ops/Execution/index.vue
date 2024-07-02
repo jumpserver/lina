@@ -103,16 +103,9 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        onCreate: () => {
-          this.uploadDialogVisible = true
-        }
+        hasImport: false
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>
