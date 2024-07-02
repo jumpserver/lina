@@ -36,7 +36,7 @@
               :placeholder="item.placeholder"
               class="inline-input"
               size="mini"
-              @change="item.callback(item.value)"
+              @change="item.callback(formModel[item.name])"
             />
           </template>
 
@@ -99,7 +99,7 @@
               v-model="formModel[item.name]"
               :active-text="item.name"
               :disabled="item.disabled"
-              @change="item.callback(item.value)"
+              @change="item.callback(formModel[item.name])"
             />
           </template>
         </el-form-item>
