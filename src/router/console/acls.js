@@ -86,7 +86,7 @@ export default [
             component: () => import('@/views/acl/CommandAcl/index'),
             hidden: true,
             meta: {
-              title: i18n.t('CommandFilterAclList'),
+              title: i18n.t('BaseCommandFilterAclList'),
               activeMenu: ''
             }
           },

@@ -9,10 +9,10 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/Apps/AssetSelect'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
-import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import { crontab, interval } from '@/views/accounts/const'
 
 export default {
   components: {
@@ -29,7 +29,7 @@ export default {
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('Plan'), ['run_after_save', 'is_periodic', 'crontab']],
+        [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
       initial: {
@@ -150,15 +150,8 @@ export default {
             return this.instantTask
           }
         },
-        crontab: {
-          type: 'cronTab',
-          component: CronTab,
-          label: i18n.t('Crontab'),
-          hidden: (formValue) => {
-            return formValue.is_periodic === false
-          },
-          helpTip: i18n.t('CrontabOfCreateUpdatePage')
-        }
+        interval,
+        crontab
       },
       createSuccessNextRoute: { name: 'JobManagement' },
       updateSuccessNextRoute: { name: 'JobManagement' }
