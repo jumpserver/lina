@@ -17,7 +17,13 @@
       <template v-if="showHasObjects">
         <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
           <td style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-            <el-tooltip :content="obj.label" :open-delay="500" effect="dark" placement="left" style="margin: 4px;">
+            <el-tooltip
+              :content="obj.label.toString()"
+              :open-delay="500"
+              effect="dark"
+              placement="left"
+              style="margin: 4px;"
+            >
               <b>{{ obj.label }}</b>
             </el-tooltip>
           </td>
@@ -101,7 +107,8 @@ export default {
     },
     performDelete: {
       type: Function,
-      default: (obj, that) => {}
+      default: (obj, that) => {
+      }
     },
     allowCreate: {
       type: Boolean,
@@ -109,7 +116,8 @@ export default {
     },
     select2Config: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     onDeleteSuccess: {
       type: Function,
@@ -146,7 +154,8 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {}
+      default: (objects, that) => {
+      }
     },
     showAddAll: {
       type: Boolean,
@@ -156,7 +165,8 @@ export default {
       type: Function,
       default(objects, that) {
         that.$log.debug('Select value', that.select2.value)
-        that.iHasObjects = [...that.iHasObjects, ...objects]
+        const oldValues = that.iHasObjects.map(item => item.value)
+        that.iHasObjects = [...that.iHasObjects, ...objects.filter(item => !oldValues.includes(item.value))]
         that.$refs.select2.clearSelected()
         that.$message.success(that.$t('AddSuccessMsg'))
         this.$refs.select2.refresh()
@@ -324,25 +334,26 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  b, strong {
-    font-weight: 700;
-    font-size: 13px;
-  }
+b, strong {
+  font-weight: 700;
+  font-size: 13px;
+}
 
-  tr td {
-    line-height: 1.42857;
-    padding: 8px;
-    vertical-align: top;
-  }
+tr td {
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: top;
+}
 
-  tr.item td {
-    border-top: 1px solid #e7eaec;
-  }
-  .box-margin {
-    margin-bottom: 20px;
-  }
+tr.item td {
+  border-top: 1px solid #e7eaec;
+}
 
-  .the-box ::v-deep .el-card__body {
-    padding: 20px;
-  }
+.box-margin {
+  margin-bottom: 20px;
+}
+
+.the-box ::v-deep .el-card__body {
+  padding: 20px;
+}
 </style>

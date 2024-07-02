@@ -17,7 +17,7 @@
       />
       <RelationCard
         ref="LabelRelation"
-        v-perms="'assets.view_label'"
+        v-perms="'assets.change_asset'"
         style="margin-top: 15px"
         type="warning"
         v-bind="labelConfig"
@@ -98,9 +98,9 @@ export default {
             type: 'primary',
             label: this.$t('Test'),
             disabled: !vm.$hasPerm('assets.test_assetconnectivity') ||
-                !this.object['auto_config'].ansible_enabled ||
-                !this.object['auto_config']['ping_enabled'] ||
-                this.$store.getters.currentOrgIsRoot
+              !this.object['auto_config'].ansible_enabled ||
+              !this.object['auto_config']['ping_enabled'] ||
+              this.$store.getters.currentOrgIsRoot
           },
           callbacks: {
             click: function() {
@@ -157,11 +157,11 @@ export default {
         objectsAjax: {
           url: '/api/v1/labels/labels/',
           transformOption: (item) => {
-            const label = String(item.name) + ':' + String(item.value)
-            return { label: label, value: label }
+            const label = `${item.name}: ${item.value}`
+            return { label: label, value: item.id }
           }
         },
-        hasObjectsId: this.object.labels,
+        hasObjectsId: this.object.labels.map(item => item.id),
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.LabelRelation.iHasObjects
@@ -169,11 +169,6 @@ export default {
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           items.map(v => newData.push(v.label))
           return this.$axios.patch(relationUrl, { labels: newData })
-        },
-        getHasObjects: (ids) => {
-          return new Promise((resolve) => {
-            return resolve(ids.map(id => ({ value: id, label: id })))
-          })
         },
         performDelete: (item) => {
           const itemId = item.value
