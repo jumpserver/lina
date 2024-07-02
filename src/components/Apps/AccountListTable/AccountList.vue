@@ -297,13 +297,6 @@ export default {
         hasCreate: false,
         hasImport: this.hasImport,
         hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
-        handleImportClick: ({ selectedRows }) => {
-          this.$eventBus.$emit('showImportDialog', {
-            selectedRows,
-            url: '/api/v1/accounts/accounts/',
-            name: this?.name
-          })
-        },
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true,

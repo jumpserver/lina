@@ -35,7 +35,7 @@ export default {
         },
         columns: [
           'user_display', 'backend_display', 'city', 'type',
-          'date_created', 'is_active', 'date_expired', 'actions'
+          'date_created', 'is_active', 'date_expired', 'user_agent', 'actions'
         ],
         columnsMeta: {
           is_active: {

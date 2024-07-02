@@ -167,6 +167,7 @@ export default {
       setTimeout(() => {
         this.dialogExportVisible = false
       }, 100)
+      this.reloadTable()
     },
     onImportDialogConfirm() {
       this.$emit('importDialogClose')

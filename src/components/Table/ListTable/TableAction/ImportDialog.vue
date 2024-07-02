@@ -152,6 +152,7 @@ export default {
   methods: {
     closeDialog() {
       this.showImportDialog = false
+      this.$emit('importDialogClose')
     },
     cancelUpload() {
       this.showTable = false

@@ -124,7 +124,6 @@ export default {
         }
       ],
       strategyRelationConfig: {
-        icon: 'fa-info',
         title: this.$t('Strategy'),
         objectsAjax: {
           url: '/api/v1/xpack/cloud/strategies/',
@@ -202,8 +201,4 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
 
