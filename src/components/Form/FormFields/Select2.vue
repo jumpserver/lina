@@ -22,7 +22,9 @@
     @visible-change="onVisibleChange"
   >
     <div v-if="showSelectAll" class="el-select-dropdown__header">
-      <el-checkbox v-model="allSelected" @change="handleSelectAllChange">{{ $t('SelectAll') }}</el-checkbox>
+      <el-checkbox v-model="allSelected" :disabled="selectAllDisabled" @change="handleSelectAllChange">
+        {{ $t('SelectAll') }}
+      </el-checkbox>
       <div v-if="quickAddCallback" style="float: right">
         <el-link :underline="false" @click="quickAddCallback">{{ $t('QuickAdd') }}</el-link>
         <el-link :underline="false" icon="el-icon-refresh" style="margin-left: 5px;" @click="refresh" />
@@ -156,7 +158,7 @@ export default {
       initialOptions: [],
       remote: true,
       allSelected: false,
-      transformed: true
+      transformed: false // 这里改回来是因为，acl 中资产选择，category 选择后，再编辑，就看不到了
     }
   },
   computed: {
@@ -168,6 +170,10 @@ export default {
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
+    },
+    selectAllDisabled() {
+      const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
+      return validOptions.length === 0
     },
     iValue: {
       set(val) {

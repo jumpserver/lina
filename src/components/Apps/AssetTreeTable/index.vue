@@ -159,7 +159,6 @@ export default {
     },
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
-      console.log(treeNode, url)
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node_id', nodeId)

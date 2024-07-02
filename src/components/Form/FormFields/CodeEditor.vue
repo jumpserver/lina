@@ -1,6 +1,6 @@
 <template>
   <div class="code-editor" style="font-size: 12px">
-    <el-form ref="form" label-position="top" label-width="80px" :rules="rules" :model="formModel">
+    <el-form ref="form" :model="formModel" :rules="rules" label-position="top" label-width="80px">
       <div class="form-content">
         <el-form-item
           v-for="(item, index) in iActions"
@@ -11,8 +11,8 @@
           <template v-if="item.type === 'button' && !item.isVisible">
             <el-button
               :type="item.el && item.el.type"
-              size="mini"
               class="start-stop-btn"
+              size="mini"
               @click="item.callback()"
             >
               <i :class="item.icon" />{{ item.name }}
@@ -32,9 +32,9 @@
           <template v-else-if="item.type === 'input'">
             <el-input
               v-model="formModel[item.name]"
+              :class="!isFold ? 'special-style' : ''"
               :placeholder="item.placeholder"
               class="inline-input"
-              :class="!isFold ? 'special-style' : ''"
               size="mini"
               @change="item.callback(item.value)"
             />
@@ -68,8 +68,8 @@
 
           <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
             <el-dropdown
-              trigger="click"
               class="select-dropdown"
+              trigger="click"
               @command="(command) => {
                 item.value = command
                 item.callback(command)
@@ -105,8 +105,8 @@
         </el-form-item>
         <div
           v-if="toolbar.hasOwnProperty('fold')"
-          class="fold"
           :class="!isFold ? 'sepcial-icon' : ''"
+          class="fold"
         >
           <el-tooltip :content="$tc('MoreActions')" :open-delay="500" placement="top">
             <i
@@ -237,7 +237,6 @@ export default {
   },
   methods: {
     onChangeFold() {
-      console.log(1)
       this.isFold = !this.isFold
     },
     getLabel(value, items) {
@@ -323,7 +322,8 @@ $input-border-color: #C0C4CC;
             .content {
               display: flex;
               justify-content: space-between;
-            };
+            }
+          ;
           }
         }
 
