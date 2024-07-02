@@ -172,10 +172,12 @@ export default {
       const url = new URL(this.url, 'http://localhost')
       url.pathname += 'render-to-json/'
       const renderToJsonUrl = url.toString().replace('http://localhost', '')
-      this.$axios.post(
-        renderToJsonUrl,
-        file.raw,
+      const requestMethod = this.importOption === 'create' ? 'post' : 'put'
+      this.$axios(
         {
+          url: renderToJsonUrl,
+          data: file.raw,
+          method: requestMethod,
           headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
           disableFlashErrorMsg: true
         }
@@ -285,20 +287,20 @@ export default {
     margin-left: 80px;
   }
 
-  .export-item:first-child {
-    margin-left: 0;
-  }
+.export-item:first-child {
+  margin-left: 0;
+}
 
-  .hasError {
-    color: $--color-danger;
-  }
+.hasError {
+  color: $--color-danger;
+}
 
-  .el-upload__tip {
-    line-height: 1.5;
-    padding-top: 0;
+.el-upload__tip {
+  line-height: 1.5;
+  padding-top: 0;
 
-    .el-link {
-      margin-left: 10px;
-    }
+  .el-link {
+    margin-left: 10px;
   }
+}
 </style>
