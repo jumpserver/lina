@@ -450,9 +450,11 @@ export default {
         if (!this.object[`${this.currentEdit}_id`]) {
           window.open(url, 'Bind', 'width=800,height=600')
         } else {
-          this.$axios.post(url).then(res => {
+          this.$axios.post(url).then(() => {
             this.$message.success(this.$tc('UpdateSuccessMsg'))
             this.$store.dispatch('users/getProfile')
+            // 此处对子组件使用 key 或 $forceUpdate 都无法使得子组件中 button 文本更新
+            window.location.reload()
           })
         }
       })
