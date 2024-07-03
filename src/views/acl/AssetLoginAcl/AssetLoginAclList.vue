@@ -14,7 +14,7 @@ export default {
       helpMsg: this.$t('AssetLoginACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
-        columnsExclude: ['users', 'assets', 'accounts'],
+        columnsExclude: ['users', 'assets', 'accounts', 'rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
