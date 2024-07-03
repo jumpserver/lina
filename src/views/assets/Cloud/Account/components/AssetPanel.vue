@@ -10,6 +10,7 @@
     <ImportTable
       ref="importTable"
       v-bind="settings"
+      origin="cloudSync"
       @cancel="closeDialog"
       @finish="showResult"
     />
