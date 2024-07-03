@@ -14,9 +14,7 @@
             fit="contain"
             shape="square"
           />
-          <el-tooltip :content="p.title" placement="top">
-            <div class="description">{{ p.title }}</div>
-          </el-tooltip>
+          <div class="description">{{ p.title }}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -37,8 +35,7 @@
 <script>
 export default {
   name: 'ProviderPanel',
-  components: {
-  },
+  components: {},
   props: {
     providers: {
       type: Array,
@@ -54,8 +51,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     handleCardClick(platform) {
@@ -90,7 +86,7 @@ export default {
     cursor: pointer;
 
     .el-col {
-      width: 270px;
+      width: 265px;
       margin-bottom: 20px;
 
       .el-card.active {
@@ -102,14 +98,14 @@ export default {
         overflow: unset;
 
         img {
-          width: 70px;
-          height: 70px;
+          width: 50px;
+          height: 50px;
         }
       }
 
       ::v-deep .description {
         margin-left: 15px;
-        font-size: 15px;
+        font-size: 14px;
         word-break: keep-all;
         white-space: normal;
         text-overflow: ellipsis;

@@ -1,7 +1,7 @@
 <template>
   <div class="panel-item">
-    <span>{{ title }}</span>
-    <el-link :underline="false" type="primary">
+    <span class="item-label">{{ title }} </span>
+    <el-link :underline="false" class="item-value">
       <span class="content">{{ content }}</span>
     </el-link>
   </div>
@@ -11,8 +11,7 @@
 
 export default {
   name: 'InfoPanel',
-  components: {
-  },
+  components: {},
   props: {
     title: {
       type: String,
@@ -24,11 +23,9 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
@@ -40,21 +37,15 @@ export default {
 }
 
 .panel-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  text-align: left;
   padding: 5px 0;
   line-height: 20px;
   @include textOverflow;
 
-  span {
-   @include textOverflow;
+  .item-label {
     text-align: left;
-  }
-
-  ::v-deep .content {
-    margin-left: 5px;
-    color: var(--color-text-primary);
+    display: inline-block;
+    width: 100px;
   }
 }
 

@@ -60,7 +60,7 @@ export default {
       excludes: ['attrs', 'task'],
       quickEditActions: [
         {
-          title: this.$t('IpType'),
+          title: this.$t('IPType'),
           type: 'updateSelect',
           attrs: {
             model: this.object.task.sync_ip_type,
@@ -177,7 +177,7 @@ export default {
           formatter(row, value) {
             return (<div>{
               value?.map((content) => {
-                return <div>{ content }</div>
+                return <div>{content}</div>
               })}
             </div>)
           }
