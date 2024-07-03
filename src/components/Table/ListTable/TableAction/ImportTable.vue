@@ -92,6 +92,10 @@ export default {
     disableImportBtn: {
       type: Boolean,
       default: false
+    },
+    origin: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -419,6 +423,13 @@ export default {
         }
       }
       this.importTaskStatus = 'done'
+
+      // 在不影响其他组件使用本组件的基础上，对云同步中导入按钮的变化
+      if (this.origin === 'cloudSync') {
+        this.tableConfig.totalData = this.pendingData
+        this.importTaskStatus = 'pending'
+      }
+
       if (this.failedCount > 0) {
         this.$message.error(this.$tc('HasImportErrorItemMsg') + '')
       }
