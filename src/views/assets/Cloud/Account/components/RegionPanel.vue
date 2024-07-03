@@ -17,7 +17,7 @@
     >
       <el-row>
         <el-col>
-          <el-checkbox v-model="checkAll" @change="handleCheckedAllChange">
+          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckedAllChange">
             {{ $t('All') }}
           </el-checkbox>
         </el-col>
@@ -75,7 +75,7 @@ export default {
       allRegions: [],
       checkAll: false,
       regionVisible: false,
-      isIndeterminate: false
+      isIndeterminate: true
     }
   },
   watch: {
@@ -126,10 +126,13 @@ export default {
     handleCheckedAllChange(val) {
       this.checkedRegion = val ? this.allRegions.map(region => region.id) : []
       this.isIndeterminate = false
+      this.checkAll = !!val
+      this.$emit('input', [])
+      this.refreshContent()
     },
     handleCheckedRegionChange(value) {
       const checkedCount = value.length
-      this.checkAll = checkedCount === this.allRegions.length
+      this.checkAll = checkedCount === 0 || checkedCount === this.allRegions.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
 
       const region = this.allRegions
@@ -145,7 +148,9 @@ export default {
     updateCheckedStatus() {
       const checkedCount = this.checkedRegion.length
       this.checkAll = checkedCount === this.allRegions.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allRegions.length
+      if (checkedCount === 0 || checkedCount === this.allRegions.length) {
+        this.handleCheckedAllChange(this.allRegions)
+      }
     }
   }
 }

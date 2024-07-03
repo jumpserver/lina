@@ -172,11 +172,12 @@ export default {
           btn.loading = true
         }
       })
+
       this.$refs.form.$refs.form.dataForm.submitForm('form', false)
 
       if (this.origin === 'update') {
         setTimeout(() => {
-          this.$emit('refresh')
+          this.$emit('submitSuccess')
           this.$emit('update:visible', false)
         }, 500)
       }
