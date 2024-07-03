@@ -24,7 +24,7 @@
       @change="handleChange"
       @focus="focus = true"
       @select="handleSelect"
-      @keyup.enter.native="handleConfirm"
+      @keyup.enter.prevent.native="handleConfirm"
     />
     <span
       v-if="replaceShowPassword && filterTags.length > 0"
@@ -89,7 +89,6 @@ export default {
     iPlaceholder() {
       return `${this.placeholder} (${this.$t('EnterToContinue')})`
     }
-
   },
   watch: {
     value(val) {
@@ -107,7 +106,7 @@ export default {
     },
     handleChange: _.debounce(function(item) {
       this.handleConfirm()
-    }, 240),
+    }, 200),
     handleConfirm() {
       if (this.filterValue === '') return
 
@@ -116,22 +115,19 @@ export default {
         this.filterValue = ''
         this.$emit('change', this.filterTags)
       }
+      this.$refs.SearchInput.focus()
     },
     handleTagClick(v, k) {
-      if (this.filterValue.length !== 0) {
-        this.handleConfirm()
-      }
       this.$delete(this.filterTags, k)
       this.filterValue = v
       this.$refs.SearchInput.focus()
     },
     matchRule(value) {
       const regex = new RegExp(this.replaceRule)
-      const replacedValue = value.replace(regex, (match, p1, p2, p3) => {
+      return value.replace(regex, (match, p1, p2, p3) => {
         const stars = p2.replace(/./g, this.replaceContent)
         return p1 + stars + p3
       })
-      return replacedValue
     },
     changeTagShowValue(value) {
       if (this.replaceShowPassword && this.replaceRule) {
@@ -147,60 +143,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .el-tag + .el-tag {
-    margin-left: 4px;
+.el-tag + .el-tag {
+  margin-left: 4px;
+}
+
+.filter-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 1px 2px 1px;
+  border: 1px solid #dcdee2;
+  border-radius: 1px;
+  background-color: #fff;
+  line-height: 30px;
+
+  &:hover {
+    border-color: #C0C4CC;
   }
 
-  .filter-field {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 1px 2px 1px;
-    border: 1px solid #dcdee2;
-    border-radius: 1px;
-    background-color: #fff;
-    line-height: 30px;
-
-    &:hover {
-      border-color: #C0C4CC;
-    }
-
-    & ::v-deep .el-tag {
-      margin-top: 1px;
-      font-family: sans-serif !important;
-    }
-
-    & ::v-deep .el-autocomplete {
-      height: 28px;
-    }
+  & ::v-deep .el-tag {
+    margin-top: 1px;
+    font-family: sans-serif !important;
   }
 
-  .search-input {
-    flex: 1;
-
-    & ::v-deep .el-input__inner {
-      max-width: 100%;
-      border: none;
-      padding-left: 10px;
-    }
-  }
-
-  .el-input ::v-deep .el-input__inner {
-    border: none !important;
-    font-size: 13px;
-  }
-
-  .filter-field ::v-deep .el-input__inner {
+  & ::v-deep .el-autocomplete {
     height: 28px;
   }
+}
 
-  .show-password {
-    display: inherit;
-    padding-right: 6px;
-    cursor: pointer;
+.search-input {
+  flex: 1;
 
-    &:hover {
-      color: #999999;
-    }
+  & ::v-deep .el-input__inner {
+    max-width: 100%;
+    border: none;
+    padding-left: 10px;
   }
+}
+
+.el-input ::v-deep .el-input__inner {
+  border: none !important;
+  font-size: 13px;
+}
+
+.filter-field ::v-deep .el-input__inner {
+  height: 28px;
+}
+
+.show-password {
+  display: inherit;
+  padding-right: 6px;
+  cursor: pointer;
+
+  &:hover {
+    color: #999999;
+  }
+}
 </style>

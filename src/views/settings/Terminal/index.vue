@@ -35,7 +35,7 @@ export default {
           name: 'Basic'
         },
         {
-          title: this.$t('Terminal'),
+          title: this.$t('Components'),
           name: 'TerminalList',
           hidden: () => !this.$hasPerm('terminal.view_terminal')
         },
@@ -47,14 +47,14 @@ export default {
           }
         },
         {
-          title: this.$t('Endpoint'),
+          title: this.$t('Endpoints'),
           name: 'EndpointList',
           hidden: () => {
             return !this.$hasPerm('terminal.view_endpoint')
           }
         },
         {
-          title: this.$t('EndpointRule'),
+          title: this.$t('EndpointRules'),
           name: 'EndpointRuleList',
           hidden: () => {
             return !this.$hasPerm('terminal.view_endpointrule')
