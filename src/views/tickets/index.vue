@@ -1,13 +1,14 @@
 <template>
   <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <el-badge
-      v-if="props.tab === 'AssignedTicketList'"
-      slot="badge"
-      v-slot="props"
-      :value="getBadgeValue(props)"
-      size="mini"
-      type="primary"
-    />
+    <template #badge>
+      <el-badge
+        v-if="props.tab === 'AssignedTicketList'"
+        v-slot="props"
+        :value="getBadgeValue(props)"
+        size="mini"
+        type="primary"
+      />
+    </template>
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>
@@ -35,11 +36,11 @@ export default {
         activeMenu: 'MyTicketList',
         submenu: [
           {
-            title: this.$t('tickets.MyTickets'),
+            title: this.$t('MyTickets'),
             name: 'MyTicketList'
           },
           {
-            title: this.$t('tickets.AssignedMe'),
+            title: this.$t('AwaitingMyApproval'),
             name: 'AssignedTicketList'
           }
         ]

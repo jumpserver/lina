@@ -4,15 +4,14 @@
     <div v-for="(item, i) of approveData" :key="i" style="margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>{{ i + 1 + ' ' + vm.$t('tickets.LevelApproval') }}</span>
+          <span>{{ i + 1 + ' ' + vm.$t('LevelApproval') }}</span>
         </div>
         <el-radio-group v-model="item.strategy.value" @change="onChange()">
-          <el-radio label="super_admin">{{ vm.$t('tickets.SuperAdmin') }}</el-radio>
-          <el-radio label="org_admin">{{ vm.$t('tickets.OrgAdmin') }}</el-radio>
-          <el-radio label="super_org_admin">{{ vm.$t('tickets.SuperOrgAdmin') }}</el-radio>
-          <el-radio label="custom_user">{{ vm.$t('tickets.CustomUser') }}</el-radio>
+          <el-radio label="super_admin">{{ vm.$t('SuperAdmin') }}</el-radio>
+          <el-radio label="org_admin">{{ vm.$t('OrgAdmin') }}</el-radio>
+          <el-radio label="super_org_admin">{{ vm.$t('SuperOrgAdmin') }}</el-radio>
+          <el-radio label="custom_user">{{ vm.$t('CustomUser') }}</el-radio>
         </el-radio-group>
-        <br>
         <Select2 v-show="item.strategy.value === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
       </el-card>
     </div>
@@ -86,7 +85,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .text {
     font-size: 14px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -98,5 +97,20 @@ export default {
 
   .box-card {
     width: 600px;
+    box-shadow: unset !important;
+
+    ::v-deep .el-card__body {
+      padding: 10px 30px !important;
+
+      .el-radio-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+
+        .el-radio {
+          padding: 5px 0;
+        }
+      }
+    }
   }
 </style>

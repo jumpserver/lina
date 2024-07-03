@@ -70,7 +70,7 @@ export default {
   line-height: 16px;
   margin-left: 0;
 
-  span >>> a:hover {
+  span ::v-deep a:hover {
     color: inherit;
   }
 

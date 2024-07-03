@@ -1,16 +1,16 @@
 <template>
-  <el-form ref="elForm" v-bind="$attrs" :model="value" class="el-form-renderer">
+  <el-form ref="elForm" :model="value" class="el-form-renderer" v-bind="$attrs">
     <template v-for="item in innerContent">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
         :key="item.id"
         :data="item"
-        :value="value"
-        :item-value="value[item.id]"
         :disabled="disabled || item.disabled"
-        :readonly="readonly || item.readonly"
+        :item-value="value[item.id]"
         :options="options[item.id]"
+        :readonly="readonly || item.readonly"
+        :value="value"
         @updateValue="updateValue"
       />
       <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
@@ -25,13 +25,7 @@ import _clonedeep from 'lodash.clonedeep'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
-import {
-  collect,
-  mergeValue,
-  transformOutputValue,
-  transformInputValue,
-  correctValue
-} from './util/utils'
+import { collect, correctValue, mergeValue, transformInputValue, transformOutputValue } from './util/utils'
 
 const GROUP = 'group'
 

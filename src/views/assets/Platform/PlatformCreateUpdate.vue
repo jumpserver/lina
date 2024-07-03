@@ -4,6 +4,7 @@
       :after-get-form-value="afterGetFormValue"
       :after-get-remote-meta="handleAfterGetRemoteMeta"
       :clean-form-value="cleanFormValue"
+      :clone-name-suffix="1"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :has-detail-in-msg="false"
@@ -43,15 +44,15 @@ export default {
         }
       },
       fields: [
-        [this.$t('common.Basic'), [
-          'name', 'category_type', 'charset',
-          'domain_enabled'
+        [this.$t('Basic'), [
+          'name', 'category_type'
         ]],
-        [this.$t('setting.Config'), [
-          'protocols', 'su_enabled', 'su_method'
+        [this.$t('Config'), [
+          'protocols', 'su_enabled', 'su_method',
+          'domain_enabled', 'charset'
         ]],
-        [this.$t('common.Automations'), ['automation']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Automations'), ['automation']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: platformFieldsMeta(this),
       url: `/api/v1/assets/platforms/`,
@@ -94,8 +95,7 @@ export default {
       defaultOptions: {}
     }
   },
-  watch: {
-  },
+  watch: {},
   async mounted() {
     try {
       await this.setCategories()
@@ -168,27 +168,37 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.platform-form >>> {
+.platform-form ::v-deep {
   .el-cascader {
     width: 100%;
   }
+
+  .item-enable.el-form-item {
+    //margin-bottom: 1px;
+  }
+
+  .item-method.el-form-item {
+    display: inline-block;
+    width: 100%;;
+
+    .el-form-item__content {
+      width: calc(75% - 50px);
+    }
+
+    .el-select {
+      width: 100%;
+    }
+
+    margin-top: -10px;
+  }
+
+  .item-params.el-form-item {
+    display: inline-block;
+    position: absolute;
+    right: 18px;
+    //margin-top: -10px;
+  }
 }
 
->>> .itemMethodKey.el-form-item {
-  display: inline-block;
-  width: 100%;
-  .el-form-item__content {
-    width: 70%;
-  }
-  .el-select {
-    width: 100%;
-  }
-}
-
->>> .itemParamsKey.el-form-item {
-  display: inline-block;
-  position: absolute;
-  right: 20px;
-}
 </style>
 

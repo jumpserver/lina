@@ -1,15 +1,15 @@
 <template>
   <el-date-picker
     v-model="value"
-    type="datetimerange"
-    :range-separator="$tc('common.To')"
-    :start-placeholder="$tc('common.DateStart')"
-    :end-placeholder="$tc('common.DateEnd')"
-    size="small"
     :clearable="false"
-    class="datepicker"
-    :picker-options="pickerOptions"
     :default-time="['00:00:01', '23:59:59']"
+    :end-placeholder="$tc('DateEnd')"
+    :picker-options="pickerOptions"
+    :range-separator="$tc('To')"
+    :start-placeholder="$tc('DateStart')"
+    class="datepicker"
+    size="small"
+    type="datetimerange"
     v-bind="$attrs"
     @change="handleDateChange"
     v-on="$listeners"
@@ -40,23 +40,23 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: this.$t('common.DateLast24Hours'),
+            text: this.$t('DateLast24Hours'),
             onClick: (picker) => this.onShortcutClick(picker, 1)
           },
           {
-            text: this.$t('common.DateLastWeek'),
+            text: this.$t('DateLastWeek'),
             onClick: (picker) => this.onShortcutClick(picker, 7)
           }, {
-            text: this.$t('common.DateLastMonth'),
+            text: this.$t('DateLastMonth'),
             onClick: (picker) => this.onShortcutClick(picker, 30)
           }, {
-            text: this.$t('common.DateLast3Months'),
+            text: this.$t('DateLast3Months'),
             onClick: (picker) => this.onShortcutClick(picker, 90)
           }, {
-            text: this.$t('common.DateLastHarfYear'),
+            text: this.$t('DateLastHarfYear'),
             onClick: (picker) => this.onShortcutClick(picker, 183)
           }, {
-            text: this.$t('common.DateLastYear'),
+            text: this.$t('DateLastYear'),
             onClick: (picker) => this.onShortcutClick(picker, 365)
           }
         ]
@@ -84,26 +84,25 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .datepicker {
-    width: 233px;
+.datepicker {
+  margin-left: 10px;
+  width: 233px;
+  border: 1px solid #dcdee2;
+  border-radius: 2px;
+  height: 28px;
 
-    & >>> .el-range__icon {
-      margin-top: 2px;
-      margin-right: 3px;
-    }
-
-    & >>> .el-range-input {
-      width: 49%;
-    }
+  ::v-deep .el-range-separator,
+  ::v-deep .el-input__icon {
+    line-height: 26px;
+    color: var(--color-icon-primary) !important;
   }
 
-  .el-input__inner {
-    border: 1px solid #dcdee2;
-    border-radius: 3px;
-    height: 32px;
+  ::v-deep .el-range-input {
+    color: var(--color-text-primary) !important;
   }
 
-  .el-date-editor ::v-deep .el-range-separator {
-    line-height: 28px;
+  ::v-deep .el-range-input {
+    width: 49%;
   }
+}
 </style>

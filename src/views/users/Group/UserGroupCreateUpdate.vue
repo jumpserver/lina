@@ -18,8 +18,8 @@ export default {
         },
         url: '/api/v1/users/groups/',
         fields: [
-          [this.$t('common.Basic'), ['name', 'users']],
-          [this.$t('common.Other'), ['comment']]
+          [this.$t('Basic'), ['name', 'users']],
+          [this.$t('Other'), ['comment']]
         ],
         fieldsMeta: {
           users: {
@@ -31,7 +31,7 @@ export default {
                   return { label: item.name + '(' + item.username + ')', value: item.id }
                 }
               },
-              resource: this.$t('common.User')
+              resource: this.$t('User')
             }
           }
         }

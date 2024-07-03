@@ -21,15 +21,15 @@ export default {
     return {
       loading: false,
       config: {
-        title: this.$t('dashboard.UserAssetActivity'),
-        tip: this.$t('dashboard.UserAssetActivity')
+        title: this.$t('UserAssetActivity'),
+        tip: this.$t('UserAssetActivity')
       },
       lineChartConfig: {
         datesMetrics: [],
-        primaryData: [0],
-        primaryName: this.$t('dashboard.ActiveUsers'),
-        secondaryData: [0],
-        secondaryName: this.$t('dashboard.LoginAssets')
+        primaryData: [1],
+        primaryName: this.$t('ActiveUsers'),
+        secondaryData: [1],
+        secondaryName: this.$t('LoginAssets')
       }
     }
   },

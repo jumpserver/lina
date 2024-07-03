@@ -1,5 +1,5 @@
 <template>
-  <BaseList v-bind="config" />
+  <BaseList v-bind="config" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -14,12 +14,11 @@ export default {
       config: {
         url: '/api/v1/assets/devices/',
         category: 'device'
+      },
+      tableConfig: {
+        columnsExclude: ['date_verified']
       }
     }
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -1,17 +1,18 @@
 <template>
   <tr>
-    <td>{{ action.title }}:</td>
+    <td>{{ getActionTitle(action) }}</td>
     <td>
       <el-popover
+        :content="action.attrs.tip"
+        :disabled="!action.attrs.showTip"
         placement="left-end"
         trigger="hover"
-        :disabled="!action.attrs.showTip"
-        :content="action.attrs.tip"
       >
         <span slot="reference">
           <component
             :is="iType"
             v-model="action.attrs.model"
+            :title="label"
             v-bind="action.attrs"
             v-on="callbacks"
           >
@@ -27,6 +28,7 @@
 import Switcher from '@/components/Form/FormFields/Switcher'
 import Select2 from '@/components/Form/FormFields/Select2'
 import UpdateSelect from '@/components/Form/FormFields/UpdateSelect'
+import { toSentenceCase } from '@/utils/common'
 
 class Action {
   constructor() {
@@ -85,10 +87,11 @@ export default {
       }
       return wrappers
     }
+  },
+  methods: {
+    getActionTitle(action) {
+      return toSentenceCase(action.title)
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

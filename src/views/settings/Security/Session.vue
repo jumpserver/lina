@@ -18,7 +18,7 @@ export default {
         hasDetailInMsg: false,
         fields: [
           [
-            this.$t('common.Basic'),
+            this.$t('Basic'),
             [
               'SECURITY_WATERMARK_ENABLED',
               'SECURITY_SESSION_SHARE',

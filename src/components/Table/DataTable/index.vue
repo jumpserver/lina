@@ -168,4 +168,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-data-table {
+  ::v-deep .el-pagination.is-background .el-pager li {
+    margin: 0 1px;
+    padding: 0 2px;
+  }
+}
 </style>

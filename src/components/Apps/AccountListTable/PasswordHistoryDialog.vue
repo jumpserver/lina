@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('accounts.HistoryPassword'),
+        title: this.$t('HistoryPassword'),
         visible: false,
         width: '60%',
         tableConfig: {
@@ -32,7 +32,7 @@ export default {
           columns: ['secret', 'version', 'history_date'],
           columnsMeta: {
             secret: {
-              label: this.$t('assets.Password'),
+              label: this.$t('Password'),
               formatter: ShowKeyCopyFormatter,
               formatterArgs: {
                 hasDownload: false,
@@ -40,7 +40,7 @@ export default {
               }
             },
             history_date: {
-              label: this.$t('accounts.HistoryDate')
+              label: this.$t('HistoryDate')
             },
             secret_type: {
               width: '200px'

@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('common.Announcement'),
+      title: this.$t('Announcement'),
       visible: false,
       enableField: 'ANNOUNCEMENT_ENABLED',
       config: {
@@ -63,7 +63,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

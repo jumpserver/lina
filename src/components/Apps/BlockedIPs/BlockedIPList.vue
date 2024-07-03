@@ -1,5 +1,5 @@
 <template>
-  <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
         ],
         columnsMeta: {
           ip: {
-            label: this.$t('assets.ip')
+            label: this.$t('IP')
           },
           actions: {
             formatterArgs: {
@@ -37,7 +37,7 @@ export default {
               extraActions: [
                 {
                   name: 'UnlockIP',
-                  title: this.$t('setting.Unblock'),
+                  title: this.$t('Unblock'),
                   can: this.$hasPerm('settings.change_security'),
                   type: 'primary',
                   callback: ({ row }) => {
@@ -45,7 +45,7 @@ export default {
                       '/api/v1/settings/security/unlock-ip/',
                       { ips: [row.ip] }
                     ).then(() => {
-                      vm.$message.success(this.$tc('common.UnlockSuccessMsg'))
+                      vm.$message.success(this.$tc('UnlockSuccessMsg'))
                       vm.$refs.ListTable.reloadTable()
                     })
                   }
@@ -68,7 +68,7 @@ export default {
         extraMoreActions: [
           {
             name: 'UnlockSelected',
-            title: this.$t('setting.BulkUnblock'),
+            title: this.$t('UnblockSelected'),
             type: 'primary',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
@@ -77,10 +77,12 @@ export default {
               vm.$axios.post(
                 '/api/v1/settings/security/unlock-ip/',
                 {
-                  ips: selectedRows.map(v => { return v.ip })
+                  ips: selectedRows.map(v => {
+                    return v.ip
+                  })
                 }
               ).then(res => {
-                vm.$message.success(vm.$tc('common.UnlockSuccessMsg'))
+                vm.$message.success(vm.$tc('UnlockSuccessMsg'))
                 vm.$refs.ListTable.reloadTable()
               })
             }

@@ -12,7 +12,7 @@ export default {
     return {
       url: '/api/v1/assets/gpts/',
       addFields: [
-        [this.$t('common.Proxy'), ['proxy'], 1]
+        [this.$t('Proxy'), ['proxy'], 1]
       ],
       updateInitial(initial) {
         initial['address'] = 'https://api.openai.com/v1/'

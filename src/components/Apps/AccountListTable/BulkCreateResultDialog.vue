@@ -30,11 +30,11 @@ export default {
     }
   },
   data() {
-    const errorProp = this.$t('common.Error')
+    const errorProp = this.$t('Error')
     const stateMap = {
-      'created': this.$tc('common.Created'),
-      'updated': this.$tc('common.Updated'),
-      'skipped': this.$tc('common.Skipped')
+      'created': this.$tc('Created'),
+      'updated': this.$tc('Updated'),
+      'skipped': this.$tc('Skipped')
     }
     const stateClsMap = {
       'created': 'color-primary',
@@ -42,16 +42,16 @@ export default {
       'skipped': 'color-default'
     }
     return {
-      title: this.$t('accounts.AddAccountResult'),
+      title: this.$t('AddAccountResult'),
       config: {
         columns: [
           {
             prop: 'asset',
-            label: this.$t('assets.Asset')
+            label: this.$t('Asset')
           },
           {
             prop: 'state',
-            label: this.$t('common.Status'),
+            label: this.$t('Status'),
             width: '200px',
             formatter: (row) => {
               if (row.error) {
@@ -71,11 +71,11 @@ export default {
   computed: {
     summary() {
       const labels = {
-        total: this.$tc('common.Total'),
-        created: this.$tc('common.Created'),
-        updated: this.$tc('common.Updated'),
-        skipped: this.$tc('common.Skipped'),
-        error: this.$tc('common.Error')
+        total: this.$tc('Total'),
+        created: this.$tc('Created'),
+        updated: this.$tc('Updated'),
+        skipped: this.$tc('Skipped'),
+        error: this.$tc('Error')
       }
       const grouped = _.groupBy(this.result, 'state')
       const groupedLength = _.mapValues(grouped, 'length')
@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     closeDialog() {
-      this.$emit('update:visible', false)
+      this.$emit('close-all')
     }
   }
 }

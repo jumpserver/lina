@@ -81,7 +81,10 @@ export default {
     },
     objectsToValues(objects) {
       let val = objects
-      if (!this.multiple) {
+      if (val === null || val === undefined) {
+        val = []
+      }
+      if (!Array.isArray(val)) {
         val = [val]
       }
       val = val.map((v) => {

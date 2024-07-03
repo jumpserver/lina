@@ -18,18 +18,18 @@ export default {
       fields: [
         {
           name: 'dest_ips',
-          label: this.$t('setting.DestinationIP'),
-          tip: this.$t('setting.helpTip.IP'),
+          label: this.$t('DA'),
           el: {
-            placeholder: this.$t('setting.DestinationIP')
+            placeholder: this.$t('DestinationIP')
           }
         },
         {
           name: 'dest_ports',
           component: TagInput,
-          label: this.$t('setting.DestinationPort'),
+          label: this.$t('DP'),
           el: {
-            inputType: 'number'
+            inputType: 'number',
+            placeholder: this.$t('DestinationPort')
           }
         }
       ],

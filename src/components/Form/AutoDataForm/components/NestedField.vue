@@ -3,12 +3,13 @@
     v-if="!loading"
     :disabled="disabled"
     :fields="iFields"
-    :form="value"
-    style="margin-left: -26%;margin-right: -6%"
+    :form="iValue"
+    class="sub-form"
     v-bind="kwargs"
     @change="updateValue($event)"
     @input="updateValue($event)"
     v-on="$listeners"
+    @submit.native.prevent
   />
 </template>
 
@@ -42,6 +43,7 @@ export default {
     return {
       loading: false,
       formJson: JSON.stringify(this.value),
+      iValue: this.value,
       kwargs: {
         hasReset: false,
         hasSaveContinue: false,
@@ -71,15 +73,22 @@ export default {
     }
   },
   watch: {
+    iValue: {
+      handler(val) {
+        this.formJson = JSON.stringify(val)
+      },
+      deep: true
+    },
     value: {
       handler(val) {
         const valJson = JSON.stringify(val)
         // 如果不想等，证明是 value 自己变化导致的， 需要重新渲染
         if (valJson !== this.formJson) {
+          this.iValue = val
           this.loading = true
           setTimeout(() => {
             this.loading = false
-          }, 10)
+          }, 100)
         }
       },
       deep: true
@@ -87,8 +96,10 @@ export default {
   },
   methods: {
     updateValue(val) {
-      this.formJson = JSON.stringify(val)
-      this.$emit('input', val)
+      this.iValue = val
+      setTimeout(() => {
+        this.$emit('input', val)
+      }, 100)
     },
     objectToString(obj) {
       let data = ''
@@ -105,6 +116,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.sub-form {
+  margin-left: -33%;
+  margin-right: 10px;
+}
 
+@media screen and (max-width: 992px) {
+  .sub-form {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
 </style>

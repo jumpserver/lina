@@ -6,9 +6,10 @@ const state = {
     withoutAnimation: false
   },
   // 默认需要展开的菜单
-  defaultOpensMenu: ['/audit/sessions', '/audit/logs', '/workbench/ops'],
+  defaultOpensMenu: [],
   device: 'desktop',
-  inited: false
+  inited: false,
+  i18nLoaded: false
 }
 
 const mutations = {
@@ -31,6 +32,9 @@ const mutations = {
   },
   SET_INIT: (state, value) => {
     state.inited = value
+  },
+  SET_I18N_LOADED: (state, value) => {
+    state.i18nLoaded = value
   }
 }
 
@@ -49,6 +53,9 @@ const actions = {
   },
   reset({ commit }) {
     commit('SET_INIT', false)
+  },
+  setI18nLoaded({ commit }, value) {
+    commit('SET_I18N_LOADED', value)
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="16" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
@@ -27,14 +27,14 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('acl.action'),
+          key: this.$t('Action'),
           value: this.object.action.label
         },
         {
-          key: this.$t('acl.reviewer'),
+          key: this.$t('Reviewer'),
           value: this.object.reviewers.map(item => item.name).join(', ')
         },
-        'priority', 'date_created', 'created_by'
+        'priority', 'date_created', 'created_by', 'comment'
       ]
     }
   },

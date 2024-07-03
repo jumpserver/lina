@@ -1,9 +1,9 @@
 <template>
   <Dialog
-    :show-cancel="false"
-    :title="$tc('common.OfflineUpload')"
     :before-close="handleClose"
     :loading-status="!isFinished"
+    :show-cancel="false"
+    :title="$tc('OfflineUpload')"
     v-bind="$attrs"
     @cancel="onCancel"
     @confirm="onSubmit"
@@ -11,7 +11,7 @@
   >
     <el-form label-position="top">
       <el-form-item
-        :label="$tc('common.Upload' )"
+        :label="$tc('Upload' )"
         :label-width="'100px'"
         class="file-uploader"
       >
@@ -29,11 +29,11 @@
         >
           <i class="el-icon-upload" />
           <div class="el-upload__text">
-            {{ $t('common.imExport.dragUploadFileInfo') }}
+            {{ $t('DragUploadFileInfo') }}
           </div>
           <div slot="tip" class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }">
-              {{ $t('terminal.uploadZipTips') }}
+              {{ $t('UploadZipTips') }}
             </span>
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
           </div>
@@ -72,7 +72,7 @@ export default {
       if (this.isFinished) {
         done()
       } else {
-        this.$message.warning(this.$tc('terminal.Uploading'))
+        this.$message.warning(this.$tc('Uploading'))
       }
     },
     onCancel() {
@@ -96,7 +96,7 @@ export default {
         }
       ).then(res => {
         this.isFinished = true
-        this.$message.success(this.$tc('terminal.UploadSucceed'))
+        this.$message.success(this.$tc('UploadSucceed'))
         this.$emit('update:visible', false)
         this.$emit('upload-event', res)
       }).catch(err => {
@@ -118,7 +118,7 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  > > > .el-upload {
+  ::v-deep .el-upload {
     width: 100%;
 
     .el-upload-dragger {

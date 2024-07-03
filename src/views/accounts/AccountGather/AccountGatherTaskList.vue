@@ -22,10 +22,16 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
-        columns: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount', 'actions'],
+        columns: [
+          'name', 'nodes', 'assets', 'is_periodic',
+          'periodic_display', 'executed_amount'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'nodes', 'assets', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
+          default: [
+            'name', 'nodes', 'assets', 'is_periodic',
+            'periodic_display', 'executed_amount'
+          ]
         },
         columnsMeta: {
           name: {
@@ -33,7 +39,7 @@ export default {
             formatterArgs: {
               route: 'AccountGatherTaskDetail',
               routeQuery: {
-                activeTab: 'Detail'
+                tab: 'AccountGatherTaskDetail'
               }
             }
           },
@@ -43,15 +49,12 @@ export default {
             }
           },
           is_periodic: {
-            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
-            width: '152px'
+            width: '150px'
           },
           periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
-            width: 150
           },
           executed_amount: {
             formatter: DetailFormatter,
@@ -62,7 +65,7 @@ export default {
                 return {
                   name: 'AccountGatherList',
                   query: {
-                    activeTab: 'AccountGatherTaskExecutionList',
+                    tab: 'AccountGatherTaskExecutionList',
                     automation_id: row.id
                   }
                 }
@@ -75,7 +78,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   type: 'info',
                   can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
@@ -110,13 +113,9 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
-      this.$router.go(0)
-    }
+    // $route(to, from) {
+    // this.$router.go(0)
+    // }
   }
 }
 </script>
-
-<style>
-
-</style>

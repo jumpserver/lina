@@ -5,16 +5,16 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('assets.PlatformProtocolConfig') + '：' + protocol.name"
+    :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"
     class="setting-dialog"
     v-bind="$attrs"
     width="800px"
     v-on="$listeners"
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="success">
-      {{ $t('assets.InheritPlatformConfig') }}
+      {{ $t('InheritPlatformConfig') }}
       <el-link :href="platformDetail" class="link-more" target="_blank">
-        {{ $t('common.View') }}
+        {{ $t('View') }}
       </el-link>
       <i class="fa fa-external-link" />
     </el-alert>
@@ -60,10 +60,10 @@ export default {
         hasButtons: !this.disabled,
         url: '/api/v1/assets/protocol-settings/?name=' + this.protocol.name,
         fields: [
-          [vm.$t('common.Basic'), [
+          [vm.$t('Basic'), [
             'primary', 'required', 'default', 'public'
           ]],
-          [vm.$t('common.Advanced'), ['setting']]
+          [vm.$t('Advanced'), ['setting']]
         ],
         fieldsMeta: {
           setting: {
@@ -107,12 +107,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-form > > > .el-form-item.form-buttons {
+.data-form ::v-deep .el-form-item.form-buttons {
   padding-top: 10px;
   margin-bottom: 0;
 }
 
-.setting-dialog > > > .el-dialog__body {
+.setting-dialog ::v-deep .el-dialog__body {
   padding-top: 10px;
 }
 

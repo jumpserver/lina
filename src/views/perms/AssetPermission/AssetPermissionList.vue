@@ -1,5 +1,5 @@
 <template>
-  <Page :help-message="helpMsg" v-bind="$attrs">
+  <Page :help-tip="helpMsg" v-bind="$attrs">
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
@@ -18,10 +18,8 @@
 import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
-import { AccountLabelMapper, AssetPermissionListPageSearchConfigOptions } from '../const'
-import { SwitchFormatter } from '@/components/Table/TableFormatters'
+import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const'
 
 export default {
   components: {
@@ -32,7 +30,7 @@ export default {
   data() {
     const vm = this
     return {
-      helpMsg: this.$t('perms.AssetPermissionHelpMsg'),
+      helpMsg: this.$t('AssetPermissionHelpMsg'),
       treeSetting: {
         showMenu: false,
         showAssets: true,
@@ -57,104 +55,7 @@ export default {
           ]
         },
         columnsMeta: {
-          name: {
-            formatterArgs: {
-              routeQuery: {
-                activeTab: 'AssetPermissionDetail'
-              }
-            }
-          },
-          is_active: {
-            width: '100px',
-            formatter: SwitchFormatter,
-            formatterArgs: {
-              getPatchUrl(row) {
-                return `/api/v1/perms/asset-permissions/${row.id}/`
-              },
-              getPatchData(row) {
-                return {
-                  is_active: !row.is_active
-                }
-              }
-            }
-          },
-          action: {
-            label: this.$t('common.Action'),
-            formatter: function(row) {
-              if (row.actions.length === 6) {
-                return vm.$t('common.All')
-              }
-              return row.actions.map(item => {
-                return item.label.replace(/ \([^)]*\)/, '')
-              }).join(',')
-            }
-          },
-          is_expired: {
-            formatterArgs: {
-              showFalse: false
-            }
-          },
-          from_ticket: {
-            label: this.$t('perms.fromTicket'),
-            formatterArgs: {
-              showFalse: false
-            }
-          },
-          users_amount: {
-            label: this.$t('perms.User'),
-            formatter: AmountFormatter,
-            formatterArgs: {
-              async: true,
-              routeQuery: {
-                activeTab: 'AssetPermissionUser'
-              }
-            }
-          },
-          user_groups_amount: {
-            label: this.$t('perms.UserGroups'),
-            formatter: AmountFormatter,
-            formatterArgs: {
-              async: true,
-              routeQuery: {
-                activeTab: 'AssetPermissionUser'
-              }
-            }
-          },
-          assets_amount: {
-            label: this.$t('perms.Asset'),
-            formatter: AmountFormatter,
-            formatterArgs: {
-              async: true,
-              routeQuery: {
-                activeTab: 'AssetPermissionAsset'
-              }
-            }
-          },
-          nodes_amount: {
-            label: this.$t('perms.Node'),
-            formatter: AmountFormatter,
-            formatterArgs: {
-              async: true,
-              routeQuery: {
-                activeTab: 'AssetPermissionAsset'
-              }
-            }
-          },
-          accounts: {
-            label: this.$t('perms.Account'),
-            formatter: AmountFormatter,
-            formatterArgs: {
-              getItem(item) {
-                if (item !== '@SPEC') {
-                  return AccountLabelMapper[item] || item
-                }
-              },
-              cellValueToRemove: ['@SPEC'],
-              routeQuery: {
-                activeTab: 'AssetPermissionAccount'
-              }
-            }
-          },
+          ...AssetPermissionTableMeta,
           actions: {
             formatterArgs: {
               updateRoute: 'AssetPermissionUpdate',
@@ -182,12 +83,6 @@ export default {
             this.$router.push(route)
           }
         },
-        handleImportClick: ({ selectedRows }) => {
-          this.$eventBus.$emit('showImportDialog', {
-            selectedRows,
-            url: '/api/v1/perms/asset-permissions/'
-          })
-        },
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions
@@ -207,6 +102,11 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot'])
   },
+  activated() {
+    setTimeout(() => {
+      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+    }, 300)
+  },
   methods: {
     handlePermBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
@@ -215,7 +115,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

@@ -136,16 +136,22 @@ export default {
 
   .tree-table {
     .left {
-      padding: 5px;
+      padding: 5px 0;
 
       .ztree {
-        min-height: 500px;
-        height: inherit !important;
+        height: 100%;
+      }
+    }
+
+    .right {
+      .transition-box {
+        padding-left: 0;
       }
     }
 
     .mini {
       padding-top: 8px;
+      width: 1px;
     }
 
     .transition-box {

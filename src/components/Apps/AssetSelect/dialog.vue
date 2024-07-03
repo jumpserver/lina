@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :close-on-click-modal="false"
-    :title="$tc('assets.Assets')"
+    :title="$tc('Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -15,10 +15,11 @@
       ref="ListPage"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
+      :sync-select-to-url="false"
       :table-config="tableConfig"
+      :tree-setting="iTreeSetting"
       :tree-url="`${baseNodeUrl}children/tree/`"
       :url="baseUrl"
-      :tree-setting="treeSetting"
       class="tree-table"
       v-bind="$attrs"
     />
@@ -73,17 +74,17 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.Name'),
+            label: this.$t('Name'),
             sortable: true
           },
           {
             prop: 'address',
-            label: this.$t('assets.ipDomain'),
+            label: this.$t('IpDomain'),
             sortable: 'custom'
           },
           {
             prop: 'platform',
-            label: this.$t('assets.Platform'),
+            label: this.$t('Platform'),
             sortable: true,
             formatter: function(row) {
               return row.platform.name
@@ -117,9 +118,14 @@ export default {
       }
     }
   },
+  computed: {
+    iTreeSetting() {
+      return { ...this.treeSetting, selectSyncToRoute: false }
+    }
+  },
   methods: {
     handleClose() {
-      this.$eventBus.$emit('treeComponentKey')
+      this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
     handleConfirm() {
       this.$emit('confirm', this.rowSelected, this.rowsAdd)

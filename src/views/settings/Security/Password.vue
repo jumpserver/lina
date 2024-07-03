@@ -26,14 +26,14 @@ export default {
       visible: false,
       fields: [
         [
-          this.$t('common.Basic'),
+          this.$t('Basic'),
           [
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
           ]
         ],
         [
-          this.$t('setting.PasswordRule'),
+          this.$t('PasswordRule'),
           [
             'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH',
             'SECURITY_PASSWORD_UPPER_CASE', 'SECURITY_PASSWORD_LOWER_CASE',

@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
-import { JSONManyToManySelect, Select2 } from '@/components/Form/FormFields'
+import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
 import { message } from '@/utils/message'
 
 export const filterSelectValues = (values) => {
@@ -19,7 +19,7 @@ export const filterSelectValues = (values) => {
         const inputValue = { name, value }
         selects.push(inputValue)
       } else {
-        message.error(i18n.t('assets.LabelInputFormatValidation'))
+        message.error(i18n.t('LabelInputFormatValidation'))
       }
     }
   })
@@ -69,7 +69,7 @@ export const assetFieldsMeta = (vm) => {
         choices: platformProtocols,
         instance: asset
       },
-      helpText: i18n.t('assets.AssetProtocolHelpText'),
+      helpText: i18n.t('AssetProtocolHelpText'),
       on: {
         input: ([value]) => {
           const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
@@ -87,7 +87,6 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     platform: {
-      label: i18n.t('assets.PlatformSimple'),
       el: {
         multiple: false,
         ajax: {
@@ -102,8 +101,15 @@ export const assetFieldsMeta = (vm) => {
           const pk = event.pk
           const url = window.location.href
           const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
-          window.location.href = newURL
-          updatePlatformProtocols(vm, platformType, updateForm, true)
+
+          if (url.includes('clone')) {
+            updatePlatformProtocols(vm, platformType, updateForm, true)
+          } else {
+            window.history.replaceState(null, null, newURL)
+            vm.$nextTick(() => {
+              updatePlatformProtocols(vm, platformType, updateForm, true)
+            })
+          }
         },
         input: ([event], updateForm) => {
           updatePlatformProtocols(vm, platformType, updateForm)
@@ -123,7 +129,6 @@ export const assetFieldsMeta = (vm) => {
     },
     accounts: {
       component: AssetAccounts,
-      label: i18n.t('assets.Accounts'),
       el: {
         platform: {},
         default: []
@@ -143,15 +148,14 @@ export const assetFieldsMeta = (vm) => {
     },
     labels: {
       name: 'labels',
-      label: vm.$t('assets.Label'),
       type: 'm2m',
-      component: Select2,
+      component: NestedObjectSelect2,
       el: {
         multiple: true,
         url: '/api/v1/labels/labels/',
         ajax: {
           transformOption: (item) => {
-            return { label: `${item.name}:${item.value}`, value: `${item.name}:${item.value}` }
+            return { label: `${item.name}:${item.value}`, value: `${item.id}` }
           }
         }
       }
@@ -160,13 +164,13 @@ export const assetFieldsMeta = (vm) => {
       type: 'switch'
     },
     cluster: {
-      label: i18n.t('assets.Cluster')
+      label: i18n.t('Cluster')
     },
     url: {
       label: 'url'
     },
     comment: {
-      helpText: i18n.t('assets.CommentHelpText')
+      placeholder: i18n.t('CommentHelpText')
     }
   }
 }
@@ -196,7 +200,7 @@ export const assetJSONSelectMeta = (vm) => {
     component: JSONManyToManySelect,
     el: {
       value: [],
-      resource: vm.$t('assets.Asset'),
+      resource: vm.$t('Asset'),
       select2: {
         url: '/api/v1/assets/assets/',
         ajax: {
@@ -208,18 +212,18 @@ export const assetJSONSelectMeta = (vm) => {
       attrs: [
         {
           name: 'name',
-          label: vm.$t('common.Name'),
+          label: vm.$t('Name'),
           inTable: true
         },
         {
           name: 'address',
-          label: vm.$t('assets.Address'),
+          label: vm.$t('Address'),
           type: 'ip',
           inTable: true
         },
         {
           name: 'nodes',
-          label: vm.$t('assets.Node'),
+          label: vm.$t('Node'),
           type: 'm2m',
           el: {
             url: '/api/v1/assets/nodes/',
@@ -232,15 +236,15 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'platform',
-          label: vm.$t('assets.Platform'),
-          type: 'fk',
+          label: vm.$t('Platform'),
+          type: 'm2m',
           el: {
             url: '/api/v1/assets/platforms/'
           }
         },
         {
           name: 'category',
-          label: vm.$t('assets.Category'),
+          label: vm.$t('Category'),
           type: 'select',
           inTable: true,
           formatter: (row, column, cellValue) => cellValue.label,
@@ -250,7 +254,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'type',
-          label: vm.$t('assets.Type'),
+          label: vm.$t('Type'),
           type: 'select',
           inTable: true,
           formatter: (row, column, cellValue) => cellValue.label,
@@ -260,7 +264,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'protocols',
-          label: vm.$t('assets.Protocols'),
+          label: vm.$t('Protocols'),
           type: 'select',
           el: {
             options: protocols
@@ -268,7 +272,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'labels',
-          label: vm.$t('assets.Label'),
+          label: vm.$t('Tags'),
           type: 'm2m',
           el: {
             multiple: true,
@@ -282,7 +286,7 @@ export const assetJSONSelectMeta = (vm) => {
         },
         {
           name: 'comment',
-          label: vm.$t('common.Comment')
+          label: vm.$t('Comment')
         }
       ]
     }

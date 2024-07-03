@@ -68,10 +68,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card >>> .el-card__body {
+.card ::v-deep .el-card__body {
   padding: 0;
 }
+
 .el-card {
-  border: 0!important;
+  border: 0 !important;
 }
 </style>

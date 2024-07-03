@@ -32,34 +32,34 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$t('tickets.ApplyRunUser'),
+          key: this.$t('ApplyRunUser'),
           value: object.rel_snapshot.apply_run_user
         },
         {
-          key: this.$t('tickets.ApplyRunAsset'),
+          key: this.$t('ApplyRunAsset'),
           value: object.apply_run_asset
         },
         {
-          key: this.$t('assets.Account'),
+          key: this.$t('Account'),
           value: object.apply_run_account
         },
         {
-          key: this.$t('tickets.ApplyRunCommand'),
+          key: this.$t('ApplyRunCommand'),
           value: object.apply_run_command
         },
         {
-          key: this.$t('tickets.ApplyFromSession'),
+          key: this.$t('ApplyFromSession'),
           value: object.apply_from_session,
           formatter: function(item, value) {
             const to = { name: 'SessionDetail', params: { id: value?.id }, query: { oid: object.org_id }}
             if (!this.$hasPerm('terminal.view_session')) {
-              return <span>{this.$t('sessions.session')}</span>
+              return <span>{this.$t('Session')}</span>
             }
-            return <router-link to={to}>{this.$t('sessions.session')}</router-link>
+            return <router-link to={to}>{this.$t('Session')}</router-link>
           }
         },
         {
-          key: this.$t('tickets.ApplyFromCMDFilterRule'),
+          key: this.$t('ApplyFromCMDFilterRule'),
           value: {
             cmdFilterRuleId: object.apply_from_cmd_filter_rule,
             cmdFilterId: object.apply_from_cmd_filter
@@ -71,9 +71,9 @@ export default {
               query: { filter: value.cmdFilterId, oid: object.org_id }
             }
             if (!this.$hasPerm('assets.change_commandfilterrule')) {
-              return <span>{this.$t('assets.CommandFilterRules')}</span>
+              return <span>{this.$t('CommandFilterRules')}</span>
             }
-            return <router-link to={to}>{this.$t('assets.CommandFilterRules')}</router-link>
+            return <router-link to={to}>{this.$t('CommandFilterRules')}</router-link>
           }
         }
       ]

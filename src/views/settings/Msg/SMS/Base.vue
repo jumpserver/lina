@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
+    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible=true">{{ $t('Settings...') }}</el-button>
     <Dialog
       v-if="visible"
       :destroy-on-close="true"
@@ -67,7 +67,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-message="notice" :table-config="tableConfig" />
+  <GenericListPage :header-actions="headerActions" :help-tip="notice" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -23,24 +23,38 @@ export default {
         },
         columnsMeta: {
           assets_amount: {
-            label: this.$t('assets.Assets'),
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
               permissions: 'assets.view_asset',
-              routeQuery: {
-                activeTab: 'AssetList'
+              getRoute({ row }) {
+                return {
+                  name: 'ZoneDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'AssetList'
+                  }
+                }
               }
             }
           },
           gateways: {
-            label: this.$t('assets.Gateway'),
             formatter: AmountFormatter,
             formatterArgs: {
               permissions: 'assets.view_gateway',
-              routeQuery: {
-                activeTab: 'GatewayList'
+              getRoute({ row }) {
+                return {
+                  name: 'ZoneDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'GatewayList'
+                  }
+                }
               }
             }
           }
@@ -48,14 +62,10 @@ export default {
       },
       headerActions: {
         hasLabelSearch: true,
-        createRoute: 'DomainCreate'
+        createRoute: 'ZoneCreate'
       },
-      notice: this.$t('assets.DomainHelpMessage')
+      notice: this.$t('ZoneHelpMessage')
     }
   }
 }
 </script>
-
-<style>
-
-</style>

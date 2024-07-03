@@ -6,15 +6,14 @@
       v-bind="$data"
     />
   </IBox>
-
 </template>
 
 <script>
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
-import EmailContent from './EmailContent.vue'
-import SMTP from './SMTP.vue'
+import EmailTemplate from './EmailTemplate.vue'
+import { UpdateToken } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
 
 export default {
@@ -26,38 +25,40 @@ export default {
   data() {
     const vm = this
     return {
+      encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
-        [
-          this.$t('setting.SMTP'),
-          [
-            'SMTP'
-          ]
-        ],
-        [
-          this.$t('setting.MailSend'),
-          [
-            'EMAIL_FROM', 'EMAIL_SUBJECT_PREFIX'
-          ]
-        ],
-        [
-          this.$t('setting.EmailContent'),
-          [
-            'CREATE_USER_MSG'
-          ]
-        ],
-        [
-          this.$t('common.Other'),
-          [
-            'EMAIL_RECIPIENT', 'EMAIL_SUFFIX'
-          ]
+        [this.$t('Server'), [
+          'EMAIL_PROTOCOL',
+          'EMAIL_HOST',
+          'EMAIL_PORT',
+          'EMAIL_HOST_USER',
+          'EMAIL_HOST_PASSWORD',
+          'EMAIL_FROM',
+          'EMAIL_USE_SSL',
+          'EMAIL_USE_TLS'
         ]
+        ],
+        [this.$t('Other'), ['CREATE_USER_MSG']],
+        [this.$t('Test'), ['EMAIL_RECIPIENT']]
       ],
       fieldsMeta: {
+        EMAIL_PORT: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
+        },
+        EMAIL_HOST_PASSWORD: {
+          component: UpdateToken
+        },
         EMAIL_HOST_USER: {
           rules: [
             rules.EmailCheck,
             rules.Required
           ]
+        },
+        EMAIL_CUSTOM_USER_CREATED_BODY: {
+          el: {
+            type: 'textarea',
+            rows: 3
+          }
         },
         EMAIL_FROM: {
           rules: [
@@ -69,13 +70,16 @@ export default {
             rules.EmailCheck
           ]
         },
-        CREATE_USER_MSG: {
-          label: this.$t('setting.CreateUserSetting'),
-          component: EmailContent
+        EMAIL_USE_SSL: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
         },
-        SMTP: {
-          label: this.$t('setting.SMTP'),
-          component: SMTP
+        EMAIL_USE_TLS: {
+          hidden: (formValue) => formValue.EMAIL_PROTOCOL !== 'smtp'
+        },
+        CREATE_USER_MSG: {
+          label: this.$t('EmailTemplate'),
+          component: EmailTemplate,
+          helpTip: this.$t('EmailTemplateHelpTip')
         }
       },
       hasDetailInMsg: false,
@@ -83,7 +87,7 @@ export default {
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
-          title: this.$t('setting.emailTest'),
+          title: this.$t('EmailTest'),
           loading: false,
           callback: function(value, form, btn) {
             const testValue = {}
@@ -103,6 +107,9 @@ export default {
           function(key) {
             if (data[key] === null) {
               delete data[key]
+            }
+            if (!data['EMAIL_HOST_PASSWORD']) {
+              delete data['EMAIL_HOST_PASSWORD']
             }
           }
         )

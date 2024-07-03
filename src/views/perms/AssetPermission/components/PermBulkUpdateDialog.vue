@@ -1,8 +1,8 @@
 <template>
   <GenericUpdateFormDialog
     v-if="visible"
-    :selected-rows="selectedRows"
     :form-setting="formSetting"
+    :selected-rows="selectedRows"
     :visible="visible"
     v-on="$listeners"
   />
@@ -61,7 +61,7 @@ export default {
         date_expired: fieldsManager.date_expired,
         is_active: fieldsManager.is_active,
         actions: {
-          label: this.$t('common.Action')
+          label: this.$t('Action')
         }
       }
       if (this.permType !== 'asset') {

@@ -1,21 +1,22 @@
 <template>
   <div class="chat-container">
-    <ChatAi ref="chat" :drawer-panel-visible="true" :has-close="false" />
+    <ChatAI ref="chat" :default-show-panel="!!from" :drawer-panel-visible="true" />
   </div>
 </template>
 
 <script>
-import ChatAi from '@/components/Apps/ChatAi'
+import ChatAI from '@/components/Apps/ChatAi'
+
 export default {
   components: {
-    ChatAi
+    ChatAI
   },
   data() {
     return {
+      from: this.$route.query.from
     }
   },
   mounted() {
-    this.$refs.chat.initWebSocket()
   },
   methods: {
   }

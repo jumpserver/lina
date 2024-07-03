@@ -30,11 +30,12 @@ export default {
     }
   },
   data() {
+    const resourceDisplay = this.$t('WordSep') + this.resource.toLowerCase()
     return {
       type: 'all', // all, selected
       types: [
-        { name: 'all', label: this.$t('common.All') },
-        { name: 'spec', label: this.$t('common.Spec') + this.$t('common.WordSep') + this.resource }
+        { name: 'all', label: this.$t('All') + resourceDisplay },
+        { name: 'spec', label: this.$t('Spec') + resourceDisplay }
       ],
       selected: []
     }
@@ -47,7 +48,6 @@ export default {
         return this.selected
       }
     }
-
   },
   mounted() {
     if (!this.value || this.value.length === 0) {

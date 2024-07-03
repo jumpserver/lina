@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage
-    :object.sync="ticket"
     :active-menu.sync="config.activeMenu"
+    :object.sync="ticket"
     v-bind="config"
     @getObjectDone="afterGetTicket"
     v-on="$listeners"
@@ -33,7 +33,7 @@ export default {
         activeMenu: 'TicketDetail',
         submenu: [
           {
-            title: this.$t('route.TicketDetail'),
+            title: this.$t('TicketDetail'),
             name: 'TicketDetail'
           }
         ],

@@ -25,11 +25,11 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$t('common.BasicInfo'),
+            title: this.$t('Basic'),
             name: 'GroupInfo'
           },
           {
-            title: this.$t('route.UserList'),
+            title: this.$t('UserList'),
             name: 'GroupUser'
           }
         ]
@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-> > > table.CardTable {
+::v-deep table.CardTable {
   table-layout: auto !important;
 }
 </style>

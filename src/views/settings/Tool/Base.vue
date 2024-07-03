@@ -8,7 +8,7 @@
               <el-form-item :label="item.label" :prop="item.name" label-width="80px">
                 <template #label>
                   {{ item.label }}
-                  <el-tooltip v-if="item.tip" :content="item.tip" placement="top">
+                  <el-tooltip v-if="item.tip" :content="item.tip" :open-delay="500" placement="top">
                     <i class="fa fa-question-circle-o" />
                   </el-tooltip>
                 </template>
@@ -27,7 +27,7 @@
           <el-form-item :label="field.label" :prop="field.name">
             <template #label>
               {{ field.label }}
-              <el-tooltip v-if="field.tip" :content="field.tip" placement="top">
+              <el-tooltip v-if="field.tip" :content="field.tip" :open-delay="500" placement="top">
                 <i class="fa fa-question-circle-o" />
               </el-tooltip>
             </template>
@@ -41,26 +41,25 @@
           </el-form-item>
         </div>
       </div>
-      <el-form-item :label="$tc('ops.output')">
+      <el-form-item :label="$tc('Output')">
         <Term ref="xterm" :xterm-config="xtermConfig" style="border: solid 1px #dddddd" />
       </el-form-item>
       <el-form-item>
         <el-button
-          :loading="isTesting"
+          v-if="!isTesting"
           size="mini"
           type="primary"
           @click="submitTest"
         >
-          {{ $t('common.Test') }}
+          <i class="fa fa-play" style="margin-right: 4px;" />{{ $t('Test') }}
         </el-button>
         <el-button
-          v-if="hasStop"
-          :disabled="!isTesting"
+          v-if="hasStop && isTesting"
           size="mini"
           type="danger"
           @click="interruptTest"
         >
-          {{ $t('common.Stop') }}
+          <i class="fa fa-stop" style="margin-right: 4px;" />{{ $t('Stop') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -83,7 +82,9 @@ export default {
   props: {
     hasStop: {
       type: Boolean,
-      default: () => { return true }
+      default: () => {
+        return true
+      }
     },
     taskType: {
       type: String,
@@ -91,7 +92,8 @@ export default {
     },
     rules: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     fields: {
       type: Array,
@@ -135,11 +137,11 @@ export default {
         this.isTesting = true
       }
       this.ws.onerror = (e) => {
-        this.xterm.write(this.$tc('common.WebSocketDisconnect'))
+        this.xterm.write(this.$tc('WebSocketDisconnect'))
         this.isTesting = false
       }
       this.ws.onclose = (e) => {
-        this.xterm.write(this.$tc('common.TaskDone'))
+        this.xterm.write(this.$tc('TaskDone'))
         this.isTesting = false
       }
     },
@@ -166,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter-field >>> .el-input__inner {
+.filter-field ::v-deep .el-input__inner {
   height: 30px;
 }
 </style>

@@ -2,7 +2,7 @@
   <Dialog
     :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('common.SelectAttrs')"
+    :title="$tc('SelectAttrs')"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import DataForm from '@/components/Form/DataForm/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
+import DataForm from '@/components/Form/DataForm/index.vue'
 import ValueField from '@/components/Form/FormFields/JSONManyToManySelect/ValueField.vue'
 import { attrMatchOptions, typeMatchMapper } from '@/components/const'
 
@@ -51,7 +51,7 @@ export default {
         fields: [
           {
             id: 'name',
-            label: this.$t('common.AttrName'),
+            label: this.$t('AttrName'),
             type: 'select',
             options: this.attrs.map(attr => {
               let disabled = this.attrsAdded.includes(attr.name) && this.form.name !== attr.name
@@ -74,7 +74,7 @@ export default {
           },
           {
             id: 'match',
-            label: this.$t('common.Match'),
+            label: this.$t('Match'),
             type: 'select',
             options: attrMatchOptions,
             on: {
@@ -88,7 +88,7 @@ export default {
           },
           {
             id: 'value',
-            label: this.$t('common.AttrValue'),
+            label: this.$t('AttrValue'),
             component: ValueField,
             el: {
               match: attrMatchOptions[0].value,
@@ -128,7 +128,9 @@ export default {
       }
     },
     onAttrDialogConfirm(form) {
-      this.$emit('confirm', form)
+      setTimeout(() => {
+        this.$emit('confirm', form)
+      }, 300)
     },
     updateMatchOptions(attr) {
       if (!attr) {
@@ -153,7 +155,7 @@ export default {
 <style lang="scss" scoped>
 
 .attr-form {
-  >>> .el-select {
+  ::v-deep .el-select {
     width: 100%;
   }
 }

@@ -2,11 +2,13 @@
   <div>
     <ActionsGroup :actions="rightSideActions" :is-fa="true" class="right-side-actions right-side-item" />
     <ImExportDialog
+      v-if="dialogExportVisible"
       :export-options="iExportOptions"
       :import-options="iImportOptions"
       :selected-rows="selectedRows"
       v-bind="$attrs"
       @importDialogClose="onImportDialogClose"
+      @importDialogConfirm="onImportDialogConfirm"
     />
   </div>
 </template>
@@ -17,7 +19,7 @@ import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
 import { assignIfNot } from '@/utils/common'
 
-const defaultTrue = { type: Boolean, default: true }
+const defaultTrue = { type: [Boolean, Function, String], default: true }
 
 export default {
   name: 'RightSide',
@@ -40,7 +42,10 @@ export default {
       default: function({ selectedRows }) {
         const { exportOptions, tableUrl } = this
         const url = exportOptions?.url ? exportOptions.url : tableUrl
-        this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
+        })
       }
     },
     hasImport: defaultTrue,
@@ -53,7 +58,10 @@ export default {
       default: function({ selectedRows }) {
         const { importOptions, tableUrl } = this
         const url = importOptions?.url ? importOptions.url : tableUrl
-        this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
+        this.dialogExportVisible = true
+        this.$nextTick(() => {
+          this.$eventBus.$emit('showImportDialog', { selectedRows, url, name: this.name })
+        })
       }
     },
     hasColumnSetting: defaultTrue,
@@ -76,28 +84,53 @@ export default {
     },
     reloadTable: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     extraRightSideActions: {
       type: Array,
       default: () => []
     },
     canCreate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     },
     canBulkUpdate: {
-      type: [Boolean, Function],
+      type: [Boolean, Function, String],
       default: false
     }
   },
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionColumnSetting', fa: 'system-setting', tip: this.$t('common.CustomCol'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
-        { name: 'actionImport', fa: 'upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
-        { name: 'actionExport', fa: 'download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
-        { name: 'actionRefresh', fa: 'refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefreshClick.bind(this) }
+        {
+          name: 'actionSetting',
+          icon: 'system-setting',
+          tip: this.$t('TableSetting'),
+          has: this.hasColumnSetting,
+          callback: this.handleTableSettingClick.bind(this)
+        },
+        {
+          name: 'actionImport',
+          icon: 'upload',
+          tip: this.$t('Import'),
+          has: this.hasImport,
+          callback: this.handleImportClick.bind(this)
+        },
+        {
+          name: 'actionExport',
+          icon: 'download',
+          tip: this.$t('Export'),
+          has: this.hasExport,
+          callback: this.handleExportClick.bind(this)
+        },
+        {
+          name: 'actionRefresh',
+          icon: 'refresh',
+          tip: this.$t('Refresh'),
+          has: this.hasRefresh,
+          callback: this.handleRefreshClick.bind(this)
+        }
       ],
       dialogExportVisible: false
     }
@@ -122,8 +155,7 @@ export default {
       })
     },
     iExportOptions() {
-      const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
-      return options
+      return assignIfNot(this.exportOptions, { url: this.tableUrl })
     }
   },
   methods: {
@@ -132,57 +164,51 @@ export default {
     },
     onImportDialogClose() {
       this.$emit('importDialogClose')
+      setTimeout(() => {
+        this.dialogExportVisible = false
+      }, 100)
+      this.reloadTable()
+    },
+    onImportDialogConfirm() {
+      this.$emit('importDialogClose')
+      setTimeout(() => {
+        this.dialogExportVisible = false
+      }, 100)
       this.reloadTable()
     }
   }
 }
 </script>
 
-<style scoped>
-  .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+<style lang="scss" scoped>
+.right-side-actions.right-side-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+  height: 30px;
+  line-height: 30px;
 
-  .right-side-item {
-    padding-top: 4px;
-  }
-
-  .right-side-actions >>> .el-button {
+  ::v-deep .el-button {
     border: none;
-    padding: 5px;
-    font-size: 14px;
-    width: 26px;
-    height: 26px;
-    color: #888;
+    padding: 7px;
+    font-size: 13px;
+    color: var(--color-icon-primary);
     background-color: transparent;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
   }
 
-  .right-side-actions >>> .fa {
+  ::v-deep .fa {
     height: 16px;
     width: 16px;
   }
+}
 
-  .right-side-actions >>> .el-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .action-search >>> .el-input__suffix i {
-    font-weight: 500;
-    color: #888;
-  }
-
-  .right-side-actions {
-    display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content:center;
-  }
-
-  .table-action-right-side {
-    display: flex;
-    justify-content:center;
-  }
-
+.table-action-right-side {
+  display: flex;
+  justify-content: center;
+}
 </style>

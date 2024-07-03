@@ -1,5 +1,7 @@
 <template>
-  <ListTable v-bind="config" />
+  <div>
+    <ListTable ref="listTable" v-bind="config" />
+  </div>
 </template>
 
 <script>
@@ -42,10 +44,11 @@ export default {
         }
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
   }
 }
 </script>
-
-<style scoped>
-
-</style>

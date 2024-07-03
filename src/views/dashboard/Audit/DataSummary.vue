@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="16">
-    <el-col :lg="12" :sm="12" class="margin-top-16">
+    <el-col :lg="12" :sm="12" class="margin-top-10">
       <DataCard :config="logConfig">
         <div class="custom">
           <span>{{ logConfig.total }}</span>
@@ -10,7 +10,7 @@
         </div>
       </DataCard>
     </el-col>
-    <el-col :lg="12" :sm="12" class="margin-top-16">
+    <el-col :lg="12" :sm="12" class="margin-top-10">
       <DataCard :config="assetConfig">
         <div class="custom">
           <span>{{ assetConfig.total }}</span>
@@ -26,6 +26,7 @@
 <script>
 import DataCard from '../components/DataCard.vue'
 import Decimal from 'decimal.js'
+
 export default {
   components: {
     DataCard
@@ -42,21 +43,21 @@ export default {
 
     return {
       logConfig: {
-        title: this.$t('route.LoginLog'),
-        tip: this.$t('route.LoginLog'),
-        subTitle: this.$t('route.LoginLog') + this.$t('dashboard.Total'),
+        title: this.$t('LoginLog'),
+        tip: this.$t('LoginLog'),
+        subTitle: this.$t('LoginLogTotal'),
         icon: 'log',
         color: themeColor,
-        chartTitle: this.$t('dashboard.LogOfLoginSuccessNum'),
+        chartTitle: this.$t('LogOfLoginSuccessNum'),
         data: []
       },
       assetConfig: {
-        title: this.$t('route.Commands'),
-        tip: this.$t('route.Commands'),
-        subTitle: this.$t('route.Commands') + this.$t('dashboard.Total'),
+        title: this.$t('Commands'),
+        tip: this.$t('Commands'),
+        subTitle: this.$t('CommandsTotal'),
         icon: 'session',
         color: '#ED612B',
-        chartTitle: this.$t('dashboard.DangerousCommandNum'),
+        chartTitle: this.$t('DangerousCommandNum'),
         data: []
       }
     }
@@ -85,8 +86,8 @@ export default {
       LoginSucceeded = LoginSucceeded.toFixed(2)
       const LoginFailed = LoginSucceeded === 100 ? 0 : 100 - LoginSucceeded
       const logs = [
-        { name: this.$t('dashboard.LoginSucceeded'), value: LoginSucceeded.toString() },
-        { name: this.$t('dashboard.LoginFailed'), value: LoginFailed.toString() }
+        { name: this.$t('LoginSucceeded'), value: LoginSucceeded.toString() },
+        { name: this.$t('LoginFailed'), value: LoginFailed.toString() }
       ]
       this.$set(this.logConfig, 'data', logs)
       this.$set(this.logConfig, 'total', data.total_count_user_login_logs)
@@ -101,8 +102,8 @@ export default {
       dangerCommand = dangerCommand.toFixed(2)
       const SafeCommand = dangerCommand === 100 ? 0 : 100 - dangerCommand
       const commandCounts = [
-        { name: this.$t('dashboard.DangerCommand'), value: dangerCommand.toString() },
-        { name: this.$t('dashboard.SafeCommand'), value: SafeCommand.toString() }
+        { name: this.$t('DangerCommand'), value: dangerCommand },
+        { name: this.$t('SafeCommand'), value: SafeCommand }
       ]
       this.$set(this.assetConfig, 'data', commandCounts)
       this.$set(this.assetConfig, 'total', data.total_count_commands)
@@ -117,7 +118,8 @@ export default {
 .left, .right {
   display: inline-block;
 }
-.margin-top-16 {
-  margin-top: 16px;
+
+.margin-top-10 {
+  margin-top: 10px;
 }
 </style>

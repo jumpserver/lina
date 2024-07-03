@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-message="helpMsg" :table-config="tableConfig" />
+  <GenericListPage :header-actions="headerActions" :help-tip="helpMsg" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -11,10 +11,10 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('acl.AssetLoginACLHelpMsg'),
+      helpMsg: this.$t('AssetLoginACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
-        columnsExclude: ['users', 'assets', 'accounts'],
+        columnsExclude: ['users', 'assets', 'accounts', 'rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -33,7 +33,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

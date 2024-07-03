@@ -1,20 +1,32 @@
 <template>
   <Page>
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+    <el-alert
+      :center="false"
+      class="announcement"
+      type="success"
+    >
+      <span v-for="(tip,index) of FileTransferBootStepHelpTips" :key="index" style="padding-right: 24px">
+        <span style="font-weight: 700; color:#1C84C6">{{ index + 1 }}.</span>
+        {{ tip }}
+      </span>
+    </el-alert>
+
+    <AssetTreeTable ref="AssetTreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
           <div class="upload_input">
             <el-button
               :disabled="runButton.disabled"
               :type="runButton.el&&runButton.el.type"
-              size="mini"
-              style="display: inline-block; margin: 0 2px"
+              size="small"
+              style="display: inline-block; padding: 6px 10px"
               @click="runButton.callback()"
             >
               <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
             </el-button>
           </div>
-          <div class="upload_input">{{ $t('users.Users') }}:</div>
+          <span style="color: red">*</span>
+          <div class="upload_input">{{ $t('Account') }}:</div>
           <div class="upload_input">
             <el-autocomplete
               v-model="runAsInput.value"
@@ -26,7 +38,7 @@
               @select="runAsInput.callback(runAsInput.value)"
             />
           </div>
-          <div class="upload_input">{{ $t('ops.UploadDir') }}:</div>
+          <div class="upload_input">{{ $t('UploadDir') }}:</div>
           <div class="upload_input">
             <el-input
               v-if="dstPathInput.type==='input'"
@@ -53,16 +65,15 @@
                 multiple
               >
                 <i class="el-icon-upload" />
-                <div class="el-upload__text">
-                  {{ $t('common.imExport.dragUploadFileInfo') }}
+                <div class="el-upload__text" style="margin-bottom: 10px;padding: 0 5px 0 5px ">
+                  {{ $t('DragUploadFileInfo') }}
                 </div>
-                <br>
                 <span>
-                  {{ $t('ops.uploadFileLthHelpText', {limit: SizeLimitMb}) }}
+                  {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
                 </span>
                 <div slot="file" slot-scope="{file}">
-                  <li tabindex="0" class="el-upload-list__item is-ready">
-                    <a class="el-upload-list__item-name" :style="sameFileStyle(file)">
+                  <li class="el-upload-list__item is-ready" tabindex="0">
+                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
                       <i class="el-icon-document" />{{ file.name }}
                       <i style="color: #1ab394;float: right;font-weight:normal">
                         {{ formatFileSize(file.size) }}
@@ -71,32 +82,34 @@
                     </a>
                   </li>
                 </div>
+                <div
+                  v-if="uploadFileList.length === 0"
+                  slot="tip"
+                  class="empty-file-tip"
+                >
+                  {{ $tc('NoFiles') }}
+                </div>
               </el-upload>
               <el-progress v-if="ShowProgress" :percentage="progressLength" />
-              <div
-                v-if="uploadFileList.length===0"
-                class="empty-file-tip"
-              >
-                {{ $tc('ops.NoFiles') }}
-              </div>
+
             </el-card>
           </div>
-          <b>{{ $tc('ops.output') }}:</b>
+          <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
           <span v-if="executionInfo.status && summary" style="float: right">
             <span>
-              <span><b>{{ $tc('common.Status') }}: </b></span>
+              <span><b>{{ $tc('Status') }}: </b></span>
               <span
                 v-if="executionInfo.status==='timeout'"
                 class="status_warning"
-              >{{ $tc('ops.timeout') }}</span>
+              >{{ $tc('Timeout') }}</span>
               <span v-else>
-                <span class="status_success">{{ $tc('ops.success') + ': ' + summary.success }}</span>
-                <span class="status_warning">{{ $tc('ops.Skip') + ': ' + summary.skip }}</span>
-                <span class="status_danger">{{ $tc('ops.failed') + ': ' + summary.failed }}</span>
+                <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
+                <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
+                <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
               </span>
             </span>
             <span>
-              <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
+              <span><b>{{ $tc('TimeDelta') }}: </b></span>
               <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
             </span>
           </span>
@@ -108,15 +121,15 @@
             />
             <div style="height: 2px" />
           </div>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          <div style="display: flex; margin-top:10px; justify-content: space-between" />
         </div>
       </template>
-    </TreeTable>
+    </AssetTreeTable>
   </Page>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
@@ -124,9 +137,9 @@ import { formatFileSize } from '@/utils/common'
 import store from '@/store'
 
 export default {
-  name: 'BulkTransfer',
+  name: 'FileTransfer',
   components: {
-    TreeTable,
+    AssetTreeTable,
     Page,
     Term
   },
@@ -146,22 +159,24 @@ export default {
       dstPath: '',
       runButton: {
         type: 'button',
-        name: this.$t('ops.Transfer'),
+        name: this.$t('Transfer'),
         align: 'left',
         icon: 'fa fa-play',
-        disabled: this.$store.getters.currentOrgIsRoot,
+        disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('ops.add_job'),
         el: {
           type: 'primary'
         },
         callback: () => {
-          this.execute()
+          setTimeout(() => {
+            this.execute()
+          }, 300)
         }
       },
       runAsInput: {
-        name: this.$t('ops.runAs'),
+        name: this.$t('RunAs'),
         align: 'left',
         value: '',
-        placeholder: this.$tc('ops.EnterRunUser'),
+        placeholder: this.$tc('EnterRunUser'),
         el: {
           autoComplete: true,
           query: (query, cb) => {
@@ -185,10 +200,10 @@ export default {
       },
       dstPathInput: {
         type: 'input',
-        name: this.$t('ops.runningPath'),
+        name: this.$t('RunningPath'),
         align: 'left',
         value: '',
-        placeholder: this.$tc('ops.EnterUploadPath'),
+        placeholder: this.$tc('EnterUploadPath'),
         callback: (val) => {
           this.chdir = val
         }
@@ -196,6 +211,7 @@ export default {
       treeSetting: {
         treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
         searchUrl: '/api/v1/perms/users/self/assets/tree/',
+        notShowBuiltinTree: true,
         showRefresh: true,
         showMenu: false,
         showSearch: true,
@@ -217,7 +233,12 @@ export default {
         'success': 0,
         'failed': 0,
         'skip': 0
-      }
+      },
+      FileTransferBootStepHelpTips: [
+        this.$tc('FileTransferBootStepHelpTips1'),
+        this.$tc('FileTransferBootStepHelpTips2'),
+        this.$tc('FileTransferBootStepHelpTips3')
+      ]
     }
   },
   computed: {
@@ -225,7 +246,7 @@ export default {
       return this.$refs.xterm.xterm
     },
     ztree() {
-      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+      return this.$refs.AssetTreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     }
   },
   mounted() {
@@ -277,7 +298,7 @@ export default {
         this.executionInfo.status = data['status']
         this.taskStatusStat(data['summary'])
         if (this.executionInfo.status === 'success') {
-          this.$message.success(this.$tc('ops.runSucceed'))
+          this.$message.success(this.$tc('RunSucceed'))
           clearInterval(this.upload_interval)
           this.progressLength = 100
           this.ShowProgress = true
@@ -288,7 +309,7 @@ export default {
       return `\r\n${msg}\r\n`
     },
     writeExecutionOutput() {
-      let msg = this.$t('assets.Pending')
+      let msg = this.$t('Pending')
       this.xterm.write(msg)
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
@@ -346,7 +367,7 @@ export default {
     isFileExceedsLimit(file) {
       const isGtLimit = file.size / 1024 / 1024 > this.SizeLimitMb
       if (isGtLimit) {
-        this.$message.error(this.$tc('ops.FileSizeExceedsLimit'))
+        this.$message.error(this.$tc('FileSizeExceedsLimit'))
       }
       return isGtLimit
     },
@@ -363,27 +384,27 @@ export default {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
         if (file.isSame) {
-          this.$message.error(this.$tc('ops.DuplicateFileExists'))
+          this.$message.error(this.$tc('DuplicateFileExists'))
           return
         }
         if (this.isFileExceedsLimit(file)) {
           return
         }
         if (file.name.length > 128) {
-          this.$message.error(file.name + ' ' + this.$tc('ops.FileNameTooLong'))
+          this.$message.error(file.name + ' ' + this.$tc('FileNameTooLong'))
           return
         }
       }
       if (this.uploadFileList.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredUploadFile'))
+        this.$message.error(this.$tc('RequiredUploadFile'))
         return
       }
       if (hosts.length === 0 && nodes.length === 0) {
-        this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
+        this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
       if (!this.runas) {
-        this.$message.error(this.$tc('ops.RequiredRunas'))
+        this.$message.error(this.$tc('RequiredRunas'))
         return
       }
       const data = {
@@ -420,7 +441,7 @@ export default {
           this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
-          this.$router.replace({ query: { taskId: this.currentTaskId, type: 'file_upload' }})
+          this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
           this.setCostTimeInterval()
           this.writeExecutionOutput()
         }).catch(() => {
@@ -449,7 +470,7 @@ export default {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
   color: #FFFFFF;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .el-tree {
@@ -469,6 +490,10 @@ export default {
   width: 600px;
   height: 100px;
   border: 1px solid #eee;
+}
+
+.upload_input ::v-deep .el-input-group__prepend {
+  padding: 0 10px;
 }
 
 .tree-box {
@@ -494,48 +519,64 @@ export default {
 }
 
 .file-uploader {
-  margin: 10px 0 10px 0;
+  margin: 10px 0;
+  min-width: 925px;
 
-  div > div:first-child {
-    display: flex;
-  }
+  ::v-deep .el-card__body {
+    div {
+      display: flex;
+      position: relative;
 
-  > > > .el-upload {
-    width: 400px;
+      .el-upload > .el-upload-dragger {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-    flex-direction: column;
+      .empty-file-tip {
+        position: absolute;
+        right: 20%;
+        top: 50%;
+        font-size: 18px;
+        color: #c5c9cc;
+        transform: translateY(-50%);
+      }
 
-    .el-upload-dragger {
-      width: 100%;
+      .el-upload-list {
+        margin-left: 20px;
+        padding: 0 10px 0 10px;
+        list-style: none;
+        width: 100%;
+        height: 180px;
+        border: 1px dashed #d9d9d9;
+        overflow-y: auto;
+        font-weight: 500;
+
+        .el-upload-list__item {
+          &:first-child {
+            margin-top: 5px;
+          }
+
+          .el-upload-list__item-name {
+            .el-icon-close {
+              position: relative;
+              top: 0;
+              left: 10px;
+            }
+          }
+        }
+      }
     }
-  }
-
-  .empty-file-tip {
-    position: relative;
-    bottom: 100px;
-    left: 58%;
-    font-size: 18px;
-    color: #c5c9cc;
-  }
-
-  > > > .el-upload-list {
-    margin-left: 20px;
-    padding: 0 10px 0 10px;
-    list-style: none;
-    width: 100%;
-    height: 180px;
-    border: 1px dashed #d9d9d9;
-    overflow-y: auto;
-    font-weight: 500;
   }
 }
 
 .output {
-  background: white;
+  min-width: 925px;
+  padding: 0 20px 20px;
+  background: #fff;
 }
 
-.output > > > #terminal {
+.output ::v-deep #terminal {
   border: dashed 1px #d9d9d9;
-  margin: 0 20px 20px;
 }
 </style>

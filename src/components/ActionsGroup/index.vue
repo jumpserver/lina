@@ -4,6 +4,7 @@
 
 <script>
 import DataActions from '@/components/DataActions'
+
 export default {
   name: 'ActionsGroup',
   components: {
@@ -24,9 +25,7 @@ export default {
     },
     moreActionsTitle: {
       type: String,
-      default() {
-        return this.$t('common.MoreActions')
-      }
+      default: ''
     },
     moreActionsPlacement: {
       type: String,
@@ -45,8 +44,9 @@ export default {
     iMoreAction() {
       const defaultBtn = {
         name: 'moreActions',
-        title: this.$t('common.MoreActions'),
+        title: '',
         type: 'primary',
+        icon: 'el-icon-more',
         plain: true
       }
       const btn = {
@@ -62,7 +62,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

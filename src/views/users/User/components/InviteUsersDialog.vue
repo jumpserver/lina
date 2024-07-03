@@ -1,15 +1,15 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
-    :title="$tc('users.InviteUserInOrg')"
-    :visible.sync="setting.InviteDialogVisible"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    custom-class="asset-select-dialog"
-    width="50vw"
-    top="15vh"
+    :title="$tc('InviteUserInOrg')"
+    :visible.sync="setting.InviteDialogVisible"
     after
-    :destroy-on-close="true"
+    custom-class="asset-select-dialog"
+    top="8vh"
+    width="710px"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
@@ -47,10 +47,11 @@ export default {
         submitMethod: () => 'post',
         hasReset: false,
         hasSaveContinue: false,
-        createSuccessMsg: this.$t('users.InviteSuccess'),
+        createSuccessMsg: this.$t('InviteSuccess'),
         fields: ['users', 'org_roles'],
         fieldsMeta: {
           users: {
+            helpTextAsTip: false,
             component: Select2,
             el: {
               ajax: {

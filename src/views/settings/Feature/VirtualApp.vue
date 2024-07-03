@@ -24,9 +24,7 @@ export default {
     return {
       visible: false,
       config: {
-        fields: [
-          [this.$t('common.Basic'), ['VIRTUAL_APP_ENABLED']]
-        ],
+        fields: ['VIRTUAL_APP_ENABLED'],
         fieldsMeta: {
         },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},

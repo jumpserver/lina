@@ -3,6 +3,8 @@ const state = {
   cachedViews: []
 }
 
+const maxCacheViews = 10
+
 const mutations = {
   ADD_VISITED_VIEW: (state, view) => {
     if (state.visitedViews.some(v => v.path === view.path)) return
@@ -11,11 +13,17 @@ const mutations = {
         title: view.meta.title || 'no-name'
       })
     )
+    if (state.visitedViews?.length > maxCacheViews) {
+      state.visitedViews.shift()
+    }
   },
   ADD_CACHED_VIEW: (state, view) => {
     if (state.cachedViews.includes(view.name)) return
     if (!view.meta.noCache) {
       state.cachedViews.push(view.name)
+    }
+    if (state.cachedViews.length > maxCacheViews) {
+      state.cachedViews.shift()
     }
   },
 

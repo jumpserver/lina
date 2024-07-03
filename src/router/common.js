@@ -11,7 +11,7 @@ export default [
     name: 'CeleryTaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },
@@ -21,7 +21,7 @@ export default [
     name: 'AnsibleTaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },
@@ -31,7 +31,7 @@ export default [
     name: 'TaskLog',
     hidden: true,
     meta: {
-      title: i18n.t('setting.ChatAI'),
+      title: i18n.t('CeleryTaskLog'),
       permissions: []
     }
   },
@@ -41,7 +41,7 @@ export default [
     name: 'ChatAi',
     hidden: true,
     meta: {
-      title: i18n.t('route.CeleryTaskLog'),
+      title: i18n.t('ChatAI'),
       permissions: []
     }
   },
@@ -55,5 +55,14 @@ export default [
     beforeEnter: (to, from, next) => {
       next({ name: 'SessionDetail', params: to.params, query: to.query })
     }
+  },
+  {
+    path: '/terminal/components/loki/tail/',
+    component: () => import('@/views/settings/Terminal/ComponentLogTail/ComponentLogTail.vue'),
+    name: 'ComponentLogTail',
+    meta: {
+      title: i18n.t('ComponentsLogTail')
+    },
+    hidden: true
   }
 ]

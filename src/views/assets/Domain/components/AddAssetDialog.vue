@@ -1,15 +1,15 @@
 <template>
   <Dialog
     v-if="setting.AddAssetDialogVisible"
-    :title="$tc('assets.AddAssetInDomain')"
-    :visible.sync="setting.AddAssetDialogVisible"
+    :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    custom-class="asset-select-dialog"
-    width="50vw"
-    top="15vh"
+    :title="$tc('AddAssetInDomain')"
+    :visible.sync="setting.AddAssetDialogVisible"
     after
-    :destroy-on-close="true"
+    custom-class="asset-select-dialog"
+    top="15vh"
+    width="50vw"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
@@ -50,9 +50,9 @@ export default {
         hasReset: false,
         hasSaveContinue: false,
         needGetObjectDetail: false,
-        createSuccessMsg: this.$t('common.AddSuccessMsg'),
+        createSuccessMsg: this.$t('AddSuccessMsg'),
         updateSuccessNextRoute: {
-          name: 'DomainDetail',
+          name: 'ZoneDetail',
           params: { id: this.$route.params.id }
         },
         fields: ['assets'],
@@ -60,7 +60,7 @@ export default {
           assets: {
             type: 'assetSelect',
             component: AssetSelect,
-            label: this.$t('assets.Assets'),
+            label: this.$t('Asset'),
             el: {
               value: [],
               baseUrl: '/api/v1/assets/assets/?domain_enabled=true',

@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -8,7 +8,7 @@ import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'AccountBackupPlanExecutionList',
+  name: 'AccountBackupExecutionList',
   components: {
     GenericListTable
   },
@@ -24,25 +24,36 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'AccountBackupName', 'timedelta', 'trigger', 'date_start',
+          'automation', 'account_backup_name', 'timedelta', 'trigger', 'date_start',
           'is_success', 'reason', 'actions'
         ],
+        columnsShow: {
+          default: [
+            'automation', 'account_backup_name', 'timedelta', 'date_start',
+            'is_success', 'reason', 'actions'
+          ]
+        },
         columnsMeta: {
-          'AccountBackupName': {
-            label: this.$t('common.DisplayName'),
+          automation: {
+            label: this.$t('TaskID'),
+            formatter: function(row) {
+              return <span>{row.plan}</span>
+            }
+          },
+          account_backup_name: {
+            label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountBackupPlanDetail',
+                name: 'AccountBackupDetail',
                 params: { id: row.plan }
               })
             },
             id: ({ row }) => row.plan
           },
           timedelta: {
-            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
-            width: '90px',
+            label: this.$t('TimeDelta'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
@@ -56,17 +67,17 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  title: this.$t('accounts.AccountChangeSecret.Log'),
+                  title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('accounts.AccountChangeSecret.Detail'),
+                  title: this.$t('Detail'),
                   type: 'info',
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountBackupExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
@@ -78,25 +89,22 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('accounts.TaskID'),
+              label: this.$t('TaskID'),
               value: 'plan_id'
             },
             {
-              label: this.$t('common.DisplayName'),
+              label: this.$t('DisplayName'),
               value: 'plan__name'
             }
           ]
         },
-        hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasMoreActions: false,
         hasExport: false,
         hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasCreate: false
       }
     }
   },
@@ -108,7 +116,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

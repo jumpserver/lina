@@ -39,21 +39,21 @@ export default {
         }
       },
       createSuccessNextRoute: {
-        name: 'DomainDetail',
+        name: 'ZoneDetail',
         params: {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       },
       updateSuccessNextRoute: {
-        name: 'DomainDetail',
+        name: 'ZoneDetail',
         params: {
           id: this.$route.query.domain
         },
         query: {
-          activeTab: 'GatewayList'
+          tab: 'GatewayList'
         }
       }
     }

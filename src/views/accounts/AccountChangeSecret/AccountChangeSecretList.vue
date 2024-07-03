@@ -25,8 +25,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'is_active', 'actions'
+            'name', 'accounts', 'periodic_display',
+            'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -46,19 +46,11 @@ export default {
               return <span> { row.secret_strategy.label } </span>
             }
           },
-          secret_type: {
-            width: '120px'
-          },
           is_periodic: {
-            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
-            width: '152px'
-          },
-          periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
-            width: '150px'
+            width: '180px'
           },
           executed_amount: {
             formatter: DetailFormatter,
@@ -69,18 +61,14 @@ export default {
                 return {
                   name: 'AccountChangeSecretList',
                   query: {
-                    activeTab: 'AccountChangeSecretExecutionList',
+                    tab: 'AccountChangeSecretExecutionList',
                     automation_id: row.id
                   }
                 }
               }
             }
           },
-          comment: {
-            width: '90px'
-          },
           actions: {
-            width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
@@ -90,7 +78,7 @@ export default {
               },
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
@@ -128,7 +116,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

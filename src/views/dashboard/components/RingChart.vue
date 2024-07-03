@@ -2,8 +2,8 @@
   <div>
     <echarts
       ref="echarts"
-      :options="options"
       :autoresize="true"
+      :options="options"
     />
   </div>
 </template>
@@ -15,17 +15,10 @@ import 'echarts/lib/component/legend'
 import Decimal from 'decimal.js'
 
 export default {
-  components: {
-
-  },
   props: {
     config: {
       type: Object,
       default: () => {}
-    }
-  },
-  data() {
-    return {
     }
   },
   computed: {
@@ -56,9 +49,9 @@ export default {
             text: active,
             textStyle: {
               fontSize: 24,
-              color: '#646A73'
+              color: '#1F2329'
             },
-            subtext: this.$t('dashboard.Proportion') + ' ' + percentage + '%',
+            subtext: this.$t('Proportion') + ' ' + percentage + '%',
             subtextStyle: {
               fontSize: 12,
               color: '#646A73'
@@ -107,6 +100,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

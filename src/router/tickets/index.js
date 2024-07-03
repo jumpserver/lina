@@ -4,10 +4,12 @@ import i18n from '@/i18n/i18n'
 
 export default {
   path: '/tickets',
-  redirect: '/tickets/my-tickets',
+  redirect: {
+    name: 'MyTicketList'
+  },
   component: Layout,
   meta: {
-    title: i18n.t('route.Tickets'),
+    title: i18n.t('BaseTickets'),
     icon: 'ticket-list',
     view: 'tickets',
     type: 'view',
@@ -22,7 +24,7 @@ export default {
       name: 'MyTicketList',
       component: () => import('@/views/tickets/MyTicketList'),
       meta: {
-        title: i18n.t('route.MyTickets'),
+        title: i18n.t('MyTickets'),
         icon: 'ticket-apply',
         showOrganization: false,
         permissions: []
@@ -34,7 +36,7 @@ export default {
       name: 'AssignedTicketList',
       component: () => import('@/views/tickets/AssignedTicketList'),
       meta: {
-        title: i18n.t('route.AssignedTicketList'),
+        title: i18n.t('AwaitingMyApproval'),
         icon: 'ticket-approval',
         showOrganization: false,
         permissions: []
@@ -46,7 +48,7 @@ export default {
       component: empty,
       hidden: true,
       meta: {
-        title: i18n.t('route.Tickets'),
+        title: i18n.t('Tickets'),
         icon: 'file-text-o',
         showOrganization: false
       },
@@ -56,7 +58,7 @@ export default {
           name: 'RequestAssetPermTicketCreateUpdate',
           component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
           meta: {
-            title: i18n.t('tickets.OpenTicket'),
+            title: i18n.t('OpenTicket'),
             permissions: ['tickets.view_ticket'],
             activeMenu: '/tickets/my-tickets'
           },
@@ -67,7 +69,7 @@ export default {
           name: 'AssetsTicketDetail',
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
           meta: {
-            title: i18n.t('route.TicketDetail'),
+            title: i18n.t('TicketDetail'),
             permissions: ['tickets.view_ticket']
           },
           hidden: true
@@ -77,7 +79,7 @@ export default {
           name: 'LoginAssetTicketDetail',
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {
-            title: i18n.t('route.TicketDetail'),
+            title: i18n.t('TicketDetail'),
             permissions: ['tickets.view_ticket']
           },
           hidden: true
@@ -87,7 +89,7 @@ export default {
           name: 'LoginTicketDetail',
           component: () => import('@/views/tickets/LoginConfirm/Detail'),
           meta: {
-            title: i18n.t('route.TicketDetail'),
+            title: i18n.t('TicketDetail'),
             permissions: ['tickets.view_ticket']
           },
           hidden: true
@@ -97,7 +99,7 @@ export default {
           name: 'CommandConfirmDetail',
           component: () => import('@/views/tickets/CommandConfirm/Detail'),
           meta: {
-            title: i18n.t('route.CommandConfirm'),
+            title: i18n.t('CommandConfirm'),
             permissions: ['tickets.view_ticket']
           },
           hidden: true
@@ -107,7 +109,7 @@ export default {
           name: 'TicketDetail',
           component: () => import('@/views/tickets/TicketDetail'),
           meta: {
-            title: i18n.t('route.TicketDetail'),
+            title: i18n.t('TicketDetail'),
             permissions: ['tickets.view_ticket']
           },
           hidden: true
@@ -117,9 +119,11 @@ export default {
     {
       path: '/tickets/flow',
       component: empty,
-      redirect: '',
+      redirect: {
+        name: 'TicketFlow'
+      },
       meta: {
-        title: i18n.t('tickets.FlowSetUp'),
+        title: i18n.t('BaseFlowSetUp'),
         icon: 'ticket-flow',
         permissions: ['tickets.view_ticketflow'],
         resource: 'ticketflow'
@@ -130,7 +134,7 @@ export default {
           name: 'TicketFlow',
           component: () => import('@/views/tickets/TicketFlow/TicketFlow'),
           meta: {
-            title: i18n.t('tickets.FlowSetUp'),
+            title: i18n.t('FlowSetUp'),
             permissions: ['tickets.view_ticketflow'],
             activeMenu: '/tickets/flow'
           }
@@ -140,7 +144,7 @@ export default {
           name: 'FlowDetail',
           component: () => import('@/views/tickets/TicketFlow/Detail'),
           meta: {
-            title: i18n.t('route.TicketFlow'),
+            title: i18n.t('TicketFlow'),
             permissions: ['tickets.view_ticketflow'],
             activeMenu: '/tickets/flow'
           },
@@ -151,7 +155,7 @@ export default {
           name: 'TicketFlowCreate',
           component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
           meta: {
-            title: i18n.t('route.TicketFlowCreate'),
+            title: i18n.t('TicketFlowCreate'),
             permissions: ['tickets.add_ticketflow'],
             activeMenu: '/tickets/flow'
           },
@@ -162,7 +166,7 @@ export default {
           name: 'TicketFlowUpdate',
           component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
           meta: {
-            title: i18n.t('route.TicketFlowUpdate'),
+            title: i18n.t('TicketFlowUpdate'),
             permissions: ['tickets.change_ticketflow'],
             activeMenu: '/tickets/flow'
           },

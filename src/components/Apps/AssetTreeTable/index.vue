@@ -2,9 +2,10 @@
   <TreeTable
     ref="TreeList"
     :active-menu.sync="treeTableConfig.activeMenu"
+    :component="treeComponent"
     :table-config="tableConfig"
     :tree-tab-config="treeTableConfig"
-    component="TabTree"
+    :tree-width="treeWidth"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -63,12 +64,14 @@ export default {
     const vm = this
 
     return {
+      treeComponent: 'TabTree',
       treeTabConfig: {
         activeMenu: 'CustomTree',
         submenu: [
           {
-            title: this.$t('assets.AssetTree'),
+            title: this.$t('AssetTree'),
             name: 'CustomTree',
+            icon: 'fa-tree',
             treeSetting: {
               showAssets,
               showMenu: false,
@@ -94,13 +97,14 @@ export default {
             }
           },
           {
-            title: this.$t('assets.BuiltinTree'),
+            title: this.$t('TypeTree'),
+            icon: 'fa-list-ul',
             name: 'BuiltinTree',
             treeSetting: {
               showRefresh: true,
               showAssets: false,
               showSearch: false,
-              customTreeHeaderName: this.$t('assets.BuiltinTree'),
+              customTreeHeaderName: this.$t('TypeTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
               treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
@@ -114,6 +118,9 @@ export default {
     }
   },
   computed: {
+    treeWidth() {
+      return '23.6%'
+    },
     treeTableConfig() {
       if (this.treeSetting.notShowBuiltinTree) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -170,13 +177,15 @@ export default {
       }
       const query = this.setTreeUrlQuery()
       url = query ? `${url}&${query}` : url
-      this.$set(this.tableConfig, 'url', url)
-      setRouterQuery(this, url)
+
+      setTimeout(() => {
+        this.$set(this.tableConfig, 'url', url)
+      }, 300)
+
+      if (this.treeSetting.selectSyncToRoute !== false) {
+        setRouterQuery(this, url)
+      }
     }
   }
 }
 </script>
-
-<style lang='scss' scoped>
-
-</style>

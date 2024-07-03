@@ -18,10 +18,10 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=clean',
       hasDetailInMsg: false,
-      helpText: this.$t('setting.CleanHelpText'),
+      helpText: this.$t('CleanHelpText'),
       fields: [
         [
-          this.$t('common.Logging'),
+          this.$t('Logging'),
           [
             'LOGIN_LOG_KEEP_DAYS', 'TASK_LOG_KEEP_DAYS',
             'OPERATE_LOG_KEEP_DAYS', 'PASSWORD_CHANGE_LOG_KEEP_DAYS', 'FTP_LOG_KEEP_DAYS',
@@ -29,7 +29,7 @@ export default {
           ]
         ],
         [
-          this.$t('common.Database'),
+          this.$t('Database'),
           [
             'JOB_EXECUTION_KEEP_DAYS',
             'CLOUD_SYNC_TASK_EXECUTION_KEEP_DAYS'
@@ -39,8 +39,8 @@ export default {
       fieldsMeta: {
         AUTH_LDAP_SYNC_CRONTAB: {
           component: CronTab,
-          label: this.$t('xpack.RegularlyPerform'),
-          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+          label: this.$t('Crontab'),
+          helpText: this.$t('CrontabOfCreateUpdatePage')
         }
       },
       submitMethod() {

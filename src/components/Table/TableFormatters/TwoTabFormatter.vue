@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="10">
     <div v-if="isAllEmpty()" style="text-align: center">
-      {{ this.$t('common.NoContent') }}
+      {{ this.$t('NoContent') }}
     </div>
     <div v-else>
       <el-col :span="rightEmpty() ? 24 : 12">
         <div v-if="!leftEmpty()">
-          <el-tag type="primary" effect="dark" :closable="false" style="width: 100%;">{{ row.leftTitle }}</el-tag>
+          <el-tag :closable="false" effect="dark" style="width: 100%;" type="primary">{{ row.leftTitle }}</el-tag>
           <div v-for="(value, key, index) in row.left" :key="index">
             <el-tag type="primary"><strong>{{ key }}: </strong>{{ value }}</el-tag>
           </div>
@@ -14,7 +14,7 @@
       </el-col>
       <el-col :span="leftEmpty() ? 24 : 12">
         <div v-if="!rightEmpty()">
-          <el-tag type="primary" effect="dark" :closable="false" style="width: 100%;">{{ row.rightTitle }}</el-tag>
+          <el-tag :closable="false" effect="dark" style="width: 100%;" type="primary">{{ row.rightTitle }}</el-tag>
           <div v-for="(value, key, index) in row.right" :key="index">
             <el-tag type="primary"><strong>{{ key }}: </strong>{{ value }}</el-tag>
           </div>

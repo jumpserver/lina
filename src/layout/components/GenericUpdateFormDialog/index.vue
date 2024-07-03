@@ -3,7 +3,7 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('common.updateSelected')"
+    :title="$tc('UpdateSelected')"
     :visible.sync="iVisible"
     top="1vh"
     width="70%"
@@ -72,7 +72,7 @@ export default {
   data: function() {
     return {
       internalKey: 0,
-      selectPropertiesLabel: this.$t('common.SelectProperties'),
+      selectPropertiesLabel: this.$t('SelectProperties'),
       checkedFields: [],
       iFormSetting: {}
     }

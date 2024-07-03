@@ -16,8 +16,8 @@ export default {
       config: {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
-          [this.$t('common.Automations'), ['deploy_options'], 3],
-          [this.$t('assets.Account'), [
+          [this.$t('Automations'), ['deploy_options'], 3],
+          [this.$t('Account'), [
             'using_same_account',
             'auto_create_accounts', 'accounts_create_amount']
           ]
@@ -63,7 +63,7 @@ export default {
             hidden: () => {
               return !this.$store.getters.hasValidLicense
             },
-            helpText: this.$t('assets.AppletHostDomainHelpText')
+            helpText: this.$t('AppletHostZoneHelpText')
           },
           nodes: {
             hidden: () => true

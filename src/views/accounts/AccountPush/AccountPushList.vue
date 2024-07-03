@@ -1,5 +1,5 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
@@ -24,8 +24,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'secret_strategy', 'is_periodic',
-            'periodic_display', 'executed_amount', 'is_active', 'actions'
+            'name', 'accounts', 'periodic_display',
+            'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -49,30 +49,20 @@ export default {
             showOverflowTooltip: true,
             formatter: ({ username }) => {
               if (username === '@USER') {
-                return this.$t('accounts.DynamicUsername')
+                return this.$t('DynamicUsername')
               } else {
                 return username
               }
             }
           },
           assets_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.AssetAmount'),
-            width: '80px'
+            label: vm.$t('AssetsOfNumber')
           },
           nodes_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
-            width: '80px'
-          },
-          is_periodic: {
-            width: '152px'
-          },
-          periodic_display: {
-            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
-            width: '150px'
+            label: vm.$t('NodeOfNumber')
           },
           password_strategy_display: {
-            label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
-            width: '220px',
+            label: vm.$t('PasswordStrategy'),
             showOverflowTooltip: true
           },
           executed_amount: {
@@ -83,25 +73,18 @@ export default {
                 return {
                   name: 'AccountPushList',
                   query: {
-                    activeTab: 'AccountPushExecutionList',
+                    tab: 'AccountPushExecutionList',
                     automation_id: row.id
                   }
                 }
               }
             }
           },
-          is_active: {
-            width: '87px'
-          },
-          comment: {
-            width: '90px'
-          },
           actions: {
-            width: '164px',
             formatterArgs: {
               extraActions: [
                 {
-                  title: vm.$t('xpack.Execute'),
+                  title: vm.$t('Execute'),
                   name: 'execute',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
@@ -133,7 +116,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

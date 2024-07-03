@@ -1,17 +1,14 @@
 <template>
   <div class="container">
     <div class="close-sidebar">
-      <i v-if="hasClose" class="el-icon-close" @click="onClose" />
+      <i v-if="hasClose" class="el-icon-download" @click="onClose" />
     </div>
-    <el-tabs v-model="active" :tab-position="'right'" @tab-click="handleClick">
-      <el-tab-pane v-for="(item) in submenu" :key="item.name" :name="item.name">
-        <span slot="label">
-          <el-tooltip effect="dark" placement="left" :content="item.label">
-            <svg-icon :icon-class="item.icon" />
-          </el-tooltip>
-        </span>
-      </el-tab-pane>
-    </el-tabs>
+    <div v-if="!expanded" class="close-sidebar">
+      <i class="fa fa-expand" style="font-weight: 200" @click="$emit('expand')" />
+    </div>
+    <div v-if="expanded" class="close-sidebar">
+      <i class="fa fa-compress" style="font-weight: 200" @click="$emit('compress')" />
+    </div>
   </div>
 </template>
 
@@ -29,18 +26,21 @@ export default {
     submenu: {
       type: Array,
       default: () => []
+    },
+    expanded: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
-    handleClick(tab, event) {
-      this.$emit('tab-click', tab)
-    },
     onClose() {
-      this.$parent.onClose()
+      this.$emit('close')
+    },
+    handleExpand() {
+      this.$emit('expand-full')
     }
   }
 }
@@ -51,17 +51,23 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #f0f1f5;
+
   .close-sidebar {
     height: 48px;
     padding: 12px 0;
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
+
     i {
       font-size: 16px;
       font-weight: 600;
       padding: 4px;
+    }
+
+    i, .svg {
       border-radius: 2px;
+
       &:hover {
         color: var(--color-primary);
         background: var(--menu-hover);
@@ -69,10 +75,16 @@ export default {
     }
   }
 }
->>> .el-tabs {
+
+.el-icon-download {
+  transform: rotate(-90deg)
+}
+
+::v-deep .el-tabs {
   .el-tabs__item {
-    padding: 0 13px;
-    font-size: 15px;
+    padding: 0 10px;
+    font-size: 14px;
+
     :hover {
       color: #7b8085;
     }

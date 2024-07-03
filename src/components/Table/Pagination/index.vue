@@ -2,12 +2,12 @@
   <div class="el-page">
     <el-pagination
       v-if="hasPagination"
-      :current-page="page"
-      :page-sizes="paginationSizes"
-      :page-size="size"
-      :total="total"
       :background="paginationBackground"
+      :current-page="page"
       :layout="paginationLayout"
+      :page-size="size"
+      :page-sizes="paginationSizes"
+      :total="total"
       v-bind="extraPaginationAttrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -68,7 +68,8 @@ export default {
     },
     extraPaginationAttrs: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     transformQuery: {
       type: Function,
@@ -106,10 +107,11 @@ export default {
 </script>
 
 <style scoped>
->>> .el-pagination {
+::v-deep .el-pagination {
   text-align: right;
 }
->>> .el-pagination__total {
+
+::v-deep .el-pagination__total {
   float: left;
 }
 </style>

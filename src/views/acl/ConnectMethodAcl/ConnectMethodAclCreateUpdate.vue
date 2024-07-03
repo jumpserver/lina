@@ -19,11 +19,11 @@ export default {
       initial: {
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('users.Users'), ['users']],
-        [this.$t('terminal.ConnectMethod'), ['connect_methods']],
-        [this.$t('common.Action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('Users'), ['users']],
+        [this.$t('ConnectMethod'), ['connect_methods']],
+        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         priority: {
@@ -33,7 +33,6 @@ export default {
         users: userJSONSelectMeta(this, true),
         connect_methods: {
           component: Select2,
-          label: this.$t('terminal.ConnectMethod'),
           el: {
             url: '/api/v1/terminal/components/connect-methods/?flat=1&limit=10&os=all',
             ajax: {

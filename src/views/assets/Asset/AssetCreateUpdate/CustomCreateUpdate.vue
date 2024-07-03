@@ -12,7 +12,7 @@ export default {
     return {
       url: '/api/v1/assets/customs/',
       addFields: [
-        [this.$t('assets.CustomFields'), ['custom_info'], 1]
+        [this.$t('CustomFields'), ['custom_info'], 1]
       ],
       addFieldsMeta: {
         custom_info: {

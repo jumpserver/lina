@@ -1,11 +1,11 @@
 <template>
   <el-tree
     :data="iData"
-    show-checkbox
-    node-key="id"
-    :default-expand-all="true"
     :default-checked-keys="value"
+    :default-expand-all="true"
     :props="defaultProps"
+    node-key="id"
+    show-checkbox
     v-bind="$attrs"
     @check="handleCheckChange"
   />
@@ -33,11 +33,11 @@ export default {
       fullChoicesTreeNodes: [
         {
           id: 'all',
-          label: this.$t('perms.all'),
+          label: this.$t('All'),
           children: [
             {
               id: 'host',
-              label: this.$t('applications.host'),
+              label: this.$t('Host'),
               children: [
                 {
                   id: 'linux',
@@ -93,7 +93,7 @@ export default {
             },
             {
               id: 'database',
-              label: this.$t('assets.Database'),
+              label: this.$t('Database'),
               children: [
                 {
                   id: 'mysql',

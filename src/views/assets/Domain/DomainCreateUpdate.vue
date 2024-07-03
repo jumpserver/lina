@@ -5,7 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import AssetSelect from '@/components/Apps/AssetSelect'
-import ObjectSelect2 from '@/components/Form/FormFields/NestedObjectSelect2.vue'
+import { TextReadonly } from '@/components/Form/FormFields'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -16,14 +16,13 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'gateways', 'assets']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Basic'), ['name', 'gateways', 'assets']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: this.$t('assets.Assets'),
           el: {
             value: [],
             baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
@@ -36,13 +35,10 @@ export default {
           }
         },
         gateways: {
-          component: ObjectSelect2,
+          component: TextReadonly,
           el: {
-            multiple: true,
-            clearable: true,
-            ajax: {
-              url: '/api/v1/assets/assets/?domain_enabled=true&platform=Gateway'
-            }
+            text: this.$t('AddInDetailText'),
+            bolder: false
           }
         }
       },
@@ -51,7 +47,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

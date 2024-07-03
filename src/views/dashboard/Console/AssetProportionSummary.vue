@@ -4,13 +4,14 @@
       <Title :config="titleConfig" />
     </div>
     <ProgressChart v-if="config.data.length > 0" v-bind="config" />
-    <div v-else class="no-data">{{ $tc('common.NoData') }}</div>
+    <div v-else class="no-data">{{ $tc('NoData') }}</div>
   </div>
 </template>
 
 <script>
 import Title from '../components/Title.vue'
 import ProgressChart from '../components/ProgressChart.vue'
+
 export default {
   components: {
     Title,
@@ -19,8 +20,8 @@ export default {
   data() {
     return {
       titleConfig: {
-        title: this.$t('dashboard.ProportionOfAssetTypes'),
-        tip: this.$t('dashboard.ProportionOfAssetTypes')
+        title: this.$t('ProportionOfAssetTypes'),
+        tip: this.$t('ProportionOfAssetTypes')
       },
       config: {
         data: []

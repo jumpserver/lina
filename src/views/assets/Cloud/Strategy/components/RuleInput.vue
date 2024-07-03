@@ -29,9 +29,10 @@ export default {
         inline: true,
         hasSaveContinue: false,
         submitBtnSize: 'mini',
-        submitBtnText: this.$t('common.Add'),
+        submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {},
+        onSubmit: () => {
+        },
         submitMethod: () => 'post',
         getUrl: () => '',
         fields: [['', ['attr', 'match', 'value']]],
@@ -71,22 +72,28 @@ export default {
       },
       tableConfig: {
         columns: [
-          { prop: 'attr', label: this.$t('common.AttrName'), formatter: tableFormatter('attr') },
-          { prop: 'match', label: this.$t('common.Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('common.AttrValue'), formatter: tableFormatter('value') },
-          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div className='input-button'>
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={ this.handleDelete(index) }
-                />
-              </div>
-            )
-          } }
+          { prop: 'attr', label: this.$t('AttrName'), formatter: tableFormatter('attr') },
+          { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
+          { prop: 'value', label: this.$t('AttrValue'), formatter: tableFormatter('value') },
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return (
+                <div className='input-button'>
+                  <el-button
+                    icon='el-icon-minus'
+                    size='mini'
+                    style={{ 'flexShrink': 0 }}
+                    type='danger'
+                    onClick={this.handleDelete(index)}
+                  />
+                </div>
+              )
+            }
+          }
         ],
         totalData: this.value || [],
         hasPagination: false
@@ -103,7 +110,7 @@ export default {
         if (item[0]?.id) {
           this.$axios.delete(`/api/v1/xpack/cloud/strategy-rules/${item[0].id}/`)
         }
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
       }
     }
   }
@@ -111,10 +118,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-form-item:nth-child(-n+4) {
+::v-deep .el-form-item:nth-child(-n+4) {
   width: 29%;
 }
->>> .el-form-item:last-child {
+
+::v-deep .el-form-item:last-child {
   width: 6%;
 }
 </style>

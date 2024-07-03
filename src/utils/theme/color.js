@@ -70,6 +70,13 @@ export function mix(color_1, color_2, weight) {
   return color
 }
 
+export function setRootColors() {
+  const themeColors = defaultThemeConfig || {}
+  for (const [key, value] of Object.entries(themeColors)) {
+    document.documentElement.style.setProperty(key, value)
+  }
+}
+
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
@@ -80,17 +87,31 @@ export function changeMenuColor(themeColors) {
   // 后端不用返回 --menu-hover
   const menuActiveTextColor = colors['--menu-text-active']
   if (menuActiveTextColor) {
-    const menuHover = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
-    colors['--menu-hover'] = menuHover
+    colors['--menu-hover'] = mix(white, menuActiveTextColor.replace(/#/g, ''), 90)
   }
 
+  const lights = [15, 40, 60, 90]
+  const darken = [15, 30, 40, 80]
+
+  const colorsGenMore = ['--color-primary']
   for (const key in colors) {
     const currentColor = colors[key]
     elementStyle.setProperty(key, currentColor)
 
+    if (colorsGenMore.includes(key)) {
+      for (const [i, light] of lights.entries()) {
+        const color = mix(white, currentColor.replace(/#/g, ''), light)
+        elementStyle.setProperty(key + '-light' + '-' + i, color)
+      }
+      for (const [i, dark] of darken.entries()) {
+        const color = mix(black, currentColor.replace(/#/g, ''), dark)
+        elementStyle.setProperty(key + '-dark' + '-' + i, color)
+      }
+    }
+
     if (key.includes('--color')) {
       const lightColor = mix(white, currentColor.replace(/#/g, ''), 70)
-      const darkColor = mix(black, currentColor.replace(/#/g, ''), 20)
+      const darkColor = mix(black, currentColor.replace(/#/g, ''), 70)
       elementStyle.setProperty(key + '-light', lightColor)
       elementStyle.setProperty(key + '-dark', darkColor)
     }

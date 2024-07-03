@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="16" :sm="24">
+      <el-col :md="15" :sm="24">
         <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="8" :sm="24">
+      <el-col :md="9" :sm="24">
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
       </el-col>
     </el-row>
@@ -64,7 +64,7 @@ export default {
           },
           system_roles: {
             width: '100px',
-            label: this.$t('users.SystemRoles'),
+            label: this.$t('SystemRoles'),
             formatter: (row) => {
               return row['system_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -73,7 +73,7 @@ export default {
           },
           org_roles: {
             width: '100px',
-            label: this.$t('users.OrgRoles'),
+            label: this.$t('OrgRoles'),
             formatter: (row) => {
               return row['org_roles'].map(item => item['display_name']).join(', ') || '-'
             },
@@ -109,7 +109,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: vm.$t('assets.ViewPerm'),
+                  title: vm.$t('ViewPerm'),
                   name: 'view',
                   type: 'primary',
                   callback: function(data) {
@@ -128,18 +128,17 @@ export default {
         hasLeftActions: false
       },
       UserGroupCardConfig: {
-        icon: 'fa-users',
-        title: this.$t('perms.UserGroups'),
+        title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
         detailRoute: 'UserGroupDetail',
-        buttonTitle: this.$t('assets.ViewPerm'),
+        buttonTitle: this.$t('ViewPerm'),
         buttonClickCallback(obj) {
           vm.GenericListTableDialogConfig.visible = true
           vm.GenericListTableDialogConfig.tableConfig.url = `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/${obj.id}/permissions/`
         }
       },
       GenericListTableDialogConfig: {
-        title: this.$t('perms.Permissions'),
+        title: this.$t('Permissions'),
         visible: false,
         width: '60%',
         tableConfig: {
@@ -161,35 +160,35 @@ export default {
               }
             },
             users_amount: {
-              label: this.$t('perms.User'),
+              label: this.$t('User'),
               width: '60px',
               formatter: DetailFormatter,
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionUser'
+                  tab: 'AssetPermissionUser'
                 }
               }
             },
             user_groups_amount: {
-              label: this.$t('perms.UserGroups'),
+              label: this.$t('UserGroups'),
               width: '100px',
               formatter: DetailFormatter,
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionUser'
+                  tab: 'AssetPermissionUser'
                 }
               }
             },
             assets_amount: {
-              label: this.$t('perms.Asset'),
+              label: this.$t('Asset'),
               width: '60px',
               formatter: DetailFormatter,
               formatterArgs: {
                 route: 'AssetPermissionDetail',
                 routeQuery: {
-                  activeTab: 'AssetPermissionAsset'
+                  tab: 'AssetPermissionAsset'
                 }
               }
             }
@@ -206,10 +205,13 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    $route: {
+      handler(newVal) {
+        newVal.fullPath.includes('/console/perms/asset-permissions/') && (this.GenericListTableDialogConfig.visible = false)
+      }
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

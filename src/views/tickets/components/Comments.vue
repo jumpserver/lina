@@ -1,7 +1,7 @@
 <template>
   <IBox v-loading="loading" class="box">
     <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-comments" /> {{ $t('common.Message') }}
+      <i class="fa fa-comments" /> {{ $t('Message') }}
     </div>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
@@ -21,7 +21,7 @@
     </template>
     <slot />
     <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item :label="$tc('tickets.reply')">
+      <el-form-item :label="$tc('Reply')">
         <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
       </el-form-item>
       <el-form-item style="float: right">
@@ -32,7 +32,7 @@
             type="primary"
             @click="handleApprove"
           >
-            <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
+            <i class="fa fa-check" /> {{ $t('Accept') }}
           </el-button>
           <el-button
             :disabled="object.status.value === 'closed'"
@@ -40,7 +40,7 @@
             type="warning"
             @click="handleReject"
           >
-            <i class="fa fa-ban" /> {{ $t('tickets.Reject') }}
+            <i class="fa fa-ban" /> {{ $t('Reject') }}
           </el-button>
         </template>
         <el-button
@@ -50,7 +50,7 @@
           type="danger"
           @click="handleClose"
         >
-          <i class="fa fa-times" /> {{ $t('tickets.Close') }}
+          <i class="fa fa-times" /> {{ $t('Close') }}
         </el-button>
         <el-button
           :disabled="object.status.value === 'closed'"
@@ -58,7 +58,7 @@
           type="info"
           @click="handleComment"
         >
-          <i class="fa fa-pencil" /> {{ $t('tickets.reply') }}
+          <i class="fa fa-pencil" /> {{ $t('Reply') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -68,7 +68,7 @@
 <script>
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {

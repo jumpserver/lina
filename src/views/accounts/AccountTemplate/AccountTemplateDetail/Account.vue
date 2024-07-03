@@ -3,15 +3,15 @@
     <el-row :gutter="20">
       <el-col :md="24" :sm="24">
         <el-alert type="success">
-          {{ $t('accounts.AccountTemplateUpdateSecretHelpText') }}
+          {{ $t('AccountTemplateUpdateSecretHelpText') }}
         </el-alert>
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :md="14" :sm="24">
+      <el-col :md="15" :sm="24">
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="10" :sm="24">
+      <el-col :md="9" :sm="24">
         <QuickActions :actions="quickActions" type="primary" />
       </el-col>
       <ViewSecret
@@ -53,10 +53,10 @@ export default {
       showViewSecretDialog: false,
       quickActions: [
         {
-          title: this.$t('accounts.SyncUpdateAccountInfo'),
+          title: this.$t('SyncUpdateAccountInfo'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.Sync')
+            label: this.$t('Sync')
           },
           callbacks: Object.freeze({
             click: () => {
@@ -83,7 +83,7 @@ export default {
             }
           },
           asset: {
-            label: this.$t('assets.Asset'),
+            label: this.$t('Asset'),
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -102,11 +102,11 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {

@@ -1,9 +1,7 @@
 <template>
   <div>
-    <el-alert type="success">{{ helpMsg }}</el-alert>
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
-
 </template>
 
 <script>
@@ -12,12 +10,13 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
+  name: 'CommandFilterAclList',
   components: {
     ListTable
   },
   data() {
     return {
-      helpMsg: this.$t('acl.CommandFilterACLHelpMsg'),
+      helpMsg: this.$t('CommandFilterACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/command-filter-acls/',
         permissions: {
@@ -40,7 +39,6 @@ export default {
             }
           },
           command_groups: {
-            label: this.$t('acl.CommandGroup'),
             width: '160px',
             formatter: AmountFormatter,
             formatterArgs: {
@@ -49,7 +47,7 @@ export default {
                 return {
                   name: 'CommandFilterAclList',
                   query: {
-                    activeTab: 'CommandGroup',
+                    tab: 'CommandGroup',
                     command_filters: row.id
                   }
                 }
@@ -71,11 +69,10 @@ export default {
       }
     }
   },
-  computed: {
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
   }
 }
 </script>
-
-<style>
-
-</style>

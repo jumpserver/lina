@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
@@ -15,7 +15,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountBackupPlanInfo',
+  name: 'AccountBackupInfo',
   components: {
     AutoDetailCard,
     QuickActions
@@ -27,14 +27,17 @@ export default {
       default: () => ({})
     }
   },
+  isEmail: false,
+
   data() {
+    this.isEmail = this.object.backup_type.value === 'email'
     return {
       quickActions: [
         {
-          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
+          title: this.$t('ManualExecution'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.AccountChangeSecret.Execute')
+            label: this.$t('Execute')
           },
           callbacks: {
             click: function() {
@@ -52,46 +55,50 @@ export default {
       detailFields: [
         'id', 'name',
         {
-          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
+          key: this.$t('Crontab'),
           value: this.object.crontab,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
+          key: this.$t('Interval'),
           value: this.object.interval,
           formatter: (item, val) => {
-            return <span>{this.object.is_periodic ? val : ''}</span>
+            return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
         'date_created', 'date_updated', 'comment',
         {
-          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' A',
+          key: this.$t('Recipient') + ' A',
           value: this.object.recipients_part_one,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientA = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+            return <span>{recipientA}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountChangeSecret.Addressee') + ' B',
+          key: this.$t('Recipient') + ' B',
           value: this.object.recipients_part_two,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientB = this.isEmail ? val.map(item => item.name).join(', ') : '-'
+            return <span>{recipientB}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountBackup.RecipientServer') + ' A',
+          key: this.$t('RecipientServer') + ' A',
           value: this.object.obj_recipients_part_one,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientServerA = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+            return <span>{recipientServerA}</span>
           }
         },
         {
-          key: this.$t('accounts.AccountBackup.RecipientServer') + ' B',
+          key: this.$t('RecipientServer') + ' B',
           value: this.object.obj_recipients_part_two,
           formatter: (item, val) => {
-            return <span>{val.map(item => item.name).join(', ')}</span>
+            const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ')
+            return <span>{recipientServerB}</span>
           }
         }
       ]

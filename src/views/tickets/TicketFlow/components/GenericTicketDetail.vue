@@ -1,11 +1,11 @@
 <template>
   <el-row>
     <el-col :md="17" :sm="24">
-      <Details :detail-card-items="detailCardItems" :title="$tc('common.BasicInfo')" />
+      <Details :detail-card-items="detailCardItems" :title="$tc('BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"
         :detail-card-items="specialCardItems"
-        :title="$tc('common.ApprovaLevel')"
+        :title="$tc('ApprovaLevel')"
       />
       <slot id="MoreDetails" />
     </el-col>

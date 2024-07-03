@@ -40,7 +40,7 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            label: this.$t('accounts.AccountChangeSecret.Asset'),
+            label: this.$t('Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
@@ -56,6 +56,7 @@ export default {
             }
           },
           account: {
+            label: this.$t('Username'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('accounts.view_account'),
@@ -71,7 +72,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('accounts.AccountChangeSecret.Success'),
+            label: this.$t('Success'),
             formatter: (row) => {
               if (row.status === 'pending') {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -88,11 +89,11 @@ export default {
               hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              moreActionsTitle: this.$t('common.More'),
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
                   name: 'View',
-                  title: this.$t('common.View'),
+                  title: this.$t('View'),
                   type: 'primary',
                   callback: ({ row }) => {
                     // debugger
@@ -105,7 +106,7 @@ export default {
                 },
                 {
                   name: 'Retry',
-                  title: this.$t('accounts.AccountChangeSecret.Retry'),
+                  title: this.$t('Retry'),
                   can: this.$hasPerm('accounts.add_changesecretexecution'),
                   type: 'primary',
                   callback: ({ row }) => {
@@ -133,29 +134,29 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
-          exclude: ['id', 'status'],
+          exclude: ['id', 'status', 'execution'],
           options: [
             {
-              label: this.$t('accounts.AccountChangeSecret.Asset'),
+              label: this.$t('Asset'),
               value: 'asset_name'
             },
             {
-              label: this.$t('accounts.Accounts'),
+              label: this.$t('Accounts'),
               value: 'account_username'
             },
             {
               value: 'status',
-              label: this.$t('common.Status'),
+              label: this.$t('Status'),
               type: 'choice',
               children: [
                 {
                   default: true,
                   value: 'success',
-                  label: this.$t('common.Success')
+                  label: this.$t('Success')
                 },
                 {
                   value: 'failed',
-                  label: this.$t('common.Failed')
+                  label: this.$t('Failed')
                 }
               ]
             }
@@ -164,7 +165,7 @@ export default {
         extraMoreActions: [
           {
             name: 'BatchRetry',
-            title: this.$t('accounts.AccountChangeSecret.BatchRetry'),
+            title: this.$t('BatchRetry'),
             type: 'primary',
             fa: 'fa-retweet',
             can: ({ selectedRows }) => {

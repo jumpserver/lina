@@ -3,7 +3,7 @@
     <AssetDialog
       v-if="iVisible"
       :base-url="assetsUrl"
-      :title="$tc('assets.Assets')"
+      :title="$tc('Assets')"
       :visible.sync="iVisible"
       @cancel="assetTreeTableDialogHandleCancel"
       @confirm="assetTreeTableDialogHandleConfirm"
@@ -86,10 +86,10 @@ export default {
         this.iVisible = false
         this.assetsSelected = []
         $('#tree-refresh').trigger('click')
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
         this.$parent?.hideMenu()
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     },
     assetTreeTableDialogHandleCancel() {

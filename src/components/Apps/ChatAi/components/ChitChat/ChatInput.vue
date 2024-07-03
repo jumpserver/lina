@@ -12,31 +12,31 @@
       <el-input
         v-model="inputValue"
         :disabled="isLoading"
-        :placeholder="$tc('common.InputMessage')"
+        :placeholder="$tc('InputMessage')"
+        :rows="expanded ? 3 :2"
         type="textarea"
         @compositionend="isIM = false"
         @compositionstart="isIM = true"
         @keypress.native="onKeyEnter"
       />
-      <div class="input-action">
-        <span class="right">
-          <i :class="{'active': inputValue }" class="fa fa-send" @click="onSendHandle" />
-        </span>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Select2 from '../../../../Form/FormFields/Select2.vue'
 import { useChat } from '../../useChat.js'
+import Select2 from '../../../../Form/FormFields/Select2.vue'
 
 const { setLoading } = useChat()
 
 export default {
   components: { Select2 },
   props: {
+    expanded: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
         url: '/api/v1/settings/chatai-prompts/',
         value: '',
         multiple: false,
-        placeholder: this.$t('common.Prompt'),
+        placeholder: this.$t('Prompt'),
         ajax: {
           transformOption: (item) => {
             return { label: item.name, value: item.content }
@@ -91,11 +91,14 @@ export default {
   display: flex;
   height: 100%;
   flex-direction: column;
+
   .chat-action {
     width: 100%;
     margin: 6px 0;
-    &>>> .el-select {
+
+    &::v-deep .el-select {
       width: 50%;
+
       .el-input__inner {
         height: 28px;
         line-height: 28px;
@@ -104,58 +107,45 @@ export default {
         background-color: #f7f7f8;
         font-size: 13px;
         color: rgba(0, 0, 0, 0.45);
+
         &:hover {
           background-color: #ededed;
         }
       }
+
       .el-input__icon {
-        line-height: 0px;
+        line-height: 0;
       }
     }
   }
+
   .chat-input {
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid #DCDFE6;
     border-radius: 12px;
-    &:has(.el-textarea__inner:focus) {
-      border: 1px solid var(--color-primary);
-    }
-    &>>> .el-textarea {
+
+    &::v-deep .el-textarea {
       height: 100%;
+
       .el-textarea__inner {
         height: 100%;
         padding: 8px 10px;
-        border: none;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
         resize: none;
+        border-radius: 5px;
+
         &::-webkit-scrollbar {
           width: 12px;
         }
       }
     }
+
     .el-textarea.is-disabled + .input-action {
       background-color: #F5F7FA;
       cursor: no-drop;
+
       i {
         cursor: no-drop;
-      }
-    }
-    .input-action {
-      overflow: hidden;
-      padding: 0 16px 15px;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-      .right {
-        float: right;
-        .active {
-          color: var(--color-primary);
-        }
-        i {
-          cursor: pointer;
-        }
       }
     }
   }

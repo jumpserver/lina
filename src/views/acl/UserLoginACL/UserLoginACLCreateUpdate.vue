@@ -28,11 +28,11 @@ export default {
       url: '/api/v1/acls/login-acls/',
       hasDetailInMsg: false,
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('acl.users'), ['users']],
-        [this.$t('acl.Rules'), ['rules']],
-        [this.$t('acl.Action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('Users'), ['users']],
+        [this.$t('Rules'), ['rules']],
+        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         is_active: {
@@ -60,11 +60,9 @@ export default {
           ],
           fieldsMeta: {
             ip_group: {
-              label: this.$t('acl.ip_group'),
-              helpText: this.$t('acl.ipGroupHelpText')
+              helpText: this.$t('IpGroupHelpText')
             },
             time_period: {
-              label: this.$t('common.timePeriod'),
               component: WeekCronSelect
             }
           }
@@ -92,14 +90,6 @@ export default {
         return value
       }
     }
-  },
-  mounted() {
-  },
-  methods: {
   }
 }
 </script>
-
-<style>
-
-</style>

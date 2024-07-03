@@ -3,11 +3,11 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import store from '@/store'
 
-import UsersRoute from './users'
-import AssetsRoute from './assets'
-import PermsRoute from './perms'
-import AccountRoutes from './accounts'
-import LabelRoutes from './labels'
+import UsersMenu from './users'
+import AssetsMenu from './assets'
+import PermsMenu from './perms'
+import AccountMenus from './accounts'
+import LabelMenus from './labels'
 
 export default {
   path: '/console',
@@ -15,7 +15,7 @@ export default {
   name: 'console',
   redirect: '/console/dashboard',
   meta: {
-    title: i18n.t('common.nav.Console'),
+    title: i18n.t('Console'),
     icon: 'console',
     view: 'console',
     type: 'view',
@@ -31,7 +31,7 @@ export default {
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',
-        title: i18n.t('route.Dashboard'),
+        title: i18n.t('Dashboard'),
         permissions: []
       }
     },
@@ -40,51 +40,52 @@ export default {
       component: empty,
       name: 'Users',
       meta: {
-        title: i18n.t('route.Users'),
+        title: i18n.t('MenuUsers'),
         icon: 'users'
       },
-      children: UsersRoute
+      children: UsersMenu
     },
     {
       path: '/console/assets',
       component: empty,
       name: 'Assets',
       meta: {
-        title: i18n.t('route.Assets'),
+        title: i18n.t('MenuAssets'),
         icon: 'assets'
       },
-      children: AssetsRoute
+      children: AssetsMenu
     },
     {
       path: '/console/accounts',
       component: empty,
       name: 'Accounts',
       meta: {
-        title: i18n.t('route.Accounts'),
-        icon: 'accounts'
+        title: i18n.t('MenuAccounts'),
+        icon: 'key'
       },
-      children: AccountRoutes
+      children: AccountMenus
     },
     {
       path: '/console/perms',
       component: empty,
       name: 'Perms',
-      alwaysShow: false,
       meta: {
-        title: i18n.t('route.Perms'),
-        icon: 'permission'
+        title: i18n.t('MenuPermissions'),
+        icon: 'permission',
+        resource: 'assetpermission',
+        permissions: []
       },
-      children: PermsRoute
+      children: PermsMenu
     },
     {
       path: '/console/more',
       component: empty,
       name: 'More',
       meta: {
-        title: i18n.t('route.More'),
+        title: i18n.t('MenuMore'),
         icon: 'more'
       },
-      children: LabelRoutes
+      children: LabelMenus
     }
   ]
 }

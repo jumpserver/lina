@@ -6,15 +6,15 @@ import i18n from '@/i18n/i18n'
 
 export const templateFields = (vm) => {
   return [
-    [vm.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
-    [vm.$t('assets.Secret'), [
+    [vm.$t('Basic'), ['name', 'username', 'privileged', 'su_from']],
+    [vm.$t('Secret'), [
       'secret_type', 'secret_strategy', 'password_rules',
       'secret', 'ssh_key', 'token', 'access_key', 'passphrase', 'api_key'
     ]],
-    [vm.$t('accounts.AutoPush'), [
+    [vm.$t('AutoPush'), [
       'auto_push', 'platforms', 'push_params'
     ]],
-    [vm.$t('common.Other'), ['comment']]
+    [vm.$t('Other'), ['comment']]
   ]
 }
 
@@ -56,14 +56,14 @@ export const templateFieldsMeta = (vm) => {
       }
     },
     secret: {
-      label: vm.$t('assets.Password'),
+      label: vm.$t('Password'),
       component: UpdateToken,
       hidden: (formValue) => {
         return formValue.secret_type !== 'password' || formValue.secret_strategy === 'random'
       }
     },
     ssh_key: {
-      label: vm.$t('assets.PrivateKey'),
+      label: vm.$t('PrivateKey'),
       el: {
         type: 'textarea',
         rows: 4
@@ -72,12 +72,12 @@ export const templateFieldsMeta = (vm) => {
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || formValue.secret_strategy === 'random'
     },
     passphrase: {
-      label: vm.$t('assets.Passphrase'),
+      label: vm.$t('Passphrase'),
       component: UpdateToken,
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || formValue.secret_strategy === 'random'
     },
     token: {
-      label: vm.$t('assets.Token'),
+      label: vm.$t('Token'),
       el: {
         type: 'textarea',
         rows: 4
@@ -85,7 +85,7 @@ export const templateFieldsMeta = (vm) => {
       hidden: (formValue) => formValue.secret_type !== 'token' || formValue.secret_strategy === 'random'
     },
     access_key: {
-      label: vm.$t('assets.AccessKey'),
+      label: vm.$t('AccessKey'),
       el: {
         type: 'textarea',
         rows: 4
@@ -93,7 +93,7 @@ export const templateFieldsMeta = (vm) => {
       hidden: (formValue) => formValue.secret_type !== 'access_key' || formValue.secret_strategy === 'random'
     },
     api_key: {
-      label: vm.$t('assets.ApiKey'),
+      label: vm.$t('ApiKey'),
       el: {
         type: 'textarea',
         rows: 4
@@ -102,7 +102,7 @@ export const templateFieldsMeta = (vm) => {
     },
     password_rules: {
       component: PasswordRule,
-      label: i18n.t('accounts.AccountChangeSecret.PasswordRule'),
+      label: i18n.t('PasswordRule'),
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
     platforms: {

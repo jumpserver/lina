@@ -8,6 +8,7 @@
 
 <script>
 import BaseAuth from './Base'
+
 export default {
   name: 'SSO',
   components: {
@@ -19,7 +20,7 @@ export default {
         url: '/api/v1/settings/setting/?category=sso',
         fields: [
           [
-            this.$t('common.Basic'), ['AUTH_SSO', 'AUTH_SSO_AUTHKEY_TTL']
+            this.$t('Basic'), ['AUTH_SSO', 'AUTH_SSO_AUTHKEY_TTL']
           ]
         ],
         submitMethod: () => 'patch'

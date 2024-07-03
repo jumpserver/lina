@@ -24,24 +24,26 @@ export default {
 
     return {
       userConfig: {
-        title: this.$t('dashboard.UserData'),
-        tip: this.$t('dashboard.UserData'),
-        subTitle: this.$t('dashboard.UsersTotal'),
+        title: this.$t('UserData'),
+        tip: this.$t('UserData'),
+        subTitle: this.$t('UsersTotal'),
         icon: 'users',
         subIcon: 'broken-line',
         color: '#FFD260',
-        chartTitle: this.$t('dashboard.LoginUserToday'),
-        data: []
+        chartTitle: this.$t('LoginUserToday'),
+        data: [],
+        route: { name: 'UserList' }
       },
       assetConfig: {
-        title: this.$t('dashboard.AssetData'),
-        tip: this.$t('dashboard.AssetData'),
-        subTitle: this.$t('dashboard.AssetsTotal'),
+        title: this.$t('AssetData'),
+        tip: this.$t('AssetData'),
+        subTitle: this.$t('AssetsTotal'),
         icon: 'assets',
         subIcon: 'broken-line',
         color: themeColor,
-        chartTitle: this.$t('dashboard.LoginAssetToday'),
-        data: []
+        chartTitle: this.$t('LoginAssetToday'),
+        data: [],
+        route: { name: 'AssetList' }
       }
     }
   },
@@ -66,8 +68,8 @@ export default {
       userActive = userActive.toFixed(2)
       const userTotal = userActive === 100 ? 0 : 100 - userActive
       const users = [
-        { name: this.$t('dashboard.ActiveUser'), value: userActive.toString() },
-        { name: this.$t('dashboard.InActiveUser'), value: userTotal.toString() }
+        { name: this.$t('ActiveUser'), value: userActive.toString() },
+        { name: this.$t('InActiveUser'), value: userTotal.toString() }
       ]
       this.$set(this.userConfig, 'data', users)
       this.$set(this.userConfig, 'total', data.total_count_users)
@@ -82,8 +84,8 @@ export default {
       assetActive = assetActive.toFixed(2)
       const assetTotal = assetActive === 100 ? 0 : 100 - assetActive
       const assets = [
-        { name: this.$t('dashboard.ActiveAsset'), value: assetActive.toString() },
-        { name: this.$t('dashboard.InActiveAsset'), value: assetTotal.toString() }
+        { name: this.$t('ActiveAsset'), value: assetActive.toString() },
+        { name: this.$t('InActiveAsset'), value: assetTotal.toString() }
       ]
       this.$set(this.assetConfig, 'data', assets)
       this.$set(this.assetConfig, 'total', data.total_count_assets)

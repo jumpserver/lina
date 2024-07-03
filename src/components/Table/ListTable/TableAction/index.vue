@@ -8,6 +8,7 @@
         class="left-side"
         v-bind="$attrs"
         v-on="$listeners"
+        @init-actions-done="handleActionsDone"
       />
       <RightSide
         v-if="hasRightActions"
@@ -46,7 +47,7 @@ import LeftSide from './LeftSide.vue'
 import RightSide from './RightSide.vue'
 import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
-import { getDaysAgo, getDaysFuture } from '@/utils/common'
+import { getDaysAgo, getDaysFuture } from '@/utils/time'
 import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -99,7 +100,8 @@ export default {
   data() {
     return {
       keyword: '',
-      foldSearch: false
+      foldSearch: false,
+      iHasLeftActions: this.hasLeftActions
     }
   },
   computed: {
@@ -119,7 +121,7 @@ export default {
       return ''
     },
     searchClass() {
-      return this.hasLeftActions ? 'right' : 'left'
+      return this.iHasLeftActions ? 'right' : 'left'
     }
   },
   methods: {
@@ -138,100 +140,41 @@ export default {
     },
     handleLabelSearchShowChange(val) {
       this.foldSearch = val
+    },
+    handleActionsDone(actions) {
+      this.iHasLeftActions = actions.filter(i => i && i.has !== false).length > 0
     }
   }
 }
 </script>
 
 <style lang='scss' scoped>
-  .table-header {
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: space-between;*/
-  }
+$innerHeight: 28px;
+$headerHeight: 30px;
 
-  .right-side-item {
-  }
-
-  .right-side-actions >>> .el-button {
-    border: none;
-    padding: 5px;
-    font-size: 14px;
-    width: 26px;
-    height: 26px;
-    color: #888;
-    background-color: transparent;
-  }
-
-  .right-side-actions >>> .fa {
-    height: 16px;
-    width: 16px;
-  }
-
-  .right-side-actions >>> .el-button:hover {
-    background-color: rgb(0, 0, 0, 0.05);
-  }
-
-  .action-search >>> .el-input__suffix i {
-    font-weight: 500;
-    color: #888;
-  }
-
-  .action-search >>> .el-cascader {
-    line-height: 32px !important;
-  }
-
-  .right-side-actions {
-    display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .table-action-right-side {
-    display: flex;
-    justify-content: center;
-  }
-
-  .export-item {
-    display: block;
-    padding: 5px 20px;
-  }
-
-  .datepicker {
-    margin-left: 10px;
-  }
-
-  .table-header {
-    line-height: 32px;
-  }
-
+.table-header {
   .left-side {
-    float: left;
     display: block;
-    &>>> .action-item.el-dropdown {
-      height: 33px;
-      &> .el-button {
-        height: 100%;
-      }
+    float: left;
+
+    ::v-deep .action-item.el-dropdown > .el-button {
+      height: 100%;
     }
   }
 
   .right-side {
     float: right;
+    height: 30px;
   }
 
   .search {
     display: flex;
     flex-direction: row;
-  }
 
-  .mobile .search {
-    display: inherit;
-  }
-
-  .mobile .search .datepicker {
-    margin-left: 0;
+    .right-side-item.action-search {
+      border: 1px solid var(--color-border);
+      overflow: hidden;
+    }
   }
 
   .search.left {
@@ -242,21 +185,58 @@ export default {
   .search.right {
     float: right;
   }
+}
 
-  .mobile .search.right {
-    float: none;
+.export-item {
+  display: block;
+  padding: 5px 20px;
+}
+
+.mobile .search {
+  display: inherit;
+}
+
+.mobile .search .datepicker {
+  margin-left: 0;
+}
+
+.mobile .search.right {
+  clear: both;
+  float: none;
+  padding-top: 10px;
+
+  .label-search {
+    margin-right: 0;
+
+    ::v-deep .el-button.label-button {
+      border: 1px solid var(--color-border);
+    }
+
+    ::v-deep .label-cascader {
+      display: block;
+      width: 100%;
+    }
+  }
+}
+
+.mobile .search.right .action-search {
+  display: inline-block;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.mobile .right-side {
+  padding-top: 3px;
+}
+
+@media (max-width: 481px) {
+  .mobile .right-side {
+    float: left;
+    margin-left: -15px;
   }
 
-  .mobile .search.right .action-search {
+  .mobile .left-side {
     width: 100%;
   }
-
-  .mobile .right-side {
-    padding-top: 5px;
-  }
-
-  .filter-field.right-side-item.action-search {
-    height: 34px;
-  }
-
+}
 </style>

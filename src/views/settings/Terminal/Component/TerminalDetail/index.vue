@@ -30,7 +30,7 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('common.Detail'),
+            'title': this.$t('Basic'),
             'name': 'Detail'
           }
         ],
@@ -41,7 +41,7 @@ export default {
           canDelete: this.$hasPerm('terminal.delete_terminal'),
           detailApiUrl: `/api/v1/terminal/terminals/${this.$route.params.id}/`
         },
-        titlePrefix: this.$t('sessions.terminalDetail')
+        titlePrefix: this.$t('TerminalDetail')
       }
     }
   },

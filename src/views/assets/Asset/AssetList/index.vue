@@ -23,7 +23,7 @@ export default {
         submenu: [
           {
             name: 'all',
-            title: this.$t('assets.All'),
+            title: this.$t('All'),
             icon: 'fa-bars',
             component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
           },
@@ -63,7 +63,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')
           },
           {
-            icon: 'fa-th',
+            icon: 'fa-cube',
             name: 'custom',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/CustomList.vue')
@@ -92,7 +92,7 @@ export default {
       const query = _.cloneDeep(this.$route.query)
       const newQuery = {
         ...query,
-        activeTab: tab.name
+        tab: tab.name
       }
       this.$nextTick(() => {
         this.$router.replace({ query: newQuery })
@@ -101,7 +101,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

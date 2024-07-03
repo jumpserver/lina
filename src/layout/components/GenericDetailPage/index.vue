@@ -8,7 +8,7 @@
   >
     <template #headingRightSide>
       <span v-if="hasRightSide">
-        <ActionsGroup slot="headingRightSide" :actions="pageActions" />
+        <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
       </span>
     </template>
     <slot />
@@ -80,7 +80,11 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$route.meta.title.replace('Detail', '').replace('详情', '')
+        const objectType = this.$route.meta.title
+          .replace('Details', '')
+          .replace('Detail', '')
+          .replace('详情', '')
+          .trim()
         this.$log.debug('Object is: ', obj)
         const titlePrefix = this.titlePrefix || objectType
         const objectName = this.getObjectName(obj)
@@ -131,16 +135,20 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$t('common.Update'),
+          title: this.$t('Edit'),
+          icon: 'el-icon-edit-outline',
+          size: 'small',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$t('common.Delete'),
+          title: this.$t('Delete'),
           type: 'danger',
           plain: true,
+          icon: 'el-icon-delete',
+          size: 'small',
           can: this.validActions.canDelete,
           has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
@@ -163,7 +171,7 @@ export default {
         return this.submenu
       }
       const activity = {
-        title: this.$t('common.Activity'),
+        title: this.$t('Activity'),
         name: 'ResourceActivity',
         hidden: () => !this.$hasPerm('audits.view_activitylog')
       }
@@ -180,13 +188,14 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$t('common.deleteWarningMsg') + ' ' + this.iTitle + ' ?'
-      const title = this.$t('common.Info')
+      const msg = this.$t('DeleteWarningMsg') + ' ' + this.iTitle + ' ?'
+      const title = this.$t('Info')
       const performDelete = () => {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)
       }
+
       this.$alert(msg, title, {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
@@ -197,14 +206,14 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$tc('common.deleteSuccessMsg'))
+            this.$message.success(this.$tc('DeleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
             const errorDetail = error?.response?.data?.detail || ''
             if (errorDetail) {
               this.$message.error(errorDetail)
             } else {
-              this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
+              this.$message.error(this.$tc('DeleteErrorMsg') + ' ' + error)
             }
           } finally {
             instance.confirmButtonLoading = false
@@ -235,7 +244,7 @@ export default {
         this.$emit('getObjectDone', data)
       }).catch(error => {
         if (error.response && error.response.status === 404) {
-          const msg = this.$t('common.ObjectNotFoundOrDeletedMsg')
+          const msg = this.$t('ObjectNotFoundOrDeletedMsg')
           this.$message.error(msg)
         } else {
           flashErrorMsg({ error, response: error.response })
@@ -252,18 +261,7 @@ export default {
 </script>
 
 <style scoped>
-  .page-submenu >>> .el-tabs__header {
-    background-color: white;
-    margin-left: -25px;
-    padding-left: 25px;
-    margin-right: -25px;
-    padding-right: 25px;
-    margin-top: -30px;
-    /*margin: 0;*/
-    /*background-color: #f3f3f4;*/
-  }
-
-  .page-submenu >>> .el-tabs__nav-wrap {
-    position: static;
+  .header-buttons {
+    z-index: 999;
   }
 </style>

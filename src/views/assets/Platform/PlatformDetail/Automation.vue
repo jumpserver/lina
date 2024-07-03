@@ -1,13 +1,17 @@
 <template>
-  <IBox v-if="!loading">
-    <GenericCreateUpdateForm class="form" v-bind="$data" />
-  </IBox>
+  <el-row>
+    <el-col :md="24" :sm="24">
+      <IBox v-if="!loading">
+        <GenericCreateUpdateForm class="form" v-bind="$data" />
+      </IBox>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 import IBox from '@/components/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { updateAutomationParams, platformFieldsMeta, setAutomations } from '../const'
+import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -62,19 +66,47 @@ export default {
   methods: {
     submit(validValues) {
       if (!this.$hasPerm('assets.change_platform') || !this.isSystemAdmin) {
-        return this.$message.error(this.$tc('rbac.NoPermission'))
+        return this.$message.error(this.$tc('NoPermission'))
       }
       this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
   }
 }
 </script>
 
-<style scoped>
-.form >>> .el-select {
-  width: 100%;
+<style lang='scss' scoped>
+::v-deep {
+  .el-cascader {
+    width: 100%;
+  }
+
+  .item-enable.el-form-item {
+    //margin-bottom: 1px;
+  }
+
+  .item-method.el-form-item {
+    display: inline-block;
+    width: 100%;;
+
+    .el-form-item__content {
+      width: calc(75% - 50px);
+    }
+
+    .el-select {
+      width: 100%;
+    }
+
+    margin-top: -10px;
+  }
+
+  .item-params.el-form-item {
+    display: inline-block;
+    position: absolute;
+    right: 18px;
+    margin-top: -10px;
+  }
 }
 
 </style>

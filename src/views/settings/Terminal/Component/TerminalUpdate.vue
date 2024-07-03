@@ -1,10 +1,10 @@
 <template>
   <GenericCreateUpdatePage
-    :fields="fields"
-    :url="url"
-    :update-success-next-route="successUrl"
     :create-success-next-route="successUrl"
+    :fields="fields"
     :fields-meta="fieldsMeta"
+    :update-success-next-route="successUrl"
+    :url="url"
   />
 </template>
 
@@ -22,8 +22,8 @@ export default {
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' }},
       url: '/api/v1/terminal/terminals/',
       fields: [
-        [this.$t('sessions.info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         command_storage: {
@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$t('sessions.terminalUpdate')
+      return this.$t('TerminalUpdate')
     },
     cardTitle() {
       return this.terminalData.name

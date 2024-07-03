@@ -1,16 +1,24 @@
 <template>
   <el-form-item
-    v-show="_show"
-    :prop="prop"
+    v-if="_show"
+    :class="classes"
     :label="data.label"
+    :prop="prop"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
   >
-    <template v-if="data.helpTips" #label>
-      {{ data.label }}
-      <el-tooltip placement="top" effect="light" popper-class="help-tips">
-        <div slot="content" v-html="data.helpTips" />
-        <i class="fa fa-question-circle-o" />
+    <template v-if="data.label" #label>
+      <span>{{ data.label }}</span>
+      <el-tooltip
+        v-if="data.helpTip"
+        :open-delay="500"
+        :tabindex="-1"
+        effect="dark"
+        placement="right"
+        popper-class="help-tips"
+      >
+        <div slot="content" v-sanitize="data.helpTip" /> <!-- Noncompliant -->
+        <i class="fa fa-question-circle-o help-tip-icon" />
       </el-tooltip>
     </template>
     <template v-if="readonly && hasReadonlyContent">
@@ -33,9 +41,9 @@
     <custom-component
       v-else
       :component="data.component || `el-${data.type}`"
-      v-bind="componentProps"
-      :value="itemValue"
       :disabled="disabled || componentProps.disabled || readonly"
+      :value="itemValue"
+      v-bind="componentProps"
       v-on="listeners"
     >
       <template v-for="opt in options">
@@ -47,8 +55,8 @@
         <el-checkbox-button
           v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
           :key="opt.value"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
+          v-bind="opt"
         >
           {{ opt.label }}
         </el-checkbox-button>
@@ -56,23 +64,41 @@
         <el-checkbox
           v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
           :key="opt.value"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
+          v-bind="opt"
         >
           {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="el-icon-warning-outline" />
+          </el-tooltip>
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
         <el-radio
           v-else-if="data.type === 'radio-group'"
           :key="opt.label"
-          v-bind="opt"
           :label="'value' in opt ? opt.value : opt.label"
-        >{{ opt.label }}
+          v-bind="opt"
+        >
+          {{ opt.label }}
+          <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
+            <i class="el-icon-warning-outline" />
+          </el-tooltip>
         </el-radio>
       </template>
     </custom-component>
-    <div v-if="data.helpText" class="help-block" v-html="data.helpText" />
+    <div v-if="data.helpText" class="help-block">
+      <el-alert
+        v-if="data.helpText.startsWith('!')"
+        :closable="false"
+        class="help-warning"
+        show-icon
+        type="info"
+      >
+        <span v-sanitize="data.helpText.replace(/^!/, '')" />
+      </el-alert>
+      <span v-else v-sanitize="data.helpText" />
+    </div>
   </el-form-item>
 </template>
 <script>
@@ -125,8 +151,7 @@ export default {
   data() {
     return {
       propsInner: {},
-      isBlurTrigger:
-        this.data.rules &&
+      isBlurTrigger: this.data.rules &&
         this.data.rules.some(rule => {
           return rule.required && rule.trigger === 'blur'
         })
@@ -135,15 +160,15 @@ export default {
   computed: {
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
-    hasReadonlyContent: ({ data: { type }}) =>
-      _includes(['input', 'select'], type),
-    hiddenStatus: ({ data: { hidden = () => false }, data, value }) =>
-      hidden(value, data),
-    enableWhenStatus: ({ data: { enableWhen }, value }) =>
-      getEnableWhenStatus(enableWhen, value),
+    hasReadonlyContent: ({ data: { type }}) => _includes(['input', 'select'], type),
+    hiddenStatus: ({ data: { hidden = () => false }, data, value }) => hidden(value, data),
+    enableWhenStatus: ({ data: { enableWhen }, value }) => getEnableWhenStatus(enableWhen, value),
     // 是否显示
     _show() {
       return !this.hiddenStatus && this.enableWhenStatus
+    },
+    classes() {
+      return 'el-form-item-' + this.data.prop + ' ' + (this.data.attrs?.class || '')
     },
     listeners() {
       const {
@@ -279,3 +304,22 @@ export default {
   }
 }
 </script>
+<style lang='scss' scoped>
+.help-tips {
+  opacity: 0.8;
+  line-height: 2;
+  width: 300px;
+}
+
+.help-block {
+  ::v-deep .el-alert__icon {
+    font-size: 16px
+  }
+}
+
+.help-tip-icon {
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>

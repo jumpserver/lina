@@ -75,21 +75,21 @@ export default {
     createSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('common.createSuccessMsg')
+        return this.$t('CreateSuccessMsg')
       }
     },
     // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
       default: function() {
-        return this.$t('common.saveSuccessContinueMsg')
+        return this.$t('SaveSuccessContinueMsg')
       }
     },
     // 更新成功的msg
     updateSuccessMsg: {
       type: String,
       default: function() {
-        return this.$t('common.updateSuccessMsg')
+        return this.$t('UpdateSuccessMsg')
       }
     },
     // 创建成功的跳转路由
@@ -121,6 +121,12 @@ export default {
       type: Function,
       default(res, method) {
         return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      }
+    },
+    cloneNameSuffix: {
+      type: String,
+      default: function() {
+        return this.$t('Duplicate').toLowerCase()
       }
     },
     // 获取提交的方法
@@ -176,23 +182,16 @@ export default {
         const detailRoute = this.objectDetailRoute
         detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
+          msg = msg[0].toLowerCase() + msg.slice(1)
           this.$message({
             message: h('p', null, [
               h('el-link', {
                 on: {
                   click: () => this.$router.push(detailRoute)
                 },
-                style: { 'vertical-align': 'top' }
+                style: { 'vertical-align': 'top', 'margin-right': '5px' }
               }, msgLinkName),
-              h('span', {
-                style: {
-                  'padding-left': '5px',
-                  'height': '18px',
-                  'line-height': '18px',
-                  'font-size': '13.5px',
-                  'font-weight': ' 400'
-                }
-              }, msg)
+              h('span', {}, msg)
             ]),
             type: 'success'
           })
@@ -205,16 +204,19 @@ export default {
       type: Function,
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
+
         if (!(route.params && route.params.id)) {
-          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id, order: this.extraQueryOrder })
-        } else {
-          route['params'] = deepmerge(route['params'], { order: this.extraQueryOrder })
+          route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
         }
+        route['query'] = deepmerge(route['query'], { 'order': this.extraQueryOrder, 'updated': new Date().getTime() })
+
         this.$emit('submitSuccess', res)
 
         this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
-          setTimeout(() => this.$router.push(route), 100)
+          if (this.$router.currentRoute.name !== route?.name) {
+            setTimeout(() => this.$router.push(route), 100)
+          }
         }
       }
     },
@@ -344,7 +346,10 @@ export default {
         .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
         .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => {
-          this.isSubmitting = false
+          setTimeout(() => {
+            this.isSubmitting = false
+            this.$emit('performFinished')
+          }, 200)
         })
     },
     async getFormValue() {
@@ -358,12 +363,16 @@ export default {
           const [curUrl, query] = this.url.split('?')
           const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
           object = await this.getObjectDetail(url)
+          let name = ''
+          let attr = ''
           if (object['name']) {
-            object.name = this.$t('common.cloneFrom') + object.name
+            name = object['name']
+            attr = 'name'
           } else if (object['hostname']) {
-            object.hostname = this.$t('common.cloneFrom') + object.hostname
-            object.name = this.$t('common.cloneFrom') + '' + object.name
+            name = object['hostname']
+            attr = 'hostname'
           }
+          object[attr] = name + '-' + this.cloneNameSuffix
         } else {
           object = await this.getObjectDetail(this.iUrl)
         }
@@ -384,8 +393,7 @@ export default {
 </script>
 
 <style scoped>
-  .ibox >>> .el-card__body {
+  .ibox ::v-deep .el-card__body {
     padding-top: 30px;
   }
-
 </style>

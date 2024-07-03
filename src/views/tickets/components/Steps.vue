@@ -1,20 +1,20 @@
 <template>
   <IBox>
     <div style="height: 660px;">
-      <el-steps direction="vertical" :active="ticketSteps">
+      <el-steps :active="ticketSteps" direction="vertical">
         <el-step
-          :title="`${this.$t('tickets.OpenTicket')}：${object.title}`"
-          :description="`${this.$t('tickets.Applicant')}：${object.rel_snapshot.applicant}`"
+          :description="`${this.$t('Applicant')}：${object.rel_snapshot.applicant}`"
+          :title="`${this.$t('OpenTicket')}：${object.title}`"
         >
           <div slot="description" class="description">
-            <div>{{ `${this.$t('tickets.Applicant')}：${object.rel_snapshot.applicant}` }}</div>
-            <div>{{ `${this.$t('common.DateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
+            <div>{{ `${this.$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
+            <div>{{ `${this.$t('DateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
         <el-step
           v-for="(item, i) in process_map"
           :key="i"
-          :title="$tc('tickets.HandleTicket')"
+          :title="$tc('HandleTicket')"
         >
           <div slot="description">
             <div class="processors">
@@ -24,24 +24,24 @@
                 </span>
               </div>
               <el-button v-if="item.assignees.length > 4" type="text" @click="lookOver(item.assignees_display)">
-                {{ $tc('tickets.CheckViewAcceptor') }}
+                {{ $tc('CheckViewAcceptor') }}
               </el-button>
             </div>
           </div>
           <div v-if="item.state ==='closed'" slot="description">
-            <div>{{ $t('tickets.Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
-            <div>{{ $t('common.dateFinished') }}:  {{ toSafeLocalDateStr(item.approval_date) }}</div>
+            <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
+            <div>{{ $t('DateFinished') }}:  {{ toSafeLocalDateStr(item.approval_date) }}</div>
           </div>
           <div v-if="item.state !=='pending' && item.state !=='closed'" slot="description">
-            <div> {{ $t('tickets.Assignee') }}: {{ item.processor_display }}</div>
-            <div>{{ $t('common.dateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
+            <div> {{ $t('Assignee') }}: {{ item.processor_display }}</div>
+            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
           </div>
         </el-step>
         <el-step
-          :title="`${this.$t('tickets.FinishedTicket')}`"
+          :title="`${this.$t('FinishedTicket')}`"
         >
           <div v-if="object.status.value === 'closed'" slot="description">
-            <div>{{ $t('common.dateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
+            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
           </div>
         </el-step>
       </el-steps>
@@ -51,7 +51,7 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import IBox from '@/components/IBox'
 import { STATE_MAP } from '../const'
 
@@ -103,7 +103,7 @@ export default {
         content.push(h('p', null, item),)
       })
       this.$msgbox({
-        title: this.$t('tickets.RelevantAssignees'),
+        title: this.$t('RelevantAssignees'),
         customClass: 'acceptance',
         message: h('p', null, content),
         showCancelButton: false,
@@ -135,5 +135,15 @@ export default {
   max-height: 400px;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.el-steps {
+  .el-step__main .el-step__title {
+    color: var(--color-text-primary);
+  }
+
+  .el-step__main .el-step__description {
+    color: var(--color-help-text);
+  }
 }
 </style>

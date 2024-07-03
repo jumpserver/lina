@@ -21,8 +21,8 @@
         <div class="action">
           <el-tooltip
             v-if="isSystemError && isLoading"
-            :content="$tc('common.Reconnect')"
-            effect="dark"
+            :content="$tc('Reconnect')"
+            :open-delay="500"
             placement="top"
           >
             <svg-icon icon-class="refresh" @click="onRefresh" />
@@ -59,7 +59,8 @@ export default {
   props: {
     item: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -69,7 +70,7 @@ export default {
       dropdownOptions: [
         {
           action: 'copy',
-          label: this.$t('common.Copy')
+          label: this.$t('Copy')
         }
       ]
     }
@@ -104,56 +105,69 @@ export default {
 .chat-item {
   display: flex;
   padding: 16px 14px 0;
+
   &:last-child {
     padding-bottom: 16px;
   }
+
   .avatar {
     width: 22px;
     height: 22px;
     margin-top: 2px;
+
     .header-avatar {
       width: 100%;
       height: 100%;
-      &>>> img {
+
+      &::v-deep img {
         background-color: #e5e5e7;
       }
     }
   }
+
   .content {
     margin-left: 6px;
     overflow: hidden;
+
     .operational {
       display: flex;
       justify-content: space-between;
       overflow: hidden;
+
       .copy {
         float: right;
         cursor: pointer;
       }
     }
+
     .message {
       display: -webkit-box;
+
       .message-content {
         flex: 1;
         padding: 6px 10px;
         border-radius: 2px 12px 12px;
         background-color: #f0f1f5;
       }
+
       .action {
         .svg-icon {
           transform: translateY(50%);
           margin-left: 3px;
           cursor: pointer;
         }
+
         .el-dropdown {
           height: 32px;
           line-height: 37px;
           font-size: 13px;
+
           .el-dropdown-link {
             i {
               padding: 4px 5px;
               font-size: 15px;
               color: #8d9091;
+
               &:hover {
                 color: #7b8085
               }
@@ -161,21 +175,27 @@ export default {
           }
         }
       }
+
       .error {
         color: red;
       }
     }
   }
 }
+
 .user-role {
   flex-direction: row-reverse;
+
   .content {
     margin-right: 10px;
+
     .operational {
       flex-direction: row-reverse;
     }
+
     .message {
       flex-direction: row-reverse;
+
       .message-content {
         background-color: var(--menu-hover);
         border-radius: 12px 2px 12px 12px;

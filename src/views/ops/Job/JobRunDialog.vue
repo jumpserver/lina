@@ -1,12 +1,12 @@
 <template>
   <Dialog
     v-if="iVisible && ready"
-    :title="$tc('ops.RunJob')"
-    :visible.sync="iVisible"
-    width="50%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('RunJob')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="50%"
   >
     <el-form ref="form" :model="form" label-width="140px">
       <el-form-item v-for="(i, key, index) in vars" :key="index" :label="i.label">

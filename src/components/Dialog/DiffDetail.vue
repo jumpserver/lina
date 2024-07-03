@@ -8,7 +8,7 @@
   >
     <div>
       <div v-if="isEmpty()" style="text-align: center">
-        {{ this.$tc('common.NoContent') }}
+        {{ this.$tc('NoContent') }}
       </div>
       <div v-else>
         <el-table
@@ -16,18 +16,18 @@
           class="diffTable"
         >
           <el-table-column
-            :label="$tc('audits.ChangeField')"
+            :label="$tc('ChangeField')"
             :prop="fieldName"
             show-overflow-tooltip
-            width="100"
+            width="150"
           />
           <el-table-column
-            :label="$tc('audits.BeforeChange')"
+            :label="$tc('BeforeChange')"
             :prop="leftKeyName"
             show-overflow-tooltip
           />
           <el-table-column
-            :label="$tc('audits.AfterChange')"
+            :label="$tc('AfterChange')"
             :prop="rightKeyName"
             show-overflow-tooltip
           />
@@ -98,7 +98,7 @@ export default {
     width: 100%;
     max-height: 80vh;
 
-    & >>> td {
+    & ::v-deep td {
       padding: 5px 0 !important;
     }
   }

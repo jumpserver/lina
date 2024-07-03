@@ -2,6 +2,7 @@ import Link from './Link.vue'
 import Select2 from './Select2.vue'
 import TagInput from './TagInput.vue'
 import Switcher from './Switcher.vue'
+import Checkbox from './Checkbox.vue'
 import AttrInput from './AttrInput.vue'
 import UploadKey from './UploadKey.vue'
 import JsonEditor from './JsonEditor.vue'
@@ -23,6 +24,7 @@ import PasswordRule from './PasswordRule.vue'
 export default {
   Link,
   Switcher,
+  Checkbox,
   Select2,
   TagInput,
   AttrInput,
@@ -47,6 +49,7 @@ export default {
 export {
   Link,
   Switcher,
+  Checkbox,
   Select2,
   TagInput,
   AttrInput,

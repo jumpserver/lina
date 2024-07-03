@@ -1,10 +1,10 @@
 <template>
   <GenericListPage
     ref="GenericListPage"
-    :title="this.$t('route.OnlineUserDevices')"
     :header-actions="headerActions"
+    :help-tip="helpMsg"
     :table-config="tableConfig"
-    :help-message="helpMsg"
+    :title="this.$t('OnlineUserDevices')"
   />
 </template>
 
@@ -18,7 +18,7 @@ export default {
   data() {
     const vm = this
     return {
-      helpMsg: this.$t('terminal.OnlineSessionHelpMsg'),
+      helpMsg: this.$t('OnlineSessionHelpMsg'),
       tableConfig: {
         permissions: {
           app: 'audits',
@@ -29,24 +29,24 @@ export default {
         columnsShow: {
           min: ['user_display', 'actions'],
           default: [
-            'user_display', 'backend_display', 'ip', 'city',
-            'user_agent', 'date_created', 'is_active', 'actions'
+            'user_display', 'backend_display', 'city',
+            'date_created', 'is_active', 'actions'
           ]
         },
         columns: [
-          'user_display', 'backend_display', 'ip', 'city', 'type',
-          'user_agent', 'date_created', 'is_active', 'date_expired', 'actions'
+          'user_display', 'backend_display', 'city', 'type',
+          'date_created', 'is_active', 'date_expired', 'user_agent', 'actions'
         ],
         columnsMeta: {
           is_active: {
-            label: this.$t('terminal.Active'),
+            label: this.$t('Active'),
             formatterArgs: {
               showText: false,
               showFalse: false
             }
           },
           user_display: {
-            label: this.$t('audits.User'),
+            label: this.$t('User'),
             formatter: function(row) {
               const to = {
                 name: 'UserDetail',
@@ -67,7 +67,7 @@ export default {
               extraActions: [
                 {
                   name: 'OfflineSession',
-                  title: this.$t('terminal.Offline'),
+                  title: this.$t('Offline'),
                   can: ({ row }) => {
                     return vm.$hasPerm('audits.offline_usersession') && !row.is_current_user_session
                   },
@@ -77,7 +77,7 @@ export default {
                       '/api/v1/audits/user-sessions/offline/',
                       { ids: [row.id] }
                     ).then(() => {
-                      vm.$message.success(this.$tc('terminal.OfflineSuccessMsg'))
+                      vm.$message.success(this.$tc('OfflineSuccessMsg'))
                       vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
                     })
                   }
@@ -99,10 +99,10 @@ export default {
           options: [
             {
               value: 'is_active',
-              label: this.$t('terminal.Active'),
+              label: this.$t('Active'),
               children: [
-                { value: true, label: this.$t('common.Yes') },
-                { value: false, label: this.$t('common.No') }
+                { value: true, label: this.$t('Yes') },
+                { value: false, label: this.$t('No') }
               ]
             }
           ]
@@ -110,9 +110,9 @@ export default {
         extraMoreActions: [
           {
             name: 'OfflineSelected',
-            title: this.$t('terminal.BulkOffline'),
+            title: this.$t('OfflineSelected'),
             type: 'danger',
-            fa: 'clean',
+            icon: 'clean',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 && vm.$hasPerm('audits.offline_usersession')
             },
@@ -125,7 +125,7 @@ export default {
                   })
                 }
               ).then(res => {
-                vm.$message.success(vm.$tc('terminal.OfflineSuccessMsg'))
+                vm.$message.success(vm.$tc('OfflineSuccessMsg'))
                 vm.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
               })
             }

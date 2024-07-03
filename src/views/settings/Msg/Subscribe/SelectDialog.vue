@@ -68,7 +68,8 @@ export default {
           return results
         },
         selectedData: [],
-        showClearBtn: true
+        showClearBtn: true,
+        transferOnCheck: true
       }
     }
   },
@@ -97,7 +98,7 @@ export default {
   padding-left: 10px;
 }
 
-.transfer >>> .district-panel {
+.transfer ::v-deep .district-panel {
   width: 300px;
 
   .el-transfer-panel__body {
@@ -109,11 +110,11 @@ export default {
   }
 }
 
-.transfer >>> .el-transfer-panel__item:hover {
+.transfer ::v-deep .el-transfer-panel__item:hover {
   color: #428bca;
 }
 
-.transfer >>> .el-checkbox {
+.transfer ::v-deep .el-checkbox {
   font-weight: normal;
 }
 </style>

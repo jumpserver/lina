@@ -5,7 +5,7 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
     component: JSONManyToManySelect,
     el: {
       value: [],
-      resource: vm.$t('users.Users'),
+      resource: vm.$t('Users'),
       select2: {
         url: '/api/v1/users/users/',
         ajax: {
@@ -17,38 +17,38 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
       attrs: [
         {
           name: 'name',
-          label: vm.$t('common.Name'),
+          label: vm.$t('Name'),
           inTable: true
         },
         {
           name: 'username',
-          label: vm.$t('common.Username'),
+          label: vm.$t('Username'),
           inTable: true
         },
         {
           name: 'email',
-          label: vm.$t('common.Email'),
+          label: vm.$t('Email'),
           inTable: true
         },
         {
           name: 'comment',
-          label: vm.$t('common.Comment'),
+          label: vm.$t('Comment'),
           inTable: true
         },
         {
           name: 'is_active',
-          label: vm.$t('common.IsActive'),
+          label: vm.$t('IsActive'),
           type: 'bool'
         },
         {
           name: 'is_first_login',
-          label: vm.$t('users.FirstLogin'),
+          label: vm.$t('FirstLogin'),
           type: 'bool'
         },
         {
           name: 'system_roles',
-          label: vm.$t('users.SystemRoles'),
           type: 'm2m',
+          label: vm.$t('SystemRoles'),
           el: {
             url: '/api/v1/rbac/system-roles/?fields_size=mini',
             ajax: {
@@ -61,7 +61,7 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
         },
         {
           name: 'org_roles',
-          label: vm.$t('users.OrgRoles'),
+          label: vm.$t('OrgRoles'),
           type: 'm2m',
           el: {
             url: '/api/v1/rbac/org-roles/',
@@ -76,10 +76,24 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
         },
         {
           name: 'groups',
-          label: vm.$t('users.UserGroups'),
+          label: vm.$t('UserGroups'),
           type: 'm2m',
           el: {
             url: '/api/v1/users/groups/?fields_size=mini'
+          }
+        },
+        {
+          name: 'labels',
+          label: vm.$t('Tags'),
+          type: 'm2m',
+          el: {
+            multiple: true,
+            url: '/api/v1/assets/labels/',
+            ajax: {
+              transformOption: (item) => {
+                return { label: `${item.name}:${item.value}`, value: item.id }
+              }
+            }
           }
         }
       ]

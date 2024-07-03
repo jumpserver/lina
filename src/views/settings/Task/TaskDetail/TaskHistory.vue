@@ -32,8 +32,7 @@ export default {
         },
         columnsMeta: {
           is_finished: {
-            label: this.$t('ops.isFinished'),
-            width: '96px',
+            label: this.$t('IsFinished'),
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
@@ -45,8 +44,7 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('ops.isSuccess'),
-            width: '96px',
+            label: this.$t('IsSuccess'),
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>
@@ -61,7 +59,7 @@ export default {
             }
           },
           time_cost: {
-            label: this.$t('ops.time'),
+            label: this.$t('Time'),
             width: '100px',
             formatter: function(row) {
               if (row.time_cost) {
@@ -71,6 +69,7 @@ export default {
             }
           },
           actions: {
+            width: '150px',
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,
@@ -79,14 +78,14 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: this.$t('ops.output'),
+                  title: this.$t('Output'),
                   callback: function({ row, tableData }) {
                     openTaskPage(row.id)
                   }
                 },
                 {
                   name: 'run',
-                  title: this.$t('ops.RunAgain'),
+                  title: this.$t('RunAgain'),
                   type: 'primary',
                   callback: function({ row, tableData }) {
                     this.$axios.post(`/api/v1/ops/task-executions/?from=${row.id}`, {}).then(data => {

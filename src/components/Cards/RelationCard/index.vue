@@ -1,23 +1,29 @@
 <template>
-  <IBox :title="title" :type="type" v-bind="$attrs">
+  <IBox :title="title" :type="type" class="the-box" v-bind="$attrs">
     <table class="CardTable" style="width: 100%;table-layout:fixed;">
       <tr>
         <td colspan="2">
-          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" v-bind="select2" />
+          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" show-select-all v-bind="select2" />
         </td>
       </tr>
       <slot />
       <tr>
         <td colspan="2">
           <el-button :disabled="iDisabled" :loading="submitLoading" :type="type" size="small" @click="addObjects">
-            {{ $t('common.Add') }}
+            {{ $t('Add') }}
           </el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">
         <tr v-for="obj of iHasObjects" :key="obj.value" class="item">
           <td style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-            <el-tooltip :content="obj.label" effect="dark" placement="left" style="margin: 4px;">
+            <el-tooltip
+              :content="obj.label.toString()"
+              :open-delay="500"
+              effect="dark"
+              placement="left"
+              style="margin: 4px;"
+            >
               <b>{{ obj.label }}</b>
             </el-tooltip>
           </td>
@@ -32,7 +38,7 @@
         <td colspan="2">
           <el-button :disabled="iDisabled" :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $t('common.More') }}
+            {{ $t('More') }}
           </el-button>
         </td>
       </tr>
@@ -41,9 +47,9 @@
 </template>
 
 <script>
-import Select2 from '@/components/Form/FormFields/Select2.vue'
-import IBox from '../../IBox/index.vue'
 import { createSourceIdCache } from '@/api/common'
+import { Select2 } from '@/components/Form/FormFields'
+import IBox from '@/components/IBox/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -101,25 +107,33 @@ export default {
     },
     performDelete: {
       type: Function,
-      default: (obj, that) => {}
+      default: (obj, that) => {
+      }
     },
     allowCreate: {
       type: Boolean,
       default: false
     },
+    select2Config: {
+      type: Object,
+      default: () => {
+      }
+    },
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
-        // 从hasObjects中移除这个object
+        // 从 hasObjects 中移除这个object
         const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
         that.iHasObjects.splice(theRemoveIndex, 1)
-        // 从disabled values中移除这个value
+
+        // 从 disabled values 中移除这个 value
         while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
           const i = that.select2.disabledValues.indexOf(obj.value)
-          this.$log.debug('disabled values remove index: ', i)
+          that.$log.debug('disabled values remove index: ', i)
           that.select2.disabledValues.splice(i, 1)
         }
-        that.$message.success(that.$t('common.RemoveSuccessMsg'))
+
+        that.$message.success(that.$t('RemoveSuccessMsg'))
       }
     },
     onDeleteFail: {
@@ -140,15 +154,23 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {}
+      default: (objects, that) => {
+      }
+    },
+    showAddAll: {
+      type: Boolean,
+      default: false
     },
     onAddSuccess: {
       type: Function,
       default(objects, that) {
         that.$log.debug('Select value', that.select2.value)
-        that.iHasObjects = [...that.iHasObjects, ...objects]
+        const oldValues = that.iHasObjects.map(item => item.value)
+        that.iHasObjects = [...that.iHasObjects, ...objects.filter(item => !oldValues.includes(item.value))]
         that.$refs.select2.clearSelected()
-        that.$message.success(that.$t('common.AddSuccessMsg'))
+        that.$message.success(that.$t('AddSuccessMsg'))
+        this.$refs.select2.refresh()
+        this.$emit('addSuccess')
       }
     },
     getHasObjects: {
@@ -161,6 +183,7 @@ export default {
       iHasObjects: this.hasObjects || [],
       totalHasObjectsLength: 0,
       submitLoading: false,
+      selectAllDisabled: false,
       params: {
         page: 1,
         hasMore: false,
@@ -172,7 +195,8 @@ export default {
         value: this.value,
         disabled: this.disabled,
         disabledValues: [],
-        allowCreate: this.allowCreate
+        allowCreate: this.allowCreate,
+        ...this.select2Config
       }
     }
   },
@@ -253,11 +277,13 @@ export default {
         }
       })
       data = this.iAjax.processResults.bind(this)(data)
-      data.results && data.results.forEach((v) => {
-        if (!this.hasObjects.find((item) => item.value === v.value)) {
-          this.iHasObjects.push(v)
-        }
-      })
+      if (data.results) {
+        data.results.forEach((v) => {
+          if (!this.iHasObjects.find((item) => item.value === v.value)) {
+            this.iHasObjects.push(v)
+          }
+        })
+      }
       // 如果还有其它页，继续获取, 如果没有就停止
       this.params.hasMore = !!data.pagination
       this.totalHasObjectsLength = data.total
@@ -267,6 +293,7 @@ export default {
         return
       }
       this.select2.disabledValues = this.hasObjectsId
+
       if (this.getHasObjects) {
         this.getHasObjects(this.hasObjectsId).then((data) => {
           this.iHasObjects = data
@@ -278,9 +305,9 @@ export default {
       }
     },
     removeObject(obj) {
-      this.performDelete(obj, this).then(
-        () => this.onDeleteSuccess(obj, this)
-      ).catch(error => {
+      this.performDelete(obj, this).then(() => {
+        this.onDeleteSuccess(obj, this)
+      }).catch(error => {
         this.onDeleteFail(error, this)
       })
     },
@@ -290,29 +317,43 @@ export default {
         return
       }
       this.performAdd(objects, this).then(
-        () => this.onAddSuccess(objects, this)
+        () => {
+          this.onAddSuccess(objects, this)
+        }
       )
+    },
+    async selectAll() {
+      this.selectAllDisabled = true
+      this.disabled = true
+      await this.$refs.select2.selectAll()
+      this.selectAllDisabled = false
+      this.disabled = false
     }
   }
 }
 </script>
 
-<style scoped>
-  b, strong {
-    font-weight: 700;
-    font-size: 13px;
-  }
+<style lang='scss' scoped>
+b, strong {
+  font-weight: 700;
+  font-size: 13px;
+}
 
-  tr td {
-    line-height: 1.42857;
-    padding: 8px;
-    vertical-align: top;
-  }
+tr td {
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: top;
+}
 
-  tr.item td {
-    border-top: 1px solid #e7eaec;
-  }
-  .box-margin {
-    margin-bottom: 20px;
-  }
+tr.item td {
+  border-top: 1px solid #e7eaec;
+}
+
+.box-margin {
+  margin-bottom: 20px;
+}
+
+.the-box ::v-deep .el-card__body {
+  padding: 20px;
+}
 </style>

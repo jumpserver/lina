@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>
@@ -30,7 +30,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.PrivilegedTemplate'),
+          title: this.$t('PrivilegedTemplate'),
           type: 'switch',
           attrs: {
             model: this.object?.privileged,
@@ -42,9 +42,9 @@ export default {
                 `/api/v1/accounts/account-templates/${this.object.id}/`,
                 { privileged: val }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -56,7 +56,7 @@ export default {
         'id', 'name', 'username', 'secret_type', 'auto_push',
         'secret_strategy', 'created_by', 'comment',
         {
-          key: this.$t('accounts.SuFrom'),
+          key: this.$t('SuFrom'),
           formatter: () => {
             const su_from = this.object.su_from
             if (!su_from) return <span>-</span>

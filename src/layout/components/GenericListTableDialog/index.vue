@@ -2,10 +2,10 @@
   <Dialog
     :title="title"
     :visible.sync="iVisible"
-    top="1vh"
     :width="width"
     :show-cancel="false"
     :show-confirm="false"
+    top="1vh"
   >
     <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
   </Dialog>
@@ -54,7 +54,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

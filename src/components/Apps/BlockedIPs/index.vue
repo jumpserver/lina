@@ -6,18 +6,18 @@
         type="primary"
         @click="onOpenDialog"
       >
-        {{ $tc('common.View') }}
-        <span>({{ $tc('setting.LockedIP', ipCounts ) }})</span>
+        {{ $tc('View') }}
+        <span>({{ $tc('LockedIP', ipCounts ) }})</span>
       </el-button>
     </div>
     <Dialog
-      :visible.sync="visible"
-      :title="title"
-      width="40%"
+      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
+      :title="title"
+      :visible.sync="visible"
       v-bind="$attrs"
+      width="40%"
       v-on="$listeners"
     >
       <BlockedIPList />
@@ -43,7 +43,7 @@ export default {
     title: {
       type: String,
       default: function() {
-        return this.$t('setting.BlockedIPS')
+        return this.$t('BlockedIPS')
       }
     },
     url: {

@@ -428,7 +428,7 @@ $--input-font-color: $--color-text-regular !default;
 /// height||Other|4
 $--input-width: 140px !default;
 /// height||Other|4
-$--input-height: 34px !default;
+$--input-height: 30px !default;
 $--input-border: $--border-base !default;
 $--input-border-color: $--border-color-base !default;
 /// borderRadius||Border|2
@@ -532,16 +532,16 @@ $--button-medium-padding-horizontal: 20px !default;
 $--button-small-font-size: 12px !default;
 $--button-small-border-radius: #{$--border-radius-base - 1} !default;
 /// padding||Spacing|3
-$--button-small-padding-vertical: 9px !default;
+$--button-small-padding-vertical: 8px !default;
 /// padding||Spacing|3
-$--button-small-padding-horizontal: 15px !default;
+$--button-small-padding-horizontal: 12px !default;
 /// fontSize||Font|1
 $--button-mini-font-size: 12px !default;
 $--button-mini-border-radius: #{$--border-radius-base - 1} !default;
 /// padding||Spacing|3
-$--button-mini-padding-vertical: 7px !default;
+$--button-mini-padding-vertical: 1px !default;
 /// padding||Spacing|3
-$--button-mini-padding-horizontal: 15px !default;
+$--button-mini-padding-horizontal: 3px !default;
 
 /// color||Color|0
 $--button-default-font-color: $--color-text-regular !default;

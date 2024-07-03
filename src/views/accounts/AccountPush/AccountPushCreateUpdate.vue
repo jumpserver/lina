@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
+import { crontab, interval, is_periodic } from '@/views/accounts/const'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -15,11 +15,11 @@ export default {
   },
   data() {
     return {
-      node_ids: [],
-      asset_ids: [],
+      nodeIds: [],
+      assetIds: [],
       isAssetType: '',
       initial: {
-        is_periodic: this.$store.getters.hasValidLicense,
+        is_periodic: false,
         password_rules: {
           length: 30
         },
@@ -30,23 +30,25 @@ export default {
       url: '/api/v1/accounts/push-account-automations/',
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['assets', 'nodes']],
+        [this.$t('Basic'), ['name']],
+        [this.$t('Asset'), ['assets', 'nodes']],
         [
-          this.$t('assets.Account'),
+          this.$t('Account'),
           [
             'accounts', 'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase', 'params'
+            'passphrase'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [
+          this.$t('Automations'), ['params']
+        ],
+        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
         assets: {
-          label: i18n.t('xpack.Asset'),
           type: 'assetSelect',
           component: AssetSelect,
           rules: [
@@ -57,12 +59,11 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.asset_ids = value
+              this.assetIds = value
             }
           }
         },
         nodes: {
-          label: this.$tc('assets.Node'),
           el: {
             multiple: true,
             ajax: {
@@ -74,7 +75,7 @@ export default {
           },
           on: {
             input: ([value]) => {
-              this.node_ids = value?.map(i => i.pk)
+              this.nodeIds = value?.map(i => i.pk)
             }
           }
         },
@@ -90,19 +91,18 @@ export default {
             readonly: true
           }
         },
-        is_periodic: {
-          type: 'switch',
-          disabled: !this.$store.getters.hasValidLicense
-        },
+        is_periodic,
+        crontab,
+        interval,
         params: {
           component: AutomationParams,
-          label: this.$t('assets.PushParams'),
+          label: this.$t('PushParams'),
           el: {
             method: 'push_account_method',
-            assets: this.asset_ids,
-            nodes: this.node_ids
+            assets: this.assetIds,
+            nodes: this.nodeIds
           },
-          helpText: this.$t('accounts.AccountPush.ParamsHelpText')
+          helpText: this.$t('ParamsHelpText')
         }
       },
       createSuccessNextRoute: { name: 'AccountPushList' },
@@ -124,13 +124,13 @@ export default {
     }
   },
   watch: {
-    node_ids: {
+    nodeIds: {
       handler(val) {
         this.fieldsMeta.params.el.nodes = val
       },
       deep: true
     },
-    asset_ids: {
+    assetIds: {
       handler(val) {
         this.fieldsMeta.params.el.assets = val
       },

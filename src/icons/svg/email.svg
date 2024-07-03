@@ -1,2 +1,6 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg t="1644305786242" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7592" width="160" height="160"><path d="M64 186.688 512 506.688 960 186.688 960 272 512 592 64 272Z" p-id="7593"></path><path d="M0 128l0 768 1024 0L1024 128 0 128zM960 832 64 832 64 192l896 0L960 832z" p-id="7594"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="30px" viewBox="0 0 40 30" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+    <polygon id="路径" points="2.5 2.2925 20 14.7925 37.5 2.2925 37.5 5.625 20 18.125 2.5 5.625"></polygon>
+    <path d="M0,0 L0,30 L40,30 L40,0 L0,0 Z M37.5,27.5 L2.5,27.5 L2.5,2.5 L37.5,2.5 L37.5,27.5 Z" id="形状"></path>
+</svg>

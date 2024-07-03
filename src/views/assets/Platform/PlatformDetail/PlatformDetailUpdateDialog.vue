@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    :title="$tc('common.Update')"
-    :visible.sync="iVisible"
-    width="60%"
-    top="1vh"
     :show-cancel="false"
     :show-confirm="false"
+    :title="$tc('Update')"
+    :visible.sync="iVisible"
+    top="1vh"
+    width="60%"
   >
     <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
   </Dialog>

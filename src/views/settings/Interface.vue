@@ -3,45 +3,50 @@
     <div v-if="isDev" style="margin-bottom: 20px">
       <div class="dz">
         <el-button
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          size="small"
         >
-          {{ tp.toUpperCase() }}
+          {{ value }}
         </el-button>
       </div>
       <div class="dz">
         <el-button
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          size="small"
           disabled
         >
-          {{ tp.toUpperCase() }}
+          {{ value }}
         </el-button>
       </div>
-
       <div class="dz">
         <el-link
-          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          v-for="(value, tp) in examples"
           :key="tp"
           :type="tp"
+          style="padding-right: 10px;"
         >
-          <span style="padding-right: 10px">{{ tp.toUpperCase() }}</span>
+          {{ value }}
         </el-link>
       </div>
       <div class="dz">
         <el-radio-group v-model="dz.radio">
-          <el-radio :label="3">备选项1</el-radio>
-          <el-radio :label="6">备选项2</el-radio>
-          <el-radio :label="9">备选项3</el-radio>
+          <el-radio v-for="i in 3" :key="i" :label="$tc('Options') + ` ${i}`" />
         </el-radio-group>
       </div>
-      <el-steps :active="1" :space="200" class="dz" finish-status="error">
-        <el-step title="已完成" />
-        <el-step title="进行中" />
-        <el-step title="步骤 3" />
-      </el-steps>
+      <div class="dz">
+        <el-steps :active="1" :space="100">
+          <el-step
+            v-for="(s, i) in stepStatus"
+            :key="s"
+            :title="$tc('Step') + ` ${i+1}`"
+            :status="s"
+          />
+        </el-steps>
+      </div>
       <div class="dz" />
     </div>
     <IBox v-if="!loading">
@@ -77,26 +82,29 @@ export default {
   data() {
     return {
       dz: {},
+      stepStatus: ['wait', 'success', 'finish', 'process', 'error'],
       loading: true,
       files: {},
+      examples: {
+        'primary': this.$t('Primary'), 'info': this.$t('Info'), 'warning': this.$t('Warning'),
+        'success': this.$t('Success'), 'danger': this.$t('Danger')
+      },
       interfaceInfo: {},
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
       isDev: process.env.NODE_ENV === 'development',
       themeConfigs: [],
       fields: [
-        [this.$t('common.Basic'), ['login_title', 'theme']],
+        [this.$t('Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
-        [this.$t('xpack.Images'), ['login_image']],
-        [this.$t('xpack.Footer'), ['footer_content']]
+        [this.$t('Images'), ['login_image']],
+        [this.$t('Footer'), ['footer_content']]
       ],
       fieldsMeta: {
         login_title: {
-          label: this.$t('xpack.loginTitle'),
-          helpText: this.$t('xpack.loginTitleTip')
+          helpText: this.$t('LoginTitleTip')
         },
         theme: {
-          label: this.$t('notifications.Subject'),
           on: {
             change: ([value]) => {
               const themeColors = this.getSelectThemeConfig(value)
@@ -106,12 +114,11 @@ export default {
         },
         login_image: {
           component: UploadField,
-          label: this.$t('xpack.loginImage'),
           el: {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.loginImageTip')
+            tip: this.$t('LoginImageTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -121,12 +128,11 @@ export default {
         },
         favicon: {
           component: UploadField,
-          label: this.$t('xpack.favicon'),
           el: {
             width: '5%',
             height: '5%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.faviconTip')
+            tip: this.$t('FaviconTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -136,12 +142,11 @@ export default {
         },
         logo_index: {
           component: UploadField,
-          label: this.$t('xpack.logoIndex'),
           el: {
             width: '10%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoIndexTip'),
+            tip: this.$t('LogoIndexTip'),
             showBG: true
           },
           on: {
@@ -152,12 +157,11 @@ export default {
         },
         logo_logout: {
           component: UploadField,
-          label: this.$t('xpack.logoLogout'),
           el: {
             width: '5%',
             height: '5%',
             accept: 'image/jpg, image/png, image/jpeg',
-            tip: this.$t('xpack.logoLogoutTip')
+            tip: this.$t('LogoLogoutTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -179,12 +183,12 @@ export default {
       },
       moreButtons: [
         {
-          title: this.$t('xpack.RestoreButton'),
+          title: this.$t('RestoreButton'),
           callback: function(value, form) {
-            this.$confirm(this.$t('xpack.restoreDialogMessage'),
-              this.$t('xpack.restoreDialogTitle'), {
-                confirmButtonText: this.$t('common.Confirm'),
-                cancelButtonText: this.$t('common.Cancel'),
+            this.$confirm(this.$t('RestoreDialogMessage'),
+              this.$t('RestoreDialogTitle'), {
+                confirmButtonText: this.$t('Confirm'),
+                cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
               }).then(() => {
               restoreInterface().then(res => {
@@ -235,9 +239,9 @@ export default {
         }
       }
       updateInterface(form).then(res => {
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
       })
     }
   }

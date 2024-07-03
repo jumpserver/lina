@@ -8,6 +8,9 @@
     />
     <div style="padding-top: 15px">
       <el-row :gutter="20">
+        <IBox v-if="totalData.length === 0" class="empty-box">
+          <el-empty />
+        </IBox>
         <el-col v-for="(d, index) in totalData" :key="index" :span="6">
           <el-card
             :body-style="{ 'text-align': 'center', 'padding': '20px' }"
@@ -16,7 +19,7 @@
             @click.native="onView(d)"
           >
             <span v-if="d.edition === 'enterprise'" class="enterprise">
-              {{ $t('common.Enterprise') }}
+              {{ $t('Enterprise') }}
             </span>
             <el-row :gutter="20">
               <el-col :span="8">
@@ -54,13 +57,15 @@
 <script>
 import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
+import IBox from '@/components/IBox/index.vue'
 
 const defaultFirstPage = 1
 
 export default {
   name: 'CardTable',
   components: {
+    IBox,
     TableAction,
     Pagination
   },
@@ -176,8 +181,8 @@ export default {
       viewFunc(obj)
     },
     onDelete(obj) {
-      const msg = `${this.$t('common.deleteWarningMsg')} "${obj.name}" ?`
-      this.$confirm(msg, this.$tc('common.Info'), {
+      const msg = `${this.$t('DeleteWarningMsg')} "${obj.name}" ?`
+      this.$confirm(msg, this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
@@ -186,7 +191,7 @@ export default {
           await deleteFunc(obj)
           done()
           this.reloadTable()
-          this.$message.success(this.$tc('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('DeleteSuccessMsg'))
         }
       }).catch(() => {
         /* 取消*/
@@ -247,6 +252,16 @@ export default {
 
 .my-card:hover .closeIcon {
   visibility: visible;
+}
+
+.empty-box ::v-deep .el-empty {
+  max-width: 200px;
+  margin: 0 auto;
+
+  .el-empty__description {
+    margin-top: 20px;
+    text-align: center;
+  }
 }
 
 .enterprise {

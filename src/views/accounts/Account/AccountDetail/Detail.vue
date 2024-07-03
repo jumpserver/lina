@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="15" :sm="24">
       <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
-    <el-col :md="10" :sm="24">
+    <el-col :md="9" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <ViewSecret
         v-if="showViewSecretDialog"
@@ -40,7 +40,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -52,7 +53,7 @@ export default {
       showViewSecretDialog: false,
       quickActions: [
         {
-          title: this.$t('common.Activate'),
+          title: this.$t('Active'),
           type: 'switcher',
           attrs: {
             model: vm.object.is_active,
@@ -64,13 +65,13 @@ export default {
                 `/api/v1/accounts/accounts/${this.object.id}/`,
                 { is_active: val, name: this.object.name }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               })
             }
           })
         },
         {
-          title: this.$t('assets.Privileged'),
+          title: this.$t('Privileged'),
           type: 'switcher',
           attrs: {
             model: vm.object.privileged,
@@ -82,16 +83,16 @@ export default {
                 `/api/v1/accounts/accounts/${this.object.id}/`,
                 { name: this.object?.name, privileged: val }
               ).then(res => {
-                this.$message.success(this.$tc('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('UpdateSuccessMsg'))
               })
             }
           })
         },
         {
-          title: this.$t('assets.TestAccountConnective'),
+          title: this.$t('TestAccountConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('accounts.Test'),
+            label: this.$t('Test'),
             disabled: (
               !vm.$hasPerm('accounts.verify_account') ||
               !vm.object.asset.auto_config?.ansible_enabled ||
@@ -114,10 +115,10 @@ export default {
           })
         },
         {
-          title: this.$t('assets.PushAccount'),
+          title: this.$t('PushAccount'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Push'),
+            label: this.$t('Push'),
             disabled: (
               !vm.$hasPerm('accounts.push_account') ||
               !vm.object.asset.auto_config?.push_account_enabled ||
@@ -140,10 +141,10 @@ export default {
           })
         },
         {
-          title: this.$t('common.ViewSecret'),
+          title: this.$t('ViewSecret'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.View'),
+            label: this.$t('View'),
             disabled: !vm.$hasPerm('accounts.view_accountsecret')
           },
           callbacks: Object.freeze({
@@ -156,10 +157,10 @@ export default {
           })
         },
         {
-          title: this.$t('common.ClearSecret'),
+          title: this.$t('ClearSecret'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Clear'),
+            label: this.$t('Clear'),
             disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
@@ -168,13 +169,13 @@ export default {
                 '/api/v1/accounts/accounts/clear-secret/',
                 { account_ids: [this.object.id] }
               ).then(() => {
-                this.$message.success(this.$tc('common.ClearSuccessMsg'))
+                this.$message.success(this.$tc('ClearSuccessMsg'))
               })
             }
           })
         },
         {
-          title: this.$t('assets.UserSwitchFrom'),
+          title: this.$t('SuFrom'),
           type: 'updateSelect',
           attrs: {
             type: 'primary',
@@ -212,7 +213,7 @@ export default {
               name: 'AssetDetail',
               params: { id: this.object.asset.id }
             }
-            return <router-link to={route} >{ value }</router-link>
+            return <router-link to={route}>{value?.name}</router-link>
           },
           su_from: (item, value) => {
             return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>

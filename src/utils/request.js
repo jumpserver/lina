@@ -61,11 +61,11 @@ function ifUnauthorized({ response, error }) {
       window.location = '/core/auth/login/'
       return
     }
-    const title = i18n.t('common.Info')
-    const msg = i18n.t('auth.LoginRequiredMsg')
+    const title = i18n.t('Info')
+    const msg = i18n.t('LoginRequiredMsg')
     MessageBox.confirm(msg, title, {
-      confirmButtonText: i18n.t('auth.ReLogin'),
-      cancelButtonText: i18n.t('common.Cancel'),
+      confirmButtonText: i18n.t('ReLogin'),
+      cancelButtonText: i18n.t('Cancel'),
       type: 'warning'
     }).then(() => {
       window.location = '/core/auth/login/'
@@ -78,15 +78,15 @@ function ifBadRequest({ response, error }) {
     if (response.data?.detail) {
       error.message = response.data.detail
     } else {
-      error.message = i18n.t('common.BadRequestErrorMsg')
+      error.message = i18n.t('BadRequestErrorMsg')
     }
   }
   if (response.status === 403) {
-    error.message = i18n.t('common.BadRoleErrorMsg')
+    error.message = i18n.t('BadRoleErrorMsg')
   }
   if (response.status === 409) {
     error.response.status = 409
-    error.message = i18n.t('common.BadConflictErrorMsg')
+    error.message = i18n.t('BadConflictErrorMsg')
   }
 }
 
@@ -123,6 +123,7 @@ function ifConfirmRequired({ response, error }) {
   return new Promise((resolve, reject) => {
     const callback = () => resolve()
     const cancel = () => reject()
+
     eventBus.$emit('showConfirmDialog', { response, callback, cancel })
   })
 }
@@ -158,6 +159,7 @@ service.interceptors.response.use(
     const response = error.response
 
     const confirming = ifConfirmRequired({ response, error })
+
     if (confirming) {
       return new Promise((resolve, reject) => {
         confirming.then(() => {

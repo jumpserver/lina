@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="ticket" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="ticket" v-bind="config" v-on="$listeners">
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>
@@ -22,7 +22,7 @@ export default {
         url: '',
         submenu: [
           {
-            title: this.$t('route.TicketDetail'),
+            title: this.$t('TicketDetail'),
             name: 'TicketDetail'
           }
         ],

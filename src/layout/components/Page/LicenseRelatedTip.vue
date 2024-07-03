@@ -3,14 +3,14 @@
     <el-alert v-if="licenseMsg" type="error">
       {{ licenseMsg }} !
       <router-link :to="{ name: 'License' }" style="padding-left: 5px">
-        {{ $t('common.View') }} <i class="fa fa-external-link" />
+        {{ $t('View') }} <i class="fa fa-external-link" />
       </router-link>
     </el-alert>
   </div>
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -39,10 +39,10 @@ export default {
       }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
       if (intervalDays < 0) {
-        return this.$t('setting.LicenseExpired')
+        return this.$t('LicenseExpired')
       }
       if (intervalDays < 7) {
-        return this.$t('setting.LicenseWillBe') + this.licenseData.date_expired + this.$t('setting.Expire')
+        return this.$t('LicenseWillBe') + this.licenseData.date_expired + this.$t('Expire')
       }
       return false
     },
@@ -51,10 +51,10 @@ export default {
         return false
       }
       if (this.licenseData.corporation === 'FIT2CLOUD') {
-        return this.$t('setting.LicenseForTest')
+        return this.$t('LicenseForTest')
       }
       if (this.licenseData['current_asset_count'] > this.licenseData.asset_count) {
-        return this.$t('setting.LicenseReachedAssetAmountLimit')
+        return this.$t('LicenseReachedAssetAmountLimit')
       }
       return false
     }

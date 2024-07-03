@@ -32,15 +32,15 @@ export default {
       const { object } = this
       return object.type === 'login_confirm' ? [] : [
         {
-          key: this.$t('acl.apply_login_asset'),
+          key: this.$t('ApplyLoginAsset'),
           value: object.apply_login_asset?.name
         },
         {
-          key: this.$t('acl.apply_login_account'),
+          key: this.$t('ApplyLoginAccount'),
           value: object.apply_login_account
         },
         {
-          key: this.$t('acl.apply_login_user'),
+          key: this.$t('ApplyLoginUser'),
           value: object.apply_login_user.name
         }
       ]

@@ -27,13 +27,13 @@ export default {
         accounts: ['@ALL']
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('perms.User'), ['users']],
-        [this.$t('perms.Asset'), ['assets']],
-        [this.$t('perms.Account'), ['accounts']],
-        [this.$t('acl.CommandGroup'), ['command_groups']],
-        [this.$t('common.action'), ['action', 'reviewers']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('User'), ['users']],
+        [this.$t('Asset'), ['assets']],
+        [this.$t('Account'), ['accounts']],
+        [this.$t('CommandGroup'), ['command_groups']],
+        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/acls/command-filter-acls/',
       createSuccessNextRoute: { name: 'CommandFilterAclList' },

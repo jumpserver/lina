@@ -12,17 +12,17 @@ export const typeMatchMapper = {
 }
 
 export const attrMatchOptions = [
-  { label: i18n.t('common.Equal'), value: 'exact' },
-  { label: i18n.t('common.NotEqual'), value: 'not' },
-  { label: i18n.t('common.MatchIn'), value: 'in' },
-  { label: i18n.t('common.Contains'), value: 'contains' },
-  { label: i18n.t('common.Exclude'), value: 'exclude' },
-  { label: i18n.t('common.Startswith'), value: 'startswith' },
-  { label: i18n.t('common.Endswith'), value: 'endswith' },
-  { label: i18n.t('common.Regex'), value: 'regex' },
-  { label: i18n.t('common.BelongTo'), value: 'm2m' },
-  { label: i18n.t('common.BelongAll'), value: 'm2m_all' },
-  { label: i18n.t('common.IPMatch'), value: 'ip_in' },
-  { label: i18n.t('common.GreatEqualThan'), value: 'gte' },
-  { label: i18n.t('common.LessEqualThan'), value: 'lte' }
+  { label: i18n.t('Equal'), value: 'exact' },
+  { label: i18n.t('NotEqual'), value: 'not' },
+  { label: i18n.t('MatchIn'), value: 'in' },
+  { label: i18n.t('Contains'), value: 'contains' },
+  { label: i18n.t('Exclude'), value: 'exclude' },
+  { label: i18n.t('Startswith'), value: 'startswith' },
+  { label: i18n.t('Endswith'), value: 'endswith' },
+  { label: i18n.t('Regex'), value: 'regex' },
+  { label: i18n.t('BelongTo'), value: 'm2m' },
+  { label: i18n.t('BelongAll'), value: 'm2m_all' },
+  { label: i18n.t('IPMatch'), value: 'ip_in' },
+  { label: i18n.t('GreatEqualThan'), value: 'gte' },
+  { label: i18n.t('LessEqualThan'), value: 'lte' }
 ]

@@ -32,12 +32,13 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': this.$t('common.Detail'),
+            'title': this.$t('Basic'),
             'name': 'Detail'
           },
           {
-            'title': this.$t('terminal.AppletHosts'),
-            'name': 'AppletHosts'
+            'title': this.$t('AppletHosts'),
+            'name': 'AppletHosts',
+            hidden: !this.$hasPerm('terminal.view_appletpublication')
           }
         ],
         hasRightSide: true,
@@ -48,7 +49,7 @@ export default {
           },
           deleteSuccessRoute: 'Applets'
         },
-        titlePrefix: this.$tc('route.AppletDetail')
+        titlePrefix: this.$tc('AppletDetail')
       }
     }
   },

@@ -8,7 +8,7 @@ import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
-  name: 'AccountBackupPlanUpdate',
+  name: 'AccountBackupUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -18,9 +18,8 @@ export default {
     return {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('accounts.AccountBackup.Types'), ['types']],
-        [this.$t('accounts.AccountBackup.Backup'),
+        [this.$t('Basic'), ['name', 'types']],
+        [this.$t('Backup'),
           [
             'backup_type',
             'is_password_divided_by_email',
@@ -32,11 +31,11 @@ export default {
             'zip_encrypt_password'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
+        [this.$t('Other'), ['comment']]
       ],
       initial: {
-        is_periodic: true,
+        is_periodic: false,
         interval: 24,
         categories: []
       },
@@ -53,7 +52,7 @@ export default {
         obj_recipients_part_two: fields.obj_recipients_part_two,
         types: {
           component: 'el-cascader',
-          label: this.$t('accounts.AccountBackup.Types'),
+          label: this.$t('Types'),
           remote: {
             request: () => vm.$axios.get('/api/v1/assets/categories/')
           },

@@ -7,7 +7,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import { openTaskPage } from '@/utils/jms'
 
@@ -27,7 +27,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'type', 'asset_amount', 'average_time_cost',
-            'summary', 'comment', 'date_last_run', 'actions'
+            'summary', 'date_last_run', 'actions'
           ]
         },
         columns: [
@@ -36,8 +36,14 @@ export default {
         ],
         columnsMeta: {
           name: {
+            width: '140px',
+            formatter: DetailFormatter,
             formatterArgs: {
-              can: true
+              can: true,
+              getRoute: ({ row }) => ({
+                name: 'JobDetail',
+                params: { id: row.id }
+              })
             }
           },
           type: {
@@ -50,29 +56,24 @@ export default {
             width: '240px'
           },
           summary: {
-            label: this.$t('ops.Summary(success/total)'),
-            width: '140px',
+            label: this.$t('Summary'),
             formatter: (row) => {
               return row.summary['success'] + '/' + row.summary['total']
             }
           },
           average_time_cost: {
-            label: this.$t('ops.AverageTimeCost'),
-            width: '140px',
             formatter: (row) => {
               return row.average_time_cost.toFixed(2) + 's'
             }
           },
           asset_amount: {
-            width: '140px',
-            label: this.$t('ops.AssetAmount'),
+            label: this.$t('AssetsOfNumber'),
             formatter: (row) => {
               return row.assets.length
             }
           },
           date_last_run: {
             width: '140px',
-            label: this.$t('ops.DateLastRun'),
             formatter: DateFormatter
           },
           actions: {
@@ -86,7 +87,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('ops.Run'),
+                  title: this.$t('Run'),
                   name: 'run',
                   can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
@@ -121,13 +122,11 @@ export default {
           dropdown: [
             {
               name: 'adhoc',
-              title: this.$t('ops.Command') + this.$t('ops.Job'),
-              has: true
+              title: this.$t('Command')
             },
             {
               name: 'playbook',
-              title: 'Playbook' + this.$t('ops.Job'),
-              has: true
+              title: 'Playbook'
             }
           ]
         }

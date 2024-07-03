@@ -3,7 +3,7 @@
     :before-submit="beforeSubmit"
     :form-config="formConfig"
     :table-config="tableConfig"
-    class="attr-input"
+    class="action-input"
     @submit="onSubmit"
   />
 </template>
@@ -28,12 +28,16 @@ export default {
       resourceType: '',
       globalResource: {},
       globalProtocols: {},
+      nameOptions: [
+        { label: this.$t('InstanceName'), value: 'full_name' },
+        { label: this.$t('InstanceNamePartIp'), value: 'part_name' }
+      ],
       formConfig: {
         initial: { attr: '', value: '' },
         inline: true,
         hasSaveContinue: false,
         submitBtnSize: 'mini',
-        submitBtnText: this.$t('common.Add'),
+        submitBtnText: this.$t('Add'),
         hasReset: false,
         onSubmit: () => {},
         submitMethod: () => 'post',
@@ -59,7 +63,8 @@ export default {
             on: {
               change: ([val], updateForm) => {
                 updateForm({ value: '' })
-                let url
+                let url = ''
+                let options = []
                 switch (val) {
                   case 'platform':
                     url = '/api/v1/assets/platforms/?category=host'
@@ -73,12 +78,16 @@ export default {
                   case 'account_template':
                     url = '/api/v1/accounts/account-templates/'
                     break
+                  case 'name_strategy':
+                    options = this.nameOptions
+                    break
                 }
                 if (val !== 'platform') {
                   this.formConfig.fieldsMeta.protocols.el.hidden = true
                 }
                 this.resourceType = val
                 this.formConfig.fieldsMeta.value.el.ajax.url = url
+                this.formConfig.fieldsMeta.value.el.options = options
               }
             }
           },
@@ -87,6 +96,7 @@ export default {
             component: Select2,
             rules: [Required],
             el: {
+              options: [],
               value: [],
               ajax: {
                 url: '',
@@ -140,10 +150,10 @@ export default {
       },
       tableConfig: {
         columns: [
-          { prop: 'attr', label: this.$t('common.ResourceType'), formatter: tableFormatter('resource_type') },
-          { prop: 'value', label: this.$t('common.Resource'), formatter: tableFormatter('resource', () => { return this.globalResource }) },
-          { prop: 'protocols', label: this.$t('common.Other'), formatter: tableFormatter('protocols') },
-          { prop: 'action', label: this.$t('common.Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
+          { prop: 'attr', label: this.$t('ResourceType'), formatter: tableFormatter('resource_type') },
+          { prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => { return this.globalResource }) },
+          { prop: 'protocols', label: this.$t('Other'), formatter: tableFormatter('protocols') },
+          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
             return (
               <div className='input-button'>
                 <el-button
@@ -162,24 +172,31 @@ export default {
       }
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
+    init() {
+      this.nameOptions.map((o) => { this.globalResource[o.value] = o.label })
+    },
     onSubmit() {
       this.$emit('input', this.tableConfig.totalData)
     },
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('assets.Platform'), domain: this.$tc('assets.Domain')
+        platform: this.$tc('Platform'), domain: this.$tc('Zone'),
+        name_strategy: this.$tc('Strategy')
       }
       this.tableConfig.totalData.map(item => {
         const iValue = item.value?.id || item.value
         const iAttr = item.attr?.value || item.attr
         if (iValue === data.value) {
           status = false
-          this.$message.error(`${this.$tc('xpack.Cloud.ExistError')}`)
+          this.$message.error(`${this.$tc('ExistError')}`)
         } else if (Object.keys(labelMap).indexOf(data?.attr) !== -1 && iAttr === data.attr) {
           status = false
-          this.$message.error(`${this.$tc('xpack.Cloud.UniqueError')}: ${labelMap[data.attr]}`)
+          this.$message.error(`${this.$tc('UniqueError')}: ${labelMap[data.attr]}`)
         }
       })
       return status
@@ -190,7 +207,7 @@ export default {
         if (item[0]?.id) {
           this.$axios.delete(`/api/v1/xpack/cloud/strategy-actions/${item[0].id}/`)
         }
-        this.$message.success(this.$tc('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
       }
     }
   }
@@ -198,11 +215,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
->>> .el-form-item:nth-child(-n+3) {
+::v-deep .el-form-item:nth-child(-n+3) {
   width: 43.5%;
 }
->>> .el-form-item:last-child {
+::v-deep .el-form-item:last-child {
   width: 6%;
+}
+.action-input {
+  margin-top: -10px;
 }
 </style>
 

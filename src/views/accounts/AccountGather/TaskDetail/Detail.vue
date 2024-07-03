@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :md="16" :sm="24">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
   </el-row>
@@ -8,7 +8,7 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'Detail',
@@ -27,16 +27,16 @@ export default {
       detailFields: [
         'id', 'name', 'is_periodic',
         {
-          key: this.$t('xpack.Cloud.RegularlyPerform'),
-          value: this.object?.periodic_display || ''
+          key: this.$t('Crontab'),
+          value: this.object?.periodic_display || '-'
         },
         {
-          key: this.$t('xpack.Cloud.DateLastSync'),
-          value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
+          key: this.$t('DateLastSync'),
+          value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : '-'
         },
         {
-          key: this.$t('xpack.Cloud.DateCreated'),
-          value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : ''
+          key: this.$t('DateCreated'),
+          value: this.object.date_created ? toSafeLocalDateStr(this.object.date_created) : '-'
         },
         'comment'
       ]
