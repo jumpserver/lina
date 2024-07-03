@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-alert
-      :closable="false"
       :center="false"
+      :closable="true"
       style="margin-bottom: 6px"
     >
-      <el-link :type="linkType" :icon="linkIcon" :underline="false"> {{ tip }} </el-link>
+      <el-link :icon="linkIcon" :type="linkType" :underline="false"> {{ tip }}</el-link>
     </el-alert>
     <ImportTable
       ref="importTable"
@@ -60,7 +60,9 @@ export default {
             title: this.$t('Next'),
             type: 'primary',
             hidden: !this.active,
-            callback: () => { this.$emit('update:active', 3) }
+            callback: () => {
+              this.$emit('update:active', 3)
+            }
           }
         ],
         config: {
@@ -68,7 +70,7 @@ export default {
           persistSelection: false,
           hasPagination: false,
           tableAttrs: {
-            maxHeight: '200px'
+            height: '300px'
           }
         },
         jsonData: {
@@ -102,7 +104,9 @@ export default {
   },
   methods: {
     enableWS() {
-      if (this.ws) { return }
+      if (this.ws) {
+        return
+      }
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
       const url = '/ws/xpack/cloud/'

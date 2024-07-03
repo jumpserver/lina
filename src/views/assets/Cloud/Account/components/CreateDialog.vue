@@ -11,8 +11,8 @@
     width="1051px"
     v-on="$listeners"
   >
-    <el-row style="padding: 10px">
-      <el-col :span="4" style="height: 300px;">
+    <el-row :gutter="5" style="padding: 10px">
+      <el-col :span="4" class="left-step-zone">
         <el-steps :active="active" direction="vertical">
           <el-step :description="firstStepDesc" />
           <el-step :description="$tc('Authentication')" />
@@ -67,7 +67,7 @@ export default {
       activeMenuMap: { 0: 'ProviderPanel', 1: 'AuthPanel', 2: 'AssetPanel', 3: 'ResultPanel' },
       activeMenu: 'ProviderPanel',
       selected: '',
-      firstStepDesc: this.$tc('SelectPlatforms'),
+      firstStepDesc: this.$tc('SelectProvider'),
       active: 0,
       account: {}
     }
@@ -102,11 +102,17 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 ::v-deep .el-dialog {
   min-width: 1051px !important;
-  max-width: 1051px !important;
+  max-width: 1056px !important;
 }
+
+.left-step-zone {
+  border-right: solid 1px var(--color-border);
+  height: 350px;
+}
+
 ::v-deep .el-step {
   .el-step__head {
     &.is-process {
@@ -131,7 +137,7 @@ export default {
 
   .el-step__main {
     .el-step__description.is-process,
-    .el-step__description.is-finish{
+    .el-step__description.is-finish {
       color: var(--color-primary);
     }
   }

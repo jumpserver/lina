@@ -3,7 +3,7 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('SelectPlatforms')"
+    :title="$tc('SelectProvider')"
     :visible.sync="iVisible"
     top="1vh"
     width="60%"

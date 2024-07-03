@@ -3,8 +3,8 @@
     ref="form"
     class="form"
     v-bind="settings"
-    @submitSuccess="handleSubmitSuccess"
     @performFinished="handlePerformFinished"
+    @submitSuccess="handleSubmitSuccess"
   />
 </template>
 
@@ -28,7 +28,8 @@ export default {
     },
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     origin: {
       type: String,
@@ -37,9 +38,13 @@ export default {
   },
   data() {
     const vm = this
+
     function setFieldAttrs(provider) {
       const fieldsObject = {}
-      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key']
+      const updateNotRequiredFields = [
+        'access_key_secret', 'client_secret', 'password', 'sc_password',
+        'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key'
+      ]
       for (const item of ACCOUNT_PROVIDER_ATTRS_MAP[provider].attrs) {
         fieldsObject[item] = {
           rules: updateNotRequiredFields.includes(item) && vm.object?.id ? [] : [RequiredChange]
@@ -202,7 +207,15 @@ export default {
 ::v-deep .el-form-item.form-buttons {
   text-align: right;
 }
+
 .form {
   margin-right: 0;
+
+  ::v-deep {
+    form {
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
 }
 </style>

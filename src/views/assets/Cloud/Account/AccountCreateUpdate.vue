@@ -18,11 +18,11 @@
       <el-col :md="4" :sm="24">
         <IBox style="height: 490px;">
           <el-steps
-            direction="vertical"
             :active="activeStep"
+            direction="vertical"
             space="400px"
           >
-            <el-step :title="$tc('Config')" :description="description" />
+            <el-step :description="description" :title="$tc('Config')" />
             <el-step :title="$tc('Strategy')" />
           </el-steps>
         </IBox>
@@ -53,7 +53,10 @@ export default {
 
     function setFieldAttrs() {
       const fieldsObject = {}
-      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key']
+      const updateNotRequiredFields = [
+        'access_key_secret', 'client_secret', 'password', 'sc_password',
+        'oc_password', 'cert_file', 'key_file', 'public_key', 'private_key'
+      ]
       for (const item of accountProviderAttrs?.attrs) {
         fieldsObject[item] = {
           rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [RequiredChange]
@@ -160,7 +163,9 @@ export default {
           }
           return `${url}?provider=${accountProvider}`
         },
-        submitMethod: () => { return vm.$route.params?.id || vm.accountId ? 'put' : 'post' },
+        submitMethod: () => {
+          return vm.$route.params?.id || vm.accountId ? 'put' : 'post'
+        },
         cleanFormValue(values) {
           const encryptedFields = [
             'access_key_secret', 'password', 'client_secret',
@@ -257,12 +262,18 @@ export default {
         },
         hasSaveContinue: false,
         hasReset: false,
-        getUrl: () => { return this.strategySettings.url },
-        submitMethod: () => { return this.$refs.baseForm.form.task?.id ? 'put' : 'post' },
+        getUrl: () => {
+          return this.strategySettings.url
+        },
+        submitMethod: () => {
+          return this.$refs.baseForm.form.task?.id ? 'put' : 'post'
+        },
         moreButtons: [
           {
             title: this.$t('Previous'),
-            callback: () => { this.activeStep = this.activeStep === 1 ? 0 : 1 }
+            callback: () => {
+              this.activeStep = this.activeStep === 1 ? 0 : 1
+            }
           }
         ],
         updateSuccessNextRoute: { name: 'CloudAccountList' },
@@ -273,7 +284,9 @@ export default {
           if (!Array.isArray(ipNetworkSegments)) {
             value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
           }
-          value.strategy = strategy.map(item => { return item.id })
+          value.strategy = strategy.map(item => {
+            return item.id
+          })
           const accountId = this.$route.params?.id || this.accountId
           if (accountId) {
             value.account = { pk: accountId }
@@ -283,8 +296,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 
 </script>
