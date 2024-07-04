@@ -42,7 +42,7 @@ export default {
         return this.$t('LicenseExpired')
       }
       if (intervalDays < 7) {
-        return this.$t('LicenseWillBe') + this.licenseData.date_expired + this.$t('Expire')
+        return this.$t('LicenseWillBe') + ' ' + this.licenseData.date_expired + ' ' + this.$t('Expire')
       }
       return false
     },
