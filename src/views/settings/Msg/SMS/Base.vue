@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible=true">{{ $t('Settings...') }}</el-button>
+    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible=true">{{ $t('Setting') }}</el-button>
     <Dialog
       v-if="visible"
       :destroy-on-close="true"
