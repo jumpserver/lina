@@ -36,12 +36,6 @@ export default {
         }
       ]
     }
-  },
-  mounted() {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
