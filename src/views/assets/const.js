@@ -29,10 +29,10 @@ export const filterSelectValues = (values) => {
 function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged = false) {
   setTimeout(() => vm.init().then(() => {
     const isCreate = vm?.$route?.meta.action === 'create' && vm?.$route?.query.clone_from === undefined
+    const need_modify = isCreate || isPlatformChanged
+    const platformProtocols = vm.platform.protocols
+    if (!need_modify) return
     if (platformType === 'website') {
-      const need_modify = isCreate || isPlatformChanged
-      if (!need_modify) return
-      const platformProtocols = vm.platform.protocols
       const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
       updateForm({
         'autofill': setting.autofill ? setting.autofill : 'basic',
@@ -42,6 +42,8 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
         'username_selector': setting.username_selector
       })
     }
+    vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols.map(item => ({ name: item.name, port: item.port }))
+    updateForm({ protocols: [] })
   }), 100)
 }
 
@@ -100,12 +102,10 @@ export const assetFieldsMeta = (vm) => {
         change: ([event], updateForm) => {
           const pk = event.pk
           const url = window.location.href
-          const newURL = url.replace(/platform=[^&]*/, 'platform=' + pk)
-
+          vm.changePlatformID = pk
           if (url.includes('clone')) {
             updatePlatformProtocols(vm, platformType, updateForm, true)
           } else {
-            window.history.replaceState(null, null, newURL)
             vm.$nextTick(() => {
               updatePlatformProtocols(vm, platformType, updateForm, true)
             })

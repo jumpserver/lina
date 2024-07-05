@@ -144,9 +144,6 @@ export default {
   watch: {
     choices: {
       handler(value, oldValue) {
-        if (value?.length === oldValue?.length) {
-          return
-        }
         this.loading = true
         setTimeout(() => {
           this.setDefaultItems(value)
