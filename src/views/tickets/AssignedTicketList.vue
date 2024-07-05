@@ -43,7 +43,7 @@ export default {
         hasMoreActions: true,
         extraMoreActions: [
           {
-            name: 'BatchApproval',
+            name: 'ApproveSelected',
             title: this.$t('ApproveSelected'),
             can: ({ selectedRows }) => { return selectedRows.length > 0 },
             callback: function({ selectedRows }) {
