@@ -234,7 +234,7 @@ export default {
         } else {
           value = values[key]
         }
-        if (value) {
+        if (value !== undefined) {
           form.append(key, value)
         }
       }
