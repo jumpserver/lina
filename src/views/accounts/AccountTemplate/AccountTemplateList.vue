@@ -32,7 +32,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: null,
-        columnsExclude: ['spec_info'],
+        columnsExclude: ['spec_info', 'password_rules', 'push_params'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'secret_type', 'has_secret', 'privileged', 'actions']
