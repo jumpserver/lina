@@ -1,7 +1,12 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="15" :sm="24">
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+      <AutoDetailCard
+        :excludes="excludes"
+        :object="object"
+        :url="url"
+        :fields="detailFields"
+      />
     </el-col>
     <el-col v-if="hasSummary" :md="9" :sm="24">
       <IBox
@@ -82,6 +87,19 @@ export default {
       excludes: [
         'job', 'parameters', 'summary', 'task_id', 'timedelta'
       ],
+      detailFields: [
+        'task_id', 'time_cost',
+        {
+          key: this.$t('IsFinished'),
+          value: `${this.object.is_finished ? '是' : '否'}`
+        },
+        {
+          key: this.$t('IsSuccess'),
+          value: `${this.object.is_success ? '是' : '否'}`
+        },
+        'job_type', 'material', 'org_name',
+        'date_start', 'date_finished', 'date_created'
+      ],
       url: `/api/v1/ops/job-executions/${this.object.id}/`
     }
   },
@@ -89,6 +107,9 @@ export default {
     hasSummary() {
       return this.object.is_finished && Object.keys(this.object.summary).length
     }
+  },
+  mounted() {
+    console.log(this.object)
   },
   methods: {}
 }
