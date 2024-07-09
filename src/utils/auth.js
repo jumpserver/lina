@@ -1,7 +1,7 @@
 import VueCookie from 'vue-cookie'
 
-const CURRENT_ORG_KEY = 'jms_current_org'
-const CURRENT_ROLE_KEY = 'jms_current_role'
+const CURRENT_ORG_KEY = 'currentOrg'
+const CURRENT_ROLE_KEY = 'currentRole'
 let cookieNamePrefix = VueCookie.get('SESSION_COOKIE_NAME_PREFIX')
 if (!cookieNamePrefix || ['""', "''"].indexOf(cookieNamePrefix) > -1) {
   cookieNamePrefix = ''
@@ -17,7 +17,7 @@ export function setTokenToCookie(value, expires) {
 }
 
 export function getCurrentRoleLocal(username) {
-  const key = CURRENT_ROLE_KEY + '_' + username
+  const key = CURRENT_ROLE_KEY + ':' + username
   const role = localStorage.getItem(key)
   if (role) {
     return parseInt(role) || null
@@ -26,12 +26,12 @@ export function getCurrentRoleLocal(username) {
 }
 
 export function saveCurrentRoleLocal(username, role) {
-  const key = CURRENT_ROLE_KEY + '_' + username
+  const key = CURRENT_ROLE_KEY + ':' + username
   return localStorage.setItem(key, role)
 }
 
 export function getCurrentOrgLocal(username) {
-  const key = CURRENT_ORG_KEY + '_' + username
+  const key = CURRENT_ORG_KEY + ':' + username
   const value = localStorage.getItem(key)
   try {
     return JSON.parse(value)
@@ -41,18 +41,18 @@ export function getCurrentOrgLocal(username) {
 }
 
 export function saveCurrentOrgLocal(username, org) {
-  const key = CURRENT_ORG_KEY + '_' + username
+  const key = CURRENT_ORG_KEY + ':' + username
   localStorage.setItem(key, JSON.stringify(org))
   VueCookie.set('X-JMS-ORG', org.id)
 }
 
 export function setPreOrgLocal(username, org) {
-  const key = 'PRE_ORG_' + username
+  const key = 'preOrg' + ':' + username
   localStorage.setItem(key, JSON.stringify(org))
 }
 
 export function getPreOrgLocal(username) {
-  const key = 'PRE_ORG_' + username
+  const key = 'preOrg' + ':' + username
   const value = localStorage.getItem(key)
   try {
     return JSON.parse(value)
