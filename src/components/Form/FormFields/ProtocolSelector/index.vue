@@ -342,6 +342,10 @@ export default {
 .protocol-item {
   display: flex;
   margin: 5px 0;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 }
 
 .input-button {

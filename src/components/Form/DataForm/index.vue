@@ -217,7 +217,7 @@ export default {
 
     .el-form-item__label {
       padding: 0 30px 0 0;
-      line-height: 32px;
+      line-height: 30px;
       color: var(--color-text-primary);
 
       i {
