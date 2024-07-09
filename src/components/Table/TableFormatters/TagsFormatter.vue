@@ -55,8 +55,9 @@ export default {
 
 <style lang="scss" scoped>
 .tag {
-  display: flex;
+  display: inline-block;
   flex-wrap: wrap;
+
   & > span {
     overflow: hidden;
     white-space: nowrap;
