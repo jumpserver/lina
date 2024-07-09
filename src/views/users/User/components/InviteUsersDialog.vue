@@ -86,6 +86,7 @@ export default {
       this.setting.InviteDialogVisible = false
       this.$emit('close', res)
       this.$store.dispatch('users/currentUserJoinNewOrg', res.users)
+      this.$router.push({ name: 'UserList', query: { order: '-date_updated' }})
     }
   }
 }
