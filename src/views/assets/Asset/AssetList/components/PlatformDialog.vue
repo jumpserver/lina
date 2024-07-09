@@ -29,7 +29,9 @@
                 @click.native="createAsset(platform)"
               >
                 <img :src="loadImage(platform)" alt="icon" class="asset-icon">
-                <span class="platform-name">{{ platform.name }}</span>
+                <el-tooltip :content="platform.name">
+                  <span class="platform-name">{{ platform.name }}</span>
+                </el-tooltip>
               </el-card>
             </el-col>
           </el-collapse-item>
@@ -195,7 +197,11 @@ export default {
   margin: 5px 0;
 
   & ::v-deep .el-card__body {
-    padding: 10px
+    padding: 10px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   border-left: solid 4px;
@@ -234,10 +240,12 @@ export default {
   height: 1.5em;
   vertical-align: -0.2em;
   fill: currentColor;
-  overflow: hidden;
 }
 
 .platform-name {
   margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
