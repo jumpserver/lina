@@ -1,7 +1,7 @@
 <template>
   <Page v-bind="$attrs">
     <div v-if="!loading">
-      <el-alert v-if="!hasValidLicense" type="success">
+      <el-alert v-if="publicSettings.XPACK_ENABLED" type="success">
         {{ this.$t('ImportLicenseTip') }}
       </el-alert>
       <el-row :gutter="20">
@@ -93,8 +93,22 @@ export default {
       if (!this.hasValidLicense) {
         return [
           {
-            key: this.$t('License'),
+            key: this.$t('Version'),
             value: this.$t('CommunityEdition')
+          },
+          {
+            key: this.$t('Expired'),
+            value: this.$t('Never')
+          },
+          {
+            key: this.$t('License'),
+            value: 'GPLv3'
+          },
+          {
+            key: 'Github',
+            formatter: () => {
+              return (<a href='https://github.com/jumpserver/jumpserver' target='_blank'> JumpServer </a>)
+            }
           }
         ]
       }
