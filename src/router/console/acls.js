@@ -201,7 +201,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupDetail'),
-              activeMenu: ''
+              activeMenu: '/console/perms/acls/cmd-acls'
             }
           },
           {

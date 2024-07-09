@@ -32,15 +32,9 @@ export default {
             title: this.$t('Basic'),
             name: 'Detail'
           }
-        ],
-        actions: {
-        }
+        ]
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

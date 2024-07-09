@@ -53,11 +53,6 @@ export default {
         }
       }
     }
-  },
-  computed: {}
+  }
 }
 </script>
-
-<style>
-
-</style>

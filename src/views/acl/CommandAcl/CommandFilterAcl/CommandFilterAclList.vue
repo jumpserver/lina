@@ -68,11 +68,6 @@ export default {
         }
       }
     }
-  },
-  activated() {
-    setTimeout(() => {
-      this.$refs.listTable.reloadTable()
-    }, 300)
   }
 }
 </script>
