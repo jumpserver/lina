@@ -586,3 +586,10 @@ li.rmenu i.fa {
     color: var(--color-link);
   }
 }
+
+.el-table__row {
+  ::-webkit-scrollbar {
+    width: 6px; /* 设置垂直滚动条的宽度 */
+    height: 6px; /* 设置水平滚动条的高度 */
+  }
+}

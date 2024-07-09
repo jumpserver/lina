@@ -4,8 +4,8 @@
       <span v-if="!iLabels || iLabels.length === 0" style="vertical-align: top;">
         -
       </span>
-      <div v-else>
-        <div
+      <span v-else class="label-wrapper">
+        <span
           v-for="label of iLabels"
           :key="label.id"
         >
@@ -15,8 +15,9 @@
             class="tag-formatter"
             @click="handleLabelSearch(label)"
           />
-        </div>
-      </div>
+          <span />
+        </span>
+      </span>
     </a>
     <a
       v-if="formatterArgs.showEditBtn"
@@ -30,15 +31,16 @@
       v-if="showDialog"
       :title="$tc('BindLabel')"
       :visible.sync="showDialog"
+      class="tag-dialog"
       width="600px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
     >
-      <el-row :gutter="1" class="tag-select">
+      <el-row class="tag-select">
         <el-col :span="12">
           <Select2 v-model="keySelect2.value" v-bind="keySelect2" @change="handleKeyChanged" />
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" style="padding-left: 5px">
           <Select2
             v-model="valueSelect2.value"
             :disabled="!keySelect2.value"
@@ -207,15 +209,8 @@ export default {
   flex-wrap: wrap;
 
   & > span {
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-}
-
-.tag-select {
-  ::v-deep .el-input__inner::placeholder {
-    font-size: 13px;
   }
 }
 
@@ -233,9 +228,14 @@ export default {
 
 .label-container {
   display: flex;
+  height: 28px;
 
   .label-formatter-col {
     overflow: hidden;
+
+    &:hover {
+      overflow: auto;
+    }
   }
 
   &:hover {
@@ -249,15 +249,23 @@ export default {
   }
 }
 
-.tag-zone {
-  margin: 20px 0 0 0;
-  border: solid 1px #ebeef5;
-  padding: 10px;
-  background: #f2f2f5;
+.tag-dialog {
+  .tag-zone {
+    margin: 20px 0 0 0;
+    border: solid 1px #ebeef5;
+    padding: 10px;
+    background: #f2f2f5;
 
-  .tag-formatter {
-    margin: 1px 3px;
-    display: inline-block;
+    .tag-formatter {
+      margin: 1px 3px;
+      display: inline-block;
+    }
+  }
+
+  .tag-select {
+    ::v-deep .el-input__inner::placeholder {
+      font-size: 13px;
+    }
   }
 }
 
@@ -270,7 +278,6 @@ export default {
 
 .tag-formatter {
   margin: 2px 0;
-
 }
 
 .tag-tip {
