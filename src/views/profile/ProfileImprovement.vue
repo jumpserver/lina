@@ -41,6 +41,9 @@ export default {
           component: PhoneInput
         },
         mfa_level: {
+          disabled: (formValue) => {
+            return formValue.mfa_level === 2
+          },
           helpText: this.$t('users.HelpText.MFAOfUserFirstLoginPersonalInformationImprovementPage')
         },
         public_key: {
