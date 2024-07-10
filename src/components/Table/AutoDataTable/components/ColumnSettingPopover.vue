@@ -90,8 +90,14 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showColumnSettingPopover', this.showColumnSettingPopoverHandler)
+  },
   mounted() {
-    this.$eventBus.$on('showColumnSettingPopover', ({ url }) => {
+    this.$eventBus.$on('showColumnSettingPopover', this.showColumnSettingPopoverHandler)
+  },
+  methods: {
+    showColumnSettingPopoverHandler({ url }) {
       if (url === this.url) {
         this.checkAll = false
         this.showColumnSettingPopover = true
@@ -105,9 +111,7 @@ export default {
         this.checkAll = false
         this.isIndeterminate = true
       }
-    })
-  },
-  methods: {
+    },
     handleColumnConfirm() {
       this.showColumnSettingPopover = false
       this.$emit('columnsUpdate', { columns: this.iCurrentColumns, url: this.url })
