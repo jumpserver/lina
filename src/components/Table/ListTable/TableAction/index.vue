@@ -124,6 +124,9 @@ export default {
       return this.iHasLeftActions ? 'right' : 'left'
     }
   },
+  created() {
+    this.$emit('done')
+  },
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
