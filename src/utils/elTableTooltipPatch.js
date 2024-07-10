@@ -16,7 +16,7 @@ Object.assign(Table.components.TableBody.methods, {
       table.$emit('cell-mouse-enter', hoverState.row, hoverState.column, hoverState.cell, event)
     }
 
-    // 判断是否text-overflow, 如果是就显示tooltip
+    // 判断是否 text-overflow, 如果是就显示tooltip
     const cellChild = event.target.querySelector('.cell')
     if (!(hasClass(cellChild, 'el-tooltip') && cellChild.childNodes.length)) {
       return

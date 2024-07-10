@@ -12,7 +12,7 @@ export default {
     ...zhLocale,
     ...zh
   },
-  zh_hant: {
+  zh_Hant: {
     ...zhTWLocale,
     ...zhHant
   },

@@ -114,6 +114,7 @@ export default {
             label: `${this.$t('common.Enable')}/${this.$t('common.Disable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
+              tooltipEnterable: false,
               isDisplay(row) {
                 return row.exec_cycle !== undefined
               },
