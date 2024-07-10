@@ -142,14 +142,18 @@ export default {
       this.showTable = false
     }
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showImportDialog', this.showImportEventHandler)
+  },
   mounted() {
-    this.$eventBus.$on('showImportDialog', ({ url }) => {
+    this.$eventBus.$on('showImportDialog', this.showImportEventHandler)
+  },
+  methods: {
+    showImportEventHandler({ url }) {
       if (url === this.url) {
         this.showImportDialog = true
       }
-    })
-  },
-  methods: {
+    },
     closeDialog() {
       this.showImportDialog = false
       this.$emit('importDialogClose')

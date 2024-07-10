@@ -71,7 +71,16 @@ export default {
     this.listenViewPort()
   },
   mounted() {
-    this.$eventBus.$on('labelSearch', label => {
+    this.$eventBus.$on('labelSearch', this.labelSearchHandler)
+  },
+  beforeDestroy(label) {
+    this.$eventBus.$off('labelSearch', this.labelSearchHandler)
+  },
+  methods: {
+    handleCascaderFocus() {
+      this.setSearchFocus()
+    },
+    labelSearchHandler(label) {
       if (!label) {
         this.labelValue = []
         this.showLabelSearch = true
@@ -82,14 +91,6 @@ export default {
       setTimeout(() => {
         this.showLabelSearch = true
       }, 500)
-    })
-  },
-  destroyed() {
-    this.$eventBus.$off('labelSearch')
-  },
-  methods: {
-    handleCascaderFocus() {
-      this.setSearchFocus()
     },
     handleCascaderVisibleChange(visible) {
       const input = this.$refs.labelCascader.$el

@@ -170,14 +170,18 @@ export default {
       ]
     }
   },
+  beforeDestroy() {
+    this.$eventBus.$off('showExportDialog', this.showExportDialogHandler)
+  },
   mounted() {
-    this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
+    this.$eventBus.$on('showExportDialog', this.showExportDialogHandler)
+  },
+  methods: {
+    showExportDialogHandler({ selectedRows, url, name }) {
       if (url === this.url || url.indexOf(this.url) > -1) {
         this.showExportDialog()
       }
-    })
-  },
-  methods: {
+    },
     showExportDialog() {
       if (!this.mfaVerifyRequired) {
         this.exportDialogShow = true
