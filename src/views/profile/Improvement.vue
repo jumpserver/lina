@@ -42,6 +42,9 @@ export default {
           component: PhoneInput
         },
         mfa_level: {
+          disabled: (formValue) => {
+            return formValue.mfa_level === 2
+          },
           helpText: this.$t('MFAOfUserFirstLoginPersonalInformationImprovementPage')
         },
         public_key: {
@@ -91,7 +94,7 @@ export default {
   methods: {
     disableMFAFieldIfNeed(user) {
       const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) &&
-        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
+          store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
       if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed || user?.mfa_level.value === 2) {
         this.fieldsMeta['mfa_level'].disabled = true
       }
