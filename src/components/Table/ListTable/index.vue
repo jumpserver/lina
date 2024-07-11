@@ -8,9 +8,11 @@
       :selected-rows="selectedRows"
       :table-url="tableUrl"
       v-bind="iHeaderActions"
+      @done="handleActionInitialDone"
     />
     <IBox class="table-content">
       <AutoDataTable
+        v-if="actionInit"
         ref="dataTable"
         :config="iTableConfig"
         :filter-table="filter"
@@ -73,7 +75,10 @@ export default {
     return {
       selectedRows: [],
       init: false,
-      extraQuery: extraQuery
+      isDeactivated: false,
+      extraQuery: extraQuery,
+      actionInit: this.headerActions.has === false,
+      initQuery: {}
     }
   },
   computed: {
@@ -166,14 +171,36 @@ export default {
     }
   },
   methods: {
+    handleActionInitialDone() {
+      setTimeout(() => {
+        this.actionInit = true
+      }, 100)
+    },
     handleSelectionChange(val) {
       this.selectedRows = val
     },
     reloadTable() {
       this.dataTable.getList()
     },
+    updateInitQuery(attrs) {
+      if (!this.actionInit) {
+        this.initQuery = attrs
+        for (const key in attrs) {
+          this.$set(this.extraQuery, key, attrs[key])
+        }
+        return true
+      }
+      const removeKeys = Object.keys(this.initQuery).filter(key => !attrs[key])
+      for (const key of removeKeys) {
+        this.$delete(this.extraQuery, key)
+      }
+    },
     search(attrs) {
       this.$log.debug('ListTable: search table', attrs)
+      const init = this.updateInitQuery(attrs)
+      if (init) {
+        return
+      }
       this.$emit('TagSearch', attrs)
       this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
     },

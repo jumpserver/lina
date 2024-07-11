@@ -122,6 +122,9 @@ export default {
       return this.hasLeftActions ? 'right' : 'left'
     }
   },
+  created() {
+    this.$emit('done')
+  },
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
@@ -144,119 +147,121 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .table-header {
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: space-between;*/
-  }
+.table-header {
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*justify-content: space-between;*/
+}
 
-  .right-side-item {
-  }
+.right-side-item {
+}
 
-  .right-side-actions >>> .el-button {
-    border: none;
-    padding: 5px;
-    font-size: 14px;
-    width: 26px;
-    height: 26px;
-    color: #888;
-    background-color: transparent;
-  }
+.right-side-actions > > > .el-button {
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  color: #888;
+  background-color: transparent;
+}
 
-  .right-side-actions >>> .fa {
-    height: 16px;
-    width: 16px;
-  }
+.right-side-actions > > > .fa {
+  height: 16px;
+  width: 16px;
+}
 
-  .right-side-actions >>> .el-button:hover {
-    background-color: rgb(0, 0, 0, 0.05);
-  }
+.right-side-actions > > > .el-button:hover {
+  background-color: rgb(0, 0, 0, 0.05);
+}
 
-  .action-search >>> .el-input__suffix i {
-    font-weight: 500;
-    color: #888;
-  }
+.action-search > > > .el-input__suffix i {
+  font-weight: 500;
+  color: #888;
+}
 
-  .action-search >>> .el-cascader {
-    line-height: 32px !important;
-  }
+.action-search > > > .el-cascader {
+  line-height: 32px !important;
+}
 
-  .right-side-actions {
-    display: flex;
-    padding-left: 10px;
-    align-items: center;
-    justify-content: center;
-  }
+.right-side-actions {
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
+  justify-content: center;
+}
 
-  .table-action-right-side {
-    display: flex;
-    justify-content: center;
-  }
+.table-action-right-side {
+  display: flex;
+  justify-content: center;
+}
 
-  .export-item {
-    display: block;
-    padding: 5px 20px;
-  }
+.export-item {
+  display: block;
+  padding: 5px 20px;
+}
 
-  .datepicker {
-    margin-left: 10px;
-  }
+.datepicker {
+  margin-left: 10px;
+}
 
-  .table-header {
-    line-height: 32px;
-  }
+.table-header {
+  line-height: 32px;
+}
 
-  .left-side {
-    float: left;
-    display: block;
-    &>>> .action-item.el-dropdown {
-      height: 33px;
-      &> .el-button {
-        height: 100%;
-      }
+.left-side {
+  float: left;
+  display: block;
+
+  & > > > .action-item.el-dropdown {
+    height: 33px;
+
+    & > .el-button {
+      height: 100%;
     }
   }
+}
 
-  .right-side {
-    float: right;
-  }
+.right-side {
+  float: right;
+}
 
-  .search {
-    display: flex;
-    flex-direction: row;
-  }
+.search {
+  display: flex;
+  flex-direction: row;
+}
 
-  .mobile .search {
-    display: inherit;
-  }
+.mobile .search {
+  display: inherit;
+}
 
-  .mobile .search .datepicker {
-    margin-left: 0;
-  }
+.mobile .search .datepicker {
+  margin-left: 0;
+}
 
-  .search.left {
-    float: left;
-    padding: 0 !important;
-  }
+.search.left {
+  float: left;
+  padding: 0 !important;
+}
 
-  .search.right {
-    float: right;
-  }
+.search.right {
+  float: right;
+}
 
-  .mobile .search.right {
-    float: none;
-  }
+.mobile .search.right {
+  float: none;
+}
 
-  .mobile .search.right .action-search {
-    width: 100%;
-  }
+.mobile .search.right .action-search {
+  width: 100%;
+}
 
-  .mobile .right-side {
-    padding-top: 5px;
-  }
+.mobile .right-side {
+  padding-top: 5px;
+}
 
-  .filter-field.right-side-item.action-search {
-    height: 34px;
-  }
+.filter-field.right-side-item.action-search {
+  height: 34px;
+}
 
 </style>
