@@ -174,8 +174,8 @@ export default {
       },
       afterGetFormValue(obj) {
         if (obj?.id) {
-          obj.org_roles = obj.org_roles.map(({ id }) => id)
-          obj.system_roles = obj.system_roles.map(({ id }) => id)
+          obj.org_roles = obj.org_roles?.map(({ id }) => id)
+          obj.system_roles = obj.system_roles?.map(({ id }) => id)
         }
         return obj
       },
