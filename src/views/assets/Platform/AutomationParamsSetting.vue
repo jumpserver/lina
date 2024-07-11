@@ -16,7 +16,6 @@
       :title="title"
       :show-cancel="false"
       :show-confirm="false"
-      :destroy-on-close="true"
       @close="onDialogClose"
     >
       <AutoDataForm
