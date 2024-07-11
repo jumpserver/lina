@@ -24,11 +24,15 @@ Object.assign(Table.components.TableBody.methods, {
     // use range width instead of scrollWidth to determine whether the text is overflowing
     // to address a potential FireFox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1074543#c3
     const range = document.createRange()
+
     range.setStart(cellChild, 0)
     range.setEnd(cellChild, cellChild.childNodes.length)
-    const rangeWidth = range.getBoundingClientRect().width
+
+    // rangeWidth 有可能是小数，因此就会导致原本 rangeWidth + padding = cellChild.offsetWidth 的大于了 cellChild.offsetWidth
+    const rangeWidth = Math.floor(range.getBoundingClientRect().width)
     const padding = (parseInt(getStyle(cellChild, 'paddingLeft'), 10) || 0) +
         (parseInt(getStyle(cellChild, 'paddingRight'), 10) || 0)
+
     if (
       (rangeWidth + padding > cellChild.offsetWidth ||
           cellChild.scrollWidth > cellChild.offsetWidth) &&
@@ -48,6 +52,7 @@ Object.assign(Table.components.TableBody.methods, {
           copy(this.tooltipContent)
         }
       }
+
       if (tooltipEnterable && tooltip.showPopper) {
         clearTimeout(tooltip.timeoutEnter)
         tooltip.timeoutEnter = setTimeout(() => {
