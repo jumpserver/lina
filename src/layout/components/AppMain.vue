@@ -23,8 +23,18 @@ export default {
       'publicSettings'
     ]),
     key() {
+      // 想让创建后回来 List 页面不刷新，但是完全不刷新 table 会不对，所以创建完成后，会更新 order 和 updated
+      // query 去掉这两个，如果变了再刷新
+      const query = {}
+      for (const [k, v] of Object.entries(this.$route.query)) {
+        if (k.includes('updated') || k.includes('order')) {
+          continue
+        }
+        query[k] = v
+      }
+
       if (this.$route.name.toLowerCase().includes('list')) {
-        return _.trimEnd(this.$route.path, '/')
+        return _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
       } else {
         return new Date().getTime()
       }
