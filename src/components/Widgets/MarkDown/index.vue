@@ -18,14 +18,15 @@
         />
       </el-col>
       <el-col v-show="isShow" :span="span">
-        <VueMarkdown class="result-html" :source="iValue" :show="true" :html="false" />
+        <VueMarkdown class="result-html" :source="sanitizedValue" :html="false" :show="true" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else class="source" :source="iValue" :html="false" />
+    <VueMarkdown v-else class="source" :html="false" :source="sanitizedValue" />
   </div>
 </template>
 
 <script>
+import DOMPurify from 'dompurify'
 import VueMarkdown from 'vue-markdown'
 import 'github-markdown-css/github-markdown-light.css'
 
@@ -54,6 +55,17 @@ export default {
       span: 12,
       isShow: true,
       iValue: this.value
+    }
+  },
+  computed: {
+    sanitizedValue() {
+      // 转义特殊字符
+      let content = this.iValue.replace(/\\/g, '\\\\').replace(/\$/g, '\\$')
+
+      // 使用 DOMPurify 进行 XSS 过滤
+      content = DOMPurify.sanitize(content)
+
+      return content
     }
   },
   mounted() {
