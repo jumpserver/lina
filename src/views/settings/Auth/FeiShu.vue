@@ -9,7 +9,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'Feishu',
@@ -33,7 +34,18 @@ export default {
     },
     formFields: {
       type: Array,
-      default: () => ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET']
+      default: () => ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES']
+    },
+    formFieldsMeta: {
+      type: Array,
+      default: () => {
+        return {
+          FEISHU_RENAME_ATTRIBUTES: {
+            component: JsonEditor,
+            rules: [JsonRequiredUserNameMapped]
+          }
+        }
+      }
     },
     enableFieldName: {
       type: String,
@@ -65,6 +77,7 @@ export default {
         ],
         encryptedFields: this.encryptedFields,
         fields: this.formFields,
+        fieldsMeta: this.formFieldsMeta,
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
           this.encryptedFields.forEach(field => {
