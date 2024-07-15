@@ -9,11 +9,11 @@
         <span class="status-item">
           <span>{{ $tc('Status') }}: </span>
           <span
-            :class="{'status_success':executionInfo.status==='success',
-                     'status_warning':executionInfo.status==='timeout',
-                     'status_danger':executionInfo.status==='failed'
+            :class="{'status_success':executionInfo.status.value==='success',
+                     'status_warning':executionInfo.status.value==='timeout',
+                     'status_danger':executionInfo.status.value==='failed'
             }"
-          >{{ $tc('' + executionInfo.status) }}</span>
+          >{{ $tc('' + executionInfo.status.label) }}</span>
         </span>
         <span class="status-item">
           <span>{{ $tc('TimeDelta') }}: </span>
@@ -66,9 +66,7 @@ export default {
     executionInfo: {
       type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
-      default: {
-        status: 'success'
-      }
+      default: {}
     }
   },
   data() {

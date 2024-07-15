@@ -64,7 +64,7 @@ export default {
       ],
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [this.$t('Backend'),
+        [this.$t('Basic'),
           [
             'VAULT_ENABLED',
             'VAULT_HCP_HOST',

@@ -164,8 +164,8 @@ export default {
         },
         extraMoreActions: [
           {
-            name: 'BatchRetry',
-            title: this.$t('BatchRetry'),
+            name: 'RetrySelected',
+            title: this.$t('RetrySelected'),
             type: 'primary',
             fa: 'fa-retweet',
             can: ({ selectedRows }) => {
