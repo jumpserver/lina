@@ -4,28 +4,29 @@
       <div class="action-bar">
         <div class="action">
           <span>
-            <i :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" class="fa" @click="onView" />
+            <i class="fa" :class="[!isShow ? 'fa-eye' : 'fa-eye-slash']" @click="onView" />
           </span>
         </div>
       </div>
       <el-col :span="span" :style="{'height': height + 'px' }">
         <el-input
           v-model="iValue"
-          :rows="rows"
           autosize
+          :rows="rows"
           type="textarea"
           @change="onChange"
         />
       </el-col>
       <el-col v-show="isShow" :span="span">
-        <VueMarkdown :html="false" :show="true" :source="iValue" class="result-html" />
+        <VueMarkdown class="result-html" :source="sanitizedValue" :html="false" :show="true" />
       </el-col>
     </el-row>
-    <VueMarkdown v-else :html="false" :source="iValue" class="source" />
+    <VueMarkdown v-else class="source" :html="false" :source="sanitizedValue" />
   </div>
 </template>
 
 <script>
+import DOMPurify from 'dompurify'
 import VueMarkdown from 'vue-markdown'
 
 export default {
@@ -53,6 +54,17 @@ export default {
       span: 12,
       isShow: true,
       iValue: this.value
+    }
+  },
+  computed: {
+    sanitizedValue() {
+      // 转义特殊字符
+      let content = this.iValue.replace(/\\/g, '\\\\').replace(/\$/g, '\\$')
+
+      // 使用 DOMPurify 进行 XSS 过滤
+      content = DOMPurify.sanitize(content)
+
+      return content
     }
   },
   mounted() {
