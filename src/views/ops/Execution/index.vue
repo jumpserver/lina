@@ -23,7 +23,7 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
         columnsExclude: [
-          'summary', 'parameters'
+          'summary', 'parameters', 'timedelta'
         ],
         columnsShow: {
           min: ['material', 'actions'],

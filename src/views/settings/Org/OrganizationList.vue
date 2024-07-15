@@ -110,7 +110,7 @@ export default {
         canCreate: this.$hasPerm('orgs.add_organization'),
         extraActions: [
           {
-            title: this.$t('Settings...'),
+            title: this.$t('Setting'),
             icon: 'el-icon-setting',
             callback: () => {
               this.visible = true
