@@ -52,6 +52,14 @@ export default {
           el: {
             hiddenGroup: true
           }
+        },
+        TERMINAL_MAGNUS_ENABLED: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          },
+          el: {
+            hiddenGroup: true
+          }
         }
       },
       getUrl: () => '/api/v1/settings/setting/?category=terminal',
