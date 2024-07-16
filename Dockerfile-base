@@ -1,0 +1,20 @@
+FROM node:20.15-bullseye-slim
+
+ARG DEPENDENCIES="                    \
+        g++                           \
+        make                          \
+        python3"
+
+RUN set -ex \
+    && rm -f /etc/apt/apt.conf.d/docker-clean \
+    && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache \
+    && apt-get update \
+    && apt-get -y install --no-install-recommends ${DEPENDENCIES} \
+    && echo "no" | dpkg-reconfigure dash
+
+WORKDIR /data
+
+COPY package.json yarn.lock ./
+
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
+    yarn install
