@@ -363,13 +363,19 @@ export function downloadText(content, filename) {
 }
 
 export function download(downloadUrl, filename) {
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  document.body.appendChild(iframe)
   const a = document.createElement('a')
   a.href = downloadUrl
   if (filename) {
     a.download = filename
   }
+  iframe.contentWindow.document.body.appendChild(a)
   a.click()
-  window.URL.revokeObjectURL(downloadUrl)
+  setTimeout(() => {
+    document.body.removeChild(iframe)
+  }, 1000 * 60 * 30) // If you can't download it in half an hour, don't download it.
 }
 
 export function diffObject(object, base) {
