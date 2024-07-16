@@ -48,6 +48,7 @@
 import Dialog from '@/components/Dialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
+import { download } from '@/utils/common'
 
 export default {
   name: 'ExportDialog',
@@ -187,10 +188,7 @@ export default {
       })
     },
     downloadCsv(url) {
-      const a = document.createElement('a')
-      a.href = url
-      a.click()
-      window.URL.revokeObjectURL(url)
+      download(url)
     },
     async defaultPerformExport(selectRows, exportOption, q, exportTypeOption) {
       const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)

@@ -22,6 +22,7 @@ import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/util
 import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
+import { download } from '@/utils/common'
 
 export default {
   name: 'CommandList',
@@ -144,10 +145,7 @@ export default {
               queryUtil.stringify(query, '=', '&')
             url = url + queryStr
             this.$log.debug('Export url: ', this.url, '=>', url)
-            const a = document.createElement('a')
-            a.href = url
-            a.click()
-            window.URL.revokeObjectURL(url + queryStr)
+            download(url + queryStr)
           }
         }
       },

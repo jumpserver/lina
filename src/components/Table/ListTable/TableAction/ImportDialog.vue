@@ -68,7 +68,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import ImportTable from '@/components/Table/ListTable/TableAction/ImportTable.vue'
-import { getErrorResponseMsg } from '@/utils/common'
+import { download, getErrorResponseMsg } from '@/utils/common'
 import { createSourceIdCache } from '@/api/common'
 
 export default {
@@ -221,10 +221,7 @@ export default {
       this.$message.success(msg)
     },
     downloadCsv(url) {
-      const a = document.createElement('a')
-      a.href = url
-      a.click()
-      window.URL.revokeObjectURL(url)
+      download(url)
     },
     async handleImportConfirm() {
       await this.$refs['importTable'].performUpload()
