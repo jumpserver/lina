@@ -232,7 +232,7 @@ export default {
 
       Object.values(actionsObj).forEach(action => {
         if (action.name === this.$t('RunAs') && action.type === 'input') {
-          rules[action.name] = [{ required: true, message: '请输入运行用户', trigger: 'blur' }]
+          rules[action.name] = [{ required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }]
         }
       })
 
