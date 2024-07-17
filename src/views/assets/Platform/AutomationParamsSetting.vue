@@ -10,7 +10,6 @@
       @click="onSetting"
     />
     <Dialog
-      v-if="isVisible"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
