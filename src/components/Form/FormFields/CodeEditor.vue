@@ -8,6 +8,7 @@
           :label="item.name"
           :prop="item.name"
         >
+
           <template v-if="item.type === 'button' && !item.isVisible">
             <el-tooltip :disabled="!item.tip" :content="item.tip">
               <el-button
@@ -151,7 +152,13 @@
         </div>
       </div>
     </el-form>
-    <codemirror ref="myCm" v-model="iValue" :options="iOptions" class="editor" />
+    <codemirror
+      ref="myCm"
+      v-model="iValue"
+      :options="iOptions"
+      class="editor"
+      :style="iActions.length > 0 ? { marginLeft: '30px' } : {}"
+    />
   </div>
 </template>
 
@@ -390,7 +397,6 @@ $input-border-color: #C0C4CC;
   }
 
   .editor {
-    //margin-left: 30px;
     border: 1px solid var(--color-border);
     overflow: hidden;
   }
