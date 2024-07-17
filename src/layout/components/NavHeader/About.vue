@@ -81,7 +81,7 @@ export default {
         },
         {
           label: this.$t('Version'),
-          value: 'version-dev'
+          value: 'v4.0.1'
         },
         {
           label: this.$t('PermissionCompany'),
