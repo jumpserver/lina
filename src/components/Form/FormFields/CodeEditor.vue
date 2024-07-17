@@ -390,7 +390,7 @@ $input-border-color: #C0C4CC;
   }
 
   .editor {
-    margin-left: 30px;
+    //margin-left: 30px;
     border: 1px solid var(--color-border);
     overflow: hidden;
   }
