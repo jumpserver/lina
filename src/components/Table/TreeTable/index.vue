@@ -167,7 +167,7 @@ $origin-color: #ffffff;
   justify-content: space-between;
 
   .left {
-    height: 100%;
+    //height: 100%;
     background: $origin-color;
     color: var(--color-border);
 
