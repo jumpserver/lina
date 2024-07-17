@@ -10,7 +10,6 @@
       @click="onSetting"
     />
     <Dialog
-      v-if="isVisible"
       width="60%"
       :visible.sync="isVisible"
       :title="title"
