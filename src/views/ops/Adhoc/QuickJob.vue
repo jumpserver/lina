@@ -470,7 +470,7 @@ $container-bg-color: #f7f7f7;
   flex-direction: column;
 
   .xterm-container {
-    margin-left: 30px;
+    //margin-left: 30px;
     height: calc(100vh - 549px);
     min-height: 255px;
     border: 1px solid var(--color-border);
