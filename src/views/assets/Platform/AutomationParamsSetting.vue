@@ -10,8 +10,6 @@
       @click="onSetting"
     />
     <Dialog
-      v-if="isVisible"
-      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       :title="title"
