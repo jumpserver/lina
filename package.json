@@ -1,13 +1,13 @@
 {
-  "name": "Lina",
+  "name": "lina",
   "version": "v4.0.0",
   "description": "JumpServer Web UI",
   "author": "JumpServer Team <support@fit2cloud.com>",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "vue-cli-service serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
