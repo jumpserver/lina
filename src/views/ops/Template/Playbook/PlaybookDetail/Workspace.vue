@@ -18,7 +18,7 @@
       </template>
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <el-tabs v-model="activeEditorId" :closable="true" @tab-remove="onCloseEditor">
+          <el-tabs v-model="activeEditorId" :closable="true" class="workspace-tab" @tab-remove="onCloseEditor">
             <el-tab-pane
               v-for="(editor,key) in openedEditor"
               :key="key"
@@ -296,6 +296,12 @@ export default {
   border-color: var(--color-primary);
   color: #FFFFFF;
   border-radius: 2px;
+}
+
+.workspace-tab{
+  ::v-deep .el-tabs__header {
+    margin: 0 0 15px 30px !important;
+  }
 }
 
 .el-tree {

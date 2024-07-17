@@ -134,7 +134,13 @@
         </div>
       </div>
     </el-form>
-    <codemirror ref="myCm" v-model="iValue" :options="iOptions" class="editor" />
+    <codemirror
+      ref="myCm"
+      v-model="iValue"
+      :options="iOptions"
+      class="editor"
+      :style="iActions.length > 0 ? { marginLeft: '30px' } : {}"
+    />
   </div>
 </template>
 
