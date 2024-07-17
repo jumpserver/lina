@@ -29,7 +29,7 @@
           <div slot="tip" class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }" />
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
-            <h5>请上传包含以下示例结构目录的 .zip 压缩文件</h5>
+            <h5>{{ $t('UploadHelpText') }}</h5>
             <pre style="display:flex; line-height: 1.2em">
 ./
 ├── roles

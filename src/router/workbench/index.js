@@ -205,7 +205,7 @@ export default {
           hidden: true,
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           meta: {
-            title: i18n.t('createAdhoc'),
+            title: i18n.t('AdhocUpdate'),
             permissions: ['ops.add_adhoc'],
             activeMenu: '/workbench/ops/templates'
           }
