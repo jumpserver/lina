@@ -64,8 +64,7 @@ export default {
             method: 'push_account_method',
             assets: this.asset_ids,
             nodes: this.node_ids
-          },
-          helpText: this.$t('ViewBlockedIPSHelpText')
+          }
         }
       },
       cleanFormValue(value) {
