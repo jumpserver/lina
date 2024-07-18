@@ -120,16 +120,20 @@ export default {
               autoComplete: true,
               query: (query, cb) => {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
-                this.$axios.post('/api/v1/ops/username-hints/', {
-                  nodes: nodes,
-                  assets: hosts,
-                  query: query
-                }).then(data => {
-                  const ns = data.map(item => {
-                    return { value: item.username }
+                if (hosts.length > 0 && nodes.length > 0) {
+                  this.$axios.post('/api/v1/ops/username-hints/', {
+                    nodes: nodes,
+                    assets: hosts,
+                    query: query
+                  }).then(data => {
+                    const ns = data.map(item => {
+                      return { value: item.username }
+                    })
+                    cb(ns)
                   })
-                  cb(ns)
-                })
+                } else {
+                  cb([])
+                }
               }
             },
             options: [],
