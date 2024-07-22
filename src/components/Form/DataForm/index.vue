@@ -33,6 +33,7 @@
       >
         {{ iSubmitBtnText }}
       </el-button>
+
       <el-button
         v-if="defaultButton && hasSaveContinue"
         size="small"
@@ -40,6 +41,7 @@
       >
         {{ $t("SaveAndAddAnother") }}
       </el-button>
+
       <el-button
         v-if="defaultButton && hasReset"
         size="small"
@@ -47,6 +49,7 @@
       >
         {{ $t("Reset") }}
       </el-button>
+
       <el-button
         v-for="button in moreButtons"
         v-show="!button.hidden"
@@ -166,6 +169,7 @@ export default {
       form.validate(valid => {
         if (valid) {
           this.$emit('submit', form.getFormValue(), form, addContinue)
+          this.resetForm()
         } else {
           this.$emit('invalid', valid)
           scrollToError(form.$el)
