@@ -32,7 +32,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import AutoDataForm from '@/components/Form/AutoDataForm'
-import { DynamicInput } from '@/components/Form/FormFields'
+import { DynamicInput, Switcher } from '@/components/Form/FormFields'
 
 export default {
   components: {
@@ -144,6 +144,9 @@ export default {
           switch (v?.type) {
             case 'list':
               component = DynamicInput
+              break
+            case 'boolean':
+              component = Switcher
               break
           }
 
