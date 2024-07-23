@@ -24,7 +24,6 @@ jobs:
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
-        if: env.GITHUB_REPOSITORY_VISIBILITY == 'public'
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
