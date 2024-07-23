@@ -16,5 +16,7 @@ WORKDIR /data
 
 COPY package.json yarn.lock ./
 
+ARG NPM_MIRROR="https://registry.npmjs.org"
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=yarn-cache \
-    yarn install
+    sed -i "s|https://registry.npmmirror.com|${NPM_MIRROR}|g" yarn.lock \
+    && yarn install
