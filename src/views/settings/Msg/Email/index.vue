@@ -50,8 +50,7 @@ export default {
         },
         EMAIL_HOST_USER: {
           rules: [
-            rules.EmailCheck,
-            rules.Required
+            rules.EmailCheck
           ]
         },
         EMAIL_CUSTOM_USER_CREATED_BODY: {
