@@ -55,8 +55,7 @@ export default {
       fieldsMeta: {
         EMAIL_HOST_USER: {
           rules: [
-            rules.EmailCheck,
-            rules.Required
+            rules.EmailCheck
           ]
         },
         EMAIL_FROM: {
