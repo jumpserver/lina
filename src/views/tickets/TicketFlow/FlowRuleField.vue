@@ -1,29 +1,29 @@
 <template>
-  <!-- 自定义组件 my-input -->
   <div>
-    <div v-for="(item, i) of approveData" :key="i" style="margin-bottom: 10px">
+    <div v-for="(item, i) of approveData" :key="i">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>{{ i + 1 + ' ' + vm.$t('LevelApproval') }}</span>
+          <span>{{ `${i + 1} ${$t('LevelApproval')}` }}</span>
         </div>
-        <el-radio-group v-model="item.strategy.value" @change="onChange()">
-          <el-radio label="super_admin">{{ vm.$t('SuperAdmin') }}</el-radio>
-          <el-radio label="org_admin">{{ vm.$t('OrgAdmin') }}</el-radio>
-          <el-radio label="super_org_admin">{{ vm.$t('SuperOrgAdmin') }}</el-radio>
-          <el-radio label="custom_user">{{ vm.$t('CustomUser') }}</el-radio>
-        </el-radio-group>
-        <Select2 v-show="item.strategy.value === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
+        <JSONManyToManySelect
+          :value="item.users"
+          :resource="userComponentMeta.el.resource"
+          :select2="userComponentMeta.el.select2"
+          :attrs="userComponentMeta.el.attrs"
+          @input="handleInput(i, $event)"
+        />
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import Select2 from '@/components/Form/FormFields/Select2'
+import { JSONManyToManySelect } from '@/components/Form/FormFields'
+import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
   components: {
-    Select2
+    JSONManyToManySelect
   },
   props: {
     value: {
@@ -37,49 +37,56 @@ export default {
   },
   data() {
     return {
-      vm: this,
+      userComponentMeta: userJSONSelectMeta(this),
       defaultRule: [
         {
-          strategy: {
-            value: 'super_admin'
-          },
-          assignees_read_only: []
+          users: {
+            type: 'attrs',
+            attrs: [
+              {
+                match: 'm2m',
+                name: 'system_roles',
+                'value': ['00000000-0000-0000-0000-000000000001']
+              }
+            ]
+          }
         }
       ],
-      select2Option: {
-        url: '/api/v1/users/users/?oid=root'
-      },
-      fields: [
-      ]
+      rules: []
     }
   },
   computed: {
     approveData() {
-      let rules = []
+      return this.getSortedRules()
+    }
+  },
+  watch: {
+    level: {
+      handler() {
+        this.updateApproveData()
+      }
+    }
+  },
+  mounted() {
+    this.updateApproveData()
+  },
+  methods: {
+    getSortedRules() {
+      return [...this.rules].sort((a, b) => a.level - b.level)
+    },
+    updateApproveData() {
+      let rules = [...this.value]
       if (this.value.length === 2 && this.level === 1) {
         rules = this.value.slice(0, this.level)
       } else if (this.value.length === 1 && this.level === 2) {
         rules = this.value.concat(this.defaultRule)
-      } else {
-        rules = this.value
       }
-      rules.forEach(rule => {
-        if (rule.assignees_read_only) {
-          rule['assignees'] = rule.assignees_read_only
-          delete rule.assignees_read_only
-        }
-      })
-      rules = rules.sort((a, b) => a.level - b.level)
-      this.$emit('input', rules)
-      return rules
-    }
-  },
-  mounted() {
-    this.$emit('input', this.approveData)
-  },
-  methods: {
-    onChange() {
-      this.$emit('input', this.approveData)
+      this.rules = rules
+      this.$emit('input', this.rules)
+    },
+    handleInput(index, event) {
+      this.$set(this.rules, index, { 'users': event })
+      this.$emit('input', this.rules)
     }
   }
 }
@@ -92,25 +99,16 @@ export default {
   }
 
   .item {
-    padding: 18px 0;
+    padding: 10px 0;
   }
 
   .box-card {
-    width: 600px;
+    width: 96%;
+    margin-bottom: 10px;
     box-shadow: unset !important;
 
     ::v-deep .el-card__body {
       padding: 10px 30px !important;
-
-      .el-radio-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-
-        .el-radio {
-          padding: 5px 0;
-        }
-      }
     }
   }
 </style>
