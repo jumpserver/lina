@@ -8,7 +8,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'WeCom',
@@ -40,11 +41,16 @@ export default {
         ],
         encryptedFields: ['WECOM_SECRET'],
         fields: [
-          'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID', 'WECOM_SECRET'
+          'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
+          'WECOM_SECRET', 'WECOM_RENAME_ATTRIBUTES'
         ],
         fieldsMeta: {
           WECOM_SECRET: {
             component: UpdateToken
+          },
+          WECOM_RENAME_ATTRIBUTES: {
+            component: JsonEditor,
+            rules: [JsonRequiredUserNameMapped]
           }
         },
         // 不清理的话，编辑secret，在删除提交会报错
