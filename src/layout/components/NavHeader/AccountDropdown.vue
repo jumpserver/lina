@@ -59,7 +59,7 @@ export default {
           this.$router.push({ name: 'Profile' })
           break
         case 'PasswordAndSSHKey':
-          this.$router.push({ name: 'PasswordAndSSHKey' })
+          this.$router.push({ name: 'SSHKeyList' })
           break
         case 'Preferences':
           this.$router.push({ name: 'Preferences' })

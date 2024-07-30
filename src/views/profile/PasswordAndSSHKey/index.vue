@@ -8,14 +8,14 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import Password from './Password'
-import SSHKey from './SSHKey'
+import Password from './Password/Password.vue'
+import SSHKeyList from './SSHKey/SSHKeyList.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
-    SSHKey
+    SSHKeyList
   },
   data() {
     return {
@@ -42,7 +42,7 @@ export default {
         },
         {
           title: this.$t('LoginSSHKeySetting'),
-          name: 'SSHKey',
+          name: 'SSHKeyList',
           disabled: !this.$store.state.users.profile.can_public_key_auth
         }
       ]

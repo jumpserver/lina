@@ -28,13 +28,39 @@ export default {
     },
     {
       path: '/profile/password-and-ssh-key',
-      name: 'PasswordAndSSHKey',
-      component: () => import('@/views/profile/PasswordAndSSHKey/index'),
+      component: empty,
       meta: {
-        title: i18n.t('PasswordAndSSHKey'),
-        icon: 'personal',
-        permissions: []
-      }
+        icon: 'personal'
+      },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/profile/PasswordAndSSHKey/index'),
+          name: 'SSHKeyList',
+          icon: 'key',
+          meta: { title: i18n.t('PasswordAndSSHKey'), permissions: ['authentication.view_sshkey'] }
+        },
+        {
+          path: 'create',
+          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          name: 'SSHKeyCreate',
+          hidden: true,
+          meta: {
+            title: i18n.t('SSHKey'),
+            permissions: ['authentication.add_sshkey']
+          }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/profile/PasswordAndSSHKey/SSHKey/SSHKeyCreateUpdate.vue'),
+          name: 'SSHKeyUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('SSHKey'),
+            permissions: ['authentication.change_sshkey']
+          }
+        }
+      ]
     },
     {
       path: '/profile/passkeys',
