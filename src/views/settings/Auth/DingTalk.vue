@@ -8,7 +8,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'DingTalk',
@@ -40,11 +41,16 @@ export default {
         encryptedFields: ['DINGTALK_APPSECRET'],
         fields: [
           'AUTH_DINGTALK', 'DINGTALK_AGENTID',
-          'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
+          'DINGTALK_APPKEY', 'DINGTALK_APPSECRET',
+          'DINGTALK_RENAME_ATTRIBUTES'
         ],
         fieldsMeta: {
           DINGTALK_APPSECRET: {
             component: UpdateToken
+          },
+          DINGTALK_RENAME_ATTRIBUTES: {
+            component: JsonEditor,
+            rules: [JsonRequiredUserNameMapped]
           }
         },
         hasDetailInMsg: false,

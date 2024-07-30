@@ -9,7 +9,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'Slack',
@@ -41,7 +42,8 @@ export default {
         ],
         encryptedFields: ['SLACK_SECRET'],
         fields: [
-          'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'
+          'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET',
+          'SLACK_BOT_TOKEN', 'SLACK_RENAME_ATTRIBUTES'
         ],
         fieldsMeta: {
           SLACK_APP_SECRET: {
@@ -49,6 +51,10 @@ export default {
           },
           SLACK_BOT_TOKEN: {
             component: UpdateToken
+          },
+          SLACK_RENAME_ATTRIBUTES: {
+            component: JsonEditor,
+            rules: [JsonRequiredUserNameMapped]
           }
         },
         // 不清理的话，编辑secret，在删除提交会报错
