@@ -140,14 +140,12 @@ export default {
   methods: {
     setTreeUrlQuery() {
       let str = ''
-      if (Object.keys(this.treeUrlQuery).length > 0) {
-        for (const key in this.treeUrlQuery) {
-          str += `${key}=${this.treeUrlQuery[key]}&`
-        }
-        str = str.substr(0, str.length - 1)
-
-        return str
+      for (const key in this.treeUrlQuery) {
+        str += `${key}=${this.treeUrlQuery[key]}&`
       }
+      str = str.substr(0, str.length - 1)
+
+      return str
     },
     decorateRMenu() {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
@@ -159,51 +157,35 @@ export default {
         $('#m_show_asset_only_current_node').css('color', '#606266')
       }
     },
+
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
 
-      /*
-       由于需要设置两个 url 然后通过 $set 设置 tableConfig 的 url 的发送请求，就会出现先后问题
-       导致了当一个请求回来后 tick 更新但是较慢的请求回来的数据视图没有更新的问题
-       */
+      const setParam = (param, value, delay) => {
+        setTimeout(() => {
+          url = setUrlParam(url, param, value)
+        })
+      }
 
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
-        setTimeout(() => {
-          url = setUrlParam(url, 'node_id', nodeId)
-        })
-
-        setTimeout(() => {
-          url = setUrlParam(url, 'asset_id', '')
-        })
+        setParam('node_id', nodeId)
+        setParam('asset_id', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
-
-        setTimeout(() => {
-          url = setUrlParam(url, 'node_id', '')
-        })
-
-        setTimeout(() => {
-          url = setUrlParam(url, 'asset_id', assetId)
-        })
+        setParam('node_id', '')
+        setParam('asset_id', assetId)
       } else if (treeNode.meta.type === 'category') {
-        url = setUrlParam(url, 'category', treeNode.meta.category)
+        setParam('category', treeNode.meta.category)
       } else if (treeNode.meta.type === 'type') {
-        setTimeout(() => {
-          url = setUrlParam(url, 'category', treeNode.meta.category)
-        })
-
-        setTimeout(() => {
-          url = setUrlParam(url, 'type', treeNode.meta._type)
-        })
+        setParam('category', treeNode.meta.category)
+        setParam('type', treeNode.meta._type)
       } else if (treeNode.meta.type === 'platform') {
-        url = setUrlParam(url, 'platform', treeNode.id)
+        setParam('platform', treeNode.id)
       }
-
       setTimeout(() => {
         const query = this.setTreeUrlQuery()
         url = query ? `${url}&${query}` : url
-
         this.$set(this.tableConfig, 'url', url)
       })
 
