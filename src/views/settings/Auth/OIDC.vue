@@ -10,6 +10,7 @@
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'OIDC',
@@ -39,6 +40,9 @@ export default {
           ]],
           [this.$t('Search'), [
             'AUTH_OPENID_USER_ATTR_MAP'
+          ]],
+          [this.$t('Other'), [
+            'OPENID_ORG_IDS'
           ]]
         ],
         fieldsMeta: {
@@ -122,6 +126,22 @@ export default {
           'AUTH_OPENID_USER_ATTR_MAP': {
             component: JsonEditor,
             rules: [JsonRequired]
+          },
+          OPENID_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         submitMethod: () => 'patch',

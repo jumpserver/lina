@@ -12,7 +12,7 @@
 <script>
 import FeiShu from './FeiShu'
 import { JsonEditor } from '@/components/Form/FormFields'
-import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'Lark',
@@ -27,7 +27,15 @@ export default {
       return 'AUTH_LARK'
     },
     formFields() {
-      return ['AUTH_LARK', 'LARK_APP_ID', 'LARK_APP_SECRET', 'LARK_RENAME_ATTRIBUTES']
+      return [
+        [this.$t('Basic'), [
+          'AUTH_LARK', 'LARK_APP_ID',
+          'LARK_APP_SECRET', 'LARK_RENAME_ATTRIBUTES'
+        ]],
+        [this.$t('Other'), [
+          'LARK_ORG_IDS'
+        ]]
+      ]
     },
     encryptedFields() {
       return ['LARK_APP_SECRET']
@@ -35,8 +43,23 @@ export default {
     formFieldsMeta() {
       return {
         LARK_RENAME_ATTRIBUTES: {
-          component: JsonEditor,
-          rules: [JsonRequiredUserNameMapped]
+          component: JsonEditor
+        },
+        LARK_ORG_IDS: {
+          component: Select2,
+          el: {
+            popperClass: 'sync-setting-org',
+            multiple: true,
+            ajax: {
+              url: '/api/v1/orgs/orgs/',
+              transformOption: (item) => {
+                return { label: item.name, value: item.id }
+              }
+            }
+          },
+          hidden: () => {
+            return !this.$hasLicense()
+          }
         }
       }
     }

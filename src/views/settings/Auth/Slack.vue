@@ -10,7 +10,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'Slack',
@@ -42,8 +42,13 @@ export default {
         ],
         encryptedFields: ['SLACK_SECRET'],
         fields: [
-          'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET',
-          'SLACK_BOT_TOKEN', 'SLACK_RENAME_ATTRIBUTES'
+          [this.$t('Basic'), [
+            'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET',
+            'SLACK_BOT_TOKEN', 'SLACK_RENAME_ATTRIBUTES'
+          ]],
+          [this.$t('Other'), [
+            'SLACK_ORG_IDS'
+          ]]
         ],
         fieldsMeta: {
           SLACK_APP_SECRET: {
@@ -53,8 +58,23 @@ export default {
             component: UpdateToken
           },
           SLACK_RENAME_ATTRIBUTES: {
-            component: JsonEditor,
-            rules: [JsonRequiredUserNameMapped]
+            component: JsonEditor
+          },
+          SLACK_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         // 不清理的话，编辑secret，在删除提交会报错
