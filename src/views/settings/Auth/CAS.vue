@@ -10,6 +10,7 @@
 import BaseAuth from './Base'
 import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 import { JsonEditor } from '@/components/Form/FormFields'
+import { Select2 } from '@/components'
 
 export default {
   name: 'Cas',
@@ -28,13 +29,29 @@ export default {
             'CAS_RENAME_ATTRIBUTES'
           ]],
           [this.$t('Other'), [
-            'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY'
+            'CAS_ORG_IDS', 'CAS_CREATE_USER', 'CAS_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {
             component: JsonEditor,
             rules: [JsonRequiredUserNameMapped]
+          },
+          CAS_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         submitMethod: () => 'patch',

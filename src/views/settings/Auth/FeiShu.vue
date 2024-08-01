@@ -10,7 +10,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'Feishu',
@@ -34,15 +34,38 @@ export default {
     },
     formFields: {
       type: Array,
-      default: () => ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES']
+      default() {
+        return [[this.$t('Basic'), [
+          'AUTH_FEISHU', 'FEISHU_APP_ID',
+          'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES'
+        ]], [this.$t('Other'), [
+          'FEISHU_ORG_IDS'
+        ]]
+        ]
+      }
     },
     formFieldsMeta: {
-      type: Array,
-      default: () => {
+      type: Object,
+      default() {
         return {
           FEISHU_RENAME_ATTRIBUTES: {
-            component: JsonEditor,
-            rules: [JsonRequiredUserNameMapped]
+            component: JsonEditor
+          },
+          FEISHU_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         }
       }
@@ -71,7 +94,9 @@ export default {
                 vm.$message.success(res['msg'])
               }).catch(() => {
                 vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              }).finally(() => {
+                btn.loading = false
+              })
             }
           }
         ],
@@ -94,12 +119,14 @@ export default {
     }
   },
   mounted() {
-    this.settings.fieldsMeta = this.encryptedFields.reduce((acc, field) => {
+    const newFieldsMeta = this.encryptedFields.reduce((acc, field) => {
       acc[field] = {
         component: UpdateToken
       }
       return acc
     }, {})
+
+    Object.assign(this.settings.fieldsMeta, newFieldsMeta)
   },
   methods: {}
 }

@@ -9,7 +9,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'WeCom',
@@ -35,22 +35,44 @@ export default {
                 vm.$message.success(res['msg'])
               }).catch(() => {
                 vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              }).finally(() => {
+                btn.loading = false
+              })
             }
           }
         ],
         encryptedFields: ['WECOM_SECRET'],
         fields: [
-          'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
-          'WECOM_SECRET', 'WECOM_RENAME_ATTRIBUTES'
+          [this.$t('Basic'), [
+            'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
+            'WECOM_SECRET', 'WECOM_RENAME_ATTRIBUTES'
+          ]],
+          [this.$t('Other'), [
+            'WECOM_ORG_IDS'
+          ]]
         ],
         fieldsMeta: {
           WECOM_SECRET: {
             component: UpdateToken
           },
           WECOM_RENAME_ATTRIBUTES: {
-            component: JsonEditor,
-            rules: [JsonRequiredUserNameMapped]
+            component: JsonEditor
+          },
+          WECOM_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         // 不清理的话，编辑secret，在删除提交会报错
@@ -66,8 +88,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

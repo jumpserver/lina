@@ -11,7 +11,7 @@
 import BaseAuth from './Base'
 import { JsonEditor } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
-import { UploadField } from '@/components'
+import { Select2, UploadField } from '@/components'
 import request from '@/utils/request'
 
 export default {
@@ -43,6 +43,7 @@ export default {
             'AUTH_OAUTH2_USER_ATTR_MAP'
           ]],
           [this.$t('Other'), [
+            'OAUTH2_ORG_IDS',
             'AUTH_OAUTH2_ALWAYS_UPDATE_USER',
             'AUTH_OAUTH2_LOGOUT_COMPLETELY'
           ]]
@@ -66,6 +67,22 @@ export default {
             rules: [JsonRequired]
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {
+          },
+          OAUTH2_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         submitMethod: () => 'patch',

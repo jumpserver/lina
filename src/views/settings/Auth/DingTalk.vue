@@ -9,7 +9,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
+import { Select2 } from '@/components'
 
 export default {
   name: 'DingTalk',
@@ -40,17 +40,37 @@ export default {
         ],
         encryptedFields: ['DINGTALK_APPSECRET'],
         fields: [
-          'AUTH_DINGTALK', 'DINGTALK_AGENTID',
-          'DINGTALK_APPKEY', 'DINGTALK_APPSECRET',
-          'DINGTALK_RENAME_ATTRIBUTES'
+          [this.$t('Basic'), [
+            'AUTH_DINGTALK', 'DINGTALK_AGENTID',
+            'DINGTALK_APPKEY', 'DINGTALK_APPSECRET',
+            'DINGTALK_RENAME_ATTRIBUTES'
+          ]],
+          [this.$t('Other'), [
+            'DINGTALK_ORG_IDS'
+          ]]
         ],
         fieldsMeta: {
           DINGTALK_APPSECRET: {
             component: UpdateToken
           },
           DINGTALK_RENAME_ATTRIBUTES: {
-            component: JsonEditor,
-            rules: [JsonRequiredUserNameMapped]
+            component: JsonEditor
+          },
+          DINGTALK_ORG_IDS: {
+            component: Select2,
+            el: {
+              popperClass: 'sync-setting-org',
+              multiple: true,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: () => {
+              return !this.$hasLicense()
+            }
           }
         },
         hasDetailInMsg: false,
