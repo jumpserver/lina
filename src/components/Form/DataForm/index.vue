@@ -169,7 +169,8 @@ export default {
       form.validate(valid => {
         if (valid) {
           this.$emit('submit', form.getFormValue(), form, addContinue)
-          this.resetForm()
+
+          if (addContinue) this.resetForm()
         } else {
           this.$emit('invalid', valid)
           scrollToError(form.$el)
