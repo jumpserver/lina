@@ -11,8 +11,9 @@
 import BaseAuth from './Base'
 import { JsonEditor } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
-import { Select2, UploadField } from '@/components'
+import { UploadField } from '@/components'
 import request from '@/utils/request'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'OAuth2',
@@ -68,22 +69,7 @@ export default {
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {
           },
-          OAUTH2_ORG_IDS: {
-            component: Select2,
-            el: {
-              popperClass: 'sync-setting-org',
-              multiple: true,
-              ajax: {
-                url: '/api/v1/orgs/orgs/',
-                transformOption: (item) => {
-                  return { label: item.name, value: item.id }
-                }
-              }
-            },
-            hidden: () => {
-              return !this.$hasLicense()
-            }
-          }
+          OAUTH2_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {

@@ -10,7 +10,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { Select2 } from '@/components'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'Slack',
@@ -60,22 +60,7 @@ export default {
           SLACK_RENAME_ATTRIBUTES: {
             component: JsonEditor
           },
-          SLACK_ORG_IDS: {
-            component: Select2,
-            el: {
-              popperClass: 'sync-setting-org',
-              multiple: true,
-              ajax: {
-                url: '/api/v1/orgs/orgs/',
-                transformOption: (item) => {
-                  return { label: item.name, value: item.id }
-                }
-              }
-            },
-            hidden: () => {
-              return !this.$hasLicense()
-            }
-          }
+          SLACK_ORG_IDS: getOrgSelect2Meta()
         },
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {

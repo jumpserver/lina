@@ -10,7 +10,7 @@
 import BaseAuth from './Base'
 import { JsonRequiredUserNameMapped } from '@/components/Form/DataForm/rules'
 import { JsonEditor } from '@/components/Form/FormFields'
-import { Select2 } from '@/components'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'Cas',
@@ -37,22 +37,7 @@ export default {
             component: JsonEditor,
             rules: [JsonRequiredUserNameMapped]
           },
-          CAS_ORG_IDS: {
-            component: Select2,
-            el: {
-              popperClass: 'sync-setting-org',
-              multiple: true,
-              ajax: {
-                url: '/api/v1/orgs/orgs/',
-                transformOption: (item) => {
-                  return { label: item.name, value: item.id }
-                }
-              }
-            },
-            hidden: () => {
-              return !this.$hasLicense()
-            }
-          }
+          CAS_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
