@@ -10,8 +10,9 @@
 <script>
 import BaseAuth from './Base'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
-import { Select2, UploadKey } from '@/components'
+import { UploadKey } from '@/components'
 import { JsonEditor } from '@/components/Form/FormFields'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'SAML2',
@@ -68,22 +69,7 @@ export default {
             component: JsonEditor,
             rules: [JsonRequired]
           },
-          SAML2_ORG_IDS: {
-            component: Select2,
-            el: {
-              popperClass: 'sync-setting-org',
-              multiple: true,
-              ajax: {
-                url: '/api/v1/orgs/orgs/',
-                transformOption: (item) => {
-                  return { label: item.name, value: item.id }
-                }
-              }
-            },
-            hidden: () => {
-              return !this.$hasLicense()
-            }
-          }
+          SAML2_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {

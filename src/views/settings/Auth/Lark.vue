@@ -12,7 +12,7 @@
 <script>
 import FeiShu from './FeiShu'
 import { JsonEditor } from '@/components/Form/FormFields'
-import { Select2 } from '@/components'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'Lark',
@@ -45,22 +45,7 @@ export default {
         LARK_RENAME_ATTRIBUTES: {
           component: JsonEditor
         },
-        LARK_ORG_IDS: {
-          component: Select2,
-          el: {
-            popperClass: 'sync-setting-org',
-            multiple: true,
-            ajax: {
-              url: '/api/v1/orgs/orgs/',
-              transformOption: (item) => {
-                return { label: item.name, value: item.id }
-              }
-            }
-          },
-          hidden: () => {
-            return !this.$hasLicense()
-          }
-        }
+        LARK_ORG_IDS: getOrgSelect2Meta()
       }
     }
   },

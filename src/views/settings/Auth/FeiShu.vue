@@ -10,7 +10,7 @@
 <script>
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
-import { Select2 } from '@/components'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'Feishu',
@@ -51,22 +51,7 @@ export default {
           FEISHU_RENAME_ATTRIBUTES: {
             component: JsonEditor
           },
-          FEISHU_ORG_IDS: {
-            component: Select2,
-            el: {
-              popperClass: 'sync-setting-org',
-              multiple: true,
-              ajax: {
-                url: '/api/v1/orgs/orgs/',
-                transformOption: (item) => {
-                  return { label: item.name, value: item.id }
-                }
-              }
-            },
-            hidden: () => {
-              return !this.$hasLicense()
-            }
-          }
+          FEISHU_ORG_IDS: getOrgSelect2Meta()
         }
       }
     },
