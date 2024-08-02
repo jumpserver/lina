@@ -1,12 +1,20 @@
 <template>
   <Page>
-    <GrantedAssets :actions="actions" :table-url="tableUrl" :tree-url="treeUrl" />
+    <GrantedAssets
+      ref="grantedAssets"
+      :name="name"
+      :comment="comment"
+      :actions="actions"
+      :table-url="tableUrl"
+      :tree-url="treeUrl"
+    />
   </Page>
 </template>
 
 <script>
 import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import Page from '@/layout/components/Page/index.vue'
+import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -48,7 +56,25 @@ export default {
           ]
         }
       },
-      allFavorites: []
+      allFavorites: [],
+      name: {
+        formatter: EditableInputFormatter,
+        formatterArgs: {
+          canEdit: true,
+          onEnter: ({ row, col, oldValue, newValue }) => {
+            this.updateAssetCoustomAtrr(row, col, oldValue, newValue)
+          }
+        }
+      },
+      comment: {
+        formatter: EditableInputFormatter,
+        formatterArgs: {
+          canEdit: true,
+          onEnter: ({ row, col, oldValue, newValue }) => {
+            this.updateAssetCoustomAtrr(row, col, oldValue, newValue)
+          }
+        }
+      }
     }
   },
   mounted() {
@@ -94,6 +120,16 @@ export default {
         }
       })
       return ok
+    },
+    updateAssetCoustomAtrr(row, col, oldValue, newValue) {
+      const colProp = col.prop
+      this.$axios.post('/api/v1/assets/my-asset/', {
+        asset: row.id,
+        [colProp]: newValue
+      }).then(() => {
+        this.$message.success(this.$t('UpdateSuccessMsg'))
+        this.$refs.grantedAssets.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
+      })
     }
   }
 }

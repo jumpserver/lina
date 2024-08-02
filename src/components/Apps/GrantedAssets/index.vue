@@ -1,5 +1,6 @@
 <template>
   <AssetTreeTable
+    ref="AssetTreeTable"
     :header-actions="headerActions"
     :table-config="tableConfig"
     :tree-setting="treeSetting"
@@ -47,9 +48,19 @@ export default {
         return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
       }
     },
-    nameDisabled: {
-      type: Boolean,
-      default: true
+    name: {
+      type: Object,
+      default: () => ({
+        formatter: DetailFormatter,
+        formatterArgs: {
+          route: 'AssetDetail',
+          can: true
+        }
+      })
+    },
+    comment: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -80,11 +91,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AssetDetail',
-              can: !this.nameDisabled
-            }
+            ...this.name
           },
           labels: {
             formatterArgs: {
@@ -99,7 +106,8 @@ export default {
             formatter: AccountInfoFormatter,
             width: '100px'
           },
-          connectivity: connectivityMeta
+          connectivity: connectivityMeta,
+          comment: { ...this.comment }
         },
         tableAttrs: {
           rowClassName({ row }) {
