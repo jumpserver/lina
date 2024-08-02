@@ -92,7 +92,10 @@ export default {
             width: '140px'
           },
           internal: {
-            width: '100px'
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
           },
           actions: {
             formatterArgs: {
