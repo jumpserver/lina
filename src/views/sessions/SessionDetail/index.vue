@@ -43,7 +43,7 @@ export default {
             hidden: () => !this.$hasPerm('terminal.view_command')
           },
           {
-            title: this.$t('Activity'),
+            title: this.$t('SessionJoinRecords'),
             name: 'SessionJoinRecords',
             hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
           },
