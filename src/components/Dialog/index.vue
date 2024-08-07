@@ -16,7 +16,7 @@
           <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
-            :loading="loadingStatus"
+            :disabled="disabledStatus"
             size="small"
             type="primary"
             @click="onConfirm"
@@ -69,7 +69,7 @@ export default {
       type: Boolean,
       default: true
     },
-    loadingStatus: {
+    disabledStatus: {
       type: Boolean,
       default: false
     },

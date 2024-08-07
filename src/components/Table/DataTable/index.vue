@@ -12,7 +12,6 @@
 <script>
 import { default as ElDatableTable } from './compenents/el-data-table'
 import { mapGetters } from 'vuex'
-import { eventBus } from '@/utils/const'
 
 export default {
   name: 'DataTable',
@@ -155,7 +154,7 @@ export default {
         }
       }
 
-      eventBus.$emit('tree-loaded')
+      this.$emit('table-loaded')
     },
     handleSizeChange(val) {
       localStorage.setItem('paginationSize', val)

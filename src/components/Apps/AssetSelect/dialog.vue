@@ -2,7 +2,7 @@
   <Dialog
     :close-on-click-modal="false"
     :title="$tc('Assets')"
-    :loading-status="loadingStatus"
+    :disabled-status="tableDataLoading"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -14,6 +14,7 @@
   >
     <AssetTreeTable
       ref="ListPage"
+      v-loading="tableDataLoading"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
       :sync-select-to-url="false"
@@ -23,6 +24,8 @@
       :url="baseUrl"
       class="tree-table"
       v-bind="$attrs"
+      v-on="$listeners"
+      @table-loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -30,7 +33,6 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import { eventBus } from '@/utils/const'
 
 export default {
   componentName: 'AssetSelectDialog',
@@ -66,7 +68,7 @@ export default {
   data() {
     const vm = this
     return {
-      loadingStatus: true,
+      tableDataLoading: true,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -126,15 +128,9 @@ export default {
       return { ...this.treeSetting, selectSyncToRoute: false }
     }
   },
-  mounted() {
-    eventBus.$on('tree-loaded', () => this.execLoading())
-  },
-  beforeDestroy() {
-    eventBus.$off('tree-loaded', () => this.execLoading())
-  },
   methods: {
-    execLoading() {
-      this.loadingStatus = false
+    handleTableLoaded() {
+      this.tableDataLoading = false
     },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
