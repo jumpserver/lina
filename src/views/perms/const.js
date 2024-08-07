@@ -105,6 +105,7 @@ export const AssetPermissionTableMeta = {
   accounts: {
     formatter: AmountFormatter,
     formatterArgs: {
+      cellValueToRemove: ['@SPEC'],
       getItem(item) {
         if (item !== '@SPEC') {
           return AccountLabelMapper[item] || item
