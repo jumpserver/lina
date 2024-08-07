@@ -28,7 +28,6 @@
 <script>
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import AssetSelectDialog from './dialog.vue'
-import { b } from 'css-color-function/lib/adjusters'
 
 export default {
   componentName: 'AssetSelect',
@@ -81,7 +80,6 @@ export default {
     }
   },
   methods: {
-    b,
     handleFocus() {
       this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
