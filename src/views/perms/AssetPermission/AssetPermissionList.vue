@@ -105,6 +105,7 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               async: true,
+              cellValueToRemove: ['@SPEC'],
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
