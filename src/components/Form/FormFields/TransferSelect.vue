@@ -13,6 +13,7 @@
       v-if="showTransfer"
       :close-on-click-modal="false"
       :title="label"
+      :loading-status="loadingStatus"
       :visible.sync="showTransfer"
       class="the-dialog"
       width="730px"
@@ -77,13 +78,16 @@ export default {
       if (keyword) {
         params['search'] = keyword
       }
+      this.loadingStatus = true
       const data = await this.$axios.get(url, { params })
+      this.loadingStatus = false
       return data['results'].map(item => {
         const n = transformOption(item)
         return { id: n.value, label: n.label }
       })
     }
     return {
+      loadingStatus: false,
       showTransfer: false,
       selectInitialized: false,
       select2: {
@@ -167,7 +171,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
