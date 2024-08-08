@@ -1,8 +1,8 @@
 <template>
   <Dialog
-    ref="customDialog"
     :close-on-click-modal="false"
     :title="$tc('Assets')"
+    :disabled-status="!isLoaded"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -67,6 +67,7 @@ export default {
   data() {
     const vm = this
     return {
+      isLoaded: false,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -128,7 +129,7 @@ export default {
   },
   methods: {
     handleTableLoaded() {
-      this.$refs.customDialog.loaded()
+      this.isLoaded = true
     },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1

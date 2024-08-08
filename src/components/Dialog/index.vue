@@ -10,7 +10,7 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <div v-loading="!isLoaded">
+      <div v-loading="disabledStatus">
         <slot />
       </div>
 
@@ -19,7 +19,7 @@
           <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
-            :disabled="!isLoaded"
+            :disabled="disabledStatus"
             size="small"
             type="primary"
             @click="onConfirm"
@@ -83,7 +83,6 @@ export default {
   },
   data() {
     return {
-      isLoaded: false
     }
   },
   computed: {
@@ -92,9 +91,6 @@ export default {
     }
   },
   methods: {
-    loaded() {
-      this.isLoaded = true
-    },
     onCancel() {
       this.$emit('cancel')
     },

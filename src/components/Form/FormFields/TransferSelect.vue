@@ -11,17 +11,17 @@
     />
     <Dialog
       v-if="showTransfer"
-      ref="customDialog"
       :close-on-click-modal="false"
       :title="label"
       :visible.sync="showTransfer"
+      :disabled-status="!isLoaded"
       class="the-dialog"
       width="730px"
       @cancel="handleTransCancel"
       @confirm="handleTransConfirm"
       v-on="$listeners"
     >
-      <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" @loaded="handleLoaded" />
+      <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
     </Dialog>
   </div>
 </template>
@@ -80,12 +80,14 @@ export default {
         params['search'] = keyword
       }
       const data = await this.$axios.get(url, { params })
+      this.isLoaded = true
       return data['results'].map(item => {
         const n = transformOption(item)
         return { id: n.value, label: n.label }
       })
     }
     return {
+      isLoaded: false,
       showTransfer: false,
       selectInitialized: false,
       select2: {
@@ -165,9 +167,6 @@ export default {
       this.select2.options = options
       this.emit(options.map(item => item.value))
       this.showTransfer = false
-    },
-    handleLoaded() {
-      this.$refs.customDialog.loaded()
     }
   }
 }
