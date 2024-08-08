@@ -154,7 +154,7 @@ export default {
         }
       }
 
-      this.$emit('table-loaded')
+      this.$emit('loaded')
     },
     handleSizeChange(val) {
       localStorage.setItem('paginationSize', val)

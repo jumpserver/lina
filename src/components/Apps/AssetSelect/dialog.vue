@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    ref="customDialog"
     :close-on-click-modal="false"
     :title="$tc('Assets')"
-    :disabled-status="tableDataLoading"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -14,7 +14,6 @@
   >
     <AssetTreeTable
       ref="ListPage"
-      v-loading="tableDataLoading"
       :header-actions="headerActions"
       :node-url="baseNodeUrl"
       :sync-select-to-url="false"
@@ -25,7 +24,7 @@
       class="tree-table"
       v-bind="$attrs"
       v-on="$listeners"
-      @table-loaded="handleTableLoaded"
+      @loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -68,7 +67,6 @@ export default {
   data() {
     const vm = this
     return {
-      tableDataLoading: true,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -130,7 +128,7 @@ export default {
   },
   methods: {
     handleTableLoaded() {
-      this.tableDataLoading = false
+      this.$refs.customDialog.loaded()
     },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1

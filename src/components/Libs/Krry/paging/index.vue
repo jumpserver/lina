@@ -240,6 +240,8 @@ export default {
           ele => !checkDataId.includes(ele.id)
         )
       }
+
+      this.$emit('loaded')
     },
     searchWord(keyword, titleId) {
       // 过滤掉数据，保留搜索的数据
