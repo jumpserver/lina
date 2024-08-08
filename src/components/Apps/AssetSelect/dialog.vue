@@ -1,7 +1,7 @@
 <template>
   <Dialog
-    ref="customDialog"
     :close-on-click-modal="false"
+    :loading-status="!isLoaded"
     :title="$tc('assets.Assets')"
     custom-class="asset-select-dialog"
     top="2vh"
@@ -65,6 +65,7 @@ export default {
   data() {
     const vm = this
     return {
+      isLoaded: false,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -147,7 +148,7 @@ export default {
       }
     },
     handleTableLoaded() {
-      this.$refs.customDialog.loaded()
+      this.isLoaded = true
     }
   }
 }
