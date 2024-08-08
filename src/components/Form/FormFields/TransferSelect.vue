@@ -79,6 +79,7 @@ export default {
       if (keyword) {
         params['search'] = keyword
       }
+      this.isLoaded = false
       const data = await this.$axios.get(url, { params })
       this.isLoaded = true
       return data['results'].map(item => {
