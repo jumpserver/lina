@@ -153,6 +153,8 @@ export default {
           this.toggleRowSelection(row, true)
         }
       }
+
+      this.$emit('loaded')
     },
     handleSizeChange(val) {
       localStorage.setItem('paginationSize', val)

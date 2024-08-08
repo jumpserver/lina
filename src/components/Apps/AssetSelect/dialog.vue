@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    ref="customDialog"
     :close-on-click-modal="false"
     :title="$tc('Assets')"
     custom-class="asset-select-dialog"
@@ -22,6 +23,8 @@
       :url="baseUrl"
       class="tree-table"
       v-bind="$attrs"
+      v-on="$listeners"
+      @loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -124,6 +127,9 @@ export default {
     }
   },
   methods: {
+    handleTableLoaded() {
+      this.$refs.customDialog.loaded()
+    },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },
