@@ -155,7 +155,7 @@ export default {
         }
       }
 
-      eventBus.$emit('tree-loaded')
+      eventBus.$emit('loaded')
     },
     handleSizeChange(val) {
       localStorage.setItem('paginationSize', val)

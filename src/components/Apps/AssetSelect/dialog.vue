@@ -1,8 +1,8 @@
 <template>
   <Dialog
+    ref="customDialog"
     :close-on-click-modal="false"
     :title="$tc('assets.Assets')"
-    :loading-status="loadingStatus"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -22,6 +22,7 @@
       :tree-setting="treeSetting"
       class="tree-table"
       v-bind="$attrs"
+      @loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -29,7 +30,6 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import { eventBus } from '@/utils/const'
 
 export default {
   componentName: 'AssetSelectDialog',
@@ -65,7 +65,6 @@ export default {
   data() {
     const vm = this
     return {
-      loadingStatus: true,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -120,16 +119,7 @@ export default {
       }
     }
   },
-  mounted() {
-    eventBus.$on('tree-loaded', () => this.execLoading())
-  },
-  beforeDestroy() {
-    eventBus.$off('tree-loaded', () => this.execLoading())
-  },
   methods: {
-    execLoading() {
-      this.loadingStatus = false
-    },
     handleClose() {
       this.$eventBus.$emit('treeComponentKey')
     },
@@ -155,6 +145,9 @@ export default {
       if (selectValueIndex > -1) {
         this.rowSelected.splice(selectValueIndex, 1)
       }
+    },
+    handleTableLoaded() {
+      this.$refs.customDialog.loaded()
     }
   }
 }

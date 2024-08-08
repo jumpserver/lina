@@ -9,11 +9,13 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <slot />
+    <div v-loading="!isLoaded">
+      <slot />
+    </div>
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
         <el-button v-if="showCancel && showButtons" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm && showButtons" :loading="loadingStatus" type="primary" @click="onConfirm">
+        <el-button v-if="showConfirm && showButtons" :disabled="!isLoaded" type="primary" @click="onConfirm">
           {{ confirmTitle }}
         </el-button>
       </slot>
@@ -71,14 +73,21 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      isLoaded: false
+    }
   },
   computed: {
     iWidth() {
       return this.$store.getters.isMobile ? '1000px' : this.width
     }
   },
+  mounted() {
+  },
   methods: {
+    loaded() {
+      this.isLoaded = true
+    },
     onCancel() {
       this.$emit('cancel')
     },
