@@ -1,5 +1,6 @@
 <template>
   <Dialog
+    ref="customDialog"
     :close-on-click-modal="false"
     :title="$tc('assets.Assets')"
     custom-class="asset-select-dialog"
@@ -21,6 +22,7 @@
       :tree-setting="treeSetting"
       class="tree-table"
       v-bind="$attrs"
+      @loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -143,6 +145,9 @@ export default {
       if (selectValueIndex > -1) {
         this.rowSelected.splice(selectValueIndex, 1)
       }
+    },
+    handleTableLoaded() {
+      this.$refs.customDialog.loaded()
     }
   }
 }

@@ -12,6 +12,7 @@
 <script>
 import { default as ElDatableTable } from './compenents/el-data-table'
 import { mapGetters } from 'vuex'
+import { eventBus } from '@/utils/const'
 
 export default {
   name: 'DataTable',
@@ -153,6 +154,8 @@ export default {
           this.toggleRowSelection(row, true)
         }
       }
+
+      eventBus.$emit('loaded')
     },
     handleSizeChange(val) {
       localStorage.setItem('paginationSize', val)

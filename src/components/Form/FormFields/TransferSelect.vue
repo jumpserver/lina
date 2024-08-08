@@ -11,6 +11,7 @@
     />
     <Dialog
       v-if="showTransfer"
+      ref="customDialog"
       :close-on-click-modal="false"
       :title="label"
       :visible.sync="showTransfer"
@@ -18,8 +19,9 @@
       width="730px"
       @cancel="handleTransCancel"
       @confirm="handleTransConfirm"
+      v-on="$listeners"
     >
-      <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" />
+      <krryPaging v-if="selectInitialized" ref="pageTransfer" class="transfer" v-bind="pagingTransfer" @loaded="handleLoaded" />
     </Dialog>
   </div>
 </template>
@@ -162,11 +164,10 @@ export default {
       this.select2.options = options
       this.emit(options.map(item => item.value))
       this.showTransfer = false
+    },
+    handleLoaded() {
+      this.$refs.customDialog.loaded()
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
