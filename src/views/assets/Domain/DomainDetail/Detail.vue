@@ -26,7 +26,7 @@ export default {
       detailFields: [
         'name', 'assets_amount',
         {
-          key: this.$t('Gateways amount'),
+          key: this.$t('Gateway'),
           value: `${this.object.gateways.length}`
         },
         'date_created', 'comment'
