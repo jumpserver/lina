@@ -91,11 +91,11 @@ export default {
         'task_id', 'time_cost',
         {
           key: this.$t('IsFinished'),
-          value: `${this.object.is_finished ? '是' : '否'}`
+          value: this.object.is_finished ? this.$t('Yes') : this.$t('No')
         },
         {
           key: this.$t('IsSuccess'),
-          value: `${this.object.is_success ? '是' : '否'}`
+          value: this.object.is_success ? this.$t('Yes') : this.$t('No')
         },
         'job_type', 'material', 'org_name',
         'date_start', 'date_finished', 'date_created'
@@ -107,14 +107,6 @@ export default {
     hasSummary() {
       return this.object.is_finished && Object.keys(this.object.summary).length
     }
-  },
-  mounted() {
-    console.log(this.object)
-  },
-  methods: {}
+  }
 }
 </script>
-
-<style lang="less" scoped>
-
-</style>
