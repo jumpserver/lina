@@ -61,8 +61,9 @@ export default {
         formatter: EditableInputFormatter,
         formatterArgs: {
           canEdit: true,
+          showEditBtn: true,
           onEnter: ({ row, col, oldValue, newValue }) => {
-            this.updateAssetCoustomAtrr(row, col, oldValue, newValue)
+            this.updateAssetCustomAttr(row, col, oldValue, newValue)
           }
         }
       },
@@ -70,8 +71,9 @@ export default {
         formatter: EditableInputFormatter,
         formatterArgs: {
           canEdit: true,
+          showEditBtn: true,
           onEnter: ({ row, col, oldValue, newValue }) => {
-            this.updateAssetCoustomAtrr(row, col, oldValue, newValue)
+            this.updateAssetCustomAttr(row, col, oldValue, newValue)
           }
         }
       }
@@ -121,14 +123,21 @@ export default {
       })
       return ok
     },
-    updateAssetCoustomAtrr(row, col, oldValue, newValue) {
+    updateAssetCustomAttr(row, col, oldValue, newValue) {
+      if (oldValue.toString() === newValue.toString()) {
+        return
+      }
       const colProp = col.prop
+
       this.$axios.post('/api/v1/assets/my-asset/', {
         asset: row.id,
         [colProp]: newValue
+      }).catch((e) => {
+        this.$message.error(e?.response?.request?.responseText || this.$t('BadRequestErrorMsg'))
+        return Promise.reject(e)
       }).then(() => {
+        this.$set(row, colProp, newValue)
         this.$message.success(this.$t('UpdateSuccessMsg'))
-        this.$refs.grantedAssets.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
       })
     }
   }
