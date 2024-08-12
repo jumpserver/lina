@@ -25,7 +25,7 @@ export default {
       tableConfig: {
         hasSelection: true,
         url: '/api/v1/authentication/ssh-key/',
-        columns: ['id', 'name', 'is_active', 'date_created', 'date_last_used'],
+        columns: ['id', 'name', 'comment', 'is_active', 'date_created', 'date_last_used'],
         columnsShow: {
           min: ['id', 'name']
         },
