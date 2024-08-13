@@ -183,7 +183,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'PasswordAndSSHKey', query: { tab: 'Password' }})
+              this.$router.push({ name: 'SSHKeyList', query: { tab: 'Password' }})
             }.bind(this)
           }
         },
@@ -196,21 +196,8 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'PasswordAndSSHKey', query: { tab: 'SSHKey' }})
+              this.$router.push({ name: 'SSHKeyList', query: { tab: 'SSHKey' }})
             }.bind(this)
-          }
-        },
-        {
-          title: this.$t('ResetPublicKeyAndDownload'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Reset'),
-            disabled: !this.$store.state.users.profile.can_public_key_auth
-          },
-          callbacks: {
-            click: function() {
-              window.open(`/core/auth/profile/pubkey/generate/`, '_blank')
-            }
           }
         }
       ],
