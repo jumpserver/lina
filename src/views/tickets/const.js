@@ -45,6 +45,14 @@ export const treeNodes = [
         label: i18n.t('Connect')
       },
       {
+        value: 'delete',
+        label: i18n.t('Delete')
+      },
+      {
+        value: 'share',
+        label: i18n.t('Share')
+      },
+      {
         value: 'updownload',
         label: i18n.t('UpDownload'),
         children: [
