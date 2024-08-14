@@ -73,6 +73,7 @@ export default {
           btn.loading = true
         }
       })
+      form.value.interval = parseInt(form.value.interval, 10)
       this.$refs.form.$refs.form.dataForm.submitForm('form', false)
     },
     handleSubmitSuccess(res) {
