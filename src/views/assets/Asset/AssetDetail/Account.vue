@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('QuickTest'),
+      title: this.$t('Test'),
       templateDialogVisible: false,
       columnsDefault: ['name', 'username', 'asset'],
       headerExtraActions: [
