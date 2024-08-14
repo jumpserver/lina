@@ -112,6 +112,11 @@
     background: url('./icons/gpt.png') no-repeat center left transparent;
   }
 
+  &.webcloud_ico_docu {
+    background: url('icons/cloud.png') no-repeat center left transparent;
+    background-size: contain;
+  }
+
   &.clickhouse_ico_docu {
     background: url('./icons/clickhouse.png') no-repeat center left transparent;
   }
