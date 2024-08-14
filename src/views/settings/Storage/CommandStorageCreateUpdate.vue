@@ -56,6 +56,12 @@ export default {
               helpText: this.$t('EsIndex')
             }
           }
+        },
+        comment: {
+          component: 'el-input',
+          el: {
+            type: 'textarea'
+          }
         }
       },
       getUrl() {
