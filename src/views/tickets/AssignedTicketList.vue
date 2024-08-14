@@ -13,7 +13,12 @@
       @confirm="onConfirm"
     >
       <div v-for="d in ticketData" :key="d.id">
-        <AutoDetailCard :fields="getDetailFields(d)" :object="d" :title="`${d.title}(${d.type.label})`" :url="detailUrl" />
+        <AutoDetailCard
+          :fields="getDetailFields(d)"
+          :object="d"
+          :title="`${d.title}(${d.type.label})`"
+          :url="detailUrl"
+        />
       </div>
     </Dialog>
   </div>
@@ -44,8 +49,10 @@ export default {
         extraMoreActions: [
           {
             name: 'ApproveSelected',
-            title: this.$t('ApproveSelected'),
-            can: ({ selectedRows }) => { return selectedRows.length > 0 },
+            title: this.$t('ApprovalSelected'),
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0
+            },
             callback: function({ selectedRows }) {
               this.isVisible = true
               this.ticketData = selectedRows
