@@ -64,6 +64,12 @@ export default {
         },
         is_default: {
           hidden: (formValue) => formValue.type === 'sftp'
+        },
+        comment: {
+          component: 'el-input',
+          el: {
+            type: 'textarea'
+          }
         }
       },
       cleanFormValue(values) {
