@@ -51,7 +51,7 @@ export default {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {})
     return {
       formatterArgs: formatterArgs,
-      data: formatterArgs.async ? [] : (this.cellValue || []),
+      listData: formatterArgs.async ? [] : (this.cellValue || []),
       amount: '',
       asyncGetDone: false
     }
@@ -68,17 +68,18 @@ export default {
         return [this.$t('Loading') + '...']
       }
       const getItem = this.formatterArgs.getItem || (item => item.name)
+
       let data = []
-      if (Array.isArray(this.data)) {
-        data = this.data.map(item => getItem(item)) || []
-      } else {
-        // object {key: [value]}
-        data = Object.entries(this.data).map(([key, value]) => {
+
+      if (Array.isArray(this.listData)) {
+        data = this.listData.map(item => getItem(item)).filter(Boolean)
+      } else if (this.listData && typeof this.listData === 'object') {
+        data = Object.entries(this.listData).map(([key, value]) => {
           const item = { key: key, value: value }
           return getItem(item)
-        }) || []
+        }).filter(Boolean)
       }
-      data = data.filter(Boolean)
+
       return data
     },
     showItems() {
@@ -86,8 +87,12 @@ export default {
     }
   },
   watch: {
-    cellValue() {
-      this.computeAmount()
+    cellValue: {
+      handler(newValue) {
+        // listData 需要重新赋值一遍 items 重新计算
+        this.listData = newValue
+        this.computeAmount()
+      }
     }
   },
   async mounted() {
@@ -105,6 +110,7 @@ export default {
           // object {key: [value]}
           cellValue = Object.keys(this.cellValue)
         }
+
         this.amount = (cellValue?.filter(value => !this.cellValueToRemove.includes(value)) || []).length
       }
     },
@@ -127,7 +133,7 @@ export default {
       const params = this.formatterArgs.ajax.params || {}
       const transform = this.formatterArgs.ajax.transform || (resp => resp[this.col.prop.replace('_amount', '')])
       const response = await this.$axios.get(url, { params: params })
-      this.data = transform(response)
+      this.listData = transform(response)
       this.asyncGetDone = true
     }
   }
