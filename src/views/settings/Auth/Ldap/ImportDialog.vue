@@ -146,10 +146,10 @@ export default {
         username_list: selectIds
       }
       if (selectIds.length === 0) {
-        this.$message.error(this.$tc('setting.unselectedUser'))
+        this.$message.error(this.$tc('UnselectedUser'))
         this.dialogLdapUserImportLoginStatus = false
       } else if (org_ids.length === 0) {
-        this.$message.error(this.$tc('setting.unselectedOrg'))
+        this.$message.error(this.$tc('UnselectedOrg'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         this.importLdapUser(data)
