@@ -1927,6 +1927,7 @@
     "Assignee": "処理者",
     "Assignees": "処理待ち",
     "Close": "閉じる",
+    "CancelTicket": "作業指示をキャンセルする",
     "OpenStatus": "オン",
     "CloseStatus": "閉じる",
     "Comment": "備考",

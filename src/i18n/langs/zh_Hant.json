@@ -1913,6 +1913,7 @@
     "Assignee": "處理人",
     "Assignees": "待處理人",
     "Close": "關閉",
+    "CancelTicket": "取消工單",
     "OpenStatus": "審批中",
     "CloseStatus": "已完成",
     "Comment": "備註",
