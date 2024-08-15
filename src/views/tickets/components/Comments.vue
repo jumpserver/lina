@@ -50,7 +50,7 @@
           type="danger"
           @click="handleClose"
         >
-          <i class="fa fa-times" /> {{ $t('tickets.Close') }}
+          <i class="fa fa-times" /> {{ $t('tickets.CancelTicket') }}
         </el-button>
         <el-button
           :disabled="object.status.value === 'closed'"
