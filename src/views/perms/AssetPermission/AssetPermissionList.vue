@@ -105,7 +105,7 @@ export default {
   activated() {
     setTimeout(() => {
       this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
-    }, 300)
+    }, 500)
   },
   methods: {
     handlePermBulkUpdate() {

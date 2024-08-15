@@ -32,6 +32,7 @@
                 :placeholder="item.placeholder"
                 class="inline-input"
                 size="mini"
+                clearable
                 @change="handleInputChange(item)"
                 @select="handleInputChange(item)"
               />
