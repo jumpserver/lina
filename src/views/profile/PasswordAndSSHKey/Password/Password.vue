@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import UserPassword from '@/components/Form/FormFields/UserPassword'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
+import UserPassword from '@/components/Form/FormFields/UserPassword.vue'
 import { IBox } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 import { PasswordInput } from '@/components/Form/FormFields'

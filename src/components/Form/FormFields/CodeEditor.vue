@@ -8,99 +8,118 @@
           :label="item.name"
           :prop="item.name"
         >
+
           <template v-if="item.type === 'button' && !item.isVisible">
-            <el-button
-              :type="item.el && item.el.type"
-              class="start-stop-btn"
-              size="mini"
-              @click="item.callback()"
-            >
-              <i :class="item.icon" />{{ item.name }}
-            </el-button>
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <el-button
+                :type="item.el && item.el.type"
+                class="start-stop-btn"
+                size="mini"
+                @click="item.callback()"
+              >
+                <i :class="item.icon" />
+
+                {{ item.name }}
+              </el-button>
+            </el-tooltip>
           </template>
+
           <template v-if="item.type === 'input' && item.el && item.el.autoComplete">
-            <el-autocomplete
-              v-model="formModel[item.name]"
-              :fetch-suggestions="item.el.query"
-              :placeholder="item.placeholder"
-              class="inline-input"
-              size="mini"
-              @change="handleInputChange(item)"
-              @select="handleInputChange(item)"
-            />
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <el-autocomplete
+                v-model="formModel[item.name]"
+                :fetch-suggestions="item.el.query"
+                :placeholder="item.placeholder"
+                class="inline-input"
+                size="mini"
+                clearable
+                @change="handleInputChange(item)"
+                @select="handleInputChange(item)"
+              />
+            </el-tooltip>
           </template>
+
           <template v-else-if="item.type === 'input'">
-            <el-input
-              v-model="formModel[item.name]"
-              :class="!isFold ? 'special-style' : ''"
-              :placeholder="item.placeholder"
-              class="inline-input"
-              size="mini"
-              @change="item.callback(formModel[item.name])"
-            />
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <el-input
+                v-model="formModel[item.name]"
+                :class="!isFold ? 'special-style' : ''"
+                :placeholder="item.placeholder"
+                class="inline-input"
+                size="mini"
+                @change="item.callback(formModel[item.name])"
+              />
+            </el-tooltip>
           </template>
 
           <template v-if="item.type === 'select' && item.el && item.el.create">
-            <span class="filter-label">{{ item.name }}:</span>
-            <el-select
-              v-if="item.type === 'select' && item.el && item.el.create"
-              :key="index"
-              v-model="formModel[item.name]"
-              :allow-create="item.el.create || false"
-              :filterable="item.el.create || false"
-              :multiple="item.el.multiple"
-              :placeholder="item.name"
-              class="autoWidth-select"
-              default-first-option
-              size="mini"
-              @change="item.callback(item.value)"
-            >
-              <template slot="prefix">{{ item.label + ':' + item.value }}</template>
-              <el-option
-                v-for="(option, id) in item.options"
-                :key="id"
-                :label="option.label"
-                :title="option.value"
-                :value="option.value"
-              />
-            </el-select>
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <span class="filter-label">{{ item.name }}:</span>
+              <el-select
+                v-if="item.type === 'select' && item.el && item.el.create"
+                :key="index"
+                v-model="formModel[item.name]"
+                :allow-create="item.el.create || false"
+                :filterable="item.el.create || false"
+                :multiple="item.el.multiple"
+                :placeholder="item.name"
+                class="autoWidth-select"
+                default-first-option
+                size="mini"
+                @change="item.callback(item.value)"
+              >
+                <template slot="prefix">{{ item.label + ':' + item.value }}</template>
+                <el-option
+                  v-for="(option, id) in item.options"
+                  :key="id"
+                  :label="option.label"
+                  :title="option.value"
+                  :value="option.value"
+                />
+              </el-select>
+            </el-tooltip>
           </template>
 
           <template v-if="item.type === 'select' && (!item.el || !item.el.create)">
-            <el-dropdown
-              class="select-dropdown"
-              trigger="click"
-              @command="(command) => {
-                item.value = command
-                item.callback(command)
-              }"
-            >
-              <el-button size="mini" type="primary">
-                <div class="text-content">
-                  <span class="content">
-                    {{ getLabel(item.value, item.options) }}
-                    <i class="el-icon-arrow-down el-icon--right" />
-                  </span>
-                </div>
-              </el-button>
-              <el-dropdown-menu v-slot="dropdown">
-                <el-dropdown-item
-                  v-for="(option, i) in item.options"
-                  :key="i"
-                  :command="option.value"
-                >
-                  {{ option.label }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <el-dropdown
+                class="select-dropdown"
+                trigger="click"
+                @command="(command) => {
+                  item.value = command
+                  item.callback(command)
+                }"
+              >
+                <el-button size="mini" type="primary">
+                  <div class="text-content">
+                    <span class="content">
+                      {{ getLabel(item.value, item.options) }}
+                      <i class="el-icon-arrow-down el-icon--right" />
+                    </span>
+                  </div>
+                </el-button>
+                <el-dropdown-menu v-slot="dropdown">
+                  <el-dropdown-item
+                    v-for="(option, i) in item.options"
+                    :key="i"
+                    :command="option.value"
+                  >
+                    {{ option.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-tooltip>
           </template>
+
           <template v-if="item.type === 'switch'">
-            <el-switch
-              v-model="formModel[item.name]"
-              :active-text="item.name"
-              :disabled="item.disabled"
-              @change="item.callback(formModel[item.name])"
-            />
+            <el-tooltip :disabled="!item.tip" :content="item.tip">
+              <el-switch
+                v-model="formModel[item.name]"
+                :active-text="item.name"
+                :disabled="item.disabled"
+                @change="item.callback(formModel[item.name])"
+              />
+            </el-tooltip>
           </template>
         </el-form-item>
         <div
@@ -134,7 +153,13 @@
         </div>
       </div>
     </el-form>
-    <codemirror ref="myCm" v-model="iValue" :options="iOptions" class="editor" />
+    <codemirror
+      ref="myCm"
+      v-model="iValue"
+      :options="iOptions"
+      class="editor"
+      :style="iActions.length > 0 ? { marginLeft: '30px' } : {}"
+    />
   </div>
 </template>
 
@@ -208,7 +233,7 @@ export default {
 
       Object.values(actionsObj).forEach(action => {
         if (action.name === this.$t('RunAs') && action.type === 'input') {
-          rules[action.name] = [{ required: true, message: '请输入运行用户', trigger: 'blur' }]
+          rules[action.name] = [{ required: true, message: this.$t('RequiredRunas'), trigger: 'blur' }]
         }
       })
 
@@ -373,7 +398,6 @@ $input-border-color: #C0C4CC;
   }
 
   .editor {
-    margin-left: 30px;
     border: 1px solid var(--color-border);
     overflow: hidden;
   }

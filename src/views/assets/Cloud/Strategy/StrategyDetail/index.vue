@@ -31,6 +31,12 @@ export default {
           }
         ],
         actions: {
+          canUpdate: () => {
+            return this.Account.name !== 'default'
+          },
+          canDelete: () => {
+            return this.Account.name !== 'default'
+          },
           deleteSuccessRoute: 'CloudAccountList',
           updateCallback: () => {
             const id = this.$route.params.id

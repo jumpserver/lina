@@ -65,6 +65,7 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.host.name,
               getRoute: ({ row }) => ({
                 name: 'AppletHostDetail',

@@ -10,13 +10,16 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <slot />
+      <div v-loading="disabledStatus">
+        <slot />
+      </div>
+
       <div v-if="showButtons" slot="footer" class="dialog-footer">
         <slot name="footer">
           <el-button v-if="showCancel && showButtons" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button
             v-if="showConfirm && showButtons"
-            :loading="loadingStatus"
+            :disabled="disabledStatus"
             size="small"
             type="primary"
             @click="onConfirm"
@@ -69,7 +72,7 @@ export default {
       type: Boolean,
       default: true
     },
-    loadingStatus: {
+    disabledStatus: {
       type: Boolean,
       default: false
     },
@@ -79,7 +82,8 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+    }
   },
   computed: {
     iWidth() {

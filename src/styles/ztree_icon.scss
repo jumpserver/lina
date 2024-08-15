@@ -116,6 +116,11 @@
     background: url('./icons/clickhouse.png') no-repeat center left transparent;
   }
 
+  &.WebCloud_ico_docu {
+    background: url('./icons/cloud.png') no-repeat center left transparent;
+    background-size: contain;
+  }
+
   &.ico_loading {
     background: url(./icons/loading.gif) no-repeat scroll 0 0 transparent;
   }

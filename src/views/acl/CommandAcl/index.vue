@@ -36,8 +36,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
     handleTabClick(tab) {
       const query = _.cloneDeep(this.$route.query)

@@ -64,8 +64,11 @@ export default {
             formatter: DateFormatter
           },
           {
-            prop: 'summary.triggerMode',
-            label: this.$t('TriggerMode')
+            prop: 'trigger',
+            label: this.$t('TriggerMode'),
+            formatter: row => {
+              return row.trigger.label
+            }
           },
           {
             prop: 'actions',

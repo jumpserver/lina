@@ -9,7 +9,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/Form/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'Feishu',
@@ -33,7 +34,26 @@ export default {
     },
     formFields: {
       type: Array,
-      default: () => ['AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET']
+      default() {
+        return [[this.$t('Basic'), [
+          'AUTH_FEISHU', 'FEISHU_APP_ID',
+          'FEISHU_APP_SECRET', 'FEISHU_RENAME_ATTRIBUTES'
+        ]], [this.$t('Other'), [
+          'FEISHU_ORG_IDS'
+        ]]
+        ]
+      }
+    },
+    formFieldsMeta: {
+      type: Object,
+      default() {
+        return {
+          FEISHU_RENAME_ATTRIBUTES: {
+            component: JsonEditor
+          },
+          FEISHU_ORG_IDS: getOrgSelect2Meta()
+        }
+      }
     },
     enableFieldName: {
       type: String,
@@ -59,12 +79,15 @@ export default {
                 vm.$message.success(res['msg'])
               }).catch(() => {
                 vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              }).finally(() => {
+                btn.loading = false
+              })
             }
           }
         ],
         encryptedFields: this.encryptedFields,
         fields: this.formFields,
+        fieldsMeta: this.formFieldsMeta,
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {
           this.encryptedFields.forEach(field => {
@@ -81,12 +104,14 @@ export default {
     }
   },
   mounted() {
-    this.settings.fieldsMeta = this.encryptedFields.reduce((acc, field) => {
+    const newFieldsMeta = this.encryptedFields.reduce((acc, field) => {
       acc[field] = {
         component: UpdateToken
       }
       return acc
     }, {})
+
+    Object.assign(this.settings.fieldsMeta, newFieldsMeta)
   },
   methods: {}
 }

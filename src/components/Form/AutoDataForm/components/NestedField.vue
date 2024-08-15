@@ -85,6 +85,7 @@ export default {
         // 如果不想等，证明是 value 自己变化导致的， 需要重新渲染
         if (valJson !== this.formJson) {
           this.iValue = val
+          this.$log.debug('Sub form value changed, rerender form: ', this.formJson, valJson)
           this.loading = true
           setTimeout(() => {
             this.loading = false
@@ -95,11 +96,12 @@ export default {
     }
   },
   methods: {
+    outputValue: _.debounce(function(val) {
+      this.$emit('input', val)
+    }),
     updateValue(val) {
       this.iValue = val
-      setTimeout(() => {
-        this.$emit('input', val)
-      }, 100)
+      this.outputValue(val)
     },
     objectToString(obj) {
       let data = ''

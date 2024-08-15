@@ -33,6 +33,7 @@
       >
         {{ iSubmitBtnText }}
       </el-button>
+
       <el-button
         v-if="defaultButton && hasSaveContinue"
         size="small"
@@ -40,6 +41,7 @@
       >
         {{ $t("SaveAndAddAnother") }}
       </el-button>
+
       <el-button
         v-if="defaultButton && hasReset"
         size="small"
@@ -47,6 +49,7 @@
       >
         {{ $t("Reset") }}
       </el-button>
+
       <el-button
         v-for="button in moreButtons"
         v-show="!button.hidden"
@@ -217,7 +220,7 @@ export default {
 
     .el-form-item__label {
       padding: 0 30px 0 0;
-      line-height: 32px;
+      line-height: 30px;
       color: var(--color-text-primary);
 
       i {

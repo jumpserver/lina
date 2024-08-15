@@ -16,7 +16,7 @@ export default {
       loading: true,
       fields: [
         [this.$t('Basic'), ['type']],
-        [this.$t('ApprovaLevel'), ['approval_level', 'rules']]
+        [this.$t('ApprovalLevel'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
         type: {

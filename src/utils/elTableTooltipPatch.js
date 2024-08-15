@@ -26,7 +26,8 @@ Object.assign(Table.components.TableBody.methods, {
     const range = document.createRange()
     range.setStart(cellChild, 0)
     range.setEnd(cellChild, cellChild.childNodes.length)
-    const rangeWidth = range.getBoundingClientRect().width
+    // rangeWidth 有可能是小数，因此就会导致原本 rangeWidth + padding = cellChild.offsetWidth 的大于了 cellChild.offsetWidth
+    const rangeWidth = Math.floor(range.getBoundingClientRect().width)
     const padding = (parseInt(getStyle(cellChild, 'paddingLeft'), 10) || 0) +
         (parseInt(getStyle(cellChild, 'paddingRight'), 10) || 0)
     if (

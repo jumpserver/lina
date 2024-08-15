@@ -12,6 +12,7 @@ import BaseAuth from './Base'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
 import { UploadKey } from '@/components'
 import { JsonEditor } from '@/components/Form/FormFields'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'SAML2',
@@ -36,7 +37,7 @@ export default {
             'SAML2_RENAME_ATTRIBUTES'
           ]],
           [this.$t('Other'), [
-            'AUTH_SAML2_ALWAYS_UPDATE_USER', 'SAML2_LOGOUT_COMPLETELY'
+            'SAML2_ORG_IDS', 'AUTH_SAML2_ALWAYS_UPDATE_USER', 'SAML2_LOGOUT_COMPLETELY'
           ]]
         ],
         fieldsMeta: {
@@ -67,7 +68,8 @@ export default {
           SAML2_RENAME_ATTRIBUTES: {
             component: JsonEditor,
             rules: [JsonRequired]
-          }
+          },
+          SAML2_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {

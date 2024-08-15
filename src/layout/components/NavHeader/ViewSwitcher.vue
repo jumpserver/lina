@@ -108,7 +108,7 @@ export default {
   methods: {
     async handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
-      localStorage.setItem('PreView', key)
+      localStorage.setItem('preView', key)
       // Next 之前要重置 init 状态，否则这些路由守卫就不走了
       await store.dispatch('app/reset')
       if (!this.tipHasRead) {

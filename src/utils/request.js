@@ -3,7 +3,6 @@ import i18n from '@/i18n/i18n'
 import { eventBus } from '@/utils/const'
 import { getTokenFromCookie } from '@/utils/auth'
 import { getErrorResponseMsg } from '@/utils/common'
-import { refreshSessionIdAge } from '@/api/users'
 import { MessageBox } from 'element-ui'
 import { message } from '@/utils/message'
 import store from '@/store'
@@ -102,20 +101,6 @@ export function flashErrorMsg({ response, error }) {
   }
 }
 
-let timer = null
-
-function refreshSessionAgeDelay(response) {
-  if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
-    return
-  }
-  if (timer) {
-    clearTimeout(timer)
-  }
-  timer = setTimeout(function() {
-    refreshSessionIdAge()
-  }, 30 * 1000)
-}
-
 function ifConfirmRequired({ response, error }) {
   if (response.status !== 412) {
     return null
@@ -142,7 +127,6 @@ service.interceptors.response.use(
    */
   response => {
     // NProgress.done()
-    refreshSessionAgeDelay(response)
     const res = response.data
     store.dispatch('common/digestSQLQuery', response).then()
 

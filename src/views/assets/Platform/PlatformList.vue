@@ -15,6 +15,7 @@
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
 import { ChoicesFormatter, ProtocolsFormatter } from '../../../components/Table/TableFormatters'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -35,9 +36,28 @@ export default {
         columnsExclude: ['automation'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'category', 'type', 'actions']
+          default: ['name', 'assets_amount', 'category', 'type', 'actions']
         },
         columnsMeta: {
+          assets_amount: {
+            width: '160px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: true,
+              permissions: 'assets.view_asset',
+              getRoute({ row }) {
+                return {
+                  name: 'PlatformDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'Assets'
+                  }
+                }
+              }
+            }
+          },
           type: {
             formatter: ChoicesFormatter
           },
@@ -72,7 +92,10 @@ export default {
             width: '140px'
           },
           internal: {
-            width: '100px'
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
           },
           actions: {
             formatterArgs: {

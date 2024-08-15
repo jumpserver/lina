@@ -13,6 +13,7 @@ import { JsonEditor } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
 import { UploadField } from '@/components'
 import request from '@/utils/request'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'OAuth2',
@@ -43,6 +44,7 @@ export default {
             'AUTH_OAUTH2_USER_ATTR_MAP'
           ]],
           [this.$t('Other'), [
+            'OAUTH2_ORG_IDS',
             'AUTH_OAUTH2_ALWAYS_UPDATE_USER',
             'AUTH_OAUTH2_LOGOUT_COMPLETELY'
           ]]
@@ -66,7 +68,8 @@ export default {
             rules: [JsonRequired]
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {
-          }
+          },
+          OAUTH2_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {

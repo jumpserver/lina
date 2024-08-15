@@ -2,6 +2,7 @@
   <Dialog
     :close-on-click-modal="false"
     :title="$tc('Assets')"
+    :disabled-status="!isLoaded"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -22,6 +23,8 @@
       :url="baseUrl"
       class="tree-table"
       v-bind="$attrs"
+      v-on="$listeners"
+      @loaded="handleTableLoaded"
     />
   </Dialog>
 </template>
@@ -64,6 +67,7 @@ export default {
   data() {
     const vm = this
     return {
+      isLoaded: false,
       dialogVisible: false,
       rowSelected: _.cloneDeep(this.value) || [],
       rowsAdd: [],
@@ -124,6 +128,9 @@ export default {
     }
   },
   methods: {
+    handleTableLoaded() {
+      this.isLoaded = true
+    },
     handleClose() {
       this.$refs.ListPage.$refs.TreeList.componentKey += 1
     },

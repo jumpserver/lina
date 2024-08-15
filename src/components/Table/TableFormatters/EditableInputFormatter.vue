@@ -1,7 +1,8 @@
 <template>
-  <div style="width: 100%;min-height: 20px" @click.stop="editCell">
+  <div class="edit-container" style="min-height: 20px" @click.stop="editCell">
     <el-input
       v-if="inEditMode"
+      ref="inputRef"
       v-model="value"
       class="editInput"
       size="mini"
@@ -9,8 +10,17 @@
       @keyup.enter.native="onInputEnter"
     />
     <template v-else>
-      <span>{{ iCellValue }}</span>
+      <span class="cellValue">{{ iCellValue }}</span>
+      <a
+        v-if="formatterArgs.showEditBtn"
+        :class="[{ 'disabled-link': this.$store.getters.currentOrgIsRoot },'edit-btn']"
+        style="padding-left: 5px"
+        @click="editCell"
+      >
+        <i class="fa fa-edit" />
+      </a>
     </template>
+
   </div>
 </template>
 
@@ -61,6 +71,9 @@ export default {
     editCell() {
       if (this.formatterArgs.canEdit) {
         this.inEditMode = true
+        this.$nextTick(() => {
+          this.$refs.inputRef.focus()
+        })
       }
     },
     getCellValue(val) {
@@ -88,7 +101,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .editInput ::v-deep .el-input__inner {
   padding: 2px;
   line-height: 12px;
@@ -97,4 +110,35 @@ export default {
 .editInput {
   padding: -6px;
 }
+
+.edit-btn {
+  visibility: hidden;
+  position: relative;
+  transition: all 1s;
+
+  & > i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+}
+
+.edit-container {
+  display: flex;
+  flex-wrap: nowrap;
+
+  &:hover {
+    .edit-btn {
+      visibility: visible;
+    }
+  }
+
+  .cellValue {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
 </style>

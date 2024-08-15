@@ -1,12 +1,20 @@
 <template>
   <Page>
-    <GrantedAssets :actions="actions" :table-url="tableUrl" :tree-url="treeUrl" />
+    <GrantedAssets
+      ref="grantedAssets"
+      :name="name"
+      :comment="comment"
+      :actions="actions"
+      :table-url="tableUrl"
+      :tree-url="treeUrl"
+    />
   </Page>
 </template>
 
 <script>
 import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import Page from '@/layout/components/Page/index.vue'
+import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -48,7 +56,27 @@ export default {
           ]
         }
       },
-      allFavorites: []
+      allFavorites: [],
+      name: {
+        formatter: EditableInputFormatter,
+        formatterArgs: {
+          canEdit: true,
+          showEditBtn: true,
+          onEnter: ({ row, col, oldValue, newValue }) => {
+            this.updateAssetCustomAttr(row, col, oldValue, newValue)
+          }
+        }
+      },
+      comment: {
+        formatter: EditableInputFormatter,
+        formatterArgs: {
+          canEdit: true,
+          showEditBtn: true,
+          onEnter: ({ row, col, oldValue, newValue }) => {
+            this.updateAssetCustomAttr(row, col, oldValue, newValue)
+          }
+        }
+      }
     }
   },
   mounted() {
@@ -94,6 +122,23 @@ export default {
         }
       })
       return ok
+    },
+    updateAssetCustomAttr(row, col, oldValue, newValue) {
+      if (oldValue.toString() === newValue.toString()) {
+        return
+      }
+      const colProp = col.prop
+
+      this.$axios.post('/api/v1/assets/my-asset/', {
+        asset: row.id,
+        [colProp]: newValue
+      }).catch((e) => {
+        this.$message.error(e?.response?.request?.responseText || this.$t('BadRequestErrorMsg'))
+        return Promise.reject(e)
+      }).then(() => {
+        this.$set(row, colProp, newValue)
+        this.$message.success(this.$t('UpdateSuccessMsg'))
+      })
     }
   }
 }

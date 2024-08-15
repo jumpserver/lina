@@ -1,9 +1,10 @@
 <template>
-  <BaseList v-bind="tableConfig" />
+  <BaseList v-bind="config" />
 </template>
 
 <script>
 import BaseList from '../../Asset/AssetList/components/BaseList'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -12,20 +13,34 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => { }
+      default: () => {
+      }
     }
   },
   data() {
     return {
-      tableConfig: {
+      config: {
         category: 'all',
         url: `/api/v1/assets/assets/?platform=${this.object.id}`,
+        tableConfig: {
+          columnsMeta: {
+            name: {
+              formatter: DetailFormatter,
+              formatterArgs: {
+                can: false
+              }
+            },
+            actions: {
+              has: false
+            }
+          }
+        },
         headerActions: {
           hasCreate: false,
-          hasRefresh: true,
+          hasRefresh: false,
           hasExport: false,
           hasImport: false,
-          hasMoreActions: true
+          hasMoreActions: false
         }
       }
     }

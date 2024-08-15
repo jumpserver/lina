@@ -157,30 +157,37 @@ export default {
         $('#m_show_asset_only_current_node').css('color', '#606266')
       }
     },
+
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
+
+      const setParam = (param, value, delay) => {
+        setTimeout(() => {
+          url = setUrlParam(url, param, value)
+        })
+      }
+
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'node_id', nodeId)
-        url = setUrlParam(url, 'asset_id', '')
+        setParam('node_id', nodeId)
+        setParam('asset_id', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
-        url = setUrlParam(url, 'node_id', '')
-        url = setUrlParam(url, 'asset_id', assetId)
+        setParam('node_id', '')
+        setParam('asset_id', assetId)
       } else if (treeNode.meta.type === 'category') {
-        url = setUrlParam(url, 'category', treeNode.meta.category)
+        setParam('category', treeNode.meta.category)
       } else if (treeNode.meta.type === 'type') {
-        url = setUrlParam(url, 'category', treeNode.meta.category)
-        url = setUrlParam(url, 'type', treeNode.meta._type)
+        setParam('category', treeNode.meta.category)
+        setParam('type', treeNode.meta._type)
       } else if (treeNode.meta.type === 'platform') {
-        url = setUrlParam(url, 'platform', treeNode.id)
+        setParam('platform', treeNode.id)
       }
-      const query = this.setTreeUrlQuery()
-      url = query ? `${url}&${query}` : url
-
       setTimeout(() => {
+        const query = this.setTreeUrlQuery()
+        url = query ? `${url}&${query}` : url
         this.$set(this.tableConfig, 'url', url)
-      }, 300)
+      })
 
       if (this.treeSetting.selectSyncToRoute !== false) {
         setRouterQuery(this, url)

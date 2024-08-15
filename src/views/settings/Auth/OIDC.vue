@@ -10,6 +10,7 @@
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
+import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
 export default {
   name: 'OIDC',
@@ -39,6 +40,9 @@ export default {
           ]],
           [this.$t('Search'), [
             'AUTH_OPENID_USER_ATTR_MAP'
+          ]],
+          [this.$t('Other'), [
+            'OPENID_ORG_IDS'
           ]]
         ],
         fieldsMeta: {
@@ -122,7 +126,8 @@ export default {
           'AUTH_OPENID_USER_ATTR_MAP': {
             component: JsonEditor,
             rules: [JsonRequired]
-          }
+          },
+          OPENID_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {

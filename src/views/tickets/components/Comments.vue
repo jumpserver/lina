@@ -11,8 +11,6 @@
           </a>
           <div class="media-body ">
             <strong>{{ item.user_display }}</strong>
-            <small class="text-muted">{{ formatTime(item.date_created) }}</small>
-            <br>
             <small class="text-muted">{{ item.date_created | date }}</small>
             <MarkDown :value="item.body" />
           </div>
@@ -50,7 +48,7 @@
           type="danger"
           @click="handleClose"
         >
-          <i class="fa fa-times" /> {{ $t('Close') }}
+          <i class="fa fa-times" /> {{ $t('CancelTicket') }}
         </el-button>
         <el-button
           :disabled="object.status.value === 'closed'"

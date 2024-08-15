@@ -173,7 +173,7 @@ export default {
         },
         {
           key: this.$t('Region'),
-          value: this.object.task?.regions,
+          value: this.object.task?.regions_display,
           formatter(row, value) {
             return (<div>{
               value?.map((content) => {

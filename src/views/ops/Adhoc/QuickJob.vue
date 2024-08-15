@@ -120,11 +120,21 @@ export default {
               autoComplete: true,
               query: (query, cb) => {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
+
+                if (hosts.length === 0) {
+                  this.$message.warning(`${this.$t('RequiredAssetOrNode')}`)
+                  return cb([])
+                }
+
                 this.$axios.post('/api/v1/ops/username-hints/', {
                   nodes: nodes,
                   assets: hosts,
                   query: query
                 }).then(data => {
+                  if (Array.isArray(data) && data.length === 0) {
+                    this.$message.info(`${this.$t('NoAccountFound')}`)
+                    return cb([])
+                  }
                   const ns = data.map(item => {
                     return { value: item.username }
                   })
@@ -430,7 +440,7 @@ export default {
       }
       createJob(data).then(res => {
         this.executionInfo.timeCost = 0
-        this.executionInfo.status = 'running'
+        this.executionInfo.status = { value: 'running', label: this.$t('Running') }
         this.currentTaskId = res.task_id
         this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
         this.setCostTimeInterval()
@@ -451,12 +461,12 @@ export default {
       })
     },
     setBtn() {
-      if (this.executionInfo.status !== 'running') {
+      if (this.executionInfo.status.value !== 'running') {
         clearInterval(this.executionInfo.cancel)
         this.toolbar.left.run.icon = 'fa fa-play'
       }
-      this.toolbar.left.run.isVisible = this.executionInfo.status === 'running'
-      this.toolbar.left.stop.isVisible = this.executionInfo.status !== 'running'
+      this.toolbar.left.run.isVisible = this.executionInfo.status.value === 'running'
+      this.toolbar.left.stop.isVisible = this.executionInfo.status.value !== 'running'
     }
   }
 }

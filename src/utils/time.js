@@ -1,13 +1,5 @@
 const moment = require('moment')
-
-function getUserLang() {
-  const userLangEN = document.cookie.indexOf('django_language=en')
-  if (userLangEN === -1) {
-    return 'zh-CN'
-  } else {
-    return 'en-US'
-  }
-}
+import { getLangCode } from '@/i18n/utils'
 
 function getTimeUnits(u) {
   const units = {
@@ -16,10 +8,11 @@ function getTimeUnits(u) {
     'm': '分',
     's': '秒'
   }
-  if (getUserLang() === 'zh-CN') {
+  if (getLangCode() === 'zh') {
     return units[u]
+  } else {
+    return u
   }
-  return u
 }
 
 export function timeOffset(a, b) {
