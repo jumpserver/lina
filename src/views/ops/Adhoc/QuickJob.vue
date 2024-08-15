@@ -120,20 +120,26 @@ export default {
               autoComplete: true,
               query: (query, cb) => {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
-                if (hosts.length > 0 && nodes.length > 0) {
-                  this.$axios.post('/api/v1/ops/username-hints/', {
-                    nodes: nodes,
-                    assets: hosts,
-                    query: query
-                  }).then(data => {
-                    const ns = data.map(item => {
-                      return { value: item.username }
-                    })
-                    cb(ns)
-                  })
-                } else {
-                  cb([])
+
+                if (hosts.length === 0) {
+                  this.$message.warning(`${this.$t('RequiredAssetOrNode')}`)
+                  return cb([])
                 }
+
+                this.$axios.post('/api/v1/ops/username-hints/', {
+                  nodes: nodes,
+                  assets: hosts,
+                  query: query
+                }).then(data => {
+                  if (Array.isArray(data) && data.length === 0) {
+                    this.$message.info(`${this.$t('NoAccountFound')}`)
+                    return cb([])
+                  }
+                  const ns = data.map(item => {
+                    return { value: item.username }
+                  })
+                  cb(ns)
+                })
               }
             },
             options: [],
