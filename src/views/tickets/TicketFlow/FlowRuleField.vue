@@ -48,7 +48,12 @@ export default {
         }
       ],
       select2Option: {
-        url: '/api/v1/users/users/?oid=root'
+        url: '/api/v1/users/users/?oid=root',
+        ajax: {
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
+          }
+        }
       },
       fields: [
       ]
