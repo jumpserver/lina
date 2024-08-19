@@ -69,12 +69,20 @@ export default {
           {
             id: 'symbol',
             label: this.$t('common.SpecialSymbol'),
-            type: 'switch'
+            type: 'switch',
+            helpTips: this.$t('common.SpecialSymbolTip')
           },
           {
             id: 'exclude_symbols',
             label: this.$t('common.ExcludeSymbol'),
-            type: 'input'
+            type: 'input',
+            helpTips: this.$t('common.ExcludeSymbolTip')
+          },
+          {
+            id: 'include_symbols',
+            label: this.$t('common.IncludeSymbol'),
+            type: 'input',
+            helpTips: this.$t('common.IncludeSymbolTip')
           }
         ]
       }
