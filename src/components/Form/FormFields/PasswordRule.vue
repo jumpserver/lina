@@ -79,10 +79,10 @@ export default {
             helpTips: this.$t('common.ExcludeSymbolTip')
           },
           {
-            id: 'include_symbols',
-            label: this.$t('common.IncludeSymbol'),
+            id: 'allow_include_symbols',
+            label: this.$t('common.AllowIncludeSymbol'),
             type: 'input',
-            helpTips: this.$t('common.IncludeSymbolTip')
+            helpTips: this.$t('common.AllowIncludeSymbolTip')
           }
         ]
       }
