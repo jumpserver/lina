@@ -32,6 +32,7 @@ export default {
       role: { name: '', comment: '', users: [] },
       config: {
         titlePrefix: scope === 'org' ? vm.$t('OrgRole') : vm.$t('SystemRole'),
+        getObjectName: (obj) => { return obj.display_name },
         url: `/api/v1/rbac/${scope}-roles`,
         activeMenu: 'RoleInfo',
         actions: {
