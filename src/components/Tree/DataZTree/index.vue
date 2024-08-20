@@ -39,7 +39,7 @@ export default {
           showRenameBtn: false,
           drag: {
             isCopy: false,
-            isMove: true
+            isMove: !this.$store.getters.currentOrgIsRoot
           }
         },
         callback: {
