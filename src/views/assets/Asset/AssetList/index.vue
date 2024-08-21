@@ -89,14 +89,15 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      const query = _.cloneDeep(this.$route.query)
-      const newQuery = {
-        ...query,
-        tab: tab.name
-      }
-      this.$nextTick(() => {
-        this.$router.replace({ query: newQuery })
-      })
+      // 这样不行，会闪
+      // const query = _.cloneDeep(this.$route.query)
+      // const newQuery = {
+      //   ...query,
+      //   tab: tab.name
+      // }
+      // this.$nextTick(() => {
+      //   this.$router.replace({ query: newQuery })
+      // })
     }
   }
 }

@@ -33,11 +33,13 @@ export default {
         query[k] = v
       }
 
+      let key
       if (this.$route.name.toLowerCase().includes('list')) {
-        return _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
+        key = _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
       } else {
-        return new Date().getTime()
+        key = new Date().getTime()
       }
+      return key
     },
     chatAiEnabled() {
       return this.publicSettings?.CHAT_AI_ENABLED
