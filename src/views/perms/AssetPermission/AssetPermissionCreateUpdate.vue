@@ -76,6 +76,8 @@ export default {
           }],
           el: {
             value: [],
+            defaultPageSize: 300,
+            baseUrl: '/api/v1/assets/assets/?fields_size=mini',
             treeSetting: {
               showSearch: false,
               showRefresh: false
