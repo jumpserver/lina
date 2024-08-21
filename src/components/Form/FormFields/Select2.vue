@@ -125,16 +125,19 @@ export default {
     allowCreate: {
       type: Boolean,
       default: false
+    },
+    defaultPageSize: {
+      type: Number,
+      default: 10
     }
   },
   data() {
     const vm = this
-    const defaultPageSize = 10
     const defaultParams = {
       search: '',
       page: 1,
       hasMore: true,
-      pageSize: defaultPageSize
+      pageSize: vm.defaultPageSize
     }
     // 设置axios全局报错提示不显示
     const validateStatus = (status) => {
@@ -194,7 +197,6 @@ export default {
       }
     },
     iAjax() {
-      const defaultPageSize = 10
       const defaultMakeParams = (params) => {
         const page = params.page || 1
         const offset = (page - 1) * params.pageSize
@@ -237,7 +239,7 @@ export default {
       }
       const defaultAjax = {
         url: '',
-        pageSize: defaultPageSize,
+        pageSize: this.defaultPageSize,
         makeParams: defaultMakeParams,
         transformOption: defaultTransformOption,
         processResults: defaultProcessResults,

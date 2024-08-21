@@ -37,6 +37,10 @@ export default {
       type: String,
       default: '/api/v1/assets/assets/'
     },
+    defaultPageSize: {
+      type: Number,
+      default: 10
+    },
     baseNodeUrl: {
       type: String,
       default: '/api/v1/assets/nodes/'
@@ -70,6 +74,7 @@ export default {
         value: iValue,
         multiple: true,
         clearable: true,
+        defaultPageSize: this.defaultPageSize,
         ajax: {
           url: this.baseUrl,
           transformOption: (item) => {
