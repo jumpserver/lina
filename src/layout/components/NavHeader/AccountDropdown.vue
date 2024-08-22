@@ -36,6 +36,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { SYSTEM_ORG_ID } from '@/utils/org'
 
 export default {
   name: 'AccountDropdown',
@@ -71,6 +72,10 @@ export default {
       }
     },
     logout() {
+      const currentOrg = this.store.getters.currentOrg
+      if (currentOrg === SYSTEM_ORG_ID) {
+        this.$store.dispatch('users/leaveSettingOrg')
+      }
     }
   }
 }
