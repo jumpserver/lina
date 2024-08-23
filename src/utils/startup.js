@@ -24,6 +24,9 @@ async function checkLogin({ to, from, next }) {
   } catch (e) {
     Vue.$log.error(e)
     const status = e.response.status
+    if (store.getters.currentOrg.autoEnter) {
+      await store.dispatch('users/setCurrentOrg', store.getters.preOrg)
+    }
     if (status === 401 || status === 403) {
       setTimeout(() => {
         window.location = process.env.VUE_APP_LOGIN_PATH
