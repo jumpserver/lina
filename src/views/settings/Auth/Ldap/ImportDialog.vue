@@ -49,6 +49,7 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import ListTable from '@/components/Table/ListTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import { StatusFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'ImportDialog',
@@ -58,6 +59,7 @@ export default {
     Select2
   },
   data() {
+    const vm = this
     return {
       dialogLdapUserImportLoginStatus: false,
       dialogLdapUserImportAllLoginStatus: false,
@@ -76,8 +78,39 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/settings/ldap/users/',
-        columns: ['username', 'name', 'email', 'groups', 'existing'],
+        columns: ['status', 'username', 'name', 'email', 'groups', 'existing'],
         columnsMeta: {
+          status: {
+            prop: 'status',
+            label: vm.$t('Status'),
+            width: '80px',
+            align: 'center',
+            formatter: StatusFormatter,
+            formatterArgs: {
+              faChoices: {
+                ok: 'fa-check text-primary',
+                error: 'fa-times text-danger',
+                pending: 'fa-clock-o'
+              },
+              getChoicesKey(val) {
+                if (val === 'ok' || val === 'pending') {
+                  return val
+                }
+                return 'error'
+              },
+              getTip(val) {
+                if (val === 'ok') {
+                  return vm.$t('Success')
+                } else if (val === 'pending') {
+                  return vm.$t('Pending')
+                } else if (val.error !== undefined) {
+                  return val.error
+                }
+                return ''
+              },
+              hasTips: true
+            }
+          },
           username: {
             label: this.$t('Username'),
             width: '180px'
