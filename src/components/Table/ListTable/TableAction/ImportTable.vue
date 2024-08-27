@@ -44,8 +44,9 @@
 import DataTable from '@/components/Table/DataTable/index.vue'
 import { getUpdateObjURL } from '@/utils/common'
 import { sleep } from '@/utils/time'
-import { EditableInputFormatter, StatusFormatter } from '@/components/Table/TableFormatters'
+import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
+import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 
 export default {
   name: 'ImportTable',
@@ -223,38 +224,7 @@ export default {
   },
   methods: {
     generateTableColumns(tableTitles, tableData) {
-      const vm = this
-      const columns = [{
-        prop: '@status',
-        label: vm.$t('Status'),
-        width: '80px',
-        align: 'center',
-        formatter: StatusFormatter,
-        formatterArgs: {
-          faChoices: {
-            ok: 'fa-check text-primary',
-            error: 'fa-times text-danger',
-            pending: 'fa-clock-o'
-          },
-          getChoicesKey(val) {
-            if (val === 'ok' || val === 'pending') {
-              return val
-            }
-            return 'error'
-          },
-          getTip(val) {
-            if (val === 'ok') {
-              return vm.$t('Success')
-            } else if (val === 'pending') {
-              return vm.$t('Pending')
-            } else if (val && val.name === 'error') {
-              return val.error
-            }
-            return ''
-          },
-          hasTips: true
-        }
-      }]
+      const columns = [{ ...getStatusColumnMeta.bind(this)().status }]
       for (const item of tableTitles) {
         const dataItemLens = tableData.map(d => {
           if (!d) {
