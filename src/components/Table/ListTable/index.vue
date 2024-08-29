@@ -189,22 +189,23 @@ export default {
     }
   },
   mounted() {
-    this.urlUpdated[this.tableUrl] = location.href
+    this.$set(this.urlUpdated, this.tableUrl, location.href)
   },
   deactivated() {
     this.isDeactivated = true
   },
   activated() {
-    this.isDeactivated = false
-    const preURL = this.urlUpdated[this.tableUrl]
-    if (!preURL || preURL === location.href) {
-      return
-    }
-    this.urlUpdated[this.tableUrl] = location.href
-    this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
-    setTimeout(() => {
+    this.$nextTick(() => {
+      this.isDeactivated = false
+      const cleanUrl = this.tableUrl.split('?')[0]
+      const preURL = this.urlUpdated[cleanUrl]
+
+      if (!preURL || preURL === location.href) return
+
+      this.$set(this.urlUpdated, this.tableUrl, location.href)
+      this.$log.debug('Reload the table get latest data: pre ', preURL, ' current: ', location.href)
       this.reloadTable()
-    }, 500)
+    })
   },
   methods: {
     handleActionInitialDone() {
