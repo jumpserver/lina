@@ -49,6 +49,7 @@ import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
 import ListTable from '@/components/Table/ListTable/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 
 export default {
   name: 'ImportDialog',
@@ -76,8 +77,9 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/settings/ldap/users/',
-        columns: ['username', 'name', 'email', 'groups', 'existing'],
+        columns: ['status', 'username', 'name', 'email', 'groups', 'existing'],
         columnsMeta: {
+          ...getStatusColumnMeta.bind(this)('status'),
           username: {
             label: this.$t('Username'),
             width: '180px'
