@@ -33,7 +33,7 @@ export default {
         fieldsMeta: {
           ANNOUNCEMENT: {
             fields: [
-              'SUBJECT', 'CONTENT', 'LINK'
+              'SUBJECT', 'CONTENT', 'DATE_START', 'DATE_END', 'LINK'
             ],
             fieldsMeta: {
               CONTENT: {

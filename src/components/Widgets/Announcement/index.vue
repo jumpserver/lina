@@ -35,13 +35,29 @@ export default {
     ]),
     announcement() {
       const ann = this.publicSettings.ANNOUNCEMENT
-      return { id: ann['ID'], subject: ann['SUBJECT'], content: ann['CONTENT'], link: ann['LINK'] }
+      return {
+        id: ann['ID'],
+        subject: ann['SUBJECT'],
+        content: ann['CONTENT'],
+        link: ann['LINK'],
+        date_start: ann['DATE_START'],
+        date_end: ann['DATE_END']
+      }
     },
     enabled() {
-      return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject)
+      return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject) && this.isDateValid
     },
     title() {
       return this.$t('Announcement') + ': ' + this.announcement.subject
+    },
+    isDateValid() {
+      if (this.announcement.date_start === undefined || this.announcement.date_end === undefined) {
+        return true
+      }
+      const now = new Date()
+      const start = new Date(this.announcement.date_start)
+      const end = new Date(this.announcement.date_end)
+      return now >= start && now <= end
     }
   },
   methods: {
