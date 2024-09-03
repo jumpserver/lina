@@ -197,6 +197,24 @@ export class FormFieldGenerator {
     return field
   }
 
+  setChoicesTips(field, fieldMeta, fieldRemoteMeta) {
+    // 设置 checkbox 的 tips
+    if (['checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
+      field.options.map(option => {
+        if (!option.tip && field.tips) {
+          option.tip = field.tips[option.value]
+        }
+        if (!option.tip) {
+          const match = option.label.match(/^(.+?)\s*\((.*?)\)$/)
+          if (match) {
+            option.label = match[1]
+            option.tip = match[2]
+          }
+        }
+      })
+    }
+  }
+
   afterGenerateField(field) {
     field.label = toSentenceCase(field.label)
 
@@ -204,15 +222,7 @@ export class FormFieldGenerator {
       field.el.placeholder = field.placeholder
     }
 
-    // 设置 checkbox 的 tips
-    if (field.tips && ['checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
-      field.options.map(option => {
-        if (!option.tip && field.tips[option.value]) {
-          option.tip = field.tips[option.value]
-        }
-      })
-    }
-
+    this.setChoicesTips(field)
     return field
   }
 
