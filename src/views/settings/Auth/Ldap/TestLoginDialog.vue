@@ -40,6 +40,12 @@ export default {
   components: {
     Dialog
   },
+  props: {
+    category: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       testLdapLoginStatus: false,
@@ -69,7 +75,7 @@ export default {
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ldap/'
+      const url = `/ws/ldap/?category=${this.category}`
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
     }
