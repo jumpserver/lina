@@ -58,6 +58,12 @@ export default {
     Dialog,
     Select2
   },
+  props: {
+    category: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       dialogLdapUserImportLoginStatus: false,
@@ -76,7 +82,7 @@ export default {
         }
       },
       tableConfig: {
-        url: '/api/v1/settings/ldap/users/',
+        url: `/api/v1/settings/ldap/users/?category=${this.category}`,
         columns: ['status', 'username', 'name', 'email', 'groups', 'existing'],
         columnsMeta: {
           ...getStatusColumnMeta.bind(this)('status'),
@@ -191,7 +197,7 @@ export default {
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ldap/'
+      const url = `/ws/ldap/?category=${this.category}`
       const wsURL = scheme + '://' + document.location.hostname + port + url
       this.ws = new WebSocket(wsURL)
     },
