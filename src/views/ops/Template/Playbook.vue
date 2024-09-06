@@ -23,7 +23,7 @@ export default {
         url: '/api/v1/ops/playbooks/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'comment', 'date_created', 'actions']
+          default: ['name', 'comment', 'scope', 'date_created', 'actions']
         },
         columnsMeta: {
           name: {
@@ -36,10 +36,14 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: this.$hasPerm('ops.change_playbook'),
+              canUpdate: ({ row }) => {
+                return this.$hasPerm('ops.change_playbook') && !row.disable_edit
+              },
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
-              canDelete: this.$hasPerm('ops.delete_playbook'),
+              canDelete: ({ row }) => {
+                return this.$hasPerm('ops.delete_playbook') && !row.disable_edit
+              },
               hasClone: false
             }
           }

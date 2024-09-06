@@ -2,7 +2,7 @@
   <div>
     <NewNodeDialog v-if="createDialogVisible" :visible.sync="createDialogVisible" @confirm="doCreate" />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
-      <template slot="rMenu">
+      <template v-if="!disableEdit" slot="rMenu">
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
           {{ $tc('NewFile') }}
         </li>
@@ -62,7 +62,9 @@ export default {
     }
   },
   data() {
+    const disableEdit = this.object.disable_edit
     return {
+      disableEdit: disableEdit,
       newNode: {},
       createDialogVisible: false,
       createType: 'directory',
@@ -70,7 +72,8 @@ export default {
       closing: false,
       DataZTree: 0,
       cmOptions: {
-        mode: 'yaml'
+        mode: 'yaml',
+        readOnly: disableEdit
       },
       toolbar: {
         left: {
@@ -82,6 +85,7 @@ export default {
             el: {
               type: 'primary'
             },
+            isVisible: disableEdit,
             callback: () => {
               this.onSave()
             }
@@ -94,6 +98,7 @@ export default {
             el: {
               type: 'primary'
             },
+            isVisible: disableEdit,
             callback: () => {
               this.onReset()
             }
@@ -163,6 +168,7 @@ export default {
   },
   mounted() {
     this.onOpenEditor({ id: 'main.yml', name: 'main.yml' })
+    this.disableEdit = this.object.disable_edit
   },
   methods: {
     refreshEditor(id, name) {
@@ -359,5 +365,9 @@ export default {
   line-height: 24px;
   box-sizing: border-box;
   cursor: pointer;
+}
+
+.rMenu {
+
 }
 </style>
