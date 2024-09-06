@@ -11,12 +11,13 @@ export default {
     GenericListTable
   },
   data() {
+    const currentUserID = this.$store.state.users.profile.id
     return {
       tableConfig: {
         url: '/api/v1/ops/adhocs/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'module', 'args', 'comment', 'date_created', 'actions']
+          default: ['name', 'module', 'args', 'comment', 'scope', 'date_created', 'actions']
         },
         columnsMeta: {
           name: {
@@ -29,10 +30,14 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: true,
-              canUpdate: this.$hasPerm('ops.change_adhoc'),
+              canUpdate: ({ row }) => {
+                return this.$hasPerm('ops.change_adhoc') && row.creator === currentUserID
+              },
               updateRoute: 'AdhocUpdate',
               hasDelete: true,
-              canDelete: this.$hasPerm('ops.delete_adhoc'),
+              canDelete: ({ row }) => {
+                return this.$hasPerm('ops.delete_adhoc') && row.creator === currentUserID
+              },
               hasClone: false
             }
           }
