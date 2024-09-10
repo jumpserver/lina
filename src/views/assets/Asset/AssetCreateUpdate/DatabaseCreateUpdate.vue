@@ -25,17 +25,17 @@ export default {
       const platform = this.$route.query.type
       const baseFields = [[this.$t('Basic'), ['db_name']]]
       let tlsFields = ['use_ssl', 'ca_cert']
-      switch (platform) {
-        case 'redis':
-          tlsFields = tlsFields.concat(['client_cert', 'client_key'])
-          break
-        case 'mysql':
-          tlsFields = tlsFields.concat(['client_cert', 'client_key', 'allow_invalid_cert'])
-          break
-        case 'mongodb':
-          tlsFields = tlsFields.concat(['client_key', 'allow_invalid_cert'])
-          break
+      const platformFieldsMap = {
+        redis: ['client_cert', 'client_key'],
+        postgresql: ['client_cert', 'client_key', 'allow_invalid_cert'],
+        mysql: ['client_cert', 'client_key', 'allow_invalid_cert'],
+        mongodb: ['client_key', 'allow_invalid_cert']
       }
+
+      if (platformFieldsMap[platform]) {
+        tlsFields = tlsFields.concat(platformFieldsMap[platform])
+      }
+
       if (tlsFields.length > 2) {
         const secureField = [
           this.$t('Secure'), tlsFields, 2
