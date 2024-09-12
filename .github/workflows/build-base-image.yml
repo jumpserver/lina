@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Lock Pull Request
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"state":"pending", "description":"Action running, merge disabled", "context":"Lock PR"}' \
+          "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -59,3 +64,9 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Unlock Pull Request
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -d '{"state":"success", "description":"Action running, merge disabled", "context":"Lock PR"}' \
+          "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
