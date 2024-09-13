@@ -27,7 +27,7 @@ export default {
       let tlsFields = ['use_ssl', 'ca_cert']
       const platformFieldsMap = {
         redis: ['client_cert', 'client_key'],
-        postgresql: ['client_cert', 'client_key', 'allow_invalid_cert'],
+        postgresql: ['client_cert', 'client_key', 'pg_ssl_mode'],
         mysql: ['client_cert', 'client_key', 'allow_invalid_cert'],
         mongodb: ['client_key', 'allow_invalid_cert']
       }
@@ -52,7 +52,14 @@ export default {
         },
         use_ssl: {
           label: this.$t('UseSSL'),
-          component: 'el-switch'
+          component: 'el-switch',
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({
+                pg_ssl_mode: event ? 'require' : 'prefer'
+              })
+            }
+          }
         },
         allow_invalid_cert: {
           label: this.$t('AllowInvalidCert'),
