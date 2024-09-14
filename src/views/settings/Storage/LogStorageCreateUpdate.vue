@@ -8,8 +8,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
-import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
-import TagInput from '@/components/Form/FormFields/TagInput.vue'
+import { GetUrl, cleanForm } from './utils.js'
+import { typeField, hostsField, indexField, commentField } from './const.js'
 
 export default {
   name: 'LogStorageUpdate',
@@ -17,11 +17,11 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const commandType = this.$route.query.type || 'es'
+    const storageType = this.$route.query.type || 'es'
     return {
       successUrl: { name: 'Storage', params: { activeMenu: 'LogStorage' }},
       initial: {
-        type: commandType,
+        type: storageType,
         meta: {
           INDEX_BY_DATE: false,
           IGNORE_VERIFY_CERTS: false
@@ -32,58 +32,23 @@ export default {
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
-        type: {
-          type: 'select',
-          disabled: true
-        },
+        type: typeField,
         meta: {
           fields: ['HOSTS', 'INDEX_BY_DATE', 'INDEX', 'IGNORE_VERIFY_CERTS', 'LOG_TYPES'],
           fieldsMeta: {
-            HOSTS: {
-              component: TagInput,
-              el: {
-                replaceShowPassword: true,
-                replaceRule: '(https?:\/\/[^:@]+:)([^@]+)(@.+)'
-              },
-              rules: [RequiredChange],
-              helpText: this.$t('EsUrl'),
-              helpTextAsPlaceholder: false
-            },
-            INDEX: {
-              rules: [Required]
-            }
+            HOSTS: hostsField,
+            INDEX: indexField
           }
         },
-        comment: {
-          component: 'el-input',
-          el: {
-            type: 'textarea'
-          }
-        }
-      },
-      getUrl() {
-        const params = this.$route.params
-        let url = `/api/v1/audits/log-storages/`
-        if (params.id) {
-          url = `${url}${params.id}/`
-        }
-        return `${url}?type=${commandType}`
+        comment: commentField
       },
       url: '/api/v1/audits/log-storages/',
-      hasDetailInMsg: false,
-      afterGetFormValue(validValues) {
-        if (!validValues?.meta?.HOSTS) {
-          return validValues
-        }
-        return validValues
+      getUrl() {
+        return GetUrl(this.url, this.$route.params.id, storageType)
       },
+      hasDetailInMsg: false,
       cleanFormValue(value) {
-        value.meta.INDEX = value.meta?.INDEX?.toLowerCase()
-        // 解决第一次提交失败后，再次提交时，HOSTS字段为Array的问题
-        if (typeof value.meta.HOSTS === 'string') {
-          value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
-        }
-        return value
+        return cleanForm(value)
       }
     }
   }
