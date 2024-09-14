@@ -30,11 +30,11 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('Name'),
+          key: this.$t('TaskPath'),
           value: this.object.name
         },
         {
-          key: this.$t('Comment'),
+          key: this.$t('Name'),
           value: this.object.meta.comment
         },
         {
@@ -44,6 +44,10 @@ export default {
         {
           key: this.$t('LastPublishedTime'),
           value: this.object.last_published_time
+        },
+        {
+          key: this.$t('Description'),
+          value: this.object.meta.description
         }
       ]
     }

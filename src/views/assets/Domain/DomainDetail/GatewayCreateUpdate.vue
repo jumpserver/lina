@@ -25,6 +25,7 @@ export default {
           disabled: true
         },
         platform: {
+          helpText: this.$t('GatewayPlatformHelpText'),
           el: {
             multiple: false,
             ajax: {

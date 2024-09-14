@@ -13,7 +13,7 @@ export default {
     return {
       url: '/api/v1/ops/playbooks/',
       fields: [
-        [this.$t('Basic'), ['name', 'comment']]
+        [this.$t('Basic'), ['name', 'comment', 'scope']]
       ],
       createSuccessNextRoute: {
         name: 'Template'
