@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" :help-tip="helpMsg" />
 </template>
 
 <script>
@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      helpMsg: this.$t('AuditsLogHelpMsg'),
       tableConfig: {
         columnsShow: {
           default: [

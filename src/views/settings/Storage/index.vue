@@ -10,10 +10,12 @@
 import TabPage from '@/layout/components/TabPage'
 import ReplayStorage from './ReplayStorage.vue'
 import CommandStorage from './CommandStorage.vue'
+import LogStorage from './LogStorage.vue'
 
 export default {
   components: {
     TabPage,
+    LogStorage,
     ReplayStorage,
     CommandStorage
   },
@@ -30,6 +32,11 @@ export default {
         {
           title: this.$t('CommandStorage'),
           name: 'CommandStorage',
+          hidden: () => !this.$hasPerm('terminal.view_commandstorage')
+        },
+        {
+          title: this.$t('LogStorage'),
+          name: 'LogStorage',
           hidden: () => !this.$hasPerm('terminal.view_commandstorage')
         }
       ]

@@ -2,6 +2,7 @@
   <div>
     <GenericListPage
       v-loading="loading"
+      :help-tip="helpMsg"
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
@@ -22,6 +23,7 @@ export default {
   data() {
     const vm = this
     return {
+      helpMsg: this.$t('AuditsLogHelpMsg'),
       url: '/api/v1/audits/operate-logs/',
       rowObj: {
         diff: ''
