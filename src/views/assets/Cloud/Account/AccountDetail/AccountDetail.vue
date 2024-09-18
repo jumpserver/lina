@@ -109,7 +109,7 @@ export default {
           }
         },
         {
-          title: this.$t('Timer'),
+          title: this.$t('TimerExecution'),
           attrs: {
             model: this.object.task,
             type: 'primary',
