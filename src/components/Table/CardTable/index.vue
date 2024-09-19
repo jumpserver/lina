@@ -7,10 +7,10 @@
       v-bind="headerActions"
     />
     <el-row :gutter="10" class="the-row">
-      <IBox v-if="totalData.length === 0" style="width: 100%">
+      <IBox v-if="totalData.length === 0">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
-      <el-col v-for="(d, index) in totalData" :key="index" style="max-width: 550px; width: 350px">
+      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -234,10 +234,8 @@ export default {
 
 <style lang="scss" scoped>
 .the-row {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
   margin-top: 15px;
+  max-width: 1600px;
   text-align: center;
 
   .el-col, div {
