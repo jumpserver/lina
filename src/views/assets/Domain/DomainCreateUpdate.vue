@@ -30,7 +30,7 @@ export default {
               domain_enabled: true
             },
             canSelect: (row) => {
-              return row.platform?.name !== 'Gateway'
+              return !row.platform?.name.startsWith('Gateway')
             }
           }
         },

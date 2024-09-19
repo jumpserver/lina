@@ -19,6 +19,7 @@ import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionD
 import AssetPermissionDetail from '@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'
 import AssetPermissionAccount from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAccount.vue'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
+import store from '@/store'
 
 export default {
   components: {
@@ -63,7 +64,7 @@ export default {
           {
             title: this.$t('UserAclLists'),
             name: 'UserLoginAcl',
-            hidden: () => !vm.$hasPerm('acls.view_loginacl')
+            hidden: () => !vm.$hasPerm('acls.view_loginacl') || !store.getters.publicSettings.XPACK_LICENSE_IS_VALID
           },
           {
             title: this.$t('UserSession'),

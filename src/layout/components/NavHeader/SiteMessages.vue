@@ -70,7 +70,7 @@
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
         </div>
         <div class="msg-detail-txt">
-          <span v-sanitize="currentMsg.content.message" />
+          <MarkDown :value="currentMsg.content.message" />
         </div>
       </div>
     </Dialog>
@@ -80,10 +80,14 @@
 <script>
 import { toSafeLocalDateStr } from '@/utils/time'
 import Dialog from '@/components/Dialog'
+import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {
   name: 'SiteMessages',
-  components: { Dialog },
+  components: {
+    Dialog,
+    MarkDown
+  },
   data() {
     return {
       show: false,

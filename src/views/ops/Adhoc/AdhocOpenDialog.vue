@@ -32,7 +32,7 @@ export default {
         width: '60%',
         tableConfig: {
           hasSelection: false,
-          url: `/api/v1/ops/adhocs/`,
+          url: `/api/v1/ops/adhocs/?only_mine=true`,
           columns: ['name', 'module', 'args', 'comment', 'actions'],
           columnsMeta: {
             name: {

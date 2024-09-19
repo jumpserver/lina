@@ -68,7 +68,7 @@ export default {
                 domain_enabled: true
               },
               canSelect: (row) => {
-                return row.platform?.name !== 'Gateway' && this.object.assets.map(item => item.id).indexOf(row.id) === -1
+                return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
               }
             }
           }

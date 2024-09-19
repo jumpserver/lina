@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import ListTable from '@/components/Table/ListTable'
 import { timeOffset } from '@/utils/time'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseList',
@@ -119,7 +119,11 @@ export default {
             }
           },
           is_locked: {
-            label: this.$t('IsLocked')
+            label: this.$t('IsLocked'),
+            formatter: ChoicesFormatter,
+            formatterArgs: {
+              showFalse: true
+            }
           },
           actions: {
             prop: 'actions',

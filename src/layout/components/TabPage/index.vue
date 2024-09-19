@@ -46,7 +46,7 @@
         <el-alert v-if="helpMessage" type="success">
           <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
-        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
+        <transition appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
               <component :is="computeActiveComponent" />
@@ -83,16 +83,18 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      toSentenceCase: toSentenceCase
+      loading: false,
+      toSentenceCase: toSentenceCase,
+      activeTab: this.activeMenu
     }
   },
   computed: {
     iActiveMenu: {
       get() {
-        return this.activeMenu
+        return this.activeTab
       },
       set(item) {
+        this.activeTab = item
         this.$emit('update:activeMenu', item)
       }
     },
@@ -119,15 +121,12 @@ export default {
   },
   watch: {
     $route(to, from) {
-      const activeTab = to.query?.tab
-      if (activeTab && this.iActiveMenu !== activeTab) {
-        this.iActiveMenu = activeTab
-      }
+      // 好像没必要
+      // const activeTab = to.query?.tab
+      // if (activeTab && this.iActiveMenu !== activeTab) {
+      //   this.iActiveMenu = activeTab
+      // }
     }
-  },
-  activated() {
-    this.iActiveMenu = this.getPropActiveTab()
-    this.loading = false
   },
   created() {
     this.iActiveMenu = this.getPropActiveTab()
@@ -136,15 +135,8 @@ export default {
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
-      this.$emit('update:activeMenu', tab.name)
-
+      this.iActiveMenu = tab.name
       this.$cookie.set(this.$route.path, tab.name, 1)
-
-      if (this.$router.currentRoute.query[this.$route.path]) {
-        this.$router.push({
-          query: { ...this.$route.query, [this.$route.path]: '' }
-        })
-      }
     },
     getPropActiveTab() {
       let activeTab = ''

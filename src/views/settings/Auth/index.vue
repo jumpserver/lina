@@ -8,7 +8,8 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage'
-import LDAP from './Ldap'
+import LdapHA from './Ldap/LdapHA.vue'
+import LDAP from './Ldap/Ldap.vue'
 import Base from './Base'
 import Basic from './Basic'
 import CAS from './CAS'
@@ -28,6 +29,7 @@ export default {
   components: {
     TabPage,
     LDAP,
+    LdapHA,
     Base,
     Basic,
     CAS,
@@ -45,6 +47,7 @@ export default {
   },
   data() {
     let extraBackends = []
+    let ldapHABackends = []
     if (this.$store.getters.hasValidLicense) {
       extraBackends = [
         {
@@ -93,6 +96,13 @@ export default {
           key: 'AUTH_RADIUS'
         }
       ]
+      ldapHABackends = [
+        {
+          title: this.$t('LDAP HA'),
+          name: 'LdapHA',
+          key: 'AUTH_LDAP_HA'
+        }
+      ]
     }
     return {
       loading: true,
@@ -107,6 +117,7 @@ export default {
           name: 'LDAP',
           key: 'AUTH_LDAP'
         },
+        ...ldapHABackends,
         {
           title: this.$t('CAS'),
           name: 'CAS',

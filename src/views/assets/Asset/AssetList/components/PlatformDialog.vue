@@ -22,17 +22,17 @@
               :key="platform.id"
               :span="6"
             >
-              <el-card
-                :style="{ borderLeftColor: randomBorderColor(index) }"
-                class="platform-item"
-                shadow="hover"
-                @click.native="createAsset(platform)"
-              >
-                <img :src="loadImage(platform)" alt="icon" class="asset-icon">
-                <el-tooltip :content="platform.name">
+              <el-tooltip :content="platform.name" :open-delay="1000">
+                <el-card
+                  :style="{ borderLeftColor: randomBorderColor(index) }"
+                  class="platform-item"
+                  shadow="hover"
+                  @click.native="createAsset(platform)"
+                >
+                  <img :src="loadImage(platform)" alt="icon" class="asset-icon">
                   <span class="platform-name">{{ platform.name }}</span>
-                </el-tooltip>
-              </el-card>
+                </el-card>
+              </el-tooltip>
             </el-col>
           </el-collapse-item>
         </el-collapse>
@@ -236,8 +236,8 @@ export default {
 }
 
 .asset-icon {
-  width: 1.5em;
-  height: 1.5em;
+  width: 2em;
+  height: 2em;
   vertical-align: -0.2em;
   fill: currentColor;
 }

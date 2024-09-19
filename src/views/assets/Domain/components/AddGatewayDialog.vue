@@ -1,11 +1,11 @@
 <template>
   <Dialog
-    v-if="setting.AddGatewayDialogVisible"
+    v-if="setting.addGatewayDialogVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddGatewayInDomain')"
-    :visible.sync="setting.AddGatewayDialogVisible"
+    :visible.sync="setting.addGatewayDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"
@@ -31,7 +31,7 @@ export default {
     setting: {
       type: Object,
       default: () => {
-        return { AddGatewayDialogVisible: false }
+        return { addGatewayDialogVisible: false }
       }
     },
     object: {
@@ -64,7 +64,7 @@ export default {
               multiple: true,
               clearable: true,
               ajax: {
-                url: '/api/v1/assets/assets/?domain_enabled=true&platform=Gateway'
+                url: '/api/v1/assets/assets/?domain_enabled=true&is_gateway=1'
               },
               disabledValues: this.object.gateways.map(item => item.id)
             }
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     onSubmitSuccess(res) {
-      this.setting.AddGatewayDialogVisible = false
+      this.setting.addGatewayDialogVisible = false
       this.$emit('close', res)
     }
   }
