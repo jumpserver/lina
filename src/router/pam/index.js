@@ -2,10 +2,10 @@ import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 
 import empty from '@/layout/empty'
-import store from '@/store'
 import automations from './automations'
 import services from './service'
 import security from './security'
+import activity from './activity'
 
 export default {
   path: '/pam/',
@@ -13,12 +13,10 @@ export default {
   component: Layout,
   redirect: '/pam/dashboard',
   meta: {
-    title: i18n.t('PAM'),
+    title: '特权账号',
     icon: 'pam',
     type: 'view',
-    showNavSwitcher: () => {
-      return store.getters.consoleOrgs.length > 0
-    },
+    showNavSwitcher: true,
     permissions: [],
     view: 'pam'
   },
@@ -60,7 +58,7 @@ export default {
       name: 'AccountSecurity',
       component: empty,
       meta: {
-        title: i18n.t('Security'),
+        title: i18n.t('安全中心'),
         icon: 'accounts',
         permissions: []
       },
@@ -75,6 +73,16 @@ export default {
         permissions: []
       },
       children: services
+    },
+    {
+      path: '/pam/activity',
+      name: 'AccountActivity',
+      meta: {
+        title: i18n.t('Activity'),
+        icon: 'accounts',
+        permissions: []
+      },
+      children: activity
     }
   ]
 }

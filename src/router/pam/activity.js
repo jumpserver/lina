@@ -3,15 +3,12 @@ import i18n from '@/i18n/i18n'
 
 export default [
   {
-    path: 'scan',
-    name: 'AccountScan',
+    path: 'session',
+    name: 'AccountSession',
     component: empty,
-    redirect: {
-      name: 'AccountPushList'
-    },
     meta: {
       app: 'accounts',
-      name: 'BaseAccountRisk',
+      name: 'BaseAccountSession',
       icon: 'accounts',
       resource: 'pushaccountautomation'
     },
@@ -21,16 +18,16 @@ export default [
         component: () => import('@/views/pam/AccountScan/index.vue'),
         name: 'AccountPushList',
         meta: {
-          title: i18n.t('账号检查'),
-          menuTitle: i18n.t('账号检查'),
+          title: i18n.t('账号会话'),
+          menuTitle: i18n.t('账号会话'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       }
     ]
   },
   {
-    path: 'risk',
-    name: 'AccountRisk',
+    path: 'activity',
+    name: 'AccountActivity',
     component: empty,
     redirect: {
       name: 'AccountPushList'
@@ -47,8 +44,8 @@ export default [
         component: () => import('@/views/accounts/AccountPush/index.vue'),
         name: 'AccountPushList',
         meta: {
-          title: i18n.t('风险分析'),
-          menuTitle: i18n.t('风险分析'),
+          title: i18n.t('活动记录'),
+          menuTitle: i18n.t('活动记录'),
           permissions: ['accounts.view_pushaccountautomation']
         }
       }
