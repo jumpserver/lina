@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}&platform=Gateway`,
+        url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
         columnsExclude: [
           'info', 'spec_info', 'auto_config'
         ],
@@ -174,7 +174,7 @@ export default {
             name: 'GatewayAdd',
             title: this.$t('Add'),
             callback: function() {
-              this.AddGatewaySetting.AddGatewayDialogVisible = true
+              this.AddGatewaySetting.addGatewayDialogVisible = true
             }.bind(this)
           }
         ]
@@ -183,7 +183,7 @@ export default {
       cell: '',
       visible: false,
       AddGatewaySetting: {
-        AddGatewayDialogVisible: false
+        addGatewayDialogVisible: false
       }
     }
   },

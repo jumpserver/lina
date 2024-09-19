@@ -61,7 +61,7 @@ export default {
                       row['auto_config'].ansible_enabled &&
                       row['auto_config'].ping_enabled,
                     callback: ({ row }) => {
-                      if (row.platform.name === 'Gateway') {
+                      if (row.platform.name.startsWith('Gateway')) {
                         this.GatewayVisible = true
                         const port = row.protocols.find(item => item.name === 'ssh').port
                         if (!port) {
