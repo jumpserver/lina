@@ -45,7 +45,8 @@ export default {
               canDelete: ({ row }) => {
                 return this.$hasPerm('ops.delete_playbook') && row.creator === currentUserID
               },
-              hasClone: true
+              hasClone: true,
+              cloneRoute: 'PlaybookCreate'
             }
           }
         }
