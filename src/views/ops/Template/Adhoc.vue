@@ -38,7 +38,8 @@ export default {
               canDelete: ({ row }) => {
                 return this.$hasPerm('ops.delete_adhoc') && row.creator === currentUserID
               },
-              hasClone: false
+              hasClone: true,
+              cloneRoute: 'AdhocCreate'
             }
           }
         }
