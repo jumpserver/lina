@@ -48,7 +48,8 @@ export default {
       },
       tableConfig: {
         url: tableUrl,
-        category: 'all'
+        category: 'all',
+        extraQuery: { 'order': '-date_updated' }
       },
       headerActions: {
         handleImportClick: ({ selectedRows }) => {
