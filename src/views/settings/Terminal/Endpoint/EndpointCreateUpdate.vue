@@ -33,7 +33,7 @@ export default {
             'redis_port', 'sqlserver_port', 'oracle_port_range'
           ]
         ],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         host: {
