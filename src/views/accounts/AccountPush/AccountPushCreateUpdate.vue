@@ -21,7 +21,7 @@ export default {
       initial: {
         is_periodic: false,
         password_rules: {
-          length: 30
+          length: 36
         },
         interval: 24,
         secret_type: 'password',
