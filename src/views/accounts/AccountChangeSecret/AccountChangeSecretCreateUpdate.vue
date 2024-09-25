@@ -19,7 +19,7 @@ export default {
       initial: {
         is_periodic: false,
         password_rules: {
-          length: 16
+          length: 36
         },
         interval: 24,
         accounts: [],
