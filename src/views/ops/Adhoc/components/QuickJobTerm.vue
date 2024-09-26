@@ -75,6 +75,7 @@ export default {
         fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
         lineHeight: 1.2,
         fontSize: 13,
+        scrollback: 9999999,
         rightClickSelectsWord: true,
         theme: {
           background: '#fff',
