@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row type="flex" align="center">
       <el-col :md="8" :sm="24">
         <div class="tableFilter">
           <el-radio-group v-model="importStatusFilter" size="small">
@@ -11,7 +11,7 @@
           </el-radio-group>
         </div>
       </el-col>
-      <el-col :md="8" :sm="24" style="text-align: center">
+      <el-col :md="16" :sm="24" style="text-align: center; display: flex; align-items: center">
         <span class="summary-item summary-total"> {{ $t('common.Total') }}: {{ totalCount }}</span>
         <span class="summary-item summary-success"> {{ $t('common.Success') }}: {{ successCount }}</span>
         <span class="summary-item summary-failed"> {{ $t('common.Failed') }}: {{ failedCount }}</span>
