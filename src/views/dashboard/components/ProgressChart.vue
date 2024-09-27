@@ -128,7 +128,8 @@ export default {
               tip += current.label + '：' + current.total + '<br/>'
             }
             return tip
-          }
+          },
+          appendToBody: true
         },
         grid: {
           top: '60%',
