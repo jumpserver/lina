@@ -4,6 +4,8 @@
 
 <script>
 import HomeCard from './HomeCard.vue'
+import { getPreference } from '@/api/settings'
+import { openNewWindow } from '@/utils/common'
 
 export default {
   name: 'Announcement',
@@ -13,6 +15,7 @@ export default {
   data() {
     const vm = this
     return {
+      preference: {},
       cardConfig: {
         title: this.$t('RecentSession')
       },
@@ -71,7 +74,11 @@ export default {
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
-                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                    if (this.preference?.basic?.connect_default_open_method === 'new') {
+                      openNewWindow(`/luna/connect?login_to=${row.asset_id}&login_account=${row.account_id}`)
+                    } else {
+                      window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                    }
                   }
                 }
               ]
@@ -82,6 +89,11 @@ export default {
         paginationSize: 10
       }
     }
+  },
+  mounted() {
+    getPreference().then(resp => {
+      this.preference = resp
+    })
   }
 }
 </script>
