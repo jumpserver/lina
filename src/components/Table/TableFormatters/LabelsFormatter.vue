@@ -131,6 +131,16 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    cellValue: {
+      handler(newValue) {
+        if (newValue) {
+          this.initial = this.formatterArgs.getLabels(this.cellValue)
+          this.iLabels = [...this.initial]
+        }
+      }
+    }
+  },
   mounted() {
     this.initial = this.formatterArgs.getLabels(this.cellValue)
     this.iLabels = [...this.initial]
