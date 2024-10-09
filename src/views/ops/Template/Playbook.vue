@@ -24,7 +24,7 @@ export default {
         url: '/api/v1/ops/playbooks/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'comment', 'scope', 'date_created', 'actions']
+          default: ['name', 'comment', 'scope', 'date_created', 'actions', 'created_by']
         },
         columnsMeta: {
           name: {
