@@ -123,6 +123,7 @@ export default {
 
     &__body {
       padding: 20px 30px;
+      font-size: 13px;
 
       &:has(.el-table) {
         background: #f3f3f4;
