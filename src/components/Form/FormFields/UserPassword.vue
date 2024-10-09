@@ -42,7 +42,7 @@ export default {
         patterns.push([/\d/, i18n.t('common.password.NUMBER_REQUIRED')])
       }
       if (passwordRule['SECURITY_PASSWORD_SPECIAL_CHAR']) {
-        const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]")
+        const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？_+-]")
         patterns.push([pattern, i18n.t('common.password.SPECIAL_CHAR_REQUIRED')])
       }
       for (const [pattern, msg] of patterns) {
