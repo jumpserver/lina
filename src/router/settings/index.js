@@ -184,6 +184,28 @@ export default {
             permissions: ['terminal.change_commandstorage']
           },
           hidden: true
+        },
+        {
+          path: 'log-storage/create',
+          name: 'CreateLogStorage',
+          component: () => import('@/views/settings/Storage/LogStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('CreateLogStorage'),
+            activeMenu: '/settings/storage',
+            permissions: ['audits.add_logstorage']
+          },
+          hidden: true
+        },
+        {
+          path: 'log-storage/:id/update',
+          name: 'LogStorageUpdate',
+          component: () => import('@/views/settings/Storage/LogStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('LogStorageUpdate'),
+            activeMenu: '/settings/storage',
+            permissions: ['audits.change_logstorage']
+          },
+          hidden: true
         }
       ]
     },
