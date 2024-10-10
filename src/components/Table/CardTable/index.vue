@@ -302,6 +302,7 @@ export default {
               display: -webkit-box;
               font-size: 12px;
               padding: 10px 0;
+              line-height: 13px;
               cursor: pointer;
               overflow: hidden;
               text-overflow: ellipsis;
