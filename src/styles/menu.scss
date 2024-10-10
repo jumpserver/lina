@@ -139,6 +139,10 @@ $single-menu-height: 38px;
       .nest-menu .level2-menu {
         line-height: $single-menu-height;
       }
+
+      .el-tooltip {
+        width: 55px !important;
+      }
     }
   }
 }
