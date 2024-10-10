@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import $ from '@/utils/jquery-vendor.js'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
@@ -286,6 +287,14 @@ export default {
         view: {
           dblClickExpand: false,
           showLine: true
+        },
+        callback: {
+          onCheck: function(_event, treeId, treeNode) {
+            const treeObj = $.fn.zTree.getZTreeObj(treeId)
+            if (treeNode.checked) {
+              treeObj.expandNode(treeNode, true, false, true)
+            }
+          }
         }
       },
       iShowTree: true
