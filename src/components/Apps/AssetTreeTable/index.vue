@@ -32,6 +32,10 @@ export default {
       type: String,
       default: '/api/v1/assets/assets/'
     },
+    typeUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/category/tree/'
+    },
     nodeUrl: {
       type: String,
       default: '/api/v1/assets/nodes/'
@@ -105,9 +109,9 @@ export default {
               showAssets: false,
               showSearch: false,
               customTreeHeaderName: this.$t('TypeTree'),
-              url: '/api/v1/assets/nodes/category/tree/',
+              url: this.typeUrl,
               nodeUrl: this.treeSetting?.nodeUrl || this.nodeUrl,
-              treeUrl: `/api/v1/assets/nodes/category/tree/?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
+              treeUrl: `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               }
