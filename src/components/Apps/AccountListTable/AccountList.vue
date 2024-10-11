@@ -185,6 +185,7 @@ export default {
           },
           connect: {
             label: this.$t('Connect'),
+            width: '80px',
             formatter: () => {
               return (
                 <span class='connect'>
@@ -286,7 +287,7 @@ export default {
                 },
                 {
                   name: 'Test',
-                  title: this.$t('Test'),
+                  title: this.$t('验证密码'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.verify_account') &&
@@ -314,6 +315,21 @@ export default {
                       this.$message.success(this.$tc('ClearSuccessMsg'))
                     })
                   }
+                },
+                {
+                  name: 'SecretHistory',
+                  title: '密文历史'
+                },
+                {
+                  name: 'CopyToOther',
+                  title: '复制到其他资产',
+                  type: 'primary',
+                  divided: true
+                },
+                {
+                  name: 'MoveToOther',
+                  title: '移动到其他资产',
+                  type: 'primary'
                 }
               ]
             }

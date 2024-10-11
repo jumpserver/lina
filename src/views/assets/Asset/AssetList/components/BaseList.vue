@@ -211,6 +211,10 @@ export default {
                     }
                   }
                 },
+                {
+                  name: 'AddAccount',
+                  title: '添加账号'
+                },
                 ...this.addExtraMoreColActions
               ]
             }
