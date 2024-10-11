@@ -23,7 +23,7 @@ export default {
   children: [
     {
       path: '/pam/dashboard',
-      component: () => import('@/views/dashboard/Audit/index'),
+      component: () => import('@/views/dashboard/Pam/index'),
       name: 'PamDashboard',
       meta: {
         icon: 'dashboard',
@@ -34,7 +34,7 @@ export default {
     {
       path: '/pam/accounts',
       name: 'PamAccounts',
-      component: () => import('@/views/pam/Account/AccountList.vue'),
+      component: () => import('@/views/pam/Account/index.vue'),
       meta: {
         title: i18n.t('Accounts'),
         icon: 'accounts',

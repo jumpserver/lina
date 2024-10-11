@@ -23,8 +23,8 @@
           v-if="item.has"
           :key="index"
           :content="item.tooltip"
+          :open-delay="500"
           effect="dark"
-          open-delay="500"
           placement="top"
         >
           <i :class="[item.class, item.icon]" class="fa" @click="item.action()" />

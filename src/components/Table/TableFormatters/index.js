@@ -18,6 +18,7 @@ import ProtocolsFormatter from './ProtocolsFormatter.vue'
 import TagChoicesFormatter from './TagChoicesFormatter.vue'
 import SwitchFormatter from './SwitchFormatter.vue'
 import AccountInfoFormatter from './AccountInfoFormatter.vue'
+import PlatformFormatter from './PlatformFormatter.vue'
 
 export default {
   DetailFormatter,
@@ -39,6 +40,7 @@ export default {
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
+  PlatformFormatter,
   AccountInfoFormatter
 }
 
@@ -62,5 +64,6 @@ export {
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
+  PlatformFormatter,
   AccountInfoFormatter
 }

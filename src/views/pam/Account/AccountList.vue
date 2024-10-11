@@ -1,42 +1,59 @@
 <template>
-  <TabPage
-    v-if="!loading"
-    :active-menu.sync="activeMenu"
-    :submenu="tab.submenu"
-    @tab-click="changeMoreCreates"
-  >
-    <keep-alive>
-      <AccountListTable ref="table" v-bind="tableConfig" />
-    </keep-alive>
-  </TabPage>
+  <div>
+    <div>
+      <!-- Todo: 未来移动到通用 table 中 -->
+      <div class="expanded-filter-zone">
+        <div class="item-zone">
+          <h5>过滤</h5>
+          <div>
+            <span class="item">全部账号</span>
+            <span class="item">拥有的</span>
+            <span class="item">收藏夹</span>
+            <span class="item">最近访问</span>
+          </div>
+        </div>
+        <div class="item-zone">
+          <h5>风险账号</h5>
+          <div>
+            <span class="item">过期的密码</span>
+            <span class="item">冲突的密码</span>
+            <span class="item">违法策略</span>
+            <span class="item">禁用的资源</span>
+            <span class="item">回收站</span>
+          </div>
+        </div>
+        <div class="item-zone">
+          <h5>账号类型</h5>
+          <div>
+            <span class="item">全部</span>
+            <span class="item">主机</span>
+            <span class="item">数据库</span>
+            <span class="item">网络设备</span>
+            <span class="item">云服务</span>
+            <span class="item">其他</span>
+          </div>
+        </div>
+      </div>
+      <div class="expand-zone">
+        <div class="expand-bar">
+          <i class="fa fa-angle-double-up" />
+        </div>
+      </div>
+    </div>
+    <AccountListTable ref="table" v-bind="tableConfig" />
+  </div>
 </template>
 
 <script>
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
-import { TabPage } from '@/layout/components'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    TabPage,
     AccountListTable
   },
   data() {
     return {
-      isInit: true,
-      clickedRow: null,
-      iShowTree: true,
-      loading: true,
-      activeMenu: 'host',
-      tab: {
-        submenu: [
-          {
-            name: 'all',
-            title: this.$t('All'),
-            icon: 'fa-bars'
-          }
-        ]
-      },
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
@@ -44,45 +61,9 @@ export default {
       }
     }
   },
-  watch: {
-    activeMenu(val) {
-      let url = '/api/v1/accounts/accounts/'
-      if (val !== 'all') {
-        url += '?category=' + val
-      }
-      this.tableConfig.url = url
-    }
-  },
   async mounted() {
-    try {
-      await this.setCategoriesTab()
-    } finally {
-      this.loading = false
-    }
   },
-  methods: {
-    changeMoreCreates() {
-    },
-    async setCategoriesTab() {
-      const categoryIcon = {
-        host: 'fa-inbox',
-        device: 'fa-microchip',
-        database: 'fa-database',
-        cloud: 'fa-cloud',
-        web: 'fa-globe',
-        gpt: 'fa-comment',
-        custom: 'fa-cube'
-      }
-      const state = await this.$store.dispatch('assets/getAssetCategories')
-      for (const item of state.assetCategories) {
-        this.tab.submenu.push({
-          name: item.value,
-          title: item.label,
-          icon: categoryIcon[item.value]
-        })
-      }
-    }
-  }
+  methods: {}
 }
 </script>
 
@@ -129,5 +110,52 @@ export default {
 
   .asset-user-table {
     padding-left: 20px;
+  }
+
+  .expand-bar {
+    text-align: center;
+
+    i {
+      cursor: pointer;
+      //transform: rotateY(90deg);
+    }
+  }
+
+  .expanded-filter-zone {
+    display: flex;
+
+    h5 {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: .5rem;
+      line-height: 1.2;
+      display: inline-block;
+    }
+
+    .item-zone {
+      margin-right: 30px;
+      margin-bottom: 5px;
+    }
+
+    .item {
+      display: inline-block;
+      margin-right: 10px;
+      border-radius: 5px;
+      background-color: #f5f7fa;
+      color: #303133;
+      font-size: 12px;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    ul {
+      list-style: none outside none;
+      margin-block-start: 0;
+      padding-left: 0;
+    }
   }
 </style>

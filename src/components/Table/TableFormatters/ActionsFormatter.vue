@@ -135,7 +135,7 @@ export default {
       {
         name: 'clone',
         title: this.$t('Duplicate'),
-        type: 'info',
+        type: 'primary',
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,

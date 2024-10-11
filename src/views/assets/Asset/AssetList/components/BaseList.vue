@@ -23,7 +23,7 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, PlatformFormatter
 } from '@/components/Table/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
@@ -144,7 +144,8 @@ export default {
             sortable: true
           },
           platform: {
-            sortable: true
+            sortable: true,
+            formatter: PlatformFormatter
           },
           protocols: {
             showFullContent: true,

@@ -49,7 +49,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, PlatformFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -89,7 +89,7 @@ export default {
     },
     hasClone: {
       type: Boolean,
-      default: false
+      default: true
     },
     asset: {
       type: Object,
@@ -119,7 +119,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'asset', 'date_updated'
+        'name', 'username', 'secret', 'asset', 'platform', 'date_updated', 'connect'
       ])
     },
     headerExtraActions: {
@@ -153,6 +153,7 @@ export default {
         },
         extraQuery: this.extraQuery,
         columnsExclude: ['spec_info'],
+        columnsAdd: ['secret', 'platform', 'connect'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: this.columnsDefault
@@ -172,6 +173,28 @@ export default {
               }
             }
           },
+          secret: {
+            formatter: () => {
+              // Todo: 通用的 formatter, 点击后 10s 后还原为 *
+              return (
+                <span class='secret'>
+                  <i class='fa fa-clone'/> ******
+                </span>
+              )
+            }
+          },
+          connect: {
+            label: this.$t('Connect'),
+            formatter: () => {
+              return (
+                <span class='connect'>
+                  <el-button type='primary' size='mini'>
+                    <i class='fa fa-terminal'/>
+                  </el-button>
+                </span>
+              )
+            }
+          },
           asset: {
             formatter: function(row) {
               const to = {
@@ -183,6 +206,13 @@ export default {
               } else {
                 return <span>{row.asset.name}</span>
               }
+            }
+          },
+          platform: {
+            label: this.$t('Platform'),
+            formatter: PlatformFormatter,
+            formatterArgs: {
+              platformAttr: 'asset.platform'
             }
           },
           username: {
@@ -218,6 +248,7 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               hasClone: this.hasClone,
+              canClone: true,
               moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
@@ -350,8 +381,8 @@ export default {
             icon: 'fa-link',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
-                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
-                  !this.$store.getters.currentOrgIsRoot
+                ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
+                !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
