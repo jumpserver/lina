@@ -593,3 +593,9 @@ li.rmenu i.fa {
     height: 6px; /* 设置水平滚动条的高度 */
   }
 }
+
+.black-theme-popover {
+  width: 300px;
+  max-height: 700px;
+  overflow-y: scroll;
+}
