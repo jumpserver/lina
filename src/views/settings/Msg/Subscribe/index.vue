@@ -26,11 +26,14 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('Receivers')" show-overflow-tooltip>
-          <template v-slot="scope">
-            <span v-if="!scope.row.children">
-              {{ scope.row.receivers.map(item => item.name).join(', ') }}
-            </span>
+        <el-table-column :label="$tc('Receivers')">
+          <template slot-scope="scope">
+            <el-popover trigger="hover" placement="top" popper-class="black-theme-popover">
+              <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
+              <span v-if="!scope.row.children" slot="reference" class="name-wrapper">
+                {{ scope.row.receivers.map(item => item.name).join(', ') }}
+              </span>
+            </el-popover>
           </template>
         </el-table-column>
         <el-table-column :label="$tc('Actions')" width="200">
@@ -185,5 +188,26 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
+}
+
+::v-deep .el-table .cell {
+  display: flex;
+
+  .name-wrapper {
+    display: inline-block;
+    max-height: 55px;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+}
+
+::v-deep .black-theme-popover .el-popover__inner {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
 }
 </style>
