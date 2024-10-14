@@ -123,6 +123,7 @@ export default {
 
   .expanded-filter-zone {
     display: flex;
+    justify-content: space-between;
 
     h5 {
       font-weight: 600;

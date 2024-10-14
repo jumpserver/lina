@@ -36,7 +36,7 @@ export default {
       name: 'PamAccounts',
       component: () => import('@/views/pam/Account/index.vue'),
       meta: {
-        title: i18n.t('Accounts'),
+        title: i18n.t('特权账号'),
         icon: 'accounts',
         permissions: []
       }

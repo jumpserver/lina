@@ -177,7 +177,7 @@ export default {
             formatter: () => {
               // Todo: 通用的 formatter, 点击后 10s 后还原为 *
               return (
-                <span class='secret'>
+                <span class='secret-col'>
                   <i class='fa fa-clone'/> ******
                 </span>
               )
@@ -189,8 +189,8 @@ export default {
             formatter: () => {
               return (
                 <span class='connect'>
-                  <el-button type='primary' size='mini'>
-                    <i class='fa fa-terminal'/>
+                  <el-button type='primary' size='mini' plain>
+                    <i class='fa fa-desktop'/>
                   </el-button>
                 </span>
               )
@@ -248,7 +248,7 @@ export default {
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
-              hasClone: this.hasClone,
+              hasClone: false,
               canClone: true,
               moreActionsTitle: this.$t('More'),
               extraActions: [
@@ -287,7 +287,7 @@ export default {
                 },
                 {
                   name: 'Test',
-                  title: this.$t('验证密码'),
+                  title: this.$t('验证密文'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.verify_account') &&
@@ -330,6 +330,11 @@ export default {
                   name: 'MoveToOther',
                   title: '移动到其他资产',
                   type: 'primary'
+                },
+                {
+                  name: 'Clone',
+                  title: this.$t('Duplicate'),
+                  divided: true
                 }
               ]
             }
@@ -557,5 +562,9 @@ export default {
 <style lang='scss' scoped>
 .cell a {
   color: var(--color-info);
+}
+
+.secret-col {
+  cursor: pointer;
 }
 </style>
