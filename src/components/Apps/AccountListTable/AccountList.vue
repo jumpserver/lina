@@ -49,7 +49,9 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
-import { ActionsFormatter, PlatformFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter, PlatformFormatter, SecretViewerFormatter
+} from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -174,13 +176,10 @@ export default {
             }
           },
           secret: {
-            formatter: () => {
-              // Todo: 通用的 formatter, 点击后 10s 后还原为 *
-              return (
-                <span class='secret-col'>
-                  <i class='fa fa-clone'/> ******
-                </span>
-              )
+            formatter: SecretViewerFormatter,
+            formatterArgs: {
+              secretFrom: 'api',
+              hasDownload: false
             }
           },
           connect: {
@@ -564,7 +563,4 @@ export default {
   color: var(--color-info);
 }
 
-.secret-col {
-  cursor: pointer;
-}
 </style>

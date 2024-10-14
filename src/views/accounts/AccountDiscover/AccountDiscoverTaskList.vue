@@ -8,7 +8,7 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountGatherTaskList',
+  name: 'AccountDiscoverTaskList',
   components: {
     GenericListTable
   },
@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        name: 'AccountGatherTaskList',
+        name: 'AccountDiscoverTaskList',
         url: '/api/v1/accounts/gather-account-automations/',
         permissions: {
           app: 'accounts',
@@ -37,9 +37,9 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountGatherTaskDetail',
+              route: 'AccountDiscoverTaskDetail',
               routeQuery: {
-                tab: 'AccountGatherTaskDetail'
+                tab: 'AccountDiscoverTaskDetail'
               }
             }
           },
@@ -54,18 +54,17 @@ export default {
             },
             width: '150px'
           },
-          periodic_display: {
-          },
+          periodic_display: {},
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountGatherList',
+              route: 'AccountDiscoverList',
               can: vm.$hasPerm('accounts.view_gatheraccountsexecution'),
               getRoute({ row }) {
                 return {
-                  name: 'AccountGatherList',
+                  name: 'AccountDiscoverList',
                   query: {
-                    tab: 'AccountGatherTaskExecutionList',
+                    tab: 'AccountDiscoverTaskExecutionList',
                     automation_id: row.id
                   }
                 }
@@ -74,7 +73,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AccountGatherTaskUpdate',
+              updateRoute: 'AccountDiscoverTaskUpdate',
               hasClone: false,
               extraActions: [
                 {
@@ -105,7 +104,7 @@ export default {
         hasImport: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'AccountGatherTaskCreate',
+        createRoute: 'AccountDiscoverTaskCreate',
         searchConfig: {
           getUrlQuery: false
         }

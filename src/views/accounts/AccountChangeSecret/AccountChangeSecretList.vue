@@ -38,12 +38,12 @@ export default {
           },
           accounts: {
             formatter: function(row) {
-              return <span> { row.accounts.join(', ') } </span>
+              return <span> {row.accounts.join(', ')} </span>
             }
           },
           secret_strategy: {
             formatter: function(row) {
-              return <span> { row.secret_strategy.label } </span>
+              return <span> {row.secret_strategy.label} </span>
             }
           },
           is_periodic: {
@@ -55,7 +55,7 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountGatherList',
+              route: 'AccountDiscoverList',
               can: vm.$hasPerm('accounts.view_changesecretexecution'),
               getRoute({ row }) {
                 return {

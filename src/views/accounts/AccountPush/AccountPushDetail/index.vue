@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountPushInfo from './AccountPushInfo'
+import AccountPushInfo from './AccountPushInfo.vue'
 
 export default {
   components: {

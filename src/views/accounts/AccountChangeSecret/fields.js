@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormFields'
-import { crontab, interval, is_periodic } from '../const'
+import { crontab, interval, is_periodic } from '../../accounts/const'
 
 export const getChangeSecretFields = () => {
   return {

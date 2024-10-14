@@ -6,11 +6,11 @@ export default [
     path: 'account-gather',
     component: empty,
     redirect: {
-      name: 'AccountGatherList'
+      name: 'AccountDiscoverList'
     },
-    name: 'AccountGather',
+    name: 'AccountDiscover',
     meta: {
-      title: i18n.t('AccountGatherList'),
+      title: i18n.t('AccountDiscoverList'),
       app: 'accounts',
       icon: 'client'
       // activeMenu: '/console/accounts/automations',
@@ -18,44 +18,44 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountGather/index.vue'),
-        name: 'AccountGatherList',
+        component: () => import('@/views/accounts/AccountDiscover/index.vue'),
+        name: 'AccountDiscoverList',
         meta: {
           menuTitle: i18n.t('GatherAccounts'),
-          title: i18n.t('AccountGatherTaskList'),
+          title: i18n.t('AccountDiscoverTaskList'),
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_gatheredaccount']
         }
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
-        name: 'AccountGatherTaskCreate',
+        component: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
+        name: 'AccountDiscoverTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountGatherTaskCreate'),
+          title: i18n.t('AccountDiscoverTaskCreate'),
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountGather/TaskDetail/index'),
-        name: 'AccountGatherTaskDetail',
+        component: () => import('@/views/accounts/AccountDiscover/TaskDetail/index'),
+        name: 'AccountDiscoverTaskDetail',
         hidden: true,
         meta: {
-          title: i18n.t('AccountGatherTaskDetail'),
+          title: i18n.t('AccountDiscoverTaskDetail'),
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
-        name: 'AccountGatherTaskUpdate',
+        component: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
+        name: 'AccountDiscoverTaskUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountGatherTaskUpdate'),
+          title: i18n.t('AccountDiscoverTaskUpdate'),
           action: 'update',
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
@@ -63,8 +63,8 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountGather/TaskDetail/TaskExecutionList.vue'),
-        name: 'AccountGatherTaskExecutionList',
+        component: () => import('@/views/accounts/AccountDiscover/TaskDetail/TaskExecutionList.vue'),
+        name: 'AccountDiscoverTaskExecutionList',
         hidden: true,
         meta: {
           title: i18n.t('ExecutionList'),
@@ -74,8 +74,8 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountGather/TaskDetail/AccountGatherExecutionDetail/index.vue'),
-        name: 'AccountGatherExecutionDetail',
+        component: () => import('@/views/accounts/AccountDiscover/TaskDetail/ExecutionDetail/index.vue'),
+        name: 'AccountDiscoverExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('ExecutionDetail'),

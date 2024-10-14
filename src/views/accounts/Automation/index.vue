@@ -39,7 +39,7 @@ export default {
           {
             id: 'gather_account',
             display_name: this.$t('GatherAccounts'),
-            name: 'AccountGatherList',
+            name: 'AccountDiscoverList',
             comment: this.$t('GatherAccountsHelpText'),
             icon: 'gather-account',
             edition: 'enterprise',

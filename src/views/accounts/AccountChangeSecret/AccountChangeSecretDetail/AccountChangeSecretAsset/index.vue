@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
-import RelationCard from '@/components/Cards/RelationCard/index'
-import AssetRelationCard from '@/components/Apps/AssetRelationCard'
+import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+import RelationCard from '@/components/Cards/RelationCard/index.vue'
+import AssetRelationCard from '@/components/Apps/AssetRelationCard/index.vue'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {

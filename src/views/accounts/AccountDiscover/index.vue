@@ -13,25 +13,25 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'AccountGatherList',
+        activeMenu: 'AccountDiscoverList',
         submenu: [
           {
             title: this.$t('GatheredAccountList'),
-            name: 'AccountGatherList',
+            name: 'AccountDiscoverList',
             hidden: !this.$hasPerm('accounts.view_gatheredaccount'),
-            component: () => import('@/views/accounts/AccountGather/AccountGatherList.vue')
+            component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverList.vue')
           },
           {
-            title: this.$t('AccountGatherTaskList'),
-            name: 'AccountGatherTaskList',
+            title: this.$t('AccountDiscoverTaskList'),
+            name: 'AccountDiscoverTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
-            component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue')
+            component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskList.vue')
           },
           {
             title: this.$t('ExecutionList'),
-            name: 'AccountGatherTaskExecutionList',
+            name: 'AccountDiscoverTaskExecutionList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution'),
-            component: () => import('@/views/accounts/AccountGather/TaskDetail/TaskExecutionList.vue')
+            component: () => import('@/views/accounts/AccountDiscover/TaskDetail/TaskExecutionList.vue')
           }
         ]
       }

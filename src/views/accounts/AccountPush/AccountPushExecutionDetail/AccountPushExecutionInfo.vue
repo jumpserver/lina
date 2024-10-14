@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 
 export default {
   name: 'AccountPushExecutionInfo',
@@ -45,8 +45,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

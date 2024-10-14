@@ -6,7 +6,7 @@ import ActionsFormatter from './ActionsFormatter.vue'
 import DeleteActionFormatter from './DeleteActionFormatter.vue'
 import DateFormatter from './DateFormatter.vue'
 import AccountShowFormatter from './GrantedAccountShowFormatter.vue'
-import ShowKeyCopyFormatter from './ShowKeyCopyFormatter.vue'
+import SecretViewerFormatter from './SecretViewerFormatter.vue'
 import DialogDetailFormatter from './DialogDetailFormatter.vue'
 import EditableInputFormatter from './EditableInputFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
@@ -28,7 +28,7 @@ export default {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
@@ -52,7 +52,7 @@ export {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,

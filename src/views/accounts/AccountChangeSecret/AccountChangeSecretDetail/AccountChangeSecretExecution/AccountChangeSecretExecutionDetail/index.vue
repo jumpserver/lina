@@ -8,8 +8,8 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountChangeSecretExecutionInfo from './AccountChangeSecretExecutionInfo'
-import AccountChangeSecretRecord from './AccountChangeSecretRecord'
+import AccountChangeSecretExecutionInfo from './AccountChangeSecretExecutionInfo.vue'
+import AccountChangeSecretRecord from './AccountChangeSecretRecord.vue'
 
 export default {
   components: {

@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import Info from './AccountGatherExecutionInfo'
+import Info from './info.vue'
 
 export default {
   components: {

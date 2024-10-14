@@ -1,23 +1,6 @@
 <template>
   <div class="content">
-    <el-tooltip
-      v-if="!isEdit"
-      :content="currentValue"
-      placement="top"
-    >
-      <pre class="text" style="cursor: pointer">{{ currentValue }}</pre>
-    </el-tooltip>
-
-    <el-input
-      v-else
-      ref="editInput"
-      v-model="realValue"
-      class="text edit-input"
-      size="small"
-      @blur="onEditBlur"
-    />
-
-    <span v-if="realValue" class="action">
+    <span v-if="realValue" :class="formatterArgs.actionLeft ? 'left' : 'right'" class="action">
       <template v-for="(item, index) in iActions">
         <el-tooltip
           v-if="item.has"
@@ -31,6 +14,24 @@
         </el-tooltip>
       </template>
     </span>
+    <el-tooltip
+      v-if="!isEdit"
+      :content="currentValue"
+      :disabled="!isShow"
+      :open-delay="500"
+      placement="top"
+    >
+      <pre class="text" style="cursor: pointer">{{ currentValue }}</pre>
+    </el-tooltip>
+
+    <el-input
+      v-else
+      ref="editInput"
+      v-model="realValue"
+      class="text edit-input"
+      size="small"
+      @blur="onEditBlur"
+    />
   </div>
 </template>
 
@@ -39,7 +40,7 @@ import { copy, downloadText } from '@/utils/common'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 
 export default {
-  name: 'ShowKeyCopyFormatter',
+  name: 'SecretViewerFormatter',
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -51,7 +52,9 @@ export default {
           hasDownload: true,
           hasCopy: true,
           hasEdit: true,
-          defaultShow: false
+          defaultShow: false,
+          secretFrom: 'cellValue', // fromCellValue or api,
+          actionLeft: false
         }
       }
     }
@@ -61,7 +64,8 @@ export default {
       isEdit: false,
       realValue: this.cellValue,
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
-      isShow: false
+      isShow: false,
+      getIt: false
     }
   },
   computed: {
@@ -117,20 +121,46 @@ export default {
       }
     }
   },
+  watch: {
+    cellValue: {
+      handler: function(val) {
+        this.realValue = val
+      },
+      immediate: true
+    }
+  },
   mounted() {
     this.isShow = this.formatterArgs.defaultShow
+    if (this.formatterArgs.secretFrom !== 'cellValue') {
+      this.realValue = '--'
+    }
   },
   methods: {
-    onShow() {
-      this.isShow = !this.isShow
+    async getAccountSecret() {
+      if (this.formatterArgs.secretFrom === 'cellValue' || this.getIt) {
+        return
+      }
+      const res = await this.$axios.get(`/api/v1/accounts/account-secrets/${this.row.id}/`)
+      this.realValue = res.secret
     },
-    onCopy() {
+    async onShow() {
+      await this.getAccountSecret()
+      console.log('show: ', this.realValue)
+      this.isShow = !this.isShow
+      setTimeout(() => {
+        this.isShow = false
+      }, 10000)
+    },
+    async onCopy() {
+      await this.getAccountSecret()
       copy(this.realValue)
     },
-    onDownload() {
+    async onDownload() {
+      await this.getAccountSecret()
       downloadText(this.realValue, this.name + '.txt')
     },
-    onEdit() {
+    async onEdit() {
+      await this.getAccountSecret()
       this.isEdit = !this.isEdit
       if (this.isEdit) {
         this.$nextTick(() => {
@@ -146,7 +176,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .content {
-    display: flex;
+    display: inline-block;
     width: 100%;
     overflow: hidden;
     //white-space: nowrap;
@@ -155,6 +185,7 @@ export default {
 
     .text {
       flex: 1;
+      display: inline;
       margin: 0;
       padding: 0;
       overflow: hidden;
@@ -163,13 +194,17 @@ export default {
     }
 
     .action {
-      float: right;
-      font-size: 15px;
+      font-size: 13px;
       cursor: pointer;
-      margin-left: 5px;
+      margin-left: 1px;
+      display: inline;
+
+      &.right {
+        float: right;
+      }
 
       .fa {
-        margin-right: 10px;
+        margin-right: 5px;
 
         &:hover {
           color: var(--color-primary);
