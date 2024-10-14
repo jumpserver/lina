@@ -21,7 +21,6 @@ export default {
     GatewayDialog
   },
   data() {
-    const vm = this
     return {
       GatewayPort: 0,
       GatewayCell: '',
@@ -30,17 +29,6 @@ export default {
         url: '/api/v1/assets/hosts/',
         category: 'host',
         optionInfo: {},
-        headerActions: {
-          extraActions: [
-            {
-              name: this.$t('CloudSync'),
-              title: this.$t('CloudSync'),
-              icon: 'cloud-provider',
-              has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
-              callback: () => this.$router.push({ name: 'CloudAccountList' })
-            }
-          ]
-        },
         tableConfig: {
           columnsMeta: {
             actions: {

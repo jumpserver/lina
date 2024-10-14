@@ -255,7 +255,7 @@ export default {
           display: flex;
           flex-wrap: nowrap;
           margin-top: 0;
-          height: 190px;
+          height: 100%;
 
           .image {
             display: flex;

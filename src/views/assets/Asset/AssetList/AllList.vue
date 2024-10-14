@@ -37,6 +37,7 @@ export default {
     BaseList
   },
   data() {
+    const vm = this
     const tableUrl = '/api/v1/assets/assets/'
     return {
       treeRef: null,
@@ -52,6 +53,15 @@ export default {
         extraQuery: { 'order': '-date_updated' }
       },
       headerActions: {
+        extraActions: [
+          {
+            name: this.$t('CloudSync'),
+            title: this.$t('CloudSync'),
+            icon: 'cloud-provider',
+            has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
+            callback: () => this.$router.push({ name: 'CloudAccountList' })
+          }
+        ],
         handleImportClick: ({ selectedRows }) => {
           this.$message.warning({
             message: this.$t('ImportMessage')
