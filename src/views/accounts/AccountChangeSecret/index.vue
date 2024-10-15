@@ -21,18 +21,18 @@ export default {
             component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeDashboard.vue')
           },
           {
+            title: this.$t('AccountChangeSecret'),
+            name: 'AccountChangeSecretList',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
+          },
+          {
             title: this.$t('ExecutionList'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import(
               '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
               )
-          },
-          {
-            title: this.$t('AccountChangeSecret'),
-            name: 'AccountChangeSecretList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
-            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
           }
         ]
       }
