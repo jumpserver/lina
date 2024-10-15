@@ -3,6 +3,7 @@
     <GenericListPage
       ref="GenericListPage"
       :header-actions="headerActions"
+      :quick-filters="quickFilters"
       :table-config="tableConfig"
     />
     <GenericUpdateFormDialog
@@ -42,6 +43,43 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      quickFilters: [
+        {
+          label: '快速筛选',
+          options: [
+            {
+              label: '禁用的',
+              value: ''
+            },
+            {
+              label: '首次登录的',
+              value: ''
+            },
+            {
+              label: '没有用户组的',
+              value: ''
+            }
+          ]
+        },
+        {
+          label: '认证',
+          options: [
+            {
+              label: '密码过期的',
+              value: ''
+            },
+            {
+              label: '需要更新密码的',
+              value: ''
+            },
+            {
+              label: '没有开启 MFA',
+              value: ''
+            }
+          ]
+        }
+
+      ],
       tableConfig: {
         url: '/api/v1/users/users/',
         permissions: {

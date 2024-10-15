@@ -1,5 +1,6 @@
 <template>
   <div>
+    <QuickFilter :filters="quickFilters" />
     <TableAction
       v-if="hasActions"
       :date-pick="handleDateChange"
@@ -31,11 +32,13 @@ import IBox from '../../IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
+import QuickFilter from './QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/time'
 
 export default {
   name: 'ListTable',
   components: {
+    QuickFilter,
     AutoDataTable,
     TableAction,
     IBox
@@ -51,6 +54,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    quickFilters: {
+      type: Array,
+      default: () => null
     }
   },
   data() {
@@ -190,6 +197,7 @@ export default {
   },
   mounted() {
     this.$set(this.urlUpdated, this.tableUrl, location.href)
+    console.log('QUick ', this.quickFilters)
   },
   deactivated() {
     this.isDeactivated = true

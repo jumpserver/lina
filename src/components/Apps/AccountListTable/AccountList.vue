@@ -1,6 +1,11 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :quick-filters="quickFilters"
+      :table-config="tableConfig"
+    />
     <ViewSecret
       v-if="showViewSecretDialog"
       :account="account"
@@ -147,6 +152,87 @@ export default {
       iAsset: this.asset,
       account: {},
       secretUrl: '',
+      quickFilters: [
+        {
+          label: '过滤',
+          options: [
+            {
+              label: '全部账号',
+              value: ''
+            },
+            {
+              label: '拥有的',
+              value: 'windows'
+            },
+            {
+              label: '收藏夹',
+              value: 'linux'
+            },
+            {
+              label: '最近访问',
+              value: ''
+            }
+          ]
+        },
+        {
+          label: '风险账号',
+          options: [
+            {
+              label: '过期的密码',
+              value: 'true'
+            },
+            {
+              label: '冲突的密码',
+              value: 'true'
+            },
+            {
+              label: '违法策略',
+              value: 'true'
+            },
+            {
+              label: '禁用的资源',
+              value: 'true'
+            },
+            {
+              label: '回收站',
+              value: 'true'
+            }
+          ]
+        },
+        {
+          label: '账号类型',
+          options: [
+            {
+              label: '全部',
+              value: 'windows'
+            },
+            {
+              label: ' 主机',
+              value: 'linux'
+            },
+            {
+              label: '数据库',
+              value: 'database'
+            },
+            {
+              label: '云',
+              value: 'cloud'
+            },
+            {
+              label: '网络设备',
+              value: 'network'
+            },
+            {
+              label: '应用',
+              value: 'application'
+            },
+            {
+              label: '其他',
+              value: 'other'
+            }
+          ]
+        }
+      ],
       tableConfig: {
         url: this.url,
         permissions: {
