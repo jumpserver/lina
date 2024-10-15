@@ -162,7 +162,7 @@ export default {
   },
   activated() {
     setTimeout(() => {
-      this.tab.activeMenu = window.localStorage.getItem('lastTab')
+      this.tab.activeMenu = window.localStorage.getItem('lastTab') || 'host'
       this.$refs.genericListTable.reloadTable()
     }, 300)
   },
