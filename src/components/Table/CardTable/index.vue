@@ -6,11 +6,11 @@
       :table-url="tableUrl"
       v-bind="headerActions"
     />
-    <el-row :gutter="10" type="flex" class="the-row">
-      <IBox v-if="totalData.length === 0" style="width: 100%">
+    <el-row :gutter="10" class="the-row">
+      <IBox v-if="totalData.length === 0">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
-      <el-col v-for="(d, index) in totalData" :key="index" style="max-width: 550px; width: 400px">
+      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -56,7 +56,7 @@
       </el-col>
     </el-row>
     <Pagination
-      v-show="pagination"
+      v-show="pagination && total > paginationSize"
       ref="pagination"
       class="pagination"
       v-bind="$data"
@@ -234,8 +234,6 @@ export default {
 
 <style lang="scss" scoped>
 .the-row {
-  flex-wrap: wrap;
-  width: 100%;
   margin-top: 15px;
   max-width: 1600px;
   text-align: center;
@@ -249,13 +247,12 @@ export default {
 
       ::v-deep .el-card__body {
         height: 100%;
-        padding: unset !important;
 
         .el-row {
           display: flex;
           flex-wrap: nowrap;
           margin-top: 0;
-          height: 190px;
+          height: 100%;
 
           .image {
             display: flex;
@@ -278,7 +275,6 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding: 10px;
 
             .one-line {
               display: flex;
@@ -300,14 +296,15 @@ export default {
 
             .comment {
               display: -webkit-box;
+              height: 120px;
               font-size: 12px;
               padding: 10px 0;
-              line-height: 13px;
               cursor: pointer;
               overflow: hidden;
-              text-overflow: ellipsis;
-              -webkit-line-clamp: 2;
+              -webkit-line-clamp: 4;
+              -webkit-box-flex: 1;
               -webkit-box-orient: vertical;
+              text-align: left;
             }
 
             .tag-zone {
@@ -315,7 +312,6 @@ export default {
               height: 30%;
               align-items: center;
               cursor: pointer;
-              margin-top: 70px;
             }
           }
         }
