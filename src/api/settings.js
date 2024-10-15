@@ -108,7 +108,7 @@ export function getLogo() {
 
 export function getPreference() {
   return request({
-    url: 'api/v1/users/preference/?category=luna',
+    url: '/api/v1/users/preference/?category=luna',
     method: 'get'
   })
 }
