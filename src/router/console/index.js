@@ -27,7 +27,7 @@ export default {
   children: [
     {
       path: '/console/dashboard',
-      component: () => import('@/views/dashboard/Console/index'),
+      component: () => import('@/views/dashboard/Console/index.vue'),
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',

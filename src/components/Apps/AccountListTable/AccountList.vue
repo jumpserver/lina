@@ -49,7 +49,9 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter, PlatformFormatter, SecretViewerFormatter
+} from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -89,7 +91,7 @@ export default {
     },
     hasClone: {
       type: Boolean,
-      default: false
+      default: true
     },
     asset: {
       type: Object,
@@ -119,7 +121,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'asset', 'date_updated'
+        'name', 'username', 'secret', 'asset', 'platform', 'date_updated', 'connect'
       ])
     },
     headerExtraActions: {
@@ -153,6 +155,7 @@ export default {
         },
         extraQuery: this.extraQuery,
         columnsExclude: ['spec_info'],
+        columnsAdd: ['secret', 'platform', 'connect'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: this.columnsDefault
@@ -172,6 +175,26 @@ export default {
               }
             }
           },
+          secret: {
+            formatter: SecretViewerFormatter,
+            formatterArgs: {
+              secretFrom: 'api',
+              hasDownload: false
+            }
+          },
+          connect: {
+            label: this.$t('Connect'),
+            width: '80px',
+            formatter: () => {
+              return (
+                <span class='connect'>
+                  <el-button type='primary' size='mini' plain>
+                    <i class='fa fa-desktop'/>
+                  </el-button>
+                </span>
+              )
+            }
+          },
           asset: {
             formatter: function(row) {
               const to = {
@@ -183,6 +206,13 @@ export default {
               } else {
                 return <span>{row.asset.name}</span>
               }
+            }
+          },
+          platform: {
+            label: this.$t('Platform'),
+            formatter: PlatformFormatter,
+            formatterArgs: {
+              platformAttr: 'asset.platform'
             }
           },
           username: {
@@ -217,7 +247,8 @@ export default {
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
-              hasClone: this.hasClone,
+              hasClone: false,
+              canClone: true,
               moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
@@ -255,7 +286,7 @@ export default {
                 },
                 {
                   name: 'Test',
-                  title: this.$t('Test'),
+                  title: this.$t('验证密文'),
                   can: ({ row }) =>
                     !this.$store.getters.currentOrgIsRoot &&
                     this.$hasPerm('accounts.verify_account') &&
@@ -283,6 +314,26 @@ export default {
                       this.$message.success(this.$tc('ClearSuccessMsg'))
                     })
                   }
+                },
+                {
+                  name: 'SecretHistory',
+                  title: '密文历史'
+                },
+                {
+                  name: 'CopyToOther',
+                  title: '复制到其他资产',
+                  type: 'primary',
+                  divided: true
+                },
+                {
+                  name: 'MoveToOther',
+                  title: '移动到其他资产',
+                  type: 'primary'
+                },
+                {
+                  name: 'Clone',
+                  title: this.$t('Duplicate'),
+                  divided: true
                 }
               ]
             }
@@ -350,8 +401,8 @@ export default {
             icon: 'fa-link',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
-                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
-                  !this.$store.getters.currentOrgIsRoot
+                ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
+                !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
@@ -511,4 +562,5 @@ export default {
 .cell a {
   color: var(--color-info);
 }
+
 </style>

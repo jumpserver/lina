@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 

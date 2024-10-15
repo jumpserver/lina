@@ -8,8 +8,8 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountPushExecutionInfo from './AccountPushExecutionInfo'
-import AccountPushExecutionTaskList from './AccountPushExecutionTaskList'
+import AccountPushExecutionInfo from './AccountPushExecutionInfo.vue'
+import AccountPushExecutionTaskList from './AccountPushExecutionTaskList.vue'
 
 export default {
   components: {

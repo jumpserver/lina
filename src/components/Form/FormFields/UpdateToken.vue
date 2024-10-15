@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="update-token">
     <el-button v-show="!isShow" icon="el-icon-edit" type="text" @click="isShow=true">
       {{ text }}
     </el-button>
@@ -8,14 +8,19 @@
       v-model.trim="curValue"
       :placeholder="placeholder"
       :type="type"
-      autocomplete="new-password"
+      class="password-input"
       show-password
       @change="onChange"
     />
+    <el-button size="small" type="text" @click="randomPassword">
+      <i class="fa fa-retweet" />
+    </el-button>
   </div>
 </template>
 
 <script>
+import { randomString } from '@/utils/string'
+
 export default {
   props: {
     value: {
@@ -55,7 +60,24 @@ export default {
   methods: {
     onChange(e) {
       this.$emit('input', this.curValue)
+    },
+    randomPassword() {
+      this.curValue = randomString(24, true)
+      this.$emit('input', this.curValue)
     }
   }
 }
 </script>
+<style lang='scss' scoped>
+.password-input {
+  width: calc(100% - 50px);
+}
+
+.update-token {
+  i {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+  }
+}
+
+</style>

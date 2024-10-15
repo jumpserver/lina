@@ -6,7 +6,7 @@ import ActionsFormatter from './ActionsFormatter.vue'
 import DeleteActionFormatter from './DeleteActionFormatter.vue'
 import DateFormatter from './DateFormatter.vue'
 import AccountShowFormatter from './GrantedAccountShowFormatter.vue'
-import ShowKeyCopyFormatter from './ShowKeyCopyFormatter.vue'
+import SecretViewerFormatter from './SecretViewerFormatter.vue'
 import DialogDetailFormatter from './DialogDetailFormatter.vue'
 import EditableInputFormatter from './EditableInputFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
@@ -18,6 +18,7 @@ import ProtocolsFormatter from './ProtocolsFormatter.vue'
 import TagChoicesFormatter from './TagChoicesFormatter.vue'
 import SwitchFormatter from './SwitchFormatter.vue'
 import AccountInfoFormatter from './AccountInfoFormatter.vue'
+import PlatformFormatter from './PlatformFormatter.vue'
 
 export default {
   DetailFormatter,
@@ -27,7 +28,7 @@ export default {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
@@ -39,6 +40,7 @@ export default {
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
+  PlatformFormatter,
   AccountInfoFormatter
 }
 
@@ -50,7 +52,7 @@ export {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
@@ -62,5 +64,6 @@ export {
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
+  PlatformFormatter,
   AccountInfoFormatter
 }

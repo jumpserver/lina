@@ -8,27 +8,35 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import Info from './AccountGatherExecutionInfo'
+import AccountPushExecutionInfo from './AccountPushExecutionInfo'
+import AccountPushExecutionTaskList from './AccountPushExecutionTaskList'
 
 export default {
   components: {
     GenericDetailPage,
-    Info
+    AccountPushExecutionInfo,
+    AccountPushExecutionTaskList
   },
   data() {
     return {
       execution: { id: '' },
       config: {
-        activeMenu: 'Info',
+        url: '/api/v1/accounts/push-account-executions',
+        activeMenu: 'AccountPushExecutionInfo',
         actions: {
-          detailApiUrl: `/api/v1/accounts/gather-account-executions/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },
         submenu: [
           {
             title: this.$t('Basic'),
-            name: 'Info'
+            name: 'AccountPushExecutionInfo',
+            hidden: () => !this.$hasPerm('accounts.view_pushaccountexecution')
+          },
+          {
+            title: this.$t('TaskList'),
+            name: 'AccountPushExecutionTaskList',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         getTitle: this.getExecutionTitle

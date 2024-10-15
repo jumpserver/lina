@@ -188,6 +188,7 @@ const actions = {
     commit('SET_MFA_VERIFY')
   },
   changeToView({ commit }, viewName) {
+    console.log('Change to view')
     const mapper = {
       console: state.consoleOrgs,
       audit: state.auditOrgs,
