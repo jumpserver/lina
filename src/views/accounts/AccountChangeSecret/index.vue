@@ -16,10 +16,9 @@ export default {
         activeMenu: 'AccountChangeSecretList',
         submenu: [
           {
-            title: this.$t('AccountChangeSecret'),
-            name: 'AccountChangeSecretList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
-            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
+            title: this.$t('Overview'),
+            name: 'AccountChangeDashboard',
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeDashboard.vue')
           },
           {
             title: this.$t('ExecutionList'),
@@ -28,6 +27,12 @@ export default {
             component: () => import(
               '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
               )
+          },
+          {
+            title: this.$t('AccountChangeSecret'),
+            name: 'AccountChangeSecretList',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
           }
         ]
       }

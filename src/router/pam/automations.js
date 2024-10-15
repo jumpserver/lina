@@ -21,8 +21,7 @@ export default [
         component: () => import('@/views/accounts/AccountDiscover/index.vue'),
         name: 'AccountDiscoverList',
         meta: {
-          menuTitle: i18n.t('GatherAccounts'),
-          title: i18n.t('AccountDiscoverTaskList'),
+          title: i18n.t('DiscoverAccounts'),
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_gatheredaccount']
         }
