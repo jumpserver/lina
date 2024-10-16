@@ -25,7 +25,7 @@
       <el-form-item style="float: right">
         <template v-if="hasActionPerm">
           <el-button
-            :disabled="object.status.value === 'closed'"
+            :disabled="isDisabled || object.status.value === 'closed'"
             size="small"
             type="primary"
             @click="handleApprove"
@@ -33,7 +33,7 @@
             <i class="fa fa-check" /> {{ $t('Accept') }}
           </el-button>
           <el-button
-            :disabled="object.status.value === 'closed'"
+            :disabled="isDisabled || object.status.value === 'closed'"
             size="small"
             type="warning"
             @click="handleReject"
@@ -43,7 +43,7 @@
         </template>
         <el-button
           v-if="isSelfTicket"
-          :disabled="object.status.value === 'closed'"
+          :disabled="isDisabled || object.status.value === 'closed'"
           size="small"
           type="danger"
           @click="handleClose"
@@ -92,6 +92,7 @@ export default {
   },
   data() {
     return {
+      isDisabled: false,
       comments: '',
       type_api: '',
       imageUrl: require('@/assets/img/avatar.png'),
@@ -154,17 +155,35 @@ export default {
       this.createComment(function() {
       })
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios.put(url).then(res => {
+        this.reloadPage()
+      }).catch(err => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.isDisabled = false
+      })
     },
     defaultReject() {
       this.createComment(function() {
       })
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios.put(url).then(res => {
+        this.reloadPage()
+      }).catch(err => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.isDisabled = false
+      })
     },
     defaultClose() {
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios.put(url).then(res => {
+        this.reloadPage()
+      }).catch(err => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.isDisabled = false
+      })
     },
     createComment(successCallback) {
       const commentText = this.form.comments
@@ -185,17 +204,42 @@ export default {
         }
       })
     },
+    handleAction(actionType) {
+      if (this.isDisabled) {
+        return
+      }
+
+      this.isDisabled = true
+      let handler
+      switch (actionType) {
+        case 'approve':
+          handler = this.approve || this.defaultApprove
+          break
+        case 'reject':
+          handler = this.reject || this.defaultReject
+          break
+        case 'close':
+          handler = this.close || this.defaultClose
+          break
+        default:
+          handler = null
+          break
+      }
+
+      if (handler) {
+        handler()
+      } else {
+        this.$message.error('No handler for action')
+      }
+    },
     handleApprove() {
-      const handler = this.approve || this.defaultApprove
-      handler()
+      this.handleAction('approve')
     },
     handleReject() {
-      const handler = this.reject || this.defaultReject
-      handler()
+      this.handleAction('reject')
     },
     handleClose() {
-      const handler = this.close || this.defaultClose
-      handler()
+      this.handleAction('close')
     },
     handleComment() {
       this.createComment(
