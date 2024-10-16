@@ -7,7 +7,6 @@ import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
 import { assignIfNot, toSentenceCase } from '@/utils/common'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
-import TransferSelect from '@/components/Form/FormFields/TransferSelect.vue'
 import i18n from '@/i18n/i18n'
 
 export class FormFieldGenerator {
@@ -135,9 +134,6 @@ export class FormFieldGenerator {
       case 'comment':
         field.el.type = 'textarea'
         break
-      case 'users':
-        field.component = TransferSelect
-        field.el.label = field.label
     }
     return field
   }

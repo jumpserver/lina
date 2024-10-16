@@ -4,7 +4,6 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import TransSelect from '@/components/Form/FormFields/TransferSelect.vue'
 
 export default {
   components: {
@@ -23,7 +22,6 @@ export default {
         ],
         fieldsMeta: {
           users: {
-            component: TransSelect,
             el: {
               url: '/api/v1/users/users/?fields_size=mini&order=name',
               ajax: {
