@@ -8,6 +8,7 @@
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
+      :quick-filters="quickFilters"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
@@ -41,6 +42,38 @@ export default {
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
       },
+      quickFilters: [
+        {
+          label: '快速过滤',
+          options: [
+            {
+              label: '未同步到资产',
+              value: ''
+            },
+            {
+              label: this.$t('最近一个月'),
+              value: ''
+            }
+          ]
+        },
+        {
+          label: this.$t('最近发现'),
+          options: [
+            {
+              label: '最近一天',
+              value: ''
+            },
+            {
+              label: '最近一周',
+              value: ''
+            },
+            {
+              label: '最近一个月',
+              value: ''
+            }
+          ]
+        }
+      ],
       tableConfig: {
         url: '/api/v1/accounts/gathered-accounts/',
         hasTree: true,

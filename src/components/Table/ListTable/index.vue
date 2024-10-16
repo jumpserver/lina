@@ -197,7 +197,6 @@ export default {
   },
   mounted() {
     this.$set(this.urlUpdated, this.tableUrl, location.href)
-    console.log('QUick ', this.quickFilters)
   },
   deactivated() {
     this.isDeactivated = true

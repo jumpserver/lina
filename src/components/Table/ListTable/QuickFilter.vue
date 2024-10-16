@@ -4,7 +4,7 @@
       <div class="quick-filter-zone">
         <div v-for="category in filters" :key="category.label" class="item-zone">
           <h5>{{ category.label }}</h5>
-          <div>
+          <div class="filter-options">
             <span v-for="option in category.options" :key="option.label" class="item">
               {{ option.label }}
             </span>
@@ -45,12 +45,10 @@ export default {
     }
   },
   mounted() {
-    console.log(this.filters)
   },
   methods: {
     toggle() {
       this.isExpand = !this.isExpand
-      console.log('toggle')
     }
   }
 }
@@ -106,6 +104,10 @@ export default {
    display: inline-block;
    width: calc(100% - 25px);
    margin-bottom: 10px;
+ }
+
+ .filter-options {
+   display: block;
  }
 
  .expand-bar-wrap {

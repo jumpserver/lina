@@ -111,6 +111,9 @@ export default {
           tooltip: this.$t('Copy')
         }
       ]
+      if (this.formatterArgs.actionLeft) {
+        actions.reverse()
+      }
       return actions
     },
     currentValue() {
@@ -145,7 +148,6 @@ export default {
     },
     async onShow() {
       await this.getAccountSecret()
-      console.log('show: ', this.realValue)
       this.isShow = !this.isShow
       setTimeout(() => {
         this.isShow = false

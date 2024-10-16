@@ -265,7 +265,8 @@ export default {
             formatter: SecretViewerFormatter,
             formatterArgs: {
               secretFrom: 'api',
-              hasDownload: false
+              hasDownload: false,
+              actionLeft: true
             }
           },
           connect: {

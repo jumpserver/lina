@@ -43,6 +43,7 @@
               :key="componentKey"
               ref="ListTable"
               :header-actions="headerActions"
+              :quick-filters="quickFilters"
               :table-config="iTableConfig"
               v-on="$listeners"
             />
