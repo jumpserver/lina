@@ -4,7 +4,7 @@ import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
 import store from '@/store'
 
 const validatorInterval = (rule, value, callback) => {
-  if (parseInt(value) < 1) {
+  if (isNaN(parseInt(value, 10)) || parseInt(value) < 1) {
     return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
