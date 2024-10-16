@@ -128,6 +128,8 @@ export function getErrorResponseMsg(error) {
     }).filter(i => i).join('; ')
   } else if (typeof data === 'string') {
     return data
+  } else {
+    msg = error.toString()
   }
   return msg
 }
@@ -310,4 +312,5 @@ export function toSentenceCase(string) {
   }).join(' ')
   return s[0].toUpperCase() + s.slice(1)
 }
+
 export { BASE_URL }
