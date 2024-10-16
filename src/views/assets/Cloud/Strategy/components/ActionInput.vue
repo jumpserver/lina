@@ -39,7 +39,8 @@ export default {
         submitBtnSize: 'mini',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {},
+        onSubmit: () => {
+        },
         submitMethod: () => 'post',
         getUrl: () => '',
         cleanFormValue(data) {
@@ -86,7 +87,11 @@ export default {
                   this.formConfig.fieldsMeta.protocols.el.hidden = true
                 }
                 this.resourceType = val
-                this.formConfig.fieldsMeta.value.el.ajax.url = url
+                if (url) {
+                  this.formConfig.fieldsMeta.value.el.ajax.url = url
+                } else {
+                  this.formConfig.fieldsMeta.attr.el.remote = false
+                }
                 this.formConfig.fieldsMeta.value.el.options = options
               }
             }
@@ -151,21 +156,31 @@ export default {
       tableConfig: {
         columns: [
           { prop: 'attr', label: this.$t('ResourceType'), formatter: tableFormatter('resource_type') },
-          { prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => { return this.globalResource }) },
+          {
+            prop: 'value', label: this.$t('Resource'), formatter: tableFormatter('resource', () => {
+              return this.globalResource
+            })
+          },
           { prop: 'protocols', label: this.$t('Other'), formatter: tableFormatter('protocols') },
-          { prop: 'action', label: this.$t('Action'), align: 'center', width: '100px', formatter: (row, col, cellValue, index) => {
-            return (
-              <div className='input-button'>
-                <el-button
-                  icon='el-icon-minus'
-                  size='mini'
-                  style={{ 'flexShrink': 0 }}
-                  type='danger'
-                  onClick={ this.handleDelete(index) }
-                />
-              </div>
-            )
-          } }
+          {
+            prop: 'action',
+            label: this.$t('Action'),
+            align: 'center',
+            width: '100px',
+            formatter: (row, col, cellValue, index) => {
+              return (
+                <div className='input-button'>
+                  <el-button
+                    icon='el-icon-minus'
+                    size='mini'
+                    style={{ 'flexShrink': 0 }}
+                    type='danger'
+                    onClick={this.handleDelete(index)}
+                  />
+                </div>
+              )
+            }
+          }
         ],
         totalData: this.value || [],
         hasPagination: false
@@ -177,7 +192,9 @@ export default {
   },
   methods: {
     init() {
-      this.nameOptions.map((o) => { this.globalResource[o.value] = o.label })
+      this.nameOptions.map((o) => {
+        this.globalResource[o.value] = o.label
+      })
     },
     onSubmit() {
       this.$emit('input', this.tableConfig.totalData)
@@ -218,9 +235,11 @@ export default {
 ::v-deep .el-form-item:nth-child(-n+3) {
   width: 43.5%;
 }
+
 ::v-deep .el-form-item:last-child {
   width: 6%;
 }
+
 .action-input {
   margin-top: -10px;
 }
