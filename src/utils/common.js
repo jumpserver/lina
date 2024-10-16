@@ -128,6 +128,8 @@ export function getErrorResponseMsg(error) {
     }).filter(i => i).join('; ')
   } else if (typeof data === 'string') {
     return data
+  } else {
+    msg = error.toString()
   }
   return msg
 }
