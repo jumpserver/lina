@@ -15,6 +15,7 @@ export function testEmailSetting(data) {
     data: data
   })
 }
+
 export function importLicense(formData) {
   return request({
     url: '/api/v1/xpack/license/import',
@@ -25,6 +26,7 @@ export function importLicense(formData) {
     data: formData
   })
 }
+
 export function testLdapSetting(data, refresh = true) {
   let url = '/api/v1/settings/ldap/testing/config/'
   if (refresh) {
@@ -96,9 +98,17 @@ export function getPublicSettings(isOpen) {
     method: 'get'
   })
 }
+
 export function getLogo() {
   return request({
     url: '/api/v1/xpack/interface/setting/',
+    method: 'get'
+  })
+}
+
+export function getPreference() {
+  return request({
+    url: '/api/v1/users/preference/?category=luna',
     method: 'get'
   })
 }

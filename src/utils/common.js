@@ -128,6 +128,8 @@ export function getErrorResponseMsg(error) {
     }).filter(i => i).join('; ')
   } else if (typeof data === 'string') {
     return data
+  } else {
+    msg = error.toString()
   }
   return msg
 }
@@ -310,4 +312,26 @@ export function toSentenceCase(string) {
   }).join(' ')
   return s[0].toUpperCase() + s.slice(1)
 }
+
 export { BASE_URL }
+
+export function openNewWindow(url) {
+  let count
+  let top = 50
+  count = parseInt(window.sessionStorage.getItem('newWindowCount'), 10)
+  if (isNaN(count)) {
+    count = 0
+  }
+  let left = 100 + count * 100
+  top = 50 + count * 50
+  if (left + screen.width / 3 > screen.width) {
+    // 支持两排足以
+    top = screen.height / 3
+    count = 1
+    left = 100
+  }
+  let params = 'toolbar=yes,scrollbars=yes,resizable=yes'
+  params = params + `,top=${top},left=${left},width=${screen.width / 3},height=${screen.height / 3}`
+  window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
+  window.open(url, '_blank', params)
+}

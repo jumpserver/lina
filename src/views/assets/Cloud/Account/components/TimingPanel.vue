@@ -73,13 +73,7 @@ export default {
           btn.loading = true
         }
       })
-
-      if (form.value.interval && typeof form.value.interval === 'number') {
-        form.value.interval = parseInt(form.value.interval, 10)
-      } else {
-        form.value.interval = 24
-      }
-
+      form.value.interval = parseInt(form.value.interval, 10)
       this.$refs.form.$refs.form.dataForm.submitForm('form', false)
     },
     handleSubmitSuccess(res) {

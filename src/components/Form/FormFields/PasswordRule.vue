@@ -48,7 +48,8 @@ export default {
             type: 'input-number',
             el: {
               min: 8,
-              max: 30
+              max: 36,
+              size: 'mini'
             }
           },
           {

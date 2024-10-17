@@ -38,7 +38,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -592,4 +592,10 @@ li.rmenu i.fa {
     width: 6px; /* 设置垂直滚动条的宽度 */
     height: 6px; /* 设置水平滚动条的高度 */
   }
+}
+
+.black-theme-popover {
+  width: 300px;
+  max-height: 700px;
+  overflow-y: scroll;
 }

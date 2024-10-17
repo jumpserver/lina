@@ -78,7 +78,7 @@ export default {
         formatterData = data
       }
       return (
-        <span>{formatterData}</span>
+        <span style={{ whiteSpace: 'pre-wrap', lineHeight: '1.2' }}>{formatterData}</span>
       )
     }
     if (this.value instanceof Array) {

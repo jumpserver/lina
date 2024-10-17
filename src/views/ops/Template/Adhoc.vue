@@ -17,7 +17,7 @@ export default {
         url: '/api/v1/ops/adhocs/',
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'module', 'args', 'comment', 'scope', 'date_created', 'actions']
+          default: ['name', 'module', 'args', 'comment', 'scope', 'date_created', 'actions', 'created_by']
         },
         columnsMeta: {
           name: {
@@ -38,7 +38,8 @@ export default {
               canDelete: ({ row }) => {
                 return this.$hasPerm('ops.delete_adhoc') && row.creator === currentUserID
               },
-              hasClone: false
+              hasClone: true,
+              cloneRoute: 'AdhocCreate'
             }
           }
         }

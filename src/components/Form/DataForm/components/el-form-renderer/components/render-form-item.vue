@@ -17,7 +17,7 @@
         placement="right"
         popper-class="help-tips"
       >
-        <div slot="content" v-sanitize="data.helpTip" /> <!-- Noncompliant -->
+        <div slot="content" v-sanitize="data.helpTip" class="help-tip-content" /> <!-- Noncompliant -->
         <i class="fa fa-question-circle-o help-tip-icon" />
       </el-tooltip>
     </template>
@@ -321,5 +321,10 @@ export default {
   &:hover {
     cursor: pointer;
   }
+}
+
+.help-tip-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>

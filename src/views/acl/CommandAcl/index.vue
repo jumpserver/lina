@@ -2,7 +2,6 @@
   <TabPage
     :active-menu.sync="config.activeMenu"
     :submenu="config.submenu"
-    @tab-click="handleTabClick"
   />
 </template>
 
@@ -34,18 +33,6 @@ export default {
           }
         ]
       }
-    }
-  },
-  methods: {
-    handleTabClick(tab) {
-      const query = _.cloneDeep(this.$route.query)
-      const newQuery = {
-        ...query,
-        tab: tab.name
-      }
-      this.$nextTick(() => {
-        this.$router.replace({ query: newQuery })
-      })
     }
   }
 }

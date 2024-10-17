@@ -33,7 +33,7 @@ export default {
             'redis_port', 'sqlserver_port', 'oracle_port_range'
           ]
         ],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         host: {
@@ -41,13 +41,17 @@ export default {
         },
         oracle_port_range: {
           disabled: true
+        },
+        is_active: {
+          disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
         }
       },
       hasDetailInMsg: false
     }
   },
   computed: {},
-  created() {},
+  created() {
+  },
   methods: {}
 }
 </script>

@@ -37,7 +37,12 @@ export default {
         notShowBuiltinTree: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
+        edit: {
+          drag: {
+            isMove: false
+          }
+        }
       },
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',

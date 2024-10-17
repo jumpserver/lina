@@ -1,5 +1,5 @@
 <template>
-  <el-input v-model="iValue" v-bind="$attrs" v-on="$listeners">
+  <el-input v-bind="$attrs" v-on="$listeners">
     <template slot="append">{{ iUnit }}</template>
   </el-input>
 </template>
@@ -30,9 +30,6 @@ export default {
   computed: {
     iUnit() {
       return this.displayMapper[this.unit] || this.unit
-    },
-    iValue() {
-      return this.$attrs.value ? this.$attrs.value : this.defaultValue
     }
   }
 }

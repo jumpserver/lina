@@ -23,6 +23,9 @@ export default {
           'AUTH_PASSKEY', 'FIDO_SERVER_ID', 'FIDO_SERVER_NAME'
         ],
         fieldsMeta: {
+          'FIDO_SERVER_ID': {
+            placeholder: 'js.example.org'
+          }
         },
         submitMethod() {
           return 'patch'
@@ -30,8 +33,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

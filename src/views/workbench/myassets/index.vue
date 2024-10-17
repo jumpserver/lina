@@ -15,6 +15,8 @@
 import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import Page from '@/layout/components/Page/index.vue'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
+import { getPreference } from '@/api/settings'
+import { openNewWindow } from '@/utils/common'
 
 export default {
   components: {
@@ -25,6 +27,7 @@ export default {
     return {
       treeUrl: `/api/v1/perms/users/self/nodes/children/tree/`,
       tableUrl: `/api/v1/perms/users/self/assets/`,
+      preference: {},
       actions: {
         width: '88px',
         align: 'center',
@@ -41,8 +44,13 @@ export default {
               can: ({ row }) => row.is_active,
               callback: ({ row }) => {
                 const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
-                const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
-                window.open(url, '_blank')
+                const url = `/luna/connect?login_to=${row.id}`
+                if (this.preference?.basic?.connect_default_open_method === 'new') {
+                  openNewWindow(url)
+                } else {
+                  const url = `/luna/?login_to=${row.id}${oid ? `&oid=${oid}` : ''}`
+                  window.open(url, '_blank')
+                }
               }
             },
             {
@@ -81,6 +89,9 @@ export default {
   },
   mounted() {
     this.refreshAllFavorites()
+    this.preference = getPreference().then((resp) => {
+      this.preference = resp
+    })
   },
   methods: {
     refreshAllFavorites() {
