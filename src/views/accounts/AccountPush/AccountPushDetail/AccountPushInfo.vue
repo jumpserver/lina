@@ -11,7 +11,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -86,8 +86,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

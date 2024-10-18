@@ -8,11 +8,11 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import Detail from './Detail'
-import TaskExecutionList from './TaskExecutionList'
+import Detail from './Detail.vue'
+import TaskExecutionList from './TaskExecutionList.vue'
 
 export default {
-  name: 'AccountGatherTaskDetail',
+  name: 'AccountDiscoverTaskDetail',
   components: {
     GenericDetailPage,
     TabPage,
@@ -25,9 +25,9 @@ export default {
       config: {
         url: '/api/v1/accounts/gather-account-automations',
         activeMenu: 'Detail',
-        titlePrefix: this.$t('AccountGatherDetail'),
+        titlePrefix: this.$t('AccountDiscoverDetail'),
         actions: {
-          deleteSuccessRoute: 'AccountGatherList',
+          deleteSuccessRoute: 'AccountDiscoverList',
           canUpdate: this.$hasPerm('accounts.change_gatheraccountsautomation'),
           canDelete: this.$hasPerm('accounts.delete_gatheraccountsautomation')
         },

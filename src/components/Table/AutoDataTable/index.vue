@@ -348,6 +348,8 @@ export default {
 
       let configColumns = config.columns || allColumnNames
       const columnsExclude = config.columnsExclude || []
+      const columnsAdd = config.columnsAdd || []
+      configColumns = configColumns.concat(columnsAdd)
       configColumns = configColumns.filter(item => !columnsExclude.includes(item))
 
       // 解决后端 API 返回字段中包含 actions 的问题;

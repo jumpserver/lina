@@ -16,6 +16,11 @@ export default {
         activeMenu: 'AccountChangeSecretList',
         submenu: [
           {
+            title: this.$t('Overview'),
+            name: 'AccountChangeDashboard',
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeDashboard.vue')
+          },
+          {
             title: this.$t('AccountChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),

@@ -8,9 +8,9 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountChangeSecretInfo from './AccountChangeSecretInfo'
-import AccountChangeSecretAsset from './AccountChangeSecretAsset/index'
-import AccountChangeSecretExecutionList from './AccountChangeSecretExecution/AccountChangeSecretExecutionList'
+import AccountChangeSecretInfo from './AccountChangeSecretInfo.vue'
+import AccountChangeSecretAsset from './AccountChangeSecretAsset/index.vue'
+import AccountChangeSecretExecutionList from './AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
 
 export default {
   components: {

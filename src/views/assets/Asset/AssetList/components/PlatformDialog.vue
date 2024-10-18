@@ -29,7 +29,9 @@
                   shadow="hover"
                   @click.native="createAsset(platform)"
                 >
-                  <img :src="loadImage(platform)" alt="icon" class="asset-icon">
+                  <div class="icon-zone">
+                    <img :src="loadImage(platform)" alt="icon" class="asset-icon">
+                  </div>
                   <span class="platform-name">{{ platform.name }}</span>
                 </el-card>
               </el-tooltip>
@@ -42,6 +44,7 @@
 </template>
 <script>
 import Dialog from '@/components/Dialog'
+import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
   name: 'PlatformDialog',
@@ -126,23 +129,7 @@ export default {
   },
   methods: {
     loadImage(platform) {
-      const platformMap = {
-        'Huawei': 'huawei',
-        'Cisco': 'cisco',
-        'Gateway': 'gateway',
-        'macOS': 'macos',
-        'BSD': 'bsd',
-        'Vmware-vSphere': 'vmware'
-      }
-
-      const value = platformMap[platform.name] || platform.type.value
-
-      try {
-        return require(`@/assets/img/icons/${value}.png`)
-      } catch (error) {
-        this.$log.debug(`Image not found: ${value}.png`)
-        return require(`@/assets/img/icons/other.png`)
-      }
+      return loadPlatformIcon(platform.name, platform.type)
     },
     loadRecentPlatformIds() {
       const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
@@ -235,8 +222,11 @@ export default {
   align-items: center;
 }
 
-.asset-icon {
+.icon-zone {
   width: 2em;
+}
+
+.asset-icon {
   height: 2em;
   vertical-align: -0.2em;
   fill: currentColor;

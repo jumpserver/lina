@@ -82,7 +82,7 @@ export default {
         ]
       }
       const hasPerms = this.$hasPerm('orgs.view_organization | orgs.add_organization')
-      const isConsole = this.currentViewRoute.name === 'console'
+      const isConsole = ['console'].includes(this.currentViewRoute.name)
       return hasPerms && isConsole ? orgActions : {}
     },
     orgChoicesGroup() {

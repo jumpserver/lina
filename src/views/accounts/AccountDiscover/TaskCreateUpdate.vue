@@ -15,8 +15,9 @@ export default {
     return {
       fields: [
         [this.$t('Basic'), ['name', 'nodes', 'assets']],
+        [this.$t('发现配置'), ['is_sync_account', 'recipients']],
         [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('Other'), ['is_sync_account', 'is_active', 'recipients', 'comment']]
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/accounts/gather-account-automations/',
       hasDetailInMsg: false,
@@ -67,8 +68,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountGatherList' },
-      updateSuccessNextRoute: { name: 'AccountGatherList' },
+      createSuccessNextRoute: { name: 'AccountDiscoverList' },
+      updateSuccessNextRoute: { name: 'AccountDiscoverList' },
       cleanFormValue(values) {
         values.interval = values.interval || null
         return values

@@ -163,7 +163,8 @@ export const accountFieldsMeta = (vm) => {
           !automation.ansible_enabled ||
           !vm.$hasPerm('accounts.push_account') ||
           (formValue.secret_type === 'ssh_key' && vm.iPlatform.type.value === 'windows') ||
-          vm.addTemplate
+          vm.addTemplate ||
+          !formValue.secret_reset
       }
     },
     params: {

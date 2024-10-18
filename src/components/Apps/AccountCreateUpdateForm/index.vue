@@ -65,7 +65,8 @@ export default {
         [this.$t('Basic'), ['assets', 'name', 'username', 'privileged', 'su_from', 'su_from_username']],
         [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
-          'access_key', 'passphrase', 'api_key'
+          'access_key', 'passphrase', 'api_key',
+          'secret_reset'
         ]],
         [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],

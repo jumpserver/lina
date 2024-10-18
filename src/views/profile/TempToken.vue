@@ -9,7 +9,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
+import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
         columnsMeta: {
           secret: {
             label: this.$t('TempToken'),
-            formatter: ShowKeyCopyFormatter
+            formatter: SecretViewerFormatter
           },
           expire: {
             label: this.$t('Expired') + '( s )'
