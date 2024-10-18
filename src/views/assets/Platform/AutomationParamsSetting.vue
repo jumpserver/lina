@@ -93,8 +93,14 @@ export default {
         hasButtons: true,
         hasReset: false,
         fields: [],
-        method: 'get',
-        fieldsMeta: {}
+        method: 'get'
+      },
+      preFieldsMeta: {
+        'change_secret_by_ssh': {
+          commands: {
+            helpTextAsTip: false
+          }
+        }
       }
     }
   },
@@ -156,6 +162,15 @@ export default {
           const item = { ...v, component: component }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
+        }
+      }
+
+      const preDefineFieldMeta = this.preFieldsMeta[method]
+      if (preDefineFieldMeta) {
+        for (const [k, v] of Object.entries(preDefineFieldMeta)) {
+          for (const [j, l] of Object.entries(v)) {
+            fieldsMeta[method]['fieldsMeta'][k][j] = l
+          }
         }
       }
 

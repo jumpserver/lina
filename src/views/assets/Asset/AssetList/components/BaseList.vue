@@ -31,6 +31,7 @@ import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
@@ -129,7 +130,7 @@ export default {
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
-            'name', 'address', 'platform',
+            'name', 'address', 'accounts_amount', 'platform',
             'connectivity', 'actions'
           ]
         },
@@ -167,6 +168,28 @@ export default {
                 return {
                   name: 'AssetMoreInformationEdit',
                   params: { id: row.id }
+                }
+              }
+            }
+          },
+          accounts_amount: {
+            label: this.$t('Accounts'),
+            formatter: AmountFormatter,
+            width: '100px',
+            formatterArgs: {
+              async: true,
+              getItem(item) {
+                return `${item.name}(${item.username})`
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: {
+                    id: row.id
+                  },
+                  query: {
+                    tab: 'Account'
+                  }
                 }
               }
             }

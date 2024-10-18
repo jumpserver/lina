@@ -124,7 +124,7 @@ export default {
       }
     },
     cloneNameSuffix: {
-      type: String,
+      type: [String, Number],
       default: function() {
         return this.$t('Duplicate').toLowerCase()
       }
@@ -372,7 +372,7 @@ export default {
             name = object['hostname']
             attr = 'hostname'
           }
-          object[attr] = name + '-' + this.cloneNameSuffix
+          object[attr] = name + '-' + this.cloneNameSuffix.toString()
         } else {
           object = await this.getObjectDetail(this.iUrl)
         }
