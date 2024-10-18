@@ -106,7 +106,7 @@ export default {
         {
           name: 'actionSetting',
           icon: 'system-setting',
-          tip: this.$t('TableSetting'),
+          tip: this.$t('ListPreference'),
           has: this.hasColumnSetting,
           callback: this.handleTableSettingClick.bind(this)
         },

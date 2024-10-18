@@ -3,7 +3,7 @@
     v-if="showColumnSettingPopover"
     :cancel-title="$tc('RestoreDefault')"
     :destroy-on-close="true"
-    :title="$tc('TableSetting')"
+    :title="$tc('ListPreference')"
     :visible.sync="showColumnSettingPopover"
     top="10%"
     width="50%"
