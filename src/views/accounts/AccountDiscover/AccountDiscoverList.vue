@@ -29,6 +29,15 @@ export default {
   data() {
     const vm = this
     return {
+      config: {
+        title: this.$t('RealTimeData'),
+        tip: this.$t('RealTimeData')
+      },
+      counter: {
+        total_count_online_sessions: '.',
+        total_count_online_users: '.',
+        total_count_today_failed_sessions: '.'
+      },
       showDeleteAccountDialog: false,
       gatherAccounts: {},
       treeSetting: {
@@ -215,3 +224,6 @@ export default {
   }
 }
 </script>
+<style lang='scss' scoped>
+
+</style>

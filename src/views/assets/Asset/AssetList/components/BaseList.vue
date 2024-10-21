@@ -13,9 +13,9 @@
       @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
-      :cell="GatewayCell"
-      :port="GatewayPort"
-      :visible.sync="GatewayVisible"
+      :cell="gatewayCell"
+      :port="gatewayPort"
+      :visible.sync="gatewayVisible"
     />
   </div>
 </template>
@@ -113,9 +113,9 @@ export default {
     const extraQuery = this.$route.params?.extraQuery || {}
     return {
       showPlatform: false,
-      GatewayPort: 0,
-      GatewayCell: '',
-      GatewayVisible: false,
+      gatewayPort: 0,
+      gatewayCell: '',
+      gatewayVisible: false,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         permissions: {
@@ -216,13 +216,13 @@ export default {
                     row?.auto_config?.ping_enabled,
                   callback: ({ row }) => {
                     if (row.platform.name === 'Gateway') {
-                      this.GatewayVisible = true
+                      this.gatewayVisible = true
                       const port = row.protocols.find(item => item.name === 'ssh').port
                       if (!port) {
                         return this.$message.error(this.$tc('BadRequestErrorMsg'))
                       } else {
-                        this.GatewayPort = port
-                        this.GatewayCell = row.id
+                        this.gatewayPort = port
+                        this.gatewayCell = row.id
                       }
                     } else {
                       this.$axios.post(
