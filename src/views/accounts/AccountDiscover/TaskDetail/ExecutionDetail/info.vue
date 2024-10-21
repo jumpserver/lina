@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 
 export default {
   components: {
@@ -27,8 +27,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

@@ -92,6 +92,15 @@ new Vue({
   i18n,
   router,
   store,
+  mounted() {
+    // 移除加载页面
+    const loadingElement = document.getElementById('loading')
+    if (loadingElement) {
+      setTimeout(() => {
+        loadingElement.style.display = 'none'
+      }, 500)
+    }
+  },
   render: h => h(App)
 })
 

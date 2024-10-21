@@ -96,7 +96,8 @@ export function getPermedViews() {
     ['audit', store.getters.auditOrgs.length > 0],
     ['workbench', true],
     ['tickets', hasPermission('tickets.view_ticket')],
-    ['settings', hasPermission('settings.view_setting')]
+    ['settings', hasPermission('settings.view_setting')],
+    ['pam', store.getters.consoleOrgs.length > 0]
   ]
   return viewShowMapper.filter(i => i[1]).map(i => i[0])
 }
@@ -154,4 +155,23 @@ export function toM2MJsonParams(attrFilter) {
 export function IsSupportPauseSessionType(terminalType) {
   const supportedType = ['koko', 'lion', 'chen', 'kael']
   return supportedType.includes(terminalType)
+}
+
+export function loadPlatformIcon(name, type) {
+  const platformMap = {
+    'Huawei': 'huawei',
+    'Cisco': 'cisco',
+    'Gateway': 'gateway',
+    'macOS': 'macos',
+    'BSD': 'bsd',
+    'Vmware-vSphere': 'vmware'
+  }
+
+  const value = platformMap[name] || type
+
+  try {
+    return require(`@/assets/img/icons/${value}.png`)
+  } catch (error) {
+    return require(`@/assets/img/icons/other.png`)
+  }
 }

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
@@ -18,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -42,14 +43,11 @@ export default {
       ]
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
 
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

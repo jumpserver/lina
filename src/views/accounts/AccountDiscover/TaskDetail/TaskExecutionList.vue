@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'AccountGatherTaskExecutionList',
+  name: 'AccountDiscoverTaskExecutionList',
   components: {
     GenericListTable
   },
@@ -40,7 +40,7 @@ export default {
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountGatherTaskDetail',
+                name: 'AccountDiscoverTaskDetail',
                 params: { id: row.automation }
               })
             },
@@ -75,7 +75,7 @@ export default {
                   title: this.$t('Detail'),
                   type: 'info',
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountGatherExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
