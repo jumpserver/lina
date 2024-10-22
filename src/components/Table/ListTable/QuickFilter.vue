@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div class="summary-zone">
+      <div v-show="summary" class="summary-zone">
         <span v-for="item of summary" :key="item.title">
           <SummaryCard :body="item.body" :title="item.title" />
         </span>
@@ -35,37 +35,11 @@ export default {
   props: {
     filters: {
       type: Array,
-      default: () => []
+      default: null
     },
     summary: {
       type: Array,
-      default: () => {
-        return [
-          {
-            title: '最近一周发现',
-            body: {
-              route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-              count: 10,
-              disabled: 0
-            }
-          },
-          {
-            title: '最近一月发现',
-            body: {
-              route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-              count: 321,
-              disabled: 0
-            }
-          },
-          {
-            title: '待确认',
-            body: {
-              count: 544,
-              disabled: true
-            }
-          }
-        ]
-      }
+      default: null
     },
     expand: {
       type: Boolean,
@@ -114,6 +88,7 @@ export default {
      width: calc(100% - 70px);
 
      .summary-zone {
+       padding-top: 10px;
        display: flex;
        justify-content: space-between;
      }
@@ -121,7 +96,6 @@ export default {
      .quick-filter-zone {
        display: flex;
        justify-content: flex-start;
-       padding-bottom: 10px;
 
        h5 {
          font-weight: 600;
@@ -169,7 +143,7 @@ export default {
 
    .expand-bar {
      float: right;
-     display: inline-block;
+     display: block;
      cursor: pointer;
 
      i {

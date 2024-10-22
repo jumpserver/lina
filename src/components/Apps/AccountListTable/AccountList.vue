@@ -157,19 +157,19 @@ export default {
           label: '过滤',
           options: [
             {
-              label: '全部账号',
+              label: '最近发现',
               value: ''
             },
             {
-              label: '拥有的',
-              value: 'windows'
+              label: '最近被登录',
+              value: ''
             },
             {
-              label: '收藏夹',
-              value: 'linux'
+              label: '最近修改',
+              value: ''
             },
             {
-              label: '最近访问',
+              label: '最近改密',
               value: ''
             }
           ]
@@ -178,23 +178,23 @@ export default {
           label: '风险账号',
           options: [
             {
-              label: '过期的密码',
+              label: '僵尸账号',
               value: 'true'
             },
             {
-              label: '冲突的密码',
+              label: '幽灵账号',
               value: 'true'
             },
             {
-              label: '违法策略',
+              label: '弱密码',
               value: 'true'
             },
             {
-              label: '禁用的资源',
+              label: '长时间未改密',
               value: 'true'
             },
             {
-              label: '回收站',
+              label: '长时间未验证',
               value: 'true'
             }
           ]

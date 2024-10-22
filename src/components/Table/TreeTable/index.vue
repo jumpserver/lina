@@ -44,6 +44,7 @@
               ref="ListTable"
               :header-actions="headerActions"
               :quick-filters="quickFilters"
+              :quick-summary="quickSummary"
               :table-config="iTableConfig"
               v-on="$listeners"
             />

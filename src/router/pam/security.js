@@ -3,8 +3,8 @@ import i18n from '@/i18n/i18n'
 
 export default [
   {
-    path: 'scan',
-    name: 'AccountScan',
+    path: 'check',
+    name: 'AccountCheck',
     component: empty,
     redirect: {
       name: 'AccountPushList'

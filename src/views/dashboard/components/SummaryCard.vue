@@ -4,14 +4,14 @@
       <span class="title">{{ title }}</span>
     </div>
     <slot>
-      <h1 class="no-margins">
+      <h3 class="no-margins">
         <span v-if="body.disabled" class="num">
           {{ body.count }}
         </span>
         <router-link v-else :to="body.route">
           <span class="num disabled-link">{{ body.count }}</span>
         </router-link>
-      </h1>
+      </h3>
     </slot>
   </div>
 </template>
@@ -42,9 +42,10 @@ export default {
 
   .title {
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 12px;
-    line-height: 20px;
+    text-transform: uppercase;
+    line-height: 1.2;
   }
 }
 
@@ -61,6 +62,7 @@ export default {
 
   .disabled-link {
     cursor: pointer;
+
     &:hover {
       color: var(--color-primary);
     }

@@ -9,6 +9,7 @@
       ref="AssetTreeTable"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
+      :quick-summary="quickSummary"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
@@ -51,6 +52,31 @@ export default {
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
       },
+      quickSummary: [
+        {
+          title: '最近一周发现',
+          body: {
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            count: 10,
+            disabled: 0
+          }
+        },
+        {
+          title: '最近一月发现',
+          body: {
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            count: 321,
+            disabled: 0
+          }
+        },
+        {
+          title: '待确认',
+          body: {
+            count: 544,
+            disabled: true
+          }
+        }
+      ],
       quickFilters: [
         {
           label: '快速过滤',
