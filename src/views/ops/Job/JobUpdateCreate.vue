@@ -28,7 +28,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
-        [this.$t('Asset'), ['assets', 'runas', 'runas_policy']],
+        [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
         [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -94,12 +94,28 @@ export default {
           type: 'assetSelect',
           component: AssetSelect,
           label: this.$t('Asset'),
-          rules: [Required],
           el: {
             baseUrl: '/api/v1/perms/users/self/assets/',
             baseNodeUrl: '/api/v1/perms/users/self/nodes/',
             typeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/category/tree',
             value: []
+          }
+        },
+        nodes: {
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/perms/users/self/nodes/',
+              filterOption: (item) => {
+                console.log(item)
+                if (item.value !== 'favorite') {
+                  return item
+                }
+              },
+              transformOption: (item) => {
+                return { label: item.full_value || item.name, value: item.id }
+              }
+            }
           }
         },
         args: {
