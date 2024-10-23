@@ -158,15 +158,21 @@ export default {
           options: [
             {
               label: '最近发现',
-              value: ''
+              filter: {
+                name: 'asdf'
+              }
             },
             {
               label: '最近被登录',
-              value: ''
+              filter: {
+                username: 'root'
+              }
             },
             {
               label: '最近修改',
-              value: ''
+              filter: {
+                username: 'admin'
+              }
             },
             {
               label: '最近改密',

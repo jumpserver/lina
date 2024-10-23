@@ -1,6 +1,6 @@
 <template>
   <div>
-    <QuickFilter :filters="quickFilters" :summary="quickSummary" @filter="handleQuickFilter" />
+    <QuickFilter :filters="quickFilters" :summary="quickSummary" @filter="filter" />
     <TableAction
       v-if="hasActions"
       :date-pick="handleDateChange"
@@ -219,8 +219,24 @@ export default {
     })
   },
   methods: {
-    handleQuickFilter() {
-
+    handleQuickFilter(option) {
+      if (option.route) {
+        this.$router.push(option.route)
+        return
+      }
+      if (option.filter) {
+        const filter = { ...option.filter }
+        if (option.active) {
+          for (const key in filter) {
+            filter[key] = ''
+          }
+        }
+        this.filter(option.filter)
+        return
+      }
+      if (option.callback) {
+        option.callback(option.active)
+      }
     },
     handleActionInitialDone() {
       setTimeout(() => {

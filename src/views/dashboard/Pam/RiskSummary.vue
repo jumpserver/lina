@@ -15,7 +15,7 @@
 
 <script>
 import Title from '../components/Title.vue'
-import SummaryCard from '../components/SummaryCard'
+import SummaryCard from '@/components/Cards/SummaryCard'
 
 export default {
   components: { Title, SummaryCard },

@@ -4,18 +4,20 @@
       <Title :config="config" />
     </div>
     <div class="content">
-      <el-row type="flex" justify="space-between">
-        <el-col v-for="item of items" :key="item.title" :md="8" :sm="12" :xs="12">
-          <SummaryCard :title="item.title" :body="item.body" />
-        </el-col>
-      </el-row>
+      <SummaryCard
+        v-for="item of items"
+        :key="item.title"
+        :body="item.body"
+        :title="item.title"
+        class="summary-card"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import Title from '../components/Title.vue'
-import SummaryCard from '../components/SummaryCard'
+import SummaryCard from '@/components/Cards/SummaryCard'
 
 export default {
   components: { Title, SummaryCard },
@@ -35,8 +37,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>
@@ -45,27 +46,20 @@ export default {
 .box {
   padding: 20px;
   background: #FFFFFF;
+
   .content {
-    .el-col {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+
+    .summary-card {
       padding-left: 16px;
       border-left: 1px solid #EFF0F1;
+
       &:first-child {
         padding-left: 0;
         border-left: none;
       }
-    }
-    .sub {
-      font-style: normal;
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      color: #646A73;
-    }
-    .num {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 24px;
-      cursor: pointer;
     }
   }
 }

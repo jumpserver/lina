@@ -2,10 +2,16 @@
   <div v-if="filters || summary" :class="isExpand ? 'expand': 'shrink' " class="quick-filter">
     <div v-show="isExpand" class="quick-filter-wrap">
       <div v-show="filters" class="quick-filter-zone">
-        <div v-for="category in filters" :key="category.label" class="item-zone">
+        <div v-for="category in iFilters" :key="category.label" class="item-zone">
           <h5>{{ category.label }}</h5>
           <div class="filter-options">
-            <span v-for="option in category.options" :key="option.label" class="item">
+            <span
+              v-for="option in category.options"
+              :key="option.label"
+              :class="option.active ? 'active' : ''"
+              class="item"
+              @click="handleClick(option)"
+            >
               {{ option.label }}
             </span>
           </div>
@@ -13,7 +19,7 @@
       </div>
       <div v-show="summary" class="summary-zone">
         <span v-for="item of summary" :key="item.title">
-          <SummaryCard :body="item.body" :title="item.title" />
+          <SummaryCard :count="item.count" :title="item.title" @click="handleSummaryClick(item)" />
         </span>
       </div>
     </div>
@@ -27,7 +33,7 @@
 </template>
 
 <script>
-import SummaryCard from '@/views/dashboard/components/SummaryCard.vue'
+import SummaryCard from '@/components/Cards/SummaryCard'
 
 export default {
   name: 'QuickFilter',
@@ -48,9 +54,13 @@ export default {
   },
   data() {
     return {
-      isExpand: this.expand
+      isExpand: this.expand,
+      iFilters: this.cleanFilters(),
+      filtered: {},
+      activeFilters: []
     }
   },
+  computed: {},
   watch: {
     isExpand(val) {
       this.$emit('expand', val)
@@ -59,8 +69,49 @@ export default {
   mounted() {
   },
   methods: {
+    cleanFilters() {
+      return this.filters.map(category => {
+        return {
+          ...category,
+          options: category.options.map(option => {
+            return {
+              category: category.label,
+              ...option,
+              active: false,
+              filter: option.filter || {}
+            }
+          })
+        }
+      })
+    },
     toggle() {
       this.isExpand = !this.isExpand
+    },
+    handleClick(option) {
+      if (!option.active) {
+        this.activeFilters = this.activeFilters.filter(item => {
+          const conflict = Object.keys(item.filter).some(key => {
+            return Object.keys(option.filter).includes(key)
+          })
+          if (conflict) {
+            item.active = false
+          }
+          return !conflict
+        })
+        this.activeFilters.push(option)
+      } else {
+        this.activeFilters = this.activeFilters.filter(item => {
+          return item.label !== option.label && item.category !== option.category
+        })
+      }
+      option.active = !option.active
+      this.activeFilters.forEach(item => {
+        this.filtered = { ...item.filter }
+      })
+      this.$emit('filter', this.filtered)
+    },
+    handleSummaryClick(item) {
+      this.$emit('filter', item)
     }
   }
 }
@@ -118,6 +169,11 @@ export default {
          color: #303133;
          font-size: 12px;
          cursor: pointer;
+
+         &.active {
+           color: var(--color-primary);
+           font-weight: 500;
+         }
 
          &:hover {
            color: var(--color-primary);

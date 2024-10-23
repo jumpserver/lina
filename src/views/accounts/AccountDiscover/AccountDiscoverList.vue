@@ -55,25 +55,23 @@ export default {
       quickSummary: [
         {
           title: '最近一周发现',
-          body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 10,
-            disabled: 0
+          count: 10,
+          filter: {
+            name: 'admin'
           }
         },
         {
           title: '最近一月发现',
-          body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 321,
-            disabled: 0
+          count: 321,
+          filter: {
+            username: 'admin'
           }
         },
         {
           title: '待确认',
-          body: {
-            count: 544,
-            disabled: true
+          count: 544,
+          filter: {
+            username: 'admin'
           }
         }
       ],
