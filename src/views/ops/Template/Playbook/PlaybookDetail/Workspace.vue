@@ -34,6 +34,7 @@
             </el-tab-pane>
           </el-tabs>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          <Variable />
         </div>
       </template>
     </TreeTable>
@@ -46,13 +47,15 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
 import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
 import { renameFile } from '@/api/ops'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   name: 'CommandExecution',
   components: {
     NewNodeDialog,
     TreeTable,
-    CodeEditor
+    CodeEditor,
+    Variable
   },
   props: {
     object: {

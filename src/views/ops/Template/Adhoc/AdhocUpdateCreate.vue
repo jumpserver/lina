@@ -14,7 +14,7 @@ export default {
     return {
       url: '/api/v1/ops/adhocs/',
       fields: [
-        [this.$t('Basic'), ['name', 'module', 'args', 'comment', 'scope']]
+        [this.$t('Basic'), ['name', 'scope', 'module', 'args', 'comment']]
       ],
       initial: {
         module: 'shell',

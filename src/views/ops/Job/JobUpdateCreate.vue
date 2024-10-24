@@ -27,9 +27,9 @@ export default {
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
-        [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
-        [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
+        [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('Plan'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
       initial: {
@@ -171,7 +171,16 @@ export default {
         crontab
       },
       createSuccessNextRoute: { name: 'JobManagement' },
-      updateSuccessNextRoute: { name: 'JobManagement' }
+      updateSuccessNextRoute: { name: 'JobManagement' },
+      moreButtons: [
+        {
+          title: this.$t('ExecuteAfterSaving'),
+          callback: (value, form, btn) => {
+            form.value.instant = true
+            this.submitForm(form, btn)
+          }
+        }
+      ]
     }
   },
   mounted() {
@@ -208,7 +217,16 @@ export default {
       this.ready = true
     }
   },
-  methods: {}
+  methods: {
+    submitForm(form, btn) {
+      form.validate((valid) => {
+        if (valid) {
+          btn.loading = true
+        }
+      })
+      this.$refs.form.$refs.createUpdateForm.$refs.form.$refs.dataForm.submitForm('form', false)
+    }
+  }
 }
 
 </script>
