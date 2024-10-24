@@ -68,7 +68,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "3.3.0",
     "v-sanitize": "^0.0.13",
-    "vue": "2.6.10",
+    "vue": "3.0.0",
     "vue-codemirror": "4.0.6",
     "vue-cookie": "^1.1.4",
     "vue-echarts": "^5.0.0-beta.0",
