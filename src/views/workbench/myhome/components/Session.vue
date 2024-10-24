@@ -67,7 +67,8 @@ export default {
               extraActions: [
                 {
                   name: 'connect',
-                  icon: 'fa-terminal',
+                  icon: 'fa-desktop',
+                  plain: true,
                   type: 'primary',
                   can: ({ row }) => row.is_active,
                   callback: ({ row }) => {

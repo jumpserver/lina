@@ -93,15 +93,15 @@ export default {
           label: this.$t('最近发现'),
           options: [
             {
-              label: '最近一天',
+              label: '最近一天 (20)',
               value: ''
             },
             {
-              label: '最近一周',
+              label: '最近一周 (300)',
               value: ''
             },
             {
-              label: '最近一个月',
+              label: '最近一个月 (600)',
               value: ''
             }
           ]

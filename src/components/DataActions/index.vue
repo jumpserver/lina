@@ -29,7 +29,13 @@
             >
               {{ option.group }}
             </div>
-            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" :open-delay="500" placement="top">
+            <el-tooltip
+              :key="option.name"
+              :content="option.tip"
+              :disabled="!option.tip"
+              :open-delay="500"
+              placement="top"
+            >
               <el-dropdown-item
                 :key="option.name"
                 :command="[option, action]"
@@ -252,7 +258,10 @@ $color-drop-menu-border: #e4e7ed;
     display: flex;
     align-items: center;
     padding: 2px 6px;
-    color: $btn-text-color;
+
+    &:not(.is-plain) {
+      color: $btn-text-color;
+    }
 
     * {
       vertical-align: baseline !important;

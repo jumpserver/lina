@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'SummaryCard',
   props: {
@@ -66,7 +67,8 @@ export default {
         this.$router.push(this.iRoute)
         return
       }
-      this.callback()
+      this.callback.bind(this)()
+      this.$emit('click')
     }
   }
 }
@@ -74,7 +76,7 @@ export default {
 
 <style lang="scss" scoped>
 .summary-header {
-  color: var(--color-icon-primary);
+  //color: var(--color-icon-primary);
 
   .title {
     font-style: normal;

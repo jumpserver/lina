@@ -1,7 +1,7 @@
 <template>
   <div v-if="filters || summary" :class="isExpand ? 'expand': 'shrink' " class="quick-filter">
     <div v-show="isExpand" class="quick-filter-wrap">
-      <div v-show="filters" class="quick-filter-zone">
+      <div v-if="filters" class="quick-filter-zone">
         <div v-for="category in iFilters" :key="category.label" class="item-zone">
           <h5>{{ category.label }}</h5>
           <div class="filter-options">
@@ -10,16 +10,22 @@
               :key="option.label"
               :class="option.active ? 'active' : ''"
               class="item"
-              @click="handleClick(option)"
+              @click="handleFilterClick(option)"
             >
               {{ option.label }}
+              <i class="el-icon-circle-check" />
             </span>
           </div>
         </div>
       </div>
-      <div v-show="summary" class="summary-zone">
-        <span v-for="item of summary" :key="item.title">
-          <SummaryCard :count="item.count" :title="item.title" @click="handleSummaryClick(item)" />
+      <div v-if="summary" class="summary-zone">
+        <span v-for="item of iSummary" :key="item.title" class="summary-block">
+          <SummaryCard
+            :class="item.active ? 'active' : ''"
+            :count="item.count"
+            :title="item.title"
+            @click="handleFilterClick(item)"
+          />
         </span>
       </div>
     </div>
@@ -41,7 +47,7 @@ export default {
   props: {
     filters: {
       type: Array,
-      default: null
+      default: () => []
     },
     summary: {
       type: Array,
@@ -56,6 +62,7 @@ export default {
     return {
       isExpand: this.expand,
       iFilters: this.cleanFilters(),
+      iSummary: this.cleanSummary(),
       filtered: {},
       activeFilters: []
     }
@@ -69,7 +76,24 @@ export default {
   mounted() {
   },
   methods: {
+    cleanSummary() {
+      if (!this.summary) {
+        return []
+      }
+      return this.summary.map(item => {
+        return {
+          category: 'summary',
+          label: item.title,
+          ...item,
+          filter: item.filter || {},
+          active: false
+        }
+      })
+    },
     cleanFilters() {
+      if (!this.filters) {
+        return []
+      }
       return this.filters.map(category => {
         return {
           ...category,
@@ -87,7 +111,7 @@ export default {
     toggle() {
       this.isExpand = !this.isExpand
     },
-    handleClick(option) {
+    handleFilterClick(option) {
       if (!option.active) {
         this.activeFilters = this.activeFilters.filter(item => {
           const conflict = Object.keys(item.filter).some(key => {
@@ -109,9 +133,6 @@ export default {
         this.filtered = { ...item.filter }
       })
       this.$emit('filter', this.filtered)
-    },
-    handleSummaryClick(item) {
-      this.$emit('filter', item)
     }
   }
 }
@@ -144,6 +165,16 @@ export default {
        justify-content: space-between;
      }
 
+     .summary-block {
+       .active {
+         //color: var(--color-primary);
+
+         ::v-deep .no-margins .num {
+           color: var(--color-primary);
+         }
+       }
+     }
+
      .quick-filter-zone {
        display: flex;
        justify-content: flex-start;
@@ -164,15 +195,21 @@ export default {
 
        .item {
          display: inline-block;
-         margin-right: 10px;
-         border-radius: 5px;
-         color: #303133;
+         margin-right: 5px;
          font-size: 12px;
          cursor: pointer;
+
+         i {
+           visibility: hidden;
+         }
 
          &.active {
            color: var(--color-primary);
            font-weight: 500;
+
+           i {
+             visibility: visible;
+           }
          }
 
          &:hover {
