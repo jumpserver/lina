@@ -185,7 +185,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 10px;
   height: 30px;
   line-height: 30px;
 

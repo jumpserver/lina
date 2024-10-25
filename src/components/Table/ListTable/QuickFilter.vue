@@ -3,18 +3,20 @@
     <div v-show="isExpand" class="quick-filter-wrap">
       <div v-if="filters" class="quick-filter-zone">
         <div v-for="category in iFilters" :key="category.label" class="item-zone">
-          <h5>{{ category.label }}</h5>
-          <div class="filter-options">
-            <span
-              v-for="option in category.options"
-              :key="option.label"
-              :class="option.active ? 'active' : ''"
-              class="item"
-              @click="handleFilterClick(option)"
-            >
-              {{ option.label }}
-              <i class="el-icon-circle-check" />
-            </span>
+          <div>
+            <h5>{{ category.label }}</h5>
+            <div class="filter-options">
+              <span
+                v-for="option in category.options"
+                :key="option.label"
+                :class="option.active ? 'active' : ''"
+                class="item"
+                @click="handleFilterClick(option)"
+              >
+                {{ option.label }}
+                <i class="el-icon-circle-check" />
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -167,10 +169,15 @@ export default {
 
      .summary-block {
        .active {
-         //color: var(--color-primary);
-
          ::v-deep .no-margins .num {
            color: var(--color-primary);
+
+           &::after {
+             content: "\e720";
+             font-family: element-icons !important;
+             font-size: 13px;
+             line-height: 1;
+           }
          }
        }
      }
@@ -178,6 +185,8 @@ export default {
      .quick-filter-zone {
        display: flex;
        justify-content: flex-start;
+       flex-wrap: wrap; /* 允许 item-zone 换行 */
+       gap: 10px;
 
        h5 {
          font-weight: 600;
@@ -196,11 +205,13 @@ export default {
        .item {
          display: inline-block;
          margin-right: 5px;
+         color: #303133;
          font-size: 12px;
          cursor: pointer;
 
          i {
            visibility: hidden;
+           margin-left: -3px;
          }
 
          &.active {

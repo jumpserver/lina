@@ -184,12 +184,14 @@ $headerHeight: 30px;
   }
 
   .search.left {
-    //float: left;
     padding: 0 !important;
+    gap: 10px;
   }
 
   .search.right {
-    //float: right;
+    display: flex;
+    flex-wrap: wrap;
+    padding-right: 10px;
   }
 }
 
@@ -197,26 +199,19 @@ $headerHeight: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 0;
 
   &.mobile {
-    //flex-direction: column; /* 改为纵向排列 */
-    //align-items: stretch; /* 让子元素充满容器的宽度 */
-    display: block;
+    justify-content: flex-start;
 
     .left-side {
-      //width: 100%;
-      display: inline-block;
+      gap: 0;
     }
 
     .search {
-      //width: 100vw;
-      align-items: stretch; /* 让子元素充满容器的宽度 */
-    }
-
-    .right-side {
-      float: right;
-      align-items: flex-end;
-      display: inline-block;
+      justify-content: flex-start;
+      gap: 10px;
     }
   }
 }
@@ -243,16 +238,6 @@ $headerHeight: 30px;
 .export-item {
   display: block;
   padding: 5px 20px;
-}
-
-.mobile .search .datepicker {
-  margin-left: 0;
-}
-
-.mobile .search.right .action-search {
-  display: inline-block;
-  width: 100%;
-  margin-top: 5px;
 }
 
 </style>

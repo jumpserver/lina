@@ -154,29 +154,37 @@ export default {
       secretUrl: '',
       quickFilters: [
         {
-          label: '过滤',
+          label: '最近(7天)',
           options: [
             {
               label: '最近发现',
               filter: {
-                name: 'asdf'
+                latest_discovery: '1'
               }
             },
             {
               label: '最近被登录',
               filter: {
-                username: 'root'
+                latest_accessed: '1'
               }
             },
             {
               label: '最近修改',
               filter: {
-                username: 'admin'
+                latest_updated: '1'
               }
             },
             {
               label: '最近改密',
-              value: ''
+              filter: {
+                latest_secret_changed: '1'
+              }
+            },
+            {
+              label: '最近改密失败',
+              filter: {
+                latest_secret_changed_failed: '1'
+              }
             }
           ]
         },
@@ -185,15 +193,27 @@ export default {
           options: [
             {
               label: '僵尸账号',
-              value: 'true'
+              filter: {
+                is_zombie: 'true'
+              }
             },
             {
               label: '幽灵账号',
-              value: 'true'
+              filter: {
+                is_ghost: 'true'
+              }
             },
             {
               label: '弱密码',
-              value: 'true'
+              filter: {
+                is_weak_password: 'true'
+              }
+            },
+            {
+              label: '空密码',
+              filter: {
+                has_secret: 'false'
+              }
             },
             {
               label: '长时间未改密',
@@ -210,31 +230,45 @@ export default {
           options: [
             {
               label: '全部',
-              value: 'windows'
+              filter: {
+                category: ''
+              }
             },
             {
               label: ' 主机',
-              value: 'linux'
+              filter: {
+                category: 'host'
+              }
             },
             {
               label: '数据库',
-              value: 'database'
+              filter: {
+                category: 'database'
+              }
             },
             {
               label: '云',
-              value: 'cloud'
+              filter: {
+                category: 'cloud'
+              }
             },
             {
               label: '网络设备',
-              value: 'network'
+              filter: {
+                category: 'device'
+              }
             },
             {
-              label: '应用',
-              value: 'application'
+              label: 'Web',
+              filter: {
+                category: 'website'
+              }
             },
             {
               label: '其他',
-              value: 'other'
+              filter: {
+                category: 'custom'
+              }
             }
           ]
         }
