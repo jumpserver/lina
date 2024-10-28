@@ -194,19 +194,19 @@ export default {
             {
               label: '僵尸账号',
               filter: {
-                is_zombie: 'true'
+                risk: 'zombie'
               }
             },
             {
               label: '幽灵账号',
               filter: {
-                is_ghost: 'true'
+                risk: 'ghost'
               }
             },
             {
               label: '弱密码',
               filter: {
-                is_weak_password: 'true'
+                risk: 'week_password'
               }
             },
             {
@@ -217,11 +217,15 @@ export default {
             },
             {
               label: '长时间未改密',
-              value: 'true'
+              filter: {
+                long_time_no_change_secret: 'true'
+              }
             },
             {
               label: '长时间未验证',
-              value: 'true'
+              filter: {
+                long_time_no_verify: 'true'
+              }
             }
           ]
         },

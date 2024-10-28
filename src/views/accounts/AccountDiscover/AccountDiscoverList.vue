@@ -19,7 +19,7 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, ConfirmFormatter } from '@/components/Table/TableFormatters'
 import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 
 export default {
@@ -111,13 +111,13 @@ export default {
         url: '/api/v1/accounts/gathered-accounts/',
         hasTree: true,
         columns: [
-          'asset', 'username', 'date_last_login', 'present',
-          'address_last_login', 'date_updated'
+          'asset', 'username', 'date_last_login',
+          'address_last_login', 'present', 'date_updated', 'status'
         ],
         columnsShow: {
           default: [
-            'asset', 'username', 'date_last_login', 'present',
-            'address_last_login'
+            'asset', 'username', 'address_last_login',
+            'date_last_login', 'present', 'status'
           ]
         },
         columnsMeta: {
@@ -144,6 +144,9 @@ export default {
             formatter: function(row, col, cell) {
               return toSafeLocalDateStr(row.date_updated)
             }
+          },
+          status: {
+            formatter: ConfirmFormatter
           },
           actions: {
             formatter: ActionsFormatter,

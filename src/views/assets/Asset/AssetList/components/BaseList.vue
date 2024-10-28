@@ -236,7 +236,12 @@ export default {
                 },
                 {
                   name: 'AddAccount',
-                  title: '添加账号'
+                  title: '添加账号',
+                  divided: true
+                },
+                {
+                  name: 'DiscoverAccounts',
+                  title: 'Discover accounts'
                 },
                 ...this.addExtraMoreColActions
               ]
