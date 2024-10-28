@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   components: {
@@ -14,7 +15,7 @@ export default {
     return {
       url: '/api/v1/ops/adhocs/',
       fields: [
-        [this.$t('Basic'), ['name', 'scope', 'module', 'args', 'comment']]
+        [this.$t('Basic'), ['name', 'scope', 'module', 'args', 'variable', 'comment']]
       ],
       initial: {
         module: 'shell',
@@ -23,6 +24,9 @@ export default {
       fieldsMeta: {
         args: {
           component: CodeEditor
+        },
+        variable: {
+          component: Variable
         }
       },
       createSuccessNextRoute: {

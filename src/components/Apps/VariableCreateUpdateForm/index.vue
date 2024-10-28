@@ -43,7 +43,7 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
       encryptedFields: ['secret'],
       fields: [
-        ['', ['name', 'username', 'type', 'default_value', 'tips', 'require']]
+        ['', ['name', 'var_name', 'type', 'default_value', 'tips', 'required']]
       ],
       fieldsMeta: {},
       hasSaveContinue: false

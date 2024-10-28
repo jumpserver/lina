@@ -34,7 +34,23 @@
             </el-tab-pane>
           </el-tabs>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          <Variable />
+          <el-form ref="form" label-position="left" label-width="30px">
+            <div class="form-content">
+              <el-form-item label="" prop="variable">
+                <Variable />
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  style="float:right"
+                  @click="submitVariable"
+                >
+                  {{ $t('Submit') }}
+                </el-button>
+              </el-form-item>
+            </div>
+          </el-form>
         </div>
       </template>
     </TreeTable>
@@ -289,6 +305,8 @@ export default {
     },
     hasChange(editor) {
       return editor.value !== editor.originValue
+    },
+    submitVariable() {
     }
   }
 }

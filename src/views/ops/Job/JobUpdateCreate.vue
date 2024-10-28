@@ -13,6 +13,8 @@ import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { crontab, interval } from '@/views/accounts/const'
+import LoadTemplateLink from '@/views/ops/Job/components/loadTemplateLink'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   components: {
@@ -28,7 +30,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
-        [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'variable', 'playbook', 'chdir', 'timeout']],
         [this.$t('Plan'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -107,7 +109,6 @@ export default {
             ajax: {
               url: '/api/v1/perms/users/self/nodes/',
               filterOption: (item) => {
-                console.log(item)
                 if (item.value !== 'favorite') {
                   return item
                 }
@@ -115,6 +116,15 @@ export default {
               transformOption: (item) => {
                 return { label: item.full_value || item.name, value: item.id }
               }
+            }
+          }
+        },
+        argsLoadFromTemplate: {
+          label: this.$t('Templates'),
+          component: LoadTemplateLink,
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({ args: event.args, module: event.module.value, variable: event.variable })
             }
           }
         },
@@ -140,6 +150,9 @@ export default {
               }
             ]
           }
+        },
+        variable: {
+          component: Variable
         },
         timeout: {
           helpText: i18n.t('TimeoutHelpText')

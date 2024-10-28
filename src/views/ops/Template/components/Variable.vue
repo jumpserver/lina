@@ -3,7 +3,7 @@
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
         <el-table-column :label="$tc('VariableName')" prop="name" />
-        <el-table-column :label="$tc('VariableUsername')" prop="username" />
+        <el-table-column :label="$tc('VariableUsername')" prop="var_name" />
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
@@ -40,28 +40,27 @@ export default {
     AddVariableDialog
   },
   props: {
-    platform: {
-      type: Object,
-      default: () => ({})
-    },
     value: {
       type: [Array],
       default: () => []
-    },
-    isUpdate: {
-      type: Function,
-      default: (vm) => {
-        return vm.$route.params.id
-      }
     }
   },
   data() {
-    const variables = this.value || []
     return {
-      variables: variables,
       variable: {},
       initial: false,
       addVariableDialogVisible: false
+    }
+  },
+  computed: {
+    variables: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('update:value', val)
+        this.$emit('change', val)
+      }
     }
   },
   watch: {
@@ -83,8 +82,8 @@ export default {
       this.variables = this.variables.filter((item) => {
         if (variable.id && item.id) {
           return item.id !== variable.id
-        } else if (variable.username && item.username) {
-          return item.username !== variable.username
+        } else if (variable.var_name && item.var_name) {
+          return item.var_name !== variable.var_name
         } else {
           return variable.name !== item.name
         }

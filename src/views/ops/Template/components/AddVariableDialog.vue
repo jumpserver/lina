@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     addVariable(variable) {
-      const i = this.variables.findIndex(item => item.username === variable.username)
+      const i = this.variables.findIndex(item => item.var_name === variable.var_name)
       if (i !== -1) {
         this.variables.splice(i, 1)
       }
@@ -64,7 +64,7 @@ export default {
       this.iVisible = false
     },
     editVariable(form) {
-      const i = this.variables.findIndex(item => item.username === this.variable.username)
+      const i = this.variables.findIndex(item => item.var_name === this.variable.var_name)
       this.variables.splice(i, 1, form)
       this.iVisible = false
     }
