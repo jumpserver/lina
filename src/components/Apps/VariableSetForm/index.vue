@@ -4,6 +4,7 @@
     class="variable-add"
     :submit-btn-text="submitBtnText"
     v-bind="$data"
+    :fields="fields"
     @submit="confirm"
   />
 </template>
@@ -12,48 +13,38 @@
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
 
 export default {
-  name: 'VariableCreateForm',
+  name: 'VariableSetForm',
   components: {
     AutoDataForm
   },
   props: {
-    asset: {
-      type: Object,
-      default: null
-    },
-    variable: {
-      type: Object,
-      default: () => ({})
-    },
-    // 默认组件密码加密
-    encryptPassword: {
-      type: Boolean,
-      default: true
+    formData: {
+      type: Array,
+      default: () => ([])
     }
   },
   data() {
     return {
       loading: true,
-      usernameChanged: false,
       submitBtnText: this.$t('Confirm'),
-      url: '/api/v1/ops/variable/',
-      form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
+      url: '/api/v1/ops/variable/form_data/',
+      form: {},
       encryptedFields: ['secret'],
-      fields: [
-        ['', ['name', 'var_name', 'type', 'default_value', 'tips', 'required']]
-      ],
-      fieldsMeta: {},
       hasSaveContinue: false,
-      method: 'get'
+      method: 'get',
+      hasReset: false
     }
+  },
+  computed: {
+    fields() {
+      return [['', this.formData.map(item => item.var_name)]]
+    }
+  },
+  mounted() {
   },
   methods: {
     confirm(form) {
-      if (this.variable?.name) {
-        this.$emit('edit', form)
-      } else {
-        this.$emit('add', form)
-      }
+      this.$emit('confirm', form)
     }
   }
 }

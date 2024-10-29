@@ -27,6 +27,11 @@ export default {
       this.showOpenAdhocDialog = true
     },
     onSelectAdhoc(adhoc) {
+      adhoc?.variable.map(item => {
+        delete item.job
+        delete item.adhoc
+        return item
+      })
       this.$emit('change', adhoc)
     }
   }

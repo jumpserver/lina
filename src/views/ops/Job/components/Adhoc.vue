@@ -2,20 +2,27 @@
   <div>
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
+    <setVariableDialog
+      v-if="showVariableDialog"
+      :item="item"
+      :visible.sync="showVariableDialog"
+      @submit="runJob"
+    />
   </div>
 </template>
 
 <script>
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import GenericListTable from '@/layout/components/GenericListTable'
-
+import setVariableDialog from '@/views/ops/Template/components/setVariableDialog'
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
     GenericListTable,
-    JobRunDialog
+    JobRunDialog,
+    setVariableDialog
   },
   data() {
     return {
@@ -90,12 +97,14 @@ export default {
                   name: 'run',
                   can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
+                    this.item = row
                     if (row?.use_parameter_define && row?.parameters_define) {
                       const params = JSON.parse(row.parameters_define)
                       if (Object.keys(params).length > 0) {
-                        this.item = row
                         this.showJobRunDialog = true
                       }
+                    } else if (row?.variable?.length) {
+                      this.showVariableDialog = true
                     } else {
                       this.runJob(row)
                     }
@@ -112,7 +121,8 @@ export default {
         hasExport: false,
         hasImport: false
       },
-      showJobRunDialog: false
+      showJobRunDialog: false,
+      showVariableDialog: false
     }
   },
   methods: {
