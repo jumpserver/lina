@@ -2,6 +2,8 @@ import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
 import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
 import store from '@/store'
+import { toSafeLocalDateStr } from '@/utils/time'
+import { ActionsFormatter, ConfirmFormatter } from '@/components/Table/TableFormatters'
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
@@ -39,6 +41,177 @@ export const is_periodic = {
   type: 'switch',
   hidden: (formValue) => {
     return !store.getters.hasValidLicense
+  }
+}
+
+export const gatherAccountTableConfig = (vm, url) => {
+  if (!url) {
+    url = '/api/v1/accounts/gathered-accounts/'
+  }
+  const h = vm.$createElement
+  return {
+    url: url,
+    hasTree: true,
+    columns: [
+      'asset', 'username', 'date_last_login',
+      'address_last_login', 'present', 'date_updated', 'status'
+    ],
+    columnsShow: {
+      default: [
+        'username', 'asset', 'address_last_login',
+        'date_last_login', 'present', 'status'
+      ]
+    },
+    columnsMeta: {
+      asset: {
+        formatter: function(row) {
+          const to = {
+            name: 'AssetDetail',
+            params: { id: row.asset.id }
+          }
+          if (vm.$hasPerm('assets.view_asset')) {
+            return h('router-link', { props: { to }}, row.asset.name)
+          } else {
+            return h('span', row.asset.name)
+          }
+        }
+      },
+      username: {
+        showOverflowTooltip: true
+      },
+      present: {
+        width: '160px'
+      },
+      date_updated: {
+        formatter: function(row, col, cell) {
+          return toSafeLocalDateStr(row.date_updated)
+        }
+      },
+      address_last_login: {
+        width: '150px'
+      },
+      status: {
+        formatter: ConfirmFormatter,
+        width: '100px',
+        formatterArgs: {
+          confirm: ({ row }) => {
+            vm.$axios.put(
+              `/api/v1/accounts/gathered-accounts/${row.id}/status/`,
+              { status: 'confirmed' }
+            ).then(res => {
+              row.status = 'confirmed'
+            }).catch(() => {
+              row.status = vm.$t('Error')
+            })
+          },
+          ignore: ({ row }) => {
+            vm.$axios.put(
+              `/api/v1/accounts/gathered-accounts/${row.id}/status/`,
+              { status: 'ignored' }
+            ).then(res => {
+              row.status = 'ignored'
+            }).catch(() => {
+              row.status = vm.$t('Error')
+            })
+          }
+        }
+      },
+      actions: {
+        formatter: ActionsFormatter,
+        formatterArgs: {
+          hasClone: false,
+          hasUpdate: false, // can set function(row, value)
+          moreActionsTitle: vm.$t('More'),
+          extraActions: [
+            {
+              name: 'Sync',
+              title: vm.$t('Sync'),
+              can: vm.$hasPerm('accounts.add_gatheredaccount') && !vm.$store.getters.currentOrgIsRoot,
+              type: 'primary',
+              callback: ({ row }) => {
+                vm.$axios.post(
+                  `/api/v1/accounts/gathered-accounts/sync-accounts/`,
+                  { gathered_account_ids: [row.id] }
+                ).then(res => {
+                  vm.$message.success(vm.$tc('SyncSuccessMsg'))
+                }).catch(() => {
+                })
+              }
+            },
+            {
+              name: 'SyncDelete',
+              title: vm.$t('SyncDelete'),
+              can: vm.$hasPerm('accounts.remove_account') && !vm.$store.getters.currentOrgIsRoot,
+              type: 'danger',
+              callback: ({ row }) => {
+                vm.gatherAccounts = [row]
+                vm.showDeleteAccountDialog = false
+                setTimeout(() => {
+                  vm.showDeleteAccountDialog = true
+                })
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+
+export const gatherAccountHeaderActions = (vm) => {
+  return {
+    hasCreate: false,
+    hasImport: false,
+    hasExport: true,
+    searchConfig: {
+      exclude: ['asset'],
+      options: [
+        {
+          label: vm.$t('AssetName'),
+          value: 'asset_name'
+        }
+      ]
+    },
+    extraMoreActions: [
+      {
+        name: 'SyncSelected',
+        title: vm.$t('ConfirmSelected'),
+        type: 'primary',
+        icon: 'fa fa-check',
+        can: ({ selectedRows }) => {
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.add_account')
+        },
+        callback: function({ selectedRows }) {
+          const ids = selectedRows.map(v => {
+            return v.id
+          })
+          vm.$axios.post(
+            `/api/v1/accounts/gathered-accounts/sync-accounts/`,
+            { gathered_account_ids: ids }
+          ).then(() => {
+            vm.$message.success(vm.$tc('SyncSuccessMsg'))
+          }).catch(err => {
+            vm.$message.error(vm.$tc('SyncErrorMsg' + ' ' + err))
+          })
+        }
+      },
+      {
+        name: 'SyncDeleteSelected',
+        title: vm.$t('SyncDeleteSelected'),
+        type: 'primary',
+        icon: 'fa fa-exchange',
+        can: ({ selectedRows }) => {
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account')
+        },
+        callback: function({ selectedRows }) {
+          vm.gatherAccounts = selectedRows
+          vm.showDeleteAccountDialog = false
+          setTimeout(() => {
+            vm.showDeleteAccountDialog = true
+          })
+        }
+      }
+    ]
   }
 }
 

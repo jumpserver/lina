@@ -1,14 +1,25 @@
 <template>
   <span class="conform-td">
     <span v-if="!iValue" class="confirm-action">
-      <el-tooltip :content="$tc('Confirm')" :open-delay="400">
-        <el-button class="confirm action" icon="el-icon-check" size="mini" type="primary" />
+      <el-tooltip :content="$tc('Add account to asset')" :open-delay="400">
+        <el-button class="confirm action" size="mini" @click="handleConfirm">
+          <i class="fa fa-check" />
+        </el-button>
       </el-tooltip>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button class="ignore action" icon="el-icon-close-notification" size="mini" />
+        <el-button class="ignore action" size="mini" @click="handleIgnore">
+          <svg-icon icon-class="ignore" />
+        </el-button>
       </el-tooltip>
     </span>
-    <span v-else class="platform-status">{{ iLabel }}</span>
+    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+      <span v-if="iValue === 'confirmed' ">
+        <i class="fa fa-check color-primary" />
+      </span>
+      <span v-else>
+        <svg-icon icon-class="ignore" />
+      </span>
+    </el-tooltip>
   </span>
 </template>
 
@@ -22,7 +33,12 @@ export default {
     formatterArgsDefault: {
       type: Object,
       default() {
-        return {}
+        return {
+          confirm: ({ row, cellValue }) => {
+          },
+          ignore: ({ row, cellValue }) => {
+          }
+        }
       }
     }
   },
@@ -46,17 +62,33 @@ export default {
         return this.cellValue
       }
     }
+  },
+  methods: {
+    handleConfirm() {
+      this.formatterArgs.confirm({ row: this.row, cellValue: this.cellValue })
+    },
+    handleIgnore() {
+      this.formatterArgs.ignore({ row: this.row, cellValue: this.cellValue })
+    }
   }
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 
 .action.el-button--mini {
   cursor: pointer;
   padding: 1px 4px;
 
   &.confirm {
+    ::v-deep i {
+      color: var(--color-primary);
+    }
+  }
+
+  &.ignore {
+    ::v-deep svg.svg-icon {
+    }
   }
 }
 

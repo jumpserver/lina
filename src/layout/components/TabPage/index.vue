@@ -193,14 +193,14 @@ export default {
   }
 
   ::v-deep .page-content {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
     padding: 0;
   }
 
   .tab-page-content {
     padding: 10px 30px 22px;
     overflow-y: auto;
-    height: calc(100% - 50px);
+    height: calc(100vh - 130px);
 
     .el-alert {
       margin-top: 0;

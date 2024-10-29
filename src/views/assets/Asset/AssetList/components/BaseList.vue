@@ -17,6 +17,7 @@
       :port="gatewayPort"
       :visible.sync="gatewayVisible"
     />
+    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
   </div>
 </template>
 
@@ -32,12 +33,14 @@ import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 
 export default {
   components: {
     ListTable,
     GatewayDialog,
     PlatformDialog,
+    AccountDiscoverDialog,
     AssetBulkUpdateDialog
   },
   props: {
@@ -241,7 +244,15 @@ export default {
                 },
                 {
                   name: 'DiscoverAccounts',
-                  title: 'Discover accounts'
+                  title: 'Discover accounts',
+                  callback: ({ row }) => {
+                    console.log('Row: ', row)
+                    vm.discoveryDialog.asset = row.id
+                    console.log('vm.discoveryDialog.asset: ', vm.discoveryDialog)
+                    setTimeout(() => {
+                      vm.discoveryDialog.visible = true
+                    }, 200)
+                  }
                 },
                 ...this.addExtraMoreColActions
               ]
@@ -342,6 +353,10 @@ export default {
         visible: false,
         category: this.category,
         selectedRows: []
+      },
+      discoveryDialog: {
+        visible: false,
+        asset: ''
       }
     }
   },
