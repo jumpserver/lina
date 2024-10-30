@@ -95,6 +95,8 @@ export default {
                 {
                   title: this.$t('Run'),
                   name: 'run',
+                  order: 5,
+                  type: 'primary',
                   can: this.$hasPerm('ops.add_jobexecution') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     this.item = row

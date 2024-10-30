@@ -21,13 +21,18 @@ export default {
     formData: {
       type: Array,
       default: () => ([])
+    },
+    queryParam: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       loading: true,
       submitBtnText: this.$t('Confirm'),
-      url: '/api/v1/ops/variable/form_data/',
+      // 防止缓存form remoteMeta
+      url: `/api/v1/ops/variable/form_data/?t=${new Date().getTime()}&` + this.queryParam,
       form: {},
       encryptedFields: ['secret'],
       hasSaveContinue: false,

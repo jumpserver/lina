@@ -10,7 +10,7 @@
   >
     <VariableSetForm
       :form-data="formData"
-      :encrypt-password="false"
+      :query-param="queryParam"
       @confirm="handleConfirm"
     />
   </Dialog>
@@ -56,6 +56,9 @@ export default {
       return this.item.variable.map((data) => {
         return data.form_data
       })
+    },
+    queryParam() {
+      return 'job=' + this.item.id
     }
   },
   methods: {

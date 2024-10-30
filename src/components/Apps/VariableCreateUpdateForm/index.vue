@@ -24,11 +24,6 @@ export default {
     variable: {
       type: Object,
       default: () => ({})
-    },
-    // 默认组件密码加密
-    encryptPassword: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
@@ -38,11 +33,34 @@ export default {
       submitBtnText: this.$t('Confirm'),
       url: '/api/v1/ops/variable/',
       form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
-      encryptedFields: ['secret'],
+      encryptedFields: ['password_default_value'],
       fields: [
-        ['', ['name', 'var_name', 'type', 'default_value', 'tips', 'required']]
+        ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]
       ],
-      fieldsMeta: {},
+      fieldsMeta: {
+        text_default_value: {
+          label: this.$t('Default Value'),
+          hidden: (formValue) => {
+            return formValue.type !== 'text'
+          },
+          el: {
+            type: 'input'
+          }
+        },
+        select_default_value: {
+          label: this.$t('Default Value'),
+          hidden: (formValue) => {
+            return formValue.type !== 'select'
+          },
+          el: { type: 'input' }
+        },
+        extra_args: {
+          hidden: (formValue) => {
+            return formValue.type !== 'select'
+          },
+          el: { type: 'textarea', rows: 4, placeholder: this.$t('每行一个选项，例如：\nval1:值1\nval2:值2\n') }
+        }
+      },
       hasSaveContinue: false,
       method: 'get'
     }
