@@ -4,9 +4,10 @@
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
     <setVariableDialog
       v-if="showVariableDialog"
-      :item="item"
+      :form-data="formData"
+      :query-param="'job=' + item.id"
       :visible.sync="showVariableDialog"
-      @submit="runJob"
+      @submit="runJobWithParams"
     />
   </div>
 </template>
@@ -127,6 +128,14 @@ export default {
       showVariableDialog: false
     }
   },
+  computed: {
+    formData() {
+      return this.item.variable.map((data) => {
+        return data.form_data
+      })
+    }
+
+  },
   methods: {
     runJob(row, parameters) {
       this.$axios.post('/api/v1/ops/job-executions/', {
@@ -135,6 +144,9 @@ export default {
       }).then((resp) => {
         openTaskPage(resp.task_id)
       })
+    },
+    runJobWithParams(parameters) {
+      this.runJob(this.item, parameters)
     }
   }
 }

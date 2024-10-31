@@ -21,7 +21,7 @@ import Dialog from '@/components/Dialog'
 import VariableSetForm from '@/components/Apps/VariableSetForm'
 
 export default {
-  name: 'AddVariableDialog',
+  name: 'SetVariableDialog',
   components: {
     Dialog,
     VariableSetForm
@@ -31,13 +31,13 @@ export default {
       type: Boolean,
       default: false
     },
-    formValue: {
-      type: Object,
-      default: () => ({})
+    formData: {
+      type: Array,
+      default: () => ([])
     },
-    item: {
-      type: Object,
-      default: () => ({})
+    queryParam: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -51,19 +51,11 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       }
-    },
-    formData() {
-      return this.item.variable.map((data) => {
-        return data.form_data
-      })
-    },
-    queryParam() {
-      return 'job=' + this.item.id
     }
   },
   methods: {
     handleConfirm(variable) {
-      this.$emit('submit', this.item, variable)
+      this.$emit('submit', variable)
     }
   }
 }
