@@ -9,7 +9,7 @@
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
 import Announcement from './Announcement.vue'
-import Vault from './Vault.vue'
+import Vault from './Vault/index.vue'
 import Ticket from './Ticket.vue'
 import Ops from './Ops.vue'
 import Chat from './Chat.vue'

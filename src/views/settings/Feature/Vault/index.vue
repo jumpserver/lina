@@ -12,6 +12,8 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/IBox/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import store from '@/store'
+import HashiCorpKV from './HCP.vue'
+import AzureKV from './Azure.vue'
 
 export default {
   components: {
@@ -26,22 +28,6 @@ export default {
       helpText: this.$t('setting.VaultHelpText'),
       moreButtons: [
         {
-          title: this.$t('common.Test'),
-          loading: false,
-          disabled: !store.getters.publicSettings['VAULT_ENABLED'],
-          callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/vault/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
-          }
-        },
-        {
           title: this.$t('setting.sync'),
           loading: false,
           disabled: !store.getters.publicSettings['VAULT_ENABLED'],
@@ -54,21 +40,15 @@ export default {
               openTaskPage(res['task'])
             }).catch(() => {
               vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         }
       ],
-      encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
-        [this.$t('common.Basic'), ['HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('setting.AccountStorage'),
-          [
-            'VAULT_ENABLED',
-            'VAULT_HCP_HOST',
-            'VAULT_HCP_TOKEN',
-            'VAULT_HCP_MOUNT_POINT'
-          ]
-        ]
+        [this.$t('common.Basic'), ['VAULT_ENABLED', 'VAULT_BACKEND', 'HISTORY_ACCOUNT_CLEAN_LIMIT']],
+        [this.$t('setting.SMSProvider'), ['HCP', 'AZURE']]
       ],
       fieldsMeta: {
         HISTORY_ACCOUNT_CLEAN_LIMIT: {
@@ -80,19 +60,24 @@ export default {
           disabled: true,
           label: this.$t('setting.EnableVaultStorage')
         },
-        VAULT_HCP_HOST: {
+        VAULT_BACKEND: {
+          label: this.$t('setting.VaultProvider'),
           hidden: (formValue) => {
             return !formValue.VAULT_ENABLED
           }
         },
-        VAULT_HCP_TOKEN: {
-          hidden: (formValue) => {
-            return !formValue.VAULT_ENABLED
+        HCP: {
+          label: this.$t('setting.HashicorpVault'),
+          component: HashiCorpKV,
+          hidden: (form) => {
+            return form['VAULT_BACKEND'] !== 'hcp'
           }
         },
-        VAULT_HCP_MOUNT_POINT: {
-          hidden: (formValue) => {
-            return !formValue.VAULT_ENABLED
+        AZURE: {
+          label: this.$t('setting.AzureKeyVault'),
+          component: AzureKV,
+          hidden: (form) => {
+            return form['VAULT_BACKEND'] !== 'azure'
           }
         }
       },
