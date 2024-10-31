@@ -37,17 +37,7 @@
           <el-form ref="form" label-position="left" label-width="30px">
             <div class="form-content">
               <el-form-item label="" prop="variable">
-                <Variable />
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  size="mini"
-                  type="primary"
-                  style="float:right"
-                  @click="submitVariable"
-                >
-                  {{ $t('Submit') }}
-                </el-button>
+                <Variable :value.sync="variables" @input="setVariable" />
               </el-form-item>
             </div>
           </el-form>
@@ -165,7 +155,8 @@ export default {
       },
       iShowTree: true,
       activeEditorId: '',
-      openedEditor: {}
+      openedEditor: {},
+      variables: []
     }
   },
   computed: {
@@ -186,6 +177,7 @@ export default {
     }
   },
   mounted() {
+    this.variables = this.object?.variable
     this.onOpenEditor({ id: 'main.yml', name: 'main.yml' })
   },
   methods: {
@@ -306,7 +298,11 @@ export default {
     hasChange(editor) {
       return editor.value !== editor.originValue
     },
-    submitVariable() {
+    setVariable(variables) {
+      this.$axios.patch(`/api/v1/ops/playbooks/${this.object.id}/`,
+        { variable: variables }).catch(err => {
+        this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + err)
+      })
     }
   }
 }

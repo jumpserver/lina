@@ -30,7 +30,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
-        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'variable', 'playbook', 'chdir', 'timeout']],
+        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout']],
         [this.$t('Plan'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -90,6 +90,19 @@ export default {
                 return { label: item.name, value: item.id }
               }
             }
+          },
+          on: {
+            change: ([event], updateForm) => {
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
+              ).then(data => {
+                data?.variable.map(item => {
+                  delete item.job
+                  delete item.playbook
+                  return item
+                })
+                updateForm({ variable: data.variable })
+              })
+            }
           }
         },
         assets: {
@@ -121,6 +134,9 @@ export default {
         },
         argsLoadFromTemplate: {
           label: this.$t('Templates'),
+          hidden: (formValue) => {
+            return formValue.type !== 'adhoc'
+          },
           component: LoadTemplateLink,
           on: {
             change: ([event], updateForm) => {

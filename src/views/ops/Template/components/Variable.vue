@@ -6,7 +6,7 @@
         <el-table-column :label="$tc('VariableUsername')" prop="var_name" />
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
-            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeAccount(scope.row)" />
+            <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
             <el-button
               :disabled="!!scope.row.template"
               icon="el-icon-edit"
@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    removeAccount(variable) {
+    removeVariable(variable) {
       this.variables = this.variables.filter((item) => {
         if (variable.id && item.id) {
           return item.id !== variable.id
