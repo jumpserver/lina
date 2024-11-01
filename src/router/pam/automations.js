@@ -73,7 +73,7 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountDiscover/TaskDetail/ExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountDiscover/ExecutionDetail/index.vue'),
         name: 'AccountDiscoverExecutionDetail',
         hidden: true,
         meta: {
@@ -210,7 +210,6 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
         name: 'AccountBackupDetail',
-        // activeMenu: '/console/accounts/automations',
         meta: {
           title: i18n.t('AccountBackupDetail'),
           activeMenu: '/console/accounts/automations'
@@ -219,14 +218,14 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue'),
         name: 'AccountBackupExecutionList',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
         name: 'AccountBackupExecutionDetail',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true

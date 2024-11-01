@@ -54,12 +54,14 @@ export const gatherAccountTableConfig = (vm, url) => {
     hasTree: true,
     columns: [
       'asset', 'username', 'date_last_login',
-      'address_last_login', 'present', 'date_updated', 'status'
+      'address_last_login', 'present',
+      'remote_present', 'status',
+      'date_updated'
     ],
     columnsShow: {
       default: [
         'username', 'asset', 'address_last_login',
-        'date_last_login', 'present', 'status'
+        'date_last_login', 'present', 'remote_present', 'status'
       ]
     },
     columnsMeta: {
@@ -80,7 +82,12 @@ export const gatherAccountTableConfig = (vm, url) => {
         showOverflowTooltip: true
       },
       present: {
-        width: '160px'
+        label: '已同步',
+        width: '120px'
+      },
+      remote_present: {
+        label: '远端存在',
+        width: '120px'
       },
       date_updated: {
         formatter: function(row, col, cell) {

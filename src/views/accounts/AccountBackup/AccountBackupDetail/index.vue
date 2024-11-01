@@ -9,7 +9,8 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import AccountBackupInfo from './AccountBackupInfo.vue'
-import AccountBackupExecutionList from './AccountBackupExecution/AccountBackupExecutionList.vue'
+import AccountBackupExecutionList
+from '@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue'
 
 export default {
   components: {
