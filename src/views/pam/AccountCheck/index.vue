@@ -23,15 +23,15 @@ export default {
           },
           {
             title: this.$t('检查任务'),
-            name: 'AccountPushExecutionList',
+            name: 'AccountCheckTask',
             hidden: !this.$hasPerm('accounts.view_pushaccountexecution'),
             component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
           },
           {
             title: this.$t('检查引擎'),
-            name: 'AccountPushExecutionList',
-            hidden: !this.$hasPerm('accounts.view_pushaccountexecution'),
-            component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
+            name: 'AccountCheckEngine',
+            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            component: () => import('@/views/pam/AccountCheck/AccountCheckEngine.vue')
           }
         ]
       }

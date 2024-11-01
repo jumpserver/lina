@@ -15,7 +15,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/AccountScan/index.vue'),
+        component: () => import('@/views/pam/AccountCheck/index.vue'),
         name: 'AccountPushList',
         meta: {
           title: i18n.t('账号会话'),
