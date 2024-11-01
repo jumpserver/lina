@@ -1,5 +1,6 @@
 const moment = require('moment')
 import { getLangCode } from '@/i18n/utils'
+import store from '@/store'
 
 function getTimeUnits(u) {
   const units = {
@@ -123,4 +124,9 @@ export function formatDate(inputTime) {
   second = second < 10 ? ('0' + second) : second
   // return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
   return y + '-' + m + '-' + d + 'T' + h + ':' + minute + ':' + second
+}
+
+export function getDefaultExpiredDays() {
+  const years = store.getters.publicSettings.DEFAULT_EXPIRED_YEARS
+  return getDayFuture(years * 365, new Date()).toISOString()
 }
