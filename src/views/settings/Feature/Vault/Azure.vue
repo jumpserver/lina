@@ -45,6 +45,11 @@ export default {
         ]
       ],
       fieldsMeta: {
+        VAULT_AZURE_CLIENT_SECRET: {
+          el: {
+            autocomplete: 'new-password'
+          }
+        }
       },
       submitMethod() {
         return 'patch'

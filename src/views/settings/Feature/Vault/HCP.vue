@@ -44,6 +44,11 @@ export default {
         ]
       ],
       fieldsMeta: {
+        VAULT_HCP_TOKEN: {
+          el: {
+            autocomplete: 'new-password'
+          }
+        }
       },
       submitMethod() {
         return 'patch'
