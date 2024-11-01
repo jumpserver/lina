@@ -147,6 +147,7 @@ export default {
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
           let component = 'el-input'
+          const el = {}
           switch (v?.type) {
             case 'list':
               component = DynamicInput
@@ -154,12 +155,15 @@ export default {
             case 'boolean':
               component = Switcher
               break
+            case 'text':
+              el['text'] = 'textarea'
+              break
           }
 
           if (param) {
             v.default = param[k] || v.default
           }
-          const item = { ...v, component: component }
+          const item = { ...v, component: component, el: el }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
         }
