@@ -19,7 +19,7 @@ import TagChoicesFormatter from './TagChoicesFormatter.vue'
 import SwitchFormatter from './SwitchFormatter.vue'
 import AccountInfoFormatter from './AccountInfoFormatter.vue'
 import PlatformFormatter from './PlatformFormatter.vue'
-import ConfirmFormatter from './ConfirmOrIgnore.vue'
+import DiscoverConfirmFormatter from './DiscoverConfirmFormatter.vue'
 
 export default {
   DetailFormatter,
@@ -43,7 +43,7 @@ export default {
   SwitchFormatter,
   PlatformFormatter,
   AccountInfoFormatter,
-  ConfirmFormatter
+  DiscoverConfirmFormatter
 }
 
 export {
@@ -67,6 +67,6 @@ export {
   LabelsFormatter,
   SwitchFormatter,
   PlatformFormatter,
-  ConfirmFormatter,
+  DiscoverConfirmFormatter,
   AccountInfoFormatter
 }

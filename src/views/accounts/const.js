@@ -3,7 +3,7 @@ import i18n from '@/i18n/i18n'
 import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
 import store from '@/store'
 import { toSafeLocalDateStr } from '@/utils/time'
-import { ActionsFormatter, ConfirmFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
@@ -91,7 +91,8 @@ export const gatherAccountTableConfig = (vm, url) => {
         width: '150px'
       },
       status: {
-        formatter: ConfirmFormatter,
+        label: vm.$t('Pending'),
+        formatter: DiscoverConfirmFormatter,
         width: '100px',
         formatterArgs: {
           confirm: ({ row }) => {
@@ -113,6 +114,10 @@ export const gatherAccountTableConfig = (vm, url) => {
             }).catch(() => {
               row.status = vm.$t('Error')
             })
+          },
+          remove({ row }) {
+            vm.deleteDialog.visible = true
+            vm.deleteDialog.account = row
           }
         }
       },
@@ -122,11 +127,15 @@ export const gatherAccountTableConfig = (vm, url) => {
           hasClone: false,
           hasUpdate: false, // can set function(row, value)
           moreActionsTitle: vm.$t('More'),
+          onDelete: ({ row }) => {
+            vm.deleteDialog.visible = true
+            vm.deleteDialog.account = row
+          },
           extraActions: [
             {
               name: 'Sync',
               title: vm.$t('Sync'),
-              can: vm.$hasPerm('accounts.add_gatheredaccount') && !vm.$store.getters.currentOrgIsRoot,
+              can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
               type: 'primary',
               callback: ({ row }) => {
                 vm.$axios.post(
@@ -135,19 +144,6 @@ export const gatherAccountTableConfig = (vm, url) => {
                 ).then(res => {
                   vm.$message.success(vm.$tc('SyncSuccessMsg'))
                 }).catch(() => {
-                })
-              }
-            },
-            {
-              name: 'SyncDelete',
-              title: vm.$t('SyncDelete'),
-              can: vm.$hasPerm('accounts.remove_account') && !vm.$store.getters.currentOrgIsRoot,
-              type: 'danger',
-              callback: ({ row }) => {
-                vm.gatherAccounts = [row]
-                vm.showDeleteAccountDialog = false
-                setTimeout(() => {
-                  vm.showDeleteAccountDialog = true
                 })
               }
             }

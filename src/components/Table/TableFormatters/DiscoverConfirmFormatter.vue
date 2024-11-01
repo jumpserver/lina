@@ -1,9 +1,14 @@
 <template>
   <span class="conform-td">
     <span v-if="!iValue" class="confirm-action">
-      <el-tooltip :content="$tc('Add account to asset')" :open-delay="400">
+      <el-tooltip v-if="row.present" :content="$tc('Add account to asset')" :open-delay="400">
         <el-button class="confirm action" size="mini" @click="handleConfirm">
-          <i class="fa fa-check" />
+          <i class="fa fa-plus" />
+        </el-button>
+      </el-tooltip>
+      <el-tooltip v-else :content="$tc('Remove account ')" :open-delay="400">
+        <el-button class="remove action" size="mini" @click="handleRemove">
+          <i class="fa fa-minus" />
         </el-button>
       </el-tooltip>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
@@ -37,7 +42,10 @@ export default {
           confirm: ({ row, cellValue }) => {
           },
           ignore: ({ row, cellValue }) => {
-          }
+          },
+          remove: ({ row, cellValue }) => {
+          },
+          confirmIcon: 'fa fa-check'
         }
       }
     }
@@ -61,6 +69,14 @@ export default {
       } else {
         return this.cellValue
       }
+    },
+    iConfirmIcon() {
+      const icon = this.formatterArgs.confirmIcon
+      if (typeof icon === 'function') {
+        return icon({ row: this.row, cellValue: this.cellValue })
+      } else {
+        return icon
+      }
     }
   },
   methods: {
@@ -69,6 +85,9 @@ export default {
     },
     handleIgnore() {
       this.formatterArgs.ignore({ row: this.row, cellValue: this.cellValue })
+    },
+    handleRemove() {
+      this.formatterArgs.remove({ row: this.row, cellValue: this.cellValue })
     }
   }
 }
@@ -83,6 +102,12 @@ export default {
   &.confirm {
     ::v-deep i {
       color: var(--color-primary);
+    }
+  }
+
+  &.remove {
+    ::v-deep i {
+      color: var(--color-danger);
     }
   }
 
