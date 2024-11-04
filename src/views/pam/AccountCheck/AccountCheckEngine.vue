@@ -34,6 +34,7 @@ export default {
         }
       },
       headerActions: {
+        hasLeftActions: false,
         hasRefresh: true,
         hasExport: false,
         hasImport: false

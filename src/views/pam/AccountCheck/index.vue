@@ -17,9 +17,9 @@ export default {
         submenu: [
           {
             title: this.$t('检查结果'),
-            name: 'AccountPushList',
-            hidden: !this.$hasPerm('accounts.view_pushaccountautomation'),
-            component: () => import('@/views/accounts/AccountPush/AccountPushList.vue')
+            name: 'AccountRisks',
+            hidden: !this.$hasPerm('accounts.view_accountrisk'),
+            component: () => import('@/views/pam/AccountCheck/AccountRiskSummary.vue')
           },
           {
             title: this.$t('检查任务'),
