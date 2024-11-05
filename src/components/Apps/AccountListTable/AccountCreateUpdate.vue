@@ -1,6 +1,6 @@
-<template>
+<template v-if="iVisible">
   <Dialog
-    v-if="iVisible"
+    v-if="origin !== 'pam'"
     :close-on-click-modal="false"
     :destroy-on-close="true"
     :show-cancel="false"
@@ -21,15 +21,33 @@
       @edit="editAccount"
     />
   </Dialog>
+
+  <Drawer
+    v-else
+    :title="title"
+    @close-drawer="iVisible = false"
+  >
+    <AccountCreateUpdateForm
+      v-if="!loading"
+      ref="form"
+      :account="account"
+      :add-template="addTemplate"
+      :asset="asset"
+      @add="addAccount"
+      @edit="editAccount"
+    />
+  </Drawer>
 </template>
 
 <script>
+import Drawer from '@/components/Drawer/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
 
 export default {
   name: 'CreateAccountDialog',
   components: {
+    Drawer,
     Dialog,
     AccountCreateUpdateForm
   },
@@ -55,6 +73,10 @@ export default {
       default: function() {
         return this.$t('AddAccount')
       }
+    },
+    origin: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -106,6 +128,8 @@ export default {
         }
       }).catch(error => {
         this.iVisible = true
+        console.log(this.iVisible)
+        console.log(this.origin)
         this.handleResult(null, error)
       })
     },
