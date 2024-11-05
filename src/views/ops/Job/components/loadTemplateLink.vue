@@ -28,6 +28,7 @@ export default {
     },
     onSelectAdhoc(adhoc) {
       adhoc?.variable.map(item => {
+        delete item.id
         delete item.job
         delete item.adhoc
         return item

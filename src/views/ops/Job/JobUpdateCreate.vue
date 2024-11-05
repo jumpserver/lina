@@ -2,6 +2,13 @@
   <div v-if="ready">
     <VariableHelpDialog :visible.sync="showHelpDialog" />
     <GenericCreateUpdatePage ref="form" v-bind="$data" />
+    <setVariableDialog
+      v-if="showVariableDialog"
+      :form-data="formData"
+      :query-param="queryParam"
+      :visible.sync="showVariableDialog"
+      @submit="setPeriodicParams"
+    />
   </div>
 </template>
 
@@ -15,9 +22,11 @@ import { Required } from '@/components/Form/DataForm/rules'
 import { crontab, interval } from '@/views/accounts/const'
 import LoadTemplateLink from '@/views/ops/Job/components/loadTemplateLink'
 import Variable from '@/views/ops/Template/components/Variable'
+import setVariableDialog from '@/views/ops/Template/components/setVariableDialog.vue'
 
 export default {
   components: {
+    setVariableDialog,
     GenericCreateUpdatePage,
     VariableHelpDialog
   },
@@ -31,7 +40,7 @@ export default {
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
         [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout']],
-        [this.$t('Plan'), ['is_periodic', 'interval', 'crontab']],
+        [this.$t('Plan'), ['is_periodic', 'interval', 'crontab', 'periodic_variable']],
         [this.$t('Other'), ['comment']]
       ],
       initial: {
@@ -93,6 +102,7 @@ export default {
           },
           on: {
             change: ([event], updateForm) => {
+              this.queryParam = `playbook=${event.pk}`
               this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
               ).then(data => {
                 data?.variable.map(item => {
@@ -140,7 +150,11 @@ export default {
           component: LoadTemplateLink,
           on: {
             change: ([event], updateForm) => {
-              updateForm({ args: event.args, module: event.module.value, variable: event.variable })
+              updateForm({
+                args: event.args,
+                module: event.module.value,
+                variable: event.variable
+              })
             }
           }
         },
@@ -168,7 +182,23 @@ export default {
           }
         },
         variable: {
-          component: Variable
+          component: Variable,
+          on: {
+            input: ([event], updateForm) => {
+              this.formData = event.map(item => {
+                return item.form_data
+              })
+              if (event.length > 0) {
+                if (event[0].job) {
+                  this.queryParam = `job=${event[0].job}`
+                } else if (event[0].adhoc) {
+                  this.queryParam = `adhoc=${event[0].adhoc}`
+                } else if (event[0].playbook) {
+                  this.queryParam = `playbook=${event[0].playbook}`
+                }
+              }
+            }
+          }
         },
         timeout: {
           helpText: i18n.t('TimeoutHelpText')
@@ -194,6 +224,18 @@ export default {
           type: 'switch',
           hidden: () => {
             return this.instantTask
+          },
+          on: {
+            change: ([event], updateForm) => {
+              if (this.formData.length > 0) {
+                this.showVariableDialog = event
+              }
+            }
+          }
+        },
+        periodic_variable: {
+          hidden: () => {
+            return true
           }
         },
         interval,
@@ -201,6 +243,10 @@ export default {
       },
       createSuccessNextRoute: { name: 'JobManagement' },
       updateSuccessNextRoute: { name: 'JobManagement' },
+      cleanFormValue: (data) => {
+        Object.assign(data, { periodic_variable: this.periodicVariableValue })
+        return data
+      },
       moreButtons: [
         {
           title: this.$t('ExecuteAfterSaving'),
@@ -209,7 +255,11 @@ export default {
             this.submitForm(form, btn)
           }
         }
-      ]
+      ],
+      formData: [],
+      queryParam: '',
+      showVariableDialog: false,
+      periodicVariableValue: {}
     }
   },
   mounted() {
@@ -254,6 +304,10 @@ export default {
         }
       })
       this.$refs.form.$refs.createUpdateForm.$refs.form.$refs.dataForm.submitForm('form', false)
+    },
+    setPeriodicParams(data) {
+      this.showVariableDialog = false
+      this.periodicVariableValue = data
     }
   }
 }
