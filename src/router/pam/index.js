@@ -45,7 +45,6 @@ export default {
       path: '/pam/automations',
       name: 'AccountAutomation',
       component: empty,
-      // redirect: '/audit/sessions/sessions',
       meta: {
         title: i18n.t('Automation'),
         icon: 'accounts',
@@ -67,6 +66,7 @@ export default {
     {
       path: '/pam/services',
       name: 'AccountService',
+      component: empty,
       meta: {
         title: i18n.t('Service'),
         icon: 'accounts',
@@ -77,6 +77,7 @@ export default {
     {
       path: '/pam/activity',
       name: 'AccountActivity',
+      component: empty,
       meta: {
         title: i18n.t('Activity'),
         icon: 'accounts',

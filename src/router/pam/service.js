@@ -12,7 +12,7 @@ export default [
     meta: {
       app: 'accounts',
       name: 'AccountService',
-      icon: 'accounts',
+      icon: 'service',
       resource: 'pushaccountautomation'
     },
     children: [

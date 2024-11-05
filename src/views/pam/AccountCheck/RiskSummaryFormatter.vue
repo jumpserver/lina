@@ -1,9 +1,9 @@
 <template>
   <span class="risk">
     <span v-for="[k, v] of Object.entries(cellValue) " :key="k">
-      <span v-if="v !== 0" size="mini" type="getRiskType(k)">
-        {{ getRiskLabel(k) }}: {{ v }};
-      </span>
+      <el-tag v-if="v !== 0" :type="getRiskType(k)" effect="plain" size="mini">
+        {{ getRiskLabel(k) }}({{ v }})
+      </el-tag>
     </span>
   </span>
 </template>
@@ -38,16 +38,16 @@ export default {
       },
       riskType: {
         zombie: 'warning',
-        ghost: 'danger',
+        ghost: 'primary',
         long_time_password: 'warning',
-        weak_password: 'warning',
+        weak_password: 'danger',
         password_error: 'danger',
-        password_expired: 'danger',
+        password_expired: 'info',
         group_changed: 'warning',
         sudo_changed: 'warning',
-        account_deleted: 'danger',
-        no_admin_account: 'danger',
-        no_user_account: 'danger',
+        account_deleted: 'info',
+        no_admin_account: 'warning',
+        no_user_account: 'info',
         other: 'warning'
       }
     }

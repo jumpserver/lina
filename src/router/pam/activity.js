@@ -2,25 +2,27 @@ import empty from '@/layout/empty.vue'
 import i18n from '@/i18n/i18n'
 
 export default [
+
   {
-    path: 'session',
+    path: 'sessions',
     name: 'AccountSession',
     component: empty,
     meta: {
-      app: 'accounts',
+      app: 'terminal',
       name: 'BaseAccountSession',
-      icon: 'accounts',
-      resource: 'pushaccountautomation'
+      icon: 'session',
+      resource: 'session',
+      permissions: []
     },
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/AccountCheck/index.vue'),
-        name: 'AccountPushList',
+        component: () => import('@/views/sessions/SessionList/index.vue'),
+        name: 'AccountSessionList',
         meta: {
           title: i18n.t('账号会话'),
           menuTitle: i18n.t('账号会话'),
-          permissions: ['accounts.view_pushaccountautomation']
+          permissions: []
         }
       }
     ]
@@ -35,7 +37,7 @@ export default [
     meta: {
       app: 'accounts',
       name: 'BaseAccountRisk',
-      icon: 'accounts',
+      icon: 'activity',
       resource: 'pushaccountautomation'
     },
     children: [

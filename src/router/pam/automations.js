@@ -3,7 +3,7 @@ import i18n from '@/i18n/i18n'
 
 export default [
   {
-    path: 'account-gather',
+    path: 'account-discovery',
     component: empty,
     redirect: {
       name: 'AccountDiscoverList'
@@ -12,7 +12,7 @@ export default [
     meta: {
       title: i18n.t('AccountDiscoverList'),
       app: 'accounts',
-      icon: 'client'
+      icon: 'discovery'
       // activeMenu: '/console/accounts/automations',
     },
     children: [
@@ -93,7 +93,7 @@ export default [
     },
     meta: {
       title: i18n.t('BaseAccountChangeSecret'),
-      icon: 'basic',
+      icon: 'change-password',
       app: 'accounts'
     },
     children: [
@@ -169,7 +169,7 @@ export default [
     meta: {
       title: i18n.t('AccountBackup'),
       app: 'accounts',
-      icon: 'clean',
+      icon: 'backup',
       resource: 'accountbackupautomation'
     },
     children: [
