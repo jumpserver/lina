@@ -49,7 +49,15 @@ export default {
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
-              hasClone: false
+              hasClone: false,
+              extraActions: [
+                {
+                  title: this.$t('View'),
+                  type: 'primary',
+                  action: function() {
+                  }
+                }
+              ]
             }
           }
         }
