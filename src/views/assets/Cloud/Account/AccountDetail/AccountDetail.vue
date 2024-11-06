@@ -76,7 +76,7 @@ export default {
           },
           callbacks: {
             change: function(val) {
-              this.updateTask({ 'sync_ip_type': val })
+              this.updateTaskData({ 'sync_ip_type': val })
             }.bind(this)
           }
         },
@@ -89,7 +89,7 @@ export default {
           },
           callbacks: {
             change: function(val) {
-              this.updateTask({ 'release_assets': val })
+              this.updateTaskData({ 'release_assets': val })
             }.bind(this)
           }
         }
@@ -204,14 +204,14 @@ export default {
     hasEditPerm() {
       return this.$hasPerm('xpack.change_account') && this.$hasPerm('xpack.change_syncinstancetask')
     },
-    updateTask(data) {
+    updateTaskData(data) {
       this.$axios.patch(
         `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`,
         data
       ).then(res => {
-        this.$message.success(this.$t('UpdateSuccessMsg'))
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(err => {
-        this.$message.error(this.$t('UpdateErrorMsg' + ' ' + err))
+        this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
       })
     }
   }
