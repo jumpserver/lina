@@ -19,7 +19,7 @@ export default {
             title: this.$t('检查结果'),
             name: 'AccountRisks',
             hidden: !this.$hasPerm('accounts.view_accountrisk'),
-            component: () => import('@/views/pam/AccountCheck/AccountRiskSummary.vue')
+            component: () => import('@/views/pam/AccountCheck/AccountRiskList.vue')
           },
           {
             title: this.$t('检查任务'),

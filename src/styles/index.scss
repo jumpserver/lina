@@ -254,6 +254,10 @@ input[type=file] {
     line-height: 1.5;
     border-right: none;
     color: var(--color-text-primary);
+
+    a {
+      color: #1c84c6
+    }
   }
 
   th {
@@ -275,6 +279,8 @@ input[type=file] {
     .el-table__column-filter-trigger {
       line-height: 24px;
     }
+
+
   }
 
   td {

@@ -245,7 +245,7 @@ $origin-color: #ffffff;
   text-align: center;
   padding: 5px 0;
   border: 1px solid #DCDFE6;
-  background-color: #fff;
+  background-color: #f3f3f3;
   border-radius: 2px;
   cursor: pointer;
   height: 30px;
