@@ -10,7 +10,6 @@
   >
     <VariableCreateForm
       :variable="variable"
-      :encrypt-password="false"
       @add="addVariable"
       @edit="editVariable"
     />
@@ -40,9 +39,6 @@ export default {
       type: Array,
       default: () => ([])
     }
-  },
-  data() {
-    return {}
   },
   computed: {
     iVisible: {

@@ -2,8 +2,8 @@
   <div>
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
-        <el-table-column :label="$tc('VariableName')" prop="name" />
-        <el-table-column :label="$tc('VariableUsername')" prop="var_name" />
+        <el-table-column :label="$tc('Name')" prop="name" />
+        <el-table-column :label="$tc('VariableName')" prop="var_name" />
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />

@@ -17,10 +17,6 @@ export default {
     AutoDataForm
   },
   props: {
-    asset: {
-      type: Object,
-      default: null
-    },
     variable: {
       type: Object,
       default: () => ({})
@@ -28,18 +24,15 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      usernameChanged: false,
       submitBtnText: this.$t('Confirm'),
       url: '/api/v1/ops/variable/',
       form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
-      encryptedFields: ['password_default_value'],
       fields: [
         ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]
       ],
       fieldsMeta: {
         text_default_value: {
-          label: this.$t('Default Value'),
+          label: this.$t('DefaultValue'),
           hidden: (formValue) => {
             return formValue.type !== 'text'
           },
@@ -48,7 +41,7 @@ export default {
           }
         },
         select_default_value: {
-          label: this.$t('Default Value'),
+          label: this.$t('DefaultValue'),
           hidden: (formValue) => {
             return formValue.type !== 'select'
           },
@@ -58,7 +51,7 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'select'
           },
-          el: { type: 'textarea', rows: 4, placeholder: this.$t('每行一个选项，例如：\n选项1:值1\n选项2:值2\n') }
+          el: { type: 'textarea', rows: 4, placeholder: this.$t('ExtraArgsPlaceholder') }
         }
       },
       hasSaveContinue: false,

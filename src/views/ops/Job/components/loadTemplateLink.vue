@@ -2,7 +2,7 @@
   <div>
     <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
     <el-link :underline="false" type="default" @click="onClick()">
-      从模板中获取
+      {{ $t('LoadTemplate') }}
     </el-link>
   </div>
 </template>
@@ -15,13 +15,11 @@ export default {
   components: {
     AdhocOpenDialog
   },
-  props: {},
   data() {
     return {
       showOpenAdhocDialog: false
     }
   },
-  watch: {},
   methods: {
     onClick() {
       this.showOpenAdhocDialog = true

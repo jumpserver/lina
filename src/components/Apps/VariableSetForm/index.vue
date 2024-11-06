@@ -1,7 +1,7 @@
 <template>
   <AutoDataForm
     ref="AutoDataForm"
-    class="variable-add"
+    class="variable-set"
     :submit-btn-text="submitBtnText"
     v-bind="$data"
     :fields="fields"
@@ -29,12 +29,10 @@ export default {
   },
   data() {
     return {
-      loading: true,
       submitBtnText: this.$t('Confirm'),
       // 防止缓存form remoteMeta
       url: `/api/v1/ops/variable/form_data/?t=${new Date().getTime()}&` + this.queryParam,
       form: {},
-      encryptedFields: ['secret'],
       hasSaveContinue: false,
       method: 'get',
       hasReset: false
@@ -45,8 +43,6 @@ export default {
       return [['', this.formData.map(item => item.var_name)]]
     }
   },
-  mounted() {
-  },
   methods: {
     confirm(form) {
       this.$emit('confirm', form)
@@ -56,7 +52,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.variable-add {
+.variable-set {
   ::v-deep .el-form-item {
     margin-bottom: 5px;
 
