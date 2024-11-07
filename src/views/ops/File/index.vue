@@ -535,7 +535,7 @@ export default {
 
       .empty-file-tip {
         position: absolute;
-        right: 20%;
+        right: calc(50% - 230px);
         top: 50%;
         font-size: 18px;
         color: #c5c9cc;

@@ -6,7 +6,7 @@
     :title="$tc('NewFile')"
     :visible.sync="iVisible"
     top="1vh"
-    width="20%"
+    width="40%"
     @confirm="onConfirm"
   >
     <el-form>
@@ -45,7 +45,8 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onConfirm() {
       this.$emit('confirm', this.name)
