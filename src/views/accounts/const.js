@@ -4,10 +4,12 @@ import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
 import store from '@/store'
 
 const validatorInterval = (rule, value, callback) => {
-  if (isNaN(parseInt(value, 10)) || parseInt(value) < 1) {
-    return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
+  // value只能是 null 或者 >=1
+  if (value === null || (!isNaN(value) && Number(value) >= 1)) {
+    callback()
+  } else {
+    callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
-  callback()
 }
 
 export const crontab = {
