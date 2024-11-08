@@ -50,7 +50,7 @@ import AdhocOpenDialog from './AdhocOpenDialog.vue'
 import AdhocSaveDialog from './AdhocSaveDialog.vue'
 import VariableHelpDialog from './VariableHelpDialog.vue'
 import setVariableDialog from '@/views/ops/Template/components/setVariableDialog'
-import { createJob, getJob, getTaskDetail, StopJob } from '@/api/ops'
+import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -479,7 +479,7 @@ export default {
       })
     },
     stop() {
-      StopJob({ task_id: this.currentTaskId }).then(() => {
+      stopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
           this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
