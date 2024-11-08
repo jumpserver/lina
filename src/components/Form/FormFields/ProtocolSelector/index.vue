@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" :class="showSetting ? 'show-setting' : 'hide-setting'">
+  <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" class="protocol-item">
       <el-input
         v-model="item.port"
@@ -114,8 +114,7 @@ export default {
       name: '',
       items: [],
       currentProtocol: {},
-      showDialog: false,
-      loading: false
+      showDialog: false
     }
   },
   computed: {
@@ -144,10 +143,8 @@ export default {
   watch: {
     choices: {
       handler(value, oldValue) {
-        this.loading = true
         setTimeout(() => {
           this.setDefaultItems(value)
-          this.loading = false
         },)
       },
       deep: true,
