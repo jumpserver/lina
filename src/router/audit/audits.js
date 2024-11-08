@@ -80,15 +80,5 @@ export default [
         }
       }
     ]
-  },
-  {
-    path: 'job-execution-log',
-    name: 'JobExecutionLog',
-    component: () => import('@/views/audits/JobExecutionLogList'),
-    meta: {
-      title: i18n.t('JobExecutionLog'),
-      icon: 'task',
-      permissions: ['audits.view_joblog']
-    }
   }
 ]

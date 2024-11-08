@@ -53,7 +53,7 @@ export function createJob(form) {
   })
 }
 
-export function StopJob(form) {
+export function stopJob(form) {
   return request({
     url: '/api/v1/ops/job-executions/stop/',
     method: 'post',
@@ -71,3 +71,10 @@ export function JobUploadFile(form) {
   })
 }
 
+export function auditUpdateJob(id, form) {
+  return request({
+    url: `/api/v1/audits/jobs/${id}/`,
+    method: 'patch',
+    data: form
+  })
+}

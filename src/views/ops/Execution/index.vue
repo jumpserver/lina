@@ -28,11 +28,14 @@ export default {
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'id', 'job', 'material', 'job_type', 'is_finished', 'is_success',
+            'id', 'material', 'job_type', 'is_finished', 'is_success',
             'time_cost', 'date_created', 'actions'
           ]
         },
         columnsMeta: {
+          material: {
+            width: '500px'
+          },
           id: {
             formatter(row) {
               return row.id.slice(0, 8)
@@ -44,6 +47,7 @@ export default {
             }
           },
           is_finished: {
+            width: '100px',
             formatter: (row) => {
               if (row.is_finished) {
                 return <i Class='fa fa-check text-primary'/>
@@ -52,6 +56,7 @@ export default {
             }
           },
           is_success: {
+            width: '100px',
             formatter: (row) => {
               if (!row.is_finished) {
                 return <i Class='fa  fa fa-spinner fa-spin'/>

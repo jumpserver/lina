@@ -24,6 +24,9 @@ export default {
           },
           isDisplay(row) {
             return true
+          },
+          callback({ row }) {
+            return null
           }
         }
       }
@@ -49,6 +52,7 @@ export default {
   methods: {
     onChange(val) {
       this.$axios.patch(this.patchUrl, this.patchData).then(res => {
+        this.formatterArgs.callback(this.row)
         this.$message.success(this.$t('updateSuccessMsg'))
       }).catch(err => {
         this.value = !val
