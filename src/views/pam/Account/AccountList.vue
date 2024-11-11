@@ -17,13 +17,32 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
-        hasImport: true
+        hasImport: true,
+        columnsMeta: {
+          connect: {
+            width: '80px',
+            formatter: (row) => {
+              console.log(row)
+              return (
+                <span class='connect'>
+                  <el-button type='primary' onClick={() => this.handlePamConnect(row)} size='mini' plain>
+                    <i class='fa fa-desktop'/>
+                  </el-button>
+                </span>
+              )
+            }
+          }
+        }
       }
     }
   },
   async mounted() {
   },
-  methods: {}
+  methods: {
+    handlePamConnect(row) {
+      window.open(`/luna/pamConnect/`, '_blank')
+    }
+  }
 }
 </script>
 
