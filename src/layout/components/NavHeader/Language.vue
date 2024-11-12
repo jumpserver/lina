@@ -67,14 +67,14 @@ export default {
       }
     },
     changeMomentLang() {
-      if (this.currentLang.code.indexOf('en') > -1) {
-        this.$moment.locale('en')
-      } else if (this.currentLang.code.indexOf('ja') > -1) {
+      if (this.currentLang.code.indexOf('ja') > -1) {
         this.$moment.locale('ja')
       } else if (this.currentLang.code.indexOf('zh_hant') > -1) {
         this.$moment.locale('zh-tw')
-      } else {
+      } else if (['zh', 'zh-cn'].includes(this.currentLang.code.toLowerCase())) {
         this.$moment.locale('zh-cn')
+      } else {
+        this.$moment.locale('en')
       }
     },
     changeLangTo(item) {
