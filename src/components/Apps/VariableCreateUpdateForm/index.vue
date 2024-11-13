@@ -51,7 +51,21 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'select'
           },
-          el: { type: 'textarea', rows: 4, placeholder: this.$t('ExtraArgsPlaceholder') }
+          el: { type: 'textarea', rows: 4, placeholder: this.$t('ExtraArgsPlaceholder') },
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                const lines = value.split('\n')
+                const regex = /^[^:]+:[^:]+$/
+                for (const line of lines) {
+                  if (!regex.test(line.trim())) {
+                    callback(new Error(this.$t('ExtraArgsFormatError')))
+                  }
+                }
+                callback()
+              }
+            }
+          ]
         }
       },
       hasSaveContinue: false,
