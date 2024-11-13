@@ -318,9 +318,9 @@ export default {
             width: '80px',
             formatter: () => {
               return (
-                <span class='connect'>
+                <span className='connect'>
                   <el-button type='primary' size='mini' plain>
-                    <i class='fa fa-desktop'/>
+                    <i className='fa fa-desktop'/>
                   </el-button>
                 </span>
               )
