@@ -74,6 +74,11 @@ module.exports = {
         target: 'http://127.0.0.1:4200',
         changeOrigin: true
       },
+      '/facelive/': {
+        target: 'http://localhost:9999',
+        changeOrigin: true,
+        ws: true
+      },
       '^/(core|static|media)/': {
         target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true
@@ -81,8 +86,7 @@ module.exports = {
     },
     after: require('./mock/mock-server.js')
   },
-  css: {
-  },
+  css: {},
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
@@ -90,7 +94,8 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        elementCss: resolve('node_modules/element-ui/lib/theme-chalk/index.css'),
+        elementCss: resolve(
+          'node_modules/element-ui/lib/theme-chalk/index.css'),
         elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js')
       },
       extensions: ['.vue', '.js', '.json']
@@ -148,7 +153,7 @@ module.exports = {
       .end()
 
     config
-    // https://webpack.js.org/configuration/devtool/#development
+      // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development',
         config => config.devtool('cheap-source-map')
       )
@@ -159,10 +164,11 @@ module.exports = {
           config
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
-              inline: /runtime\..*\.js$/
-            }])
+            .use('script-ext-html-webpack-plugin', [
+              {
+                // `runtime` must same as runtimeChunk name. default is `runtime`
+                inline: /runtime\..*\.js$/
+              }])
             .end()
           config
             .optimization.splitChunks({
