@@ -8,7 +8,7 @@
     :visible.sync="visible"
     class="dialog-content"
     v-bind="$attrs"
-    width="600px"
+    width="740px"
     @confirm="visible = false"
     v-on="$listeners"
   >
@@ -52,11 +52,21 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" style="display: flex; align-items: center; margin-bottom: 20px;">
           <el-input
+            v-if="subTypeSelected !== 'face'"
             v-model="secretValue"
             :placeholder="inputPlaceholder"
             :show-password="showPassword"
             @keyup.enter.native="handleConfirm"
           />
+
+          <iframe
+            v-if="isFaceCaptureVisible && subTypeSelected ==='face' && faceCaptureUrl"
+            :src="faceCaptureUrl"
+            allow="camera"
+            sandbox="allow-scripts allow-same-origin"
+            style="width: 100%; height: 800px;border: none;"
+          />
+
           <span v-if="subTypeSelected === 'sms'" style="margin: -1px 0 0 20px;">
             <el-button
               :disabled="smsBtnDisabled"
@@ -72,8 +82,23 @@
       </el-row>
       <el-row :gutter="24" style="margin: 10px auto;">
         <el-col :md="24" :sm="24">
-          <el-button class="confirm-btn" size="mini" type="primary" @click="handleConfirm">
+          <el-button
+            v-if="subTypeSelected!=='face'"
+            class="confirm-btn"
+            size="mini"
+            type="primary"
+            @click="handleConfirm"
+          >
             {{ this.$t('Confirm') }}
+          </el-button>
+          <el-button
+            v-if="subTypeSelected==='face'&&!isFaceCaptureVisible"
+            class="confirm-btn"
+            size="mini"
+            type="primary"
+            @click="handleFaceCapture"
+          >
+            开始人脸识别
           </el-button>
         </el-col>
       </el-row>
@@ -113,7 +138,10 @@ export default {
       visible: false,
       callback: null,
       cancel: null,
-      processing: false
+      processing: false,
+      isFaceCaptureVisible: false,
+      faceToken: null,
+      faceCaptureUrl: null
     }
   },
   computed: {
@@ -129,6 +157,10 @@ export default {
   },
   methods: {
     handleSubTypeChange(val) {
+      if (val !== 'face') {
+        this.isFaceCaptureVisible = false
+      }
+
       this.inputPlaceholder = this.subTypeChoices.filter(item => item.name === val)[0]?.placeholder
       this.smsWidth = val === 'sms' ? 6 : 0
     },
@@ -192,6 +224,29 @@ export default {
         this.$message.error(this.$tc('FailedToSendVerificationCode'))
       })
     },
+    startFaceCapture() {
+      const url = '/api/v1/authentication/mfa/face/context/'
+      this.$axios.post(url).then(data => {
+        const token = data['token']
+        this.faceCaptureUrl = '/facelive/capture?token=' + token
+        this.isFaceCaptureVisible = true
+
+        const timer = setInterval(() => {
+          this.$axios.get(url + `?token=${token}`).then(data => {
+            if (data['is_finished']) {
+              clearInterval(timer)
+              this.isFaceCaptureVisible = false
+              this.handleConfirm()
+            }
+          })
+        }, 1000)
+      }).catch(() => {
+        this.$message.error(this.$tc('FailedToStartFaceCapture'))
+      })
+    },
+    handleFaceCapture() {
+      this.startFaceCapture()
+    },
     handleConfirm() {
       if (this.confirmTypeRequired === 'relogin') {
         return this.logout()
@@ -214,6 +269,8 @@ export default {
         })
       }).catch((err) => {
         this.$message.error(err.message || this.$tc('ConfirmFailed'))
+        this.faceCaptureUrl = null
+        this.isFaceCaptureVisible = false
       })
     }
   }
@@ -221,21 +278,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog-content ::v-deep .el-dialog__footer {
-    padding: 0;
-  }
+.dialog-content ::v-deep .el-dialog__footer {
+  padding: 0;
+}
 
-  .dialog-content ::v-deep .el-dialog {
-    padding: 8px;
+.dialog-content ::v-deep .el-dialog {
+  padding: 8px;
 
-    .el-dialog__body {
-      padding-top: 30px;
-      padding-bottom: 30px;
-    }
+  .el-dialog__body {
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
+}
 
-  .confirm-btn {
-    width: 100%;
-    line-height: 20px;
-  }
+.confirm-btn {
+  width: 100%;
+  line-height: 20px;
+}
 </style>
