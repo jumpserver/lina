@@ -62,21 +62,22 @@ export default {
         VAULT_BACKEND: {
           label: this.$t('Provider'),
           hidden: (formValue) => {
-            return !formValue.VAULT_ENABLED
-          }
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] === 'local'
+          },
+          disabled: true
         },
         HCP: {
           label: this.$t('HashicorpVault'),
           component: HashiCorpKV,
-          hidden: (form) => {
-            return form['VAULT_BACKEND'] !== 'hcp'
+          hidden: (formValue) => {
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'hcp'
           }
         },
         AZURE: {
           label: this.$t('AzureKeyVault'),
           component: AzureKV,
-          hidden: (form) => {
-            return form['VAULT_BACKEND'] !== 'azure'
+          hidden: (formValue) => {
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'azure'
           }
         }
       },
