@@ -12,7 +12,7 @@
 
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
-import RiskHandleFormatter from './RiskHandleFormatter.vue'
+import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 
 export default {
   components: {
@@ -96,7 +96,10 @@ export default {
           status: {
             label: vm.$t('Pending'),
             width: '120px',
-            formatter: RiskHandleFormatter
+            formatter: RiskHandleFormatter,
+            el: {
+              'show-overflow-tooltip': false
+            }
           },
           actions: {
             has: false

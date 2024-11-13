@@ -1,27 +1,32 @@
 <template>
-  <span class="risk-handler">
-    <el-dropdown trigger="click">
-      <el-button class="confirm action" size="mini">
-        <i class="fa fa-check" />
-      </el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="item of iActions" :key="item.name">
-          {{ item.label }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-    <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-      <el-button class="ignore action" size="mini">
-        <svg-icon icon-class="ignore" />
-      </el-button>
-    </el-tooltip>
+  <span>
+    <span class="risk-handler">
+      <el-dropdown trigger="click" @command="handleRisk">
+        <el-button class="confirm action" size="mini">
+          <i class="fa fa-check" />
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="item of iActions" :key="item.name" :command="item.name">
+            {{ item.label }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-tooltip :content="$tc('Ignore')" :open-delay="400">
+        <el-button class="ignore action" size="mini">
+          <svg-icon icon-class="ignore" />
+        </el-button>
+      </el-tooltip>
+    </span>
+    <ReviewDraw :row="row" :visible.sync="reviewDrawer" />
   </span>
 </template>
 <script>
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
+import ReviewDraw from '@/views/pam/AccountCheck/RiskHandlerFormatter/ReviewDraw.vue'
 
 export default {
   name: 'RiskSummaryFormatter',
+  components: { ReviewDraw },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -31,7 +36,8 @@ export default {
   },
   data() {
     return {
-      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
+      reviewDrawer: false
     }
   },
   computed: {
@@ -40,14 +46,21 @@ export default {
     }
   },
   methods: {
+    handleRisk(cmd) {
+      switch (cmd) {
+        case 'review':
+          this.reviewDrawer = true
+          break
+        default:
+          console.log(cmd)
+      }
+    },
     getActions() {
       const actions = [
         {
           name: 'disableAccount',
           label: this.$t('Disable Account'),
-          has: ['zombie', 'ghost'],
-          callback: () => {
-          }
+          has: ['zombie', 'ghost']
         },
         {
           name: 'deleteAccount',
@@ -109,6 +122,11 @@ export default {
     ::v-deep svg.svg-icon {
     }
   }
+}
+
+.draw-body {
+  padding: 20px;
+  font-size: 13px;
 }
 
 </style>
