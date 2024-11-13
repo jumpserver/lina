@@ -19,7 +19,7 @@ export default {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
-        titlePrefix: this.$t('AccountPushDetail'),
+        titlePrefix: this.$t('AccountCheckDetail'),
         activeMenu: 'AccountPushInfo',
         url: '/api/v1/accounts/push-account-automations',
         submenu: [

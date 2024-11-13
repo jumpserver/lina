@@ -27,22 +27,11 @@ export default {
         secret_type: 'password',
         secret_strategy: 'specific'
       },
-      url: '/api/v1/accounts/push-account-automations/',
+      url: '/api/v1/accounts/check-account-automations/',
       encryptedFields: ['secret'],
       fields: [
         [this.$t('Basic'), ['name']],
         [this.$t('Asset'), ['assets', 'nodes']],
-        [
-          this.$t('Account'),
-          [
-            'accounts', 'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase'
-          ]
-        ],
-        [
-          this.$t('Automations'), ['params']
-        ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],

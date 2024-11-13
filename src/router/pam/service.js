@@ -51,7 +51,7 @@ export default [
       {
         path: ':id',
         component: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
-        name: 'AccountPushDetail',
+        name: 'AccountCheckDetail',
         hidden: true,
         meta: {
           title: i18n.t('AccountPushList'),
@@ -73,7 +73,7 @@ export default [
       {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
-        name: 'AccountPushExecutionDetail',
+        name: 'AccountCheckExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('ExecutionDetail'),

@@ -10,7 +10,7 @@ export default [
       app: 'accounts',
       name: 'BaseAccountRisk',
       icon: 'scan',
-      resource: 'pushaccountautomation'
+      resource: 'accountcheckautomation'
     },
     children: [
       {
@@ -19,8 +19,16 @@ export default [
         name: 'AccountCheckSummary',
         meta: {
           title: i18n.t('账号检查'),
-          menuTitle: i18n.t('账号检查'),
-          permissions: ['accounts.view_pushaccountautomation']
+          menuTitle: i18n.t('账号检查')
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/pam/AccountCheck/AccountCheckCreateUpdate.vue'),
+        name: 'AccountCheckCreate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountCheckCreate')
         }
       }
     ]

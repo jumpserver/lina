@@ -46,7 +46,7 @@ export default {
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountPushDetail',
+                name: 'AccountCheckDetail',
                 params: { id: row.automation }
               })
             },
@@ -94,7 +94,7 @@ export default {
                   type: 'info',
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountCheckExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]

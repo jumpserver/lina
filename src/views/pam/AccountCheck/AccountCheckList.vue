@@ -16,10 +16,10 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/accounts/push-account-automations/',
+        url: '/api/v1/accounts/check-account-automations/',
         columns: [
-          'name', 'accounts', 'secret_strategy', 'is_periodic',
-          'periodic_display', 'executed_amount', 'is_active', 'actions'
+          'name', 'assets', 'accounts', 'secret_strategy', 'is_periodic',
+          'periodic_display', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -32,7 +32,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountPushDetail'
+              route: 'AccountCheckDetail'
             }
           },
           accounts: {
@@ -87,7 +87,7 @@ export default {
                   title: vm.$t('Execute'),
                   name: 'execute',
                   can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
+                    return row.is_active && vm.$hasPerm('accounts.add_accountcheckautomation')
                   },
                   type: 'info',
                   callback: function({ row }) {
@@ -110,7 +110,9 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        createRoute: 'AccountCheckCreate',
+        canCreate: vm.$hasPerm('accounts.add_accountcheckautomation')
       }
     }
   }

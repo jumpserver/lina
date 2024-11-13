@@ -30,7 +30,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountPushDetail'
+              route: 'AccountCheckDetail'
             }
           },
           risk_summary: {
