@@ -34,6 +34,16 @@ export default {
       },
       updateSuccessNextRoute: {
         name: 'Template'
+      },
+      cleanFormValue(value) {
+        const isClone = this?.$route?.query.clone_from !== undefined
+        if (isClone) {
+          value?.variable.map((item) => {
+            delete item.id
+            delete item.adhoc
+          })
+        }
+        return value
       }
     }
   }

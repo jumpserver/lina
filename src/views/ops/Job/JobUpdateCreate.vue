@@ -40,7 +40,7 @@ export default {
         [this.$t('Basic'), ['name', 'type', 'instant']],
         [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
         [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout']],
-        [this.$t('Plan'), ['is_periodic', 'interval', 'crontab', 'periodic_variable']],
+        [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab', 'periodic_variable']],
         [this.$t('Other'), ['comment']]
       ],
       initial: {
@@ -217,7 +217,7 @@ export default {
         run_after_save: {
           type: 'checkbox',
           hidden: (formValue) => {
-            return this.instantTask
+            return true
           }
         },
         is_periodic: {
@@ -251,7 +251,7 @@ export default {
         {
           title: this.$t('ExecuteAfterSaving'),
           callback: (value, form, btn) => {
-            form.value.instant = true
+            form.value.run_after_save = true
             this.submitForm(form, btn)
           }
         }

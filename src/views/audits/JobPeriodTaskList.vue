@@ -28,6 +28,9 @@ export default {
           'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary', 'created_by', 'is_periodic'
         ],
         columnsMeta: {
+          actions: {
+            has: false
+          },
           name: {
             formatter: (row) => row.name
           },
@@ -51,7 +54,7 @@ export default {
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {
-                return row.crontab || row.interval
+                return row.is_periodic
               },
               getPatchUrl(row) {
                 return `/api/v1/ops/celery/period-tasks/run_ops_job_period_${row.id.slice(0, 8)}/`
@@ -62,7 +65,7 @@ export default {
                 }
               },
               callback(row) {
-                auditUpdateJob(row.id, { is_periodic: false }).then(() => {
+                auditUpdateJob(row.id, { is_periodic: !row.is_periodic }).then(() => {
                   vm.$refs.ListPage.reloadTable()
                 })
               }
