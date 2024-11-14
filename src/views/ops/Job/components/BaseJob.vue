@@ -155,6 +155,7 @@ export default {
         job: row.id,
         parameters: parameters
       }).then((resp) => {
+        this.showVariableDialog = false
         openTaskPage(resp.task_id)
       })
     },

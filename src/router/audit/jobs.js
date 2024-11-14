@@ -12,7 +12,7 @@ export default [
     meta: {
       title: i18n.t('JobList'),
       icon: 'task',
-      permissions: []
+      permissions: ['audits.view_joblog']
     },
     children: [
       {

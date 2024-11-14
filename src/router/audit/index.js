@@ -64,7 +64,7 @@ export default {
       meta: {
         title: i18n.t('JobsAudit'),
         icon: 'job',
-        permissions: []
+        permissions: ['audits.view_joblog']
       },
       children: JobRoutes
     }
