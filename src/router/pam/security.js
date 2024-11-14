@@ -16,7 +16,7 @@ export default [
       {
         path: '',
         component: () => import('@/views/pam/AccountCheck/index.vue'),
-        name: 'AccountCheckSummary',
+        name: 'AccountCheckList',
         meta: {
           title: i18n.t('账号检查'),
           menuTitle: i18n.t('账号检查')
@@ -25,7 +25,7 @@ export default [
       {
         path: 'create',
         component: () => import('@/views/pam/AccountCheck/AccountCheckCreateUpdate.vue'),
-        name: 'AccountCheckCreate',
+        name: 'AccountCheckCreateUpdate',
         hidden: true,
         meta: {
           title: i18n.t('AccountCheckCreate')

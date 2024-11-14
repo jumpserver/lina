@@ -21,18 +21,18 @@ export default {
             hidden: !this.$hasPerm('accounts.view_accountrisk'),
             component: () => import('@/views/pam/AccountCheck/AccountRiskList.vue')
           },
-          // {
-          //   title: this.$t('检查任务'),
-          //   name: 'AccountCheckTask',
-          //   hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
-          //   component: () => import('./AccountCheckList.vue')
-          // },
-          // {
-          //   title: this.$t('执行历史'),
-          //   name: 'AccountCheckExecution',
-          //   hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
-          //   component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
-          // },
+          {
+            title: this.$t('检查任务'),
+            name: 'AccountCheckTask',
+            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            component: () => import('./AccountCheckTaskList.vue')
+          },
+          {
+            title: this.$t('执行历史'),
+            name: 'AccountCheckExecution',
+            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
+          },
           {
             title: this.$t('检查引擎'),
             name: 'AccountCheckEngine',

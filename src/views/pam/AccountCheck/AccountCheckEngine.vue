@@ -16,12 +16,12 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-check-engines/',
         columns: [
-          'name', 'display_name', 'description'
+          'name', 'comment'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'display_name', 'description', 'actions'
+            'name', 'comment', 'actions'
           ]
         },
         columnsMeta: {

@@ -5,7 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
-import { AssetSelect, AutomationParams } from '@/components'
+import { AssetSelect } from '@/components'
 import { crontab, interval, is_periodic } from '@/views/accounts/const'
 
 export default {
@@ -32,6 +32,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name']],
         [this.$t('Asset'), ['assets', 'nodes']],
+        [this.$t('Engine'), ['engines']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -49,6 +50,23 @@ export default {
           on: {
             input: ([value]) => {
               this.assetIds = value
+            }
+          }
+        },
+        engines: {
+          el: {
+            url: '/api/v1/accounts/account-check-engines/',
+            multiple: true,
+            ajax: {
+              transformOption: (item) => {
+                let name = item.name
+                let disabled = false
+                if (item.slug === 'check_gathered_account') {
+                  name = `${name} (使用创建账号发现任务替代)`
+                  disabled = true
+                }
+                return { label: name, value: item.id, disabled: disabled }
+              }
             }
           }
         },
@@ -82,20 +100,10 @@ export default {
         },
         is_periodic,
         crontab,
-        interval,
-        params: {
-          component: AutomationParams,
-          label: this.$t('PushParams'),
-          el: {
-            method: 'push_account_method',
-            assets: this.assetIds,
-            nodes: this.nodeIds
-          },
-          helpText: this.$t('ParamsHelpText')
-        }
+        interval
       },
-      createSuccessNextRoute: { name: 'AccountPushList' },
-      updateSuccessNextRoute: { name: 'AccountPushList' },
+      createSuccessNextRoute: { name: 'AccountCheckList' },
+      updateSuccessNextRoute: { name: 'AccountCheckList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''

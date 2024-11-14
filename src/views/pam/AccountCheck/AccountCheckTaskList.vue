@@ -6,6 +6,7 @@
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   name: 'AccountPushList',
@@ -18,13 +19,13 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/check-account-automations/',
         columns: [
-          'name', 'assets', 'accounts', 'secret_strategy', 'is_periodic',
+          'name', 'assets', 'nodes', 'is_periodic',
           'periodic_display', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'accounts', 'periodic_display',
+            'name', 'assets', 'nodes', 'periodic_display',
             'executed_amount', 'is_active', 'actions'
           ]
         },
@@ -35,9 +36,32 @@ export default {
               route: 'AccountCheckDetail'
             }
           },
-          accounts: {
-            formatter: function(row) {
-              return <span> {row.accounts.join(', ')} </span>
+          assets: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: false,
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
+            }
+          },
+          nodes: {
+            formatter: AmountFormatter,
+            formatterArgs: {
+              async: false,
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
             }
           },
           secret_strategy: {
@@ -82,6 +106,8 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: () => true,
+              updateRoute: 'AccountCheckCreateUpdate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),
@@ -92,7 +118,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/accounts/push-account-executions/`,
+                      `/api/v1/accounts/check-account-executions/`,
                       {
                         automation: row.id,
                         type: row.type.value
@@ -111,7 +137,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: 'AccountCheckCreate',
+        createRoute: 'AccountCheckCreateUpdate',
         canCreate: vm.$hasPerm('accounts.add_accountcheckautomation')
       }
     }
