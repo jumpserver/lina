@@ -56,7 +56,6 @@ export default {
   methods: {
     handleConfirm(variable) {
       this.$emit('submit', variable)
-      this.visible = false
     }
   }
 }
