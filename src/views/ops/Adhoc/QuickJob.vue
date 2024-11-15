@@ -323,6 +323,13 @@ export default {
       return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     }
   },
+  watch: {
+    command(iNew, iOld) {
+      if (iNew === '') {
+        this.variableFormData = []
+      }
+    }
+  },
   mounted() {
     this.enableWS()
     this.initData()
