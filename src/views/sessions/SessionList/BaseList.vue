@@ -32,13 +32,21 @@ export default {
           ]
         }
       }
+    },
+    columnsMeta: {
+      type: Object,
+      default: () => {}
+    },
+    columnsExclude: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       tableConfig: {
         url: this.url,
-        columnsExclude: ['terminal'],
+        columnsExclude: ['terminal', ...this.columnsExclude],
         columnsShow: this.columnsShow,
         columnsMeta: {
           id: {
@@ -137,7 +145,8 @@ export default {
               hasUpdate: false,
               extraActions: this.extraActions
             }
-          }
+          },
+          ...this.columnsMeta
         }
       },
       headerActions: {

@@ -1,5 +1,5 @@
 <template>
-  <BaseList :extra-actions="extraActions" :url="url" />
+  <BaseList :extra-actions="extraActions" :url="url" :columns-meta="columnsMeta" :columns-exclude="columnsExclude" />
 </template>
 
 <script>
@@ -42,7 +42,13 @@ export default {
             download(`/api/v1/terminal/sessions/${row.id}/replay/download/`)
           }
         }
-      ]
+      ],
+      columnsExclude: ['has_command'],
+      columnsMeta: {
+        command_amount: {
+          label: this.$t('CommandsTotal')
+        }
+      }
     }
   },
   methods: {
