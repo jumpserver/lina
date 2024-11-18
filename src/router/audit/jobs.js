@@ -17,7 +17,7 @@ export default [
     children: [
       {
         path: '',
-        name: 'JobList',
+        name: 'AuditJobList',
         component: () => import('@/views/audits/JobPeriodTaskList'),
         meta: {
           title: i18n.t('JobList'),
@@ -31,7 +31,7 @@ export default [
     name: 'JobExecutionLog',
     component: empty,
     redirect: {
-      name: 'JobExecutionLog'
+      name: 'AuditJobExecutionLog'
     },
     meta: {
       title: i18n.t('JobExecutionLog'),
@@ -41,7 +41,7 @@ export default [
     children: [
       {
         path: '',
-        name: 'JobExecutionLog',
+        name: 'AuditJobExecutionLog',
         component: () => import('@/views/audits/JobExecutionLogList'),
         meta: {
           title: i18n.t('JobExecutionLog'),
