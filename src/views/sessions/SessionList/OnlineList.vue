@@ -1,5 +1,5 @@
 <template>
-  <BaseList :extra-actions="extraActions" :url="url" />
+  <BaseList :extra-actions="extraActions" :url="url" :columns-meta="columnsMeta" :columns-exclude="columnsExclude" />
 </template>
 
 <script>
@@ -100,12 +100,14 @@ export default {
             window.open(monitorUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }
-      ]
+      ],
+      columnsExclude: ['has_command'],
+      columnsMeta: {
+        command_amount: {
+          label: this.$t('CommandsTotal')
+        }
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
