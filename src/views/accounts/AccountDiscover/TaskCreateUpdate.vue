@@ -15,7 +15,7 @@ export default {
     return {
       fields: [
         [this.$t('Basic'), ['name', 'nodes', 'assets']],
-        [this.$t('发现配置'), ['is_sync_account', 'recipients']],
+        [this.$t('DiscoverConfig'), ['is_sync_account', 'check_risk', 'recipients']],
         [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -23,10 +23,10 @@ export default {
       hasDetailInMsg: false,
       fieldsMeta: {
         is_sync_account: {
-          type: 'switch',
           label: this.$t('IsSyncAccountLabel'),
           helpText: this.$t('IsSyncAccountHelpText')
         },
+        check_risk: {},
         is_periodic,
         crontab,
         interval,

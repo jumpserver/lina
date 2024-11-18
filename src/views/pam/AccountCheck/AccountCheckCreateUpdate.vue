@@ -7,6 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect } from '@/components'
 import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import i18n from '@/i18n/i18n'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -32,7 +33,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name']],
         [this.$t('Asset'), ['assets', 'nodes']],
-        [this.$t('Engine'), ['engines']],
+        [this.$t('Check config'), ['engines', 'recipients']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -66,6 +67,19 @@ export default {
                   disabled = true
                 }
                 return { label: name, value: item.id, disabled: disabled }
+              }
+            }
+          }
+        },
+        recipients: {
+          label: i18n.t('Recipients'),
+          helpText: i18n.t('OnlyMailSend'),
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
           }

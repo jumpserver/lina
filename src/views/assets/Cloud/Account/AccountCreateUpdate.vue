@@ -214,12 +214,12 @@ export default {
             helpTip: this.$t('HostnameStrategy')
           },
           is_always_update: {
-            type: 'switch',
+            type: 'checkbox',
             label: this.$t('IsAlwaysUpdate'),
             helpTip: this.$t('IsAlwaysUpdateHelpTip')
           },
           fully_synchronous: {
-            type: 'switch',
+            type: 'checkbox',
             label: this.$t('FullySynchronous'),
             helpTip: this.$t('FullySynchronousHelpTip')
           },
@@ -238,7 +238,7 @@ export default {
             }
           },
           is_periodic: {
-            type: 'switch'
+            type: 'checkbox'
           },
           crontab: {
             component: CronTab,

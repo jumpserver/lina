@@ -38,7 +38,7 @@ export const interval = {
 }
 
 export const is_periodic = {
-  type: 'switch',
+  type: 'checkbox',
   hidden: (formValue) => {
     return !store.getters.hasValidLicense
   }

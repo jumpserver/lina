@@ -54,22 +54,22 @@ export default {
           {
             id: 'uppercase',
             label: this.$t('Uppercase'),
-            type: 'switch'
+            type: 'checkbox'
           },
           {
             id: 'lowercase',
             label: this.$t('Lowercase'),
-            type: 'switch'
+            type: 'checkbox'
           },
           {
             id: 'digit',
             label: this.$t('Digit'),
-            type: 'switch'
+            type: 'checkbox'
           },
           {
             id: 'symbol',
             label: this.$t('SpecialSymbol'),
-            type: 'switch'
+            type: 'checkbox'
           },
           {
             id: 'exclude_symbols',

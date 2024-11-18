@@ -161,7 +161,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     is_active: {
-      type: 'switch'
+      type: 'checkbox'
     },
     cluster: {
       label: i18n.t('Cluster')

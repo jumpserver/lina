@@ -31,7 +31,7 @@ export default {
             title: this.$t('执行历史'),
             name: 'AccountCheckExecution',
             hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
-            component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
+            component: () => import('./AccountCheckExecutionList.vue')
           },
           {
             title: this.$t('检查引擎'),

@@ -54,7 +54,7 @@ export default {
             }
           },
           AUTH_LDAP_SYNC_IS_PERIODIC: {
-            type: 'switch'
+            type: 'checkbox'
           },
           AUTH_LDAP_SYNC_CRONTAB: {
             component: CronTab,

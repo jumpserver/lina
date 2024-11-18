@@ -153,6 +153,7 @@ export default {
               break
             case 'boolean':
               component = Switcher
+              // component = 'checkbox'
               break
           }
 

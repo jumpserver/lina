@@ -145,7 +145,7 @@ export default {
           }
         },
         is_periodic: {
-          type: 'switch',
+          type: 'checkbox',
           hidden: () => {
             return this.instantTask
           }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import ObjectSelect2 from '@/components/Form/FormFields/NestedObjectSelect2.vue'
 import NestedField from '@/components/Form/AutoDataForm/components/NestedField.vue'
-import Switcher from '@/components/Form/FormFields/Switcher.vue'
 import rules from '@/components/Form/DataForm/rules'
 import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
@@ -65,8 +64,9 @@ export class FormFieldGenerator {
         }
         break
       case 'boolean':
-        type = ''
-        field.component = Switcher
+        type = 'checkbox'
+        // field.component = Switcher
+        // field.type = 'checkbox'
         break
       case 'list':
         type = 'input'

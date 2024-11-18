@@ -22,14 +22,15 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/check-account-executions/',
         columns: [
-          'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
-          'trigger', 'date_start', 'date_finished', 'actions'
+          'task_name', 'asset_amount',
+          'node_amount', 'status', 'trigger',
+          'date_start', 'date_finished', 'actions'
         ],
         columnsShow: {
           default: [
-            'automation', 'push_user_name', 'status',
+            'automation', 'task_name', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },
@@ -40,7 +41,7 @@ export default {
               return <span>{row.automation}</span>
             }
           },
-          push_user_name: {
+          task_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
@@ -95,6 +96,15 @@ export default {
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountCheckExecutionDetail', params: { id: row.id }})
+                  }
+                },
+                {
+                  name: 'report',
+                  title: this.$t('Report'),
+                  type: 'success',
+                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
+                  callback: function({ row }) {
+                    window.open(`/api/v1/accounts/check-account-executions/${row.id}/report/`)
                   }
                 }
               ]

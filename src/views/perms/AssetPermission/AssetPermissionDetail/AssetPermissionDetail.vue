@@ -30,7 +30,7 @@ export default {
       quickActions: [
         {
           title: this.$t('Active'),
-          type: 'switch',
+          type: 'checkbox',
           attrs: {
             model: this.object.is_active,
             disabled: !this.$hasPerm('perms.change_assetpermission')
