@@ -9,6 +9,7 @@ import rules from '@/components/Form/DataForm/rules'
 import { mapGetters } from 'vuex'
 import { Select2 } from '@/components'
 import store from '@/store'
+import { MFASystemSetting, MFALevel } from '../const'
 
 export default {
   components: {
@@ -44,10 +45,7 @@ export default {
           }
         },
         mfa_level: {
-          disabled: false,
-          tips: {
-            2: this.$t('forceEnableMFAHelpText')
-          }
+          disabled: false
         },
         email: {
           rules: [
@@ -176,6 +174,7 @@ export default {
         if (obj?.id) {
           obj.org_roles = obj.org_roles?.map(({ id }) => id)
           obj.system_roles = obj.system_roles?.map(({ id }) => id)
+          obj.mfa_level.value = this.initial.mfa_level || obj.mfa_level.value
         }
         return obj
       },
@@ -192,6 +191,9 @@ export default {
         }
         if (value.source !== 'local') {
           delete value.need_update_password
+        }
+        if ([MFALevel.allUsers, MFALevel.onlyAdminUsers].indexOf(value.mfa_level) > -1) {
+          delete value.mfa_level
         }
         return value
       }
@@ -231,11 +233,26 @@ export default {
       this.initial.org_roles = roles.filter(role => role.name === 'OrgUser').map(role => role.id)
     },
     disableMFAFieldIfNeed(user) {
+      let options = null
+      let mfa_level = null
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
+      const securityMFAAuth = store.getters.publicSettings['SECURITY_MFA_AUTH']
       const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' &&
-        store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
-      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed) {
-        this.fieldsMeta['mfa_level'].disabled = true
+        securityMFAAuth === MFASystemSetting.onlyAdminUsers
+      if (securityMFAAuth === MFASystemSetting.allUsers) {
+        options = [{ 'value': MFALevel.allUsers, 'label': this.$t('MFAAllUsers') }]
+        mfa_level = MFALevel.allUsers
+      }
+      if (securityMFAAuth === MFASystemSetting.onlyAdminUsers && adminUserIsNeed) {
+        options = [{
+          'value': MFALevel.onlyAdminUsers,
+          'label': this.$t('MFAOnlyAdminUsers')
+        }]
+        mfa_level = MFALevel.onlyAdminUsers
+      }
+      if (mfa_level !== null && options !== null) {
+        this.fieldsMeta['mfa_level'].options = options
+        this.initial.mfa_level = mfa_level
       }
     }
   }
