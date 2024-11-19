@@ -23,7 +23,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'host', 'actions',
-            'http_port', 'https_port', 'ssh_port', 'rdp_port','vnc_port',
+            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port',
             'mysql_port', 'mariadb_port', 'postgresql_port',
             'redis_port', 'sqlserver_port', 'oracle_port_range', 'is_active'
           ]
