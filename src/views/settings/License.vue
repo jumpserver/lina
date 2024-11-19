@@ -114,8 +114,8 @@ export default {
       }
       return [
         {
-          key: this.$t('SubscriptionID'),
-          value: this.licenseData.subscription_id
+          key: this.$t('SerialNumber'),
+          value: this.licenseData?.serial_no || ''
         },
         {
           key: this.$t('Corporation'),
@@ -132,10 +132,6 @@ export default {
         {
           key: this.$t('Edition'),
           value: this.licenseData.edition
-        },
-        {
-          key: this.$t('SerialNumber'),
-          value: this.licenseData?.serial_no || ''
         },
         {
           key: this.$t('Comment'),
