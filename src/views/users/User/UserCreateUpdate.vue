@@ -176,6 +176,7 @@ export default {
         if (obj?.id) {
           obj.org_roles = obj.org_roles?.map(({ id }) => id)
           obj.system_roles = obj.system_roles?.map(({ id }) => id)
+          obj.mfa_level.value = this.initial.mfa_level || obj.mfa_level.value
         }
         return obj
       },
@@ -192,6 +193,9 @@ export default {
         }
         if (value.source !== 'local') {
           delete value.need_update_password
+        }
+        if ([3, 4].indexOf(value.mfa_level) > -1) {
+          delete value.mfa_level
         }
         return value
       }
@@ -234,8 +238,13 @@ export default {
       // SECURITY_MFA_AUTH 0 不开启 1 全局开启 2 管理员开启
       const adminUserIsNeed = (user?.is_superuser || user?.is_org_admin) && this.$route.meta.action === 'update' &&
         store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2
-      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1 || adminUserIsNeed) {
-        this.fieldsMeta['mfa_level'].disabled = true
+      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1) {
+        this.fieldsMeta['mfa_level'].options = [{ 'value': 3, 'label': this.$t('MFAAllUsers') }]
+        this.initial.mfa_level = 3
+      }
+      if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2 && adminUserIsNeed) {
+        this.fieldsMeta['mfa_level'].options = [{ 'value': 4, 'label': this.$t('MFAOnlyAdminUsers') }]
+        this.initial.mfa_level = 4
       }
     }
   }

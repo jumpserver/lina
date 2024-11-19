@@ -23,6 +23,7 @@ import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import store from '@/store'
 
 export default {
   components: {
@@ -65,7 +66,16 @@ export default {
             }
           },
           mfa_level: {
-            width: '130px'
+            width: '130px',
+            formatter: (row) => {
+              if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 1) {
+                return this.$t('MFAAllUsers')
+              } else if (store.getters.publicSettings['SECURITY_MFA_AUTH'] === 2 && (row?.is_superuser || row?.is_org_admin)) {
+                return this.$t('MFAOnlyAdminUsers')
+              } else {
+                return row['mfa_level'].label
+              }
+            }
           },
           source: {
             width: '120px',
