@@ -34,7 +34,7 @@
             </el-tab-pane>
           </el-tabs>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          <el-form ref="form" label-position="left" label-width="30px">
+          <el-form v-if="!disableEdit" ref="form" label-position="left" label-width="30px">
             <div class="form-content">
               <el-form-item label="" prop="variable">
                 <Variable :value.sync="variables" @input="setVariable" />
