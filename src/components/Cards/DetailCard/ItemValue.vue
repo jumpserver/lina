@@ -92,7 +92,7 @@ export default {
       )
     }
     return (
-      <span title={this.displayValue}>{this.displayValue}</span>
+      <span style='white-space: pre-wrap;' title={this.displayValue}>{this.displayValue}</span>
     )
   }
 }
