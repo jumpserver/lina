@@ -90,6 +90,20 @@ export default {
                 return { label: item.name, value: item.id }
               }
             }
+          },
+          on: {
+            change: ([event], updateForm) => {
+              this.queryParam = `playbook=${event.pk}`
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
+              ).then(data => {
+                data?.variable.map(item => {
+                  delete item.job
+                  delete item.playbook
+                  return item
+                })
+                updateForm({ variable: data.variable })
+              })
+            }
           }
         },
         assets: {

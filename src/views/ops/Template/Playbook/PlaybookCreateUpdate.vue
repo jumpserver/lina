@@ -32,6 +32,7 @@ export default {
           value?.variable.map((item) => {
             delete item.id
             delete item.playbook
+            delete item.job
           })
         }
         return value
