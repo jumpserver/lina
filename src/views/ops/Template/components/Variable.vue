@@ -4,6 +4,7 @@
       <el-table :data="variables" class="el-table--fit el-table--border">
         <el-table-column show-overflow-tooltip :label="$tc('Name')" prop="name" />
         <el-table-column show-overflow-tooltip :label="$tc('VariableName')" prop="var_name" />
+        <el-table-column show-overflow-tooltip :label="$tc('DefaultValue')" prop="default_value" />
         <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
