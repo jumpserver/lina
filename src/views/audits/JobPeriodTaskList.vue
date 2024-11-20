@@ -21,11 +21,12 @@ export default {
         columnsShow: {
           min: ['name', 'material'],
           default: [
-            'name', 'material', 'type', 'crontab', 'interval', 'created_by', 'is_periodic'
+            'name', 'material', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
           ]
         },
         columns: [
-          'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary', 'created_by', 'is_periodic'
+          'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
+          'created_by', 'is_periodic_display', 'is_periodic'
         ],
         columnsMeta: {
           actions: {
@@ -47,6 +48,10 @@ export default {
                 <span>{row.summary.total}</span>
               </div>
             }
+          },
+          is_periodic_display: {
+            width: '100px',
+            label: this.$t('Periodic')
           },
           is_periodic: {
             width: '120px',
