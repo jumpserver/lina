@@ -13,13 +13,28 @@ export default {
     return {
       url: '/api/v1/ops/playbooks/',
       fields: [
-        [this.$t('Basic'), ['name', 'scope', 'comment']]
+        [this.$t('Basic'), ['name', 'scope', 'comment', 'variable']]
       ],
+      fieldsMeta: {
+        variable: {
+          hidden: () => true
+        }
+      },
       createSuccessNextRoute: {
         name: 'Template'
       },
       updateSuccessNextRoute: {
         name: 'Template'
+      },
+      cleanFormValue(value) {
+        const isClone = this?.$route?.query.clone_from !== undefined
+        if (isClone) {
+          value?.variable.map((item) => {
+            delete item.id
+            delete item.playbook
+          })
+        }
+        return value
       }
     }
   }
