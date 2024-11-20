@@ -55,12 +55,16 @@ export default {
           rules: [
             {
               validator: (rule, value, callback) => {
-                const lines = value.split('\n')
-                const regex = /^[^:]+:[^:]+$/
-                for (const line of lines) {
-                  if (!regex.test(line.trim())) {
-                    callback(new Error(this.$t('ExtraArgsFormatError')))
+                try {
+                  const lines = value.split('\n')
+                  const regex = /^[^:]+:[^:]+$/
+                  for (const line of lines) {
+                    if (!regex.test(line.trim())) {
+                      callback(new Error(this.$t('ExtraArgsFormatError')))
+                    }
                   }
+                } catch (e) {
+                  callback(new Error(this.$t('ExtraArgsFormatError')))
                 }
                 callback()
               }
