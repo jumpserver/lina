@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="16" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
   </el-row>
 </template>
@@ -21,7 +21,8 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/ops/adhocs/${this.object.id}/`
+      url: `/api/v1/ops/adhocs/${this.object.id}/`,
+      excludes: ['variable']
     }
   },
   computed: {
