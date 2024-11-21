@@ -99,6 +99,7 @@ export default {
                 data?.variable.map(item => {
                   delete item.job
                   delete item.playbook
+                  delete item.id
                   return item
                 })
                 updateForm({ variable: data.variable })
