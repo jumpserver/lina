@@ -23,7 +23,7 @@ export default {
     return {
       url: `/api/v1/ops/playbooks/${this.object.id}/`,
       excludes: [
-        'path', 'create_method', 'vcs_url'
+        'variable', 'path', 'create_method', 'vcs_url'
       ]
     }
   },
