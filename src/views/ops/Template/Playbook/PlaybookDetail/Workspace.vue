@@ -34,10 +34,10 @@
             </el-tab-pane>
           </el-tabs>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          <el-form v-if="!disableEdit" ref="form" label-position="left" label-width="30px">
+          <el-form ref="form" label-position="left" label-width="30px">
             <div class="form-content">
               <el-form-item label="" prop="variable">
-                <Variable :value.sync="variables" @input="setVariable" />
+                <Variable :value.sync="variables" :disable-edit.sync="disableEdit" @input="setVariable" />
               </el-form-item>
             </div>
           </el-form>
@@ -299,6 +299,9 @@ export default {
       return editor.value !== editor.originValue
     },
     setVariable(variables) {
+      if (this.disableEdit) {
+        return
+      }
       this.$axios.patch(`/api/v1/ops/playbooks/${this.object.id}/`,
         { variable: variables }).catch(err => {
         this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + err)
