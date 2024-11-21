@@ -117,7 +117,7 @@ export default {
 <style lang="scss" scoped>
 .page {
   height: calc(100vh - 50px);
-  overflow-y: hidden;
+  //overflow-y: hidden;
   overflow-x: hidden;
 
   .el-alert {
@@ -127,8 +127,9 @@ export default {
 
   .page-content {
     height: calc(100% - 20px);
-    overflow-x: hidden;
-    overflow-y: auto !important;
+    //Todo)) 注释掉的原因：当页面动态高度变化时就会导致页面最下方的按钮被 hidden 掉
+    //overflow-x: hidden;
+    //overflow-y: auto !important;
 
     ::v-deep > div {
       margin-bottom: 50px;

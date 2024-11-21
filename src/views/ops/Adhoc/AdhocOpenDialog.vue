@@ -52,6 +52,7 @@ export default {
                     title: this.$tc('Select'),
                     name: 'select',
                     can: true,
+                    type: 'primary',
                     callback: ({ row }) => {
                       this.$emit('select', row)
                       this.iVisible = false

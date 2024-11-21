@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+    <GenericListPage ref="ListPage" :header-actions="headerActions" :table-config="tableConfig" />
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import { stopJob } from '@/api/ops'
 
 export default {
   components: {
@@ -44,6 +45,20 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     openTaskPage(row.task_id)
+                  }
+                },
+                {
+                  title: this.$t('Stop'),
+                  name: 'stop',
+                  can: ({ row }) => {
+                    return !row.is_finished
+                  },
+                  type: 'danger',
+                  callback: ({ row }) => {
+                    stopJob({ task_id: row.task_id }).then(() => {
+                      this.$refs.ListPage.reloadTable()
+                      this.$message.success(this.$t('StopJobMsg'))
+                    })
                   }
                 }
               ]

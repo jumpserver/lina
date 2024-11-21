@@ -66,7 +66,8 @@ export const getChangeSecretFields = () => {
     is_periodic,
     accounts: {
       label: i18n.t('Accounts'),
-      component: TagInput
+      component: TagInput,
+      helpText: i18n.t('ChangeSecretAccountHelpText')
     }
   }
 }

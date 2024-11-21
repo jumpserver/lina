@@ -8,6 +8,12 @@
       :visible.sync="showOpenAdhocSaveDialog"
     />
     <VariableHelpDialog :visible.sync="showHelpDialog" />
+    <setVariableDialog
+      :form-data="variableFormData"
+      :query-param="variableQueryParam"
+      :visible.sync="showSetVariableDialog"
+      @submit="onSubmitVariable"
+    />
     <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -43,7 +49,8 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from './AdhocOpenDialog.vue'
 import AdhocSaveDialog from './AdhocSaveDialog.vue'
 import VariableHelpDialog from './VariableHelpDialog.vue'
-import { createJob, getJob, getTaskDetail, StopJob } from '@/api/ops'
+import setVariableDialog from '@/views/ops/Template/components/setVariableDialog'
+import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
 
 export default {
   name: 'CommandExecution',
@@ -51,6 +58,7 @@ export default {
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
+    setVariableDialog,
     AssetTreeTable,
     Page,
     QuickJobTerm,
@@ -70,6 +78,7 @@ export default {
       showHelpDialog: false,
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
+      showSetVariableDialog: false,
       DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
@@ -93,6 +102,10 @@ export default {
               type: 'primary'
             },
             callback: () => {
+              if (this.variableFormData.length !== 0) {
+                this.showSetVariableDialog = true
+                return
+              }
               this.execute()
             }
           },
@@ -297,7 +310,9 @@ export default {
           }
         }
       },
-      iShowTree: true
+      iShowTree: true,
+      variableFormData: [],
+      variableQueryParam: ''
     }
   },
   computed: {
@@ -306,6 +321,13 @@ export default {
     },
     ztree() {
       return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+    }
+  },
+  watch: {
+    command(iNew, iOld) {
+      if (iNew === '') {
+        this.variableFormData = []
+      }
     }
   },
   mounted() {
@@ -339,6 +361,10 @@ export default {
       }
     },
     onSelectAdhoc(adhoc) {
+      this.variableFormData = adhoc?.variable.map((data) => {
+        return data.form_data
+      })
+      this.variableQueryParam = 'adhoc=' + adhoc.id
       this.command = adhoc.args
     },
     enableWS() {
@@ -432,7 +458,6 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
-
       const data = {
         assets: hosts,
         nodes: nodes,
@@ -447,6 +472,9 @@ export default {
       if (this.chdir) {
         data.chdir = this.chdir
       }
+      if (this.parameters) {
+        data.parameters = this.parameters
+      }
       createJob(data).then(res => {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = { value: 'running', label: this.$t('Running') }
@@ -458,9 +486,9 @@ export default {
       })
     },
     stop() {
-      StopJob({ task_id: this.currentTaskId }).then(() => {
+      stopJob({ task_id: this.currentTaskId }).then(() => {
         this.xterm.write('\x1b[31m' +
-            this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
+          this.$tc('StopLogOutput').replace('currentTaskId', this.currentTaskId) + '\x1b[0m')
         this.xterm.write(this.wrapperError(''))
         this.getTaskStatus()
       }).catch((e) => {
@@ -476,6 +504,11 @@ export default {
       }
       this.toolbar.left.run.isVisible = this.executionInfo.status.value === 'running'
       this.toolbar.left.stop.isVisible = this.executionInfo.status.value !== 'running'
+    },
+    onSubmitVariable(parameters) {
+      this.parameters = parameters
+      this.showSetVariableDialog = false
+      this.execute()
     }
   }
 }

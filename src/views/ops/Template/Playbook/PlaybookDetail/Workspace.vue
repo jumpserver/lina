@@ -34,6 +34,13 @@
             </el-tab-pane>
           </el-tabs>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          <el-form ref="form" label-position="left" label-width="30px">
+            <div class="form-content">
+              <el-form-item label="" prop="variable">
+                <Variable :value.sync="variables" :disable-edit.sync="disableEdit" @input="setVariable" />
+              </el-form-item>
+            </div>
+          </el-form>
         </div>
       </template>
     </TreeTable>
@@ -46,13 +53,15 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import item from '@/layout/components/NavLeft/Item'
 import NewNodeDialog from '@/views/ops/Template/Playbook/PlaybookDetail/Editor/NewNodeDialog.vue'
 import { renameFile } from '@/api/ops'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   name: 'CommandExecution',
   components: {
     NewNodeDialog,
     TreeTable,
-    CodeEditor
+    CodeEditor,
+    Variable
   },
   props: {
     object: {
@@ -146,7 +155,8 @@ export default {
       },
       iShowTree: true,
       activeEditorId: '',
-      openedEditor: {}
+      openedEditor: {},
+      variables: []
     }
   },
   computed: {
@@ -167,6 +177,7 @@ export default {
     }
   },
   mounted() {
+    this.variables = this.object?.variable
     this.onOpenEditor({ id: 'main.yml', name: 'main.yml' })
   },
   methods: {
@@ -286,6 +297,15 @@ export default {
     },
     hasChange(editor) {
       return editor.value !== editor.originValue
+    },
+    setVariable(variables) {
+      if (this.disableEdit) {
+        return
+      }
+      this.$axios.patch(`/api/v1/ops/playbooks/${this.object.id}/`,
+        { variable: variables }).catch(err => {
+        this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + err)
+      })
     }
   }
 }

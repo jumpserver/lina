@@ -100,3 +100,13 @@ export const userJSONSelectMeta = (vm, withoutOrgRole = false) => {
     }
   }
 }
+export const MFALevel = {
+  allUsers: 3,
+  onlyAdminUsers: 4
+}
+
+export const MFASystemSetting = {
+  notEnable: 0,
+  allUsers: 1,
+  onlyAdminUsers: 2
+}

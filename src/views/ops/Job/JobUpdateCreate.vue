@@ -13,6 +13,8 @@ import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { crontab, interval } from '@/views/accounts/const'
+import LoadTemplateLink from '@/views/ops/Job/components/loadTemplateLink'
+import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
   components: {
@@ -27,8 +29,8 @@ export default {
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('Basic'), ['name', 'type', 'instant']],
-        [this.$t('Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
-        [this.$t('Asset'), ['assets', 'runas', 'runas_policy']],
+        [this.$t('Asset'), ['assets', 'nodes', 'runas', 'runas_policy']],
+        [this.$t('Task'), ['module', 'argsLoadFromTemplate', 'args', 'playbook', 'variable', 'chdir', 'timeout', 'parameters']],
         [this.$t('Plan'), ['run_after_save', 'is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['comment']]
       ],
@@ -88,18 +90,63 @@ export default {
                 return { label: item.name, value: item.id }
               }
             }
+          },
+          on: {
+            change: ([event], updateForm) => {
+              this.queryParam = `playbook=${event.pk}`
+              this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
+              ).then(data => {
+                data?.variable.map(item => {
+                  delete item.job
+                  delete item.playbook
+                  return item
+                })
+                updateForm({ variable: data.variable })
+              })
+            }
           }
         },
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
           label: this.$t('Asset'),
-          rules: [Required],
           el: {
             baseUrl: '/api/v1/perms/users/self/assets/',
             baseNodeUrl: '/api/v1/perms/users/self/nodes/',
             typeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/category/tree',
             value: []
+          }
+        },
+        nodes: {
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/perms/users/self/nodes/',
+              filterOption: (item) => {
+                if (item.value !== 'favorite') {
+                  return item
+                }
+              },
+              transformOption: (item) => {
+                return { label: item.full_value || item.name, value: item.id }
+              }
+            }
+          }
+        },
+        argsLoadFromTemplate: {
+          label: this.$t('Templates'),
+          hidden: (formValue) => {
+            return formValue.type !== 'adhoc'
+          },
+          component: LoadTemplateLink,
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({
+                args: event.args,
+                module: event.module.value,
+                variable: event.variable
+              })
+            }
           }
         },
         args: {
@@ -125,6 +172,9 @@ export default {
             ]
           }
         },
+        variable: {
+          component: Variable
+        },
         timeout: {
           helpText: i18n.t('TimeoutHelpText')
         },
@@ -142,7 +192,7 @@ export default {
         run_after_save: {
           type: 'checkbox',
           hidden: (formValue) => {
-            return this.instantTask
+            return true
           }
         },
         is_periodic: {
@@ -151,11 +201,34 @@ export default {
             return this.instantTask
           }
         },
+        parameters: {
+          hidden: () => {
+            return true
+          }
+        },
         interval,
         crontab
       },
       createSuccessNextRoute: { name: 'JobManagement' },
-      updateSuccessNextRoute: { name: 'JobManagement' }
+      updateSuccessNextRoute: { name: 'JobManagement' },
+      cleanFormValue: (data) => {
+        Object.assign(data, { periodic_variable: this.periodicVariableValue })
+        return data
+      },
+      moreButtons: [
+        {
+          title: this.$t('ExecuteAfterSaving'),
+          callback: (value, form, btn) => {
+            form.value.run_after_save = true
+            const parameters = form.value.variable.reduce((acc, item) => {
+              acc[item.var_name] = item.default_value
+              return acc
+            }, {})
+            form.value['parameters'] = parameters
+            this.submitForm(form, btn)
+          }
+        }
+      ]
     }
   },
   mounted() {
@@ -192,7 +265,16 @@ export default {
       this.ready = true
     }
   },
-  methods: {}
+  methods: {
+    submitForm(form, btn) {
+      form.validate((valid) => {
+        if (valid) {
+          btn.loading = true
+        }
+      })
+      this.$refs.form.$refs.createUpdateForm.$refs.form.$refs.dataForm.submitForm('form', false)
+    }
+  }
 }
 
 </script>

@@ -245,7 +245,7 @@ export default {
       },
       set(val) {
         this.$emit('update:value', val)
-        this.$emit('change', val)
+        this.$emit('input', val)
       }
     },
     iOptions() {
