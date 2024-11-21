@@ -68,6 +68,9 @@ export default {
     variables: {
       handler(value) {
         if (value.length > 0 || this.initial) {
+          value.map((item) => {
+            item.default_value = item.text_default_value || item.select_default_value
+          })
           this.$emit('input', value)
         }
         if (value) {
