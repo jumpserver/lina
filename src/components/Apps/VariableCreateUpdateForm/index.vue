@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       submitBtnText: this.$t('Confirm'),
-      url: '/api/v1/ops/variable/',
+      url: '/api/v1/ops/variables/',
       form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
       fields: [
         ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]

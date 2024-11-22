@@ -2,7 +2,7 @@
   <div>
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
-    <setVariableDialog
+    <SetVariableDialog
       v-if="showVariableDialog"
       :form-data="formData"
       :query-param="'job=' + item.id"
@@ -15,7 +15,7 @@
 <script>
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import GenericListTable from '@/layout/components/GenericListTable'
-import setVariableDialog from '@/views/ops/Template/components/setVariableDialog'
+import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -23,7 +23,7 @@ export default {
   components: {
     GenericListTable,
     JobRunDialog,
-    setVariableDialog
+    SetVariableDialog
   },
   props: {
     type: {

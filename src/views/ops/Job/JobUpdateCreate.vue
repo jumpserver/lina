@@ -13,7 +13,7 @@ import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { crontab, interval } from '@/views/accounts/const'
-import LoadTemplateLink from '@/views/ops/Job/components/loadTemplateLink'
+import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
