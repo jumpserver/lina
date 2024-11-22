@@ -4,7 +4,8 @@
       <el-table :data="variables" class="el-table--fit el-table--border">
         <el-table-column show-overflow-tooltip :label="$tc('Name')" prop="name" />
         <el-table-column show-overflow-tooltip :label="$tc('VariableName')" prop="var_name" />
-        <el-table-column :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
+        <el-table-column show-overflow-tooltip :label="$tc('DefaultValue')" prop="default_value" />
+        <el-table-column v-if="!disableEdit" :label="$tc('Actions')" align="center" class-name="buttons" fixed="right" width="135">
           <template v-slot="scope">
             <el-button icon="el-icon-minus" size="mini" type="danger" @click="removeVariable(scope.row)" />
             <el-button
@@ -17,7 +18,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="actions">
+      <div v-if="!disableEdit" class="actions">
         <el-button size="mini" type="primary" @click="onAddClick">
           {{ $t('Add') }}
         </el-button>
@@ -43,6 +44,10 @@ export default {
     value: {
       type: [Array],
       default: () => []
+    },
+    disableEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -67,6 +72,9 @@ export default {
     variables: {
       handler(value) {
         if (value.length > 0 || this.initial) {
+          value.map((item) => {
+            item.default_value = item.text_default_value || item.select_default_value
+          })
           this.$emit('input', value)
         }
         if (value) {

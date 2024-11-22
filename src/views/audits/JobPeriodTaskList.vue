@@ -7,7 +7,6 @@
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { SwitchFormatter } from '@/components/Table/TableFormatters'
-import { auditUpdateJob } from '@/api/ops'
 
 export default {
   components: {
@@ -21,11 +20,12 @@ export default {
         columnsShow: {
           min: ['name', 'material'],
           default: [
-            'name', 'material', 'type', 'crontab', 'interval', 'created_by', 'is_periodic'
+            'name', 'material', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
           ]
         },
         columns: [
-          'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary', 'created_by', 'is_periodic'
+          'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
+          'created_by', 'is_periodic_display', 'is_periodic'
         ],
         columnsMeta: {
           actions: {
@@ -48,8 +48,12 @@ export default {
               </div>
             }
           },
+          is_periodic_display: {
+            width: '100px',
+            label: this.$t('Periodic')
+          },
           is_periodic: {
-            width: '120px',
+            width: '140px',
             label: `${this.$t('Enable')}/${this.$t('Disable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
@@ -57,17 +61,15 @@ export default {
                 return row.is_periodic
               },
               getPatchUrl(row) {
-                return `/api/v1/ops/celery/period-tasks/run_ops_job_period_${row.id.slice(0, 8)}/`
+                return `/api/v1/audits/jobs/${row.id}/`
               },
               getPatchData(row) {
                 return {
-                  enabled: !row.is_periodic
+                  is_periodic: !row.is_periodic
                 }
               },
-              callback(row) {
-                auditUpdateJob(row.id, { is_periodic: !row.is_periodic }).then(() => {
-                  vm.$refs.ListPage.reloadTable()
-                })
+              callback() {
+                vm.$refs.ListPage.reloadTable()
               }
             }
           }
