@@ -8,7 +8,7 @@
       :visible.sync="showOpenAdhocSaveDialog"
     />
     <VariableHelpDialog :visible.sync="showHelpDialog" />
-    <setVariableDialog
+    <SetVariableDialog
       :form-data="variableFormData"
       :query-param="variableQueryParam"
       :visible.sync="showSetVariableDialog"
@@ -49,7 +49,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from './AdhocOpenDialog.vue'
 import AdhocSaveDialog from './AdhocSaveDialog.vue'
 import VariableHelpDialog from './VariableHelpDialog.vue'
-import setVariableDialog from '@/views/ops/Template/components/setVariableDialog'
+import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
 
 export default {
@@ -58,7 +58,7 @@ export default {
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
-    setVariableDialog,
+    SetVariableDialog,
     AssetTreeTable,
     Page,
     QuickJobTerm,
