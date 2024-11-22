@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     handlePamConnect(row) {
-      window.open(`/luna/pamConnect/${row.asset.id}`, '_blank')
+      window.open(`/luna/pam_connect/${row.asset.id}`, '_blank')
     }
   }
 }
