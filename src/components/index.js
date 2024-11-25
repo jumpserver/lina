@@ -30,7 +30,7 @@ export { default as AccountListTable } from './Apps/AccountListTable/AccountList
 export { default as AssetRelationCard } from './Apps/AssetRelationCard'
 export { default as UserConfirmDialog } from './Apps/UserConfirmDialog'
 export { default as Announcement } from './Widgets/Announcement'
-export { default as CronTab } from './Form/CronTab'
+export { default as CronTab } from './Form/FormFields/CronTab'
 export { default as Pagination } from './Table/Pagination'
 export { default as Tooltip } from './Widgets/Tooltip'
 export { default as ResourceActivity } from './Apps/ResourceActivity'

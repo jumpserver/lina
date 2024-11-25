@@ -13,6 +13,7 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
+    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
   </div>
 </template>
 
@@ -20,11 +21,13 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import DeleteDialog from '@/views/accounts/AccountDiscover/DeleteDialog.vue'
 import { gatherAccountHeaderActions, gatherAccountTableConfig } from '@/views/accounts/const'
+import AccountDiscoverDialog from '@/views/assets/Asset/AssetList/components/AccountDiscoverDialog.vue'
 
 export default {
   components: {
     AssetTreeTable,
-    DeleteDialog
+    DeleteDialog,
+    AccountDiscoverDialog
   },
   data() {
     return {
@@ -33,9 +36,16 @@ export default {
         visible: false,
         account: {}
       },
+      discoveryDialog: {
+        asset: '',
+        visible: false
+      },
       gatherAccounts: [],
       treeSetting: {
-        showMenu: false,
+        showDefaultMenu: false,
+        showMenu: (node) => {
+          return node.meta.type === 'asset'
+        },
         showRefresh: true,
         showSearch: true,
         showAssets: true,
@@ -43,7 +53,20 @@ export default {
         url: '/api/v1/accounts/gathered-accounts/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
+        menu: [
+          {
+            id: 'discover',
+            icon: 'discovery',
+            name: '发现账号',
+            callback: (node) => {
+              console.log('Discovery it: ', node)
+              this.discoveryDialog.asset = node.id
+              this.discoveryDialog.visible = true
+              // this.discoveryDialog.asset = node.data
+            }
+          }
+        ]
       },
       quickSummary: [
         {

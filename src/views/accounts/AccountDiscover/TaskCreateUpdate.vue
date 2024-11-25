@@ -5,7 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import i18n from '@/i18n/i18n'
-import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import { periodicMeta } from '@/components/const'
 
 export default {
   components: {
@@ -22,14 +22,12 @@ export default {
       url: '/api/v1/accounts/gather-account-automations/',
       hasDetailInMsg: false,
       fieldsMeta: {
+        ...periodicMeta,
         is_sync_account: {
           label: this.$t('IsSyncAccountLabel'),
           helpText: this.$t('IsSyncAccountHelpText')
         },
         check_risk: {},
-        is_periodic,
-        crontab,
-        interval,
         assets: {
           el: {
             multiple: true,

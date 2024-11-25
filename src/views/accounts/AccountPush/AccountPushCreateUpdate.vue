@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
-import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import { periodicMeta } from '@/components/const'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -47,6 +47,7 @@ export default {
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        ...periodicMeta,
         ...getChangeSecretFields(),
         assets: {
           type: 'assetSelect',
@@ -91,9 +92,6 @@ export default {
             readonly: true
           }
         },
-        is_periodic,
-        crontab,
-        interval,
         params: {
           component: AutomationParams,
           label: this.$t('PushParams'),

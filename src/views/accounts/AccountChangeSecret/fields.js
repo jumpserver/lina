@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { PasswordRule, Select2, TagInput, UpdateToken } from '@/components/Form/FormFields'
-import { crontab, interval, is_periodic } from '../../accounts/const'
+import { periodicMeta } from '@/components/const'
 
 export const getChangeSecretFields = () => {
   return {
@@ -75,9 +75,7 @@ export const getChangeSecretFields = () => {
         }
       }
     },
-    interval,
-    crontab,
-    is_periodic,
+    ...periodicMeta,
     accounts: {
       label: i18n.t('Accounts'),
       component: TagInput

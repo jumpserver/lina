@@ -24,8 +24,8 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
-          'automation', 'account_gather_name', 'status', 'trigger', 'date_start',
-          'date_finished', 'actions'
+          'automation', 'account_gather_name', 'status', 'trigger',
+          'date_start', 'date_finished', 'actions'
         ],
         columnsMeta: {
           automation: {
@@ -76,6 +76,15 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
+                  }
+                },
+                {
+                  name: 'report',
+                  title: this.$t('Report'),
+                  type: 'success',
+                  can: this.$hasPerm('accounts.view_gatheraccountsexecution'),
+                  callback: function({ row }) {
+                    window.open(`/api/v1/accounts/gather-account-executions/${row.id}/report/`)
                   }
                 }
               ]

@@ -4,9 +4,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { CronTab, Select2 } from '@/components'
+import { Select2 } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
+import { periodicMeta } from '@/components/const'
 
 export default {
   components: {
@@ -34,6 +35,7 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
+        ...periodicMeta,
         account: {
           label: this.$t('xpack.Cloud.Account'),
           on: {
@@ -85,24 +87,6 @@ export default {
               }
             }
           }
-        },
-        is_periodic: {
-          type: 'checkbox'
-        },
-        crontab: {
-          component: CronTab,
-          label: this.$t('xpack.RegularlyPerform'),
-          hidden: (formValue) => {
-            return formValue.is_periodic === false
-          },
-          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
-        },
-        interval: {
-          label: this.$t('xpack.CyclePerform'),
-          hidden: (formValue) => {
-            return formValue.is_periodic === false
-          },
-          helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         },
         strategy: {
           label: this.$t('common.Strategy'),

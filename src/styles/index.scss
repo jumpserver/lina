@@ -547,8 +547,23 @@ li.rmenu i.fa {
   height: 28px;
 }
 
+.el-checkbox__input {
+  padding-right: 5px;
+}
+
+.el-checkbox__label {
+  padding-left: 5px !important;
+}
+
 .el-checkbox__inner {
   border-radius: 1px !important;
+  width: 16px !important;
+  height: 16px !important;
+
+  &::after {
+    left: 5px !important;
+    height: 8px !important;
+  }
 }
 
 .el-alert.el-alert--info.is-light {

@@ -62,7 +62,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountDiscover/TaskDetail/TaskExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountDiscover/TaskExecutionList.vue'),
         name: 'AccountDiscoverTaskExecutionList',
         hidden: true,
         meta: {

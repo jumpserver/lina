@@ -4,9 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect } from '@/components'
-import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import { periodicMeta } from '@/components/const'
 import i18n from '@/i18n/i18n'
 
 export default {
@@ -18,18 +17,11 @@ export default {
     return {
       nodeIds: [],
       assetIds: [],
-      isAssetType: '',
       initial: {
         is_periodic: false,
-        password_rules: {
-          length: 30
-        },
-        interval: 24,
-        secret_type: 'password',
-        secret_strategy: 'specific'
+        interval: 24
       },
       url: '/api/v1/accounts/check-account-automations/',
-      encryptedFields: ['secret'],
       fields: [
         [this.$t('Basic'), ['name']],
         [this.$t('Asset'), ['assets', 'nodes']],
@@ -38,7 +30,6 @@ export default {
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        ...getChangeSecretFields(),
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
@@ -100,33 +91,10 @@ export default {
             }
           }
         },
-        username: {
-          hidden: (formValue) => formValue['dynamic_username']
-        },
-        ssh_key_change_strategy: {
-          hidden: (formValue) => formValue['action'] !== 'create_and_push' ||
-            formValue['secret_type'] !== 'ssh_key'
-        },
-        triggers: {
-          el: {
-            readonly: true
-          }
-        },
-        is_periodic,
-        crontab,
-        interval
+        ...periodicMeta
       },
       createSuccessNextRoute: { name: 'AccountCheckList' },
-      updateSuccessNextRoute: { name: 'AccountCheckList' },
-      afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
-      cleanFormValue(data) {
-        const secretType = data.secret_type || ''
-        if (secretType !== 'password') {
-          data.secret = data[secretType]
-          delete data[secretType]
-        }
-        return data
-      }
+      updateSuccessNextRoute: { name: 'AccountCheckList' }
     }
   },
   computed: {
@@ -134,20 +102,7 @@ export default {
       return this.$route.path.indexOf('/update') > -1
     }
   },
-  watch: {
-    nodeIds: {
-      handler(val) {
-        this.fieldsMeta.params.el.nodes = val
-      },
-      deep: true
-    },
-    assetIds: {
-      handler(val) {
-        this.fieldsMeta.params.el.assets = val
-      },
-      deep: true
-    }
-  },
+  watch: {},
   mounted() {
     if (!this.$store.getters.hasValidLicense) {
       delete this.fields[3]
@@ -156,15 +111,6 @@ export default {
   methods: {
     hasType(type) {
       return this.isAssetType.indexOf(type) > -1
-    },
-    handleAfterGetRemoteMeta(meta) {
-      const needSetOptionFields = [
-        'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
-      ]
-      for (const i of needSetOptionFields) {
-        const field = this.fieldsMeta[i] || {}
-        field.options = meta[i]?.choices || []
-      }
     }
   }
 }

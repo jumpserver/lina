@@ -1,4 +1,7 @@
 import i18n from '@/i18n/i18n'
+import CronTab from '@/components/Form/FormFields/CronTab/index.vue'
+import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
+import store from '@/store'
 
 export const strMatchValues = ['exact', 'not', 'in', 'contains', 'startswith', 'endswith', 'regex']
 export const typeMatchMapper = {
@@ -26,3 +29,49 @@ export const attrMatchOptions = [
   { label: i18n.t('GreatEqualThan'), value: 'gte' },
   { label: i18n.t('LessEqualThan'), value: 'lte' }
 ]
+
+export const crontab = {
+  type: 'cronTab',
+  component: CronTab,
+  label: i18n.t('Crontab'),
+  hidden: (formValue) => {
+    return formValue.is_periodic === false
+  },
+  helpText: i18n.t('CrontabHelpText'),
+  helpTip: i18n.t('CrontabHelpTip')
+}
+
+const validatorInterval = (rule, value, callback) => {
+  if (parseInt(value) < 1) {
+    return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
+  }
+  callback()
+}
+
+export const interval = {
+  label: i18n.t('Interval'),
+  hidden: (formValue) => {
+    return formValue.is_periodic === false
+  },
+  component: InputWithUnit,
+  el: {
+    unit: 'hour'
+  },
+  rules: [
+    { validator: validatorInterval }
+  ]
+}
+
+export const is_periodic = {
+  type: 'checkbox',
+  hidden: (formValue) => {
+    return !store.getters.hasValidLicense
+  }
+}
+
+export const periodicMeta = {
+  is_periodic,
+  interval,
+  crontab
+}
+

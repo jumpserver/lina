@@ -1,13 +1,28 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
-import { openWindow } from './common'
+
+let openedTaskWindow = null // 保存已打开的窗口对象
+
+function openOrReuseWindow(url, windowName = 'task', windowFeatures = '', iWidth = 900, iHeight = 600) {
+  const iTop = (window.screen.height - 30 - iHeight) / 2
+  const iLeft = (window.screen.width - 10 - iWidth) / 2
+
+  // 检查窗口是否已经打开
+  if (openedTaskWindow && !openedTaskWindow.closed) {
+    openedTaskWindow.location.href = url // 如果窗口未关闭，更新其地址
+    openedTaskWindow.focus() // 将窗口置于前台
+  } else {
+    // 如果窗口未打开或已关闭，创建新窗口
+    openedTaskWindow = window.open(url, windowName, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
+  }
+}
 
 export function openTaskPage(taskId, taskType, taskUrl) {
   taskType = taskType || 'celery'
   if (!taskUrl) {
     taskUrl = `/core/ops/${taskType}/task/${taskId}/log/?type=${taskType}`
   }
-  openWindow(taskUrl)
+  openOrReuseWindow(taskUrl)
 }
 
 export function checkPermission(permsRequired, permsAll) {

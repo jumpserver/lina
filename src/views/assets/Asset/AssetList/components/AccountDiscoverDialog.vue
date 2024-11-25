@@ -10,13 +10,15 @@
       top="35vh"
       width="80%"
     >
-      <ListTable v-bind="config" />
+      <!--      <ListTable v-bind="config" />-->
+      <span v-if="loading" v-loading="loading" class="loading" />
+      <iframe :src="url" frameborder="0" @load="onIframeLoad" />
     </Dialog>
-    <RemoveAccount
-      v-if="showDeleteAccountDialog"
-      :accounts="gatherAccounts"
-      :visible.sync="showDeleteAccountDialog"
-    />
+    <!--    <RemoveAccount-->
+    <!--      v-if="showDeleteAccountDialog"-->
+    <!--      :accounts="gatherAccounts"-->
+    <!--      :visible.sync="showDeleteAccountDialog"-->
+    <!--    />-->
   </div>
 
 </template>
@@ -24,14 +26,10 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { gatherAccountHeaderActions, gatherAccountTableConfig } from '@/views/accounts/const'
-import ListTable from '@/components/Table/ListTable/index.vue'
-import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 
 export default {
   name: 'AccountDiscoverDialog',
   components: {
-    RemoveAccount,
-    ListTable,
     Dialog
   },
   props: {
@@ -47,6 +45,7 @@ export default {
   data() {
     return {
       showDeleteAccountDialog: false,
+      loading: true,
       gatherAccounts: [],
       config: {
         tableConfig: gatherAccountTableConfig(this, `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`),
@@ -62,6 +61,11 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       }
+    },
+    url: {
+      get() {
+        return `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`
+      }
     }
   },
   watch: {
@@ -76,6 +80,22 @@ export default {
   },
   beforeMount() {
   },
-  methods: {}
+  methods: {
+    onIframeLoad() {
+      this.loading = false
+    }
+  }
 }
 </script>
+
+<style lang="scss" scoped>
+iframe {
+  width: 100%;
+  height: 500px;
+}
+
+.loading {
+  margin-top: 20px;
+  display: block;
+}
+</style>

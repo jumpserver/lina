@@ -31,7 +31,7 @@ export default {
             title: this.$t('ExecutionList'),
             name: 'AccountDiscoverTaskExecutionList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution'),
-            component: () => import('@/views/accounts/AccountDiscover/TaskDetail/TaskExecutionList.vue')
+            component: () => import('@/views/accounts/AccountDiscover/TaskExecutionList.vue')
           }
         ]
       }

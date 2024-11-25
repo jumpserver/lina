@@ -23,7 +23,7 @@ export default {
     return {
       gatherAccounts: [],
       treeSetting: {
-        showMenu: false,
+        showMenu: true,
         showRefresh: true,
         showSearch: true,
         showAssets: true,
@@ -31,7 +31,15 @@ export default {
         url: '/api/v1/accounts/account-risks/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0'
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
+        menu: [
+          {
+            id: 'check',
+            name: this.$t('Check'),
+            icon: 'scan',
+            callback: () => {}
+          }
+        ]
       },
       quickFilters: [
         {

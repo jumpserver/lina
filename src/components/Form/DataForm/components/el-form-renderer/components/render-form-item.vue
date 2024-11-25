@@ -71,6 +71,7 @@
           <el-tooltip v-if="opt.tip" :content="opt.tip" :open-delay="500" placement="top">
             <i class="el-icon-warning-outline" />
           </el-tooltip>
+          <span v-if="data.helpText">{{ data.helpText }}</span>
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
@@ -87,7 +88,7 @@
         </el-radio>
       </template>
     </custom-component>
-    <div v-if="data.helpText" class="help-block">
+    <div v-if="data.helpText" :class="data.type" class="help-block">
       <el-alert
         v-if="data.helpText.startsWith('!')"
         :closable="false"
@@ -314,6 +315,10 @@ export default {
 .help-block {
   ::v-deep .el-alert__icon {
     font-size: 16px
+  }
+
+  &.checkbox {
+    //display: inline;
   }
 }
 
