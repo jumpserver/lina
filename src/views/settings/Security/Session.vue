@@ -23,13 +23,13 @@ export default {
               'SECURITY_WATERMARK_ENABLED',
               'SECURITY_SESSION_SHARE',
               'SESSION_EXPIRE_AT_BROWSER_CLOSE',
+              'VIEW_ASSET_ONLINE_SESSION_INFO',
               'SECURITY_MAX_IDLE_TIME',
               'SECURITY_MAX_SESSION_TIME'
             ]
           ]
         ],
-        fieldsMeta: {
-        }
+        fieldsMeta: {}
       }
     }
   }
