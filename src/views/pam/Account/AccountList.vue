@@ -22,7 +22,6 @@ export default {
           connect: {
             width: '80px',
             formatter: (row) => {
-              console.log(row)
               return (
                 <span class='connect'>
                   <el-button type='primary' onClick={() => this.handlePamConnect(row)} size='mini' plain>
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     handlePamConnect(row) {
-      window.open(`/luna/pamConnect/`, '_blank')
+      window.open(`/luna/pam_connect/${row.asset.id}`, '_blank')
     }
   }
 }
