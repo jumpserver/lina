@@ -39,6 +39,22 @@ export default {
 </script>
 
 <style scoped>
+  html:lang(en) .quick-actions ::v-deep button {
+    width: 80px;
+  }
+
+  html:lang(ja) .quick-actions ::v-deep button {
+    width: 100px;
+  }
+
+  html:lang(zh-tw) .quick-actions ::v-deep button {
+    width: 65px;
+  }
+
+  html:lang(zh-cn) .quick-actions ::v-deep button {
+    width: 65px;
+  }
+
   .quick-actions ::v-deep table {
     width: 100%;
   }
@@ -58,7 +74,6 @@ export default {
   .quick-actions ::v-deep button {
     padding: 4px 5px;
     font-size: 13px;
-    width: 65px;
 
     span {
       overflow: hidden;

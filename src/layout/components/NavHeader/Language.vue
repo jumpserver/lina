@@ -69,12 +69,16 @@ export default {
     changeMomentLang() {
       if (this.currentLang.code.indexOf('en') > -1) {
         this.$moment.locale('en')
+        document.documentElement.lang = 'en'
       } else if (this.currentLang.code.indexOf('ja') > -1) {
         this.$moment.locale('ja')
+        document.documentElement.lang = 'ja'
       } else if (this.currentLang.code.indexOf('zh_hant') > -1) {
         this.$moment.locale('zh-tw')
+        document.documentElement.lang = 'zh-tw'
       } else {
         this.$moment.locale('zh-cn')
+        document.documentElement.lang = 'zh-cn'
       }
     },
     changeLangTo(item) {
