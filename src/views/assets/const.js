@@ -42,7 +42,7 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
         'username_selector': setting.username_selector
       })
     }
-    vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols.map(item => ({ name: item.name, port: item.port }))
+    vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
     updateForm({ protocols: [] })
   }), 100)
 }
