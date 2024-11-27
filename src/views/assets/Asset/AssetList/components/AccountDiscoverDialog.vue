@@ -9,6 +9,7 @@
       :visible.sync="iVisible"
       top="35vh"
       width="80%"
+      @close="loading=true"
     >
       <!--      <ListTable v-bind="config" />-->
       <span v-if="loading" v-loading="loading" class="loading" />
@@ -46,6 +47,7 @@ export default {
     return {
       showDeleteAccountDialog: false,
       loading: true,
+      showLoading: true,
       gatherAccounts: [],
       config: {
         tableConfig: gatherAccountTableConfig(this, `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`),
@@ -81,6 +83,9 @@ export default {
   beforeMount() {
   },
   methods: {
+    onVisibleChange() {
+
+    },
     onIframeLoad() {
       this.loading = false
     }

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span class="risk-handler">
+    <span v-if="iValue === 'pending'" class="risk-handler">
       <el-dropdown trigger="click" @command="handleRisk">
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
@@ -17,6 +17,14 @@
         </el-button>
       </el-tooltip>
     </span>
+    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+      <span v-if="iValue === 'confirmed' ">
+        <i class="fa fa-check color-primary" />
+      </span>
+      <span v-else>
+        <svg-icon icon-class="ignore" />
+      </span>
+    </el-tooltip>
     <ReviewDraw :row="row" :visible.sync="reviewDrawer" />
   </span>
 </template>
@@ -43,50 +51,85 @@ export default {
   computed: {
     iActions() {
       return this.getActions()
+    },
+    iValue() {
+      if (this.cellValueIsLabelChoice()) {
+        return this.cellValue.value
+      } else {
+        return this.cellValue
+      }
+    },
+    iLabel() {
+      if (this.cellValueIsLabelChoice()) {
+        return this.cellValue.label
+      } else {
+        return this.cellValue
+      }
+    },
+    iConfirmIcon() {
+      const icon = this.formatterArgs.confirmIcon
+      if (typeof icon === 'function') {
+        return icon({ row: this.row, cellValue: this.cellValue })
+      } else {
+        return icon
+      }
     }
   },
   methods: {
     handleRisk(cmd) {
+      const data = {
+        username: this.row.username,
+        asset: this.row.asset.id,
+        risk: this.row.risk.value,
+        action: cmd
+      }
       switch (cmd) {
         case 'review':
           this.reviewDrawer = true
           break
         default:
-          console.log(cmd)
+          this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data).then(() => {
+            this.row.status = 'confirmed'
+          })
       }
     },
     getActions() {
       const actions = [
         {
-          name: 'disableAccount',
-          label: this.$t('Disable Account'),
-          has: ['zombie', 'ghost']
+          name: 'disable_remote',
+          label: this.$t('Disable remote'),
+          has: ['long_time_no_login', 'new_found']
         },
         {
-          name: 'deleteAccount',
+          name: 'delete_remote',
           label: this.$t('Delete Account'),
-          has: ['zombie', 'ghost']
+          has: ['long_time_no_login', 'new_found']
         },
         {
-          name: 'addToAccount',
+          name: 'delete_both',
+          label: this.$t('Delete Both'),
+          has: ['long_time_no_login']
+        },
+        {
+          name: 'add_account',
           label: this.$t('Add to Account'),
-          has: ['ghost']
+          has: ['new_found']
         },
         {
-          name: 'changePassword',
+          name: 'change_password',
           label: this.$t('Change Password'),
           has: ['long_time_password', 'weak_password', 'password_expired']
         },
-        {
-          name: 'addPrivilegedAccount',
-          label: this.$t('Add Privileged Account'),
-          has: ['no_admin_account']
-        },
-        {
-          name: 'modifyPassword',
-          label: this.$t('Modify Password'),
-          has: ['password_error']
-        },
+        // {
+        //   name: 'addPrivilegedAccount',
+        //   label: this.$t('Add Privileged Account'),
+        //   has: ['no_admin_account']
+        // },
+        // {
+        //   name: 'modifyPassword',
+        //   label: this.$t('Modify Password'),
+        //   has: ['password_error']
+        // },
         {
           name: 'review',
           label: this.$t('Review'),

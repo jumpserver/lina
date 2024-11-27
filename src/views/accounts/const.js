@@ -94,24 +94,7 @@ export const gatherAccountTableConfig = (vm, url) => {
           onDelete: ({ row }) => {
             vm.deleteDialog.visible = true
             vm.deleteDialog.account = row
-          },
-          extraActions: [
-            {
-              name: 'Sync',
-              title: vm.$t('Sync'),
-              can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
-              type: 'primary',
-              callback: ({ row }) => {
-                vm.$axios.post(
-                  `/api/v1/accounts/gathered-accounts/sync-accounts/`,
-                  { gathered_account_ids: [row.id] }
-                ).then(res => {
-                  vm.$message.success(vm.$tc('SyncSuccessMsg'))
-                }).catch(() => {
-                })
-              }
-            }
-          ]
+          }
         }
       }
     }
