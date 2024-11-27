@@ -99,7 +99,9 @@ export default {
         chen: 'Chen',
         kael: 'Kael',
         video_worker: 'Video-Worker',
-        panda: 'Panda'
+        panda: 'Panda',
+        nec: 'NEC',
+        facelive: 'Facelive'
       }
       return nameMapper[this.componentMetric.type]
     },
