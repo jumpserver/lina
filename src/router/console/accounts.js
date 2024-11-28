@@ -67,57 +67,57 @@ export default [
         }
       }
     ]
-  },
-  {
-    path: 'account-template',
-    component: empty,
-    redirect: {
-      name: 'AccountTemplateList'
-    },
-    meta: {
-      title: i18n.t('AccountTemplate'),
-      app: 'accounts',
-      icon: 'template',
-      permissions: ['accounts.view_accounttemplate']
-    },
-    children: [
-      {
-        path: '',
-        name: 'AccountTemplateList',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
-        meta: {
-          menuTitle: i18n.t('MenuAccountTemplates'),
-          title: i18n.t('AccountTemplateList'),
-          permissions: ['accounts.view_accounttemplate']
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
-        name: 'AccountTemplateCreate',
-        meta: {
-          title: i18n.t('CreateAccountTemplate'),
-          action: 'create'
-        },
-        hidden: true
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
-        name: 'AccountTemplateUpdate',
-        meta: {
-          title: i18n.t('UpdateAccountTemplate'),
-          action: 'update'
-        },
-        hidden: true
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
-        name: 'AccountTemplateDetail',
-        meta: { title: i18n.t('AccountTemplate') },
-        hidden: true
-      }
-    ]
   }
+  // {
+  //   path: 'account-template',
+  //   component: empty,
+  //   redirect: {
+  //     name: 'AccountTemplateList'
+  //   },
+  //   meta: {
+  //     title: i18n.t('AccountTemplate'),
+  //     app: 'accounts',
+  //     icon: 'template',
+  //     permissions: ['accounts.view_accounttemplate']
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'AccountTemplateList',
+  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
+  //       meta: {
+  //         menuTitle: i18n.t('MenuAccountTemplates'),
+  //         title: i18n.t('AccountTemplateList'),
+  //         permissions: ['accounts.view_accounttemplate']
+  //       }
+  //     },
+  //     {
+  //       path: 'create',
+  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+  //       name: 'AccountTemplateCreate',
+  //       meta: {
+  //         title: i18n.t('CreateAccountTemplate'),
+  //         action: 'create'
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: ':id/update',
+  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+  //       name: 'AccountTemplateUpdate',
+  //       meta: {
+  //         title: i18n.t('UpdateAccountTemplate'),
+  //         action: 'update'
+  //       },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: ':id',
+  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
+  //       name: 'AccountTemplateDetail',
+  //       meta: { title: i18n.t('AccountTemplate') },
+  //       hidden: true
+  //     }
+  //   ]
+  // }
 ]

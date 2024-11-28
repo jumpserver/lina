@@ -106,6 +106,8 @@ export default {
     goDetail() {
       const detailRoute = this.getDetailRoute()
 
+      console.log('%c DEBUG[ detailRoute ]-97:', 'font-size:13px; background:pink; color:#7B68EE;', detailRoute)
+
       if (this.formatterArgs.openInNewPage) {
         this.linkClicked = this.formatterArgs.removeColorOnClick
         const { href } = this.$router.resolve(detailRoute)
