@@ -36,19 +36,19 @@ export default [
     },
     meta: {
       app: 'accounts',
-      name: 'BaseAccountRisk',
+      name: 'BaseAccountActivity',
       icon: 'activity',
-      resource: 'pushaccountautomation'
+      resource: 'operate-logs'
     },
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountPush/index.vue'),
-        name: 'AccountPushList',
+        component: () => import('@/views/accounts/AccountActivity/AccountActivityList.vue'),
+        name: 'AccountActivityList',
         meta: {
           title: i18n.t('活动记录'),
           menuTitle: i18n.t('活动记录'),
-          permissions: ['accounts.view_pushaccountautomation']
+          permissions: ['audits.view_operatelog']
         }
       }
     ]
