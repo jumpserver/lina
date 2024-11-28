@@ -1,25 +1,37 @@
 <template>
-  <DataActions
-    v-if="hasLeftActions && iActions.length > 0"
-    :actions="iActions"
-    class="header-action"
-    v-bind="$attrs"
-  />
+  <div>
+    <DataActions
+      v-if="hasLeftActions && iActions.length > 0"
+      :actions="iActions"
+      class="header-action"
+      v-bind="$attrs"
+    />
+
+    <Drawer v-if="showDrawer" @close-drawer="handleCloseDrawer">
+      <component :is="dynamicTemplateComponent" />
+    </Drawer>
+  </div>
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
-import DataActions from '@/components/DataActions/index.vue'
-import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
+import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common'
+
+import i18n from '@/i18n/i18n'
+import Drawer from '@/components/Drawer/index.vue'
+import DataActions from '@/components/DataActions/index.vue'
+import AccountTemplateCreate from '@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 const defaultFalse = { type: [Boolean, Function, String], default: false }
+
 export default {
   name: 'LeftSide',
   components: {
-    DataActions
+    Drawer,
+    DataActions,
+    AccountTemplateCreate
   },
   props: {
     hasLeftActions: defaultTrue,
@@ -90,6 +102,8 @@ export default {
   data() {
     const vm = this
     return {
+      showDrawer: false,
+      dynamicTemplateComponent: null,
       defaultMoreActions: [
         {
           title: this.$t('DeleteSelected'),
@@ -194,6 +208,7 @@ export default {
   methods: {
     handleCreate() {
       let route
+
       if (typeof this.createRoute === 'string') {
         route = { name: this.createRoute }
         route.name = this.createRoute
@@ -202,13 +217,26 @@ export default {
       } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
+
       this.$log.debug('handle create')
+
       if (this.createInNewPage) {
         const { href } = this.$router.resolve(route)
         window.open(href, '_blank')
       } else {
+        if (route.isPam) {
+          this.showDrawer = true
+          this.dynamicTemplateComponent = route.name
+
+          return
+        }
+
         this.$router.push(route)
       }
+    },
+    handleCloseDrawer() {
+      this.showDrawer = false
+      this.dynamicTemplateComponent = null
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
       const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
@@ -248,3 +276,17 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+::v-deep .ibox {
+  height: 100% !important;
+  margin: unset !important;
+  border: unset !important;
+
+  .el-card__body {
+    padding-top: unset !important;
+    padding-bottom: unset !important;
+    height: 100% !important;
+  }
+}
+</style>
