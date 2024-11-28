@@ -18,6 +18,12 @@
             style="margin-top: 15px"
             type="info"
           />
+          <QuickActions
+            :title="$tc('BiometricFeatures')"
+            type="warning"
+            :actions="biometricFeaturesActions"
+            style="margin-top: 15px"
+          />
           <IBox :title="$tc('InformationModification')" fa="fa-edit">
             <table>
               <tr>
@@ -76,6 +82,21 @@ export default {
       url: `/api/v1/users/profile/`,
       showPasswordDialog: false,
       currentEdit: '',
+      biometricFeaturesActions: [
+        {
+          title: this.$t('Face'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
+          },
+          callbacks: {
+            click: () => {
+              const next_url = this.$store.state.users.profile.is_face_code_set ? '/core/auth/profile/face/disable/' : '/core/auth/profile/face/enable/'
+              window.open(next_url, '_self')
+            }
+          }
+        }
+      ],
       authQuickActions: [
         {
           title: this.$t('WeComOAuth'),
