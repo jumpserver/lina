@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="15" :sm="24" class="auto-detail-card">
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="9" :sm="24" class="quick-actions">
       <QuickActions :actions="quickActions" type="primary" />
     </el-col>
   </el-row>

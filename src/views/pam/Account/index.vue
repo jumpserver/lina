@@ -33,6 +33,12 @@ export default {
             title: this.$t('Asset'),
             icon: 'fa-inbox',
             component: () => import('@/views/pam/Account/AssetList.vue')
+          },
+          {
+            name: 'AccountTemplateList',
+            title: this.$t('AccountTemplate'),
+            icon: 'fa-copy',
+            component: () => import('@/views/pam/Account/AccountTemplate.vue')
           }
         ]
       }
@@ -46,4 +52,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

@@ -1,18 +1,18 @@
 <template>
   <span class="conform-td">
-    <span v-if="!iValue" class="confirm-action">
-      <el-tooltip v-if="row.present" :content="$tc('Add account to asset')" :open-delay="400">
-        <el-button class="confirm action" size="mini" @click="handleConfirm">
-          <i class="fa fa-plus" />
+    <span v-if="iValue === 'pending'">
+      <el-dropdown trigger="click" @command="handleRisk">
+        <el-button class="confirm action" size="mini">
+          <i class="fa fa-check" />
         </el-button>
-      </el-tooltip>
-      <el-tooltip v-else :content="$tc('Remove account ')" :open-delay="400">
-        <el-button class="remove action" size="mini" @click="handleRemove">
-          <i class="fa fa-minus" />
-        </el-button>
-      </el-tooltip>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="item of iActions" :key="item.name" :command="item.name">
+            {{ item.label }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button class="ignore action" size="mini" @click="handleIgnore">
+        <el-button class="ignore action" size="mini">
           <svg-icon icon-class="ignore" />
         </el-button>
       </el-tooltip>
@@ -70,24 +70,50 @@ export default {
         return this.cellValue
       }
     },
-    iConfirmIcon() {
-      const icon = this.formatterArgs.confirmIcon
-      if (typeof icon === 'function') {
-        return icon({ row: this.row, cellValue: this.cellValue })
-      } else {
-        return icon
-      }
+    iActions() {
+      return this.getActions()
     }
   },
   methods: {
-    handleConfirm() {
-      this.formatterArgs.confirm({ row: this.row, cellValue: this.cellValue })
-    },
-    handleIgnore() {
-      this.formatterArgs.ignore({ row: this.row, cellValue: this.cellValue })
-    },
     handleRemove() {
       this.formatterArgs.remove({ row: this.row, cellValue: this.cellValue })
+    },
+    handleRisk(cmd) {
+      const data = {
+        asset: this.row.asset.id,
+        username: this.row.username,
+        action: cmd,
+        risk: ''
+      }
+      this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data).then(() => {
+        console.log('cmd: ', cmd)
+        if (cmd === 'add_account') {
+          this.row.present = true
+        }
+        this.row.status = 'confirmed'
+      })
+    },
+    getActions() {
+      const actions = [
+        // {
+        //   name: 'disable_account',
+        //   label: this.$t('Disable remote account'),
+        //   has: this.row.remote_present
+        // },
+        {
+          name: 'delete_remote',
+          label: this.$t('Delete remote account'),
+          has: this.row.remote_present
+        },
+        {
+          name: 'add_account',
+          label: this.$t('Add account'),
+          has: !this.row.present
+        }
+      ]
+      return actions.filter(action => {
+        return action.has
+      })
     }
   }
 }

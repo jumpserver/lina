@@ -21,6 +21,7 @@
     <AccountCreateUpdate
       v-if="showAddDialog"
       :account="account"
+      :origin="origin"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
@@ -30,6 +31,7 @@
     <AccountCreateUpdate
       v-if="showAddTemplateDialog"
       :account="account"
+      :origin="origin"
       :add-template="true"
       :asset="iAsset"
       :title="accountCreateByTemplateTitle"
@@ -136,6 +138,10 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    origin: {
+      type: String,
+      default: ''
     }
   },
   data() {

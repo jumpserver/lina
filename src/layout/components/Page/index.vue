@@ -132,6 +132,7 @@ export default {
 
     ::v-deep > div {
       margin-bottom: 50px;
+      height: 100%;
     }
   }
 }

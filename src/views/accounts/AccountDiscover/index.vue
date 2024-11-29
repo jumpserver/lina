@@ -16,7 +16,7 @@ export default {
         activeMenu: 'AccountDiscoverList',
         submenu: [
           {
-            title: this.$t('GatheredAccountList'),
+            title: this.$t('DiscoveredAccountList'),
             name: 'AccountDiscoverList',
             hidden: !this.$hasPerm('accounts.view_gatheredaccount'),
             component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverList.vue')

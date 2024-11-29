@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AccountListTable ref="table" v-bind="tableConfig" />
+    <AccountListTable ref="table" v-bind="tableConfig" :origin="'pam'" />
   </div>
 </template>
 
