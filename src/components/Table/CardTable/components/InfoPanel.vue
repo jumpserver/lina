@@ -1,9 +1,7 @@
 <template>
   <div class="panel-item">
-    <span class="item-label">{{ title }} </span>
-    <el-link :underline="false" class="item-value">
-      <span class="content">{{ content }}</span>
-    </el-link>
+    <div class="item-label">{{ title }}</div>
+    <div class="text-info" :title="content">{{ content }}</div>
   </div>
 </template>
 
@@ -38,14 +36,18 @@ export default {
 
 .panel-item {
   text-align: left;
-  padding: 5px 0;
+  padding: 3px 0;
   line-height: 20px;
-  @include textOverflow;
 
   .item-label {
     text-align: left;
-    display: inline-block;
-    width: 100px;
+  }
+  .item-label::after {
+    content: ':';
+    margin-left: 1px;
+  }
+  .text-info {
+    @include textOverflow;
   }
 }
 

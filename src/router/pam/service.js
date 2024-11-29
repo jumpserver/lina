@@ -3,82 +3,57 @@ import i18n from '@/i18n/i18n'
 
 export default [
   {
-    path: 'service',
-    name: 'AccountService',
+    path: 'services',
+    name: 'ServiceIntegration',
     component: empty,
     redirect: {
-      name: 'AccountServiceList'
+      name: 'ServiceIntegrationList'
     },
     meta: {
       app: 'accounts',
-      name: 'AccountService',
+      name: 'ServiceIntegration',
       icon: 'service',
-      resource: 'pushaccountautomation'
+      resource: 'serviceintegration'
     },
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountPush/index.vue'),
-        name: 'AccountServiceList',
+        component: () => import('@/views/pam/ServiceIntegration/index.vue'),
+        name: 'ServiceIntegrationList',
         meta: {
-          title: i18n.t('服务对接'),
-          menuTitle: i18n.t('服务对接'),
-          permissions: ['accounts.view_pushaccountautomation']
+          title: i18n.t('ServiceIntegration'),
+          menuTitle: i18n.t('ServiceIntegration'),
+          permissions: ['accounts.view_serviceintegration']
         }
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
-        name: 'AccountPushCreate',
+        component: () => import('@/views/pam/ServiceIntegration/ServiceIntegrationCreateUpdate.vue'),
+        name: 'ServiceIntegrationCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountPushCreate'),
-          // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.add_pushaccountautomation']
+          title: i18n.t('ServiceIntegrationCreate'),
+          permissions: ['accounts.add_serviceintegration']
         }
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
-        name: 'AccountPushUpdate',
+        component: () => import('@/views/pam/ServiceIntegration/ServiceIntegrationCreateUpdate.vue'),
+        name: 'ServiceIntegrationUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountPushUpdate'),
-          // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.change_pushaccountautomation']
+          title: i18n.t('ServiceIntegrationUpdate'),
+          permissions: ['accounts.change_serviceintegration']
         }
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
-        name: 'AccountCheckDetail',
+        component: () => import('@/views/pam/ServiceIntegration/ServiceIntegrationDetail/index.vue'),
+        name: 'ServiceIntegrationDetail',
         hidden: true,
         meta: {
-          title: i18n.t('AccountPushList'),
-          // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.view_pushaccountautomation']
-        }
-      },
-      {
-        path: 'executions',
-        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue'),
-        name: 'AccountPushExecutionList',
-        hidden: true,
-        meta: {
-          title: i18n.t('ExecutionList'),
-          // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.view_pushaccountexecution']
-        }
-      },
-      {
-        path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
-        name: 'AccountCheckExecutionDetail',
-        hidden: true,
-        meta: {
-          title: i18n.t('ExecutionDetail'),
-          // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.view_pushaccountexecution']
+          title: i18n.t('ServiceIntegrationDetail'),
+          permissions: ['accounts.view_serviceintegration']
         }
       }
     ]

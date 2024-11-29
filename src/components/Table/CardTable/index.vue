@@ -10,7 +10,7 @@
       <IBox v-if="totalData.length === 0">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
-      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
+      <el-col v-for="(d, index) in totalData" :key="index" :lg="24 / columns" :md="12" :sm="24" style="min-width: 335px;">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -19,7 +19,14 @@
           @click.native="onView(d)"
         >
           <keep-alive>
-            <component :is="subComponent" v-if="subComponent" :object="d" @refresh="getList" />
+            <component
+              :is="subComponent"
+              v-if="subComponent"
+              :object="d"
+              :table-config="tableConfig"
+              v-bind="subComponentProps"
+              @refresh="getList"
+            />
             <slot v-else :index="index" :item="d">
               <span v-if="d.edition === 'enterprise'" class="enterprise">
                 {{ $t('Enterprise') }}
@@ -85,6 +92,10 @@ export default {
   },
   props: {
     // 定义 table 的配置
+    columns: {
+      type: Number,
+      default: 3
+    },
     tableConfig: {
       type: Object,
       default: () => ({})
@@ -100,6 +111,10 @@ export default {
     subComponent: {
       type: Object,
       default: () => null
+    },
+    subComponentProps: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
