@@ -14,6 +14,7 @@ import { openTaskPage } from '@/utils/jms'
 import store from '@/store'
 import HashiCorpKV from './HCP.vue'
 import AzureKV from './Azure.vue'
+import AwsSM from './Aws.vue'
 
 export default {
   components: {
@@ -48,7 +49,7 @@ export default {
       ],
       fields: [
         [this.$t('Basic'), ['VAULT_ENABLED', 'VAULT_BACKEND', 'HISTORY_ACCOUNT_CLEAN_LIMIT']],
-        [this.$t('Provider'), ['HCP', 'AZURE']]
+        [this.$t('Provider'), ['HCP', 'AZURE', 'AWS']]
       ],
       fieldsMeta: {
         HISTORY_ACCOUNT_CLEAN_LIMIT: {
@@ -78,6 +79,13 @@ export default {
           component: AzureKV,
           hidden: (formValue) => {
             return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'azure'
+          }
+        },
+        AWS: {
+          label: this.$t('AmazonSecretsManager'),
+          component: AwsSM,
+          hidden: (formValue) => {
+            return !formValue.VAULT_ENABLED || formValue['VAULT_BACKEND'] !== 'aws'
           }
         }
       },
