@@ -1,17 +1,38 @@
 <template>
   <Page>
     <div v-if="this.$hasPerm('accounts.view_changesecretautomation')">
-      <SwitchDate class="switch-date" @change="onChange" />
-      <CardSummary :days="days" />
-      <el-row :gutter="16">
-        <el-col :lg="12" :sm="24">
-          <AccountSummary :days="days" />
+
+      <div>
+        <SwitchDate class="switch-date" @change="onChange" />
+      </div>
+
+      <el-row type="flex">
+
+        <el-col :span="18">
+          <CardSummary class="card-summary" :days="days" />
         </el-col>
-        <el-col :lg="12" :sm="24">
-          <DataSummary :days="days" />
+
+        <el-col :span="6">
+          <DataSummary class="data-summary" :days="days" style="margin-left: 1rem" />
+        </el-col>
+
+      </el-row>
+
+      <el-row type="flex" :gutter="20">
+        <el-col :span="12" style="margin-top: 2rem">
+          <FailedAccountSummary />
+        </el-col>
+        <el-col :span="12" style="margin-top: 2rem">
+          <FailedAccountSummary />
         </el-col>
       </el-row>
-      <FailedAccountSummary />
+
+      <el-row type="flex" style="flex-direction: column">
+        <el-col :span="24">
+          <AccountSummary class="account-summary" :days="days" />
+        </el-col>
+      </el-row>
+
     </div>
     <Page403 v-else />
   </Page>
