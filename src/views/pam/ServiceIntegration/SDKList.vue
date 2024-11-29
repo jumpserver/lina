@@ -39,7 +39,8 @@ export default {
       currentLanguage: 'python',
       readme: '',
       filenameMap: {
-        python: 'jms_pam-0.0.1-py3-none-any.whl'
+        python: 'jms_pam-0.0.1-py3-none-any.whl',
+        go: 'jms_pam.go'
       },
       quickFilters: [
         {
