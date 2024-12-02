@@ -18,13 +18,8 @@
 
       </el-row>
 
-      <el-row type="flex" :gutter="20">
-        <el-col :span="12" style="margin-top: 2rem">
-          <FailedAccountSummary />
-        </el-col>
-        <el-col :span="12" style="margin-top: 2rem">
-          <FailedAccountSummary />
-        </el-col>
+      <el-row type="flex" :gutter="24">
+        <FailedAccountSummary :days="days" />
       </el-row>
 
       <el-row type="flex" style="flex-direction: column">
