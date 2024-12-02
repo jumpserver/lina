@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="15" :sm="24" class="auto-detail-card">
       <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="9" :sm="24" class="quick-actions">
       <QuickActions :actions="quickActions" type="primary" />
       <ViewSecret
         v-if="showViewSecretDialog"

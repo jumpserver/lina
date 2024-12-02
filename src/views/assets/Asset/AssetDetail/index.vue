@@ -34,6 +34,7 @@ export default {
     return {
       asset: {},
       config: {
+        url: '/api/v1/assets/assets',
         activeMenu: 'Detail',
         submenu: [
           {

@@ -1,24 +1,73 @@
 <template>
   <div>
     <AccountListTable ref="table" v-bind="tableConfig" :origin="'pam'" />
+
+    <Drawer v-if="showTableDetailDrawer" :title="drawerTitle" @close-drawer="showTableDetailDrawer = !showTableDetailDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
   </div>
 </template>
 
 <script>
+import Drawer from '@/components/Drawer/index.vue'
+import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
+import AssetAccountDetail from '@/views/accounts/Account/AccountDetail/index.vue'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    AccountListTable
+    Drawer,
+    AssetDetail,
+    AccountListTable,
+    AssetAccountDetail
   },
   data() {
     return {
+      showTableDetailDrawer: false,
+      currentTemplate: null,
+      drawerTitle: '',
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
         hasImport: true,
         columnsMeta: {
+          name: {
+            formatter: (row) => {
+              return (
+                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
+                  this.$route.params.id = row.id
+
+                  this.currentTemplate = 'AssetAccountDetail'
+                  this.showTableDetailDrawer = true
+                  this.drawerTitle = this.$t('AssetAccountDetail')
+                }}>
+                  {row.name}
+                </span>
+              )
+            }
+          },
+          asset: {
+            formatter: (row) => {
+              return (
+                this.$hasPerm('assets.view_asset') ? (
+                  <span
+                    style={{ color: '#1c84c6', cursor: 'pointer' }}
+                    onClick={() => {
+                      this.$route.params.id = row.asset.id
+                      this.currentTemplate = 'AssetDetail'
+                      this.showTableDetailDrawer = true
+                      this.drawerTitle = this.$t('AssetDetail')
+                    }}
+                  >
+                    {row.name}
+                  </span>
+                ) : (
+                  <span>{row.asset ? row.asset.name : ''}</span>
+                )
+              )
+            }
+          },
           connect: {
             width: '80px',
             formatter: (row) => {
@@ -88,6 +137,25 @@ export default {
 
   .asset-user-table {
     padding-left: 20px;
+  }
+
+  ::v-deep .page.tab-page {
+   .page-heading .el-row--flex {
+      flex-wrap: wrap;
+
+     .page-heading-left .el-button {
+       display: none;
+     }
+   }
+
+    //.page-content {
+    //  height: 100% !important;
+    //  overflow-x: unset;
+    //
+    //  .tab-page-content {
+    //    height: calc(100% - 120px);
+    //  }
+    //}
   }
 
 </style>

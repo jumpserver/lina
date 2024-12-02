@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="15" :sm="24" class="auto-detail-card">
       <AutoDetailCard v-bind="basicInfoConfig" />
       <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
       <AutoDetailCard v-bind="customInfoConfig" />
       <AutoDetailCard v-bind="gatheredInfoConfig" />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="9" :sm="24" class="quick-actions">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="NodeRelation"
