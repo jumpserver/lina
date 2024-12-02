@@ -57,18 +57,32 @@
         :visible.sync="templateDialogVisible"
       />
     </div>
+
+    <el-drawer
+      direction="btt"
+      size="50%"
+      :with-header="false"
+      :append-to-body="true"
+      :visible.sync="pamDrawerShow"
+    >
+      <component :is="drawerRefName" />
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import AccountTemplateDialog from './AccountTemplateDialog'
+import Drawer from '@/components/Drawer/index.vue'
 import AddAccountDialog from './AddAccountDialog'
+import AssetDetail from '@/views/assets/Asset/AssetDetail'
+import AccountTemplateDialog from './AccountTemplateDialog'
 
 export default {
   name: 'AssetAccounts',
   components: {
-    AccountTemplateDialog,
-    AddAccountDialog
+    Drawer,
+    AssetDetail,
+    AddAccountDialog,
+    AccountTemplateDialog
   },
   props: {
     platform: {
@@ -90,7 +104,9 @@ export default {
     const accounts = this.value || []
     return {
       accounts: accounts,
+      drawerRefName: null,
       account: {},
+      pamDrawerShow: false,
       initial: false,
       addAccountDialogVisible: false,
       templateDialogVisible: false
@@ -153,6 +169,17 @@ export default {
         })
         return
       }
+
+      if (this.$route.query.type === 'pam') {
+        this.pamDrawerShow = true
+        this.drawerRefName = AssetDetail
+
+        this.$route.params.id = assetId
+        this.$route.query.tab = 'Account'
+
+        return
+      }
+
       this.$router.push({
         name: 'AssetDetail',
         params: { id: assetId },
@@ -222,6 +249,21 @@ export default {
 
   .cell {
     padding-top: 3px !important;
+  }
+}
+
+::v-deep .page.tab-page {
+  .page-heading .el-row--flex {
+    flex-wrap: wrap;
+
+    .page-heading-left .el-button {
+      display: none;
+    }
+  }
+
+  .tab-page-content {
+    overflow: auto;
+    height: 100%;
   }
 }
 </style>
