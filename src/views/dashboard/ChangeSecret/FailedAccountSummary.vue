@@ -1,85 +1,141 @@
 <template>
-  <HomeCard :table-config="tableConfig" v-bind="cardConfig" />
+  <div>
+    <RecordViewSecret
+      v-if="showViewSecretDialog"
+      :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
+    />
+    <HomeCard ref="HomeCard" :table-config="tableConfig" v-bind="cardConfig" />
+  </div>
 </template>
 
 <script>
 import HomeCard from '@/views/workbench/myhome/components/HomeCard.vue'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
+import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 
 export default {
   components: {
+    RecordViewSecret,
     HomeCard
+  },
+  props: {
+    days: {
+      type: [Number, String],
+      default: '7'
+    }
   },
   data() {
     const vm = this
     return {
+      showViewSecretDialog: false,
       cardConfig: {
         title: '改密失败账号'
       },
       tableConfig: {
-        url: '/api/v1/terminal/my-sessions/?limit=5',
+        url: `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`,
         columns: [
-          'id', 'asset', 'account', 'remote_addr', 'protocol'
+          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
         ],
         columnsMeta: {
-          id: {
-            prop: 'id',
-            align: 'center',
-            formatter: function(row, column, cellValue, index) {
-              const label = index + 1
-              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              if (vm.$hasPerm('terminal.view_session')) {
-                return <router-link {...{ attrs: route }} >{label}</router-link>
-              } else {
-                return label
+          asset: {
+            label: this.$t('Asset'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle({ row }) {
+                return row.asset.name
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset.id }
+                }
               }
             }
           },
-          asset: {
-            'min-width': 200,
-            label: this.$t('Asset')
-          },
           account: {
-            'min-width': 100
+            label: this.$t('Username'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: this.$hasPerm('accounts.view_account'),
+              getTitle({ row }) {
+                return row.account.username
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'AssetAccountDetail',
+                  params: { id: row.account.id }
+                }
+              }
+            }
           },
-          command_amount: {
-            align: 'center',
-            label: this.$t('Command')
-          },
-          remote_addr: {
-            width: 180,
-            label: this.$t('RemoteAddr')
-          },
-          protocol: {
-            width: 100,
-            label: this.$t('Protocol'),
-            el: {
-              disabled: false
-            },
-            sortable: false
+          is_success: {
+            label: this.$t('Success'),
+            formatter: (row) => {
+              if (row.status === 'pending') {
+                return <i Class='fa  fa fa-spinner fa-spin'/>
+              }
+              if (row.is_success) {
+                return <i Class='fa fa-check text-primary'/>
+              }
+              return <i Class='fa fa-times text-danger'/>
+            }
           },
           actions: {
-            align: 'center',
+            formatter: ActionsFormatter,
             formatterArgs: {
+              hasUpdate: false,
               hasDelete: false,
               hasClone: false,
-              hasUpdate: false,
+              moreActionsTitle: this.$t('More'),
               extraActions: [
                 {
-                  name: 'connect',
-                  icon: 'fa-desktop',
-                  plain: true,
+                  name: 'View',
+                  title: this.$t('View'),
                   type: 'primary',
-                  can: ({ row }) => row.is_active,
                   callback: ({ row }) => {
-                    window.open(`/luna/?login_to=${row.asset_id}&login_account=${row.account_id}`, '_blank')
+                    // debugger
+                    vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
+                    vm.showViewSecretDialog = false
+                    setTimeout(() => {
+                      vm.showViewSecretDialog = true
+                    })
+                  }
+                },
+                {
+                  name: 'Retry',
+                  title: this.$t('Retry'),
+                  can: this.$hasPerm('accounts.add_changesecretexecution'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.post(
+                      '/api/v1/accounts/change-secret-records/execute/',
+                      { record_ids: [row.id] }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                },
+                {
+                  name: 'ignoreFail',
+                  title: this.$t('ignoreFail'),
+                  can: this.$hasPerm('accounts.view_changesecretrecord'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.$axios.patch(
+                      `/api/v1/accounts/change-secret-records/${row.id}/ignore-fail/`,
+                    ).then(res => {
+                      this.$message.success(this.$tc('UpdateSuccessMsg'))
+                      this.$refs.HomeCard.$refs.ListTable.reloadTable()
+                    })
                   }
                 }
               ]
             }
           }
-        },
-        hasSelection: false,
-        paginationSize: 10
+        }
       }
     }
   }
