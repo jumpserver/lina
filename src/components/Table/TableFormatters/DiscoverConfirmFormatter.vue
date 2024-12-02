@@ -1,6 +1,6 @@
 <template>
   <span class="conform-td">
-    <span v-if="iValue === 'pending'">
+    <span v-if="iValue === '0'">
       <el-dropdown trigger="click" @command="handleRisk">
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
@@ -18,21 +18,25 @@
       </el-tooltip>
     </span>
     <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
-      <span v-if="iValue === 'confirmed' ">
+      <span v-if="iValue === '1' ">
         <i class="fa fa-check color-primary" />
       </span>
       <span v-else>
+        {{ iValue }}
         <svg-icon icon-class="ignore" />
       </span>
     </el-tooltip>
+    <ProcessingDialog :visible="processing" />
   </span>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 
 export default {
   name: 'ConfirmOrIgnoreFormatter',
+  components: { ProcessingDialog },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -52,7 +56,8 @@ export default {
   },
   data() {
     return {
-      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
+      processing: false
     }
   },
   computed: {
@@ -85,12 +90,16 @@ export default {
         action: cmd,
         risk: ''
       }
+      this.processing = true
       this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data).then(() => {
-        console.log('cmd: ', cmd)
         if (cmd === 'add_account') {
           this.row.present = true
         }
-        this.row.status = 'confirmed'
+        this.row.status = { 'value': '0' }
+      }).finally(() => {
+        setTimeout(() => {
+          this.processing = false
+        }, 500)
       })
     },
     getActions() {

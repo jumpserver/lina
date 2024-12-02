@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="iValue === 'pending'" class="risk-handler">
+    <span v-if="iValue === '0'" class="risk-handler">
       <el-dropdown trigger="click" @command="handleRisk">
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
@@ -18,7 +18,7 @@
       </el-tooltip>
     </span>
     <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
-      <span v-if="iValue === 'confirmed' ">
+      <span v-if="iValue === '1'">
         <i class="fa fa-check color-primary" />
       </span>
       <span v-else>

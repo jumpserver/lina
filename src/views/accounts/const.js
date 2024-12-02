@@ -39,11 +39,9 @@ export const gatherAccountTableConfig = (vm, url) => {
         showOverflowTooltip: true
       },
       present: {
-        label: '已同步',
         width: '120px'
       },
       remote_present: {
-        label: '远端存在',
         width: '120px'
       },
       date_updated: {
@@ -55,7 +53,6 @@ export const gatherAccountTableConfig = (vm, url) => {
         width: '150px'
       },
       status: {
-        label: vm.$t('Pending'),
         formatter: DiscoverConfirmFormatter,
         width: '100px',
         formatterArgs: {
