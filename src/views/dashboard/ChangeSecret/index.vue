@@ -19,13 +19,15 @@
       </el-row>
 
       <el-row type="flex" :gutter="24">
-        <FailedAccountSummary :days="days" />
-      </el-row>
 
-      <el-row type="flex" style="flex-direction: column">
-        <el-col :span="24">
+        <el-col :span="14">
+          <FailedAccountSummary :days="days" class="failed-account-summary" />
+        </el-col>
+
+        <el-col :span="10">
           <AccountSummary class="account-summary" :days="days" />
         </el-col>
+
       </el-row>
 
     </div>
@@ -70,6 +72,16 @@ export default {
 
   .page ::v-deep .page-heading {
     display: none;
+  }
+
+  .failed-account-summary {
+    height: 100%;
+    margin-top: 16px;
+
+   ::v-deep #HomeCard .el-card.no-border {
+     height: 100%;
+     margin-bottom: unset !important;
+    }
   }
 
 </style>
