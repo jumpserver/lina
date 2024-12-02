@@ -6,39 +6,18 @@
       :help-tip="helpMessage"
       :table-config="tableConfig"
     />
-    <Dialog
-      :show-cancel="false"
-      :title="$tc('CreateAccessKey')"
-      :visible.sync="visible"
-      width="700px"
-      @close="onClose"
-      @confirm="visible = false"
-    >
-      <el-alert type="warning">
-        {{ warningText }}
-        <div class="secret">
-          <div class="row">
-            <span class="col">ID:</span>
-            <span class="value">{{ key.id }}</span>
-          </div>
-          <div class="row">
-            <span class="col">Secret:</span>
-            <span class="value">{{ key.secret }}</span>
-          </div>
-        </div>
-      </el-alert>
-    </Dialog>
+    <SecretDialog ref="secretDialog" @close="onClose" />
   </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import { ArrayFormatter, DateFormatter } from '@/components/Table/TableFormatters'
-import Dialog from '@/components/Dialog/index.vue'
+import SecretDialog from '@/components/Dialog/Secret.vue'
 
 export default {
   components: {
-    Dialog,
+    SecretDialog,
     GenericListPage
   },
   data() {
@@ -125,8 +104,7 @@ export default {
             can: () => this.$hasPerm('authentication.add_accesskey'),
             callback: function() {
               this.$axios.post(ajaxUrl).then(res => {
-                this.key = res
-                this.visible = true
+                this.$refs.secretDialog.show(res)
               })
             }.bind(this)
           }
@@ -146,22 +124,4 @@ export default {
 </script>
 
 <style scoped>
-.secret {
-  color: #2b2f3a;
-  margin-top: 20px;
-}
-
-.row {
-  margin-bottom: 10px;
-}
-
-.col {
-  width: 100px;
-  text-align: left;
-  display: inline-block;
-}
-
-.value {
-  font-weight: 600;
-}
 </style>
