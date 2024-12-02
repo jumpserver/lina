@@ -96,6 +96,15 @@ export default {
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountChangeSecretExecutionDetail', params: { id: row.id }})
                   }
+                },
+                {
+                  name: 'report',
+                  title: this.$t('Report'),
+                  type: 'success',
+                  can: this.$hasPerm('accounts.view_changesecretexecution'),
+                  callback: function({ row }) {
+                    window.open(`/api/v1/accounts/change-secret-executions/${row.id}/report/`)
+                  }
                 }
               ]
             }
