@@ -149,26 +149,4 @@ export default {
     padding-bottom: unset;
   }
 }
-
-::v-deep .el-row {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  .auto-detail-card,
-  .quick-actions,
-  .generic-list-table,
-  .resource-activity {
-    width: 100% !important;
-
-    .ibox {
-      border: 1px solid #EBEEF5 !important;
-    }
-  }
-
-  .quick-actions {
-    margin-top: 30px;
-  }
-
-}
 </style>
