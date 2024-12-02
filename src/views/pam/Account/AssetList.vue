@@ -97,4 +97,14 @@ export default {
     height: 100%;
   }
 }
+
+::v-deep .page, .page.tab-page {
+  .page-heading .el-row--flex {
+    flex-wrap: wrap;
+
+    .page-heading-left .el-button {
+      display: none;
+    }
+  }
+}
 </style>
