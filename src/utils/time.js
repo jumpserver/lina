@@ -9,7 +9,7 @@ function getTimeUnits(u) {
     'm': '分',
     's': '秒'
   }
-  if (getLangCode() === 'zh') {
+  if (getLangCode(true) === 'zh-hans') {
     return units[u]
   } else {
     return u

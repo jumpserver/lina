@@ -1,12 +1,17 @@
 import VueCookie from 'vue-cookie'
+import store from '@/store'
 
-export function getLangCode() {
+export function getLangCode(withInternalCode = false) {
   const cookieLang = VueCookie.get('django_language')
-  const browserLang = navigator.systemLanguage || navigator.language || navigator.userLanguage
-  let lang = cookieLang || browserLang || 'en'
-  lang = lang.replace('-', '_')
-  if (lang !== 'zh_hant') {
-    lang = lang.slice(0, 2)
+  let lang = cookieLang || navigator.language.toLowerCase()
+  if (withInternalCode) {
+    const languages = store.getters.publicSettings['LANGUAGES']
+    for (const langObj of languages) {
+      if (langObj['other_codes'].indexOf(lang) > -1) {
+        lang = langObj['code']
+        break
+      }
+    }
   }
   return lang
 }
