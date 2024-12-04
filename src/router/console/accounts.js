@@ -113,7 +113,7 @@ export default [
   //     },
   //     {
   //       path: ':id',
-  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
+  //       component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/Application.vue'),
   //       name: 'AccountTemplateDetail',
   //       meta: { title: i18n.t('AccountTemplate') },
   //       hidden: true

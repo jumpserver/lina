@@ -16,8 +16,8 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/service-integrations/',
-        permissions: { app: 'accounts', resource: 'serviceintegration' }
+        url: '/api/v1/accounts/integration-applications/',
+        permissions: { app: 'accounts', resource: 'integrationapplication' }
       },
       headerActions: {
         hasImport: false,
@@ -30,7 +30,7 @@ export default {
       },
       subComponentProps: {
         getImage: (obj) => {
-          return obj.logo_image
+          return obj.logo
         },
         getInfos: (obj) => {
           return [
@@ -41,7 +41,7 @@ export default {
           ]
         },
         handleUpdate: (obj) => {
-          this.$router.push({ name: 'ServiceIntegrationUpdate', params: { id: obj.id }})
+          this.$router.push({ name: 'IntegrationApplicationUpdate', params: { id: obj.id }})
         }
       }
     }

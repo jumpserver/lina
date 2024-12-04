@@ -8,7 +8,7 @@ import { UploadField } from '@/components'
 import { JSONManyToManySelect } from '@/components/Form/FormFields'
 
 export default {
-  name: 'ServiceIntegrationCreateUpdate',
+  name: 'IntegrationApplicationCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -16,9 +16,9 @@ export default {
     const vm = this
     return {
       logo_file: null,
-      url: '/api/v1/accounts/service-integrations/',
+      url: '/api/v1/accounts/integration-applications/',
       fields: [
-        [this.$t('Basic'), ['name', 'logo_image']],
+        [this.$t('Basic'), ['name', 'logo']],
         [this.$t('AccountPolicy'), ['accounts', 'ip_group']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -50,7 +50,7 @@ export default {
             ]
           }
         },
-        logo_image: {
+        logo: {
           component: UploadField,
           el: {
             width: '10%',
@@ -66,11 +66,11 @@ export default {
       },
       hasSaveContinue: false,
       createSuccessNextRoute: {
-        name: 'ServiceIntegrationDetail'
+        name: 'ApplicationDetail'
       },
       performSubmit(values) {
         const formData = new FormData()
-        delete values['logo_image']
+        delete values['logo']
 
         if (!Array.isArray(values.ip_group)) {
           values.ip_group = values.ip_group ? values.ip_group.split(',') : []
@@ -87,7 +87,7 @@ export default {
           formData.append(key, value)
         }
         if (vm.logo_file) {
-          formData.append('logo_image', vm.logo_file)
+          formData.append('logo', vm.logo_file)
         }
         return this.$axios[this.method](this.iUrl, formData)
       }

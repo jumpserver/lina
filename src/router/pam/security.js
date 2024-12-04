@@ -15,16 +15,15 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/AccountCheck/index.vue'),
+        component: () => import('@/views/pam/RiskDetect/index.vue'),
         name: 'AccountCheckList',
         meta: {
-          title: i18n.t('账号检查'),
-          menuTitle: i18n.t('账号检查')
+          title: i18n.t('RiskDetection')
         }
       },
       {
         path: 'create',
-        component: () => import('@/views/pam/AccountCheck/AccountCheckCreateUpdate.vue'),
+        component: () => import('@/views/pam/RiskDetect/AccountCheckCreateUpdate.vue'),
         name: 'AccountCheckCreateUpdate',
         hidden: true,
         meta: {

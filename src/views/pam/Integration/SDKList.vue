@@ -93,7 +93,7 @@ export default {
       })
     },
     getSdkInfo() {
-      const url = `/api/v1/accounts/service-integrations/sdks/?language=${this.currentLanguage}`
+      const url = `/api/v1/accounts/integration-applications/sdks/?language=${this.currentLanguage}`
       this.$axios.get(url).then(res => {
         this.readme = res.readme
         this.$nextTick(() => {

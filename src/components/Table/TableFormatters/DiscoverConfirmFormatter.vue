@@ -22,7 +22,6 @@
         <i class="fa fa-check color-primary" />
       </span>
       <span v-else>
-        {{ iValue }}
         <svg-icon icon-class="ignore" />
       </span>
     </el-tooltip>
@@ -95,7 +94,7 @@ export default {
         if (cmd === 'add_account') {
           this.row.present = true
         }
-        this.row.status = { 'value': '0' }
+        this.row.status = { 'value': '1' }
       }).finally(() => {
         setTimeout(() => {
           this.processing = false

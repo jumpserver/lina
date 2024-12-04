@@ -8,27 +8,27 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ServiceIntegrationInfo from './ServiceIntegrationInfo.vue'
+import IntegrationApplicationInfo from './ServiceInfo.vue'
 import ServiceCallRecords from '../components/CallRecords.vue'
 
 export default {
   components: {
     GenericDetailPage,
     ServiceCallRecords,
-    ServiceIntegrationInfo
+    IntegrationApplicationInfo
   },
   data() {
     return {
       object: {},
       config: {
-        titlePrefix: this.$t('ServiceIntegrationDetail'),
-        activeMenu: 'ServiceIntegrationInfo',
-        url: '/api/v1/accounts/service-integrations',
+        titlePrefix: this.$t('ApplicationDetail'),
+        activeMenu: 'IntegrationApplicationInfo',
+        url: '/api/v1/accounts/integration-applications',
         submenu: [
           {
             title: this.$t('Basic'),
-            name: 'ServiceIntegrationInfo',
-            hidden: () => !this.$hasPerm('accounts.view_serviceintegration')
+            name: 'IntegrationApplicationInfo',
+            hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
             name: 'ServiceCallRecords',

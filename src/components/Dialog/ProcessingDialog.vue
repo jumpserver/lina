@@ -1,6 +1,7 @@
 <template>
   <Dialog
     :visible="iVisible"
+    height="300"
     title="Processing"
     width="300"
   >
@@ -39,10 +40,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .spinner {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border: 5px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     border-top-color: #3498db;

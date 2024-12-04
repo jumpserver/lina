@@ -20,8 +20,7 @@ export default [
         component: () => import('@/views/sessions/SessionList/index.vue'),
         name: 'AccountSessionList',
         meta: {
-          title: i18n.t('账号会话'),
-          menuTitle: i18n.t('账号会话'),
+          title: i18n.t('AccountSessions'),
           permissions: []
         }
       }
@@ -46,8 +45,7 @@ export default [
         component: () => import('@/views/accounts/AccountActivity/AccountActivityList.vue'),
         name: 'AccountActivityList',
         meta: {
-          title: i18n.t('活动记录'),
-          menuTitle: i18n.t('活动记录'),
+          title: i18n.t('AccountActivity'),
           permissions: ['audits.view_operatelog']
         }
       }

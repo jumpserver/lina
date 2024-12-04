@@ -3,7 +3,7 @@ import i18n from '@/i18n/i18n'
 
 import empty from '@/layout/empty'
 import automations from './automations'
-import services from './service'
+import integrations from './integrations'
 import security from './security'
 import activity from './activity'
 
@@ -13,7 +13,7 @@ export default {
   component: Layout,
   redirect: '/pam/dashboard',
   meta: {
-    title: '特权账号',
+    title: i18n.t('PAM'),
     icon: 'pam',
     type: 'view',
     showNavSwitcher: true,
@@ -36,7 +36,7 @@ export default {
       name: 'PamAccounts',
       component: () => import('@/views/pam/Account/index.vue'),
       meta: {
-        title: i18n.t('特权账号'),
+        title: i18n.t('Accounts'),
         icon: 'accounts',
         permissions: []
       }
@@ -57,22 +57,22 @@ export default {
       name: 'AccountSecurity',
       component: empty,
       meta: {
-        title: i18n.t('安全中心'),
+        title: i18n.t('Security'),
         icon: 'accounts',
         permissions: []
       },
       children: security
     },
     {
-      path: '/pam/services',
-      name: 'AccountService',
+      path: '/pam/integrations',
+      name: 'Integrations',
       component: empty,
       meta: {
-        title: i18n.t('Service'),
+        title: i18n.t('Integration'),
         icon: 'accounts',
         permissions: []
       },
-      children: services
+      children: integrations
     },
     {
       path: '/pam/activity',

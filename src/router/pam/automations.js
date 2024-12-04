@@ -102,7 +102,7 @@ export default [
         component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
         name: 'AccountChangeSecretList',
         meta: {
-          menuTitle: i18n.t('ChangeCredentials'),
+          menuTitle: i18n.t('ChangeSecret'),
           title: i18n.t('AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
