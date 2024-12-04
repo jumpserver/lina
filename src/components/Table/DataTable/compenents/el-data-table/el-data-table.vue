@@ -14,7 +14,7 @@
         @select="selectStrategy.onSelect"
         v-on="$listeners"
         @selection-change="selectStrategy.onSelectionChange"
-        @select-all="selectStrategy.onSelectAll($event, canSelect)"
+        @select-all="handleSelectAll($event, canSelect)"
         @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
@@ -1105,6 +1105,12 @@ export default {
 
       this.page = val
       this.getList()
+    },
+    handleSelectAll(e, canSelect) {
+      this.loading = true
+      this.selectStrategy.onSelectAll(e, canSelect, () => {
+        this.loading = false
+      })
     },
     /**
      * 切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否

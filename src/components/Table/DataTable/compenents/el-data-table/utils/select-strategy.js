@@ -71,22 +71,40 @@ class StrategyPersistSelection extends StrategyAbstract {
   /**
    * 用户切换当前页的多选
    */
-  onSelectAll(selection, selectable = () => true) {
+  onSelectAll(selection, selectable = () => true, callback) {
+    const { id, selected, data } = this.elDataTable
+
+    const selectedIds = new Set(selected.map(r => r[id]))
+
     // 获取当前所有已选择的项
     const selectedRows = this.elDataTable.data.filter(r => selection.includes(r))
 
     // 判断是否已全选
     const isSelected = this.elDataTable.data.every(r => selectable(r) && selectedRows.includes(r))
 
-    this.elDataTable.data.forEach(r => {
+    data.forEach(r => {
       if (selectable(r)) {
-        this.toggleRowSelection(r, isSelected)
+        const isRowSelected = selectedIds.has(r[id])
+
+        if (isSelected && !isRowSelected) {
+          selected.push(r)
+          this.elDataTable.toggleRowSelection(r, true)
+        } else if (!isSelected && isRowSelected) {
+          const index = selected.findIndex(item => item[id] === r[id])
+
+          if (index !== -1) {
+            selected.splice(index, 1)
+            this.elDataTable.toggleRowSelection(r, false)
+          }
+        }
       }
     })
+
+    callback()
   }
   /**
-   * toggleRowSelection和clearSelection管理elDataTable的selected数组
-   * 记得最后要将状态同步到el-table中
+   * toggleRowSelection 和 clearSelection 管理 elDataTable 的 selected 数组
+   * 记得最后要将状态同步到 el-table 中
    */
   toggleRowSelection(row, isSelected) {
     const { id, selected } = this.elDataTable
