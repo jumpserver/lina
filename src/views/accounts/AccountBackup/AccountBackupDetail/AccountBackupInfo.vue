@@ -53,7 +53,7 @@ export default {
       ],
       url: `/api/v1/accounts/account-backup-plans/${this.object.id}/`,
       detailFields: [
-        'id', 'name',
+        'id', 'name', 'backup_type',
         {
           key: this.$t('Crontab'),
           value: this.object.crontab,
@@ -68,7 +68,6 @@ export default {
             return <span>{this.object.is_periodic ? val : '-'}</span>
           }
         },
-        'date_created', 'date_updated', 'comment',
         {
           key: this.$t('Recipient') + ' A',
           value: this.object.recipients_part_one,
@@ -100,7 +99,8 @@ export default {
             const recipientServerB = this.isEmail ? '-' : val.map(item => item.name).join(', ')
             return <span>{recipientServerB}</span>
           }
-        }
+        },
+        'date_created', 'date_updated', 'is_active', 'comment'
       ]
     }
   },

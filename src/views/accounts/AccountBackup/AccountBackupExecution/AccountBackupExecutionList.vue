@@ -24,38 +24,32 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'automation', 'account_backup_name', 'timedelta', 'trigger', 'date_start',
-          'is_success', 'reason', 'actions'
+          'automation', 'trigger',
+          'date_start', 'date_finished', 'duration', 'actions'
         ],
         columnsShow: {
           default: [
-            'automation', 'account_backup_name', 'timedelta', 'date_start',
-            'is_success', 'reason', 'actions'
+            'automation', 'trigger',
+            'date_start', 'date_finished', 'duration', 'actions'
           ]
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
-            formatter: function(row) {
-              return <span>{row.plan}</span>
-            }
-          },
-          account_backup_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountBackupDetail',
-                params: { id: row.plan }
+                params: { id: row.automation }
               })
             },
-            id: ({ row }) => row.plan
+            id: ({ row }) => row.automation
           },
-          timedelta: {
+          duration: {
             label: this.$t('TimeDelta'),
             formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
+              return row.duration + 's'
             }
           },
           actions: {
@@ -67,6 +61,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
+                  can: this.$hasPerm('accounts.view_backupaccountexecution'),
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
@@ -76,8 +71,18 @@ export default {
                   name: 'detail',
                   title: this.$t('Detail'),
                   type: 'info',
+                  can: this.$hasPerm('accounts.view_backupaccountexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountBackupExecutionDetail', params: { id: row.id }})
+                  }
+                },
+                {
+                  name: 'report',
+                  title: this.$t('Report'),
+                  type: 'success',
+                  can: this.$hasPerm('accounts.view_backupaccountexecution'),
+                  callback: function({ row }) {
+                    window.open(`/api/v1/accounts/account-backup-plan-executions/${row.id}/report/`)
                   }
                 }
               ]
@@ -90,11 +95,11 @@ export default {
           options: [
             {
               label: this.$t('TaskID'),
-              value: 'plan_id'
+              value: 'automation_id'
             },
             {
               label: this.$t('DisplayName'),
-              value: 'plan__name'
+              value: 'automation__name'
             }
           ]
         },
