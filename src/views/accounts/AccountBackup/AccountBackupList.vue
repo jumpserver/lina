@@ -22,14 +22,14 @@ export default {
           resource: 'accountbackupautomation'
         },
         columns: [
-          'name', 'org_name', 'is_periodic',
-          'periodic_display', 'executed_amount', 'actions'
+          'name', 'backup_type', 'org_name', 'is_periodic',
+          'periodic_display', 'executed_amount', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'org_name', 'periodic_display',
-            'executed_amount', 'actions'
+            'name', 'backup_type', 'org_name', 'periodic_display',
+            'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -56,7 +56,7 @@ export default {
                   name: 'AccountBackupList',
                   query: {
                     tab: 'AccountBackupExecutionList',
-                    plan_id: row.id
+                    automation_id: row.id
                   }
                 }
               }
@@ -79,7 +79,10 @@ export default {
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
-                      { plan: row.id }
+                      {
+                        automation: row.id,
+                        type: row.type.value
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
