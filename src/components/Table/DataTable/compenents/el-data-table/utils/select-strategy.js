@@ -32,7 +32,6 @@ class StrategyNormal extends StrategyAbstract {
    * normal模式下只需要监听selection-change事件
    */
   onSelectionChange(val) {
-    console.log('%c DEBUG[ val ]-85:', 'font-size:13px; background:#F0F8FF; color:#FF6347;', val)
     this.elDataTable.selected = val
   }
 
@@ -117,10 +116,6 @@ class StrategyPersistSelection extends StrategyAbstract {
    */
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
-
-    // console.log('%c DEBUG[ data ]-37:', 'font-size:13px; background:#E6E6FA; color:#2F4F4F;', data)
-    // console.log('%c DEBUG[ id ]-37:', 'font-size:13px; background:#E6E6FA; color:#2F4F4F;', id)
-    // console.log('%c DEBUG[ selected ]-37:', 'font-size:13px; background:#E6E6FA; color:#2F4F4F;', selected)
 
     // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和selected合并
     const mergeData = _.uniqWith([...data, ...selected], _.isEqual)
