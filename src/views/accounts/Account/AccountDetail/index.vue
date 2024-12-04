@@ -38,6 +38,7 @@ export default {
       AccountVisible: false,
       account: {},
       config: {
+        url: '/api/v1/accounts/accounts',
         activeMenu: 'Detail',
         submenu: [
           {

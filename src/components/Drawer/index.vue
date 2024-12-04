@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     ref="drawer"
-    size="35%"
+    size="61.8%"
     direction="rtl"
     custom-class="drawer"
     :title="title"

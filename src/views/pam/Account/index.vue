@@ -43,14 +43,6 @@ export default {
         ]
       }
     }
-  },
-  watch: {},
-  async mounted() {
-  },
-  methods: {}
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
