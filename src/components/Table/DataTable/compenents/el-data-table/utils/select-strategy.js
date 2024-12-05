@@ -6,6 +6,8 @@
  * 多选策略接口
  */
 class StrategyAbstract {
+  cachedSelectedData = []
+
   constructor(elDataTable) {
     this.elDataTable = elDataTable
     // 绑定this后可直接在template中使用
@@ -77,28 +79,50 @@ class StrategyPersistSelection extends StrategyAbstract {
     const selectedIds = new Set(selected.map(r => r[id]))
 
     // 获取当前所有已选择的项
-    const selectedRows = this.elDataTable.data.filter(r => selection.includes(r))
+    const selectedRows = data.filter(r => selection.includes(r))
 
     // 判断是否已全选
-    const isSelected = this.elDataTable.data.every(r => selectable(r) && selectedRows.includes(r))
+    const isSelected = data.every(r => selectable(r) && selectedRows.includes(r))
+
+    const rowsToSelect = []
+    const rowsToDeselect = []
 
     data.forEach(r => {
       if (selectable(r)) {
         const isRowSelected = selectedIds.has(r[id])
 
         if (isSelected && !isRowSelected) {
-          selected.push(r)
-          this.elDataTable.toggleRowSelection(r, true)
+          rowsToSelect.push(r)
         } else if (!isSelected && isRowSelected) {
-          const index = selected.findIndex(item => item[id] === r[id])
-
-          if (index !== -1) {
-            selected.splice(index, 1)
-            this.elDataTable.toggleRowSelection(r, false)
-          }
+          rowsToDeselect.push(r)
         }
       }
     })
+
+    if (isSelected) {
+      rowsToSelect.forEach(row => {
+        selected.push(row)
+        selectedIds.add(row[id])
+      })
+      rowsToDeselect.forEach(row => {
+        this.elDataTable.toggleRowSelection(row, true)
+      })
+    } else {
+      rowsToDeselect.forEach(row => {
+        const index = selected.findIndex(item => item[id] === row[id])
+        if (index !== -1) {
+          selected.splice(index, 1)
+        }
+        selectedIds.delete(row[id])
+      })
+      rowsToSelect.forEach(row => {
+        this.elDataTable.toggleRowSelection(row, false)
+      })
+    }
+
+    // this.elTable.selected = Array.from(selectedIds).map(id => {
+    //   return data.find(r => r[id] === id)
+    // })
 
     callback()
   }
