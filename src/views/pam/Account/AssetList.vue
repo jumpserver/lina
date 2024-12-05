@@ -13,7 +13,7 @@ import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 
 import HostUpdate from '@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -35,36 +35,28 @@ export default {
         columnsExclude: ['date_verified'],
         columnsMeta: {
           name: {
-            formatter: (row) => {
-              return (
-                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
-                  this.$route.params.id = row.id
-                  this.$route.query.tab = 'Basic'
-
-                  this.currentTemplate = 'AssetDetail'
-                  this.showTableUpdateDrawer = true
-                  this.drawerTitle = this.$t('AssetDetail')
-                }}>
-                  {row.name}
-                </span>
-              )
-            }
+            formatterArgs: {
+              can: true,
+              isPam: true,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.id }
+              })
+            },
+            formatter: DetailFormatter
           },
           accounts_amount: {
-            formatter: (row) => {
-              return (
-                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
-                  this.$route.params.id = row.id
-                  this.$route.query.tab = 'Account'
-
-                  this.currentTemplate = 'AssetDetail'
-                  this.showTableUpdateDrawer = true
-                  this.drawerTitle = this.$t('AssetDetail')
-                }}>
-                  {row.name}
-                </span>
-              )
-            }
+            formatterArgs: {
+              can: true,
+              isPam: true,
+              getTitle: ({ row }) => row.accounts_amount,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.id },
+                query: { tab: 'Account' }
+              })
+            },
+            formatter: DetailFormatter
           },
           actions: {
             formatter: ActionsFormatter,

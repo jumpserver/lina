@@ -299,7 +299,7 @@ export default {
         columnsMeta: {
           name: {
             width: '120px',
-            formatter: function(row) {
+            formatter: (row) => {
               const to = {
                 name: 'AssetAccountDetail',
                 params: { id: row.id }
@@ -333,7 +333,7 @@ export default {
             }
           },
           asset: {
-            formatter: function(row) {
+            formatter: (row) => {
               const to = {
                 name: 'AssetDetail',
                 params: { id: row.asset.id }

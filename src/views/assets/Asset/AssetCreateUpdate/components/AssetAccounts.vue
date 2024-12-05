@@ -59,7 +59,6 @@
     </div>
 
     <el-drawer
-      direction="btt"
       size="50%"
       :with-header="false"
       :append-to-body="true"
