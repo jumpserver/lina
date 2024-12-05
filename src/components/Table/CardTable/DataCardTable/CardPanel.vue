@@ -24,7 +24,6 @@
         </el-dropdown>
       </el-col>
     </el-row>
-    <el-divider />
     <el-row :gutter="20" class="panel-content">
       <el-col :span="6" class="panel-image">
         <el-image :src="imageUrl" fit="contain" />

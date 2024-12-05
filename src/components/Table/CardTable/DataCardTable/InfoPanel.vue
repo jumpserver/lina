@@ -1,7 +1,7 @@
 <template>
   <div class="panel-item">
-    <div class="item-label">{{ title }}</div>
-    <div :title="content" class="text-info">{{ content || '' }}</div>
+    <span class="item-label">{{ title }} </span>
+    <span :title="content" class="text-info">{{ content || '' }}</span>
   </div>
 </template>
 

@@ -48,7 +48,7 @@ export default [
       {
         path: ':id',
         component: () => import('@/views/pam/Integration/ApplicationDetail/index.vue'),
-        name: 'ApplicationDetail',
+        name: 'IntegrationApplicationDetail',
         hidden: true,
         meta: {
           title: i18n.t('ApplicationDetail'),
