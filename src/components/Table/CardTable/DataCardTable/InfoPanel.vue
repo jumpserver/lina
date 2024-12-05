@@ -1,7 +1,7 @@
 <template>
   <div class="panel-item">
     <div class="item-label">{{ title }}</div>
-    <div class="text-info" :title="content">{{ content }}</div>
+    <div :title="content" class="text-info">{{ content || '' }}</div>
   </div>
 </template>
 

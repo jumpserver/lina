@@ -1,7 +1,7 @@
 <template>
   <div>
     <SmallCard ref="table" v-bind="$data" />
-    <CreateDialog v-if="visible" v-bind="providerConfig" :visible.sync="visible" />
+    <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
     <Dialog
       v-if="updateVisible"
       :destroy-on-close="true"
@@ -40,7 +40,7 @@ import {
   qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
 } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
-import SmallCard from '@/components/Table/CardTable/SmallCard.vue'
+import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import Dialog from '@/components/Dialog/index.vue'
 import AssetPanel from './components/AssetPanel.vue'

@@ -5,7 +5,7 @@
 </template>
 
 <script type="text/jsx">
-import SmallCard from '@/components/Table/CardTable/SmallCard.vue'
+import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
@@ -34,7 +34,7 @@ export default {
         },
         getInfos: (obj) => {
           return [
-            { title: `${this.$tc('RelevantApp')} ID`, content: obj.id },
+            { title: `ID`, content: obj.id },
             { title: this.$tc('DataLastUsed'), content: toSafeLocalDateStr(obj.date_last_used) },
             { title: this.$tc('AccountAmount'), content: obj.accounts_amount },
             { title: this.$tc('Comment'), content: obj.comment || this.$tc('Nothing') }
