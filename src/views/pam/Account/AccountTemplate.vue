@@ -20,10 +20,9 @@
 import { GenericListPage } from '@/layout/components'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
-import Drawer from '@/components/Drawer/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
-import AccountTemplateDetail from '@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'
-import AccountTemplateUpdate from '@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'
+import Drawer from '@/components/Drawer/index.vue'
+// import AccountTemplateDetail from '@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'
 
 export default {
   name: 'AccountTemplateList',
@@ -31,8 +30,7 @@ export default {
     Drawer,
     ViewSecret,
     GenericListPage,
-    AccountTemplateUpdate,
-    AccountTemplateDetail
+    AccountTemplateUpdate: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue')
   },
   data() {
     const vm = this
@@ -78,10 +76,9 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: true,
-              hasDelete: true,
-              hasClone: this.hasClone,
+              isPam: true,
               moreActionsTitle: this.$t('More'),
+              updateRoute: 'AccountTemplateUpdate',
               extraActions: [
                 {
                   name: 'View',
@@ -101,8 +98,9 @@ export default {
               onUpdate: ({ row }) => {
                 this.$route.params.id = row.id
 
+                this.$route.query.type = 'pam'
+
                 this.currentTemplate = 'AccountTemplateUpdate'
-                this.drawerTitle = this.$t('UpdateAccountTemplate')
                 this.showTableUpdateDrawer = true
               }
             }

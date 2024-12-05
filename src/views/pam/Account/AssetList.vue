@@ -9,24 +9,21 @@
 
 <script>
 import Drawer from '@/components/Drawer/index.vue'
-import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 
-import HostUpdate from '@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
     Drawer,
     BaseList,
-    HostUpdate,
-    AssetDetail
+    HostUpdate: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue')
   },
   data() {
     return {
       drawerTitle: '',
-      currentTemplate: null,
       showTableUpdateDrawer: false,
+      currentTemplate: null,
       config: {
         url: '/api/v1/assets/assets/',
         category: 'all'
@@ -61,6 +58,8 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
+              isPam: true,
+              updateRoute: 'HostUpdate',
               onUpdate: ({ row }) => {
                 this.$route.params.id = row.id
 
