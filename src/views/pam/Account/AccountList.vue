@@ -1,31 +1,20 @@
 <template>
   <div>
     <AccountListTable ref="table" v-bind="tableConfig" :origin="'pam'" />
-
-    <Drawer v-if="showTableDetailDrawer" :title="drawerTitle" @close-drawer="showTableDetailDrawer = !showTableDetailDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
   </div>
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/index.vue'
-import AssetDetail from '@/views/assets/Asset/AssetDetail'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
-import AssetAccountDetail from '@/views/accounts/Account/AccountDetail/index.vue'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    Drawer,
-    AssetDetail,
-    AccountListTable,
-    AssetAccountDetail
+    AccountListTable
   },
   data() {
     return {
-      showTableDetailDrawer: false,
-      currentTemplate: null,
       drawerTitle: '',
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
@@ -33,39 +22,26 @@ export default {
         hasImport: true,
         columnsMeta: {
           name: {
-            formatter: (row) => {
-              return (
-                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
-                  this.$route.params.id = row.id
-
-                  this.currentTemplate = 'AssetAccountDetail'
-                  this.showTableDetailDrawer = true
-                  this.drawerTitle = this.$t('AssetAccountDetail')
-                }}>
-                  {row.name}
-                </span>
-              )
-            }
+            formatterArgs: {
+              can: true,
+              isPam: true,
+              getRoute: ({ row }) => ({
+                name: 'AssetAccountList',
+                params: { id: row.id }
+              })
+            },
+            formatter: DetailFormatter
           },
           asset: {
-            formatter: (row) => {
-              return (
-                this.$hasPerm('assets.view_asset') ? (
-                  <span
-                    style={{ color: '#1c84c6', cursor: 'pointer' }}
-                    onClick={() => {
-                      this.$route.params.id = row.asset.id
-                      this.currentTemplate = 'AssetDetail'
-                      this.showTableDetailDrawer = true
-                      this.drawerTitle = this.$t('AssetDetail')
-                    }}
-                  >
-                    {row.name}
-                  </span>
-                ) : (
-                  <span>{row.asset ? row.asset.name : ''}</span>
-                )
-              )
+            formatter: DetailFormatter,
+            formatterArgs: {
+              isPam: true,
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle: ({ row }) => row.asset.name,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.asset.id }
+              })
             }
           },
           connect: {

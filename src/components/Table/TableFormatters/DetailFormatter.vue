@@ -12,14 +12,25 @@
         {{ iTitle }}
       </slot>
     </el-link>
+
+    <Drawer v-if="showTableDetailDrawer" :title="drawerTitle" @close-drawer="showTableDetailDrawer = !showTableDetailDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
+  components: {
+    Drawer,
+    AssetDetail: () => import('@/views/assets/Asset/AssetDetail'),
+    AssetAccountList: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
+    AccountTemplateDetail: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue')
+  },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -46,6 +57,9 @@ export default {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     return {
       linkClicked: false,
+      showTableDetailDrawer: false,
+      drawerTitle: '',
+      currentTemplate: null,
       formatterArgs: formatterArgs
     }
   },
@@ -107,12 +121,24 @@ export default {
       const detailRoute = this.getDetailRoute()
 
       if (this.formatterArgs.openInNewPage) {
-        this.linkClicked = this.formatterArgs.removeColorOnClick
         const { href } = this.$router.resolve(detailRoute)
-        window.open(href, '_blank')
-      } else {
-        this.$router.push(detailRoute)
+        this.linkClicked = this.formatterArgs.removeColorOnClick
+
+        return window.open(href, '_blank')
       }
+
+      if (this.formatterArgs.isPam) {
+        this.showTableDetailDrawer = true
+
+        console.log('%c DEBUG[ detailRoute ]-20:', 'font-size:13px; background:pink; color:#2E8B57;', detailRoute)
+
+        this.currentTemplate = detailRoute.name
+        this.$route.params.id = detailRoute.params.id
+
+        return
+      }
+
+      this.$router.push(detailRoute)
     }
   }
 }

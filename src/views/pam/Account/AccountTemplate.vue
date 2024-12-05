@@ -53,18 +53,13 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: (row) => {
-              return (
-                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
-                  this.$route.params.id = row.id
-
-                  this.currentTemplate = 'AccountTemplateDetail'
-                  this.showTableUpdateDrawer = true
-                  this.drawerTitle = this.$t('AccountTemplate')
-                }}>
-                  {row.name}
-                </span>
-              )
+            formatterArgs: {
+              can: true,
+              isPam: true,
+              getRoute: ({ row }) => ({
+                name: 'AccountTemplateDetail',
+                params: { id: row.id }
+              })
             }
           },
           privileged: {
