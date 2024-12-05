@@ -37,6 +37,7 @@ export default {
               return (
                 <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
                   this.$route.params.id = row.id
+                  this.$route.query.type = 'pam'
 
                   this.currentTemplate = 'AssetAccountDetail'
                   this.showTableDetailDrawer = true
@@ -60,7 +61,7 @@ export default {
                       this.drawerTitle = this.$t('AssetDetail')
                     }}
                   >
-                    {row.name}
+                    {row.asset.name}
                   </span>
                 ) : (
                   <span>{row.asset ? row.asset.name : ''}</span>

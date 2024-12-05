@@ -1,41 +1,54 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24" class="auto-detail-card">
-      <AutoDetailCard :object="object" v-bind="detail" />
-    </el-col>
-    <el-col :md="9" :sm="24" class="quick-actions">
-      <QuickActions :actions="quickActions" type="primary" />
-      <ViewSecret
-        v-if="showViewSecretDialog"
-        :account="object"
-        :url="secretUrl"
-        :visible.sync="showViewSecretDialog"
-      />
-      <AutomationParamsForm
-        :has-button="false"
-        :method="pushAccountMethod"
-        :visible.sync="autoPushVisible"
-        @canSetting="onCanSetting"
-        @submit="onSubmit"
-      />
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :md="15" :sm="24" class="auto-detail-card">
+        <AutoDetailCard :object="object" v-bind="detail" />
+      </el-col>
+      <el-col :md="9" :sm="24" class="quick-actions">
+        <QuickActions :actions="quickActions" type="primary" />
+        <ViewSecret
+          v-if="showViewSecretDialog"
+          :account="object"
+          :url="secretUrl"
+          :visible.sync="showViewSecretDialog"
+        />
+        <AutomationParamsForm
+          :has-button="false"
+          :method="pushAccountMethod"
+          :visible.sync="autoPushVisible"
+          @canSetting="onCanSetting"
+          @submit="onSubmit"
+        />
+      </el-col>
+    </el-row>
+
+    <el-drawer
+      size="50%"
+      :with-header="false"
+      :append-to-body="true"
+      :visible.sync="pamDrawerShow"
+    >
+      <component :is="drawerRefName" />
+    </el-drawer>
+  </div>
 </template>
 
 <script>
-import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
-import QuickActions from '@/components/QuickActions/index.vue'
-import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
 import { openTaskPage } from '@/utils/jms'
+import QuickActions from '@/components/QuickActions/index.vue'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import AssetDetail from '@/views/assets/Asset/AssetDetail/index.vue'
+import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
 export default {
   name: 'Detail',
   components: {
-    AutoDetailCard,
+    ViewSecret,
+    AssetDetail,
     QuickActions,
-    AutomationParamsForm,
-    ViewSecret
+    AutoDetailCard,
+    AutomationParamsForm
   },
   props: {
     object: {
@@ -47,6 +60,8 @@ export default {
   data() {
     const vm = this
     return {
+      pamDrawerShow: false,
+      drawerRefName: null,
       needSetAutoPushParams: false,
       autoPushVisible: false,
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
@@ -213,6 +228,21 @@ export default {
               name: 'AssetDetail',
               params: { id: this.object.asset.id }
             }
+
+            if (this.$route.query.type === 'pam') {
+              this.drawerRefName = 'AssetDetail'
+
+              this.$route.params.id = this.object.asset.id
+
+              return (
+                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
+                  this.pamDrawerShow = true
+                }}>
+                  {value?.name}
+                </span>
+              )
+            }
+
             return <router-link to={route}>{value?.name}</router-link>
           },
           su_from: (item, value) => {
