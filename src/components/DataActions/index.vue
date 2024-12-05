@@ -10,10 +10,9 @@
         trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)">
-          <span v-if="action.icon && !action.icon.startsWith('el-')" class="pre-icon">
-            <i v-if="action.icon.startsWith('fa')" :class="'fa fa-fw ' + action.icon" />
-            <svg-icon v-else :icon-class="action.icon" />
+        <el-button :size="size" class="more-action" v-bind="{...cleanButtonAction(action), icon: ''}">
+          <span v-if="action.icon" class="pre-icon">
+            <Icon :icon="action.icon" />
           </span>
           <span v-if="action.title">
             {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
@@ -44,8 +43,7 @@
                 v-bind="{...option, icon: ''}"
               >
                 <span v-if="option.icon" class="pre-icon">
-                  <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
-                  <svg-icon v-else :icon-class="option.icon" />
+                  <Icon :icon="option.icon" />
                 </span>
                 {{ option.title }}
               </el-dropdown-item>
@@ -59,14 +57,13 @@
         :key="action.name"
         :size="size"
         class="action-item"
-        v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
+        v-bind="{...cleanButtonAction(action), icon: ''}"
         @click="handleClick(action)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
           <span>
-            <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
-              <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
-              <svg-icon v-else :icon-class="action.icon" />
+            <span v-if="action.icon" style="vertical-align: initial">
+              <Icon :icon="action.icon" />
             </span>
             {{ action.title }}
           </span>
@@ -78,9 +75,13 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common'
+import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
+  components: {
+    Icon
+  },
   props: {
     grouped: {
       type: Boolean,

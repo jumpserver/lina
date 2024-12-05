@@ -7,15 +7,18 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
+    <BatchResolveDialog :visible.sync="batchResolveDialog.visible" v-bind="batchResolveDialog" />
   </div>
 </template>
 
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
+import BatchResolveDialog from '@/views/pam/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
 
 export default {
   components: {
+    BatchResolveDialog,
     AssetTreeTable
   },
   data() {
@@ -73,6 +76,10 @@ export default {
           ]
         }
       ],
+      batchResolveDialog: {
+        visible: false,
+        risks: []
+      },
       tableConfig: {
         url: '/api/v1/accounts/account-risks/',
         columns: [
@@ -115,7 +122,21 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false
+        hasCreate: false,
+        extraMoreActions: [
+          {
+            name: 'resolveSelected',
+            title: this.$t('ResolveSelected'),
+            icon: 'el-icon-check',
+            callback: function(rows) {
+              vm.batchResolveDialog.risks = rows
+              vm.batchResolveDialog.visible = true
+            },
+            can: function({ selectedRows }) {
+              return selectedRows.length > 0
+            }
+          }
+        ]
       }
     }
   },
