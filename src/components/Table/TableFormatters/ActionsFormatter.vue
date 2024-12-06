@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
 import BaseFormatter from './base.vue'
+import ActionsGroup from '@/components/ActionsGroup/index.vue'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
@@ -23,7 +23,9 @@ const defaultPerformDelete = function({ row, col }) {
 
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
+
   let route = { params: { id: id }}
+
   const updateRoute = this.colActions.updateRoute
 
   if (typeof updateRoute === 'object') {
@@ -33,6 +35,7 @@ const defaultUpdateCallback = function({ row, col }) {
   } else {
     route.name = updateRoute
   }
+
   this.$router.push(route)
 }
 
@@ -106,7 +109,7 @@ export default {
           onUpdate: defaultUpdateCallback,
           onDelete: defaultDeleteCallback,
           onClone: defaultCloneCallback,
-          extraActions: [] // format see defaultActions
+          extraActions: []
         }
       }
     }
@@ -145,8 +148,7 @@ export default {
     return {
       colActions: colActions,
       defaultActions: defaultActions,
-      extraActions: colActions.extraActions,
-      moreActionsTitle: ''
+      extraActions: colActions.extraActions
       // moreActionsTitle: colActions.moreActionsTitle || null
     }
   },
