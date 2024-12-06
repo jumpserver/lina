@@ -128,8 +128,8 @@ export default {
             name: 'resolveSelected',
             title: this.$t('ResolveSelected'),
             icon: 'el-icon-check',
-            callback: function(rows) {
-              vm.batchResolveDialog.risks = rows
+            callback: function({ selectedRows }) {
+              vm.batchResolveDialog.risks = selectedRows
               vm.batchResolveDialog.visible = true
             },
             can: function({ selectedRows }) {

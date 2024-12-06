@@ -47,6 +47,14 @@ export default {
     formatterArgsDefault: {
       type: Object,
       default: () => ({})
+    },
+    changed: {
+      type: Boolean,
+      default: false
+    },
+    rows: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -75,6 +83,11 @@ export default {
       } else {
         return this.cellValue
       }
+    }
+  },
+  watch: {
+    changed() {
+      this.handleVisibleChange(true)
     }
   },
   methods: {
@@ -125,7 +138,7 @@ export default {
     },
     async handleVisibleChange(visible) {
       if (!visible) {
-        return
+        return false
       }
       if (this.actions.length === 0) {
         this.actions = await this.getActions()

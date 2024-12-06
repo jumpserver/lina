@@ -108,7 +108,7 @@ export default {
       return this.quickFilters && this.quickFilters.length > 0
     },
     dataTable() {
-      return this.$refs.dataTable.$refs.dataTable
+      return this.$refs.dataTable?.$refs.dataTable
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等

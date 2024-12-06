@@ -21,6 +21,9 @@ export const riskActions = [
     label: i18n.t('Add to Account'),
     has: ['new_found'],
     disabled: async function() {
+      if (!this.row.username) {
+        return false
+      }
       const url = `/api/v1/accounts/accounts/?username=${this.row.username}&asset=${this.row.asset.id}`
       const data = await this.$axios.get(url)
       return data.length > 0

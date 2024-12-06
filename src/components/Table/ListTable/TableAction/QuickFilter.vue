@@ -15,7 +15,7 @@
                   @click="handleFilterClick(option)"
                 >
                   {{ option.label }}
-                  <i class="el-icon-circle-check" />
+                  <!--                  <i class="el-icon-circle-check" />-->
                 </span>
               </div>
             </div>
