@@ -8,6 +8,7 @@
     :before-close="handleClose"
     :visible.sync="dialog"
     :wrapper-closable="true"
+    :append-to-body="true"
   >
     <div class="drawer__content">
       <slot name="default" />
