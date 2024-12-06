@@ -29,6 +29,7 @@ export default {
     Drawer,
     AssetDetail: () => import('@/views/assets/Asset/AssetDetail'),
     AssetAccountList: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
+    AccountDiscoverTaskDetail: () => import('@/views/accounts/AccountDiscover/TaskDetail/index'),
     AccountTemplateDetail: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue')
   },
   extends: BaseFormatter,
@@ -127,10 +128,8 @@ export default {
         return window.open(href, '_blank')
       }
 
-      if (this.formatterArgs.isPam) {
+      if (detailRoute.query.type === 'pam') {
         this.showTableDetailDrawer = true
-
-        console.log('%c DEBUG[ detailRoute ]-20:', 'font-size:13px; background:pink; color:#2E8B57;', detailRoute)
 
         this.currentTemplate = detailRoute.name
         this.$route.params.id = detailRoute.params.id

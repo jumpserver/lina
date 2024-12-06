@@ -88,7 +88,7 @@ export default {
     },
     moreActionsTitle: {
       type: String,
-      default: null
+      default: ''
     },
     moreCreates: {
       type: Object,

@@ -8,6 +8,7 @@ import i18n from '@/i18n/i18n'
 import { periodicMeta } from '@/components/const'
 
 export default {
+  name: 'AccountDiscoverTaskCreate',
   components: {
     GenericCreateUpdatePage
   },
