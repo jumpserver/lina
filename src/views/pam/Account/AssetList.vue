@@ -37,7 +37,8 @@ export default {
               isPam: true,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
-                params: { id: row.id }
+                params: { id: row.id },
+                query: { type: 'pam' }
               })
             },
             formatter: DetailFormatter
@@ -50,7 +51,7 @@ export default {
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.id },
-                query: { tab: 'Account' }
+                query: { type: 'pam', tab: 'Account' }
               })
             },
             formatter: DetailFormatter

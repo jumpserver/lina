@@ -148,8 +148,9 @@ export default {
     return {
       colActions: colActions,
       defaultActions: defaultActions,
-      extraActions: colActions.extraActions
+      extraActions: colActions.extraActions,
       // moreActionsTitle: colActions.moreActionsTitle || null
+      moreActionsTitle: ''
     }
   },
   computed: {

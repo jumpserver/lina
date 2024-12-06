@@ -1,20 +1,34 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+
+    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
-    GenericListTable
+    Drawer,
+    GenericListTable,
+    AccountDiscoverTaskCreate: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
+    AccountDiscoverTaskUpdate: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate')
   },
   data() {
     const vm = this
     return {
+      showViewSecretDialog: false,
+      showTableUpdateDrawer: false,
+      currentTemplate: null,
+      drawerTitle: '',
       tableConfig: {
         name: 'AccountDiscoverTaskList',
         url: '/api/v1/accounts/gather-account-automations/',
@@ -37,10 +51,11 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountDiscoverTaskDetail',
-              routeQuery: {
-                tab: 'AccountDiscoverTaskDetail'
-              }
+              getRoute: ({ row }) => ({
+                name: 'AccountDiscoverTaskDetail',
+                params: { id: row.id },
+                query: { type: 'pam' }
+              })
             }
           },
           nodes: {
@@ -94,7 +109,15 @@ export default {
                     })
                   }
                 }
-              ]
+              ],
+              onUpdate: ({ row }) => {
+                this.$route.params.id = row.id
+
+                this.$route.query.type = 'pam'
+
+                this.currentTemplate = 'AccountDiscoverTaskUpdate'
+                this.showTableUpdateDrawer = true
+              }
             }
           }
         }
@@ -107,14 +130,15 @@ export default {
         createRoute: 'AccountDiscoverTaskCreate',
         searchConfig: {
           getUrlQuery: false
+        },
+        onCreate: ({ row }) => {
+          this.$route.query.type = 'pam'
+
+          this.currentTemplate = 'AccountDiscoverTaskCreate'
+          this.showTableUpdateDrawer = true
         }
       }
     }
-  },
-  watch: {
-    // $route(to, from) {
-    // this.$router.go(0)
-    // }
   }
 }
 </script>

@@ -1,16 +1,26 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+
+    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
+  </div>
 </template>
 
 <script>
+import Drawer from '@/components/Drawer/index.vue'
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AccountDiscoverTaskExecutionList',
   components: {
-    GenericListTable
+    Drawer,
+    GenericListTable,
+    AccountDiscoverExecutionDetail: () => import('@/views/accounts/AccountDiscover/ExecutionDetail/index.vue')
   },
   props: {
     object: {
@@ -21,6 +31,9 @@ export default {
   },
   data() {
     return {
+      showTableUpdateDrawer: false,
+      currentTemplate: null,
+      drawerTitle: '',
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
@@ -41,7 +54,8 @@ export default {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.automation }
+                params: { id: row.automation },
+                query: { type: 'pam' }
               })
             },
             id: ({ row }) => row.automation
@@ -74,8 +88,10 @@ export default {
                   name: 'detail',
                   title: this.$t('Detail'),
                   type: 'info',
-                  callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
+                  callback: ({ row }) => {
+                    this.handleDetailCallback(row)
+
+                    // return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {
@@ -117,6 +133,16 @@ export default {
     const automation_id = this.$route.query.automation_id
     if (automation_id !== undefined) {
       this.tableConfig.url = `${this.tableConfig.url}?automation_id=${automation_id}`
+    }
+  },
+  methods: {
+    handleDetailCallback(row) {
+      this.$route.params.id = row.id
+
+      this.$route.query.type = 'pam'
+
+      this.currentTemplate = 'AccountDiscoverExecutionDetail'
+      this.showTableUpdateDrawer = true
     }
   }
 }
