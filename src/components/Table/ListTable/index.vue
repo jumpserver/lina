@@ -1,9 +1,17 @@
 <template>
   <div>
-    <QuickFilter :filters="quickFilters" :summary="quickSummary" @filter="filter" />
+    <QuickFilter
+      :expand.sync="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      @filter="filter"
+    />
     <TableAction
       v-if="hasActions"
+      :class="{'filter-expand': filterExpand}"
       :date-pick="handleDateChange"
+      :has-quick-filter="iHasQuickFilter"
+      :quick-filter-expand.sync="filterExpand"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
@@ -32,7 +40,7 @@ import IBox from '../../IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
-import QuickFilter from './QuickFilter.vue'
+import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/time'
 
 export default {
@@ -90,11 +98,15 @@ export default {
       isDeactivated: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
-      initQuery: {}
+      initQuery: {},
+      filterExpand: true
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
+    iHasQuickFilter() {
+      return this.quickFilters && this.quickFilters.length > 0
+    },
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
@@ -219,6 +231,9 @@ export default {
     })
   },
   methods: {
+    handleFilterExpandChanged(expand) {
+      this.filterExpand = expand
+    },
     handleQuickFilter(option) {
       if (option.route) {
         this.$router.push(option.route)
@@ -312,6 +327,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-expand {
+  &::v-deep button.actionFilter {
+    background-color: rgb(0, 0, 0, 0.08) !important;
+  }
+}
 .table-content {
   margin-top: 10px;
 

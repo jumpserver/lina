@@ -1,47 +1,49 @@
 <template>
-  <div v-if="filters || summary" :class="isExpand ? 'expand': 'shrink' " class="quick-filter">
-    <div v-show="isExpand" class="quick-filter-wrap">
-      <div v-if="filters" class="quick-filter-zone">
-        <div v-for="category in iFilters" :key="category.label" class="item-zone">
-          <div>
-            <h5>{{ category.label }}</h5>
-            <div class="filter-options">
-              <span
-                v-for="option in category.options"
-                :key="option.label"
-                :class="option.active ? 'active' : ''"
-                class="item"
-                @click="handleFilterClick(option)"
-              >
-                {{ option.label }}
-                <i class="el-icon-circle-check" />
-              </span>
+  <div v-show="isExpand">
+    <div v-if="filters || summary" :class="isExpand ? 'expand': 'shrink' " class="quick-filter">
+      <div v-show="isExpand" class="quick-filter-wrap">
+        <div v-if="filters" class="quick-filter-zone">
+          <div v-for="category in iFilters" :key="category.label" class="item-zone">
+            <div>
+              <h5>{{ category.label }}</h5>
+              <div class="filter-options">
+                <span
+                  v-for="option in category.options"
+                  :key="option.label"
+                  :class="option.active ? 'active' : ''"
+                  class="item"
+                  @click="handleFilterClick(option)"
+                >
+                  {{ option.label }}
+                  <i class="el-icon-circle-check" />
+                </span>
+              </div>
             </div>
           </div>
         </div>
+        <div v-if="summary" class="summary-zone">
+          <span v-for="item of iSummary" :key="item.title" class="summary-block">
+            <SummaryCard
+              :class="item.active ? 'active' : ''"
+              :count="item.count"
+              :title="item.title"
+              @click="handleFilterClick(item)"
+            />
+          </span>
+        </div>
       </div>
-      <div v-if="summary" class="summary-zone">
-        <span v-for="item of iSummary" :key="item.title" class="summary-block">
-          <SummaryCard
-            :class="item.active ? 'active' : ''"
-            :count="item.count"
-            :title="item.title"
-            @click="handleFilterClick(item)"
-          />
-        </span>
-      </div>
-    </div>
-    <div class="expand-bar-wrap">
-      <div class="expand-bar" @click="toggle">
-        <i :class="isExpand ? 'expand': 'shrink' " class="fa fa-angle-double-up" />
-        <span v-show="!isExpand"> 展开过滤器 </span>
+      <div class="expand-bar-wrap">
+        <div class="expand-bar" @click="toggle">
+          <i :class="isExpand ? 'expand': 'shrink' " class="fa fa-angle-double-up" />
+          <span v-show="!isExpand"> 展开过滤器 </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SummaryCard from '@/components/Cards/SummaryCard'
+import SummaryCard from '@/components/Cards/SummaryCard/index.vue'
 
 export default {
   name: 'QuickFilter',
@@ -62,17 +64,20 @@ export default {
   },
   data() {
     return {
-      isExpand: this.expand,
       iFilters: this.cleanFilters(),
       iSummary: this.cleanSummary(),
       filtered: {},
       activeFilters: []
     }
   },
-  computed: {},
-  watch: {
-    isExpand(val) {
-      this.$emit('expand', val)
+  computed: {
+    isExpand: {
+      set(val) {
+        this.$emit('update:expand', val)
+      },
+      get() {
+        return this.expand
+      }
     }
   },
   mounted() {

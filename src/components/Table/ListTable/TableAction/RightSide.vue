@@ -99,7 +99,11 @@ export default {
       type: [Boolean, Function, String],
       default: false
     },
-    hasFilter: defaultTrue
+    hasQuickFilter: defaultTrue,
+    quickFilterExpand: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
@@ -108,8 +112,8 @@ export default {
           name: 'actionFilter',
           icon: 'filter',
           tip: this.$t('Filter'),
-          has: this.hasFilter,
-          callback: this.handleTableSettingClick.bind(this)
+          has: this.hasQuickFilter,
+          callback: this.handleFilterClick.bind(this)
         },
         {
           name: 'actionSetting',
@@ -167,6 +171,9 @@ export default {
     }
   },
   methods: {
+    handleFilterClick() {
+      this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
+    },
     handleTagSearch(val) {
       this.searchTable(val)
     },

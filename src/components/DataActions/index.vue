@@ -10,7 +10,7 @@
         trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button :size="size" class="more-action" v-bind="{...cleanButtonAction(action), icon: ''}">
+        <el-button :class="action.name" :size="size" class="more-action" v-bind="{...cleanButtonAction(action), icon: ''}">
           <span v-if="action.icon" class="pre-icon">
             <Icon :icon="action.icon" />
           </span>
@@ -55,6 +55,7 @@
       <el-button
         v-else
         :key="action.name"
+        :class="action.name"
         :size="size"
         class="action-item"
         v-bind="{...cleanButtonAction(action), icon: ''}"
