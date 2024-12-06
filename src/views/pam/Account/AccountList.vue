@@ -114,24 +114,4 @@ export default {
   .asset-user-table {
     padding-left: 20px;
   }
-
-  ::v-deep .page.tab-page {
-   .page-heading .el-row--flex {
-      flex-wrap: wrap;
-
-     .page-heading-left .el-button {
-       display: none;
-     }
-   }
-
-    //.page-content {
-    //  height: 100% !important;
-    //  overflow-x: unset;
-    //
-    //  .tab-page-content {
-    //    height: calc(100% - 120px);
-    //  }
-    //}
-  }
-
 </style>
