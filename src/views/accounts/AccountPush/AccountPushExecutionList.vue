@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/push-account-executions',
         columns: [
           'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
@@ -94,7 +94,16 @@ export default {
                   type: 'info',
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountCheckExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
+                  }
+                },
+                {
+                  name: 'report',
+                  title: this.$t('Report'),
+                  type: 'success',
+                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
+                  callback: function({ row }) {
+                    window.open(`/api/v1/accounts/push-account-executions/${row.id}/report/`)
                   }
                 }
               ]

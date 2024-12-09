@@ -107,6 +107,7 @@ export default {
           }
         }
       },
+      helpMsg: this.$t('WebHelpMessage'),
       headerActions: {
         hasRefresh: true,
         hasExport: false,
