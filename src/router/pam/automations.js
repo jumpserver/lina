@@ -160,6 +160,82 @@ export default [
     ]
   },
   {
+    path: 'account-push',
+    name: 'AccountPush',
+    component: empty,
+    redirect: {
+      name: 'AccountPushList'
+    },
+    meta: {
+      app: 'accounts',
+      name: 'BaseAccountPushList',
+      resource: 'pushaccountautomation',
+      icon: 'change-password'
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/accounts/AccountPush/index.vue'),
+        name: 'AccountPushList',
+        meta: {
+          title: i18n.t('AccountPushList'),
+          menuTitle: i18n.t('AccountPushList'),
+          permissions: ['accounts.view_pushaccountautomation']
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
+        name: 'AccountPushCreate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountPushCreate'),
+          permissions: ['accounts.add_pushaccountautomation']
+        }
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
+        name: 'AccountPushUpdate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountPushUpdate'),
+          permissions: ['accounts.change_pushaccountautomation']
+        }
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
+        name: 'AccountPushDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountPushList'),
+          permissions: ['accounts.view_pushaccountautomation']
+        }
+      },
+      {
+        path: 'executions',
+        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue'),
+        name: 'AccountPushExecutionList',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionList'),
+          permissions: ['accounts.view_pushaccountexecution']
+        }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
+        name: 'AccountPushExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionDetail'),
+          permissions: ['accounts.view_pushaccountexecution']
+        }
+      }
+    ]
+  },
+  {
     path: 'account-backup',
     component: empty,
     name: 'AccountBackup',
