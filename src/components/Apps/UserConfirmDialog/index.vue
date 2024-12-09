@@ -225,7 +225,7 @@ export default {
       })
     },
     startFaceCapture() {
-      const url = '/api/v1/authentication/mfa/face/context/'
+      const url = '/api/v1/authentication/face/context/'
       this.$axios.post(url).then(data => {
         const token = data['token']
         this.faceCaptureUrl = '/facelive/capture?token=' + token
