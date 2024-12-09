@@ -72,7 +72,7 @@ const mutations = {
   },
   SET_CURRENT_ORG(state, org) {
     // 系统组织和全局组织不设置成 Pre org
-    if (!state.currentOrg?.autoEnter && !state.currentOrg?.is_root) {
+    if (!state.currentOrg?.autoEnter) {
       state.preOrg = state.currentOrg
       setPreOrgLocal(state.username, state.currentOrg)
     }
