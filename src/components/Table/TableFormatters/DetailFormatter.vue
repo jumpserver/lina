@@ -29,7 +29,10 @@ export default {
     Drawer,
     AssetDetail: () => import('@/views/assets/Asset/AssetDetail'),
     AssetAccountList: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
+    AccountPushDetail: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
     AccountDiscoverTaskDetail: () => import('@/views/accounts/AccountDiscover/TaskDetail/index'),
+    AccountBackupDetail: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
+    IntegrationApplicationDetail: () => import('@/views/pam/Integration/ApplicationDetail/index.vue'),
     AccountTemplateDetail: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue')
   },
   extends: BaseFormatter,
@@ -132,6 +135,7 @@ export default {
         this.showTableDetailDrawer = true
 
         this.currentTemplate = detailRoute.name
+        this.drawerTitle = this.$t(detailRoute.name)
         this.$route.params.id = detailRoute.params.id
 
         return
@@ -166,5 +170,9 @@ export default {
 .icon {
   width: 28px;
   height: 28px;
+}
+
+::v-deep .go-back {
+  display: none;
 }
 </style>
