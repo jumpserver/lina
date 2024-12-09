@@ -119,7 +119,15 @@ export default {
       })
     },
     handleConfirm() {
-
+      this.$axios.delete('/api/v1/accounts/gathered-accounts/', {
+        params: {
+          username: this.account.username,
+          asset: this.account.asset.id
+        }
+      }).then(res => {
+        this.$message.success('删除成功')
+        this.iVisible = false
+      })
     }
   }
 }

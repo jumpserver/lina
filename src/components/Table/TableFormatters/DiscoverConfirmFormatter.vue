@@ -1,6 +1,6 @@
 <template>
   <span class="conform-td">
-    <span v-if="iValue === '0'">
+    <span v-if="iValue === statusMap.pending">
       <el-dropdown trigger="click" @command="handleRisk">
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
@@ -13,12 +13,12 @@
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
         <el-button class="ignore action" size="mini">
-          <svg-icon icon-class="ignore" />
+          <svg-icon icon-class="ignore" @click="handleRisk('ignore')" />
         </el-button>
       </el-tooltip>
     </span>
     <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
-      <span v-if="iValue === '1' ">
+      <span v-if="iValue === statusMap.confirmed ">
         <i class="fa fa-check color-primary" />
       </span>
       <span v-else>
@@ -33,6 +33,11 @@
 import BaseFormatter from './base.vue'
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 
+const statusMap = {
+  pending: '0',
+  confirmed: '1',
+  ignored: '2'
+}
 export default {
   name: 'ConfirmOrIgnoreFormatter',
   components: { ProcessingDialog },
@@ -56,7 +61,8 @@ export default {
   data() {
     return {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
-      processing: false
+      processing: false,
+      statusMap: statusMap
     }
   },
   computed: {
@@ -94,7 +100,10 @@ export default {
         if (cmd === 'add_account') {
           this.row.present = true
         }
-        this.row.status = { 'value': '1' }
+        if (cmd === 'ignore') {
+          this.row.status = { 'value': statusMap.ignored }
+        }
+        this.row.status = { 'value': statusMap.confirmed }
       }).finally(() => {
         setTimeout(() => {
           this.processing = false
