@@ -148,11 +148,11 @@ const actions = {
     }
     commit('SET_CURRENT_ORG', systemOrg)
   },
-  leaveSettingOrg({ commit }) {
-    const preOrg = store.state.users.preOrg
-    if (!preOrg) {
-      return
-    }
+  leaveSettingOrg({ commit, state }) {
+    const preOrg = getPreOrgLocal(state.profile.username)
+
+    if (!preOrg) return
+
     commit('SET_CURRENT_ORG', preOrg)
   },
   enterGlobalOrg({ commit }) {

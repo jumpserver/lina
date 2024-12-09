@@ -99,8 +99,11 @@ export default {
     },
     currentOrgId() {
       const usingOrgIds = this.usingOrgs.map(o => o.id)
+
       let currentOrgId = this.currentOrg.id
+
       const find = usingOrgIds.indexOf(currentOrgId) > -1
+
       if (!find) {
         currentOrgId = null
       }
