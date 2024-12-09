@@ -229,7 +229,9 @@ export default {
               params: { id: this.object.asset.id }
             }
 
-            if (this.$route.query.type === 'pam') {
+            console.log(this.$route)
+
+            if (this.$route.params.type === 'pam') {
               return (
                 <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
                   this.pamDrawerShow = true

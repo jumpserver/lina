@@ -56,7 +56,8 @@ export default {
               isPam: true,
               getRoute: ({ row }) => ({
                 name: 'AccountTemplateDetail',
-                params: { id: row.id }
+                params: { id: row.id },
+                query: { type: 'pam' }
               })
             }
           },

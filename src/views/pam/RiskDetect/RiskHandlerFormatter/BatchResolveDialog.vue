@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="$tc('ResolveSelected')" :visible.sync="iVisible">
+  <Dialog :show-buttons="false" :title="$tc('ResolveSelected')" :visible.sync="iVisible">
     <div v-if="iVisible">
       <el-form class="el-form">
         <el-form-item class="risk-select" prop="selected">

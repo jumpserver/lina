@@ -27,7 +27,8 @@ export default {
               isPam: true,
               getRoute: ({ row }) => ({
                 name: 'AssetAccountList',
-                params: { id: row.id }
+                params: { id: row.id },
+                query: { type: 'pam' }
               })
             },
             formatter: DetailFormatter
@@ -40,7 +41,8 @@ export default {
               getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
-                params: { id: row.asset.id }
+                params: { id: row.asset.id },
+                query: { type: 'pam', tab: 'Basic' }
               })
             }
           },
