@@ -8,6 +8,7 @@
       :tree-setting="treeSetting"
     />
     <BatchResolveDialog :visible.sync="batchResolveDialog.visible" v-bind="batchResolveDialog" />
+    <RiskScanDialog v-if="detectDialog.visible" :asset="detectDialog.asset" :visible.sync="detectDialog.visible" />
   </div>
 </template>
 
@@ -15,9 +16,11 @@
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/pam/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
+import RiskScanDialog from './RiskScanDialog.vue'
 
 export default {
   components: {
+    RiskScanDialog,
     BatchResolveDialog,
     AssetTreeTable
   },
@@ -25,6 +28,11 @@ export default {
     const vm = this
     return {
       gatherAccounts: [],
+      scanVisible: false,
+      detectDialog: {
+        visible: false,
+        asset: ''
+      },
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -40,7 +48,13 @@ export default {
             id: 'check',
             name: this.$t('Check'),
             icon: 'scan',
-            callback: () => {}
+            callback: (node) => {
+              console.log('Discovery it: ', node)
+              vm.detectDialog.asset = node.id
+              setTimeout(() => {
+                vm.detectDialog.visible = true
+              }, 100)
+            }
           }
         ]
       },
