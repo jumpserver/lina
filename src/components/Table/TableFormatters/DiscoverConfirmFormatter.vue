@@ -126,6 +126,11 @@ export default {
           name: 'add_account',
           label: this.$t('Add account'),
           has: !this.row.present
+        },
+        {
+          name: 'add_account_after_change_password',
+          label: this.$t('Add account after changing password'),
+          has: !this.row.present
         }
       ]
       return actions.filter(action => {

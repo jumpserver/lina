@@ -105,7 +105,8 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     iHasQuickFilter() {
-      return this.quickFilters && this.quickFilters.length > 0
+      const has = this.quickFilters && this.quickFilters.length > 0
+      return !!has
     },
     dataTable() {
       return this.$refs.dataTable?.$refs.dataTable
