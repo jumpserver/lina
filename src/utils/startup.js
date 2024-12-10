@@ -8,7 +8,10 @@ import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
-const autoEnterOrgs = ['00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000']
+const autoEnterOrgs = [
+  '00000000-0000-0000-0000-000000000001',
+  '00000000-0000-0000-0000-000000000000'
+]
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
