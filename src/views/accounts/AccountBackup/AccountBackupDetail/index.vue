@@ -13,6 +13,7 @@ import AccountBackupExecutionList
 from '@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue'
 
 export default {
+  name: 'AccountBackupDetail',
   components: {
     GenericDetailPage,
     AccountBackupInfo,
@@ -39,7 +40,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

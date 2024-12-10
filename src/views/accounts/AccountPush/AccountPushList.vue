@@ -1,20 +1,33 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+
+    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
+  </div>
 </template>
 
 <script>
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountPushList',
   components: {
-    GenericListTable
+    Drawer,
+    GenericListTable,
+    AccountPushUpdate: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
+    AccountPushCreate: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue')
   },
   data() {
     const vm = this
     return {
+      drawerTitle: '',
+      showTableUpdateDrawer: false,
+      currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
@@ -32,7 +45,12 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountCheckDetail'
+              isPam: true,
+              getRoute: ({ row }) => ({
+                name: 'AccountPushDetail',
+                params: { id: row.id },
+                query: { type: 'pam' }
+              })
             }
           },
           accounts: {
@@ -81,7 +99,20 @@ export default {
             }
           },
           actions: {
+            formatter: ActionsFormatter,
             formatterArgs: {
+              isPam: true,
+              updateRoute: 'AccountPushUpdate',
+              onUpdate: ({ row }) => {
+                this.$route.params.id = row.id
+
+                // 解决表单详情中的跳转
+                this.$route.query.type = 'pam'
+
+                this.currentTemplate = 'AccountPushUpdate'
+                this.drawerTitle = this.$t('AccountPushUpdate')
+                this.showTableUpdateDrawer = true
+              },
               extraActions: [
                 {
                   title: vm.$t('Execute'),
@@ -111,7 +142,12 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        onCreate: () => {
+          this.currentTemplate = 'AccountPushCreate'
+          this.drawerTitle = this.$t('AccountPushCreate')
+          this.showTableUpdateDrawer = true
+        }
       }
     }
   }

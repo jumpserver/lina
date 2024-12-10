@@ -1,20 +1,33 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+
+    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
+      <component :is="currentTemplate" />
+    </Drawer>
+  </div>
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountBackupList',
   components: {
-    GenericListTable
+    Drawer,
+    GenericListTable,
+    AccountBackupUpdate: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
+    AccountBackupCreate: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue')
   },
   data() {
     const vm = this
     return {
+      drawerTitle: '',
+      showTableUpdateDrawer: false,
+      currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plans/',
         permissions: {
@@ -36,7 +49,13 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountBackupDetail'
+              isPam: true,
+              route: 'AccountBackupDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountBackupDetail',
+                params: { id: row.id },
+                query: { type: 'pam' }
+              })
             }
           },
           types: {
@@ -68,7 +87,14 @@ export default {
                 vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupUpdate', params: { id: row.id }})
+                this.$route.params.id = row.id
+
+                // 解决表单详情中的跳转
+                this.$route.query.type = 'pam'
+
+                this.currentTemplate = 'AccountBackupUpdate'
+                this.drawerTitle = this.$t('AccountBackupUpdate')
+                this.showTableUpdateDrawer = true
               },
               extraActions: [
                 {
@@ -101,6 +127,11 @@ export default {
           return {
             name: 'AccountBackupCreate'
           }
+        },
+        onCreate: () => {
+          this.currentTemplate = 'AccountBackupCreate'
+          this.drawerTitle = this.$t('AccountBackupCreate')
+          this.showTableUpdateDrawer = true
         }
       }
     }
