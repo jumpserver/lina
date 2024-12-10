@@ -2,12 +2,10 @@
 import store from '@/store'
 import router, { resetRouter } from '@/router'
 import Vue from 'vue'
-import VueCookie from 'vue-cookie'
 import { message } from '@/utils/message'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
-import request from '@/utils/request'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 
@@ -20,24 +18,24 @@ async function checkLogin({ to, from, next }) {
     next()
   }
   // Determine whether the user has logged in
-  const sessionExpire = VueCookie.get('jms_session_expire')
-  if (!sessionExpire) {
-    request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
-      window.location = process.env.VUE_APP_LOGIN_PATH
-    })
-    return reject('No session mark found in cookie')
-  } else if (sessionExpire === 'close') {
-    let startTime = new Date().getTime()
-    setInterval(() => {
-      const endTime = new Date().getTime()
-      const delta = (endTime - startTime)
-      startTime = endTime
-      Vue.$log.debug('Set session expire: ', delta)
-      VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
-    }, 10 * 1000)
-  } else if (sessionExpire === 'age') {
-    Vue.$log.debug('Session expire on age')
-  }
+  // const sessionExpire = VueCookie.get('jms_session_expire')
+  // if (!sessionExpire) {
+  //   request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
+  //     window.location = process.env.VUE_APP_LOGIN_PATH
+  //   })
+  //   return reject('No session mark found in cookie')
+  // } else if (sessionExpire === 'close') {
+  //   let startTime = new Date().getTime()
+  //   setInterval(() => {
+  //     const endTime = new Date().getTime()
+  //     const delta = (endTime - startTime)
+  //     startTime = endTime
+  //     Vue.$log.debug('Set session expire: ', delta)
+  //     VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
+  //   }, 10 * 1000)
+  // } else if (sessionExpire === 'age') {
+  //   Vue.$log.debug('Session expire on age')
+  // }
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
