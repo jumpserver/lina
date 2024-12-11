@@ -3,7 +3,7 @@
     <AssetTreeTable
       ref="AssetTreeTable"
       :header-actions="headerActions"
-      :quick-filters="quickFilters"
+      :quick-summary="quickSummary"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
@@ -49,7 +49,6 @@ export default {
             name: this.$t('Check'),
             icon: 'scan',
             callback: (node) => {
-              console.log('Discovery it: ', node)
               vm.detectDialog.asset = node.id
               setTimeout(() => {
                 vm.detectDialog.visible = true
@@ -58,36 +57,24 @@ export default {
           }
         ]
       },
-      quickFilters: [
+      quickSummary: [
         {
-          label: '快速过滤',
-          options: [
-            {
-              label: '未同步到资产',
-              value: ''
-            },
-            {
-              label: this.$t('最近一个月'),
-              value: ''
-            }
-          ]
+          title: '最近一周发现',
+          filter: {
+            'days': '7'
+          }
         },
         {
-          label: this.$t('最近发现'),
-          options: [
-            {
-              label: '最近一天 (20)',
-              value: ''
-            },
-            {
-              label: '最近一周 (300)',
-              value: ''
-            },
-            {
-              label: '最近一个月 (600)',
-              value: ''
-            }
-          ]
+          title: '最近一月发现',
+          filter: {
+            'days': '30'
+          }
+        },
+        {
+          title: '待处理',
+          filter: {
+            status: '0'
+          }
         }
       ],
       batchResolveDialog: {

@@ -21,8 +21,8 @@
     <AccountCreateUpdate
       v-if="showAddDialog"
       :account="account"
-      :origin="origin"
       :asset="iAsset"
+      :origin="origin"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
       @add="addAccountSuccess"
@@ -31,9 +31,9 @@
     <AccountCreateUpdate
       v-if="showAddTemplateDialog"
       :account="account"
-      :origin="origin"
       :add-template="true"
       :asset="iAsset"
+      :origin="origin"
       :title="accountCreateByTemplateTitle"
       :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
@@ -200,13 +200,13 @@ export default {
             {
               label: '僵尸账号',
               filter: {
-                risk: 'zombie'
+                risk: 'long_time_no_login'
               }
             },
             {
               label: '幽灵账号',
               filter: {
-                risk: 'ghost'
+                risk: 'new_found'
               }
             },
             {

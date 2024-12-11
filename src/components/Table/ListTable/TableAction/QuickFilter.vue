@@ -15,7 +15,9 @@
                   @click="handleFilterClick(option)"
                 >
                   {{ option.label }}
-                  <span v-if="option.hasCount">({{ getCount(option) }}) </span>
+                  <span v-if="option.hasCount">
+                    (<span v-async="getCount(option)">-</span>)
+                  </span>
                   <!--                  <i class="el-icon-circle-check" />-->
                 </span>
               </div>
