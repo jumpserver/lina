@@ -18,7 +18,8 @@ export default [
         component: () => import('@/views/pam/RiskDetect/index.vue'),
         name: 'AccountCheckList',
         meta: {
-          title: i18n.t('RiskDetection')
+          title: i18n.t('RiskDetection'),
+          permissions: ['accounts.view_accountrisk']
         }
       },
       {
@@ -27,7 +28,8 @@ export default [
         name: 'AccountCheckCreateUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountCheckCreate')
+          title: i18n.t('AccountCheckCreate'),
+          permissions: ['accounts.view_accountrisk']
         }
       }
     ]
