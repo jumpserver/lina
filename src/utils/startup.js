@@ -173,19 +173,25 @@ export async function startup({ to, from, next }) {
   if (store.getters.inited) {
     return true
   }
-  await store.dispatch('app/init')
 
-  // set page title
-  // await getOpenPublicSetting({ to, from, next })
-  await getPublicSetting({ to, from, next }, true)
-  await checkLogin({ to, from, next })
-  await onI18nLoaded()
-  await getPublicSetting({ to, from, next }, false)
-  await changeCurrentViewIfNeed({ to, from, next })
-  await changeCurrentOrgIfNeed({ to, from, next })
-  await generatePageRoutes({ to, from, next })
-  await checkUserFirstLogin({ to, from, next })
-  await store.dispatch('assets/getAssetCategories')
+  try {
+    await store.dispatch('app/init')
+
+    // set page title
+    // await getOpenPublicSetting({ to, from, next })
+    await getPublicSetting({ to, from, next }, true)
+    await checkLogin({ to, from, next })
+    await onI18nLoaded()
+    await getPublicSetting({ to, from, next }, false)
+    await changeCurrentViewIfNeed({ to, from, next })
+    await changeCurrentOrgIfNeed({ to, from, next })
+    console.log('.........x')
+    await generatePageRoutes({ to, from, next })
+    await checkUserFirstLogin({ to, from, next })
+    await store.dispatch('assets/getAssetCategories')
+  } catch (e) {
+    Vue.$log.error('Startup error: ', e)
+  }
   return true
 }
 
