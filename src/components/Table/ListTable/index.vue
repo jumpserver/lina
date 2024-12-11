@@ -4,6 +4,7 @@
       :expand.sync="filterExpand"
       :filters="quickFilters"
       :summary="quickSummary"
+      :table-url="tableUrl"
       @filter="filter"
     />
     <TableAction
