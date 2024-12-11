@@ -7,6 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
 import { periodicMeta } from '@/components/const'
+import { TagInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -91,6 +92,10 @@ export default {
           el: {
             readonly: true
           }
+        },
+        accounts: {
+          component: TagInput,
+          helpText: this.$t('If the account already exists, the ciphertext of the account will be used for push; if the account does not exist, the account will be created according to the filled-in ciphertext and then pushed.')
         },
         params: {
           component: AutomationParams,
