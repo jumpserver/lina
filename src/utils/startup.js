@@ -185,7 +185,6 @@ export async function startup({ to, from, next }) {
     await getPublicSetting({ to, from, next }, false)
     await changeCurrentViewIfNeed({ to, from, next })
     await changeCurrentOrgIfNeed({ to, from, next })
-    console.log('.........x')
     await generatePageRoutes({ to, from, next })
     await checkUserFirstLogin({ to, from, next })
     await store.dispatch('assets/getAssetCategories')
