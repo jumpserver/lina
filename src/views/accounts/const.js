@@ -36,7 +36,13 @@ export const gatherAccountTableConfig = (vm, url) => {
         }
       },
       username: {
-        showOverflowTooltip: true
+        formatter: function(row) {
+          const to = {
+            name: 'AccountDiscoverAccountDetail',
+            params: { id: row.id }
+          }
+          return h('router-link', { props: { to }}, row.username)
+        }
       },
       present: {
         width: '120px'
