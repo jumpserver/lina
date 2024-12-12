@@ -133,8 +133,13 @@ export default {
     submitMethod: {
       type: [Function, String],
       default: function() {
-        const params = this.$route.params
-        if (params.id) {
+        const cloneFrom = this.getCloneId()
+        console.log('Clone from: ', cloneFrom)
+        if (cloneFrom) {
+          return 'post'
+        }
+        const objectId = this.getUpdateId()
+        if (objectId) {
           return 'put'
         } else {
           return 'post'
@@ -145,13 +150,13 @@ export default {
     getUrl: {
       type: Function,
       default: function() {
-        const params = this.$route.params
+        const objectId = this.getUpdateId()
         let url = this.url
-        if (params.id) {
-          url = getUpdateObjURL(url, params.id)
+        if (objectId) {
+          url = getUpdateObjURL(url, objectId)
         }
 
-        const clone_from = this.$route.query['clone_from']
+        const clone_from = this.getCloneId()
         const query = clone_from ? `clone_from=${clone_from}` : ''
         if (query) {
           if (url.indexOf('?') === -1) {
@@ -268,7 +273,11 @@ export default {
       form: {},
       loading: true,
       isSubmitting: false,
-      clone: false
+      clone: false,
+      drawer: false,
+      action: '',
+      actionId: '',
+      row: {}
     }
   },
   computed: {
@@ -297,19 +306,47 @@ export default {
     }
   },
   async created() {
-    this.$log.debug('Object init is: ', this.object)
+    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+    if (drawActionMeta) {
+      this.drawer = true
+      this.action = drawActionMeta.action
+      this.row = drawActionMeta.row
+      this.actionId = this.row?.id
+    }
+    this.$log.debug('Object init is: ', this.object, this.method)
+    console.log('Action: ', this.action, this.actionId)
+
     this.loading = true
     try {
       const values = await this.getFormValue()
       this.$log.debug('Final object is: ', values)
       const formValue = Object.assign(this.form, values)
       this.form = this.afterGetFormValue(formValue)
+      console.log('Form: ', this.form)
     } finally {
       this.loading = false
     }
   },
   methods: {
+    getUpdateId() {
+      if (this.actionId && this.action === 'update') {
+        return this.actionId
+      } else {
+        return this.$route.params.id
+      }
+    },
+    getAction() {
+      return this.action
+    },
+    getCloneId() {
+      if (this.actionId && this.action === 'clone') {
+        return this.actionId
+      } else {
+        return this.$route.query['clone_from']
+      }
+    },
     isUpdateMethod() {
+      console.log('This method: ', this.method)
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
     encryptFields(values) {
@@ -352,27 +389,35 @@ export default {
           }, 200)
         })
     },
+    async getUpdateForm() {
+
+    },
+    async getCloneForm(cloneFrom) {
+      const [curUrl, query] = this.url.split('?')
+      const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
+      const object = await this.getObjectDetail(url)
+      let name = ''
+      let attr = ''
+      if (object['name']) {
+        name = object['name']
+        attr = 'name'
+      } else if (object['hostname']) {
+        name = object['hostname']
+        attr = 'hostname'
+      }
+      object[attr] = name + '-' + this.cloneNameSuffix.toString()
+      return object
+    },
     async getFormValue() {
-      const cloneFrom = this.$route.query['clone_from']
-      if ((!this.isUpdateMethod() && !cloneFrom) || !this.needGetObjectDetail) {
+      const cloneFrom = this.getCloneId()
+      const objectId = this.getUpdateId()
+      if ((!objectId && !cloneFrom) || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
       if (!object || Object.keys(object).length === 0) {
         if (cloneFrom) {
-          const [curUrl, query] = this.url.split('?')
-          const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
-          object = await this.getObjectDetail(url)
-          let name = ''
-          let attr = ''
-          if (object['name']) {
-            name = object['name']
-            attr = 'name'
-          } else if (object['hostname']) {
-            name = object['hostname']
-            attr = 'hostname'
-          }
-          object[attr] = name + '-' + this.cloneNameSuffix.toString()
+          object = await this.getCloneForm(cloneFrom)
         } else {
           object = await this.getObjectDetail(this.iUrl)
         }

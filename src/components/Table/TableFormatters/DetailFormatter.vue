@@ -6,35 +6,20 @@
       :disabled="disabled"
       :type="col.type || 'info'"
       class="detail"
-      @click="goDetail"
+      @click="handleClick"
     >
       <slot>
         {{ iTitle }}
       </slot>
     </el-link>
-
-    <Drawer v-if="showTableDetailDrawer" :title="drawerTitle" @close-drawer="showTableDetailDrawer = !showTableDetailDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
-import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
-  components: {
-    Drawer,
-    AssetDetail: () => import('@/views/assets/Asset/AssetDetail'),
-    AssetAccountList: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
-    AccountPushDetail: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
-    AccountDiscoverTaskDetail: () => import('@/views/accounts/AccountDiscover/TaskDetail/index'),
-    AccountBackupDetail: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
-    IntegrationApplicationDetail: () => import('@/views/pam/Integration/ApplicationDetail/index.vue'),
-    AccountTemplateDetail: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue')
-  },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -45,6 +30,7 @@ export default {
           getRoute: null,
           routeQuery: null,
           can: true,
+          onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
           getTitle({ col, row, cellValue }) {
@@ -91,6 +77,17 @@ export default {
     }
   },
   methods: {
+    handleClick() {
+      if (this.formatterArgs.onClick) {
+        this.formatterArgs.onClick({
+          col: this.col,
+          row: this.row,
+          cellValue: this.cellValue
+        })
+      } else {
+        this.goDetail()
+      }
+    },
     getDetailRoute() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route

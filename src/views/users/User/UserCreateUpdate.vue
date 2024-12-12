@@ -164,14 +164,6 @@ export default {
           el: {}
         }
       },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
-        }
-      },
       afterGetFormValue(obj) {
         if (obj?.id) {
           obj.org_roles = obj.org_roles?.map(({ id }) => id)

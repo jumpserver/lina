@@ -98,13 +98,7 @@ export default {
   },
   data() {
     const vm = this
-    const detailApiUrl = (function() {
-      if (vm.url) {
-        return `${vm.url}/${vm.$route.params.id}/`
-      } else {
-        return getApiPath(vm)
-      }
-    }())
+    const detailApiUrl = this.getDetailUrl()
     const defaultActions = {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
@@ -187,6 +181,14 @@ export default {
     }
   },
   methods: {
+    getDetailUrl() {
+      const vm = this
+      if (vm.url) {
+        return `${vm.url}/${vm.$route.params.id}/`
+      } else {
+        return getApiPath(vm)
+      }
+    },
     defaultDelete() {
       const msg = this.$t('DeleteWarningMsg') + ' ' + this.iTitle + ' ?'
       const title = this.$t('Info')

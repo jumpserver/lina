@@ -7,7 +7,8 @@ const getDefaultState = () => {
     isRouterAlive: true,
     sqlQueryCounter: [],
     showSqlQueryCounter: true,
-    confirmDialogVisible: false
+    confirmDialogVisible: false,
+    drawerActionMeta: {}
   }
 }
 
@@ -85,6 +86,15 @@ const actions = {
   },
   showSqlQueryCounter({ commit, state }, show) {
     state.showSqlQueryCounter = show
+  },
+  setDrawerActionMeta({ commit, state }, meta) {
+    state.drawerActionMeta = meta
+  },
+  getDrawerActionMeta({ commit, state }) {
+    return state.drawerActionMeta
+  },
+  cleanDrawerActionMeta({ commit, state }) {
+    state.drawerActionMeta = {}
   }
 }
 

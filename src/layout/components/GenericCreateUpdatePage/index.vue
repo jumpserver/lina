@@ -1,5 +1,5 @@
 <template>
-  <Page v-bind="$attrs">
+  <Page :class="{drawer: drawer}" v-bind="$attrs">
     <IBox>
       <GenericCreateUpdateForm ref="createUpdateForm" v-bind="$attrs" v-on="$listeners" />
     </IBox>
@@ -14,6 +14,19 @@ export default {
   name: 'GenericCreateUpdatePage',
   components: {
     Page, IBox, GenericCreateUpdateForm
+  },
+  data() {
+    return {
+      drawer: false
+    }
+  },
+  mounted() {
+    this.$store.dispatch('common/getDrawerActionMeta').then((res) => {
+      console.log('res: ', res)
+      if (res.action) {
+        this.drawer = true
+      }
+    })
   }
 }
 </script>
@@ -26,5 +39,9 @@ export default {
     padding-top: 30px;
     padding-bottom: 60px;
   }
+}
+
+.drawer ::v-deep .page-heading {
+  display: none;
 }
 </style>
