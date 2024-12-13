@@ -366,16 +366,32 @@ export function download(downloadUrl, filename) {
   const iframe = document.createElement('iframe')
   iframe.style.display = 'none'
   document.body.appendChild(iframe)
-  const a = document.createElement('a')
-  a.href = downloadUrl
+  const timeout = 1000 * 60 * 30
+
   if (filename) {
-    a.download = filename
+    fetch(downloadUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob)
+        const a = iframe.contentWindow.document.createElement('a')
+        a.href = url
+        a.download = filename
+        iframe.contentWindow.document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          URL.revokeObjectURL(url)
+          document.body.removeChild(iframe)
+        }, timeout) // If you can't download it in half an hour, don't download it.
+      })
+      .catch(() => {
+        document.body.removeChild(iframe)
+      })
+  } else {
+    iframe.src = downloadUrl
+    setTimeout(() => {
+      document.body.removeChild(iframe)
+    }, timeout) // If you can't download it in half an hour, don't download it.
   }
-  iframe.contentWindow.document.body.appendChild(a)
-  a.click()
-  setTimeout(() => {
-    document.body.removeChild(iframe)
-  }, 1000 * 60 * 30) // If you can't download it in half an hour, don't download it.
 }
 
 export function diffObject(object, base) {
