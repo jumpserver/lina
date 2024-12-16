@@ -61,8 +61,8 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('AccountTemplate'), ['template']],
-        [this.$t('Basic'), ['assets', 'name', 'username', 'privileged', 'su_from', 'su_from_username']],
+        [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username', 'template']],
+        [this.$t('Assets'), ['assets']],
         [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
           'access_key', 'passphrase', 'api_key',
@@ -158,10 +158,10 @@ export default {
 <style lang='scss' scoped>
 .account-add {
   ::v-deep .el-form-item {
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
 
     .help-block {
-      margin-bottom: 5px;
+      //margin-bottom: 5px;
     }
   }
 

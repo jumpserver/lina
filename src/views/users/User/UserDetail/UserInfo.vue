@@ -263,9 +263,9 @@ export default {
 </script>
 
 <style scoped>
-  .mfa-setting ::v-deep .el-slider__runway {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
+.mfa-setting ::v-deep .el-slider__runway {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
 </style>

@@ -14,6 +14,7 @@ router.beforeEach(async(to, from, next) => {
   // start progress bar
   // NProgress.start()
   try {
+    await store.dispatch('common/cleanDrawerActionMeta')
     await startup({ to, from, next })
     next()
   } catch (e) {

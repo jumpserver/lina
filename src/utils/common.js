@@ -3,13 +3,16 @@ import { message } from '@/utils/message'
 
 const _ = require('lodash')
 
-export function getApiPath(that) {
+export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
   } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
+  }
+  if (pagePathArray.indexOf(objectId) === -1) {
+    pagePathArray.push(objectId)
   }
   if (pagePathArray.indexOf('tickets') !== -1) {
     // ticket ...
@@ -310,4 +313,5 @@ export function toSentenceCase(string) {
   }).join(' ')
   return s[0].toUpperCase() + s.slice(1)
 }
+
 export { BASE_URL }
