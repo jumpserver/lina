@@ -209,7 +209,6 @@ export default {
       type: Function,
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
-
         if (!(route.params && route.params.id)) {
           route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
         }
@@ -218,10 +217,18 @@ export default {
         this.$emit('submitSuccess', res)
 
         this.emitPerformSuccessMsg(method, res, addContinue)
-        if (!addContinue) {
+        if (addContinue) {
+          return
+        }
+
+        if (!vm.drawer) {
           if (this.$router.currentRoute.name !== route?.name) {
             setTimeout(() => this.$router.push(route), 100)
           }
+        } else {
+          console.log('Reload table clsonse dr')
+          this.$emit('close-drawer')
+          this.$emit('reload-table')
         }
       }
     },
@@ -390,7 +397,6 @@ export default {
         })
     },
     async getUpdateForm() {
-
     },
     async getCloneForm(cloneFrom) {
       const [curUrl, query] = this.url.split('?')
@@ -438,7 +444,7 @@ export default {
 </script>
 
 <style scoped>
-  .ibox ::v-deep .el-card__body {
-    padding-top: 30px;
-  }
+.ibox ::v-deep .el-card__body {
+  padding-top: 30px;
+}
 </style>

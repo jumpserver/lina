@@ -124,18 +124,7 @@ export default {
       if (this.formatterArgs.openInNewPage) {
         const { href } = this.$router.resolve(detailRoute)
         this.linkClicked = this.formatterArgs.removeColorOnClick
-
         return window.open(href, '_blank')
-      }
-
-      if (detailRoute.query.type === 'pam') {
-        this.showTableDetailDrawer = true
-
-        this.currentTemplate = detailRoute.name
-        this.drawerTitle = this.$t(detailRoute.name)
-        this.$route.params.id = detailRoute.params.id
-
-        return
       }
 
       this.$router.push(detailRoute)

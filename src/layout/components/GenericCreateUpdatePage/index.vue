@@ -22,7 +22,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('common/getDrawerActionMeta').then((res) => {
-      console.log('res: ', res)
       if (res.action) {
         this.drawer = true
       }

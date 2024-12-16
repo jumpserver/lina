@@ -8,7 +8,8 @@ const getDefaultState = () => {
     sqlQueryCounter: [],
     showSqlQueryCounter: true,
     confirmDialogVisible: false,
-    drawerActionMeta: {}
+    drawerActionMeta: {},
+    inDrawer: false
   }
 }
 
@@ -89,12 +90,14 @@ const actions = {
   },
   setDrawerActionMeta({ commit, state }, meta) {
     state.drawerActionMeta = meta
+    state.inDrawer = true
   },
   getDrawerActionMeta({ commit, state }) {
     return state.drawerActionMeta
   },
   cleanDrawerActionMeta({ commit, state }) {
     state.drawerActionMeta = {}
+    state.inDrawer = false
   }
 }
 

@@ -13,8 +13,8 @@ import { toSentenceCase } from '@/utils/common'
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   // NProgress.start()
-  await store.dispatch('common/setDrawerActionMeta', {})
   try {
+    await store.dispatch('common/cleanDrawerActionMeta')
     await startup({ to, from, next })
     next()
   } catch (e) {

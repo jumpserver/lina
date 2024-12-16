@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage
+    v-if="!loading"
+    class="user-create-update"
+    v-bind="$data"
+    @getObjectDone="afterGetUser"
+    v-on="$listeners"
+  />
 </template>
 
 <script>

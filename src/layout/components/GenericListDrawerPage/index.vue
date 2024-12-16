@@ -10,10 +10,12 @@
     </Page>
     <Drawer
       v-if="drawerVisible"
+      :action="action"
       :component="drawerComponent"
       :props="drawerProps"
       :title="drawerTitle"
       :visible.sync="drawerVisible"
+      @reload-table="reloadTable"
     />
   </div>
 </template>
@@ -78,7 +80,7 @@ export default {
     }
   },
   watch: {
-    visible(val) {
+    drawerVisible(val) {
       if (!val) {
         this.$store.dispatch('common/cleanDrawerActionMeta')
       }

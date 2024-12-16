@@ -3,6 +3,7 @@
     <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
       <el-button
+        v-if="!inDrawer"
         :disabled="gobackDisabled"
         class="go-back"
         icon="el-icon-back"
@@ -46,6 +47,7 @@ import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Page',
@@ -81,6 +83,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['inDrawer']),
     iTitle() {
       let title = this.title || this.$route.meta.title
       if (!title) {
