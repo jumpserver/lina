@@ -81,6 +81,16 @@ export default [
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_gatheraccountsexecution']
         }
+      },
+      {
+        path: 'account/:id',
+        component: () => import('@/views/accounts/AccountDiscover/AccountDetail/index.vue'),
+        name: 'AccountDiscoverAccountDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountDiscoverAccountDetail'),
+          permissions: ['accounts.view_gatheraccountsexecution']
+        }
       }
     ]
   },
