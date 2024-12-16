@@ -62,9 +62,6 @@ export const accountFieldsMeta = (vm) => {
             }
           }
         }
-      },
-      hidden: () => {
-        return vm.addTemplate
       }
     },
     username: {
@@ -188,10 +185,7 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('IsActive')
     },
     comment: {
-      label: vm.$t('Comment'),
-      hidden: () => {
-        return vm.addTemplate
-      }
+      label: vm.$t('Comment')
     }
   }
 }

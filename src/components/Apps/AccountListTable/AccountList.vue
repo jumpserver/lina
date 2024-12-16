@@ -22,7 +22,6 @@
       v-if="showAddDialog"
       :account="account"
       :asset="iAsset"
-      :origin="origin"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
       @add="addAccountSuccess"
@@ -33,7 +32,6 @@
       :account="account"
       :add-template="true"
       :asset="iAsset"
-      :origin="origin"
       :title="accountCreateByTemplateTitle"
       :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
@@ -56,9 +54,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
-import {
-  ActionsFormatter, PlatformFormatter, SecretViewerFormatter
-} from '@/components/Table/TableFormatters'
+import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -138,10 +134,6 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
-    },
-    origin: {
-      type: String,
-      default: ''
     }
   },
   data() {

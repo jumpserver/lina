@@ -1,24 +1,24 @@
 <template>
-  <el-drawer
+  <Drawer
+    :component="component"
+    :component-listeners="listener"
     :size="drawerSize"
     :title="title"
     :visible.sync="iVisible"
     append-to-body
     class="form-drawer"
     destroy-on-close
-  >
-    <component
-      :is="component"
-      v-bind="props"
-      @close="closeDrawer"
-      v-on="$listeners"
-      @close-drawer="iVisible=false"
-    />
-  </el-drawer>
+    v-bind="props"
+    @close="closeDrawer"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
+import Drawer from '@/components/Drawer/index.vue'
+
 export default {
+  components: { Drawer },
   props: {
     visible: {
       type: Boolean,
@@ -41,7 +41,22 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      listener: {
+        'close-drawer': () => {
+          this.iVisible = false
+        },
+        ...this.$listeners
+      }
+    }
+  },
   computed: {
+    drawerSize() {
+      const width = window.innerWidth
+      if (width >= 768) return '800px'
+      return '90%'
+    },
     iVisible: {
       get() {
         return this.visible
@@ -49,11 +64,6 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       }
-    },
-    drawerSize() {
-      const width = window.innerWidth
-      if (width >= 768) return '800px'
-      return '90%'
     }
   },
   methods: {

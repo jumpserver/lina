@@ -1,18 +1,21 @@
 <template>
   <el-drawer
     ref="drawer"
-    size="61.8%"
-    direction="rtl"
-    custom-class="drawer"
-    :title="title"
-    :before-close="handleClose"
-    :visible.sync="dialog"
-    :wrapper-closable="true"
     :append-to-body="true"
+    :before-close="handleClose"
+    :size="size"
+    :title="title"
+    :visible.sync="iVisible"
+    custom-class="drawer"
+    direction="rtl"
+    v-on="$listeners"
   >
     <div class="drawer__content">
-      <slot name="default" />
+      <slot name="default">
+        <component :is="component" v-if="component" v-bind="componentProps" v-on="componentListeners" />
+      </slot>
     </div>
+    <div slot="drawer-footer" class="drawer__footer" />
   </el-drawer>
 </template>
 
@@ -24,13 +27,42 @@ export default {
       default: function() {
         return this.$t('AddAccount')
       }
+    },
+    size: {
+      type: String,
+      default: '800px'
+    },
+    component: {
+      type: [String, Function],
+      default: ''
+    },
+    componentProps: {
+      type: Object,
+      default: () => ({})
+    },
+    componentListeners: {
+      type: Object,
+      default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      dialog: true,
       loading: false,
       formLabelWidth: '80px'
+    }
+  },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
     }
   },
   methods: {
@@ -46,7 +78,7 @@ export default {
 }
 </script>
 
-<style scoped lang='scss'>
+<style lang='scss' scoped>
 ::v-deep .drawer {
   min-width: 565px;
 
@@ -61,43 +93,24 @@ export default {
   }
 
   .el-drawer__body {
+    overflow: auto;
 
     .drawer__content {
-      height: 100%;
-
       .el-form {
-        position: relative;
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: column;
-        justify-content: flex-start;
-        margin: unset !important;
-        padding-right: 50px;
+        //position: relative;
+        //display: flex;
+        //flex-wrap: nowrap;
+        //flex-direction: column;
+        //justify-content: flex-start;
+        margin-right: 50px;
+        margin-left: 20px;
         height: 100%;
 
         .el-form-item {
-          margin: 5px 0 5px 0;
-        }
-
-        .form-buttons {
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          display: flex;
-          flex-wrap: nowrap;
-          padding: 0 10px 0 10px;
-
-          .el-form-item__content {
-            width: 100%;
-            display: flex;
-            margin: unset !important;
-            justify-content: center;
-
-            .el-button {
-              width: 50%;
-              border-radius: 10px;
-            }
+          //margin: 5px 0 5px 0;
+          &:last-child {
+            //margin-bottom: 10px;
+            //padding-bottom: 10px;
           }
         }
       }

@@ -8,7 +8,7 @@
         v-bind="$attrs"
       />
     </Page>
-    <Drawer
+    <PageDrawer
       v-if="drawerVisible"
       :action="action"
       :component="drawerComponent"
@@ -23,7 +23,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
-import Drawer from './Drawer'
+import PageDrawer from './PageDrawer.vue'
 import { toSentenceCase } from '@/utils/common'
 
 const drawerType = [String, Function]
@@ -31,7 +31,7 @@ const drawerType = [String, Function]
 export default {
   name: 'GenericListPage',
   components: {
-    Page, GenericListTable, Drawer
+    Page, GenericListTable, PageDrawer
   },
   props: {
     detailDrawer: {
