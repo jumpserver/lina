@@ -2,6 +2,8 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import XPackRoutes from './xpack'
 
+const globalSubmenu = () => import('@/layout/globalOrg.vue')
+
 export default [
   {
     path: 'assets',
@@ -293,7 +295,7 @@ export default [
   },
   {
     path: 'platforms',
-    component: empty,
+    component: globalSubmenu,
     meta: {
       permissions: ['assets.view_platform'],
       resource: 'platform',
