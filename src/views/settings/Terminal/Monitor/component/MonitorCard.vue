@@ -90,7 +90,7 @@ export default {
         omnidb: 'OmniDB',
         guacamole: 'Guacamole',
         lion: 'Lion',
-        xrdp: 'XRDP',
+        xrdp: 'Xrdp',
         razor: 'Razor',
         core: 'Core',
         celery: 'Celery',
@@ -100,7 +100,7 @@ export default {
         kael: 'Kael',
         video_worker: 'Video-Worker',
         panda: 'Panda',
-        nec: 'NEC',
+        nec: 'Nec',
         facelive: 'Facelive'
       }
       return nameMapper[this.componentMetric.type]
