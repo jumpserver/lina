@@ -10,10 +10,10 @@
           v-if="protocolChoices"
           v-model="object.protocols"
           :choices="protocolChoices"
-          :readonly="object['internal']"
+          :readonly="!canEdit"
         />
         <el-button
-          v-if="!object.internal"
+          v-if="canEdit"
           size="small"
           style="margin-top: 10px"
           type="primary"
@@ -71,7 +71,8 @@ export default {
       ],
 
       protocolChoices: null,
-      constraints: {}
+      constraints: {},
+      canEdit: !this.object['internal'] && this.$hasPerm('assets.change_platform')
     }
   },
   computed: {},
@@ -103,7 +104,7 @@ export default {
           attrs: {
             label: this.$t('Update'),
             model: object['domain_enabled'],
-            disabled: object['internal'] || this.constraints['domain_enabled'] === false
+            disabled: !this.canEdit || this.constraints['domain_enabled'] === false
           },
           callbacks: Object.freeze({
             change: (val) => {
@@ -120,7 +121,7 @@ export default {
           type: 'switch',
           attrs: {
             model: object['su_enabled'],
-            disabled: object['internal'] || this.constraints['su_enabled'] === false
+            disabled: !this.canEdit || this.constraints['su_enabled'] === false
           },
           callbacks: Object.freeze({
             change: (val) => {
@@ -136,7 +137,8 @@ export default {
           title: this.$t('SyncProtocolToAsset'),
           attrs: {
             type: 'primary',
-            label: this.$t('Sync')
+            label: this.$t('Sync'),
+            disabled: !this.canEdit
           },
           callbacks: Object.freeze({
             click: () => {
