@@ -84,7 +84,7 @@ export default {
       currentEdit: '',
       biometricFeaturesActions: [
         {
-          title: this.$t('Face'),
+          title: this.$t('FacialFeatures'),
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
