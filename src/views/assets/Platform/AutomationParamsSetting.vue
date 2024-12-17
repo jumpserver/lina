@@ -122,7 +122,7 @@ export default {
     },
     onCanSetting() {
       const filterField = Object.keys(this.remoteMeta)
-      this.canSetting = filterField.includes(this.method)
+      this.canSetting = filterField.includes(this.method) && this.$hasPerm('assets.change_platform')
       this.$emit('canSetting', this.canSetting)
       return this.canSetting
     },

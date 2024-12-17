@@ -27,6 +27,7 @@ export default {
     }
   },
   data() {
+    const canEdit = !this.object['internal'] && this.$hasPerm('assets.change_platform')
     return {
       loading: true,
       initial: {
@@ -35,14 +36,14 @@ export default {
         }
       },
       url: `/api/v1/assets/platforms/`,
-      disabled: this.object.internal,
+      disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,
       submitMethod: () => 'patch',
       fields: [['', ['automation']]],
       fieldsMeta: platformFieldsMeta(this),
       onSubmit: this.submit,
-      canSubmit: !this.object.internal,
+      canSubmit: canEdit,
       defaultOptions: {},
       afterGetFormValue: (obj) => {
         updateAutomationParams(this, obj)
@@ -65,7 +66,7 @@ export default {
   },
   methods: {
     submit(validValues) {
-      if (!this.$hasPerm('assets.change_platform') || !this.isSystemAdmin) {
+      if (!this.canSubmit || !this.isSystemAdmin) {
         return this.$message.error(this.$tc('NoPermission'))
       }
       this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
