@@ -1108,9 +1108,7 @@ export default {
     },
     handleSelectAll(e, canSelect) {
       this.loading = true
-      this.selectStrategy.onSelectAll(e, canSelect, () => {
-        this.loading = false
-      })
+      this.selectStrategy.onSelectAll(e, canSelect)
     },
     /**
      * 切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否

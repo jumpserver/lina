@@ -6,8 +6,6 @@
  * 多选策略接口
  */
 class StrategyAbstract {
-  cachedSelectedData = []
-
   constructor(elDataTable) {
     this.elDataTable = elDataTable
     // 绑定this后可直接在template中使用
@@ -50,17 +48,44 @@ class StrategyNormal extends StrategyAbstract {
 }
 
 /**
- * 跨页保存多选策略。手动维护selected数组
+ * 跨页保存多选策略。手动维护selected
  */
 class StrategyPersistSelection extends StrategyAbstract {
   /**
-   * el-table 的 selection-change 事件不适用于开启跨页保存的情况。
-   * 比如，当开启 persistSelection时，发生以下两个场景：
-   * 1. 用户点击翻页
-   * 2. 用户点击行首的切换全选项按钮，清空当前页多选项数据
-   * 其中场景 1 应该保持 selected 不变；而场景 2 只应该从 selected 移除当前页所有行，保留其他页面的多选状态。
-   * 但 el-table 的 selection-change 事件在两个场景中无差别发生，所以这里不处理这个事件
+   * 批量处理表格选择状态
+   * @param {Array} rows 需要处理的行数据
+   * @returns {Promise}
    */
+  batchProcessSelection(rows) {
+    return new Promise((resolve) => {
+      // 先清空当前页的选择状态
+      this.elTable.clearSelection()
+
+      const batchSize = 50
+      const batches = Math.ceil(rows.length / batchSize)
+
+      const processBatch = (batchIndex) => {
+        if (batchIndex >= batches) {
+          // 所有批次处理完成后，关闭加载状态并resolve
+          this.elDataTable.loading = false
+
+          resolve()
+          return
+        }
+
+        const start = batchIndex * batchSize
+        const end = Math.min(start + batchSize, rows.length)
+
+        rows.slice(start, end).forEach(row => {
+          this.elTable.toggleRowSelection(row, true, false)
+        })
+
+        requestAnimationFrame(() => processBatch(batchIndex + 1))
+      }
+
+      requestAnimationFrame(() => processBatch(0))
+    })
+  }
 
   /**
    * 用户切换某一行的多选
@@ -73,62 +98,57 @@ class StrategyPersistSelection extends StrategyAbstract {
   /**
    * 用户切换当前页的多选
    */
-  onSelectAll(selection, selectable = () => true, callback) {
+  onSelectAll(selection, selectable = () => true) {
     const { id, selected, data } = this.elDataTable
 
-    const selectedIds = new Set(selected.map(r => r[id]))
+    // 获取可选择的行
+    const selectableRows = data.filter(selectable)
 
-    // 获取当前所有已选择的项
-    const selectedRows = data.filter(r => selection.includes(r))
-
-    // 判断是否已全选
-    const isSelected = data.every(r => selectable(r) && selectedRows.includes(r))
-
-    const rowsToSelect = []
-    const rowsToDeselect = []
-
-    data.forEach(r => {
-      if (selectable(r)) {
-        const isRowSelected = selectedIds.has(r[id])
-
-        if (isSelected && !isRowSelected) {
-          rowsToSelect.push(r)
-        } else if (!isSelected && isRowSelected) {
-          rowsToDeselect.push(r)
-        }
-      }
-    })
+    // 使用selection参数来判断是全选还是取消全选
+    const isSelected = selection.length > 0
 
     if (isSelected) {
-      rowsToSelect.forEach(row => {
-        selected.push(row)
-        selectedIds.add(row[id])
-      })
-      rowsToDeselect.forEach(row => {
-        this.elDataTable.toggleRowSelection(row, true)
+      // 全选
+      const rowsToAdd = selectableRows.filter(row =>
+        !selected.find(r => r[id] === row[id])
+      )
+      selected.push(...rowsToAdd)
+
+      // 触发选择事件
+      rowsToAdd.forEach(row => {
+        this.elDataTable.$emit('toggle-row-selection', true, row)
       })
     } else {
-      rowsToDeselect.forEach(row => {
-        const index = selected.findIndex(item => item[id] === row[id])
-        if (index !== -1) {
+      // 取消全选
+      // 1. 先找出当前页面中已选中的行
+      const currentPageSelected = selectableRows.filter(row =>
+        selected.find(r => r[id] === row[id])
+      )
+
+      // 2. 从selected中移除这些行
+      currentPageSelected.forEach(row => {
+        const index = selected.findIndex(r => r[id] === row[id])
+        if (index > -1) {
           selected.splice(index, 1)
         }
-        selectedIds.delete(row[id])
       })
-      rowsToSelect.forEach(row => {
-        this.elDataTable.toggleRowSelection(row, false)
+
+      // 3. 触发取消选择事件
+      currentPageSelected.forEach(row => {
+        this.elDataTable.$emit('toggle-row-selection', false, row)
       })
     }
 
-    // this.elTable.selected = Array.from(selectedIds).map(id => {
-    //   return data.find(r => r[id] === id)
-    // })
+    // 更新表格选择状态
+    const selectedIds = new Set(selected.map(r => r[id]))
+    const currentPageSelectedRows = data.filter(r => selectedIds.has(r[id]))
 
-    callback()
+    return this.batchProcessSelection(currentPageSelectedRows)
   }
+
   /**
-   * toggleRowSelection 和 clearSelection 管理 elDataTable 的 selected 数组
-   * 记得最后要将状态同步到 el-table 中
+   * toggleRowSelection和clearSelection管理elDataTable的selected数组
+   * 记得最后要将状态同步到el-table中
    */
   toggleRowSelection(row, isSelected) {
     const { id, selected } = this.elDataTable
@@ -159,18 +179,14 @@ class StrategyPersistSelection extends StrategyAbstract {
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
 
-    // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和selected合并
-    const mergeData = _.uniqWith([...data, ...selected], _.isEqual)
+    if (!this.elTable) {
+      return Promise.resolve()
+    }
 
-    mergeData.forEach(r => {
-      const isSelected = !!selected.find(r2 => r[id] === r2[id])
+    const selectedIds = new Set(selected.map(r => r[id]))
+    const currentPageSelectedRows = data.filter(r => selectedIds.has(r[id]))
 
-      if (!this.elTable) {
-        return
-      }
-
-      this.elTable.toggleRowSelection(r, isSelected)
-    })
+    return this.batchProcessSelection(currentPageSelectedRows)
   }
 }
 
