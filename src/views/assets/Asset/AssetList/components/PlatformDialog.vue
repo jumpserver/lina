@@ -3,12 +3,12 @@
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('SelectProvider')"
+    :title="$tc('SelectPlatform')"
     :visible.sync="iVisible"
     top="1vh"
     width="60%"
   >
-    <div style="margin: 0 10px">
+    <div v-loading="loading" class="platform-content">
       <el-row :gutter="20">
         <el-collapse v-model="activeType" accordion>
           <el-collapse-item
@@ -22,7 +22,7 @@
               :key="platform.id"
               :span="6"
             >
-              <el-tooltip :content="platform.name" :open-delay="1000">
+              <el-tooltip :content="platform.name">
                 <el-card
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
@@ -30,7 +30,7 @@
                   @click.native="createAsset(platform)"
                 >
                   <div class="icon-zone">
-                    <img :src="loadImage(platform)" alt="icon" class="asset-icon">
+                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
                   </div>
                   <span class="platform-name">{{ platform.name }}</span>
                 </el-card>
@@ -65,6 +65,7 @@ export default {
     return {
       platforms: [],
       recentPlatformIds: [],
+      loading: true,
       activeType: 'host',
       recentUsedLabel: this.$t('RecentlyUsed'),
       typeIconMapper: {
@@ -76,7 +77,8 @@ export default {
       bottomColors: [
         '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
         '#783887', '#fc6554'
-      ]
+      ],
+      allRecentPlatforms: []
     }
   },
   computed: {
@@ -111,32 +113,21 @@ export default {
       const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
       return _.groupBy(typedPlatforms, (item) => item.type.label)
     },
-    allRecentPlatforms() {
-      return this.recentPlatformIds
-        .map(i => this.platforms.find(p => p.id === i))
-        .filter(p => p)
-    },
     typeRecentPlatforms() {
       return this.allRecentPlatforms.filter(item => item.category.value === this.category)
     }
   },
-  created() {
-    this.$axios.get('/api/v1/assets/platforms/').then(data => {
-      this.platforms = data
-      this.loadRecentPlatformIds()
-      this.activeType = Object.keys(this.iPlatforms)[0]
-    })
+  async created() {
+    this.platforms = await this.$store.dispatch('assets/getPlatforms')
+    this.allRecentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
+    if (this.allRecentPlatforms.length > 0) {
+      this.activeType = this.recentUsedLabel
+    }
+    this.loading = false
   },
   methods: {
-    loadImage(platform) {
+    getPlatformLogo(platform) {
       return loadPlatformIcon(platform.name, platform.type)
-    },
-    loadRecentPlatformIds() {
-      const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
-      this.recentPlatformIds = recentPlatformIds
-        .map(i => this.platforms.find(p => p.id === i))
-        .filter(p => p)
-        .map(p => p.id)
     },
     onConfirm() {
       this.iVisible = false
@@ -156,30 +147,19 @@ export default {
       this.recentPlatformIds = recentPlatformIds
       localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatformIds))
     },
-    createAsset(platform) {
-      const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
+    handleSelect(platform) {
       this.addToRecentPlatforms(platform)
-      this.iVisible = false
-      const query = {
-        node: this.$route.query?.node || this.$route.query?.node_id || '',
-        platform: platform.id,
-        type: platform.type.value,
-        category: platform.category.value
-      }
-
-      const router = { name: route, query }
-      if (this.$route.query.node_id) {
-        const { href } = this.$router.resolve(router)
-        window.open(href, '_blank')
-      } else {
-        this.$router.push(router)
-      }
+      this.$emit('select-platform', platform)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.platform-content {
+  padding: 0 10px;
+}
+
 .platform-item {
   margin: 5px 0;
 
@@ -229,6 +209,7 @@ export default {
 .asset-icon {
   height: 2em;
   vertical-align: -0.2em;
+  width: 26px;
   fill: currentColor;
 }
 

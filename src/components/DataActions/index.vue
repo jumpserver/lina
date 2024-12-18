@@ -6,7 +6,7 @@
         v-show="action.dropdown.length > 0"
         :key="action.name"
         :class="[action.name, {grouped: action.grouped }]"
-        :size="action.size || 'small'"
+        :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
         class="action-item"
@@ -24,11 +24,11 @@
           class="more-action"
           v-bind="{...cleanButtonAction(action), icon: ''}"
         >
-          <span v-if="action.icon" class="pre-icon">
-            <Icon :icon="action.icon" />
+          <span class="pre-icon">
+            <Icon v-if="action.icon" :icon="action.icon" />
           </span>
           <span v-if="action.title">
-            {{ action.title }}<i v-if="!action.split" class="el-icon-arrow-down el-icon--right" />
+            {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
@@ -55,8 +55,8 @@
                 class="dropdown-item"
                 v-bind="{...option, icon: ''}"
               >
-                <span v-if="option.icon" class="pre-icon">
-                  <Icon :icon="option.icon" />
+                <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                  <Icon v-if="option.icon" :icon="option.icon" />
                 </span>
                 {{ option.title }}
               </el-dropdown-item>
@@ -120,6 +120,9 @@ export default {
     }
   },
   methods: {
+    actionsHasIcon(actions) {
+      return actions.some(action => action.icon)
+    },
     hasIcon(action, type = '') {
       const icon = action.icon
       if (!icon) {
@@ -206,6 +209,10 @@ export default {
           action.disabled = !can
         }
         delete action['can']
+
+        if (!action.size) {
+          action.size = 'small'
+        }
 
         if (action.dropdown) {
           action.dropdown = this.cleanActions(action.dropdown)
@@ -332,6 +339,7 @@ $color-drop-menu-border: #e4e7ed;
 
   .dropdown-item {
     color: var(--color-text-primary);
+    line-height: 34px;
 
     .pre-icon {
       width: 17px;
