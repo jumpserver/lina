@@ -23,7 +23,7 @@ export default {
         [
           this.$t('Port'),
           [
-            'http_port', 'https_port', 'ssh_port', 'rdp_port','vnc_port'
+            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port'
           ]
         ],
         [
