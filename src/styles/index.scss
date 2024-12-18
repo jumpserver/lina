@@ -599,3 +599,11 @@ li.rmenu i.fa {
   max-height: 700px;
   overflow-y: scroll;
 }
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  width: 100%;
+}
