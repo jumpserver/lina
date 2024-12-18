@@ -36,12 +36,14 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'text'
           },
+          helpTip: this.$t('DefaultValueTip'),
           el: {
             type: 'input'
           }
         },
         select_default_value: {
           label: this.$t('DefaultValue'),
+          helpTip: this.$t('DefaultValueTip'),
           hidden: (formValue) => {
             return formValue.type !== 'select'
           },
