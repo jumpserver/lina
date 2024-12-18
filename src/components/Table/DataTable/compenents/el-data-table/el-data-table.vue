@@ -7,7 +7,7 @@
     <template v-else>
       <el-table
         ref="table"
-        v-loading="loading"
+        v-loading="tableLoading"
         :data="data"
         :row-class-name="rowClassName"
         v-bind="tableAttrs"
@@ -749,7 +749,7 @@ export default {
       page: defaultFirstPage,
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
-      loading: false,
+      tableLoading: false,
       // 多选项的数组
       selected: [],
 
@@ -940,11 +940,11 @@ export default {
     },
     getListFromStaticData({ loading = true } = {}) {
       if (loading) {
-        this.loading = true
+        this.tableLoading = true
       }
       if (!this.hasPagination) {
         this.data = this.totalData
-        this.loading = false
+        this.tableLoading = false
         if (this.isTree) {
           this.data = this.tree2Array(this.data, this.expandAll)
         }
@@ -957,7 +957,7 @@ export default {
       const end = (page + pageOffset) * this.size
       this.$log.debug(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
       this.data = this.totalData.slice(start, end)
-      this.loading = false
+      this.tableLoading = false
       this.data = this.tree2Array(this.data, this.expandAll)
       return this.data
     },
@@ -983,7 +983,7 @@ export default {
         queryUtil.stringify(query, '=', '&')
 
       // 请求开始
-      this.loading = loading
+      this.tableLoading = loading
 
       // 存储query记录, 便于后面恢复
       if (this.saveQuery) {
@@ -1023,7 +1023,7 @@ export default {
             this.total === 0 &&
             (_isEmpty(formValue) || _values(formValue).every(isFalsey))
 
-          this.loading = false
+          this.tableLoading = false
           /**
            * 请求返回, 数据更新后触发
            * @property {object} data - table的数据
@@ -1043,7 +1043,7 @@ export default {
            */
           this.$emit('error', err)
           this.total = 0
-          this.loading = false
+          this.tableLoading = false
         })
     },
     search(attrs, reset) {
@@ -1106,9 +1106,13 @@ export default {
       this.page = val
       this.getList()
     },
-    handleSelectAll(e, canSelect) {
-      this.loading = true
-      this.selectStrategy.onSelectAll(e, canSelect)
+    handleSelectAll(selection, selectable = () => true) {
+      this.tableLoading = true
+      try {
+        this.selectStrategy.onSelectAll(selection, selectable)
+      } finally {
+        this.tableLoading = false
+      }
     },
     /**
      * 切换某一行的选中状态，如果使用了第二个参数，则是设置这一行选中与否
