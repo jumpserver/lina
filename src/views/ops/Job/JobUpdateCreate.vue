@@ -222,7 +222,7 @@ export default {
           callback: (value, form, btn) => {
             form.value.run_after_save = true
             const parameters = form.value.variable.reduce((acc, item) => {
-              acc[item.var_name] = item.default_value
+              acc[item.var_name] = item.default_value || ''
               return acc
             }, {})
             form.value['parameters'] = parameters
