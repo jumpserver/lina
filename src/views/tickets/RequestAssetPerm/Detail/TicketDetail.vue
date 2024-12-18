@@ -24,6 +24,7 @@
               v-model="requestForm.accounts"
               :nodes="requestForm.nodes"
               :assets="requestForm.assets"
+              :oid="requestForm.oid"
               :show-add-template="false"
               style="width: 50% !important"
             />
@@ -83,6 +84,7 @@ export default {
         assets: this.object.apply_assets?.map(i => i.id),
         accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
+        oid: this.object.org_id,
         apply_date_expired: this.object.apply_date_expired,
         apply_date_start: this.object.apply_date_start
       },
