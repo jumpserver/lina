@@ -24,7 +24,12 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, PlatformFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DetailFormatter,
+  PlatformFormatter,
+  ProtocolsFormatter
 } from '@/components/Table/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
@@ -268,6 +273,42 @@ export default {
         searchConfig: {
           getUrlQuery: false
         },
+        hasCreate: false,
+        extraActions: [
+          {
+            name: 'platform',
+            title: 'Create',
+            type: 'primary',
+            icon: '',
+            split: true,
+            callback: () => {
+              this.showPlatform = true
+            },
+            dropdown: [
+              {
+                name: 'All',
+                title: this.$t('All'),
+                callback: () => {
+                  console.log('All')
+                }
+              },
+              {
+                name: 'Gateway',
+                title: this.$t('Gateway'),
+                callback: () => {
+                  this.$router.push({ query: { platform: 'Gateway' }})
+                }
+              },
+              {
+                name: 'Server',
+                title: this.$t('Server'),
+                callback: () => {
+                  this.$router.push({ query: { platform: 'Server' }})
+                }
+              }
+            ]
+          }
+        ],
         extraMoreActions: [
           {
             name: 'TestSelected',

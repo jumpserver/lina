@@ -5,17 +5,30 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :key="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
+        :size="action.size || 'small'"
+        :split-button="!!action.split"
+        :type="action.type"
         class="action-item"
         placement="bottom-start"
         trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button :class="action.name" :size="size" class="more-action" v-bind="{...cleanButtonAction(action), icon: ''}">
+        <span v-if="action.split" @click="handleClick(action)">
+          {{ action.title }}
+        </span>
+        <el-button
+          v-else
+          :class="action.name"
+          :size="size"
+          class="more-action"
+          v-bind="{...cleanButtonAction(action), icon: ''}"
+        >
           <span v-if="action.icon" class="pre-icon">
             <Icon :icon="action.icon" />
           </span>
           <span v-if="action.title">
-            {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ action.title }}<i v-if="!action.split" class="el-icon-arrow-down el-icon--right" />
           </span>
         </el-button>
         <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
@@ -55,7 +68,7 @@
       <el-button
         v-else
         :key="action.name"
-        :class="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
         :size="size"
         class="action-item"
         v-bind="{...cleanButtonAction(action), icon: ''}"
@@ -164,6 +177,7 @@ export default {
       delete action['callback']
       delete action['name']
       delete action['can']
+      delete action['split']
       return action
     },
     cleanActions(actions) {
@@ -216,6 +230,10 @@ $color-drop-menu-border: #e4e7ed;
 .layout {
   .action-item {
     margin-left: 5px;
+
+    &.grouped {
+      margin-left: 0;
+    }
 
     &:first-child {
       margin-left: 0;
