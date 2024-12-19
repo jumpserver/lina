@@ -92,7 +92,7 @@ export default {
           callbacks: {
             click: () => {
               const next_url = this.$store.state.users.profile.is_face_code_set ? '/core/auth/profile/face/disable/' : '/core/auth/profile/face/enable/'
-              window.open(next_url, '_self')
+              window.open(next_url, '_blank')
             }
           }
         }
