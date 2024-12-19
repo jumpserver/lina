@@ -17,6 +17,14 @@ export default {
     const { icon, title } = context.props
     const vNodes = []
 
+    const ellipsisStyle = {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      width: '100%',
+      display: 'inline-block'
+    }
+
     if (icon) {
       if (icon.startsWith('fa-')) {
         vNodes.push(<i class={`fa ${icon}`} />)
@@ -26,7 +34,7 @@ export default {
     }
 
     if (title) {
-      vNodes.push(<span slot='title'>{title}</span>)
+      vNodes.push(<span slot='title' style={ellipsisStyle} title={ title }>{title}</span>)
     }
     return vNodes
   }

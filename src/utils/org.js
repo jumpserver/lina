@@ -17,7 +17,7 @@ function getPropOrg() {
   if (defaultOrg) {
     return defaultOrg
   }
-  return orgs.filter(item => !item['is_root'] && item.id !== SYSTEM_ORG_ID)[0]
+  return orgs.filter(item => !item['is_root'] && !item['is_system'])[0]
 }
 
 async function change2PropOrg() {

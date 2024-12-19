@@ -84,6 +84,14 @@ const components_ee = [
   {
     'title': 'Xrdp',
     'components': ['xrdp', 'jms_xrdp']
+  },
+  {
+    'title': 'Nec',
+    'components': ['nec', 'jms_nec']
+  },
+  {
+    'title': 'Facelive',
+    'components': ['facelive', 'jms_facelive']
   }
 ]
 all_components.push(...components_ce)

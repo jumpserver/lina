@@ -48,11 +48,6 @@ export default {
         EMAIL_HOST_PASSWORD: {
           component: UpdateToken
         },
-        EMAIL_HOST_USER: {
-          rules: [
-            rules.EmailCheck
-          ]
-        },
         EMAIL_CUSTOM_USER_CREATED_BODY: {
           el: {
             type: 'textarea',

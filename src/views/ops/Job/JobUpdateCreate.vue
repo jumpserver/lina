@@ -13,7 +13,7 @@ import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { crontab, interval } from '@/views/accounts/const'
-import LoadTemplateLink from '@/views/ops/Job/components/loadTemplateLink'
+import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
 
 export default {
@@ -99,6 +99,7 @@ export default {
                 data?.variable.map(item => {
                   delete item.job
                   delete item.playbook
+                  delete item.id
                   return item
                 })
                 updateForm({ variable: data.variable })
@@ -221,7 +222,7 @@ export default {
           callback: (value, form, btn) => {
             form.value.run_after_save = true
             const parameters = form.value.variable.reduce((acc, item) => {
-              acc[item.var_name] = item.default_value
+              acc[item.var_name] = item.default_value || ''
               return acc
             }, {})
             form.value['parameters'] = parameters

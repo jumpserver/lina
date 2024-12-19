@@ -16,7 +16,7 @@ export default {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],
         columnsExtra: ['gateways'],
-        columns: ['name', 'assets_amount', 'gateways', 'comment', 'actions'],
+        columns: ['name', 'assets_amount', 'gateways', 'labels', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'assets_amount', 'gateways', 'comment', 'actions']

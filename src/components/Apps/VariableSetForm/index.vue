@@ -31,7 +31,7 @@ export default {
     return {
       submitBtnText: this.$t('Confirm'),
       // 防止缓存form remoteMeta
-      url: `/api/v1/ops/variable/form_data/?t=${new Date().getTime()}&` + this.queryParam,
+      url: `/api/v1/ops/variables/form-data/?t=${new Date().getTime()}&` + this.queryParam,
       form: {},
       hasSaveContinue: false,
       method: 'get',

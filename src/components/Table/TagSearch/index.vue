@@ -202,9 +202,10 @@ export default {
             label: current.label,
             value: valueDecode
           }
+
           if (curChildren.length > 0) {
             for (const item of curChildren) {
-              if (valueDecode === item.value) {
+              if (valueDecode === String(item.value)) {
                 searchFieldOption.valueLabel = item.label
                 break
               }

@@ -14,7 +14,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
-        columns: ['name', 'users_amount', 'comment', 'actions'],
+        columns: ['name', 'users_amount', 'comment', 'actions', 'labels'],
         columnsShow: {
           default: ['name', 'users_amount', 'comment', 'actions'],
           min: ['name', 'action']

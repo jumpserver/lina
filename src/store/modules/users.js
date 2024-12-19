@@ -71,10 +71,11 @@ const mutations = {
     state.consoleOrgs = state.consoleOrgs.filter(i => i.id !== org.id)
   },
   SET_CURRENT_ORG(state, org) {
-    // 系统组织和全局组织不设置成 Pre org
-    if (!state.currentOrg?.autoEnter && !state.currentOrg?.is_root) {
-      state.preOrg = state.currentOrg
-      setPreOrgLocal(state.username, state.currentOrg)
+    // 系统组织不设置成 Pre org
+    const currentOrg = state.currentOrg
+    if (currentOrg && !currentOrg.autoEnter && !currentOrg.is_system) {
+      state.preOrg = currentOrg
+      setPreOrgLocal(state.username, currentOrg)
     }
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
@@ -144,6 +145,7 @@ const actions = {
     const systemOrg = {
       id: orgUtil.SYSTEM_ORG_ID,
       name: 'SystemSetting',
+      is_system: true,
       autoEnter: new Date().getTime()
     }
     commit('SET_CURRENT_ORG', systemOrg)

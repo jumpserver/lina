@@ -23,9 +23,17 @@ export default {
     }
   },
   data() {
+    const defaultValidator = (rule, value, callback) => {
+      if (this.defaultValueRequired && !value) {
+        callback(new Error(this.$t('FieldRequiredError')))
+      } else {
+        callback()
+      }
+    }
     return {
+      defaultValueRequired: false,
       submitBtnText: this.$t('Confirm'),
-      url: '/api/v1/ops/variable/',
+      url: '/api/v1/ops/variables/',
       form: Object.assign({ 'on_invalid': 'error' }, this.variable || {}),
       fields: [
         ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]
@@ -36,15 +44,19 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'text'
           },
+          rules: [{ validator: defaultValidator }],
+          helpTip: this.$t('DefaultValueTip'),
           el: {
             type: 'input'
           }
         },
         select_default_value: {
           label: this.$t('DefaultValue'),
+          helpTip: this.$t('DefaultValueTip'),
           hidden: (formValue) => {
             return formValue.type !== 'select'
           },
+          rules: [{ validator: defaultValidator }],
           el: { type: 'input' }
         },
         extra_args: {
@@ -70,11 +82,21 @@ export default {
               }
             }
           ]
+        },
+        required: {
+          on: {
+            change: ([event], updateForm) => {
+              this.defaultValueRequired = event
+            }
+          }
         }
       },
       hasSaveContinue: false,
       method: 'get'
     }
+  },
+  mounted() {
+    this.defaultValueRequired = this.variable?.required || false
   },
   methods: {
     confirm(form) {
