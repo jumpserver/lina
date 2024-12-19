@@ -17,7 +17,6 @@ export default {
     const { icon, title } = context.props
     const vNodes = []
 
-    // 定义文本溢出样式
     const ellipsisStyle = {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -26,7 +25,6 @@ export default {
       display: 'inline-block'
     }
 
-    // 定义 tooltip 样式
     const tooltipStyle = {
       position: 'fixed',
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -35,7 +33,9 @@ export default {
       borderRadius: '4px',
       fontSize: '12px',
       zIndex: 9999,
-      display: 'none'
+      display: 'none',
+      transition: 'opacity 0.3s',
+      pointerEvents: 'none'
     }
 
     if (icon) {
@@ -47,17 +47,13 @@ export default {
     }
 
     if (title) {
-      // 创建 tooltip div
-      const tooltip = <div class='menu-tooltip' style={tooltipStyle}>{title}</div>
-
-      // 创建带有事件处理的 span
       const titleSpan = (
         <span
           slot='title'
           style={ellipsisStyle}
           onMouseenter={(e) => {
             const el = e.target
-            const tooltip = el.parentNode.querySelector('.menu-tooltip')
+            const tooltip = el.querySelector('.menu-tooltip')
 
             // 检查文本是否溢出
             if (el.scrollWidth > el.offsetWidth) {
@@ -68,12 +64,15 @@ export default {
             }
           }}
           onMouseleave={(e) => {
-            const tooltip = e.target.parentNode.querySelector('.menu-tooltip')
+            const tooltip = e.querySelector('.menu-tooltip')
             tooltip.style.display = 'none'
           }}
         >
           {title}
-          {tooltip}
+          <div class='menu-tooltip' style={tooltipStyle}>
+            {title}
+            <span class='tooltip-arrow'></span>
+          </div>
         </span>
       )
 
@@ -84,26 +83,19 @@ export default {
 }
 </script>
 
-<style scoped>
-::v-deep(.el-menu-item),
-::v-deep(.el-submenu__title) {
-  overflow: hidden;
-  white-space: nowrap;
+<style>
+.el-menu-item,
+.el-submenu__title {
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }
 
-.menu-tooltip {
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.menu-tooltip::before {
-  content: '';
+.tooltip-arrow {
   position: absolute;
   left: -4px;
   top: 50%;
-  transform: translateY(-50%);
-  border-width: 4px;
-  border-style: solid;
-  border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+  margin-top: -4px;
+  border: 4px solid transparent;
+  border-right-color: rgba(0, 0, 0, 0.8);
 }
 </style>
