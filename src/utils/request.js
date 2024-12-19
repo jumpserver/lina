@@ -54,7 +54,9 @@ service.interceptors.request.use(
 )
 
 function goToLogin() {
-  window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+  setTimeout(() => {
+    window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+  }, 200)
   localStorage.setItem('next', window.location.hash.replace('#', ''))
 }
 
@@ -72,9 +74,7 @@ function ifUnauthorized({ response, error }) {
       cancelButtonText: i18n.t('Cancel'),
       type: 'warning'
     }).then(() => {
-      setTimeout(() => {
-        goToLogin()
-      }, 100)
+      goToLogin()
     })
   }
 }
