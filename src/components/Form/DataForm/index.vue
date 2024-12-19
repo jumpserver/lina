@@ -5,7 +5,7 @@
     :class="mobile ? 'mobile' : 'desktop'"
     :content="fields"
     :form="basicForm"
-    :label-position="labelPosition"
+    :label-position="iLabelPosition"
     label-width="25%"
     v-bind="$attrs"
     v-on="$listeners"
@@ -121,6 +121,10 @@ export default {
     isSubmitting: {
       type: Boolean,
       default: false
+    },
+    labelPosition: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -137,8 +141,14 @@ export default {
     mobile() {
       return this.$store.state.app.device === 'mobile'
     },
-    labelPosition() {
-      return this.mobile ? 'top' : 'right'
+    drawer() {
+      return this.$store.state.common.inDrawer
+    },
+    iLabelPosition() {
+      if (this.labelPosition) {
+        return this.labelPosition
+      }
+      return this.drawer || this.mobile ? 'top' : 'right'
     }
   },
   mounted() {
