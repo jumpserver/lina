@@ -26,15 +26,6 @@ async function checkLogin({ to, from, next }) {
     return await store.dispatch('users/getProfile')
   } catch (e) {
     Vue.$log.error(e)
-    const status = e.response.status
-    if (store.getters.currentOrg.autoEnter) {
-      await store.dispatch('users/setCurrentOrg', store.getters.preOrg)
-    }
-    if (status === 401 || status === 403) {
-      setTimeout(() => {
-        window.location = process.env.VUE_APP_LOGIN_PATH
-      }, 100)
-    }
     return reject('No profile get: ' + e)
   }
 }
@@ -128,6 +119,11 @@ export async function generatePageRoutes({ to, from, next }) {
 export async function checkUserFirstLogin({ to, from, next }) {
   if (store.state.users.profile.is_first_login) {
     next('/profile/improvement')
+  }
+  const nextRoute = localStorage.getItem('next')
+  if (nextRoute) {
+    localStorage.setItem('next', '')
+    next(nextRoute.replace('#', ''))
   }
 }
 

@@ -53,21 +53,28 @@ service.interceptors.request.use(
   }
 )
 
+function goToLogin() {
+  window.location = process.env.VUE_APP_LOGIN_PATH + '?next=' + window.location.pathname
+  localStorage.setItem('next', window.location.hash.replace('#', ''))
+}
+
 function ifUnauthorized({ response, error }) {
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
-      window.location = '/core/auth/login/'
+      goToLogin()
       return
     }
-    const title = i18n.t('Info')
-    const msg = i18n.t('LoginRequiredMsg')
+    const title = i18n.tc('Info')
+    const msg = i18n.tc('LoginRequiredMsg')
     MessageBox.confirm(msg, title, {
       confirmButtonText: i18n.t('ReLogin'),
       cancelButtonText: i18n.t('Cancel'),
       type: 'warning'
     }).then(() => {
-      window.location = '/core/auth/login/'
+      setTimeout(() => {
+        goToLogin()
+      }, 100)
     })
   }
 }
@@ -90,7 +97,7 @@ function ifBadRequest({ response, error }) {
 }
 
 export function logout() {
-  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${router.fullPath}`
+  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
 }
 
 export function flashErrorMsg({ response, error }) {
@@ -99,7 +106,9 @@ export function flashErrorMsg({ response, error }) {
     const msg = responseErrorMsg || error.message
 
     if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
-      setTimeout(() => { logout() }, 1000)
+      setTimeout(() => {
+        logout()
+      }, 1000)
     }
     message({
       message: msg,
@@ -176,6 +185,7 @@ axiosRetry(service, {
 
 export function fetchAllData(url, params) {
   const allData = []
+
   function fetchPage(url) {
     return service({
       url,
@@ -192,6 +202,7 @@ export function fetchAllData(url, params) {
       }
     })
   }
+
   return fetchPage(url)
 }
 
