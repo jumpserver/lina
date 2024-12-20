@@ -1,11 +1,11 @@
 import i18n from '@/i18n/i18n'
 
 export const riskActions = [
-  {
-    name: 'disable_remote',
-    label: i18n.t('Disable remote'),
-    has: ['long_time_no_login', 'new_found']
-  },
+  // {
+  //   name: 'disable_remote',
+  //   label: i18n.t('Disable remote'),
+  //   has: ['long_time_no_login', 'new_found']
+  // },
   {
     name: 'delete_remote',
     label: i18n.t('Delete Account'),
@@ -19,6 +19,19 @@ export const riskActions = [
   {
     name: 'add_account',
     label: i18n.t('Add to Account'),
+    has: ['new_found'],
+    disabled: async function() {
+      if (!this.row.username) {
+        return false
+      }
+      const url = `/api/v1/accounts/accounts/?username=${this.row.username}&asset=${this.row.asset.id}`
+      const data = await this.$axios.get(url)
+      return data.length > 0
+    }
+  },
+  {
+    name: 'add_account_after_change_password',
+    label: i18n.t('Add account after change password'),
     has: ['new_found'],
     disabled: async function() {
       if (!this.row.username) {

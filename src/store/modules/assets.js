@@ -1,9 +1,11 @@
 import { getCategoryTypes as apiGetCategoryTypes } from '@/api/asset'
+import request from '@/utils/request'
 
 const state = {
   assetCategories: [],
   assetCategoriesDropdown: [],
-  assetCategoriesCascader: []
+  assetCategoriesCascader: [],
+  platforms: []
 }
 
 const mutations = {
@@ -45,6 +47,25 @@ const actions = {
         commit('SET_CATEGORIES', data)
         commit('SET_CATEGORIES_DROPDOWN', data)
         resolve(state)
+      })
+    })
+  },
+  getPlatforms({ commit, dispatch, state }) {
+    return new Promise(resolve => {
+      if (state.platforms.length > 0) {
+        resolve(state.platforms)
+      }
+      request.get('/api/v1/assets/platforms/').then(data => {
+        state.platforms = data
+        resolve(data)
+      })
+    })
+  },
+  getRecentPlatforms({ commit, dispatch, state }) {
+    const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
+    return new Promise(resolve => {
+      dispatch('getPlatforms').then(platforms => {
+        resolve(platforms.filter(p => recentPlatformIds.includes(p.id)))
       })
     })
   }

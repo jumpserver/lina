@@ -29,7 +29,7 @@
         {{ iLabel }}
       </el-button>
     </el-tooltip>
-    <ReviewDraw :row="row" :show-buttons="reviewButtons" :visible.sync="reviewDrawer" />
+    <ReviewDraw :row="row" :rows="rows" :show-buttons="reviewButtons" :visible.sync="reviewDrawer" />
     <ProcessingDialog :visible="processing" />
   </span>
 </template>
@@ -38,6 +38,7 @@ import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 import ReviewDraw from '@/views/pam/RiskDetect/RiskHandlerFormatter/ReviewDraw.vue'
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 import { riskActions } from './const'
+import { sleep } from '@/utils/time'
 
 export default {
   name: 'RiskSummaryFormatter',
@@ -100,27 +101,32 @@ export default {
       this.reviewDrawer = true
     },
     async handleCommon(cmd) {
-      const data = {
-        username: this.row.username,
-        asset: this.row.asset.id,
-        risk: this.row.risk.value,
-        action: cmd
+      let rows = this.rows
+      if (this.rows.length === 0) {
+        rows = [this.row]
+        this.processing = true
       }
-      this.processing = true
-      this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data).then(() => {
-        if (cmd !== 'ignore') {
-          this.row.status = { value: '1', label: this.$t('Confirmed') }
-        } else {
-          this.row.status = { value: '2', label: this.$t('Ignored') }
+
+      for (const [i, row] of Object.entries(rows)) {
+        const data = {
+          username: row.username,
+          asset: row.asset.id,
+          risk: row.risk.value,
+          action: cmd
         }
-      }).finally(() => {
-        setTimeout(() => {
-          this.processing = false
-          this.$axios.get(`/api/v1/accounts/account-risks/${this.row.id}/`).then((res) => {
-            Object.assign(this.row, res)
-          })
-        }, 500)
-      })
+        row.status = { value: '3', label: this.$t('Processing') }
+        await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
+        await sleep(100)
+        if (cmd !== 'ignore') {
+          row.status = { value: '1', label: this.$t('Confirmed') }
+        } else {
+          row.status = { value: '2', label: this.$t('Ignored') }
+        }
+        this.$emit('processDone', { index: i, row })
+      }
+      setTimeout(() => {
+        this.processing = false
+      }, 500)
     },
     handleRisk(cmd) {
       if (cmd === 'review') {
@@ -140,7 +146,7 @@ export default {
       if (!visible) {
         return false
       }
-      if (this.actions.length === 0) {
+      if (this.actions.length === 0 || this.changed === true) {
         this.actions = await this.getActions()
       }
       return this.actions.length > 0

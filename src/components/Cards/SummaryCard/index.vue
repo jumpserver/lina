@@ -5,8 +5,8 @@
     </div>
     <slot>
       <h3 class="no-margins ">
-        <span class="num" @click="handleClick">
-          {{ iCount }}
+        <span v-async="iCount" class="num" @click="handleClick">
+          -
         </span>
       </h3>
     </slot>
@@ -27,7 +27,7 @@ export default {
       default: () => ({})
     },
     count: {
-      type: [Number, String],
+      type: [Number, String, Promise],
       default: 0
     },
     route: {
@@ -49,7 +49,8 @@ export default {
   },
   computed: {
     iCount() {
-      return this.body.count || this.count
+      const count = this.body.count || this.count
+      return count
     },
     iRoute() {
       return this.body.route || this.route

@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage
+    v-if="!loading"
+    class="user-create-update"
+    v-bind="$data"
+    @getObjectDone="afterGetUser"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
@@ -162,14 +168,6 @@ export default {
         is_active: {
           label: this.$t('IsActive'),
           el: {}
-        }
-      },
-      submitMethod() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
         }
       },
       afterGetFormValue(obj) {

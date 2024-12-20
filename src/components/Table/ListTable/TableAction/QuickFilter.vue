@@ -15,6 +15,9 @@
                   @click="handleFilterClick(option)"
                 >
                   {{ option.label }}
+                  <span v-if="option.hasCount">
+                    (<span v-async="getCount(option)">-</span>)
+                  </span>
                   <!--                  <i class="el-icon-circle-check" />-->
                 </span>
               </div>
@@ -25,7 +28,7 @@
           <span v-for="item of iSummary" :key="item.title" class="summary-block">
             <SummaryCard
               :class="item.active ? 'active' : ''"
-              :count="item.count"
+              :count="getCount(item)"
               :title="item.title"
               @click="handleFilterClick(item)"
             />
@@ -44,6 +47,7 @@
 
 <script>
 import SummaryCard from '@/components/Cards/SummaryCard/index.vue'
+import { setUrlParam } from '@/utils/common'
 
 export default {
   name: 'QuickFilter',
@@ -60,6 +64,10 @@ export default {
     expand: {
       type: Boolean,
       default: true
+    },
+    tableUrl: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -83,6 +91,22 @@ export default {
   mounted() {
   },
   methods: {
+    async getCount(item) {
+      if (item.count) {
+        return item.count
+      }
+      if (!item.filter) {
+        return '-'
+      }
+      let url = this.tableUrl
+      for (const [k, v] of Object.entries({ ...item.filter, limit: 1 })) {
+        url = setUrlParam(url, k, v)
+      }
+      const res = await this.$axios.get(url, { raw: 1 })
+      item.count = res.data.count
+      console.log('............get count: ', item.count)
+      return item.count
+    },
     cleanSummary() {
       if (!this.summary) {
         return []

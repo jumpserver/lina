@@ -9,18 +9,21 @@
     @open="handleOpen"
   >
     <div class="drawer-body">
-      <el-timeline :reverse="true">
-        <el-timeline-item
-          v-for="detail in row.details"
-          :key="detail.datetime"
-          :icon="getDetailIcon(detail)"
-          :timestamp="formatTimestamp(detail.datetime)"
-          :type="getDetailType(detail)"
-          placement="top"
-        >
-          <span v-html="handleDetail(row, detail)" />
-        </el-timeline-item>
-      </el-timeline>
+      <div v-for="r in iRows" :key="r.id">
+        <div class="host-username">{{ r.asset ? r.asset.name : r }} - {{ r.username }}</div>
+        <el-timeline :reverse="true">
+          <el-timeline-item
+            v-for="detail in r.details"
+            :key="detail.datetime"
+            :icon="getDetailIcon(detail)"
+            :timestamp="formatTimestamp(detail.datetime)"
+            :type="getDetailType(detail)"
+            placement="top"
+          >
+            <span v-html="handleDetail(r, detail)" />
+          </el-timeline-item>
+        </el-timeline>
+      </div>
     </div>
     <div v-if="showButtons" class="drawer-footer">
       <span class="buttons">
@@ -49,6 +52,10 @@ export default {
     showButtons: {
       type: Boolean,
       default: true
+    },
+    rows: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -70,6 +77,13 @@ export default {
         acc[cur.name] = cur
         return acc
       }, {})
+    },
+    iRows() {
+      if (this.rows.length === 0) {
+        return [this.row]
+      } else {
+        return this.rows
+      }
     }
   },
   mounted() {
@@ -142,8 +156,17 @@ ${detail.diff}
   height: calc(100% - 40px - 40px);
   overflow: auto;
 
+  ::v-deep .el-drawer__body {
+    overflow: auto;
+  }
+
   ::v-deep pre {
     overflow: auto;
+  }
+
+  .host-username {
+    margin-left: 40px;
+    margin-bottom: 10px;
   }
 }
 

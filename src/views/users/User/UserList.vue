@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListPage
+    <GenericListDrawerPage
       ref="GenericListPage"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
@@ -19,7 +19,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
+import { GenericUpdateFormDialog } from '@/layout/components'
+import GenericListDrawerPage from '@/layout/components/GenericListDrawerPage/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
@@ -28,7 +29,7 @@ import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.
 export default {
   components: {
     InviteUsersDialog,
-    GenericListPage,
+    GenericListDrawerPage,
     GenericUpdateFormDialog
   },
   data() {
@@ -43,6 +44,8 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      createDrawer: () => import('@/views/users/User/UserCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/users/User/UserDetail/index.vue'),
       quickFilters: [
         {
           label: '快速筛选',

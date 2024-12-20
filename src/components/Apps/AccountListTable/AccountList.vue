@@ -21,7 +21,6 @@
     <AccountCreateUpdate
       v-if="showAddDialog"
       :account="account"
-      :origin="origin"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
@@ -31,7 +30,6 @@
     <AccountCreateUpdate
       v-if="showAddTemplateDialog"
       :account="account"
-      :origin="origin"
       :add-template="true"
       :asset="iAsset"
       :title="accountCreateByTemplateTitle"
@@ -56,9 +54,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable/index.vue'
-import {
-  ActionsFormatter, PlatformFormatter, SecretViewerFormatter
-} from '@/components/Table/TableFormatters'
+import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
@@ -138,10 +134,6 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
-    },
-    origin: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -200,13 +192,13 @@ export default {
             {
               label: '僵尸账号',
               filter: {
-                risk: 'zombie'
+                risk: 'long_time_no_login'
               }
             },
             {
               label: '幽灵账号',
               filter: {
-                risk: 'ghost'
+                risk: 'new_found'
               }
             },
             {

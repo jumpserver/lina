@@ -4,7 +4,7 @@
       <span v-sanitize="helpMessage" class="announcement-main" />
     </el-alert>
     <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
-    <PlatformDialog :category="category" :visible.sync="showPlatform" />
+    <PlatformDialog :category="category" :visible.sync="showPlatform" @select-platform="createAsset" />
     <AssetBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
       :category="category"
@@ -24,7 +24,12 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter, PlatformFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DetailFormatter,
+  PlatformFormatter,
+  ProtocolsFormatter
 } from '@/components/Table/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
@@ -114,8 +119,35 @@ export default {
       }
     }
     const extraQuery = this.$route.params?.extraQuery || {}
+    const recentPlatforms = [
+      {
+        name: 'linux',
+        title: 'Linux',
+        callback: () => {
+        }
+      },
+      {
+        name: 'windows',
+        title: 'Windows',
+        callback: () => {
+        }
+      }
+    ]
+    const createAction = {
+      name: 'create',
+      title: 'Create',
+      type: 'primary',
+      icon: '',
+      split: true,
+      callback: () => {
+        this.showPlatform = true
+      },
+      dropdown: recentPlatforms
+    }
     return {
       showPlatform: false,
+      recentPlatforms: recentPlatforms,
+      createAction: createAction,
       gatewayPort: 0,
       gatewayCell: '',
       gatewayVisible: false,
@@ -268,12 +300,12 @@ export default {
         searchConfig: {
           getUrlQuery: false
         },
+        hasCreate: false,
         extraMoreActions: [
           {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa fa-link',
             can: ({ selectedRows }) =>
               this.$hasPerm('assets.test_assetconnectivity') &&
               !this.$store.getters.currentOrgIsRoot &&
@@ -372,6 +404,17 @@ export default {
       if (this.addExtraMoreActions) {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
+      // if (this.extraActions) {
+      //   actions.extraActions = [...actions.extraActions, ...this.extraActions]
+      // }
+      const create = this.createAction
+      if (create) {
+        create.dropdown = this.recentPlatforms
+      }
+      const extraActions = actions.extraActions || []
+      actions.extraActions = [create, ...extraActions]
+      // actions.extraActions[0].dropdown = platforms
+      console.log('Actions: ', actions)
       return actions
     }
   },
@@ -388,10 +431,55 @@ export default {
       }
     }
   },
+  mounted() {
+  },
+  activated() {
+    this.setRecentPlatforms()
+  },
   methods: {
+    createAsset(platform) {
+      const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
+      this.addToRecentPlatforms(platform)
+      this.iVisible = false
+      const query = {
+        node: this.$route.query?.node || this.$route.query?.node_id || '',
+        platform: platform.id,
+        type: platform.type.value,
+        category: platform.category.value
+      }
+
+      const router = { name: route, query }
+      if (this.$route.query.node_id) {
+        const { href } = this.$router.resolve(router)
+        window.open(href, '_blank')
+      } else {
+        this.$router.push(router)
+      }
+    },
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    async setRecentPlatforms() {
+      const recentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
+      const recentIds = recentPlatforms.map(item => item.id)
+      let allPlatforms = await this.$store.dispatch('assets/getPlatforms')
+      allPlatforms = allPlatforms.filter(item => !recentIds.includes(item.id))
+      let platforms = [...recentPlatforms, ...allPlatforms]
+      if (this.category !== 'all') {
+        platforms = platforms.filter(item => item.category.value === this.category)
+      }
+      platforms = platforms.slice(0, 6)
+      platforms = platforms.map(item => {
+        return {
+          name: item.name,
+          title: item.name,
+          callback: () => {
+            this.showPlatform = true
+          }
+        }
+      })
+      this.recentPlatforms = platforms
     }
   }
 }

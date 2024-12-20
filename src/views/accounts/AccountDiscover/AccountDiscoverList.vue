@@ -58,12 +58,10 @@ export default {
           {
             id: 'discover',
             icon: 'discovery',
-            name: '发现账号',
+            name: this.$t('DiscoverAccounts'),
             callback: (node) => {
-              console.log('Discovery it: ', node)
               this.discoveryDialog.asset = node.id
               this.discoveryDialog.visible = true
-              // this.discoveryDialog.asset = node.data
             }
           }
         ]
@@ -71,58 +69,25 @@ export default {
       quickSummary: [
         {
           title: '最近一周发现',
-          count: 10,
+          hasCount: true,
           filter: {
-            name: 'admin'
+            'days': '7'
           }
         },
         {
           title: '最近一月发现',
-          count: 321,
           filter: {
-            username: 'admin'
+            'days': '30'
           }
         },
         {
           title: '待确认',
-          count: 544,
           filter: {
-            username: 'admin'
+            status: '0'
           }
         }
       ],
-      quickFilters: [
-        {
-          label: '快速过滤',
-          options: [
-            {
-              label: '未同步到资产',
-              value: ''
-            },
-            {
-              label: this.$t('最近一个月'),
-              value: ''
-            }
-          ]
-        },
-        {
-          label: this.$t('最近发现'),
-          options: [
-            {
-              label: '最近一天 (20)',
-              value: ''
-            },
-            {
-              label: '最近一周 (300)',
-              value: ''
-            },
-            {
-              label: '最近一个月 (600)',
-              value: ''
-            }
-          ]
-        }
-      ],
+      quickFilters: [],
       tableConfig: gatherAccountTableConfig(this),
       headerActions: gatherAccountHeaderActions(this)
     }

@@ -37,7 +37,7 @@ export default {
           {
             name: 'AccountTemplateList',
             title: this.$t('AccountTemplate'),
-            icon: 'fa-copy',
+            icon: 'template',
             component: () => import('@/views/pam/Account/AccountTemplate.vue')
           }
         ]

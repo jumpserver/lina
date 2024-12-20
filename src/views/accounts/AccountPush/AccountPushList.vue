@@ -1,33 +1,20 @@
 <template>
-  <div>
-    <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-
-    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
-  </div>
+  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
-import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountPushList',
   components: {
-    Drawer,
-    GenericListTable,
-    AccountPushUpdate: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
-    AccountPushCreate: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue')
+    GenericListTable
   },
   data() {
     const vm = this
     return {
-      drawerTitle: '',
-      showTableUpdateDrawer: false,
-      currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
@@ -45,12 +32,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              isPam: true,
-              getRoute: ({ row }) => ({
-                name: 'AccountPushDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
-              })
+              route: 'AccountPushDetail'
             }
           },
           accounts: {
@@ -61,16 +43,6 @@ export default {
           secret_strategy: {
             formatter: function(row) {
               return <span> {row.secret_strategy.label} </span>
-            }
-          },
-          username: {
-            showOverflowTooltip: true,
-            formatter: ({ username }) => {
-              if (username === '@USER') {
-                return this.$t('DynamicUsername')
-              } else {
-                return username
-              }
             }
           },
           assets_amount: {
@@ -101,17 +73,11 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              isPam: true,
-              updateRoute: 'AccountPushUpdate',
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'AccountPushCreate', query: { clone_from: row.id }})
+              },
               onUpdate: ({ row }) => {
-                this.$route.params.id = row.id
-
-                // 解决表单详情中的跳转
-                this.$route.query.type = 'pam'
-
-                this.currentTemplate = 'AccountPushUpdate'
-                this.drawerTitle = this.$t('AccountPushUpdate')
-                this.showTableUpdateDrawer = true
+                vm.$router.push({ name: 'AccountPushUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -138,15 +104,14 @@ export default {
           }
         }
       },
-      helpMsg: this.$t('WebHelpMessage'),
       headerActions: {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        onCreate: () => {
-          this.currentTemplate = 'AccountPushCreate'
-          this.drawerTitle = this.$t('AccountPushCreate')
-          this.showTableUpdateDrawer = true
+        createRoute: () => {
+          return {
+            name: 'AccountPushCreate'
+          }
         }
       }
     }

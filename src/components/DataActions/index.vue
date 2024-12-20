@@ -5,14 +5,27 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :key="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
+        :size="action.size"
+        :split-button="!!action.split"
+        :type="action.type"
         class="action-item"
         placement="bottom-start"
         trigger="click"
         @command="handleDropdownCallback"
       >
-        <el-button :class="action.name" :size="size" class="more-action" v-bind="{...cleanButtonAction(action), icon: ''}">
-          <span v-if="action.icon" class="pre-icon">
-            <Icon :icon="action.icon" />
+        <span v-if="action.split" @click="handleClick(action)">
+          {{ action.title }}
+        </span>
+        <el-button
+          v-else
+          :class="action.name"
+          :size="size"
+          class="more-action"
+          v-bind="{...cleanButtonAction(action), icon: ''}"
+        >
+          <span class="pre-icon">
+            <Icon v-if="action.icon" :icon="action.icon" />
           </span>
           <span v-if="action.title">
             {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
@@ -42,8 +55,8 @@
                 class="dropdown-item"
                 v-bind="{...option, icon: ''}"
               >
-                <span v-if="option.icon" class="pre-icon">
-                  <Icon :icon="option.icon" />
+                <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                  <Icon v-if="option.icon" :icon="option.icon" />
                 </span>
                 {{ option.title }}
               </el-dropdown-item>
@@ -55,7 +68,7 @@
       <el-button
         v-else
         :key="action.name"
-        :class="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
         :size="size"
         class="action-item"
         v-bind="{...cleanButtonAction(action), icon: ''}"
@@ -107,6 +120,9 @@ export default {
     }
   },
   methods: {
+    actionsHasIcon(actions) {
+      return actions.some(action => action.icon)
+    },
     hasIcon(action, type = '') {
       const icon = action.icon
       if (!icon) {
@@ -164,6 +180,7 @@ export default {
       delete action['callback']
       delete action['name']
       delete action['can']
+      delete action['split']
       return action
     },
     cleanActions(actions) {
@@ -193,6 +210,10 @@ export default {
         }
         delete action['can']
 
+        if (!action.size) {
+          action.size = 'small'
+        }
+
         if (action.dropdown) {
           action.dropdown = this.cleanActions(action.dropdown)
         }
@@ -216,6 +237,10 @@ $color-drop-menu-border: #e4e7ed;
 .layout {
   .action-item {
     margin-left: 5px;
+
+    &.grouped {
+      margin-left: 0;
+    }
 
     &:first-child {
       margin-left: 0;
@@ -314,6 +339,7 @@ $color-drop-menu-border: #e4e7ed;
 
   .dropdown-item {
     color: var(--color-text-primary);
+    line-height: 34px;
 
     .pre-icon {
       width: 17px;

@@ -1,1 +1,2 @@
 import './permission'
+import './async'

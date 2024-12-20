@@ -16,11 +16,10 @@
           <el-tab-pane
             :key="item.name"
             :disabled="item.disabled"
-            :label-content="item.labelContent"
             :name="item.name"
           >
             <span slot="label">
-              <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
+              <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
               <el-tooltip
@@ -60,12 +59,14 @@
 
 <script>
 import Page from '../Page/'
+import Icon from '@/components/Widgets/Icon'
 import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'TabPage',
   components: {
-    Page
+    Page,
+    Icon
   },
   props: {
     submenu: {

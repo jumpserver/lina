@@ -66,7 +66,7 @@ export default {
     },
     url: {
       get() {
-        return `/api/v1/accounts/gathered-accounts/discover/?asset_id=${this.asset}`
+        return `/api/v1/accounts/gather-account-executions/adhoc/?asset_id=${this.asset}`
       }
     }
   },
@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     onVisibleChange() {
-
     },
     onIframeLoad() {
       this.loading = false
