@@ -129,7 +129,8 @@ export default {
     },
     onCreate() {
       this.action = 'create'
-      this.drawerComponent = this.iCreateDrawer
+      console.log('DrawerComponent', this.createDrawer)
+      this.drawerComponent = this.createDrawer
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'create'
       }).then(() => {

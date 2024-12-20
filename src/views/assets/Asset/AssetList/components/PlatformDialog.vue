@@ -1,12 +1,12 @@
 <template>
-  <Dialog
+  <el-drawer
     v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
     :visible.sync="iVisible"
+    size="600px"
     top="1vh"
-    width="60%"
   >
     <div v-loading="loading" class="platform-content">
       <el-row :gutter="20">
@@ -20,7 +20,7 @@
             <el-col
               v-for="(platform, index) of ps"
               :key="platform.id"
-              :span="6"
+              :span="8"
             >
               <el-tooltip :content="platform.name">
                 <el-card
@@ -40,17 +40,14 @@
         </el-collapse>
       </el-row>
     </div>
-  </Dialog>
+  </el-drawer>
 </template>
 <script>
-import Dialog from '@/components/Dialog'
 import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
-  name: 'PlatformDialog',
-  components: {
-    Dialog
-  },
+  name: 'PlatformDrawer',
+  components: {},
   props: {
     visible: {
       type: Boolean,
@@ -126,6 +123,9 @@ export default {
     this.loading = false
   },
   methods: {
+    createAsset(platform) {
+      this.$emit('select-platform', platform)
+    },
     getPlatformLogo(platform) {
       return loadPlatformIcon(platform.name, platform.type)
     },
@@ -156,6 +156,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+::v-deep .el-drawer__body {
+  padding: 0 20px;
+}
+
 .platform-content {
   padding: 0 10px;
 }

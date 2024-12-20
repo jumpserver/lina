@@ -44,8 +44,6 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
-      createDrawer: () => import('@/views/users/User/UserCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/users/User/UserDetail/index.vue'),
       quickFilters: [
         {
           label: '快速筛选',

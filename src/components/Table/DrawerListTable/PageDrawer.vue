@@ -80,7 +80,12 @@ export default {
 
   ::v-deep {
     .el-card.ibox {
-      //border: none;
+      border: none;
+
+      .el-card__body {
+        padding-top: 10px;
+        padding-bottom: 20px;
+      }
     }
 
     .el-drawer__header {

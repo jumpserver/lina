@@ -2,7 +2,7 @@
   <ElFormRender
     :id="id"
     ref="form"
-    :class="mobile ? 'mobile' : 'desktop'"
+    :class="[mobile ? 'mobile' : 'desktop', {'label-top': iLabelPosition === 'top'}]"
     :content="fields"
     :form="basicForm"
     :label-position="iLabelPosition"
@@ -219,6 +219,14 @@ export default {
   ::v-deep .form-group-header {
     margin-left: 50px;
     color: var(--color-text-primary);
+  }
+
+  &.label-top {
+    ::v-deep .el-form-item {
+      .el-form-item__content {
+        width: 100%;
+      }
+    }
   }
 
   ::v-deep .el-form-item {

@@ -102,12 +102,14 @@ export default {
         //flex-wrap: nowrap;
         //flex-direction: column;
         //justify-content: flex-start;
-        margin-right: 50px;
-        margin-left: 20px;
+        //margin-right: 50px;
+        //margin-left: 20px;
         height: 100%;
 
         .el-form-item {
           //margin: 5px 0 5px 0;
+          padding-left: 2px;
+
           &:last-child {
             //margin-bottom: 10px;
             //padding-bottom: 10px;
