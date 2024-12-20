@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'MenuItem',
   functional: true,
@@ -16,7 +17,6 @@ export default {
     const { icon, title } = context.props
     const vNodes = []
 
-    // 定义文本溢出样式
     const ellipsisStyle = {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -29,16 +29,12 @@ export default {
       if (icon.startsWith('fa-')) {
         vNodes.push(<i class={`fa ${icon}`} />)
       } else {
-        vNodes.push(<svg-icon icon-class={icon} />)
+        vNodes.push(<svg-icon icon-class={icon}/>)
       }
     }
 
     if (title) {
-      vNodes.push(
-        <el-tooltip content={title} placement='right' effect='dark' open-delay={ 1000 }>
-          <span style={ellipsisStyle}>{title}</span>
-        </el-tooltip>
-      )
+      vNodes.push(<span slot='title' style={ellipsisStyle} title={ title }>{title}</span>)
     }
     return vNodes
   }

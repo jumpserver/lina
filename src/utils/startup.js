@@ -9,12 +9,32 @@ import { getPropView, isViewHasOrgs } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 const autoEnterOrgs = [
+  '00000000-0000-0000-0000-000000000004',
   '00000000-0000-0000-0000-000000000001',
   '00000000-0000-0000-0000-000000000000'
 ]
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
+}
+
+async function beforeGoToLogin() {
+  // remove currentOrg: System org item
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (!key.startsWith('currentOrg:')) {
+      continue
+    }
+    let value = localStorage.getItem(key)
+    value = JSON.parse(value)
+    if (!value.is_system) {
+      continue
+    }
+    localStorage.removeItem(key)
+  }
+  if (store.getters.currentOrg.autoEnter) {
+    await store.dispatch('users/setCurrentOrg', store.getters.preOrg)
+  }
 }
 
 async function checkLogin({ to, from, next }) {
@@ -26,15 +46,7 @@ async function checkLogin({ to, from, next }) {
     return await store.dispatch('users/getProfile')
   } catch (e) {
     Vue.$log.error(e)
-    const status = e.response.status
-    if (store.getters.currentOrg.autoEnter) {
-      await store.dispatch('users/setCurrentOrg', store.getters.preOrg)
-    }
-    if (status === 401 || status === 403) {
-      setTimeout(() => {
-        window.location = process.env.VUE_APP_LOGIN_PATH
-      }, 100)
-    }
+    await beforeGoToLogin()
     return reject('No profile get: ' + e)
   }
 }
@@ -128,6 +140,11 @@ export async function generatePageRoutes({ to, from, next }) {
 export async function checkUserFirstLogin({ to, from, next }) {
   if (store.state.users.profile.is_first_login) {
     next('/profile/improvement')
+  }
+  const nextRoute = localStorage.getItem('next')
+  if (nextRoute) {
+    localStorage.setItem('next', '')
+    next(nextRoute.replace('#', ''))
   }
 }
 
