@@ -17,6 +17,21 @@
       :port="GatewayPort"
       :visible.sync="GatewayVisible"
     />
+    <Dialog
+      v-if="TestPortVisible"
+      :show-cancel="false"
+      :title="$tc('TestSelectedPort')"
+      :visible.sync="TestPortVisible"
+      top="1vh"
+      width="60%"
+      @confirm="handleTestPort"
+    >
+      <el-form label-position="right" label-width="100px">
+        <el-form-item :label="$tc('Port')">
+          <el-input-number v-model="port" :min="0" :max="65535" />
+        </el-form-item>
+      </el-form>
+    </Dialog>
   </div>
 </template>
 
@@ -31,9 +46,11 @@ import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter'
+import Dialog from '@/components/Dialog/index.vue'
 
 export default {
   components: {
+    Dialog,
     ListTable,
     GatewayDialog,
     PlatformDialog,
@@ -115,6 +132,9 @@ export default {
       GatewayPort: 0,
       GatewayCell: '',
       GatewayVisible: false,
+      TestPortVisible: false,
+      TestPortRows: [],
+      port: 22,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         permissions: {
@@ -210,6 +230,15 @@ export default {
                     }
                   }
                 },
+                {
+                  name: 'TestPort',
+                  title: this.$t('TestPort'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  callback: ({ row }) => {
+                    this.TestPortRows = [row]
+                    this.TestPortVisible = true
+                  }
+                },
                 ...this.addExtraMoreColActions
               ]
             }
@@ -302,6 +331,19 @@ export default {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
               vm.updateSelectedDialogSetting.visible = true
             }
+          },
+          {
+            name: 'TestSelectedPort',
+            title: this.$t('TestSelectedPort'),
+            type: 'primary',
+            icon: 'fa fa-cogs',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && this.$hasPerm('assets.test_assetconnectivity')
+            },
+            callback: function({ selectedRows }) {
+              this.TestPortVisible = true
+              this.TestPortRows = selectedRows
+            }.bind(this)
           }
         ]
       },
@@ -344,6 +386,18 @@ export default {
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    handleTestPort() {
+      const ids = this.TestPortRows.map(v => { return v.id })
+      this.$axios.post(
+        '/api/v1/assets/assets/tasks/',
+        { action: 'test_port', assets: ids, port: this.port }).then(res => {
+        openTaskPage(res['task'])
+      }).catch(err => {
+        this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+      }).finally(() => {
+        this.TestPortVisible = false
+      })
     }
   }
 }
