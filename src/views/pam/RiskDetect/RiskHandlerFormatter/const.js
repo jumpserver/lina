@@ -32,7 +32,7 @@ export const riskActions = [
   {
     name: 'change_password',
     label: i18n.t('Change Password'),
-    has: ['long_time_password', 'weak_password', 'password_expired']
+    has: ['long_time_password', 'weak_password', 'password_expired', 'leaked_password', 'repeated_password']
   },
   // {
   //   name: 'addPrivilegedAccount',
