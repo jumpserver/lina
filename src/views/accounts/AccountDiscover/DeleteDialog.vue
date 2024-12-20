@@ -20,9 +20,15 @@
             </el-checkbox>
             <ul>
               <li v-for="item in assetAccounts" :key="item.id">
-                <a href="">
+                <router-link
+                  :to="{
+                    name: 'AssetAccountDetail',
+                    params: { id: item.id }
+                  }"
+                  target="_blank"
+                >
                   {{ item.name }}({{ item.username }}) - {{ account.asset.name }}
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -119,10 +125,13 @@ export default {
       })
     },
     handleConfirm() {
-      this.$axios.delete('/api/v1/accounts/gathered-accounts/', {
+      const url = '/api/v1/accounts/gathered-accounts/'
+      this.$axios.delete(url, {
         params: {
           username: this.account.username,
-          asset: this.account.asset.id
+          asset: this.account.asset.id,
+          is_delete_account: this.iDeleteAccount,
+          is_delete_remote: this.iDeleteRemote
         }
       }).then(res => {
         this.$message.success('删除成功')
