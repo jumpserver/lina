@@ -9,6 +9,7 @@ const getDefaultState = () => {
     showSqlQueryCounter: true,
     confirmDialogVisible: false,
     drawerActionMeta: {},
+    successActionMeta: {},
     inDrawer: false
   }
 }
@@ -91,11 +92,17 @@ const actions = {
   setDrawerActionMeta({ commit, state }, meta) {
     state.drawerActionMeta = meta
     state.inDrawer = true
+    console.log('setDrawerActionMeta', meta)
   },
   getDrawerActionMeta({ commit, state }) {
     return state.drawerActionMeta
   },
   cleanDrawerActionMeta({ commit, state }) {
+    state.drawerActionMeta = {}
+    state.inDrawer = false
+  },
+  finishDrawerActionMeta({ commit, state }, payload) {
+    state.successActionMeta = payload
     state.drawerActionMeta = {}
     state.inDrawer = false
   }

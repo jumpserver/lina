@@ -44,9 +44,6 @@ export default {
   data() {
     return {
       listener: {
-        'close-drawer': () => {
-          this.iVisible = false
-        },
         ...this.$listeners
       }
     }

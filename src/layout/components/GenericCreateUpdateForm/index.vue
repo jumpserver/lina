@@ -132,19 +132,7 @@ export default {
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
-      default: function() {
-        const cloneFrom = this.getCloneId()
-        console.log('Clone from: ', cloneFrom)
-        if (cloneFrom) {
-          return 'post'
-        }
-        const objectId = this.getUpdateId()
-        if (objectId) {
-          return 'put'
-        } else {
-          return 'post'
-        }
-      }
+      default: ''
     },
     // 获取创建和更新的url function
     getUrl: {
@@ -226,9 +214,7 @@ export default {
             setTimeout(() => this.$router.push(route), 100)
           }
         } else {
-          console.log('Reload table clsonse dr')
-          this.$emit('close-drawer')
-          this.$emit('reload-table')
+          this.$store.dispatch('common/finishDrawerActionMeta', { action: vm.action, row: res })
         }
       }
     },
@@ -284,17 +270,11 @@ export default {
       drawer: false,
       action: '',
       actionId: '',
-      row: {}
+      row: {},
+      method: ''
     }
   },
   computed: {
-    method() {
-      if (this.submitMethod instanceof Function) {
-        return this.submitMethod(this)
-      } else {
-        return this.submitMethod
-      }
-    },
     iUrl() {
       // 更新或创建的url
       return this.getUrl()
@@ -313,17 +293,10 @@ export default {
     }
   },
   async created() {
-    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-    if (drawActionMeta) {
-      this.drawer = true
-      this.action = drawActionMeta.action
-      this.row = drawActionMeta.row
-      this.actionId = this.row?.id
-    }
-    this.$log.debug('Object init is: ', this.object, this.method)
-    console.log('Action: ', this.action, this.actionId)
-
     this.loading = true
+    this.$log.debug('Object init is: ', this.object, this.method)
+    await this.setDrawerMeta()
+    this.setMethod()
     try {
       const values = await this.getFormValue()
       this.$log.debug('Final object is: ', values)
@@ -335,15 +308,35 @@ export default {
     }
   },
   methods: {
+    async setDrawerMeta() {
+      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      if (drawActionMeta) {
+        this.drawer = true
+        this.action = drawActionMeta.action
+        this.row = drawActionMeta.row
+        this.actionId = this.row?.id
+      }
+    },
+    setMethod() {
+      if (this.submitMethod instanceof Function) {
+        this.method = this.submitMethod(this)
+      } else {
+        this.method = this.submitMethod
+      }
+      if (this.drawer) {
+        if (this.action === 'clone' || this.action === 'create') {
+          this.method = 'post'
+        } else {
+          this.method = 'put'
+        }
+      }
+    },
     getUpdateId() {
       if (this.actionId && this.action === 'update') {
         return this.actionId
       } else {
-        return this.$route.params.id
+        return this.$route.params['id']
       }
-    },
-    getAction() {
-      return this.action
     },
     getCloneId() {
       if (this.actionId && this.action === 'clone') {
@@ -353,7 +346,6 @@ export default {
       }
     },
     isUpdateMethod() {
-      console.log('This method: ', this.method)
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
     encryptFields(values) {
@@ -396,8 +388,6 @@ export default {
           }, 200)
         })
     },
-    async getUpdateForm() {
-    },
     async getCloneForm(cloneFrom) {
       const [curUrl, query] = this.url.split('?')
       const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
@@ -415,15 +405,14 @@ export default {
       return object
     },
     async getFormValue() {
-      const cloneFrom = this.getCloneId()
-      const objectId = this.getUpdateId()
-      if ((!objectId && !cloneFrom) || !this.needGetObjectDetail) {
+      if (this.action === 'create' || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
+
       if (!object || Object.keys(object).length === 0) {
-        if (cloneFrom) {
-          object = await this.getCloneForm(cloneFrom)
+        if (this.action === 'clone') {
+          object = await this.getCloneForm(this.actionId)
         } else {
           object = await this.getObjectDetail(this.iUrl)
         }

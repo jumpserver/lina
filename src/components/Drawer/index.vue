@@ -102,9 +102,9 @@ export default {
         //flex-wrap: nowrap;
         //flex-direction: column;
         //justify-content: flex-start;
-        //margin-right: 50px;
         //margin-left: 20px;
         height: 100%;
+        margin-right: 10px;
 
         .el-form-item {
           //margin: 5px 0 5px 0;

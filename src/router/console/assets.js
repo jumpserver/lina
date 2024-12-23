@@ -133,14 +133,14 @@ export default [
       {
         path: 'create',
         name: 'CloudCreate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('CloudCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'CloudUpdate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('CloudUpdate'), activeMenu: '/console/assets/assets' }
       }

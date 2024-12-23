@@ -1,23 +1,17 @@
 <template>
   <div>
     <BaseList :table-config="tableConfig" v-bind="config" />
-    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
   </div>
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/index.vue'
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
-    Drawer,
-    BaseList,
-    HostUpdate: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue')
+    BaseList
   },
   data() {
     return {
@@ -55,23 +49,6 @@ export default {
               })
             },
             formatter: DetailFormatter
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              isPam: true,
-              updateRoute: 'HostUpdate',
-              onUpdate: ({ row }) => {
-                this.$route.params.id = row.id
-
-                // 解决表单详情中的跳转
-                this.$route.query.type = 'pam'
-
-                this.currentTemplate = 'HostUpdate'
-                this.drawerTitle = this.$t('HostUpdate')
-                this.showTableUpdateDrawer = true
-              }
-            }
           }
         }
       }
@@ -80,7 +57,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 ::v-deep .ibox {
   height: 100%;
 

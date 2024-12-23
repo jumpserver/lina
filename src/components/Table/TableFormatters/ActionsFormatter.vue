@@ -23,9 +23,7 @@ const defaultPerformDelete = function({ row, col }) {
 
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-
   let route = { params: { id: id }}
-
   const updateRoute = this.colActions.updateRoute
 
   if (typeof updateRoute === 'object') {

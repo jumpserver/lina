@@ -148,7 +148,11 @@ export default {
       if (this.labelPosition) {
         return this.labelPosition
       }
-      return this.drawer || this.mobile ? 'top' : 'right'
+      // if (this.drawer) {
+      //   return 'left'
+      // }
+      // return this.drawer || this.mobile ? 'top' : 'right'
+      return this.mobile ? 'top' : 'right'
     }
   },
   mounted() {

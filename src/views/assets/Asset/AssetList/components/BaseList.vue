@@ -6,6 +6,7 @@
     <ListTable
       ref="ListTable"
       :create-drawer="createDrawer"
+      :draw-props="createProps"
       :header-actions="iHeaderActions"
       :table-config="iTableConfig"
     />
@@ -117,10 +118,11 @@ export default {
         'host': () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         'web': () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
         'custom': () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
-        'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         'device': () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue')
       },
+      createProps: {},
       showPlatform: false,
       recentPlatforms: recentPlatforms,
       createAction: createAction,
@@ -152,9 +154,6 @@ export default {
       if (this.addExtraMoreActions) {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
-      // if (this.extraActions) {
-      //   actions.extraActions = [...actions.extraActions, ...this.extraActions]
-      // }
       const create = this.createAction
       if (create) {
         create.dropdown = this.recentPlatforms
@@ -162,7 +161,6 @@ export default {
       const extraActions = actions.extraActions || []
       actions.extraActions = [create, ...extraActions]
       // actions.extraActions[0].dropdown = platforms
-      console.log('Actions: ', actions)
       return actions
     }
   },
@@ -180,32 +178,41 @@ export default {
     }
   },
   mounted() {
+    this.setRecentPlatforms()
   },
   activated() {
     this.setRecentPlatforms()
   },
   methods: {
+    async updateOrCloneAsset(row, action) {
+      const meta = {
+        action: action,
+        id: row.id,
+        platform: row.platform.id,
+        type: row.type.value,
+        category: row.category.value,
+        row: row
+      }
+      await this.$store.dispatch('common/setDrawerActionMeta', meta)
+      this.createDrawer = this.drawer[row.category.value]
+      setTimeout(() => {
+        this.$refs.ListTable.showDrawer(action)
+      }, 100)
+    },
     createAsset(platform) {
       this.createDrawer = this.drawer[platform.category.value]
-      setTimeout(() => {
-        this.$refs.ListTable.onCreate()
-      }, 200)
-      // const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
-      // this.iVisible = false
-      // const query = {
-      //   node: this.$route.query?.node || this.$route.query?.node_id || '',
-      //   platform: platform.id,
-      //   type: platform.type.value,
-      //   category: platform.category.value
-      // }
-      //
-      // const router = { name: route, query }
-      // if (this.$route.query.node_id) {
-      //   const { href } = this.$router.resolve(router)
-      //   window.open(href, '_blank')
-      // } else {
-      //   this.$router.push(router)
-      // }
+      const createProps = {
+        platform: platform.id,
+        type: platform.type.value,
+        category: platform.category.value,
+        node: this.$route.query?.node || this.$route.query?.node_id || ''
+      }
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'create',
+        ...createProps
+      }).then(() => {
+        this.$refs.ListTable.showDrawer('create')
+      })
     },
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
@@ -221,12 +228,13 @@ export default {
         platforms = platforms.filter(item => item.category.value === this.category)
       }
       platforms = platforms.slice(0, 6)
+      const vm = this
       platforms = platforms.map(item => {
         return {
           name: item.name,
           title: item.name,
           callback: () => {
-            this.showPlatform = true
+            vm.createAsset(item)
           }
         }
       })

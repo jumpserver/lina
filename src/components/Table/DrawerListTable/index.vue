@@ -23,6 +23,7 @@
 import ListTable from '../ListTable'
 import PageDrawer from './PageDrawer.vue'
 import { toSentenceCase } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 const drawerType = [String, Function]
 
@@ -51,6 +52,10 @@ export default {
     headerActions: {
       type: Object,
       required: true
+    },
+    drawerProps: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -58,16 +63,13 @@ export default {
       visible: false,
       drawerVisible: false,
       drawerComponent: '',
-      drawerProps: {},
       iHeaderActions: {},
       iTableConfig: {},
-      action: '',
-      iCreateDrawer: this.createDrawer,
-      iUpdateDrawer: this.updateDrawer,
-      iDetailDrawer: this.detailDrawer
+      action: ''
     }
   },
   computed: {
+    ...mapGetters(['inDrawer']),
     drawerTitle() {
       let title = this.title || this.$route.meta.title
       if (!title) {
@@ -80,19 +82,17 @@ export default {
   watch: {
     drawerVisible(val) {
       if (!val) {
-        this.$store.dispatch('common/cleanDrawerActionMeta')
+        // this.$store.dispatch('common/cleanDrawerActionMeta')
       }
-    }
-  },
-  mounted() {
-    if (!this.createDrawer) {
-      this.iCreateDrawer = this.getDefaultDrawer('create')
-    }
-    if (!this.updateDrawer) {
-      this.iUpdateDrawer = this.getDefaultDrawer('update')
-    }
-    if (!this.detailDrawer) {
-      this.iDetailDrawer = this.getDefaultDrawer('detail')
+    },
+    inDrawer(val) {
+      if (!this.drawerVisible) {
+        return
+      }
+      if (!val) {
+        this.drawerVisible = false
+        this.reloadTable()
+      }
     }
   },
   created() {
@@ -103,9 +103,18 @@ export default {
     this.iTableConfig = {
       ...this.tableConfig
     }
-    _.set(this.iTableConfig, 'columnsMeta.actions.formatterArgs.onUpdate', this.onUpdate)
-    _.set(this.iTableConfig, 'columnsMeta.actions.formatterArgs.onClone', this.onClone)
-    _.set(this.iTableConfig, 'columnsMeta.name.formatterArgs.onClick', this.onDetail)
+    const actionMap = {
+      onUpdate: this.onUpdate,
+      onClone: this.onClone,
+      onDetail: this.onDetail
+    }
+    for (const [key, value] in Object.entries(actionMap)) {
+      if (_.get(this.iTableConfig, 'columnsMeta.actions.formatterArgs.' + key)) {
+        continue
+      }
+      _.set(this.iTableConfig, 'columnsMeta.actions.formatterArgs.' + key, value)
+    }
+    console.log('Table Config: ', this.iTableConfig)
   },
   methods: {
     getDefaultDrawer(action) {
@@ -127,52 +136,53 @@ export default {
         return matched[0].components.default
       }
     },
+    showDrawer(action) {
+      this.action = action
+      if (action === 'create') {
+        this.drawerComponent = this.createDrawer
+      } else if (action === 'update') {
+        this.drawerComponent = this.updateDrawer || this.createDrawer
+      } else if (action === 'detail') {
+        this.drawerComponent = this.detailDrawer
+      } else if (action === 'clone') {
+        this.drawerComponent = this.createDrawer
+      } else {
+        this.drawerComponent = this.createDrawer
+      }
+      console.log('Drawer Component: ', this.drawerComponent)
+      if (!this.drawerComponent) {
+        this.drawerComponent = this.getDefaultDrawer(action)
+      }
+      this.drawerVisible = true
+    },
     onCreate() {
-      this.action = 'create'
-      console.log('DrawerComponent', this.createDrawer)
-      this.drawerComponent = this.createDrawer
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'create'
       }).then(() => {
-        this.drawerVisible = true
+        this.showDrawer('create')
       })
     },
     reloadTable() {
       this.$refs.ListTable.reloadTable()
     },
     onClone({ row, col }) {
-      this.drawerComponent = this.iCreateDrawer
-      this.action = 'clone'
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'clone',
-        row: row,
-        col: col
+        action: 'clone', row: row, col: col, id: row.id
       }).then(() => {
-        this.drawerVisible = true
+        this.showDrawer('clone')
       })
     },
     onUpdate({ row, col }) {
-      this.action = 'update'
-      let updateDrawer = this.iUpdateDrawer
-      if (!updateDrawer) {
-        updateDrawer = this.iCreateDrawer
-      }
-      this.drawerComponent = updateDrawer
+      console.log('Update: ', row, col)
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'update',
-        row: row,
-        col: col
+        action: 'update', row: row, col: col, id: row.id
       }).then(() => {
-        this.drawerVisible = true
+        this.showDrawer('update')
       })
     },
     onDetail({ row, cellValue }) {
-      this.action = 'detail'
-      this.drawerComponent = this.iDetailDrawer
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail',
-        row: row,
-        cellValue: cellValue
+        action: 'detail', row: row, cellValue: cellValue
       }).then(() => {
         this.drawerVisible = true
       })

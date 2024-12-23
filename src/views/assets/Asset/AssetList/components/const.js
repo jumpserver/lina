@@ -12,34 +12,8 @@ import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { openTaskPage } from '@/utils/jms'
 
 export function getDefaultConfig(vm) {
-  const onAction = (row, action) => {
-    let routeAction = action
-    if (action === 'Clone') {
-      routeAction = 'Create'
-    }
-    const routeName = _.capitalize(row.category.value) + routeAction
-    const route = {
-      name: routeName,
-      params: {},
-      query: {}
-    }
-    if (action === 'Clone') {
-      route.query.clone_from = row.id
-    } else if (action === 'Update') {
-      route.params.id = row.id
-    }
-    if (['Create', 'Update'].includes(routeAction)) {
-      route.query.platform = row.platform.id
-      route.query.type = row.type.value
-      route.query.category = row.type.category
-    }
-    const createInNewPage = vm.$route.query.node_id
-    if (createInNewPage) {
-      const { href } = vm.$router.resolve(route)
-      window.open(href, '_blank')
-    } else {
-      vm.$router.push(route)
-    }
+  const onAction = async(row, action) => {
+    await vm.updateOrCloneAsset(row, action.toLowerCase())
   }
   const extraQuery = vm.$route.params?.extraQuery || {}
   const defaultHeaderActions = {
