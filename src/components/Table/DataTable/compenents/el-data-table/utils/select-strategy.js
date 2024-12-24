@@ -46,7 +46,7 @@ class StrategyNormal extends StrategyAbstract {
 }
 
 /**
- * 跨页保存多选策略。手动维护selected数��
+ * 跨页保存多选策略。手动维护selected数组
  */
 class StrategyPersistSelection extends StrategyAbstract {
   /**
