@@ -46,7 +46,7 @@ class StrategyNormal extends StrategyAbstract {
 }
 
 /**
- * 跨页保存多选策略。手动维护selected数组
+ * 跨页保存多选策略。手动维护selected数��
  */
 class StrategyPersistSelection extends StrategyAbstract {
   /**
@@ -69,12 +69,42 @@ class StrategyPersistSelection extends StrategyAbstract {
    * 用户切换当前页的多选
    */
   onSelectAll(selection, selectable = () => true) {
+    const { id, selected, data } = this.elDataTable
+    const selectableRows = data.filter(selectable)
     const isSelected = !!selection.length
-    this.elDataTable.data.forEach(r => {
-      if (selectable(r)) {
-        this.toggleRowSelection(r, isSelected)
+
+    // 创建已选择项的 id 集合，用于快速查找
+    const selectedIds = new Set(selected.map(r => r[id]))
+
+    // 先清空表格选择状态
+    this.elTable.clearSelection()
+
+    // 遍历处理每一行，但使用 Set 来优化查找
+    selectableRows.forEach(row => {
+      const rowId = row[id]
+      const hasSelected = selectedIds.has(rowId)
+
+      if (isSelected) {
+        if (!hasSelected) {
+          selected.push(row)
+          this.elTable.toggleRowSelection(row, true)
+
+          // ! 这里必须要逐行触发事件，否则无法更新selected
+          this.elDataTable.$emit('toggle-row-selection', true, row)
+        }
+      } else {
+        // 需要取消选中且已选中
+        if (hasSelected) {
+          const index = selected.findIndex(r => r[id] === rowId)
+          if (index > -1) {
+            selected.splice(index, 1)
+          }
+          this.elDataTable.$emit('toggle-row-selection', false, row)
+        }
       }
     })
+
+    this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
   /**
    * toggleRowSelection和clearSelection管理elDataTable的selected数组
@@ -83,14 +113,17 @@ class StrategyPersistSelection extends StrategyAbstract {
   toggleRowSelection(row, isSelected) {
     const { id, selected } = this.elDataTable
     const foundIndex = selected.findIndex(r => r[id] === row[id])
+
     if (typeof isSelected === 'undefined') {
       isSelected = foundIndex <= -1
     }
+
     if (isSelected && foundIndex === -1) {
       selected.push(row)
     } else if (!isSelected && foundIndex > -1) {
       selected.splice(foundIndex, 1)
     }
+
     this.elDataTable.$emit('toggle-row-selection', isSelected, row)
     this.updateElTableSelection()
   }
@@ -103,13 +136,15 @@ class StrategyPersistSelection extends StrategyAbstract {
    */
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
-    // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和selected合并
+
+    // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和 selected 合并
     const mergeData = _.uniqWith([...data, ...selected], _.isEqual)
+
     mergeData.forEach(r => {
       const isSelected = !!selected.find(r2 => r[id] === r2[id])
-      if (!this.elTable) {
-        return
-      }
+
+      if (!this.elTable) return
+
       this.elTable.toggleRowSelection(r, isSelected)
     })
   }
