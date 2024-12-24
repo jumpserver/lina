@@ -146,9 +146,6 @@ export default {
     }
   },
   methods: {
-    hasType(type) {
-      return this.isAssetType.indexOf(type) > -1
-    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = [
         'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
