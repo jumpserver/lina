@@ -22,7 +22,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -90,8 +91,7 @@ export default {
       ]
     }
   },
-  computed: {
-  },
+  computed: {},
   created() {
     const arrs = this.object.rules.time_period
     for (let i = 0; i < arrs.length; i++) {

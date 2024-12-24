@@ -34,7 +34,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -174,12 +175,10 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

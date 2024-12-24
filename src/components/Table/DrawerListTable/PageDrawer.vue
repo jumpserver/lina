@@ -51,7 +51,7 @@ export default {
   computed: {
     drawerSize() {
       const width = window.innerWidth
-      if (width >= 768) return '800px'
+      if (width >= 800) return '767px'
       return '90%'
     },
     iVisible: {
@@ -77,8 +77,6 @@ export default {
 
   ::v-deep {
     .el-card.ibox {
-      border: none;
-
       .el-card__body {
         padding-top: 10px;
         padding-bottom: 20px;

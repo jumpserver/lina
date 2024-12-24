@@ -22,13 +22,13 @@ export default {
           asset: {
             formatter: DetailFormatter,
             formatterArgs: {
-              isPam: true,
+              drawer: true,
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.asset.id },
-                query: { type: 'pam', tab: 'Basic' }
+                query: { tab: 'Basic' }
               })
             }
           },

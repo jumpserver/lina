@@ -5,8 +5,6 @@
 <script>
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-
 export default {
   components: {
     BaseList
@@ -21,32 +19,7 @@ export default {
         category: 'all'
       },
       tableConfig: {
-        columnsExclude: ['date_verified'],
-        columnsMeta: {
-          name: {
-            formatterArgs: {
-              can: true,
-              getRoute: ({ row }) => ({
-                name: 'AssetDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
-              })
-            },
-            formatter: DetailFormatter
-          },
-          accounts_amount: {
-            formatterArgs: {
-              can: true,
-              getTitle: ({ row }) => row.accounts_amount,
-              getRoute: ({ row }) => ({
-                name: 'AssetDetail',
-                params: { id: row.id },
-                query: { type: 'pam', tab: 'Account' }
-              })
-            },
-            formatter: DetailFormatter
-          }
-        }
+        columnsExclude: ['date_verified']
       }
     }
   }

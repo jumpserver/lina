@@ -193,7 +193,7 @@ export default {
     },
     onDetail({ row, cellValue }) {
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: row, cellValue: cellValue
+        action: 'detail', row: row, cellValue: cellValue, id: row.id
       }).then(() => {
         this.showDrawer('detail')
       })

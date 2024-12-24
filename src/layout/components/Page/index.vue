@@ -85,6 +85,9 @@ export default {
   computed: {
     ...mapGetters(['inDrawer']),
     iTitle() {
+      if (this.title === 'null') {
+        return
+      }
       let title = this.title || this.$route.meta.title
       if (!title) {
         title = this.$t('NoTitle')

@@ -2,6 +2,7 @@
   <div>
     <ListTable
       ref="ListTable"
+      :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
       :table-config="tableConfig"
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
@@ -144,6 +145,7 @@ export default {
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
       accountCreateUpdateTitle: this.$t('AddAccount'),
       accountCreateByTemplateTitle: this.$t('AddAccountByTemplate'),
@@ -291,17 +293,20 @@ export default {
         columnsMeta: {
           name: {
             width: '120px',
-            formatter: (row) => {
-              const to = {
-                name: 'AssetAccountDetail',
-                params: { id: row.id }
-              }
-              if (vm.$hasPerm('accounts.view_account')) {
-                return <router-link to={to}>{row.name}</router-link>
-              } else {
-                return <span>{row.name}</span>
-              }
+            formatterArgs: {
+              can: () => vm.$hasPerm('accounts.view_account')
             }
+            // formatter: (row) => {
+            //   const to = {
+            //     name: 'AssetAccountDetail',
+            //     params: { id: row.id }
+            //   }
+            //   if (vm.$hasPerm('accounts.view_account')) {
+            //     return <routerlink to={to}>{row.name}</routerlink>
+            //   } else {
+            //     return <span>{row.name}</span>
+            //   }
+            // }
           },
           secret: {
             formatter: SecretViewerFormatter,

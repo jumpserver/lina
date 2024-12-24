@@ -12,14 +12,21 @@
         {{ iTitle }}
       </slot>
     </el-link>
+    <Drawer
+      v-if="formatterArgs.drawer && drawerVisible"
+      :component="drawerComponent"
+      :visible.sync="drawerVisible"
+    />
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
+  components: { Drawer },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -33,6 +40,7 @@ export default {
           onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
+          drawer: false,
           getTitle({ col, row, cellValue }) {
             return cellValue
           },
@@ -50,7 +58,9 @@ export default {
       showTableDetailDrawer: false,
       drawerTitle: '',
       currentTemplate: null,
-      formatterArgs: formatterArgs
+      formatterArgs: formatterArgs,
+      drawerComponent: '',
+      drawerVisible: false
     }
   },
   computed: {
@@ -77,17 +87,53 @@ export default {
     }
   },
   methods: {
+    getRouteComponent() {
+      const route = this.getDetailRoute()
+      const routes = this.$router.resolve(route)
+      if (!routes) {
+        return
+      }
+      const matched = routes.resolved.matched.filter(item => item.name === route.name && item.components)
+      if (matched.length === 0) {
+        return
+      }
+      if (matched[0] && matched[0].components?.default) {
+        return matched[0].components.default
+      }
+    },
+    showDrawer() {
+      if (this.formatterArgs.drawerComponent) {
+        this.drawerComponent = this.formatterArgs.drawerComponent
+      } else {
+        this.drawerComponent = this.getRouteComponent()
+      }
+      const route = this.getDetailRoute()
+      if (route?.query?.tab) {
+        this.$cookie.set(route.name, route.query.tab, 1)
+      }
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'detail',
+        row: this.row,
+        col: this.col,
+        id: route.params.id
+      }).then(() => {
+        this.drawerVisible = true
+      })
+    },
     handleClick() {
-      console.log('Handle click: ', this.formatterArgs.onClick)
       if (this.formatterArgs.onClick) {
         this.formatterArgs.onClick({
           col: this.col,
           row: this.row,
           cellValue: this.cellValue
         })
-      } else {
-        this.goDetail()
+        return
       }
+      if (this.formatterArgs.drawer) {
+        this.showDrawer()
+        return
+      }
+      this.goDetail()
     },
     getDetailRoute() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')

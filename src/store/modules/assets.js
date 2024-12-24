@@ -62,7 +62,7 @@ const actions = {
     })
   },
   getRecentPlatforms({ commit, dispatch, state }) {
-    const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
+    const recentPlatformIds = JSON.parse(localStorage.getItem('recentPlatforms')) || []
     return new Promise(resolve => {
       dispatch('getPlatforms').then(platforms => {
         resolve(platforms.filter(p => recentPlatformIds.includes(p.id)))

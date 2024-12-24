@@ -144,7 +144,7 @@ export default {
         recentPlatformIds.pop()
       }
       this.recentPlatformIds = recentPlatformIds
-      localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatformIds))
+      localStorage.setItem('recentPlatforms', JSON.stringify(recentPlatformIds))
     },
     handleSelect(platform) {
       this.addToRecentPlatforms(platform)

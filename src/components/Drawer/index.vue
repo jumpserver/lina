@@ -31,7 +31,7 @@ export default {
     },
     size: {
       type: String,
-      default: '800px'
+      default: '768px'
     },
     component: {
       type: [String, Function],
@@ -70,10 +70,6 @@ export default {
     handleClose(done) {
       this.$emit('close-drawer')
       done()
-    },
-    cancelForm() {
-      this.loading = false
-      this.dialog = false
     }
   }
 }
@@ -105,7 +101,7 @@ export default {
         //justify-content: flex-start;
         //margin-left: 20px;
         height: 100%;
-        margin-right: 10px;
+        //margin-right: 10px;
 
         .el-form-item {
           //margin: 5px 0 5px 0;

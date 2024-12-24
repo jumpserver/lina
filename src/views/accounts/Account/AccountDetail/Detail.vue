@@ -23,10 +23,10 @@
     </el-row>
 
     <el-drawer
-      size="50%"
-      :with-header="false"
       :append-to-body="true"
       :visible.sync="pamDrawerShow"
+      :with-header="false"
+      size="50%"
     >
       <component :is="drawerRefName" />
     </el-drawer>

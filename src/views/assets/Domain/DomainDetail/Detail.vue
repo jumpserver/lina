@@ -17,7 +17,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -33,8 +34,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

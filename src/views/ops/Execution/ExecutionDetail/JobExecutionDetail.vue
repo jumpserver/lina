@@ -3,9 +3,9 @@
     <el-col :md="15" :sm="24">
       <AutoDetailCard
         :excludes="excludes"
+        :fields="detailFields"
         :object="object"
         :url="url"
-        :fields="detailFields"
       />
     </el-col>
     <el-col v-if="hasSummary" :md="9" :sm="24">

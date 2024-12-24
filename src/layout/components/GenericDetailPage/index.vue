@@ -118,7 +118,7 @@ export default {
     return {
       defaultActions,
       loading: true,
-      drawer: '',
+      drawer: false,
       action: '',
       actionId: '',
       validActions: Object.assign(defaultActions, this.actions)
@@ -152,6 +152,9 @@ export default {
       ]
     },
     iTitle() {
+      if (this.drawer) {
+        return 'null'
+      }
       return this.title || this.getTitle(this.object)
     },
     iActiveMenu: {
@@ -186,10 +189,10 @@ export default {
   methods: {
     async checkDrawer() {
       const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-      if (drawActionMeta) {
+      if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.row = drawActionMeta.row
-        this.actionId = this.row?.id
+        this.actionId = drawActionMeta.id
       }
     },
     getDetailUrl() {
