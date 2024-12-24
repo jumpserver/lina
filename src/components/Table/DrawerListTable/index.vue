@@ -116,7 +116,8 @@ export default {
     const actionMap = {
       'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
       'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-      'columnsMeta.name.formatterArgs.onClick': this.onDetail
+      'columnsMeta.name.formatterArgs.drawer': true,
+      'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
     }
     for (const [key, value] of Object.entries(actionMap)) {
       if (_.get(this.iTableConfig, key)) {
@@ -158,7 +159,6 @@ export default {
       } else {
         this.drawerComponent = this.createDrawer
       }
-      console.log('Detail drawer', this.detailDrawer)
       if (!this.drawerComponent) {
         this.drawerComponent = this.getDefaultDrawer(action)
       }
@@ -189,13 +189,6 @@ export default {
         action: 'update', row: row, col: col, id: row.id
       }).then(() => {
         this.showDrawer('update')
-      })
-    },
-    onDetail({ row, cellValue }) {
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: row, cellValue: cellValue, id: row.id
-      }).then(() => {
-        this.showDrawer('detail')
       })
     }
   }

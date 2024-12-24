@@ -122,7 +122,7 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 65px);
   overflow-y: hidden;
   overflow-x: hidden;
 

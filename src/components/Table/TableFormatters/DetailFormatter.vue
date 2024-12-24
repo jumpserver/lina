@@ -15,6 +15,7 @@
     <Drawer
       v-if="formatterArgs.drawer && drawerVisible"
       :component="drawerComponent"
+      :title="iTitle"
       :visible.sync="drawerVisible"
     />
   </div>
@@ -117,6 +118,7 @@ export default {
         col: this.col,
         id: route.params.id
       }).then(() => {
+        this.drawerTitle = this.cellValue
         this.drawerVisible = true
       })
     },

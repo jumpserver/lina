@@ -15,7 +15,7 @@ import Page from '@/layout/components/Page'
 import DrawerListTable from '@/components/Table/DrawerListTable/index'
 
 export default {
-  name: 'GenericListPage',
+  name: 'GenericListDrawerPage',
   components: {
     Page, DrawerListTable
   },

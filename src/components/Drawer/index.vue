@@ -1,6 +1,7 @@
 <template>
   <el-drawer
     ref="drawer"
+    v-el-drawer-drag-width
     :append-to-body="true"
     :before-close="handleClose"
     :size="size"
