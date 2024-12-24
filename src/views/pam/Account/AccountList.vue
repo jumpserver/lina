@@ -52,7 +52,9 @@ export default {
   },
   methods: {
     handlePamConnect(row) {
-      window.open(`/luna/pam_connect/${row.asset.id}`, '_blank')
+      if (row.asset.type.value === 'windows') return window.open(`/luna/pam_gui_connect/${row.asset.id}`, '_blank')
+
+      window.open(`/luna/pam_terminal_connect/${row.asset.id}`, '_blank')
     }
   }
 }

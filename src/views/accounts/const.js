@@ -64,8 +64,8 @@ export const gatherAccountTableConfig = (vm, url) => {
         formatterArgs: {
           confirm: ({ row }) => {
             vm.$axios.put(
-              `/api/v1/accounts/gathered-accounts/${row.id}/status/`,
-              { status: 'confirmed' }
+              `/api/v1/accounts/gathered-accounts/status/`,
+              { status: 'confirmed', ids: [row.id] }
             ).then(res => {
               row.status = 'confirmed'
             }).catch(() => {
@@ -74,8 +74,8 @@ export const gatherAccountTableConfig = (vm, url) => {
           },
           ignore: ({ row }) => {
             vm.$axios.put(
-              `/api/v1/accounts/gathered-accounts/${row.id}/status/`,
-              { status: 'ignored' }
+              `/api/v1/accounts/gathered-accounts/status/`,
+              { status: 'ignored', ids: [row.id] }
             ).then(res => {
               row.status = 'ignored'
             }).catch(() => {
@@ -121,7 +121,7 @@ export const gatherAccountHeaderActions = (vm) => {
     extraMoreActions: [
       {
         name: 'SyncSelected',
-        title: vm.$t('ConfirmSelected'),
+        title: vm.$t('SyncSelected'),
         type: 'primary',
         icon: 'fa fa-check',
         can: ({ selectedRows }) => {
@@ -131,9 +131,9 @@ export const gatherAccountHeaderActions = (vm) => {
           const ids = selectedRows.map(v => {
             return v.id
           })
-          vm.$axios.post(
-            `/api/v1/accounts/gathered-accounts/sync-accounts/`,
-            { gathered_account_ids: ids }
+          vm.$axios.put(
+            `/api/v1/accounts/gathered-accounts/status/`,
+            { ids: ids, status: 'confirmed' }
           ).then(() => {
             vm.$message.success(vm.$tc('SyncSuccessMsg'))
           }).catch(err => {
