@@ -27,6 +27,9 @@ const mutations = {
     }, 0)
   },
   addSQLQueryCounter: (state, { url, count }) => {
+    if (count < 5) {
+      return
+    }
     state.sqlQueryCounter = state.sqlQueryCounter.filter(item => item.url !== url)
     state.sqlQueryCounter.push({ url, count, time: new Date().getTime() })
     if (state.sqlQueryCounter.length > 5) {

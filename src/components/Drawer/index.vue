@@ -7,6 +7,7 @@
     :title="title"
     :visible.sync="iVisible"
     custom-class="drawer"
+    destroy-on-close
     direction="rtl"
     v-on="$listeners"
   >

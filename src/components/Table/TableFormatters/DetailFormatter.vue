@@ -78,6 +78,7 @@ export default {
   },
   methods: {
     handleClick() {
+      console.log('Handle click: ', this.formatterArgs.onClick)
       if (this.formatterArgs.onClick) {
         this.formatterArgs.onClick({
           col: this.col,

@@ -1,6 +1,5 @@
 <template>
   <el-drawer
-    v-if="iVisible"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"

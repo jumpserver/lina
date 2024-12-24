@@ -1,26 +1,16 @@
 <template>
-  <div>
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-
-    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
-  </div>
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
-import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountBackupList',
   components: {
-    Drawer,
-    GenericListTable,
-    AccountBackupUpdate: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
-    AccountBackupCreate: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue')
+    GenericListTable
   },
   data() {
     const vm = this
@@ -49,7 +39,6 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              isPam: true,
               route: 'AccountBackupDetail',
               getRoute: ({ row }) => ({
                 name: 'AccountBackupDetail',

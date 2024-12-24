@@ -1,6 +1,12 @@
 <template>
   <div>
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :resource="$tc('AccountTemplate')"
+      :table-config="tableConfig"
+    />
     <ViewSecret
       v-if="showViewSecretDialog"
       :account="account"
@@ -15,7 +21,8 @@
 <script>
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
-import ListTable from '@/components/Table/ListTable/index.vue'
+// import ListTable from '@/components/Table/ListTable/index.vue'
+import ListTable from '@/components/Table/DrawerListTable'
 
 export default {
   name: 'AccountTemplateTable',
@@ -27,6 +34,8 @@ export default {
     const vm = this
     return {
       showViewSecretDialog: false,
+      createDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
       account: {},
       secretUrl: '',
       tableConfig: {

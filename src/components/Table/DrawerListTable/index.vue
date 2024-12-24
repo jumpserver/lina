@@ -7,7 +7,6 @@
       v-bind="$attrs"
     />
     <PageDrawer
-      v-if="drawerVisible"
       :action="action"
       :component="drawerComponent"
       :props="drawerProps"
@@ -22,7 +21,7 @@
 <script>
 import ListTable from '../ListTable'
 import PageDrawer from './PageDrawer.vue'
-import { toSentenceCase } from '@/utils/common'
+import { setUrlParam, toSentenceCase } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 const drawerType = [String, Function]
@@ -56,6 +55,14 @@ export default {
     drawerProps: {
       type: Object,
       default: () => ({})
+    },
+    reloadOrderQuery: {
+      type: String,
+      default: '-date_updated'
+    },
+    resource: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -71,7 +78,10 @@ export default {
   computed: {
     ...mapGetters(['inDrawer']),
     drawerTitle() {
-      let title = this.title || this.$route.meta.title
+      let title = this.title
+      if (!title && this.resource) {
+        title = this.resource
+      }
       if (!title) {
         title = this.$t('NoTitle')
       }
@@ -104,17 +114,16 @@ export default {
       ...this.tableConfig
     }
     const actionMap = {
-      onUpdate: this.onUpdate,
-      onClone: this.onClone,
-      onDetail: this.onDetail
+      'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
+      'columnsMeta.actions.formatterArgs.onClone': this.onClone,
+      'columnsMeta.name.formatterArgs.onClick': this.onDetail
     }
-    for (const [key, value] in Object.entries(actionMap)) {
-      if (_.get(this.iTableConfig, 'columnsMeta.actions.formatterArgs.' + key)) {
+    for (const [key, value] of Object.entries(actionMap)) {
+      if (_.get(this.iTableConfig, key)) {
         continue
       }
-      _.set(this.iTableConfig, 'columnsMeta.actions.formatterArgs.' + key, value)
+      _.set(this.iTableConfig, key, value)
     }
-    console.log('Table Config: ', this.iTableConfig)
   },
   methods: {
     getDefaultDrawer(action) {
@@ -149,7 +158,7 @@ export default {
       } else {
         this.drawerComponent = this.createDrawer
       }
-      console.log('Drawer Component: ', this.drawerComponent)
+      console.log('Detail drawer', this.detailDrawer)
       if (!this.drawerComponent) {
         this.drawerComponent = this.getDefaultDrawer(action)
       }
@@ -163,6 +172,9 @@ export default {
       })
     },
     reloadTable() {
+      if (this.reloadOrderQuery) {
+        this.iTableConfig.url = setUrlParam(this.iTableConfig.url, 'order', this.reloadOrderQuery)
+      }
       this.$refs.ListTable.reloadTable()
     },
     onClone({ row, col }) {
@@ -173,7 +185,6 @@ export default {
       })
     },
     onUpdate({ row, col }) {
-      console.log('Update: ', row, col)
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       }).then(() => {
@@ -184,7 +195,7 @@ export default {
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'detail', row: row, cellValue: cellValue
       }).then(() => {
-        this.drawerVisible = true
+        this.showDrawer('detail')
       })
     }
   }
@@ -192,8 +203,30 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.page-drawer ::v-deep .form-group-header {
-  margin-left: 1px;
+.page-drawer ::v-deep {
+  .form-group-header {
+    margin-left: 1px;
+  }
+
+  .sql.container {
+    display: none;
+  }
+
+  .page {
+    overflow-y: auto;
+  }
+
+  .ibox {
+    margin-bottom: 10px;
+  }
+
+  .page-content {
+    height: unset;
+
+    & > div {
+      margin-bottom: 1px;
+    }
+  }
 }
 
 </style>

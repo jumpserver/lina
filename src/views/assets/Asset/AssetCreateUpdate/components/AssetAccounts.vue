@@ -57,20 +57,10 @@
         :visible.sync="templateDialogVisible"
       />
     </div>
-
-    <el-drawer
-      size="50%"
-      :with-header="false"
-      :append-to-body="true"
-      :visible.sync="pamDrawerShow"
-    >
-      <component :is="drawerRefName" />
-    </el-drawer>
   </div>
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/index.vue'
 import AddAccountDialog from './AddAccountDialog'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import AccountTemplateDialog from './AccountTemplateDialog'
@@ -78,8 +68,6 @@ import AccountTemplateDialog from './AccountTemplateDialog'
 export default {
   name: 'AssetAccounts',
   components: {
-    Drawer,
-    AssetDetail,
     AddAccountDialog,
     AccountTemplateDialog
   },

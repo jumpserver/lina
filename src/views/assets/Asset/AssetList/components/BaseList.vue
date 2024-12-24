@@ -6,11 +6,17 @@
     <ListTable
       ref="ListTable"
       :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
       :draw-props="createProps"
       :header-actions="iHeaderActions"
+      :resource="$tc('Asset')"
       :table-config="iTableConfig"
     />
-    <PlatformDialog :category="category" :visible.sync="showPlatform" @select-platform="createAsset" />
+    <PlatformDialog
+      :category="category"
+      :visible.sync="showPlatform"
+      @select-platform="createAsset"
+    />
     <AssetBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
       :category="category"
@@ -108,12 +114,17 @@ export default {
       icon: '',
       split: true,
       callback: () => {
-        this.showPlatform = true
+        this.showPlatform = false
+        console.log('Create action')
+        setTimeout(() => {
+          this.showPlatform = true
+        }, 100)
       },
       dropdown: recentPlatforms
     }
     return {
       createDrawer: '',
+      detailDrawer: () => import('@/views/assets/Asset/AssetDetail/index.vue'),
       drawer: {
         'host': () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         'web': () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
@@ -200,6 +211,7 @@ export default {
       }, 100)
     },
     createAsset(platform) {
+      this.showPlatform = false
       this.createDrawer = this.drawer[platform.category.value]
       const createProps = {
         platform: platform.id,

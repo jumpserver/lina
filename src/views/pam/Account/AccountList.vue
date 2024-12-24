@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <AccountListTable ref="table" v-bind="tableConfig" :origin="'pam'" />
-  </div>
+  <AccountListTable ref="table" v-bind="tableConfig" />
 </template>
 
 <script>
@@ -21,18 +19,6 @@ export default {
         hasLeftActions: true,
         hasImport: true,
         columnsMeta: {
-          name: {
-            formatterArgs: {
-              can: true,
-              isPam: true,
-              getRoute: ({ row }) => ({
-                name: 'AssetAccountList',
-                params: { id: row.id },
-                query: { type: 'pam' }
-              })
-            },
-            formatter: DetailFormatter
-          },
           asset: {
             formatter: DetailFormatter,
             formatterArgs: {
@@ -73,47 +59,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
-    background-color: #f5f7fa;
+.asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
+  background-color: #f5f7fa;
+}
+
+.asset-table {
+  &:hover {
+    cursor: pointer;
   }
 
-  .asset-table {
-    &:hover {
-      cursor: pointer;
-    }
-
-    & ::v-deep .table-content {
-      margin-left: 21px;
-    }
-
-    & ::v-deep .el-table__row {
-      height: 40px;
-
-      & > td {
-        padding: 0;
-      }
-    }
+  & ::v-deep .table-content {
+    margin-left: 21px;
   }
 
-  .noDataR {
-    width: 100%;
-    height: 40vh;
+  & ::v-deep .el-table__row {
+    height: 40px;
+
+    & > td {
+      padding: 0;
+    }
+  }
+}
+
+.noDataR {
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-direction: column;
+
+  .hintWrap {
+    color: #D4D6E6;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    font-size: 18px;
     flex-direction: column;
-
-    .hintWrap {
-      color: #D4D6E6;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      flex-direction: column;
-    }
   }
+}
 
-  .asset-user-table {
-    padding-left: 20px;
-  }
+.asset-user-table {
+  padding-left: 20px;
+}
 </style>

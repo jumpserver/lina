@@ -146,7 +146,7 @@ export default {
           icon: 'el-icon-delete',
           size: 'small',
           can: this.validActions.canDelete,
-          has: this.validActions.hasDelete,
+          has: this.validActions.hasDelete && !this.drawer,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]

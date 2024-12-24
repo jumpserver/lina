@@ -1,15 +1,10 @@
 <template>
   <div>
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-
-    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
   </div>
 </template>
 
 <script>
-import Drawer from '@/components/Drawer/index.vue'
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 
 import { openTaskPage } from '@/utils/jms'
@@ -18,9 +13,7 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 export default {
   name: 'AccountDiscoverTaskExecutionList',
   components: {
-    Drawer,
-    GenericListTable,
-    AccountDiscoverExecutionDetail: () => import('@/views/accounts/AccountDiscover/ExecutionDetail/index.vue')
+    GenericListTable
   },
   props: {
     object: {

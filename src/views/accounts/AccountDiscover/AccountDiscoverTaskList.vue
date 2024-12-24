@@ -1,26 +1,16 @@
 <template>
-  <div>
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-
-    <Drawer v-if="showTableUpdateDrawer" :title="drawerTitle" @close-drawer="showTableUpdateDrawer = !showTableUpdateDrawer">
-      <component :is="currentTemplate" />
-    </Drawer>
-  </div>
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
-import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'AccountDiscoverTaskList',
   components: {
-    Drawer,
-    GenericListTable,
-    AccountDiscoverTaskCreate: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
-    AccountDiscoverTaskUpdate: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate')
+    GenericListTable
   },
   data() {
     const vm = this

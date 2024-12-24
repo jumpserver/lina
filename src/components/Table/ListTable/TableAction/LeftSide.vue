@@ -1,16 +1,10 @@
 <template>
-  <div>
-    <DataActions
-      v-if="hasLeftActions && iActions.length > 0"
-      :actions="iActions"
-      class="header-action"
-      v-bind="$attrs"
-    />
-
-    <Drawer v-if="showDrawer" @close-drawer="handleCloseDrawer">
-      <component :is="dynamicTemplateComponent" />
-    </Drawer>
-  </div>
+  <DataActions
+    v-if="hasLeftActions && iActions.length > 0"
+    :actions="iActions"
+    class="header-action"
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
@@ -19,9 +13,7 @@ import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common'
 
 import i18n from '@/i18n/i18n'
-import Drawer from '@/components/Drawer/index.vue'
 import DataActions from '@/components/DataActions/index.vue'
-import AccountTemplateCreate from '@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 const defaultFalse = { type: [Boolean, Function, String], default: false }
@@ -29,9 +21,7 @@ const defaultFalse = { type: [Boolean, Function, String], default: false }
 export default {
   name: 'LeftSide',
   components: {
-    Drawer,
-    DataActions,
-    AccountTemplateCreate
+    DataActions
   },
   props: {
     hasLeftActions: defaultTrue,
@@ -277,7 +267,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 ::v-deep .ibox {
   height: 100% !important;
   margin: unset !important;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="globalNotification">
-      <SqlQueryTip v-if="debug && !inDrawer" />
+      <SqlQueryTip v-if="debug " />
       <LicenseRelatedTip v-else />
       <PasswordExpireTip />
     </slot>

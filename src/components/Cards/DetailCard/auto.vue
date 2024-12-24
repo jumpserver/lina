@@ -1,7 +1,12 @@
 <template>
   <IBox v-if="loading" style="width: 100%; height: 200px" />
   <div v-else>
-    <DetailCard v-if="hasObject && items.length > 0" :items="validItems" :loading="loading" v-bind="$attrs" />
+    <DetailCard
+      v-if="hasObject && items.length > 0"
+      :items="validItems"
+      :loading="loading"
+      v-bind="$attrs"
+    />
   </div>
 </template>
 

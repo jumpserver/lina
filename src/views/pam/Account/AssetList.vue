@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <BaseList :table-config="tableConfig" v-bind="config" />
-  </div>
+  <BaseList :table-config="tableConfig" v-bind="config" />
 </template>
 
 <script>
@@ -28,7 +26,6 @@ export default {
           name: {
             formatterArgs: {
               can: true,
-              isPam: true,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.id },
@@ -40,7 +37,6 @@ export default {
           accounts_amount: {
             formatterArgs: {
               can: true,
-              isPam: true,
               getTitle: ({ row }) => row.accounts_amount,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',

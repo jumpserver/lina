@@ -18,7 +18,10 @@ export function getDefaultConfig(vm) {
   const extraQuery = vm.$route.params?.extraQuery || {}
   const defaultHeaderActions = {
     onCreate: () => {
-      vm.showPlatform = true
+      vm.showPlatform = false
+      setTimeout(() => {
+        vm.showPlatform = true
+      }, 100)
     },
     hasLabelSearch: true,
     searchConfig: {

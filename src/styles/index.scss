@@ -621,3 +621,9 @@ li.rmenu i.fa {
   font-weight: 600;
   font-size: 16px;
 }
+
+.el-input-number {
+  .el-input-number__decrease, .el-input-number__increase {
+    line-height: 26px;
+  }
+}
