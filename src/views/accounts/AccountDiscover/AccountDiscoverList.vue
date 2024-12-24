@@ -1,5 +1,10 @@
 <template>
   <div>
+    <RemoveAccount
+      v-if="showDeleteAccountDialog"
+      :accounts="gatherAccounts"
+      :visible.sync="showDeleteAccountDialog"
+    />
     <DeleteDialog
       v-if="deleteDialog.visible"
       :account="deleteDialog.account"
@@ -22,12 +27,14 @@ import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import DeleteDialog from '@/views/accounts/AccountDiscover/DeleteDialog.vue'
 import { gatherAccountHeaderActions, gatherAccountTableConfig } from '@/views/accounts/const'
 import AccountDiscoverDialog from '@/views/assets/Asset/AssetList/components/AccountDiscoverDialog.vue'
+import RemoveAccount from '@/components/Apps/AccountListTable/RemoveAccount.vue'
 
 export default {
   components: {
     AssetTreeTable,
     DeleteDialog,
-    AccountDiscoverDialog
+    AccountDiscoverDialog,
+    RemoveAccount
   },
   data() {
     return {
