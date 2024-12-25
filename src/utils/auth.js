@@ -42,8 +42,14 @@ export function getCurrentOrgLocal(username) {
 
 export function saveCurrentOrgLocal(username, org) {
   const key = CURRENT_ORG_KEY + '_' + username
-  localStorage.setItem(key, JSON.stringify(org))
-  VueCookie.set('X-JMS-ORG', org.id)
+
+  if (org) {
+    localStorage.setItem(key, JSON.stringify(org))
+    VueCookie.set('X-JMS-ORG', org.id)
+  } else {
+    localStorage.removeItem(key)
+    VueCookie.delete('X-JMS-ORG')
+  }
 }
 
 export function setPreOrgLocal(username, org) {
