@@ -26,6 +26,19 @@ async function checkLogin({ to, from, next }) {
     return await store.dispatch('users/getProfile')
   } catch (e) {
     Vue.$log.error(e)
+    // remove currentOrg: System org item
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (!key.startsWith('jms_current_org_')) {
+        continue
+      }
+      let value = localStorage.getItem(key)
+      value = JSON.parse(value)
+      if (!value.is_system) {
+        continue
+      }
+      localStorage.removeItem(key)
+    }
     const status = e.response.status
     if (store.getters.currentOrg.autoEnter) {
       await store.dispatch('users/setCurrentOrg', store.getters.preOrg)
