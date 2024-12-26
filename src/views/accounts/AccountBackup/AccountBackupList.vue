@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -16,6 +21,8 @@ export default {
     const vm = this
     return {
       drawerTitle: '',
+      createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
       showTableUpdateDrawer: false,
       currentTemplate: null,
       tableConfig: {
@@ -44,7 +51,8 @@ export default {
                 name: 'AccountBackupDetail',
                 params: { id: row.id },
                 query: { type: 'pam' }
-              })
+              }),
+              drawer: true
             }
           },
           types: {
@@ -75,16 +83,6 @@ export default {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
               },
-              onUpdate: ({ row }) => {
-                this.$route.params.id = row.id
-
-                // 解决表单详情中的跳转
-                this.$route.query.type = 'pam'
-
-                this.currentTemplate = 'AccountBackupUpdate'
-                this.drawerTitle = this.$t('AccountBackupUpdate')
-                this.showTableUpdateDrawer = true
-              },
               extraActions: [
                 {
                   title: vm.$t('Execute'),
@@ -111,17 +109,7 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'AccountBackupCreate'
-          }
-        },
-        onCreate: () => {
-          this.currentTemplate = 'AccountBackupCreate'
-          this.drawerTitle = this.$t('AccountBackupCreate')
-          this.showTableUpdateDrawer = true
-        }
+        hasImport: false
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="16" :sm="24" class="resource-activity">
+      <el-col :md="20" :sm="24" class="resource-activity">
         <IBox :title="title" class="block" v-bind="$attrs">
           <el-timeline>
             <el-timeline-item

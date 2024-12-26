@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="24" :sm="24">
       <ListTable
         ref="ListTable"
         :header-actions="headerActions"
         :table-config="tableConfig"
       />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="20" :sm="24">
       <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :md="15" :sm="24" class="generic-list-table">
+      <el-col :md="24" :sm="24" class="generic-list-table">
         <AccountListTable
           ref="ListTable"
           :asset="object"
@@ -21,7 +21,7 @@
           @onConfirm="onConfirm"
         />
       </el-col>
-      <el-col :md="9" :sm="24" class="quick-actions">
+      <el-col :md="20" :sm="24" class="quick-actions">
         <QuickActions :actions="quickActions" :title="title" type="primary" />
       </el-col>
     </el-row>

@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="24" :sm="24">
       <AutoDetailCard :fields="detailFields" :formatters="detailFormatters" :object="object" :url="url" />
     </el-col>
-    <el-col :md="9" :sm="24">
+    <el-col :md="20" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="relationConfig" />
     </el-col>

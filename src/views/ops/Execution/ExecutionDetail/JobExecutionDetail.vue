@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+    <el-col :md="24" :sm="24">
       <AutoDetailCard
         :excludes="excludes"
         :fields="detailFields"
@@ -8,7 +8,7 @@
         :url="url"
       />
     </el-col>
-    <el-col v-if="hasSummary" :md="9" :sm="24">
+    <el-col v-if="hasSummary" :md="20" :sm="24">
       <IBox
         v-if="object.summary.ok"
         :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})` "

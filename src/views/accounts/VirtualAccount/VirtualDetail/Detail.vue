@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
+    <el-col :md="20" :sm="24">
       <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
   </el-row>
@@ -17,7 +17,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {

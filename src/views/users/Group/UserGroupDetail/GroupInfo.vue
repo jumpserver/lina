@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
+    <el-col :md="20" :sm="24">
       <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     </el-col>
   </el-row>
@@ -26,16 +26,14 @@ export default {
       excludes: ['users']
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     group(iNew, iOld) {
       this.$log.debug('Group has changed')
       this.relationConfig.hasObjectsId = iNew.users
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="16" :sm="24">
+      <el-col :md="20" :sm="24">
         <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       </el-col>
     </el-row>
@@ -19,7 +19,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -30,8 +31,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

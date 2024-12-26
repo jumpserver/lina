@@ -8,10 +8,10 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :md="15" :sm="24" class="generic-list-table">
+      <el-col :md="24" :sm="24" class="generic-list-table">
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="9" :sm="24" class="quick-actions">
+      <el-col :md="20" :sm="24" class="quick-actions">
         <QuickActions :actions="quickActions" type="primary" />
       </el-col>
       <ViewSecret

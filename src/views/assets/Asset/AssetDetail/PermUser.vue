@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :md="15" :sm="24" class="list-table">
+      <el-col :md="24" :sm="24" class="list-table">
         <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="9" :sm="24" class="perm-user-group-card">
+      <el-col :md="20" :sm="24" class="perm-user-group-card">
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
       </el-col>
     </el-row>
