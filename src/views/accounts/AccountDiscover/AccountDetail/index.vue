@@ -22,8 +22,8 @@ export default {
       execution: { id: '' },
       config: {
         activeMenu: 'Info',
+        url: '/api/v1/accounts/gathered-accounts',
         actions: {
-          detailApiUrl: `/api/v1/accounts/gathered-accounts/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },
