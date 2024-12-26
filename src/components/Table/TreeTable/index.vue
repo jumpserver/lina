@@ -58,7 +58,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { setUrlParam } from '@/utils/common'
-import ListTable from '@/components/Table/ListTable/index.vue'
+import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import FileTree from '@/components/Table/TreeTable/components/FileTree.vue'
 import IBox from '../../IBox/index.vue'
 import TabTree from '../TabTree/index.vue'
@@ -96,6 +96,14 @@ export default {
     treeWidth: {
       type: String,
       default: () => '23.6%'
+    },
+    quickFilters: {
+      type: Array,
+      default: () => []
+    },
+    quickSummary: {
+      type: Array,
+      default: () => []
     }
   },
   data() {

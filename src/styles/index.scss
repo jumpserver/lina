@@ -552,7 +552,8 @@ li.rmenu i.fa {
 }
 
 .el-checkbox__label {
-  padding-left: 5px !important;
+  // 这里不能 important page transfer 里面的 checkbox 和 label 会叠加，见用户组选择用户
+  padding-left: 5px;
 }
 
 .el-checkbox__inner {

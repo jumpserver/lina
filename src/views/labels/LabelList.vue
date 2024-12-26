@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListDrawerPage as GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
 import { mapGetters } from 'vuex'
@@ -45,7 +45,7 @@ export default {
                 vm.handleClickResCount(row)
               }
               return (
-                <el-link type='success' onClick={onClick}>{ row['res_count'] }</el-link>
+                <el-link type='success' onClick={onClick}>{row['res_count']}</el-link>
               )
             }
           },

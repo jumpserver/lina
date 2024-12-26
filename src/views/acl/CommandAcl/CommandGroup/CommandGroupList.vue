@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {

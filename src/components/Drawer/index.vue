@@ -35,7 +35,7 @@ export default {
       default: '768px'
     },
     component: {
-      type: [String, Function],
+      type: [String, Function, Object],
       default: ''
     },
     componentProps: {
@@ -102,7 +102,7 @@ export default {
         //justify-content: flex-start;
         //margin-left: 20px;
         height: 100%;
-        //margin-right: 10px;
+        margin-right: 20px;
 
         .el-form-item {
           //margin: 5px 0 5px 0;

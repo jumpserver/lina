@@ -29,7 +29,7 @@ export default {
       default: ''
     },
     component: {
-      type: [String, Function],
+      type: [String, Function, Object],
       required: true
     },
     props: {
@@ -75,12 +75,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .form-drawer {
   /* 可自定义样式 */
 
   ::v-deep {
     .el-card.ibox {
-      //border: none;
+      border: none;
     }
 
     .el-drawer__header {

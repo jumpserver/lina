@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesFormatter, ProtocolsFormatter } from '../../../components/Table/TableFormatters'
+import { TabPage } from '@/layout/components'
+import { ChoicesFormatter, ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import GenericListTable from '@/components/Table/DrawerListTable/index.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
@@ -102,25 +103,11 @@ export default {
               canClone: () => vm.$hasPerm('assets.add_platform'),
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
-              updateRoute: ({ row }) => {
-                return {
-                  name: 'PlatformUpdate',
-                  params: { id: row.id },
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value
-                  }
-                }
-              },
-              cloneRoute: ({ row }) => {
-                return {
-                  name: 'PlatformCreate',
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value,
-                    clone_from: row.id
-                  }
-                }
+              onUpdate({ row, col }) {
+                vm.$router.push({
+                  query: { _type: row.type.value, _category: row.category.value }
+                })
+                vm.$refs.genericListTable.onUpdate({ row, col })
               }
             }
           }
@@ -142,9 +129,9 @@ export default {
         moreCreates: {
           callback: (item) => {
             this.$router.push({
-              name: 'PlatformCreate',
-              query: { type: item.name, category: item.category }
+              query: { _type: item.name, _category: item.category }
             })
+            this.$refs.genericListTable.onCreate()
           },
           dropdown: []
         }

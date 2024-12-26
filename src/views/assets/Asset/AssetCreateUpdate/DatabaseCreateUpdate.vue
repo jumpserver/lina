@@ -6,6 +6,7 @@
 import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 import { UploadKey } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
+import { setUrlParam } from '@/utils/common'
 
 export default {
   name: 'DatabaseCreateUpdate',
@@ -18,7 +19,9 @@ export default {
     }
   },
   mounted() {
-    this.url = `${this.url}?platform=${this.$route.query.platform}`
+    if (this.$route.query.platform) {
+      this.url = setUrlParam(this.url, 'platform', this.$route.query.platform)
+    }
   },
   methods: {
     getAddFields() {

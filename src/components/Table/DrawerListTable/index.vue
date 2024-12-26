@@ -8,6 +8,7 @@
     />
     <PageDrawer
       :action="action"
+      :class="[action]"
       :component="drawerComponent"
       :props="drawerProps"
       :title="drawerTitle"
@@ -70,8 +71,6 @@ export default {
       visible: false,
       drawerVisible: false,
       drawerComponent: '',
-      iHeaderActions: {},
-      iTableConfig: {},
       action: ''
     }
   },
@@ -83,10 +82,43 @@ export default {
         title = this.resource
       }
       if (!title) {
+        title = this.$route.meta?.title
+        title = title.replace('List', '').replace('列表', '')
+        title = _.trimEnd(title, 's')
+      }
+      if (!title) {
         title = this.$t('NoTitle')
       }
-      title = toSentenceCase(this.action) + ' ' + title.toLowerCase()
+      let action = this.action
+      if (action === 'clone') {
+        action = 'create'
+      }
+      title = toSentenceCase(action) + this.$t('WordSep') + title.toLowerCase()
       return title
+    },
+    iHeaderActions() {
+      return {
+        ...this.headerActions,
+        onCreate: this.onCreate
+      }
+    },
+    iTableConfig() {
+      const config = {
+        ...this.tableConfig
+      }
+      const actionMap = {
+        'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
+        'columnsMeta.actions.formatterArgs.onClone': this.onClone,
+        'columnsMeta.name.formatterArgs.drawer': true,
+        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
+      }
+      for (const [key, value] of Object.entries(actionMap)) {
+        if (_.get(config, key)) {
+          continue
+        }
+        _.set(config, key, value)
+      }
+      return config
     }
   },
   watch: {
@@ -105,35 +137,39 @@ export default {
       }
     }
   },
-  created() {
-    this.iHeaderActions = {
-      ...this.headerActions,
-      onCreate: this.onCreate
-    }
-    this.iTableConfig = {
-      ...this.tableConfig
-    }
-    const actionMap = {
-      'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
-      'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-      'columnsMeta.name.formatterArgs.drawer': true,
-      'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
-    }
-    for (const [key, value] of Object.entries(actionMap)) {
-      if (_.get(this.iTableConfig, key)) {
-        continue
-      }
-      _.set(this.iTableConfig, key, value)
-    }
-  },
   methods: {
+    genConfig() {
+      this.iHeaderActions = {
+        ...this.headerActions,
+        onCreate: this.onCreate
+      }
+      this.iTableConfig = {
+        ...this.tableConfig
+      }
+      const actionMap = {
+        'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
+        'columnsMeta.actions.formatterArgs.onClone': this.onClone,
+        'columnsMeta.name.formatterArgs.drawer': true,
+        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
+      }
+      for (const [key, value] of Object.entries(actionMap)) {
+        if (_.get(this.iTableConfig, key)) {
+          continue
+        }
+        _.set(this.iTableConfig, key, value)
+      }
+    },
     getDefaultDrawer(action) {
       const route = this.$route.name
       const actionRouteName = route.replace('List', toSentenceCase(action))
-      return this.getRouteNameComponent(actionRouteName)
+      return this.getRouteNameComponent(actionRouteName, action)
     },
-    getRouteNameComponent(name) {
-      const routes = this.$router.resolve({ name: name })
+    getRouteNameComponent(name, action) {
+      const route = { name: name }
+      if (action === 'detail' || action === 'update') {
+        route.params = { id: '1' }
+      }
+      const routes = this.$router.resolve(route)
       if (!routes) {
         return
       }
@@ -143,7 +179,8 @@ export default {
       }
 
       if (matched[0] && matched[0].components?.default) {
-        return matched[0].components.default
+        const component = matched[0].components.default
+        return component
       }
     },
     showDrawer(action) {
@@ -155,18 +192,22 @@ export default {
       } else if (action === 'detail') {
         this.drawerComponent = this.detailDrawer
       } else if (action === 'clone') {
-        this.drawerComponent = this.createDrawer
+        this.drawerComponent = this.createDrawer || this.getDefaultDrawer('create')
       } else {
         this.drawerComponent = this.createDrawer
       }
       if (!this.drawerComponent) {
         this.drawerComponent = this.getDefaultDrawer(action)
       }
+      console.log('Show drawer', this.drawerComponent)
       this.drawerVisible = true
     },
-    onCreate() {
+    onCreate(meta) {
+      if (!meta) {
+        meta = {}
+      }
       this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'create'
+        action: 'create', ...meta
       }).then(() => {
         this.showDrawer('create')
       })
@@ -197,8 +238,8 @@ export default {
 <style lang="scss" scoped>
 
 .page-drawer ::v-deep {
-  .form-group-header {
-    margin-left: 1px;
+  .el-form .form-group-header {
+    margin-left: 10px;
   }
 
   .sql.container {
@@ -211,6 +252,7 @@ export default {
 
   .ibox {
     margin-bottom: 10px;
+    border: none;
   }
 
   .page-content {

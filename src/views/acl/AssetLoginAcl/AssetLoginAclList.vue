@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListDrawerPage as GenericListPage } from '@/layout/components'
 
 export default {
   components: {

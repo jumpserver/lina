@@ -112,6 +112,7 @@ export default {
       if (route?.query?.tab) {
         this.$cookie.set(route.name, route.query.tab, 1)
       }
+      console.log('showDrawer', this.drawerComponent)
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'detail',
         row: this.row,

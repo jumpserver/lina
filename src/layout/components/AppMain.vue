@@ -27,17 +27,20 @@ export default {
       // query 去掉这两个，如果变了再刷新
       const query = {}
       for (const [k, v] of Object.entries(this.$route.query)) {
-        if (k.includes('updated') || k.includes('order')) {
+        if (k.includes('updated') || k.includes('order') || k.startsWith('_')) {
           continue
         }
         query[k] = v
       }
 
       let key
-      if (this.$route.name.toLowerCase().includes('list')) {
+      if (this.$route.query['_']) {
+        key = this.$route.query['_']
+      } else if (this.$route.name.toLowerCase().includes('list')) {
         key = _.trimEnd(this.$route.path, '/') + '?' + new URLSearchParams(query).toString()
       } else {
         key = new Date().getTime()
+        // key = this.$route.fullPath
       }
       return key
     },
