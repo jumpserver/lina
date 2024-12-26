@@ -102,7 +102,8 @@ export default {
         //justify-content: flex-start;
         //margin-left: 20px;
         height: 100%;
-        margin-right: 20px;
+        // 设置这个创建账号不好看
+        //margin-right: 30px;
 
         .el-form-item {
           //margin: 5px 0 5px 0;

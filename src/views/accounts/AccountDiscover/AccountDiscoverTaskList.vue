@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -15,6 +20,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       showViewSecretDialog: false,
       showTableUpdateDrawer: false,
       currentTemplate: null,
@@ -99,15 +106,7 @@ export default {
                     })
                   }
                 }
-              ],
-              onUpdate: ({ row }) => {
-                this.$route.params.id = row.id
-
-                this.$route.query.type = 'pam'
-
-                this.currentTemplate = 'AccountDiscoverTaskUpdate'
-                this.showTableUpdateDrawer = true
-              }
+              ]
             }
           }
         }
@@ -120,12 +119,6 @@ export default {
         createRoute: 'AccountDiscoverTaskCreate',
         searchConfig: {
           getUrlQuery: false
-        },
-        onCreate: ({ row }) => {
-          this.$route.query.type = 'pam'
-
-          this.currentTemplate = 'AccountDiscoverTaskCreate'
-          this.showTableUpdateDrawer = true
         }
       }
     }

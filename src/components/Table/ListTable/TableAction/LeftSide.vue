@@ -33,6 +33,10 @@ export default {
         return this.$route.name?.replace('List', 'Create')
       }
     },
+    beforeCreate: {
+      type: Function,
+      default: () => null
+    },
     onCreate: {
       type: Function,
       default: null
@@ -132,7 +136,11 @@ export default {
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
           icon: 'plus',
-          callback: this.onCreate || this.handleCreate
+          callback: () => {
+            this.beforeCreate()
+            const callback = this.onCreate || this.handleCreate
+            callback()
+          }
         }
       ]
       if (this.moreCreates) {
@@ -144,7 +152,11 @@ export default {
           icon: 'plus',
           can: this.canCreate,
           dropdown: [],
-          callback: this.onCreate || this.handleCreate
+          callback: () => {
+            this.beforeCreate()
+            const callback = this.onCreate || this.handleCreate
+            callback()
+          }
         }
         const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
         defaultActions.push(createCreateAction)

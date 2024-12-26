@@ -41,11 +41,15 @@ export default {
 
   .item-label {
     text-align: left;
+    display: inline-block;
+    width: 35%;
   }
+
   .item-label::after {
     content: ':';
     margin-left: 1px;
   }
+
   .text-info {
     @include textOverflow;
   }

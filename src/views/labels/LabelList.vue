@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { GenericListDrawerPage as GenericListPage } from '@/layout/components'
+import { GenericListPage } from '@/layout/components'
 import BindDialog from './BindDialog.vue'
 import LabelResourcesDialog from '@/views/labels/LabelResourcesDialog.vue'
 import { mapGetters } from 'vuex'

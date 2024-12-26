@@ -108,12 +108,10 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this, this.meta.type)
       let url = this.url
-      console.log('Url: ', url)
       const { id = '' } = this.meta
       if (this.meta.platform && !id) {
         url = setUrlParam(url, 'platform', this.meta.platform)
       }
-      console.log('Url 2: ', url)
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
@@ -149,7 +147,6 @@ export default {
       this.meta = meta
     },
     async setInitial() {
-      console.log('Meta in setInitial: ', this.meta)
       const { defaultConfig } = this
       const { node, platform } = this.meta
       const nodesInitial = node ? [node] : []

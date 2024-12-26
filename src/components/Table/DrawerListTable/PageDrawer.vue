@@ -81,6 +81,10 @@ export default {
         padding-top: 10px;
         padding-bottom: 20px;
       }
+
+      .el-form {
+        margin-right: 10px;
+      }
     }
 
     .el-drawer__header {

@@ -104,6 +104,10 @@ export default {
     quickSummary: {
       type: Array,
       default: () => []
+    },
+    headerActions: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {

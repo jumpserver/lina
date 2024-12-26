@@ -3,7 +3,6 @@ import Vue from 'vue'
 Vue.directive('el-drawer-drag-width', {
   bind(el, binding, vnode, oldVnode) {
     const drawerEle = el.querySelector('.el-drawer')
-    console.log(drawerEle)
     // 创建触发拖拽的元素
     const dragItem = document.createElement('div')
     // 将元素放置到抽屉的左边边缘

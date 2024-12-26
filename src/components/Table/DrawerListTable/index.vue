@@ -97,10 +97,11 @@ export default {
       return title
     },
     iHeaderActions() {
-      return {
-        ...this.headerActions,
-        onCreate: this.onCreate
+      const actions = this.headerActions
+      if (!actions.onCreate) {
+        actions.onCreate = this.onCreate
       }
+      return actions
     },
     iTableConfig() {
       const config = {
@@ -138,27 +139,6 @@ export default {
     }
   },
   methods: {
-    genConfig() {
-      this.iHeaderActions = {
-        ...this.headerActions,
-        onCreate: this.onCreate
-      }
-      this.iTableConfig = {
-        ...this.tableConfig
-      }
-      const actionMap = {
-        'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
-        'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-        'columnsMeta.name.formatterArgs.drawer': true,
-        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
-      }
-      for (const [key, value] of Object.entries(actionMap)) {
-        if (_.get(this.iTableConfig, key)) {
-          continue
-        }
-        _.set(this.iTableConfig, key, value)
-      }
-    },
     getDefaultDrawer(action) {
       const route = this.$route.name
       const actionRouteName = route.replace('List', toSentenceCase(action))

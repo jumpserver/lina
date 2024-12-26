@@ -42,6 +42,8 @@ export default {
           openInNewPage: false,
           removeColorOnClick: false,
           drawer: false,
+          beforeClick: () => {
+          },
           getTitle({ col, row, cellValue }) {
             return cellValue
           },
@@ -85,6 +87,13 @@ export default {
         row: this.row,
         cellValue: this.cellValue
       })
+    },
+    callbackArgs() {
+      return {
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      }
     }
   },
   methods: {
@@ -124,12 +133,11 @@ export default {
       })
     },
     handleClick() {
+      if (this.formatterArgs.beforeClick) {
+        this.formatterArgs.beforeClick(this.callbackArgs)
+      }
       if (this.formatterArgs.onClick) {
-        this.formatterArgs.onClick({
-          col: this.col,
-          row: this.row,
-          cellValue: this.cellValue
-        })
+        this.formatterArgs.onClick(this.callbackArgs)
         return
       }
       if (this.formatterArgs.drawer) {
@@ -142,11 +150,7 @@ export default {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
       if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
-        route = this.formatterArgs.getRoute({
-          row: this.row,
-          col: this.col,
-          cellValue: this.cellValue
-        })
+        route = this.formatterArgs.getRoute(this.callbackArgs)
       }
       if (!route) {
         console.error('No route found')

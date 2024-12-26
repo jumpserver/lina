@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SmallCard ref="table" v-bind="$data" />
+    <SmallCard ref="table" class="account-table" v-bind="$data" />
     <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
     <Dialog
       v-if="updateVisible"
@@ -35,9 +35,31 @@
 
 <script type="text/jsx">
 import {
-  aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
-  baiducloud, state_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
-  qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
+  aliyun,
+  apsara_stack,
+  aws_china,
+  aws_international,
+  azure,
+  azure_international,
+  baiducloud,
+  fc,
+  gcp,
+  huaweicloud,
+  huaweicloud_private,
+  jdcloud,
+  kingsoftcloud,
+  lan,
+  nutanix,
+  openstack,
+  qcloud,
+  qcloud_lighthouse,
+  qingcloud_private,
+  scp,
+  state_private,
+  ucloud,
+  vmware,
+  volcengine,
+  zstack
 } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
 import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
@@ -212,3 +234,14 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.account-table {
+  ::v-deep {
+    .panel-content {
+      padding: 30px 0;
+    }
+  }
+}
+
+</style>

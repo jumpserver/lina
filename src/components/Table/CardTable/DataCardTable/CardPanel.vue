@@ -75,7 +75,8 @@ export default {
     },
     handleUpdate: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -152,10 +153,12 @@ export default {
 
   .title {
     text-align: left;
-    font-weight: 500;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 1.1em;
+    color: #555555;
   }
 
   .panel-content {
