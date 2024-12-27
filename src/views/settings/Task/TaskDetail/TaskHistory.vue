@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 
 export default {

@@ -2,27 +2,32 @@
   <Drawer
     :title="title"
     :visible="iVisible"
+    class="drawer"
     @close-drawer="iVisible = false"
   >
-    <AccountCreateUpdateForm
-      v-if="!loading"
-      ref="form"
-      :account="account"
-      :add-template="addTemplate"
-      :asset="asset"
-      @add="addAccount"
-      @edit="editAccount"
-    />
+    <IBox class="content">
+      <AccountCreateUpdateForm
+        v-if="!loading"
+        ref="form"
+        :account="account"
+        :add-template="addTemplate"
+        :asset="asset"
+        @add="addAccount"
+        @edit="editAccount"
+      />
+    </IBox>
   </Drawer>
 </template>
 
 <script>
 import Drawer from '@/components/Drawer/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
+import IBox from '@/components/IBox/index.vue'
 
 export default {
   name: 'CreateAccountDialog',
   components: {
+    IBox,
     Drawer,
     AccountCreateUpdateForm
   },
@@ -167,3 +172,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.drawer {
+  ::v-deep .el-drawer__body {
+    padding: 12px 30px 22px;
+    background: #f3f3f3;
+
+    .el-form {
+      margin-right: 30px;
+    }
+  }
+}
+
+.content {
+}
+
+</style>

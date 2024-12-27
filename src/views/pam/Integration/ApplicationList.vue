@@ -5,9 +5,9 @@
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'CloudAccountList',
@@ -63,22 +63,6 @@ export default {
                 return app.secret
               }
             }
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              updateRoute: 'IntegrationApplicationUpdate',
-              onUpdate: ({ row }) => {
-                this.$route.params.id = row.id
-
-                // 解决表单详情中的跳转
-                this.$route.query.type = 'pam'
-
-                this.currentTemplate = 'IntegrationApplicationUpdate'
-                this.drawerTitle = this.$t('IntegrationApplicationUpdate')
-                this.showTableUpdateDrawer = true
-              }
-            }
           }
         },
         columnsExtra: ['secret'],
@@ -93,11 +77,6 @@ export default {
         hasImport: false,
         searchConfig: {
           getUrlQuery: false
-        },
-        onCreate: () => {
-          this.currentTemplate = 'IntegrationApplicationCreate'
-          this.drawerTitle = this.$t('IntegrationApplicationCreate')
-          this.showTableUpdateDrawer = true
         }
       }
     }

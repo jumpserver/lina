@@ -21,7 +21,7 @@
 <script>
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
-// import ListTable from '@/components/Table/ListTable/index.vue'
+// import { DrawerListTable as ListTable } from '@/components'
 import ListTable from '@/components/Table/DrawerListTable'
 
 export default {

@@ -17,6 +17,7 @@
       :component="drawerComponent"
       :title="iTitle"
       :visible.sync="drawerVisible"
+      class="form-drawer"
     />
   </div>
 </template>
@@ -215,4 +216,11 @@ export default {
 ::v-deep .go-back {
   display: none;
 }
+
+.form-drawer ::v-deep {
+  .drawer__content, .tab-page-content {
+    background: #f3f3f3;
+  }
+}
+
 </style>

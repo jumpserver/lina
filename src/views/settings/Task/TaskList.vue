@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common'
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'TaskList',

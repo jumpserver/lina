@@ -28,7 +28,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'AccountTemplateDialog',
@@ -44,7 +44,8 @@ export default {
     },
     asset: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     accounts: {
       type: Array,

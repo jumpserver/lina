@@ -72,29 +72,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-drawer {
-  /* 可自定义样式 */
-
-  ::v-deep {
-    .el-card.ibox {
-      .el-card__body {
-        padding-top: 10px;
-        padding-bottom: 20px;
-      }
-
-      .el-form {
-        margin-right: 10px;
-      }
-    }
-
-    .el-drawer__header {
-      //border-bottom: 1px solid #EBEEF5;
-      margin-bottom: 10px;
-      padding-top: 10px;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-    }
-  }
-}
 </style>

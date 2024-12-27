@@ -18,18 +18,25 @@ export default [
         component: () => import('@/views/pam/RiskDetect/index.vue'),
         name: 'AccountCheckList',
         meta: {
-          title: i18n.t('RiskDetection'),
-          permissions: ['accounts.view_accountrisk']
+          title: i18n.t('RiskDetection')
         }
       },
       {
         path: 'create',
         component: () => import('@/views/pam/RiskDetect/AccountCheckCreateUpdate.vue'),
-        name: 'AccountCheckCreateUpdate',
+        name: 'AccountCheckCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountCheckCreate'),
-          permissions: ['accounts.view_accountrisk']
+          title: i18n.t('AccountCheckCreate')
+        }
+      },
+      {
+        path: 'update/:id',
+        component: () => import('@/views/pam/RiskDetect/AccountCheckCreateUpdate.vue'),
+        name: 'AccountCheckUpdate',
+        hidden: true,
+        meta: {
+          title: i18n.t('AccountCheckUpdate')
         }
       }
     ]

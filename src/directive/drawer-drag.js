@@ -6,7 +6,7 @@ Vue.directive('el-drawer-drag-width', {
     // 创建触发拖拽的元素
     const dragItem = document.createElement('div')
     // 将元素放置到抽屉的左边边缘
-    dragItem.style.cssText = 'height: 100%;width: 5px;cursor: w-resize;position: absolute;left: 0;'
+    dragItem.style.cssText = 'height: 100%;width: 5px;cursor: ew-resize;position: absolute;left: 0;'
     drawerEle.append(dragItem)
 
     dragItem.onmousedown = (downEvent) => {

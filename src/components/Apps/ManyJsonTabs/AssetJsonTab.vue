@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import { toM2MJsonParams } from '@/utils/jms'
 
 export default {
@@ -18,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {

@@ -217,31 +217,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.page-drawer ::v-deep {
-  .el-form .form-group-header {
-    margin-left: 10px;
-  }
-
-  .sql.container {
-    display: none;
-  }
-
-  .page {
-    overflow-y: auto;
-  }
-
-  .ibox {
-    margin-bottom: 10px;
-    border: none;
-  }
-
-  .page-content {
-    height: unset;
-
-    & > div {
-      margin-bottom: 1px;
-    }
-  }
-}
-
 </style>

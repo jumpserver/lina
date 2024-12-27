@@ -80,42 +80,72 @@ export default {
 ::v-deep .drawer {
   min-width: 565px;
 
-  .el-drawer__header {
-    margin-bottom: 20px;
+  .el-card__body {
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
 
-    span {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--color-text-primary);
+  .el-form {
+    margin-right: 30px;
+    height: 100%;
+
+    .form-group-header {
+      margin-left: 10px;
+    }
+
+    .el-form-item {
+      //margin: 5px 0 5px 0;
+      padding-left: 2px;
     }
   }
 
-  .el-drawer__body {
-    overflow: auto;
+  .el-drawer__header {
+    border-bottom: 1px solid #EBEEF5;
+    margin-bottom: 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
 
-    .drawer__content {
-      .el-form {
-        //position: relative;
-        //display: flex;
-        //flex-wrap: nowrap;
-        //flex-direction: column;
-        //justify-content: flex-start;
-        //margin-left: 20px;
-        height: 100%;
-        // 设置这个创建账号不好看
-        //margin-right: 30px;
+  .sql.container {
+    display: none;
+  }
 
-        .el-form-item {
-          //margin: 5px 0 5px 0;
-          padding-left: 2px;
+  .page {
+    overflow-y: auto;
 
-          &:last-child {
-            //margin-bottom: 10px;
-            //padding-bottom: 10px;
-          }
-        }
+    .page-content {
+      height: unset;
+      padding-right: 20px;
+
+      & > div {
+        margin-bottom: 1px;
       }
     }
+
+    .ibox {
+      margin-bottom: 10px;
+      border: none;
+    }
+  }
+
+  .drawer__content, .tab-page-content {
+    background: #f3f3f3;
+  }
+
+  //.el-drawer__header {
+  //  margin-bottom: 20px;
+  //
+  //  span {
+  //    font-size: 16px;
+  //    font-weight: 800;
+  //    color: var(--color-text-primary);
+  //  }
+  //}
+
+  .el-drawer__body {
+    overflow: auto;
   }
 }
 </style>
