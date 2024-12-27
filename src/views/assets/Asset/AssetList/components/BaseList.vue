@@ -219,6 +219,9 @@ export default {
         category: platform.category.value,
         node: this.$route.query?.node || this.$route.query?.node_id || ''
       }
+      this.$router.push({
+        query: { _platform: createProps.platform, _type: createProps.type, _category: createProps.category, _node: createProps.node }
+      })
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'create',
         ...createProps
