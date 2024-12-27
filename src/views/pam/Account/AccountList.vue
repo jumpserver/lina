@@ -52,9 +52,12 @@ export default {
   },
   methods: {
     handlePamConnect(row) {
-      if (row.asset.type.value === 'windows') return window.open(`/luna/pam_gui_connect/${row.asset.id}`, '_blank')
+      // 暂将两个页面分开
+      if (row.asset.type.value === 'windows') {
+        return window.open(`/luna/pam_gui_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}`, '_blank')
+      }
 
-      window.open(`/luna/pam_terminal_connect/${row.asset.id}`, '_blank')
+      window.open(`/luna/pam_terminal_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}`, '_blank')
     }
   }
 }
