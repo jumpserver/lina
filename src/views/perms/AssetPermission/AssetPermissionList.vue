@@ -28,7 +28,6 @@ export default {
     PermBulkUpdateDialog
   },
   data() {
-    const vm = this
     return {
       helpMsg: this.$t('AssetPermissionHelpMsg'),
       treeSetting: {
@@ -71,18 +70,6 @@ export default {
       headerActions: {
         hasLabelSearch: true,
         hasBulkDelete: true,
-        onCreate: () => {
-          const route = {
-            name: 'AssetPermissionCreate',
-            query: this.$route.query
-          }
-          if (vm.$route.query.node_id) {
-            const { href } = this.$router.resolve(route)
-            window.open(href, '_blank')
-          } else {
-            this.$router.push(route)
-          }
-        },
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions

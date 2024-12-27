@@ -99,11 +99,11 @@ export default {
     },
     quickFilters: {
       type: Array,
-      default: () => []
+      default: null
     },
     quickSummary: {
       type: Array,
-      default: () => []
+      default: null
     },
     headerActions: {
       type: Object,

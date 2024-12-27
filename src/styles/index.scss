@@ -628,3 +628,16 @@ li.rmenu i.fa {
     line-height: 26px;
   }
 }
+
+
+.el-form--label-top.el-form {
+  //.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after {
+  //  content: '*';
+  //  margin-left: 4px;
+  //}
+
+  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
+  }
+}
+
+

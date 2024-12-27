@@ -89,20 +89,63 @@ export default {
     margin-right: 30px;
     height: 100%;
 
+    &.el-form--label-top {
+      .el-radio-group {
+        .el-radio {
+          display: block;
+          padding-bottom: 3px;
+        }
+      }
+
+      .el-checkbox-group {
+        .el-checkbox {
+          display: block;
+          padding-bottom: 3px;
+        }
+      }
+
+      .el-form-item__content:has(.el-checkbox):not(:has(.el-checkbox-group)) {
+        display: inline-block; /* 更改为 inline-block */
+        width: unset;
+        vertical-align: bottom;
+      }
+
+      .el-form-item__content {
+        form {
+          .el-form-item {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+
     .form-group-header {
       margin-left: 10px;
     }
 
     .el-form-item {
-      //margin: 5px 0 5px 0;
-      padding-left: 2px;
+      //padding-left: 2px;
+      padding-left: 12px;
+
+      // Top 上面时
+      &.label-top {
+        .el-form-item__label {
+          padding: 0 30px 0 0;
+          line-height: 30px;
+        }
+
+        .sub-form {
+          margin-left: -12px;
+        }
+
+      }
     }
   }
 
   .el-drawer__header {
     border-bottom: 1px solid #EBEEF5;
     margin-bottom: 0;
-    padding: 10px 20px;
+    padding: 15px 20px;
     font-size: 16px;
     font-weight: 500;
     color: var(--color-text-primary);
@@ -114,6 +157,12 @@ export default {
 
   .page {
     overflow-y: auto;
+
+    &.tab-page {
+      .page-content {
+        padding-right: 0;
+      }
+    }
 
     .page-content {
       height: unset;

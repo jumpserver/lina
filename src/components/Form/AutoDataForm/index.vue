@@ -7,18 +7,18 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <span
+    <template
       v-for="(group, i) in groups"
-      :key="'group-'+group.name"
       :slot="'id:'+group.name"
     >
       <FormGroupHeader
         v-if="!groupHidden(group, i)"
+        :key="'group-' + group.name"
         :group="group"
         :index="i"
         :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
       />
-    </span>
+    </template>
   </DataForm>
 </template>
 

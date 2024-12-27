@@ -22,7 +22,7 @@
       :name="`$id:${item.id}`"
     />
 
-    <el-form-item v-if="hasButtons" class="form-buttons">
+    <div v-if="hasButtons" class="form-buttons">
       <el-button
         v-if="defaultButton"
         :disabled="!canSubmit"
@@ -61,7 +61,7 @@
       >
         {{ button.title }}
       </el-button>
-    </el-form-item>
+    </div>
   </ElFormRender>
 </template>
 
@@ -151,8 +151,8 @@ export default {
       // if (this.drawer) {
       //   return 'left'
       // }
-      // return this.drawer || this.mobile ? 'top' : 'right'
-      return this.mobile ? 'top' : 'right'
+      return this.drawer || this.mobile ? 'top' : 'right'
+      // return this.mobile ? 'top' : 'right'
     }
   },
   mounted() {
@@ -323,8 +323,9 @@ export default {
     }
   }
 
-  ::v-deep .el-form-item.form-buttons {
+  ::v-deep .form-buttons {
     margin-top: 20px;
+    margin-left: 25%;
   }
 }
 

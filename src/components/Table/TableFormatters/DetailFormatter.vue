@@ -218,8 +218,8 @@ export default {
 }
 
 .form-drawer ::v-deep {
-  .drawer__content, .tab-page-content {
-    background: #f3f3f3;
+  .el-drawer__header {
+    border-bottom: none;
   }
 }
 
