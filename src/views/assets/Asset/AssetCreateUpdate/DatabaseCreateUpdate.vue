@@ -19,13 +19,13 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.platform) {
-      this.url = setUrlParam(this.url, 'platform', this.$route.query.platform)
+    if (this.$route.query._platform) {
+      this.url = setUrlParam(this.url, 'platform', this.$route.query._platform)
     }
   },
   methods: {
     getAddFields() {
-      const platform = this.$route.query.type
+      const platform = this.$route.query._type
       const baseFields = [[this.$t('Basic'), ['db_name']]]
       let tlsFields = ['use_ssl', 'ca_cert']
       const platformFieldsMap = {
@@ -38,7 +38,6 @@ export default {
       if (platformFieldsMap[platform]) {
         tlsFields = tlsFields.concat(platformFieldsMap[platform])
       }
-
       if (tlsFields.length > 2) {
         const secureField = [
           this.$t('Secure'), tlsFields, 2
@@ -48,7 +47,7 @@ export default {
       return baseFields
     },
     getAddFieldsMeta() {
-      const platform = this.$route.query.type
+      const platform = this.$route.query._type
       const fieldsMeta = {
         db_name: {
           label: this.$t('DefaultDatabase')
