@@ -20,8 +20,8 @@ export default {
       execution: { id: '' },
       config: {
         activeMenu: 'Info',
+        url: '/api/v1/accounts/gather-account-executions',
         actions: {
-          detailApiUrl: `/api/v1/accounts/gather-account-executions/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },
