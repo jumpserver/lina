@@ -52,6 +52,13 @@ export default {
                   }
                 }
               },
+              beforeClick: ({ row }) => {
+                vm.$router.push({
+                  query: {
+                    _scope: row.scope.value
+                  }
+                })
+              },
               drawer: true
             }
           },

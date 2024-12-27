@@ -5,7 +5,7 @@
       <AutoDetailCard v-bind="detailSpecInfoConfig" />
       <AutoDetailCard v-bind="detailInfoConfig" />
     </el-col>
-    <el-col :md="20" :sm="24">
+    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="LabelRelation"

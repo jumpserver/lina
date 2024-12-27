@@ -3,7 +3,7 @@
     <el-col :md="24" :sm="24">
       <DetailCard v-if="object" :items="detailItems" />
     </el-col>
-    <el-col :md="20" :sm="24">
+    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
       <QuickActions v-if="object" :actions="quickActions" type="primary" />
     </el-col>
   </el-row>

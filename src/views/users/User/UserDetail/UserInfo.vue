@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+    <el-col :md="14" :sm="24">
       <AutoDetailCard :fields="detailFields" :formatters="detailFormatters" :object="object" :url="url" />
     </el-col>
-    <el-col :md="20" :sm="24">
+    <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard style="margin-top: 15px" type="info" v-bind="relationConfig" />
+      <RelationCard type="info" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -262,10 +262,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .mfa-setting ::v-deep .el-slider__runway {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.detail-right-quick-actions {
+  display: flex;
+
+  & > div {
+    margin-right: 20px;
+    width: 350px;
+  }
+
+  & > div:last-child {
+    margin-right: 0; /* 清除最后一个元素的多余间距 */
+  }
 }
 
 </style>

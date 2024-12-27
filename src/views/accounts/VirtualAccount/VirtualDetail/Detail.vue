@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
+    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
       <AutoDetailCard :object="object" v-bind="detail" />
     </el-col>
   </el-row>

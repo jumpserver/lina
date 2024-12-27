@@ -341,7 +341,7 @@ b, strong {
 
 tr td {
   line-height: 1.42857;
-  padding: 8px;
+  padding: 8px 0;
   vertical-align: top;
 }
 

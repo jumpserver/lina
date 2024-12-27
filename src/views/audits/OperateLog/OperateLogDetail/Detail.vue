@@ -4,7 +4,7 @@
       <el-col :md="24" :sm="24">
         <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
       </el-col>
-      <el-col :md="20" :sm="24">
+      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
         <QuickActions
           v-if="object.id"
           :actions="quickActions"

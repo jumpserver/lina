@@ -5,7 +5,7 @@
         <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
         <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
       </el-col>
-      <el-col :md="20" :sm="24">
+      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
         <QuickActions :actions="quickEditActions" type="primary" />
         <QuickActions :actions="quickExecuteActions" type="primary" />
         <RelationCard

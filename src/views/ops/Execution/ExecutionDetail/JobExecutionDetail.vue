@@ -8,7 +8,7 @@
         :url="url"
       />
     </el-col>
-    <el-col v-if="hasSummary" :md="20" :sm="24">
+    <el-col v-if="hasSummary" :md="20" :sm="24" class="detail-right-quick-actions">
       <IBox
         v-if="object.summary.ok"
         :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})` "

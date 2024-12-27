@@ -4,7 +4,7 @@
       <el-col :md="24" :sm="24">
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
       </el-col>
-      <el-col :md="20" :sm="24">
+      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
         <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
       </el-col>
     </el-row>

@@ -13,7 +13,6 @@
         </el-form-item>
       </span>
     </el-form>
-    <slot />
   </IBox>
 </template>
 
@@ -45,7 +44,7 @@ export default {
     },
     labelWidth: {
       type: String,
-      default: '25%'
+      default: ''
     }
   },
   data() {
@@ -71,55 +70,60 @@ export default {
   padding: 20px 40px;
 }
 
-.el-form-item {
-  border-bottom: 1px dashed #EBEEF5;
-  padding: 1px 0;
-  margin-bottom: 0;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &.array-item {
-    border-bottom: none;
-
-    ::v-deep .el-form-item__content {
-      border-bottom: 1px dashed #EBEEF5
-    }
-
-    ::v-deep .el-form-item__label:last-child {
-      border: 1px dashed #EBEEF5;
-    }
-  }
-
-  ::v-deep .el-form-item__label {
-    padding-right: 8%;
-    overflow: hidden;
-    color: var(--color-icon-primary);
-
-    span {
-      display: inline-block;
-      line-height: 1.5;
-    }
-  }
-
-  ::v-deep .el-form-item__content {
-    color: var(--color-text-primary);
-    font-size: 13px;
-    line-height: 40px;
-  }
-
-  ::v-deep .el-tag--mini {
-    margin-right: 3px;
-  }
-}
-
-.item-value span {
-  word-break: break-word;
-}
-
 .content {
   font-size: 13px;
-  line-height: 2.5;
+  line-height: 2;
+
+  ::v-deep .el-form-item {
+    //border-bottom: 1px dashed #EBEEF5;
+    padding: 1px 0;
+    margin-bottom: 0;
+    text-align: end;
+
+    &:last-child {
+      //border-bottom: none;
+    }
+
+    &.array-item {
+      border-bottom: none;
+
+      ::v-deep .el-form-item__content {
+        border-bottom: 1px dashed #EBEEF5
+      }
+
+      ::v-deep .el-form-item__label:last-child {
+        border: 1px dashed #EBEEF5;
+      }
+    }
+
+    .el-form-item__label {
+      //padding-right: 8%;
+      overflow: hidden;
+      color: var(--color-icon-primary);
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 400;
+
+      span {
+        display: inline-block;
+        //line-height: 1.1;
+      }
+    }
+
+    .el-form-item__content {
+      color: var(--color-text-primary);
+      font-size: 13px;
+      //line-height: 1.3;
+      //padding-bottom: 10px;
+    }
+
+    ::v-deep .el-tag--mini {
+      margin-right: 3px;
+    }
+  }
+
+  .item-value span {
+    word-break: break-word;
+  }
 }
 </style>

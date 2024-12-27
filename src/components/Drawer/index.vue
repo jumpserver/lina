@@ -89,6 +89,11 @@ export default {
     margin-right: 30px;
     height: 100%;
 
+    // Detail 中
+    &.content {
+      margin-right: 0;
+    }
+
     &.el-form--label-top {
       .el-radio-group {
         .el-radio {

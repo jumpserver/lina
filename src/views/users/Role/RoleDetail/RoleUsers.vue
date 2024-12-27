@@ -7,7 +7,7 @@
         :table-config="tableConfig"
       />
     </el-col>
-    <el-col :md="20" :sm="24">
+    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
       <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>
