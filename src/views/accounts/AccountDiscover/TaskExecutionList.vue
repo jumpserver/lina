@@ -83,8 +83,7 @@ export default {
                   type: 'info',
                   callback: ({ row }) => {
                     this.handleDetailCallback(row)
-
-                    // return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {
