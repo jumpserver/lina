@@ -26,6 +26,7 @@ const getters = {
   MFAVerifyAt: state => state.users.MFAVerifyAt,
   MFA_TTl: state => state.settings.publicSettings['SECURITY_MFA_VERIFY_TTL'],
   tableConfig: state => state.table.tableConfig,
+  protocolMap: state => state.table.protocolMap,
   currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
   currentUserIsAdmin: state => state.users.isAdmin,
   hasValidLicense: state => state.settings.hasValidLicense,
