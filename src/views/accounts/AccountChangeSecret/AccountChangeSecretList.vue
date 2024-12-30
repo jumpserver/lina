@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -15,6 +20,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
@@ -70,12 +77,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretUpdate', params: { id: row.id }})
-              },
+              updateRoute: 'AccountChangeSecretUpdate',
+              cloneRoute: 'AccountChangeSecretCreate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),
@@ -106,11 +109,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'AccountChangeSecretCreate'
-          }
-        }
+        createRoute: 'AccountChangeSecretCreate'
       }
     }
   }

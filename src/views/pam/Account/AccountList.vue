@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
 
@@ -11,9 +12,14 @@ export default {
   components: {
     AccountListTable
   },
+  computed: {
+    ...mapGetters(['protocolMap'])
+  },
   data() {
     return {
       drawerTitle: '',
+      currentProtocol: '',
+      perm_protocols: [],
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
@@ -34,12 +40,55 @@ export default {
           },
           connect: {
             width: '80px',
-            formatter: (row) => {
+            formatter: row => {
               return (
                 <span class='connect'>
-                  <el-button type='primary' onClick={() => this.handlePamConnect(row)} size='mini' plain>
-                    <i class='fa fa-desktop'/>
-                  </el-button>
+                  <el-dropdown
+                    {...{
+                      props: {
+                        trigger: 'hover',
+                        size: 'small',
+                        showTimeout: 500
+                      },
+                      on: {
+                        'visible-change': visible => {
+                          if (visible) {
+                            this.getPermdProtocols(row.asset.id)
+                          }
+                        },
+                        command: protocol => {
+                          this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+                            key: row.id,
+                            value: protocol
+                          })
+
+                          this.handleWindowOpen(row, protocol)
+                        }
+                      }
+                    }}
+                  >
+                    <el-button
+                      plain
+                      size='mini'
+                      type='primary'
+                      onClick={() => this.handlePamConnect(row)}
+                    >
+                      <i class='fa fa-desktop' />
+                    </el-button>
+                    <el-dropdown-menu slot='dropdown'>
+                      <el-dropdown-item command='Title' disabled>
+                        可选协议
+                      </el-dropdown-item>
+                      <el-dropdown-item divided />
+                      {this.perm_protocols.map(protocol => {
+                        return (
+                          <el-dropdown-item command={protocol.name}>
+                            {protocol.name}
+                          </el-dropdown-item>
+                        )
+                      })}
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </span>
               )
             }
@@ -48,23 +97,82 @@ export default {
       }
     }
   },
-  async mounted() {
-  },
+  async mounted() {},
   methods: {
-    handlePamConnect(row) {
+    getAssetDetail(id) {
+      const detailUrl = `/api/v1/assets/assets/${id}`
+
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .get(detailUrl)
+          .then(res => {
+            resolve(res)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    handleWindowOpen(row, protocol) {
       // 暂将两个页面分开
       if (row.asset.type.value === 'windows') {
-        return window.open(`/luna/pam_gui_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}`, '_blank')
+        return window.open(
+          `/luna/pam_gui_connect/${row.id}/${row.username}/${row.asset.id}/${
+            row.asset.name
+          }/${protocol}`,
+          '_blank'
+        )
       }
+      window.open(
+        `/luna/pam_terminal_connect/${row.id}/${row.username}/${row.asset.id}/${
+          row.asset.name
+        }/${protocol}`,
+        '_blank'
+      )
+    },
+    async handlePamConnect(row) {
+      const protocolMap = this.protocolMap
 
-      window.open(`/luna/pam_terminal_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}`, '_blank')
+      if (protocolMap.has(row.id)) {
+        const protocol = protocolMap.get(row.id)
+        this.handleWindowOpen(row, protocol)
+      } else {
+        try {
+          const res = await this.getAssetDetail(row.asset.id)
+
+          if (res) {
+            const protocol = res.protocols[0]
+
+            this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+              key: row.id,
+              value: protocol.name
+            })
+
+            this.handleWindowOpen(row, protocol.name)
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    },
+    async getPermdProtocols(assetId) {
+      try {
+        const res = await this.getAssetDetail(assetId)
+
+        if (res) {
+          this.perm_protocols = res.protocols
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
+.asset-table ::v-deep .row-clicked,
+.asset-user-table ::v-deep .row-background-color {
   background-color: #f5f7fa;
 }
 
@@ -96,7 +204,7 @@ export default {
   flex-direction: column;
 
   .hintWrap {
-    color: #D4D6E6;
+    color: #d4d6e6;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -106,5 +214,10 @@ export default {
 
 .asset-user-table {
   padding-left: 20px;
+}
+
+.el-dropdown-menu__item.is-disabled {
+  font-weight: 500;
+  color: var(--el-text-color-secondary);
 }
 </style>
