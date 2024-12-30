@@ -85,12 +85,7 @@ export default {
             }
           },
           public: {
-            disabled: this.protocol.name === 'winrm',
-            hidden: (formValue) => {
-              if (this.protocol.name === 'winrm') {
-                formValue['public'] = false
-              }
-            }
+            disabled: this.protocol.name === 'winrm'
           }
         }
       }
