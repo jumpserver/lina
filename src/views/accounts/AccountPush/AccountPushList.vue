@@ -1,5 +1,11 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="listTable"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -15,6 +21,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
@@ -73,12 +81,8 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountPushCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountPushUpdate', params: { id: row.id }})
-              },
+              updateRoute: 'AccountPushUpdate',
+              cloneRoute: 'AccountPushCreate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),
@@ -108,11 +112,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'AccountPushCreate'
-          }
-        }
+        createRoute: 'AccountPushCreate'
       }
     }
   }
