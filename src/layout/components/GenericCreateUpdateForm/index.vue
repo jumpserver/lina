@@ -323,7 +323,7 @@ export default {
       } else {
         this.method = this.submitMethod
       }
-      if (this.drawer) {
+      if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
           this.method = 'post'
         } else {
@@ -410,13 +410,15 @@ export default {
       }
       let object = this.object
 
+      console.log('Object: ', object)
       if (!object || Object.keys(object).length === 0) {
         if (this.action === 'clone') {
           object = await this.getCloneForm(this.actionId)
         } else {
-          object = await this.getObjectDetail(this.iUrl)
+          object = await this.getObjectDetail(this.iUrl, this.actionId)
         }
       }
+      console.log('Object 2: ', object)
       if (object) {
         object = _.cloneDeep(object)
         this.$emit('update:object', object)
@@ -424,9 +426,14 @@ export default {
       }
       return object
     },
-    async getObjectDetail(url) {
+    async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      return this.$axios.get(url)
+      let data = await this.$axios.get(url, { params: { id }})
+      console.log('Is array: ', Array.isArray(data))
+      if (Array.isArray(data)) {
+        data = {}
+      }
+      return data
     }
   }
 }

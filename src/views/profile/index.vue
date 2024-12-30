@@ -1,50 +1,48 @@
 <template>
   <Page v-bind="$attrs">
-    <div>
-      <el-row :gutter="20">
-        <el-col :md="24" :sm="24">
-          <DetailCard :items="detailCardItems" />
-        </el-col>
-        <el-col :md="20" :sm="24" class="detail-right-quick-actions">
-          <QuickActions
-            :actions="authQuickActions"
-            :title="$tc('AuthSettings')"
+    <TwoCol>
+      <template>
+        <DetailCard :items="detailCardItems" />
+      </template>
+      <template #right>
+        <QuickActions
+          :actions="authQuickActions"
+          :title="$tc('AuthSettings')"
+          type="primary"
+        />
+        <QuickActions
+          :actions="messageSubscriptionQuickActions"
+          :title="$tc('NotificationConfiguration')"
+          fa="fa-info-circle"
+          style="margin-top: 15px"
+          type="info"
+        />
+        <IBox :title="$tc('InformationModification')" fa="fa-edit">
+          <table>
+            <tr>
+              <td> {{ $t('Phone') }}</td>
+              <td>
+                <PhoneInput :value="object.phone" />
+              </td>
+            </tr>
+            <tr>
+              <td> {{ $t('WeChat') }}</td>
+              <td>
+                <el-input v-model="object.wechat" />
+              </td>
+            </tr>
+          </table>
+          <el-button
+            size="small"
+            style="margin-top: 10px"
             type="primary"
-          />
-          <QuickActions
-            :actions="messageSubscriptionQuickActions"
-            :title="$tc('NotificationConfiguration')"
-            fa="fa-info-circle"
-            style="margin-top: 15px"
-            type="info"
-          />
-          <IBox :title="$tc('InformationModification')" fa="fa-edit">
-            <table>
-              <tr>
-                <td> {{ $t('Phone') }}</td>
-                <td>
-                  <PhoneInput :value="object.phone" />
-                </td>
-              </tr>
-              <tr>
-                <td> {{ $t('WeChat') }}</td>
-                <td>
-                  <el-input v-model="object.wechat" />
-                </td>
-              </tr>
-            </table>
-            <el-button
-              size="small"
-              style="margin-top: 10px"
-              type="primary"
-              @click="updateProfile"
-            >
-              {{ $t('Update') }}
-            </el-button>
-          </IBox>
-        </el-col>
-      </el-row>
-    </div>
+            @click="updateProfile"
+          >
+            {{ $t('Update') }}
+          </el-button>
+        </IBox>
+      </template>
+    </TwoCol>
   </Page>
 </template>
 
@@ -56,9 +54,11 @@ import DetailCard from '@/components/Cards/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/time'
 import store from '@/store'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     Page,
     IBox,
     PhoneInput,

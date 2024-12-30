@@ -1,12 +1,12 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24" class="auto-detail-card">
+  <TwoCol>
+    <template>
       <AutoDetailCard v-bind="basicInfoConfig" />
       <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
       <AutoDetailCard v-bind="customInfoConfig" />
       <AutoDetailCard v-bind="gatheredInfoConfig" />
-    </el-col>
-    <el-col :md="24" :sm="24" class="quick-actions">
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="NodeRelation"
@@ -22,8 +22,8 @@
         type="warning"
         v-bind="labelConfig"
       />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
@@ -31,10 +31,12 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import RelationCard from '@/components/Cards/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import { openTaskPage } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard,
     QuickActions,
     RelationCard

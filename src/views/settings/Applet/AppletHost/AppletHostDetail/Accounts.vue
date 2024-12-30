@@ -1,9 +1,5 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
-      <Account :columns-meta="columnsMeta" :extra-quick-actions="quickActions" :object.sync="object" />
-    </el-col>
-  </el-row>
+  <Account :columns-meta="columnsMeta" :extra-quick-actions="quickActions" :object.sync="object" />
 </template>
 
 <script>

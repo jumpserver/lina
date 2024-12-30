@@ -1,21 +1,27 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+  <TwoCol>
+    <template>
+      <AutoDetailCard
+        :fields="detailFields"
+        :object="object"
+        :url="url"
+      />
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import QuickActions from '@/components/QuickActions'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard,
     QuickActions
   },

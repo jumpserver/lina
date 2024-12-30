@@ -1,17 +1,17 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
-      <AutoDetailCard :object="object" v-bind="detail" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <AutoDetailCard :object="object" v-bind="detail" />
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard
   },
   props: {

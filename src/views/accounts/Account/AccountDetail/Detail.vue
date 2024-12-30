@@ -1,10 +1,13 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24" class="auto-detail-card">
-        <AutoDetailCard :object="object" v-bind="detail" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="quick-actions">
+    <TwoCol>
+      <template>
+        <AutoDetailCard
+          :object="object"
+          v-bind="detail"
+        />
+      </template>
+      <template #right>
         <QuickActions :actions="quickActions" type="primary" />
         <ViewSecret
           v-if="showViewSecretDialog"
@@ -19,9 +22,8 @@
           @canSetting="onCanSetting"
           @submit="onSubmit"
         />
-      </el-col>
-    </el-row>
-
+      </template>
+    </TwoCol>
     <el-drawer
       :append-to-body="true"
       :visible.sync="pamDrawerShow"
@@ -40,10 +42,12 @@ import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
 import { openTaskPage } from '@/utils/jms'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard,
     QuickActions,
     AssetDetail,

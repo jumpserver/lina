@@ -236,10 +236,6 @@ export default {
   ::v-deep .el-form-item {
     margin-bottom: 10px;
 
-    .item-params {
-      margin-top: 0;
-    }
-
     .el-form-item__label {
       padding: 0 30px 0 0;
       line-height: 30px;

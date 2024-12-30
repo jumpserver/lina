@@ -6,17 +6,17 @@
         <el-radio label="go">Go</el-radio>
       </el-radio-group>
     </IBox>
-    <el-row :gutter="20">
-      <el-col :lg="16" :md="16" :sm="16">
+    <TwoCol>
+      <template>
         <IBox title="README">
           <vue-markdown v-if="readme" :source="readme" />
           <span v-else>{{ $tc('NoData') }}</span>
         </IBox>
-      </el-col>
-      <el-col :lg="8" :md="8" :sm="8">
+      </template>
+      <template #right>
         <QuickActions :actions="quickActions" type="primary" />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
   </div>
 </template>
 
@@ -26,10 +26,12 @@ import { download } from '@/utils/common'
 import QuickActions from '@/components/QuickActions/index.vue'
 import VueMarkdown from 'vue-markdown'
 import { highlightBlock } from 'highlight.js'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'SDKList',
   components: {
+    TwoCol,
     QuickActions,
     IBox,
     VueMarkdown

@@ -1,11 +1,7 @@
 <template>
-  <el-row>
-    <el-col :md="24" :sm="24">
-      <IBox v-if="!loading">
-        <GenericCreateUpdateForm class="form" v-bind="$data" />
-      </IBox>
-    </el-col>
-  </el-row>
+  <IBox>
+    <GenericCreateUpdateForm class="form" v-bind="$data" />
+  </IBox>
 </template>
 
 <script>
@@ -34,7 +30,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/`,
+      url: `/api/v1/assets/platforms/${this.object.id}/`,
       disabled: this.object.internal,
       hasReset: false,
       hasDetailInMsg: false,
@@ -91,7 +87,7 @@ export default {
     width: 100%;;
 
     .el-form-item__content {
-      width: calc(75% - 50px);
+      width: calc(100% - 50px) !important;
     }
 
     .el-select {
@@ -105,7 +101,7 @@ export default {
     display: inline-block;
     position: absolute;
     right: 18px;
-    margin-top: -10px;
+    margin-top: 22px;
   }
 }
 

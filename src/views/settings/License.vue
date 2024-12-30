@@ -4,14 +4,14 @@
       <el-alert v-if="publicSettings.XPACK_ENABLED" type="success">
         {{ this.$t('ImportLicenseTip') }}
       </el-alert>
-      <el-row :gutter="20">
-        <el-col :md="24" :sm="24">
+      <TwoCol>
+        <template>
           <DetailCard :items="detailItems" :title="cardTitle" />
-        </el-col>
-        <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+        </template>
+        <template #right>
           <QuickActions :actions="quickActions" type="primary" />
-        </el-col>
-      </el-row>
+        </template>
+      </TwoCol>
       <Dialog
         :title="$tc('ImportLicense')"
         :visible.sync="dialogLicenseImport"
@@ -35,10 +35,12 @@ import { Dialog, QuickActions } from '@/components'
 import DetailCard from '@/components/Cards/DetailCard/index'
 import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'License',
   components: {
+    TwoCol,
     Page,
     DetailCard,
     QuickActions,

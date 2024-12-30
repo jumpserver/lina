@@ -138,7 +138,8 @@ export default {
 
     ::v-deep > div {
       margin-bottom: 50px;
-      height: 100%;
+      // 别设置，用户列页面会被撑开
+      //height: 100%;
     }
   }
 }

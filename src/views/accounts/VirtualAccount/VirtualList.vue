@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'VirtualAccountList',

@@ -1,9 +1,9 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
+  <TwoCol>
+    <template>
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="20" :sm="24">
+    </template>
+    <template #right>
       <IBox :title="$tc('Permissions')">
         <div style="height: 10%">
           <el-button
@@ -22,18 +22,20 @@
           </div>
         </div>
       </IBox>
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'RolePerms',
   components: {
+    TwoCol,
     AutoDataZTree,
     AutoDetailCard,
     IBox

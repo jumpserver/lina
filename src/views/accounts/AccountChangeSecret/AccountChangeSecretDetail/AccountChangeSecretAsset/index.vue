@@ -1,17 +1,17 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <GenericListTable
         ref="listTable"
         :header-actions="headerActions"
         :table-config="tableConfig"
       />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
@@ -19,10 +19,12 @@ import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import RelationCard from '@/components/Cards/RelationCard/index.vue'
 import AssetRelationCard from '@/components/Apps/AssetRelationCard/index.vue'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AccountChangeSecretAsset',
   components: {
+    TwoCol,
     GenericListTable, RelationCard, AssetRelationCard
   },
   props: {

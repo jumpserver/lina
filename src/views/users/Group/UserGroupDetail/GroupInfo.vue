@@ -1,17 +1,17 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
-      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'GroupInfo',
   components: {
+    TwoCol,
     AutoDetailCard
   },
   props: {

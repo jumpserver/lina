@@ -55,7 +55,7 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   background-color: #f3f3f4;
-  height: 100% !important;
+  height: 100%;
   width: 100%;
   position: relative;
   overflow: auto;

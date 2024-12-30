@@ -4,6 +4,7 @@
     :active-menu.sync="iActiveMenu"
     :submenu="iSubmenu"
     :title="iTitle"
+    class="generic-detail-page"
     @tab-click="handleTabClick"
   >
     <template #headingRightSide>
@@ -291,8 +292,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .header-buttons {
   z-index: 999;
+}
+
+.generic-detail-page {
+  ::v-deep {
+    .tab-page-content {
+      padding-left: 15px;
+      padding-right: 10px;
+    }
+  }
 }
 </style>

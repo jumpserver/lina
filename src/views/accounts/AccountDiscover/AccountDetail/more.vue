@@ -1,16 +1,16 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
-      <AutoDetailCard :object="detail" :url="url" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <AutoDetailCard :object="detail" :url="url" />
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     AutoDetailCard
   },
   props: {

@@ -1,23 +1,30 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
-      <AutoDetailCard :fields="detailFields" :formatters="detailFormatters" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="10" :sm="24">
+  <TwoCol>
+    <template>
+      <AutoDetailCard
+        :fields="detailFields"
+        :formatters="detailFormatters"
+        :object="object"
+        :url="url"
+      />
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard type="info" v-bind="relationConfig" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'UserInfo',
   components: {
+    TwoCol,
     RelationCard,
     QuickActions,
     AutoDetailCard

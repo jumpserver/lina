@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24">
+    <TwoCol>
+      <template>
         <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+      </template>
+      <template #right>
         <QuickActions :actions="quickActions" type="primary" />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
     <SecretDialog ref="secretDialog" />
   </div>
 </template>
@@ -16,10 +16,12 @@
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import SecretDialog from '@/components/Dialog/Secret.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'IntegrationApplicationInfo',
   components: {
+    TwoCol,
     SecretDialog,
     AutoDetailCard,
     QuickActions

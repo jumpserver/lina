@@ -1,12 +1,12 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <DetailCard v-if="object" :items="detailItems" />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <QuickActions v-if="object" :actions="quickActions" type="primary" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
@@ -14,10 +14,12 @@ import DetailCard from '@/components/Cards/DetailCard/index'
 import QuickActions from '@/components/QuickActions'
 import { terminateSession } from '@/api/sessions'
 import { toSafeLocalDateStr } from '@/utils/time'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'SessionDetailInfo',
   components: {
+    TwoCol,
     DetailCard,
     QuickActions
   },

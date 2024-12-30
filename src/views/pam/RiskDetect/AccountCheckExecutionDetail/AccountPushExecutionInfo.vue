@@ -1,9 +1,7 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+  </TwoCol>
 </template>
 
 <script>

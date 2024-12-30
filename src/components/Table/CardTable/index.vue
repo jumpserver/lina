@@ -379,7 +379,7 @@ export default {
 }
 
 .el-col {
-  min-width: 330px;
+  //min-width: 330px; 设置完后，remote app 列表会有问题
 }
 
 .no-data {

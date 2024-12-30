@@ -1,13 +1,13 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
-      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" class- />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+  <TwoCol>
+    <template>
+      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+    </template>
+    <template #right>
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="nodeRelationConfig" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
@@ -15,10 +15,12 @@ import ListTable from '@/components/Table/ListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 import AssetRelationCard from '@/components/Apps/AssetRelationCard'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetPermissionAsset',
   components: {
+    TwoCol,
     ListTable,
     RelationCard,
     AssetRelationCard

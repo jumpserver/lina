@@ -1,13 +1,11 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24" class="list-table">
-        <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="perm-user-group-card">
-        <PermUserGroupCard v-bind="UserGroupCardConfig" />
-      </el-col>
-    </el-row>
+    <TwoCol>
+      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+    </TwoCol>
+    <TwoCol>
+      <PermUserGroupCard v-bind="UserGroupCardConfig" />
+    </TwoCol>
     <GenericListTableDialog
       :visible.sync="GenericListTableDialogConfig.visible"
       v-bind="GenericListTableDialogConfig"
@@ -20,10 +18,12 @@ import ListTable from '@/components/Table/ListTable'
 import { GenericListTableDialog } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import PermUserGroupCard from './components/PermUserGroupCard'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'PermUserList',
   components: {
+    TwoCol,
     ListTable, GenericListTableDialog, PermUserGroupCard
   },
   props: {

@@ -1,11 +1,15 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24">
-        <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+    <TwoCol>
+      <template>
+        <AutoDetailCard
+          :excludes="excludes"
+          :object="object"
+          :url="url"
+        />
         <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+      </template>
+      <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
         <QuickActions :actions="quickExecuteActions" type="primary" />
         <RelationCard
@@ -15,8 +19,8 @@
           type="info"
           v-bind="strategyRelationConfig"
         />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
     <Dialog
       :close-on-click-modal="false"
       :destroy-on-close="true"
@@ -37,10 +41,12 @@ import QuickActions from '@/components/QuickActions'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
 import Dialog from '@/components/Dialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'CloudAccountDetail',
   components: {
+    TwoCol,
     Dialog,
     TimingPanel,
     QuickActions,

@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <AccountListTable
         ref="ListTable"
         :asset="object"
@@ -12,8 +12,8 @@
         :has-left-actions="false"
         :url="url"
       />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <IBox :title="$tc('Account')" type="primary">
         <AccountFormatter
           :assets="assetIds"
@@ -23,17 +23,19 @@
           @change="updateAccount"
         />
       </IBox>
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import { AccountListTable, IBox } from '@/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetPermissionAccount',
   components: {
+    TwoCol,
     IBox,
     AccountFormatter,
     AccountListTable

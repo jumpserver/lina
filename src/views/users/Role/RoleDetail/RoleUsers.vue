@@ -1,25 +1,27 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <ListTable
         ref="ListTable"
         :header-actions="headerActions"
         :table-config="tableConfig"
       />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <RelationCard v-if="!loading" ref="userRelation" v-bind="relationConfig" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import { ListTable, RelationCard } from '@/components'
 import { mapGetters } from 'vuex'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     ListTable,
     RelationCard
   },

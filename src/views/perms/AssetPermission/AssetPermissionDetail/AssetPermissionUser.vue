@@ -1,23 +1,25 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <RelationCard type="primary" v-bind="userRelationConfig" />
       <RelationCard style="margin-top: 15px" type="info" v-bind="groupRelationConfig" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetPermissionUser',
   components: {
+    TwoCol,
     ListTable,
     RelationCard
   },

@@ -1,26 +1,22 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24">
-        <el-alert type="success">
-          {{ $t('AccountTemplateUpdateSecretHelpText') }}
-        </el-alert>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24" class="generic-list-table">
+    <el-alert type="success">
+      {{ $t('AccountTemplateUpdateSecretHelpText') }}
+    </el-alert>
+    <TwoCol>
+      <template>
         <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="quick-actions">
+      </template>
+      <template #right>
         <QuickActions :actions="quickActions" type="primary" />
-      </el-col>
-      <ViewSecret
-        v-if="showViewSecretDialog"
-        :account="account"
-        :url="secretUrl"
-        :visible.sync="showViewSecretDialog"
-      />
-    </el-row>
+      </template>
+    </TwoCol>
+    <ViewSecret
+      v-if="showViewSecretDialog"
+      :account="account"
+      :url="secretUrl"
+      :visible.sync="showViewSecretDialog"
+    />
   </div>
 </template>
 
@@ -30,10 +26,12 @@ import QuickActions from '@/components/QuickActions'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AccountTemplateChangeSecret',
   components: {
+    TwoCol,
     ViewSecret,
     QuickActions,
     GenericListTable

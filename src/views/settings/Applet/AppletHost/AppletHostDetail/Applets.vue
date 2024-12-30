@@ -1,22 +1,24 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="24" :sm="24">
+  <TwoCol>
+    <template>
       <ListTable :header-actions="headerConfig" :table-config="config" />
-    </el-col>
-    <el-col :md="20" :sm="24" class="detail-right-quick-actions">
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script type="text/jsx">
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Publications',
   components: {
+    TwoCol,
     ListTable,
     QuickActions
   },

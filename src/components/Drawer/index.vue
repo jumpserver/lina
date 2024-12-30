@@ -94,6 +94,11 @@ export default {
       margin-right: 0;
     }
 
+    // Form 中的子 form
+    .el-form {
+      margin-left: 0;
+    }
+
     &.el-form--label-top {
       .el-radio-group {
         .el-radio {
@@ -111,7 +116,7 @@ export default {
 
       .el-form-item__content:has(.el-checkbox):not(:has(.el-checkbox-group)) {
         display: inline-block; /* 更改为 inline-block */
-        width: unset;
+        //width: unset; /* 这个设置上去后，平台详情中， Automations 会有问题 */
         vertical-align: bottom;
       }
 

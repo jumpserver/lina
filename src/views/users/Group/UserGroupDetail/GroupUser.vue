@@ -1,24 +1,28 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col :md="24" :sm="24">
-        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </el-col>
-      <el-col :md="20" :sm="24" class="detail-right-quick-actions">
-        <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
-      </el-col>
-    </el-row>
-  </div>
+  <TwoCol>
+    <template>
+      <GenericListTable
+        ref="listTable"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
+    </template>
+    <template #right>
+      <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'GroupUser',
   components: {
+    TwoCol,
     RelationCard,
     GenericListTable
   },

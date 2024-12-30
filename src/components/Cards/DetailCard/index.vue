@@ -1,8 +1,8 @@
 <template>
   <IBox :fa="fa" :title="title">
     <el-form :label-width="labelWidth" class="content" label-position="left">
-      <span v-for="item in items" :key="item.key">
-        <el-form-item v-if="item.has !== false" :class="item.class" :label="item.key">
+      <template v-for="item in items">
+        <el-form-item v-if="item.has !== false" :key="item.key" :class="item.class" :label="item.key">
           <span slot="label"> {{ formateLabel(item.key) }}</span>
           <span
             :is="item.component"
@@ -11,7 +11,7 @@
           />
           <ItemValue v-else :value="item.value" class="item-value" v-bind="item" />
         </el-form-item>
-      </span>
+      </template>
     </el-form>
   </IBox>
 </template>
@@ -79,6 +79,7 @@ export default {
     padding: 1px 0;
     margin-bottom: 0;
     text-align: end;
+    line-height: 1.2;
 
     &:last-child {
       //border-bottom: none;
