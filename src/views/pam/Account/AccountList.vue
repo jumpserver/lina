@@ -61,6 +61,8 @@ export default {
                             key: row.id,
                             value: protocol
                           })
+
+                          this.handleWindowOpen(row, protocol)
                         }
                       }
                     }}
