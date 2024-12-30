@@ -102,7 +102,7 @@ export default {
       overflow: hidden;
       color: var(--color-icon-primary);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 30px;
       font-weight: 400;
 
       span {
