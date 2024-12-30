@@ -114,17 +114,8 @@ export default {
       })
     },
     handleWindowOpen(row, protocol) {
-      // 暂将两个页面分开
-      if (row.asset.type.value === 'windows') {
-        return window.open(
-          `/luna/pam_gui_connect/${row.id}/${row.username}/${row.asset.id}/${
-            row.asset.name
-          }/${protocol}`,
-          '_blank'
-        )
-      }
       window.open(
-        `/luna/pam_terminal_connect/${row.id}/${row.username}/${row.asset.id}/${
+        `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${
           row.asset.name
         }/${protocol}`,
         '_blank'
