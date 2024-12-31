@@ -1,10 +1,12 @@
 <template>
   <div>
     <TwoCol>
-      <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-    </TwoCol>
-    <TwoCol>
-      <PermUserGroupCard v-bind="UserGroupCardConfig" />
+      <template>
+        <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+      </template>
+      <template #right>
+        <PermUserGroupCard v-bind="UserGroupCardConfig" />
+      </template>
     </TwoCol>
     <GenericListTableDialog
       :visible.sync="GenericListTableDialogConfig.visible"
@@ -39,19 +41,12 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
         columns: [
-          'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'system_roles', 'org_roles', 'source',
-          'is_valid', 'login_blocked', 'mfa_enabled',
-          'mfa_force_enabled', 'is_expired',
-          'last_login', 'date_joined', 'date_password_last_updated',
-          'comment', 'created_by', 'actions'
+          'name', 'username', 'email',
+          'comment', 'created_by'
         ],
         columnsShow: {
-          min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username',
-            'source', 'is_valid', 'actions'
-          ]
+          min: ['name', 'username'],
+          default: ['name', 'username']
         },
         columnsMeta: {
           name: {

@@ -340,13 +340,13 @@ b, strong {
 }
 
 tr td {
-  line-height: 1.42857;
+  line-height: 1.4;
   padding: 8px 0;
   vertical-align: top;
 }
 
 tr.item td {
-  border-top: 1px solid #e7eaec;
+  border-top: 1px dashed #EBEEF5;
 }
 
 .box-margin {

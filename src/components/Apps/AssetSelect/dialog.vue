@@ -2,7 +2,6 @@
   <Dialog
     :close-on-click-modal="false"
     :title="$tc('Assets')"
-    :disabled-status="!isLoaded"
     custom-class="asset-select-dialog"
     top="2vh"
     v-bind="$attrs"
@@ -23,8 +22,8 @@
       :url="baseUrl"
       class="tree-table"
       v-bind="$attrs"
-      v-on="$listeners"
       @loaded="handleTableLoaded"
+      v-on="$listeners"
     />
   </Dialog>
 </template>

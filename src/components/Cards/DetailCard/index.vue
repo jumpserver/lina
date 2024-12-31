@@ -75,7 +75,7 @@ export default {
   line-height: 2;
 
   ::v-deep .el-form-item {
-    //border-bottom: 1px dashed #EBEEF5;
+    border-bottom: 1px dashed #F4F4F4;
     padding: 1px 0;
     margin-bottom: 0;
     text-align: end;

@@ -1,16 +1,19 @@
 <template>
-  <TwoCol>
-    <template>
-      <GenericListTable
-        ref="listTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-    </template>
-    <template #right>
-      <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
-    </template>
-  </TwoCol>
+  <div>
+    <TwoCol>
+      <template>
+        <GenericListTable
+          ref="listTable"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+        />
+      </template>
+      <template #right>
+        <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
+      </template>
+    </TwoCol>
+    <TwoCol />
+  </div>
 </template>
 
 <script>
@@ -34,7 +37,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       quickActions: [
         {
@@ -69,14 +71,14 @@ export default {
       tableConfig: {
         url: `/api/v1/users/users/?group_id=${this.object.id}`,
         columns: [
-          'name', 'username', 'is_valid', 'delete_action'
+          'name', 'delete_action'
         ],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail',
-              can: vm.$hasPerm('user.view_user')
+              can: false,
+              getTitle: ({ row }) => row.name + '(' + row.username + ')'
             }
           },
           delete_action: {

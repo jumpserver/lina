@@ -92,7 +92,6 @@ export default {
 
 <style lang="less" scoped>
 .dialog ::v-deep form {
-  padding: 0 40px;
 }
 
 .dialog ::v-deep .el-dialog__footer {

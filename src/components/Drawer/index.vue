@@ -85,6 +85,12 @@ export default {
     padding-bottom: 20px;
   }
 
+  .page-submenu {
+    .el-tabs__item.is-top {
+      padding: 0 10px;
+    }
+  }
+
   .el-form {
     margin-right: 30px;
     height: 100%;

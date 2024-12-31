@@ -1,15 +1,16 @@
 <template>
   <Dialog
-    v-if="setting.AddAssetDialogVisible"
+    v-if="setting.addAssetDialogVisible"
     :destroy-on-close="true"
+    :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAssetInDomain')"
-    :visible.sync="setting.AddAssetDialogVisible"
+    :visible.sync="setting.addAssetDialogVisible"
     after
     custom-class="asset-select-dialog"
     top="15vh"
-    width="50vw"
+    width="600px"
   >
     <GenericCreateUpdateForm
       v-bind="formConfig"
@@ -20,7 +21,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
+import { Select2 } from '@/components'
 
 export default {
   components: {
@@ -31,7 +32,7 @@ export default {
     setting: {
       type: Object,
       default: () => {
-        return { AddAssetDialogVisible: false }
+        return { addAssetDialogVisible: false }
       }
     },
     object: {
@@ -58,12 +59,12 @@ export default {
         fields: ['assets'],
         fieldsMeta: {
           assets: {
-            type: 'assetSelect',
-            component: AssetSelect,
-            label: this.$t('Asset'),
+            label: this.$t('Assets'),
+            component: Select2,
+            type: 'select2',
             el: {
               value: [],
-              baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
+              url: '/api/v1/assets/assets/?domain_enabled=true',
               treeUrlQuery: {
                 domain_enabled: true
               },
@@ -86,7 +87,7 @@ export default {
   },
   methods: {
     onSubmitSuccess(res) {
-      this.setting.AddAssetDialogVisible = false
+      this.setting.addAssetDialogVisible = false
       this.$emit('close', res)
     }
   }
@@ -95,7 +96,6 @@ export default {
 
 <style lang="less" scoped>
 .dialog ::v-deep form {
-  padding: 0 40px;
 }
 
 .dialog ::v-deep .el-dialog__footer {

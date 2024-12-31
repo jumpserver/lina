@@ -122,7 +122,7 @@ export function getDefaultConfig(vm) {
     columnsExclude: ['spec_info', 'auto_config'],
     columnsShow: {
       min: ['name', 'address', 'actions'],
-      default: [
+      default: vm.defaultColumns || [
         'name', 'address', 'accounts_amount', 'platform',
         'connectivity', 'actions'
       ]

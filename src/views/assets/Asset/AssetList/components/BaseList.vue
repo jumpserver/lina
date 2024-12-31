@@ -86,12 +86,15 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    defaultColumns: {
+      type: Array,
+      default: null
     }
   },
   data() {
     const vm = this
     const defaultConfig = getDefaultConfig(vm)
-    console.log('Default config: ', defaultConfig)
 
     const recentPlatforms = [
       {
@@ -113,6 +116,7 @@ export default {
       type: 'primary',
       icon: '',
       split: true,
+      has: this.headerActions.hasCrate,
       callback: () => {
         this.showPlatform = false
         console.log('Create action')
@@ -220,7 +224,12 @@ export default {
         node: this.$route.query?.node || this.$route.query?.node_id || ''
       }
       this.$router.push({
-        query: { _platform: createProps.platform, _type: createProps.type, _category: createProps.category, _node: createProps.node }
+        query: {
+          _platform: createProps.platform,
+          _type: createProps.type,
+          _category: createProps.category,
+          _node: createProps.node
+        }
       })
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'create',

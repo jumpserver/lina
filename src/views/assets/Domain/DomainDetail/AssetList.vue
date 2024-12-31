@@ -1,16 +1,20 @@
 <template>
   <div>
-    <BaseList ref="AssetBaseList" v-bind="tableConfig" />
-    <AddAssetDialog :object="object" :setting="AddAssetSetting" @close="handleAddAssetDialogClose" />
+    <TwoCol>
+      <BaseList ref="AssetBaseList" v-bind="tableConfig" />
+    </TwoCol>
+    <AddAssetDialog :object="object" :setting="addAssetSetting" @close="handleAddAssetDialogClose" />
   </div>
 </template>
 
 <script>
 import BaseList from '../../Asset/AssetList/components/BaseList'
 import AddAssetDialog from '@/views/assets/Domain/components/AddAssetDialog.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     AddAssetDialog,
     BaseList
   },
@@ -25,7 +29,7 @@ export default {
     return {
       tableConfig: {
         category: 'all',
-        url: `/api/v1/assets/assets/?domain=${this.$route.params.id}&exclude_platform=Gateway`,
+        url: `/api/v1/assets/assets/?domain=${this.object.id}&exclude_platform=Gateway`,
         tableConfig: {
           columnsMeta: {
             actions: {
@@ -48,7 +52,7 @@ export default {
               title: this.$t('Add'),
               type: 'primary',
               callback: function() {
-                this.AddAssetSetting.AddAssetDialogVisible = true
+                this.addAssetSetting.addAssetDialogVisible = true
               }.bind(this)
             }
           ]
@@ -78,14 +82,14 @@ export default {
           }
         ]
       },
-      AddAssetSetting: {
-        AddAssetDialogVisible: false
+      addAssetSetting: {
+        addAssetDialogVisible: false
       }
     }
   },
   methods: {
     handleAddAssetDialogClose() {
-      this.AddAssetSetting.AddAssetDialogVisible = false
+      this.addAssetSetting.addAssetDialogVisible = false
       this.reloadTable()
     },
     removeAsset(rows) {

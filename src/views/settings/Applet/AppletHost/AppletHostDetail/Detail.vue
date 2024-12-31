@@ -165,7 +165,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: false,
+        showUndefined: false,
         excludes: ['spec_info.script']
       },
       detailInfoConfig: {
@@ -173,7 +173,7 @@ export default {
         title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'info',
-        showUndefine: false
+        showUndefined: false
       }
     }
   },

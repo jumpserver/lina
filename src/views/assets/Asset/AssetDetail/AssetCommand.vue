@@ -1,17 +1,13 @@
 <template>
-  <TwoCol>
-    <BaseList :asset-id="object.id" :is-page="false" />
-  </TwoCol>
+  <BaseList :asset-id="object.id" :is-page="false" />
 </template>
 
 <script>
 import BaseList from '@/views/sessions/CommandList/index.vue'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetCommand',
   components: {
-    TwoCol,
     BaseList
   },
   props: {

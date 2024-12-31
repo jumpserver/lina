@@ -37,7 +37,7 @@ export default {
       type: Array,
       default: null
     },
-    showUndefine: {
+    showUndefined: {
       type: Boolean,
       default: true
     },
@@ -225,7 +225,7 @@ export default {
         value = this.parseValue(value, fieldMeta.type)
 
         if (value === undefined) {
-          if (this.showUndefine) {
+          if (this.showUndefined) {
             value = '-'
           } else {
             continue

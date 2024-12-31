@@ -21,16 +21,12 @@
           @onConfirm="onConfirm"
         />
       </template>
-      <template #right>
-        <QuickActions :actions="quickActions" :title="title" type="primary" />
-      </template>
     </TwoCol>
   </div>
 </template>
 
 <script>
 import { AccountListTable } from '@/components'
-import QuickActions from '@/components/QuickActions'
 import AccountTemplateDialog from '@/views/assets/Asset/AssetCreateUpdate/components/AccountTemplateDialog'
 import { openTaskPage } from '@/utils/jms'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -39,7 +35,6 @@ export default {
   name: 'Detail',
   components: {
     TwoCol,
-    QuickActions,
     AccountListTable,
     AccountTemplateDialog
   },

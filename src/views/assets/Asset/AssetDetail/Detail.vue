@@ -204,21 +204,21 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: true
+        showUndefined: true
       },
       customInfoConfig: {
         title: this.$t('CustomInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'custom_info',
-        showUndefine: false
+        showUndefined: false
       },
       gatheredInfoConfig: {
         url: `/api/v1/assets/hosts/${this.object.id}/`,
         title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'gathered_info',
-        showUndefine: false
+        showUndefined: false
       }
     }
   },
