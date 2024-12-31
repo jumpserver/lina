@@ -167,7 +167,7 @@ export default {
 
   ::v-deep .form-group-header {
     .hr-line-dashed {
-      margin: 5px 0;
+      //margin: 5px 0;
     }
 
     h3 {

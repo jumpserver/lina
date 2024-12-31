@@ -8,7 +8,7 @@
     v-bind="data.attrs"
   >
     <template v-if="data.label" #label>
-      <span>{{ data.label }}</span>
+      <span :title="data.label">{{ data.label }}</span>
       <el-tooltip
         v-if="data.helpTip"
         :open-delay="500"

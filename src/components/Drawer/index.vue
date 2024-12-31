@@ -110,6 +110,21 @@ export default {
       margin-left: 0;
     }
 
+    .el-form-item {
+      .el-form-item__label {
+        padding-right: 20px;
+      }
+
+      .el-radio {
+        line-height: 25px;
+        margin-right: 13px;
+
+        .el-radio__label {
+          padding-left: 5px;
+        }
+      }
+    }
+
     &.el-form--label-top {
       .el-radio-group {
         .el-radio {
@@ -122,7 +137,7 @@ export default {
         padding-left: 12px;
 
         .el-form-item__label {
-          padding: 0 30px 0 0;
+          padding: 0 20px 0 0;
           line-height: 30px;
         }
 

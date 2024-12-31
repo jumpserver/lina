@@ -247,6 +247,13 @@ export default {
       i {
         color: var(--color-icon-primary);
       }
+
+      span {
+        max-width: calc(100% - 25px);
+        white-space: nowrap; /* 禁止换行 */
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
 
     .el-form-item__content {
