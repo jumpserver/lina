@@ -43,4 +43,8 @@ export default {
 .drawer ::v-deep .page-heading {
   display: none;
 }
+
+.drawer ::v-deep .el-radio-group {
+  display: flex;
+}
 </style>
