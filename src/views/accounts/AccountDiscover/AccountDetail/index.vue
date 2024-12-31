@@ -12,6 +12,7 @@ import Info from './info.vue'
 import More from './more.vue'
 
 export default {
+  name: 'AccountDiscoverDetail',
   components: {
     GenericDetailPage,
     Info,
