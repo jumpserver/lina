@@ -6,11 +6,12 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
-
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'AccountPushExecutionInfo',
   components: {
-    AutoDetailCard
+    AutoDetailCard,
+    TwoCol
   },
   props: {
     object: {

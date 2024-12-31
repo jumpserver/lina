@@ -11,6 +11,7 @@ import { GenericDetailPage } from '@/layout/components'
 import Info from './info.vue'
 
 export default {
+  name: 'ExecutionDetail',
   components: {
     GenericDetailPage,
     Info

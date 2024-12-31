@@ -1,11 +1,10 @@
 import { toSafeLocalDateStr } from '@/utils/time'
-import { ActionsFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
 
 export const gatherAccountTableConfig = (vm, url) => {
   if (!url) {
     url = '/api/v1/accounts/gathered-accounts/'
   }
-  const h = vm.$createElement
   return {
     url: url,
     hasTree: true,
@@ -23,25 +22,30 @@ export const gatherAccountTableConfig = (vm, url) => {
     },
     columnsMeta: {
       asset: {
-        formatter: function(row) {
-          const to = {
-            name: 'AssetDetail',
-            params: { id: row.asset.id }
-          }
-          if (vm.$hasPerm('assets.view_asset')) {
-            return h('router-link', { props: { to }}, row.asset.name)
-          } else {
-            return h('span', row.asset.name)
-          }
+        formatter: DetailFormatter,
+        formatterArgs: {
+          can: vm.$hasPerm('assets.view_asset'),
+          getTitle: ({ row }) => row.asset.name,
+          getRoute({ row }) {
+            return {
+              name: 'AssetDetail',
+              params: { id: row.asset.id }
+            }
+          },
+          drawer: true
         }
       },
       username: {
-        formatter: function(row) {
-          const to = {
-            name: 'AccountDiscoverAccountDetail',
-            params: { id: row.id }
-          }
-          return h('router-link', { props: { to }}, row.username)
+        formatter: DetailFormatter,
+        formatterArgs: {
+          can: true,
+          getRoute({ row }) {
+            return {
+              name: 'AccountDiscoverAccountDetail',
+              params: { id: row.id }
+            }
+          },
+          drawer: true
         }
       },
       present: {

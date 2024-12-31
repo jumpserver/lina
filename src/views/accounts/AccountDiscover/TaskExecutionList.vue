@@ -49,7 +49,8 @@ export default {
                 name: 'AccountDiscoverTaskDetail',
                 params: { id: row.automation },
                 query: { type: 'pam' }
-              })
+              }),
+              drawer: true
             },
             id: ({ row }) => row.automation
           },
