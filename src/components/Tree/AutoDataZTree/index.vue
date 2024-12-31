@@ -287,6 +287,7 @@ export default {
         return
       }
       this.currentNode = treeNode
+      console.log('Treenode: ', treeNode)
       this.currentNodeId = treeNode.meta.data.id
       // 屏蔽收藏资产
       if (treeNode?.id === '-12') {

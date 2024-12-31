@@ -91,8 +91,13 @@ export default {
     }
   }
 
+  .form-buttons {
+    margin-left: 13px;
+  }
+
   .el-form {
-    margin-right: 30px;
+    margin-right: 1px;
+    padding-right: 15px;
     height: 100%;
 
     // Detail 中
@@ -111,6 +116,28 @@ export default {
           display: block;
           padding-bottom: 3px;
         }
+      }
+
+      .el-form-item {
+        padding-left: 12px;
+
+        .el-form-item__label {
+          padding: 0 30px 0 0;
+          line-height: 30px;
+        }
+
+        .sub-form {
+          margin-left: -1px;
+
+          .form-fields {
+            max-height: unset;
+          }
+        }
+      }
+
+      &.form-fields {
+        //overflow: auto;
+        //max-height: calc(100vh - 180px);
       }
 
       .el-checkbox-group {
@@ -136,25 +163,7 @@ export default {
     }
 
     .form-group-header {
-      margin-left: 10px;
-    }
-
-    .el-form-item {
-      //padding-left: 2px;
-      padding-left: 12px;
-
-      // Top 上面时
-      &.label-top {
-        .el-form-item__label {
-          padding: 0 30px 0 0;
-          line-height: 30px;
-        }
-
-        .sub-form {
-          margin-left: -12px;
-        }
-
-      }
+      margin-left: 20px;
     }
   }
 

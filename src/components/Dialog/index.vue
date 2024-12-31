@@ -82,8 +82,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     iWidth() {
@@ -102,58 +101,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog ::v-deep .el-dialog {
-    border-radius: 0.3em;
-    max-width: min(100vw, 1500px);
+.dialog ::v-deep .el-dialog {
+  border-radius: 0.3em;
+  max-width: min(100vw, 1500px);
 
+  //.el-form, .form-buttons {
+  //  margin-left: 20px;
+  //}
+
+  .form-group-header {
+    margin-left: 20px;
+  }
+
+  .el-form--label-top {
     .form-group-header {
-      margin-left: 20px;
-    }
-
-    .el-icon-circle-check {
-      display: none;
-    }
-
-    &__header {
-      box-sizing: border-box;
-      padding: 15px 22px;
-      border-bottom: 1px solid #dee2e6;
-      font-weight: 400;
-    }
-
-    &__body {
-      padding: 20px 30px;
-
-      &:has(.el-table) {
-        background: #f3f3f4;
-      }
-    }
-
-    &__footer {
-      border-top: 1px solid #dee2e6;
-      padding: 16px 25px;
-      justify-content: flex-end;
+      margin-left: 0;
     }
   }
 
-  @media (max-width: 900px) {
-    .dialog ::v-deep .el-dialog {
-      max-width: calc(100% - 30px);
+  .el-icon-circle-check {
+    display: none;
+  }
+
+  &__header {
+    box-sizing: border-box;
+    padding: 15px 22px;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 400;
+  }
+
+  &__body {
+    padding: 20px 30px;
+
+    &:has(.el-table) {
+      background: #f3f3f4;
     }
   }
 
-  .dialog-footer ::v-deep button.el-button {
-    font-size: 13px;
-    padding: 8px 12px;
+  &__footer {
+    border-top: 1px solid #dee2e6;
+    padding: 16px 25px;
+    justify-content: flex-end;
   }
+}
 
-  .dialog-fade-enter-active, .dialog-fade-leave-active {
-    transition: opacity 1s ease;
+@media (max-width: 900px) {
+  .dialog ::v-deep .el-dialog {
+    max-width: calc(100% - 30px);
   }
+}
 
-  .dialog-fade-enter, .dialog-fade-leave-to /* .dialog-fade-leave-active 在 <2.1.8 中以及被重复声明 */
-  {
-    opacity: 0;
-  }
+.dialog-footer ::v-deep button.el-button {
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+.dialog-fade-enter-active, .dialog-fade-leave-active {
+  transition: opacity 1s ease;
+}
+
+.dialog-fade-enter, .dialog-fade-leave-to /* .dialog-fade-leave-active 在 <2.1.8 中以及被重复声明 */
+{
+  opacity: 0;
+}
 
 </style>

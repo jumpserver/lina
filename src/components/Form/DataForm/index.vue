@@ -1,68 +1,71 @@
 <template>
-  <ElFormRender
-    :id="id"
-    ref="form"
-    :class="[mobile ? 'mobile' : 'desktop', {'label-top': iLabelPosition === 'top'}]"
-    :content="fields"
-    :form="basicForm"
-    :label-position="iLabelPosition"
-    label-width="25%"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <!-- slot 透传 -->
-    <slot
-      v-for="item in fields"
-      :slot="`id:${item.id}`"
-      :name="`id:${item.id}`"
-    />
-    <slot
-      v-for="item in fields"
-      :slot="`$id:${item.id}`"
-      :name="`$id:${item.id}`"
-    />
+  <div>
+    <ElFormRender
+      :id="id"
+      ref="form"
+      :class="[mobile ? 'mobile' : 'desktop']"
+      :content="fields"
+      :form="basicForm"
+      :label-position="iLabelPosition"
+      class="form-fields"
+      label-width="23%"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <!-- slot 透传 -->
+      <slot
+        v-for="item in fields"
+        :slot="`id:${item.id}`"
+        :name="`id:${item.id}`"
+      />
+      <slot
+        v-for="item in fields"
+        :slot="`$id:${item.id}`"
+        :name="`$id:${item.id}`"
+      />
 
-    <div v-if="hasButtons" class="form-buttons">
-      <el-button
-        v-if="defaultButton"
-        :disabled="!canSubmit"
-        :loading="isSubmitting"
-        :size="submitBtnSize"
-        type="primary"
-        @click="submitForm('form')"
-      >
-        {{ iSubmitBtnText }}
-      </el-button>
+      <div v-if="hasButtons" class="form-buttons">
+        <el-button
+          v-if="defaultButton"
+          :disabled="!canSubmit"
+          :loading="isSubmitting"
+          :size="submitBtnSize"
+          type="primary"
+          @click="submitForm('form')"
+        >
+          {{ iSubmitBtnText }}
+        </el-button>
 
-      <el-button
-        v-if="defaultButton && hasSaveContinue"
-        size="small"
-        @click="submitForm('form', true)"
-      >
-        {{ $t("SaveAndAddAnother") }}
-      </el-button>
+        <el-button
+          v-if="defaultButton && hasSaveContinue"
+          size="small"
+          @click="submitForm('form', true)"
+        >
+          {{ $t("SaveAndAddAnother") }}
+        </el-button>
 
-      <el-button
-        v-if="defaultButton && hasReset"
-        size="small"
-        @click="resetForm('form')"
-      >
-        {{ $t("Reset") }}
-      </el-button>
+        <el-button
+          v-if="defaultButton && hasReset"
+          size="small"
+          @click="resetForm('form')"
+        >
+          {{ $t("Reset") }}
+        </el-button>
 
-      <el-button
-        v-for="button in moreButtons"
-        v-show="!button.hidden"
-        :key="button.title"
-        :loading="button.loading"
-        size="small"
-        v-bind="button"
-        @click="handleClick(button)"
-      >
-        {{ button.title }}
-      </el-button>
-    </div>
-  </ElFormRender>
+        <el-button
+          v-for="button in moreButtons"
+          v-show="!button.hidden"
+          :key="button.title"
+          :loading="button.loading"
+          size="small"
+          v-bind="button"
+          @click="handleClick(button)"
+        >
+          {{ button.title }}
+        </el-button>
+      </div>
+    </ElFormRender>
+  </div>
 </template>
 
 <script>
@@ -151,8 +154,8 @@ export default {
       // if (this.drawer) {
       //   return 'left'
       // }
-      return this.drawer || this.mobile ? 'top' : 'right'
-      // return this.mobile ? 'top' : 'right'
+      // return this.drawer || this.mobile ? 'top' : 'right'
+      return this.mobile ? 'top' : 'right'
     }
   },
   mounted() {
@@ -320,8 +323,8 @@ export default {
   }
 
   ::v-deep .form-buttons {
-    margin-top: 20px;
-    margin-left: 25%;
+    margin-top: 30px;
+    margin-left: 23%;
   }
 }
 

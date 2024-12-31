@@ -1,5 +1,6 @@
 <template>
   <el-drawer
+    :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
@@ -26,7 +27,7 @@
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
                   shadow="hover"
-                  @click.native="createAsset(platform)"
+                  @click.native="handleSelect(platform)"
                 >
                   <div class="icon-zone">
                     <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
@@ -122,11 +123,8 @@ export default {
     this.loading = false
   },
   methods: {
-    createAsset(platform) {
-      this.$emit('select-platform', platform)
-    },
     getPlatformLogo(platform) {
-      return loadPlatformIcon(platform.name, platform.type)
+      return loadPlatformIcon(platform.name, platform.type.value)
     },
     onConfirm() {
       this.iVisible = false
@@ -144,6 +142,7 @@ export default {
         recentPlatformIds.pop()
       }
       this.recentPlatformIds = recentPlatformIds
+      console.log('Connected: ', platform)
       localStorage.setItem('recentPlatforms', JSON.stringify(recentPlatformIds))
     },
     handleSelect(platform) {
