@@ -6,6 +6,9 @@ export default [
     path: 'check',
     name: 'AccountCheck',
     component: empty,
+    redirect: {
+      name: 'AccountCheckList'
+    },
     meta: {
       app: 'accounts',
       name: 'BaseAccountRisk',
@@ -18,7 +21,8 @@ export default [
         component: () => import('@/views/pam/RiskDetect/index.vue'),
         name: 'AccountCheckList',
         meta: {
-          title: i18n.t('RiskDetection')
+          title: i18n.t('RiskDetection'),
+          permissions: ['accounts.view_accountrisk']
         }
       },
       {
@@ -27,7 +31,8 @@ export default [
         name: 'AccountCheckCreate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountCheckCreate')
+          title: i18n.t('AccountCheckCreate'),
+          permissions: ['accounts.view_accountrisk']
         }
       },
       {
@@ -36,7 +41,8 @@ export default [
         name: 'AccountCheckUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('AccountCheckUpdate')
+          title: i18n.t('AccountCheckUpdate'),
+          permissions: ['accounts.view_accountrisk']
         }
       }
     ]
