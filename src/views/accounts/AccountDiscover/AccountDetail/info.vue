@@ -6,10 +6,13 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
+  name: 'AccountDiscoverInfo',
   components: {
-    AutoDetailCard
+    AutoDetailCard,
+    TwoCol
   },
   props: {
     object: {

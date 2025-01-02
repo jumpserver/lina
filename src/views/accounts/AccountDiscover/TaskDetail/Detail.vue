@@ -6,12 +6,14 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'Detail',
   components: {
-    AutoDetailCard
+    AutoDetailCard,
+    TwoCol
   },
   props: {
     object: {
