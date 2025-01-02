@@ -19,10 +19,19 @@ export default {
     UserJsonTab,
     AssetJsonTab
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       TaskDetail: {},
       config: {
+        url: `/api/v1/acls/login-asset-acls/`,
         activeMenu: 'Detail',
         submenu: [
           {
@@ -40,8 +49,8 @@ export default {
         ],
         hasRightSide: true,
         actions: {
-          detailApiUrl: `/api/v1/acls/login-asset-acls/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/acls/login-asset-acls/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/acls/login-asset-acls/${this.object.id}/`,
+          deleteApiUrl: `/api/v1/acls/login-asset-acls/${this.object.id}/`
         }
       }
     }

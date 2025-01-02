@@ -1,18 +1,18 @@
 <template>
-  <el-row :gutter="24">
-    <el-col :md="20" :sm="22">
-      <ListTable v-bind="config" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <ListTable v-bind="config" />
+  </TwoCol>
 </template>
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
 import { toM2MJsonParams } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetJsonTab',
   components: {
+    TwoCol,
     ListTable
   },
   props: {
@@ -33,9 +33,11 @@ export default {
         },
         tableConfig: {
           url: `/api/v1/assets/assets/?${key}=${value}`,
-          columns: ['name', 'address', 'platform',
-            'type', 'is_active'
-          ],
+          columns: ['name', 'address', 'platform', 'type', 'is_active'],
+          columnsShow: {
+            min: ['name', 'address'],
+            default: ['name', 'address', 'platform']
+          },
           columnsMeta: {
             name: {
               label: this.$t('Asset'),
