@@ -17,6 +17,7 @@ import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
 import BatchResolveDialog from '@/views/pam/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
 import RiskScanDialog from './RiskScanDialog.vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -89,16 +90,17 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            formatter: function(row) {
-              const to = {
-                name: 'AssetDetail',
-                params: { id: row.asset.id }
-              }
-              if (vm.$hasPerm('assets.view_asset')) {
-                return vm.$createElement('router-link', { props: { to }}, row.asset.name)
-              } else {
-                return vm.$createElement('span', row.asset.name)
-              }
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: vm.$hasPerm('assets.view_asset'),
+              getTitle: ({ row }) => row.asset.name,
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset.id }
+                }
+              },
+              drawer: true
             }
           },
           username: {
