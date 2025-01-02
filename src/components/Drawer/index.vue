@@ -134,6 +134,13 @@ export default {
         margin-right: 0;
       }
 
+      .form-buttons {
+        position: absolute;
+        bottom: 13px;
+        margin-left: 20%;
+        margin-top: 0;
+      }
+
       // Form 中的子 form
       .el-form {
         margin-left: 0;
@@ -231,13 +238,6 @@ export default {
 
       height: calc(100vh - 110px);
 
-      .form-buttons {
-        position: absolute;
-        bottom: 13px;
-        margin-left: 20%;
-        margin-top: 0;
-      }
-
       &.tab-page {
         .page-content {
           padding-right: 0;
@@ -276,10 +276,6 @@ export default {
     //    color: var(--color-text-primary);
     //  }
     //}
-
-    .el-drawer__body {
-      overflow: auto;
-    }
   }
 }
 </style>
