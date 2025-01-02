@@ -157,7 +157,7 @@ export default {
         </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
       const icons = `
-        <span style="float: right; margin-right: 10px">
+        <span>
           ${treeActions}
         </span>`
       if (rootNode) {
