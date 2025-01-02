@@ -34,11 +34,12 @@
 <script>
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
-import { Checkbox, CronTab, IBox, UploadKey } from '@/components'
+import { Checkbox, IBox, UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
 import { GenericCreateUpdateForm, Page } from '@/layout/components'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy'
 import { setUrlParam } from '@/utils/common'
+import { crontab, interval, is_periodic } from '@/components/const'
 
 export default {
   components: {
@@ -237,23 +238,9 @@ export default {
               }
             }
           },
-          is_periodic: {
-            type: 'checkbox'
-          },
-          crontab: {
-            component: CronTab,
-            hidden: (formValue) => {
-              return formValue.is_periodic === false
-            },
-            helpText: this.$t('CrontabOfCreateUpdatePage'),
-            helpTextAsTip: true
-          },
-          interval: {
-            hidden: (formValue) => {
-              return formValue.is_periodic === false
-            },
-            helpText: this.$t('IntervalOfCreateUpdatePage')
-          },
+          is_periodic,
+          crontab,
+          interval,
           strategy: {
             label: this.$t('Strategy'),
             component: SyncInstanceTaskStrategy,

@@ -12,7 +12,7 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
-import { crontab, interval } from '@/views/accounts/const'
+import { crontab, interval } from '@/components/const'
 
 export default {
   components: {

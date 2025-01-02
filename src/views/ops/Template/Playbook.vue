@@ -1,12 +1,22 @@
 <template>
   <div>
-    <GenericListTable ref="list" :header-actions="headerActions" :table-config="tableConfig" />
-    <UploadDialog v-if="uploadDialogVisible" :visible.sync="uploadDialogVisible" @completed="refreshTable" />
+    <GenericListTable
+      ref="list"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <UploadDialog
+      v-if="uploadDialogVisible"
+      :visible.sync="uploadDialogVisible"
+      @completed="refreshTable"
+    />
   </div>
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/components/Table/DrawerListTable'
 import UploadDialog from '@/views/ops/Template/Playbook/UploadDialog'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
@@ -18,6 +28,8 @@ export default {
   data() {
     const currentUserID = this.$store.state.users.profile.id
     return {
+      createDrawer: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/ops/Template/Playbook/PlaybookDetail/index.vue'),
       createDialogVisible: false,
       uploadDialogVisible: false,
       tableConfig: {
@@ -60,7 +72,7 @@ export default {
           callback: (item) => {
             switch (item.name) {
               case 'create':
-                this.$router.push({ name: 'PlaybookCreate' })
+                this.handleCreate()
                 break
               case 'upload':
                 this.uploadDialogVisible = true
@@ -86,6 +98,9 @@ export default {
   methods: {
     refreshTable() {
       this.$refs.list.$refs.ListTable.reloadTable()
+    },
+    handleCreate() {
+      this.$refs.list.onCreate()
     }
   }
 }

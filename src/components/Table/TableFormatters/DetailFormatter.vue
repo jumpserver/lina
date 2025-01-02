@@ -15,6 +15,7 @@
     <Drawer
       v-if="formatterArgs.drawer && drawerVisible"
       :component="drawerComponent"
+      :has-footer="false"
       :title="iTitle"
       :visible.sync="drawerVisible"
       class="form-drawer"

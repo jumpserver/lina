@@ -1,13 +1,18 @@
 <template>
   <div>
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <GenericListTable
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
   </div>
 </template>
 
 <script>
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/components/Table/DrawerListTable'
 
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
@@ -19,6 +24,8 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('@/views/ops/Job/JobUpdateCreate.vue'),
+      detailDrawer: () => import('@/views/ops/Job/JobDetail/index.vue'),
       item: {},
       tableConfig: {
         url: '/api/v1/ops/jobs/?type=playbook',
