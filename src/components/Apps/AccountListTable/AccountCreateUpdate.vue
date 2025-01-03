@@ -109,8 +109,6 @@ export default {
         }
       }).catch(error => {
         this.iVisible = true
-        console.log(this.iVisible)
-        console.log(this.origin)
         this.handleResult(null, error)
       })
     },
@@ -126,7 +124,11 @@ export default {
           this.handleAccountOperation(this.account.id, 'move-to-assets', data)
           break
         default:
-          this.handleAccountOperation(this.account.id, '', data)
+          this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
+            this.iVisible = false
+            this.$emit('add', true)
+            this.$message.success(this.$tc('UpdateSuccessMsg'))
+          }).catch(error => this.setFieldError(error))
       }
     },
     handleResult(resp, error) {
@@ -186,11 +188,12 @@ export default {
       Reflect.deleteProperty(this.$route.query, 'flag')
     },
     handleAccountOperation(id, path, data) {
-      this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then(() => {
+      this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then((res) => {
         this.iVisible = false
         this.$emit('add', true)
+        this.handleResult(res, null)
         this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => this.setFieldError(error))
+      }).catch(error => this.handleResult(null, error))
     }
   }
 }
