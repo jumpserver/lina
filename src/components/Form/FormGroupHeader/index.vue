@@ -82,5 +82,6 @@ h3 {
 
 .ellipsis {
   text-align: center;
+  cursor: pointer;
 }
 </style>
