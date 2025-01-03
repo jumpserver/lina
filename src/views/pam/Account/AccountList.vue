@@ -56,7 +56,7 @@ export default {
                             this.getPermdProtocols(row.asset.id)
                           }
                         },
-                        command: protocol => {
+                        'command': protocol => {
                           this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
                             key: row.id,
                             value: protocol

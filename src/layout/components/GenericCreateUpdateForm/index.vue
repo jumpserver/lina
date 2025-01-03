@@ -391,18 +391,22 @@ export default {
     async getCloneForm(cloneFrom) {
       const [curUrl, query] = this.url.split('?')
       const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
-      const object = await this.getObjectDetail(url)
-      let name = ''
-      let attr = ''
-      if (object['name']) {
-        name = object['name']
-        attr = 'name'
-      } else if (object['hostname']) {
-        name = object['hostname']
-        attr = 'hostname'
+      try {
+        const object = await this.getObjectDetail(url)
+        let name = ''
+        let attr = ''
+        if (object['name']) {
+          name = object['name']
+          attr = 'name'
+        } else if (object['hostname']) {
+          name = object['hostname']
+          attr = 'hostname'
+        }
+        object[attr] = name + '-' + this.cloneNameSuffix.toString()
+        return object
+      } catch (e) {
+        throw new Error(`Error for reason: ${e.message}`)
       }
-      object[attr] = name + '-' + this.cloneNameSuffix.toString()
-      return object
     },
     async getFormValue() {
       if (this.action === 'create' || !this.needGetObjectDetail) {

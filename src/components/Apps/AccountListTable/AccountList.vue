@@ -50,18 +50,28 @@
       v-bind="updateSelectedDialogSetting"
       @update="handleAccountBulkUpdate"
     />
+    <PasswordHistoryDialog
+      v-if="showPasswordHistoryDialog"
+      :account="currentAccountColumn"
+      :visible.sync="showPasswordHistoryDialog"
+    />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/Table/DrawerListTable/index.vue'
-import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
-import ViewSecret from './ViewSecret.vue'
-import UpdateSecretInfo from './UpdateSecretInfo.vue'
-import AccountCreateUpdate from './AccountCreateUpdate.vue'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
+import {
+  ActionsFormatter,
+  PlatformFormatter,
+  SecretViewerFormatter
+} from '@/components/Table/TableFormatters'
+import ViewSecret from './ViewSecret.vue'
+import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
+import AccountCreateUpdate from './AccountCreateUpdate.vue'
+import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
+import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import AccountBulkUpdateDialog from '@/components/Apps/AccountListTable/AccountBulkUpdateDialog.vue'
 
 export default {
@@ -72,7 +82,8 @@ export default {
     ListTable,
     UpdateSecretInfo,
     ViewSecret,
-    AccountCreateUpdate
+    AccountCreateUpdate,
+    PasswordHistoryDialog
   },
   props: {
     url: {
@@ -119,8 +130,7 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     columnsDefault: {
       type: Array,
@@ -140,6 +150,8 @@ export default {
   data() {
     const vm = this
     return {
+      currentAccountColumn: {},
+      showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showResultDialog: false,
@@ -323,14 +335,14 @@ export default {
               return (
                 <span className='connect'>
                   <el-button type='primary' size='mini' plain>
-                    <i className='fa fa-desktop'/>
+                    <i className='fa fa-desktop' />
                   </el-button>
                 </span>
               )
             }
           },
           asset: {
-            formatter: (row) => {
+            formatter: row => {
               const to = {
                 name: 'AssetDetail',
                 params: { id: row.asset.id }
@@ -451,18 +463,39 @@ export default {
                 },
                 {
                   name: 'SecretHistory',
-                  title: '密文历史'
+                  // 密文历史
+                  title: this.$t('SecretHistory'),
+                  can: () => this.$hasPerm('accounts.view_accountsecret'),
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    this.currentAccountColumn = row
+                    this.$nextTick(() => {
+                      this.showPasswordHistoryDialog = true
+                    })
+                  }
                 },
                 {
                   name: 'CopyToOther',
                   title: '复制到其他资产',
                   type: 'primary',
-                  divided: true
+                  divided: true,
+                  callback: ({ row }) => {
+                    vm.$route.query.flag = 'copy'
+                    vm.iAsset = this.asset
+                    vm.account = row
+                    vm.showAddDialog = true
+                  }
                 },
                 {
                   name: 'MoveToOther',
                   title: '移动到其他资产',
-                  type: 'primary'
+                  type: 'primary',
+                  callback: ({ row }) => {
+                    vm.$route.query.flag = 'move'
+                    vm.iAsset = this.asset
+                    vm.account = row
+                    vm.showAddDialog = true
+                  }
                 },
                 {
                   name: 'Clone',
@@ -500,8 +533,7 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
-              await this.getAssetDetail()
+            callback: () => {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
@@ -516,8 +548,7 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
-              await this.getAssetDetail()
+            callback: () => {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
@@ -654,6 +685,7 @@ export default {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
+      Reflect.deleteProperty(this.$route.query, 'flag')
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
@@ -692,9 +724,8 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .cell a {
   color: var(--color-info);
 }
-
 </style>
