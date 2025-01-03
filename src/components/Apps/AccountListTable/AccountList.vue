@@ -479,28 +479,22 @@ export default {
                   title: '复制到其他资产',
                   type: 'primary',
                   divided: true,
-                  callback: async({ row }) => {
-                    await this.getAssetDetail()
-                    this.$nextTick(() => {
-                      vm.$route.query.flag = 'copy'
-                      vm.iAsset = this.asset
-                      vm.account = row
-                      vm.showAddDialog = true
-                    })
+                  callback: ({ row }) => {
+                    vm.$route.query.flag = 'copy'
+                    vm.iAsset = this.asset
+                    vm.account = row
+                    vm.showAddDialog = true
                   }
                 },
                 {
                   name: 'MoveToOther',
                   title: '移动到其他资产',
                   type: 'primary',
-                  callback: async({ row }) => {
-                    await this.getAssetDetail()
-                    this.$nextTick(() => {
-                      vm.$route.query.flag = 'move'
-                      vm.iAsset = this.asset
-                      vm.account = row
-                      vm.showAddDialog = true
-                    })
+                  callback: ({ row }) => {
+                    vm.$route.query.flag = 'move'
+                    vm.iAsset = this.asset
+                    vm.account = row
+                    vm.showAddDialog = true
                   }
                 },
                 {
@@ -539,8 +533,7 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
-              await this.getAssetDetail()
+            callback: () => {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
@@ -555,8 +548,7 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
-              await this.getAssetDetail()
+            callback: () => {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
