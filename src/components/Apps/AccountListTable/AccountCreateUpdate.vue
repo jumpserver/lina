@@ -4,7 +4,7 @@
     :title="title"
     :visible="iVisible"
     class="drawer"
-    @close-drawer="iVisible = false"
+    @close-drawer="handleCloseDrawer"
   >
     <Page :title="'null'">
       <IBox class="content">
@@ -180,6 +180,10 @@ export default {
           refsAutoDataForm.setFieldError(current, err)
         }
       }
+    },
+    handleCloseDrawer() {
+      this.iVisible = false
+      Reflect.deleteProperty(this.$route.query, 'flag')
     },
     handleAccountOperation(id, path, data) {
       this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then(() => {

@@ -693,6 +693,7 @@ export default {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
+      Reflect.deleteProperty(this.$route.query, 'flag')
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
