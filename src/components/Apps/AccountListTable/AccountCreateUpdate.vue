@@ -192,7 +192,6 @@ export default {
         this.iVisible = false
         this.$emit('add', true)
         this.handleResult(res, null)
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).catch(error => this.handleResult(null, error))
     }
   }
