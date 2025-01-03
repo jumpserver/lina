@@ -246,7 +246,8 @@ export default {
 
       .page-content {
         height: unset;
-        padding-right: 20px;
+        padding-right: 10px;
+        padding-left: 20px;
 
         & > div {
           margin-bottom: 1px;

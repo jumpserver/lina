@@ -14,7 +14,6 @@
       :title="drawerTitle"
       :visible.sync="drawerVisible"
       class="page-drawer"
-      @reload-table="reloadTable"
     />
   </div>
 </template>
@@ -123,11 +122,6 @@ export default {
     }
   },
   watch: {
-    drawerVisible(val) {
-      if (!val) {
-        // this.$store.dispatch('common/cleanDrawerActionMeta')
-      }
-    },
     inDrawer(val) {
       if (!this.drawerVisible) {
         return

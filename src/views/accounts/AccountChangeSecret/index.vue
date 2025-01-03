@@ -31,7 +31,7 @@ export default {
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import(
-              '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
+              '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
               )
           }
         ]

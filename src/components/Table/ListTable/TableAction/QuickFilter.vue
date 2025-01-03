@@ -88,8 +88,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
     async getCount(item) {
       if (item.count) {
@@ -104,7 +102,6 @@ export default {
       }
       const res = await this.$axios.get(url, { raw: 1 })
       item.count = res.data.count
-      console.log('............get count: ', item.count)
       return item.count
     },
     cleanSummary() {
@@ -160,9 +157,9 @@ export default {
         })
       }
       option.active = !option.active
-      this.activeFilters.forEach(item => {
-        this.filtered = { ...item.filter }
-      })
+      this.filtered = this.activeFilters.reduce((acc, item) => {
+        return { ...acc, ...item.filter }
+      }, {})
       this.$emit('filter', this.filtered)
     }
   }

@@ -5,7 +5,7 @@
       :url="secretUrl"
       :visible.sync="showViewSecretDialog"
     />
-    <HomeCard ref="HomeCard" :table-config="tableConfig" v-bind="cardConfig" />
+    <HomeCard ref="HomeCard" :table-config="tableConfig" class="failed-accounts" v-bind="cardConfig" />
   </div>
 </template>
 
@@ -143,4 +143,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.failed-accounts {
+
+  ::v-deep {
+    .el-table {
+      min-height: 260px;
+    }
+  }
+}
 </style>

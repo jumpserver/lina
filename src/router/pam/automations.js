@@ -149,7 +149,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {
@@ -159,7 +159,7 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
         name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
@@ -180,7 +180,7 @@ export default [
       app: 'accounts',
       name: 'BaseAccountPushList',
       resource: 'pushaccountautomation',
-      icon: 'change-password'
+      icon: 'push'
     },
     children: [
       {

@@ -99,11 +99,6 @@ export default {
       headerActions: gatherAccountHeaderActions(this)
     }
   },
-  activated() {
-    setTimeout(() => {
-      this.$refs.AssetTreeTable.$refs.TreeList.reloadTable()
-    }, 300)
-  },
   mounted() {
   }
 }

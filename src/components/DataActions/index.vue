@@ -316,7 +316,6 @@ $color-drop-menu-border: #e4e7ed;
 // 下拉 options
 .el-dropdown-menu {
   ::v-deep .more-batch-processing {
-    text-align: center;
 
     &:hover {
       background-color: transparent !important;
