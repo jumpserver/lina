@@ -5,7 +5,7 @@
     <span class="compass" @click="toggle">
       <i :class="iconClass" />
     </span>
-    <div v-if="!isVisible" class="ellipsis">
+    <div v-if="!isVisible" class="ellipsis" @click="toggle">
       <i class="el-icon-more-outline" />
     </div>
   </div>
@@ -51,7 +51,7 @@ export default {
       let sibling = formGroupHeader.nextElementSibling
 
       // 循环隐藏或显示直到找到下一个 form-group-header
-      while (sibling && !sibling.classList.contains('form-group-header')) {
+      while (sibling && sibling.classList.contains('el-form-item')) {
         sibling.style.display = this.isVisible ? '' : 'none'
         sibling = sibling.nextElementSibling
       }
