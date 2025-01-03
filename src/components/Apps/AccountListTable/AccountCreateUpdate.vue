@@ -116,11 +116,18 @@ export default {
     },
     editAccount(form) {
       const data = { ...form }
-      this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => this.setFieldError(error))
+      const flag = this.$route.query.flag
+
+      switch (flag) {
+        case 'copy':
+          this.handleAccountOperation(this.account.id, 'copy-to-assets', data)
+          break
+        case 'move':
+          this.handleAccountOperation(this.account.id, 'move-to-assets', data)
+          break
+        default:
+          this.handleAccountOperation(this.account.id, '', data)
+      }
     },
     handleResult(resp, error) {
       let bulkCreate = !this.asset
@@ -173,6 +180,13 @@ export default {
           refsAutoDataForm.setFieldError(current, err)
         }
       }
+    },
+    handleAccountOperation(id, path, data) {
+      this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then(() => {
+        this.iVisible = false
+        this.$emit('add', true)
+        this.$message.success(this.$tc('UpdateSuccessMsg'))
+      }).catch(error => this.setFieldError(error))
     }
   }
 }
@@ -187,8 +201,4 @@ export default {
     }
   }
 }
-
-.content {
-}
-
 </style>

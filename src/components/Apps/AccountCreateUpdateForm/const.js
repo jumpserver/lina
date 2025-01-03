@@ -5,6 +5,7 @@ import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSettin
 
 export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
+
   return {
     assets: {
       component: Select2,
@@ -27,6 +28,7 @@ export const accountFieldsMeta = (vm) => {
       component: Select2,
       rules: [Required],
       el: {
+        disabled: vm.$route.fullPath.includes('pam'),
         multiple: false,
         ajax: {
           url: '/api/v1/accounts/account-templates/',
@@ -43,6 +45,9 @@ export const accountFieldsMeta = (vm) => {
       rules: [Required],
       label: vm.$t('AccountPolicy'),
       helpTip: vm.$t('AccountPolicyHelpText'),
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: () => {
         return vm.platform || vm.asset
       }
@@ -50,6 +55,9 @@ export const accountFieldsMeta = (vm) => {
     name: {
       label: vm.$t('Name'),
       rules: [RequiredChange],
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       on: {
         input: ([value], updateForm) => {
           if (!vm.usernameChanged) {
@@ -66,7 +74,7 @@ export const accountFieldsMeta = (vm) => {
     },
     username: {
       el: {
-        disabled: !!vm.account?.name
+        disabled: !!vm.account?.name || vm.$route.fullPath.includes('pam')
       },
       on: {
         input: ([value], updateForm) => {
@@ -85,6 +93,9 @@ export const accountFieldsMeta = (vm) => {
     },
     privileged: {
       label: vm.$t('Privileged'),
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: () => {
         return vm.addTemplate
       }
@@ -97,6 +108,7 @@ export const accountFieldsMeta = (vm) => {
       el: {
         multiple: false,
         clearable: true,
+        disabled: vm.$route.fullPath.includes('pam'),
         ajax: {
           url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.account?.id || ''}&asset=${vm.asset?.id || ''}`,
           transformOption: (item) => {
@@ -107,6 +119,7 @@ export const accountFieldsMeta = (vm) => {
     },
     su_from_username: {
       label: vm.$t('UserSwitchFrom'),
+      disabled: vm.$route.fullPath.includes('pam'),
       hidden: (formValue) => {
         return vm.platform || vm.asset || vm.addTemplate
       }
@@ -115,39 +128,57 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Password'),
       component: UpdateToken,
       hidden: (formValue) => {
-        return formValue.secret_type !== 'password' || vm.addTemplate
+        return formValue.secret_type !== 'password' || vm.addTemplate || vm.$route.fullPath.includes('pam')
       }
     },
     ssh_key: {
       label: vm.$t('PrivateKey'),
       component: UploadSecret,
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
     passphrase: {
       label: vm.$t('Passphrase'),
       component: UpdateToken,
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
     token: {
       label: vm.$t('Token'),
       component: UploadSecret,
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: (formValue) => formValue.secret_type !== 'token' || vm.addTemplate
     },
     access_key: {
       id: 'access_key',
       label: vm.$t('AccessKey'),
       component: UploadSecret,
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: (formValue) => formValue.secret_type !== 'access_key' || vm.addTemplate
     },
     api_key: {
       id: 'api_key',
       label: vm.$t('ApiKey'),
       component: UploadSecret,
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: (formValue) => formValue.secret_type !== 'api_key' || vm.addTemplate
     },
     secret_type: {
       type: 'radio-group',
       options: [],
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      },
       hidden: () => {
         return vm.addTemplate
       }
@@ -182,10 +213,22 @@ export const accountFieldsMeta = (vm) => {
       }
     },
     is_active: {
-      label: vm.$t('IsActive')
+      label: vm.$t('IsActive'),
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      }
     },
     comment: {
-      label: vm.$t('Comment')
+      label: vm.$t('Comment'),
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      }
+    },
+    secret_reset: {
+      label: vm.$t('SecretReset'),
+      el: {
+        disabled: vm.$route.fullPath.includes('pam')
+      }
     }
   }
 }
