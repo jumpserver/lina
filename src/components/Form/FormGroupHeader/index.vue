@@ -5,7 +5,7 @@
     <span class="compass" @click="toggle">
       <i :class="iconClass" />
     </span>
-    <div v-if="!isVisible" class="ellipsis">
+    <div v-if="!isVisible" class="ellipsis" @click="toggle">
       <i class="el-icon-more-outline" />
     </div>
   </div>
@@ -82,5 +82,6 @@ h3 {
 
 .ellipsis {
   text-align: center;
+  cursor: pointer;
 }
 </style>
