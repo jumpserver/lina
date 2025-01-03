@@ -102,7 +102,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [vmware]: {
     name: vmware,
     title: 'VMware',
-    attrs: ['host', 'port', 'username', 'password']
+    attrs: ['host', 'port', 'username', 'password', 'auto_sync_node']
   },
   [nutanix]: {
     name: nutanix,
