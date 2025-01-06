@@ -103,7 +103,7 @@ export default {
           title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
-          icon: 'fa fa-trash-o',
+          icon: 'trash',
           can({ selectedRows }) {
             return selectedRows.length > 0 && vm.canBulkDelete
           },
