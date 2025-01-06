@@ -34,14 +34,12 @@ class StrategyNormal extends StrategyAbstract {
   onSelectionChange(val) {
     this.elDataTable.selected = val
   }
-
   /**
    * toggleRowSelection和clearSelection的表现与el-table一致
    */
   toggleRowSelection(...args) {
     return this.elTable.toggleRowSelection(...args)
   }
-
   clearSelection() {
     return this.elTable.clearSelection()
   }
@@ -52,12 +50,12 @@ class StrategyNormal extends StrategyAbstract {
  */
 class StrategyPersistSelection extends StrategyAbstract {
   /**
-   * el-table 的 selection-change 事件不适用于开启跨页保存的情况。
-   * 比如，当开启 persistSelection时，发生以下两个场景：
+   * el-table的selection-change事件不适用于开启跨页保存的情况。
+   * 比如，当开启persistSelection时，发生以下两个场景：
    * 1. 用户点击翻页
    * 2. 用户点击行首的切换全选项按钮，清空当前页多选项数据
-   * 其中场景 1 应该保持 selected 不变；而场景 2 只应该从 selected 移除当前页所有行，保留其他页面的多选状态。
-   * 但 el-table 的 selection-change 事件在两个场景中无差别发生，所以这里不处理这个事件
+   * 其中场景1应该保持selected不变；而场景2只应该从selected移除当前页所有行，保留其他页面的多选状态。
+   * 但el-table的selection-change事件在两个场景中无差别发生，所以这里不处理这个事件
    */
 
   /**
@@ -65,24 +63,54 @@ class StrategyPersistSelection extends StrategyAbstract {
    */
   onSelect(selection, row) {
     const isChosen = selection.indexOf(row) > -1
-
     this.toggleRowSelection(row, isChosen)
   }
   /**
    * 用户切换当前页的多选
    */
   onSelectAll(selection, selectable = () => true) {
-    // 获取当前所有已选择的项
-    const selectedRows = this.elDataTable.data.filter(r => selection.includes(r))
+    const { id, selected, data } = this.elDataTable
+    const selectableRows = data.filter(selectable)
+    // const isSelected = !!selection.length
 
-    // 判断是否已全选
-    const isSelected = this.elDataTable.data.every(r => selectable(r) && selectedRows.includes(r))
+    // 创建已选择项的 id 集合，用于快速查找
+    const selectedIds = new Set(selected.map(r => r[id]))
+    const currentPageIds = new Set(selectableRows.map(row => row[id]))
 
-    this.elDataTable.data.forEach(r => {
-      if (selectable(r)) {
-        this.toggleRowSelection(r, isSelected)
-      }
-    })
+    // 前页面的选中状态
+    const currentPageSelectedCount = selectableRows.filter(row =>
+      selectedIds.has(row[id])
+    ).length
+
+    // 判断是全选还是取消全选
+    const shouldSelectAll = currentPageSelectedCount < selectableRows.length
+
+    this.elTable.clearSelection()
+
+    if (shouldSelectAll) {
+      selectableRows.forEach(row => {
+        if (!selectedIds.has(row[id])) selected.push(row)
+
+        this.elTable.toggleRowSelection(row, true)
+
+        // ! 这里需要触发事件，否则在 el-table 中无法触发 selection-change 事件
+        this.elDataTable.$emit('toggle-row-selection', true, row)
+      })
+    } else {
+      const newSelected = []
+
+      selected.forEach(row => {
+        if (!currentPageIds.has(row[id])) {
+          newSelected.push(row)
+        } else {
+          this.elDataTable.$emit('toggle-row-selection', false, row)
+        }
+      })
+
+      this.elDataTable.selected = newSelected
+    }
+
+    this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
   /**
    * toggleRowSelection和clearSelection管理elDataTable的selected数组
@@ -105,29 +133,26 @@ class StrategyPersistSelection extends StrategyAbstract {
     this.elDataTable.$emit('toggle-row-selection', isSelected, row)
     this.updateElTableSelection()
   }
-
   clearSelection() {
     this.elDataTable.selected = []
     this.updateElTableSelection()
   }
-
   /**
    * 将selected状态同步到el-table中
    */
   updateElTableSelection() {
     const { data, id, selected } = this.elDataTable
+    const selectedIds = new Set(selected.map(r => r[id]))
 
-    // 历史勾选的行已经不在当前页了，所以要将当前页的行数据和selected合并
-    const mergeData = _.uniqWith([...data, ...selected], _.isEqual)
+    this.elTable.clearSelection()
 
-    mergeData.forEach(r => {
-      const isSelected = !!selected.find(r2 => r[id] === r2[id])
+    data.forEach(row => {
+      const shouldBeSelected = selectedIds.has(row[id])
+      if (!this.elTable) return
 
-      if (!this.elTable) {
-        return
+      if (shouldBeSelected) {
+        this.elTable.toggleRowSelection(row, true)
       }
-
-      this.elTable.toggleRowSelection(r, isSelected)
     })
   }
 }
