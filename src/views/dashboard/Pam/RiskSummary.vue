@@ -26,9 +26,9 @@ export default {
         tip: this.$t('RealTimeData')
       },
       counter: {
-        total_count_online_sessions: '.',
-        total_count_online_users: '.',
-        total_count_today_failed_sessions: '.'
+        total_long_time_no_login_accounts: '.',
+        total_weak_password_accounts: '.',
+        total_long_time_change_password_accounts: '.'
       }
     }
   },
@@ -36,32 +36,23 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('幽灵账号'),
+          title: this.$t('长期未登录账号'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 23,
-            disabled: !this.$hasPerm('terminal.view_session')
-          }
-        },
-        {
-          title: this.$t('僵尸账号'),
-          body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 293,
-            disabled: !this.$hasPerm('terminal.view_session')
+            count: this.counter.total_long_time_no_login_accounts
           }
         },
         {
           title: this.$t('弱密码'),
           body: {
-            count: 203,
+            count: this.counter.total_weak_password_accounts,
             disabled: true
           }
         },
         {
           title: this.$t('长时未改密'),
           body: {
-            count: 1010,
+            count: this.counter.total_long_time_change_password_accounts,
             disabled: true
           }
         }
@@ -74,12 +65,16 @@ export default {
   methods: {
     async getResourcesCount() {
       return this.$axios.get(
-        '/api/v1/index/',
+        '/api/v1/accounts/pam-dashboard/',
         {
           params: {
-            total_count_online_sessions: 1,
-            total_count_online_users: 1,
-            total_count_today_failed_sessions: 1
+            total_privileged_accounts: 1,
+            total_ordinary_accounts: 1,
+            total_unmanaged_accounts: 1,
+            total_unavailable_accounts: 1,
+            total_long_time_no_login_accounts: 1,
+            total_weak_password_accounts: 1,
+            total_long_time_change_password_accounts: 1
           }
         }
       )

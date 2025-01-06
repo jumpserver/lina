@@ -9,7 +9,7 @@
         <div>
           <template v-if="config.route">
             <router-link :to="config.route">
-              <div class="num"> 1000 </div>
+              <div class="num"> {{ config.total }} </div>
             </router-link>
           </template>
           <template v-else>

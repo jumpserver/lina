@@ -26,9 +26,10 @@ export default {
         tip: this.$t('RealTimeData')
       },
       counter: {
-        total_count_online_sessions: '.',
-        total_count_online_users: '.',
-        total_count_today_failed_sessions: '.'
+        total_privileged_accounts: '',
+        total_ordinary_accounts: '',
+        total_unmanaged_accounts: '',
+        total_unavailable_accounts: ''
       }
     }
   },
@@ -39,7 +40,7 @@ export default {
           title: this.$t('特权账号'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 4932,
+            count: this.counter.total_privileged_accounts,
             disabled: !this.$hasPerm('terminal.view_session')
           }
         },
@@ -47,21 +48,20 @@ export default {
           title: this.$t('普通账号'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: 2323,
-            disabled: !this.$hasPerm('terminal.view_session')
+            count: this.counter.total_ordinary_accounts
           }
         },
         {
           title: this.$t('未托管账号'),
           body: {
-            count: 1233,
+            count: this.counter.total_unmanaged_accounts,
             disabled: true
           }
         },
         {
           title: this.$t('不可用账号'),
           body: {
-            count: 123,
+            count: this.counter.total_unavailable_accounts,
             disabled: true
           }
         }
@@ -74,12 +74,13 @@ export default {
   methods: {
     async getResourcesCount() {
       return this.$axios.get(
-        '/api/v1/index/',
+        '/api/v1/accounts/pam-dashboard/',
         {
           params: {
-            total_count_online_sessions: 1,
-            total_count_online_users: 1,
-            total_count_today_failed_sessions: 1
+            total_privileged_accounts: 1,
+            total_ordinary_accounts: 1,
+            total_unmanaged_accounts: 1,
+            total_unavailable_accounts: 1
           }
         }
       )
