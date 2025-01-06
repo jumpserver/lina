@@ -34,7 +34,13 @@ export default {
           connect: {
             label: this.$t('Connect'),
             width: '80px',
-            formatter: AccountConnectFormatter
+            formatter: AccountConnectFormatter,
+            formatterArgs: {
+              buttonIcon: 'fa fa-desktop',
+              titleText: '可选协议',
+              url: '/api/v1/assets/assets/{id}',
+              connectUrlTemplate: '/luna/pam_connect/{id}/{username}/{assetId}/{assetName}/{protocol}'
+            }
           }
         }
       }
