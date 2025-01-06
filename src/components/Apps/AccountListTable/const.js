@@ -172,13 +172,13 @@ export const accountQuickFilters = [
     label: '风险账号',
     options: [
       {
-        label: '僵尸账号',
+        label: '长期未登录账号',
         filter: {
           risk: 'long_time_no_login'
         }
       },
       {
-        label: '幽灵账号',
+        label: '未托管账号',
         filter: {
           risk: 'new_found'
         }
