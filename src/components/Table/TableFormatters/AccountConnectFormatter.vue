@@ -12,15 +12,15 @@
       type="primary"
       @click="handlePamConnect"
     >
-      <i class="fa fa-desktop" />
+      <i :class="IButtonIcon" />
     </el-button>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="Title" disabled>
-        可选协议
+        {{ ITitleText }}
       </el-dropdown-item>
       <el-dropdown-item divided />
       <el-dropdown-item
-        v-for="protocol in perm_protocols"
+        v-for="protocol in protocols"
         :key="protocol.id"
         :command="protocol.name"
       >
@@ -31,22 +31,46 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import BaseFormatter from './base.vue'
 
 export default {
   name: 'AccountConnectFormatter',
   extends: BaseFormatter,
+  props: {
+    buttonIcon: {
+      type: String,
+      default: 'fa fa-desktop'
+    },
+    titleText: {
+      type: String,
+      default: ''
+    },
+    url: {
+      type: String,
+      default: ''
+    },
+    connectUrlTemplate: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      perm_protocols: []
+      protocols: []
     }
   },
   computed: {
-    ...mapGetters(['protocolMap'])
+    IButtonIcon() {
+      return this.buttonIcon
+    },
+    ITitleText() {
+      return this.titleText || this.$t('OptionalProtocol')
+    }
   },
   methods: {
     handleCommand(protocol) {
+      if (protocol === 'Title') return
+
       this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
         key: this.row.id,
         value: protocol
@@ -56,40 +80,31 @@ export default {
     },
     visibleChange(visible) {
       if (visible) {
-        this.getPermdProtocols(this.row.asset.id)
+        this.getProtocols(this.row.asset.id)
       }
     },
-    getAssetDetail(id) {
-      const detailUrl = `/api/v1/assets/assets/${id}`
-
-      return new Promise((resolve, reject) => {
-        this.$axios
-          .get(detailUrl)
-          .then(res => {
-            resolve(res)
-          })
-          .catch(err => {
-            reject(err)
-          })
-      })
-    },
     handleWindowOpen(row, protocol) {
-      window.open(
-        `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/${protocol}`,
-        '_blank'
-      )
+      const url = this.formatterArgs.connectUrlTemplate
+        .replace('{id}', row.id)
+        .replace('{username}', row.username)
+        .replace('{assetId}', row.asset.id)
+        .replace('{assetName}', row.asset.name)
+        .replace('{protocol}', protocol)
+
+      window.open(url, '_blank')
     },
     async handlePamConnect() {
-      const protocolMap = this.protocolMap
+      const protocolMap = this.$store.getters.protocolMap
 
       if (protocolMap.has(this.row.id)) {
         const protocol = protocolMap.get(this.row.id)
         this.handleWindowOpen(this.row, protocol)
       } else {
         try {
-          const res = await this.getAssetDetail(this.row.asset.id)
+          const url = this.formatterArgs.url.replace('{id}', this.row.asset.id)
+          const res = await this.$axios.get(url)
 
-          if (res) {
+          if (res && res.protocols.length > 0) {
             const protocol = res.protocols[0]
 
             this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
@@ -100,19 +115,18 @@ export default {
             this.handleWindowOpen(this.row, protocol.name)
           }
         } catch (e) {
-          throw new Error(`Error for reaseon: ${e}`)
+          throw new Error(`Error getting protocols: ${e}`)
         }
       }
     },
-    async getPermdProtocols(assetId) {
+    async getProtocols(assetId) {
       try {
-        const res = await this.getAssetDetail(assetId)
+        const url = this.formatterArgs.url.replace('{id}', assetId)
+        const res = await this.$axios.get(url)
 
-        if (res) {
-          this.perm_protocols = res.protocols
-        }
+        if (res) this.protocols = res.protocols
       } catch (e) {
-        throw new Error(`Error for reaseon: ${e}`)
+        throw new Error(`Error getting protocols: ${e}`)
       }
     }
   }
