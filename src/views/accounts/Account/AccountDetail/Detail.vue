@@ -233,21 +233,6 @@ export default {
               params: { id: this.object.asset.id }
             }
 
-            console.log(this.$route)
-
-            if (this.$route.params.type === 'pam') {
-              return (
-                <span style={{ color: '#1c84c6', cursor: 'pointer' }} onClick={() => {
-                  this.pamDrawerShow = true
-                  this.$route.params.id = this.object.asset.id
-
-                  this.drawerRefName = 'AssetDetail'
-                }}>
-                  {value.name}
-                </span>
-              )
-            }
-
             return <router-link to={route}>{value?.name}</router-link>
           },
           su_from: (item, value) => {

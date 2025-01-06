@@ -5,8 +5,11 @@ const state = {
   assetCategories: [],
   assetCategoriesDropdown: [],
   assetCategoriesCascader: [],
-  platforms: []
+  platforms: [],
+  platformGetting: false
 }
+
+let isFetchingPlatforms = false
 
 const mutations = {
   SET_CATEGORIES: (state, categories) => {
@@ -51,14 +54,39 @@ const actions = {
     })
   },
   getPlatforms({ commit, dispatch, state }) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (state.platforms.length > 0) {
+        // 如果已有数据，直接返回
         resolve(state.platforms)
+        return
       }
-      request.get('/api/v1/assets/platforms/').then(data => {
-        state.platforms = data
-        resolve(data)
-      })
+
+      if (isFetchingPlatforms) {
+        // 如果正在请求中，等待之前的请求完成后再返回
+        const checkInterval = setInterval(() => {
+          if (!isFetchingPlatforms) {
+            clearInterval(checkInterval)
+            resolve(state.platforms)
+          }
+        }, 50)
+        return
+      }
+
+      // 设置标志位，表示正在请求中
+      isFetchingPlatforms = true
+
+      console.log('Get platforms:', '123123')
+      request
+        .get('/api/v1/assets/platforms/')
+        .then(data => {
+          state.platforms = data
+          isFetchingPlatforms = false // 请求完成，重置标志位
+          resolve(data)
+        })
+        .catch(error => {
+          isFetchingPlatforms = false // 请求失败也要重置标志位
+          reject(error)
+        })
     })
   },
   getRecentPlatforms({ commit, dispatch, state }) {

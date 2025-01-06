@@ -12,9 +12,6 @@ export default {
   components: {
     AccountListTable
   },
-  computed: {
-    ...mapGetters(['protocolMap'])
-  },
   data() {
     return {
       drawerTitle: '',
@@ -39,6 +36,7 @@ export default {
             }
           },
           connect: {
+            label: this.$t('Connect'),
             width: '80px',
             formatter: row => {
               return (
@@ -73,13 +71,13 @@ export default {
                       type='primary'
                       onClick={() => this.handlePamConnect(row)}
                     >
-                      <i class='fa fa-desktop' />
+                      <i class='fa fa-desktop'/>
                     </el-button>
                     <el-dropdown-menu slot='dropdown'>
                       <el-dropdown-item command='Title' disabled>
                         可选协议
                       </el-dropdown-item>
-                      <el-dropdown-item divided />
+                      <el-dropdown-item divided/>
                       {this.perm_protocols.map(protocol => {
                         return (
                           <el-dropdown-item command={protocol.name}>
@@ -97,7 +95,11 @@ export default {
       }
     }
   },
-  async mounted() {},
+  computed: {
+    ...mapGetters(['protocolMap'])
+  },
+  async mounted() {
+  },
   methods: {
     getAssetDetail(id) {
       const detailUrl = `/api/v1/assets/assets/${id}`

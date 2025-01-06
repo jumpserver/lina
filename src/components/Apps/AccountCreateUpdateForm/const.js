@@ -130,7 +130,7 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Password'),
       component: UpdateToken,
       hidden: (formValue) => {
-        return formValue.secret_type !== 'password' || vm.addTemplate || vm.$route.fullPath.includes('pam')
+        return formValue.secret_type !== 'password' || vm.addTemplate
       }
     },
     ssh_key: {
