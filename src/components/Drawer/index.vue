@@ -241,6 +241,7 @@ export default {
       &.tab-page {
         .page-content {
           padding-right: 0;
+          padding-left: 0;
         }
       }
 

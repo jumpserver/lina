@@ -100,15 +100,15 @@ export default {
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
       initQuery: {},
-      filterExpand: true
+      filterExpand: localStorage.getItem('filterExpand') === '1'
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     iHasQuickFilter() {
       const has =
-          (this.quickFilters && this.quickFilters.length > 0) ||
-          (this.quickSummary && this.quickSummary.length > 0)
+        (this.quickFilters && this.quickFilters.length > 0) ||
+        (this.quickSummary && this.quickSummary.length > 0)
       return !!has
     },
     dataTable() {
@@ -213,6 +213,11 @@ export default {
         this.$log.debug('ListTable: found colConfig change')
       },
       deep: true
+    },
+    filterExpand: {
+      handler(val) {
+        localStorage.setItem('filterExpand', val ? '1' : '0')
+      }
     }
   },
   mounted() {
@@ -336,6 +341,7 @@ export default {
     background-color: rgb(0, 0, 0, 0.08) !important;
   }
 }
+
 .table-content {
   margin-top: 10px;
 

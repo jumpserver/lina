@@ -8,7 +8,7 @@
       :form="basicForm"
       :label-position="iLabelPosition"
       class="form-fields"
-      label-width="23%"
+      label-width="25%"
       v-bind="$attrs"
       v-on="$listeners"
     >

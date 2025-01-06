@@ -59,13 +59,9 @@
 </template>
 
 <script>
-import { connectivityMeta } from './const'
+import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-import {
-  ActionsFormatter,
-  PlatformFormatter,
-  SecretViewerFormatter
-} from '@/components/Table/TableFormatters'
+import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
@@ -130,7 +126,8 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     columnsDefault: {
       type: Array,
@@ -164,131 +161,7 @@ export default {
       iAsset: this.asset,
       account: {},
       secretUrl: '',
-      quickFilters: [
-        {
-          label: '最近(7天)',
-          options: [
-            {
-              label: '最近发现',
-              filter: {
-                latest_discovery: '1'
-              }
-            },
-            {
-              label: '最近被登录',
-              filter: {
-                latest_accessed: '1'
-              }
-            },
-            {
-              label: '最近修改',
-              filter: {
-                latest_updated: '1'
-              }
-            },
-            {
-              label: '最近改密',
-              filter: {
-                latest_secret_changed: '1'
-              }
-            },
-            {
-              label: '最近改密失败',
-              filter: {
-                latest_secret_changed_failed: '1'
-              }
-            }
-          ]
-        },
-        {
-          label: '风险账号',
-          options: [
-            {
-              label: '长期未登录账号',
-              filter: {
-                risk: 'long_time_no_login'
-              }
-            },
-            {
-              label: '未托管账号',
-              filter: {
-                risk: 'new_found'
-              }
-            },
-            {
-              label: '弱密码',
-              filter: {
-                risk: 'week_password'
-              }
-            },
-            {
-              label: '空密码',
-              filter: {
-                has_secret: 'false'
-              }
-            },
-            {
-              label: '长时间未改密',
-              filter: {
-                long_time_no_change_secret: 'true'
-              }
-            },
-            {
-              label: '长时间未验证',
-              filter: {
-                long_time_no_verify: 'true'
-              }
-            }
-          ]
-        },
-        {
-          label: '账号类型',
-          options: [
-            {
-              label: '全部',
-              filter: {
-                category: ''
-              }
-            },
-            {
-              label: ' 主机',
-              filter: {
-                category: 'host'
-              }
-            },
-            {
-              label: '数据库',
-              filter: {
-                category: 'database'
-              }
-            },
-            {
-              label: '云',
-              filter: {
-                category: 'cloud'
-              }
-            },
-            {
-              label: '网络设备',
-              filter: {
-                category: 'device'
-              }
-            },
-            {
-              label: 'Web',
-              filter: {
-                category: 'website'
-              }
-            },
-            {
-              label: '其他',
-              filter: {
-                category: 'custom'
-              }
-            }
-          ]
-        }
-      ],
+      quickFilters: accountQuickFilters,
       tableConfig: {
         url: this.url,
         permissions: {
@@ -308,17 +181,6 @@ export default {
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account')
             }
-            // formatter: (row) => {
-            //   const to = {
-            //     name: 'AssetAccountDetail',
-            //     params: { id: row.id }
-            //   }
-            //   if (vm.$hasPerm('accounts.view_account')) {
-            //     return <routerlink to={to}>{row.name}</routerlink>
-            //   } else {
-            //     return <span>{row.name}</span>
-            //   }
-            // }
           },
           secret: {
             formatter: SecretViewerFormatter,
@@ -335,7 +197,7 @@ export default {
               return (
                 <span className='connect'>
                   <el-button type='primary' size='mini' plain>
-                    <i className='fa fa-desktop' />
+                    <i className='fa fa-desktop'/>
                   </el-button>
                 </span>
               )
@@ -396,113 +258,7 @@ export default {
               hasClone: false,
               canClone: true,
               moreActionsTitle: this.$t('More'),
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  can: this.$hasPerm('accounts.view_accountsecret'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    // debugger
-                    vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
-                    vm.account = row
-                    vm.showViewSecretDialog = false
-                    setTimeout(() => {
-                      vm.showViewSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Update',
-                  title: this.$t('Edit'),
-                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    const data = {
-                      ...this.asset,
-                      ...row.asset
-                    }
-                    vm.account = row
-                    vm.iAsset = data
-                    vm.showAddDialog = false
-                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
-                    setTimeout(() => {
-                      vm.showAddDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Test',
-                  title: this.$t('验证密文'),
-                  can: ({ row }) =>
-                    !this.$store.getters.currentOrgIsRoot &&
-                    this.$hasPerm('accounts.verify_account') &&
-                    row.asset['auto_config'].ansible_enabled &&
-                    row.asset['auto_config'].ping_enabled,
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/accounts/accounts/tasks/`,
-                      { action: 'verify', accounts: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
-                  name: 'ClearSecret',
-                  title: this.$t('ClearSecret'),
-                  can: this.$hasPerm('accounts.change_account'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/accounts/clear-secret/`,
-                      { account_ids: [row.id] }
-                    ).then(() => {
-                      this.$message.success(this.$tc('ClearSuccessMsg'))
-                    })
-                  }
-                },
-                {
-                  name: 'SecretHistory',
-                  // 密文历史
-                  title: this.$t('SecretHistory'),
-                  can: () => this.$hasPerm('accounts.view_accountsecret'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.currentAccountColumn = row
-                    this.$nextTick(() => {
-                      this.showPasswordHistoryDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'CopyToOther',
-                  title: '复制到其他资产',
-                  type: 'primary',
-                  divided: true,
-                  callback: ({ row }) => {
-                    vm.$route.query.flag = 'copy'
-                    vm.iAsset = this.asset
-                    vm.account = row
-                    vm.showAddDialog = true
-                  }
-                },
-                {
-                  name: 'MoveToOther',
-                  title: '移动到其他资产',
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    vm.$route.query.flag = 'move'
-                    vm.iAsset = this.asset
-                    vm.account = row
-                    vm.showAddDialog = true
-                  }
-                },
-                {
-                  name: 'Clone',
-                  title: this.$t('Duplicate'),
-                  divided: true
-                }
-              ]
+              extraActions: accountOtherActions(this)
             }
           },
           ...this.columnsMeta
@@ -639,40 +395,7 @@ export default {
     }
   },
   mounted() {
-    if (this.columns.length > 0) {
-      this.tableConfig.columns = this.columns
-    }
-    if (this.otherActions) {
-      const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
-      for (const item of this.otherActions) {
-        actionColumn.formatterArgs.extraActions.push(item)
-      }
-    }
-    if (this.hasDeleteAction) {
-      this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
-        {
-          name: 'Delete',
-          title: this.$t('Delete'),
-          can: this.$hasPerm('accounts.delete_account'),
-          type: 'primary',
-          callback: ({ row }) => {
-            const msg = this.$t('AccountDeleteConfirmMsg')
-            this.$confirm(msg, this.$tc('Info'), {
-              type: 'warning',
-              confirmButtonClass: 'el-button--danger',
-              beforeClose: async(action, instance, done) => {
-                if (action !== 'confirm') return done()
-                this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-                  done()
-                  this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$tc('DeleteSuccessMsg'))
-                })
-              }
-            })
-          }
-        }
-      )
-    }
+    this.setActions()
   },
   activated() {
     // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
@@ -680,7 +403,46 @@ export default {
       this.refresh()
     }, 300)
   },
+  deactivated() {
+    this.deactive = true
+  },
   methods: {
+    setActions() {
+      if (this.columns.length > 0) {
+        this.tableConfig.columns = this.columns
+      }
+      if (this.otherActions) {
+        const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
+        for (const item of this.otherActions) {
+          actionColumn.formatterArgs.extraActions.push(item)
+        }
+      }
+      if (this.hasDeleteAction) {
+        this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
+          {
+            name: 'Delete',
+            title: this.$t('Delete'),
+            can: this.$hasPerm('accounts.delete_account'),
+            type: 'primary',
+            callback: ({ row }) => {
+              const msg = this.$t('AccountDeleteConfirmMsg')
+              this.$confirm(msg, this.$tc('Info'), {
+                type: 'warning',
+                confirmButtonClass: 'el-button--danger',
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
+                    done()
+                    this.$refs.ListTable.reloadTable()
+                    this.$message.success(this.$tc('DeleteSuccessMsg'))
+                  })
+                }
+              })
+            }
+          }
+        )
+      }
+    },
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
     },

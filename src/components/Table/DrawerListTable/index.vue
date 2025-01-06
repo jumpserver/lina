@@ -128,6 +128,7 @@ export default {
       }
       if (!val) {
         this.drawerVisible = false
+        console.log('Start reload table')
         this.reloadTable()
       }
     }
@@ -187,6 +188,7 @@ export default {
       })
     },
     reloadTable() {
+      console.log('Reload table ....')
       if (this.reloadOrderQuery) {
         this.iTableConfig.url = setUrlParam(this.iTableConfig.url, 'order', this.reloadOrderQuery)
       }

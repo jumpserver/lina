@@ -62,7 +62,6 @@
 
 <script>
 import AddAccountDialog from './AddAccountDialog'
-import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import AccountTemplateDialog from './AccountTemplateDialog'
 
 export default {
@@ -154,16 +153,6 @@ export default {
             tab: 'Accounts'
           }
         })
-        return
-      }
-
-      if (this.$route.query.type === 'pam') {
-        this.pamDrawerShow = true
-        this.drawerRefName = AssetDetail
-
-        this.$route.params.id = assetId
-        this.$route.query.tab = 'Account'
-
         return
       }
 
