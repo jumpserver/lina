@@ -281,7 +281,8 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: () => {
+            callback: async() => {
+              await this.getAssetDetail()
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
@@ -296,7 +297,8 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: () => {
+            callback: async() => {
+              await this.getAssetDetail()
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}

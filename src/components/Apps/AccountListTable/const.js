@@ -68,7 +68,10 @@ export const accountOtherActions = (vm) => [
         ...vm.asset,
         ...row.asset
       }
-      vm.account = row
+      vm.account = {
+        ...row,
+        name: `${row.name} - ${vm.$t('Duplicate').toLowerCase()}`
+      }
       vm.iAsset = data
       vm.showAddDialog = false
       vm.accountCreateUpdateTitle = vm.$t('DuplicateAccount')
