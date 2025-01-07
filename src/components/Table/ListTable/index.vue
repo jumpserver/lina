@@ -100,7 +100,7 @@ export default {
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
       initQuery: {},
-      filterExpand: localStorage.getItem('filterExpand') === '1'
+      filterExpand: localStorage.getItem('filterExpand') !== '0'
     }
   },
   computed: {

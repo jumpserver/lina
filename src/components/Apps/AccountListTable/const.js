@@ -30,6 +30,7 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('View'),
     can: vm.$hasPerm('accounts.view_accountsecret'),
     type: 'primary',
+    order: 1,
     callback: ({ row }) => {
       // debugger
       vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
@@ -59,8 +60,27 @@ export const accountOtherActions = (vm) => [
     }
   },
   {
+    name: 'Clone',
+    title: vm.$t('Duplicate'),
+    can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
+    callback: ({ row }) => {
+      const data = {
+        ...vm.asset,
+        ...row.asset
+      }
+      vm.account = row
+      vm.iAsset = data
+      vm.showAddDialog = false
+      vm.accountCreateUpdateTitle = vm.$t('DuplicateAccount')
+      setTimeout(() => {
+        vm.showAddDialog = true
+      })
+    }
+  },
+  {
     name: 'Test',
     title: vm.$t('验证密文'),
+    divided: true,
     can: ({ row }) =>
       !vm.$store.getters.currentOrgIsRoot &&
       vm.$hasPerm('accounts.verify_account') &&
@@ -104,10 +124,11 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'CopyToOther',
-    title: '复制到其他资产',
+    title: vm.$t('CopyToOther'),
     type: 'primary',
     divided: true,
     callback: ({ row }) => {
+      vm.accountCreateUpdateTitle = vm.$t('CopyToOther')
       vm.$route.query.flag = 'copy'
       vm.iAsset = vm.asset
       vm.account = row
@@ -116,19 +137,15 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'MoveToOther',
-    title: '移动到其他资产',
+    title: vm.$t('MoveToOther'),
     type: 'primary',
     callback: ({ row }) => {
+      vm.accountCreateUpdateTitle = vm.$t('MoveToOther')
       vm.$route.query.flag = 'move'
       vm.iAsset = vm.asset
       vm.account = row
       vm.showAddDialog = true
     }
-  },
-  {
-    name: 'Clone',
-    title: vm.$t('Duplicate'),
-    divided: true
   }
 ]
 
@@ -186,7 +203,7 @@ export const accountQuickFilters = [
       {
         label: '弱密码',
         filter: {
-          risk: 'week_password'
+          risk: 'weak_password'
         }
       },
       {

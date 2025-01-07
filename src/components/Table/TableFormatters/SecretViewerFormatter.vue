@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <span v-if="realValue" :class="formatterArgs.actionLeft ? 'left' : 'right'" class="action">
+    <span :class="formatterArgs.actionLeft ? 'left' : 'right'" class="action">
       <template v-for="(item, index) in iActions">
         <el-tooltip
           v-if="item.has"

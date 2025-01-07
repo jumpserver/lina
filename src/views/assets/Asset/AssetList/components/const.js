@@ -1,10 +1,5 @@
 import {
-  ActionsFormatter,
-  ArrayFormatter,
-  ChoicesFormatter,
-  DetailFormatter,
-  PlatformFormatter,
-  ProtocolsFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, PlatformFormatter, ProtocolsFormatter
 } from '@/components/Table/TableFormatters'
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
@@ -33,6 +28,7 @@ export function getDefaultConfig(vm) {
         name: 'TestSelected',
         title: vm.$t('TestSelected'),
         type: 'primary',
+        icon: 'verify',
         can: ({ selectedRows }) =>
           vm.$hasPerm('assets.test_assetconnectivity') &&
           !vm.$store.getters.currentOrgIsRoot &&
@@ -56,7 +52,7 @@ export function getDefaultConfig(vm) {
         name: 'DeactiveSelected',
         title: vm.$t('DisableSelected'),
         type: 'primary',
-        icon: 'fa fa-ban',
+        icon: 'disable',
         can: ({ selectedRows }) => {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },
@@ -76,7 +72,7 @@ export function getDefaultConfig(vm) {
         name: 'ActiveSelected',
         title: vm.$t('ActivateSelected'),
         type: 'primary',
-        icon: 'fa fa-check-circle-o',
+        icon: 'activate',
         can: ({ selectedRows }) => {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },

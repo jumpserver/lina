@@ -174,8 +174,16 @@ export default {
   margin-bottom: 5px;
 
   .el-tabs__item {
-    i.pre-icon {
+    .pre-icon {
+      width: 16px;
+      display: inline-block;
       opacity: 0.6;
+    }
+
+    &.is-active {
+      .pre-icon {
+        opacity: 1;
+      }
     }
   }
 

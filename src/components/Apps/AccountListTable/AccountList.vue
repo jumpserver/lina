@@ -162,6 +162,7 @@ export default {
       account: {},
       secretUrl: '',
       quickFilters: accountQuickFilters,
+      tabDeactivated: false,
       tableConfig: {
         url: this.url,
         permissions: {
@@ -205,15 +206,7 @@ export default {
           },
           asset: {
             formatter: row => {
-              const to = {
-                name: 'AssetDetail',
-                params: { id: row.asset.id }
-              }
-              if (vm.$hasPerm('assets.view_asset')) {
-                return <router-link to={to}>{row.asset.name}</router-link>
-              } else {
-                return <span>{row.asset.name}</span>
-              }
+              return <span>{row.asset.name}</span>
             }
           },
           platform: {
@@ -254,9 +247,9 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
+              hasDelete: true, // can set function(row, value)
               hasClone: false,
-              canClone: true,
+              canDelete: () => vm.$hasPerm('accounts.delete_account'),
               moreActionsTitle: this.$t('More'),
               extraActions: accountOtherActions(this)
             }
@@ -319,7 +312,7 @@ export default {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa-link',
+            icon: 'verify',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
@@ -399,12 +392,12 @@ export default {
   },
   activated() {
     // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
-    setTimeout(() => {
-      this.refresh()
-    }, 300)
+    if (this.tabDeactivated) {
+      setTimeout(() => this.refresh(), 300)
+    }
   },
   deactivated() {
-    this.deactive = true
+    this.tabDeactivated = true
   },
   methods: {
     setActions() {
@@ -416,31 +409,6 @@ export default {
         for (const item of this.otherActions) {
           actionColumn.formatterArgs.extraActions.push(item)
         }
-      }
-      if (this.hasDeleteAction) {
-        this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
-          {
-            name: 'Delete',
-            title: this.$t('Delete'),
-            can: this.$hasPerm('accounts.delete_account'),
-            type: 'primary',
-            callback: ({ row }) => {
-              const msg = this.$t('AccountDeleteConfirmMsg')
-              this.$confirm(msg, this.$tc('Info'), {
-                type: 'warning',
-                confirmButtonClass: 'el-button--danger',
-                beforeClose: async(action, instance, done) => {
-                  if (action !== 'confirm') return done()
-                  this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-                    done()
-                    this.$refs.ListTable.reloadTable()
-                    this.$message.success(this.$tc('DeleteSuccessMsg'))
-                  })
-                }
-              })
-            }
-          }
-        )
       }
     },
     onUpdateAuthDone(account) {
