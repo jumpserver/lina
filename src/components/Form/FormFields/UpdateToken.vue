@@ -8,11 +8,12 @@
       v-model.trim="curValue"
       :placeholder="placeholder"
       :type="type"
+      :disabled="disabled"
       class="password-input"
       show-password
       @change="onChange"
     />
-    <el-button size="small" type="text" @click="randomPassword">
+    <el-button size="small" type="text" :disabled="disabled" @click="randomPassword">
       <i class="fa fa-retweet" />
     </el-button>
   </div>
@@ -44,6 +45,10 @@ export default {
     placeholder: {
       type: String,
       default: () => ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
