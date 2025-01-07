@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('风险账号'),
+        title: this.$t('RiskyAccount'),
         tip: this.$t('RealTimeData')
       },
       counter: {
@@ -36,21 +36,21 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('长期未登录账号'),
+          title: this.$t('LongTimeNoLogin'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_long_time_no_login_accounts
           }
         },
         {
-          title: this.$t('弱密码'),
+          title: this.$t('WeakPassword'),
           body: {
             count: this.counter.total_weak_password_accounts,
             disabled: true
           }
         },
         {
-          title: this.$t('长时未改密'),
+          title: this.$t('LongTimeNoChangeSecret'),
           body: {
             count: this.counter.total_long_time_change_password_accounts,
             disabled: true

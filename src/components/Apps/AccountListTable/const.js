@@ -60,7 +60,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'Test',
-    title: vm.$t('验证密文'),
+    title: vm.$t('Test'),
     can: ({ row }) =>
       !vm.$store.getters.currentOrgIsRoot &&
       vm.$hasPerm('accounts.verify_account') &&
@@ -92,7 +92,7 @@ export const accountOtherActions = (vm) => [
   {
     name: 'SecretHistory',
     // 密文历史
-    title: vm.$t('SecretHistory'),
+    title: vm.$t('HistoryPassword'),
     can: () => vm.$hasPerm('accounts.view_accountsecret'),
     type: 'primary',
     callback: ({ row }) => {
@@ -104,7 +104,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'CopyToOther',
-    title: '复制到其他资产',
+    title: vm.$t('CopyToAsset'),
     type: 'primary',
     divided: true,
     callback: ({ row }) => {
@@ -116,7 +116,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'MoveToOther',
-    title: '移动到其他资产',
+    title: vm.$t('MoveToAsset'),
     type: 'primary',
     callback: ({ row }) => {
       vm.$route.query.flag = 'move'
@@ -132,36 +132,36 @@ export const accountOtherActions = (vm) => [
   }
 ]
 
-export const accountQuickFilters = [
+export const accountQuickFilters = (vm) => [
   {
-    label: '最近(7天)',
+    label: vm.$t('Recent (7 days)'),
     options: [
       {
-        label: '最近发现',
+        label: vm.$t('RecentlyDiscovered'),
         filter: {
           latest_discovery: '1'
         }
       },
       {
-        label: '最近被登录',
+        label: vm.$t('RecentlyLoggedIn'),
         filter: {
           latest_accessed: '1'
         }
       },
       {
-        label: '最近修改',
+        label: vm.$t('RecentlyModified'),
         filter: {
           latest_updated: '1'
         }
       },
       {
-        label: '最近改密',
+        label: vm.$t('RecentlyChangedPassword'),
         filter: {
           latest_secret_changed: '1'
         }
       },
       {
-        label: '最近改密失败',
+        label: vm.$t('RecentPasswordChangeFailed'),
         filter: {
           latest_secret_changed_failed: '1'
         }
@@ -169,40 +169,40 @@ export const accountQuickFilters = [
     ]
   },
   {
-    label: '风险账号',
+    label: vm.$t('RiskyAccount'),
     options: [
       {
-        label: '长期未登录账号',
+        label: vm.$t('LongTimeNoLogin'),
         filter: {
           risk: 'long_time_no_login'
         }
       },
       {
-        label: '未托管账号',
+        label: vm.$t('UnmanagedAccount'),
         filter: {
           risk: 'new_found'
         }
       },
       {
-        label: '弱密码',
+        label: vm.$t('WeakPassword'),
         filter: {
           risk: 'week_password'
         }
       },
       {
-        label: '空密码',
+        label: vm.$t('EmptyPassword'),
         filter: {
           has_secret: 'false'
         }
       },
       {
-        label: '长时间未改密',
+        label: vm.$t('LongTimeNoChangeSecret'),
         filter: {
           long_time_no_change_secret: 'true'
         }
       },
       {
-        label: '长时间未验证',
+        label: vm.$t('LongTimeNoVerify'),
         filter: {
           long_time_no_verify: 'true'
         }
@@ -210,34 +210,34 @@ export const accountQuickFilters = [
     ]
   },
   {
-    label: '账号类型',
+    label: vm.$t('AccountType'),
     options: [
       {
-        label: '全部',
+        label: vm.$t('All'),
         filter: {
           category: ''
         }
       },
       {
-        label: ' 主机',
+        label: vm.$t('Host'),
         filter: {
           category: 'host'
         }
       },
       {
-        label: '数据库',
+        label: vm.$t('Database'),
         filter: {
           category: 'database'
         }
       },
       {
-        label: '云',
+        label: vm.$t('Cloud'),
         filter: {
           category: 'cloud'
         }
       },
       {
-        label: '网络设备',
+        label: vm.$t('Device'),
         filter: {
           category: 'device'
         }
@@ -249,7 +249,7 @@ export const accountQuickFilters = [
         }
       },
       {
-        label: '其他',
+        label: vm.$t('Other'),
         filter: {
           category: 'custom'
         }

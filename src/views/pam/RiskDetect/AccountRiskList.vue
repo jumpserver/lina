@@ -60,19 +60,19 @@ export default {
       },
       quickSummary: [
         {
-          title: '最近一周发现',
+          title: this.$t('DateLastWeek'),
           filter: {
             'days': '7'
           }
         },
         {
-          title: '最近一月发现',
+          title: this.$t('DateLastMonth'),
           filter: {
             'days': '30'
           }
         },
         {
-          title: '待处理',
+          title: this.$t('Pending'),
           filter: {
             status: '0'
           }

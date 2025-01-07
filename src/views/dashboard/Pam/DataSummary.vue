@@ -18,9 +18,9 @@ export default {
   data() {
     return {
       accountConfig: {
-        title: this.$t('账号数据'),
+        title: this.$t('AccountData'),
         tip: this.$t('UserData'),
-        subTitle: this.$t('账号总数'),
+        subTitle: this.$t('AccountTotal'),
         icon: 'users',
         data: [],
         route: { name: 'PamAccounts' },
