@@ -46,7 +46,7 @@ export default {
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountCheckDetail',
+                name: 'AccountPushDetail',
                 params: { id: row.automation }
               })
             },

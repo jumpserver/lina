@@ -6,10 +6,12 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AccountChangeSecretExecutionInfo',
   components: {
+    TwoCol,
     AutoDetailCard
   },
   props: {
@@ -20,7 +22,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/accounts/change-secret-executions/${this.object.id}`,
+      url: `/api/v1/accounts/change-secret-executions/${this.object.id}/`,
       detailFields: [
         'id',
         {

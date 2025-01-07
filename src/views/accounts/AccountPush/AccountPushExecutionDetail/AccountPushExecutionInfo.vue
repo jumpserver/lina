@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/accounts/push-account-executions/${this.object.id}`,
+      url: `/api/v1/accounts/push-account-executions/${this.object.id}/`,
       detailFields: [
         'id',
         {
