@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('账号汇总'),
+        title: this.$t('AccountSummary'),
         tip: this.$t('RealTimeData')
       },
       counter: {
@@ -37,7 +37,7 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('特权账号'),
+          title: this.$t('Privileged'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_privileged_accounts,
@@ -45,21 +45,21 @@ export default {
           }
         },
         {
-          title: this.$t('普通账号'),
+          title: this.$t('GeneralAccounts'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_ordinary_accounts
           }
         },
         {
-          title: this.$t('未托管账号'),
+          title: this.$t('UnmanagedAccount'),
           body: {
             count: this.counter.total_unmanaged_accounts,
             disabled: true
           }
         },
         {
-          title: this.$t('不可用账号'),
+          title: this.$t('UnavailableAccount'),
           body: {
             count: this.counter.total_unavailable_accounts,
             disabled: true
