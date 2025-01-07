@@ -8,10 +8,12 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import AccountPushInfo from './AccountPushInfo.vue'
 
 export default {
   components: {
+    TwoCol,
     GenericDetailPage,
     AccountPushInfo
   },
@@ -19,7 +21,7 @@ export default {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
-        titlePrefix: this.$t('AccountCheckDetail'),
+        titlePrefix: this.$t('AccountPushDetail'),
         activeMenu: 'AccountPushInfo',
         url: '/api/v1/accounts/push-account-automations',
         submenu: [
