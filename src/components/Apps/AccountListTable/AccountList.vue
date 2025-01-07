@@ -161,8 +161,7 @@ export default {
       iAsset: this.asset,
       account: {},
       secretUrl: '',
-      quickFilters: accountQuickFilters,
-      tabDeactivated: false,
+      quickFilters: accountQuickFilters(this),
       tableConfig: {
         url: this.url,
         permissions: {

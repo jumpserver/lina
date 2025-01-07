@@ -112,7 +112,7 @@ export const accountOtherActions = (vm) => [
   {
     name: 'SecretHistory',
     // 密文历史
-    title: vm.$t('SecretHistory'),
+    title: vm.$t('HistoryPassword'),
     can: () => vm.$hasPerm('accounts.view_accountsecret'),
     type: 'primary',
     callback: ({ row }) => {
@@ -124,7 +124,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'CopyToOther',
-    title: vm.$t('CopyToOther'),
+    title: vm.$t('CopyToAsset'),
     type: 'primary',
     divided: true,
     callback: ({ row }) => {
@@ -137,7 +137,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'MoveToOther',
-    title: vm.$t('MoveToOther'),
+    title: vm.$t('MoveToAsset'),
     type: 'primary',
     callback: ({ row }) => {
       vm.accountCreateUpdateTitle = vm.$t('MoveToOther')
@@ -149,36 +149,36 @@ export const accountOtherActions = (vm) => [
   }
 ]
 
-export const accountQuickFilters = [
+export const accountQuickFilters = (vm) => [
   {
-    label: '最近(7天)',
+    label: vm.$t('Recent (7 days)'),
     options: [
       {
-        label: '最近发现',
+        label: vm.$t('RecentlyDiscovered'),
         filter: {
           latest_discovery: '1'
         }
       },
       {
-        label: '最近被登录',
+        label: vm.$t('RecentlyLoggedIn'),
         filter: {
           latest_accessed: '1'
         }
       },
       {
-        label: '最近修改',
+        label: vm.$t('RecentlyModified'),
         filter: {
           latest_updated: '1'
         }
       },
       {
-        label: '最近改密',
+        label: vm.$t('RecentlyChangedPassword'),
         filter: {
           latest_secret_changed: '1'
         }
       },
       {
-        label: '最近改密失败',
+        label: vm.$t('RecentPasswordChangeFailed'),
         filter: {
           latest_secret_changed_failed: '1'
         }
@@ -186,40 +186,40 @@ export const accountQuickFilters = [
     ]
   },
   {
-    label: '风险账号',
+    label: vm.$t('RiskyAccount'),
     options: [
       {
-        label: '僵尸账号',
+        label: vm.$t('LongTimeNoLogin'),
         filter: {
           risk: 'long_time_no_login'
         }
       },
       {
-        label: '幽灵账号',
+        label: vm.$t('UnmanagedAccount'),
         filter: {
           risk: 'new_found'
         }
       },
       {
-        label: '弱密码',
+        label: vm.$t('WeakPassword'),
         filter: {
           risk: 'weak_password'
         }
       },
       {
-        label: '空密码',
+        label: vm.$t('EmptyPassword'),
         filter: {
           has_secret: 'false'
         }
       },
       {
-        label: '长时间未改密',
+        label: vm.$t('LongTimeNoChangeSecret'),
         filter: {
           long_time_no_change_secret: 'true'
         }
       },
       {
-        label: '长时间未验证',
+        label: vm.$t('LongTimeNoVerify'),
         filter: {
           long_time_no_verify: 'true'
         }
@@ -227,34 +227,34 @@ export const accountQuickFilters = [
     ]
   },
   {
-    label: '账号类型',
+    label: vm.$t('AccountType'),
     options: [
       {
-        label: '全部',
+        label: vm.$t('All'),
         filter: {
           category: ''
         }
       },
       {
-        label: ' 主机',
+        label: vm.$t('Host'),
         filter: {
           category: 'host'
         }
       },
       {
-        label: '数据库',
+        label: vm.$t('Database'),
         filter: {
           category: 'database'
         }
       },
       {
-        label: '云',
+        label: vm.$t('Cloud'),
         filter: {
           category: 'cloud'
         }
       },
       {
-        label: '网络设备',
+        label: vm.$t('Device'),
         filter: {
           category: 'device'
         }
@@ -266,7 +266,7 @@ export const accountQuickFilters = [
         }
       },
       {
-        label: '其他',
+        label: vm.$t('Other'),
         filter: {
           category: 'custom'
         }
