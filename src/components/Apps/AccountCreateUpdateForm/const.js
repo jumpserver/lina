@@ -72,6 +72,9 @@ export const accountFieldsMeta = (vm) => {
             }
           }
         }
+      },
+      hidden: () => {
+        return vm.addTemplate
       }
     },
     username: {
@@ -129,6 +132,9 @@ export const accountFieldsMeta = (vm) => {
     password: {
       label: vm.$t('Password'),
       component: UpdateToken,
+      el: {
+        disabled: isPam
+      },
       hidden: (formValue) => {
         return formValue.secret_type !== 'password' || vm.addTemplate
       }
