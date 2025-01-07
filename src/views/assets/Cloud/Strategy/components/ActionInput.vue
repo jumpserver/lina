@@ -79,6 +79,9 @@ export default {
                   case 'account_template':
                     url = '/api/v1/accounts/account-templates/'
                     break
+                  case 'label':
+                    url = '/api/v1/labels/labels/'
+                    break
                   case 'name_strategy':
                     options = this.nameOptions
                     break
