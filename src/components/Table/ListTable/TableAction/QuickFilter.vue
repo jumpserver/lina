@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async getCount(item) {
-      if (item.count) {
+      if (item.count || item.count === 0) {
         return item.count
       }
       if (!item.filter) {
