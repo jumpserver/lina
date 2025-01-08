@@ -11,7 +11,7 @@
           <DataSummary />
         </el-col>
       </el-row>
-      <AssetProportionSummary />
+      <AssetProportionSummary :url="url" />
       <RankSummary />
     </div>
     <Page403 v-else />
@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      url: '/api/v1/index/?total_count_type_to_assets_amount=1'
     }
   }
 }

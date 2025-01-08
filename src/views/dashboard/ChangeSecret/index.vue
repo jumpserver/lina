@@ -1,6 +1,6 @@
 <template>
   <div v-if="this.$hasPerm('accounts.view_changesecretautomation')">
-    <div>
+    <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" @change="onChange" />
     </div>
 
@@ -15,27 +15,21 @@
       </el-col>
 
     </el-row>
-
-    <el-row :gutter="24" type="flex">
-
-      <el-col :span="14">
-        <FailedAccountSummary :days="days" class="failed-account-summary" />
-      </el-col>
-
-      <el-col :span="10">
-        <AccountSummary :days="days" class="account-summary" />
-      </el-col>
-
+    <el-row>
+      <AccountSummary :days="days" class="account-summary" />
+    </el-row>
+    <el-row>
+      <FailedAccountSummary :days="days" class="failed-account-summary" />
     </el-row>
   </div>
 </template>
 
 <script>
-import SwitchDate from '../components/SwitchDate'
-import FailedAccountSummary from './FailedAccountSummary.vue'
 import DataSummary from './DataSummary.vue'
 import CardSummary from './CardSummary.vue'
+import SwitchDate from '../components/SwitchDate'
 import AccountSummary from './AccountSummary.vue'
+import FailedAccountSummary from './FailedAccountSummary.vue'
 
 export default {
   components: {
@@ -60,19 +54,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  %card-common {
+    background: #fff;
+    border-radius: 4px;
+    padding: 1.25rem;
+    height: 100%;
+    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    transition: all .3s;
+
+    &:hover {
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    }
+
+    ::v-deep {
+      .card-content {
+        padding-bottom: unset;
+        border-bottom: unset;
+      }
+
+      .ring {
+        display: none;
+      }
+
+      .el-card {
+        box-shadow: none;
+        border: none;
+      }
+
+      .el-card__body {
+        padding: 0;
+      }
+    }
+  }
+
+  .switch-date-wrapper {
+    margin-bottom: 1.25rem;
+  }
 
   .page ::v-deep .page-heading {
     display: none;
   }
 
+  .card-summary {
+    @extend %card-common;
+  }
+
+  .data-summary {
+    @extend %card-common;
+  }
+
+  .account-summary {
+    @extend %card-common;
+    margin-top: 1rem;
+  }
+
   .failed-account-summary {
+    @extend %card-common;
     height: 100%;
     margin-top: 16px;
 
-   ::v-deep #HomeCard .el-card.no-border {
-     height: 100%;
-     margin-bottom: unset !important;
+    ::v-deep #HomeCard .el-card.no-border {
+      height: 100%;
+      margin-bottom: unset !important;
     }
   }
-
 </style>
