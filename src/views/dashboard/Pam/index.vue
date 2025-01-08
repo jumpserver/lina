@@ -5,7 +5,7 @@
 
       <div class="dashboard-container">
         <el-row :gutter="20" class="top-summary">
-          <el-col :span="18" :lg="18" :xs="24" class="left-column">
+          <el-col :lg="16" :xs="24" class="left-column">
             <div class="account-wrapper">
               <AccountSummary class="summary-card" />
             </div>
@@ -13,7 +13,7 @@
               <RiskSummary class="summary-card" />
             </div>
           </el-col>
-          <el-col :span="6" :lg="6" :xs="24">
+          <el-col :lg="8" :xs="24" class="right-column">
             <DataSummary class="summary-card" />
           </el-col>
         </el-row>
@@ -81,6 +81,11 @@ export default {
       flex-direction: column;
       gap: 1.25rem;
     }
+
+    .right-column {
+      max-height: 286px;
+      height: 286px;
+    }
   }
 
   .bottom-section {
@@ -117,6 +122,12 @@ export default {
     padding: 1.25rem;
     margin-bottom: 1.25rem;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  }
+
+  @media screen and (max-width: 1200px) {
+    .right-column {
+      margin-top: 1.25rem;
+    }
   }
 
   @media screen and (max-width: 768px) {
