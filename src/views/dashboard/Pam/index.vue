@@ -85,6 +85,11 @@ export default {
     .right-column {
       max-height: 286px;
       height: 286px;
+
+      ::v-deep .el-row,
+      ::v-deep .el-col {
+        height: 100%;
+      }
     }
   }
 

@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="summary-header">
-      <span class="title">{{ title }}</span>
+      <el-tooltip :content="title" placement="top" :open-delay="500">
+        <span class="title">{{ title }}</span>
+      </el-tooltip>
     </div>
     <slot>
       <h3 class="no-margins ">
@@ -78,6 +80,10 @@ export default {
 <style lang="scss" scoped>
 .summary-header {
   //color: var(--color-icon-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
 
   .title {
     font-style: normal;

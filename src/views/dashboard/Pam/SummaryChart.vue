@@ -1,5 +1,5 @@
 <template>
-  <div class="summary-card">
+  <div class="card">
     <div class="title-section">
       <Title :config="config" />
     </div>
@@ -21,10 +21,12 @@
           :key="item.key"
           class="metric-item"
         >
-          <span class="metric-value" :class="{'increase': config[item.key] > 0}">
-            {{ config[item.key] }}
-          </span>
-          <span class="metric-label">{{ $tc(item.label) }}</span>
+          <div class="metric-content">
+            <span class="metric-label">{{ $tc(item.label) }}</span>
+            <span class="metric-value" :class="{'increase': config[item.key] > 0}">
+              {{ config[item.key] }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -69,47 +71,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.summary-card {
+.card {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   width: 100%;
+  height: 100%;
   background-color: #FFF;
+  overflow: hidden;
 
   .title-section {
+    flex-shrink: 0;
     .title {
-      font-size: 1.125rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--color-text-primary);
-      letter-spacing: -0.01em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    gap: 2rem;
+    flex: 1;
+    min-height: 0;
+    gap: 1.5rem;
 
     .info-box {
       display: flex;
+      flex: 3;
+      justify-content: center;
       flex-direction: column;
-      gap: 0.5rem;
-      flex: 1;
-      min-width: 160px;
-      padding: 1rem 0;
+      gap: 0.375rem;
 
       .total-number {
-        font-size: 2.25rem;
+        font-size: 2rem;
         font-weight: 700;
         color: var(--color-text-primary);
-        line-height: 1;
-        letter-spacing: -0.02em;
+        line-height: 1.2;
 
         a {
           color: inherit;
           text-decoration: none;
-          transition: color 0.2s ease;
           &:hover { color: var(--color-primary); }
         }
       }
@@ -117,85 +122,91 @@ export default {
       .sub-title {
         font-size: 0.875rem;
         color: var(--color-icon-primary);
-        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
     .metrics-section {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: nowrap;
-      gap: 0.75rem;
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      align-content: flex-end;
 
       .metric-item {
-        min-width: 120px;
-        padding: 0.75rem 0;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 0.375rem;
+        min-width: 0;
+        padding: 0.5rem 0;
         transition: all 0.2s ease;
+        cursor: pointer;
 
         &:hover {
+          background-color: var(--color-neutral-muted);
           transform: translateY(-2px);
         }
 
-        .metric-value {
-          font-size: 1.25rem;
-          font-weight: 600;
-          color: var(--color-text-primary);
-          letter-spacing: -0.01em;
+        .metric-content {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
 
-          &.increase {
-            color: var(--color-primary);
+          .metric-label {
+            font-size: 0.75rem;
+            color: var(--color-icon-primary);
+            text-transform: uppercase;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
-        }
 
-        .metric-label {
-          font-size: 0.75rem;
-          font-weight: 500;
-          color: var(--color-icon-primary);
-          text-transform: uppercase;
-          letter-spacing: 0.02em;
+          .metric-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.increase {
+              color: var(--color-primary);
+            }
+          }
         }
       }
     }
   }
 
   @media (max-width: 768px) {
-    padding: 1.25rem;
-    gap: 1.25rem;
-
     .content {
-      gap: 1rem;
-
-      .info-box {
-        width: 100%;
-        padding: 0.875rem 0;
-
-        .total-number {
-          font-size: 2rem;
-        }
-      }
+      gap: 1.25rem;
 
       .metrics-section {
-        width: 100%;
-        justify-content: space-between;
-
-        .metric-item {
-          flex: 1;
-          min-width: calc(33.333% - 0.5rem);
-          max-width: calc(50% - 0.5rem);
-        }
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   }
 
   @media (max-width: 480px) {
-    padding: 1rem;
+    .content {
+      .metrics-section {
+        grid-template-columns: repeat(2, 1fr);
 
-    .metrics-section .metric-item {
-      min-width: calc(50% - 0.375rem);
+        .metric-item {
+          padding: 0.375rem 0.5rem;
+
+          &:hover {
+            transform: translateY(-1px);
+          }
+
+          .metric-content {
+            .metric-value {
+              font-size: 1rem;
+            }
+          }
+        }
+      }
     }
   }
 }
