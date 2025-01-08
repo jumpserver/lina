@@ -17,10 +17,16 @@ export default {
     Title,
     ProgressChart
   },
+  props: {
+    url: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       titleConfig: {
-        title: this.$t('ProportionOfAssetTypes'),
+        title: '',
         tip: this.$t('ProportionOfAssetTypes')
       },
       config: {
@@ -33,9 +39,24 @@ export default {
   },
   methods: {
     async getChartData() {
-      const url = '/api/v1/index/?total_count_type_to_assets_amount=1'
-      const data = await this.$axios.get(url)
-      this.$set(this.config, 'data', data.total_count_type_to_assets_amount)
+      if (!this.url) return
+
+      try {
+        const data = await this.$axios.get(this.url)
+        const str = data[this.url.split('?')[1].split('=')[0]]
+
+        if (this.url.includes('accounts')) {
+          this.titleConfig.title = this.$t('ProportionOfAccontTypes')
+          this.titleConfig.tip = this.$t('ProportionOfAccountTypes')
+        } else {
+          this.titleConfig.title = this.$t('ProportionOfAssetTypes')
+          this.titleConfig.tip = this.$t('ProportionOfAssetTypes')
+        }
+
+        this.$set(this.config, 'data', str)
+      } catch (e) {
+        this.$message.error(e.message)
+      }
     }
   }
 }
