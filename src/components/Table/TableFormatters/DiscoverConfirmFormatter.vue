@@ -128,7 +128,7 @@ export default {
           has: !this.row.present
         },
         {
-          name: 'add_account_after_change_password',
+          name: 'change_password_add',
           label: this.$t('Add account after changing password'),
           has: !this.row.present
         }
