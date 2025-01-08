@@ -19,14 +19,14 @@ export default {
 
     if (icon) {
       if (icon.startsWith('fa-')) {
-        vNodes.push(<i class={`fa ${icon}`} />)
+        vNodes.push(<i class={`fa ${icon}`}/>)
       } else {
         vNodes.push(<svg-icon icon-class={icon}/>)
       }
     }
 
     if (title) {
-      vNodes.push(<span slot='title'>{title}</span>)
+      vNodes.push(<span class='item-title' slot='title'>{title}</span>)
     }
     return vNodes
   }

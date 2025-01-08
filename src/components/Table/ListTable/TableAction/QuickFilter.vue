@@ -230,10 +230,25 @@ export default {
 
        .item {
          display: inline-block;
-         margin-right: 5px;
+         margin-right: 8px;
          color: #303133;
          font-size: 12px;
          cursor: pointer;
+
+         &::after {
+           content: "";
+           margin-left: 4px;
+           margin-bottom: 2px;
+           vertical-align: middle;
+           width: 1px; /* 分割线宽度 */
+           height: 8px; /* 分割线高度 */
+           background-color: var(--color-icon-primary); /* 分割线颜色 */
+           display: inline-block;
+         }
+
+         &:last-child::after {
+           display: none;
+         }
 
          i {
            visibility: hidden;
@@ -242,7 +257,6 @@ export default {
 
          &.active {
            color: var(--color-primary);
-           font-weight: 500;
 
            i {
              visibility: visible;

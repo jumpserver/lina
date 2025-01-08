@@ -33,6 +33,15 @@ $single-menu-height: 38px;
     margin-right: 10px;
   }
 
+  .submenu-item {
+    .item-title {
+      width: 150px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
   .el-submenu .el-menu-item {
     height: $single-menu-height;
     line-height: $single-menu-height;
