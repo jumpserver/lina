@@ -11,6 +11,7 @@ import { GenericDetailPage } from '@/layout/components'
 import AccountBackupExecutionInfo from './AccountBackupExecutionInfo.vue'
 
 export default {
+  name: 'AccountBackupExecutionDetail',
   components: {
     GenericDetailPage,
     AccountBackupExecutionInfo
@@ -19,9 +20,9 @@ export default {
     return {
       execution: { id: '' },
       config: {
+        url: '/api/v1/accounts/account-backup-plan-executions',
         activeMenu: 'AccountBackupExecutionInfo',
         actions: {
-          detailApiUrl: `/api/v1/accounts/account-backup-plan-executions/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },
