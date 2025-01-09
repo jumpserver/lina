@@ -101,7 +101,6 @@ export default {
 
   .summary-card {
     background: #fff;
-    border-radius: 4px;
     padding: 1.25rem;
     height: 100%;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
@@ -115,15 +114,10 @@ export default {
     ::v-deep .ring {
       display: none;
     }
-
-    &:hover {
-      box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-    }
   }
 
   .secret-summary {
     background: #fff;
-    border-radius: 4px;
     padding: 1.25rem;
     margin-bottom: 1.25rem;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);

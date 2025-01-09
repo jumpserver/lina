@@ -6,11 +6,11 @@
 
     <el-row type="flex">
 
-      <el-col :span="18">
+      <el-col :span="16">
         <CardSummary :days="days" class="card-summary" />
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="8">
         <DataSummary :days="days" class="data-summary" style="margin-left: 1rem" />
       </el-col>
 
@@ -32,6 +32,7 @@ import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
 
 export default {
+  name: 'ChangeSecret',
   components: {
     AccountSummary,
     SwitchDate,
@@ -56,15 +57,10 @@ export default {
 <style lang="scss" scoped>
   %card-common {
     background: #fff;
-    border-radius: 4px;
     padding: 1.25rem;
     height: 100%;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
     transition: all .3s;
-
-    &:hover {
-      box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-    }
 
     ::v-deep {
       .card-content {
@@ -93,14 +89,6 @@ export default {
 
   .page ::v-deep .page-heading {
     display: none;
-  }
-
-  .card-summary {
-    @extend %card-common;
-  }
-
-  .data-summary {
-    @extend %card-common;
   }
 
   .account-summary {
