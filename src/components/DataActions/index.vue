@@ -360,6 +360,8 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .el-dropdown-menu__item {
+    padding: 0 20px;
+
     &.is-disabled {
       color: var(--color-disabled);
       cursor: not-allowed;

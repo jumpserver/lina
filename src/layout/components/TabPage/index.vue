@@ -1,10 +1,10 @@
 <template>
-  <Page v-if="!loading" class="tab-page" v-bind="$attrs">
+  <Page v-if="!loading" :title="title" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
 
-    <div style="height: 100%">
+    <div class="tab-page-wrapper">
       <el-tabs
         v-if="tabIndices.length > 1"
         slot="submenu"
@@ -80,6 +80,10 @@ export default {
     helpMessage: {
       type: String,
       default: ''
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -95,6 +99,7 @@ export default {
         return this.activeTab
       },
       set(item) {
+        console.log('SEt active tab', item)
         this.activeTab = item
         this.$emit('update:activeMenu', item)
       }
@@ -118,15 +123,6 @@ export default {
         }
       }
       return needActiveComponent
-    }
-  },
-  watch: {
-    $route(to, from) {
-      // 好像没必要
-      // const activeTab = to.query?.tab
-      // if (activeTab && this.iActiveMenu !== activeTab) {
-      //   this.iActiveMenu = activeTab
-      // }
     }
   },
   created() {
@@ -167,6 +163,25 @@ export default {
 
 <style lang='scss' scoped>
 
+.page.no-title {
+  ::v-deep {
+    .page-submenu .el-tabs__header {
+      margin-top: 0;
+    }
+
+    .page-content > div {
+      margin-bottom: 10px;
+    }
+
+    .page-content {
+      height: calc(100% - 15px);
+    }
+
+    .tab-page-content {
+    }
+  }
+}
+
 .page-submenu ::v-deep .el-tabs__header {
   background-color: white;
   margin-top: -10px;
@@ -197,6 +212,10 @@ export default {
 }
 
 .tab-page {
+  .tab-page-wrapper {
+    height: 100%;
+  }
+
   ::v-deep .page-heading {
     border-bottom: none;
   }
@@ -209,7 +228,7 @@ export default {
   .tab-page-content {
     padding: 10px 30px 22px;
     overflow-y: auto;
-    height: calc(100vh - 130px);
+    height: calc(100% - 30px);
 
     .el-alert {
       margin-top: 0;

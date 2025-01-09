@@ -1,7 +1,7 @@
 <template>
-  <div class="page">
+  <div :class="{'no-title': title === 'null'}" class="page">
     <TagsView />
-    <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print">
+    <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
         v-if="!inDrawer"
         :disabled="gobackDisabled"
@@ -30,12 +30,10 @@
       </template>
     </PageHeading>
     <PageContent class="page-content">
-      <div>
-        <el-alert v-if="helpMessage" type="success">
-          <span v-sanitize="helpMessage" class="announcement-main" />
-        </el-alert>
-        <slot />
-      </div>
+      <el-alert v-if="helpMessage" type="success">
+        <span v-sanitize="helpMessage" class="announcement-main" />
+      </el-alert>
+      <slot />
     </PageContent>
     <UserConfirmDialog />
   </div>
@@ -122,7 +120,10 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-  height: calc(100vh - 65px);
+  // 这个不加的话，page title 也会滚动
+  height: calc(100vh - 52px);
+  display: flex;
+  flex-direction: column;
   overflow-y: hidden;
   overflow-x: hidden;
 
@@ -131,13 +132,22 @@ export default {
     margin-bottom: 5px;
   }
 
+  &.no-title {
+  }
+
+  .page-head {
+
+  }
+
   .page-content {
-    height: calc(100% - 20px);
+    flex: 1; /* 占用剩余高度 */
+    //height: calc(100% - 50px);
     overflow-x: hidden;
     overflow-y: auto !important;
 
     ::v-deep > div {
-      margin-bottom: 50px;
+      // 这个当时为什么设置的
+      //margin-bottom: 50px;
       // 别设置，用户列页面会被撑开
       //height: 100%;
     }

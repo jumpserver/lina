@@ -6,7 +6,8 @@ const state = {
   assetCategoriesDropdown: [],
   assetCategoriesCascader: [],
   platforms: [],
-  platformGetting: false
+  platformGetting: false,
+  recentPlatformIds: JSON.parse(localStorage.getItem('recentPlatforms')) || []
 }
 
 let isFetchingPlatforms = false
@@ -89,8 +90,17 @@ const actions = {
         })
     })
   },
+  addToRecentPlatforms({ commit, display, state }, platform) {
+    const recentPlatformIds = state.recentPlatformIds.filter(i => i !== platform.id)
+    recentPlatformIds.unshift(platform.id)
+    if (recentPlatformIds.length > 8) {
+      recentPlatformIds.pop()
+    }
+    state.recentPlatformIds = recentPlatformIds
+    localStorage.setItem('recentPlatforms', JSON.stringify(recentPlatformIds))
+  },
   getRecentPlatforms({ commit, dispatch, state }) {
-    const recentPlatformIds = JSON.parse(localStorage.getItem('recentPlatforms')) || []
+    const recentPlatformIds = state.recentPlatformIds
     return new Promise(resolve => {
       dispatch('getPlatforms').then(platforms => {
         resolve(platforms.filter(p => recentPlatformIds.includes(p.id)))
