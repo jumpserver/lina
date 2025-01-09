@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24" class="card-left">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24" class="card-right">
         <SummaryCountCard :config="sessionConfig" :items="sessionItems" />
       </el-col>
     </el-row>
@@ -15,6 +15,7 @@
 import SummaryCountCard from '../components/SummaryCountCard.vue'
 
 export default {
+  name: 'CardSummary',
   components: { SummaryCountCard },
   props: {
     days: {

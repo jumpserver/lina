@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :lg="24" :sm="12" class="margin-top-10">
+      <el-col :lg="24" :sm="12">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
     </el-row>

@@ -123,8 +123,15 @@ export default {
     }
   }
 
-  .item-value span {
-    word-break: break-word;
+  .item-value {
+    ::v-deep span {
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
   }
 }
 </style>
