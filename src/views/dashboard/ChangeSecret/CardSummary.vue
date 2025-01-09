@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :lg="12" :sm="24" class="card-left">
+      <el-col :lg="12" :sm="24" class="margin-top-10 card-left">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
-      <el-col :lg="12" :sm="24" class="card-right">
+      <el-col :lg="12" :sm="24" class="margin-top-10 card-right">
         <SummaryCountCard :config="sessionConfig" :items="sessionItems" />
       </el-col>
     </el-row>
