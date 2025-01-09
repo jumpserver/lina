@@ -59,7 +59,7 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts_amount=1'
+      url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts=1'
     }
   }
 }
