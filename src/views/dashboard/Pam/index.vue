@@ -6,6 +6,9 @@
       <div class="dashboard-container">
         <el-row :gutter="20" class="top-summary">
           <el-col :lg="16" :xs="24" class="left-column">
+            <div class="mission-wrapper">
+              <DataSummary class="summary-card" />
+            </div>
             <div class="account-wrapper">
               <AccountSummary class="summary-card" />
             </div>
@@ -14,7 +17,7 @@
             </div>
           </el-col>
           <el-col :lg="8" :xs="24" class="right-column">
-            <DataSummary class="summary-card" />
+            <MissionSummery class="summary-card" />
           </el-col>
         </el-row>
 
@@ -43,19 +46,21 @@ import DataSummary from './DataSummary'
 import RiskSummary from './RiskSummary.vue'
 import AccountSummary from './AccountSummary.vue'
 import AssetProportionSummary from './AssetProportionSummary'
+import MissionSummery from './MissionSummery.vue'
 import AccountSecretSummary from '../ChangeSecret/AccountSummary.vue'
 
 export default {
   name: 'Dashboard',
   components: {
     Page,
-    Announcement,
+    Page403,
     DataSummary,
-    AssetProportionSummary,
     RiskSummary,
+    Announcement,
+    MissionSummery,
     AccountSummary,
     AccountSecretSummary,
-    Page403
+    AssetProportionSummary
   },
   data() {
     return {
@@ -83,8 +88,8 @@ export default {
     }
 
     .right-column {
-      max-height: 286px;
-      height: 286px;
+      max-height: 540px;
+      height: 540px;
 
       ::v-deep .el-row,
       ::v-deep .el-col {
@@ -114,6 +119,12 @@ export default {
     ::v-deep .ring {
       display: none;
     }
+  }
+
+  .mission-summary {
+    background: #fff;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0,21,41,.08);
   }
 
   .secret-summary {
