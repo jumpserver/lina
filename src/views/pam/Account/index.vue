@@ -2,7 +2,6 @@
   <TabPage
     :active-menu.sync="activeMenu"
     :submenu="tab.submenu"
-    title="null"
   />
 </template>
 

@@ -76,7 +76,6 @@ const actions = {
       // 设置标志位，表示正在请求中
       isFetchingPlatforms = true
 
-      console.log('Get platforms:', '123123')
       request
         .get('/api/v1/assets/platforms/')
         .then(data => {
@@ -96,14 +95,16 @@ const actions = {
     if (recentPlatformIds.length > 8) {
       recentPlatformIds.pop()
     }
-    state.recentPlatformIds = recentPlatformIds
+    state.recentPlatformIds = [...recentPlatformIds]
     localStorage.setItem('recentPlatforms', JSON.stringify(recentPlatformIds))
   },
   getRecentPlatforms({ commit, dispatch, state }) {
     const recentPlatformIds = state.recentPlatformIds
     return new Promise(resolve => {
       dispatch('getPlatforms').then(platforms => {
-        resolve(platforms.filter(p => recentPlatformIds.includes(p.id)))
+        const recentPlatforms = platforms.filter(p => recentPlatformIds.includes(p.id))
+          .sort((a, b) => recentPlatformIds.indexOf(a.id) - recentPlatformIds.indexOf(b.id))
+        resolve(recentPlatforms)
       })
     })
   }

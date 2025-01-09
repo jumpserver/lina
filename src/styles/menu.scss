@@ -36,9 +36,19 @@ $single-menu-height: 38px;
   .submenu-item {
     .item-title {
       width: 150px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      //overflow: hidden;
+      //white-space: nowrap;
+      //text-overflow: ellipsis;
+
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.2;
+      display: -webkit-box; /* 创建弹性盒子模型 */
+      -webkit-box-orient: vertical; /* 垂直排列子元素 */
+      overflow: hidden; /* 隐藏超出内容 */
+      text-overflow: ellipsis; /* 超出部分显示省略号 */
+      -webkit-line-clamp: 2; /* 限制显示两行 */
     }
   }
 

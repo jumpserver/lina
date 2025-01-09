@@ -12,9 +12,10 @@
         class="action-item"
         placement="bottom-start"
         trigger="click"
+        @click="handleClick(action)"
         @command="handleDropdownCallback"
       >
-        <span v-if="action.split" @click="handleClick(action)">
+        <span v-if="action.split">
           {{ action.title }}
         </span>
         <el-button
@@ -134,6 +135,7 @@ export default {
       return true
     },
     handleDropdownCallback(command) {
+      console.log('Handle drop down lick')
       const [option, dropdown] = command
       if (option.disabled) {
         return

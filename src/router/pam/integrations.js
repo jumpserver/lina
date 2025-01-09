@@ -18,7 +18,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/Integration/Application.vue'),
+        component: () => import('@/views/pam/Integration/index.vue'),
         name: 'IntegrationApplicationList',
         meta: {
           title: i18n.t('Applications'),

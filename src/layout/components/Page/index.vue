@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'no-title': title === 'null'}" class="page">
+  <div :class="{'no-title': noTitle}" class="page">
     <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
@@ -82,8 +82,11 @@ export default {
   },
   computed: {
     ...mapGetters(['inDrawer']),
+    noTitle() {
+      return this.title === 'null' || this.title === null
+    },
     iTitle() {
-      if (this.title === 'null') {
+      if (this.noTitle) {
         return
       }
       let title = this.title || this.$route.meta.title

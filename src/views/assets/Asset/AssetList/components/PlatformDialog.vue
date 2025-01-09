@@ -135,18 +135,8 @@ export default {
       const color = this.bottomColors[colorIndex]
       return color
     },
-    addToRecentPlatforms(platform) {
-      const recentPlatformIds = this.recentPlatformIds.filter(i => i !== platform.id)
-      recentPlatformIds.unshift(platform.id)
-      if (recentPlatformIds.length > 8) {
-        recentPlatformIds.pop()
-      }
-      this.recentPlatformIds = recentPlatformIds
-      console.log('Connected: ', platform)
-      localStorage.setItem('recentPlatforms', JSON.stringify(recentPlatformIds))
-    },
     handleSelect(platform) {
-      this.addToRecentPlatforms(platform)
+      this.$store.dispatch('assets/addToRecentPlatforms', platform)
       this.$emit('select-platform', platform)
     }
   }

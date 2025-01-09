@@ -40,6 +40,7 @@ import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
 import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import { getDefaultConfig } from './const'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -119,8 +120,9 @@ export default {
       has: this.headerActions.hasCrate,
       callback: () => {
         this.showPlatform = false
-        console.log('Create action')
+        console.log('Click create')
         setTimeout(() => {
+          console.log('Show platform')
           this.showPlatform = true
         }, 100)
       },
@@ -158,6 +160,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      recentPlatformIds: state => state.assets.recentPlatformIds
+    }),
     iTableConfig() {
       return _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
@@ -190,10 +195,18 @@ export default {
         iNew.query.node_id = ''
         this.$router.push(iNew)
       }
+    },
+    recentPlatformIds(newValue, oldValue) {
+      console.log('recentPlatformIds updated:', newValue)
+      this.setRecentPlatforms()
+      // 在这里执行需要的操作
     }
   },
   mounted() {
     this.setRecentPlatforms()
+    setInterval(() => {
+      console.log('ids: ', this.recentPlatformIds, this)
+    }, 1000 * 2)
   },
   activated() {
     this.setRecentPlatforms()

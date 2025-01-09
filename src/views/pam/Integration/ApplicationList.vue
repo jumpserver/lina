@@ -47,9 +47,9 @@ export default {
             formatterArgs: {
               getRoute: ({ row }) => ({
                 name: 'IntegrationApplicationDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
-              })
+                params: { id: row.id }
+              }),
+              drawer: true
             },
             formatter: DetailFormatter
           },
@@ -68,7 +68,7 @@ export default {
         columnsExtra: ['secret'],
         columnsShow: {
           default: [
-            'logo', 'id', 'secret', 'name', 'accounts', 'date_last_used', 'active'
+            'logo', 'name', 'id', 'secret', 'accounts', 'date_last_used', 'active'
           ]
         },
         permissions: { app: 'accounts', resource: 'integrationapplication' }
