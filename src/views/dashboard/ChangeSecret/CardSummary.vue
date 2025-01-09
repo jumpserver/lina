@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24" class="card-left">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24" class="card-right">
         <SummaryCountCard :config="sessionConfig" :items="sessionItems" />
       </el-col>
     </el-row>
@@ -15,6 +15,7 @@
 import SummaryCountCard from '../components/SummaryCountCard.vue'
 
 export default {
+  name: 'CardSummary',
   components: { SummaryCountCard },
   props: {
     days: {
@@ -104,12 +105,18 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get(`/api/v1/accounts/change-secret-dashboard/?days=${this.days}
-        &total_count_change_secrets=1
-        &total_count_periodic_change_secrets=1
-        &total_count_change_secret_assets=1
-        &total_count_change_secret_status=1
-      `)
+      this.data = await this.$axios.get(
+        '/api/v1/accounts/change-secret-dashboard/',
+        {
+          params: {
+            days: this.days,
+            total_count_change_secrets: 1,
+            total_count_periodic_change_secrets: 1,
+            total_count_change_secret_assets: 1,
+            total_count_change_secret_status: 1
+          }
+        }
+      )
     }
   }
 }

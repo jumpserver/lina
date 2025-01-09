@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :lg="24" :sm="12" class="margin-top-10">
+      <el-col :lg="24" :sm="12">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
     </el-row>
@@ -28,10 +28,7 @@ export default {
       data: {
         total_count_ongoing_change_secret: 0,
         total_count_ongoing_change_secret_assets: 0,
-        total_count_ongoing_change_secret_accounts: 0,
-        total_count_online_sessions: 0,
-        total_count_history_sessions: 0,
-        total_count_ftp_logs: 0
+        total_count_ongoing_change_secret_accounts: 0
       }
     }
   },
@@ -72,14 +69,14 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get(`/api/v1/index/?days=${this.days}
-        &total_count_user_login_logs=1
-        &total_count_operate_logs=1
-        &total_count_change_password_logs=1
-        &total_count_online_sessions=1
-        &total_count_history_sessions=1
-        &total_count_ftp_logs=1
-      `)
+      this.data = await this.$axios.get(
+        '/api/v1/accounts/change-secret-dashboard/',
+        {
+          params: {
+            total_count_ongoing_change_secret: 1
+          }
+        }
+      )
     }
   }
 }
