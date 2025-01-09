@@ -169,15 +169,8 @@ export default {
       margin-top: 0;
     }
 
-    .page-content > div {
-      margin-bottom: 10px;
-    }
-
-    .page-content {
-      height: calc(100% - 15px);
-    }
-
     .tab-page-content {
+      height: calc(100% - 45px);
     }
   }
 }
@@ -228,7 +221,7 @@ export default {
   .tab-page-content {
     padding: 10px 30px 22px;
     overflow-y: auto;
-    height: calc(100% - 30px);
+    height: calc(100% - 33px);
 
     .el-alert {
       margin-top: 0;
