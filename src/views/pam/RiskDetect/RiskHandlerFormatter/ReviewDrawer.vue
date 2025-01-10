@@ -3,16 +3,16 @@
     :title="$t('Details')"
     :visible.sync="iVisible"
     append-to-body
-    class="drawer"
     destroy-on-close
     direction="rtl"
     style="z-index: 999"
+    class="risk-review-drawer"
     @open="handleOpen"
   >
     <div class="drawer-body">
-      <div v-for="r in iRows" :key="r.id">
+      <div v-for="r in iRows" :key="r.id" class="risk-item">
         <div class="host-username">
-          {{ r.username }}@{{ r.asset ? r.asset.name : r }}
+          <span>{{ r.asset ? r.asset.name : r }} - {{ r.username }}</span>
         </div>
         <el-timeline :reverse="true">
           <el-timeline-item
@@ -162,41 +162,69 @@ ${detail.diff}
 </script>
 
 <style lang='scss' scoped>
-.drawer {
+.risk-review-drawer {
   ::v-deep {
-    .el-drawer__header {
-      padding: 15px 20px 5px;
+     .el-drawer__header {
+      padding: 16px 20px;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-primary);
+      font-weight: 500;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    .el-drawer__body {
+      background: #f3f3f3;
     }
   }
 }
 
 .drawer-body {
-  height: calc(100% - 40px - 30px);
-  overflow: auto;
+  height: calc(100% - 110px);
+  padding: 0;
+  overflow-y: auto;
 
-  ::v-deep .el-drawer__body {
-    overflow: auto;
-    padding: 0 10px;
-  }
+  .risk-item {
+    background: #fff;
+    margin: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(208, 153, 153, 0.06);
 
-  ::v-deep pre {
-    overflow: auto;
-  }
+    &:first-child {
+      margin-top: 16px;
+    }
 
-  .host-username {
-    font-size: 13px;
-    margin-left: 40px;
-    margin-bottom: 10px;
-    font-weight: 500;
+    .host-username {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      border-radius: 8px 8px 0 0;
+
+      i {
+        color: var(--color-primary);
+        font-size: 14px;
+      }
+    }
+
+    ::v-deep .el-timeline {
+      padding: 16px 20px 20px 40px;
+      margin: 0;
+    }
   }
 }
 
 .drawer-footer {
-  border-top: solid 1px var(--color-border);
-  height: 60px;
-  line-height: 60px;
-  padding: 0 30px;
-
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 30px;
+  background: #fff;
 }
-
 </style>

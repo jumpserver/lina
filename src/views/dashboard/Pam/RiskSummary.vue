@@ -28,7 +28,9 @@ export default {
       counter: {
         total_long_time_no_login_accounts: '.',
         total_weak_password_accounts: '.',
-        total_long_time_change_password_accounts: '.'
+        total_long_time_change_password_accounts: '.',
+        total_leaked_password_accounts: '.',
+        total_repeated_password_accounts: '.'
       }
     }
   },
@@ -53,6 +55,20 @@ export default {
           title: this.$t('LongTimeNoChangeSecret'),
           body: {
             count: this.counter.total_long_time_change_password_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('LeakedPassword'),
+          body: {
+            count: this.counter.total_leaked_password_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('RepeatedPassword'),
+          body: {
+            count: this.counter.total_repeated_password_accounts,
             disabled: true
           }
         }
