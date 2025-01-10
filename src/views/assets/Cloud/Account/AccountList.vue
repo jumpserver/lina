@@ -33,7 +33,7 @@ export default {
       colWidth: 6,
       subComponent: AccountPanel,
       tableConfig: {
-        url: '/api/v1/xpack/cloud/accounts/',
+        url: `/api/v1/xpack/cloud/accounts/?category=${this.$route.query.category}`,
         permissions: {
           app: 'xpack',
           resource: 'account'
@@ -58,12 +58,15 @@ export default {
               title: this.$t('PublicCloud'),
               icon: 'public-cloud',
               callback: () => {
-                const providers = [
-                  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
-                  baiducloud, jdcloud, kingsoftcloud, aws_china,
-                  aws_international, azure, azure_international,
-                  gcp, ucloud, volcengine
-                ]
+                let providers = [aliyun]
+                if (this.$route.query.category === 'host') {
+                  providers = providers.concat([
+                    aliyun, qcloud, qcloud_lighthouse, huaweicloud,
+                    baiducloud, jdcloud, kingsoftcloud, aws_china,
+                    aws_international, azure, azure_international,
+                    gcp, ucloud, volcengine
+                  ])
+                }
                 this.providerConfig.providers = providers.map(
                   (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                 )
@@ -74,6 +77,7 @@ export default {
               name: 'privateCloud',
               icon: 'private-cloud',
               title: this.$t('PrivateCloud'),
+              has: () => this.$route.query.category === 'host',
               callback: () => {
                 const providers = [
                   vmware, qingcloud_private, huaweicloud_private, state_private,
@@ -89,6 +93,7 @@ export default {
               name: 'LAN',
               title: this.$t('LAN'),
               icon: 'computer',
+              has: () => this.$route.query.category === 'host',
               callback: () => {
                 const providers = [lan]
                 this.providerConfig.providers = providers.map(

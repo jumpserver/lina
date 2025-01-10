@@ -178,8 +178,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: lan,
     title: i18n.t('LAN'),
     attrs: ['ip_group', 'test_port', 'test_timeout', 'hostname_prefix'],
-    image: require('@/assets/img/cloud/lan.svg'),
-    imageCSS: { height: '250px' }
+    image: require('@/assets/img/cloud/lan.svg')
   }
 }
 
