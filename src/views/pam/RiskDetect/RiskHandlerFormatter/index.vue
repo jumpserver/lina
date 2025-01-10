@@ -35,7 +35,7 @@
 </template>
 <script>
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import ReviewDraw from '@/views/pam/RiskDetect/RiskHandlerFormatter/ReviewDraw.vue'
+import ReviewDraw from '@/views/pam/RiskDetect/RiskHandlerFormatter/ReviewDrawer.vue'
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 import { riskActions } from './const'
 import { sleep } from '@/utils/time'

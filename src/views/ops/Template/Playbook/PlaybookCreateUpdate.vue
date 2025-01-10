@@ -15,6 +15,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name', 'scope']],
         [this.$t('Other'), ['comment']]
+
       ],
       createSuccessNextRoute: {
         name: 'Template'

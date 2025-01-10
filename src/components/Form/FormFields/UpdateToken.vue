@@ -6,15 +6,15 @@
     <el-input
       v-show="isShow"
       v-model.trim="curValue"
+      :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      :disabled="disabled"
       class="password-input"
       show-password
       @change="onChange"
     />
-    <el-button size="small" type="text" :disabled="disabled" @click="randomPassword">
-      <i class="fa fa-retweet" />
+    <el-button :disabled="disabled" size="small" type="text" @click="randomPassword">
+      <i class="fa fa-refresh" />
     </el-button>
   </div>
 </template>

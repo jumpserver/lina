@@ -7,6 +7,18 @@
     "notAlphanumericUnderscore": "Only alphanumeric characters and underscores are allowed.",
     "notParenthesis": "Parentheses are not allowed.",
     "InvalidJson": "Invalid JSON format.",
-    "requiredHasUserNameMapped": "Username attr is required."
+    "requiredHasUserNameMapped": "Username attr is required.",
+    "NewFound": "New Found",
+    "LastLoginTime": "Last login time",
+    "Diff": "Difference",
+    "LastChangeTime": "Last change time",
+    "AccountDeleted": "Account deleted",
+    "WeakPassword": "Weak password",
+    "RepeatPassword": "Repeat password",
+    "LeakPassword": "Password leaked",
+    "Other": "Other",
+    "Details": "Details",
+    "Confirm": "Confirm",
+    "Ignore": "Ignore"
 }
 

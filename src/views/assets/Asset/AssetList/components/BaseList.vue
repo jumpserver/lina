@@ -252,10 +252,9 @@ export default {
     },
     async setRecentPlatforms() {
       const recentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
-      const recentIds = recentPlatforms.map(item => item.id)
-      let allPlatforms = await this.$store.dispatch('assets/getPlatforms')
-      allPlatforms = allPlatforms.filter(item => !recentIds.includes(item.id))
-      let platforms = [...recentPlatforms, ...allPlatforms]
+      const allPlatforms = await this.$store.dispatch('assets/getPlatforms')
+      const otherPlatforms = allPlatforms.filter(item => !this.recentPlatformIds.includes(item.id))
+      let platforms = [...recentPlatforms, ...otherPlatforms]
       if (this.category !== 'all') {
         platforms = platforms.filter(item => item.category.value === this.category)
       }

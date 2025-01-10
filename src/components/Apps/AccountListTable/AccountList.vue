@@ -132,7 +132,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'secret', 'asset', 'platform', 'date_updated', 'connect'
+        'name', 'username', 'secret', 'asset', 'platform', 'connect'
       ])
     },
     headerExtraActions: {
@@ -210,6 +210,7 @@ export default {
           },
           platform: {
             label: this.$t('Platform'),
+            width: '120px',
             formatter: PlatformFormatter,
             formatterArgs: {
               platformAttr: 'asset.platform'

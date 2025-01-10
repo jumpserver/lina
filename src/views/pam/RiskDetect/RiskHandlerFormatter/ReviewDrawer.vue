@@ -3,6 +3,7 @@
     :title="$t('Details')"
     :visible.sync="iVisible"
     append-to-body
+    class="drawer"
     destroy-on-close
     direction="rtl"
     style="z-index: 999"
@@ -10,7 +11,9 @@
   >
     <div class="drawer-body">
       <div v-for="r in iRows" :key="r.id">
-        <div class="host-username">{{ r.asset ? r.asset.name : r }} - {{ r.username }}</div>
+        <div class="host-username">
+          {{ r.username }}@{{ r.asset ? r.asset.name : r }}
+        </div>
         <el-timeline :reverse="true">
           <el-timeline-item
             v-for="detail in r.details"
@@ -54,13 +57,14 @@ export default {
       default: true
     },
     rows: {
-      type: Array,
+      type: Array, // 可能会批量 review 所以有了它
       default: () => []
     }
   },
   data() {
     return {
-      riskActions
+      riskActions,
+      title: this.$t('Details of')
     }
   },
   computed: {
@@ -128,23 +132,29 @@ export default {
     handleInit(row, detail) {
       switch (row.risk.value) {
         case 'new_found':
-          return this.$tc('New found')
+          return this.$tc('NewFound')
         case 'long_time_no_login':
-          return this.$tc('Last login time') + ': ' + this.formatTimestamp(detail.date)
+          return this.$tc('LastLoginTime') + ': ' + this.formatTimestamp(detail.date)
         case 'group_changed':
         case 'sudoers_changed':
         case 'authorized_key_changed':
-          return `变更:
+          return this.$t('Diff') + `:
             <pre>
 ${detail.diff}
             </pre>
             `
         case 'long_time_password':
-          return this.$t('Last change time') + ': ' + this.formatTimestamp(detail.date)
+          return this.$t('LastChangeTime') + ': ' + this.formatTimestamp(detail.date)
         case 'account_deleted':
-          return this.$t('Account deleted')
+          return this.$t('AccountDeleted')
+        case 'weak_password':
+          return this.$t('WeakPassword')
+        case 'repeat_password':
+          return this.$t('RepeatPassword')
+        case 'leak_password':
+          return this.$t('LeakPassword')
         default:
-          return '其它'
+          return this.$t('Other')
       }
     }
   }
@@ -152,12 +162,21 @@ ${detail.diff}
 </script>
 
 <style lang='scss' scoped>
+.drawer {
+  ::v-deep {
+    .el-drawer__header {
+      padding: 15px 20px 5px;
+    }
+  }
+}
+
 .drawer-body {
-  height: calc(100% - 40px - 40px);
+  height: calc(100% - 40px - 30px);
   overflow: auto;
 
   ::v-deep .el-drawer__body {
     overflow: auto;
+    padding: 0 10px;
   }
 
   ::v-deep pre {
@@ -165,18 +184,19 @@ ${detail.diff}
   }
 
   .host-username {
+    font-size: 13px;
     margin-left: 40px;
     margin-bottom: 10px;
+    font-weight: 500;
   }
 }
 
 .drawer-footer {
   border-top: solid 1px var(--color-border);
-  height: 70px;
-  padding: 15px 30px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 30px;
 
-  .buttons {
-  }
 }
 
 </style>

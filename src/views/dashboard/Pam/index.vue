@@ -72,8 +72,6 @@ export default {
 
 <style lang="scss" scoped>
 .dashboard-container {
-  padding: 1.25rem;
-
   .top-summary,
   .middle-section,
   .bottom-section {
@@ -108,7 +106,7 @@ export default {
     background: #fff;
     padding: 1.25rem;
     height: 100%;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
     transition: all .3s;
 
     ::v-deep .card-content {
@@ -124,14 +122,14 @@ export default {
   .mission-summary {
     background: #fff;
     padding: 1.25rem;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   }
 
   .secret-summary {
     background: #fff;
     padding: 1.25rem;
     margin-bottom: 1.25rem;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   }
 
   @media screen and (max-width: 1200px) {

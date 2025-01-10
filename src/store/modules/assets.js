@@ -102,8 +102,11 @@ const actions = {
     const recentPlatformIds = state.recentPlatformIds
     return new Promise(resolve => {
       dispatch('getPlatforms').then(platforms => {
-        const recentPlatforms = platforms.filter(p => recentPlatformIds.includes(p.id))
-          .sort((a, b) => recentPlatformIds.indexOf(a.id) - recentPlatformIds.indexOf(b.id))
+        const platformsMap = {}
+        platforms.forEach(p => {
+          platformsMap[p.id] = p
+        })
+        const recentPlatforms = recentPlatformIds.map(id => platformsMap[id]).filter(p => p)
         resolve(recentPlatforms)
       })
     })

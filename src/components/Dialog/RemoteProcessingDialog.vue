@@ -16,7 +16,7 @@
 import Dialog from './index.vue'
 
 export default {
-  name: 'ProcessingDialog',
+  name: 'RemoteProcessingDialog',
   components: { Dialog },
   props: {
     visible: {
