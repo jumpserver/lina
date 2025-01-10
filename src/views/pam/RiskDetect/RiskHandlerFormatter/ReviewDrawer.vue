@@ -176,12 +176,13 @@ ${detail.diff}
 
     .el-drawer__body {
       background: #f3f3f3;
+      height: 100%;
     }
   }
 }
 
 .drawer-body {
-  height: calc(100% - 110px);
+  height: calc(100% - 120px);
   padding: 0;
   overflow-y: auto;
 
@@ -220,10 +221,7 @@ ${detail.diff}
 }
 
 .drawer-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  height: 60px;
   padding: 16px 30px;
   background: #fff;
 }
