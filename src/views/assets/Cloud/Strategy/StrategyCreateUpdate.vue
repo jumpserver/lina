@@ -36,15 +36,22 @@ export default {
           component: ActionInput
         }
       },
-      updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
-      createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
+      updateSuccessNextRoute: this.getNextRoute(),
+      createSuccessNextRoute: this.getNextRoute(),
       getUrl() {
         const id = this.$route.params?.id
         return id ? `${this.url}${id}/` : this.url
       }
     }
   },
-  methods: {}
+  methods: {
+    getNextRoute() {
+      return {
+        name: 'CloudAccountList', params: { activeMenu: 'StrategyList' },
+        query: { category: this.$route.query.category || 'host' }
+      }
+    }
+  }
 }
 
 </script>

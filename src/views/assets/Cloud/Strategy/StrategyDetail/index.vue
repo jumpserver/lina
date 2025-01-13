@@ -38,14 +38,7 @@ export default {
             return this.Account.name !== 'default'
           },
           deleteSuccessRoute: 'CloudAccountList',
-          updateCallback: () => {
-            const id = this.$route.params.id
-            const routeName = 'CloudStrategyUpdate'
-            this.$router.push({
-              name: routeName,
-              params: { id: id }
-            })
-          }
+          updateRoute: 'CloudStrategyUpdate'
         }
       }
     }
