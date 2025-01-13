@@ -19,6 +19,7 @@
     "Other": "Other",
     "Details": "Details",
     "Confirm": "Confirm",
-    "Ignore": "Ignore"
+    "Ignore": "Ignore",
+    "Please enter a reason": "Please enter a reason",
+    "PleaseEnterReason": "Please enter a reason | Please enter reasons"
 }
-

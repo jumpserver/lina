@@ -29,7 +29,14 @@
         {{ iLabel }}
       </el-button>
     </el-tooltip>
-    <ReviewDraw :row="row" :rows="rows" :show-buttons="reviewButtons" :visible.sync="reviewDrawer" />
+    <ReviewDraw
+      :row="row"
+      :rows="rows"
+      :show-buttons="reviewButtons"
+      :visible.sync="reviewDrawer"
+      @confirm="handleConfirm"
+      @ignore="handleIgnore"
+    />
     <ProcessingDialog :visible="processing" />
   </span>
 </template>
@@ -92,6 +99,10 @@ export default {
     }
   },
   methods: {
+    handleConfirm() {
+    },
+    handleIgnore() {
+    },
     showDetail() {
       this.reviewButtons = false
       this.reviewDrawer = true

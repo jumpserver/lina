@@ -9,30 +9,33 @@
     class="risk-review-drawer"
     @open="handleOpen"
   >
-    <div class="drawer-body">
-      <div v-for="r in iRows" :key="r.id" class="risk-item">
-        <div class="host-username">
-          <span>{{ r.asset ? r.asset.name : r }} - {{ r.username }}</span>
+    <div class="drawer-container">
+      <div class="drawer-body">
+        <div v-for="r in iRows" :key="r.id" class="risk-item">
+          <div class="host-username">
+            <span>{{ r.asset ? r.asset.name : r }} - {{ r.username }}</span>
+          </div>
+          <el-timeline :reverse="true">
+            <el-timeline-item
+              v-for="detail in r.details"
+              :key="detail.datetime"
+              :icon="getDetailIcon(detail)"
+              :timestamp="formatTimestamp(detail.datetime)"
+              :type="getDetailType(detail)"
+              placement="top"
+            >
+              <span v-html="handleDetail(r, detail)" />
+            </el-timeline-item>
+          </el-timeline>
         </div>
-        <el-timeline :reverse="true">
-          <el-timeline-item
-            v-for="detail in r.details"
-            :key="detail.datetime"
-            :icon="getDetailIcon(detail)"
-            :timestamp="formatTimestamp(detail.datetime)"
-            :type="getDetailType(detail)"
-            placement="top"
-          >
-            <span v-html="handleDetail(r, detail)" />
-          </el-timeline-item>
-        </el-timeline>
       </div>
-    </div>
-    <div v-if="showButtons" class="drawer-footer">
-      <span class="buttons">
-        <el-button size="small" type="primary" @click="handleConfirm">{{ $t("Confirm") }}</el-button>
-        <el-button size="small">{{ $t('Ignore') }}</el-button>
-      </span>
+      <div v-if="showButtons" class="drawer-footer">
+        <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
+        <span class="buttons">
+          <el-button size="small" type="primary" @click="handleConfirm">{{ $t("Confirm") }}</el-button>
+          <el-button size="small" @click="handleIgnore">{{ $t('Ignore') }}</el-button>
+        </span>
+      </div>
     </div>
   </el-drawer>
 </template>
@@ -64,7 +67,7 @@ export default {
   data() {
     return {
       riskActions,
-      title: this.$t('Details of')
+      comment: ''
     }
   },
   computed: {
@@ -99,6 +102,10 @@ export default {
       return toSafeLocalDateStr(datetime)
     },
     handleConfirm() {
+      this.$emit('confirm', { comment: this.comment })
+    },
+    handleIgnore() {
+      this.$emit('ignore', { comment: this.comment })
     },
     getDetailIcon(detail) {
       if (detail.status === '1') {
@@ -179,10 +186,29 @@ ${detail.diff}
       height: 100%;
     }
   }
+
+  ::v-deep .el-drawer__body {
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+}
+
+.drawer-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
 }
 
 .drawer-body {
-  height: calc(100% - 120px);
+  flex: 1;
+  min-height: 0;
   padding: 0;
   overflow-y: auto;
 
@@ -194,6 +220,10 @@ ${detail.diff}
 
     &:first-child {
       margin-top: 16px;
+    }
+
+    &:last-child {
+      margin-bottom: 16px;
     }
 
     .host-username {
@@ -209,7 +239,7 @@ ${detail.diff}
 
       i {
         color: var(--color-primary);
-        font-size: 14px;
+        font-size: 16px;
       }
     }
 
@@ -221,8 +251,14 @@ ${detail.diff}
 }
 
 .drawer-footer {
-  height: 60px;
+  height: 130px;
   padding: 16px 30px;
   background: #fff;
+  border-top: 1px solid var(--color-border);
+
+  .buttons {
+    display: inline-block;
+    margin-top: 16px;
+  }
 }
 </style>
