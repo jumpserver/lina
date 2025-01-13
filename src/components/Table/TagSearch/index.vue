@@ -17,7 +17,7 @@
       size="small"
       type="info"
       @click="handleTagClick(v,k)"
-      @close="handleTagClose(k)"
+      @close.stop="handleTagClose(k)"
     >
       <strong v-if="v.label">{{ v.label + ':' }}</strong>
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
@@ -128,7 +128,7 @@ export default {
       deep: true
     },
     filterTags: {
-      handler() {
+      handler(newValue) {
         this.$emit('tag-search', this.filterMaps)
       },
       deep: true
@@ -136,6 +136,15 @@ export default {
     filterValue(newValue, oldValue) {
       if (newValue === '' && oldValue !== '') {
         this.emptyCount = 1
+      }
+    },
+    '$route'(to, from) {
+      if (from.query !== to.query) {
+        this.filterTags = {}
+        if (to.query && Object.keys(to.query).length) {
+          const routeFilter = this.checkInTableColumns(this.options)
+          this.filterTagSearch(routeFilter)
+        }
       }
     }
   },
