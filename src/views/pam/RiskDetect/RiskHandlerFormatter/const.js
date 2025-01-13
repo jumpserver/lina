@@ -1,5 +1,14 @@
 import i18n from '@/i18n/i18n'
 
+async function checkUserExist() {
+  if (!this.row.username) {
+    return false
+  }
+  const url = `/api/v1/accounts/accounts/?username=${encodeURIComponent(this.row.username)}&asset=${this.row.asset.id}`
+  const data = await this.$axios.get(url)
+  return data.length > 0
+}
+
 export const riskActions = [
   // {
   //   name: 'disable_remote',
@@ -21,31 +30,24 @@ export const riskActions = [
     label: i18n.t('Add to Account'),
     has: ['new_found'],
     disabled: async function() {
-      if (!this.row.username) {
-        return false
-      }
-      const url = `/api/v1/accounts/accounts/?username=${this.row.username}&asset=${this.row.asset.id}`
-      const data = await this.$axios.get(url)
-      return data.length > 0
+      return await checkUserExist.call(this)
     }
   },
   {
-    name: 'add_account_after_change_password',
+    name: 'change_password_add',
     label: i18n.t('Add account after change password'),
-    has: ['new_found'],
-    disabled: async function() {
-      if (!this.row.username) {
-        return false
-      }
-      const url = `/api/v1/accounts/accounts/?username=${this.row.username}&asset=${this.row.asset.id}`
-      const data = await this.$axios.get(url)
-      return data.length > 0
+    has: async function() {
+      const risks = ['new_found', 'long_time_password', 'password_expired']
+      return risks.includes(this.row.risk.value) && !await checkUserExist.call(this)
     }
   },
   {
     name: 'change_password',
     label: i18n.t('Change Password'),
-    has: ['long_time_password', 'weak_password', 'password_expired', 'leaked_password', 'repeated_password']
+    has: async function() {
+      const risks = ['long_time_password', 'weak_password', 'password_expired', 'leaked_password', 'repeated_password']
+      return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
+    }
   },
   // {
   //   name: 'addPrivilegedAccount',
