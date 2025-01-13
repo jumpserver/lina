@@ -155,7 +155,13 @@ export default {
       })
     },
     iExportOptions() {
-      return assignIfNot(this.exportOptions, { url: this.tableUrl })
+      /**
+       *  原本是使用 assignIfNot 此函数内部使用 partialRight, 该函数
+       *  只在目标对象的属性未定义时才从源对象复制属性，如果目标对象已经有值，则保留原值
+       *  那如果首次点击的树节点，那么此时 url 就会被确定，后续点击的树节点，那么 url 就不会
+       *  改变了
+       */
+      return Object.assign({}, this.exportOptions, { url: this.tableUrl })
     }
   },
   methods: {
