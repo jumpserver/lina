@@ -30,17 +30,35 @@ export default {
       let percentage = activeDecimal.dividedBy(totalDecimal).times(100)
       percentage = isNaN(percentage) ? 0 : percentage
       percentage = percentage.toFixed(2)
+
+      const formatTitle = (text) => {
+        if (!text) return ''
+        const maxLength = 23
+        const lines = []
+        for (let i = 0; i < text.length; i += maxLength) {
+          lines.push(text.slice(i, i + maxLength))
+        }
+        return lines.join('\n')
+      }
+
       return {
         title: [
           {
-            text: this.config.chartTitle,
+            text: formatTitle(this.config.chartTitle),
             textStyle: {
               color: '#646A73',
-              fontSize: 12
+              fontSize: 12,
+              lineHeight: 16,
+              rich: {
+                width: 100,
+                overflow: 'break'
+              }
             },
             textAlign: 'center',
             left: '48%',
-            top: '32%'
+            top: '32%',
+            width: 100,
+            overflow: 'break'
           },
           {
             left: '48%',

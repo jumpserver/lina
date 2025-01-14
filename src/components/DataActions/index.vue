@@ -57,7 +57,7 @@
         @click="handleClick(action)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
-          <span>
+          <span :title="action.tip">
             <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
               <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
               <svg-icon v-else :icon-class="action.icon" />
@@ -249,10 +249,11 @@ $color-drop-menu-border: #e4e7ed;
   align-items: flex-end;
 
   .el-button {
-    display: flex;
-    align-items: center;
-    padding: 2px 6px;
+    padding: 2px 5px;
     color: $btn-text-color;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     * {
       vertical-align: baseline !important;
