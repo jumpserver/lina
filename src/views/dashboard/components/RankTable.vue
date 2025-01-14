@@ -10,17 +10,24 @@
       style="width: 100%"
     >
       <el-table-column :label="$tc('Ranking')" width="80px">
-        <template v-slot="scope">
-          <span>{{ scope.$index + 1 }}</span>
+        <template v-slot="scope" #header>
+          <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
+            <span style="cursor: pointer;">{{ $t('Ranking') }}</span>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
         v-for="i in config.columns"
         :key="i.prop"
-        :label="i.label"
         :prop="i.prop"
         :width="i.width"
-      />
+      >
+        <template #header>
+          <el-tooltip :content="i.label" placement="top" :open-delay="500">
+            <span style="cursor: pointer;">{{ i.label }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
