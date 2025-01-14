@@ -181,18 +181,27 @@ export default {
       }
       return this.actions.length > 0
     },
-    checkHas(action) {
-      return action.has.includes(this.row.risk.value) || action.name === 'review'
+    async checkHas(action) {
+      const has = action.has === undefined ? false : action.has
+      if (typeof has === 'function') {
+        return await action.has.call(this)
+      }
+      if (Array.isArray(has)) {
+        return has.includes(this.row.risk.value) || action.name === 'review'
+      }
+      return false
     },
     async getActions() {
-      let actions = _.cloneDeep(riskActions)
-      actions = actions.filter((action) => {
-        return this.checkHas(action)
-      })
+      const actions = _.cloneDeep(riskActions)
+      const filteredActions = []
       for (const action of actions) {
         action.disabled = await this.checkDisabled(action)
+        const has = await this.checkHas(action)
+        if (has) {
+          filteredActions.push(action)
+        }
       }
-      return actions
+      return filteredActions
     }
   }
 }
