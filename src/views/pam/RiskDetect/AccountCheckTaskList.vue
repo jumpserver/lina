@@ -111,11 +111,12 @@ export default {
               extraActions: [
                 {
                   title: vm.$t('Execute'),
+                  order: 1,
                   name: 'execute',
+                  type: 'primary',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_accountcheckautomation')
                   },
-                  type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/check-account-executions/`,

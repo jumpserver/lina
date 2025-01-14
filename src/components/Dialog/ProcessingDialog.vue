@@ -1,10 +1,12 @@
 <template>
   <Dialog
+    :show-cancel="false"
     :visible="iVisible"
+    class="processing-dialog"
     height="300"
     title="Processing"
     width="300"
-    class="processing-dialog"
+    @confirm="iVisible=false"
   >
     <div id="load">
       <div class="spinner" />
@@ -48,12 +50,12 @@ export default {
 }
 
 .spinner {
-    width: 100px;
-    height: 100px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top-color: var(--color-primary);
-    animation: spin 1s infinite linear;
+  width: 100px;
+  height: 100px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s infinite linear;
 }
 
 #load {
@@ -62,8 +64,8 @@ export default {
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

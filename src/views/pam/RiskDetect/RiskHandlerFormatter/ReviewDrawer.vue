@@ -3,38 +3,43 @@
     :title="$t('Details')"
     :visible.sync="iVisible"
     append-to-body
+    class="risk-review-drawer"
     destroy-on-close
     direction="rtl"
     style="z-index: 999"
-    class="risk-review-drawer"
     @open="handleOpen"
   >
     <div class="drawer-container">
       <div class="drawer-body">
         <div v-for="r in iRows" :key="r.id" class="risk-item">
-          <div class="host-username">
-            <span>{{ r.asset ? r.asset.name : r }} - {{ r.username }}</span>
-          </div>
-          <el-timeline :reverse="true">
-            <el-timeline-item
-              v-for="detail in r.details"
-              :key="detail.datetime"
-              :icon="getDetailIcon(detail)"
-              :timestamp="formatTimestamp(detail.datetime)"
-              :type="getDetailType(detail)"
-              placement="top"
-            >
-              <span v-html="handleDetail(r, detail)" />
-            </el-timeline-item>
-          </el-timeline>
+          <IBox :title="getAccountTitle(r)">
+            <el-timeline :reverse="true">
+              <el-timeline-item
+                v-for="detail in r.details"
+                :key="detail.datetime"
+                :icon="getDetailIcon(detail)"
+                :timestamp="formatTimestamp(detail.datetime)"
+                :type="getDetailType(detail)"
+                placement="top"
+              >
+                <span v-html="handleDetail(r, detail)" />
+              </el-timeline-item>
+            </el-timeline>
+          </IBox>
         </div>
       </div>
-      <div v-if="showButtons" class="drawer-footer">
-        <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
-        <span class="buttons">
-          <el-button size="small" type="primary" @click="handleConfirm">{{ $t("Confirm") }}</el-button>
-          <el-button size="small" @click="handleIgnore">{{ $t('Ignore') }}</el-button>
-        </span>
+      <div class="drawer-footer">
+        <div v-if="row.status.value === '0'">
+          <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
+          <span class="buttons">
+            <el-button size="small" type="primary" @click="handleIgnore">
+              {{ $t("IgnoreAlert") }}
+            </el-button>
+          </span>
+        </div>
+        <div v-else>
+          <el-button size="small" @click="handleReopen">{{ $t('Reopen') }}</el-button>
+        </div>
       </div>
     </div>
   </el-drawer>
@@ -43,9 +48,11 @@
 <script>
 import { toSafeLocalDateStr } from '@/utils/time'
 import { riskActions } from './const'
+import IBox from '@/components/IBox/index.vue'
 
 export default {
   name: 'ReviewDraw',
+  components: { IBox },
   props: {
     row: {
       type: Object,
@@ -83,7 +90,7 @@ export default {
       return riskActions.reduce((acc, cur) => {
         acc[cur.name] = cur
         return acc
-      }, {})
+      }, { 'ignore': { label: this.$t('Ignore') }})
     },
     iRows() {
       if (this.rows.length === 0) {
@@ -93,16 +100,25 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
+    getAccountTitle(row) {
+      let asset, username
+      if (row.account) {
+        asset = row.account.asset
+        username = row.account.username
+      } else {
+        asset = row.asset
+        username = row.username
+      }
+      return `${username}@${asset.name}`
+    },
     handleOpen() {
     },
     formatTimestamp(datetime) {
       return toSafeLocalDateStr(datetime)
     },
-    handleConfirm() {
-      this.$emit('confirm', { comment: this.comment })
+    handleReopen() {
+      this.$emit('reopen')
     },
     handleIgnore() {
       this.$emit('ignore', { comment: this.comment })
@@ -116,7 +132,7 @@ export default {
     },
     getDetailType(detail) {
       if (detail.type !== 'process') {
-        return ''
+        return 'warning'
       }
       if (detail.status === '1') {
         return 'primary'
@@ -132,9 +148,15 @@ export default {
       }
     },
     handleProcess(row, detail) {
-      const { action, processor } = detail
-      const actionLabel = this.actionMap[action]?.label || action
-      return `${processor} ${actionLabel}`
+      const { action, processor, comment } = detail
+      let actionLabel = this.actionMap[action]?.label || action
+      if (comment) {
+        actionLabel = `${actionLabel} (${comment})`
+      }
+      return `
+          <div>${actionLabel}</div>
+          <div class="processor"><i class="fa fa-user-o"></i> <span> ${processor}</span></div>
+      `
     },
     handleInit(row, detail) {
       switch (row.risk.value) {
@@ -171,7 +193,7 @@ ${detail.diff}
 <style lang='scss' scoped>
 .risk-review-drawer {
   ::v-deep {
-     .el-drawer__header {
+    .el-drawer__header {
       padding: 16px 20px;
       margin-bottom: 0;
       border-bottom: 1px solid var(--color-border);
@@ -184,14 +206,14 @@ ${detail.diff}
     .el-drawer__body {
       background: #f3f3f3;
       height: 100%;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
     }
-  }
 
-  ::v-deep .el-drawer__body {
-    height: 100%;
-    padding: 0;
-    overflow: hidden;
-    position: relative;
+    .el-timeline {
+      padding: 0 20px;
+    }
   }
 }
 
@@ -226,39 +248,26 @@ ${detail.diff}
       margin-bottom: 16px;
     }
 
-    .host-username {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--color-border);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--color-text-primary);
-      border-radius: 8px 8px 0 0;
+    ::v-deep {
+      .processor {
+        margin-top: 5px;
+        font-size: 12px;
 
-      i {
-        color: var(--color-primary);
-        font-size: 16px;
+        color: var(--color-text-secondary)
       }
-    }
-
-    ::v-deep .el-timeline {
-      padding: 16px 20px 20px 40px;
-      margin: 0;
     }
   }
 }
 
 .drawer-footer {
-  height: 130px;
-  padding: 16px 30px;
   background: #fff;
+  padding: 15px 20px;
   border-top: 1px solid var(--color-border);
 
-  .buttons {
-    display: inline-block;
-    margin-top: 16px;
+  ::v-deep {
+    .el-textarea {
+      margin-bottom: 5px;
+    }
   }
 }
 </style>

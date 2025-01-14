@@ -1,7 +1,7 @@
 <template>
   <span>
     <span v-if="iValue === '0'" class="risk-handler">
-      <el-dropdown trigger="click" @command="handleRisk" @visible-change="handleVisibleChange">
+      <el-dropdown trigger="click" @command="handleDropdown" @visible-change="handleVisibleChange">
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
         </el-button>
@@ -16,16 +16,18 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button class="ignore action" size="mini" @click="handleRisk('ignore')">
+      <el-tooltip :content="$tc('Ignore alert')" :open-delay="400">
+        <el-button class="ignore action" size="mini" @click="handleDropdown('ignore')">
           <svg-icon icon-class="ignore" />
         </el-button>
       </el-tooltip>
     </span>
     <el-tooltip v-else :content="$t('Detail')" :open-delay="400" class="platform-status">
       <el-button size="mini" type="text" @click="showDetail">
-        <i v-if="iValue === '1'" class="fa fa-check color-primary" />
-        <svg-icon v-else icon-class="ignore" />
+        <span class="detail-icon">
+          <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />
+          <svg-icon v-else icon-class="ignore" />
+        </span>
         {{ iLabel }}
       </el-button>
     </el-tooltip>
@@ -34,8 +36,8 @@
       :rows="rows"
       :show-buttons="reviewButtons"
       :visible.sync="reviewDrawer"
-      @confirm="handleConfirm"
       @ignore="handleIgnore"
+      @reopen="handleReopen"
     />
     <ProcessingDialog :visible="processing" />
   </span>
@@ -99,23 +101,28 @@ export default {
     }
   },
   methods: {
-    handleConfirm() {
+    async handleReopen() {
+      await this.handleCommon('reopen')
+      this.reviewDrawer = false
     },
-    handleIgnore() {
+    async handleIgnore(obj) {
+      await this.handleCommon('ignore', obj)
+      this.reviewDrawer = false
     },
     showDetail() {
-      this.reviewButtons = false
       this.reviewDrawer = true
     },
     handleReview() {
-      this.reviewButtons = true
       this.reviewDrawer = true
     },
-    async handleCommon(cmd) {
+    async handleCommon(cmd, addition) {
       let rows = this.rows
       if (this.rows.length === 0) {
         rows = [this.row]
         this.processing = true
+      }
+      if (!addition) {
+        addition = {}
       }
 
       for (const [i, row] of Object.entries(rows)) {
@@ -123,15 +130,27 @@ export default {
           username: row.username,
           asset: row.asset.id,
           risk: row.risk.value,
-          action: cmd
+          action: cmd,
+          ...addition
         }
         row.status = { value: '3', label: this.$t('Processing') }
-        await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
+        let risk = {}
+        try {
+          risk = await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
+        } catch (e) {
+          row.status = { value: '4', label: this.$t('Failed') }
+          this.$emit('processDone', { index: i, row })
+          continue
+        }
         await sleep(100)
-        if (cmd !== 'ignore') {
-          row.status = { value: '1', label: this.$t('Confirmed') }
+        if (risk.status) {
+          Object.assign(row, risk)
         } else {
-          row.status = { value: '2', label: this.$t('Ignored') }
+          if (cmd !== 'ignore') {
+            row.status = { value: '1', label: this.$t('Confirmed') }
+          } else {
+            row.status = { value: '2', label: this.$t('Ignored') }
+          }
         }
         this.$emit('processDone', { index: i, row })
       }
@@ -139,7 +158,7 @@ export default {
         this.processing = false
       }, 500)
     },
-    handleRisk(cmd) {
+    handleDropdown(cmd) {
       if (cmd === 'review') {
         this.handleReview()
       } else {
@@ -199,6 +218,14 @@ export default {
   &.ignore {
     ::v-deep svg.svg-icon {
     }
+  }
+}
+
+.detail-icon {
+  margin-right: 3px;
+
+  i {
+    font-size: 14px;
   }
 }
 
