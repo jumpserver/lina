@@ -9,6 +9,7 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
+import { DetailFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -24,7 +25,33 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
-        hasImport: true
+        hasImport: true,
+        columnsMeta: {
+          asset: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              drawer: true,
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle: ({ row }) => row.asset.name,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.asset.id },
+                query: { tab: 'Basic' }
+              })
+            }
+          },
+          connect: {
+            label: this.$t('Connect'),
+            width: '80px',
+            formatter: AccountConnectFormatter,
+            formatterArgs: {
+              buttonIcon: 'fa fa-desktop',
+              titleText: '可选协议',
+              url: '/api/v1/assets/assets/{id}',
+              connectUrlTemplate: '/luna/pam_connect/{id}/{username}/{assetId}/{assetName}/{protocol}'
+            }
+          }
+        }
       },
       treeSetting: {
         showMenu: false,
