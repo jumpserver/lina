@@ -90,7 +90,7 @@ export default {
       return riskActions.reduce((acc, cur) => {
         acc[cur.name] = cur
         return acc
-      }, { 'ignore': { label: this.$t('Ignore') }})
+      }, {})
     },
     iRows() {
       if (this.rows.length === 0) {
@@ -124,20 +124,26 @@ export default {
       this.$emit('ignore', { comment: this.comment })
     },
     getDetailIcon(detail) {
-      if (detail.status === '1') {
-        return 'el-icon-check'
-      } else if (detail.status === '0') {
-        return 'el-icon-close'
+      switch (detail.status) {
+        case '1':
+          return 'el-icon-check'
+        case '2':
+          return 'el-icon-close-notification'
+        default:
+          return ''
       }
     },
     getDetailType(detail) {
       if (detail.type !== 'process') {
         return 'warning'
       }
-      if (detail.status === '1') {
-        return 'primary'
-      } else {
-        return 'danger'
+      switch (detail.action) {
+        case 'ignore':
+          return 'danger'
+        case 'reopen':
+          return 'primary'
+        default:
+          return 'success'
       }
     },
     handleDetail(row, detail) {

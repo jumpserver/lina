@@ -22,13 +22,12 @@
         </el-button>
       </el-tooltip>
     </span>
-    <el-tooltip v-else :content="$t('Detail')" :open-delay="400" class="platform-status">
+    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
       <el-button size="mini" type="text" @click="showDetail">
         <span class="detail-icon">
           <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />
           <svg-icon v-else icon-class="ignore" />
         </span>
-        {{ iLabel }}
       </el-button>
     </el-tooltip>
     <ReviewDraw
@@ -111,6 +110,9 @@ export default {
     },
     showDetail() {
       this.reviewDrawer = true
+    },
+    handleViewSecret() {
+
     },
     handleReview() {
       this.reviewDrawer = true

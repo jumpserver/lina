@@ -83,10 +83,11 @@ export default {
                 {
                   title: vm.$t('Execute'),
                   name: 'execute',
+                  order: 1,
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
                   },
-                  type: 'info',
+                  type: 'primary',
                   disabled: ({ row }) => !row.is_active,
                   callback: function({ row }) {
                     this.$axios.post(

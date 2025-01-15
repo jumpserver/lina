@@ -86,8 +86,9 @@ export default {
               extraActions: [
                 {
                   title: vm.$t('Execute'),
+                  order: 1,
                   name: 'execute',
-                  type: 'info',
+                  type: 'primary',
                   can: this.$hasPerm('accounts.add_accountbackupexecution'),
                   callback: function({ row }) {
                     this.$axios.post(

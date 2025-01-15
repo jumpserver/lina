@@ -91,7 +91,8 @@ export default {
                 {
                   title: vm.$t('Execute'),
                   name: 'execute',
-                  type: 'info',
+                  type: 'primary',
+                  order: 1,
                   can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
                   callback: function(data) {
                     this.$axios.post(

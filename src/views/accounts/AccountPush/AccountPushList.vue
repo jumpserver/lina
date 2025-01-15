@@ -87,10 +87,11 @@ export default {
                 {
                   title: vm.$t('Execute'),
                   name: 'execute',
+                  order: 1,
+                  type: 'primary',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
                   },
-                  type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/push-account-executions/`,

@@ -49,6 +49,14 @@ export const riskActions = [
       return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
     }
   },
+  {
+    name: 'view_password',
+    label: i18n.t('View Password'),
+    has: async function() {
+      const risks = ['weak_password', 'leaked_password', 'repeated_password']
+      return risks.includes(this.row.risk.value)
+    }
+  },
   // {
   //   name: 'addPrivilegedAccount',
   //   label: i18n.t('Add Privileged Account'),
@@ -63,5 +71,10 @@ export const riskActions = [
     name: 'review',
     label: i18n.t('Review'),
     has: ['group_changed', 'sudo_changed', 'authorized_key_changed', 'account_deleted', 'others']
+  },
+  {
+    name: 'ignore',
+    label: i18n.t('Ignore'),
+    has: false
   }
 ]

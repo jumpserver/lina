@@ -112,8 +112,8 @@ export default {
                 {
                   title: vm.$t('Execute'),
                   order: 1,
-                  name: 'execute',
                   type: 'primary',
+                  name: 'execute',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_accountcheckautomation')
                   },
