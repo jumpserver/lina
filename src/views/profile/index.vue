@@ -19,6 +19,7 @@
             type="info"
           />
           <QuickActions
+            v-if="biometricFeaturesActions.some(action => action.has)"
             :title="$tc('BiometricFeatures')"
             type="warning"
             :actions="biometricFeaturesActions"
@@ -85,13 +86,17 @@ export default {
       biometricFeaturesActions: [
         {
           title: this.$t('FacialFeatures'),
+          has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
+              this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
           },
           callbacks: {
             click: () => {
-              const next_url = this.$store.state.users.profile.is_face_code_set ? '/core/auth/profile/face/disable/' : '/core/auth/profile/face/enable/'
+              const next_url = this.$store.state.users.profile.is_face_code_set
+                ? '/core/auth/profile/face/disable/'
+                : '/core/auth/profile/face/enable/'
               window.open(next_url, '_blank')
             }
           }

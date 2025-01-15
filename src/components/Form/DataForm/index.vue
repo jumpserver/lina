@@ -223,6 +223,10 @@ export default {
       line-height: 30px;
       color: var(--color-text-primary);
 
+      span {
+        display: unset;
+      }
+
       i {
         color: var(--color-icon-primary);
       }
