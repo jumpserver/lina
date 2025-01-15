@@ -101,7 +101,7 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'Test',
-    title: vm.$t('验证密文'),
+    title: vm.$t('VerifySecret'),
     divided: true,
     can: ({ row }) =>
       !vm.$store.getters.currentOrgIsRoot &&

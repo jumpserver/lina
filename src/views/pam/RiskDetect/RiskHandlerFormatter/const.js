@@ -17,17 +17,17 @@ export const riskActions = [
   // },
   {
     name: 'delete_remote',
-    label: i18n.t('Delete Account'),
+    label: i18n.t('DeleteAccount'),
     has: ['long_time_no_login', 'new_found']
   },
   {
     name: 'delete_both',
-    label: i18n.t('Delete Both'),
+    label: i18n.t('DeleteBoth'),
     has: ['long_time_no_login']
   },
   {
     name: 'add_account',
-    label: i18n.t('Add to Account'),
+    label: i18n.t('AddAccount'),
     has: ['new_found'],
     disabled: async function() {
       return await checkUserExist.call(this)
@@ -35,7 +35,7 @@ export const riskActions = [
   },
   {
     name: 'change_password_add',
-    label: i18n.t('Add account after change password'),
+    label: i18n.t('AddAccountAfterChangePassword'),
     has: async function() {
       const risks = ['new_found', 'long_time_password', 'password_expired']
       return risks.includes(this.row.risk.value) && !await checkUserExist.call(this)
@@ -43,7 +43,7 @@ export const riskActions = [
   },
   {
     name: 'change_password',
-    label: i18n.t('Change Password'),
+    label: i18n.t('ChangePassword'),
     has: async function() {
       const risks = ['long_time_password', 'weak_password', 'password_expired', 'leaked_password', 'repeated_password']
       return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
