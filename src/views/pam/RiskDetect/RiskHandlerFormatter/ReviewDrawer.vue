@@ -32,7 +32,10 @@
         <div v-if="row.status.value === '0'">
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
-            <el-button size="small" type="primary" @click="handleIgnore">
+            <el-button size="small" type="primary" @click="handleConfirm">
+              {{ $t("Confirm") }}
+            </el-button>
+            <el-button size="small" @click="handleIgnore">
               {{ $t("IgnoreAlert") }}
             </el-button>
           </span>
@@ -114,14 +117,17 @@ export default {
     },
     handleOpen() {
     },
+    handleConfirm() {
+      this.$emit('handle', { action: 'confirm', comment: this.comment })
+    },
     formatTimestamp(datetime) {
       return toSafeLocalDateStr(datetime)
     },
     handleReopen() {
-      this.$emit('reopen')
+      this.$emit('handle', { action: 'reopen' })
     },
     handleIgnore() {
-      this.$emit('ignore', { comment: this.comment })
+      this.$emit('handle', { action: 'ignore', comment: this.comment })
     },
     getDetailIcon(detail) {
       switch (detail.status) {

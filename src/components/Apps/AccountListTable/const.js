@@ -60,6 +60,25 @@ export const accountOtherActions = (vm) => [
     }
   },
   {
+    name: 'UpdateSecret',
+    title: vm.$t('EditSecret'),
+    can: vm.$hasPerm('accounts.change_account') && !vm.$store.getters.currentOrgIsRoot,
+    callback: ({ row }) => {
+      const data = {
+        ...vm.asset,
+        ...row.asset
+      }
+      vm.account = row
+      vm.iAsset = data
+      vm.showUpdateSecretDialog = false
+      vm.accountCreateUpdateTitle = vm.$t('UpdateAccount')
+      setTimeout(() => {
+        console.log('Update secret')
+        vm.showUpdateSecretDialog = true
+      })
+    }
+  },
+  {
     name: 'Clone',
     title: vm.$t('Duplicate'),
     can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,

@@ -331,7 +331,7 @@ export default {
 
   ::v-deep .form-buttons {
     margin-top: 30px;
-    margin-left: 23%;
+    margin-left: 25%;
   }
 }
 

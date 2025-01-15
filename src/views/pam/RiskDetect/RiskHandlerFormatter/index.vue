@@ -35,8 +35,7 @@
       :rows="rows"
       :show-buttons="reviewButtons"
       :visible.sync="reviewDrawer"
-      @ignore="handleIgnore"
-      @reopen="handleReopen"
+      @handle="handleDrawerEvent"
     />
     <ProcessingDialog :visible="processing" />
   </span>
@@ -68,9 +67,12 @@ export default {
   },
   data() {
     return {
+      processing: false,
       reviewDrawer: false,
       reviewButtons: true,
-      processing: false,
+      showViewSecretDialog: false,
+      account: {},
+      secretUrl: '',
       actions: [],
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
@@ -100,31 +102,26 @@ export default {
     }
   },
   methods: {
-    async handleReopen() {
-      await this.handleCommon('reopen')
-      this.reviewDrawer = false
-    },
-    async handleIgnore(obj) {
-      await this.handleCommon('ignore', obj)
+    async handleDrawerEvent(payload) {
+      const action = payload.action
+      delete payload.action
+      await this.handleCommon(action, payload)
       this.reviewDrawer = false
     },
     showDetail() {
       this.reviewDrawer = true
     },
-    handleViewSecret() {
-
-    },
-    handleReview() {
+    showReview() {
       this.reviewDrawer = true
     },
-    async handleCommon(cmd, addition) {
+    async handleCommon(cmd, payload) {
       let rows = this.rows
       if (this.rows.length === 0) {
         rows = [this.row]
         this.processing = true
       }
-      if (!addition) {
-        addition = {}
+      if (!payload) {
+        payload = {}
       }
 
       for (const [i, row] of Object.entries(rows)) {
@@ -133,7 +130,7 @@ export default {
           asset: row.asset.id,
           risk: row.risk.value,
           action: cmd,
-          ...addition
+          ...payload
         }
         row.status = { value: '3', label: this.$t('Processing') }
         let risk = {}
@@ -162,7 +159,7 @@ export default {
     },
     handleDropdown(cmd) {
       if (cmd === 'review') {
-        this.handleReview()
+        this.showReview()
       } else {
         this.handleCommon(cmd)
       }

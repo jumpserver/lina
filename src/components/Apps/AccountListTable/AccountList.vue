@@ -184,6 +184,7 @@ export default {
           },
           secret: {
             formatter: SecretViewerFormatter,
+            width: '130px',
             formatterArgs: {
               secretFrom: 'api',
               hasDownload: false,
