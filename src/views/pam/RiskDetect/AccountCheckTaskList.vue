@@ -115,7 +115,7 @@ export default {
                   type: 'primary',
                   name: 'execute',
                   can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_accountcheckautomation')
+                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountautomation')
                   },
                   callback: function({ row }) {
                     this.$axios.post(
@@ -139,7 +139,7 @@ export default {
         hasExport: false,
         hasImport: false,
         createRoute: 'AccountCheckCreateUpdate',
-        canCreate: vm.$hasPerm('accounts.add_accountcheckautomation')
+        canCreate: vm.$hasPerm('accounts.add_checkaccountautomation')
       }
     }
   }
