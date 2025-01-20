@@ -198,7 +198,6 @@ export default {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
       })
-
       return {
         name: 'moreActions',
         title: this.moreActionsTitle || this.$t('MoreActions'),

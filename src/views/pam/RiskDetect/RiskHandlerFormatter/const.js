@@ -75,8 +75,8 @@ export const riskActions = [
     has: false
   },
   {
-    name: 'confirm',
-    label: i18n.t('Confirm'),
+    name: 'close',
+    label: i18n.t('Close'),
     has: false
   }
 ]
