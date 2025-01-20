@@ -9,7 +9,7 @@ import { GenericListTable } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
-  name: 'AccountPushList',
+  name: 'AccountCheckTaskList',
   components: {
     GenericListTable
   },
