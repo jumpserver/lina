@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       loading: true,
+      isDisabled: false,
       usernameChanged: false,
       submitBtnText: this.$t('Confirm'),
       iPlatform: {
@@ -72,6 +73,16 @@ export default {
       ],
       fieldsMeta: accountFieldsMeta(this),
       hasSaveContinue: false
+    }
+  },
+  watch: {
+    '$route.query': {
+      handler(nv, ov) {
+        if (nv && (nv.flag === 'move' || nv.flag === 'copy')) {
+          this.isDisabled = true
+        }
+      },
+      immediate: true
     }
   },
   async mounted() {

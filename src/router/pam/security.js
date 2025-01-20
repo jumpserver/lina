@@ -13,7 +13,7 @@ export default [
       app: 'accounts',
       name: 'BaseAccountRisk',
       icon: 'scan',
-      resource: 'accountcheckautomation'
+      resource: 'checkaccountautomation'
     },
     children: [
       {

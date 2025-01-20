@@ -100,8 +100,6 @@ export default {
   data() {
     const vm = this
     return {
-      showDrawer: false,
-      dynamicTemplateComponent: null,
       defaultMoreActions: [
         {
           title: this.$t('DeleteSelected'),
@@ -231,19 +229,8 @@ export default {
         const { href } = this.$router.resolve(route)
         window.open(href, '_blank')
       } else {
-        if (route.isPam) {
-          this.showDrawer = true
-          this.dynamicTemplateComponent = route.name
-
-          return
-        }
-
         this.$router.push(route)
       }
-    },
-    handleCloseDrawer() {
-      this.showDrawer = false
-      this.dynamicTemplateComponent = null
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
       const msg = this.$t('DeleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('Rows') + ' ?'
@@ -285,15 +272,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .ibox {
-  height: 100% !important;
-  margin: unset !important;
-  border: unset !important;
-
-  .el-card__body {
-    padding-top: unset !important;
-    padding-bottom: unset !important;
-    height: 100% !important;
-  }
-}
 </style>
