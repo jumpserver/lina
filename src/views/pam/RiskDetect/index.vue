@@ -24,19 +24,19 @@ export default {
           {
             title: this.$t('DetectTasks'),
             name: 'AccountCheckTask',
-            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
             component: () => import('./AccountCheckTaskList.vue')
           },
           {
             title: this.$t('Executions'),
             name: 'AccountCheckExecution',
-            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
             component: () => import('./AccountCheckExecutionList.vue')
           },
           {
             title: this.$t('DetectEngines'),
             name: 'AccountCheckEngine',
-            hidden: !this.$hasPerm('accounts.view_accountcheckautomation'),
+            hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
             component: () => import('@/views/pam/RiskDetect/AccountCheckEngine.vue')
           }
         ]
