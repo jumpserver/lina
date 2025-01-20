@@ -9,6 +9,7 @@
       v-if="deleteDialog.visible"
       :account="deleteDialog.account"
       :visible.sync="deleteDialog.visible"
+      @deleted="afterDeleteGatheredAccount"
     />
     <AssetTreeTable
       ref="AssetTreeTable"
@@ -100,6 +101,11 @@ export default {
     }
   },
   mounted() {
+  },
+  methods: {
+    afterDeleteGatheredAccount() {
+      this.$refs.AssetTreeTable.reloadTable()
+    }
   }
 }
 </script>

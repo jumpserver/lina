@@ -7,7 +7,6 @@
     destroy-on-close
     direction="rtl"
     style="z-index: 999"
-    @open="handleOpen"
   >
     <div class="drawer-container">
       <div class="drawer-body">

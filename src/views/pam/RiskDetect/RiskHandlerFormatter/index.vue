@@ -222,11 +222,6 @@ export default {
       color: var(--color-danger);
     }
   }
-
-  &.ignore {
-    ::v-deep svg.svg-icon {
-    }
-  }
 }
 
 .detail-icon {

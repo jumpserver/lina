@@ -11,12 +11,13 @@
       v-on="$listeners"
     >
       <el-alert type="error">
-        是否要删除 发现账号 "{{ account.username }} - {{ account.asset.name }}" ?
+        "{{ this.$t('DeleteWarningMsg') }}" "{{ account.username }} - {{ account.asset.name }}" ?
 
         <div class="extra-delete">
           <div v-if="hasDeleteAccount && assetAccounts.length > 0" class="delete-item">
             <el-checkbox v-model="iDeleteAccount">
-              发现资产账号列表中，存在该账号，是否同步删除 ?
+              <!-- 发现资产账号列表中，存在该账号，是否同步删除 ? -->
+              {{ this.$t('FoundAccountInAssetDeleteMsg') }} ?
             </el-checkbox>
             <ul>
               <li v-for="item in assetAccounts" :key="item.id">
@@ -35,7 +36,8 @@
 
           <div v-if="hasDeleteRemote && account.present" class="delete-item">
             <el-checkbox v-model="iDeleteRemote">
-              远端主机上存在该账号，是否要同步删除 ?
+              {{ this.$t('RemoteAssetFoundAccountDeleteMsg') }} ?
+              <!-- 远端主机上存在该账号，是否要同步删除 ? -->
             </el-checkbox>
           </div>
         </div>
@@ -134,8 +136,11 @@ export default {
           is_delete_remote: this.iDeleteRemote
         }
       }).then(res => {
-        this.$message.success('删除成功')
-        this.iVisible = false
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
+        this.$emit('deleted', res)
+        setTimeout(() => {
+          this.iVisible = false
+        }, 100)
       })
     }
   }
