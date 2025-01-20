@@ -84,6 +84,10 @@ export default {
       type: String,
       default: ''
     },
+    moreActionsType: {
+      type: String,
+      default: null
+    },
     moreCreates: {
       type: Object,
       default: null
@@ -194,10 +198,12 @@ export default {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
       })
+
       return {
         name: 'moreActions',
         title: this.moreActionsTitle || this.$t('MoreActions'),
-        dropdown: dropdown
+        dropdown: dropdown,
+        type: this.moreActionsType
       }
     },
     hasSelectedRows() {

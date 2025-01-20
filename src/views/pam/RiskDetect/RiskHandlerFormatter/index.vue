@@ -16,7 +16,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-tooltip :content="$tc('Ignore alert')" :open-delay="400">
+      <el-tooltip :content="$tc('IgnoreAlert')" :open-delay="400">
         <el-button class="ignore action" size="mini" @click="handleDropdown('ignore')">
           <svg-icon icon-class="ignore" />
         </el-button>

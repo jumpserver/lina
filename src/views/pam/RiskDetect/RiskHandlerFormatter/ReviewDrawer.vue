@@ -130,6 +130,9 @@ export default {
       this.$emit('handle', { action: 'ignore', comment: this.comment })
     },
     getDetailIcon(detail) {
+      if (detail.action === 'reopen') {
+        return 'el-icon-refresh'
+      }
       switch (detail.status) {
         case '1':
           return 'el-icon-check'
@@ -225,6 +228,11 @@ ${detail.diff}
 
     .el-timeline {
       padding: 0 20px;
+
+      .el-timeline-item__node--normal {
+        width: 15px;
+        height: 15px;
+      }
     }
   }
 }
