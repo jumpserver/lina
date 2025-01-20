@@ -6,8 +6,6 @@ import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSettin
 export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
 
-  const isPam = vm.$route.query.flag === 'copy' || vm.$route.query.flag === 'move'
-
   return {
     assets: {
       component: Select2,
@@ -30,7 +28,9 @@ export const accountFieldsMeta = (vm) => {
       component: Select2,
       rules: [Required],
       el: {
-        disabled: isPam,
+        get disabled() {
+          return vm.isDisabled
+        },
         multiple: false,
         ajax: {
           url: '/api/v1/accounts/account-templates/',
@@ -48,7 +48,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('AccountPolicy'),
       helpTip: vm.$t('AccountPolicyHelpText'),
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: () => {
         return vm.platform || vm.asset
@@ -58,7 +60,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Name'),
       rules: [RequiredChange],
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       on: {
         input: ([value], updateForm) => {
@@ -79,7 +83,9 @@ export const accountFieldsMeta = (vm) => {
     },
     username: {
       el: {
-        disabled: !!vm.account?.name || isPam
+        get disabled() {
+          return !!vm.account?.name || vm.isDisabled
+        }
       },
       on: {
         input: ([value], updateForm) => {
@@ -99,7 +105,9 @@ export const accountFieldsMeta = (vm) => {
     privileged: {
       label: vm.$t('Privileged'),
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: () => {
         return vm.addTemplate
@@ -113,7 +121,11 @@ export const accountFieldsMeta = (vm) => {
       el: {
         multiple: false,
         clearable: true,
-        disabled: isPam,
+        disabled: {
+          get disabled() {
+            return vm.isDisabled
+          }
+        },
         ajax: {
           url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.account?.id || ''}&asset=${vm.asset?.id || ''}`,
           transformOption: (item) => {
@@ -124,7 +136,11 @@ export const accountFieldsMeta = (vm) => {
     },
     su_from_username: {
       label: vm.$t('UserSwitchFrom'),
-      disabled: isPam,
+      el: {
+        get disabled() {
+          return vm.isDisabled
+        }
+      },
       hidden: (formValue) => {
         return vm.platform || vm.asset || vm.addTemplate
       }
@@ -133,7 +149,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Password'),
       component: UpdateToken,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => {
         return formValue.secret_type !== 'password' || vm.addTemplate
@@ -143,7 +161,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('PrivateKey'),
       component: UploadSecret,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
@@ -151,7 +171,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Passphrase'),
       component: UpdateToken,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
     },
@@ -159,7 +181,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('Token'),
       component: UploadSecret,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => formValue.secret_type !== 'token' || vm.addTemplate
     },
@@ -168,7 +192,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('AccessKey'),
       component: UploadSecret,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => formValue.secret_type !== 'access_key' || vm.addTemplate
     },
@@ -177,7 +203,9 @@ export const accountFieldsMeta = (vm) => {
       label: vm.$t('ApiKey'),
       component: UploadSecret,
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: (formValue) => formValue.secret_type !== 'api_key' || vm.addTemplate
     },
@@ -185,7 +213,9 @@ export const accountFieldsMeta = (vm) => {
       type: 'radio-group',
       options: [],
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       },
       hidden: () => {
         return vm.addTemplate
@@ -223,19 +253,25 @@ export const accountFieldsMeta = (vm) => {
     is_active: {
       label: vm.$t('IsActive'),
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       }
     },
     comment: {
       label: vm.$t('Comment'),
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       }
     },
     secret_reset: {
       label: vm.$t('SecretReset'),
       el: {
-        disabled: isPam
+        get disabled() {
+          return vm.isDisabled
+        }
       }
     }
   }
