@@ -422,7 +422,6 @@ export default {
           object = await this.getObjectDetail(this.iUrl, this.actionId)
         }
       }
-      console.log('Object 2: ', object)
       if (object) {
         object = _.cloneDeep(object)
         this.$emit('update:object', object)
@@ -431,9 +430,11 @@ export default {
       return object
     },
     async getObjectDetail(url, id) {
+      if (!id) {
+        return
+      }
       this.$log.debug('Get object detail: ', url)
       let data = await this.$axios.get(url, { params: { id }})
-      console.log('Is array: ', Array.isArray(data))
       if (Array.isArray(data)) {
         data = {}
       }

@@ -2,7 +2,6 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import XPackRoutes from './xpack'
 
-const globalSubmenu = () => import('@/layout/globalOrg.vue')
 export default [
   {
     path: 'assets',
@@ -292,45 +291,6 @@ export default [
       }
     ]
   },
-  {
-    path: 'platforms',
-    component: globalSubmenu,
-    meta: {
-      permissions: ['assets.view_platform'],
-      resource: 'platform',
-      icon: 'platform',
-      disableOrgsChange: true
-    },
-    redirect: '',
-    children: [
-      {
-        path: '',
-        name: 'PlatformList',
-        component: () => import('@/views/assets/Platform/PlatformList'),
-        meta: { title: i18n.t('PlatformList') }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformCreate',
-        hidden: true,
-        meta: { title: i18n.t('PlatformCreate') }
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformUpdate',
-        hidden: true,
-        meta: { title: i18n.t('PlatformUpdate'), permissions: [] }
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/assets/Platform/PlatformDetail'), // Parent router-view
-        name: 'PlatformDetail',
-        hidden: true,
-        meta: { title: i18n.t('PlatformDetail') }
-      }
-    ]
-  },
+
   ...XPackRoutes
 ]

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListDrawerPage
+    <GenericListPage
       ref="GenericListPage"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
@@ -13,23 +13,25 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
-    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
+    <InviteUsersDialog
+      :setting="InviteDialogSetting"
+      @close="handleInviteDialogClose"
+    />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { GenericUpdateFormDialog } from '@/layout/components'
-import GenericListDrawerPage from '@/layout/components/GenericListDrawerPage/index.vue'
 import { createSourceIdCache } from '@/api/common'
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
+import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import { mapGetters } from 'vuex'
 import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
-import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
   components: {
     InviteUsersDialog,
-    GenericListDrawerPage,
+    GenericListPage,
     GenericUpdateFormDialog
   },
   data() {
@@ -79,7 +81,6 @@ export default {
             }
           ]
         }
-
       ],
       tableConfig: {
         url: '/api/v1/users/users/',
@@ -232,6 +233,17 @@ export default {
             can: () => vm.$hasPerm('users.invite_user'),
             callback: () => {
               this.InviteDialogSetting.InviteDialogVisible = true
+            }
+          },
+          {
+            name: this.$t('Roles'),
+            title: this.$t('Roles'),
+            has: () => {
+              return this.publicSettings.XPACK_LICENSE_IS_VALID &&
+                this.$hasPerm(['rbac.view_orgrole | rbac.view_systemrole'],)
+            },
+            callback: () => {
+              this.$router.push({ name: 'RoleList' })
             }
           }
         ],

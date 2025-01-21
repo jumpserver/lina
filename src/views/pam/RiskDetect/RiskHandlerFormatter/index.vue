@@ -1,7 +1,11 @@
 <template>
   <span>
     <span v-if="iValue === '0'" class="risk-handler">
-      <el-dropdown trigger="click" @command="handleDropdown" @visible-change="handleVisibleChange">
+      <el-dropdown
+        trigger="click"
+        @command="handleDropdown"
+        @visible-change="handleVisibleChange"
+      >
         <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
         </el-button>
@@ -17,12 +21,21 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip :content="$tc('IgnoreAlert')" :open-delay="400">
-        <el-button class="ignore action" size="mini" @click="handleDropdown('ignore')">
+        <el-button
+          class="ignore action"
+          size="mini"
+          @click="handleDropdown('ignore')"
+        >
           <svg-icon icon-class="ignore" />
         </el-button>
       </el-tooltip>
     </span>
-    <el-tooltip v-else :content="iLabel" :open-delay="400" class="platform-status">
+    <el-tooltip
+      v-else
+      :content="iLabel"
+      :open-delay="400"
+      class="platform-status"
+    >
       <el-button size="mini" type="text" @click="showDetail">
         <span class="detail-icon">
           <i v-if="iValue === '1'" class="fa fa-check-circle color-primary" />
@@ -41,11 +54,11 @@
   </span>
 </template>
 <script>
-import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import ReviewDraw from '@/views/pam/RiskDetect/RiskHandlerFormatter/ReviewDrawer.vue'
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
-import { riskActions } from './const'
+import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 import { sleep } from '@/utils/time'
+import ReviewDraw from '@/views/pam/RiskDetect/RiskHandlerFormatter/ReviewDrawer.vue'
+import { riskActions } from './const'
 
 export default {
   name: 'RiskSummaryFormatter',
@@ -74,7 +87,10 @@ export default {
       account: {},
       secretUrl: '',
       actions: [],
-      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+      formatterArgs: Object.assign(
+        this.formatterArgsDefault,
+        this.col.formatterArgs
+      )
     }
   },
   computed: {
@@ -135,7 +151,10 @@ export default {
         row.status = { value: '3', label: this.$t('Processing') }
         let risk = {}
         try {
-          risk = await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
+          risk = await this.$axios.post(
+            `/api/v1/accounts/account-risks/handle/`,
+            data
+          )
         } catch (e) {
           row.status = { value: '4', label: this.$t('Failed') }
           this.$emit('processDone', { index: i, row })
@@ -206,7 +225,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .action.el-button--mini {
   cursor: pointer;
   padding: 1px 4px;
@@ -236,5 +255,4 @@ export default {
   padding: 20px;
   font-size: 13px;
 }
-
 </style>
