@@ -7,6 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { AssetSelect } from '@/components'
 import { periodicMeta } from '@/components/const'
 import i18n from '@/i18n/i18n'
+import { Select2 } from '@/components/Form/FormFields'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -46,6 +47,7 @@ export default {
           }
         },
         engines: {
+          component: Select2,
           el: {
             url: '/api/v1/accounts/account-check-engines/',
             multiple: true,
@@ -57,7 +59,7 @@ export default {
                   name = `${name} (使用创建账号发现任务替代)`
                   disabled = true
                 }
-                return { label: name, value: item.id, disabled: disabled }
+                return { label: name, value: item.slug, disabled: disabled }
               }
             }
           }
