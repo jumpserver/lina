@@ -134,6 +134,7 @@ $text-color: #646A73;
       flex-direction: column;
       gap: 0.3rem;
       flex: 1;
+      transition: all 0.3s ease-in-out;
 
       .metric-label {
         color: #646A73;
@@ -147,6 +148,15 @@ $text-color: #646A73;
         line-height: 2rem;
         font-size: 1.5rem;
         font-weight: 500;
+      }
+
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-0.2rem);
+
+        .metric-value {
+          color: #1ab394;
+        }
       }
     }
   }
