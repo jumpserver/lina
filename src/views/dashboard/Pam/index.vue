@@ -2,7 +2,6 @@
   <Page>
     <div v-if="this.$hasPerm('rbac.view_console')">
       <Announcement />
-
       <div class="dashboard-container">
         <el-row :gutter="20" class="top-summary">
           <el-col :lg="16" :xs="24" class="left-column">
@@ -108,6 +107,7 @@ export default {
     height: 100%;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
     transition: all .3s;
+    border-radius: 0.5rem;
 
     ::v-deep .card-content {
       padding-bottom: unset;

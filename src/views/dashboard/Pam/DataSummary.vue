@@ -26,8 +26,10 @@ export default {
         route: { name: 'PamAccounts' },
         total: 0,
         weekAdd: 0,
-        connectivityOk: 0,
-        secretReset: 0
+        resetSecret: 0,
+        connectable: 0,
+        privilegedAccount: 0,
+        regularAccount: 0
       }
     }
   },
@@ -50,8 +52,12 @@ export default {
 
       this.accountConfig.total = data.total_accounts
       this.accountConfig.weekAdd = data.total_week_add_accounts
-      this.accountConfig.secretReset = data.total_secret_reset_accounts
-      this.accountConfig.connectivityOk = data.total_connectivity_ok_accounts
+      this.accountConfig.resetSecret = data.total_secret_reset_accounts
+      this.accountConfig.connectable = data.total_connectivity_ok_accounts
+
+      // TODO 额外两个字段
+      // this.accountConfig.privilegedAccount = data.total_privileged_accounts
+      // this.accountConfig.regularAccount = data.total_regular_accounts
     }
   }
 }
