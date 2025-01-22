@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { GenericListPage } from '@/layout///components'
+import { GenericListPage } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {

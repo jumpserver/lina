@@ -37,17 +37,17 @@ export default {
       default() {
         return {
           route: this.$route.name.replace('List', 'Detail'),
+          can: true,
           getRoute: null,
           routeQuery: null,
-          can: true,
+          drawer: false,
           onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
-          drawer: false,
           beforeClick: () => {
           },
           getTitle({ col, row, cellValue }) {
-            return cellValue
+            return cellValue || row.name
           },
           getIcon({ col, row, cellValue }) {
             return null
@@ -59,12 +59,12 @@ export default {
   data() {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     return {
-      linkClicked: false,
-      showTableDetailDrawer: false,
       drawerTitle: '',
+      linkClicked: false,
+      drawerComponent: '',
+      showTableDetailDrawer: false,
       currentTemplate: null,
       formatterArgs: formatterArgs,
-      drawerComponent: '',
       drawerVisible: false
     }
   },
@@ -122,15 +122,15 @@ export default {
       const route = this.getDetailRoute()
       if (route?.query?.tab) {
         this.$cookie.set(route.name, route.query.tab, 1)
+        this.$route.query.tab = route.query.tab
       }
-      console.log('showDrawer', this.drawerComponent)
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'detail',
         row: this.row,
         col: this.col,
         id: route.params.id
       }).then(() => {
-        this.drawerTitle = this.cellValue
+        this.drawerTitle = this.iTitle
         this.drawerVisible = true
       })
     },
@@ -160,7 +160,6 @@ export default {
       }
 
       let detailRoute = { replace: true }
-
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: this.row.id }
@@ -218,9 +217,11 @@ export default {
   display: none;
 }
 
-.form-drawer ::v-deep {
-  .el-drawer__header {
-    border-bottom: none;
+.form-drawer {
+  ::v-deep {
+    .el-drawer__header {
+      border-bottom: none;
+    }
   }
 }
 

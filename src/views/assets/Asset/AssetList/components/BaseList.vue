@@ -204,9 +204,6 @@ export default {
   },
   mounted() {
     this.setRecentPlatforms()
-    setInterval(() => {
-      console.log('ids: ', this.recentPlatformIds, this)
-    }, 1000 * 2)
   },
   activated() {
     this.setRecentPlatforms()

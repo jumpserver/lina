@@ -118,6 +118,15 @@ export default {
         }
         _.set(config, key, value)
       }
+      const columnsMeta = config.columnsMeta
+      for (const value of Object.values(columnsMeta)) {
+        if (
+          value.formatter && value.formatter.name === 'AmountFormatter' &&
+          value.formatterArgs && !value.formatterArgs.drawer
+        ) {
+          value.formatterArgs.drawer = this.detailDrawer
+        }
+      }
       return config
     }
   },

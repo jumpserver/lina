@@ -135,10 +135,10 @@ export default {
       }
 
       .form-buttons {
-        position: absolute;
-        bottom: 13px;
-        margin-left: 20%;
-        margin-top: 0;
+        //position: absolute;
+        // bottom: 13px;
+        // margin-left: 20%;
+        // margin-top: 0;
       }
 
       // Form 中的子 form
