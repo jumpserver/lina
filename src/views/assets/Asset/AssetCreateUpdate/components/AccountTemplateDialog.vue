@@ -3,6 +3,7 @@
     <Dialog
       v-if="iVisible"
       :close-on-click-modal="false"
+      :confirm-title="$tc('Add')"
       :destroy-on-close="true"
       :model="false"
       :title="$tc('SelectTemplate')"

@@ -18,7 +18,7 @@
       :has-footer="false"
       :title="iTitle"
       :visible.sync="drawerVisible"
-      class="form-drawer"
+      class="detail-drawer"
     />
   </div>
 </template>
@@ -188,7 +188,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail {
   display: inline-block;
   max-width: 100%;
@@ -217,7 +217,7 @@ export default {
   display: none;
 }
 
-.form-drawer {
+.detail-drawer {
   ::v-deep {
     .el-drawer__header {
       border-bottom: none;

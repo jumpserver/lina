@@ -2,6 +2,8 @@
   <div>
     <GenericListPage
       ref="GenericListPage"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :quick-filters="quickFilters"
       :table-config="tableConfig"
@@ -46,6 +48,8 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      createDrawer: () => import('./UserCreateUpdate.vue'),
+      detailDrawer: () => import('./UserDetail/index.vue'),
       quickFilters: [
         {
           label: '快速筛选',

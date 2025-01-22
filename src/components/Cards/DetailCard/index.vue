@@ -125,7 +125,7 @@ export default {
 
   .item-value {
     ::v-deep span {
-      display: -webkit-box;
+      //display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;
       word-break: break-word;
