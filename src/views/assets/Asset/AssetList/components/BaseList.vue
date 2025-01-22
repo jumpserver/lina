@@ -197,7 +197,6 @@ export default {
       }
     },
     recentPlatformIds(newValue, oldValue) {
-      console.log('recentPlatformIds updated:', newValue)
       this.setRecentPlatforms()
       // 在这里执行需要的操作
     }
