@@ -1,14 +1,23 @@
 <template>
-  <div class="box">
-    <div style="margin-bottom: 12px;">
+  <div class="card">
+    <div class="title-section">
       <Title :config="config" />
     </div>
-    <div class="content">
-      <el-row justify="space-between" type="flex">
-        <el-col v-for="item of summaryItems" :key="item.title" :md="8" :sm="12" :xs="12">
+
+    <div class="metrics-section">
+      <template v-for="item of summaryItems">
+        <SummaryCard
+          :key="item.title"
+          :body="item.body"
+          :title="item.title"
+          class="metric-item"
+        />
+      </template>
+      <!-- <el-row :gutter="20">
+        <el-col v-for="item of summaryItems" :key="item.title" :md="6" :sm="12" :xs="12">
           <SummaryCard :body="item.body" :title="item.title" />
         </el-col>
-      </el-row>
+      </el-row> -->
     </div>
   </div>
 </template>
@@ -38,10 +47,10 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('LongTimeNoLogin'),
+          title: this.$t('LeakedPassword'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: this.counter.total_long_time_no_login_accounts
+            count: this.counter.total_leaked_password_accounts,
+            disabled: true
           }
         },
         {
@@ -52,16 +61,17 @@ export default {
           }
         },
         {
+          title: this.$t('LongTimeNoLogin'),
+          body: {
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            count: this.counter.total_long_time_no_login_accounts
+          }
+        },
+
+        {
           title: this.$t('LongTimeNoChangeSecret'),
           body: {
             count: this.counter.total_long_time_change_password_accounts,
-            disabled: true
-          }
-        },
-        {
-          title: this.$t('LeakedPassword'),
-          body: {
-            count: this.counter.total_leaked_password_accounts,
             disabled: true
           }
         },
@@ -71,6 +81,18 @@ export default {
             count: this.counter.total_repeated_password_accounts,
             disabled: true
           }
+        },
+        {
+          title: 'Unmanaged'
+        },
+        {
+          title: 'Password expiration'
+        },
+        {
+          title: 'Wrong password'
+        },
+        {
+          title: 'No admin'
         }
       ]
     }
@@ -100,34 +122,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box {
-  padding: 20px;
-  background: #FFFFFF;
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.25rem;
+  background-color: #FFF;
+  overflow: hidden;
 
-  .content {
-    .el-col {
-      padding-left: 16px;
-      border-left: 1px solid #EFF0F1;
+  .metrics-section {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 1.25rem;
 
-      &:first-child {
-        padding-left: 0;
-        border-left: none;
-      }
-    }
-
-    .sub {
-      font-style: normal;
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      color: #646A73;
-    }
-
-    .num {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 24px;
+    .metric-item {
+      width: 25%;
       cursor: pointer;
+      transition: all 0.3s ease-in-out;
+
+      ::v-deep .summary-header {
+        .title {
+          color: #646A73;
+          font-size: 0.9rem;
+          font-weight: 400;
+          line-height: 1.4rem;
+          text-transform: unset;
+        }
+
+        h3 span {
+          font-size: 1.5rem;
+        }
+      }
+
+      &:hover {
+        transform: translateY(-0.2rem);
+
+        ::v-deep .no-margins {
+          .num {
+            color: var(--color-primary);
+          }
+        }
+      }
     }
   }
 }
