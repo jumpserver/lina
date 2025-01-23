@@ -63,37 +63,25 @@ export default {
     resource: {
       type: String,
       default: ''
+    },
+    getDrawerTitle: {
+      type: Function,
+      default: null
     }
   },
   data() {
     return {
+      title: '',
+      action: '',
       visible: false,
       drawerVisible: false,
-      drawerComponent: '',
-      action: ''
+      drawerComponent: ''
     }
   },
   computed: {
     ...mapGetters(['inDrawer']),
     drawerTitle() {
-      let title = this.title
-      if (!title && this.resource) {
-        title = this.resource
-      }
-      if (!title) {
-        title = this.$route.meta?.title
-        title = title.replace('List', '').replace('列表', '')
-        title = _.trimEnd(title, 's')
-      }
-      if (!title) {
-        title = this.$t('NoTitle')
-      }
-      let action = this.action
-      if (action === 'clone') {
-        action = 'create'
-      }
-      title = toSentenceCase(action) + this.$t('WordSep') + title.toLowerCase()
-      return title
+      return this.getDefaultTitle()
     },
     iHeaderActions() {
       const actions = this.headerActions
@@ -137,12 +125,31 @@ export default {
       }
       if (!val) {
         this.drawerVisible = false
-        console.log('Start reload table')
         this.reloadTable()
       }
     }
   },
   methods: {
+    getDefaultTitle() {
+      let title = this.title
+      if (!title && this.resource) {
+        title = this.resource
+      }
+      if (!title) {
+        title = this.$route.meta?.title
+        title = title.replace('List', '').replace('列表', '')
+        title = _.trimEnd(title, 's')
+      }
+      if (!title) {
+        title = this.$t('NoTitle')
+      }
+      let action = this.action
+      if (action === 'clone') {
+        action = 'create'
+      }
+      title = toSentenceCase(action) + this.$t('WordSep') + title.toLowerCase()
+      return title
+    },
     getDefaultDrawer(action) {
       const route = this.$route.name
       const actionRouteName = route.replace('List', toSentenceCase(action))
@@ -167,7 +174,7 @@ export default {
         return component
       }
     },
-    showDrawer(action) {
+    async showDrawer(action) {
       this.action = action
       if (action === 'create') {
         this.drawerComponent = this.createDrawer
@@ -183,7 +190,10 @@ export default {
       if (!this.drawerComponent) {
         this.drawerComponent = this.getDefaultDrawer(action)
       }
-      console.log('Show drawer', this.drawerComponent)
+      if (this.getDrawerTitle) {
+        const actionMeta = await this.$store.getters['common/drawerActionMeta']
+        this.title = this.getDrawerTitle({ action, ...actionMeta })
+      }
       this.drawerVisible = true
     },
     onCreate(meta) {
@@ -197,7 +207,6 @@ export default {
       })
     },
     reloadTable() {
-      console.log('Reload table ....')
       if (this.reloadOrderQuery) {
         this.iTableConfig.url = setUrlParam(this.iTableConfig.url, 'order', this.reloadOrderQuery)
       }

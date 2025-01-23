@@ -9,7 +9,7 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import AccountListTable from '@/components/Apps/AccountListTable/AccountList.vue'
-import { DetailFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
+import { AccountConnectFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -32,7 +32,7 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({ row }) => row.asset.name,
+              getTitle: ({ row }) => row.asset.name + row.asset.id,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.asset.id },
@@ -65,47 +65,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
-    background-color: #f5f7fa;
+.asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
+  background-color: #f5f7fa;
+}
+
+.asset-table {
+  &:hover {
+    cursor: pointer;
   }
 
-  .asset-table {
-    &:hover {
-      cursor: pointer;
-    }
-
-    & ::v-deep .table-content {
-      margin-left: 21px;
-    }
-
-    & ::v-deep .el-table__row {
-      height: 40px;
-
-      & > td {
-        padding: 0;
-      }
-    }
+  & ::v-deep .table-content {
+    margin-left: 21px;
   }
 
-  .noDataR {
-    width: 100%;
-    height: 40vh;
+  & ::v-deep .el-table__row {
+    height: 40px;
+
+    & > td {
+      padding: 0;
+    }
+  }
+}
+
+.noDataR {
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-direction: column;
+
+  .hintWrap {
+    color: #D4D6E6;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    font-size: 18px;
     flex-direction: column;
-
-    .hintWrap {
-      color: #D4D6E6;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      flex-direction: column;
-    }
   }
+}
 
-  .asset-user-table {
-    padding-left: 20px;
-  }
+.asset-user-table {
+  padding-left: 20px;
+}
 </style>

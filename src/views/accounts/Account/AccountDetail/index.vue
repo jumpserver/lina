@@ -62,6 +62,9 @@ export default {
   methods: {
     addAccountSuccess() {
       this.$store.commit('common/reload')
+    },
+    getPageTitle({ row }) {
+      return `${row.username}@${row.asset.name}`
     }
   }
 }

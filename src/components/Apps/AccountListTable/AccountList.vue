@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable
+    <DrawerListTable
       ref="ListTable"
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
@@ -22,19 +22,10 @@
     <AccountCreateUpdate
       v-if="showAddDialog"
       :account="account"
+      :add-template="addTemplate"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
-      @add="addAccountSuccess"
-      @bulk-create-done="showBulkCreateResult($event)"
-    />
-    <AccountCreateUpdate
-      v-if="showAddTemplateDialog"
-      :account="account"
-      :add-template="true"
-      :asset="iAsset"
-      :title="accountCreateByTemplateTitle"
-      :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
@@ -67,19 +58,19 @@ import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
 import AccountCreateUpdate from './AccountCreateUpdate.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
-import ListTable from '@/components/Table/DrawerListTable/index.vue'
+import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 import AccountBulkUpdateDialog from '@/components/Apps/AccountListTable/AccountBulkUpdateDialog.vue'
 
 export default {
   name: 'AccountListTable',
   components: {
-    AccountBulkUpdateDialog,
-    ResultDialog,
-    ListTable,
-    UpdateSecretInfo,
     ViewSecret,
+    ResultDialog,
+    DrawerListTable,
+    UpdateSecretInfo,
     AccountCreateUpdate,
-    PasswordHistoryDialog
+    PasswordHistoryDialog,
+    AccountBulkUpdateDialog
   },
   props: {
     url: {
@@ -147,6 +138,7 @@ export default {
   data() {
     const vm = this
     return {
+      addTemplate: false,
       currentAccountColumn: {},
       showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
@@ -156,8 +148,6 @@ export default {
       showAddTemplateDialog: false,
       detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('AddAccount'),
-      accountCreateByTemplateTitle: this.$t('AddAccountByTemplate'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
@@ -179,7 +169,10 @@ export default {
           name: {
             width: '120px',
             formatterArgs: {
-              can: () => vm.$hasPerm('accounts.view_account')
+              can: () => vm.$hasPerm('accounts.view_account'),
+              getDrawerTitle({ row }) {
+                return `${row.username}@${row.asset.name}`
+              }
             }
           },
           secret: {
@@ -202,11 +195,6 @@ export default {
                   </el-button>
                 </span>
               )
-            }
-          },
-          asset: {
-            formatter: row => {
-              return <span>{row.asset.name}</span>
             }
           },
           platform: {
@@ -288,6 +276,7 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
+                vm.addTemplate = false
                 vm.showAddDialog = true
               })
             }
@@ -304,7 +293,8 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.showAddTemplateDialog = true
+                vm.showAddDialog = true
+                vm.addTemplate = true
               })
             }
           },
@@ -381,6 +371,15 @@ export default {
       updateSelectedDialogSetting: {
         visible: false,
         selectedRows: []
+      }
+    }
+  },
+  computed: {
+    accountCreateUpdateTitle() {
+      if (this.addTemplate) {
+        return this.$t('AddAccountByTemplate')
+      } else {
+        return this.$t('AddAccount')
       }
     }
   },

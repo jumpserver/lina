@@ -99,7 +99,6 @@ export default {
         return this.activeTab
       },
       set(item) {
-        console.log('SEt active tab', item)
         this.activeTab = item
         this.$emit('update:activeMenu', item)
       }

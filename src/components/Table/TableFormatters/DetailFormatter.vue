@@ -46,7 +46,10 @@ export default {
           removeColorOnClick: false,
           beforeClick: () => {
           },
-          getTitle({ col, row, cellValue }) {
+          getTitle({ row, cellValue }) {
+            return cellValue || row.name
+          },
+          getDrawerTitle({ row, cellValue }) {
             return cellValue || row.name
           },
           getIcon({ col, row, cellValue }) {
@@ -124,13 +127,14 @@ export default {
         this.$cookie.set(route.name, route.query.tab, 1)
         this.$route.query.tab = route.query.tab
       }
-      this.$store.dispatch('common/setDrawerActionMeta', {
+      const payload = {
         action: 'detail',
         row: this.row,
         col: this.col,
-        id: route.params.id
-      }).then(() => {
-        this.drawerTitle = this.iTitle
+        id: route.params.id || this.row.id
+      }
+      this.$store.dispatch('common/setDrawerActionMeta', payload).then(() => {
+        this.drawerTitle = this.formatterArgs.getDrawerTitle(payload)
         this.drawerVisible = true
       })
     },

@@ -1,5 +1,10 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :active-menu.sync="config.activeMenu"
+    :object.sync="user"
+    v-bind="config"
+    v-on="$listeners"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>

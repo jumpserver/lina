@@ -1,6 +1,5 @@
 <template v-if="iVisible">
   <Drawer
-    :has-footer="true"
     :title="title"
     :visible="iVisible"
     class="drawer"
