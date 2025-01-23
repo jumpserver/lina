@@ -2,34 +2,28 @@
   <Page>
     <div v-if="this.$hasPerm('rbac.view_console')">
       <Announcement />
-      <div class="dashboard-container">
-        <el-row :gutter="20" class="top-summary">
-          <el-col :lg="16" :xs="24" class="left-column">
-            <div class="mission-wrapper">
-              <DataSummary class="summary-card" />
-            </div>
-            <div class="account-wrapper">
-              <AccountSummary class="summary-card" />
-            </div>
-            <div class="risk-wrapper">
-              <RiskSummary class="summary-card" />
-            </div>
+
+      <div class="summary-container">
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <DataSummary class="data-summery" />
           </el-col>
-          <el-col :lg="8" :xs="24" class="right-column">
-            <MissionSummery class="summary-card" />
+          <el-col :span="8">
+            <AccountSecretSummary class="account-secret-summary" />
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" class="middle-section">
-          <el-col :span="24">
-            <AccountSecretSummary class="secret-summary" />
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <RiskSummary class="risk-summary" />
+          </el-col>
+          <el-col :span="8">
+            <MissionSummery class="mission-summery" />
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" class="bottom-section">
-          <el-col :span="24" class="asset-proportion-wrapper">
-            <AssetProportionSummary :url="url" class="summary-card" />
-          </el-col>
+        <el-row>
+          <AssetProportionSummary :url="url" class="asset-proportion-summary" />
         </el-row>
       </div>
     </div>
@@ -43,7 +37,6 @@ import { Announcement } from '@/components'
 import Page403 from '@/views/403'
 import DataSummary from './DataSummary'
 import RiskSummary from './RiskSummary.vue'
-import AccountSummary from './AccountSummary.vue'
 import AssetProportionSummary from './AssetProportionSummary'
 import MissionSummery from './MissionSummery.vue'
 import AccountSecretSummary from '../ChangeSecret/AccountSummary.vue'
@@ -57,7 +50,6 @@ export default {
     RiskSummary,
     Announcement,
     MissionSummery,
-    AccountSummary,
     AccountSecretSummary,
     AssetProportionSummary
   },
@@ -70,80 +62,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container {
-  .top-summary,
-  .middle-section,
-  .bottom-section {
-    margin-bottom: 1.25rem;
-  }
+.el-row {
+  margin-bottom: 1.25rem;
+}
 
-  .top-summary {
-    .left-column {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
+.summary-container {
 
-    .right-column {
-      max-height: 540px;
-      height: 540px;
-
-      ::v-deep .el-row,
-      ::v-deep .el-col {
-        height: 100%;
-      }
-    }
-  }
-
-  .bottom-section {
-    .data-summary-wrapper {
-      margin-bottom: 1.25rem;
-    }
-  }
-
-  .summary-card {
-    background: #fff;
-    padding: 1.25rem;
-    height: 100%;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
-    transition: all .3s;
+  .account-secret-summary,
+  .asset-proportion-summary,
+  .risk-summary,
+  .mission-summery {
     border-radius: 0.5rem;
-
-    ::v-deep .card-content {
-      padding-bottom: unset;
-      border-bottom: unset;
-    }
-
-    ::v-deep .ring {
-      display: none;
-    }
   }
 
-  .mission-summary {
-    background: #fff;
-    padding: 1.25rem;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  .account-secret-summary,
+  .asset-proportion-summary {
+    margin-top: unset;
   }
 
-  .secret-summary {
-    background: #fff;
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
-  }
+  .account-secret-summary {
+    margin-top: unset;
 
-  @media screen and (max-width: 1200px) {
-    .right-column {
-      margin-top: 1.25rem;
+    ::v-deep .echarts {
+      height: 205px;
     }
   }
 
-  @media screen and (max-width: 768px) {
-    padding: 0.625rem;
-
-    .el-col {
-      margin-bottom: 1.25rem;
-    }
-  }
 }
 </style>

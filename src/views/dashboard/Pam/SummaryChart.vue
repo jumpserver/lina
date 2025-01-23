@@ -16,6 +16,8 @@
       </div>
     </div>
 
+    <el-divider />
+
     <div class="metrics-section">
       <div
         v-for="item in summaryItems"
@@ -76,12 +78,17 @@ export default {
 <style lang="scss" scoped>
 $text-color: #646A73;
 
+.el-divider--horizontal {
+  margin: unset !important;
+}
+
 .card {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   width: 100%;
   height: 100%;
+  padding: 1.25rem;
   background-color: #FFF;
   overflow: hidden;
 

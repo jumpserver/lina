@@ -41,23 +41,10 @@ export default {
   computed: {
     chartOption() {
       return {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b}: {c} ({d}%)',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          borderColor: '#eee',
-          borderWidth: 1,
-          padding: [10, 15],
-          textStyle: {
-            color: '#666'
-          }
-        },
         legend: {
-          type: 'scroll',
-          orient: 'horizontal',
-          top: 0,
-          left: 0,
-          right: 0,
+          orient: 'vertical',
+          top: '13%',
+          right: '15%',
           itemGap: 20,
           textStyle: {
             color: '#666',
@@ -65,33 +52,31 @@ export default {
           },
           icon: 'circle',
           itemWidth: 8,
-          itemHeight: 8
+          itemHeight: 8,
+          formatter: (name) => {
+            const data = [
+              { name: '账号收集任务', value: this.counter.total_count_gathered_account_automation },
+              { name: '账号推送任务', value: this.counter.total_count_push_account_automation },
+              { name: '账号备份任务', value: this.counter.total_count_backup_account_automation },
+              { name: '风险账号', value: this.counter.total_count_risk_account },
+              { name: '集成应用', value: this.counter.total_count_integration_application }
+            ]
+            const item = data.find(item => item.name === name)
+
+            return name.padEnd(10, '\u2003') + (item.value || 0)
+          }
         },
         series: [
           {
             name: '任务分布',
             type: 'pie',
-            radius: ['45%', '65%'],
-            center: ['50%', '55%'],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 8
-            },
+            radius: ['50%', '70'],
+            center: ['25%', '50%'],
             label: {
-              show: true,
-              position: 'outside',
-              formatter: '{b}\n{c}',
-              color: '#666',
-              fontSize: 12,
-              lineHeight: 18
+              show: false
             },
             labelLine: {
-              show: true,
-              length: 15,
-              length2: 10,
-              smooth: true
+              show: false
             },
             data: [
               {
@@ -152,17 +137,15 @@ export default {
   },
   methods: {
     async getResourcesCount() {
-      return this.$axios.get('/api/v1/accounts/pam-dashboard/',
-        {
-          params: {
-            total_count_gathered_account_automation: 1,
-            total_count_push_account_automation: 1,
-            total_count_backup_account_automation: 1,
-            total_count_risk_account: 1,
-            total_count_integration_application: 1
-          }
+      return this.$axios.get('/api/v1/accounts/pam-dashboard/', {
+        params: {
+          total_count_gathered_account_automation: 1,
+          total_count_push_account_automation: 1,
+          total_count_backup_account_automation: 1,
+          total_count_risk_account: 1,
+          total_count_integration_application: 1
         }
-      )
+      })
     },
     initChart() {
       this.chart = echarts.init(this.$refs.chartRef)
@@ -192,7 +175,12 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .header {
-    padding: 16px 20px 0;
+    padding: 1.25rem;
+
+    .content {
+      justify-content: flex-start;
+      padding: unset;
+    }
   }
 
   .content {
@@ -205,7 +193,7 @@ export default {
 
     .chart-container {
       width: 100%;
-      height: 420px;
+      height: 226px;
     }
   }
 }
