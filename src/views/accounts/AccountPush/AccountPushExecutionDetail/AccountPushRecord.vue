@@ -28,14 +28,11 @@ export default {
     }
   },
   data() {
-    const url = this.object.id === undefined
-      ? '/api/v1/accounts/push-account-records/'
-      : `/api/v1/accounts/push-account-records/?execution_id=${this.object.id}`
     return {
       secretUrl: '',
       showViewSecretDialog: false,
       tableConfig: {
-        url: url,
+        url: '/api/v1/accounts/push-account-records/',
         columns: [
           'asset', 'account', 'date_finished', 'is_success', 'error'
         ],

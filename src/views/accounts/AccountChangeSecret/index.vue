@@ -36,7 +36,7 @@ export default {
           },
           {
             title: this.$t('RecordList'),
-            name: 'AccountPushRecord',
+            name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
             component: () => import(
               '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/AccountChangeSecretRecord.vue'
