@@ -21,23 +21,13 @@ export default {
     RecordViewSecret,
     GenericListTable
   },
-  props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    }
-  },
   data() {
     const vm = this
-    const url = this.object.id === undefined
-      ? '/api/v1/accounts/change-secret-records/'
-      : `/api/v1/accounts/change-secret-records/?execution_id=${this.object.id}`
     return {
       secretUrl: '',
       showViewSecretDialog: false,
       tableConfig: {
-        url: url,
+        url: '/api/v1/accounts/change-secret-records/',
         columns: [
           'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
         ],

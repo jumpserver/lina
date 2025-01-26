@@ -242,8 +242,7 @@ export default [
           title: i18n.t('ExecutionDetail'),
           permissions: ['accounts.view_pushaccountexecution']
         }
-      }
-    ]
+      }]
   },
   {
     path: 'account-backup',
