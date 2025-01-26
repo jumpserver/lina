@@ -35,7 +35,7 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
+            label: this.$t('ExecutionID'),
             formatter: function(row) {
               return <span>{row.automation}</span>
             }
