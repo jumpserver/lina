@@ -430,9 +430,6 @@ export default {
       return object
     },
     async getObjectDetail(url, id) {
-      if (!id) {
-        return
-      }
       this.$log.debug('Get object detail: ', url)
       let data = await this.$axios.get(url, { params: { id }})
       if (Array.isArray(data)) {

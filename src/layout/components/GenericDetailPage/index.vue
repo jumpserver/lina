@@ -198,17 +198,12 @@ export default {
     },
     getDetailUrl() {
       const vm = this
-      let objectId = ''
-      if (this.actionId) {
-        objectId = this.actionId
-      } else {
-        objectId = vm.$route.params.id
+      const objectId = this.actionId || this.$route.params.id
+      // 兼容之前的 detailApiUrl
+      if (vm.validActions.detailApiUrl || vm.detailApiUrl) {
+        return vm.validActions.detailApiUrl || vm.detailApiUrl
       }
-      if (vm.url) {
-        return `${vm.url}/${objectId}/`
-      } else {
-        return getApiPath(vm, objectId)
-      }
+      return vm.url ? `${vm.url}/${objectId}/` : getApiPath(vm, objectId)
     },
     afterDelete() {
       if (this.drawer) {
