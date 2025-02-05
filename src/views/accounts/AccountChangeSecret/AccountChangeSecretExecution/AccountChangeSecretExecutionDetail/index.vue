@@ -32,11 +32,6 @@ export default {
             title: this.$t('Basic'),
             name: 'AccountChangeSecretExecutionInfo',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
-          },
-          {
-            title: this.$t('TaskList'),
-            name: 'AccountChangeSecretRecord',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         getTitle: this.getExecutionTitle

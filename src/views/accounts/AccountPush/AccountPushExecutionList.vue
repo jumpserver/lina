@@ -12,13 +12,6 @@ export default {
   components: {
     GenericListTable
   },
-  props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    }
-  },
   data() {
     return {
       tableConfig: {
@@ -35,7 +28,7 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
+            label: this.$t('ExecutionID'),
             formatter: function(row) {
               return <span>{row.automation}</span>
             }
@@ -91,7 +84,6 @@ export default {
                 {
                   name: 'detail',
                   title: this.$t('Detail'),
-                  type: 'info',
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
@@ -100,10 +92,23 @@ export default {
                 {
                   name: 'report',
                   title: this.$t('Report'),
-                  type: 'success',
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
                     window.open(`/api/v1/accounts/push-account-executions/${row.id}/report/`)
+                  }
+                },
+                {
+                  name: 'record',
+                  title: this.$t('Record'),
+                  can: this.$hasPerm('accounts.view_pushsecretrecord'),
+                  callback: function({ row }) {
+                    return this.$router.push({
+                      name: 'AccountPushList',
+                      query: {
+                        tab: 'AccountPushRecord',
+                        execution_id: row.id
+                      }
+                    })
                   }
                 }
               ]

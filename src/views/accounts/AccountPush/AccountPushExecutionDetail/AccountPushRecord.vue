@@ -11,25 +11,30 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
-import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 
 export default {
-  name: 'AccountChangeSecretRecord',
+  name: 'AccountPushRecord',
   components: {
     RecordViewSecret,
     GenericListTable
   },
+  props: {
+    object: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    }
+  },
   data() {
-    const vm = this
     return {
       secretUrl: '',
       showViewSecretDialog: false,
       tableConfig: {
-        url: '/api/v1/accounts/change-secret-records/',
+        url: '/api/v1/accounts/push-account-records/',
         columns: [
-          'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
+          'asset', 'account', 'date_finished', 'is_success', 'error'
         ],
         columnsMeta: {
           asset: {
@@ -75,44 +80,6 @@ export default {
               }
               return <i Class='fa fa-times text-danger'/>
             }
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false,
-              hasDelete: false,
-              hasClone: false,
-              moreActionsTitle: this.$t('More'),
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    // debugger
-                    vm.secretUrl = `/api/v1/accounts/change-secret-records/${row.id}/secret/`
-                    vm.showViewSecretDialog = false
-                    setTimeout(() => {
-                      vm.showViewSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Retry',
-                  title: this.$t('Retry'),
-                  can: this.$hasPerm('accounts.add_changesecretexecution'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      '/api/v1/accounts/change-secret-records/execute/',
-                      { record_ids: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                }
-              ]
-            }
           }
         }
       },
@@ -150,36 +117,15 @@ export default {
                 {
                   value: 'failed',
                   label: this.$t('Failed')
-                },
-                {
-                  label: this.$t('Execution'),
-                  value: 'execution_id'
                 }
               ]
+            },
+            {
+              label: this.$t('Execution'),
+              value: 'execution_id'
             }
           ]
-        },
-        extraMoreActions: [
-          {
-            name: 'RetrySelected',
-            title: this.$t('RetrySelected'),
-            type: 'primary',
-            fa: 'fa-retweet',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('accounts.add_changesecretexecution')
-            },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
-                return v.id
-              })
-              this.$axios.post(
-                '/api/v1/accounts/change-secret-records/execute/',
-                { record_ids: ids }).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
-        ]
+        }
       }
     }
   }

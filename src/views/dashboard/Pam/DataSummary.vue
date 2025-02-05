@@ -56,8 +56,8 @@ export default {
       this.accountConfig.connectable = data.total_connectivity_ok_accounts
 
       // TODO 额外两个字段
-      // this.accountConfig.privilegedAccount = data.total_privileged_accounts
-      // this.accountConfig.regularAccount = data.total_regular_accounts
+      this.accountConfig.privilegedAccount = data.total_privileged_accounts
+      this.accountConfig.regularAccount = data.total_regular_accounts
     }
   }
 }

@@ -12,13 +12,6 @@ export default {
   components: {
     GenericListTable
   },
-  props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    }
-  },
   data() {
     return {
       tableConfig: {
@@ -35,7 +28,7 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
+            label: this.$t('ExecutionID'),
             formatter: function(row) {
               return <span>{row.automation}</span>
             }
@@ -104,6 +97,20 @@ export default {
                   can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
                     window.open(`/api/v1/accounts/change-secret-executions/${row.id}/report/`)
+                  }
+                },
+                {
+                  name: 'record',
+                  title: this.$t('Record'),
+                  can: this.$hasPerm('accounts.view_changesecretrecord'),
+                  callback: function({ row }) {
+                    return this.$router.push({
+                      name: 'AccountChangeSecretList',
+                      query: {
+                        tab: 'ChangeSecretRecord',
+                        execution_id: row.id
+                      }
+                    })
                   }
                 }
               ]
