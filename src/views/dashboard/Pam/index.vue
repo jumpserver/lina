@@ -67,12 +67,11 @@ export default {
 }
 
 .summary-container {
-
   .account-secret-summary,
   .asset-proportion-summary,
   .risk-summary,
   .mission-summery {
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
   }
 
   .account-secret-summary,

@@ -91,6 +91,7 @@ $text-color: #646A73;
   padding: 1.25rem;
   background-color: #FFF;
   overflow: hidden;
+  border-radius: 0.25rem;
 
   .total-section {
     display: flex;
