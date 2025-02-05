@@ -39,7 +39,11 @@ export default {
         total_weak_password_accounts: '.',
         total_long_time_change_password_accounts: '.',
         total_leaked_password_accounts: '.',
-        total_repeated_password_accounts: '.'
+        total_repeated_password_accounts: '.',
+        total_password_expired_accounts: '.',
+        total_no_admin_account_accounts: '.',
+        total_password_error_accounts: '.',
+        total_new_found_accounts: '.'
       }
     }
   },
@@ -83,16 +87,32 @@ export default {
           }
         },
         {
-          title: 'Unmanaged'
+          title: this.$t('Unmanaged'),
+          body: {
+            count: this.counter.total_new_found_accounts,
+            disabled: true
+          }
         },
         {
-          title: 'Password expiration'
+          title: this.$t('Password expiration'),
+          body: {
+            count: this.counter.total_password_expired_accounts,
+            disabled: true
+          }
         },
         {
-          title: 'Wrong password'
+          title: this.$t('Error password'),
+          body: {
+            count: this.counter.total_password_error_accounts,
+            disabled: true
+          }
         },
         {
-          title: 'No admin'
+          title: this.$t('No admin'),
+          body: {
+            count: this.counter.total_no_admin_account_accounts,
+            disabled: true
+          }
         }
       ]
     }
