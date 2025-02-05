@@ -58,7 +58,7 @@ export default {
 .quick-actions ::v-deep button {
   padding: 4px 5px;
   font-size: 13px;
-  width: 65px;
+  min-width: 65px;
 
   span {
     overflow: hidden;

@@ -29,7 +29,22 @@
         <slot name="headingRightSide" />
       </template>
     </PageHeading>
-    <PageContent class="page-content">
+    <PageContent :class="{'disabled': disabled}" class="page-content">
+      <div v-if="disabled" class="content-disabled-mask">
+        <IBox shadow="always">
+          <div class="disabled-content">
+            <div class="lock-icon">
+              <i class="el-icon-unlock" />
+            </div>
+            <div class="disabled-text">
+              {{ $t('UpgradeEnterpriseEditionHelpText') }}
+            </div>
+            <el-button class="upgrade-btn" type="primary">
+              {{ $t('UpgradeEnterpriseEdition') }}
+            </el-button>
+          </div>
+        </IBox>
+      </div>
       <el-alert v-if="helpMessage" type="success">
         <span v-sanitize="helpMessage" class="announcement-main" />
       </el-alert>
@@ -46,6 +61,7 @@ import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common'
 import { mapGetters } from 'vuex'
+import IBox from '@/components/IBox/index.vue'
 
 export default {
   name: 'Page',
@@ -53,9 +69,14 @@ export default {
     UserConfirmDialog,
     PageHeading,
     PageContent,
-    TagsView
+    TagsView,
+    IBox
   },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: ''
@@ -81,7 +102,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['inDrawer']),
+    ...mapGetters(['inDrawer', 'hasValidLicense']),
+    iDisabled() {
+      if (this.disabled !== null) {
+        return this.disabled
+      }
+      return !this.hasValidLicense
+    },
     noTitle() {
       return this.title === 'null' || this.title === null
     },
@@ -116,6 +143,10 @@ export default {
     },
     endLongPress() {
       clearTimeout(this.longPressTimer)
+    },
+    handleUpgrade() {
+      const url = 'http://www.jumpserver.org/support/'
+      window.open(url, '_blank')
     }
   }
 }
@@ -133,13 +164,6 @@ export default {
   .el-alert {
     margin-top: -5px;
     margin-bottom: 5px;
-  }
-
-  &.no-title {
-  }
-
-  .page-head {
-
   }
 
   .page-content {
@@ -184,5 +208,60 @@ export default {
     word-wrap: break-word;
     white-space: pre-wrap;
   }
+}
+
+.ibox {
+  width: 500px;
+  position: absolute;
+  top: 30%;
+}
+
+.content-disabled-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .disabled-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .lock-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px auto;
+
+      i {
+        font-size: 40px;
+        color: #909399;
+      }
+    }
+
+    .disabled-text {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    .upgrade-btn {
+      min-width: 120px;
+      margin: 10px auto;
+    }
+  }
+}
+
+.page-content.disabled {
+  position: relative;
 }
 </style>

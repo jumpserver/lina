@@ -1,9 +1,10 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
+  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" :disabled="!hasValidLicense" />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Index',
@@ -37,6 +38,9 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['hasValidLicense'])
   }
 }
 </script>
