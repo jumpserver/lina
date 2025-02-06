@@ -10,12 +10,14 @@
 import { GenericDetailPage } from '@/layout/components'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
 import ServiceCallRecords from '../components/CallRecords.vue'
+import IntegrationApplicationAccount from '../components/AccountList.vue'
 
 export default {
   components: {
     GenericDetailPage,
     ServiceCallRecords,
-    IntegrationApplicationInfo
+    IntegrationApplicationInfo,
+    IntegrationApplicationAccount
   },
   data() {
     return {
@@ -31,9 +33,14 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
+            title: this.$t('Account'),
+            name: 'IntegrationApplicationAccount',
+            hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
+          },
+          {
             name: 'ServiceCallRecords',
             title: this.$t('CallRecords'),
-            hidden: () => !this.$hasPerm('audits.view_serviceaccesslog')
+            hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
           }
         ]
       }
