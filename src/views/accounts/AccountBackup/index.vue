@@ -1,5 +1,8 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" :disabled="!hasValidLicense" />
+  <TabPage
+    :active-menu.sync="config.activeMenu"
+    :submenu="config.submenu"
+  />
 </template>
 
 <script>

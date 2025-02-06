@@ -1,17 +1,14 @@
 <template>
-  <TabPage
-    :active-menu.sync="activeMenu"
-    :submenu="tab.submenu"
-    :disabled="!hasValidLicense"
-  />
+  <TabPage :active-menu.sync="activeMenu" :submenu="tab.submenu" />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
+// import TabPage from '@/layout/components/TabPage/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'IntegrationApplicationList',
+  name: 'IntegrationnList',
   components: {
     TabPage
   },
