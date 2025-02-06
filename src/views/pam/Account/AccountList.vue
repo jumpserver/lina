@@ -39,7 +39,13 @@ export default {
               buttonIcon: 'fa fa-desktop',
               titleText: '可选协议',
               url: '/api/v1/assets/assets/{id}',
-              connectUrlTemplate: '/luna/pam_connect/{id}/{username}/{assetId}/{assetName}/{protocol}'
+              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
+              setMapItem: (id, protocol) => {
+                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+                  key: id,
+                  value: protocol
+                })
+              }
             }
           }
         }
