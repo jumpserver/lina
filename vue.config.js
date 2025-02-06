@@ -43,6 +43,9 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    watchOptions: {
+      aggregateTimeout: 2000
+    },
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
@@ -94,7 +97,7 @@ module.exports = {
         elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js')
       },
       extensions: ['.vue', '.js', '.json']
-    },
+    }
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
@@ -148,16 +151,16 @@ module.exports = {
     config
       .when(process.env.NODE_ENV === 'production', config => {
         config
-        .plugin('CompressionWebpackPlugin')
-        .use(CompressionWebpackPlugin, [
-          {
-            algorithm: 'gzip',
-            test: productionGzipExtensions, // 处理所有匹配此 {RegExp} 的资源
-            threshold: 10240,               // 只处理比这个值大的资源。按字节计算(楼主设置10K以上进行压缩)
-            minRatio: 0.8,                   // 只有压缩率比这个值小的资源才会被处理
-            cache: false
-          }
-        ])
+          .plugin('CompressionWebpackPlugin')
+          .use(CompressionWebpackPlugin, [
+            {
+              algorithm: 'gzip',
+              test: productionGzipExtensions, // 处理所有匹配此 {RegExp} 的资源
+              threshold: 10240, // 只处理比这个值大的资源。按字节计算(楼主设置10K以上进行压缩)
+              minRatio: 0.8, // 只有压缩率比这个值小的资源才会被处理
+              cache: false
+            }
+          ])
       })
 
     config

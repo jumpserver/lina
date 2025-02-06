@@ -21,6 +21,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const roleManage = this.$t('RoleManage')
     return {
       loading: true,
       initial: {
@@ -134,6 +135,16 @@ export default {
           component: Select2,
           label: this.$t('OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
+          helpTextFormatter: () => {
+            const handleClick = () => {
+              window.open('/settings/roles', '_blank')
+            }
+            return (
+              <el-link onClick={handleClick}>
+                <i class='fa fa-external-link'></i> {roleManage}
+              </el-link>
+            )
+          },
           el: {
             multiple: true,
             ajax: {
@@ -198,15 +209,40 @@ export default {
   computed: {
     ...mapGetters(['currentOrgIsRoot', 'currentUser'])
   },
-  async mounted() {
+  mounted() {
     if (this.currentOrgIsRoot) {
       this.fieldsMeta.groups.el.disabled = true
     }
-    await this.setDefaultRoles()
+    this.setDefaultRoles()
     this.disableMFAFieldIfNeed(null)
     this.loading = false
+    this.initRoleManagementLink()
   },
   methods: {
+    initRoleManagementLink() {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            const gotoRoleElement = document.querySelector('.goto-role')
+            if (gotoRoleElement) {
+              const handleClick = () => {
+                this.$router.push({ path: '/settings/roles' })
+              }
+              gotoRoleElement.addEventListener('click', handleClick)
+              this.$once('hook:beforeDestroy', () => {
+                gotoRoleElement.removeEventListener('click', handleClick)
+                observer.disconnect()
+              })
+              observer.disconnect()
+            }
+          }
+        })
+      })
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      })
+    },
     afterGetUser(user) {
       this.user = user
       if (this.user.id === this.currentUser.id) {

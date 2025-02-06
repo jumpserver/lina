@@ -75,7 +75,7 @@
         v-bind="{...cleanButtonAction(action), icon: ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
+        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
           <span>
             <span v-if="action.icon" style="vertical-align: initial">
               <Icon :icon="action.icon" />

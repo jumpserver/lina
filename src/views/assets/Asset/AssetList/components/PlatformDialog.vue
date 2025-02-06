@@ -8,6 +8,18 @@
     size="600px"
     top="1vh"
   >
+    <template #title>
+      <div class="drawer-title">
+        <span>{{ $tc('SelectPlatform') }}</span>
+        <el-link
+          type="text"
+          size="small"
+          @click="handleManagePlatform"
+        >
+          <i class="fa fa-cog" /> {{ $tc('PlatformManage') }}
+        </el-link>
+      </div>
+    </template>
     <div v-loading="loading" class="platform-content">
       <el-row :gutter="20">
         <el-collapse v-model="activeType" accordion>
@@ -47,7 +59,6 @@ import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
   name: 'PlatformDrawer',
-  components: {},
   props: {
     visible: {
       type: Boolean,
@@ -138,6 +149,10 @@ export default {
     handleSelect(platform) {
       this.$store.dispatch('assets/addToRecentPlatforms', platform)
       this.$emit('select-platform', platform)
+    },
+    handleManagePlatform() {
+      this.$router.push({ name: 'PlatformList' })
+      this.iVisible = false
     }
   }
 }
@@ -211,5 +226,17 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.drawer-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 40px;
+
+  .el-link {
+    margin-left: 15px;
+  }
 }
 </style>

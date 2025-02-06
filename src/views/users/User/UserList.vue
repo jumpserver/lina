@@ -238,18 +238,18 @@ export default {
             callback: () => {
               this.InviteDialogSetting.InviteDialogVisible = true
             }
-          },
-          {
-            name: this.$t('Roles'),
-            title: this.$t('Roles'),
-            has: () => {
-              return this.publicSettings.XPACK_LICENSE_IS_VALID &&
-                this.$hasPerm(['rbac.view_orgrole | rbac.view_systemrole'],)
-            },
-            callback: () => {
-              this.$router.push({ name: 'RoleList' })
-            }
           }
+          // {
+          // name: this.$t('Roles'),
+          // title: this.$t('Roles'),
+          // has: () => {
+          // return this.publicSettings.XPACK_LICENSE_IS_VALID &&
+          // this.$hasPerm(['rbac.view_orgrole | rbac.view_systemrole'],)
+          // },
+          // callback: () => {
+          // this.$router.push({ name: 'RoleList' })
+          // }
+          // }
         ],
         hasBulkUpdate: true,
         canBulkUpdate: ({ selectedRows }) => {

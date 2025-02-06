@@ -8,18 +8,20 @@
     v-bind="data.attrs"
   >
     <template v-if="data.label" #label>
-      <span :title="data.label">{{ data.label }}</span>
-      <el-tooltip
-        v-if="data.helpTip"
-        :open-delay="500"
-        :tabindex="-1"
-        effect="dark"
-        placement="right"
-        popper-class="help-tips"
-      >
-        <div slot="content" v-sanitize="data.helpTip" /> <!-- Noncompliant -->
-        <i class="fa fa-question-circle-o help-tip-icon" />
-      </el-tooltip>
+      <span :title="data.label">
+        {{ data.label }}
+        <el-tooltip
+          v-if="data.helpTip"
+          :open-delay="500"
+          :tabindex="-1"
+          effect="dark"
+          placement="right"
+          popper-class="help-tips"
+        >
+          <div slot="content" v-sanitize="data.helpTip" /> <!-- Noncompliant -->
+          <i class="fa fa-question-circle-o help-tip-icon" />
+        </el-tooltip>
+      </span>
     </template>
     <template v-if="readonly && hasReadonlyContent">
       <div
@@ -100,6 +102,9 @@
       </el-alert>
       <span v-else v-sanitize="data.helpText" />
     </div>
+    <div v-if="data.helpTextFormatter" class="help-block">
+      <RenderHelpTextSafe :render-content="data.helpTextFormatter" />
+    </div>
   </el-form-item>
 </template>
 <script>
@@ -122,6 +127,18 @@ function validator(data) {
 
 export default {
   components: {
+    RenderHelpTextSafe: {
+      functional: true,
+      props: {
+        renderContent: {
+          type: Function,
+          required: true
+        }
+      },
+      render(h, { props }) {
+        return props.renderContent()
+      }
+    },
     /**
      * 🐂🍺只需要有组件选项对象，就可以立刻包装成函数式组件在 template 中使用
      * FYI: https://cn.vuejs.org/v2/guide/render-function.html#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6

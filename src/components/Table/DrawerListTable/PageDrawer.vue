@@ -50,6 +50,10 @@ export default {
   },
   computed: {
     drawerSize() {
+      const drawerWidth = localStorage.getItem('drawerWidth')
+      if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
+        return drawerWidth + 'px'
+      }
       const width = window.innerWidth
       if (width >= 800) return '767px'
       return '90%'

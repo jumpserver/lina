@@ -20,6 +20,7 @@ Vue.directive('el-drawer-drag-width', {
         // 宽度不能大于浏览器宽度 80%，不能小于宽度的 20%
         realWidth = realWidth > width80 ? width80 : realWidth < width30 ? width30 : realWidth
         drawerEle.style.width = realWidth + 'px'
+        localStorage.setItem('drawerWidth', realWidth)
       }
       document.onmouseup = function(e) {
         // 拖拽时结束时，取消禁用文本选中
