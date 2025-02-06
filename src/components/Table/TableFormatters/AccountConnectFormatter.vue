@@ -50,8 +50,8 @@ export default {
       default: ''
     },
     connectUrlTemplate: {
-      type: String,
-      default: ''
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -71,11 +71,7 @@ export default {
     handleCommand(protocol) {
       if (protocol === 'Title') return
 
-      this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
-        key: this.row.id,
-        value: protocol
-      })
-
+      this.formatterArgs.setMapItem(this.row.id, protocol)
       this.handleWindowOpen(this.row, protocol)
     },
     visibleChange(visible) {
@@ -84,19 +80,17 @@ export default {
       }
     },
     handleWindowOpen(row, protocol) {
-      const url = this.formatterArgs.connectUrlTemplate
-        .replace('{id}', row.id)
-        .replace('{username}', row.username)
-        .replace('{assetId}', row.asset.id)
-        .replace('{assetName}', row.asset.name)
-        .replace('{protocol}', protocol)
+      const url = this.formatterArgs.connectUrlTemplate(row) + `${protocol}`
 
-      window.open(url, '_blank')
+      this.$nextTick(() => {
+        window.open(url, '_blank')
+      })
     },
     async handlePamConnect() {
       const protocolMap = this.$store.getters.protocolMap
 
       if (protocolMap.has(this.row.id)) {
+        // 直连
         const protocol = protocolMap.get(this.row.id)
         this.handleWindowOpen(this.row, protocol)
       } else {
@@ -107,11 +101,7 @@ export default {
           if (res && res.protocols.length > 0) {
             const protocol = res.protocols[0]
 
-            this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
-              key: this.row.id,
-              value: protocol.name
-            })
-
+            this.formatterArgs.setMapItem(this.row.id, protocol.name)
             this.handleWindowOpen(this.row, protocol.name)
           }
         } catch (e) {

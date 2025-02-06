@@ -2,11 +2,12 @@
   <TabPage
     :active-menu.sync="activeMenu"
     :submenu="tab.submenu"
-    :disabled="true"
+    :disabled="!hasValidLicense"
   />
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { TabPage } from '@/layout/components'
 
 export default {
@@ -44,6 +45,9 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['hasValidLicense'])
   }
 }
 </script>
