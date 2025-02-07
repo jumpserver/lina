@@ -41,7 +41,9 @@ export default {
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         'CHAT_AI_ENABLED',
+        'CHAT_AI_TYPE',
         'GPT_MODEL',
+        'DEEPSEEK_MODEL',
         'GPT_BASE_URL',
         'GPT_API_KEY',
         'GPT_PROXY'
@@ -55,6 +57,16 @@ export default {
         GPT_API_KEY: {
           el: {
             autocomplete: 'new-password'
+          }
+        },
+        GPT_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'gpt'
+          }
+        },
+        DEEPSEEK_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'deep-seek'
           }
         },
         GPT_PROXY: {
