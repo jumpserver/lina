@@ -125,7 +125,7 @@ export default {
         this.conversationId = data.id
 
         const newFragment = {
-          message: { id: data.message.id },
+          message: { id: data.message.id, is_reasoning: data.message.is_reasoning },
           reasoning: { content: data.message.is_reasoning ? data.message.content : '' },
           result: { content: data.message.is_reasoning ? '' : data.message.content },
           role: data.message.role,
