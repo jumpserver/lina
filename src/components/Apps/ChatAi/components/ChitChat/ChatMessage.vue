@@ -9,7 +9,7 @@
       </div>
       <div class="content">
         <div class="operational">
-          <div v-if="!item.reasoning" class="date">
+          <div v-if="!item.message.is_reasoning" class="date">
             {{
               $moment(item.message.create_time).format("YYYY-MM-DD HH:mm:ss")
             }}
