@@ -86,7 +86,7 @@ export default {
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasRightActions: true,
         hasExport: false,
         hasImport: false,
