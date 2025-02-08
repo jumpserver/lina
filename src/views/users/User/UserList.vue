@@ -52,36 +52,60 @@ export default {
       detailDrawer: () => import('./UserDetail/index.vue'),
       quickFilters: [
         {
-          label: '快速筛选',
+          label: this.$t('QuickFilter'),
           options: [
             {
-              label: '禁用的',
-              value: ''
+              label: this.$t('Invalid'),
+              filter: {
+                is_valid: false
+              }
             },
             {
-              label: '首次登录的',
-              value: ''
+              label: this.$t('Disabled'),
+              filter: {
+                is_active: false
+              }
             },
             {
-              label: '没有用户组的',
-              value: ''
+              label: this.$t('Expired'),
+              filter: {
+                is_expired: true
+              }
+            },
+            {
+              label: this.$t('NeverLogin'),
+              filter: {
+                is_first_login: true
+              }
             }
           ]
         },
         {
-          label: '认证',
+          label: this.$t('Auth'),
           options: [
             {
-              label: '密码过期的',
-              value: ''
+              label: this.$t('PasswordExpired'),
+              filter: {
+                is_password_expired: true
+              }
             },
             {
-              label: '需要更新密码的',
-              value: ''
+              label: this.$t('LongTimeNoLogin'),
+              filter: {
+                date_last_login__lte: getDayFuture(-30)
+              }
             },
             {
-              label: '没有开启 MFA',
-              value: ''
+              label: this.$t('NoMFA'),
+              filter: {
+                mfa_level: 0
+              }
+            },
+            {
+              label: this.$t('LoginBlocked'),
+              filter: {
+                is_blocked: true
+              }
             }
           ]
         }

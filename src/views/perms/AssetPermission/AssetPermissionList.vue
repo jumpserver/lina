@@ -5,6 +5,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
+      :quick-filters="quickFilter"
     />
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -30,6 +31,36 @@ export default {
   data() {
     return {
       helpMsg: this.$t('AssetPermissionHelpMsg'),
+      quickFilter: [
+        {
+          label: this.$t('QuickFilter'),
+          options: [
+            {
+              label: this.$t('Invalid'),
+              filter: {
+                is_valid: false
+              }
+            },
+            {
+              label: this.$t('Expired'),
+              filter: {
+              }
+            },
+            {
+              label: this.$t('Disabled'),
+              filter: {
+                is_active: false
+              }
+            },
+            {
+              label: this.$t('NoResource'),
+              filter: {
+                no_resource: true
+              }
+            }
+          ]
+        }
+      ],
       treeSetting: {
         showMenu: false,
         showAssets: true,

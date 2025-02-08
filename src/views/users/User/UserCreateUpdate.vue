@@ -137,7 +137,8 @@ export default {
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           helpTextFormatter: () => {
             const handleClick = () => {
-              window.open('/settings/roles', '_blank')
+              this.$router.push({ name: 'RoleList' })
+              // window.open('/settings/roles', '_blank')
             }
             return (
               <el-link onClick={handleClick}>
@@ -188,6 +189,14 @@ export default {
         }
         return obj
       },
+      submitMethod() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      },
       cleanFormValue(value) {
         const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
@@ -216,33 +225,8 @@ export default {
     this.setDefaultRoles()
     this.disableMFAFieldIfNeed(null)
     this.loading = false
-    this.initRoleManagementLink()
   },
   methods: {
-    initRoleManagementLink() {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.addedNodes.length) {
-            const gotoRoleElement = document.querySelector('.goto-role')
-            if (gotoRoleElement) {
-              const handleClick = () => {
-                this.$router.push({ path: '/settings/roles' })
-              }
-              gotoRoleElement.addEventListener('click', handleClick)
-              this.$once('hook:beforeDestroy', () => {
-                gotoRoleElement.removeEventListener('click', handleClick)
-                observer.disconnect()
-              })
-              observer.disconnect()
-            }
-          }
-        })
-      })
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      })
-    },
     afterGetUser(user) {
       this.user = user
       if (this.user.id === this.currentUser.id) {

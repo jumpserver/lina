@@ -220,6 +220,7 @@ export default {
       })
     },
     onUpdate({ row, col }) {
+      this.$route.params.id = row.id
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       }).then(() => {

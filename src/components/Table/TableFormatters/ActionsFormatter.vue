@@ -224,7 +224,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .table-actions {
   ::v-deep {
     .el-icon-arrow-down {
