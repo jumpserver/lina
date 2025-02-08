@@ -1,38 +1,34 @@
 <template>
   <div>
     <IBox class="radio-box">
-      <el-radio-group v-model="currentLanguage" @input="handleInput">
-        <el-radio label="python">Python</el-radio>
-        <el-radio label="go">Go</el-radio>
-      </el-radio-group>
+      <div class="code-container">
+        <el-tabs v-model="currentLanguage" @tab-click="handleInput">
+          <el-tab-pane v-for="language in languages" :key="language.value" :label="language.label" :name="language.value">
+            <template>
+              <vue-markdown v-if="readme" :source="readme" />
+              <span v-else>{{ $tc('NoData') }}</span>
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+        <div class="copy-btn">
+          <i
+            class="copy-btn el-icon-copy-document"
+            @click="copyContent"
+          />
+        </div>
+      </div>
     </IBox>
-    <TwoCol>
-      <template>
-        <IBox title="README">
-          <vue-markdown v-if="readme" :source="readme" />
-          <span v-else>{{ $tc('NoData') }}</span>
-        </IBox>
-      </template>
-      <template #right>
-        <QuickActions :actions="quickActions" type="primary" />
-      </template>
-    </TwoCol>
   </div>
 </template>
 
 <script>
 import { IBox } from '@/components'
-import { download } from '@/utils/common'
-import QuickActions from '@/components/QuickActions/index.vue'
 import VueMarkdown from 'vue-markdown'
 import { highlightBlock } from 'highlight.js'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'SDKList',
   components: {
-    TwoCol,
-    QuickActions,
     IBox,
     VueMarkdown
   },
@@ -40,45 +36,9 @@ export default {
     return {
       currentLanguage: 'python',
       readme: '',
-      filenameMap: {
-        python: 'jms_pam-0.0.1-py3-none-any.whl',
-        go: 'jms_pam.go'
-      },
-      quickFilters: [
-        {
-          label: this.$t('Language'),
-          options: [
-            {
-              label: 'Python',
-              active: false,
-              filter: {
-                category: 'python'
-              }
-            },
-            {
-              label: 'GO',
-              filter: {
-                category: 'go'
-              }
-            }
-          ]
-        }
-      ],
-      quickActions: [
-        {
-          title: this.$t('Action'),
-          attrs: {
-            type: 'primary',
-            label: this.$tc('Download'),
-            model: this.currentLanguage
-          },
-          callbacks: {
-            click: () => {
-              const filename = this.filenameMap[this.currentLanguage]
-              download(`/download/public/sdks/${filename}/`)
-            }
-          }
-        }
+      languages: [
+        { label: 'Python', value: 'python' },
+        { label: 'Go', value: 'go' }
       ]
     }
   },
@@ -86,6 +46,14 @@ export default {
     this.getSdkInfo()
   },
   methods: {
+    async copyContent() {
+      try {
+        await navigator.clipboard.writeText(this.readme)
+        this.$message.success('复制成功')
+      } catch (err) {
+        this.$message.error('复制失败')
+      }
+    },
     highlightCode() {
       const codeBlocks = this.$el.querySelectorAll('pre code')
       codeBlocks.forEach((block) => {
@@ -109,9 +77,15 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.code-container {
+  position: relative;
+}
 
-<style lang="scss" scoped>
-.radio-box {
-  margin-bottom: 5px;
+.copy-btn {
+  font-size: 20px;
+  position: absolute;
+  top: 8px;
+  right: 5px;
 }
 </style>
