@@ -65,9 +65,11 @@ export default {
         columns: ['name', 'username', 'secret_type', 'privileged'],
         columnsMeta: {
           name: {
-            formatterArgs: {
-              route: 'AccountTemplateDetail'
-            }
+            formatter: (row) => <span>{row.name}</span>
+            // 暂禁用远程应用中账号模板的详情跳转
+            // formatterArgs: {
+            //   route: 'AccountTemplateDetail'
+            // }
           },
           privileged: {
             width: '100px'
