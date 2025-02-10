@@ -9,21 +9,21 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('AssetAddress'), value: 'address' },
   { label: i18n.t('Account'), value: 'accounts' },
   {
-    label: i18n.t('isValid'), value: 'is_valid',
+    label: i18n.t('Valid'), value: 'is_valid',
     children: [
       { value: '1', label: i18n.t('Yes') },
       { value: '0', label: i18n.t('No') }
     ]
   },
   {
-    label: i18n.t('isEffective'), value: 'is_effective',
+    label: i18n.t('Effective'), value: 'is_effective',
     children: [
       { value: '1', label: i18n.t('Yes') },
       { value: '0', label: i18n.t('No') }
     ]
   },
   {
-    label: i18n.t('fromTicket'), value: 'from_ticket',
+    label: i18n.t('FromTicket'), value: 'from_ticket',
     children: [
       { value: '1', label: i18n.t('Yes') },
       { value: '0', label: i18n.t('No') }
