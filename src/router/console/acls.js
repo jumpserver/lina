@@ -24,7 +24,6 @@ export default [
         meta: {
           title: i18n.t('BaseUserLoginAclList'),
           app: 'acls',
-          licenseRequired: true,
           resource: 'loginacl',
           disableOrgsChange: true
         },
