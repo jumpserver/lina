@@ -5,7 +5,7 @@
         <el-tabs v-model="currentLanguage" @tab-click="handleInput">
           <el-tab-pane v-for="language in languages" :key="language.value" :label="language.label" :name="language.value">
             <template>
-              <vue-markdown v-if="readme" :source="readme" />
+              <vue-markdown v-if="readme" class="code-markdown" :source="readme" />
               <span v-else>{{ $tc('NoData') }}</span>
             </template>
           </el-tab-pane>
@@ -25,6 +25,7 @@
 import { IBox } from '@/components'
 import VueMarkdown from 'vue-markdown'
 import { highlightBlock } from 'highlight.js'
+import 'highlight.js/styles/github.css'
 
 export default {
   name: 'SDKList',
@@ -80,6 +81,10 @@ export default {
 <style lang="less" scoped>
 .code-container {
   position: relative;
+}
+.code-markdown {
+  min-height: 210px;
+  border: 1px solid #DCDFE6;
 }
 
 .copy-btn {
