@@ -92,7 +92,7 @@ export default {
             {
               label: this.$t('LongTimeNoLogin'),
               filter: {
-                date_last_login__lte: getDayFuture(-30)
+                is_long_time_no_login: true
               }
             },
             {
@@ -104,7 +104,7 @@ export default {
             {
               label: this.$t('LoginBlocked'),
               filter: {
-                is_blocked: true
+                is_login_blocked: true
               }
             }
           ]
