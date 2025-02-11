@@ -41,10 +41,16 @@ export default {
   computed: {
     chartOption() {
       return {
+        tooltip: {
+          trigger: 'item',
+          formatter: (params) => {
+            return `${params.name}: ${params.value} (${params.percent}%)`
+          }
+        },
         legend: {
           orient: 'vertical',
-          top: '13%',
-          right: '15%',
+          top: '25%',
+          right: this.$i18n.locale === 'zh' ? '20%' : '10%',
           itemGap: 20,
           textStyle: {
             color: '#666',
@@ -61,17 +67,31 @@ export default {
               { name: this.$t('AccountBackup'), value: this.counter.total_count_backup_account_automation },
               { name: this.$t('RelevantApp'), value: this.counter.total_count_integration_application }
             ]
-            const item = data.find(item => item.name === name)
 
-            return name.padEnd(10, '\u2003') + (item.value || 0)
+            const item = data.find(item => item.name === name)
+            return `${name}: ${item?.value || 0}`
+          },
+          rich: {
+            name: {
+              width: this.$i18n.locale === 'zh' ? 120 : 200,
+              color: '#666',
+              fontSize: 12,
+              padding: [0, 15, 0, 0]
+            },
+            value: {
+              width: 60,
+              align: 'right',
+              color: '#666',
+              fontSize: 12
+            }
           }
         },
         series: [
           {
             name: this.$t('Task Distribution'),
             type: 'pie',
-            radius: ['50%', '70'],
-            center: ['25%', '50%'],
+            radius: ['50%', '60%'],
+            center: ['30%', '50%'],
             label: {
               show: false
             },
@@ -172,7 +192,6 @@ export default {
   height: 100%;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .header {
     padding: 1.25rem;
@@ -193,7 +212,7 @@ export default {
 
     .chart-container {
       width: 100%;
-      height: 226px;
+      height: 19.25rem;
     }
   }
 }
