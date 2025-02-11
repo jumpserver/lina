@@ -26,12 +26,12 @@ export default {
   data() {
     return {
       logConfig: {
-        title: '当前状态',
-        tip: '当前状态'
+        title: this.$t('CurrentStatus'),
+        tip: this.$t('CurrentStatus')
       },
       sessionConfig: {
-        title: '改密任务执行状态',
-        tip: '改密任务执行状态'
+        title: this.$t('ChangeSecretTaskStatus'),
+        tip: this.$t('ChangeSecretTaskStatus')
       },
       data: {
         total_count_change_secrets: 0,
@@ -47,23 +47,20 @@ export default {
     LogItems() {
       return [
         {
-          title: '任务数',
+          title: this.$t('TaskCount'),
           body: {
-            route: { name: `LoginLogList` },
             count: this.data.total_count_change_secrets
           }
         },
         {
-          title: '定时任务数',
+          title: this.$t('ScheduledTaskCount'),
           body: {
-            route: { name: `LoginLogList` },
             count: this.data.total_count_periodic_change_secrets
           }
         },
         {
-          title: '资产数',
+          title: this.$t('AssetsOfNumber'),
           body: {
-            route: { name: `OperateLogList` },
             count: this.data.total_count_change_secret_assets
           }
         }
@@ -72,23 +69,20 @@ export default {
     sessionItems() {
       return [
         {
-          title: '任务执行数',
+          title: this.$t('TaskExecutionCount'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.data.total_count_change_secret_executions
           }
         },
         {
-          title: '成功数',
+          title: this.$t('SuccessCount'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OfflineList' }},
             count: this.data.total_count_success_change_secret_executions
           }
         },
         {
-          title: '失败数',
+          title: this.$t('FailCount'),
           body: {
-            route: { name: `FtpLog` },
             count: this.data.total_count_failed_change_secret_executions
           }
         }

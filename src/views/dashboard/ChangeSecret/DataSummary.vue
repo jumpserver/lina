@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       logConfig: {
-        title: '当前正在改密情况',
-        tip: '当前正在改密情况'
+        title: this.$t('OngoingPwdChange'),
+        tip: this.$t('OngoingPwdChange')
       },
       data: {
         total_count_ongoing_change_secret: 0,
@@ -36,21 +36,21 @@ export default {
     LogItems() {
       return [
         {
-          title: '任务执行数',
+          title: this.$t('TaskExecutionCount'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret
           }
         },
         {
-          title: '资产数',
+          title: this.$t('AssetsOfNumber'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret_assets
           }
         },
         {
-          title: '账号数',
+          title: this.$t('AccountAmount'),
           body: {
             route: { name: `OperateLogList` },
             count: this.data.total_count_ongoing_change_secret_accounts
