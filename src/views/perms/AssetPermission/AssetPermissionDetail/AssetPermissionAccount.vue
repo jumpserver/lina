@@ -11,6 +11,7 @@
         :has-import="false"
         :has-left-actions="false"
         :url="url"
+        v-bind="tableConfig"
       />
     </template>
     <template #right>
@@ -31,6 +32,7 @@
 import { AccountListTable, IBox } from '@/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { AccountConnectFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AssetPermissionAccount',
@@ -54,6 +56,27 @@ export default {
       relation: {
         disabled: false,
         username: ''
+      },
+      tableConfig: {
+        columnsMeta: {
+          connect: {
+            label: this.$t('Connect'),
+            width: '80px',
+            formatter: AccountConnectFormatter,
+            formatterArgs: {
+              buttonIcon: 'fa fa-desktop',
+              titleText: '可选协议',
+              url: '/api/v1/assets/assets/{id}',
+              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
+              setMapItem: (id, protocol) => {
+                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+                  key: id,
+                  value: protocol
+                })
+              }
+            }
+          }
+        }
       }
     }
   },
