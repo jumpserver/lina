@@ -12,7 +12,7 @@
     </template>
     <template v-else>
       <!-- 默认插槽内容，全宽 -->
-      <el-col :md="single" :sm="24">
+      <el-col :md="single" :offset="(24 - single)/2" :sm="24">
         <slot />
       </el-col>
     </template>

@@ -4,16 +4,16 @@
       <AccountListTable
         ref="ListTable"
         :asset="object"
+        :columns-default="columns"
         :has-clone="false"
         :has-column-actions="false"
         :has-delete-action="false"
         :has-export="false"
         :has-import="false"
         :has-left-actions="false"
+        :show-quick-filters="false"
         :url="url"
       />
-    </template>
-    <template #right>
       <IBox :title="$tc('Account')" type="primary">
         <AccountFormatter
           :assets="assetIds"
@@ -54,7 +54,8 @@ export default {
       relation: {
         disabled: false,
         username: ''
-      }
+      },
+      columns: ['name', 'username', 'secret', 'asset']
     }
   },
   computed: {

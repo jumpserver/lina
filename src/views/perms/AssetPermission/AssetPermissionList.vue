@@ -20,7 +20,7 @@ import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import { mapGetters } from 'vuex'
-import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const'
+import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
 
 export default {
   components: {
@@ -42,8 +42,15 @@ export default {
               }
             },
             {
+              label: this.$t('Valid'),
+              filter: {
+                is_valid: true
+              }
+            },
+            {
               label: this.$t('Expired'),
               filter: {
+                is_expired: true
               }
             },
             {
@@ -55,7 +62,7 @@ export default {
             {
               label: this.$t('NoResource'),
               filter: {
-                no_resource: true
+                is_no_resource: true
               }
             }
           ]

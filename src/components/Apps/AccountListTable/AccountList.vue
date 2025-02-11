@@ -133,6 +133,10 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    showQuickFilters: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -151,7 +155,7 @@ export default {
       iAsset: this.asset,
       account: {},
       secretUrl: '',
-      quickFilters: accountQuickFilters(this),
+      quickFilters: this.showQuickFilters ? accountQuickFilters(this) : [],
       tableConfig: {
         url: this.url,
         permissions: {
@@ -203,6 +207,11 @@ export default {
             formatter: PlatformFormatter,
             formatterArgs: {
               platformAttr: 'asset.platform'
+            }
+          },
+          asset: {
+            formatter: function(row) {
+              return row.asset.name
             }
           },
           username: {
