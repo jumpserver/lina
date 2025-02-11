@@ -55,7 +55,7 @@ export default {
         disabled: false,
         username: ''
       },
-      columns: ['name', 'username', 'secret', 'asset']
+      columns: ['name', 'username', 'secret', 'asset', 'connect']
     }
   },
   computed: {
