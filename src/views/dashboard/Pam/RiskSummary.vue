@@ -13,11 +13,6 @@
           class="metric-item"
         />
       </template>
-      <!-- <el-row :gutter="20">
-        <el-col v-for="item of summaryItems" :key="item.title" :md="6" :sm="12" :xs="12">
-          <SummaryCard :body="item.body" :title="item.title" />
-        </el-col>
-      </el-row> -->
     </div>
   </div>
 </template>
@@ -35,15 +30,19 @@ export default {
         tip: this.$t('RealTimeData')
       },
       counter: {
-        total_long_time_no_login_accounts: '.',
-        total_weak_password_accounts: '.',
-        total_long_time_change_password_accounts: '.',
-        total_leaked_password_accounts: '.',
-        total_repeated_password_accounts: '.',
-        total_password_expired_accounts: '.',
-        total_no_admin_account_accounts: '.',
-        total_password_error_accounts: '.',
-        total_new_found_accounts: '.'
+        'total_long_time_no_login_accounts': '.',
+        'total_new_found_accounts': '.',
+        'total_group_changed_accounts': '.',
+        'total_sudo_changed_accounts': '.',
+        'total_authorized_keys_changed_accounts': '.',
+        'total_account_deleted_accounts': '.',
+        'total_password_expired_accounts': '.',
+        'total_long_time_password_accounts': '.',
+        'total_weak_password_accounts': '.',
+        'total_leaked_password_accounts': '.',
+        'total_repeated_password_accounts': '.',
+        'total_password_error_accounts': '.',
+        'total_no_admin_account_accounts': '.'
       }
     }
   },
@@ -51,9 +50,58 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('LeakedPassword'),
+          title: this.$t('NoLoginLongTime'),
           body: {
-            count: this.counter.total_leaked_password_accounts,
+            count: this.counter.total_long_time_no_login_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('NewAccountsFound'),
+          body: {
+            count: this.counter.total_new_found_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('GroupChanged'),
+          body: {
+            count: this.counter.total_group_changed_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('SudoChanged'),
+          body: {
+            count: this.counter.total_sudo_changed_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('AuthorizedKeysChanged'),
+          body: {
+            count: this.counter.total_authorized_keys_changed_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('AccountDeleted'),
+          body: {
+            count: this.counter.total_account_deleted_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('PasswordExpired'),
+          body: {
+            count: this.counter.total_password_expired_accounts,
+            disabled: true
+          }
+        },
+        {
+          title: this.$t('LongTimePassword'),
+          body: {
+            count: this.counter.total_long_time_password_accounts,
             disabled: true
           }
         },
@@ -65,17 +113,9 @@ export default {
           }
         },
         {
-          title: this.$t('LongTimeNoLogin'),
+          title: this.$t('LeakedPassword'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: this.counter.total_long_time_no_login_accounts
-          }
-        },
-
-        {
-          title: this.$t('LongTimeNoChangeSecret'),
-          body: {
-            count: this.counter.total_long_time_change_password_accounts,
+            count: this.counter.total_leaked_password_accounts,
             disabled: true
           }
         },
@@ -87,28 +127,14 @@ export default {
           }
         },
         {
-          title: this.$t('Unmanaged'),
-          body: {
-            count: this.counter.total_new_found_accounts,
-            disabled: true
-          }
-        },
-        {
-          title: this.$t('Password expiration'),
-          body: {
-            count: this.counter.total_password_expired_accounts,
-            disabled: true
-          }
-        },
-        {
-          title: this.$t('Error password'),
+          title: this.$t('PasswordError'),
           body: {
             count: this.counter.total_password_error_accounts,
             disabled: true
           }
         },
         {
-          title: this.$t('No admin'),
+          title: this.$t('NoAdminAccount'),
           body: {
             count: this.counter.total_no_admin_account_accounts,
             disabled: true
@@ -126,13 +152,19 @@ export default {
         '/api/v1/accounts/pam-dashboard/',
         {
           params: {
-            total_privileged_accounts: 1,
-            total_ordinary_accounts: 1,
-            total_unmanaged_accounts: 1,
-            total_unavailable_accounts: 1,
             total_long_time_no_login_accounts: 1,
+            total_new_found_accounts: 1,
+            total_group_changed_accounts: 1,
+            total_sudo_changed_accounts: 1,
+            total_authorized_keys_changed_accounts: 1,
+            total_account_deleted_accounts: 1,
+            total_password_expired_accounts: 1,
+            total_long_time_password_accounts: 1,
             total_weak_password_accounts: 1,
-            total_long_time_change_password_accounts: 1
+            total_leaked_password_accounts: 1,
+            total_repeated_password_accounts: 1,
+            total_password_error_accounts: 1,
+            total_no_admin_account_accounts: 1
           }
         }
       )

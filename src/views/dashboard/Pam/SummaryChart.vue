@@ -50,24 +50,20 @@ export default {
     return {
       summaryItems: [
         {
-          label: 'Connectable',
-          key: 'connectable',
-          className: 'connection'
+          label: this.$t('Privileged'),
+          key: 'privileged'
         },
         {
-          label: 'Reset secret',
-          key: 'resetSecret',
-          className: 'reset'
+          label: this.$t('Reset secret'),
+          key: 'resetSecret'
         },
         {
-          label: 'Privileged Account',
-          key: 'privilegedAccount',
-          className: 'privileged'
+          label: this.$t('Connectable'),
+          key: 'connectable'
         },
         {
-          label: 'Regular Account',
-          key: 'regularAccount',
-          className: 'regular'
+          label: this.$t('Valid'),
+          key: 'valid'
         }
       ]
     }

@@ -31,7 +31,7 @@ export default {
     return {
       showViewSecretDialog: false,
       cardConfig: {
-        title: '改密失败账号'
+        title: this.$tc('ChangeSecretFailAccounts')
       },
       tableConfig: {
         url: `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`,
