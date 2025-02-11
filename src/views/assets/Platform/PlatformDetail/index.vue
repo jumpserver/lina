@@ -25,6 +25,7 @@ export default {
       TaskDetail: {},
       actions: {},
       config: {
+        url: '/api/v1/assets/platforms',
         title: this.$t('PlatformDetail'),
         activeMenu: 'Detail',
         submenu: [

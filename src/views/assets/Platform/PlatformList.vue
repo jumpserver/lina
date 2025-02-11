@@ -7,7 +7,13 @@
     @tab-click="changeMoreCreates"
   >
     <keep-alive>
-      <GenericListTable ref="genericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable
+        ref="genericListTable"
+        :create-drawer="createDrawer"
+        :detail-drawer="detailDrawer"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
     </keep-alive>
   </TabPage>
 </template>
@@ -26,6 +32,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Platform/PlatformDetail/index.vue'),
       loading: true,
       platformPageHelpMsg: this.$t('PlatformPageHelpMsg'),
       tab: {
