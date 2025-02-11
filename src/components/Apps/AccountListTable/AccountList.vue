@@ -52,7 +52,7 @@
 <script>
 import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
@@ -191,14 +191,18 @@ export default {
           connect: {
             label: this.$t('Connect'),
             width: '80px',
-            formatter: () => {
-              return (
-                <span className='connect'>
-                  <el-button type='primary' size='mini' plain>
-                    <i className='fa fa-desktop'/>
-                  </el-button>
-                </span>
-              )
+            formatter: AccountConnectFormatter,
+            formatterArgs: {
+              buttonIcon: 'fa fa-desktop',
+              titleText: '可选协议',
+              url: '/api/v1/assets/assets/{id}',
+              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
+              setMapItem: (id, protocol) => {
+                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+                  key: id,
+                  value: protocol
+                })
+              }
             }
           },
           platform: {
