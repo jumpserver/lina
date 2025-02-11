@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     width() {
-      return this.$store.state.app.device === 'mobile' ? '70%' : '380px'
+      return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
     }
   },
   mounted() {

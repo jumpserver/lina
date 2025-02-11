@@ -91,9 +91,9 @@ export const constantRoutes = [
  */
 export const viewRoutes = [
   consoleViewRoutes,
+  pamViewRoutes,
   auditViewRoutes,
   workbenchViewRoutes,
-  pamViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

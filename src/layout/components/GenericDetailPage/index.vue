@@ -203,7 +203,8 @@ export default {
       if (vm.validActions.detailApiUrl || vm.detailApiUrl) {
         return vm.validActions.detailApiUrl || vm.detailApiUrl
       }
-      return vm.url ? `${vm.url}/${objectId}/` : getApiPath(vm, objectId)
+      const url = _.trimEnd(vm.url, '/')
+      return url ? `${url}/${objectId}/` : getApiPath(vm, objectId)
     },
     afterDelete() {
       if (this.drawer) {
