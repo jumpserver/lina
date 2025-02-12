@@ -8,12 +8,10 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import AccountPushInfo from './AccountPushInfo.vue'
 
 export default {
   components: {
-    TwoCol,
     GenericDetailPage,
     AccountPushInfo
   },
@@ -28,7 +26,7 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'AccountPushInfo',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
+            hidden: () => !this.$hasPerm('accounts.view_pushaccountautomation')
           }
         ]
       }

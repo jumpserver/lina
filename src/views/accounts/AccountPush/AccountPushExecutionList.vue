@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="listTable"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -14,6 +19,7 @@ export default {
   },
   data() {
     return {
+      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions',
         columns: [
@@ -28,9 +34,16 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('ExecutionID'),
-            formatter: function(row) {
-              return <span>{row.automation}</span>
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountPushExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountPushExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true,
+              can: this.$hasPerm('accounts.view_pushaccountexecution')
             }
           },
           push_user_name: {
@@ -79,14 +92,6 @@ export default {
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
-                  callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {

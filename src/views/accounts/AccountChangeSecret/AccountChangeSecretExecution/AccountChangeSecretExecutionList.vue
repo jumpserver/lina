@@ -28,9 +28,16 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('ExecutionID'),
-            formatter: function(row) {
-              return <span>{row.automation}</span>
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountChangeSecretExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountChangeSecretExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true,
+              can: this.$hasPerm('accounts.view_changesecretexecution')
             }
           },
           change_secret_name: {
@@ -79,15 +86,6 @@ export default {
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  type: 'info',
-                  can: this.$hasPerm('accounts.view_changesecretexecution'),
-                  callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountChangeSecretExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {

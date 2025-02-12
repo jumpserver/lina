@@ -20,7 +20,7 @@ export default [
         component: () => import('@/views/sessions/SessionList/index.vue'),
         name: 'AccountSessionList',
         meta: {
-          title: i18n.t('AccountSessions'),
+          title: i18n.t('SessionList'),
           permissions: []
         }
       }
@@ -45,7 +45,7 @@ export default [
         component: () => import('@/views/accounts/AccountActivity/AccountActivityList.vue'),
         name: 'AccountActivityList',
         meta: {
-          title: i18n.t('AccountActivity'),
+          title: i18n.t('Activity'),
           permissions: ['audits.view_operatelog']
         }
       }
