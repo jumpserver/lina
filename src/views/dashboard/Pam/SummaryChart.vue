@@ -54,7 +54,7 @@ export default {
           key: 'privileged'
         },
         {
-          label: this.$t('Reset secret'),
+          label: this.$t('ResetSecret'),
           key: 'resetSecret'
         },
         {

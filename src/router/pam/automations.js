@@ -113,7 +113,7 @@ export default [
         name: 'AccountChangeSecretList',
         meta: {
           menuTitle: i18n.t('ChangeSecret'),
-          title: i18n.t('AccountChangeSecret'),
+          title: i18n.t('ChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -143,7 +143,7 @@ export default [
         name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
-          title: i18n.t('AccountChangeSecret'),
+          title: i18n.t('ChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -296,8 +296,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
         name: 'AccountBackupDetail',
         meta: {
-          title: i18n.t('AccountBackupDetail'),
-          activeMenu: '/console/accounts/automations'
+          title: i18n.t('AccountBackupDetail')
         },
         hidden: true
       },
