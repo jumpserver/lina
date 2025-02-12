@@ -47,11 +47,7 @@ export default {
           }
         ],
         hasRightSide: true,
-        url: '/api/v1/acls/connect-method-acls/',
-        actions: {
-          detailApiUrl: `/api/v1/acls/connect-method-acls/${this.object.id}/`,
-          deleteApiUrl: `/api/v1/acls/connect-method-acls/${this.object.id}/`
-        }
+        url: '/api/v1/acls/connect-method-acls/'
       }
     }
   }

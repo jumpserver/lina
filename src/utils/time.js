@@ -72,7 +72,7 @@ export function toSafeLocalDateStr(d) {
     return '-'
   }
   const date = safeDate(d)
-  return moment(date).format('L LTS')
+  return moment(date).format('L HH:mm:ss')
 }
 
 export function getDaysAgo(days, now) {

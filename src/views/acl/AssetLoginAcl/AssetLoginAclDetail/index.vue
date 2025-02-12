@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="instance" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="instance" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -19,17 +19,9 @@ export default {
     UserJsonTab,
     AssetJsonTab
   },
-  props: {
-    object: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
   data() {
     return {
-      TaskDetail: {},
+      instance: {},
       config: {
         url: `/api/v1/acls/login-asset-acls/`,
         activeMenu: 'Detail',
@@ -47,11 +39,7 @@ export default {
             name: 'AssetJsonTab'
           }
         ],
-        hasRightSide: true,
-        actions: {
-          detailApiUrl: `/api/v1/acls/login-asset-acls/${this.object.id}/`,
-          deleteApiUrl: `/api/v1/acls/login-asset-acls/${this.object.id}/`
-        }
+        hasRightSide: true
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="instance" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="instance" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -15,18 +15,11 @@ export default {
     GenericDetailPage,
     Detail
   },
-  props: {
-    object: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
   data() {
     return {
-      TaskDetail: {},
+      instance: {},
       config: {
+        url: `/api/v1/acls/login-acls/`,
         activeMenu: 'Detail',
         submenu: [
           {
@@ -34,12 +27,7 @@ export default {
             name: 'Detail'
           }
         ],
-        hasRightSide: false,
-        url: `/api/v1/acls/login-acls/`,
-        actions: {
-          deleteApiUrl: `/api/v1/acls/login-acls/${this.object.id}/`,
-          detailApiUrl: `/api/v1/acls/login-acls/`
-        }
+        hasRightSide: false
       }
     }
   }

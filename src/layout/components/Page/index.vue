@@ -3,7 +3,6 @@
     <TagsView />
     <PageHeading v-if="iTitle || helpMessage" :help-msg="helpMessage" class="disabled-when-print page-head">
       <el-button
-        v-if="!inDrawer"
         :disabled="gobackDisabled"
         class="go-back"
         icon="el-icon-back"
@@ -60,7 +59,6 @@ import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common'
-import { mapGetters } from 'vuex'
 import IBox from '@/components/IBox/index.vue'
 
 export default {
@@ -102,13 +100,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['inDrawer', 'hasValidLicense']),
-    iDisabled() {
-      if (this.disabled !== null) {
-        return this.disabled
-      }
-      return !this.hasValidLicense
-    },
     noTitle() {
       return this.title === 'null' || this.title === null
     },

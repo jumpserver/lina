@@ -314,4 +314,20 @@ export function toSentenceCase(string) {
   return s[0].toUpperCase() + s.slice(1)
 }
 
+export function toLowerCaseExcludeAbbr(s) {
+  if (!s) return ''
+
+  return s.split(' ').map(word => {
+    // 如果单词包含超过 2 个大写字母，则不转换
+    const uppercaseCount = word.split('').filter(char => {
+      return char === char.toUpperCase() && char !== char.toLowerCase()
+    }).length
+    if (uppercaseCount > 2) {
+      return word
+    }
+    // 否则将单词转换为小写
+    return word.toLowerCase()
+  }).join(' ')
+}
+
 export { BASE_URL }

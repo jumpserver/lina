@@ -2,7 +2,6 @@
   <TabPage
     :active-menu.sync="config.activeMenu"
     :submenu="config.submenu"
-    @tab-click="handleTabClick"
   />
 </template>
 

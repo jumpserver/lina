@@ -15,8 +15,8 @@ import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   components: {
     TwoCol,
-    AddAssetDialog,
-    BaseList
+    BaseList,
+    AddAssetDialog
   },
   props: {
     object: {
@@ -31,11 +31,15 @@ export default {
         category: 'all',
         url: `/api/v1/assets/assets/?domain=${this.object.id}&exclude_platform=Gateway`,
         tableConfig: {
+          columns: ['name', 'address', 'platform', 'actions'],
           columnsMeta: {
             actions: {
               formatterArgs: {
                 hasDelete: false
               }
+            },
+            connectivity: {
+              hidden: () => false
             }
           }
         },

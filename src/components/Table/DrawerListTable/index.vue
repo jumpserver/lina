@@ -21,7 +21,7 @@
 <script>
 import ListTable from '../ListTable'
 import PageDrawer from './PageDrawer.vue'
-import { setUrlParam, toSentenceCase } from '@/utils/common'
+import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 const drawerType = [String, Function]
@@ -147,7 +147,7 @@ export default {
       if (action === 'clone') {
         action = 'create'
       }
-      title = toSentenceCase(action) + this.$t('WordSep') + title.toLowerCase()
+      title = toSentenceCase(action) + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
       return title
     },
     getDefaultDrawer(action) {

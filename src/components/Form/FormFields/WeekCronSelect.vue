@@ -212,8 +212,9 @@ export default {
       const nowDate = new Date(timeStamp).getTime()
       const targetStamp = new Date(nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000).getTime()
 
-      const beginStamp = targetStamp + col * 1800000 // col * 30 * 60 * 1000
-      const endStamp = beginStamp + 1800000
+      // (2 / this.colspan) 原来是一个单元格 30分钟，现在是一个单元格 30 * 2 / this.colspan 分钟
+      const beginStamp = targetStamp + col * 1800000 * (2 / this.colspan) // col * 30 * 60 * 1000
+      const endStamp = beginStamp + 1800000 * (2 / this.colspan)
 
       const begin = this.formatDate(new Date(beginStamp), 'hh:mm')
       const end = this.formatDate(new Date(endStamp), 'hh:mm')
@@ -245,11 +246,14 @@ export default {
     },
     setTimeRange() {
       this.timeRange = this.weekTimeData.map(item => {
+        console.log('item', item)
+        console.log('Value', splicing(item.child))
         return {
           id: item.row === 6 ? 0 : item.row + 1,
           value: splicing(item.child)
         }
       })
+      console.log('Time range: ', this.timeRange)
       this.$emit('change', this.timeRange)
     },
     cellEnter(item) {

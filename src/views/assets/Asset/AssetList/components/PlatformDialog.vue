@@ -12,11 +12,13 @@
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
         <el-link
-          type="text"
+          :underline="false"
           size="small"
+          type="text"
           @click="handleManagePlatform"
         >
-          <i class="fa fa-cog" /> {{ $tc('PlatformManage') }}
+          <i class="fa fa-gear" />
+          {{ $tc('ManagePlatform') }}
         </el-link>
       </div>
     </template>
@@ -236,6 +238,8 @@ export default {
   padding-right: 40px;
 
   .el-link {
+    font-size: 14px;
+    font-weight: 400;
     margin-left: 15px;
   }
 }

@@ -5,6 +5,7 @@
         <el-checkbox
           v-for="(i) in choices"
           :key="i.label"
+          :disabled="i.disabled"
           :label="i.value"
           @change="handleCheckboxCheck(i, $event)"
         >
@@ -64,7 +65,12 @@
 <script>
 import { TagInput } from '@/components/Form/FormFields'
 import {
-  AccountLabelMapper, AllAccount, AnonymousAccount, ManualAccount, SameAccount, SpecAccount
+  AccountLabelMapper,
+  AllAccount,
+  AnonymousAccount,
+  ManualAccount,
+  SameAccount,
+  SpecAccount
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
@@ -125,7 +131,8 @@ export default {
         label: this.$t('VirtualAccounts'),
         value: virtual,
         tip: this.$t('VirtualAccountHelpMsg'),
-        disabled: !this.showVirtualAccount
+        disabled: !this.showVirtualAccount,
+        has: this.showVirtualAccount !== false
       }
     ]
     return {

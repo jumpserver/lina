@@ -34,9 +34,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: function() {
-        return this.$t('AddAccount')
-      }
+      default: ''
     },
     size: {
       type: String,
