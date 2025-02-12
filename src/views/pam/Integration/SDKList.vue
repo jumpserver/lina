@@ -4,10 +4,14 @@
       <div class="code-container">
         <el-tabs v-model="currentLanguage" @tab-click="handleInput">
           <el-tab-pane v-for="language in languages" :key="language.value" :label="language.label" :name="language.value">
-            <template>
-              <vue-markdown v-if="readme" class="code-markdown" :source="readme" />
-              <span v-else>{{ $tc('NoData') }}</span>
-            </template>
+            <two-col>
+              <template>
+                <vue-markdown class="code-markdown" :source="readme" />
+              </template>
+              <template #right>
+                <vue-markdown class="code-demo" :source="code" />
+              </template>
+            </two-col>
           </el-tab-pane>
         </el-tabs>
         <div class="copy-btn">
@@ -25,11 +29,12 @@
 import { IBox } from '@/components'
 import VueMarkdown from 'vue-markdown'
 import { highlightBlock } from 'highlight.js'
-import 'highlight.js/styles/github.css'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'SDKList',
   components: {
+    TwoCol,
     IBox,
     VueMarkdown
   },
@@ -37,6 +42,7 @@ export default {
     return {
       currentLanguage: 'python',
       readme: '',
+      code: '',
       languages: [
         { label: 'Python', value: 'python' },
         { label: 'Go', value: 'go' }
@@ -49,10 +55,10 @@ export default {
   methods: {
     async copyContent() {
       try {
-        await navigator.clipboard.writeText(this.readme)
-        this.$message.success('复制成功')
+        await navigator.clipboard.writeText(this.code)
+        this.$message.success(this.$tc('CopySuccess'))
       } catch (err) {
-        this.$message.error('复制失败')
+        this.$message.error(this.$tc('CopyFailed'))
       }
     },
     highlightCode() {
@@ -67,6 +73,7 @@ export default {
       const url = `/api/v1/accounts/integration-applications/sdks/?language=${this.currentLanguage}`
       this.$axios.get(url).then(res => {
         this.readme = res.readme
+        this.code = `\`\`\`${this.currentLanguage}\n${res.code}\n\`\`\``
         this.$nextTick(() => {
           this.highlightCode()
         })
@@ -84,9 +91,28 @@ export default {
 }
 .code-markdown {
   min-height: 210px;
+  padding: 10px 20px;
+  border: 1px solid #DCDFE6;
+  ::v-deep .table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    th, td {
+      border: 1px solid #ebeef5;
+      padding: 10px;
+      text-align: left;
+  }
+   th {
+      background-color: #f5f7fa;
+    }
+  }
+}
+.code-demo{
+  @import "~highlight.js/styles/atom-one-light.css";
+  min-height: 210px;
+  padding: 10px 20px;
   border: 1px solid #DCDFE6;
 }
-
 .copy-btn {
   font-size: 20px;
   position: absolute;

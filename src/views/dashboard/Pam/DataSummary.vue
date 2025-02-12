@@ -26,10 +26,10 @@ export default {
         route: { name: 'PamAccounts' },
         total: 0,
         weekAdd: 0,
+        privileged: 0,
         resetSecret: 0,
         connectable: 0,
-        privilegedAccount: 0,
-        regularAccount: 0
+        valid: 0
       }
     }
   },
@@ -44,20 +44,20 @@ export default {
           params: {
             total_accounts: 1,
             total_week_add_accounts: 1,
+            total_privileged_accounts: 1,
             total_secret_reset_accounts: 1,
-            total_connectivity_ok_accounts: 1
+            total_connectivity_ok_accounts: 1,
+            total_valid_accounts: 1
           }
         }
       )
 
       this.accountConfig.total = data.total_accounts
       this.accountConfig.weekAdd = data.total_week_add_accounts
+      this.accountConfig.privileged = data.total_privileged_accounts
       this.accountConfig.resetSecret = data.total_secret_reset_accounts
       this.accountConfig.connectable = data.total_connectivity_ok_accounts
-
-      // TODO 额外两个字段
-      this.accountConfig.privilegedAccount = data.total_privileged_accounts
-      this.accountConfig.regularAccount = data.total_regular_accounts
+      this.accountConfig.valid = data.total_valid_accounts
     }
   }
 }

@@ -25,14 +25,14 @@ export default {
   data() {
     return {
       config: {
-        title: '任务执行情况',
-        tip: '任务执行情况'
+        title: this.$t('Task Distribution'),
+        tip: this.$t('Task Distribution')
       },
       counter: {
-        total_count_gathered_account_automation: 0,
+        total_count_change_secret_automation: 0,
         total_count_push_account_automation: 0,
+        total_count_gathered_account_automation: 0,
         total_count_backup_account_automation: 0,
-        total_count_risk_account: 0,
         total_count_integration_application: 0
       },
       chart: null
@@ -41,10 +41,16 @@ export default {
   computed: {
     chartOption() {
       return {
+        tooltip: {
+          trigger: 'item',
+          formatter: (params) => {
+            return `${params.name}: ${params.value} (${params.percent}%)`
+          }
+        },
         legend: {
           orient: 'vertical',
-          top: '13%',
-          right: '15%',
+          top: '25%',
+          right: this.$i18n.locale === 'zh' ? '20%' : '10%',
           itemGap: 20,
           textStyle: {
             color: '#666',
@@ -55,23 +61,37 @@ export default {
           itemHeight: 8,
           formatter: (name) => {
             const data = [
-              { name: '账号收集任务', value: this.counter.total_count_gathered_account_automation },
-              { name: '账号推送任务', value: this.counter.total_count_push_account_automation },
-              { name: '账号备份任务', value: this.counter.total_count_backup_account_automation },
-              { name: '风险账号', value: this.counter.total_count_risk_account },
-              { name: '集成应用', value: this.counter.total_count_integration_application }
+              { name: this.$t('BaseAccountChangeSecret'), value: this.counter.total_count_change_secret_automation },
+              { name: this.$t('BaseAccountPush'), value: this.counter.total_count_push_account_automation },
+              { name: this.$t('DiscoverAccounts'), value: this.counter.total_count_gathered_account_automation },
+              { name: this.$t('AccountBackup'), value: this.counter.total_count_backup_account_automation },
+              { name: this.$t('RelevantApp'), value: this.counter.total_count_integration_application }
             ]
-            const item = data.find(item => item.name === name)
 
-            return name.padEnd(10, '\u2003') + (item.value || 0)
+            const item = data.find(item => item.name === name)
+            return `${name}: ${item?.value || 0}`
+          },
+          rich: {
+            name: {
+              width: this.$i18n.locale === 'zh' ? 120 : 200,
+              color: '#666',
+              fontSize: 12,
+              padding: [0, 15, 0, 0]
+            },
+            value: {
+              width: 60,
+              align: 'right',
+              color: '#666',
+              fontSize: 12
+            }
           }
         },
         series: [
           {
-            name: '任务分布',
+            name: this.$t('Task Distribution'),
             type: 'pie',
-            radius: ['50%', '70'],
-            center: ['25%', '50%'],
+            radius: ['50%', '60%'],
+            center: ['30%', '50%'],
             label: {
               show: false
             },
@@ -80,24 +100,24 @@ export default {
             },
             data: [
               {
-                value: this.counter.total_count_gathered_account_automation,
-                name: '账号收集任务'
+                value: this.counter.total_count_change_secret_automation,
+                name: this.$t('BaseAccountChangeSecret')
               },
               {
                 value: this.counter.total_count_push_account_automation,
-                name: '账号推送任务'
+                name: this.$t('BaseAccountPush')
+              },
+              {
+                value: this.counter.total_count_gathered_account_automation,
+                name: this.$t('DiscoverAccounts')
               },
               {
                 value: this.counter.total_count_backup_account_automation,
-                name: '账号备份任务'
-              },
-              {
-                value: this.counter.total_count_risk_account,
-                name: '风险账号'
+                name: this.$t('AccountBackup')
               },
               {
                 value: this.counter.total_count_integration_application,
-                name: '集成应用'
+                name: this.$t('RelevantApp')
               }
             ],
             emphasis: {
@@ -139,10 +159,10 @@ export default {
     async getResourcesCount() {
       return this.$axios.get('/api/v1/accounts/pam-dashboard/', {
         params: {
+          total_count_change_secret_automation: 1,
           total_count_gathered_account_automation: 1,
           total_count_push_account_automation: 1,
           total_count_backup_account_automation: 1,
-          total_count_risk_account: 1,
           total_count_integration_application: 1
         }
       })
@@ -172,7 +192,6 @@ export default {
   height: 100%;
   background: #fff;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .header {
     padding: 1.25rem;
@@ -193,7 +212,7 @@ export default {
 
     .chart-container {
       width: 100%;
-      height: 226px;
+      height: 19.25rem;
     }
   }
 }

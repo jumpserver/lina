@@ -46,7 +46,7 @@ export default {
         const str = data[this.url.split('?')[1].split('=')[0]]
 
         if (this.url.includes('accounts')) {
-          this.titleConfig.title = this.$t('ProportionOfAccontTypes')
+          this.titleConfig.title = this.$t('ProportionOfAccountTypes')
           this.titleConfig.tip = this.$t('ProportionOfAccountTypes')
         } else {
           this.titleConfig.title = this.$t('ProportionOfAssetTypes')

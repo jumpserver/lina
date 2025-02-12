@@ -26,15 +26,15 @@ export default {
     return {
       loading: false,
       config: {
-        title: '账号成功/失败情况',
-        tip: '账号成功/失败情况'
+        title: this.$t('AccountResult'),
+        tip: this.$t('AccountResult')
       },
       lineChartConfig: {
         datesMetrics: [],
         primaryData: [1],
-        primaryName: '成功',
+        primaryName: this.$t('Success'),
         secondaryData: [1],
-        secondaryName: '失败'
+        secondaryName: this.$t('Failed')
       }
     }
   },
