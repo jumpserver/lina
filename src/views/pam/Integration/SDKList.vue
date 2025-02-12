@@ -40,12 +40,15 @@ export default {
   },
   data() {
     return {
-      currentLanguage: 'python',
+      currentLanguage: 'curl',
       readme: '',
       code: '',
       languages: [
+        { label: 'cURL', value: 'curl' },
         { label: 'Python', value: 'python' },
-        { label: 'Go', value: 'go' }
+        { label: 'Go', value: 'go' },
+        { label: 'Java', value: 'java' },
+        { label: 'Node.js', value: 'node' }
       ]
     }
   },
@@ -73,7 +76,15 @@ export default {
       const url = `/api/v1/accounts/integration-applications/sdks/?language=${this.currentLanguage}`
       this.$axios.get(url).then(res => {
         this.readme = res.readme
-        this.code = `\`\`\`${this.currentLanguage}\n${res.code}\n\`\`\``
+        const highlightMapper = {
+          'curl': 'bash',
+          'python': 'python',
+          'go': 'go',
+          'java': 'java',
+          'node': 'javascript'
+        }
+        const language = highlightMapper[this.currentLanguage] || 'bash'
+        this.code = `\`\`\`${language}\n${res.code}\n\`\`\``
         this.$nextTick(() => {
           this.highlightCode()
         })
