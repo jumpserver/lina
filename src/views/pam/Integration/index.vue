@@ -26,7 +26,7 @@ export default {
           },
           {
             name: 'records',
-            title: this.$t('Records'),
+            title: this.$t('RecordList'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
             component: () => import('@/views/pam/Integration/components/CallRecords.vue')
           },

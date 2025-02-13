@@ -8,7 +8,7 @@ import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
-  name: 'AccountPushExecutionList',
+  name: 'CheckAccountExecutionList',
   components: {
     GenericListTable
   },
@@ -24,7 +24,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/check-account-executions/',
         columns: [
-          'task_name', 'asset_amount',
+          'automation', 'task_name', 'asset_amount',
           'node_amount', 'status', 'trigger',
           'date_start', 'date_finished', 'actions'
         ],
@@ -36,9 +36,16 @@ export default {
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
-            formatter: function(row) {
-              return <span>{row.automation}</span>
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountCheckExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountCheckExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true,
+              can: this.$hasPerm('accounts.view_checkaccountexecution')
             }
           },
           task_name: {
@@ -68,12 +75,6 @@ export default {
           status: {
             label: this.$t('Result')
           },
-          timedelta: {
-            label: this.$t('TimeDelta'),
-            formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
-            }
-          },
           actions: {
             formatterArgs: {
               hasDelete: false,
@@ -83,26 +84,17 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
+                  can: this.$hasPerm('accounts.view_checkaccountexecution'),
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
                   }
                 },
                 {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  type: 'info',
-                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
-                  callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountCheckExecutionDetail', params: { id: row.id }})
-                  }
-                },
-                {
                   name: 'report',
                   title: this.$t('Report'),
                   type: 'success',
-                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
+                  can: this.$hasPerm('accounts.view_checkaccountexecution'),
                   callback: function({ row }) {
                     window.open(`/api/v1/accounts/check-account-executions/${row.id}/report/`)
                   }
