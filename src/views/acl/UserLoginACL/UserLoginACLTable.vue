@@ -37,6 +37,7 @@ export default {
             label: this.$t('ApproverNumbers')
           },
           actions: {
+            width: (this.$i18n.locale === 'pt-br' || this.$i18n.locale === 'en') ? '120px' : '100px',
             formatterArgs: {
               hasClone: false,
               updateRoute: ({ row }) => {
