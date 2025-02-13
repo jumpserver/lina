@@ -17,7 +17,7 @@
           type="text"
           @click="handleManagePlatform"
         >
-          <i class="fa fa-gear" />
+          <i class="fa fa-external-link" />
           {{ $tc('ManagePlatform') }}
         </el-link>
       </div>
@@ -241,6 +241,7 @@ export default {
     font-size: 14px;
     font-weight: 400;
     margin-left: 15px;
+    color: var(--color-link);
   }
 }
 </style>

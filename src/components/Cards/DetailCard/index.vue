@@ -4,12 +4,14 @@
       <template v-for="item in items">
         <el-form-item v-if="item.has !== false" :key="item.key" :class="item.class" :label="item.key">
           <span slot="label"> {{ formateLabel(item.key) }}</span>
-          <span
-            :is="item.component"
-            v-if="item.component"
-            v-bind="{...item}"
-          />
-          <ItemValue v-else :value="item.value" class="item-value" v-bind="item" />
+          <span class="item-value">
+            <template
+              :is="item.component"
+              v-if="item.component"
+              v-bind="{...item}"
+            />
+            <ItemValue v-else :value="item.value" v-bind="item" />
+          </span>
         </el-form-item>
       </template>
     </el-form>
@@ -44,7 +46,7 @@ export default {
     },
     labelWidth: {
       type: String,
-      default: ''
+      default: '120px'
     }
   },
   data() {
@@ -78,7 +80,7 @@ export default {
     border-bottom: 1px dashed #F4F4F4;
     padding: 1px 0;
     margin-bottom: 0;
-    text-align: end;
+    //text-align: end;
     line-height: 1.2;
 
     &:last-child {
@@ -131,6 +133,7 @@ export default {
       word-break: break-word;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+      vertical-align: middle;
     }
   }
 }

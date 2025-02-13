@@ -24,9 +24,9 @@ export default {
     return {
       url: `/api/v1/terminal/sessions/?user_id=${this.object.id}&order=is_finished,-date_end`,
       columnsShow: {
-        min: ['id', 'user', 'asset', 'account'],
+        min: ['id', 'asset', 'account'],
         default: [
-          'id', 'user', 'asset', 'account', 'protocol',
+          'id', 'asset', 'account', 'protocol',
           'date_start', 'duration'
         ]
       }

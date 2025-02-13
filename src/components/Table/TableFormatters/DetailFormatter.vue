@@ -16,7 +16,7 @@
       v-if="formatterArgs.drawer && drawerVisible"
       :component="drawerComponent"
       :has-footer="false"
-      :title="iTitle"
+      :title="drawerTitle"
       :visible.sync="drawerVisible"
       class="detail-drawer"
     />
@@ -49,9 +49,7 @@ export default {
           getTitle({ row, cellValue }) {
             return cellValue || row.name
           },
-          getDrawerTitle({ row, cellValue }) {
-            return cellValue || row.name
-          },
+          getDrawerTitle: null,
           getIcon({ col, row, cellValue }) {
             return null
           }
@@ -102,7 +100,30 @@ export default {
     }
   },
   methods: {
-    getRouteComponent() {
+    getResource() {
+      const route = this.resolveRoute()
+      if (!route) {
+        return
+      }
+      const resource = route.meta.title || route.name
+      return resource.replace('Detail', '').replace('详情', '')
+    },
+    getDrawerTitle() {
+      if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {
+        return this.formatterArgs.getDrawerTitle({
+          col: this.col,
+          row: this.row,
+          cellValue: this.cellValue
+        })
+      }
+      let title = this.cellValue || this.row.name
+      const resource = this.getResource()
+      if (resource) {
+        title = `${resource}: ${title}`
+      }
+      return title
+    },
+    resolveRoute() {
       const route = this.getDetailRoute()
       const routes = this.$router.resolve(route)
       if (!routes) {
@@ -113,7 +134,13 @@ export default {
         return
       }
       if (matched[0] && matched[0].components?.default) {
-        return matched[0].components.default
+        return matched[0]
+      }
+    },
+    getRouteComponent() {
+      const route = this.resolveRoute()
+      if (route) {
+        return route.components.default
       }
     },
     showDrawer() {
@@ -134,7 +161,7 @@ export default {
         id: route.params.id || this.row.id
       }
       this.$store.dispatch('common/setDrawerActionMeta', payload).then(() => {
-        this.drawerTitle = this.formatterArgs.getDrawerTitle(payload)
+        this.drawerTitle = this.getDrawerTitle(payload)
         this.drawerVisible = true
       })
     },

@@ -39,7 +39,7 @@ export default {
     },
     single: {
       type: Number,
-      default: 22
+      default: 24
     }
   }
 }

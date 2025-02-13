@@ -32,7 +32,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'nodes_amount', 'accounts', 'actions'
           ]
         },
         columnsMeta: AssetPermissionTableMeta

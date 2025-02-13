@@ -298,8 +298,8 @@ export default {
 .generic-detail-page {
   ::v-deep {
     .tab-page-content {
-      padding-left: 15px;
-      padding-right: 10px;
+      padding-left: 20px;
+      padding-right: 15px;
     }
   }
 }
