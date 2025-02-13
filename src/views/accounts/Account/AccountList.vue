@@ -24,12 +24,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/accounts/',
         hasLeftActions: true,
-        hasImport: true,
-        columnsMeta: {
-          actions: {
-            width: this.$i18n.locale === 'pt-br' ? '120px' : '100px'
-          }
-        }
+        hasImport: true
       },
       treeSetting: {
         showMenu: false,

@@ -103,7 +103,6 @@ export default {
             width: '200px'
           },
           actions: {
-            width: this.$i18n.locale === 'pt-br' ? '120px' : '100px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,

@@ -65,7 +65,17 @@ export default {
       isDeactivated: false
     }
   },
-  computed: {},
+  computed: {
+    dynamicActionWidth() {
+      if (this.$i18n.locale === 'en') {
+        return '120px'
+      }
+      if (this.$i18n.locale === 'pt-br') {
+        return '160px'
+      }
+      return '100px'
+    }
+  },
   watch: {
     config: {
       handler: _.debounce(function(iNew, iOld) {
@@ -131,7 +141,7 @@ export default {
             prop: 'actions',
             label: i18n.t('Actions'),
             align: 'center',
-            width: '100px',
+            width: this.dynamicActionWidth,
             formatter: ActionsFormatter,
             fixed: 'right',
             formatterArgs: {}
