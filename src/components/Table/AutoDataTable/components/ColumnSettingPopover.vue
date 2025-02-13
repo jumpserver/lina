@@ -36,6 +36,7 @@
           <el-checkbox
             :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
             :label="item.prop"
+            :title="item.label"
           >
             {{ item.label }}
           </el-checkbox>
