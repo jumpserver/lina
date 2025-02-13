@@ -1,6 +1,7 @@
 <template>
   <TwoCol>
     <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+    <AutoDetailCard v-bind="moreConfig" />
   </TwoCol>
 </template>
 
@@ -28,7 +29,14 @@ export default {
         'date_last_login', 'address_last_login',
         'remote_present', 'present',
         'date_updated', 'status'
-      ]
+      ],
+      moreConfig: {
+        url: `/api/v1/accounts/gathered-accounts/${this.object.id}/details/`,
+        title: this.$t('More'),
+        object: this.object,
+        nested: 'detail',
+        showUndefined: false
+      }
     }
   },
   computed: {}
