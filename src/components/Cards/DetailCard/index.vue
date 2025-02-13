@@ -109,7 +109,8 @@ export default {
       font-size: 12px;
       line-height: 1.5;
       font-weight: 400;
-      width: 120px;
+      width: 33%;
+      min-width: 120px;
       padding: 5px 0;
 
       span {
