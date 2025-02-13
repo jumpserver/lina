@@ -9,14 +9,12 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import Info from './info.vue'
-import More from './more.vue'
 
 export default {
   name: 'AccountDiscoverDetail',
   components: {
     GenericDetailPage,
-    Info,
-    More
+    Info
   },
   data() {
     return {
@@ -32,10 +30,6 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'Info'
-          },
-          {
-            title: this.$t('More'),
-            name: 'More'
           }
         ],
         getTitle: this.getExecutionTitle

@@ -173,7 +173,7 @@ export default {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       let remoteMeta = data.actions['GET'] || {}
       if (this.nested) {
-        remoteMeta = remoteMeta[this.nested]?.children || {}
+        remoteMeta = remoteMeta[this.nested]?.children || remoteMeta || {}
       }
       let fields = this.fields
       fields = fields || Object.keys(remoteMeta)
