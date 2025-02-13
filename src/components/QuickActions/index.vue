@@ -76,8 +76,7 @@ export default {
     font-size: 13px;
 
     span {
-      overflow: hidden;
-      white-space: nowrap; /* 控制文本不换行 */
+      white-space: nowrap;
       text-overflow: ellipsis;
       display: block;
     }

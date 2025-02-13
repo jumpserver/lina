@@ -84,6 +84,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+html:lang(pt-br) {
+  .datepicker ::v-deep .el-range-separator {
+    padding: 0 10px;
+  }
+}
+
 .datepicker {
   margin-left: 10px;
   width: 233px;
