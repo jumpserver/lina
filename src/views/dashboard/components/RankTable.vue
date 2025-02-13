@@ -9,13 +9,14 @@
       class="table"
       style="width: 100%"
     >
-      <el-table-column :label="$tc('Ranking')" width="80px">
-        <template v-slot="scope" #header>
+      <el-table-column :label="$tc('Ranking')" :width="this.$i18n.locale === 'zh-CN' ? '80px' : '110px'">
+        <template #header>
           <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
             <span style="cursor: pointer;">{{ $t('Ranking') }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
+
       <el-table-column
         v-for="i in config.columns"
         :key="i.prop"
