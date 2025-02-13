@@ -28,7 +28,7 @@ export default {
             component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
           },
           {
-            title: this.$t('AccountRecord'),
+            title: this.$t('RecordList'),
             name: 'AccountPushRecord',
             hidden: () => !this.$hasPerm('accounts.view_pushsecretrecord'),
             component: () => import(

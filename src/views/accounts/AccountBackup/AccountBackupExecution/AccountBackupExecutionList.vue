@@ -30,7 +30,7 @@ export default {
         columnsShow: {
           default: [
             'automation', 'backup_name', 'trigger',
-            'date_start', 'date_finished', 'duration', 'actions'
+            'date_start', 'date_finished', 'actions'
           ]
         },
         columnsMeta: {
