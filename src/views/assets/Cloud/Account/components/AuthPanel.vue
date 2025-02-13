@@ -164,6 +164,7 @@ export default {
           const newValues = JSON.parse(JSON.stringify(values))
           newValues['attrs'] = encryptAttrsField(newValues.attrs)
           newValues['provider'] = vm.provider
+          newValues['category'] = this.$route.query.category || 'host'
           return newValues
         },
         addContinue: true

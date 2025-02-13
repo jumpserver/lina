@@ -1,7 +1,7 @@
 <template>
   <div class="cloud-select-wrap">
-    <el-row :gutter="12">
-      <el-col v-for="p in providers" :key="p.name" :style="p.imageCSS ? p.imageCSS : ''">
+    <el-row :gutter="12" style="min-height: 300px">
+      <el-col v-for="p in providers" :key="p.name">
         <el-card
           :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
           :class="selected === p.name ? 'active': ''"
