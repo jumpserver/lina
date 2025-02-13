@@ -59,6 +59,9 @@ export default {
             autocomplete: 'new-password'
           }
         },
+        CHAT_AI_TYPE: {
+          helpText: this.$t('ChatAITypeHelpText')
+        },
         GPT_MODEL: {
           hidden: (formValue) => {
             return formValue.CHAT_AI_TYPE !== 'gpt'
