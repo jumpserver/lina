@@ -59,7 +59,6 @@ export default {
             }
           },
           actions: {
-            width: (this.$i18n.locale === 'pt-br' || this.$i18n.locale === 'en') ? '160px' : '100px',
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
