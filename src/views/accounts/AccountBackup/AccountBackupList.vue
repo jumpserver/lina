@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   name: 'AccountBackupList',
@@ -46,13 +46,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountBackupDetail',
-              getRoute: ({ row }) => ({
-                name: 'AccountBackupDetail',
-                params: { id: row.id },
-                query: { type: 'pam' }
-              }),
-              drawer: true
+              route: 'AccountBackupDetail'
             }
           },
           types: {

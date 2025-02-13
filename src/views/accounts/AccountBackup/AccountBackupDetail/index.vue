@@ -20,18 +20,14 @@ export default {
     return {
       plan: { name: '', comment: '' },
       config: {
-        url: `/api/v1/accounts/account-backup-plans/`,
+        url: `/api/v1/accounts/account-backup-plans`,
         activeMenu: 'AccountBackupInfo',
         submenu: [
           {
             title: this.$t('Basic'),
             name: 'AccountBackupInfo'
           }
-        ],
-        actions: {
-          detailApiUrl: `/api/v1/accounts/account-backup-plans/`,
-          deleteSuccessRoute: 'AccountBackupList'
-        }
+        ]
       }
     }
   }

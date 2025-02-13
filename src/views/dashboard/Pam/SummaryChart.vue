@@ -5,13 +5,10 @@
     </div>
 
     <div class="total-section">
-      <!-- {{ $t('Total accounts') }} -->
-      <div class="sub-title"> Total accounts </div>
       <div class="total-account"> {{ config.total }} </div>
 
       <div class="week-add">
-        <!-- {{ $t('WeekAdd') }} 英文内容替换为 New this week -->
-        <div class="week-add-title"> New this week: </div>
+        <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
         <div class="week-add-value"> + {{ config.weekAdd }} </div>
       </div>
     </div>
@@ -54,7 +51,7 @@ export default {
           key: 'privileged'
         },
         {
-          label: this.$t('Reset secret'),
+          label: this.$t('ResetSecret'),
           key: 'resetSecret'
         },
         {

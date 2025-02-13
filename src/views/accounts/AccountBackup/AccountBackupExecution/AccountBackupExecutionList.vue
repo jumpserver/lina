@@ -24,17 +24,30 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
-          'automation', 'trigger',
+          'automation', 'backup_name', 'trigger',
           'date_start', 'date_finished', 'duration', 'actions'
         ],
         columnsShow: {
           default: [
-            'automation', 'trigger',
+            'automation', 'backup_name', 'trigger',
             'date_start', 'date_finished', 'duration', 'actions'
           ]
         },
         columnsMeta: {
           automation: {
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountBackupExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountBackupExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true,
+              can: this.$hasPerm('accounts.view_backupaccountexecution')
+            }
+          },
+          backup_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
@@ -65,15 +78,6 @@ export default {
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  type: 'info',
-                  can: this.$hasPerm('accounts.view_backupaccountexecution'),
-                  callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountBackupExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {

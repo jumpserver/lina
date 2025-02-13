@@ -22,7 +22,7 @@ export default {
             component: () => import('@/views/dashboard/ChangeSecret')
           },
           {
-            title: this.$t('AccountChangeSecret'),
+            title: this.$t('ChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
             component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
@@ -36,7 +36,7 @@ export default {
               )
           },
           {
-            title: this.$t('RecordList'),
+            title: this.$t('AccountRecord'),
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
             component: () => import(

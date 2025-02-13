@@ -35,9 +35,15 @@ export default {
         ],
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
-            formatter: function(row) {
-              return <span>{row.automation}</span>
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountDiscoverExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountDiscoverExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true
             }
           },
           account_gather_name: {
@@ -52,7 +58,8 @@ export default {
               }),
               drawer: true
             },
-            id: ({ row }) => row.automation
+            id: ({ row }) => row.automation,
+            can: this.$hasPerm('accounts.view_gatheraccountsexecution')
           },
           timedelta: {
             label: this.$t('TimeDelta'),
@@ -76,15 +83,6 @@ export default {
                   title: this.$t('Log'),
                   callback: function({ row }) {
                     openTaskPage(row['id'])
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  type: 'info',
-                  callback: ({ row }) => {
-                    this.handleDetailCallback(row)
-                    return this.$router.push({ name: 'AccountDiscoverExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {

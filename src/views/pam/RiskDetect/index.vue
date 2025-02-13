@@ -29,7 +29,7 @@ export default {
             component: () => import('./AccountCheckTaskList.vue')
           },
           {
-            title: this.$t('Executions'),
+            title: this.$t('ExecutionList'),
             name: 'AccountCheckExecution',
             hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
             component: () => import('./AccountCheckExecutionList.vue')
