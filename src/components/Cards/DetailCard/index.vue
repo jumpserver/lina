@@ -1,10 +1,10 @@
 <template>
   <IBox :fa="fa" :title="title">
-    <el-form :label-width="labelWidth" class="content" label-position="left">
+    <el-form :label-width="labelWidth" class="content detail-card" label-position="left">
       <template v-for="item in items">
-        <el-form-item v-if="item.has !== false" :key="item.key" :class="item.class" :label="item.key">
-          <span slot="label"> {{ formateLabel(item.key) }}</span>
-          <span class="item-value">
+        <div v-if="item.has !== false" :key="item.key" :class="item.class " :label="item.key" class="el-form-item">
+          <span slot="label" class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
+          <span class="item-value el-form-item__content">
             <template
               :is="item.component"
               v-if="item.component"
@@ -12,7 +12,7 @@
             />
             <ItemValue v-else :value="item.value" v-bind="item" />
           </span>
-        </el-form-item>
+        </div>
       </template>
     </el-form>
   </IBox>
@@ -80,8 +80,11 @@ export default {
     border-bottom: 1px dashed #F4F4F4;
     padding: 1px 0;
     margin-bottom: 0;
+    display: flex;
+    align-items: center;
     //text-align: end;
-    line-height: 1.2;
+    line-height: 32px;
+    min-height: 32px;
 
     &:last-child {
       //border-bottom: none;
@@ -104,8 +107,10 @@ export default {
       overflow: hidden;
       color: var(--color-icon-primary);
       font-size: 12px;
-      line-height: 30px;
+      line-height: 1.5;
       font-weight: 400;
+      width: 120px;
+      padding: 5px 0;
 
       span {
         display: inline-block;
@@ -116,8 +121,9 @@ export default {
     .el-form-item__content {
       color: var(--color-text-primary);
       font-size: 13px;
-      //line-height: 1.3;
-      //padding-bottom: 10px;
+      line-height: 1.5;
+      width: calc(100% - 120px);
+      padding: 5px 0;
     }
 
     ::v-deep .el-tag--mini {

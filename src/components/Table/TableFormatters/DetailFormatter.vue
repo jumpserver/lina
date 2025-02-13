@@ -106,7 +106,7 @@ export default {
         return
       }
       const resource = route.meta.title || route.name
-      return resource.replace('Detail', '').replace('详情', '')
+      return resource.replace(' details', '').replace('详情', '')
     },
     getDrawerTitle() {
       if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {

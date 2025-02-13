@@ -131,6 +131,10 @@ export default {
       padding-right: 15px;
       height: 100%;
 
+      &.detail-card {
+        padding-right: 0;
+      }
+
       // Detail 中
       &.content {
         margin-right: 0;

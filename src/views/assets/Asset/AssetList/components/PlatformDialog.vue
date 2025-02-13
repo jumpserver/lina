@@ -196,6 +196,10 @@ export default {
 ::v-deep .el-collapse {
   border: none;
 
+  .el-collapse-item__content {
+    padding-bottom: 10px;
+  }
+
   .el-collapse-item:last-child {
     .el-collapse-item__header {
       border: none;
