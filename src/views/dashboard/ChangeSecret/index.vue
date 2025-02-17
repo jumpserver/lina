@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$hasPerm('accounts.view_changesecretautomation')">
+  <div v-if="this.$hasPerm('accounts.view_changesecretautomation')" class="change-secret-container">
     <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" @change="onChange" />
     </div>
@@ -82,6 +82,10 @@ export default {
     }
   }
 
+  .change-secret-container {
+    min-width: 670px;
+  }
+
   .switch-date-wrapper {
     margin-bottom: 1.25rem;
   }
@@ -114,7 +118,7 @@ export default {
   .data-summary,
   .card-summary,
   .failed-account-summary {
-    min-width: 670px;
+    min-width: unset;
   }
 
   @media (max-width: 1200px) {
