@@ -71,10 +71,9 @@ export default {
       form.validate((valid) => {
         if (valid) {
           btn.loading = true
+          this.$refs.form.$refs.form.dataForm.submitForm('form', false)
         }
       })
-      form.value.interval = parseInt(form.value.interval, 10)
-      this.$refs.form.$refs.form.dataForm.submitForm('form', false)
     },
     handleSubmitSuccess(res) {
       this.$emit('update:visible', false)
