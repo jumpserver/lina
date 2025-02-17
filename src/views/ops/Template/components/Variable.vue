@@ -1,4 +1,4 @@
-<template>
+～<template>
   <div>
     <div class="variables el-data-table">
       <el-table :data="variables" class="el-table--fit el-table--border">
@@ -81,7 +81,7 @@ export default {
         if (oldVal === undefined) return
         if (newVal.length > 0 || !this.initial) {
           newVal.map((item) => {
-            item.default_value = item.text_default_value || item.select_default_value
+            item.default_value = item.text_default_value || item.select_default_value || undefined
           })
           this.$emit('input', newVal)
         }
