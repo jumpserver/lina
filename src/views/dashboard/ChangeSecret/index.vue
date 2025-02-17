@@ -4,14 +4,13 @@
       <SwitchDate class="switch-date" @change="onChange" />
     </div>
 
-    <el-row type="flex">
-
-      <el-col :span="16">
+    <el-row>
+      <el-col :lg="16" :md="24">
         <CardSummary :days="days" class="card-summary" />
       </el-col>
 
-      <el-col :span="8">
-        <DataSummary :days="days" class="data-summary" style="margin-left: 1rem" />
+      <el-col :lg="8" :md="24">
+        <DataSummary :days="days" class="data-summary" />
       </el-col>
 
     </el-row>
@@ -104,6 +103,23 @@ export default {
     ::v-deep #HomeCard .el-card.no-border {
       height: 100%;
       margin-bottom: unset !important;
+    }
+  }
+
+  .data-summary {
+    margin-left: 1rem
+  }
+
+  .account-summary,
+  .data-summary,
+  .card-summary,
+  .failed-account-summary {
+    min-width: 670px;
+  }
+
+  @media (max-width: 1200px) {
+    ::v-deep .data-summary {
+      margin-left: unset !important;
     }
   }
 </style>

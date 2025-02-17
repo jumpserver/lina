@@ -43,55 +43,28 @@ export default {
       return {
         tooltip: {
           trigger: 'item',
-          formatter: (params) => {
+          formatter: params => {
             return `${params.name}: ${params.value} (${params.percent}%)`
           }
         },
         legend: {
-          orient: 'vertical',
-          top: '25%',
-          right: this.$i18n.locale === 'zh' ? '20%' : '10%',
-          itemGap: 20,
-          textStyle: {
-            color: '#666',
-            fontSize: 12
-          },
-          icon: 'circle',
-          itemWidth: 8,
-          itemHeight: 8,
-          formatter: (name) => {
-            const data = [
-              { name: this.$t('BaseAccountChangeSecret'), value: this.counter.total_count_change_secret_automation },
-              { name: this.$t('BaseAccountPush'), value: this.counter.total_count_push_account_automation },
-              { name: this.$t('DiscoverAccounts'), value: this.counter.total_count_gathered_account_automation },
-              { name: this.$t('AccountBackup'), value: this.counter.total_count_backup_account_automation },
-              { name: this.$t('RelevantApp'), value: this.counter.total_count_integration_application }
-            ]
-
-            const item = data.find(item => item.name === name)
-            return `${name}: ${item?.value || 0}`
-          },
-          rich: {
-            name: {
-              width: this.$i18n.locale === 'zh' ? 120 : 200,
-              color: '#666',
-              fontSize: 12,
-              padding: [0, 15, 0, 0]
-            },
-            value: {
-              width: 60,
-              align: 'right',
-              color: '#666',
-              fontSize: 12
-            }
-          }
+          icon: 'rect',
+          itemWidth: 10,
+          itemHeight: 10,
+          left: '2%'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
         series: [
           {
             name: this.$t('Task Distribution'),
             type: 'pie',
-            radius: ['50%', '60%'],
-            center: ['30%', '50%'],
+            top: '10%',
+            radius: ['45%', '60%'],
             label: {
               show: false
             },
@@ -194,7 +167,8 @@ export default {
   border-radius: 4px;
 
   .header {
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 0;
+    margin-bottom: 8px;
 
     .content {
       justify-content: flex-start;
@@ -212,7 +186,7 @@ export default {
 
     .chart-container {
       width: 100%;
-      height: 19.25rem;
+      height: 321px;
     }
   }
 }
