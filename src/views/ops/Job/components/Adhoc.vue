@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericListTable
+      ref="ListTable"
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
@@ -22,6 +23,7 @@ export default {
     JobRunDialog
   },
   data() {
+    const vm = this
     return {
       item: {},
       createDrawer: () => import('@/views/ops/Job/JobUpdateCreate.vue'),
@@ -113,7 +115,12 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'JobCreate',
+        onCreate: () => {
+          vm.$router.push({
+            query: { _type: 'adhoc' }
+          })
+          vm.$refs.ListTable.onCreate()
+        },
         hasRefresh: true,
         hasExport: false,
         hasImport: false

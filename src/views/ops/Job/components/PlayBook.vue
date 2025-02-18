@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericListTable
+      ref="ListTable"
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
@@ -23,6 +24,7 @@ export default {
     JobRunDialog
   },
   data() {
+    const vm = this
     return {
       createDrawer: () => import('@/views/ops/Job/JobUpdateCreate.vue'),
       detailDrawer: () => import('@/views/ops/Job/JobDetail/index.vue'),
@@ -117,13 +119,11 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'JobCreate',
-            query: {
-              type: 'playbook'
-            }
-          }
+        onCreate: () => {
+          vm.$router.push({
+            query: { _type: 'playbook' }
+          })
+          vm.$refs.ListTable.onCreate()
         }
       },
       showJobRunDialog: false
