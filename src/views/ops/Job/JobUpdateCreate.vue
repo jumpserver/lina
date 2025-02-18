@@ -158,37 +158,33 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query && this.$route.query.type) {
-      this.initial.type = 'adhoc'
-      switch (this.$route.query.type) {
-        case 'adhoc':
-          this.initial.type = 'adhoc'
-          if (this.$route.query.id) {
-            this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
-              this.initial.module = data.module
-              this.initial.args = data.args
-              this.initial.instant = true
-              this.initial.runAfterSave = true
-              this.instantTask = true
-              this.createSuccessNextRoute = { name: 'Adhoc' }
-              this.ready = true
-            })
-          } else {
+    const type = this.$route.query['_type']
+    switch (type) {
+      case 'adhoc':
+        this.initial.type = 'adhoc'
+        if (this.$route.query.id) {
+          this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
+            this.initial.module = data.module
+            this.initial.args = data.args
+            this.initial.instant = true
+            this.initial.runAfterSave = true
+            this.instantTask = true
+            this.createSuccessNextRoute = { name: 'Adhoc' }
             this.ready = true
-          }
-          break
-        case 'playbook':
-          this.initial.type = 'playbook'
-          if (this.$route.query.id) {
-            this.initial.playbook = this.$route.query.id
-            this.ready = true
-          } else {
-            this.ready = true
-          }
-          break
-      }
-    } else {
-      this.ready = true
+          })
+        } else {
+          this.ready = true
+        }
+        break
+      case 'playbook':
+        this.initial.type = 'playbook'
+        if (this.$route.query.id) {
+          this.initial.playbook = this.$route.query.id
+          this.ready = true
+        } else {
+          this.ready = true
+        }
+        break
     }
   },
   methods: {}
