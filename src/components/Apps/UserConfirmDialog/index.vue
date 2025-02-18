@@ -99,6 +99,7 @@
             @click="handleFaceCapture"
           >
             开始人脸识别
+            {{ this.$tc('VerifyFace') }}
           </el-button>
         </el-col>
       </el-row>
