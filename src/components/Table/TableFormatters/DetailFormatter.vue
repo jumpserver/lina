@@ -252,6 +252,7 @@ export default {
   ::v-deep {
     .el-drawer__header {
       border-bottom: none;
+      padding-bottom: 1px;
     }
   }
 }

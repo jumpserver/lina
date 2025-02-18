@@ -17,7 +17,7 @@ export const gatherAccountTableConfig = (vm, url) => {
     columnsShow: {
       default: [
         'username', 'asset', 'address_last_login',
-        'date_last_login', 'present', 'remote_present', 'status'
+        'date_last_login', 'status'
       ]
     },
     columnsMeta: {
@@ -49,7 +49,7 @@ export const gatherAccountTableConfig = (vm, url) => {
         }
       },
       present: {
-        width: '120px'
+        width: '110px'
       },
       remote_present: {
         width: '120px'
