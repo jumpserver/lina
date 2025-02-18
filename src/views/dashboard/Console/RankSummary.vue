@@ -32,8 +32,7 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('LoginCount'),
-            width: this.$i18n.locale === 'zh-CN' ? '120px' : '220px'
+            label: this.$t('LoginCount')
           }
         ]
       },
@@ -49,8 +48,7 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('NumberOfVisits'),
-            width: this.$i18n.locale === 'zh-CN' ? '140px' : '140px'
+            label: this.$t('NumberOfVisits')
           }
         ]
       }
@@ -58,7 +56,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
