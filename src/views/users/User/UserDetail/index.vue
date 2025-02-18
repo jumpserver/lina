@@ -43,6 +43,7 @@ export default {
     return {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
+        url: '/api/v1/users/users',
         activeMenu: 'UserInfo',
         actions: {
           canUpdate: () => {
