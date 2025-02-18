@@ -136,7 +136,7 @@ export default {
           actions: {
             prop: 'actions',
             label: this.$t('Actions'),
-            width: '130px',
+            width: this.dynamicActionWidth,
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
@@ -158,6 +158,14 @@ export default {
           exclude: ['is_finished']
         }
       }
+    }
+  },
+  computed: {
+    dynamicActionWidth() {
+      if (this.$i18n.locale === 'pt-br') {
+        return '160px'
+      }
+      return '130px'
     }
   }
 }

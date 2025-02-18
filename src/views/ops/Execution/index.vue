@@ -76,7 +76,7 @@ export default {
             }
           },
           actions: {
-            width: '120px',
+            width: '130px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
