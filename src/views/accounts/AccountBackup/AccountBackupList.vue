@@ -38,7 +38,7 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'backup_type', 'org_name', 'periodic_display',
+            'name', 'backup_type', 'periodic_display',
             'executed_amount', 'is_active', 'actions'
           ]
         },

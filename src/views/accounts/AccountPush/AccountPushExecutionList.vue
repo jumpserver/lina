@@ -28,7 +28,7 @@ export default {
         ],
         columnsShow: {
           default: [
-            'automation', 'push_user_name', 'status',
+            'automation', 'push_user_name', 'trigger', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },

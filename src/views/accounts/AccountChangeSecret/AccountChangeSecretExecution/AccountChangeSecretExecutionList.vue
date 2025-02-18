@@ -22,7 +22,7 @@ export default {
         ],
         columnsShow: {
           default: [
-            'automation', 'change_secret_name', 'status',
+            'automation', 'change_secret_name', 'trigger', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },
