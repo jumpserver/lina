@@ -167,7 +167,7 @@ export default {
   border-radius: 4px;
 
   .header {
-    padding: 1.25rem 1.25rem 0;
+    padding: 1.2rem 1.25rem 0;
     margin-bottom: 8px;
 
     .content {
@@ -179,14 +179,14 @@ export default {
   .content {
     flex: 1;
     min-height: 0;
-    padding: 0 10px 20px;
+    padding: 0 10px 0;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .chart-container {
       width: 100%;
-      height: 321px;
+      height: 12.5rem;
     }
   }
 }
