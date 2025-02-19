@@ -44,6 +44,10 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
+              getDrawerTitle({ row }) {
+                return row.snapshot.name
+              },
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountChangeSecretDetail',
