@@ -9,6 +9,7 @@
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
+import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export default {
   components: {
@@ -34,8 +35,10 @@ export default {
         },
         columnsMeta: {
           id: {
-            formatter(row) {
-              return row.id.slice(0, 8)
+            formatter: detailFormatter,
+            formatterArgs: {
+              drawer: true,
+              route: 'ExecutionDetail'
             }
           },
           job: {
@@ -77,15 +80,6 @@ export default {
               hasDelete: false,
               hasClone: false,
               extraActions: [
-                {
-                  title: this.$t('Detail'),
-                  name: 'detail',
-                  type: 'primary',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({ name: 'ExecutionDetail', params: { id: row.id }})
-                  }
-                },
                 {
                   title: this.$t('Output'),
                   name: 'logging',
