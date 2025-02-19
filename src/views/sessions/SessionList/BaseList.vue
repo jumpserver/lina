@@ -54,7 +54,7 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({ row }) => { return row.id },
+              getTitle: ({ row, col, cellValue, index }) => { return index + 1 },
               getRoute: ({ row }) => {
                 return {
                   name: 'SessionDetail',
