@@ -126,6 +126,12 @@ export default {
           vm.$refs.ListTable.onCreate()
         }
       },
+      onUpdate: () => {
+        vm.$router.push({
+          query: { _type: 'playbook' }
+        })
+        vm.$refs.ListTable.onUpdate()
+      },
       showJobRunDialog: false
     }
   },
