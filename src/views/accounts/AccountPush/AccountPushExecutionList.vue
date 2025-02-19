@@ -50,11 +50,15 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountPushDetail',
                 params: { id: row.automation }
-              })
+              }),
+              getDrawerTitle({ row }) {
+                return row.snapshot.name
+              }
             },
             id: ({ row }) => row.automation
           },
