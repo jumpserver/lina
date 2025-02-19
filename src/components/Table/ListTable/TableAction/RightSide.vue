@@ -40,8 +40,8 @@ export default {
     handleExportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        const { exportOptions, tableUrl } = this
-        const url = exportOptions?.url ? exportOptions.url : tableUrl
+        // const { exportOptions, tableUrl } = this
+        const url = this.iExportOptions.url
         this.dialogExportVisible = true
         this.$nextTick(() => {
           this.$eventBus.$emit('showExportDialog', { selectedRows, url, name: this.name })
@@ -155,20 +155,18 @@ export default {
       })
     },
     iExportOptions() {
-      if (this.$route.name === 'AssetAccountList') {
-        // 在账号列表中，第一次点击 export 时的 url 是 /accounts/account-secrets/ 都导致无法出现对话框
-        return assignIfNot(this.exportOptions, { url: this.tableUrl })
-      }
-
       /**
        *  原本是使用 assignIfNot 此函数内部使用 partialRight, 该函数
        *  只在目标对象的属性未定义时才从源对象复制属性，如果目标对象已经有值，则保留原值
-       *  那如果首次点击的树节点，那么此时 url 就会被确定，后续点击的树节点，那么 url 就不会
-       *  改变了
+       *  那如果首次点击的树节点，那么此时 url 就会被确定，后续点击的树节点，那么 url 就将不会携带节点信息
        *
-       *  主要是在资产列表中，切换节点的时候
        */
-      return Object.assign(this.exportOptions, { url: this.tableUrl })
+      // return assignIfNot(this.exportOptions, { url: this.tableUrl })
+
+      return {
+        ...this.exportOptions,
+        url: this.tableUrl
+      }
     }
   },
   methods: {
