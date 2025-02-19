@@ -105,14 +105,14 @@
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
-            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
+            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, $index}">
               <div
                 :is="col.formatter"
                 :key="row.id"
                 :cell-value="row[col.prop]"
                 :col="col"
                 :column="column"
-                :index="index"
+                :index="$index"
                 :reload="getList"
                 :row="row"
                 :table-data="data"

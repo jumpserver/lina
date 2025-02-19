@@ -74,7 +74,8 @@ export default {
       return this.formatterArgs.getTitle({
         col: this.col,
         row: this.row,
-        cellValue: this.cellValue
+        cellValue: this.cellValue,
+        index: this.index
       })
     },
     disabled() {
