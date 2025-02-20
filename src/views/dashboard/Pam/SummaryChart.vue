@@ -1,16 +1,22 @@
 <template>
   <div class="card">
-    <div class="title-section">
-      <Title :config="config" />
-    </div>
+    <div class="card-content">
+      <div class="left-section">
+        <div class="title-section">
+          <Title :config="config" />
+        </div>
 
-    <div class="total-section">
-      <div class="total-account"> {{ config.total }} </div>
-
-      <div class="week-add">
-        <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
-        <div class="week-add-value"> + {{ config.weekAdd }} </div>
+        <div class="total-section">
+          <div class="total-title">Total accounts</div>
+          <div class="total-account"> {{ config.total }} </div>
+          <div class="week-add">
+            <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
+            <div class="week-add-value"> + {{ config.weekAdd }} </div>
+          </div>
+        </div>
       </div>
+
+      <div ref="chartRef" class="right-section" />
     </div>
 
     <el-divider />
@@ -31,6 +37,7 @@
 </template>
 
 <script>
+import * as echarts from 'echarts'
 import Title from '../components/Title.vue'
 
 export default {
@@ -64,6 +71,100 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    chartOption() {
+      return {
+        title: {
+          show: false
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+            }
+          }
+        },
+        legend: {
+          show: false
+        },
+        grid: {
+          left: '3%',
+          right: 0,
+          bottom: 0
+        },
+        xAxis: [
+          {
+            show: false,
+            type: 'category',
+            boundaryGap: false,
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          }
+        ],
+        yAxis: [
+          {
+            show: false,
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: 'Line 1',
+            type: 'line',
+            stack: 'Total',
+            smooth: true,
+            itemStyle: {
+              color: '#1AB394'
+            },
+            lineStyle: {
+              width: 2,
+              color: '#1AB394'
+            },
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(26, 179, 148, 0.3)'
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(26, 179, 148, 0)'
+                }
+              ])
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            data: [0, 232, 101, 264, 90, 340, 0]
+          }
+        ]
+      }
+    }
+  },
+  mounted() {
+    this.initChart()
+    window.addEventListener('resize', this.resizeChart)
+  },
+  beforeDestroy() {
+    if (this.chart) {
+      this.chart.dispose()
+      this.chart = null
+    }
+    window.removeEventListener('resize', this.resizeChart)
+  },
+  methods: {
+    initChart() {
+      this.chart = echarts.init(this.$refs.chartRef)
+      this.chart.setOption(this.chartOption)
+    },
+    resizeChart() {
+      if (this.chart) {
+        this.chart.resize()
+      }
+    }
   }
 }
 </script>
@@ -78,7 +179,7 @@ $text-color: #646A73;
 .card {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.37rem;
   width: 100%;
   height: 100%;
   padding: 1.25rem;
@@ -86,43 +187,66 @@ $text-color: #646A73;
   overflow: hidden;
   border-radius: 0.25rem;
 
-  .total-section {
+  .card-content {
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
 
-    .sub-title {
-      color: #646A73;
-      font-size: 0.9rem;
-      font-weight: 400;
-    }
-
-    .total-account {
-      color: #1F2329;
-      font-size: 2rem;
-      font-weight: 500;
-      line-height: 2.5rem;
-    }
-
-    .week-add {
+    .left-section {
       display: flex;
+      flex-direction: column;
       gap: 0.5rem;
-      color: #1F2329;
-      font-weight: 400;
-      line-height: 1.4rem;
+      flex: 1;
 
-      .week-add-title {
-        font-size: 0.9rem;
-        font-weight: inherit;
-        line-height: inherit;
-      }
+      .total-section {
+        display: flex;
+        gap: 0.4rem;
+        flex-direction: column;
+        margin-top: 0.5rem;
 
-      .week-add-value {
-        color: #F54A45;
-        font-size: 0.9rem;
-        font-weight: inherit;
-        line-height: inherit;
+        .total-title {
+          font-size: 0.875rem;
+          color: #646A73;
+          font-weight: 400;
+        }
+
+        .sub-title {
+          color: #646A73;
+          font-size: 0.9rem;
+          font-weight: 400;
+        }
+
+        .total-account {
+          color: #1F2329;
+          font-size: 2rem;
+          font-weight: 500;
+          line-height: 2.5rem;
+        }
+
+        .week-add {
+          display: flex;
+          gap: 0.5rem;
+          color: #1F2329;
+          font-weight: 400;
+          line-height: 1.4rem;
+
+          .week-add-title {
+            font-size: 0.9rem;
+            font-weight: inherit;
+            line-height: inherit;
+          }
+
+          .week-add-value {
+            color: #F54A45;
+            font-size: 0.9rem;
+            font-weight: inherit;
+            line-height: inherit;
+          }
+        }
       }
+    }
+
+    .right-section {
+      height: 8rem;
+      width: 20rem;
     }
   }
 

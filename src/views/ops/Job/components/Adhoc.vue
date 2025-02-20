@@ -121,6 +121,12 @@ export default {
           })
           vm.$refs.ListTable.onCreate()
         },
+        onUpdate: () => {
+          vm.$router.push({
+            query: { _type: 'adhoc' }
+          })
+          vm.$refs.ListTable.onUpdate()
+        },
         hasRefresh: true,
         hasExport: false,
         hasImport: false

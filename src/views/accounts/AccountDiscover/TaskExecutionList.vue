@@ -48,7 +48,7 @@ export default {
               getTitle: ({ row }) => row.short_id,
               drawer: true
             },
-            width: '100px'
+            width: '240px'
           },
           status: {
             label: this.$t('Status'),

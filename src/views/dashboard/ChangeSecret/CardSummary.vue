@@ -120,4 +120,8 @@ export default {
 .margin-top-10 {
   margin-top: 10px;
 }
+
+::v-deep .content .summary-card {
+  flex: 1;
+}
 </style>
