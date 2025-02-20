@@ -45,10 +45,10 @@ export default {
                 name: 'AccountDiscoverExecutionDetail',
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row.short_id,
+              getTitle: ({ row }) => row['short_id'],
               drawer: true
             },
-            width: '240px'
+            width: '120px'
           },
           status: {
             label: this.$t('Status'),
