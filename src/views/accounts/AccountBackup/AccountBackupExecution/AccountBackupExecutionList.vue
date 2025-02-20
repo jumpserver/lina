@@ -45,7 +45,8 @@ export default {
               }),
               drawer: true,
               can: this.$hasPerm('accounts.view_backupaccountexecution')
-            }
+            },
+            width: '240px'
           },
           backup_name: {
             label: this.$t('DisplayName'),
