@@ -156,8 +156,8 @@ export default {
               distance: 10
             },
             itemStyle: {
-              color: '#2B937C',
-              opacity: 0.8,
+              color: '#1AB394',
+
               borderRadius: [0, 4, 4, 0]
             }
           }
@@ -273,6 +273,6 @@ export default {
 
 .chart-container {
   width: 100%;
-  height: 400px;
+  height: 16rem;
 }
 </style>
