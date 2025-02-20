@@ -74,4 +74,3 @@ export const periodicMeta = {
   interval,
   crontab
 }
-

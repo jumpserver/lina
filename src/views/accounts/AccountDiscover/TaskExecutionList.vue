@@ -9,6 +9,8 @@ import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { taskStatusFormatterMeta } from '@/components/const'
+import TaskStatusChoicesFormatter from '@/components/Table/TableFormatters/TaskStatusFormatter.vue'
 
 export default {
   name: 'AccountDiscoverTaskExecutionList',
@@ -30,11 +32,11 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/gather-account-executions/',
         columns: [
-          'automation', 'account_gather_name', 'status', 'trigger',
+          'id', 'automation', 'status', 'trigger',
           'date_start', 'date_finished', 'actions'
         ],
         columnsMeta: {
-          automation: {
+          id: {
             label: this.$t('ID'),
             formatter: DetailFormatter,
             formatterArgs: {
@@ -43,11 +45,21 @@ export default {
                 name: 'AccountDiscoverExecutionDetail',
                 params: { id: row.id }
               }),
+              getTitle: ({ row }) => row.short_id,
               drawer: true
-            }
+            },
+            width: '100px'
           },
-          account_gather_name: {
-            label: this.$t('DisplayName'),
+          status: {
+            label: this.$t('Status'),
+            formatter: TaskStatusChoicesFormatter,
+            ...taskStatusFormatterMeta
+          },
+          trigger: {
+            width: '135px'
+          },
+          automation: {
+            label: this.$t('Automation'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
