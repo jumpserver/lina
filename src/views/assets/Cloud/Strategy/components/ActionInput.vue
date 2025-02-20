@@ -39,8 +39,7 @@ export default {
         submitBtnSize: 'mini',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {
-        },
+        onSubmit: () => {},
         submitMethod: () => 'post',
         getUrl: () => '',
         cleanFormValue(data) {
@@ -110,26 +109,30 @@ export default {
                 url: '',
                 clearable: false,
                 transformOption: (item) => {
-                  let label
+                  let display
                   switch (this.resourceType) {
                     case 'platform':
-                      label = item?.name
+                      display = item?.name
                       this.globalProtocols[item.id] = item.protocols
-                      this.globalResource[item.id] = label
+                      this.globalResource[item.id] = display
                       break
                     case 'account_template':
-                      label = `${item.name}(${item.username})`
-                      this.globalResource[item.id] = label
+                      display = `${item.name}(${item.username})`
+                      this.globalResource[item.id] = display
                       break
                     case 'node':
-                      label = item?.full_value
-                      this.globalResource[item.id] = label
+                      display = item?.full_value
+                      this.globalResource[item.id] = display
+                      break
+                    case 'label':
+                      display = `${item.name}:${item.value}`
+                      this.globalResource[item.id] = display
                       break
                     default:
-                      label = item?.name
-                      this.globalResource[item.id] = label
+                      display = item?.name
+                      this.globalResource[item.id] = display
                   }
-                  return { label: label, value: item.id }
+                  return { label: display, value: item.id }
                 }
               },
               multiple: false

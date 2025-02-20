@@ -41,23 +41,68 @@ export default {
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         'CHAT_AI_ENABLED',
-        'GPT_MODEL',
+        'CHAT_AI_TYPE',
+        'DEEPSEEK_BASE_URL',
+        'DEEPSEEK_API_KEY',
+        'DEEPSEEK_PROXY',
+        'DEEPSEEK_MODEL',
         'GPT_BASE_URL',
         'GPT_API_KEY',
-        'GPT_PROXY'
+        'GPT_PROXY',
+        'GPT_MODEL'
       ],
       fieldsMeta: {
         GPT_BASE_URL: {
           el: {
             autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         GPT_API_KEY: {
           el: {
             autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         GPT_PROXY: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'gpt'
+          }
+        },
+        GPT_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'gpt'
+          }
+        },
+        DEEPSEEK_BASE_URL: {
+          el: {
+            autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+          }
+        },
+        DEEPSEEK_API_KEY: {
+          el: {
+            autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+          }
+        },
+        DEEPSEEK_PROXY: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+          }
+        },
+        DEEPSEEK_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+          }
         }
       },
       submitMethod() {

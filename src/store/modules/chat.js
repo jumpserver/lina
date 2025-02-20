@@ -40,11 +40,26 @@ const mutations = {
 
   updateChaMessageContentById(state, { id, data }) {
     const chats = state.activeChat.chats || []
-    const filterChat = chats.filter((chat) => chat.message.id === id)?.[0] || {}
-    if (Object.keys(filterChat).length > 0) {
-      filterChat.message.content = data.message.content
+    const index = chats.findIndex((chat) => chat.message.id === data.message.id)
+
+    if (index === -1) {
+      // 如果没有记录，直接添加新消息
+      chats.push({
+        message: { id: data.message.id },
+        reasoning: { content: data.reasoning.content },
+        result: { content: data.result.content },
+        role: data.role,
+        type: data.type,
+        create_time: data.create_time
+      })
     } else {
-      chats?.push(data)
+      if (data.reasoning.content !== '') {
+        chats[index].reasoning.content = data.reasoning.content
+      }
+
+      if (data.result.content !== '') {
+        chats[index].result.content = data.result.content
+      }
     }
   }
 }

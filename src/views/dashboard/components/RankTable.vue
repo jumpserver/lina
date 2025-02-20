@@ -9,18 +9,22 @@
       class="table"
       style="width: 100%"
     >
-      <el-table-column :label="$tc('Ranking')" width="80px">
-        <template v-slot="scope" #header>
+      <el-table-column :label="$tc('Ranking')">
+        <template #header>
           <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
             <span style="cursor: pointer;">{{ $t('Ranking') }}</span>
           </el-tooltip>
         </template>
+        <template #default="scope">
+          {{ scope.$index + 1 }}
+        </template>
       </el-table-column>
+
       <el-table-column
         v-for="i in config.columns"
         :key="i.prop"
         :prop="i.prop"
-        :width="i.width"
+        :width="getColumnWidth(i)"
       >
         <template #header>
           <el-tooltip :content="i.label" placement="top" :open-delay="500">
@@ -63,6 +67,19 @@ export default {
     this.getList()
   },
   methods: {
+    getColumnWidth(column) {
+      if (column.prop === 'total') {
+        const locale = this.$i18n.locale
+        switch (locale) {
+          case 'en':
+            return '120px'
+          case 'pt-br':
+            return '220px'
+          default:
+            return '100px'
+        }
+      }
+    },
     getList() {
       this.$axios.get(this.tableUrl).then(res => {
         this.tableData = this.config.data ? res?.[this.config.data] : res

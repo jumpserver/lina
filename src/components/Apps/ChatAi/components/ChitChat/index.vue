@@ -123,7 +123,17 @@ export default {
         setLoading(true)
         removeLoadingMessageInChat()
         this.conversationId = data.id
-        updateChaMessageContentById(data.message.id, data)
+
+        const newFragment = {
+          message: { id: data.message.id, is_reasoning: data.message.is_reasoning },
+          reasoning: { content: data.message.is_reasoning ? data.message.content : '' },
+          result: { content: data.message.is_reasoning ? '' : data.message.content },
+          role: data.message.role,
+          type: data.message.type,
+          create_time: data.message.create_time
+        }
+
+        updateChaMessageContentById(data.message.id, newFragment)
       }
       if (data.message?.type === 'finish') {
         setLoading(false)

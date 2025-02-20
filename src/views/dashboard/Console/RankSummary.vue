@@ -32,8 +32,7 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('LoginCount'),
-            width: '120px'
+            label: this.$t('LoginCount')
           }
         ]
       },
@@ -49,8 +48,7 @@ export default {
           },
           {
             prop: 'total',
-            label: this.$t('NumberOfVisits'),
-            width: '140px'
+            label: this.$t('NumberOfVisits')
           }
         ]
       }
@@ -58,7 +56,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
