@@ -44,7 +44,8 @@ export default {
                 params: { id: row.id }
               }),
               drawer: true
-            }
+            },
+            width: '240px'
           },
           account_gather_name: {
             label: this.$t('DisplayName'),

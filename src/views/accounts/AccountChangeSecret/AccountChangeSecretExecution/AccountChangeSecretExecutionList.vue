@@ -38,7 +38,8 @@ export default {
               }),
               drawer: true,
               can: this.$hasPerm('accounts.view_changesecretexecution')
-            }
+            },
+            width: '240px'
           },
           change_secret_name: {
             label: this.$t('DisplayName'),
