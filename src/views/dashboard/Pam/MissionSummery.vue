@@ -186,7 +186,7 @@ export default {
 
     .chart-container {
       width: 100%;
-      height: 12.5rem;
+      height: 14.25rem;
     }
   }
 }

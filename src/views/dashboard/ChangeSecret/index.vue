@@ -86,9 +86,9 @@ export default {
     min-width: 670px;
   }
 
-  .switch-date-wrapper {
-    margin-bottom: 1.25rem;
-  }
+  // .switch-date-wrapper {
+  //   margin-bottom: 1.25rem;
+  // }
 
   .page ::v-deep .page-heading {
     display: none;

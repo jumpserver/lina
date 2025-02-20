@@ -5,19 +5,19 @@
 
       <div class="summary-container">
         <el-row :gutter="20">
-          <el-col :span="16" :xs="24">
+          <el-col :span="14" :xs="24">
             <DataSummary class="data-summery" />
           </el-col>
-          <el-col :span="8" :xs="24">
+          <el-col :span="10" :xs="24">
             <MissionSummery class="mission-summery" />
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
-          <el-col :span="16" :xs="24">
+          <el-col :span="14" :xs="24">
             <AccountSecretSummary class="account-secret-summary" />
           </el-col>
-          <el-col :span="8" :xs="24">
+          <el-col :span="10" :xs="24">
             <RiskSummary class="risk-summary" />
           </el-col>
         </el-row>
@@ -83,7 +83,7 @@ export default {
     margin-top: unset;
 
     ::v-deep .echarts {
-      height: 25rem;
+      height: 16rem;
     }
   }
 }
