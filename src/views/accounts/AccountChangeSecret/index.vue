@@ -1,9 +1,10 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
+  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" :disabled="!hasValidLicense" />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Index',
@@ -16,7 +17,12 @@ export default {
         activeMenu: 'AccountChangeSecretList',
         submenu: [
           {
-            title: this.$t('AccountChangeSecret'),
+            title: this.$t('Overview'),
+            name: 'AccountChangeDashboard',
+            component: () => import('@/views/dashboard/ChangeSecret')
+          },
+          {
+            title: this.$t('ChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
             component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
@@ -26,12 +32,23 @@ export default {
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import(
-              '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
+              '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
+              )
+          },
+          {
+            title: this.$t('RecordList'),
+            name: 'ChangeSecretRecord',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
+            component: () => import(
+              '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/AccountChangeSecretRecord.vue'
               )
           }
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['hasValidLicense'])
   }
 }
 </script>

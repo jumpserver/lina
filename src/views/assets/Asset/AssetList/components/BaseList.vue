@@ -3,8 +3,20 @@
     <el-alert v-if="helpMessage" show-icon type="info">
       <span v-sanitize="helpMessage" class="announcement-main" />
     </el-alert>
-    <ListTable ref="ListTable" :header-actions="iHeaderActions" :table-config="iTableConfig" />
-    <PlatformDialog :category="category" :visible.sync="showPlatform" />
+    <ListTable
+      ref="ListTable"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :draw-props="createProps"
+      :header-actions="iHeaderActions"
+      :resource="$tc('Asset')"
+      :table-config="iTableConfig"
+    />
+    <PlatformDialog
+      :category="category"
+      :visible.sync="showPlatform"
+      @select-platform="createAsset"
+    />
     <AssetBulkUpdateDialog
       v-if="updateSelectedDialogSetting.visible"
       :category="category"
@@ -13,30 +25,29 @@
       @update="handleAssetBulkUpdate"
     />
     <GatewayDialog
-      :cell="GatewayCell"
-      :port="GatewayPort"
-      :visible.sync="GatewayVisible"
+      :cell="gatewayCell"
+      :port="gatewayPort"
+      :visible.sync="gatewayVisible"
     />
+    <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
   </div>
 </template>
 
 <script>
-import { ListTable } from '@/components'
-import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, ProtocolsFormatter
-} from '@/components/Table/TableFormatters'
+import ListTable from '@/components/Table/DrawerListTable'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
-import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
-import { openTaskPage } from '@/utils/jms'
-import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter'
+import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
+import { getDefaultConfig } from './const'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     ListTable,
     GatewayDialog,
     PlatformDialog,
+    AccountDiscoverDialog,
     AssetBulkUpdateDialog
   },
   props: {
@@ -76,243 +87,82 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    defaultColumns: {
+      type: Array,
+      default: null
     }
   },
   data() {
     const vm = this
-    const onAction = (row, action) => {
-      let routeAction = action
-      if (action === 'Clone') {
-        routeAction = 'Create'
-      }
-      const routeName = _.capitalize(row.category.value) + routeAction
-      const route = {
-        name: routeName,
-        params: {},
-        query: {}
-      }
-      if (action === 'Clone') {
-        route.query.clone_from = row.id
-      } else if (action === 'Update') {
-        route.params.id = row.id
-      }
-      if (['Create', 'Update'].includes(routeAction)) {
-        route.query.platform = row.platform.id
-        route.query.type = row.type.value
-        route.query.category = row.type.category
-      }
-      const createInNewPage = this.$route.query.node_id
-      if (createInNewPage) {
-        const { href } = vm.$router.resolve(route)
-        window.open(href, '_blank')
-      } else {
-        this.$router.push(route)
-      }
-    }
-    const extraQuery = this.$route.params?.extraQuery || {}
-    return {
-      showPlatform: false,
-      GatewayPort: 0,
-      GatewayCell: '',
-      GatewayVisible: false,
-      defaultConfig: {
-        url: '/api/v1/assets/hosts/',
-        permissions: {
-          app: 'assets',
-          resource: 'asset'
-        },
-        extraQuery: {
-          ...extraQuery,
-          ...this.extraQuery
-        },
-        columnsExclude: ['spec_info', 'auto_config'],
-        columnsShow: {
-          min: ['name', 'address', 'actions'],
-          default: [
-            'name', 'address', 'platform',
-            'connectivity', 'actions'
-          ]
-        },
-        columnsMeta: {
-          type: { formatter: ChoicesFormatter, sortable: false },
-          category: { formatter: ChoicesFormatter, sortable: false },
-          name: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AssetDetail'
-            },
-            sortable: true
-          },
-          platform: {
-            sortable: true
-          },
-          protocols: {
-            showFullContent: true,
-            formatter: ProtocolsFormatter
-          },
-          nodes_display: {
-            formatter: ArrayFormatter
-          },
-          address: {
-            minWidth: '200px'
-          },
-          gathered_info: {
-            label: this.$t('HardwareInfo'),
-            formatter: HostInfoFormatter,
-            formatterArgs: {
-              info: vm?.optionInfo,
-              can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
-              getRoute({ row }) {
-                return {
-                  name: 'AssetMoreInformationEdit',
-                  params: { id: row.id }
-                }
-              }
-            }
-          },
-          connectivity: connectivityMeta,
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              onUpdate: ({ row }) => onAction(row, 'Update'),
-              onClone: ({ row }) => onAction(row, 'Clone'),
-              performDelete: ({ row }) => {
-                const id = row.id
-                const url = `/api/v1/assets/assets/${id}/`
-                return this.$axios.delete(url)
-              },
-              extraActions: [
-                {
-                  name: 'Test',
-                  title: this.$t('Test'),
-                  can: ({ row }) =>
-                    this.$hasPerm('assets.test_assetconnectivity') &&
-                    !this.$store.getters.currentOrgIsRoot &&
-                    row?.auto_config?.ansible_enabled &&
-                    row?.auto_config?.ping_enabled,
-                  callback: ({ row }) => {
-                    if (row.platform.name.startsWith('Gateway')) {
-                      this.GatewayVisible = true
-                      const port = row.protocols.find(item => item.name === 'ssh').port
-                      if (!port) {
-                        return this.$message.error(this.$tc('BadRequestErrorMsg'))
-                      } else {
-                        this.GatewayPort = port
-                        this.GatewayCell = row.id
-                      }
-                    } else {
-                      this.$axios.post(
-                        `/api/v1/assets/assets/${row.id}/tasks/`,
-                        { action: 'test' }
-                      ).then(res => {
-                        openTaskPage(res['task'])
-                      })
-                    }
-                  }
-                },
-                ...this.addExtraMoreColActions
-              ]
-            }
-          }
+    const defaultConfig = getDefaultConfig(vm)
+
+    const recentPlatforms = [
+      {
+        name: 'linux',
+        title: 'Linux',
+        callback: () => {
         }
       },
-      defaultHeaderActions: {
-        onCreate: () => {
+      {
+        name: 'windows',
+        title: 'Windows',
+        callback: () => {
+        }
+      }
+    ]
+    const createAction = {
+      name: 'create',
+      title: 'Create',
+      type: 'primary',
+      icon: '',
+      split: true,
+      has: this.headerActions.hasCrate,
+      callback: () => {
+        this.showPlatform = false
+        console.log('Click create')
+        setTimeout(() => {
+          console.log('Show platform')
           this.showPlatform = true
-        },
-        hasLabelSearch: true,
-        searchConfig: {
-          getUrlQuery: false
-        },
-        extraMoreActions: [
-          {
-            name: 'TestSelected',
-            title: this.$t('TestSelected'),
-            type: 'primary',
-            icon: 'fa fa-link',
-            can: ({ selectedRows }) =>
-              this.$hasPerm('assets.test_assetconnectivity') &&
-              !this.$store.getters.currentOrgIsRoot &&
-              selectedRows.length > 0 &&
-              selectedRows[0].auto_config?.ansible_enabled &&
-              selectedRows[0].auto_config?.ping_enabled,
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map(v => {
-                return v.id
-              })
-              this.$axios.post(
-                '/api/v1/assets/assets/tasks/',
-                { action: 'test', assets: ids }).then(res => {
-                openTaskPage(res['task'])
-              }).catch(err => {
-                this.$message.error(this.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          },
-          {
-            name: 'DeactiveSelected',
-            title: this.$t('DisableSelected'),
-            type: 'primary',
-            icon: 'fa fa-ban',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
-            },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map((v) => {
-                return { pk: v.id, is_active: false }
-              })
-              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-                this.$refs.ListTable.reloadTable()
-              }).catch(err => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          },
-          {
-            name: 'ActiveSelected',
-            title: this.$t('ActivateSelected'),
-            type: 'primary',
-            icon: 'fa fa-check-circle-o',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
-            },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map((v) => {
-                return { pk: v.id, is_active: true }
-              })
-              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$tc('UpdateSuccessMsg'))
-                this.$refs.ListTable.reloadTable()
-              }).catch(err => {
-                this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          },
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('UpdateSelected'),
-            icon: 'batch-update',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 &&
-                !this.$store.getters.currentOrgIsRoot &&
-                vm.$hasPerm('assets.change_asset')
-            },
-            callback: ({ selectedRows }) => {
-              vm.updateSelectedDialogSetting.selectedRows = selectedRows
-              vm.updateSelectedDialogSetting.visible = true
-            }
-          }
-        ]
+        }, 100)
       },
+      dropdown: recentPlatforms
+    }
+    return {
+      createDrawer: '',
+      detailDrawer: () => import('@/views/assets/Asset/AssetDetail/index.vue'),
+      drawer: {
+        'host': () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
+        'web': () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
+        'custom': () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
+        'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
+        'device': () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
+        'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue')
+      },
+      createProps: {},
+      showPlatform: false,
+      recentPlatforms: recentPlatforms,
+      createAction: createAction,
+      gatewayPort: 0,
+      gatewayCell: '',
+      gatewayVisible: false,
+      defaultConfig: defaultConfig['tableConfig'],
+      defaultHeaderActions: defaultConfig['defaultHeaderActions'],
       updateSelectedDialogSetting: {
         visible: false,
         category: this.category,
         selectedRows: []
+      },
+      discoveryDialog: {
+        visible: false,
+        asset: ''
       }
     }
   },
   computed: {
+    ...mapState({
+      recentPlatformIds: state => state.assets.recentPlatformIds
+    }),
     iTableConfig() {
       return _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
@@ -324,6 +174,13 @@ export default {
       if (this.addExtraMoreActions) {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
+      const create = this.createAction
+      if (create) {
+        create.dropdown = this.recentPlatforms
+      }
+      const extraActions = actions.extraActions || []
+      actions.extraActions = [create, ...extraActions]
+      // actions.extraActions[0].dropdown = platforms
       return actions
     }
   },
@@ -338,12 +195,77 @@ export default {
         iNew.query.node_id = ''
         this.$router.push(iNew)
       }
+    },
+    recentPlatformIds(newValue, oldValue) {
+      this.setRecentPlatforms()
+      // 在这里执行需要的操作
     }
   },
+  mounted() {
+    this.setRecentPlatforms()
+  },
+  activated() {
+    this.setRecentPlatforms()
+  },
   methods: {
+    async updateOrCloneAsset(row, action) {
+      const meta = {
+        action: action,
+        id: row.id,
+        platform: row.platform.id,
+        type: row.type.value,
+        category: row.category.value,
+        row: row
+      }
+      await this.$store.dispatch('common/setDrawerActionMeta', meta)
+      this.createDrawer = this.drawer[row.category.value]
+      setTimeout(() => {
+        this.$refs.ListTable.showDrawer(action)
+      }, 100)
+    },
+    createAsset(platform) {
+      this.showPlatform = false
+      this.createDrawer = this.drawer[platform.category.value]
+      const createProps = {
+        platform: platform.id,
+        type: platform.type.value,
+        category: platform.category.value,
+        node: this.$route.query?.node || this.$route.query?.node_id || ''
+      }
+      for (const key in createProps) {
+        this.$route.query[key] = createProps[key]
+      }
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'create',
+        ...createProps
+      }).then(() => {
+        this.$refs.ListTable.showDrawer('create')
+      })
+    },
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false
       this.$refs.ListTable.reloadTable()
+    },
+    async setRecentPlatforms() {
+      const recentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
+      const allPlatforms = await this.$store.dispatch('assets/getPlatforms')
+      const otherPlatforms = allPlatforms.filter(item => !this.recentPlatformIds.includes(item.id))
+      let platforms = [...recentPlatforms, ...otherPlatforms]
+      if (this.category !== 'all') {
+        platforms = platforms.filter(item => item.category.value === this.category)
+      }
+      platforms = platforms.slice(0, 6)
+      const vm = this
+      platforms = platforms.map(item => {
+        return {
+          name: item.name,
+          title: item.name,
+          callback: () => {
+            vm.createAsset(item)
+          }
+        }
+      })
+      this.recentPlatforms = platforms
     }
   }
 }

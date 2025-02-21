@@ -5,6 +5,7 @@
     :fields-meta="fieldsMeta"
     :initial="initial"
     :url="url"
+    title="null"
     v-bind="$data"
   />
 </template>

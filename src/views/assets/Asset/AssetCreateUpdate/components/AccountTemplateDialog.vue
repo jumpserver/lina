@@ -3,11 +3,13 @@
     <Dialog
       v-if="iVisible"
       :close-on-click-modal="false"
+      :confirm-title="$tc('Add')"
       :destroy-on-close="true"
+      :model="false"
       :title="$tc('SelectTemplate')"
       :visible.sync="iVisible"
       v-bind="$attrs"
-      width="70%"
+      width="800px"
       @cancel="handleCancel"
       @confirm="handleConfirm"
       v-on="$listeners"
@@ -28,7 +30,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import CreateAccountTemplateDialog from './CreateAccountTemplateDialog'
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'AccountTemplateDialog',
@@ -44,7 +46,8 @@ export default {
     },
     asset: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     accounts: {
       type: Array,

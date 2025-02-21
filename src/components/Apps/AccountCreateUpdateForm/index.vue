@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       loading: true,
+      isDisabled: false,
       usernameChanged: false,
       submitBtnText: this.$t('Confirm'),
       iPlatform: {
@@ -61,16 +62,27 @@ export default {
       form: Object.assign({ 'on_invalid': 'error' }, this.account || {}),
       encryptedFields: ['secret'],
       fields: [
-        [this.$t('AccountTemplate'), ['template']],
-        [this.$t('Basic'), ['assets', 'name', 'username', 'privileged', 'su_from', 'su_from_username']],
+        [this.$t('Basic'), ['name', 'username', 'privileged', 'su_from', 'su_from_username', 'template']],
+        [this.$t('Assets'), ['assets']],
         [this.$t('Secret'), [
           'secret_type', 'password', 'ssh_key', 'token',
-          'access_key', 'passphrase', 'api_key'
+          'access_key', 'passphrase', 'api_key',
+          'secret_reset'
         ]],
         [this.$t('Other'), ['push_now', 'params', 'on_invalid', 'is_active', 'comment']]
       ],
       fieldsMeta: accountFieldsMeta(this),
       hasSaveContinue: false
+    }
+  },
+  watch: {
+    '$route.query': {
+      handler(nv, ov) {
+        if (nv && (nv.flag === 'move' || nv.flag === 'copy')) {
+          this.isDisabled = true
+        }
+      },
+      immediate: true
     }
   },
   async mounted() {
@@ -157,16 +169,16 @@ export default {
 <style lang='scss' scoped>
 .account-add {
   ::v-deep .el-form-item {
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
 
     .help-block {
-      margin-bottom: 5px;
+      //margin-bottom: 5px;
     }
   }
 
   ::v-deep .form-group-header {
     .hr-line-dashed {
-      margin: 5px 0;
+      //margin: 5px 0;
     }
 
     h3 {

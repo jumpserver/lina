@@ -51,7 +51,6 @@ export default {
     }
   },
   data() {
-    console.log('ProviderPanel', this.providers)
     return {}
   },
   methods: {

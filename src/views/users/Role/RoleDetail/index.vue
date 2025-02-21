@@ -24,7 +24,7 @@ export default {
   },
   data() {
     const vm = this
-    const scope = this.$route.query['scope']
+    const scope = this.$route.query['_scope']
     const scopeRole = `${scope}role`
     return {
       scope: scope,
@@ -32,7 +32,9 @@ export default {
       role: { name: '', comment: '', users: [] },
       config: {
         titlePrefix: scope === 'org' ? vm.$t('OrgRole') : vm.$t('SystemRole'),
-        getObjectName: (obj) => { return obj.display_name },
+        getObjectName: (obj) => {
+          return obj.display_name
+        },
         url: `/api/v1/rbac/${scope}-roles`,
         activeMenu: 'RoleInfo',
         actions: {

@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  <GenericCreateUpdatePage
+    v-if="!loading"
+    class="user-create-update"
+    v-bind="$data"
+    @getObjectDone="afterGetUser"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
@@ -16,6 +22,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const roleManage = this.$t('RoleManage')
     return {
       loading: true,
       initial: {
@@ -126,6 +133,17 @@ export default {
           component: Select2,
           label: this.$t('OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
+          helpTextFormatter: () => {
+            const handleClick = () => {
+              this.$router.push({ name: 'RoleList' })
+              // window.open('/settings/roles', '_blank')
+            }
+            return (
+              <el-link onClick={handleClick}>
+                <i class='fa fa-external-link'></i> {roleManage}
+              </el-link>
+            )
+          },
           el: {
             multiple: true,
             ajax: {

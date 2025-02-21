@@ -9,36 +9,27 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import AccountBackupInfo from './AccountBackupInfo.vue'
-import AccountBackupExecutionList from './AccountBackupExecution/AccountBackupExecutionList.vue'
 
 export default {
+  name: 'AccountBackupDetail',
   components: {
     GenericDetailPage,
-    AccountBackupInfo,
-    AccountBackupExecutionList
+    AccountBackupInfo
   },
   data() {
     return {
       plan: { name: '', comment: '' },
       config: {
+        url: `/api/v1/accounts/account-backup-plans`,
         activeMenu: 'AccountBackupInfo',
         submenu: [
           {
             title: this.$t('Basic'),
             name: 'AccountBackupInfo'
           }
-        ],
-        actions: {
-          detailApiUrl: `/api/v1/accounts/account-backup-plans/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/accounts/account-backup-plans/${this.$route.params.id}/`,
-          deleteSuccessRoute: 'AccountBackupList'
-        }
+        ]
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

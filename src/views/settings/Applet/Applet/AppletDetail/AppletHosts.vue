@@ -5,7 +5,7 @@
 </template>
 
 <script type="text/jsx">
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
@@ -44,7 +44,9 @@ export default {
               vm.$axios.post(
                 `/api/v1/terminal/applet-host-deployments/applets/`,
                 {
-                  hosts: selectedRows.map(v => { return v.host.id }),
+                  hosts: selectedRows.map(v => {
+                    return v.host.id
+                  }),
                   applet_id: vm.object.id
                 }
               ).then(res => {

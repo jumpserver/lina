@@ -15,7 +15,7 @@
 
 <script>
 import Title from './Title.vue'
-import SummaryCard from './SummaryCard'
+import SummaryCard from '@/components/Cards/SummaryCard'
 
 export default {
   components: { Title, SummaryCard },
@@ -85,15 +85,18 @@ export default {
 .box {
   padding: 20px;
   background: #FFFFFF;
+
   .content {
     .el-col {
       padding-left: 16px;
       border-left: 1px solid #EFF0F1;
+
       &:first-child {
         padding-left: 0;
         border-left: none;
       }
     }
+
     .sub {
       font-style: normal;
       font-weight: 400;
@@ -101,6 +104,7 @@ export default {
       line-height: 20px;
       color: #646A73;
     }
+
     .num {
       font-style: normal;
       font-weight: 500;

@@ -2,7 +2,7 @@
   <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
 </template>
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import { SetToDefaultReplayStorage, TestReplayStorage } from '@/api/sessions'
 import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 

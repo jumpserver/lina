@@ -1,20 +1,29 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <DrawerListTable
+    ref="drawer"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :resource="$tc('CommandGroup')"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'CommandGroupList',
   components: {
-    ListTable
+    DrawerListTable
   },
   data() {
     const _id = this.$route.query.command_filters
     const url = `/api/v1/acls/command-groups/${_id ? `?command_filters=${_id}` : ''}`
     return {
+      createDrawer: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupDetail/index.vue'),
       tableConfig: {
         url: url,
         permissions: {
@@ -50,6 +59,9 @@ export default {
         createRoute: 'CommandGroupCreate',
         canCreate: () => {
           return this.$hasPerm('acls.add_commandgroup') && !this.$store.getters.currentOrgIsRoot
+        },
+        onCreate: () => {
+          this.$refs.drawer.onCreate()
         }
       }
     }

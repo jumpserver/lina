@@ -64,7 +64,7 @@ export default {
         const ansibleConfig = automation?.['ansible_config'] || {}
         automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
-        if (query.hasOwnProperty('clone_from')) {
+        if (query.hasOwnProperty('_clone_from')) {
           if (automation.hasOwnProperty('id')) {
             delete automation['id']
           }
@@ -182,7 +182,7 @@ export default {
     width: 100%;;
 
     .el-form-item__content {
-      width: calc(75% - 50px);
+      width: calc(100% - 50px);
     }
 
     .el-select {
@@ -196,7 +196,7 @@ export default {
     display: inline-block;
     position: absolute;
     right: 18px;
-    //margin-top: -10px;
+    margin-top: 22px;
   }
 }
 

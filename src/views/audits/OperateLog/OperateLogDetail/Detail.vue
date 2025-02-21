@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="15" :sm="24">
+    <TwoCol>
+      <template>
         <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-      </el-col>
-      <el-col :md="9" :sm="24">
+      </template>
+      <template #right>
         <QuickActions
           v-if="object.id"
           :actions="quickActions"
           :title="$tc('ConvenientOperate')"
           type="primary"
         />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
     <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
@@ -21,10 +21,12 @@
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import DiffDetail from '@/components/Dialog/DiffDetail'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     QuickActions,
     AutoDetailCard,
     DiffDetail
@@ -32,7 +34,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -62,8 +65,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

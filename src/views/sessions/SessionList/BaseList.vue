@@ -1,9 +1,13 @@
 <template>
-  <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable as ListTable } from '@/components'
 import { timeOffset } from '@/utils/time'
 import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -44,6 +48,7 @@ export default {
   },
   data() {
     return {
+      detailDrawer: () => import('../SessionDetail/index.vue'),
       tableConfig: {
         url: this.url,
         columnsExclude: ['terminal', ...this.columnsExclude],
@@ -53,20 +58,29 @@ export default {
             prop: 'id',
             label: this.$t('Number'),
             align: 'center',
-            formatter: function(row, column, cellValue, index) {
-              const label = index + 1
-              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }} class='link'>{label}</router-link>
+            formatter: DetailFormatter,
+            formatterArgs: {
+              drawer: true,
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle: ({ row, col, cellValue, index }) => { return index + 1 },
+              getRoute: ({ row }) => {
+                return {
+                  name: 'SessionDetail',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           user: {
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
+              getTitle: ({ row }) => { return row.user },
               getRoute: ({ row }) => {
                 return {
                   name: 'UserDetail',
                   params: {
-                    id: row['user_id']
+                    id: row.user_id
                   }
                 }
               }
@@ -106,14 +120,14 @@ export default {
             label: this.$t('Target'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getRoute: ({ row }) => {
-                return {
-                  name: 'AssetDetail',
-                  params: {
-                    id: row['asset_id']
-                  }
-                }
-              }
+              drawer: true,
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle: ({ row }) => row.asset,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.asset_id },
+                query: { tab: 'Basic' }
+              })
             }
           },
           protocol: {

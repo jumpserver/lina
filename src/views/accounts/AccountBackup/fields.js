@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { crontab, interval, is_periodic } from '../const'
+import { periodicMeta } from '@/components/const'
 
 function getAccountBackupFields() {
   const recipients_part_one = {
@@ -85,9 +85,7 @@ function getAccountBackupFields() {
     }
   }
   return {
-    is_periodic: is_periodic,
-    crontab: crontab,
-    interval: interval,
+    ...periodicMeta,
     is_password_divided_by_email: is_password_divided_by_email,
     is_password_divided_by_obj_storage: is_password_divided_by_obj_storage,
     recipients_part_one: recipients_part_one,

@@ -1,9 +1,14 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="listTable"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
@@ -12,43 +17,49 @@ export default {
   components: {
     GenericListTable
   },
-  props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    }
-  },
   data() {
     return {
+      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
       tableConfig: {
-        url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/push-account-executions',
         columns: [
           'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
         ],
         columnsShow: {
           default: [
-            'automation', 'push_user_name', 'status',
+            'automation', 'push_user_name', 'trigger', 'status',
             'date_start', 'date_finished', 'actions'
           ]
         },
         columnsMeta: {
           automation: {
-            label: this.$t('TaskID'),
-            formatter: function(row) {
-              return <span>{row.automation}</span>
-            }
+            label: this.$t('ID'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AccountPushExecutionDetail',
+              getRoute: ({ row }) => ({
+                name: 'AccountPushExecutionDetail',
+                params: { id: row.id }
+              }),
+              drawer: true,
+              can: this.$hasPerm('accounts.view_pushaccountexecution')
+            },
+            width: '240px'
           },
           push_user_name: {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountPushDetail',
                 params: { id: row.automation }
-              })
+              }),
+              getDrawerTitle({ row }) {
+                return row.snapshot.name
+              }
             },
             id: ({ row }) => row.automation
           },
@@ -89,12 +100,25 @@ export default {
                   }
                 },
                 {
-                  name: 'detail',
-                  title: this.$t('Detail'),
-                  type: 'info',
+                  name: 'report',
+                  title: this.$t('Report'),
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
+                    window.open(`/api/v1/accounts/push-account-executions/${row.id}/report/`)
+                  }
+                },
+                {
+                  name: 'record',
+                  title: this.$t('Record'),
+                  can: this.$hasPerm('accounts.view_pushsecretrecord'),
+                  callback: function({ row }) {
+                    return this.$router.push({
+                      name: 'AccountPushList',
+                      query: {
+                        tab: 'AccountPushRecord',
+                        execution_id: row.id
+                      }
+                    })
                   }
                 }
               ]

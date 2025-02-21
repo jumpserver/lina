@@ -1,68 +1,71 @@
 <template>
-  <ElFormRender
-    :id="id"
-    ref="form"
-    :class="mobile ? 'mobile' : 'desktop'"
-    :content="fields"
-    :form="basicForm"
-    :label-position="labelPosition"
-    label-width="25%"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <!-- slot 透传 -->
-    <slot
-      v-for="item in fields"
-      :slot="`id:${item.id}`"
-      :name="`id:${item.id}`"
-    />
-    <slot
-      v-for="item in fields"
-      :slot="`$id:${item.id}`"
-      :name="`$id:${item.id}`"
-    />
+  <div>
+    <ElFormRender
+      :id="id"
+      ref="form"
+      :class="[mobile ? 'mobile' : 'desktop']"
+      :content="fields"
+      :form="basicForm"
+      :label-position="iLabelPosition"
+      class="form-fields"
+      label-width="25%"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <!-- slot 透传 -->
+      <slot
+        v-for="item in fields"
+        :slot="`id:${item.id}`"
+        :name="`id:${item.id}`"
+      />
+      <slot
+        v-for="item in fields"
+        :slot="`$id:${item.id}`"
+        :name="`$id:${item.id}`"
+      />
 
-    <el-form-item v-if="hasButtons" class="form-buttons">
-      <el-button
-        v-if="defaultButton"
-        :disabled="!canSubmit"
-        :loading="isSubmitting"
-        :size="submitBtnSize"
-        type="primary"
-        @click="submitForm('form')"
-      >
-        {{ iSubmitBtnText }}
-      </el-button>
+      <div v-if="hasButtons" class="form-buttons">
+        <el-button
+          v-if="defaultButton"
+          :disabled="!canSubmit"
+          :loading="isSubmitting"
+          :size="submitBtnSize"
+          type="primary"
+          @click="submitForm('form')"
+        >
+          {{ iSubmitBtnText }}
+        </el-button>
 
-      <el-button
-        v-if="defaultButton && hasSaveContinue"
-        size="small"
-        @click="submitForm('form', true)"
-      >
-        {{ $t("SaveAndAddAnother") }}
-      </el-button>
+        <el-button
+          v-if="defaultButton && hasSaveContinue"
+          size="small"
+          @click="submitForm('form', true)"
+        >
+          {{ $t("SaveAndAddAnother") }}
+        </el-button>
 
-      <el-button
-        v-if="defaultButton && hasReset"
-        size="small"
-        @click="resetForm('form')"
-      >
-        {{ $t("Reset") }}
-      </el-button>
+        <el-button
+          v-if="defaultButton && hasReset"
+          size="small"
+          @click="resetForm('form')"
+        >
+          {{ $t("Reset") }}
+        </el-button>
 
-      <el-button
-        v-for="button in moreButtons"
-        v-show="!button.hidden"
-        :key="button.title"
-        :loading="button.loading"
-        size="small"
-        v-bind="button"
-        @click="handleClick(button)"
-      >
-        {{ button.title }}
-      </el-button>
-    </el-form-item>
-  </ElFormRender>
+        <el-button
+          v-for="button in moreButtons"
+          v-show="!button.hidden"
+          :key="button.title"
+          :loading="button.loading"
+          size="small"
+          v-bind="button"
+          @click="handleClick(button)"
+        >
+          {{ button.title }}
+        </el-button>
+      </div>
+    </ElFormRender>
+  </div>
 </template>
 
 <script>
@@ -121,6 +124,10 @@ export default {
     isSubmitting: {
       type: Boolean,
       default: false
+    },
+    labelPosition: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -137,7 +144,17 @@ export default {
     mobile() {
       return this.$store.state.app.device === 'mobile'
     },
-    labelPosition() {
+    drawer() {
+      return this.$store.state.common.inDrawer
+    },
+    iLabelPosition() {
+      if (this.labelPosition) {
+        return this.labelPosition
+      }
+      // if (this.drawer) {
+      //   return 'left'
+      // }
+      // return this.drawer || this.mobile ? 'top' : 'right'
       return this.mobile ? 'top' : 'right'
     }
   },
@@ -211,12 +228,16 @@ export default {
     color: var(--color-text-primary);
   }
 
+  &.label-top {
+    ::v-deep .el-form-item {
+      .el-form-item__content {
+        width: 100%;
+      }
+    }
+  }
+
   ::v-deep .el-form-item {
     margin-bottom: 10px;
-
-    .item-params {
-      margin-top: 0;
-    }
 
     .el-form-item__label {
       padding: 0 30px 0 0;
@@ -229,6 +250,13 @@ export default {
 
       i {
         color: var(--color-icon-primary);
+      }
+
+      span {
+        max-width: calc(100% - 25px);
+        white-space: nowrap; /* 禁止换行 */
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
 
@@ -305,8 +333,9 @@ export default {
     }
   }
 
-  ::v-deep .el-form-item.form-buttons {
-    margin-top: 20px;
+  ::v-deep .form-buttons {
+    margin-top: 30px;
+    margin-left: 25%;
   }
 }
 

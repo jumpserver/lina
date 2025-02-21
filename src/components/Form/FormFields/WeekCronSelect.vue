@@ -1,7 +1,7 @@
 <template>
   <div class="c-weektime">
     <div class="c-schedue" />
-    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" :style="styleValue" />
+    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" />
     <table :class="{'c-min-table': colspan < 2}" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody class="c-weektime-body" @mouseleave="containerLeave()">
-        <tr v-for="t in weektimeData" :key="t.row">
+        <tr v-for="t in weekTimeData" :key="t.row">
           <td>{{ t.value }}</td>
           <td
             v-for="n in t.child"
@@ -45,6 +45,7 @@
 const createArr = len => {
   return Array.from(Array(len)).map((ret, id) => id)
 }
+
 function splicing(list) {
   let same
   let i = -1
@@ -67,6 +68,7 @@ function splicing(list) {
   arr.shift()
   return arr.join('')
 }
+
 export default {
   name: 'WeekCronSelect',
   props: {
@@ -77,7 +79,7 @@ export default {
     colspan: {
       type: Number,
       default() {
-        return 2
+        return 1
       }
     }
   },
@@ -100,7 +102,7 @@ export default {
         this.$t('Saturday'),
         this.$t('Sunday')
       ],
-      weektimeData: [],
+      weekTimeData: [],
       timeRange: [] // 格式化之后数据
     }
   },
@@ -142,10 +144,11 @@ export default {
         return {
           value: ret,
           row: index,
-          child: children(ret, index, 48)
+          child: children(ret, index, 24 * this.colspan)
         }
       })
-      this.weektimeData = isData
+      console.log('isData', isData)
+      this.weekTimeData = isData
     },
     // 反解析传递过来的默认值
     nextValue() {
@@ -169,7 +172,7 @@ export default {
       const startVal = this.countIndex(start)
       const endVal = this.countIndex(end)
       for (let i = startVal; i < (endVal === 0 ? 48 : endVal); i++) {
-        const curWeek = this.weektimeData[idNum]
+        const curWeek = this.weekTimeData[idNum]
         curWeek.child[i].check = true
       }
     },
@@ -209,8 +212,9 @@ export default {
       const nowDate = new Date(timeStamp).getTime()
       const targetStamp = new Date(nowDate + offsetGMT * 60 * 1000 + timezone * 60 * 60 * 1000).getTime()
 
-      const beginStamp = targetStamp + col * 1800000 // col * 30 * 60 * 1000
-      const endStamp = beginStamp + 1800000
+      // (2 / this.colspan) 原来是一个单元格 30分钟，现在是一个单元格 30 * 2 / this.colspan 分钟
+      const beginStamp = targetStamp + col * 1800000 * (2 / this.colspan) // col * 30 * 60 * 1000
+      const endStamp = beginStamp + 1800000 * (2 / this.colspan)
 
       const begin = this.formatDate(new Date(beginStamp), 'hh:mm')
       const end = this.formatDate(new Date(endStamp), 'hh:mm')
@@ -218,7 +222,7 @@ export default {
     },
     // 清空时间段
     clearWeektime() {
-      this.weektimeData.forEach(item => {
+      this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
           this.$set(t, 'check', false)
         })
@@ -228,7 +232,7 @@ export default {
     },
     // 全选
     selectAll() {
-      this.weektimeData.forEach(item => {
+      this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
           this.$set(t, 'check', true)
         })
@@ -241,12 +245,15 @@ export default {
       this.mode = 0
     },
     setTimeRange() {
-      this.timeRange = this.weektimeData.map(item => {
+      this.timeRange = this.weekTimeData.map(item => {
+        console.log('item', item)
+        console.log('Value', splicing(item.child))
         return {
           id: item.row === 6 ? 0 : item.row + 1,
           value: splicing(item.child)
         }
       })
+      console.log('Time range: ', this.timeRange)
       this.$emit('change', this.timeRange)
     },
     cellEnter(item) {
@@ -308,7 +315,7 @@ export default {
     selectWeek(row, col, check) {
       const [minRow, maxRow] = row
       const [minCol, maxCol] = col
-      this.weektimeData.forEach(item => {
+      this.weekTimeData.forEach(item => {
         item.child.forEach(t => {
           if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
             this.$set(t, 'check', check)
@@ -321,11 +328,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .c-weektime {
-  min-width: 640px;
+  //min-width: 440px;
   position: relative;
   display: inline-block;
   padding-right: 20px;
 }
+
 .c-schedue {
   background: #598fe6;
   position: absolute;
@@ -334,55 +342,70 @@ export default {
   opacity: .6;
   pointer-events: none;
 }
+
 .c-schedue-notransi {
   transition: width .12s ease, height .12s ease, top .12s ease, left .12s ease;
 }
+
 .c-weektime-table {
   border-collapse: collapse;
+
   th {
     vertical-align: inherit;
     font-weight: bold;
   }
+
   tr {
     height: 30px;
   }
+
   tr, td, th {
     user-select: none;
     border: 1px solid #dee4f5;
     text-align: center;
-    min-width: 12px;
+    min-width: 10px;
     line-height: 1.6em;
     transition: background .16s ease;
   }
+
   .c-weektime-head {
     font-size: 12px;
+
     .week-td {
       width: 72px;
     }
   }
+
   .c-weektime-body {
     font-size: 12px;
+
     td {
       &.weektime-atom-item {
         user-select: unset;
         background-color: #f5f5f5;
+        width: 18px;
       }
+
       &.ui-selected {
         background-color: #598fe6;
       }
     }
   }
+
   .c-weektime-preview {
     line-height: 2.4em;
     padding: 0 10px;
-    font-size: 13px;
+    font-size: 11px;
+
     .c-weektime-con {
       line-height: 42px;
       user-select: none;
     }
+
     .c-weektime-time {
       text-align: left;
       line-height: 2.4em;
+
       p {
         max-width: 625px;
         line-height: 1.4em;
@@ -392,11 +415,13 @@ export default {
     }
   }
 }
+
 .c-min-table {
   tr, td, th {
-    min-width: 24px;
+    min-width: 17px;
   }
 }
+
 .g-clearfix {
   &:after, &:before {
     clear: both;
@@ -404,16 +429,20 @@ export default {
     display: table;
   }
 }
+
 .g-pull-left {
   float: left;
 }
+
 .g-pull-right {
   float: right;
-  color: #409eff!important;
+  color: #409eff !important;
 }
+
 .g-pull-margin {
   margin-right: 12px;
 }
+
 .g-tip-text {
   color: #999;
 }

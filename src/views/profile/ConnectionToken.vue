@@ -9,7 +9,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
+import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'ConnectionToken',
@@ -32,7 +32,7 @@ export default {
         columnsMeta: {
           id: {
             label: 'Token ID',
-            formatter: ShowKeyCopyFormatter
+            formatter: SecretViewerFormatter
           },
           action: {
             label: this.$t('PermAction'),
@@ -77,13 +77,11 @@ export default {
         hasImport: false,
         hasBulkDelete: false,
         hasCreate: false,
-        extraActions: [
-        ]
+        extraActions: []
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     reloadTable() {
       return this.$refs.GenericListTable.reloadTable()

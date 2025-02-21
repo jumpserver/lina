@@ -3,15 +3,15 @@
     ref="form"
     class="form"
     v-bind="settings"
-    @submitSuccess="handleSubmitSuccess"
     @performFinished="handlePerformFinished"
+    @submitSuccess="handleSubmitSuccess"
   />
 </template>
 
 <script>
 
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import { periodicMeta } from '@/components/const'
 
 export default {
   name: 'ResultPanel',
@@ -21,7 +21,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -33,9 +34,7 @@ export default {
           [this.$t('Timer'), ['is_periodic', 'interval', 'crontab']]
         ],
         fieldsMeta: {
-          is_periodic,
-          interval,
-          crontab
+          ...periodicMeta
         },
         defaultButton: false,
         submitMethod: 'put',
@@ -91,6 +90,7 @@ export default {
 ::v-deep .el-form-item.form-buttons {
   text-align: right;
 }
+
 .form {
   margin-right: 0;
 }

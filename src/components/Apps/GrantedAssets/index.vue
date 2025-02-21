@@ -87,7 +87,7 @@ export default {
         columnsExclude: ['spec_info'],
         columnsShow: {
           min: ['name', 'address', 'accounts'],
-          default: ['name', 'address', 'platform', 'connectivity', 'view_account', 'actions']
+          default: ['name', 'address', 'platform', 'view_account', 'actions']
         },
         columnsMeta: {
           name: {

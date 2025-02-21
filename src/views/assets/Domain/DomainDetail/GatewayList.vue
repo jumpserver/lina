@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <el-col :md="24" :sm="24">
-      <GenericListTable
-        ref="ListTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-      <GatewayDialog
-        :cell="cell"
-        :port="port"
-        :visible.sync="visible"
-      />
-      <AddGatewayDialog :object="object" :setting="AddGatewaySetting" @close="handleAddGatewayDialogClose" />
-    </el-col>
-  </div>
+  <TwoCol>
+    <GenericListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <GatewayDialog
+      :cell="cell"
+      :port="port"
+      :visible.sync="visible"
+    />
+    <AddGatewayDialog :object="object" :setting="AddGatewaySetting" @close="handleAddGatewayDialogClose" />
+  </TwoCol>
 </template>
 
 <script>
@@ -22,9 +20,11 @@ import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 import AddGatewayDialog from '@/views/assets/Domain/components/AddGatewayDialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     GenericListTable,
     GatewayDialog,
     AddGatewayDialog
@@ -46,7 +46,7 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'address', 'protocols',
+            'name', 'address',
             'connectivity', 'actions'
           ]
         },

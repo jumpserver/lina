@@ -7,14 +7,21 @@
     @tab-click="changeMoreCreates"
   >
     <keep-alive>
-      <GenericListTable ref="genericListTable" :header-actions="headerActions" :table-config="tableConfig" />
+      <GenericListTable
+        ref="genericListTable"
+        :create-drawer="createDrawer"
+        :detail-drawer="detailDrawer"
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
     </keep-alive>
   </TabPage>
 </template>
 
 <script>
-import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesFormatter, ProtocolsFormatter } from '../../../components/Table/TableFormatters'
+import { TabPage } from '@/layout/components'
+import { ChoicesFormatter, ProtocolsFormatter } from '@/components/Table/TableFormatters'
+import GenericListTable from '@/components/Table/DrawerListTable/index.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
@@ -25,6 +32,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Platform/PlatformDetail/index.vue'),
       loading: true,
       platformPageHelpMsg: this.$t('PlatformPageHelpMsg'),
       tab: {
@@ -102,25 +111,10 @@ export default {
               canClone: () => vm.$hasPerm('assets.add_platform'),
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
-              updateRoute: ({ row }) => {
-                return {
-                  name: 'PlatformUpdate',
-                  params: { id: row.id },
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value
-                  }
-                }
-              },
-              cloneRoute: ({ row }) => {
-                return {
-                  name: 'PlatformCreate',
-                  query: {
-                    category: row.category.value,
-                    type: row.type.value,
-                    clone_from: row.id
-                  }
-                }
+              onUpdate({ row, col }) {
+                vm.$route.query.type = row.type.value
+                vm.$route.query.category = row.category.value
+                vm.$refs.genericListTable.onUpdate({ row, col })
               }
             }
           }
@@ -142,9 +136,9 @@ export default {
         moreCreates: {
           callback: (item) => {
             this.$router.push({
-              name: 'PlatformCreate',
-              query: { type: item.name, category: item.category }
+              query: { _type: item.name, _category: item.category }
             })
+            this.$refs.genericListTable.onCreate()
           },
           dropdown: []
         }

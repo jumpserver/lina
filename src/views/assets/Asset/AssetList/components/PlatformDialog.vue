@@ -1,14 +1,28 @@
 <template>
-  <Dialog
-    v-if="iVisible"
+  <el-drawer
+    :modal="false"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('SelectProvider')"
+    :title="$tc('SelectPlatform')"
     :visible.sync="iVisible"
+    size="600px"
     top="1vh"
-    width="60%"
   >
-    <div style="margin: 0 10px">
+    <template #title>
+      <div class="drawer-title">
+        <span>{{ $tc('SelectPlatform') }}</span>
+        <el-link
+          :underline="false"
+          size="small"
+          type="text"
+          @click="handleManagePlatform"
+        >
+          <i class="fa fa-external-link" />
+          {{ $tc('ManagePlatform') }}
+        </el-link>
+      </div>
+    </template>
+    <div v-loading="loading" class="platform-content">
       <el-row :gutter="20">
         <el-collapse v-model="activeType" accordion>
           <el-collapse-item
@@ -20,16 +34,18 @@
             <el-col
               v-for="(platform, index) of ps"
               :key="platform.id"
-              :span="6"
+              :span="8"
             >
-              <el-tooltip :content="platform.name" :open-delay="1000">
+              <el-tooltip :content="platform.name">
                 <el-card
                   :style="{ borderLeftColor: randomBorderColor(index) }"
                   class="platform-item"
                   shadow="hover"
-                  @click.native="createAsset(platform)"
+                  @click.native="handleSelect(platform)"
                 >
-                  <img :src="loadImage(platform)" alt="icon" class="asset-icon">
+                  <div class="icon-zone">
+                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon">
+                  </div>
                   <span class="platform-name">{{ platform.name }}</span>
                 </el-card>
               </el-tooltip>
@@ -38,16 +54,13 @@
         </el-collapse>
       </el-row>
     </div>
-  </Dialog>
+  </el-drawer>
 </template>
 <script>
-import Dialog from '@/components/Dialog'
+import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
-  name: 'PlatformDialog',
-  components: {
-    Dialog
-  },
+  name: 'PlatformDrawer',
   props: {
     visible: {
       type: Boolean,
@@ -62,6 +75,7 @@ export default {
     return {
       platforms: [],
       recentPlatformIds: [],
+      loading: true,
       activeType: 'host',
       recentUsedLabel: this.$t('RecentlyUsed'),
       typeIconMapper: {
@@ -73,7 +87,8 @@ export default {
       bottomColors: [
         '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
         '#783887', '#fc6554'
-      ]
+      ],
+      allRecentPlatforms: []
     }
   },
   computed: {
@@ -108,48 +123,21 @@ export default {
       const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
       return _.groupBy(typedPlatforms, (item) => item.type.label)
     },
-    allRecentPlatforms() {
-      return this.recentPlatformIds
-        .map(i => this.platforms.find(p => p.id === i))
-        .filter(p => p)
-    },
     typeRecentPlatforms() {
       return this.allRecentPlatforms.filter(item => item.category.value === this.category)
     }
   },
-  created() {
-    this.$axios.get('/api/v1/assets/platforms/').then(data => {
-      this.platforms = data
-      this.loadRecentPlatformIds()
-      this.activeType = Object.keys(this.iPlatforms)[0]
-    })
+  async created() {
+    this.platforms = await this.$store.dispatch('assets/getPlatforms')
+    this.allRecentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
+    if (this.allRecentPlatforms.length > 0) {
+      this.activeType = this.recentUsedLabel
+    }
+    this.loading = false
   },
   methods: {
-    loadImage(platform) {
-      const platformMap = {
-        'Huawei': 'huawei',
-        'Cisco': 'cisco',
-        'Gateway': 'gateway',
-        'macOS': 'macos',
-        'BSD': 'bsd',
-        'Vmware-vSphere': 'vmware'
-      }
-
-      const value = platformMap[platform.name] || platform.type.value
-
-      try {
-        return require(`@/assets/img/icons/${value}.png`)
-      } catch (error) {
-        this.$log.debug(`Image not found: ${value}.png`)
-        return require(`@/assets/img/icons/other.png`)
-      }
-    },
-    loadRecentPlatformIds() {
-      const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
-      this.recentPlatformIds = recentPlatformIds
-        .map(i => this.platforms.find(p => p.id === i))
-        .filter(p => p)
-        .map(p => p.id)
+    getPlatformLogo(platform) {
+      return loadPlatformIcon(platform.name, platform.type.value)
     },
     onConfirm() {
       this.iVisible = false
@@ -160,39 +148,28 @@ export default {
       const color = this.bottomColors[colorIndex]
       return color
     },
-    addToRecentPlatforms(platform) {
-      const recentPlatformIds = this.recentPlatformIds.filter(i => i !== platform.id)
-      recentPlatformIds.unshift(platform.id)
-      if (recentPlatformIds.length > 8) {
-        recentPlatformIds.pop()
-      }
-      this.recentPlatformIds = recentPlatformIds
-      localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatformIds))
+    handleSelect(platform) {
+      this.$store.dispatch('assets/addToRecentPlatforms', platform)
+      this.$emit('select-platform', platform)
     },
-    createAsset(platform) {
-      const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
-      this.addToRecentPlatforms(platform)
+    handleManagePlatform() {
+      this.$router.push({ name: 'PlatformList' })
       this.iVisible = false
-      const query = {
-        node: this.$route.query?.node || this.$route.query?.node_id || '',
-        platform: platform.id,
-        type: platform.type.value,
-        category: platform.category.value
-      }
-
-      const router = { name: route, query }
-      if (this.$route.query.node_id) {
-        const { href } = this.$router.resolve(router)
-        window.open(href, '_blank')
-      } else {
-        this.$router.push(router)
-      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
+::v-deep .el-drawer__body {
+  padding: 0 20px;
+}
+
+.platform-content {
+  padding: 0 10px;
+}
+
 .platform-item {
   margin: 5px 0;
 
@@ -219,6 +196,10 @@ export default {
 ::v-deep .el-collapse {
   border: none;
 
+  .el-collapse-item__content {
+    padding-bottom: 10px;
+  }
+
   .el-collapse-item:last-child {
     .el-collapse-item__header {
       border: none;
@@ -235,10 +216,14 @@ export default {
   align-items: center;
 }
 
-.asset-icon {
+.icon-zone {
   width: 2em;
+}
+
+.asset-icon {
   height: 2em;
   vertical-align: -0.2em;
+  width: 26px;
   fill: currentColor;
 }
 
@@ -247,5 +232,20 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.drawer-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 40px;
+
+  .el-link {
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 15px;
+    color: var(--color-link);
+  }
 }
 </style>

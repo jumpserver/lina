@@ -13,7 +13,8 @@ export default {
     return {
       url: '/api/v1/ops/playbooks/',
       fields: [
-        [this.$t('Basic'), ['name', 'scope', 'comment', 'variable']]
+        [this.$t('Basic'), ['name', 'scope', 'variable']],
+        [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
         variable: {

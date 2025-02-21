@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
 import BaseFormatter from './base.vue'
+import ActionsGroup from '@/components/ActionsGroup/index.vue'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
@@ -33,6 +33,7 @@ const defaultUpdateCallback = function({ row, col }) {
   } else {
     route.name = updateRoute
   }
+
   this.$router.push(route)
 }
 
@@ -106,7 +107,7 @@ export default {
           onUpdate: defaultUpdateCallback,
           onDelete: defaultDeleteCallback,
           onClone: defaultCloneCallback,
-          extraActions: [] // format see defaultActions
+          extraActions: []
         }
       }
     }
@@ -135,7 +136,7 @@ export default {
       {
         name: 'clone',
         title: this.$t('Duplicate'),
-        type: 'info',
+        type: 'primary',
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,
@@ -146,8 +147,8 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: ''
       // moreActionsTitle: colActions.moreActionsTitle || null
+      moreActionsTitle: ''
     }
   },
   computed: {
@@ -223,7 +224,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .table-actions {
   ::v-deep {
     .el-icon-arrow-down {

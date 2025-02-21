@@ -12,7 +12,7 @@
     >
       <el-form :model="secretInfo" class="password-form" label-position="right" label-width="100px">
         <el-form-item :label="$tc('OldSecret')">
-          <ShowKeyCopyFormatter
+          <SecretViewerFormatter
             :cell-value="secretInfo.old_secret"
             :col="{ formatterArgs: {
               name: 'old_secret'
@@ -20,7 +20,7 @@
           />
         </el-form-item>
         <el-form-item :label="$tc('NewSecret')">
-          <ShowKeyCopyFormatter
+          <SecretViewerFormatter
             :cell-value="secretInfo.new_secret"
             :col="{ formatterArgs: {
               name: 'new_secret'
@@ -34,13 +34,13 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
+import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'RecordViewSecret',
   components: {
     Dialog,
-    ShowKeyCopyFormatter
+    SecretViewerFormatter
   },
   props: {
     visible: {

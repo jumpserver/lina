@@ -1,26 +1,24 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="8" :sm="24">
-      <IBox :title="$tc('Variable')">
-        <Variable
-          :value.sync="object.variable"
-          @input="updateVariable"
-        />
-      </IBox>
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+    <IBox :title="$tc('Variable')">
+      <Variable
+        :value.sync="object.variable"
+        @input="updateVariable"
+      />
+    </IBox>
+  </TwoCol>
 </template>
 
 <script type="text/jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import Variable from '@/views/ops/Template/components/Variable.vue'
 import { IBox } from '@/components'
 
 export default {
   components: {
+    TwoCol,
     IBox, Variable,
     AutoDetailCard
   },

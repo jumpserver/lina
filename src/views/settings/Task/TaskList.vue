@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
 import { BASE_URL } from '@/utils/common'
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'TaskList',
@@ -17,8 +17,15 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'state', 'date_last_publish', 'exec_cycle', 'next_exec_time', 'enabled'
+          'name', 'queue', 'count', 'state', 'date_last_publish',
+          'exec_cycle', 'next_exec_time', 'enabled'
         ],
+        columnsShow: {
+          default: [
+            'name', 'count', 'state', 'date_last_publish',
+            'exec_cycle', 'next_exec_time', 'enabled'
+          ]
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -69,8 +76,8 @@ export default {
             label: `${this.$t('Success')}/${this.$t('Total')}`,
             formatter: (row) => {
               return <div>
-                <span Class='text-primary'>{row.summary.success}</span>/
-                <span>{row.summary.total}</span>
+                <span Class='text-primary'>{row.summary.success || 0}</span>/
+                <span>{row.summary.total || 0}</span>
               </div>
             }
           },
@@ -107,7 +114,7 @@ export default {
           },
           enabled: {
             width: '120px',
-            label: `${this.$t('Enable')}/${this.$t('Disable')}`,
+            label: `${this.$t('Enable')}`,
             formatter: SwitchFormatter,
             formatterArgs: {
               isDisplay(row) {

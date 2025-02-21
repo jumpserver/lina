@@ -1,21 +1,27 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
-      <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="9" :sm="24">
+  <TwoCol>
+    <template>
+      <AutoDetailCard
+        :fields="detailFields"
+        :object="object"
+        :url="url"
+      />
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetPermissionDetail',
   components: {
+    TwoCol,
     AutoDetailCard,
     QuickActions
   },

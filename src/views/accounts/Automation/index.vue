@@ -38,9 +38,9 @@ export default {
           },
           {
             id: 'gather_account',
-            display_name: this.$t('GatherAccounts'),
-            name: 'AccountGatherList',
-            comment: this.$t('GatherAccountsHelpText'),
+            display_name: this.$t('DiscoverAccounts'),
+            name: 'AccountDiscoverList',
+            comment: this.$t('DiscoverAccountsHelpText'),
             icon: 'gather-account',
             edition: 'enterprise',
             tags: ['ansible']

@@ -254,6 +254,10 @@ input[type=file] {
     line-height: 1.5;
     border-right: none;
     color: var(--color-text-primary);
+
+    a {
+      color: #1c84c6
+    }
   }
 
   th {
@@ -388,7 +392,7 @@ input[type=file] {
 }
 
 .el-drawer.rtl, .drawer-panel {
-  border-radius: 10px 0 0 10px;
+  border-radius: 5px 0 0 5px;
 }
 
 .el-select-group__title {
@@ -541,8 +545,24 @@ li.rmenu i.fa {
   height: 28px;
 }
 
+.el-checkbox__input {
+  padding-right: 5px;
+}
+
+.el-checkbox__label {
+  // 这里不能 important page transfer 里面的 checkbox 和 label 会叠加，见用户组选择用户
+  padding-left: 5px;
+}
+
 .el-checkbox__inner {
   border-radius: 1px !important;
+  width: 16px !important;
+  height: 16px !important;
+
+  &::after {
+    left: 5px !important;
+    height: 8px !important;
+  }
 }
 
 .el-alert.el-alert--info.is-light {
@@ -577,6 +597,7 @@ li.rmenu i.fa {
   }
 }
 
+
 .link-btn {
   span {
     color: var(--color-link);
@@ -591,6 +612,36 @@ li.rmenu i.fa {
   ::-webkit-scrollbar {
     width: 6px; /* 设置垂直滚动条的宽度 */
     height: 6px; /* 设置水平滚动条的高度 */
+  }
+}
+
+.el-drawer__wrapper .el-drawer__header {
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.el-input-number {
+  .el-input-number__decrease, .el-input-number__increase {
+    line-height: 26px;
+  }
+}
+
+
+.el-form--label-top.el-form {
+  //.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after {
+  //  content: '*';
+  //  margin-left: 4px;
+  //}
+
+  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
+  }
+}
+
+
+.el-form-item {
+  .CodeMirror {
+    height: 200px;
   }
 }
 

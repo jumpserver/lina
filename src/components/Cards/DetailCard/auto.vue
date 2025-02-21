@@ -1,7 +1,12 @@
 <template>
   <IBox v-if="loading" style="width: 100%; height: 200px" />
   <div v-else>
-    <DetailCard v-if="hasObject && items.length > 0" :items="validItems" :loading="loading" v-bind="$attrs" />
+    <DetailCard
+      v-if="hasObject && items.length > 0"
+      :items="validItems"
+      :loading="loading"
+      v-bind="$attrs"
+    />
   </div>
 </template>
 
@@ -32,7 +37,7 @@ export default {
       type: Array,
       default: null
     },
-    showUndefine: {
+    showUndefined: {
       type: Boolean,
       default: true
     },
@@ -168,7 +173,7 @@ export default {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       let remoteMeta = data.actions['GET'] || {}
       if (this.nested) {
-        remoteMeta = remoteMeta[this.nested]?.children || {}
+        remoteMeta = remoteMeta[this.nested]?.children || remoteMeta || {}
       }
       let fields = this.fields
       fields = fields || Object.keys(remoteMeta)
@@ -220,7 +225,7 @@ export default {
         value = this.parseValue(value, fieldMeta.type)
 
         if (value === undefined) {
-          if (this.showUndefine) {
+          if (this.showUndefined) {
             value = '-'
           } else {
             continue

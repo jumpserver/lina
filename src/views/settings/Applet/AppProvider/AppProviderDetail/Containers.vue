@@ -1,13 +1,13 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="16" :sm="24">
+    <el-col :md="20" :sm="24">
       <ListTable :header-actions="headerConfig" :table-config="config" />
     </el-col>
   </el-row>
 </template>
 
 <script type="text/jsx">
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'Containers',

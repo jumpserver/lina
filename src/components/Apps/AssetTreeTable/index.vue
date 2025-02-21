@@ -142,6 +142,10 @@ export default {
     treeSetting.showDelete = this.$hasPerm('assets.delete_node')
   },
   methods: {
+    reloadTable() {
+      console.log('Reload table')
+      this.$refs.TreeList.reloadTable()
+    },
     setTreeUrlQuery() {
       let str = ''
       for (const key in this.treeUrlQuery) {

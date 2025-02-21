@@ -1,5 +1,12 @@
 <template>
-  <GenericListPage ref="listPage" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage
+    ref="listPage"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :resource="$t('Group')"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -12,6 +19,8 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./UserGroupCreateUpdate.vue'),
+      detailDrawer: () => import('./UserGroupDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/users/groups/',
         columns: ['name', 'users_amount', 'comment', 'actions', 'labels'],
@@ -26,17 +35,6 @@ export default {
               async: true,
               getItem(item) {
                 return item.is_service_account ? null : item.name
-              },
-              getRoute({ row }) {
-                return {
-                  name: 'UserGroupDetail',
-                  params: {
-                    id: row.id
-                  },
-                  query: {
-                    tab: 'GroupUser'
-                  }
-                }
               }
             }
           }

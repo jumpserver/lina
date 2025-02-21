@@ -24,7 +24,8 @@ export default {
         interval: 24,
         accounts: [],
         secret_type: 'password',
-        secret_strategy: 'specific'
+        secret_strategy: 'specific',
+        ssh_key_change_strategy: 'set_jms'
       },
       url: '/api/v1/accounts/change-secret-automations/',
       encryptedFields: ['secret'],
@@ -41,7 +42,8 @@ export default {
         ],
         [this.$t('Automations'), ['params']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Other'), ['is_active', 'recipients', 'comment']]
+        [this.$t('Notification'), ['recipients']],
+        [this.$t('Other'), ['check_conn_after_change', 'is_active', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),

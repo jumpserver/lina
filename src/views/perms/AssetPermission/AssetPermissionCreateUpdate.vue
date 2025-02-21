@@ -37,6 +37,7 @@ export default {
       },
       fields: [
         [this.$t('Basic'), ['name']],
+        // [this.$t('Resource'), ['users', 'user_groups']],
         [this.$t('User'), ['users', 'user_groups']],
         [this.$t('Asset'), ['assets', 'nodes']],
         [this.$t('Account'), ['accounts']],

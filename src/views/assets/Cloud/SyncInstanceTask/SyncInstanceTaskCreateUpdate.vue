@@ -4,9 +4,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { CronTab, Select2 } from '@/components'
+import { Select2 } from '@/components'
 import rules from '@/components/Form/DataForm/rules'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy/index'
+import { periodicMeta } from '@/components/const'
 
 export default {
   components: {
@@ -34,6 +35,7 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
+        ...periodicMeta,
         account: {
           label: this.$t('xpack.Cloud.Account'),
           on: {
@@ -59,12 +61,12 @@ export default {
           helpTips: this.$t('xpack.Cloud.HostnameStrategy')
         },
         is_always_update: {
-          type: 'switch',
+          type: 'checkbox',
           label: this.$t('xpack.Cloud.IsAlwaysUpdate'),
           helpTips: this.$t('xpack.Cloud.IsAlwaysUpdateHelpTips')
         },
         fully_synchronous: {
-          type: 'switch',
+          type: 'checkbox',
           label: this.$t('xpack.Cloud.FullySynchronous'),
           helpTips: this.$t('xpack.Cloud.FullySynchronousHelpTips')
         },
@@ -85,24 +87,6 @@ export default {
               }
             }
           }
-        },
-        is_periodic: {
-          type: 'switch'
-        },
-        crontab: {
-          component: CronTab,
-          label: this.$t('xpack.RegularlyPerform'),
-          hidden: (formValue) => {
-            return formValue.is_periodic === false
-          },
-          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
-        },
-        interval: {
-          label: this.$t('xpack.CyclePerform'),
-          hidden: (formValue) => {
-            return formValue.is_periodic === false
-          },
-          helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         },
         strategy: {
           label: this.$t('common.Strategy'),
@@ -125,7 +109,9 @@ export default {
         if (!Array.isArray(ipNetworkSegments)) {
           value.ip_network_segment_group = ipNetworkSegments ? ipNetworkSegments.split(',') : []
         }
-        value.strategy = strategy.map(item => { return item.id })
+        value.strategy = strategy.map(item => {
+          return item.id
+        })
         return value
       },
       onPerformError(error, method, vm) {
@@ -155,8 +141,7 @@ export default {
       this.fieldsMeta.regions.el.ajax.url = form.account?.id ? `/api/v1/xpack/cloud/regions/?account_id=${form.account.id}` : `/api/v1/xpack/cloud/regions/`
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 
 </script>

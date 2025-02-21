@@ -7,5 +7,17 @@
     "notAlphanumericUnderscore": "仅支持字母、数字和下划线。",
     "notParenthesis": "不能包含括号。",
     "InvalidJson": "JSON 格式错误.",
-    "requiredHasUserNameMapped": "用户名属性是必需的。"
+    "requiredHasUserNameMapped": "用户名属性是必需的。",
+    "NewFound": "新发现",
+    "LastLoginTime": "最后登录时间",
+    "Diff": "差异",
+    "LastChangeTime": "最后修改时间",
+    "AccountDeleted": "账户已删除",
+    "WeakPassword": "弱密码",
+    "RepeatPassword": "重复密码",
+    "LeakPassword": "密码泄露",
+    "Other": "其他",
+    "Details": "详情",
+    "Confirm": "确认",
+    "Ignore": "忽略"
 }
