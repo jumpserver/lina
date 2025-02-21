@@ -95,7 +95,6 @@ const actions = {
   setDrawerActionMeta({ commit, state }, meta) {
     state.drawerActionMeta = meta
     state.inDrawer = true
-    console.log('setDrawerActionMeta', meta)
   },
   getDrawerActionMeta({ commit, state }) {
     return state.drawerActionMeta

@@ -1,5 +1,10 @@
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, PlatformFormatter, ProtocolsFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DetailFormatter,
+  PlatformFormatter,
+  ProtocolsFormatter
 } from '@/components/Table/TableFormatters'
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
@@ -232,9 +237,7 @@ export function getDefaultConfig(vm) {
               name: 'DiscoverAccounts',
               title: 'Discover accounts',
               callback: ({ row }) => {
-                console.log('Row: ', row)
                 vm.discoveryDialog.asset = row.id
-                console.log('vm.discoveryDialog.asset: ', vm.discoveryDialog)
                 setTimeout(() => {
                   vm.discoveryDialog.visible = true
                 }, 200)

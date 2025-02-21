@@ -302,7 +302,6 @@ export default {
       this.$log.debug('Final object is: ', values)
       const formValue = Object.assign(this.form, values)
       this.form = this.afterGetFormValue(formValue)
-      console.log('Form: ', this.form)
     } finally {
       this.loading = false
     }
@@ -414,7 +413,6 @@ export default {
       }
       let object = this.object
 
-      console.log('Object: ', object)
       if (!object || Object.keys(object).length === 0) {
         if (this.action === 'clone') {
           object = await this.getCloneForm(this.actionId)

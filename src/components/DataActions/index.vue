@@ -135,7 +135,6 @@ export default {
       return true
     },
     handleDropdownCallback(command) {
-      console.log('Handle drop down lick')
       const [option, dropdown] = command
       if (option.disabled) {
         return
@@ -289,6 +288,7 @@ $color-drop-menu-border: #e4e7ed;
     &:not(.is-plain) {
       color: $btn-text-color;
     }
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -120,9 +120,7 @@ export default {
       has: this.headerActions.hasCrate,
       callback: () => {
         this.showPlatform = false
-        console.log('Click create')
         setTimeout(() => {
-          console.log('Show platform')
           this.showPlatform = true
         }, 100)
       },

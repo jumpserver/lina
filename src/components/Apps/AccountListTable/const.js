@@ -73,7 +73,6 @@ export const accountOtherActions = (vm) => [
       vm.showUpdateSecretDialog = false
       vm.accountCreateUpdateTitle = vm.$t('UpdateAccount')
       setTimeout(() => {
-        console.log('Update secret')
         vm.showUpdateSecretDialog = true
       })
     }

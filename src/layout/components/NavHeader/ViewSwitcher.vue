@@ -115,7 +115,6 @@ export default {
         this.tipHasRead = '1'
         this.iShowTip = false
       }
-      console.log('Route to: ', routeName)
       this.$router.push(routeName)
       this.$emit('view-change', routeName)
     }

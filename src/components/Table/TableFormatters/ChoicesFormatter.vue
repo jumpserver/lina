@@ -14,6 +14,7 @@
 <script>
 import i18n from '@/i18n/i18n'
 import BaseFormatter from './base.vue'
+
 const formatterArgsDefault = {
   faChoices: {
     true: 'fa-check-circle',
@@ -75,8 +76,6 @@ export default {
       const icon = this.formatterArgs.getIcon(
         { row: this.row, cellValue: this.cellValue }
       )
-      console.log('choices: ', this.faChoices)
-      console.log('Icon: ', icon)
       return icon
     },
     classes() {

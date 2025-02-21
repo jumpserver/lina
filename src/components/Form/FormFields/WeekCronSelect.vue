@@ -147,7 +147,6 @@ export default {
           child: children(ret, index, 24 * this.colspan)
         }
       })
-      console.log('isData', isData)
       this.weekTimeData = isData
     },
     // 反解析传递过来的默认值
@@ -246,14 +245,11 @@ export default {
     },
     setTimeRange() {
       this.timeRange = this.weekTimeData.map(item => {
-        console.log('item', item)
-        console.log('Value', splicing(item.child))
         return {
           id: item.row === 6 ? 0 : item.row + 1,
           value: splicing(item.child)
         }
       })
-      console.log('Time range: ', this.timeRange)
       this.$emit('change', this.timeRange)
     },
     cellEnter(item) {

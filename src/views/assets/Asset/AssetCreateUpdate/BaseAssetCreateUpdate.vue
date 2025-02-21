@@ -99,7 +99,6 @@ export default {
         await this.genConfig()
         await this.setInitial()
         await this.setPlatformConstrains()
-        console.log('iConfig: ', this.iConfig)
       } finally {
         this.loading = false
       }

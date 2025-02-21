@@ -64,10 +64,6 @@ export default {
         'comment'
       ]
     }
-  },
-  computed: {},
-  mounted() {
-    console.log('object', this.object)
   }
 }
 </script>

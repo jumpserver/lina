@@ -143,7 +143,6 @@ export default {
   },
   methods: {
     reloadTable() {
-      console.log('Reload table')
       this.$refs.TreeList.reloadTable()
     },
     setTreeUrlQuery() {

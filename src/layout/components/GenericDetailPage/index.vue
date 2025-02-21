@@ -203,7 +203,6 @@ export default {
       if (vm.validActions.detailApiUrl || vm.detailApiUrl) {
         return vm.validActions.detailApiUrl || vm.detailApiUrl
       }
-      console.log('Object id: ', objectId)
       const url = _.trimEnd(vm.url, '/')
       return url ? `${url}/${objectId}/` : getApiPath(vm, objectId)
     },
@@ -268,7 +267,6 @@ export default {
     getObject() {
       // 兼容之前的 detailApiUrl
       const url = this.getDetailUrl()
-      console.log('Detail url: ', url)
       return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
         this.$emit('getObjectDone', data)
