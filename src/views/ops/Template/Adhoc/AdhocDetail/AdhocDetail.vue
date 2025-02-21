@@ -1,13 +1,15 @@
 <template>
   <TwoCol>
     <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    <IBox :title="$tc('Variable')">
-      <Variable
-        :value.sync="object.variable"
-        :disable-edit="disableEdit"
-        @input="updateVariable"
-      />
-    </IBox>
+    <template #right>
+      <IBox :title="$tc('Variable')">
+        <Variable
+          :value.sync="object.variable"
+          :disable-edit="disableEdit"
+          @input="updateVariable"
+        />
+      </IBox>
+    </template>
   </TwoCol>
 </template>
 

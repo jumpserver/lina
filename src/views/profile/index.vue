@@ -479,19 +479,5 @@ export default {
 }
 </script>
 <style scoped>
-.ibox ::v-deep table {
-  width: 100%;
-}
 
-.ibox ::v-deep tr > td > span:first-child {
-  line-height: 1.43;
-  padding-right: 30px;
-  vertical-align: top;
-  font-size: 13px;
-  width: 50%;
-}
-
-.ibox ::v-deep tr > td > span:last-child {
-  float: right;
-}
 </style>
