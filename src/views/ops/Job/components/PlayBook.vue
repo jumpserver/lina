@@ -92,6 +92,12 @@ export default {
               updateRoute: 'JobUpdate',
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
+              onUpdate: ({ row, col }) => {
+                vm.$router.push({
+                  query: { _type: 'playbook' }
+                })
+                vm.$refs.ListTable.onUpdate({ row, col })
+              },
               hasClone: false,
               extraActions: [
                 {
@@ -125,12 +131,6 @@ export default {
           })
           vm.$refs.ListTable.onCreate()
         }
-      },
-      onUpdate: () => {
-        vm.$router.push({
-          query: { _type: 'playbook' }
-        })
-        vm.$refs.ListTable.onUpdate()
       },
       showJobRunDialog: false
     }

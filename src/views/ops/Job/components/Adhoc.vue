@@ -89,6 +89,12 @@ export default {
               hasUpdate: true,
               canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
+              onUpdate: ({ row, col }) => {
+                vm.$router.push({
+                  query: { _type: 'adhoc' }
+                })
+                vm.$refs.ListTable.onUpdate({ row, col })
+              },
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
               hasClone: false,
