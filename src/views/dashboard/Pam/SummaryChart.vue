@@ -79,19 +79,14 @@ export default {
           show: false
         },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-            }
-          }
+          trigger: 'axis'
         },
         legend: {
           show: false
         },
         grid: {
           left: '3%',
-          right: 0,
+          right: '3%',
           bottom: 0
         },
         xAxis: [
@@ -99,7 +94,7 @@ export default {
             show: false,
             type: 'category',
             boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: [this.$t('Privileged'), this.$t('ResetSecret'), this.$t('Connectable'), this.$t('Valid')]
           }
         ],
         yAxis: [
@@ -110,7 +105,6 @@ export default {
         ],
         series: [
           {
-            name: 'Line 1',
             type: 'line',
             stack: 'Total',
             smooth: true,
@@ -123,7 +117,6 @@ export default {
             },
             showSymbol: false,
             areaStyle: {
-              opacity: 0.8,
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
@@ -138,10 +131,25 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [0, 232, 101, 264, 90, 340, 0]
+            data: []
           }
         ]
       }
+    }
+  },
+  watch: {
+    config: {
+      handler(newData) {
+        if (this.chart) {
+          this.chart.setOption({
+            series: [{
+              data: [newData.privileged, newData.resetSecret, newData.valid, newData.connectable]
+            }]
+          })
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   mounted() {
