@@ -96,6 +96,14 @@ export default {
         }
       ]
 
+      // 过滤出值大于0的项目
+      let filteredData = data.filter(item => item.value > 0)
+
+      // 如果没有值大于0的项目，则显示前5个
+      if (filteredData.length === 0) {
+        filteredData = data.slice(0, 5)
+      }
+
       return {
         grid: {
           top: '5%',
@@ -123,7 +131,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: data.map(item => item.name),
+          data: filteredData.map(item => item.name),
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
@@ -145,7 +153,7 @@ export default {
         series: [
           {
             type: 'bar',
-            data: data.map(item => item.value),
+            data: filteredData.map(item => item.value),
             barWidth: '60%',
             label: {
               show: false,
