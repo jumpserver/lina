@@ -1,18 +1,18 @@
 <template>
-  <el-row :gutter="10">
-    <el-col ::md="20" :sm="24">
-      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+  </TwoCol>
 </template>
 
 <script>
 import ListTable from '@/components/Table/ListTable'
 import { AssetPermissionTableMeta, UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'UserAssetPermission',
   components: {
+    TwoCol,
     ListTable
   },
   props: {
@@ -32,7 +32,7 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'nodes_amount', 'accounts', 'actions'
           ]
         },
         columnsMeta: AssetPermissionTableMeta

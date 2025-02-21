@@ -124,7 +124,7 @@ export default {
       }
     },
     cloneNameSuffix: {
-      type: String,
+      type: [String, Number],
       default: function() {
         return this.$t('Duplicate').toLowerCase()
       }
@@ -132,26 +132,19 @@ export default {
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
-      default: function() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
-        }
-      }
+      default: ''
     },
     // 获取创建和更新的url function
     getUrl: {
       type: Function,
       default: function() {
-        const params = this.$route.params
+        const objectId = this.getUpdateId()
         let url = this.url
-        if (params.id) {
-          url = getUpdateObjURL(url, params.id)
+        if (objectId) {
+          url = getUpdateObjURL(url, objectId)
         }
 
-        const clone_from = this.$route.query['clone_from']
+        const clone_from = this.getCloneId()
         const query = clone_from ? `clone_from=${clone_from}` : ''
         if (query) {
           if (url.indexOf('?') === -1) {
@@ -204,7 +197,6 @@ export default {
       type: Function,
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
-
         if (!(route.params && route.params.id)) {
           route['params'] = deepmerge(route['params'] || {}, { 'id': res.id })
         }
@@ -213,10 +205,16 @@ export default {
         this.$emit('submitSuccess', res)
 
         this.emitPerformSuccessMsg(method, res, addContinue)
-        if (!addContinue) {
+        if (addContinue) {
+          return
+        }
+
+        if (!vm.drawer) {
           if (this.$router.currentRoute.name !== route?.name) {
             setTimeout(() => this.$router.push(route), 100)
           }
+        } else {
+          this.$store.dispatch('common/finishDrawerActionMeta', { action: vm.action, row: res })
         }
       }
     },
@@ -268,17 +266,15 @@ export default {
       form: {},
       loading: true,
       isSubmitting: false,
-      clone: false
+      clone: false,
+      drawer: false,
+      action: '',
+      actionId: '',
+      row: {},
+      method: ''
     }
   },
   computed: {
-    method() {
-      if (this.submitMethod instanceof Function) {
-        return this.submitMethod(this)
-      } else {
-        return this.submitMethod
-      }
-    },
     iUrl() {
       // 更新或创建的url
       return this.getUrl()
@@ -297,8 +293,10 @@ export default {
     }
   },
   async created() {
-    this.$log.debug('Object init is: ', this.object)
     this.loading = true
+    this.$log.debug('Object init is: ', this.object, this.method)
+    await this.setDrawerMeta()
+    this.setMethod()
     try {
       const values = await this.getFormValue()
       this.$log.debug('Final object is: ', values)
@@ -309,6 +307,43 @@ export default {
     }
   },
   methods: {
+    async setDrawerMeta() {
+      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      if (drawActionMeta) {
+        this.drawer = true
+        this.action = drawActionMeta.action
+        this.row = drawActionMeta.row
+        this.actionId = this.row?.id
+      }
+    },
+    setMethod() {
+      if (this.submitMethod instanceof Function) {
+        this.method = this.submitMethod(this)
+      } else {
+        this.method = this.submitMethod
+      }
+      if (this.drawer && !this.submitMethod) {
+        if (this.action === 'clone' || this.action === 'create') {
+          this.method = 'post'
+        } else {
+          this.method = 'put'
+        }
+      }
+    },
+    getUpdateId() {
+      if (this.actionId && this.action === 'update') {
+        return this.actionId
+      } else {
+        return this.$route.params['id']
+      }
+    },
+    getCloneId() {
+      if (this.actionId && this.action === 'clone') {
+        return this.actionId
+      } else {
+        return this.$route.query['clone_from']
+      }
+    },
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
@@ -352,29 +387,37 @@ export default {
           }, 200)
         })
     },
+    async getCloneForm(cloneFrom) {
+      const [curUrl, query] = this.url.split('?')
+      const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
+      try {
+        const object = await this.getObjectDetail(url)
+        let name = ''
+        let attr = ''
+        if (object['name']) {
+          name = object['name']
+          attr = 'name'
+        } else if (object['hostname']) {
+          name = object['hostname']
+          attr = 'hostname'
+        }
+        object[attr] = name + '-' + this.cloneNameSuffix.toString()
+        return object
+      } catch (e) {
+        throw new Error(`Error for reason: ${e.message}`)
+      }
+    },
     async getFormValue() {
-      const cloneFrom = this.$route.query['clone_from']
-      if ((!this.isUpdateMethod() && !cloneFrom) || !this.needGetObjectDetail) {
+      if (this.action === 'create' || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
+
       if (!object || Object.keys(object).length === 0) {
-        if (cloneFrom) {
-          const [curUrl, query] = this.url.split('?')
-          const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
-          object = await this.getObjectDetail(url)
-          let name = ''
-          let attr = ''
-          if (object['name']) {
-            name = object['name']
-            attr = 'name'
-          } else if (object['hostname']) {
-            name = object['hostname']
-            attr = 'hostname'
-          }
-          object[attr] = name + '-' + this.cloneNameSuffix
+        if (this.action === 'clone') {
+          object = await this.getCloneForm(this.actionId)
         } else {
-          object = await this.getObjectDetail(this.iUrl)
+          object = await this.getObjectDetail(this.iUrl, this.actionId)
         }
       }
       if (object) {
@@ -384,16 +427,20 @@ export default {
       }
       return object
     },
-    async getObjectDetail(url) {
+    async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      return this.$axios.get(url)
+      let data = await this.$axios.get(url, { params: { id }})
+      if (Array.isArray(data)) {
+        data = {}
+      }
+      return data
     }
   }
 }
 </script>
 
 <style scoped>
-  .ibox ::v-deep .el-card__body {
-    padding-top: 30px;
-  }
+.ibox ::v-deep .el-card__body {
+  padding-top: 30px;
+}
 </style>

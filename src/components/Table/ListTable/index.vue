@@ -1,8 +1,18 @@
 <template>
   <div>
+    <QuickFilter
+      :expand.sync="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      :table-url="tableUrl"
+      @filter="filter"
+    />
     <TableAction
       v-if="hasActions"
+      :class="{'filter-expand': filterExpand}"
       :date-pick="handleDateChange"
+      :has-quick-filter="iHasQuickFilter"
+      :quick-filter-expand.sync="filterExpand"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
@@ -31,11 +41,13 @@ import IBox from '../../IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
+import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/time'
 
 export default {
   name: 'ListTable',
   components: {
+    QuickFilter,
     AutoDataTable,
     TableAction,
     IBox
@@ -51,6 +63,14 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    quickFilters: {
+      type: Array,
+      default: () => null
+    },
+    quickSummary: {
+      type: Array,
+      default: () => null
     }
   },
   data() {
@@ -79,13 +99,20 @@ export default {
       isDeactivated: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
-      initQuery: {}
+      initQuery: {},
+      filterExpand: localStorage.getItem('filterExpand') !== '0'
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
+    iHasQuickFilter() {
+      const has =
+        (this.quickFilters && this.quickFilters.length > 0) ||
+        (this.quickSummary && this.quickSummary.length > 0)
+      return !!has
+    },
     dataTable() {
-      return this.$refs.dataTable.$refs.dataTable
+      return this.$refs.dataTable?.$refs.dataTable
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
@@ -186,6 +213,11 @@ export default {
         this.$log.debug('ListTable: found colConfig change')
       },
       deep: true
+    },
+    filterExpand: {
+      handler(val) {
+        localStorage.setItem('filterExpand', val ? '1' : '0')
+      }
     }
   },
   mounted() {
@@ -208,6 +240,28 @@ export default {
     })
   },
   methods: {
+    handleFilterExpandChanged(expand) {
+      this.filterExpand = expand
+    },
+    handleQuickFilter(option) {
+      if (option.route) {
+        this.$router.push(option.route)
+        return
+      }
+      if (option.filter) {
+        const filter = { ...option.filter }
+        if (option.active) {
+          for (const key in filter) {
+            filter[key] = ''
+          }
+        }
+        this.filter(option.filter)
+        return
+      }
+      if (option.callback) {
+        option.callback(option.active)
+      }
+    },
     handleActionInitialDone() {
       setTimeout(() => {
         this.actionInit = true
@@ -282,6 +336,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-expand {
+  &::v-deep button.actionFilter {
+    background-color: rgb(0, 0, 0, 0.08) !important;
+  }
+}
+
 .table-content {
   margin-top: 10px;
 

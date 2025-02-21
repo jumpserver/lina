@@ -34,11 +34,12 @@
 <script>
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
-import { Checkbox, CronTab, IBox, UploadKey } from '@/components'
+import { Checkbox, IBox, UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
 import { GenericCreateUpdateForm, Page } from '@/layout/components'
 import SyncInstanceTaskStrategy from './components/SyncInstanceTaskStrategy'
 import { setUrlParam } from '@/utils/common'
+import { crontab, interval, is_periodic } from '@/components/const'
 
 export default {
   components: {
@@ -214,12 +215,12 @@ export default {
             helpTip: this.$t('HostnameStrategy')
           },
           is_always_update: {
-            type: 'switch',
+            type: 'checkbox',
             label: this.$t('IsAlwaysUpdate'),
             helpTip: this.$t('IsAlwaysUpdateHelpTip')
           },
           fully_synchronous: {
-            type: 'switch',
+            type: 'checkbox',
             label: this.$t('FullySynchronous'),
             helpTip: this.$t('FullySynchronousHelpTip')
           },
@@ -237,23 +238,9 @@ export default {
               }
             }
           },
-          is_periodic: {
-            type: 'switch'
-          },
-          crontab: {
-            component: CronTab,
-            hidden: (formValue) => {
-              return formValue.is_periodic === false
-            },
-            helpText: this.$t('CrontabOfCreateUpdatePage'),
-            helpTextAsTip: true
-          },
-          interval: {
-            hidden: (formValue) => {
-              return formValue.is_periodic === false
-            },
-            helpText: this.$t('IntervalOfCreateUpdatePage')
-          },
+          is_periodic,
+          crontab,
+          interval,
           strategy: {
             label: this.$t('Strategy'),
             component: SyncInstanceTaskStrategy,

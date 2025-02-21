@@ -2,6 +2,7 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
 const Setting = () => import('@/views/settings/index')
+const globalSubmenu = () => import('@/layout/globalOrg.vue')
 
 export default {
   path: '/settings',
@@ -83,6 +84,106 @@ export default {
             title: i18n.t('OrganizationDetail'),
             permissions: ['orgs.view_organization']
           }
+        }
+      ]
+    },
+    {
+      path: '/settings/roles',
+      component: globalSubmenu,
+      redirect: '',
+      meta: {
+        permissions: ['rbac.view_orgrole | rbac.view_systemrole'],
+        app: 'rbac',
+        disableOrgsChange: true,
+        licenseRequired: true,
+        icon: 'role'
+      },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/users/Role/RoleList/index'),
+          name: 'RoleList',
+          meta: {
+            title: i18n.t('RoleList'),
+            app: 'rbac',
+            permissions: ['rbac.view_orgrole | rbac.view_systemrole']
+          }
+        },
+        {
+          path: 'create',
+          component: () => import('@/views/users/Role/RoleCreateUpdate'),
+          name: 'RoleCreate',
+          hidden: true,
+          meta: {
+            title: i18n.t('RoleCreate'),
+            permissions: [],
+            app: 'rbac',
+            resource: 'role'
+          }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/users/Role/RoleCreateUpdate'),
+          name: 'RoleUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('RoleUpdate'),
+            app: 'rbac',
+            permissions: []
+          }
+        },
+        {
+          path: ':id',
+          component: () => import('@/views/users/Role/RoleDetail/index'),
+          name: 'RoleDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('RoleDetail'),
+            app: 'rbac',
+            resource: 'role',
+            permissions: []
+          }
+        }
+      ]
+    },
+    {
+      path: '/settings/platforms',
+      component: globalSubmenu,
+      meta: {
+        permissions: ['assets.view_platform'],
+        resource: 'platform',
+        icon: 'platform',
+        app: 'assets',
+        disableOrgsChange: true
+      },
+      redirect: '',
+      children: [
+        {
+          path: '',
+          name: 'PlatformList',
+          component: () => import('@/views/assets/Platform/PlatformList'),
+          meta: { title: i18n.t('PlatformList'), permissions: ['assets.view_platform'] }
+        },
+        {
+          path: 'create',
+          component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
+          name: 'PlatformCreate',
+          hidden: true,
+          meta: { title: i18n.t('PlatformCreate') }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
+          name: 'PlatformUpdate',
+          hidden: true,
+          meta: { title: i18n.t('PlatformUpdate'), permissions: [] }
+        },
+        {
+          path: ':id',
+          component: () => import('@/views/assets/Platform/PlatformDetail'), // Parent router-view
+          name: 'PlatformDetail',
+          hidden: true,
+          meta: { title: i18n.t('PlatformDetail') }
         }
       ]
     },

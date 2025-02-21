@@ -1,9 +1,15 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="listTable"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
 
@@ -15,6 +21,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [
@@ -45,16 +53,6 @@ export default {
               return <span> {row.secret_strategy.label} </span>
             }
           },
-          username: {
-            showOverflowTooltip: true,
-            formatter: ({ username }) => {
-              if (username === '@USER') {
-                return this.$t('DynamicUsername')
-              } else {
-                return username
-              }
-            }
-          },
           assets_amount: {
             label: vm.$t('AssetsOfNumber')
           },
@@ -81,15 +79,19 @@ export default {
             }
           },
           actions: {
+            formatter: ActionsFormatter,
             formatterArgs: {
+              updateRoute: 'AccountPushUpdate',
+              cloneRoute: 'AccountPushCreate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),
                   name: 'execute',
+                  order: 1,
+                  type: 'primary',
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_pushaccountexecution')
                   },
-                  type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/push-account-executions/`,
@@ -110,7 +112,8 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        createRoute: 'AccountPushCreate'
       }
     }
   }

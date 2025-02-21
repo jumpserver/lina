@@ -38,6 +38,7 @@ export const templateFieldsMeta = (vm) => {
       }
     },
     secret_type: {
+      type: 'radio-group',
       on: {
         change: ([event], updateForm) => {
           if (!canRandomSecretTypes.includes(event)) {

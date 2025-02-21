@@ -26,11 +26,13 @@ const getters = {
   MFAVerifyAt: state => state.users.MFAVerifyAt,
   MFA_TTl: state => state.settings.publicSettings['SECURITY_MFA_VERIFY_TTL'],
   tableConfig: state => state.table.tableConfig,
+  protocolMap: state => state.table.protocolMap,
   currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
   currentUserIsAdmin: state => state.users.isAdmin,
   hasValidLicense: state => state.settings.hasValidLicense,
   isSystemAdmin: state => state.users.profile.system_roles.some(i => (i?.id === '00000000-0000-0000-0000-000000000001')),
   sqlQueryCounter: state => state.common.sqlQueryCounter,
-  showSqlQueryCounter: state => state.common.showSqlQueryCounter
+  showSqlQueryCounter: state => state.common.showSqlQueryCounter,
+  inDrawer: state => state.common.inDrawer
 }
 export default getters

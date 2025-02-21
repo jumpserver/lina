@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     options() {
-      const { total = 0, active = 0, title, color } = this.config
+      const { total = 0, active = 0, title, color, colors } = this.config
       const activeDecimal = new Decimal(active)
       const totalDecimal = new Decimal(total)
 
@@ -79,7 +79,7 @@ export default {
         legend: {
           show: false
         },
-        color: [color, 'rgba(43, 147, 124, 0.05)'],
+        color: colors || [color, 'rgba(43, 147, 124, 0.05)'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {d}%'

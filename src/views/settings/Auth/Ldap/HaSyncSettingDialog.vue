@@ -19,9 +19,10 @@
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { CronTab, Dialog } from '@/components'
+import { Dialog } from '@/components'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { Required } from '@/components/Form/DataForm/rules'
+import { crontab, interval, is_periodic } from '@/components/const'
 
 export default {
   name: 'SyncSettingDialog',
@@ -56,16 +57,9 @@ export default {
               return !this.$hasLicense()
             }
           },
-          AUTH_LDAP_HA_SYNC_IS_PERIODIC: {
-            type: 'switch'
-          },
-          AUTH_LDAP_HA_SYNC_CRONTAB: {
-            component: CronTab,
-            helpTip: this.$t('CrontabOfCreateUpdatePage')
-          },
-          AUTH_LDAP_HA_SYNC_INTERVAL: {
-            helpText: this.$t('IntervalOfCreateUpdatePage')
-          },
+          AUTH_LDAP_HA_SYNC_IS_PERIODIC: is_periodic,
+          AUTH_LDAP_HA_SYNC_CRONTAB: crontab,
+          AUTH_LDAP_HA_SYNC_INTERVAL: interval,
           AUTH_LDAP_HA_SYNC_RECEIVERS: {
             component: Select2,
             el: {

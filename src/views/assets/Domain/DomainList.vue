@@ -1,5 +1,11 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :help-tip="notice" :table-config="tableConfig" />
+  <GenericListPage
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :help-tip="notice"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -12,6 +18,8 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./DomainCreateUpdate.vue'),
+      detailDrawer: () => import('./DomainDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columnsExclude: ['gateway'],

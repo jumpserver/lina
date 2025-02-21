@@ -1,37 +1,87 @@
 <template>
   <div>
-    <CardTable ref="accountTable" :sub-component="subComponent" v-bind="$data" />
-    <CreateDialog
-      v-if="visible"
-      v-bind="providerConfig"
-      :visible.sync="visible"
-    />
+    <SmallCard ref="table" class="account-table" v-bind="$data" />
+    <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
+    <Dialog
+      v-if="updateVisible"
+      :destroy-on-close="true"
+      :show-buttons="false"
+      :title="$tc('CloudAccountUpdate')"
+      :visible.sync="updateVisible"
+      v-on="$listeners"
+    >
+      <AuthPanel
+        :object="object"
+        :provider="object.provider.value"
+        :visible.sync="updateVisible"
+        origin="update"
+        @submitSuccess="onSubmitSuccess"
+      />
+    </Dialog>
+    <Dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :destroy-on-close="true"
+      :show-buttons="false"
+      :show-close="false"
+      :title="$tc('SyncOnline')"
+      :visible.sync="onlineSyncVisible"
+      v-on="$listeners"
+    >
+      <AssetPanel :object="object" :visible.sync="onlineSyncVisible" />
+    </Dialog>
   </div>
 </template>
 
 <script type="text/jsx">
 import {
-  aliyun, apsara_stack, aws_china, aws_international, azure, azure_international,
-  baiducloud, state_private, fc, gcp, huaweicloud, huaweicloud_private, jdcloud, kingsoftcloud, lan, nutanix, openstack,
-  qcloud, qcloud_lighthouse, qingcloud_private, scp, ucloud, vmware, volcengine, zstack
+  aliyun,
+  apsara_stack,
+  aws_china,
+  aws_international,
+  azure,
+  azure_international,
+  baiducloud,
+  fc,
+  gcp,
+  huaweicloud,
+  huaweicloud_private,
+  jdcloud,
+  kingsoftcloud,
+  lan,
+  nutanix,
+  openstack,
+  qcloud,
+  qcloud_lighthouse,
+  qingcloud_private,
+  scp,
+  state_private,
+  ucloud,
+  vmware,
+  volcengine,
+  zstack
 } from '../const'
-import rules from '@/components/Form/DataForm/rules'
 import CreateDialog from './components/CreateDialog.vue'
-import CardTable from '@/components/Table/CardTable'
-import AccountPanel from './components/AccountPanel'
+import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
+import Dialog from '@/components/Dialog/index.vue'
+import AssetPanel from './components/AssetPanel.vue'
+import AuthPanel from './components/AuthPanel.vue'
+import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'CloudAccountList',
   components: {
-    CardTable,
+    AuthPanel,
+    AssetPanel,
+    Dialog,
+    SmallCard,
     CreateDialog
   },
   data() {
     const vm = this
     return {
-      colWidth: 6,
-      subComponent: AccountPanel,
+      object: null,
       tableConfig: {
         url: '/api/v1/xpack/cloud/accounts/',
         permissions: {
@@ -103,21 +153,64 @@ export default {
       providerConfig: {
         providers: []
       },
-      account: {},
       visible: false,
-      testLoading: false,
-      select2: {
-        allowCreate: true,
-        multiple: false
-      },
-      regionRules: [rules.Required]
+      updateVisible: false,
+      onlineSyncVisible: false,
+      subComponentProps: {
+        handleUpdate: (obj) => {
+          this.object = obj
+          this.updateVisible = true
+        },
+        getImage: (obj) => {
+          return ACCOUNT_PROVIDER_ATTRS_MAP[obj.provider.value].image
+        },
+        getInfos: (obj) => {
+          return [
+            {
+              title: this.$tc('TotalSyncRegion'),
+              content: obj?.task.regions.length
+            },
+            {
+              title: this.$tc('TotalSyncAsset'),
+              content: obj?.task.instance_count
+            },
+            {
+              title: this.$tc('DateLastSync'),
+              content: toSafeLocalDateStr(obj?.task.date_last_sync)
+            }
+          ]
+        },
+        actions: [
+          {
+            id: 'online-sync',
+            name: this.$tc('SyncOnline'),
+            icon: 'el-icon-thumb',
+            callback: this.handleOnlineExecute,
+            disabled: !this.$hasPerm('xpack.change_syncinstancetask')
+          }
+        ]
+      }
     }
   },
   watch: {
     visible: {
       handler(val) {
         if (!val) {
-          this.$refs.accountTable.reloadTable()
+          this.$refs.table.reloadTable()
+        }
+      }
+    },
+    onlineSyncVisible: {
+      handler(newValue) {
+        if (newValue === false) {
+          this.$refs.table.reloadTable()
+        }
+      }
+    },
+    updateVisible: {
+      handler(newValue) {
+        if (newValue === false) {
+          this.$refs.table.reloadTable()
         }
       }
     }
@@ -129,7 +222,26 @@ export default {
         return 200
       }
       return status
+    },
+    handleOnlineExecute(obj) {
+      this.object = obj
+      this.onlineSyncVisible = true
+    },
+    onSubmitSuccess() {
+      this.$refs.table.reloadTable()
+      this.updateVisible = false
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.account-table {
+  ::v-deep {
+    .panel-content {
+      padding: 30px 0;
+    }
+  }
+}
+
+</style>

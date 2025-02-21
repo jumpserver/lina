@@ -61,14 +61,14 @@
 </template>
 
 <script>
-import AccountTemplateDialog from './AccountTemplateDialog'
 import AddAccountDialog from './AddAccountDialog'
+import AccountTemplateDialog from './AccountTemplateDialog'
 
 export default {
   name: 'AssetAccounts',
   components: {
-    AccountTemplateDialog,
-    AddAccountDialog
+    AddAccountDialog,
+    AccountTemplateDialog
   },
   props: {
     platform: {
@@ -90,7 +90,9 @@ export default {
     const accounts = this.value || []
     return {
       accounts: accounts,
+      drawerRefName: null,
       account: {},
+      pamDrawerShow: false,
       initial: false,
       addAccountDialogVisible: false,
       templateDialogVisible: false
@@ -153,6 +155,7 @@ export default {
         })
         return
       }
+
       this.$router.push({
         name: 'AssetDetail',
         params: { id: assetId },
@@ -222,6 +225,21 @@ export default {
 
   .cell {
     padding-top: 3px !important;
+  }
+}
+
+::v-deep .page.tab-page {
+  .page-heading .el-row--flex {
+    flex-wrap: wrap;
+
+    .page-heading-left .el-button {
+      display: none;
+    }
+  }
+
+  .tab-page-content {
+    overflow: auto;
+    height: 100%;
   }
 }
 </style>

@@ -1,25 +1,24 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col :md="16" :sm="24">
-        <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-      </el-col>
-    </el-row>
-  </div>
+  <TwoCol>
+    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard
   },
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -30,8 +29,7 @@ export default {
       ]
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 

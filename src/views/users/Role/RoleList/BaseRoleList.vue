@@ -1,9 +1,14 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable
+    ref="ListTable"
+    :create-drawer="createDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
@@ -23,6 +28,7 @@ export default {
     return {
       loading: true,
       scopeRole: scopeRole,
+      createDrawer: () => import('@/views/users/Role/RoleCreateUpdate.vue'),
       tableConfig: {
         url: `/api/v1/rbac/${this.scope}-roles/`,
         columnsExclude: ['name', 'permissions'],
@@ -39,13 +45,21 @@ export default {
                 return {
                   name: 'RoleDetail',
                   query: {
-                    scope: row.scope.value
+                    _scope: row.scope.value
                   },
                   params: {
                     id: row.id
                   }
                 }
-              }
+              },
+              beforeClick: ({ row }) => {
+                vm.$router.push({
+                  query: {
+                    _scope: row.scope.value
+                  }
+                })
+              },
+              drawer: true
             }
           },
           users_amount: {
@@ -102,11 +116,11 @@ export default {
         }
       },
       headerActions: {
-        createRoute: {
-          name: 'RoleCreate',
-          query: {
-            scope: this.scope
-          }
+        onCreate: () => {
+          vm.$router.push({
+            query: { _scope: vm.scope }
+          })
+          this.$refs.ListTable.onCreate()
         },
         searchConfig: {
           exclude: ['scope']

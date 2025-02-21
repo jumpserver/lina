@@ -1,9 +1,14 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/components/Table/DrawerListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
@@ -13,6 +18,8 @@ export default {
   data() {
     const currentUserID = this.$store.state.users.profile.id
     return {
+      createDrawer: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate.vue'),
+      detailDrawer: () => import('@/views/ops/Template/Adhoc/AdhocDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/ops/adhocs/',
         columnsShow: {

@@ -33,7 +33,7 @@ export default [
             name: 'UserLoginAclList',
             component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
             meta: {
-              title: i18n.t('UserLoginAclList'), activeMenu: ''
+              title: i18n.t('UserLoginAclList'), menuTitle: i18n.t('UserLogin'), activeMenu: ''
             }
           },
           {
@@ -133,7 +133,7 @@ export default [
             path: '',
             name: 'AssetAclList',
             component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
-            meta: { title: i18n.t('AssetAclList'), activeMenu: '' }
+            meta: { title: i18n.t('AssetAclList'), activeMenu: '', menuTitle: i18n.t('AssetConnect') }
           },
           {
             path: 'create',
@@ -234,7 +234,7 @@ export default [
             path: '',
             name: 'ConnectMethodAclList',
             component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclList.vue'),
-            meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '' }
+            meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '', menuTitle: i18n.t('ConnectMethod') }
           },
           {
             path: 'create',

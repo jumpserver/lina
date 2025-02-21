@@ -6,6 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
 import { encryptPassword } from '@/utils/crypto'
+import { periodicMeta } from '@/components/const'
 
 export default {
   name: 'AccountBackupUpdate',
@@ -40,9 +41,7 @@ export default {
         categories: []
       },
       fieldsMeta: {
-        is_periodic: fields.is_periodic,
-        crontab: fields.crontab,
-        interval: fields.interval,
+        ...periodicMeta,
         is_password_divided_by_email: fields.is_password_divided_by_email,
         zip_encrypt_password: fields.zip_encrypt_password,
         is_password_divided_by_obj_storage: fields.is_password_divided_by_obj_storage,

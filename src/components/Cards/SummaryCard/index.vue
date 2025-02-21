@@ -1,21 +1,22 @@
 <template>
-  <el-card shadow="never">
-    <div slot="header" class="summary-header">
-      <span class="header-title">{{ title }}</span>
+  <div>
+    <div class="summary-header">
+      <el-tooltip :content="title" placement="top" :open-delay="500">
+        <span class="title">{{ title }}</span>
+      </el-tooltip>
     </div>
     <slot>
-      <h1 class="no-margins">
-        <span v-if="body.disabled" class="disabled-link">{{ body.count }}</span>
-        <router-link v-else :to="body.route">
-          <span>{{ body.count }}</span>
-        </router-link>
-      </h1>
-      <small>{{ body.comment }}</small>
+      <h3 class="no-margins ">
+        <span v-async="iCount" class="num" @click="handleClick">
+          -
+        </span>
+      </h3>
     </slot>
-  </el-card>
+  </div>
 </template>
 
 <script>
+
 export default {
   name: 'SummaryCard',
   props: {
@@ -23,56 +24,90 @@ export default {
       type: String,
       default: ''
     },
-    rightSideLabel: {
-      type: Object,
-      default: () => ({})
-    },
     body: {
       type: Object,
       default: () => ({})
+    },
+    count: {
+      type: [Number, String, Promise],
+      default: 0
+    },
+    route: {
+      type: [String, Object],
+      default: ''
+    },
+    callback: {
+      type: Function,
+      default: () => {
+      }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    iCount() {
+      const count = this.body.count || this.count
+      return count
+    },
+    iRoute() {
+      return this.body.route || this.route
+    },
+    iDisabled() {
+      return this.body.disabled === undefined ? this.disabled : this.body.disabled
+    }
+  },
+  methods: {
+    handleClick() {
+      if (this.iDisabled) {
+        return
+      }
+      if (this.iRoute) {
+        this.$router.push(this.iRoute)
+        return
+      }
+      this.callback.bind(this)()
+      this.$emit('click')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .pull-right {
-    float: right !important;
-  }
+.summary-header {
+  //color: var(--color-icon-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
 
-  .header-title {
-    font-size: 14px;
-    margin: 0 0 7px;
+  .title {
+    font-style: normal;
     font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    line-height: 1.2;
   }
+}
 
-  .right-side ::v-deep .el-tag {
-    font-weight: 600;
-    padding: 3px 8px;
-    text-shadow: none;
-    line-height: 1;
-  }
+.no-margins {
+  margin: 0 !important;
 
-  h1 {
-    font-size: 30px;
-    font-weight: 100;
-  }
+  .num {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 40px;
+    color: var(--color-text-primary);
+    cursor: pointer;
 
-  .el-card__body {
-    background-color: #ffffff;
-    color: inherit;
-    padding: 15px 20px 20px 20px !important;
-    border-color: #e7eaec;
-    border-image: none;
-    border-style: solid solid none;
-    border-width: 1px 0;
+    &:hover {
+      color: var(--color-primary);
+    }
   }
-
-  .no-margins {
-    margin: 0 !important;
-  }
-
-  .disabled-link {
-    color: #428bca;
-  }
+}
 </style>

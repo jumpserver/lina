@@ -2,6 +2,7 @@
   <GenericDetailPage
     :active-menu.sync="config.activeMenu"
     :object.sync="CommandGroup"
+    :title="'null'"
     v-bind="config"
     v-on="$listeners"
   >

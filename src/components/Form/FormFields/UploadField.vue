@@ -8,7 +8,7 @@
     <div v-if="tip !== ''" class="help-block">{{ tip }}</div>
     <input v-model="value" hidden type="text" v-on="$listeners">
     <div>
-      <img :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs">
+      <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs" alt="">
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-card :class="'ibox ' + type" shadow="never" v-bind="$attrs">
+  <el-card :class="'ibox ' + type" :shadow="shadow" v-bind="$attrs">
     <template #header>
       <slot name="header">
         <div v-if="title" slot="header" class="clearfix ibox-title">
@@ -26,6 +26,10 @@ export default {
     type: {
       type: String,
       default: 'default'
+    },
+    shadow: {
+      type: String,
+      default: 'never'
     }
   },
   computed: {

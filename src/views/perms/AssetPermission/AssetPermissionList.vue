@@ -5,6 +5,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
       :tree-setting="treeSetting"
+      :quick-filters="quickFilter"
     />
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -19,7 +20,7 @@ import Page from '@/layout/components/Page'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import { mapGetters } from 'vuex'
-import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const'
+import { AssetPermissionListPageSearchConfigOptions, AssetPermissionTableMeta } from '../const.js'
 
 export default {
   components: {
@@ -28,16 +29,52 @@ export default {
     PermBulkUpdateDialog
   },
   data() {
-    const vm = this
     return {
       helpMsg: this.$t('AssetPermissionHelpMsg'),
+      quickFilter: [
+        {
+          label: this.$t('QuickFilter'),
+          options: [
+            {
+              label: this.$t('Invalid'),
+              filter: {
+                is_valid: false
+              }
+            },
+            {
+              label: this.$t('Valid'),
+              filter: {
+                is_valid: true
+              }
+            },
+            {
+              label: this.$t('Expired'),
+              filter: {
+                is_expired: true
+              }
+            },
+            {
+              label: this.$t('Disabled'),
+              filter: {
+                is_active: false
+              }
+            },
+            {
+              label: this.$t('NoResource'),
+              filter: {
+                is_no_resource: true
+              }
+            }
+          ]
+        }
+      ],
       treeSetting: {
         showMenu: false,
         showAssets: true,
         notShowBuiltinTree: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1&asset_amount=0',
         edit: {
           drag: {
             isMove: false
@@ -76,18 +113,6 @@ export default {
       headerActions: {
         hasLabelSearch: true,
         hasBulkDelete: true,
-        onCreate: () => {
-          const route = {
-            name: 'AssetPermissionCreate',
-            query: this.$route.query
-          }
-          if (vm.$route.query.node_id) {
-            const { href } = this.$router.resolve(route)
-            window.open(href, '_blank')
-          } else {
-            this.$router.push(route)
-          }
-        },
         searchConfig: {
           url: '',
           options: AssetPermissionListPageSearchConfigOptions

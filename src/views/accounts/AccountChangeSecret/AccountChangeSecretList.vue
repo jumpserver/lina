@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
@@ -15,6 +20,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
@@ -38,12 +45,12 @@ export default {
           },
           accounts: {
             formatter: function(row) {
-              return <span> { row.accounts.join(', ') } </span>
+              return <span> {row.accounts.join(', ')} </span>
             }
           },
           secret_strategy: {
             formatter: function(row) {
-              return <span> { row.secret_strategy.label } </span>
+              return <span> {row.secret_strategy.label} </span>
             }
           },
           is_periodic: {
@@ -55,7 +62,7 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountGatherList',
+              route: 'AccountDiscoverList',
               can: vm.$hasPerm('accounts.view_changesecretexecution'),
               getRoute({ row }) {
                 return {
@@ -70,20 +77,17 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountChangeSecretUpdate', params: { id: row.id }})
-              },
+              updateRoute: 'AccountChangeSecretUpdate',
+              cloneRoute: 'AccountChangeSecretCreate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),
                   name: 'execute',
+                  order: 1,
                   can: ({ row }) => {
                     return row.is_active && vm.$hasPerm('accounts.add_changesecretexecution')
                   },
-                  type: 'info',
+                  type: 'primary',
                   disabled: ({ row }) => !row.is_active,
                   callback: function({ row }) {
                     this.$axios.post(
@@ -106,11 +110,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'AccountChangeSecretCreate'
-          }
-        }
+        createRoute: 'AccountChangeSecretCreate'
       }
     }
   }

@@ -1,23 +1,30 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
-      <AutoDetailCard :fields="detailFields" :formatters="detailFormatters" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="9" :sm="24">
+  <TwoCol>
+    <template>
+      <AutoDetailCard
+        :fields="detailFields"
+        :formatters="detailFormatters"
+        :object="object"
+        :url="url"
+      />
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
-      <RelationCard style="margin-top: 15px" type="info" v-bind="relationConfig" />
-    </el-col>
-  </el-row>
+      <RelationCard type="info" v-bind="relationConfig" />
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'UserInfo',
   components: {
+    TwoCol,
     RelationCard,
     QuickActions,
     AutoDetailCard
@@ -262,10 +269,23 @@ export default {
 }
 </script>
 
-<style scoped>
-  .mfa-setting ::v-deep .el-slider__runway {
-    margin-top: 0;
-    margin-bottom: 0;
+<style lang="scss" scoped>
+.mfa-setting ::v-deep .el-slider__runway {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.detail-right-quick-actions {
+  display: flex;
+
+  & > div {
+    margin-right: 20px;
+    width: 350px;
   }
+
+  & > div:last-child {
+    margin-right: 0; /* 清除最后一个元素的多余间距 */
+  }
+}
 
 </style>

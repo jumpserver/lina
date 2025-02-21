@@ -12,13 +12,10 @@ export default {
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: '/api/v1/assets/databases/',
+      url: `/api/v1/assets/databases/?platform=${this.$route.query.platform}`,
       addFields: this.getAddFields(),
       addFieldsMeta: this.getAddFieldsMeta()
     }
-  },
-  mounted() {
-    this.url = `${this.url}?platform=${this.$route.query.platform}`
   },
   methods: {
     getAddFields() {
@@ -35,7 +32,6 @@ export default {
       if (platformFieldsMap[platform]) {
         tlsFields = tlsFields.concat(platformFieldsMap[platform])
       }
-
       if (tlsFields.length > 2) {
         const secureField = [
           this.$t('Secure'), tlsFields, 2

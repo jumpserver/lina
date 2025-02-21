@@ -29,6 +29,7 @@
         <a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
+
     <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
         <slot name="rMenu" />
@@ -49,8 +50,7 @@ import axiosRetry from 'axios-retry'
 
 const defaultObject = {
   type: Object,
-  default: () => {
-  }
+  default: () => ({})
 }
 export default {
   name: 'ZTree',
@@ -90,6 +90,12 @@ export default {
     window.removeEventListener('resize', this.updateTreeHeight)
   },
   methods: {
+    onMenuClick(menu) {
+      if (menu.disabled) {
+        return
+      }
+      menu.callback()
+    },
     updateTreeHeight: _.debounce(function() {
       const tree = document.getElementById(this.iZTreeID)
       if (!tree) {
@@ -106,8 +112,8 @@ export default {
         }
       }
       // 使用 table 的高度
-      const ztreeRect = tree.getBoundingClientRect()
-      tree.style.height = `calc(100vh - ${ztreeRect.top}px - 30px - 25px)`
+      const zTreeRect = tree.getBoundingClientRect()
+      tree.style.height = `calc(100vh - ${zTreeRect.top}px - 30px - 25px)`
     }, 100),
     async initTree(refresh = false) {
       const vm = this
@@ -155,9 +161,6 @@ export default {
 
       if (this.treeSetting.showMenu) {
         this.rMenu = $(`#${this.iRMenuID}`)
-      }
-      if (this.treeSetting?.otherMenu) {
-        $('.menu-actions').append(this.otherMenu)
       }
     },
     onSearch() {
@@ -435,6 +438,24 @@ div.rMenu li {
   list-style: none outside none;
 }
 
+.menu-item {
+    font-size: 12px;
+    padding: 0 16px;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #606266;
+    height: 24px;
+    line-height: 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    i {
+      width: 15px;
+    }
+}
+
 .dropdown-menu {
   border: medium none;
   min-width: 160px;
@@ -451,7 +472,8 @@ div.rMenu li {
   text-shadow: none;
   top: 100%;
   z-index: 1000;
-  height: 300px;
+  max-height: 320px;
+  min-height: 150px;
   overflow: auto;
 }
 

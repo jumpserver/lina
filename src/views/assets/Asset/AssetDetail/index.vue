@@ -34,6 +34,7 @@ export default {
     return {
       asset: {},
       config: {
+        url: '/api/v1/assets/assets',
         activeMenu: 'Detail',
         submenu: [
           {
@@ -41,7 +42,7 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('AccountList'),
+            title: this.$t('Accounts'),
             name: 'Account',
             hidden: () => !this.$hasPerm('accounts.view_account')
           },

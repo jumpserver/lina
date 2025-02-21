@@ -10,7 +10,7 @@
       <IBox v-if="totalData.length === 0">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
-      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" style="min-width: 335px;">
+      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" class="el-col">
         <el-card
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
@@ -19,8 +19,7 @@
           @click.native="onView(d)"
         >
           <keep-alive>
-            <component :is="subComponent" v-if="subComponent" :object="d" @refresh="getList" />
-            <slot v-else :index="index" :item="d">
+            <slot :index="index" :item="d">
               <span v-if="d.edition === 'enterprise'" class="enterprise">
                 {{ $t('Enterprise') }}
               </span>
@@ -85,6 +84,10 @@ export default {
   },
   props: {
     // 定义 table 的配置
+    columns: {
+      type: Number,
+      default: 3
+    },
     tableConfig: {
       type: Object,
       default: () => ({})
@@ -100,6 +103,10 @@ export default {
     subComponent: {
       type: Object,
       default: () => null
+    },
+    subComponentProps: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -369,6 +376,10 @@ export default {
 .pagination {
   padding-top: 10px;
   border-top: 1px solid #e7eaec;
+}
+
+.el-col {
+  //min-width: 330px; 设置完后，remote app 列表会有问题
 }
 
 .no-data {

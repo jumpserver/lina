@@ -5,15 +5,28 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :key="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
+        :size="action.size"
+        :split-button="!!action.split"
+        :type="action.type"
         class="action-item"
         placement="bottom-start"
         trigger="click"
+        @click="handleClick(action)"
         @command="handleDropdownCallback"
       >
-        <el-button :size="size" class="more-action" v-bind="cleanButtonAction(action)">
-          <span v-if="action.icon && !action.icon.startsWith('el-')" class="pre-icon">
-            <i v-if="action.icon.startsWith('fa')" :class="'fa fa-fw ' + action.icon" />
-            <svg-icon v-else :icon-class="action.icon" />
+        <span v-if="action.split">
+          {{ action.title }}
+        </span>
+        <el-button
+          v-else
+          :class="action.name"
+          :size="size"
+          class="more-action"
+          v-bind="{...cleanButtonAction(action), icon: ''}"
+        >
+          <span class="pre-icon">
+            <Icon v-if="action.icon" :icon="action.icon" />
           </span>
           <span v-if="action.title">
             {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
@@ -29,7 +42,13 @@
             >
               {{ option.group }}
             </div>
-            <el-tooltip :key="option.name" :content="option.tip" :disabled="!option.tip" :open-delay="500" placement="top">
+            <el-tooltip
+              :key="option.name"
+              :content="option.tip"
+              :disabled="!option.tip"
+              :open-delay="500"
+              placement="top"
+            >
               <el-dropdown-item
                 :key="option.name"
                 :command="[option, action]"
@@ -37,9 +56,8 @@
                 class="dropdown-item"
                 v-bind="{...option, icon: ''}"
               >
-                <span v-if="option.icon" class="pre-icon">
-                  <i v-if="option.icon.startsWith('fa')" :class="'fa fa-fw ' + option.icon" />
-                  <svg-icon v-else :icon-class="option.icon" />
+                <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
+                  <Icon v-if="option.icon" :icon="option.icon" />
                 </span>
                 {{ option.title }}
               </el-dropdown-item>
@@ -51,16 +69,16 @@
       <el-button
         v-else
         :key="action.name"
+        :class="[action.name, {grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        v-bind="{...cleanButtonAction(action), icon: action.icon && action.icon.startsWith('el-') ? action.icon : ''}"
+        v-bind="{...cleanButtonAction(action), icon: ''}"
         @click="handleClick(action)"
       >
-        <el-tooltip :content="action.tip" :disabled="!action.tip" :open-delay="500" placement="top">
-          <span :title="action.tip">
-            <span v-if="action.icon && !action.icon.startsWith('el-')" style="vertical-align: initial">
-              <i v-if="action.icon.startsWith('fa')" :class="'fa ' + action.icon" />
-              <svg-icon v-else :icon-class="action.icon" />
+        <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
+          <span>
+            <span v-if="action.icon" style="vertical-align: initial">
+              <Icon :icon="action.icon" />
             </span>
             {{ action.title }}
           </span>
@@ -72,9 +90,13 @@
 
 <script>
 import { toSentenceCase } from '@/utils/common'
+import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'DataActions',
+  components: {
+    Icon
+  },
   props: {
     grouped: {
       type: Boolean,
@@ -99,6 +121,9 @@ export default {
     }
   },
   methods: {
+    actionsHasIcon(actions) {
+      return actions.some(action => action.icon)
+    },
     hasIcon(action, type = '') {
       const icon = action.icon
       if (!icon) {
@@ -156,6 +181,7 @@ export default {
       delete action['callback']
       delete action['name']
       delete action['can']
+      delete action['split']
       return action
     },
     cleanActions(actions) {
@@ -185,6 +211,10 @@ export default {
         }
         delete action['can']
 
+        if (!action.size) {
+          action.size = 'small'
+        }
+
         if (action.dropdown) {
           action.dropdown = this.cleanActions(action.dropdown)
         }
@@ -208,6 +238,10 @@ $color-drop-menu-border: #e4e7ed;
 .layout {
   .action-item {
     margin-left: 5px;
+
+    &.grouped {
+      margin-left: 0;
+    }
 
     &:first-child {
       margin-left: 0;
@@ -250,7 +284,11 @@ $color-drop-menu-border: #e4e7ed;
 
   .el-button {
     padding: 2px 5px;
-    color: $btn-text-color;
+
+    &:not(.is-plain) {
+      color: $btn-text-color;
+    }
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -281,7 +319,6 @@ $color-drop-menu-border: #e4e7ed;
 // 下拉 options
 .el-dropdown-menu {
   ::v-deep .more-batch-processing {
-    text-align: center;
 
     &:hover {
       background-color: transparent !important;
@@ -304,6 +341,7 @@ $color-drop-menu-border: #e4e7ed;
 
   .dropdown-item {
     color: var(--color-text-primary);
+    line-height: 34px;
 
     .pre-icon {
       width: 17px;
@@ -325,6 +363,8 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .el-dropdown-menu__item {
+    padding: 0 20px;
+
     &.is-disabled {
       color: var(--color-disabled);
       cursor: not-allowed;

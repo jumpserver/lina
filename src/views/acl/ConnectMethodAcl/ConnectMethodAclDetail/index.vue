@@ -19,6 +19,14 @@ export default {
     UserJsonTab,
     AssetJsonTab
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       TaskDetail: {},
@@ -39,10 +47,7 @@ export default {
           }
         ],
         hasRightSide: true,
-        actions: {
-          detailApiUrl: `/api/v1/acls/connect-method-acls/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/acls/connect-method-acls/${this.$route.params.id}/`
-        }
+        url: '/api/v1/acls/connect-method-acls/'
       }
     }
   }

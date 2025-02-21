@@ -1,9 +1,13 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
+  <TabPage
+    :active-menu.sync="config.activeMenu"
+    :submenu="config.submenu"
+  />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Index',
@@ -25,11 +29,14 @@ export default {
             title: this.$t('ExecutionList'),
             name: 'AccountBackupExecutionList',
             hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
-            component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/AccountBackupExecution/AccountBackupExecutionList.vue')
+            component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue')
           }
         ]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['hasValidLicense'])
   }
 }
 </script>

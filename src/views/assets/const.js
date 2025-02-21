@@ -47,10 +47,9 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
   }), 100)
 }
 
-export const assetFieldsMeta = (vm) => {
+export const assetFieldsMeta = (vm, platformType) => {
   const platformProtocols = []
   const secretTypes = []
-  const platformType = vm?.$route.query?.type
   const asset = { address: 'https://jumpserver:330' }
   return {
     address: {
@@ -161,7 +160,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     is_active: {
-      type: 'switch'
+      type: 'checkbox'
     },
     cluster: {
       label: i18n.t('Cluster')

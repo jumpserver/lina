@@ -8,14 +8,12 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountPushExecutionInfo from './AccountPushExecutionInfo'
-import AccountPushExecutionTaskList from './AccountPushExecutionTaskList'
+import AccountPushExecutionInfo from './AccountPushExecutionInfo.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountPushExecutionInfo,
-    AccountPushExecutionTaskList
+    AccountPushExecutionInfo
   },
   data() {
     return {
@@ -32,11 +30,6 @@ export default {
             title: this.$t('Basic'),
             name: 'AccountPushExecutionInfo',
             hidden: () => !this.$hasPerm('accounts.view_pushaccountexecution')
-          },
-          {
-            title: this.$t('TaskList'),
-            name: 'AccountPushExecutionTaskList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         getTitle: this.getExecutionTitle

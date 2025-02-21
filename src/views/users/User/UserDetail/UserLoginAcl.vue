@@ -1,17 +1,17 @@
 <template>
-  <el-row :gutter="10">
-    <el-col ::md="20" :sm="24">
-      <UserLoginACLTable :url="url" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <UserLoginACLTable :url="url" />
+  </TwoCol>
 </template>
 
 <script>
 import UserLoginACLTable from '@/views/acl/UserLoginACL/UserLoginACLTable.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'UserLoginAcl',
   components: {
+    TwoCol,
     UserLoginACLTable
   },
   props: {

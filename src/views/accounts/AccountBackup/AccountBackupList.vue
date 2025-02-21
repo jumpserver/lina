@@ -1,11 +1,16 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
 import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   name: 'AccountBackupList',
@@ -15,6 +20,11 @@ export default {
   data() {
     const vm = this
     return {
+      drawerTitle: '',
+      createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
+      showTableUpdateDrawer: false,
+      currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plans/',
         permissions: {
@@ -22,14 +32,14 @@ export default {
           resource: 'accountbackupautomation'
         },
         columns: [
-          'name', 'org_name', 'is_periodic',
-          'periodic_display', 'executed_amount', 'actions'
+          'name', 'backup_type', 'org_name', 'is_periodic',
+          'periodic_display', 'executed_amount', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'org_name', 'periodic_display',
-            'executed_amount', 'actions'
+            'name', 'backup_type', 'periodic_display',
+            'executed_amount', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -56,7 +66,7 @@ export default {
                   name: 'AccountBackupList',
                   query: {
                     tab: 'AccountBackupExecutionList',
-                    plan_id: row.id
+                    automation_id: row.id
                   }
                 }
               }
@@ -67,19 +77,20 @@ export default {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
               },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupUpdate', params: { id: row.id }})
-              },
               extraActions: [
                 {
                   title: vm.$t('Execute'),
+                  order: 1,
                   name: 'execute',
-                  type: 'info',
+                  type: 'primary',
                   can: this.$hasPerm('accounts.add_accountbackupexecution'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
-                      { plan: row.id }
+                      {
+                        automation: row.id,
+                        type: row.type.value
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -93,12 +104,7 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'AccountBackupCreate'
-          }
-        }
+        hasImport: false
       }
     }
   }

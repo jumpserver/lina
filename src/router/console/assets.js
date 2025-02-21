@@ -132,14 +132,14 @@ export default [
       {
         path: 'create',
         name: 'CloudCreate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('CloudCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'CloudUpdate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('CloudUpdate'), activeMenu: '/console/assets/assets' }
       }
@@ -291,44 +291,6 @@ export default [
       }
     ]
   },
-  {
-    path: 'platforms',
-    component: empty,
-    meta: {
-      permissions: ['assets.view_platform'],
-      resource: 'platform',
-      icon: 'platform'
-    },
-    redirect: '',
-    children: [
-      {
-        path: '',
-        name: 'PlatformList',
-        component: () => import('@/views/assets/Platform/PlatformList'),
-        meta: { title: i18n.t('PlatformList') }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformCreate',
-        hidden: true,
-        meta: { title: i18n.t('PlatformCreate') }
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformUpdate',
-        hidden: true,
-        meta: { title: i18n.t('PlatformUpdate'), permissions: [] }
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/assets/Platform/PlatformDetail'), // Parent router-view
-        name: 'PlatformDetail',
-        hidden: true,
-        meta: { title: i18n.t('PlatformDetail') }
-      }
-    ]
-  },
+
   ...XPackRoutes
 ]

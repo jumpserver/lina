@@ -35,7 +35,8 @@ export const AssetPermissionTableMeta = {
   name: {
     minWidth: '120px',
     formatterArgs: {
-      route: 'AssetPermissionDetail'
+      route: 'AssetPermissionDetail',
+      drawer: true
     }
   },
   action: {
@@ -65,6 +66,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       route: 'AssetPermissionDetail',
+      drawer: true,
       routeQuery: {
         tab: 'AssetPermissionUser'
       }
@@ -75,6 +77,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionUser'
@@ -85,6 +88,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
@@ -96,6 +100,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
@@ -106,6 +111,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       cellValueToRemove: ['@SPEC'],
+      drawer: true,
       getItem(item) {
         if (item !== '@SPEC') {
           return AccountLabelMapper[item] || item

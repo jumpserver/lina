@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 

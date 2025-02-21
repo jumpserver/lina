@@ -5,7 +5,9 @@
     v-bind="iAttrs"
     @input="handleInput"
     v-on="$listeners"
-  />
+  >
+    hello
+  </Password>
 </template>
 
 <script>

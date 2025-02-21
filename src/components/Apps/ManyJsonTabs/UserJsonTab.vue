@@ -1,18 +1,18 @@
 <template>
-  <el-row :gutter="24">
-    <el-col :md="20" :sm="22">
-      <ListTable v-bind="config" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <ListTable v-bind="config" />
+  </TwoCol>
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import { toM2MJsonParams } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'User',
   components: {
+    TwoCol,
     ListTable
   },
   props: {
@@ -34,13 +34,16 @@ export default {
         tableConfig: {
           url: `/api/v1/users/users/?${key}=${value}`,
           columns: [
-            'name', 'username', 'groups', 'system_roles',
+            'name', 'username', 'email', 'groups', 'system_roles',
             'org_roles', 'source', 'is_valid'
           ],
+          columnsShow: {
+            min: ['name', 'username'],
+            default: ['name', 'username', 'email']
+          },
           columnsMeta: {
             name: {
               label: this.$t('Name'),
-              width: 85,
               formatter: (row) => {
                 const to = {
                   name: 'UserDetail',

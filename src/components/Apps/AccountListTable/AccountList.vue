@@ -1,6 +1,12 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <DrawerListTable
+      ref="ListTable"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :quick-filters="quickFilters"
+      :table-config="tableConfig"
+    />
     <ViewSecret
       v-if="showViewSecretDialog"
       :account="account"
@@ -16,19 +22,10 @@
     <AccountCreateUpdate
       v-if="showAddDialog"
       :account="account"
+      :add-template="addTemplate"
       :asset="iAsset"
       :title="accountCreateUpdateTitle"
       :visible.sync="showAddDialog"
-      @add="addAccountSuccess"
-      @bulk-create-done="showBulkCreateResult($event)"
-    />
-    <AccountCreateUpdate
-      v-if="showAddTemplateDialog"
-      :account="account"
-      :add-template="true"
-      :asset="iAsset"
-      :title="accountCreateByTemplateTitle"
-      :visible.sync="showAddTemplateDialog"
       @add="addAccountSuccess"
       @bulk-create-done="showBulkCreateResult($event)"
     />
@@ -44,29 +41,36 @@
       v-bind="updateSelectedDialogSetting"
       @update="handleAccountBulkUpdate"
     />
+    <PasswordHistoryDialog
+      v-if="showPasswordHistoryDialog"
+      :account="currentAccountColumn"
+      :visible.sync="showPasswordHistoryDialog"
+    />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
+import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
+import { openTaskPage } from '@/utils/jms'
+import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
-import AccountCreateUpdate from './AccountCreateUpdate.vue'
-import { connectivityMeta } from './const'
-import { openTaskPage } from '@/utils/jms'
 import ResultDialog from './BulkCreateResultDialog.vue'
+import AccountCreateUpdate from './AccountCreateUpdate.vue'
+import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
+import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 import AccountBulkUpdateDialog from '@/components/Apps/AccountListTable/AccountBulkUpdateDialog.vue'
 
 export default {
   name: 'AccountListTable',
   components: {
-    AccountBulkUpdateDialog,
-    ResultDialog,
-    ListTable,
-    UpdateSecretInfo,
     ViewSecret,
-    AccountCreateUpdate
+    ResultDialog,
+    DrawerListTable,
+    UpdateSecretInfo,
+    AccountCreateUpdate,
+    PasswordHistoryDialog,
+    AccountBulkUpdateDialog
   },
   props: {
     url: {
@@ -89,7 +93,7 @@ export default {
     },
     hasClone: {
       type: Boolean,
-      default: false
+      default: true
     },
     asset: {
       type: Object,
@@ -119,7 +123,7 @@ export default {
     columnsDefault: {
       type: Array,
       default: () => ([
-        'name', 'username', 'asset', 'date_updated'
+        'name', 'username', 'secret', 'asset', 'platform', 'connect'
       ])
     },
     headerExtraActions: {
@@ -129,22 +133,29 @@ export default {
     extraQuery: {
       type: Object,
       default: () => ({})
+    },
+    showQuickFilters: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     const vm = this
     return {
+      addTemplate: false,
+      currentAccountColumn: {},
+      showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showResultDialog: false,
       showAddDialog: false,
       showAddTemplateDialog: false,
+      detailDrawer: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
       createAccountResults: [],
-      accountCreateUpdateTitle: this.$t('AddAccount'),
-      accountCreateByTemplateTitle: this.$t('AddAccountByTemplate'),
       iAsset: this.asset,
       account: {},
       secretUrl: '',
+      quickFilters: this.showQuickFilters ? accountQuickFilters(this) : [],
       tableConfig: {
         url: this.url,
         permissions: {
@@ -153,6 +164,7 @@ export default {
         },
         extraQuery: this.extraQuery,
         columnsExclude: ['spec_info'],
+        columnsAdd: ['secret', 'platform', 'connect'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: this.columnsDefault
@@ -160,29 +172,50 @@ export default {
         columnsMeta: {
           name: {
             width: '120px',
-            formatter: function(row) {
-              const to = {
-                name: 'AssetAccountDetail',
-                params: { id: row.id }
+            formatterArgs: {
+              can: () => vm.$hasPerm('accounts.view_account'),
+              getDrawerTitle({ row }) {
+                return `${row.username}@${row.asset.name}`
               }
-              if (vm.$hasPerm('accounts.view_account')) {
-                return <router-link to={to}>{row.name}</router-link>
-              } else {
-                return <span>{row.name}</span>
+            }
+          },
+          secret: {
+            formatter: SecretViewerFormatter,
+            width: '130px',
+            formatterArgs: {
+              secretFrom: 'api',
+              hasDownload: false,
+              actionLeft: true
+            }
+          },
+          connect: {
+            label: this.$t('Connect'),
+            width: '80px',
+            formatter: AccountConnectFormatter,
+            formatterArgs: {
+              buttonIcon: 'fa fa-desktop',
+              titleText: '可选协议',
+              url: '/api/v1/assets/assets/{id}',
+              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
+              setMapItem: (id, protocol) => {
+                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
+                  key: id,
+                  value: protocol
+                })
               }
+            }
+          },
+          platform: {
+            label: this.$t('Platform'),
+            width: '120px',
+            formatter: PlatformFormatter,
+            formatterArgs: {
+              platformAttr: 'asset.platform'
             }
           },
           asset: {
             formatter: function(row) {
-              const to = {
-                name: 'AssetDetail',
-                params: { id: row.asset.id }
-              }
-              if (vm.$hasPerm('assets.view_asset')) {
-                return <router-link to={to}>{row.asset.name}</router-link>
-              } else {
-                return <span>{row.asset.name}</span>
-              }
+              return row.asset.name
             }
           },
           username: {
@@ -216,75 +249,11 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
-              hasClone: this.hasClone,
+              hasDelete: true, // can set function(row, value)
+              hasClone: false,
+              canDelete: () => vm.$hasPerm('accounts.delete_account'),
               moreActionsTitle: this.$t('More'),
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t('View'),
-                  can: this.$hasPerm('accounts.view_accountsecret'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    // debugger
-                    vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
-                    vm.account = row
-                    vm.showViewSecretDialog = false
-                    setTimeout(() => {
-                      vm.showViewSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Update',
-                  title: this.$t('Edit'),
-                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    const data = {
-                      ...this.asset,
-                      ...row.asset
-                    }
-                    vm.account = row
-                    vm.iAsset = data
-                    vm.showAddDialog = false
-                    vm.accountCreateUpdateTitle = this.$t('UpdateAccount')
-                    setTimeout(() => {
-                      vm.showAddDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Test',
-                  title: this.$t('Test'),
-                  can: ({ row }) =>
-                    !this.$store.getters.currentOrgIsRoot &&
-                    this.$hasPerm('accounts.verify_account') &&
-                    row.asset['auto_config'].ansible_enabled &&
-                    row.asset['auto_config'].ping_enabled,
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/accounts/accounts/tasks/`,
-                      { action: 'verify', accounts: [row.id] }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
-                  name: 'ClearSecret',
-                  title: this.$t('ClearSecret'),
-                  can: this.$hasPerm('accounts.change_account'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.patch(
-                      `/api/v1/accounts/accounts/clear-secret/`,
-                      { account_ids: [row.id] }
-                    ).then(() => {
-                      this.$message.success(this.$tc('ClearSuccessMsg'))
-                    })
-                  }
-                }
-              ]
+              extraActions: accountOtherActions(this)
             }
           },
           ...this.columnsMeta
@@ -320,6 +289,7 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
+                vm.addTemplate = false
                 vm.showAddDialog = true
               })
             }
@@ -336,7 +306,8 @@ export default {
               setTimeout(() => {
                 vm.iAsset = this.asset
                 vm.account = {}
-                vm.showAddTemplateDialog = true
+                vm.showAddDialog = true
+                vm.addTemplate = true
               })
             }
           },
@@ -347,11 +318,11 @@ export default {
             name: 'TestSelected',
             title: this.$t('TestSelected'),
             type: 'primary',
-            icon: 'fa-link',
+            icon: 'verify',
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
-                  ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
-                  !this.$store.getters.currentOrgIsRoot
+                ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
+                !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {
@@ -416,6 +387,15 @@ export default {
       }
     }
   },
+  computed: {
+    accountCreateUpdateTitle() {
+      if (this.addTemplate) {
+        return this.$t('AddAccountByTemplate')
+      } else {
+        return this.$t('AddAccount')
+      }
+    }
+  },
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
@@ -423,52 +403,34 @@ export default {
     }
   },
   mounted() {
-    if (this.columns.length > 0) {
-      this.tableConfig.columns = this.columns
-    }
-    if (this.otherActions) {
-      const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
-      for (const item of this.otherActions) {
-        actionColumn.formatterArgs.extraActions.push(item)
-      }
-    }
-    if (this.hasDeleteAction) {
-      this.tableConfig.columnsMeta.actions.formatterArgs.extraActions.push(
-        {
-          name: 'Delete',
-          title: this.$t('Delete'),
-          can: this.$hasPerm('accounts.delete_account'),
-          type: 'primary',
-          callback: ({ row }) => {
-            const msg = this.$t('AccountDeleteConfirmMsg')
-            this.$confirm(msg, this.$tc('Info'), {
-              type: 'warning',
-              confirmButtonClass: 'el-button--danger',
-              beforeClose: async(action, instance, done) => {
-                if (action !== 'confirm') return done()
-                this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
-                  done()
-                  this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$tc('DeleteSuccessMsg'))
-                })
-              }
-            })
-          }
-        }
-      )
-    }
+    this.setActions()
   },
   activated() {
     // 由于组件嵌套较深，有可能导致 Error in activated hook: "TypeError: Cannot read properties of undefined (reading 'getList')" 的问题
-    setTimeout(() => {
-      this.refresh()
-    }, 300)
+    if (this.tabDeactivated) {
+      setTimeout(() => this.refresh(), 300)
+    }
+  },
+  deactivated() {
+    this.tabDeactivated = true
   },
   methods: {
+    setActions() {
+      if (this.columns.length > 0) {
+        this.tableConfig.columns = this.columns
+      }
+      if (this.otherActions) {
+        const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
+        for (const item of this.otherActions) {
+          actionColumn.formatterArgs.extraActions.push(item)
+        }
+      }
+    },
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
     },
     addAccountSuccess() {
+      Reflect.deleteProperty(this.$route.query, 'flag')
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
@@ -507,7 +469,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .cell a {
   color: var(--color-info);
 }

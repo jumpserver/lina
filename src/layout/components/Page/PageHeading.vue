@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="globalNotification">
-      <SqlQueryTip v-if="debug" />
+      <SqlQueryTip v-if="debug " />
       <LicenseRelatedTip v-else />
       <PasswordExpireTip />
     </slot>
@@ -22,6 +22,7 @@
 import LicenseRelatedTip from './LicenseRelatedTip'
 import PasswordExpireTip from './PasswordExpireTip'
 import SqlQueryTip from './SqlQueryTip'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'PageHeading',
@@ -40,6 +41,9 @@ export default {
     return {
       debug: process.env.NODE_ENV === 'development'
     }
+  },
+  computed: {
+    ...mapGetters(['inDrawer'])
   }
 }
 </script>

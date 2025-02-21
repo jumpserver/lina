@@ -98,11 +98,23 @@ export default {
     canBulkUpdate: {
       type: [Boolean, Function, String],
       default: false
+    },
+    hasQuickFilter: defaultTrue,
+    quickFilterExpand: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       defaultRightSideActions: [
+        {
+          name: 'actionFilter',
+          icon: 'filter',
+          tip: this.$t('Filter'),
+          has: this.hasQuickFilter,
+          callback: this.handleFilterClick.bind(this)
+        },
         {
           name: 'actionSetting',
           icon: 'system-setting',
@@ -170,6 +182,9 @@ export default {
     }
   },
   methods: {
+    handleFilterClick() {
+      this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
+    },
     handleTagSearch(val) {
       this.searchTable(val)
     },
@@ -196,7 +211,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 10px;
   height: 30px;
   line-height: 30px;
 
