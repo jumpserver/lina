@@ -88,9 +88,6 @@ export default {
       if (!actions.onCreate) {
         actions.onCreate = this.onCreate
       }
-      if (!actions.onUpdate) {
-        actions.onUpdate = this.onUpdate
-      }
       return actions
     },
     iTableConfig() {
