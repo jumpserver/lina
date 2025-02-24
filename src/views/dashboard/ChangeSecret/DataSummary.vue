@@ -89,5 +89,13 @@ export default {
 
 ::v-deep .content .summary-card {
   flex: 1;
+  width: 33%;
+  max-width: 33%;
+
+  .summary-header {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 </style>

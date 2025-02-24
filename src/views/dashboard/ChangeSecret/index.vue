@@ -111,7 +111,7 @@ export default {
   }
 
   .data-summary {
-    margin-left: 1rem
+    margin-left: 1rem;
   }
 
   .account-summary,
