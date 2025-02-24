@@ -110,14 +110,15 @@ export default {
       return resource.replace(' details', '').replace('详情', '')
     },
     getDrawerTitle() {
-      if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {
-        return this.formatterArgs.getDrawerTitle({
+      let drawerTitle = ''
+      if (this.formatterArgs?.getTitle && typeof this.formatterArgs.getTitle === 'function') {
+        drawerTitle = this.formatterArgs.getTitle({
           col: this.col,
           row: this.row,
           cellValue: this.cellValue
         })
       }
-      let title = this.cellValue || this.row.name
+      let title = this.cellValue?.name || drawerTitle
       const resource = this.getResource()
       if (resource) {
         title = `${resource}: ${title}`
