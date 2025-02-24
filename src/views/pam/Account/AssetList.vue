@@ -11,9 +11,6 @@ export default {
   },
   data() {
     return {
-      drawerTitle: '',
-      showTableUpdateDrawer: false,
-      currentTemplate: null,
       config: {
         url: '/api/v1/assets/assets/',
         category: 'all'
