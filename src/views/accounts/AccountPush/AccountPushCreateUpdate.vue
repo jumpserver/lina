@@ -95,7 +95,7 @@ export default {
         },
         accounts: {
           component: TagInput,
-          helpText: this.$t('If the account already exists, the ciphertext of the account will be used for push; if the account does not exist, the account will be created according to the filled-in ciphertext and then pushed.')
+          helpText: this.$t('PushAccountHelpText')
         },
         params: {
           component: AutomationParams,

@@ -64,7 +64,7 @@ export default {
       return this.buttonIcon
     },
     ITitleText() {
-      return this.titleText || this.$t('OptionalProtocol')
+      return this.titleText || this.$t('SelectProtocol')
     }
   },
   methods: {
