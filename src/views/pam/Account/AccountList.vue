@@ -36,6 +36,23 @@ export default {
     }
   },
   mounted() {
+    if (!this.$route.query.payload) return
+
+    const payload = this.$route.query.payload
+    switch (payload) {
+      case 'privileged':
+        this.tableConfig.url += '?privileged=1'
+        break
+      case 'resetSecret':
+        this.tableConfig.url += '?secret_reset=1'
+        break
+      case 'connectable':
+        this.tableConfig.url += '?connectivity=ok'
+        break
+      case 'valid':
+        this.tableConfig.url += '?valid=1'
+        break
+    }
   },
   methods: {
   }

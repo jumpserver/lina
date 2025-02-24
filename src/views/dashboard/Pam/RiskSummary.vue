@@ -43,66 +43,84 @@ export default {
     chartOption() {
       const data = [
         {
+          description: 'long_time_no_login',
           name: this.$t('NoLoginLongTime'),
           value: this.counter.total_long_time_no_login_accounts
         },
         {
+          description: 'new_found',
           name: this.$t('NewAccountsFound'),
           value: this.counter.total_new_found_accounts
         },
         {
+          description: 'group_changed',
           name: this.$t('GroupChanged'),
           value: this.counter.total_group_changed_accounts
         },
         {
+          description: 'sudo_changed',
           name: this.$t('SudoChanged'),
           value: this.counter.total_sudo_changed_accounts
         },
         {
+          description: 'authorized_keys_changed',
           name: this.$t('AuthorizedKeysChanged'),
           value: this.counter.total_authorized_keys_changed_accounts
         },
         {
+          description: 'account_deleted',
           name: this.$t('AccountDeleted'),
           value: this.counter.total_account_deleted_accounts
         },
         {
+          description: 'password_expired',
           name: this.$t('PasswordExpired'),
           value: this.counter.total_password_expired_accounts
         },
         {
+          description: 'long_time_password',
           name: this.$t('LongTimePassword'),
           value: this.counter.total_long_time_password_accounts
         },
         {
+          description: 'weak_password',
           name: this.$t('WeakPassword'),
           value: this.counter.total_weak_password_accounts
         },
         {
+          description: 'leaked_password',
           name: this.$t('LeakedPassword'),
           value: this.counter.total_leaked_password_accounts
         },
         {
+          description: 'repeated_password',
           name: this.$t('RepeatedPassword'),
           value: this.counter.total_repeated_password_accounts
         },
         {
+          description: 'password_error',
           name: this.$t('PasswordError'),
           value: this.counter.total_password_error_accounts
         },
         {
+          description: 'no_admin_account',
           name: this.$t('NoAdminAccount'),
           value: this.counter.total_no_admin_account_accounts
         }
       ]
 
-      // 过滤出值大于0的项目
-      let filteredData = data.filter(item => item.value > 0)
+      let filteredData = []
 
-      // 如果没有值大于0的项目，则显示前5个
-      if (filteredData.length === 0) {
-        filteredData = data.slice(0, 5)
+      // 只要有一个大于零 则展示全部的
+      if (data.some(item => item.value > 0).length > 0) {
+        filteredData = data
+      } else {
+        filteredData = data.slice(0, 7)
       }
+
+      // 找出所有数据中最大的值，并设置为 x 轴的 max。如果全是零则设置为 10
+      const maxValue = Math.max(...filteredData.map(item => item.value))
+      const max = maxValue > 0 ? maxValue : 10
 
       return {
         grid: {
@@ -115,6 +133,9 @@ export default {
         xAxis: {
           type: 'value',
           show: true,
+          min: 0,
+          max: max,
+          interval: 1,
           position: 'top',
           axisLine: { show: false },
           axisTick: { show: false },
@@ -153,7 +174,11 @@ export default {
         series: [
           {
             type: 'bar',
-            data: filteredData.map(item => item.value),
+            data: filteredData.map(item => ({
+              name: item.name,
+              value: item.value,
+              description: item.description
+            })),
             barWidth: '60%',
             label: {
               show: false,
@@ -165,7 +190,6 @@ export default {
             },
             itemStyle: {
               color: '#1AB394',
-
               borderRadius: [0, 4, 4, 0]
             }
           }
@@ -216,6 +240,17 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$refs.chartRef)
       this.chart.setOption(this.chartOption)
+
+      this.chart.on('click', (params) => {
+        if (params.componentType === 'series') {
+          this.$router.push({
+            name: 'AccountCheckList',
+            query: {
+              payload: params.data.description
+            }
+          })
+        }
+      })
     },
     updateChart() {
       if (this.chart) {

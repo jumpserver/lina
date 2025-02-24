@@ -26,6 +26,7 @@
         v-for="item in summaryItems"
         :key="item.key"
         class="metric-item"
+        @click="handleClick(item)"
       >
         <span class="metric-label">{{ $tc(item.label) }}</span>
         <span class="metric-value" :class="{'increase': config[item.key] > 0}">
@@ -172,6 +173,9 @@ export default {
       if (this.chart) {
         this.chart.resize()
       }
+    },
+    handleClick(item) {
+      this.$router.push({ name: this.config.route.name, query: { payload: item.key }})
     }
   }
 }
