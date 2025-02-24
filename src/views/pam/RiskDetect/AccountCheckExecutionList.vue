@@ -44,6 +44,7 @@ export default {
                 name: 'AccountCheckExecutionDetail',
                 params: { id: row.id }
               }),
+              getTitle: ({ row }) => row['short_id'],
               drawer: true,
               can: this.$hasPerm('accounts.view_checkaccountexecution')
             }

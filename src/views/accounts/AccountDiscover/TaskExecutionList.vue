@@ -47,8 +47,7 @@ export default {
               }),
               getTitle: ({ row }) => row['short_id'],
               drawer: true
-            },
-            width: '120px'
+            }
           },
           status: {
             label: this.$t('Status'),
