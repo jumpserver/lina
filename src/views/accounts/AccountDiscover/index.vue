@@ -27,7 +27,7 @@ export default {
             component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverList.vue')
           },
           {
-            title: this.$t('AccountDiscoverTaskList'),
+            title: this.$t('AccountDiscoverTask'),
             name: 'AccountDiscoverTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
             component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskList.vue')

@@ -43,7 +43,7 @@ export default [
         name: 'AccountDiscoverTaskDetail',
         hidden: true,
         meta: {
-          title: i18n.t('AccountDiscoverTaskDetail'),
+          title: i18n.t('AccountDiscoverTask'),
           // activeMenu: '/console/accounts/automations',
           permissions: ['accounts.view_gatheraccountsautomation']
         }

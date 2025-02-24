@@ -36,7 +36,7 @@ export default {
               )
           },
           {
-            title: this.$t('RecordList'),
+            title: this.$t('ExecutionRecord'),
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
             component: () => import(

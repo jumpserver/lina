@@ -210,7 +210,7 @@ export const accountQuickFilters = (vm) => [
     label: vm.$t('RiskyAccount'),
     options: [
       {
-        label: vm.$t('LongTimeNoLogin'),
+        label: vm.$t('NoLoginLongTime'),
         filter: {
           risk: 'long_time_no_login'
         }
@@ -234,7 +234,7 @@ export const accountQuickFilters = (vm) => [
         }
       },
       {
-        label: vm.$t('LongTimeNoChangeSecret'),
+        label: vm.$t('LongTimePassword'),
         filter: {
           long_time_no_change_secret: 'true'
         }

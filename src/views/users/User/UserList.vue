@@ -92,7 +92,7 @@ export default {
               }
             },
             {
-              label: this.$t('LongTimeNoLogin'),
+              label: this.$t('NoLoginLongTime'),
               filter: {
                 is_long_time_no_login: true
               }
