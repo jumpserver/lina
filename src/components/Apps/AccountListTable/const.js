@@ -283,7 +283,7 @@ export const accountQuickFilters = (vm) => [
       {
         label: 'Web',
         filter: {
-          category: 'website'
+          category: 'web'
         }
       },
       {
