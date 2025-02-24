@@ -1,5 +1,10 @@
 <template>
-  <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable
+    ref="listTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+    :create-drawer="createDrawer"
+  />
 </template>
 
 <script>
@@ -57,7 +62,8 @@ export default {
         hasImport: false,
         hasMoreActions: false,
         createRoute: 'UserLoginAclCreate'
-      }
+      },
+      createDrawer: () => import('./UserLoginACLCreateUpdate.vue')
     }
   },
   activated() {
