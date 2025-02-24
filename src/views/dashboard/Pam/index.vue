@@ -89,9 +89,12 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .risk-summary,
   .data-summery {
     margin-bottom: 1.25rem;
+  }
+
+  .risk-summary {
+    margin-top: 1.25rem;
   }
 }
 </style>
