@@ -129,11 +129,6 @@ export default {
           ]
         },
         columnsMeta: {
-          name: {
-            formatterArgs: {
-              route: 'UserDetail'
-            }
-          },
           mfa_level: {
             width: '130px',
             formatter: (row) => {
