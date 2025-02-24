@@ -42,10 +42,10 @@ export default {
                 name: 'AccountPushExecutionDetail',
                 params: { id: row.id }
               }),
+              getTitle: ({ row }) => row['short_id'],
               drawer: true,
               can: this.$hasPerm('accounts.view_pushaccountexecution')
-            },
-            width: '240px'
+            }
           },
           push_user_name: {
             label: this.$t('DisplayName'),
