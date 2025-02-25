@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 function getTableConfigFromLocal() {
   const configs = localStorage.getItem('tableConfig')
   try {
@@ -25,11 +23,6 @@ const state = {
 }
 
 const mutations = {
-  SET_TABLE_CONFIG: (state, item) => {
-    const _tableConfig = getTableConfigFromLocal()
-    Vue.set(_tableConfig, item.key, item.value)
-    localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
-  },
   SET_PROTOCOL_MAP_ITEM: (state, item) => {
     state.protocolMap.set(item.key, item.value)
     const obj = Object.fromEntries(state.protocolMap)
