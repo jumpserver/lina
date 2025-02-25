@@ -1,7 +1,7 @@
 <template>
   <TwoCol>
     <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    <template #right>
+    <template>
       <IBox :title="$tc('Variable')">
         <Variable
           :value.sync="object.variable"
