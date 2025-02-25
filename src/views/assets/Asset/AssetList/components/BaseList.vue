@@ -30,6 +30,12 @@
       :visible.sync="gatewayVisible"
     />
     <AccountDiscoverDialog :asset="discoveryDialog.asset" :visible.sync="discoveryDialog.visible" />
+    <AccountCreateUpdate
+      v-if="showAddDialog"
+      :asset="asset"
+      :visible.sync="showAddDialog"
+      @add="addAccountSuccess"
+    />
   </div>
 </template>
 
@@ -39,6 +45,7 @@ import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import PlatformDialog from '../components/PlatformDialog'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
 import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
+import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'
 import { mapState } from 'vuex'
 
@@ -47,6 +54,7 @@ export default {
     ListTable,
     GatewayDialog,
     PlatformDialog,
+    AccountCreateUpdate,
     AccountDiscoverDialog,
     AssetBulkUpdateDialog
   },
@@ -139,9 +147,11 @@ export default {
       },
       createProps: {},
       showPlatform: false,
+      showAddDialog: false,
       recentPlatforms: recentPlatforms,
       createAction: createAction,
       gatewayPort: 0,
+      asset: {},
       gatewayCell: '',
       gatewayVisible: false,
       defaultConfig: defaultConfig['tableConfig'],
@@ -264,6 +274,9 @@ export default {
         }
       })
       this.recentPlatforms = platforms
+    },
+    addAccountSuccess() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
