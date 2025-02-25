@@ -1,6 +1,12 @@
 <template>
   <div>
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <GenericListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :table-config="tableConfig"
+    />
     <JobRunDialog v-if="showJobRunDialog" :item="item" :visible.sync="showJobRunDialog" @submit="runJob" />
     <SetVariableDialog
       v-if="showVariableDialog"
@@ -14,7 +20,7 @@
 
 <script>
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/components/Table/DrawerListTable'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
@@ -32,7 +38,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      createDrawer: () => import('@/views/ops/Job/JobUpdateCreate.vue'),
+      detailDrawer: () => import('@/views/ops/Job/JobDetail/index.vue'),
       item: {},
       tableConfig: {
         url: `/api/v1/ops/jobs/?type=${this.type}`,
@@ -95,6 +104,12 @@ export default {
               hasUpdate: true,
               canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
+              onUpdate: ({ row, col }) => {
+                vm.$router.push({
+                  query: { _type: this.type }
+                })
+                vm.$refs.ListTable.onUpdate({ row, col })
+              },
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
               hasClone: false,
@@ -125,13 +140,11 @@ export default {
         }
       },
       headerActions: {
-        createRoute: () => {
-          return {
-            name: 'JobCreate',
-            query: {
-              type: this.type
-            }
-          }
+        onCreate: () => {
+          vm.$router.push({
+            query: { _type: this.type }
+          })
+          vm.$refs.ListTable.onCreate()
         },
         hasRefresh: true,
         hasExport: false,
