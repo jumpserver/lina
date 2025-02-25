@@ -388,21 +388,27 @@ export class ObjectLocalStorage {
     } catch (e) {
       console.warn('localStorage value is not a valid JSON: ', this.key)
     }
-    if (typeof value !== 'object') {
+    if (!value || typeof value !== 'object') {
       value = {}
     }
     return value
   }
 
-  get(attr) {
+  get(attr, defaults) {
     const obj = this.getObject(this.key)
     const attrSafe = this.b64(attr)
-    return obj[attrSafe]
+    const val = obj[attrSafe]
+    if (val === undefined) {
+      return defaults
+    }
+    return val
   }
 
   set(attr, value) {
     const obj = this.getObject(this.key)
     const attrSafe = this.b64(attr)
+    console.log('Obj: ', obj)
+    console.log('Set to: ', attr, value)
     obj[attrSafe] = value
     window.localStorage.setItem(this.key, JSON.stringify(obj))
   }
