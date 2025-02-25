@@ -231,7 +231,11 @@ export function getDefaultConfig(vm) {
             {
               name: 'AddAccount',
               title: '添加账号',
-              divided: true
+              divided: true,
+              callback: ({ row }) => {
+                vm.asset.id = row.id
+                vm.showAddDialog = true
+              }
             },
             {
               name: 'DiscoverAccounts',
