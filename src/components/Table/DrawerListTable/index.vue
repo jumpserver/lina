@@ -132,6 +132,7 @@ export default {
   methods: {
     getDefaultTitle() {
       let title = this.title
+      let dispatchAction = ''
       if (!title && this.resource) {
         title = this.resource
       }
@@ -143,11 +144,13 @@ export default {
       if (!title) {
         title = this.$t('NoTitle')
       }
-      let action = this.action
-      if (action === 'clone') {
-        action = 'create'
+      const action = this.action
+      if (action === 'clone' || action === 'create') {
+        dispatchAction = this.$t('Create')
+      } else if (action === 'update') {
+        dispatchAction = this.$t('Update')
       }
-      title = toSentenceCase(action) + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
+      title = dispatchAction + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
       return title
     },
     getDefaultDrawer(action) {
