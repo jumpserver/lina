@@ -1,5 +1,9 @@
 <template>
-  <BaseList :table-config="tableConfig" v-bind="config" />
+  <BaseList
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    v-bind="config"
+  />
 </template>
 
 <script>
@@ -17,6 +21,13 @@ export default {
       },
       tableConfig: {
         columnsExclude: ['date_verified']
+      },
+      headerActions: {
+        handleImportClick: ({ selectedRows }) => {
+          this.$message.warning({
+            message: this.$t('ImportMessage')
+          })
+        }
       }
     }
   }

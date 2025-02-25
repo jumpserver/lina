@@ -1,16 +1,21 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import ReportDialog from '@/components/Dialog/ReportDialog.vue'
 
 export default {
   name: 'AccountBackupExecutionList',
   components: {
-    GenericListTable
+    GenericListTable,
+    ReportDialog
   },
   props: {
     object: {
@@ -20,7 +25,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      visible: false,
+      reportUrl: '',
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
@@ -87,7 +95,8 @@ export default {
                   type: 'success',
                   can: this.$hasPerm('accounts.view_backupaccountexecution'),
                   callback: function({ row }) {
-                    window.open(`/api/v1/accounts/account-backup-plan-executions/${row.id}/report/`)
+                    vm.visible = true
+                    vm.reportUrl = `/api/v1/accounts/account-backup-plan-executions/${row.id}/report/`
                   }
                 }
               ]

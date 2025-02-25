@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ReportDialog :visible.sync="visible" :url="reportUrl" />
   </div>
 </template>
 
@@ -11,10 +12,12 @@ import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { taskStatusFormatterMeta } from '@/components/const'
 import TaskStatusChoicesFormatter from '@/components/Table/TableFormatters/TaskStatusFormatter.vue'
+import ReportDialog from '@/components/Dialog/ReportDialog.vue'
 
 export default {
   name: 'AccountDiscoverTaskExecutionList',
   components: {
+    ReportDialog,
     GenericListTable
   },
   props: {
@@ -25,7 +28,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      visible: false,
+      reportUrl: '',
       showTableUpdateDrawer: false,
       currentTemplate: null,
       drawerTitle: '',
@@ -72,13 +78,6 @@ export default {
             id: ({ row }) => row.automation,
             can: this.$hasPerm('accounts.view_gatheraccountsexecution')
           },
-          timedelta: {
-            label: this.$t('TimeDelta'),
-            formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
-            },
-            width: null
-          },
           date_start: {
             width: null
           },
@@ -102,7 +101,8 @@ export default {
                   type: 'success',
                   can: this.$hasPerm('accounts.view_gatheraccountsexecution'),
                   callback: function({ row }) {
-                    window.open(`/api/v1/accounts/gather-account-executions/${row.id}/report/`)
+                    vm.visible = true
+                    vm.reportUrl = `/api/v1/accounts/gather-account-executions/${row.id}/report/`
                   }
                 }
               ]

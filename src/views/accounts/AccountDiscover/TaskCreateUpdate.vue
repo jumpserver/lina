@@ -67,8 +67,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountDiscoverList' },
-      updateSuccessNextRoute: { name: 'AccountDiscoverList' },
+      createSuccessNextRoute: { name: 'AccountDiscover' },
+      updateSuccessNextRoute: { name: 'AccountDiscover' },
       cleanFormValue(values) {
         values.interval = values.interval || null
         return values
