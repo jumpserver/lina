@@ -1,24 +1,32 @@
 <template>
-  <GenericListTable
-    ref="listTable"
-    :detail-drawer="detailDrawer"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-  />
+  <div>
+    <GenericListTable
+      ref="listTable"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import ReportDialog from '@/components/Dialog/ReportDialog'
 
 export default {
   name: 'AccountPushExecutionList',
   components: {
-    GenericListTable
+    GenericListTable,
+    ReportDialog
   },
   data() {
+    const vm = this
     return {
+      visible: false,
+      reportUrl: '',
       detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions',
@@ -78,12 +86,6 @@ export default {
           status: {
             label: this.$t('Result')
           },
-          timedelta: {
-            label: this.$t('TimeDelta'),
-            formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
-            }
-          },
           actions: {
             formatterArgs: {
               hasDelete: false,
@@ -104,7 +106,8 @@ export default {
                   title: this.$t('Report'),
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
-                    window.open(`/api/v1/accounts/push-account-executions/${row.id}/report/`)
+                    vm.visible = true
+                    vm.reportUrl = `/api/v1/accounts/push-account-executions/${row.id}/report/`
                   }
                 },
                 {

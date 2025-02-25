@@ -239,7 +239,7 @@ export function getDefaultConfig(vm) {
             },
             {
               name: 'DiscoverAccounts',
-              title: 'Discover accounts',
+              title: vm.$t('AccountDiscover'),
               callback: ({ row }) => {
                 vm.discoveryDialog.asset = row.id
                 setTimeout(() => {

@@ -1,19 +1,27 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <div>
+    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+  </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import ReportDialog from '@/components/Dialog/ReportDialog.vue'
 
 export default {
   name: 'AccountChangeSecretExecutionList',
   components: {
+    ReportDialog,
     GenericListTable
   },
   data() {
+    const vm = this
     return {
+      visible: false,
+      reportUrl: '',
       tableConfig: {
         url: '/api/v1/accounts/change-secret-executions',
         columns: [
@@ -72,12 +80,6 @@ export default {
           status: {
             label: this.$t('Result')
           },
-          timedelta: {
-            label: this.$t('TimeDelta'),
-            formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
-            }
-          },
           actions: {
             formatterArgs: {
               hasDelete: false,
@@ -99,7 +101,8 @@ export default {
                   type: 'success',
                   can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
-                    window.open(`/api/v1/accounts/change-secret-executions/${row.id}/report/`)
+                    vm.visible = true
+                    vm.reportUrl = `/api/v1/accounts/change-secret-executions/${row.id}/report/`
                   }
                 },
                 {
