@@ -43,6 +43,7 @@ import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/time'
+import { ObjectLocalStorage } from '@/utils/common'
 
 export default {
   name: 'ListTable',
@@ -100,11 +101,25 @@ export default {
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
       initQuery: {},
-      filterExpand: localStorage.getItem('filterExpand') !== '0'
+      tablePath: new URL(this.tableConfig.url || '', 'http://127.0.0.1').pathname,
+      objStorage: new ObjectLocalStorage('filterExpand'),
+      iFilterExpand: null
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
+    filterExpand: {
+      get() {
+        if (this.iFilterExpand !== null) {
+          return this.iFilterExpand
+        }
+        return this.objStorage.get(this.tablePath)
+      },
+      set(val) {
+        this.iFilterExpand = val
+        this.objStorage.set(this.tablePath, val)
+      }
+    },
     iHasQuickFilter() {
       const has =
         (this.quickFilters && this.quickFilters.length > 0) ||
@@ -213,11 +228,6 @@ export default {
         this.$log.debug('ListTable: found colConfig change')
       },
       deep: true
-    },
-    filterExpand: {
-      handler(val) {
-        localStorage.setItem('filterExpand', val ? '1' : '0')
-      }
     }
   },
   mounted() {

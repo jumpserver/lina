@@ -370,3 +370,40 @@ export function openNewWindow(url) {
   window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
   window.open(url, '_blank', params)
 }
+
+export class ObjectLocalStorage {
+  constructor(key) {
+    this.key = key
+  }
+
+  b64(val) {
+    return btoa(unescape(encodeURIComponent(val)))
+  }
+
+  getObject() {
+    const stored = window.localStorage.getItem(this.key)
+    let value = {}
+    try {
+      value = JSON.parse(stored)
+    } catch (e) {
+      console.warn('localStorage value is not a valid JSON: ', this.key)
+    }
+    if (typeof value !== 'object') {
+      value = {}
+    }
+    return value
+  }
+
+  get(attr) {
+    const obj = this.getObject(this.key)
+    const attrSafe = this.b64(attr)
+    return obj[attrSafe]
+  }
+
+  set(attr, value) {
+    const obj = this.getObject(this.key)
+    const attrSafe = this.b64(attr)
+    obj[attrSafe] = value
+    window.localStorage.setItem(this.key, JSON.stringify(obj))
+  }
+}
