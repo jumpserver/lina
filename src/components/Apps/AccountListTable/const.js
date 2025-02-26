@@ -82,17 +82,14 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('Duplicate'),
     can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
     callback: ({ row }) => {
-      const data = {
-        ...vm.asset,
-        ...row.asset
-      }
       vm.account = {
-        ...row,
-        name: `${row.name} - ${vm.$t('Duplicate').toLowerCase()}`
+        name: `${row.name} - ${vm.$t('Duplicate').toLowerCase()}`,
+        username: `${row.username} - ${vm.$t('Duplicate').toLowerCase()}`,
+        payload: 'pam_account_clone'
       }
-      vm.iAsset = data
+      vm.iAsset = vm.asset
+
       vm.showAddDialog = false
-      vm.accountCreateUpdateTitle = vm.$t('DuplicateAccount')
       setTimeout(() => {
         vm.showAddDialog = true
       })

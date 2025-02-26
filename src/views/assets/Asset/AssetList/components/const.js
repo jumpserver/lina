@@ -193,7 +193,7 @@ export function getDefaultConfig(vm) {
         formatter: ActionsFormatter,
         formatterArgs: {
           onUpdate: ({ row }) => onAction(row, 'Update'),
-          onClone: ({ row }) => onAction(row, 'Clone'),
+          onClone: ({ row }) => onAction({ ...row, payload: 'pam_asset_clone' }, 'Clone'),
           performDelete: ({ row }) => {
             const id = row.id
             const url = `/api/v1/assets/assets/${id}/`
@@ -230,7 +230,7 @@ export function getDefaultConfig(vm) {
             },
             {
               name: 'AddAccount',
-              title: '添加账号',
+              title: vm.$t('AddAccount'),
               divided: true,
               callback: ({ row }) => {
                 vm.asset.id = row.id

@@ -157,7 +157,11 @@ export default {
         delete form['secret']
       }
       if (this.account?.name) {
-        this.$emit('edit', form)
+        if (this.account.payload && this.account.payload === 'pam_account_clone') {
+          this.$emit('add', form)
+        } else {
+          this.$emit('edit', form)
+        }
       } else {
         this.$emit('add', form)
       }
