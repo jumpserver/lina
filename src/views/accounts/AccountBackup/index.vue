@@ -29,7 +29,7 @@ export default {
             title: this.$t('ExecutionList'),
             name: 'AccountBackupExecutionList',
             hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
-            component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue')
+            component: () => import('@/views/accounts/AccountBackup/Executions/AccountBackupExecutionList.vue')
           }
         ]
       }

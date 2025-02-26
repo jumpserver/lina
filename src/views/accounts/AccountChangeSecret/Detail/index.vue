@@ -11,7 +11,7 @@ import { GenericDetailPage } from '@/layout/components'
 import AccountChangeSecretInfo from './AccountChangeSecretInfo.vue'
 import AccountChangeSecretAsset from './AccountChangeSecretAsset/index.vue'
 import AccountChangeSecretExecutionList
-from '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
+from '@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue'
 
 export default {
   components: {

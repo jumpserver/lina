@@ -32,7 +32,7 @@ export default {
             name: 'AccountPushRecord',
             hidden: () => !this.$hasPerm('accounts.view_pushsecretrecord'),
             component: () => import(
-              '@/views/accounts/AccountPush/AccountPushExecutionDetail/AccountPushRecord.vue'
+              '@/views/accounts/AccountPush/ExecutionDetail/AccountPushRecord.vue'
               )
           }
         ]

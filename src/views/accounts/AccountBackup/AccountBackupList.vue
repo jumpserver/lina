@@ -22,7 +22,7 @@ export default {
     return {
       drawerTitle: '',
       createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
       showTableUpdateDrawer: false,
       currentTemplate: null,
       tableConfig: {

@@ -35,7 +35,7 @@ export default {
     return {
       showViewSecretDialog: false,
       createDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
       account: {},
       secretUrl: '',
       tableConfig: {
