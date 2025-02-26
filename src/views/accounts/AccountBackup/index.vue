@@ -22,13 +22,13 @@ export default {
           {
             title: this.$t('AccountBackup'),
             name: 'AccountBackupList',
-            hidden: !this.$hasPerm('accounts.view_accountbackupautomation'),
+            hidden: !this.$hasPerm('accounts.view_backupaccountautomation'),
             component: () => import('@/views/accounts/AccountBackup/AccountBackupList.vue')
           },
           {
             title: this.$t('ExecutionList'),
             name: 'AccountBackupExecutionList',
-            hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
+            hidden: !this.$hasPerm('accounts.view_backupaccountexecution'),
             component: () => import('@/views/accounts/AccountBackup/Executions/AccountBackupExecutionList.vue')
           }
         ]

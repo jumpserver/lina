@@ -26,7 +26,7 @@ export default {
         url: '/api/v1/accounts/account-backup-plans/',
         permissions: {
           app: 'accounts',
-          resource: 'accountbackupautomation'
+          resource: 'backupaccountautomation'
         },
         columns: [
           'name', 'backup_type', 'org_name', 'is_periodic',
@@ -57,7 +57,7 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              can: vm.$hasPerm('accounts.view_accountbackupexecution'),
+              can: vm.$hasPerm('accounts.view_backupaccountexecution'),
               getRoute({ row }) {
                 return {
                   name: 'AccountBackupList',
@@ -79,7 +79,7 @@ export default {
                   order: 1,
                   name: 'execute',
                   type: 'primary',
-                  can: this.$hasPerm('accounts.add_accountbackupexecution'),
+                  can: this.$hasPerm('accounts.add_backupaccountexecution'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
