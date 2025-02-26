@@ -202,7 +202,7 @@ export const accountQuickFilters = (vm) => [
       {
         label: vm.$t('RecentPasswordChangeFailed'),
         filter: {
-          latest_secret_changed_failed: '1'
+          latest_secret_change_failed: '1'
         }
       }
     ]
