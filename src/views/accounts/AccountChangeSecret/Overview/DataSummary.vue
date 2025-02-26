@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import SummaryCountCard from '../components/SummaryCountCard.vue'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 
 export default {
   components: { SummaryCountCard },
@@ -82,7 +82,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .margin-top-10 {
   margin-top: 10px;
 }

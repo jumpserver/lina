@@ -12,7 +12,7 @@ export default {
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: `/api/v1/assets/databases/?platform=${this.$route.query.platform}`,
+      url: `/api/v1/assets/databases/`,
       addFields: this.getAddFields(),
       addFieldsMeta: this.getAddFieldsMeta()
     }
