@@ -70,6 +70,10 @@ export default {
   methods: {
     closeDrawer() {
       this.iVisible = false
+      // 关闭 Drawer 后，清空所有 params 参数
+      Reflect.ownKeys(this.$route.params).forEach(key => {
+        Reflect.deleteProperty(this.$route.params, key)
+      })
     }
   }
 }
