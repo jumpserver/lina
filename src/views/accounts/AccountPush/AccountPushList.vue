@@ -22,7 +22,7 @@ export default {
     const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountPush/AccountPushCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountPush/Detail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
         columns: [

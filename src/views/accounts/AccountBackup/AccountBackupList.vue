@@ -21,7 +21,7 @@ export default {
     const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plans/',
         permissions: {

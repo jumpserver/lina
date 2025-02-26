@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" :disabled="!hasValidLicense" />
+  <TabPage :active-menu.sync="config.activeMenu" :disabled="!hasValidLicense" :submenu="config.submenu" />
 </template>
 
 <script>
@@ -19,29 +19,25 @@ export default {
           {
             title: this.$t('Overview'),
             name: 'AccountChangeDashboard',
-            component: () => import('@/views/accounts/AccountChangeSecret/Overview/index.vue')
+            component: () => import('./Overview/index.vue')
           },
           {
             title: this.$t('ChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
-            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
+            component: () => import('./AccountChangeSecretList.vue')
           },
           {
             title: this.$t('ExecutionList'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
-            component: () => import(
-              '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'
-              )
+            component: () => import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue')
           },
           {
             title: this.$t('ExecutionRecord'),
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
-            component: () => import(
-              '@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/AccountChangeSecretRecord.vue'
-              )
+            component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
           }
         ]
       }

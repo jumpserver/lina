@@ -139,7 +139,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/Detail/index.vue'),
         name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
@@ -149,7 +149,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue'),
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {
@@ -159,7 +159,7 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/index.vue'),
         name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
@@ -215,7 +215,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountPush/AccountPushDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountPush/Detail/index.vue'),
         name: 'AccountPushDetail',
         hidden: true,
         meta: {
@@ -235,7 +235,7 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountPush/ExecutionDetail/index.vue'),
         name: 'AccountPushExecutionDetail',
         hidden: true,
         meta: {
@@ -293,7 +293,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/AccountBackup/AccountBackupDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
         name: 'AccountBackupDetail',
         meta: {
           title: i18n.t('AccountBackupDetail')
@@ -302,14 +302,14 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountBackup/Executions/AccountBackupExecutionList.vue'),
         name: 'AccountBackupExecutionList',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountBackup/AccountBackupExecution/AccountBackupExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountBackup/Executions/ExecutionDetail/index.vue'),
         name: 'AccountBackupExecutionDetail',
         meta: { title: i18n.t('ExecutionDetail') },
         hidden: true

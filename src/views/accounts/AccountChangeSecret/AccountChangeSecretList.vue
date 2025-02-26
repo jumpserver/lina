@@ -21,7 +21,7 @@ export default {
     const vm = this
     return {
       createDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountChangeSecret/Detail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],

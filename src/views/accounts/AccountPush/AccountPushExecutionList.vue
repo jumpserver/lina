@@ -6,7 +6,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
-    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+    <ReportDialog :url="reportUrl" :visible.sync="visible" />
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
     return {
       visible: false,
       reportUrl: '',
-      detailDrawer: () => import('@/views/accounts/AccountPush/AccountPushExecutionDetail/index.vue'),
+      detailDrawer: () => import('@/views/accounts/AccountPush/ExecutionDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/push-account-executions',
         columns: [
