@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <el-col :sm="24" :md="24" class="margin-top-10">
+      <el-col :md="24" :sm="24" class="margin-top-10">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
     </el-row>
@@ -22,8 +22,7 @@ export default {
   data() {
     return {
       logConfig: {
-        title: this.$t('OngoingPwdChange'),
-        tip: this.$t('OngoingPwdChange')
+        title: this.$t('RunningSummary')
       },
       data: {
         total_count_ongoing_change_secret: 0,
@@ -36,21 +35,21 @@ export default {
     LogItems() {
       return [
         {
-          title: this.$t('TaskExecutionCount'),
+          title: this.$t('Tasks'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret
           }
         },
         {
-          title: this.$t('AssetsOfNumber'),
+          title: this.$t('Assets'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret_assets
           }
         },
         {
-          title: this.$t('AccountAmount'),
+          title: this.$t('Accounts'),
           body: {
             route: { name: `OperateLogList` },
             count: this.data.total_count_ongoing_change_secret_accounts
@@ -82,7 +81,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .margin-top-10 {
   margin-top: 10px;
 }
