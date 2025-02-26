@@ -129,14 +129,16 @@ export const accountOtherActions = (vm) => [
   },
   {
     name: 'SecretHistory',
-    // 密文历史
     title: vm.$t('HistoryPassword'),
     can: () => vm.$hasPerm('accounts.view_accountsecret'),
     type: 'primary',
     callback: ({ row }) => {
+      vm.account = row
       vm.currentAccountColumn = row
-      vm.$nextTick(() => {
-        vm.showPasswordHistoryDialog = true
+      vm.showViewSecretDialog = false
+      vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
+      setTimeout(() => {
+        vm.showViewSecretDialog = true
       })
     }
   },
