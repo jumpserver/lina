@@ -223,7 +223,8 @@ export default {
         platform: row.platform.id,
         type: row.type.value,
         category: row.category.value,
-        row: row
+        row: row,
+        payload: row.payload
       }
       await this.$store.dispatch('common/setDrawerActionMeta', meta)
       this.createDrawer = this.drawer[row.category.value]
