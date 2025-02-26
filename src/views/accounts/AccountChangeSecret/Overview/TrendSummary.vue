@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Title from '../components/Title.vue'
-import ColumnChart from '../components/ColumnChart'
+import Title from '@/components/Dashboard/Title.vue'
+import ColumnChart from '@/components/Dashboard/ColumnChart'
 
 export default {
   components: { Title, ColumnChart },

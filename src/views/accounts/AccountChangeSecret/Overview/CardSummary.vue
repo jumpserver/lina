@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SummaryCountCard from '../components/SummaryCountCard.vue'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 
 export default {
   name: 'CardSummary',

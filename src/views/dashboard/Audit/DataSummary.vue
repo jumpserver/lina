@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import DataCard from '../components/DataCard.vue'
+import DataCard from '@/components/Dashboard/DataCard.vue'
 import Decimal from 'decimal.js'
 
 export default {

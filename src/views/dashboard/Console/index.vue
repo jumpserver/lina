@@ -22,7 +22,7 @@
 import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
-import RealTimeSummary from '../components/RealTimeSummary.vue'
+import RealTimeSummary from '@/components/Dashboard/RealTimeSummary.vue'
 import UserAssetActivity from './UserAssetActivity.vue'
 import DataSummary from './DataSummary'
 import AssetProportionSummary from './AssetProportionSummary'

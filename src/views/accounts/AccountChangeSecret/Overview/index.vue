@@ -26,7 +26,7 @@
 <script>
 import DataSummary from './DataSummary.vue'
 import CardSummary from './CardSummary.vue'
-import SwitchDate from '../components/SwitchDate'
+import SwitchDate from '@/components/Dashboard/SwitchDate'
 import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
 

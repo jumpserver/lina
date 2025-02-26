@@ -21,7 +21,7 @@
 <script>
 import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
-import SwitchDate from '../components/SwitchDate'
+import SwitchDate from '@/components/Dashboard/SwitchDate'
 import TrendSummary from './TrendSummary'
 import DataSummary from './DataSummary'
 import CardSummary from './CardSummary.vue'

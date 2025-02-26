@@ -39,7 +39,7 @@ import DataSummary from './DataSummary'
 import RiskSummary from './RiskSummary.vue'
 import AssetProportionSummary from './AssetProportionSummary'
 import MissionSummery from './MissionSummery.vue'
-import AccountSecretSummary from '../ChangeSecret/AccountSummary.vue'
+import AccountSecretSummary from '@/views/accounts/AccountChangeSecret/Overview/AccountSummary.vue'
 
 export default {
   name: 'Dashboard',

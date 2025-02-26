@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import RankTable from '../components/RankTable.vue'
+import RankTable from '@/components/Dashboard/RankTable.vue'
 
 export default {
   components: {

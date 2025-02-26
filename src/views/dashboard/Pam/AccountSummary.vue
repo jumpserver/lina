@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Title from '../components/Title.vue'
+import Title from '@/components/Dashboard/Title.vue'
 import SummaryCard from '@/components/Cards/SummaryCard'
 
 export default {

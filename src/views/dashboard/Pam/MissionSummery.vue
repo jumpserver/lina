@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Title from '../components/Title.vue'
+import Title from '@/components/Dashboard/Title.vue'
 import * as echarts from 'echarts'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'

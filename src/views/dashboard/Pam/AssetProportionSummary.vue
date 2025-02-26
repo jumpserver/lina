@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import Title from '../components/Title.vue'
-import ProgressChart from '../components/ProgressChart.vue'
+import Title from '@/components/Dashboard/Title.vue'
+import ProgressChart from '@/components/Dashboard/ProgressChart.vue'
 
 export default {
   components: {

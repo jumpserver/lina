@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Title from '../components/Title.vue'
-import LineChart from '../components/LineChart.vue'
-import SummaryCountCard from '../components/SummaryCountCard.vue'
+import Title from '@/components/Dashboard/Title.vue'
+import LineChart from '@/components/Dashboard/LineChart.vue'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 
 export default {
   components: {

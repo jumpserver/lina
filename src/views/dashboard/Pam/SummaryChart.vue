@@ -39,7 +39,7 @@
 
 <script>
 import * as echarts from 'echarts'
-import Title from '../components/Title.vue'
+import Title from '@/components/Dashboard/Title.vue'
 
 export default {
   components: {

@@ -19,7 +19,7 @@ export default {
           {
             title: this.$t('Overview'),
             name: 'AccountChangeDashboard',
-            component: () => import('@/views/dashboard/ChangeSecret')
+            component: () => import('@/views/accounts/AccountChangeSecret/Overview/index.vue')
           },
           {
             title: this.$t('ChangeSecret'),
