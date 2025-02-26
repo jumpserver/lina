@@ -135,8 +135,8 @@ export default {
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.$route.query._category
+      const type = this.$route.query._type
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints
