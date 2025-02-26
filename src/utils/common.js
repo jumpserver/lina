@@ -407,8 +407,6 @@ export class ObjectLocalStorage {
   set(attr, value) {
     const obj = this.getObject(this.key)
     const attrSafe = this.b64(attr)
-    console.log('Obj: ', obj)
-    console.log('Set to: ', attr, value)
     obj[attrSafe] = value
     window.localStorage.setItem(this.key, JSON.stringify(obj))
   }

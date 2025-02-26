@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { ArrayFormatter, DetailFormatter, ActionsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
 
@@ -20,11 +20,8 @@ export default {
   data() {
     const vm = this
     return {
-      drawerTitle: '',
       createDrawer: () => import('@/views/accounts/AccountBackup/AccountBackupCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountBackup/Detail/index.vue'),
-      showTableUpdateDrawer: false,
-      currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plans/',
         permissions: {
@@ -74,9 +71,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'AccountBackupCreate', query: { clone_from: row.id }})
-              },
+              formatter: ActionsFormatter,
+              cloneRoute: 'AccountBackupCreate',
               extraActions: [
                 {
                   title: vm.$t('Execute'),

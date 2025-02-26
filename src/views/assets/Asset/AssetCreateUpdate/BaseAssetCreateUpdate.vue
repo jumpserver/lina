@@ -70,7 +70,7 @@ export default {
           let url = this.url
           const { id = '' } = vm.meta
           const values = _.cloneDeep(validValues)
-          const submitMethod = id ? 'put' : 'post'
+          let submitMethod = id ? 'put' : 'post'
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
@@ -83,6 +83,10 @@ export default {
               item['secret'] = encryptPassword(item['secret'])
               return item
             })
+          }
+          if (vm.meta?.payload === 'pam_asset_clone') {
+            submitMethod = 'post'
+            url = this.url
           }
           return this.$axios[submitMethod](url, values)
         }
