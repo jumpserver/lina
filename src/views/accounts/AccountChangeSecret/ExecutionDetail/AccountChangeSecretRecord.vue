@@ -36,10 +36,9 @@ export default {
             label: this.$t('Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle({ row }) {
-                return row.asset.name
-              },
+              getTitle: ({ row }) => row.asset.name,
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
@@ -52,10 +51,9 @@ export default {
             label: this.$t('Username'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               can: this.$hasPerm('accounts.view_account'),
-              getTitle({ row }) {
-                return row.account.username
-              },
+              getTitle: ({ row }) => row.account.username,
               getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
