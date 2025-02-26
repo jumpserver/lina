@@ -68,7 +68,8 @@ export default {
               return true
             }
 
-            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
+            // 特权账号版本无需使用 Router 跳转因此不会携带 update 字段 this.$route.meta.action !== 'update'
+            return formValue.source !== 'local'
           }
         },
         password: {
