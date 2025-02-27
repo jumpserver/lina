@@ -3,12 +3,13 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
+    :resource="$tc('AccountBackupTask')"
     :table-config="tableConfig"
   />
 </template>
 
 <script>
-import { ArrayFormatter, DetailFormatter, ActionsFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import { GenericListTable } from '@/layout/components'
 

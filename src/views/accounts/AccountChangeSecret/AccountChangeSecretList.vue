@@ -3,6 +3,7 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
+    :resource="$tc('AccountChangeSecret')"
     :table-config="tableConfig"
   />
 </template>
