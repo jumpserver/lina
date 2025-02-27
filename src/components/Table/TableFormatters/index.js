@@ -9,6 +9,7 @@ import AccountShowFormatter from './GrantedAccountShowFormatter.vue'
 import SecretViewerFormatter from './SecretViewerFormatter.vue'
 import DialogDetailFormatter from './DialogDetailFormatter.vue'
 import EditableInputFormatter from './EditableInputFormatter.vue'
+import CopyableFormatter from './CopyableFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
 import TagsFormatter from './TagsFormatter.vue'
 import LabelsFormatter from './LabelsFormatter.vue'
@@ -44,6 +45,7 @@ export default {
   SwitchFormatter,
   PlatformFormatter,
   AccountInfoFormatter,
+  CopyableFormatter,
   DiscoverConfirmFormatter,
   AccountConnectFormatter
 }
@@ -62,6 +64,7 @@ export {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
+  CopyableFormatter,
   ObjectRelatedFormatter,
   TwoTabFormatter,
   ProtocolsFormatter,

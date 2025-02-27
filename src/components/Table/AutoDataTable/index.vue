@@ -23,8 +23,14 @@
 <script type="text/jsx">
 import DataTable from '@/components/Table/DataTable/index.vue'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter,
-  DetailFormatter, DisplayFormatter, ObjectRelatedFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  CopyableFormatter,
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
+  ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
 import { newURL, ObjectLocalStorage, replaceAllUUID, toSentenceCase } from '@/utils/common'
@@ -131,6 +137,11 @@ export default {
     },
     generateColumnByName(name, col) {
       switch (name) {
+        case 'id':
+          col.width = '290px'
+          col.formatter = CopyableFormatter
+          col.iconPosition = 'left'
+          break
         case 'name':
           col.formatter = DetailFormatter
           col.sortable = 'custom'

@@ -254,9 +254,11 @@ export default {
 
       span {
         max-width: calc(100% - 25px);
-        white-space: nowrap; /* 禁止换行 */
-        text-overflow: ellipsis;
+        //white-space: nowrap; /* 禁止换行 */
+        //text-overflow: ellipsis;
         overflow: hidden;
+        display: inline-block;
+        line-height: 16px;
       }
     }
 

@@ -1,6 +1,7 @@
 <script>
 import BaseFormatter from './base.vue'
 import { copy } from '@/utils/common'
+
 export default {
   name: 'CopyableFormatter',
   extends: BaseFormatter,
@@ -10,7 +11,8 @@ export default {
       default() {
         return {
           shadow: false,
-          getText: ({ cellValue }) => cellValue
+          getText: ({ cellValue }) => cellValue,
+          iconPosition: 'right'
         }
       }
     }
@@ -27,6 +29,9 @@ export default {
       } else {
         return this.cellValue
       }
+    },
+    iconPosition() {
+      return this.formatterArgs.iconPosition
     }
   },
   methods: {
@@ -40,11 +45,18 @@ export default {
 
 <template>
   <span class="copyable">
-    {{ iCellValue }} <i class="el-icon-copy-document copy" @click="copy()" />
+    <span :style="{ order: 2 }">{{ iCellValue }}</span>
+    <i :style="{ order: iconPosition === 'left' ? 0 : 3 } " class="el-icon-copy-document copy" @click="copy()" />
   </span>
 </template>
 
 <style lang="scss" scoped>
+.copyable {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* 元素间距 */
+}
+
 .copy {
   cursor: pointer;
 
