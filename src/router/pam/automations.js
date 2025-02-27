@@ -180,7 +180,7 @@ export default [
       title: i18n.t('AccountBackup'),
       app: 'accounts',
       icon: 'backup',
-      resource: 'accountbackupautomation'
+      resource: 'backupaccountautomation'
     },
     children: [
       {
@@ -191,7 +191,7 @@ export default [
           menuTitle: i18n.t('AccountBackup'),
           title: i18n.t('AccountBackupList'),
           // activeMenu: '/console/accounts/automations',
-          permissions: ['accounts.view_accountbackupautomation']
+          permissions: ['accounts.view_backupaccountautomation']
         }
       },
       {

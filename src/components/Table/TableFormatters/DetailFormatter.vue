@@ -47,7 +47,7 @@ export default {
           beforeClick: () => {
           },
           getTitle({ row, cellValue }) {
-            return cellValue || row.name
+            return cellValue != null ? cellValue : row.name
           },
           getDrawerTitle: null,
           getIcon({ col, row, cellValue }) {

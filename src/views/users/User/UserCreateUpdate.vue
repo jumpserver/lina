@@ -67,8 +67,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
-
-            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
+            return formValue.source !== 'local' || this.$route.params.action !== 'update'
           }
         },
         password: {
