@@ -112,7 +112,7 @@ export class FormFieldGenerator {
     let nestedFields = fieldMeta.fields || []
     const nestedFieldsMeta = fieldMeta.fieldsMeta || {}
     const nestedFieldsRemoteMeta = fieldRemoteMeta.children || {}
-    if (nestedFields === '__all__') {
+    if (nestedFields.toString() === '__all__') {
       nestedFields = Object.keys(nestedFieldsRemoteMeta)
     }
     for (const name of nestedFields) {

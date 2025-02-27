@@ -1,5 +1,5 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" :disabled="!hasValidLicense" />
+  <TabPage :active-menu.sync="config.activeMenu" :disabled="!hasValidLicense" :submenu="config.submenu" />
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
             component: () => import('./AccountCheckTaskList.vue')
           },
           {
-            title: this.$t('ExecutionList'),
+            title: this.$t('ExecutionHistory'),
             name: 'AccountCheckExecution',
             hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
             component: () => import('./AccountCheckExecutionList.vue')

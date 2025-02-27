@@ -46,7 +46,7 @@ export default {
       name: 'AccountAutomation',
       component: empty,
       meta: {
-        title: i18n.t('Automation'),
+        title: i18n.tc('Automation'),
         icon: 'accounts',
         permissions: []
       },

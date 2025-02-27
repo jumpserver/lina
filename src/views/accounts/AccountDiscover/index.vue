@@ -2,7 +2,6 @@
   <TabPage
     :active-menu.sync="config.activeMenu"
     :submenu="config.submenu"
-    :disabled="!hasValidLicense"
   />
 </template>
 
@@ -27,13 +26,13 @@ export default {
             component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverList.vue')
           },
           {
-            title: this.$t('AccountDiscover'),
+            title: this.$tc('DiscoverAccountTask', 2),
             name: 'AccountDiscoverTaskList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsautomation'),
             component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskList.vue')
           },
           {
-            title: this.$t('ExecutionList'),
+            title: this.$t('ExecutionHistory'),
             name: 'AccountDiscoverTaskExecutionList',
             hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution'),
             component: () => import('@/views/accounts/AccountDiscover/TaskExecutionList.vue')

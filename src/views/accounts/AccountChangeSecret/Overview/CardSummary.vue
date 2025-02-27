@@ -26,12 +26,12 @@ export default {
   data() {
     return {
       logConfig: {
-        title: this.$t('CurrentStatus'),
+        title: this.$t('TaskSummary'),
         tip: this.$t('CurrentStatus')
       },
       sessionConfig: {
-        title: this.$t('ChangeSecretTaskStatus'),
-        tip: this.$t('ChangeSecretTaskStatus')
+        title: this.$t('ExecutionSummary'),
+        tip: this.$t('ChangeSecretExecutionStatus')
       },
       data: {
         total_count_change_secrets: 0,
@@ -47,19 +47,19 @@ export default {
     LogItems() {
       return [
         {
-          title: this.$t('TaskCount'),
+          title: this.$t('Tasks'),
           body: {
             count: this.data.total_count_change_secrets
           }
         },
         {
-          title: this.$t('ScheduledTaskCount'),
+          title: this.$t('Periodic'),
           body: {
             count: this.data.total_count_periodic_change_secrets
           }
         },
         {
-          title: this.$t('AssetsOfNumber'),
+          title: this.$t('Assets'),
           body: {
             count: this.data.total_count_change_secret_assets
           }
@@ -69,19 +69,19 @@ export default {
     sessionItems() {
       return [
         {
-          title: this.$t('TaskExecutionCount'),
+          title: this.$t('Total'),
           body: {
             count: this.data.total_count_change_secret_executions
           }
         },
         {
-          title: this.$t('SuccessCount'),
+          title: this.$t('Success'),
           body: {
             count: this.data.total_count_success_change_secret_executions
           }
         },
         {
-          title: this.$t('FailCount'),
+          title: this.$t('Failed'),
           body: {
             count: this.data.total_count_failed_change_secret_executions
           }
@@ -116,7 +116,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .margin-top-10 {
   margin-top: 10px;
 }

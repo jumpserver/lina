@@ -7,6 +7,7 @@
 <script>
 import IBox from '@/components/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
+
 export default {
   name: 'Base',
   components: {
@@ -42,6 +43,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

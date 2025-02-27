@@ -39,6 +39,7 @@ export default {
           'id', 'name', 'type', 'is_default', 'comment', 'actions'
         ],
         columnsShow: {
+          default: ['name', 'type', 'comment', 'is_default', 'actions'],
           min: ['name', 'type', 'actions']
         },
         columnsMeta: {

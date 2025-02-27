@@ -22,13 +22,13 @@ export default {
             component: () => import('./Overview/index.vue')
           },
           {
-            title: this.$t('ChangeSecret'),
+            title: this.$tc('ChangeSecretTask', 2),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
             component: () => import('./AccountChangeSecretList.vue')
           },
           {
-            title: this.$t('ExecutionList'),
+            title: this.$t('ExecutionHistory'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import('@/views/accounts/AccountChangeSecret/Executions/AccountChangeSecretExecutionList.vue')
