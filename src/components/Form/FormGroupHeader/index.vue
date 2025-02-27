@@ -6,7 +6,7 @@
       <i :class="iconClass" />
     </span>
     <div v-if="!isVisible" class="ellipsis" @click="toggle">
-      <i class="el-icon-more-outline" />
+      <i class="fa fa-angle-double-down" />
     </div>
   </div>
 </template>

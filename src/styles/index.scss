@@ -658,3 +658,10 @@ li.rmenu i.fa {
   display: inline-block;
   width: 100%;
 }
+
+.el-card__body {
+  .el-form {
+    margin-top: 20px;
+    margin-right: 80px;
+  }
+}

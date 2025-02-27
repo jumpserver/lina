@@ -441,6 +441,5 @@ export default {
 
 <style scoped>
 .ibox ::v-deep .el-card__body {
-  padding-top: 30px;
 }
 </style>
