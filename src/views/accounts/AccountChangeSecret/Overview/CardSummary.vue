@@ -47,7 +47,7 @@ export default {
     LogItems() {
       return [
         {
-          title: this.$t('Tasks'),
+          title: this.$t('Total'),
           body: {
             count: this.data.total_count_change_secrets
           }

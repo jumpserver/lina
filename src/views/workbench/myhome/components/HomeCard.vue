@@ -2,7 +2,7 @@
   <div id="HomeCard">
     <el-card class="box-card no-border" shadow="never">
       <div v-show="title || btnText" slot="header" class="clearfix">
-        <span v-show="title" class="head-title">{{ title }}</span>
+        <span v-show="title" class="title">{{ title }}</span>
         <el-button
           v-show="btnText"
           style="float: right; padding: 3px 0"
