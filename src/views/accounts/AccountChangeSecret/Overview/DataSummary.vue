@@ -35,7 +35,7 @@ export default {
     LogItems() {
       return [
         {
-          title: this.$t('Tasks'),
+          title: this.$t('Total'),
           body: {
             route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret
