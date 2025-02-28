@@ -51,7 +51,7 @@ export default {
                 name: 'AccountBackupExecutionDetail',
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row['short_id'],
+              getTitle: ({ row }) => row.automation.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_backupaccountexecution')
             }
