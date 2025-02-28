@@ -8,25 +8,24 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountPushInfo from './AccountPushInfo'
+import AccountCheckDetail from './Detail.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountPushInfo
+    AccountCheckDetail
   },
   data() {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
         titlePrefix: this.$t('AccountCheckDetail'),
-        activeMenu: 'AccountPushInfo',
-        url: '/api/v1/accounts/push-account-automations',
+        url: '/api/v1/accounts/check-account-automations',
         submenu: [
           {
             title: this.$t('Basic'),
-            name: 'AccountPushInfo',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
+            name: 'AccountCheckDetail',
+            hidden: () => !this.$hasPerm('accounts.view_accountrisk')
           }
         ]
       }
