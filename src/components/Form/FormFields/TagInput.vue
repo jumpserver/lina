@@ -151,7 +151,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 0 6px;
+  //padding: 0 6px;
   border: 1px solid #dcdee2;
   border-radius: 1px;
   background-color: #fff;
@@ -177,7 +177,7 @@ export default {
   & ::v-deep .el-input__inner {
     max-width: 100%;
     border: none;
-    padding-left: 10px;
+    padding-left: 12px;
     height: 28px;
   }
 }
