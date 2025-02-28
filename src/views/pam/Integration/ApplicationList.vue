@@ -7,7 +7,7 @@
 <script type="text/jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'CloudAccountList',
@@ -62,6 +62,12 @@ export default {
                 const app = await vm.$axios.get(`/api/v1/accounts/integration-applications/${row.id}/secret/`)
                 return app.secret
               }
+            }
+          },
+          actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasClone: false
             }
           }
         },
