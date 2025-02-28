@@ -70,8 +70,7 @@ export default {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.automation },
-                query: { type: 'pam' }
+                params: { id: row.automation }
               }),
               drawer: true
             },
