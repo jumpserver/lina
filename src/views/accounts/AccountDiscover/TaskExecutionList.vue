@@ -51,7 +51,7 @@ export default {
                 name: 'AccountDiscoverExecutionDetail',
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row.automation.slice(0, 8),
+              getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true
             }
           },

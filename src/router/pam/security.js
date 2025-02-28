@@ -129,6 +129,16 @@ export default [
           permissions: ['accounts.view_accountrisk']
         },
         hidden: true
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/pam/RiskDetect/RiskHistoryExecutionDetail/index.vue'),
+        name: 'RiskHistoryExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionDetail'),
+          permissions: ['accounts.view_checkaccountexecution']
+        }
       }
     ]
   }
