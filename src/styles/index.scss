@@ -666,3 +666,17 @@ li.rmenu i.fa {
     margin-right: 80px;
   }
 }
+
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
+  span {
+    &::before {
+      content: '*';
+      margin-right: 4px;
+      color: #ff4d4f;
+    }
+  }
+
+  &::before {
+    display: none;
+  }
+}

@@ -164,6 +164,7 @@ export default {
   & ::v-deep .el-tag {
     margin-bottom: 1px;
     font-family: sans-serif !important;
+    margin-left: 5px;
   }
 
   & ::v-deep .el-autocomplete {

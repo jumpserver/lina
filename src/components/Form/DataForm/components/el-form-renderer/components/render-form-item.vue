@@ -9,6 +9,7 @@
   >
     <template v-if="data.label" #label>
       <span :title="data.label">
+        <span v-if="data.required">* </span>
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
