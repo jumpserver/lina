@@ -22,6 +22,7 @@ export default {
       currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/integration-applications/',
+        columnsExclude: ['accounts'],
         columnsMeta: {
           id: {
             width: '300px',
@@ -37,7 +38,7 @@ export default {
               )
             }
           },
-          accounts: {
+          accounts_amount: {
             width: '100px',
             formatter: (row) => {
               return row.accounts_amount
@@ -74,7 +75,7 @@ export default {
         columnsExtra: ['secret'],
         columnsShow: {
           default: [
-            'logo', 'name', 'id', 'secret', 'accounts', 'date_last_used', 'active'
+            'logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active'
           ]
         },
         permissions: { app: 'accounts', resource: 'integrationapplication' }
