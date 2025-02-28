@@ -45,7 +45,7 @@ export default {
             click: function() {
               this.$axios.post(
                 `/api/v1/accounts/account-backup-plan-executions/`,
-                { plan: this.object.id }
+                { automation: this.object.id }
               ).then(res => {
                 openTaskPage(res['task'])
               })
