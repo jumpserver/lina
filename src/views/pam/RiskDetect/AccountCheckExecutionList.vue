@@ -47,12 +47,11 @@ export default {
             label: this.$t('ID'),
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountCheckExecutionDetail',
               getRoute: ({ row }) => ({
                 name: 'AccountCheckExecutionDetail',
-                params: { id: row.id }
+                params: { id: row.automation }
               }),
-              getTitle: ({ row }) => row['short_id'],
+              getTitle: ({ row }) => row.automation.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_checkaccountexecution')
             }
@@ -61,9 +60,10 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountCheckDetail',
+                name: 'AccountCheckList',
                 params: { id: row.automation }
               })
             },

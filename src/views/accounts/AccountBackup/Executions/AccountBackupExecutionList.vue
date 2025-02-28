@@ -51,7 +51,7 @@ export default {
                 name: 'AccountBackupExecutionDetail',
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row['short_id'],
+              getTitle: ({ row }) => row.automation.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_backupaccountexecution')
             }
@@ -60,6 +60,7 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountBackupDetail',

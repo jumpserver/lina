@@ -51,7 +51,7 @@ export default {
                 name: 'AccountDiscoverExecutionDetail',
                 params: { id: row.id }
               }),
-              getTitle: ({ row }) => row['short_id'],
+              getTitle: ({ row }) => row.automation.slice(0, 8),
               drawer: true
             }
           },
@@ -70,8 +70,7 @@ export default {
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.automation },
-                query: { type: 'pam' }
+                params: { id: row.automation }
               }),
               drawer: true
             },

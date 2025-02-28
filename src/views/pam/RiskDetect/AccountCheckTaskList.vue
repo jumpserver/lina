@@ -33,35 +33,34 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountCheckDetail'
+              getRoute: ({ row }) => ({
+                name: 'AccountCheckDetail',
+                params: { id: row.id }
+              })
             }
           },
           assets: {
             formatter: AmountFormatter,
             formatterArgs: {
               async: false,
-              getRoute({ row }) {
-                return {
-                  name: 'AssetDetail',
-                  params: {
-                    id: row.id
-                  }
-                }
-              }
+              drawer: true,
+              getTitle: ({ row }) => row.assets[0].name,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.assets[0].id }
+              })
             }
           },
           nodes: {
             formatter: AmountFormatter,
             formatterArgs: {
               async: false,
-              getRoute({ row }) {
-                return {
-                  name: 'AssetDetail',
-                  params: {
-                    id: row.id
-                  }
-                }
-              }
+              drawer: true,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                query: { tab: 'Basic' },
+                params: { id: row.assets[0].id }
+              })
             }
           },
           secret_strategy: {

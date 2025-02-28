@@ -41,6 +41,7 @@ export default {
             label: this.$t('Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               can: this.$hasPerm('assets.view_asset'),
               getTitle({ row }) {
                 return row.asset.name
@@ -57,6 +58,7 @@ export default {
             label: this.$t('Username'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               can: this.$hasPerm('accounts.view_account'),
               getTitle({ row }) {
                 return row.account.username
