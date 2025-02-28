@@ -60,6 +60,7 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: 'AccountBackupDetail',
