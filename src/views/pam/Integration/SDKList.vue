@@ -14,13 +14,17 @@
             </two-col>
           </el-tab-pane>
         </el-tabs>
+
         <div class="copy-btn">
-          <i
-            class="copy-btn el-icon-copy-document"
-            @click="copyContent"
-          />
+          <el-tooltip :content="$t('Copy')" placement="top">
+            <i
+              class="copy-btn el-icon-copy-document"
+              @click="copyContent"
+            />
+          </el-tooltip>
         </div>
       </div>
+
     </IBox>
   </div>
 </template>
@@ -129,5 +133,6 @@ export default {
   position: absolute;
   top: 8px;
   right: 5px;
+  cursor: pointer;
 }
 </style>

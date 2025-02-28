@@ -112,7 +112,7 @@ export default {
       let filteredData = []
 
       // 只要有一个大于零 则展示全部的
-      if (data.some(item => item.value > 0).length > 0) {
+      if (data.some(item => item.value > 0)) {
         filteredData = data
       } else {
         filteredData = data.slice(0, 7)
@@ -135,7 +135,6 @@ export default {
           show: true,
           min: 0,
           max: max,
-          interval: 1,
           position: 'top',
           axisLine: { show: false },
           axisTick: { show: false },
