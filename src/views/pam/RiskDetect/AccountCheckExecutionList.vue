@@ -48,10 +48,10 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute: ({ row }) => ({
-                name: 'AccountCheckExecutionDetail',
-                params: { id: row.automation }
+                name: 'RiskHistoryExecutionDetail',
+                params: { id: row.id }
               }),
-              getTitle: ({ row }) => row.automation.slice(0, 8),
+              getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_checkaccountexecution')
             }
@@ -63,7 +63,7 @@ export default {
               drawer: true,
               getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountCheckList',
+                name: 'AccountCheckDetail',
                 params: { id: row.automation }
               })
             },
