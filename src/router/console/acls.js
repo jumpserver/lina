@@ -31,7 +31,7 @@ export default [
           {
             path: '',
             name: 'UserLoginAclList',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLList.vue'),
             meta: {
               title: i18n.t('UserLoginAclList'), menuTitle: i18n.t('UserLogin'), activeMenu: ''
             }
@@ -39,7 +39,7 @@ export default [
           {
             path: 'create',
             name: 'UserLoginAclCreate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
             meta: {
               title: i18n.t('UserLoginAclCreate'), activeMenu: ''
@@ -48,7 +48,7 @@ export default [
           {
             path: ':id',
             name: 'UserLoginAclDetail',
-            component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
+            component: () => import('@/views/acls/UserLoginACL/UserDetail/index'),
             hidden: true,
             meta: {
               title: i18n.t('UserLoginAclDetail'), activeMenu: '',
@@ -59,7 +59,7 @@ export default [
           {
             path: ':id/update',
             name: 'UserLoginAclUpdate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '' }
           }
@@ -82,7 +82,7 @@ export default [
           {
             path: '',
             name: 'CommandFilterAclList',
-            component: () => import('@/views/acl/CommandAcl/index'),
+            component: () => import('@/views/acls/CommandAcl/index'),
             hidden: true,
             meta: {
               title: i18n.t('BaseCommandFilterAclList'),
@@ -92,14 +92,14 @@ export default [
           {
             path: 'create',
             name: 'CommandFilterAclCreate',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+            component: () => import('@/views/acls/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
             meta: { title: i18n.t('CommandFilterAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'CommandFilterAclDetail',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclDetail/index'),
+            component: () => import('@/views/acls/CommandAcl/CommandFilterAcl/CommandFilterAclDetail/index'),
             hidden: true,
             meta: {
               title: i18n.t('CommandFilterAclDetail'),
@@ -109,7 +109,7 @@ export default [
           {
             path: ':id/update',
             name: 'CommandFilterAclUpdate',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+            component: () => import('@/views/acls/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
             meta: { title: i18n.t('CommandFilterAclUpdate'), activeMenu: '' }
           }
@@ -132,27 +132,27 @@ export default [
           {
             path: '',
             name: 'AssetAclList',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
+            component: () => import('@/views/acls/AssetLoginAcl/AssetLoginAclList.vue'),
             meta: { title: i18n.t('AssetAclList'), activeMenu: '', menuTitle: i18n.t('AssetConnect') }
           },
           {
             path: 'create',
             name: 'AssetAclCreate',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+            component: () => import('@/views/acls/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('AssetAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'AssetAclDetail',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
+            component: () => import('@/views/acls/AssetLoginAcl/AssetLoginAclDetail/index'),
             hidden: true,
             meta: { title: i18n.t('AssetAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'AssetAclUpdate',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+            component: () => import('@/views/acls/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('AssetAclUpdate'), activeMenu: '' }
           }
@@ -176,7 +176,7 @@ export default [
           {
             path: '',
             name: 'CommandGroupList',
-            component: () => import('@/views/acl/CommandAcl/index'),
+            component: () => import('@/views/acls/CommandAcl/index'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupList'),
@@ -186,7 +186,7 @@ export default [
           {
             path: 'create',
             name: 'CommandGroupCreate',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+            component: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupCreate'),
@@ -196,7 +196,7 @@ export default [
           {
             path: ':id',
             name: 'CommandGroupDetail',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupDetail/index'),
+            component: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupDetail/index'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupDetail'),
@@ -206,7 +206,7 @@ export default [
           {
             path: ':id/update',
             name: 'CommandGroupUpdate',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+            component: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupUpdate'),
@@ -233,27 +233,27 @@ export default [
           {
             path: '',
             name: 'ConnectMethodAclList',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclList.vue'),
+            component: () => import('@/views/acls/ConnectMethodAcl/ConnectMethodAclList.vue'),
             meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '', menuTitle: i18n.t('ConnectMethod') }
           },
           {
             path: 'create',
             name: 'ConnectMethodAclCreate',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+            component: () => import('@/views/acls/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'ConnectMethodAclDetail',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclDetail/index'),
+            component: () => import('@/views/acls/ConnectMethodAcl/ConnectMethodAclDetail/index'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'ConnectMethodAclUpdate',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+            component: () => import('@/views/acls/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '' }
           }

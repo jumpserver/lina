@@ -22,14 +22,14 @@ export default {
             title: this.$t('CommandFilterACL'),
             name: 'CommandFilterACL',
             hidden: !this.$hasPerm('acls.view_commandfilteracl'),
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue'),
+            component: () => import('@/views/acls/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue'),
             helpTip: this.$t('CommandFilterACLHelpMsg')
           },
           {
             title: this.$t('CommandGroup'),
             name: 'CommandGroup',
             hidden: !this.$hasPerm('acls.view_commandgroup'),
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupList.vue')
+            component: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupList.vue')
           }
         ]
       }
