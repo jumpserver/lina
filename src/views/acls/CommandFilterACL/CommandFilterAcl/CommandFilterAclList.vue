@@ -10,7 +10,7 @@ import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
 export default {
-  name: 'CommandFilterAclList',
+  name: 'CommandFilterACLList',
   components: {
     ListTable
   },
@@ -35,7 +35,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'CommandFilterAclDetail'
+              route: 'CommandFilterACLDetail'
             }
           },
           command_groups: {
@@ -45,7 +45,7 @@ export default {
               route: 'AccountGatherList',
               getRoute({ row }) {
                 return {
-                  name: 'CommandFilterAclList',
+                  name: 'CommandFilterACLList',
                   query: {
                     tab: 'CommandGroup',
                     command_filters: row.id
@@ -62,7 +62,7 @@ export default {
         hasImport: false,
         hasRefresh: true,
         hasSearch: true,
-        createRoute: 'CommandFilterAclCreate',
+        createRoute: 'CommandFilterACLCreate',
         canCreate: () => {
           return this.$hasPerm('acls.add_commandfilteracl') && !this.$store.getters.currentOrgIsRoot
         }

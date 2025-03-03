@@ -17,7 +17,7 @@ import { GenericDetailPage } from '@/layout/components'
 
 import UserInfo from './UserInfo'
 import UserSession from './UserSession.vue'
-import UserLoginAcl from './UserLoginAcl.vue'
+import UserLoginACL from './UserLoginACL.vue'
 import UserGrantedAssets from './UserGrantedAssets'
 import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
 import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
@@ -29,7 +29,7 @@ export default {
   components: {
     UserInfo,
     UserSession,
-    UserLoginAcl,
+    UserLoginACL,
     GenericDetailPage,
     UserGrantedAssets,
     AssetPermissionUser,
@@ -67,8 +67,8 @@ export default {
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('UserAclLists'),
-            name: 'UserLoginAcl',
+            title: this.$t('UserACLss'),
+            name: 'UserLoginACL',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
           },
           {

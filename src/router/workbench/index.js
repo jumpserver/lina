@@ -25,7 +25,7 @@ export default {
     {
       path: '/workbench/home',
       name: 'MyHome',
-      component: () => import('@/views/workbench/myhome'),
+      component: () => import('@/views/workbench/overview/index.vue'),
       meta: {
         icon: 'overview',
         title: i18n.t('Overview'),

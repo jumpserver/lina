@@ -22,8 +22,8 @@ export default {
     const _id = this.$route.query.command_filters
     const url = `/api/v1/acls/command-groups/${_id ? `?command_filters=${_id}` : ''}`
     return {
-      createDrawer: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupCreateUpdate.vue'),
-      detailDrawer: () => import('@/views/acls/CommandAcl/CommandGroup/CommandGroupDetail/index.vue'),
+      createDrawer: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupDetail/index.vue'),
       tableConfig: {
         url: url,
         permissions: {

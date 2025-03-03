@@ -6,7 +6,7 @@
 import { GenericListPage } from '@/layout/components'
 
 export default {
-  name: 'ConnectMethodListAcl',
+  name: 'ConnectMethodListACL',
   components: { GenericListPage },
   data() {
     return {

@@ -16,7 +16,7 @@ import { userJSONSelectMeta } from '@/views/users/const'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 
 export default {
-  name: 'CommandFilterAclCreateUpdate',
+  name: 'CommandFilterACLCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -36,7 +36,7 @@ export default {
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/acls/command-filter-acls/',
-      createSuccessNextRoute: { name: 'CommandFilterAclList' },
+      createSuccessNextRoute: { name: 'CommandFilterACLList' },
       fieldsMeta: {
         users: userJSONSelectMeta(this),
         assets: assetJSONSelectMeta(this),
