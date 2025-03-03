@@ -25,8 +25,8 @@ export default {
   data() {
     return {
       config: {
-        title: this.$t('TaskDistribution'),
-        tip: this.$t('TaskDistribution')
+        title: this.$t('TaskSummary'),
+        tip: this.$t('TaskSummary')
       },
       counter: {
         total_count_change_secret_automation: 0,
@@ -61,7 +61,7 @@ export default {
         },
         series: [
           {
-            name: this.$t('TaskDistribution'),
+            name: this.$t('TaskSummary'),
             type: 'pie',
             top: '10%',
             radius: ['45%', '60%'],

@@ -7,7 +7,7 @@
         </div>
 
         <div class="total-section">
-          <div class="total-title">Total accounts</div>
+          <div class="total-title">{{ $t('TotalAccounts') }}</div>
           <div class="total-account"> {{ config.total }} </div>
           <div class="week-add">
             <div class="week-add-title"> {{ $t('WeekAdd') }} </div>
