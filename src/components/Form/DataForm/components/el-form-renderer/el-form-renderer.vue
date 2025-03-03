@@ -169,6 +169,9 @@ export default {
      */
     updateValue({ id, value }) {
       this.value = { ...this.value, [id]: value }
+      this.$nextTick(() => {
+        this.$refs.elForm.validateField(id)
+      })
     },
     /**
      * @return {object} key is item's id, value is item's value
