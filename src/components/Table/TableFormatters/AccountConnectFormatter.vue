@@ -1,33 +1,46 @@
 <template>
-  <el-dropdown
-    size="small"
-    trigger="hover"
-    :show-timeout="500"
-    @command="handleCommand"
-    @visible-change="visibleChange"
-  >
+  <div>
+    <el-dropdown
+      v-if="hasPerm"
+      size="small"
+      trigger="hover"
+      :show-timeout="500"
+      @command="handleCommand"
+      @visible-change="visibleChange"
+    >
+      <el-button
+        plain
+        size="mini"
+        type="primary"
+        @click="handlePamConnect"
+      >
+        <i :class="IButtonIcon" />
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="Title" disabled>
+          {{ ITitleText }}
+        </el-dropdown-item>
+        <el-dropdown-item divided />
+        <el-dropdown-item
+          v-for="protocol in protocols"
+          :key="protocol.id"
+          :command="protocol.name"
+        >
+          {{ protocol.name }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
     <el-button
+      v-else
       plain
       size="mini"
       type="primary"
-      @click="handlePamConnect"
+      :disabled="!hasPerm"
     >
-      <i :class="IButtonIcon" />
+      <i :class="IButtonIcon" style="color: #fff" />
     </el-button>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="Title" disabled>
-        {{ ITitleText }}
-      </el-dropdown-item>
-      <el-dropdown-item divided />
-      <el-dropdown-item
-        v-for="protocol in protocols"
-        :key="protocol.id"
-        :command="protocol.name"
-      >
-        {{ protocol.name }}
-      </el-dropdown-item>
-    </el-dropdown-menu>
-  </el-dropdown>
+  </div>
 </template>
 
 <script>
@@ -48,14 +61,11 @@ export default {
     url: {
       type: String,
       default: ''
-    },
-    connectUrlTemplate: {
-      type: Function,
-      default: () => {}
     }
   },
   data() {
     return {
+      hasPerm: false,
       protocols: []
     }
   },
@@ -66,6 +76,9 @@ export default {
     ITitleText() {
       return this.titleText || this.$t('SelectProtocol')
     }
+  },
+  mounted() {
+    this.hasPerm = this.formatterArgs.can()
   },
   methods: {
     handleCommand(protocol) {
