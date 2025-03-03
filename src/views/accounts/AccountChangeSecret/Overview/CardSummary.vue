@@ -49,6 +49,7 @@ export default {
         {
           title: this.$t('Tasks'),
           body: {
+            route: { name: 'AccountChangeSecret' },
             count: this.data.total_count_change_secrets
           }
         },
@@ -71,6 +72,7 @@ export default {
         {
           title: this.$t('Total'),
           body: {
+            route: { name: 'AccountChangeSecretExecutionList' },
             count: this.data.total_count_change_secret_executions
           }
         },
