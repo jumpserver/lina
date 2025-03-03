@@ -168,6 +168,7 @@ export default {
      * @param  {All} options.value 表单数据
      */
     updateValue({ id, value }) {
+      if (!value) return
       this.value = { ...this.value, [id]: value }
       this.$nextTick(() => {
         this.$refs.elForm.validateField(id)
