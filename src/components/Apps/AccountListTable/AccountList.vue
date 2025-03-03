@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
@@ -196,6 +197,10 @@ export default {
               buttonIcon: 'fa fa-desktop',
               titleText: '可选协议',
               url: '/api/v1/assets/assets/{id}',
+              can: () => {
+                console.log(this.currentUserIsSuperAdmin)
+                return this.currentUserIsSuperAdmin
+              },
               connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
               setMapItem: (id, protocol) => {
                 this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
@@ -388,6 +393,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentUserIsSuperAdmin']),
     accountCreateUpdateTitle() {
       if (this.addTemplate) {
         return this.$t('AddAccountByTemplate')
