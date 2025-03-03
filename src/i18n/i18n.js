@@ -57,7 +57,11 @@ axios.get(`/api/v1/settings/i18n/lina/?lang=${lang}&flat=0`)
     }
   })
   .finally(() => {
-    store.dispatch('app/setI18nLoaded', true)
+    store.dispatch('app/setI18nLoaded', true).then(
+      () => {
+        console.log('I18n loaded')
+      }
+    )
   })
 
 export default i18n

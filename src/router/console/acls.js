@@ -22,7 +22,7 @@ export default [
           name: 'UserLoginACLList'
         },
         meta: {
-          title: i18n.t('BaseUserLoginACLs'),
+          title: i18n.t('UserLoginACLs'),
           app: 'acls',
           resource: 'loginacl',
           disableOrgsChange: true
@@ -73,7 +73,7 @@ export default [
         },
         name: 'CmdACL',
         meta: {
-          title: i18n.t('CommandFilterACL'),
+          title: i18n.t('CommandFilterACLs',),
           menuTitle: i18n.t('CommandFilter'),
           app: 'acls',
           resource: 'commandfilteracl'

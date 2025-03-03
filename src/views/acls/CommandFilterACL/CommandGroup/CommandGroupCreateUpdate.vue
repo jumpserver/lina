@@ -28,7 +28,7 @@ export default {
         [this.$t('Other'), ['comment']]
       ],
       url: `/api/v1/acls/command-groups/`,
-      createSuccessNextRoute: { name: 'CommandFilterACLs' },
+      createSuccessNextRoute: { name: 'CommandFilterACLList' },
       updateSuccessNextRoute: { name: 'CommandFilterACLList' },
       fieldsMeta: {
         type: {
