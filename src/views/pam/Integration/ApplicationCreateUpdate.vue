@@ -59,8 +59,6 @@ export default {
           },
           on: {
             fileChange: ([value], updateForm) => {
-              console.log('fileChange', value)
-              console.log('updateForm', updateForm)
               this.logo_file = value
             }
           }
