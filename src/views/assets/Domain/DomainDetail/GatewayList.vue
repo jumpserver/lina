@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
         columnsExclude: [
           'info', 'spec_info', 'auto_config'
         ],
