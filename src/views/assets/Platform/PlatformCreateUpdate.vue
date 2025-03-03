@@ -173,20 +173,16 @@ export default {
     width: 100%;
   }
 
-  .item-enable.el-form-item {
-    //margin-bottom: 1px;
-  }
-
   .item-method.el-form-item {
     display: inline-block;
-    width: 100%;;
+    width: 100%;
 
     .el-form-item__content {
       width: calc(100% - 50px);
     }
 
     .el-select {
-      width: 100%;
+      width: 75%;
     }
 
     margin-top: -10px;
@@ -195,10 +191,8 @@ export default {
   .item-params.el-form-item {
     display: inline-block;
     position: absolute;
-    right: 18px;
-    margin-top: 22px;
+    right: 10px;
   }
 }
-
 </style>
 
