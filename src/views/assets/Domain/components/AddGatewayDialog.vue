@@ -41,6 +41,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       formConfig: {
         getUrl: () => {
@@ -53,7 +54,7 @@ export default {
         createSuccessMsg: this.$t('AddSuccessMsg'),
         updateSuccessNextRoute: {
           name: 'ZoneDetail',
-          params: { id: this.$route.params.id }
+          params: { id: this.object.id }
         },
         fields: ['gateways'],
         fieldsMeta: {
@@ -73,7 +74,7 @@ export default {
         cleanFormValue(values) {
           const data = []
           values.gateways.forEach(item => {
-            const d = { id: item.pk, domain: this.$route.params.id }
+            const d = { id: item.pk, domain: vm.object.id }
             data.push(d)
           })
           return data

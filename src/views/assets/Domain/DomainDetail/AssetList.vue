@@ -29,7 +29,7 @@ export default {
     return {
       tableConfig: {
         category: 'all',
-        url: `/api/v1/assets/assets/?domain=${this.$route.params.id}&is_gateway=0`,
+        url: `/api/v1/assets/assets/?domain=${this.object.id}&is_gateway=0`,
         tableConfig: {
           columns: ['name', 'address', 'platform', 'actions'],
           columnsMeta: {
