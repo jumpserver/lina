@@ -144,6 +144,7 @@ export default {
     const vm = this
     return {
       addTemplate: false,
+      isUpdateAccount: false,
       currentAccountColumn: {},
       showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
@@ -209,7 +210,7 @@ export default {
           },
           platform: {
             label: this.$t('Platform'),
-            width: '120px',
+            width: '170px',
             formatter: PlatformFormatter,
             formatterArgs: {
               platformAttr: 'asset.platform'
@@ -394,6 +395,8 @@ export default {
     accountCreateUpdateTitle() {
       if (this.addTemplate) {
         return this.$t('AddAccountByTemplate')
+      } else if (this.isUpdateAccount) {
+        return this.$t('UpdateAccount')
       } else {
         return this.$t('AddAccount')
       }
@@ -434,6 +437,7 @@ export default {
     },
     addAccountSuccess() {
       Reflect.deleteProperty(this.$route.query, 'flag')
+      this.isUpdateAccount = false
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
