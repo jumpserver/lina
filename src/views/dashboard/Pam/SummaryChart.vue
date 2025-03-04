@@ -67,7 +67,7 @@ export default {
           key: 'connectable'
         },
         {
-          label: this.$t('Valid'),
+          label: this.$t('Active'),
           key: 'valid'
         }
       ]
@@ -95,7 +95,7 @@ export default {
             show: false,
             type: 'category',
             boundaryGap: false,
-            data: [this.$t('Privileged'), this.$t('ResetSecret'), this.$t('Connectable'), this.$t('Valid')]
+            data: [this.$t('Privileged'), this.$t('ResetSecret'), this.$t('Connectable'), this.$t('Active')]
           }
         ],
         yAxis: [
