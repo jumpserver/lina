@@ -182,7 +182,7 @@ export default {
     width: 100%;;
 
     .el-form-item__content {
-      width: calc(100% - 50px);
+      width: calc(75% - 50px);
     }
 
     .el-select {
@@ -196,7 +196,7 @@ export default {
     display: inline-block;
     position: absolute;
     right: 18px;
-    margin-top: 22px;
+    //margin-top: 22px;
   }
 }
 

@@ -157,7 +157,7 @@ export default {
   activated() {
     setTimeout(() => {
       this.tab.activeMenu = window.localStorage.getItem('lastTab') || 'host'
-      this.$refs.genericListTable.reloadTable()
+      this.$refs.genericListTable?.reloadTable()
     }, 300)
   },
   async mounted() {

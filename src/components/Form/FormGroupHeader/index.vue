@@ -1,10 +1,12 @@
 <template>
   <div ref="formGroup" class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
-    <h3 @click="toggle">{{ group['title'] }} </h3>
-    <span class="compass" @click="toggle">
-      <i :class="iconClass" />
-    </span>
+    <div v-if="group['title']">
+      <h3 @click="toggle">{{ group['title'] }} </h3>
+      <span class="compass" @click="toggle">
+        <i :class="iconClass" />
+      </span>
+    </div>
     <div v-if="!isVisible" class="ellipsis" @click="toggle">
       <i class="fa fa-angle-double-down" />
     </div>

@@ -61,7 +61,7 @@ export default {
       visible: false,
       fields: ['domain_enabled'],
       quickActions: [],
-      url: `/api/v1/assets/platforms/${this.object.id}`,
+      url: `/api/v1/assets/platforms/${this.object.id}/`,
       detailFields: [
         'id', 'name', 'charset', 'internal',
         {
