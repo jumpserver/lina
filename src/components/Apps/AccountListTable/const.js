@@ -53,6 +53,7 @@ export const accountOtherActions = (vm) => [
       // }
       // vm.iAsset = data
       vm.account = row
+      vm.addTemplate = false
       vm.showAddDialog = false
       setTimeout(() => {
         vm.showAddDialog = true
