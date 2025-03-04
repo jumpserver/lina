@@ -22,8 +22,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/accounts/accounts/?integrationapplication=${this.object.id}`,
-        hasLeftActions: true,
-        hasImport: true,
+        hasLeftActions: false,
+        hasImport: false,
+        hasExport: false,
+        showQuickFilters: false,
         columnsMeta: {
           asset: {
             formatter: DetailFormatter,
