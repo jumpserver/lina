@@ -31,6 +31,7 @@ import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import store from '@/store'
 import { MFASystemSetting } from '../const'
+import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export default {
   components: {
@@ -129,6 +130,15 @@ export default {
           ]
         },
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'UserDetail',
+              routeQuery: {
+                tab: 'Basic'
+              }
+            }
+          },
           mfa_level: {
             width: '130px',
             formatter: (row) => {
