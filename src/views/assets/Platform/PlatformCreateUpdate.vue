@@ -195,7 +195,7 @@ export default {
   .item-params.el-form-item {
     display: inline-block;
     position: absolute;
-    right: 18px;
+    right: 10px;
     //margin-top: 22px;
   }
 }
