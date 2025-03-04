@@ -179,7 +179,7 @@ export default {
 
   .item-method.el-form-item {
     display: inline-block;
-    width: 100%;;
+    width: 100%;
 
     .el-form-item__content {
       width: calc(75% - 50px);
@@ -199,6 +199,5 @@ export default {
     //margin-top: 22px;
   }
 }
-
 </style>
 

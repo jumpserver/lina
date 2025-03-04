@@ -169,6 +169,12 @@ export default {
     .panel-image {
       margin: auto 5px;
     }
+
+    .panel-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
   }
 
   .el-divider--horizontal {

@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
@@ -143,6 +144,7 @@ export default {
     const vm = this
     return {
       addTemplate: false,
+      isUpdateAccount: false,
       currentAccountColumn: {},
       showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
@@ -196,6 +198,7 @@ export default {
               buttonIcon: 'fa fa-desktop',
               titleText: '可选协议',
               url: '/api/v1/assets/assets/{id}',
+              can: () => this.currentUserIsSuperAdmin,
               connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
               setMapItem: (id, protocol) => {
                 this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
@@ -207,7 +210,7 @@ export default {
           },
           platform: {
             label: this.$t('Platform'),
-            width: '120px',
+            width: '170px',
             formatter: PlatformFormatter,
             formatterArgs: {
               platformAttr: 'asset.platform'
@@ -388,9 +391,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentUserIsSuperAdmin']),
     accountCreateUpdateTitle() {
       if (this.addTemplate) {
         return this.$t('AddAccountByTemplate')
+      } else if (this.isUpdateAccount) {
+        return this.$t('UpdateAccount')
       } else {
         return this.$t('AddAccount')
       }
@@ -431,6 +437,7 @@ export default {
     },
     addAccountSuccess() {
       Reflect.deleteProperty(this.$route.query, 'flag')
+      this.isUpdateAccount = false
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
