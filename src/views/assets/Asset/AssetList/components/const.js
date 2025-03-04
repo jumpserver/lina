@@ -139,6 +139,7 @@ export function getDefaultConfig(vm) {
         sortable: true
       },
       platform: {
+        width: '160px',
         sortable: true,
         formatter: PlatformFormatter
       },
