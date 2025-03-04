@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="drawer-footer">
-        <div v-if="row.status.value === '0'">
+        <div v-if="row.status && row.status.value === '0'">
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
             <el-button size="small" type="primary" @click="handleClose">
@@ -181,7 +181,7 @@ export default {
         case 'authorized_key_changed':
           return this.$t('Diff') + `:
             <pre>
-${detail.diff}
+              ${detail.diff}
             </pre>
             `
         case 'long_time_password':
