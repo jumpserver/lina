@@ -118,10 +118,6 @@ export default {
     &.is-process {
       color: var(--color-primary);
 
-      .el-step__line {
-        background-color: var(--color-primary);
-      }
-
       .el-step__icon {
         border-color: var(--color-primary);
       }
