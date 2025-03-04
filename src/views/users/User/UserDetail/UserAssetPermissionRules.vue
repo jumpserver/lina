@@ -1,6 +1,9 @@
 <template>
   <TwoCol>
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </TwoCol>
 </template>
 

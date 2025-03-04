@@ -3,6 +3,7 @@
     ref="listTable"
     :create-drawer="createDrawer"
     :header-actions="headerActions"
+    :resource="$t('UserLoginACL')"
     :table-config="tableConfig"
   />
 </template>
