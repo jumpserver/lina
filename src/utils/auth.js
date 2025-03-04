@@ -1,4 +1,5 @@
 import VueCookie from 'vue-cookie'
+import request from '@/utils/request'
 
 const CURRENT_ORG_KEY = 'currentOrg'
 const CURRENT_ROLE_KEY = 'currentRole'
@@ -64,4 +65,24 @@ export function getPreOrgLocal(username) {
   } catch (e) {
     return null
   }
+}
+
+export function watchSessions() {
+  request({
+    url: '/api/v1/authentication/user-session/',
+    method: 'get',
+    disableFlashErrorMsg: true
+  })
+
+  let idBeforeunload = false
+
+  window.addEventListener('beforeunload', (event) => {
+    if (idBeforeunload) return
+    idBeforeunload = true
+    request({
+      url: '/api/v1/authentication/user-session/',
+      method: 'delete',
+      disableFlashErrorMsg: true
+    })
+  })
 }
