@@ -9,7 +9,7 @@ import { Required } from '@/components/Form/DataForm/rules'
 import { userJSONSelectMeta } from '@/views/users/const'
 
 export default {
-  name: 'AclCreateUpdate',
+  name: 'ACLCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },

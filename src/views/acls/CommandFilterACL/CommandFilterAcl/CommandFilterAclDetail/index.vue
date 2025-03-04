@@ -1,12 +1,12 @@
 <template>
   <GenericDetailPage
     :active-menu.sync="config.activeMenu"
-    :object.sync="CommandFilterAcl"
+    :object.sync="CommandFilterACL"
     v-bind="config"
     v-on="$listeners"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="CommandFilterAcl" />
+      <component :is="config.activeMenu" :object="CommandFilterACL" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      CommandFilterAcl: {},
+      CommandFilterACL: {},
       config: {
         url: '/api/v1/acls/command-filter-acls',
         activeMenu: 'Detail',

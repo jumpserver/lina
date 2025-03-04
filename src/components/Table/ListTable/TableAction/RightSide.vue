@@ -176,8 +176,8 @@ export default {
       // return assignIfNot(this.exportOptions, { url: this.tableUrl })
 
       return {
-        ...this.exportOptions,
-        url: this.tableUrl
+        url: this.tableUrl,
+        ...this.exportOptions
       }
     }
   },

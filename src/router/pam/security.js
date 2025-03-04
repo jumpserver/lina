@@ -119,6 +119,26 @@ export default [
           title: i18n.t('AccountCheckUpdate'),
           permissions: ['accounts.view_accountrisk']
         }
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/pam/RiskDetect/AccountCheckDetail/index.vue'),
+        name: 'AccountCheckDetail',
+        meta: {
+          title: i18n.t('RiskDetectionDetail'),
+          permissions: ['accounts.view_accountrisk']
+        },
+        hidden: true
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/pam/RiskDetect/RiskHistoryExecutionDetail/index.vue'),
+        name: 'RiskHistoryExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('ExecutionDetail'),
+          permissions: ['accounts.view_checkaccountexecution']
+        }
       }
     ]
   }

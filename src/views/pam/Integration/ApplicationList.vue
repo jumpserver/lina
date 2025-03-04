@@ -7,7 +7,7 @@
 <script type="text/jsx">
 import { DrawerListTable as ListTable } from '@/components'
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
-import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'CloudAccountList',
@@ -22,6 +22,7 @@ export default {
       currentTemplate: null,
       tableConfig: {
         url: '/api/v1/accounts/integration-applications/',
+        columnsExclude: ['accounts'],
         columnsMeta: {
           id: {
             width: '300px',
@@ -37,7 +38,7 @@ export default {
               )
             }
           },
-          accounts: {
+          accounts_amount: {
             width: '100px',
             formatter: (row) => {
               return row.accounts_amount
@@ -63,12 +64,18 @@ export default {
                 return app.secret
               }
             }
+          },
+          actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasClone: false
+            }
           }
         },
         columnsExtra: ['secret'],
         columnsShow: {
           default: [
-            'logo', 'name', 'id', 'secret', 'accounts', 'date_last_used', 'active'
+            'logo', 'name', 'id', 'secret', 'accounts_amount', 'date_last_used', 'active'
           ]
         },
         permissions: { app: 'accounts', resource: 'integrationapplication' }

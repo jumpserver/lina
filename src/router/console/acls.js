@@ -19,10 +19,10 @@ export default [
         path: 'login-acls',
         component: globalSubmenu,
         redirect: {
-          name: 'UserLoginAclList'
+          name: 'UserLoginACLList'
         },
         meta: {
-          title: i18n.t('BaseUserLoginAclList'),
+          title: i18n.t('UserLoginACLs'),
           app: 'acls',
           resource: 'loginacl',
           disableOrgsChange: true
@@ -30,38 +30,38 @@ export default [
         children: [
           {
             path: '',
-            name: 'UserLoginAclList',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLList.vue'),
+            name: 'UserLoginACLList',
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLList.vue'),
             meta: {
-              title: i18n.t('UserLoginAclList'), menuTitle: i18n.t('UserLogin'), activeMenu: ''
+              title: i18n.t('UserLoginACLs'), menuTitle: i18n.t('UserLogin'), activeMenu: ''
             }
           },
           {
             path: 'create',
-            name: 'UserLoginAclCreate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            name: 'UserLoginACLCreate',
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
             meta: {
-              title: i18n.t('UserLoginAclCreate'), activeMenu: ''
+              title: i18n.t('UserLoginACLCreate'), activeMenu: ''
             }
           },
           {
             path: ':id',
-            name: 'UserLoginAclDetail',
-            component: () => import('@/views/acl/UserLoginACL/UserDetail/index'),
+            name: 'UserLoginACLDetail',
+            component: () => import('@/views/acls/UserLoginACL/UserDetail/index'),
             hidden: true,
             meta: {
-              title: i18n.t('UserLoginAclDetail'), activeMenu: '',
+              title: i18n.t('UserLoginACLDetail'), activeMenu: '',
               app: 'acls',
               resource: 'loginacl'
             }
           },
           {
             path: ':id/update',
-            name: 'UserLoginAclUpdate',
-            component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate.vue'),
+            name: 'UserLoginACLUpdate',
+            component: () => import('@/views/acls/UserLoginACL/UserLoginACLCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('UserLoginAclUpdate'), activeMenu: '' }
+            meta: { title: i18n.t('UserLoginACLUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -69,11 +69,12 @@ export default [
         path: 'cmd-acls',
         component: empty,
         redirect: {
-          name: 'CommandFilterAclList'
+          name: 'CommandFilterACLList'
         },
         name: 'CmdACL',
         meta: {
-          title: i18n.t('BaseCommandFilterAclList'),
+          title: i18n.t('CommandFilterACLs',),
+          menuTitle: i18n.t('CommandFilter'),
           app: 'acls',
           resource: 'commandfilteracl'
         },
@@ -81,37 +82,38 @@ export default [
           // Command Filter ACL
           {
             path: '',
-            name: 'CommandFilterAclList',
-            component: () => import('@/views/acl/CommandAcl/index'),
+            name: 'CommandFilterACLList',
+            component: () => import('@/views/acls/CommandFilterACL/index'),
             hidden: true,
             meta: {
-              title: i18n.t('BaseCommandFilterAclList'),
+              title: i18n.tc('CommandFilterACL', 2),
+              menuTitle: i18n.t('CommandFilter'),
               activeMenu: ''
             }
           },
           {
             path: 'create',
-            name: 'CommandFilterAclCreate',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+            name: 'CommandFilterACLCreate',
+            component: () => import('@/views/acls/CommandFilterACL/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclCreate'), activeMenu: '' }
+            meta: { title: i18n.t('CommandFilterACLCreate'), activeMenu: '' }
           },
           {
             path: ':id',
-            name: 'CommandFilterAclDetail',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclDetail/index'),
+            name: 'CommandFilterACLDetail',
+            component: () => import('@/views/acls/CommandFilterACL/CommandFilterAcl/CommandFilterAclDetail/index'),
             hidden: true,
             meta: {
-              title: i18n.t('CommandFilterAclDetail'),
+              title: i18n.t('CommandFilterACLDetail'),
               activeMenu: ''
             }
           },
           {
             path: ':id/update',
-            name: 'CommandFilterAclUpdate',
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+            name: 'CommandFilterACLUpdate',
+            component: () => import('@/views/acls/CommandFilterACL/CommandFilterAcl/CommandFilterAclCreateUpdate'),
             hidden: true,
-            meta: { title: i18n.t('CommandFilterAclUpdate'), activeMenu: '' }
+            meta: { title: i18n.t('CommandFilterACLUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -119,11 +121,11 @@ export default [
         path: 'login-asset-acls',
         component: empty,
         redirect: {
-          name: 'AssetAclList'
+          name: 'AssetACLList'
         },
-        name: 'LoginAssetAcls',
+        name: 'LoginAssetACLs',
         meta: {
-          title: i18n.t('BaseAssetAclList'),
+          title: i18n.t('BaseAssetACLs'),
           licenseRequired: true,
           app: 'acls',
           resource: 'loginassetacl'
@@ -131,30 +133,30 @@ export default [
         children: [
           {
             path: '',
-            name: 'AssetAclList',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclList.vue'),
-            meta: { title: i18n.t('AssetAclList'), activeMenu: '', menuTitle: i18n.t('AssetConnect') }
+            name: 'AssetACLList',
+            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclList.vue'),
+            meta: { title: i18n.t('AssetACLs'), activeMenu: '', menuTitle: i18n.t('AssetConnect') }
           },
           {
             path: 'create',
-            name: 'AssetAclCreate',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+            name: 'AssetACLCreate',
+            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclCreate'), activeMenu: '' }
+            meta: { title: i18n.t('AssetACLCreate'), activeMenu: '' }
           },
           {
             path: ':id',
-            name: 'AssetAclDetail',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclDetail/index'),
+            name: 'AssetACLDetail',
+            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclDetail/index'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclDetail'), activeMenu: '' }
+            meta: { title: i18n.t('AssetACLDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
-            name: 'AssetAclUpdate',
-            component: () => import('@/views/acl/AssetLoginAcl/AssetLoginAclCreateUpdate.vue'),
+            name: 'AssetACLUpdate',
+            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
-            meta: { title: i18n.t('AssetAclUpdate'), activeMenu: '' }
+            meta: { title: i18n.t('AssetACLUpdate'), activeMenu: '' }
           }
         ]
       },
@@ -176,7 +178,7 @@ export default [
           {
             path: '',
             name: 'CommandGroupList',
-            component: () => import('@/views/acl/CommandAcl/index'),
+            component: () => import('@/views/acls/CommandFilterACL/index'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupList'),
@@ -186,7 +188,7 @@ export default [
           {
             path: 'create',
             name: 'CommandGroupCreate',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+            component: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupCreateUpdate'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupCreate'),
@@ -196,7 +198,7 @@ export default [
           {
             path: ':id',
             name: 'CommandGroupDetail',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupDetail/index'),
+            component: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupDetail/index'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupDetail'),
@@ -206,7 +208,7 @@ export default [
           {
             path: ':id/update',
             name: 'CommandGroupUpdate',
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+            component: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupCreateUpdate'),
             hidden: true,
             meta: {
               title: i18n.t('CommandGroupUpdate'),
@@ -219,7 +221,7 @@ export default [
         path: 'connect-method-acls',
         component: globalSubmenu,
         redirect: {
-          name: 'ConnectMethodAclList'
+          name: 'ConnectMethodACLList'
         },
         name: 'ConnectMethodACL',
         meta: {
@@ -232,28 +234,28 @@ export default [
         children: [
           {
             path: '',
-            name: 'ConnectMethodAclList',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclList.vue'),
-            meta: { title: i18n.t('ConnectMethodAclList'), activeMenu: '', menuTitle: i18n.t('ConnectMethod') }
+            name: 'ConnectMethodACLList',
+            component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclList.vue'),
+            meta: { title: i18n.t('ConnectMethodACLs'), activeMenu: '', menuTitle: i18n.t('ConnectMethod') }
           },
           {
             path: 'create',
-            name: 'ConnectMethodAclCreate',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+            name: 'ConnectMethodACLCreate',
+            component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclCreate'), activeMenu: '' }
           },
           {
             path: ':id',
             name: 'ConnectMethodAclDetail',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclDetail/index'),
+            component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclDetail/index'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
             name: 'ConnectMethodAclUpdate',
-            component: () => import('@/views/acl/ConnectMethodAcl/ConnectMethodAclCreateUpdate.vue'),
+            component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '' }
           }

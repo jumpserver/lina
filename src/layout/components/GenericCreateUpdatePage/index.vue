@@ -35,7 +35,7 @@ export default {
   margin: 0 10px 30px 0;
 
   .el-card__body {
-    padding-top: 30px;
+    padding-top: 3px;
     padding-bottom: 60px;
   }
 }

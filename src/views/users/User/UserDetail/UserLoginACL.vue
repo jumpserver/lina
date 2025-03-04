@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import UserLoginACLTable from '@/views/acl/UserLoginACL/UserLoginACLTable.vue'
+import UserLoginACLTable from '@/views/acls/UserLoginACL/UserLoginACLTable.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
-  name: 'UserLoginAcl',
+  name: 'UserLoginACL',
   components: {
     TwoCol,
     UserLoginACLTable

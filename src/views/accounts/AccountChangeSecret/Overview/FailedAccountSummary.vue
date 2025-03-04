@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import HomeCard from '@/views/workbench/myhome/components/HomeCard.vue'
+import HomeCard from '@/views/workbench/overview/components/HomeCard.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'

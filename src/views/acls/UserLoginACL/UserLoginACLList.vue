@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import UserLoginACLTable from '@/views/acl/UserLoginACL/UserLoginACLTable.vue'
+import UserLoginACLTable from '@/views/acls/UserLoginACL/UserLoginACLTable.vue'
 import Page from '@/layout/components/Page'
 
 export default {

@@ -19,17 +19,17 @@ export default {
         activeMenu: 'CommandFilterACL',
         submenu: [
           {
-            title: this.$t('CommandFilterACL'),
+            title: this.$tc('CommandFilterACL', 2),
             name: 'CommandFilterACL',
             hidden: !this.$hasPerm('acls.view_commandfilteracl'),
-            component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclList.vue'),
+            component: () => import('@/views/acls/CommandFilterACL/CommandFilterAcl/CommandFilterAclList.vue'),
             helpTip: this.$t('CommandFilterACLHelpMsg')
           },
           {
-            title: this.$t('CommandGroup'),
+            title: this.$tc('CommandGroup', 2),
             name: 'CommandGroup',
             hidden: !this.$hasPerm('acls.view_commandgroup'),
-            component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupList.vue')
+            component: () => import('@/views/acls/CommandFilterACL/CommandGroup/CommandGroupList.vue')
           }
         ]
       }

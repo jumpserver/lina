@@ -1,6 +1,6 @@
 <template>
   <div class="panel-item">
-    <span class="item-label">{{ title }} </span>
+    <span class="item-label">{{ title }}: </span>
     <span :title="content" class="text-info">{{ content || '' }}</span>
   </div>
 </template>
@@ -35,22 +35,21 @@ export default {
 }
 
 .panel-item {
+  display: flex;
+  flex-wrap: nowrap;
   text-align: left;
   padding: 3px 0;
   line-height: 20px;
 
   .item-label {
     text-align: left;
-    display: inline-block;
-    width: 35%;
-  }
-
-  .item-label::after {
-    content: ':';
-    margin-left: 1px;
+    display: flex;
+    flex: 1;
+    min-width: 110px;
   }
 
   .text-info {
+    flex: 2;
     @include textOverflow;
   }
 }

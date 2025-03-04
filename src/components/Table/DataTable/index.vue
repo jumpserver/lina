@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import { ObjectLocalStorage } from '@/utils/common'
-import { newURL } from '@/utils/common'
+import { newURL, ObjectLocalStorage } from '@/utils/common'
 import { default as ElDatableTable } from './compenents/el-data-table'
 import { mapGetters } from 'vuex'
 
@@ -113,7 +112,7 @@ export default {
       return this.$refs.table
     },
     tableConfig() {
-      const tableDefaultConfig = this.defaultConfig
+      const tableDefaultConfig = this.defaultConfig || {}
       let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
         tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)

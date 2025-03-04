@@ -22,9 +22,9 @@ export default {
           ]
         }
       },
-      updateRoute: 'AssetAclUpdate',
+      updateRoute: 'AssetACLUpdate',
       headerActions: {
-        createRoute: 'AssetAclCreate',
+        createRoute: 'AssetACLCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false

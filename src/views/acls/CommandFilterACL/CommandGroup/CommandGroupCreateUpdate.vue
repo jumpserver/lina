@@ -24,11 +24,12 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('Basic'), ['name', 'type', 'content', 'ignore_case', 'comment']]
+        [this.$t('Basic'), ['name', 'type', 'content', 'ignore_case']],
+        [this.$t('Other'), ['comment']]
       ],
       url: `/api/v1/acls/command-groups/`,
-      createSuccessNextRoute: { name: 'CommandFilterAclList' },
-      updateSuccessNextRoute: { name: 'CommandFilterAclList' },
+      createSuccessNextRoute: { name: 'CommandFilterACLList' },
+      updateSuccessNextRoute: { name: 'CommandFilterACLList' },
       fieldsMeta: {
         type: {
           on: {

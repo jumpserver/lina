@@ -179,10 +179,10 @@ export default {
 
   .item-method.el-form-item {
     display: inline-block;
-    width: 100%;;
+    width: 100%;
 
     .el-form-item__content {
-      width: calc(100% - 50px);
+      width: calc(75% - 50px);
     }
 
     .el-select {
@@ -195,10 +195,9 @@ export default {
   .item-params.el-form-item {
     display: inline-block;
     position: absolute;
-    right: 18px;
-    margin-top: 22px;
+    right: 10px;
+    //margin-top: 22px;
   }
 }
-
 </style>
 

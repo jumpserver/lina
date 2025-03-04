@@ -138,9 +138,13 @@ export default {
     generateColumnByName(name, col) {
       switch (name) {
         case 'id':
-          col.width = '290px'
-          col.formatter = CopyableFormatter
-          col.iconPosition = 'left'
+          if (!col.width) {
+            col.width = '290px'
+          }
+          if (!col.formatter) {
+            col.formatter = CopyableFormatter
+            col.iconPosition = 'left'
+          }
           break
         case 'name':
           col.formatter = DetailFormatter

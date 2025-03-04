@@ -7,7 +7,7 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <BatchResolveDialog :visible.sync="batchResolveDialog.visible" v-bind="batchResolveDialog" />
+    <BatchResolveDialog v-if="batchResolveDialog.visible" :visible.sync="batchResolveDialog.visible" v-bind="batchResolveDialog" />
     <RiskScanDialog v-if="detectDialog.visible" :asset="detectDialog.asset" :visible.sync="detectDialog.visible" />
   </div>
 </template>

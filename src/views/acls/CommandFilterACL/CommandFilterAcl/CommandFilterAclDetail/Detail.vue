@@ -9,7 +9,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
-  name: 'CommandFilterAclDetail',
+  name: 'CommandFilterACLDetail',
   components: {
     AutoDetailCard,
     TwoCol

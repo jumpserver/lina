@@ -26,7 +26,7 @@ export default {
       fields: [
         [this.$t('Basic'), ['name']],
         [this.$t('Asset'), ['assets', 'nodes']],
-        [this.$t('Check config'), ['engines', 'recipients']],
+        [this.$t('Config'), ['engines', 'recipients']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
@@ -65,7 +65,6 @@ export default {
           }
         },
         recipients: {
-          label: i18n.t('Recipients'),
           helpText: i18n.t('OnlyMailSend'),
           el: {
             value: [],

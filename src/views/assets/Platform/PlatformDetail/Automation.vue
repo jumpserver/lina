@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm class="form" v-bind="$data" />
+    <GenericCreateUpdateForm :object="object" class="form" v-bind="$data" />
   </IBox>
 </template>
 
@@ -18,8 +18,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data() {
@@ -31,7 +30,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/`,
+      url: `/api/v1/assets/platforms/${this.object.id}/`,
       disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,
@@ -52,15 +51,18 @@ export default {
   },
   async mounted() {
     try {
-      const { category, type } = this.object
-      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
-      this.defaultOptions = await this.$axios.get(url)
-      await setAutomations(this)
+      await this.setDefaultAutomations()
     } finally {
       this.loading = false
     }
   },
   methods: {
+    async setDefaultAutomations() {
+      const { category, type } = this.object
+      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
+      this.defaultOptions = await this.$axios.get(url)
+      await setAutomations(this)
+    },
     submit(validValues) {
       if (!this.canSubmit || !this.isSystemAdmin) {
         return this.$message.error(this.$tc('NoPermission'))
@@ -88,7 +90,7 @@ export default {
     width: 100%;;
 
     .el-form-item__content {
-      width: calc(100% - 50px) !important;
+      width: calc(75% - 50px) !important;
     }
 
     .el-select {
@@ -101,8 +103,7 @@ export default {
   .item-params.el-form-item {
     display: inline-block;
     position: absolute;
-    right: 18px;
-    margin-top: 22px;
+    right: 10px;
   }
 }
 

@@ -1,9 +1,10 @@
 <template>
   <ListTable
     ref="listTable"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
     :create-drawer="createDrawer"
+    :header-actions="headerActions"
+    :resource="$t('UserLoginACL')"
+    :table-config="tableConfig"
   />
 </template>
 
@@ -35,7 +36,7 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'UserLoginAclDetail'
+              route: 'UserLoginACLDetail'
             }
           },
           reviewers_amount: {
@@ -46,7 +47,7 @@ export default {
               hasClone: false,
               updateRoute: ({ row }) => {
                 return {
-                  name: 'UserLoginAclUpdate',
+                  name: 'UserLoginACLUpdate',
                   params: {
                     id: row.id
                   }
@@ -61,7 +62,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasMoreActions: false,
-        createRoute: 'UserLoginAclCreate'
+        createRoute: 'UserLoginACLCreate'
       },
       createDrawer: () => import('./UserLoginACLCreateUpdate.vue')
     }

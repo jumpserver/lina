@@ -1,6 +1,6 @@
 <template>
   <Dialog :destroy-on-close="true" :show-buttons="false" :title="$tc('ResolveSelected')" :visible.sync="iVisible">
-    <div v-if="iVisible">
+    <div>
       <el-form class="el-form">
         <el-form-item class="risk-select" prop="selected">
           <el-select v-model="riskSelected" :placeholder="$t('Select risk')">
@@ -58,6 +58,7 @@ export default {
         label: this.$t('Pending')
       },
       tableConfig: {
+        url: '',
         totalData: [],
         columns: [
           {

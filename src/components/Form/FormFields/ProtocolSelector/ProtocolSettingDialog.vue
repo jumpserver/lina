@@ -3,6 +3,7 @@
     v-if="$attrs.visible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
+    :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('PlatformProtocolConfig') + '：' + protocol.name"

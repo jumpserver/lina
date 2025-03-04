@@ -58,7 +58,7 @@ export const constantRoutes = [
       {
         path: '',
         name: 'home',
-        component: () => import('@/views/workbench/myhome/index'),
+        component: () => import('@/views/workbench/overview/index'),
         meta: {
           icon: 'dashboard',
           title: i18n.t('Overview')

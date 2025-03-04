@@ -22,15 +22,15 @@ export default {
           {
             id: 'command-filter',
             display_name: this.$t('CommandFilterACL'),
-            name: 'CommandFilterAclList',
+            name: 'CommandFilterACLList',
             comment: this.$t('CommandFilterACLHelpText'),
             icon: 'filter',
             tags: ['command']
           },
           {
             id: 'connect-asset',
-            display_name: this.$t('AssetAclList'),
-            name: 'AssetAclList',
+            display_name: this.$t('AssetACLs'),
+            name: 'AssetACLList',
             comment: this.$t('AssetLoginACLHelpText'),
             icon: 'assets',
             edition: 'enterprise',
@@ -38,8 +38,8 @@ export default {
           },
           {
             id: 'connect-method',
-            display_name: this.$t('ConnectMethodAclList'),
-            name: 'ConnectMethodAclList',
+            display_name: this.$t('ConnectMethodACLs'),
+            name: 'ConnectMethodACLList',
             comment: this.$t('ConnectMethodACLHelpText'),
             icon: 'client',
             edition: 'enterprise',
@@ -47,8 +47,8 @@ export default {
           },
           {
             id: 'UserLoginACL',
-            display_name: this.$t('UserLoginAclList'),
-            name: 'UserLoginAclList',
+            display_name: this.$t('UserLoginACLs'),
+            name: 'UserLoginACLList',
             comment: this.$t('UserLoginACLHelpText'),
             icon: 'login',
             edition: 'enterprise',

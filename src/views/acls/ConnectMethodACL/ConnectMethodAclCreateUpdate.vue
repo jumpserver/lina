@@ -10,14 +10,13 @@ import { assetJSONSelectMeta } from '@/views/assets/const'
 import { Select2 } from '@/components/Form/FormFields'
 
 export default {
-  name: 'AclCreateUpdate',
+  name: 'ACLCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     return {
-      initial: {
-      },
+      initial: {},
       fields: [
         [this.$t('Basic'), ['name', 'priority']],
         [this.$t('Users'), ['users']],

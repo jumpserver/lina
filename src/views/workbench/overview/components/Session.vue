@@ -28,6 +28,7 @@ export default {
           id: {
             prop: 'id',
             align: 'center',
+            width: '50px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}

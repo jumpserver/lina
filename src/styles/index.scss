@@ -431,6 +431,7 @@ input[type=file] {
 .el-form {
   label {
     font-weight: 400;
+    line-height: 32px;
   }
 
   .el-input__icon {
@@ -657,4 +658,25 @@ li.rmenu i.fa {
   white-space: nowrap;
   display: inline-block;
   width: 100%;
+}
+
+.el-card__body {
+  .el-form {
+    margin-top: 20px;
+    margin-right: 80px;
+  }
+}
+
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
+  span {
+    &::before {
+      content: '*';
+      margin-right: 4px;
+      color: #ed5565;
+    }
+  }
+
+  &::before {
+    display: none;
+  }
 }

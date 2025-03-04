@@ -11,7 +11,7 @@ import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFo
 import { WeekCronSelect } from '@/components/Form/FormFields'
 
 export default {
-  name: 'AclCreateUpdate',
+  name: 'ACLCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },

@@ -2,6 +2,7 @@
   <transition name="dialog-fade">
     <el-dialog
       :append-to-body="true"
+      :class="{ shadow: shadow }"
       :modal-append-to-body="true"
       :title="title"
       :top="top"
@@ -79,6 +80,10 @@ export default {
     maxWidth: {
       type: String,
       default: '1200px'
+    },
+    shadow: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -101,13 +106,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dialog.shadow ::v-deep .el-dialog {
+  box-shadow: 1px 2px 12px 0 rgba(0, 0, 0, 0.6);
+}
+
 .dialog ::v-deep .el-dialog {
   border-radius: 0.3em;
   max-width: min(100vw, 1500px);
-
-  //.el-form, .form-buttons {
-  //  margin-left: 20px;
-  //}
 
   .form-group-header {
     margin-left: 20px;
@@ -132,7 +137,7 @@ export default {
 
   &__body {
     padding: 20px 30px;
-      font-size: 13px;
+    font-size: 13px;
 
     &:has(.el-table) {
       background: #f3f3f4;

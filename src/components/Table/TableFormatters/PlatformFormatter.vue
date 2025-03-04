@@ -45,16 +45,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.platform-td {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
 
-.icon-zone {
-  display: inline-block;
-  width: 1.5em;
+  .icon-zone {
+    width: 1.5em;
+    height: 1.5em;
+
+    .asset-icon {
+      height: 100%;
+      width: 100%;
+      vertical-align: -0.2em;
+      fill: currentColor;
+    }
+  }
+
+  .platform-name {
+    flex: 1;
+  }
 }
 
-.asset-icon {
-  height: 1.5em;
-  vertical-align: -0.2em;
-  fill: currentColor;
-}
 </style>

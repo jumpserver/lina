@@ -40,10 +40,9 @@ export default {
             'ssh_key', 'passphrase'
           ]
         ],
-        [this.$t('Automations'), ['params']],
+        [this.$t('Params'), ['params']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Notification'), ['recipients']],
-        [this.$t('Other'), ['check_conn_after_change', 'is_active', 'comment']]
+        [this.$t('Other'), ['check_conn_after_change', 'is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
