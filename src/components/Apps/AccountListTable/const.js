@@ -46,14 +46,14 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('Edit'),
     can: vm.$hasPerm('accounts.change_account') && !vm.$store.getters.currentOrgIsRoot,
     callback: ({ row }) => {
-      const data = {
-        ...vm.asset,
-        ...row.asset
-      }
+      vm.isUpdateAccount = true
+      // const data = {
+      //   ...vm.asset,
+      //   ...row.asset
+      // }
+      // vm.iAsset = data
       vm.account = row
-      vm.iAsset = data
       vm.showAddDialog = false
-      vm.accountCreateUpdateTitle = vm.$t('UpdateAccount')
       setTimeout(() => {
         vm.showAddDialog = true
       })
