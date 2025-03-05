@@ -27,7 +27,10 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'CloudStrategyDetail'
+              getRoute: ({ row }) => ({
+                name: 'CloudStrategyDetail', params: { id: row.id },
+                query: { category: this.$route.query.category || 'host' }
+              })
             }
           },
           strategy_rules: {
@@ -38,7 +41,12 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'CloudStrategyUpdate',
+              updateRoute: ({ row }) => {
+                return {
+                  name: 'CloudStrategyUpdate', params: { id: row.id },
+                  query: { category: this.$route.query.category || 'host' }
+                }
+              },
               hasClone: false,
               canDelete: ({ row }) => { return row.name !== 'default' },
               canUpdate: ({ row }) => { return row.name !== 'default' }
@@ -50,7 +58,11 @@ export default {
         hasImport: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'CloudStrategyCreate'
+        createRoute: () => {
+          return {
+            name: 'CloudStrategyCreate', query: { category: this.$route.query.category || 'host' }
+          }
+        }
       }
     }
   },
