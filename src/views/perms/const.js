@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('Name'), value: 'name' },
@@ -33,10 +34,14 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
 
 export const AssetPermissionTableMeta = {
   name: {
+    formatter: DetailFormatter,
     minWidth: '120px',
     formatterArgs: {
       route: 'AssetPermissionDetail',
-      drawer: true
+      drawer: true,
+      routeQuery: {
+        tab: 'Basic'
+      }
     }
   },
   action: {
