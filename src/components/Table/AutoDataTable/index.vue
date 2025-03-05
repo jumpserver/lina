@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <DataTable
       v-if="!loading"
       ref="dataTable"

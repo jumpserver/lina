@@ -1,5 +1,5 @@
 <template>
-  <span v-if="loading" v-loading="loading" class="loading" />
+  <span v-if="loading" v-loading="loading" :style="{ height: loadingHeight + 'px'}" class="loading" />
 </template>
 
 <script>
@@ -9,11 +9,14 @@ export default {
     loading: {
       type: Boolean,
       default: true
+    },
+    loadingHeight: {
+      type: Number,
+      default: 200
     }
   },
   data() {
-    return {
-    }
+    return {}
   }
 }
 </script>

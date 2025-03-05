@@ -18,16 +18,17 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row>
-      <el-button size="small" style="float: right;" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
-      <el-button
-        size="small"
-        style="float: right; margin-right: 10px;"
-        type="primary"
-        @click="handleNext"
-      >
-        {{ $tc('Next') }}
-      </el-button>
+    <el-row class="buttons">
+      <el-col>
+        <el-button size="small" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
+        <el-button
+          size="small"
+          type="primary"
+          @click="handleNext"
+        >
+          {{ $tc('Next') }}
+        </el-button>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -77,6 +78,10 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.buttons {
+  margin-top: 10px;
+}
+
 .cloud-select-wrap {
   height: 300px;
 

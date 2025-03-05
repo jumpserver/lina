@@ -1,25 +1,27 @@
 <template>
-  <DataForm
-    v-if="!loading"
-    ref="dataForm"
-    :fields="totalFields"
-    :form="iForm"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <template
-      v-for="(group, i) in groups"
-      :slot="'id:'+group.name"
+  <div v-loading="loading">
+    <DataForm
+      v-if="!loading"
+      ref="dataForm"
+      :fields="totalFields"
+      :form="iForm"
+      v-bind="$attrs"
+      v-on="$listeners"
     >
-      <FormGroupHeader
-        v-if="!groupHidden(group, i)"
-        :key="'group-' + group.name"
-        :group="group"
-        :index="i"
-        :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
-      />
-    </template>
-  </DataForm>
+      <template
+        v-for="(group, i) in groups"
+        :slot="'id:'+group.name"
+      >
+        <FormGroupHeader
+          v-if="!groupHidden(group, i)"
+          :key="'group-' + group.name"
+          :group="group"
+          :index="i"
+          :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+        />
+      </template>
+    </DataForm>
+  </div>
 </template>
 
 <script>

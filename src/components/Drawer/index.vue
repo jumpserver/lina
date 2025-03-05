@@ -268,6 +268,7 @@ export default {
     }
 
     .drawer__content, .tab-page-content {
+      height: 100%;
       background: #f3f3f3;
     }
 

@@ -1,21 +1,23 @@
 <template>
-  <GenericCreateUpdatePage
-    v-if="!loading"
-    class="user-create-update"
-    v-bind="$data"
-    @getObjectDone="afterGetUser"
-    v-on="$listeners"
-  />
+  <div v-loading="loading">
+    <GenericCreateUpdatePage
+      v-if="!loading"
+      class="user-create-update"
+      v-bind="$data"
+      @getObjectDone="afterGetUser"
+      v-on="$listeners"
+    />
+  </div>
 </template>
 
 <script>
+import store from '@/store'
+import { mapGetters } from 'vuex'
+import { Select2 } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
-import { mapGetters } from 'vuex'
-import { Select2 } from '@/components'
-import store from '@/store'
-import { MFASystemSetting, MFALevel } from '../const'
+import { MFALevel, MFASystemSetting } from '../const'
 
 export default {
   components: {

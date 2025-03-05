@@ -2,7 +2,7 @@
   <div>
     <SmallCard ref="table" class="account-table" v-bind="$data" />
     <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
-    <Dialog
+    <Drawer
       v-if="updateVisible"
       :destroy-on-close="true"
       :show-buttons="false"
@@ -17,7 +17,7 @@
         origin="update"
         @submitSuccess="onSubmitSuccess"
       />
-    </Dialog>
+    </Drawer>
     <Dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -65,6 +65,7 @@ import CreateDialog from './components/CreateDialog.vue'
 import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import Dialog from '@/components/Dialog/index.vue'
+import Drawer from '@/components/Drawer/index.vue'
 import AssetPanel from './components/AssetPanel.vue'
 import AuthPanel from './components/AuthPanel.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
@@ -72,6 +73,7 @@ import { toSafeLocalDateStr } from '@/utils/time'
 export default {
   name: 'CloudAccountList',
   components: {
+    Drawer,
     AuthPanel,
     AssetPanel,
     Dialog,

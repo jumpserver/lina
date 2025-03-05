@@ -1,8 +1,9 @@
 <template>
-  <Dialog
+  <Drawer
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
+    :has-footer="false"
     :show-buttons="false"
     :show-close="false"
     :title="$tc('CloudSyncConfig')"
@@ -12,7 +13,7 @@
     v-on="$listeners"
   >
     <el-row :gutter="5" style="padding: 10px">
-      <el-col :span="4" class="left-step-zone">
+      <el-col :span="6" class="left-step-zone">
         <el-steps :active="active" direction="vertical">
           <el-step :description="firstStepDesc" />
           <el-step :description="$tc('Authentication')" />
@@ -20,7 +21,7 @@
           <el-step :description="$tc('Result')" />
         </el-steps>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="18">
         <component
           :is="activeMenu"
           :active.sync="active"
@@ -32,11 +33,11 @@
         />
       </el-col>
     </el-row>
-  </Dialog>
+  </Drawer>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
+import Drawer from '@/components/Drawer'
 import ProviderPanel from '@/views/assets/Cloud/Account/components/ProviderPanel'
 import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel'
 import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel'
@@ -46,7 +47,7 @@ import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 export default {
   name: 'CreateDialog',
   components: {
-    Dialog,
+    Drawer,
     AuthPanel,
     AssetPanel,
     ResultPanel,
@@ -111,6 +112,10 @@ export default {
 .left-step-zone {
   border-right: solid 1px var(--color-border);
   height: 350px;
+
+  .el-steps {
+    padding-left: 15px;
+  }
 }
 
 ::v-deep .el-step {

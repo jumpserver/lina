@@ -20,7 +20,7 @@
       v-bind="iHeaderActions"
       @done="handleActionInitialDone"
     />
-    <IBox class="table-content">
+    <IBox v-loading="!actionInit" class="table-content">
       <AutoDataTable
         v-if="actionInit"
         ref="dataTable"

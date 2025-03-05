@@ -10,8 +10,10 @@
       <IBox v-if="totalData.length === 0">
         <el-empty :description="$t('NoData')" :image-size="200" class="no-data" style="padding: 20px" />
       </IBox>
-      <el-col v-for="(d, index) in totalData" :key="index" :lg="8" :md="12" :sm="24" class="el-col">
+      <div class="card-container">
         <el-card
+          v-for="(d, index) in totalData"
+          :key="index"
           :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
           class="my-card"
@@ -52,7 +54,7 @@
             </slot>
           </keep-alive>
         </el-card>
-      </el-col>
+      </div>
     </el-row>
     <Pagination
       v-show="pagination && total > paginationSize"
@@ -207,9 +209,7 @@ export default {
       this.$router.push(detailRoute)
     },
     defaultPerformDelete(obj) {
-      this.$axios.delete(
-        `${this.tableConfig.url}${obj.id}/`
-      )
+      this.$axios.delete(`${this.tableConfig.url}${obj.id}/`)
     },
     onView(obj) {
       if (this.isDisabled(obj)) {
@@ -246,11 +246,15 @@ export default {
   text-align: center;
 
   .el-col, div {
+    display: flex;
+    gap: 20px;
+
     .my-card {
       min-width: 330px;
-      width: 100%;
       position: relative;
       margin-bottom: 20px;
+      height: 230px;
+      width: 380px;
 
       ::v-deep .el-card__body {
         height: 100%;
