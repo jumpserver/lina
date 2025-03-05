@@ -11,7 +11,7 @@
       v-on="$listeners"
     >
       <el-alert type="error">
-        "{{ this.$t('DeleteWarningMsg') }}" "{{ account.username }} - {{ account.asset.name }}" ?
+        {{ this.$t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 
         <div class="extra-delete">
           <div v-if="hasDeleteAccount && assetAccounts.length > 0" class="delete-item">

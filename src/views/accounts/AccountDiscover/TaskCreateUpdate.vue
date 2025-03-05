@@ -16,7 +16,7 @@ export default {
     return {
       fields: [
         [this.$t('Basic'), ['name', 'nodes', 'assets']],
-        [this.$t('DiscoverConfig'), ['is_sync_account', 'check_risk', 'recipients']],
+        [this.$t('Config'), ['is_sync_account', 'check_risk', 'recipients']],
         [this.$t('Periodic'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
