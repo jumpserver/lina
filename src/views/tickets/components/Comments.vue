@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/time'
 import MarkDown from '@/components/Widgets/MarkDown'

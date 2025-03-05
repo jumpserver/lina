@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import Switcher from '@/components/Form/FormFields/Switcher'
-import Select2 from '@/components/Form/FormFields/Select2'
-import UpdateSelect from '@/components/Form/FormFields/UpdateSelect'
+import Switcher from '@/components/Form/FormFields/Switcher.vue'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
+import UpdateSelect from '@/components/Form/FormFields/UpdateSelect.vue'
 import { toSentenceCase } from '@/utils/common'
 
 class Action {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
 
 export default {
@@ -48,11 +48,13 @@ export default {
     },
     performAdd: {
       type: Function,
-      default: (objects, that) => {}
+      default: (objects, that) => {
+      }
     },
     onAddSuccess: {
       type: Function,
-      default: (objects, that) => {}
+      default: (objects, that) => {
+      }
     },
     canSelect: {
       type: Function,
@@ -62,8 +64,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     addObjects() {
@@ -77,18 +78,18 @@ export default {
 </script>
 
 <style scoped>
-  b, strong {
-    font-weight: 700;
-    font-size: 13px;
-  }
+b, strong {
+  font-weight: 700;
+  font-size: 13px;
+}
 
-  tr td {
-    line-height: 1.42857;
-    padding: 8px;
-    vertical-align: top;
-  }
+tr td {
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: top;
+}
 
-  tr.item td {
-    border-top: 1px solid #e7eaec;
-  }
+tr.item td {
+  border-top: 1px solid #e7eaec;
+}
 </style>

@@ -72,7 +72,7 @@ import TableAction from '@/components/Table/ListTable/TableAction'
 import { Pagination } from '@/components'
 import Icon from '@/components/Widgets/Icon/index.vue'
 import { mapGetters } from 'vuex'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 const defaultFirstPage = 1
 

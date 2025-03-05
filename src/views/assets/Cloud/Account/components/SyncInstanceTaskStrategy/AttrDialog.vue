@@ -19,7 +19,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import Dialog from '@/components/Dialog/index.vue'
 import RuleInput from '@/views/assets/Cloud/Strategy/components/RuleInput'
 import ActionInput from '@/views/assets/Cloud/Strategy/components/ActionInput'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'AttrDialog',

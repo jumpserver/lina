@@ -62,7 +62,7 @@ import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/Form/FormFields/Select2'
 import BasicTree from '@/components/Form/FormFields/BasicTree'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { AccountLabelMapper } from '@/views/perms/const'
 
 export default {
@@ -250,24 +250,24 @@ export default {
 </script>
 
 <style scoped>
-  .assets {
-    margin-top: 14px;
-  }
+.assets {
+  margin-top: 14px;
+}
 
-  .feed-activity-list .feed-element {
-    border-bottom: 1px solid #e7eaec;
-  }
+.feed-activity-list .feed-element {
+  border-bottom: 1px solid #e7eaec;
+}
 
-  .feed-element > .pull-left {
-    margin-right: 10px;
-  }
+.feed-element > .pull-left {
+  margin-right: 10px;
+}
 
-  .feed-element .header-avatar {
-    width: 38px;
-    height: 38px;
-  }
+.feed-element .header-avatar {
+  width: 38px;
+  height: 38px;
+}
 
-  .box {
-    margin-bottom: 15px;
-  }
+.box {
+  margin-bottom: 15px;
+}
 </style>

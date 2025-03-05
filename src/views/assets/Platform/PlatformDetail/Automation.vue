@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '../../../../components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
 import { mapGetters } from 'vuex'

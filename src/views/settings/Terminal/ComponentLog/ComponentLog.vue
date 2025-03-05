@@ -44,7 +44,7 @@ import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicke
 import { getDaysAgo, getDaysFuture } from '@/utils/time'
 import { debounce } from 'lodash'
 import { getLokiLog } from '@/api/component'
-import ActionsGroup from '@/components/ActionsGroup'
+import ActionsGroup from '@/components/Common/ActionsGroup'
 import store from '@/store'
 import CardLog from './CardLog.vue'
 

@@ -24,7 +24,7 @@
 <script>
 import Drawer from '@/components/Drawer/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import Page from '@/layout/components/Page/index.vue'
 
 export default {

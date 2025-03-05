@@ -13,7 +13,7 @@
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { BlockedIPs } from '@/components'
 
 export default {

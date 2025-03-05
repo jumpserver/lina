@@ -22,7 +22,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'

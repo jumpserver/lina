@@ -13,7 +13,7 @@ import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common'
 
 import i18n from '@/i18n/i18n'
-import DataActions from '@/components/DataActions/index.vue'
+import DataActions from '@/components/Common/DataActions/index.vue'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 const defaultFalse = { type: [Boolean, Function, String], default: false }

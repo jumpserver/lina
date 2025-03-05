@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
+import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
 import { assignIfNot } from '@/utils/common'

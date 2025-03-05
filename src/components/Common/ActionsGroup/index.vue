@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import DataActions from '@/components/DataActions'
+import DataActions from '@/components/Common/DataActions/index.vue'
 
 export default {
   name: 'ActionsGroup',

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 
 export default {
   name: 'PermUserGroupCard',
@@ -75,7 +75,8 @@ export default {
     },
     buttonClickCallback: {
       type: Function,
-      default: (obj) => {}
+      default: (obj) => {
+      }
     }
   },
   data() {
@@ -107,35 +108,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .card-table {
-    width: 100%;
-    table-layout:fixed;
-  }
-  [v-cloak]{
-    display: none!important;
-  }
-  b, strong {
-    font-size: 13px;
-  }
-  tr td {
-    line-height: 1.2;
-    padding: 4px 8px;
-    vertical-align: top;
-    display: inline;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  tr.item {
-    border-bottom: 1px solid #e7eaec;
-    padding: 4px  8px;
-    display: block;
-    //&:last-child {
-    //   border-bottom: 0;
-    //}
-  }
-  .box-margin {
-    margin-bottom: 20px;
-  }
+.card-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+[v-cloak] {
+  display: none !important;
+}
+
+b, strong {
+  font-size: 13px;
+}
+
+tr td {
+  line-height: 1.2;
+  padding: 4px 8px;
+  vertical-align: top;
+  display: inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tr.item {
+  border-bottom: 1px solid #e7eaec;
+  padding: 4px 8px;
+  display: block;
+  //&:last-child {
+  //   border-bottom: 0;
+  //}
+}
+
+.box-margin {
+  margin-bottom: 20px;
+}
 
 </style>

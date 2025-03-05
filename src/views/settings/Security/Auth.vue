@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import rules from '@/components/Form/DataForm/rules'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 

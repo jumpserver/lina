@@ -11,7 +11,7 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

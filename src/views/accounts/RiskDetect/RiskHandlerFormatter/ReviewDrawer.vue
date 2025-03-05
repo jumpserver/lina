@@ -50,7 +50,7 @@
 <script>
 import { toSafeLocalDateStr } from '@/utils/time'
 import { riskActions } from './const'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'ReviewDraw',

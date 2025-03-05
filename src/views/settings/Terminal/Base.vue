@@ -4,7 +4,7 @@
   </IBox>
 </template>
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
@@ -79,8 +79,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

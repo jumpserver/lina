@@ -20,7 +20,7 @@
 import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
-import ActionsGroup from '@/components/ActionsGroup'
+import ActionsGroup from '@/components/Common/ActionsGroup'
 import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'

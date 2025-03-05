@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
-import ActionItem from './action'
+import IBox from '@/components/Common/IBox/index.vue'
+import ActionItem from './action.vue'
 
 // 查看 views/users/users/UserDetail/UserInfo.vue 使用样例
 export default {

@@ -11,7 +11,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
+import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
@@ -224,7 +224,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .table-actions {
   ::v-deep {
     .el-icon-arrow-down {

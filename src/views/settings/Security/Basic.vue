@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
@@ -24,8 +24,7 @@ export default {
             ]
           ]
         ],
-        fieldsMeta: {
-        }
+        fieldsMeta: {}
       }
     }
   }

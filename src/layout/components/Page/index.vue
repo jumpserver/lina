@@ -59,7 +59,7 @@ import PageContent from './PageContent'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import TagsView from '../TagsView/index.vue'
 import { toSentenceCase } from '@/utils/common'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'Page',

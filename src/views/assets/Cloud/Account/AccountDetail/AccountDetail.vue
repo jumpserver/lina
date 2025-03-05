@@ -37,7 +37,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/time'
 import RelationCard from '@/components/Cards/RelationCard'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
 import Dialog from '@/components/Dialog'

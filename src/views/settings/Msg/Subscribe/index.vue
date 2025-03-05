@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column :label="$tc('Receivers')">
           <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top" popper-class="black-theme-popover">
+            <el-popover placement="top" popper-class="black-theme-popover" trigger="hover">
               <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
               <span v-if="!scope.row.children" slot="reference" class="name-wrapper">
                 {{ scope.row.receivers.map(item => item.name).join(', ') }}
@@ -59,7 +59,7 @@
 
 <script>
 import SelectDialog from './SelectDialog.vue'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   components: {

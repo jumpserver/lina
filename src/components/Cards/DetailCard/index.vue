@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import IBox from '../../IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import ItemValue from './ItemValue.vue'
 
 export default {
