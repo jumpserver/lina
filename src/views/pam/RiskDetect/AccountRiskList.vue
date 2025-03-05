@@ -142,6 +142,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasImport: false,
         extraMoreActions: [
           {
             name: 'resolveSelected',
