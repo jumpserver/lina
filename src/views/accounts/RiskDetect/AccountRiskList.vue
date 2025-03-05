@@ -7,7 +7,11 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
     />
-    <BatchResolveDialog v-if="batchResolveDialog.visible" :visible.sync="batchResolveDialog.visible" v-bind="batchResolveDialog" />
+    <BatchResolveDialog
+      v-if="batchResolveDialog.visible"
+      :visible.sync="batchResolveDialog.visible"
+      v-bind="batchResolveDialog"
+    />
     <RiskScanDialog v-if="detectDialog.visible" :asset="detectDialog.asset" :visible.sync="detectDialog.visible" />
   </div>
 </template>
@@ -15,7 +19,7 @@
 <script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable/index.vue'
 import RiskHandleFormatter from './RiskHandlerFormatter/index.vue'
-import BatchResolveDialog from '@/views/pam/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
+import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter/BatchResolveDialog.vue'
 import RiskScanDialog from './RiskScanDialog.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 

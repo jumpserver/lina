@@ -20,7 +20,7 @@ export default {
             title: this.$t('DetectResults'),
             name: 'AccountRisks',
             hidden: !this.$hasPerm('accounts.view_accountrisk'),
-            component: () => import('@/views/pam/RiskDetect/AccountRiskList.vue')
+            component: () => import('@/views/accounts/RiskDetect/AccountRiskList.vue')
           },
           {
             title: this.$t('DetectTasks'),
@@ -38,7 +38,7 @@ export default {
             title: this.$t('DetectEngines'),
             name: 'AccountCheckEngine',
             hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
-            component: () => import('@/views/pam/RiskDetect/AccountCheckEngine.vue')
+            component: () => import('@/views/accounts/RiskDetect/AccountCheckEngine.vue')
           }
         ]
       }

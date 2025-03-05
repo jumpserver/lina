@@ -1,13 +1,13 @@
 <template>
   <BaseList
-    :table-config="tableConfig"
     :header-actions="headerActions"
+    :table-config="tableConfig"
     v-bind="config"
   />
 </template>
 
 <script>
-import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
+import BaseList from '@/views/assets/Asset/AssetList/components/BaseList.vue'
 
 export default {
   components: {

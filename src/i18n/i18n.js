@@ -22,11 +22,11 @@ const i18n = new VueI18n({
 locale.i18n((key, value) => i18n.t(key, value)) // 重点: 为了实现element插件的多语言切换
 
 // 自定义 tc 方法, 默认添加 s
-const originalTc = i18n.t.bind(i18n)
+const originalTc = i18n.tc.bind(i18n)
 
 i18n.tc = function(key, choice, ...args) {
   // 获取原始翻译结果
-  const translation = originalTc(key, choice, ...args)
+  const translation = i18n.t(key, choice).toString()
 
   // 仅处理英语且翻译不包含复数形式的情况
   if (this.locale === 'en') {
@@ -36,7 +36,7 @@ i18n.tc = function(key, choice, ...args) {
       return choice > 1 ? `${translation}s` : translation
     }
   }
-  return translation
+  return originalTc(key, choice, ...args)
 }
 
 Vue.prototype.$tc = i18n.tc.bind(i18n)

@@ -47,7 +47,7 @@ export default {
     },
     width: {
       type: String,
-      default: '60%'
+      default: '800px'
     },
     showConfirm: {
       type: Boolean,

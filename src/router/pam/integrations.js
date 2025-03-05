@@ -18,7 +18,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/Integration/index.vue'),
+        component: () => import('@/views/accounts/Integration/index.vue'),
         name: 'IntegrationApplicationList',
         meta: {
           title: i18n.t('Applications'),
@@ -27,7 +27,7 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/pam/Integration/ApplicationCreateUpdate.vue'),
+        component: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
         name: 'IntegrationApplicationCreate',
         hidden: true,
         meta: {
@@ -37,7 +37,7 @@ export default [
       },
       {
         path: ':id/update',
-        component: () => import('@/views/pam/Integration/ApplicationCreateUpdate.vue'),
+        component: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
         name: 'IntegrationApplicationUpdate',
         hidden: true,
         meta: {
@@ -47,7 +47,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/pam/Integration/ApplicationDetail/index.vue'),
+        component: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
         name: 'IntegrationApplicationDetail',
         hidden: true,
         meta: {

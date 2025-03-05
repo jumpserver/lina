@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/Dialog/index.vue'
+
 export default {
   name: 'RiskScanDialog',
   components: { Dialog },

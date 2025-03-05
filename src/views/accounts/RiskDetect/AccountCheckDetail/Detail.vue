@@ -11,7 +11,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import { openTaskPage } from '@/utils/jms'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 

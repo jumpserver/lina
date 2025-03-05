@@ -4,11 +4,10 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-// import TabPage from '@/layout/components/TabPage/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'IntegrationnList',
+  name: 'Integrationn',
   components: {
     TabPage
   },
@@ -22,19 +21,19 @@ export default {
             name: 'application',
             title: this.$t('Applications'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),
-            component: () => import('@/views/pam/Integration/ApplicationList.vue')
+            component: () => import('@/views/accounts/Integration/ApplicationList.vue')
           },
           {
             name: 'records',
             title: this.$t('CallRecords'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
-            component: () => import('@/views/pam/Integration/components/CallRecords.vue')
+            component: () => import('@/views/accounts/Integration/components/CallRecords.vue')
           },
           {
             name: 'docs',
             title: this.$t('Documentation'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),
-            component: () => import('@/views/pam/Integration/SDKList.vue')
+            component: () => import('@/views/accounts/Integration/SDKList.vue')
           }
         ]
       }

@@ -46,7 +46,7 @@ export default {
         url: '/api/v1/settings/chatai-prompts/',
         value: '',
         multiple: false,
-        placeholder: this.$t('Prompt'),
+        placeholder: this.$t('Role'),
         ajax: {
           transformOption: (item) => {
             return { label: item.name, value: item.content }

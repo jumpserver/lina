@@ -3,13 +3,18 @@
     <IBox class="radio-box">
       <div class="code-container">
         <el-tabs v-model="currentLanguage" @tab-click="handleInput">
-          <el-tab-pane v-for="language in languages" :key="language.value" :label="language.label" :name="language.value">
+          <el-tab-pane
+            v-for="language in languages"
+            :key="language.value"
+            :label="language.label"
+            :name="language.value"
+          >
             <two-col>
               <template>
-                <vue-markdown class="code-markdown" :source="readme" />
+                <vue-markdown :source="readme" class="code-markdown" />
               </template>
               <template #right>
-                <vue-markdown class="code-demo" :source="code" />
+                <vue-markdown :source="code" class="code-demo" />
               </template>
             </two-col>
           </el-tab-pane>
@@ -104,30 +109,36 @@ export default {
 .code-container {
   position: relative;
 }
+
 .code-markdown {
   min-height: 210px;
   padding: 10px 20px;
   border: 1px solid #DCDFE6;
+
   ::v-deep .table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
+
     th, td {
       border: 1px solid #ebeef5;
       padding: 10px;
       text-align: left;
-  }
-   th {
+    }
+
+    th {
       background-color: #f5f7fa;
     }
   }
 }
-.code-demo{
+
+.code-demo {
   @import "~highlight.js/styles/atom-one-light.css";
   min-height: 210px;
   padding: 10px 20px;
   border: 1px solid #DCDFE6;
 }
+
 .copy-btn {
   font-size: 20px;
   position: absolute;

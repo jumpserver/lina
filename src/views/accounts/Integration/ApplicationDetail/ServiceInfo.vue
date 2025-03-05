@@ -14,7 +14,7 @@
 
 <script>
 import { QuickActions } from '@/components'
-import AutoDetailCard from '@/components/Cards/DetailCard/auto'
+import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import SecretDialog from '@/components/Dialog/Secret.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 

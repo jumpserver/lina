@@ -1,12 +1,12 @@
 <template>
   <div>
     <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+    <ReportDialog :url="reportUrl" :visible.sync="visible" />
   </div>
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import ReportDialog from '@/components/Dialog/ReportDialog.vue'
