@@ -114,7 +114,7 @@ export const gatherAccountHeaderActions = (vm) => {
     hasImport: false,
     hasExport: true,
     searchConfig: {
-      exclude: ['asset'],
+      exclude: ['asset', 'id'],
       options: [
         {
           label: vm.$t('AssetName'),
