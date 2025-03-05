@@ -148,6 +148,9 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('CopyToAsset'),
     type: 'primary',
     divided: true,
+    has: () => {
+      return !vm.asset
+    },
     callback: ({ row }) => {
       vm.accountCreateUpdateTitle = vm.$t('CopyToOther')
       vm.$route.query.flag = 'copy'
@@ -160,6 +163,9 @@ export const accountOtherActions = (vm) => [
     name: 'MoveToOther',
     title: vm.$t('MoveToAsset'),
     type: 'primary',
+    has: () => {
+      return !vm.asset
+    },
     callback: ({ row }) => {
       vm.accountCreateUpdateTitle = vm.$t('MoveToOther')
       vm.$route.query.flag = 'move'
