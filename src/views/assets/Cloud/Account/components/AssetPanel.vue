@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="asset-panel">
     <el-alert
       :center="false"
       :closable="true"
@@ -9,8 +9,8 @@
     </el-alert>
     <ImportTable
       ref="importTable"
-      v-bind="settings"
       origin="cloudSync"
+      v-bind="settings"
       @cancel="closeDialog"
       @finish="showResult"
     />
@@ -162,3 +162,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.asset-panel {
+  display: block;
+
+}
+</style>

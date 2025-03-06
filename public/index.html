@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta content="0" http-equiv="Expires">
@@ -20,52 +20,71 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.98);
             z-index: 9999;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border: 3px solid transparent;
+            border-top-color: var(--color-primary);
             border-radius: 50%;
-            border-top-color: #3498db;
-            animation: spin 1s infinite linear;
+            animation: spin 1s linear infinite;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 40px;
+            height: 40px;
+            border: 3px solid transparent;
+            border-top-color: rgba(64, 158, 255, 0.2);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
         }
 
         @keyframes spin {
-            to {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
                 transform: rotate(360deg);
             }
         }
     </style>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <script>
-      window.onload = function () {
-          if (location.pathname === '/') {
-              location.pathname = '/ui/'
-          }
-          const pathname = window.location.pathname
-          if (pathname.startsWith('/core')) {
-              return
-          }
-          if (pathname.indexOf('/ui') === -1) {
-              window.location.href = window.location.origin + '/ui/#' + pathname
-          }
-          if (pathname.startsWith('/ui/#/chat')) {
-              window.location.href = window.location.origin + pathname
-          }
-      }
-    </script>
-    <div id="app">
-    </div>
-    <div id="loading">
-      <div class="spinner"></div>
-    </div>
-    <!-- built files will be auto injected -->
-  </body>
+</head>
+<body>
+<noscript>
+    <strong>
+        We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.
+    </strong>
+</noscript>
+<script>
+    window.onload = function () {
+        if (location.pathname === '/') {
+            location.pathname = '/ui/'
+        }
+        const pathname = window.location.pathname
+        if (pathname.startsWith('/core')) {
+            return
+        }
+        if (pathname.indexOf('/ui') === -1) {
+            window.location.href = window.location.origin + '/ui/#' + pathname
+        }
+        if (pathname.startsWith('/ui/#/chat')) {
+            window.location.href = window.location.origin + pathname
+        }
+    }
+</script>
+<div id="app">
+</div>
+<div id="loading">
+    <div class="spinner"></div>
+</div>
+<!-- built files will be auto injected -->
+</body>
 </html>

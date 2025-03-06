@@ -83,7 +83,7 @@ export default {
 }
 
 .cloud-select-wrap {
-  height: 300px;
+  background: #f3f3f3;
 
   .el-row {
     flex-direction: column;

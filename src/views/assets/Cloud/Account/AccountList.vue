@@ -1,23 +1,8 @@
 <template>
   <div>
-    <SmallCard ref="table" class="account-table" v-bind="$data" />
+    <SmallCard ref="table" class="account-table" v-bind="table" />
     <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
-    <Drawer
-      v-if="updateVisible"
-      :destroy-on-close="true"
-      :show-buttons="false"
-      :title="$tc('CloudAccountUpdate')"
-      :visible.sync="updateVisible"
-      v-on="$listeners"
-    >
-      <AuthPanel
-        :object="object"
-        :provider="object.provider.value"
-        :visible.sync="updateVisible"
-        origin="update"
-        @submitSuccess="onSubmitSuccess"
-      />
-    </Drawer>
+    <UpdateDialog v-if="updateVisible" :object="object" :update-visible="updateVisible" />
     <Dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -62,94 +47,128 @@ import {
   zstack
 } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
+import UpdateDialog from './components/UpdateDialog.vue'
 import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import Dialog from '@/components/Dialog/index.vue'
-import Drawer from '@/components/Drawer/index.vue'
 import AssetPanel from './components/AssetPanel.vue'
-import AuthPanel from './components/AuthPanel.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'CloudAccountList',
   components: {
-    Drawer,
-    AuthPanel,
     AssetPanel,
     Dialog,
     SmallCard,
-    CreateDialog
+    CreateDialog,
+    UpdateDialog
   },
   data() {
     const vm = this
     return {
       object: null,
-      tableConfig: {
-        url: '/api/v1/xpack/cloud/accounts/',
-        permissions: {
-          app: 'xpack',
-          resource: 'account'
-        }
-      },
-      headerActions: {
-        hasImport: false,
-        hasExport: false,
-        hasColumnSetting: false,
-        hasMoreActions: false,
-        searchConfig: {
-          getUrlQuery: false
+      table: {
+        tableConfig: {
+          url: '/api/v1/xpack/cloud/accounts/',
+          permissions: {
+            app: 'xpack',
+            resource: 'account'
+          }
         },
-        moreCreates: {
-          loading: false,
-          callback: (option) => {
-            vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
+        subComponentProps: {
+          handleUpdate: (obj) => {
+            this.object = obj
+            this.updateVisible = true
           },
-          dropdown: [
-            {
-              name: 'publicCloud',
-              title: this.$t('PublicCloud'),
-              icon: 'public-cloud',
-              callback: () => {
-                const providers = [
-                  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
-                  baiducloud, jdcloud, kingsoftcloud, aws_china,
-                  aws_international, azure, azure_international,
-                  gcp, ucloud, volcengine
-                ]
-                this.providerConfig.providers = providers.map(
-                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
-                )
-                this.visible = true
+          getImage: (obj) => {
+            return ACCOUNT_PROVIDER_ATTRS_MAP[obj.provider.value].image
+          },
+          getInfos: (obj) => {
+            return [
+              {
+                title: this.$tc('TotalSyncRegion'),
+                content: obj?.task.regions.length
+              },
+              {
+                title: this.$tc('TotalSyncAsset'),
+                content: obj?.task.instance_count
+              },
+              {
+                title: this.$tc('DateLastSync'),
+                content: toSafeLocalDateStr(obj?.task.date_last_sync)
               }
-            },
+            ]
+          },
+          actions: [
             {
-              name: 'privateCloud',
-              icon: 'private-cloud',
-              title: this.$t('PrivateCloud'),
-              callback: () => {
-                const providers = [
-                  vmware, qingcloud_private, huaweicloud_private, state_private,
-                  openstack, zstack, nutanix, fc, scp, apsara_stack
-                ]
-                this.providerConfig.providers = providers.map(
-                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
-                )
-                this.visible = true
-              }
-            },
-            {
-              name: 'LAN',
-              title: this.$t('LAN'),
-              icon: 'computer',
-              callback: () => {
-                const providers = [lan]
-                this.providerConfig.providers = providers.map(
-                  (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
-                )
-                this.visible = true
-              }
+              id: 'online-sync',
+              name: this.$tc('SyncOnline'),
+              icon: 'el-icon-thumb',
+              callback: this.handleOnlineExecute,
+              disabled: !this.$hasPerm('xpack.change_syncinstancetask')
             }
           ]
+        },
+        headerActions: {
+          hasImport: false,
+          hasExport: false,
+          hasColumnSetting: false,
+          hasMoreActions: false,
+          searchConfig: {
+            getUrlQuery: false
+          },
+          moreCreates: {
+            loading: false,
+            callback: (option) => {
+              vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
+            },
+            dropdown: [
+              {
+                name: 'publicCloud',
+                title: this.$t('PublicCloud'),
+                icon: 'public-cloud',
+                callback: () => {
+                  const providers = [
+                    aliyun, qcloud, qcloud_lighthouse, huaweicloud,
+                    baiducloud, jdcloud, kingsoftcloud, aws_china,
+                    aws_international, azure, azure_international,
+                    gcp, ucloud, volcengine
+                  ]
+                  this.providerConfig.providers = providers.map(
+                    (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                  )
+                  this.visible = true
+                }
+              },
+              {
+                name: 'privateCloud',
+                icon: 'private-cloud',
+                title: this.$t('PrivateCloud'),
+                callback: () => {
+                  const providers = [
+                    vmware, qingcloud_private, huaweicloud_private, state_private,
+                    openstack, zstack, nutanix, fc, scp, apsara_stack
+                  ]
+                  this.providerConfig.providers = providers.map(
+                    (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                  )
+                  this.visible = true
+                }
+              },
+              {
+                name: 'LAN',
+                title: this.$t('LAN'),
+                icon: 'computer',
+                callback: () => {
+                  const providers = [lan]
+                  this.providerConfig.providers = providers.map(
+                    (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
+                  )
+                  this.visible = true
+                }
+              }
+            ]
+          }
         }
       },
       providerConfig: {
@@ -157,41 +176,7 @@ export default {
       },
       visible: false,
       updateVisible: false,
-      onlineSyncVisible: false,
-      subComponentProps: {
-        handleUpdate: (obj) => {
-          this.object = obj
-          this.updateVisible = true
-        },
-        getImage: (obj) => {
-          return ACCOUNT_PROVIDER_ATTRS_MAP[obj.provider.value].image
-        },
-        getInfos: (obj) => {
-          return [
-            {
-              title: this.$tc('TotalSyncRegion'),
-              content: obj?.task.regions.length
-            },
-            {
-              title: this.$tc('TotalSyncAsset'),
-              content: obj?.task.instance_count
-            },
-            {
-              title: this.$tc('DateLastSync'),
-              content: toSafeLocalDateStr(obj?.task.date_last_sync)
-            }
-          ]
-        },
-        actions: [
-          {
-            id: 'online-sync',
-            name: this.$tc('SyncOnline'),
-            icon: 'el-icon-thumb',
-            callback: this.handleOnlineExecute,
-            disabled: !this.$hasPerm('xpack.change_syncinstancetask')
-          }
-        ]
-      }
+      onlineSyncVisible: false
     }
   },
   watch: {

@@ -143,6 +143,9 @@ function customizer(objValue, srcValue) {
 
 export function newURL(url) {
   let obj
+  if (!url) {
+    return ''
+  }
   if (url.indexOf('//') > -1) {
     obj = new URL(url)
   } else {

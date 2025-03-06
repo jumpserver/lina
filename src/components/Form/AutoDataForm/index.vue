@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div>
     <DataForm
       v-if="!loading"
       ref="dataForm"

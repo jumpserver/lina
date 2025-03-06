@@ -22,15 +22,17 @@
         </el-steps>
       </el-col>
       <el-col :span="18">
-        <component
-          :is="activeMenu"
-          :active.sync="active"
-          :object.sync="account"
-          :provider="iSelected"
-          :providers="providers"
-          :selected.sync="iSelected"
-          :visible.sync="iVisible"
-        />
+        <div class="right-content">
+          <component
+            :is="activeMenu"
+            :active.sync="active"
+            :object.sync="account"
+            :provider="iSelected"
+            :providers="providers"
+            :selected.sync="iSelected"
+            :visible.sync="iVisible"
+          />
+        </div>
       </el-col>
     </el-row>
   </Drawer>
@@ -43,10 +45,12 @@ import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel'
 import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel'
 import ResultPanel from '@/views/assets/Cloud/Account/components/ResultPanel'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'CreateDialog',
   components: {
+    IBox,
     Drawer,
     AuthPanel,
     AssetPanel,
@@ -116,6 +120,11 @@ export default {
   .el-steps {
     padding-left: 15px;
   }
+}
+
+.right-content {
+  background-color: #fff;
+  padding: 20px 10px;
 }
 
 ::v-deep .el-step {
