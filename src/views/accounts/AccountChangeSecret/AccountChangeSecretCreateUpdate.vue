@@ -84,6 +84,18 @@ export default {
             assets: this.asset_ids,
             nodes: this.node_ids
           }
+        },
+        recipients: {
+          helpText: this.$t('OnlyMailSend'),
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            }
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },
