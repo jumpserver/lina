@@ -6,7 +6,12 @@
     v-bind="$attrs"
   >
     <template v-slot:default="slotProps">
-      <CardPanel :object="slotProps.item" :table-config="tableConfig" v-bind="subComponentProps" />
+      <CardPanel
+        :object="slotProps.item"
+        :table-config="tableConfig"
+        v-bind="subComponentProps"
+        @refresh="reloadTable"
+      />
     </template>
   </CardTable>
 </template>
