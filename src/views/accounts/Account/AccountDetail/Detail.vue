@@ -257,14 +257,6 @@ export default {
       ).then(res => {
         openTaskPage(res['task'])
       })
-    },
-    handleClick() {
-      this.drawerRefName = 'AssetDetail'
-      this.$route.params.id = this.object.asset.id
-
-      this.$nextTick(() => {
-        this.pamDrawerShow = true
-      })
     }
   }
 }
