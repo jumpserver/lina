@@ -85,10 +85,10 @@ export default [
       {
         path: 'account/:id',
         component: () => import('@/views/accounts/AccountDiscover/AccountDetail/index.vue'),
-        name: 'AccountDiscoverAccountDetail',
+        name: 'DiscoverAccountDetail',
         hidden: true,
         meta: {
-          title: i18n.t('AccountDiscoverAccountDetail'),
+          title: i18n.t('DiscoverAccountDetail'),
           permissions: ['accounts.view_gatheraccountsexecution']
         }
       }

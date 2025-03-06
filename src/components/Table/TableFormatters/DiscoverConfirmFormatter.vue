@@ -119,17 +119,17 @@ export default {
         // },
         {
           name: 'delete_remote',
-          label: this.$t('Delete remote account'),
+          label: this.$t('DeleteRemoteAccount'),
           has: this.row.remote_present
         },
         {
           name: 'add_account',
-          label: this.$t('Add account'),
+          label: this.$t('AddAccount'),
           has: !this.row.present
         },
         {
           name: 'change_password_add',
-          label: this.$t('Add account after changing password'),
+          label: this.$t('AddAccountAfterChangingPassword'),
           has: !this.row.present
         }
       ]
