@@ -217,8 +217,9 @@ export default {
   },
   methods: {
     async updateOrCloneAsset(row, action) {
-      this.$route.params.id = row.id
-      this.$route.params.action = action
+      if (action === 'update') {
+        this.$route.params.id = row.id
+      }
       const meta = {
         action: action,
         id: row.id,
