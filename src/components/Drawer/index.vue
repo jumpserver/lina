@@ -133,6 +133,7 @@ export default {
 
       &.detail-card {
         padding-right: 0;
+        margin-top: unset;
       }
 
       // Detail 中
