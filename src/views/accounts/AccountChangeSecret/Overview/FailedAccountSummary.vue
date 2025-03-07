@@ -120,7 +120,7 @@ export default {
                 },
                 {
                   name: 'ignoreFail',
-                  title: this.$t('ignoreFail'),
+                  title: this.$t('IgnoreFail'),
                   can: this.$hasPerm('accounts.view_changesecretrecord'),
                   type: 'primary',
                   callback: ({ row }) => {

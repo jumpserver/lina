@@ -119,11 +119,15 @@ export default {
                 {
                   value: 'failed',
                   label: this.$t('Failed')
+                },
+                {
+                  value: 'pending',
+                  label: this.$t('Pending')
                 }
               ]
             },
             {
-              label: this.$t('Execution'),
+              label: this.$t('ExecutionID'),
               value: 'execution_id'
             }
           ]
