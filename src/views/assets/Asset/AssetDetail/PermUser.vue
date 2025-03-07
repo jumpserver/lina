@@ -50,9 +50,16 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
+            formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail'
+              drawer: true,
+              can: vm.$hasPerm('users.view_user'),
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           source: {

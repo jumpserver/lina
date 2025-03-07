@@ -1,5 +1,10 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="replayActions" :table-config="replayTableConfig" />
+  <ListTable
+    ref="ListTable"
+    :header-actions="replayActions"
+    :table-config="replayTableConfig"
+    :create-drawer="createDrawer"
+  />
 </template>
 <script>
 import { DrawerListTable as ListTable } from '@/components'
@@ -15,6 +20,7 @@ export default {
     const vm = this
     const storageOptions = this.getReplayStorageOptions()
     return {
+      createDrawer: () => import('./ReplayStorageCreateUpdate.vue'),
       replayActions: {
         canCreate: this.$hasPerm('terminal.add_replaystorage'),
         hasExport: false,
@@ -22,9 +28,6 @@ export default {
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
-          callback: (item) => {
-            this.$router.push({ name: 'CreateReplayStorage', query: { type: item.name.toLowerCase() }})
-          },
           dropdown: storageOptions
         }
       },
@@ -60,9 +63,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onUpdate: function({ row }) {
-                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
-              },
               canUpdate: function({ row }) {
                 return (
                   row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_replaystorage')

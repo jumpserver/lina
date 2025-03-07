@@ -1,5 +1,10 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
+  <ListTable
+    ref="ListTable"
+    :header-actions="commandActions"
+    :table-config="commandTableConfig"
+    :create-drawer="createDrawer"
+  />
 </template>
 
 <script>
@@ -20,6 +25,7 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('./CommandStorageCreateUpdate.vue'),
       commandActions: {
         canCreate: this.$hasPerm('terminal.add_commandstorage'),
         hasExport: false,
@@ -27,9 +33,6 @@ export default {
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
-          callback: (item) => {
-            this.$router.push({ name: 'CreateCommandStorage', query: { type: item.name }})
-          },
           dropdown: [
             {
               name: 'es',
@@ -72,9 +75,6 @@ export default {
             formatterArgs: {
               canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
-              },
-              onUpdate: function({ row }) {
-                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
               },
               canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
@@ -123,9 +123,4 @@ export default {
     }
   }
 }
-
 </script>
-
-<style scoped>
-
-</style>
