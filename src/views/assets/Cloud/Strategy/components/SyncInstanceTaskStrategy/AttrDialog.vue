@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 import Dialog from '@/components/Dialog/index.vue'
-import RuleInput from '@/views/assets/Cloud/Strategy/components/RuleInput'
-import ActionInput from '@/views/assets/Cloud/Strategy/components/ActionInput'
+import RuleInput from '@/views/assets/Cloud/Strategy/components/RuleInput.vue'
+import ActionInput from '@/views/assets/Cloud/Strategy/components/ActionInput.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 
 export default {

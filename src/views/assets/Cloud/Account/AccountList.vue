@@ -1,64 +1,37 @@
 <template>
   <div>
     <SmallCard ref="table" class="account-table" v-bind="table" />
-    <CreateDialog v-if="visible" :visible.sync="visible" v-bind="providerConfig" />
-    <UpdateDialog v-if="updateVisible" :object="object" :update-visible="updateVisible" />
-    <Dialog
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :destroy-on-close="true"
-      :show-buttons="false"
-      :show-close="false"
-      :title="$tc('SyncOnline')"
+    <CreateDialog
+      v-if="visible"
+      :visible.sync="visible"
+      v-bind="providerConfig"
+    />
+    <UpdateDialog
+      v-if="updateVisible"
+      :object="object"
+      :visible.sync="updateVisible"
+      @submitSuccess="onSubmitSuccess"
+    />
+    <SyncDialog
+      v-if="onlineSyncVisible"
       :visible.sync="onlineSyncVisible"
-      v-on="$listeners"
-    >
-      <AssetPanel :object="object" :visible.sync="onlineSyncVisible" />
-    </Dialog>
+    />
   </div>
 </template>
 
 <script type="text/jsx">
-import {
-  aliyun,
-  apsara_stack,
-  aws_china,
-  aws_international,
-  azure,
-  azure_international,
-  baiducloud,
-  fc,
-  gcp,
-  huaweicloud,
-  huaweicloud_private,
-  jdcloud,
-  kingsoftcloud,
-  lan,
-  nutanix,
-  openstack,
-  qcloud,
-  qcloud_lighthouse,
-  qingcloud_private,
-  scp,
-  state_private,
-  ucloud,
-  vmware,
-  volcengine,
-  zstack
-} from '../const'
+import { lan, privateCloudProviders, publicCloudProviders } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
 import UpdateDialog from './components/UpdateDialog.vue'
+import SyncDialog from './components/SyncDialog.vue'
 import SmallCard from '@/components/Table/CardTable/DataCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
-import Dialog from '@/components/Dialog/index.vue'
-import AssetPanel from './components/AssetPanel.vue'
 import { toSafeLocalDateStr } from '@/utils/time'
 
 export default {
   name: 'CloudAccountList',
   components: {
-    AssetPanel,
-    Dialog,
+    SyncDialog,
     SmallCard,
     CreateDialog,
     UpdateDialog
@@ -128,13 +101,7 @@ export default {
                 title: this.$t('PublicCloud'),
                 icon: 'public-cloud',
                 callback: () => {
-                  const providers = [
-                    aliyun, qcloud, qcloud_lighthouse, huaweicloud,
-                    baiducloud, jdcloud, kingsoftcloud, aws_china,
-                    aws_international, azure, azure_international,
-                    gcp, ucloud, volcengine
-                  ]
-                  this.providerConfig.providers = providers.map(
+                  this.providerConfig.providers = publicCloudProviders.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                   )
                   this.visible = true
@@ -145,11 +112,7 @@ export default {
                 icon: 'private-cloud',
                 title: this.$t('PrivateCloud'),
                 callback: () => {
-                  const providers = [
-                    vmware, qingcloud_private, huaweicloud_private, state_private,
-                    openstack, zstack, nutanix, fc, scp, apsara_stack
-                  ]
-                  this.providerConfig.providers = providers.map(
+                  this.providerConfig.providers = privateCloudProviders.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                   )
                   this.visible = true

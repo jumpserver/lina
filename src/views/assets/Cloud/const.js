@@ -29,6 +29,18 @@ export const scp = 'scp'
 export const apsara_stack = 'apsara_stack'
 export const lan = 'lan'
 
+export const publicCloudProviders = [
+  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
+  baiducloud, jdcloud, kingsoftcloud, aws_china,
+  aws_international, azure, azure_international,
+  gcp, ucloud, volcengine
+]
+
+export const privateCloudProviders = [
+  vmware, qingcloud_private, huaweicloud_private, state_private,
+  openstack, zstack, nutanix, fc, scp, apsara_stack
+]
+
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
     name: aliyun,

@@ -39,7 +39,8 @@ export default {
         submitBtnSize: 'mini',
         submitBtnText: this.$t('Add'),
         hasReset: false,
-        onSubmit: () => {},
+        onSubmit: () => {
+        },
         submitMethod: () => 'post',
         getUrl: () => '',
         cleanFormValue(data) {
@@ -247,7 +248,6 @@ export default {
 }
 
 .action-input {
-  margin-top: -10px;
 }
 </style>
 

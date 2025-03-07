@@ -11,7 +11,7 @@
       </template>
       <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
-        <QuickActions :actions="quickExecuteActions" type="primary" />
+        <QuickActions :actions="quickExecuteActions" :title="$t('Sync')" type="primary" />
         <RelationCard
           ref="StrategyRelation"
           v-perms="'xpack.change_strategy'"
