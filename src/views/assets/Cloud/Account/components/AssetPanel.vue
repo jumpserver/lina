@@ -67,6 +67,7 @@ export default {
           }
         ],
         config: {
+          url: '',
           hasSelection: true,
           persistSelection: false,
           hasPagination: false,

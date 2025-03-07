@@ -115,7 +115,8 @@ export default {
         drawerTitle = this.formatterArgs.getTitle({
           col: this.col,
           row: this.row,
-          cellValue: this.cellValue
+          cellValue: this.cellValue,
+          index: this.index
         })
       }
       let title = this.cellValue?.name || drawerTitle

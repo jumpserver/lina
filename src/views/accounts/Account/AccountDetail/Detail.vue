@@ -228,12 +228,7 @@ export default {
         ],
         formatters: {
           asset: (item, value) => {
-            const route = {
-              name: 'AssetDetail',
-              params: { id: this.object.asset.id }
-            }
-
-            return <router-link to={route}>{value?.name}</router-link>
+            return <span>{ value?.name }</span>
           },
           su_from: (item, value) => {
             return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>
