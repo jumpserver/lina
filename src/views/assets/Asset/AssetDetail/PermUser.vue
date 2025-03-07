@@ -133,7 +133,7 @@ export default {
       UserGroupCardConfig: {
         title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
-        detailRoute: 'UserGroupDetail',
+        detailRoute: () => import('@/views/users/Group/UserGroupDetail'),
         buttonTitle: this.$t('ViewPerm'),
         buttonClickCallback(obj) {
           vm.GenericListTableDialogConfig.visible = true

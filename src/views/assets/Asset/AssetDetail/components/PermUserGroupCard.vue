@@ -1,52 +1,62 @@
 <template>
-  <IBox
-    :fa="icon"
-    :title="title"
-    :type="type"
-    v-bind="$attrs"
-  >
-    <table class="card-table">
-      <div v-cloak v-if="iObjects.length > 0">
-        <tr v-for="obj of iObjects" :key="obj.value" class="item">
-          <td>
-            <el-tooltip
-              :content="obj.label"
-              :open-delay="500"
-              effect="dark"
-              placement="left"
-              style="margin: 4px;"
-            >
-              <el-link class="detail" @click="goDetail(obj)">
-                {{ obj.label }}
-              </el-link>
-            </el-tooltip>
-          </td>
-          <td>
-            <el-button
-              size="mini"
-              style="float: right"
-              type="primary"
-              @click="buttonClickCallback(obj)"
-            >
-              {{ buttonTitle }}
-            </el-button>
-          </td>
-        </tr>
-      </div>
-      <div v-cloak v-else style="text-align: center;">
-        {{ $t('NoData') }}
-      </div>
-    </table>
-  </IBox>
+  <div>
+    <IBox
+      :fa="icon"
+      :title="title"
+      :type="type"
+      v-bind="$attrs"
+    >
+      <table class="card-table">
+        <div v-cloak v-if="iObjects.length > 0">
+          <tr v-for="obj of iObjects" :key="obj.value" class="item">
+            <td>
+              <el-tooltip
+                :content="obj.label"
+                :open-delay="500"
+                effect="dark"
+                placement="left"
+                style="margin: 4px;"
+              >
+                <el-link class="detail" @click="goDetail(obj)">
+                  {{ obj.label }}
+                </el-link>
+              </el-tooltip>
+            </td>
+            <td>
+              <el-button
+                size="mini"
+                style="float: right"
+                type="primary"
+                @click="buttonClickCallback(obj)"
+              >
+                {{ buttonTitle }}
+              </el-button>
+            </td>
+          </tr>
+        </div>
+        <div v-cloak v-else style="text-align: center;">
+          {{ $t('NoData') }}
+        </div>
+      </table>
+    </IBox>
+    <Drawer
+      :component="detailDrawer"
+      :has-footer="false"
+      :title="title"
+      :visible.sync="drawerVisible"
+    />
+  </div>
 </template>
 
 <script>
 import IBox from '@/components/Common/IBox'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'PermUserGroupCard',
   components: {
-    IBox
+    IBox,
+    Drawer
   },
   props: {
     icon: {
@@ -66,7 +76,7 @@ export default {
       required: true
     },
     detailRoute: {
-      type: String,
+      type: [String, Function],
       default: ''
     },
     buttonTitle: {
@@ -81,6 +91,8 @@ export default {
   },
   data() {
     return {
+      detailDrawer: '',
+      drawerVisible: false,
       objects: []
     }
   },
@@ -101,7 +113,14 @@ export default {
       this.objects = data
     },
     goDetail(obj) {
-      this.$router.push({ name: this.detailRoute, params: { id: obj.id }})
+      this.detailDrawer = this.detailRoute
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'create',
+        row: {},
+        id: obj.id
+      }).then(() => {
+        this.drawerVisible = true
+      })
     }
   }
 }

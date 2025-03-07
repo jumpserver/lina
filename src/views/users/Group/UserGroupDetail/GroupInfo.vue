@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/users/groups/${this.object.id}/`,
+      url: this.object.id ? `/api/v1/users/groups/${this.object.id}/` : '/api/v1/users/groups/',
       excludes: ['users']
     }
   },
