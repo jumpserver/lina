@@ -116,9 +116,6 @@ export default {
           'AUTH_OPENID_USE_NONCE': {
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
           },
-          'AUTH_OPENID_ALWAYS_UPDATE_USER': {
-            hidden: (form) => form['AUTH_OPENID_KEYCLOAK']
-          },
           'AUTH_OPENID_IGNORE_SSL_VERIFICATION': {
           },
           'AUTH_OPENID_SHARE_SESSION': {
