@@ -38,8 +38,7 @@ export default {
         actions: {
           canUpdate: this.$hasPerm('terminal.change_terminal'),
           hasDelete: this.$hasPerm('terminal.delete_terminal'),
-          canDelete: this.$hasPerm('terminal.delete_terminal'),
-          detailApiUrl: `/api/v1/terminal/terminals/${this.$route.params.id}/`
+          canDelete: this.$hasPerm('terminal.delete_terminal')
         },
         titlePrefix: this.$t('TerminalDetail')
       }
@@ -49,7 +48,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

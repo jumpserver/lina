@@ -1,6 +1,12 @@
 <template>
   <div>
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+    />
     <Dialog
       :destroy-on-close="true"
       :show-cancel="false"
@@ -14,10 +20,12 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
-import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/Form/FormFields/Select2'
+
+import { DrawerListTable as ListTable } from '@/components'
+import { GenericCreateUpdateForm } from '@/layout/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -28,6 +36,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('./TerminalUpdate.vue'),
+      detailDrawer: () => import('./TerminalDetail/index.vue'),
       dialogSettings: {
         selectedRows: [],
         visible: false,
@@ -110,8 +120,17 @@ export default {
         columnsMeta: {
           name: {
             sortable: 'custom',
+            formatter: DetailFormatter,
             formatterArgs: {
-              route: 'TerminalDetail'
+              drawer: true,
+              getRoute: ({ row }) => {
+                return {
+                  name: 'TerminalDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
             }
           },
           stat: {
