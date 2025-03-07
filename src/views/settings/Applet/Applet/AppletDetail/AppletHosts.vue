@@ -1,10 +1,14 @@
 <template>
   <el-row :gutter="20">
-    <ListTable :header-actions="headerActions" :table-config="config" />
+    <ListTable
+      :header-actions="headerActions"
+      :table-config="config"
+      :detail-drawer="detailDrawer"
+    />
   </el-row>
 </template>
 
-<script type="text/jsx">
+<script>
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
@@ -24,6 +28,7 @@ export default {
   data() {
     const vm = this
     return {
+      detailDrawer: () => import('./Detail.vue'),
       headerActions: {
         hasCreate: false,
         hasImport: false,
@@ -67,6 +72,7 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.host.name,
               getRoute: ({ row }) => ({
@@ -124,7 +130,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
