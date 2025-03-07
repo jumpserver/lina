@@ -75,8 +75,8 @@ export default {
             clearable: false,
             showSelect: true,
             options: [
-              { label: this.$t('PublicIp'), value: 1 },
-              { label: this.$t('PrivateIp'), value: 0 }
+              { label: this.$t('PublicIP'), value: 1 },
+              { label: this.$t('PrivateIP'), value: 0 }
             ],
             disabled: !this.hasEditPerm()
           },

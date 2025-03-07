@@ -42,7 +42,7 @@ export default {
         },
         {
           key: this.$t('IPType'),
-          value: this.object.task.sync_ip_type === 1 ? this.$t('PublicIp') : this.$t('PrivateIp')
+          value: this.object.task.sync_ip_type === 1 ? this.$t('PublicIP') : this.$t('PrivateIP')
         },
         { key: this.$t('Timer'), value: this.object.task.is_periodic ? this.$t('Yes') : this.$t('No') }
       ]
