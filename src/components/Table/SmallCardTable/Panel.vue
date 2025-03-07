@@ -1,6 +1,6 @@
 <template>
   <div class="account-panel">
-    <el-row :gutter="20">
+    <el-row :gutter="20" class="panel-header">
       <el-col :span="21">
         <div class="title">
           <span>{{ object.name }}</span>
@@ -37,11 +37,12 @@
         />
       </el-col>
     </el-row>
+    <el-row class="panel-footer" />
   </div>
 </template>
 
 <script>
-import InfoPanel from './InfoPanel'
+import InfoPanel from './Info.vue'
 
 export default {
   name: 'CardPanel',

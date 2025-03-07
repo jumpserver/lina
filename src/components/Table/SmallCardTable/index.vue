@@ -18,7 +18,7 @@
 
 <script type="text/jsx">
 import CardTable from '@/components/Table/CardTable/index.vue'
-import CardPanel from './CardPanel.vue'
+import CardPanel from './Panel.vue'
 
 export default {
   name: 'SmallCard',
@@ -37,8 +37,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     reloadTable() {
