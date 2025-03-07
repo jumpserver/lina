@@ -55,12 +55,12 @@ export default {
             formatterArgs: {
               drawer: true,
               getDrawerTitle({ row }) {
-                return row.snapshot.name
+                return row.automation.name
               },
-              getTitle: ({ row }) => row.snapshot.name,
+              getTitle: ({ row }) => row.automation.name,
               getRoute: ({ row }) => ({
                 name: 'AccountChangeSecretDetail',
-                params: { id: row.automation }
+                params: { id: row.automation.id }
               })
             },
             id: ({ row }) => row.automation

@@ -60,13 +60,13 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
-              getTitle: ({ row }) => row.snapshot.name,
+              getTitle: ({ row }) => row.automation.name,
               getRoute: ({ row }) => ({
                 name: 'AccountPushDetail',
-                params: { id: row.automation }
+                params: { id: row.automation.id }
               }),
               getDrawerTitle({ row }) {
-                return row.snapshot.name
+                return row.automation.name
               }
             },
             id: ({ row }) => row.automation
