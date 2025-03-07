@@ -121,10 +121,6 @@ export default {
                   label: this.$t('Failed')
                 }
               ]
-            },
-            {
-              label: this.$t('Execution'),
-              value: 'execution_id'
             }
           ]
         }
