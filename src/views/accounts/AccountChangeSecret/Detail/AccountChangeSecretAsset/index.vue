@@ -45,6 +45,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               route: 'AssetDetail',
               can: this.$hasPerm('assets.view_asset')
             }
