@@ -1,12 +1,17 @@
 <template>
   <div>
     <el-alert v-sanitize="helpMessage" type="success" />
-    <ListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="ListTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :create-drawer="createDrawer"
+    />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'EndpointRule',
@@ -15,6 +20,7 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./EndpointRuleCreateUpdate.vue'),
       helpMessage: this.$t('EndpointRuleListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoint-rules/',
@@ -46,7 +52,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
