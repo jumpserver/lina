@@ -19,18 +19,15 @@ export default {
           'name', 'comment'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
+          min: ['name'],
           default: [
-            'name', 'comment', 'actions'
+            'name', 'comment'
           ]
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter
           }
-        },
-        actions: {
-          formatterArgs: {}
         }
       },
       headerActions: {
