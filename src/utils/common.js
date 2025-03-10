@@ -272,7 +272,7 @@ export const copy = _.throttle(function(value) {
   inputDom.select()
   document?.execCommand('copy')
   message({
-    message: i18n.t('Copied'),
+    message: i18n.t('CopySuccess'),
     type: 'success',
     duration: 1000
   })
