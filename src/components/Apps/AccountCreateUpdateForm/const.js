@@ -121,11 +121,6 @@ export const accountFieldsMeta = (vm) => {
       el: {
         multiple: false,
         clearable: true,
-        disabled: {
-          get disabled() {
-            return vm.isDisabled
-          }
-        },
         ajax: {
           url: `/api/v1/accounts/accounts/su-from-accounts/?account=${vm.account?.id || ''}&asset=${vm.asset?.id || ''}`,
           transformOption: (item) => {
