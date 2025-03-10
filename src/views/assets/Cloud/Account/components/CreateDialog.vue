@@ -123,11 +123,12 @@ export default {
 }
 
 .right-content {
-  background-color: #fff;
+  //background-color: #fff;
 
   ::v-deep {
     .el-form {
-      padding: 20px 20px 20px 10px
+      padding: 20px 20px 20px 10px;
+      background: #fff;
     }
   }
 }
