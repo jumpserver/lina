@@ -125,6 +125,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
+          getUrlQuery: true,
           exclude: ['id', 'status', 'execution'],
           options: [
             {
@@ -187,7 +188,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
