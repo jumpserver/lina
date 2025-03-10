@@ -80,7 +80,7 @@ export default {
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
-        hasLeftActions: false,
+        hasLeftActions: true,
         hasRightActions: true,
         hasExport: false,
         hasImport: false,
@@ -88,6 +88,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
+          getUrlQuery: true,
           exclude: ['id', 'status', 'execution'],
           options: [
             {
