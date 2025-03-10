@@ -1,5 +1,5 @@
 <template>
-  <AccountListTable ref="table" v-bind="tableConfig" />
+  <AccountListTable ref="table" :show-extra-actions="false" v-bind="tableConfig" />
 </template>
 
 <script>
@@ -46,8 +46,7 @@ export default {
   },
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
