@@ -22,7 +22,7 @@ export default {
       tableConfig: {
         url: this.getUrl(),
         columns: [
-          'service', 'asset', 'account', 'remote_addr', 'datetime'
+          'service', 'service_id', 'asset', 'account', 'remote_addr', 'datetime'
         ],
         extraQuery: {
           order: '-datetime'
