@@ -298,13 +298,12 @@ export default {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
             callback: () => {
-              // await this.getAssetDetail()
               setTimeout(() => {
-                vm.iAsset = this.asset
-                vm.account = {}
-                vm.addTemplate = false
-                vm.showAddDialog = true
-              })
+                // this.iAsset = {}
+                // this.account = {}
+                this.addTemplate = false
+                this.showAddDialog = true
+              }, 200)
             }
           },
           {
