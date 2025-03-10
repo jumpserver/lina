@@ -52,12 +52,6 @@ export default {
         titlePrefix: this.$tc('AppletDetail')
       }
     }
-  },
-  mounted() {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

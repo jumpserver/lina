@@ -1,18 +1,25 @@
 <template>
-  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+  <DrawerListTable
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script type="text/jsx">
-import GenericListTable from '@/layout/components/GenericListTable'
+import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'StrategyList',
   components: {
-    GenericListTable
+    DrawerListTable
   },
   data() {
     return {
+      createDrawer: () => import('@/views/assets/Cloud/Strategy/StrategyCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Cloud/Strategy/StrategyDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/xpack/cloud/strategies/',
         permissions: {
@@ -31,17 +38,25 @@ export default {
             }
           },
           strategy_rules: {
-            formatter: (row) => { return row.strategy_rules.length }
+            formatter: (row) => {
+              return row.strategy_rules.length
+            }
           },
           strategy_actions: {
-            formatter: (row) => { return row.strategy_actions.length }
+            formatter: (row) => {
+              return row.strategy_actions.length
+            }
           },
           actions: {
             formatterArgs: {
               updateRoute: 'CloudStrategyUpdate',
               hasClone: false,
-              canDelete: ({ row }) => { return row.name !== 'default' },
-              canUpdate: ({ row }) => { return row.name !== 'default' }
+              canDelete: ({ row }) => {
+                return row.name !== 'default'
+              },
+              canUpdate: ({ row }) => {
+                return row.name !== 'default'
+              }
             }
           }
         }
@@ -54,8 +69,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 
 }
 </script>

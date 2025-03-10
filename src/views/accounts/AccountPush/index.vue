@@ -31,9 +31,7 @@ export default {
             title: this.$t('ExecutionRecord'),
             name: 'AccountPushRecord',
             hidden: () => !this.$hasPerm('accounts.view_pushsecretrecord'),
-            component: () => import(
-              '@/views/accounts/AccountPush/ExecutionDetail/AccountPushRecord.vue'
-              )
+            component: () => import('@/views/accounts/AccountPush/ExecutionDetail/AccountPushRecord.vue')
           }
         ]
       }

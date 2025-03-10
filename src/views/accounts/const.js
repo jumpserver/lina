@@ -41,7 +41,7 @@ export const gatherAccountTableConfig = (vm, url) => {
           can: true,
           getRoute({ row }) {
             return {
-              name: 'AccountDiscoverAccountDetail',
+              name: 'DiscoverAccountDetail',
               params: { id: row.id }
             }
           },
@@ -114,7 +114,7 @@ export const gatherAccountHeaderActions = (vm) => {
     hasImport: false,
     hasExport: true,
     searchConfig: {
-      exclude: ['asset'],
+      exclude: ['asset', 'id'],
       options: [
         {
           label: vm.$t('AssetName'),

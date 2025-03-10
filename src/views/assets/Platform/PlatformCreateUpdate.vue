@@ -124,8 +124,8 @@ export default {
       this.initial.su_method = this.suMethodLimits[0]
     },
     async setCategories() {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
+      const category = this.$route.query._category
+      const type = this.$route.query._type
       const state = await this.$store.dispatch('assets/getAssetCategories')
       this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
       if (category && type) {

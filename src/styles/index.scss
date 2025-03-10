@@ -680,3 +680,21 @@ li.rmenu i.fa {
     display: none;
   }
 }
+
+.el-button:not(:disabled):not(.disabled):active:focus,
+.el-button:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.el-button.el-button--default {
+  &:focus,
+  &:hover {
+    //background-color: #fff;
+  }
+}
+
+div.el-loading-parent--relative {
+  min-height: 150px;
+}

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
 import { openTaskPage } from '@/utils/jms'
 import { toSafeLocalDateStr } from '@/utils/time'

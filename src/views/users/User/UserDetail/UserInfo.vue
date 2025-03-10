@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import RelationCard from '@/components/Cards/RelationCard'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

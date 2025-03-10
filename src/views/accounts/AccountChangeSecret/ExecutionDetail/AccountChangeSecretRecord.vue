@@ -125,6 +125,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         searchConfig: {
+          getUrlQuery: true,
           exclude: ['id', 'status', 'execution'],
           options: [
             {
@@ -150,10 +151,14 @@ export default {
                   label: this.$t('Failed')
                 },
                 {
-                  label: this.$t('Execution'),
-                  value: 'execution_id'
+                  value: 'pending',
+                  label: this.$t('Pending')
                 }
               ]
+            },
+            {
+              label: this.$t('ExecutionID'),
+              value: 'execution_id'
             }
           ]
         },
@@ -183,7 +188,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

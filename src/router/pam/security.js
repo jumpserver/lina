@@ -10,7 +10,6 @@ export default [
       name: 'AccountChangeSecretList'
     },
     meta: {
-      title: i18n.t('BaseAccountChangeSecret'),
       icon: 'change-password',
       app: 'accounts'
     },
@@ -20,8 +19,8 @@ export default [
         component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
         name: 'AccountChangeSecretList',
         meta: {
-          menuTitle: i18n.t('ChangeSecret'),
-          title: i18n.t('ChangeSecret'),
+          menuTitle: i18n.t('MenuChangeSecret'),
+          title: i18n.t('AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -93,7 +92,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/pam/RiskDetect/index.vue'),
+        component: () => import('@/views/accounts/RiskDetect/index.vue'),
         name: 'AccountCheckList',
         meta: {
           title: i18n.t('RiskDetection'),
@@ -102,7 +101,7 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/pam/RiskDetect/AccountCheckCreateUpdate.vue'),
+        component: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
         name: 'AccountCheckCreate',
         hidden: true,
         meta: {
@@ -112,7 +111,7 @@ export default [
       },
       {
         path: 'update/:id',
-        component: () => import('@/views/pam/RiskDetect/AccountCheckCreateUpdate.vue'),
+        component: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
         name: 'AccountCheckUpdate',
         hidden: true,
         meta: {
@@ -122,7 +121,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/pam/RiskDetect/AccountCheckDetail/index.vue'),
+        component: () => import('@/views/accounts/RiskDetect/AccountCheckDetail/index.vue'),
         name: 'AccountCheckDetail',
         meta: {
           title: i18n.t('RiskDetectionDetail'),
@@ -132,7 +131,7 @@ export default [
       },
       {
         path: 'executions/:id',
-        component: () => import('@/views/pam/RiskDetect/RiskHistoryExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/RiskDetect/RiskHistoryExecutionDetail/index.vue'),
         name: 'RiskHistoryExecutionDetail',
         hidden: true,
         meta: {

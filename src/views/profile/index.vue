@@ -19,10 +19,10 @@
         />
         <QuickActions
           v-if="biometricFeaturesActions.some(action => action.has)"
-          :title="$tc('BiometricFeatures')"
-          type="warning"
           :actions="biometricFeaturesActions"
+          :title="$tc('BiometricFeatures')"
           style="margin-top: 15px"
+          type="warning"
         />
         <IBox :title="$tc('InformationModification')" fa="fa-edit">
           <table>
@@ -54,11 +54,10 @@
 </template>
 
 <script type="text/jsx">
-import { IBox } from '@/components'
+import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
-import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/time'
 import store from '@/store'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -87,7 +86,7 @@ export default {
         {
           title: this.$t('FacialFeatures'),
           has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-              this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
+            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')

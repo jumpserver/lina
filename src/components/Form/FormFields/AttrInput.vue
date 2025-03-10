@@ -27,7 +27,9 @@ export default {
     },
     beforeSubmit: {
       type: Function,
-      default: (val) => { return true }
+      default: (val) => {
+        return true
+      }
     }
   },
   data() {
@@ -50,14 +52,16 @@ export default {
 ::v-deep .el-select {
   width: 100%;
 }
+
 ::v-deep .el-form-item__content {
   width: 100% !important;
 }
+
 ::v-deep .form-buttons {
   margin: 0 !important;
 }
+
 .attr-input {
-  margin-top: -10px;
 }
 </style>
 

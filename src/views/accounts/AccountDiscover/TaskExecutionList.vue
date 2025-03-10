@@ -67,10 +67,10 @@ export default {
             label: this.$t('Automation'),
             formatter: DetailFormatter,
             formatterArgs: {
-              getTitle: ({ row }) => row.snapshot.name,
+              getTitle: ({ row }) => row.automation.name,
               getRoute: ({ row }) => ({
                 name: 'AccountDiscoverTaskDetail',
-                params: { id: row.automation }
+                params: { id: row.automation.id }
               }),
               drawer: true
             },
@@ -111,6 +111,7 @@ export default {
       },
       headerActions: {
         searchConfig: {
+          getUrlQuery: true,
           options: [
             {
               label: this.$t('TaskID'),

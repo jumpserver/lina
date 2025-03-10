@@ -37,7 +37,7 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
-import QuickActions from '@/components/QuickActions/index.vue'
+import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
 import { openTaskPage } from '@/utils/jms'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
@@ -228,12 +228,7 @@ export default {
         ],
         formatters: {
           asset: (item, value) => {
-            const route = {
-              name: 'AssetDetail',
-              params: { id: this.object.asset.id }
-            }
-
-            return <router-link to={route}>{value?.name}</router-link>
+            return <span>{ value?.name }</span>
           },
           su_from: (item, value) => {
             return <span>{value?.name ? value?.name + `(${value?.username})` : ''}</span>

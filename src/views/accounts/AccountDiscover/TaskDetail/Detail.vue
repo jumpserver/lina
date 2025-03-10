@@ -33,7 +33,7 @@ export default {
         },
         {
           key: this.$t('DateLastSync'),
-          value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : '-'
+          value: this.object.last_execution_date ? toSafeLocalDateStr(this.object.last_execution_date) : '-'
         },
         {
           key: this.$t('DateCreated'),

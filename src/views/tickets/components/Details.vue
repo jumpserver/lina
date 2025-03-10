@@ -42,7 +42,7 @@
 </template>
 <script>
 import ItemValue from '@/components/Cards/DetailCard/ItemValue'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 
 export default {
   name: 'Details',
@@ -71,14 +71,17 @@ export default {
 .box {
   margin-bottom: 15px;
 }
+
 .content {
   font-size: 13px;
   line-height: 2.5;
 }
+
 .item-label {
   margin-right: 4px;
   white-space: nowrap;
 }
+
 .item-label, .item-text {
   display: inline-block;
 }

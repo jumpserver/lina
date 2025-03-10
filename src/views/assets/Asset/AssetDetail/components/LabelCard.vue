@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 
 export default {
   name: '',

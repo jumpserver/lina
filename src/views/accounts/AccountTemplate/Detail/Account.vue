@@ -22,7 +22,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 import { openTaskPage } from '@/utils/jms'
@@ -76,21 +76,28 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AssetAccountDetail',
-              can: vm.$hasPerm('accounts.view_account')
+              drawer: true,
+              can: vm.$hasPerm('accounts.view_account'),
+              getRoute: ({ row }) => {
+                return {
+                  name: 'AssetAccountDetail',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           asset: {
             label: this.$t('Asset'),
-            formatter: function(row) {
-              const to = {
-                name: 'AssetDetail',
-                params: { id: row.asset.id }
-              }
-              if (vm.$hasPerm('assets.view_asset')) {
-                return <router-link to={to}>{row.asset.name}</router-link>
-              } else {
-                return <span>{row.asset.name}</span>
+            formatter: DetailFormatter,
+            formatterArgs: {
+              drawer: true,
+              can: vm.$hasPerm('assets.view_asset'),
+              getTitle: ({ row }) => row.asset.name,
+              getRoute: ({ row }) => {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset.id }
+                }
               }
             }
           },

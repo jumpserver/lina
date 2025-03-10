@@ -34,7 +34,7 @@ export default {
     {
       path: '/pam/accounts',
       name: 'PamAccounts',
-      component: () => import('@/views/pam/Account/index.vue'),
+      component: () => import('@/views/accounts/PAM/index.vue'),
       meta: {
         title: i18n.t('AccountList'),
         icon: 'accounts',

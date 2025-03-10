@@ -78,5 +78,4 @@ export default {
 .App-Provider ::v-deep .protocol {
   margin-left: 3px;
 }
-
 </style>

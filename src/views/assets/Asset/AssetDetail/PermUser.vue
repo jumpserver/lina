@@ -50,9 +50,16 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
+            formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail'
+              drawer: true,
+              can: vm.$hasPerm('users.view_user'),
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           source: {
@@ -126,7 +133,7 @@ export default {
       UserGroupCardConfig: {
         title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
-        detailRoute: 'UserGroupDetail',
+        detailRoute: () => import('@/views/users/Group/UserGroupDetail'),
         buttonTitle: this.$t('ViewPerm'),
         buttonClickCallback(obj) {
           vm.GenericListTableDialogConfig.visible = true

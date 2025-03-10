@@ -1,18 +1,20 @@
 <template>
-  <AutoDataForm
-    v-if="!loading"
-    ref="form"
-    :form="form"
-    :has-reset="iHasReset"
-    :has-save-continue="iHasSaveContinue"
-    :is-submitting="isSubmitting"
-    :method="method"
-    :url="iUrl"
-    v-bind="$attrs"
-    @afterRemoteMeta="handleAfterRemoteMeta"
-    @submit="handleSubmit"
-    v-on="$listeners"
-  />
+  <div v-loading="loading">
+    <AutoDataForm
+      v-if="!loading"
+      ref="form"
+      :form="form"
+      :has-reset="iHasReset"
+      :has-save-continue="iHasSaveContinue"
+      :is-submitting="isSubmitting"
+      :method="method"
+      :url="iUrl"
+      v-bind="$attrs"
+      @afterRemoteMeta="handleAfterRemoteMeta"
+      @submit="handleSubmit"
+      v-on="$listeners"
+    />
+  </div>
 </template>
 <script>
 import AutoDataForm from '@/components/Form/AutoDataForm'
@@ -297,6 +299,7 @@ export default {
     this.$log.debug('Object init is: ', this.object, this.method)
     await this.setDrawerMeta()
     this.setMethod()
+
     try {
       const values = await this.getFormValue()
       this.$log.debug('Final object is: ', values)

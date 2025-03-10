@@ -143,6 +143,9 @@ function customizer(objValue, srcValue) {
 
 export function newURL(url) {
   let obj
+  if (!url) {
+    return ''
+  }
   if (url.indexOf('//') > -1) {
     obj = new URL(url)
   } else {
@@ -269,7 +272,7 @@ export const copy = _.throttle(function(value) {
   inputDom.select()
   document?.execCommand('copy')
   message({
-    message: i18n.t('Copied'),
+    message: i18n.t('CopySuccess'),
     type: 'success',
     duration: 1000
   })

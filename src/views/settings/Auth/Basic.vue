@@ -6,7 +6,7 @@
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 
 export default {
   components: {

@@ -11,7 +11,7 @@
       </template>
       <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
-        <QuickActions :actions="quickExecuteActions" type="primary" />
+        <QuickActions :actions="quickExecuteActions" :title="$t('Sync')" type="primary" />
         <RelationCard
           ref="StrategyRelation"
           v-perms="'xpack.change_strategy'"
@@ -37,7 +37,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/time'
 import RelationCard from '@/components/Cards/RelationCard'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
 import Dialog from '@/components/Dialog'
@@ -75,8 +75,8 @@ export default {
             clearable: false,
             showSelect: true,
             options: [
-              { label: this.$t('PublicIp'), value: 1 },
-              { label: this.$t('PrivateIp'), value: 0 }
+              { label: this.$t('PublicIP'), value: 1 },
+              { label: this.$t('PrivateIP'), value: 0 }
             ],
             disabled: !this.hasEditPerm()
           },

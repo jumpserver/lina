@@ -49,7 +49,7 @@
 <script>
 import { createSourceIdCache } from '@/api/common'
 import { Select2 } from '@/components/Form/FormFields'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {

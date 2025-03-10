@@ -69,7 +69,7 @@
 
 <script type="text/jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

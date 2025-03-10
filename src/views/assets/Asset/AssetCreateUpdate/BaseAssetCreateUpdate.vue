@@ -68,13 +68,13 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = vm.meta
+          const { id = '', action } = vm.meta
           const values = _.cloneDeep(validValues)
           let submitMethod = id ? 'put' : 'post'
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          if (id) {
+          if (action === 'update') {
             url = getUpdateObjURL(url, id)
             delete values['accounts']
           } else {

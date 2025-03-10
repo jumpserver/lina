@@ -1,8 +1,9 @@
 <template>
-  <Dialog
+  <Drawer
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
+    :has-footer="false"
     :show-buttons="false"
     :show-close="false"
     :title="$tc('CloudSyncConfig')"
@@ -12,7 +13,7 @@
     v-on="$listeners"
   >
     <el-row :gutter="5" style="padding: 10px">
-      <el-col :span="4" class="left-step-zone">
+      <el-col :span="6" class="left-step-zone">
         <el-steps :active="active" direction="vertical">
           <el-step :description="firstStepDesc" />
           <el-step :description="$tc('Authentication')" />
@@ -20,33 +21,37 @@
           <el-step :description="$tc('Result')" />
         </el-steps>
       </el-col>
-      <el-col :span="20">
-        <component
-          :is="activeMenu"
-          :active.sync="active"
-          :object.sync="account"
-          :provider="iSelected"
-          :providers="providers"
-          :selected.sync="iSelected"
-          :visible.sync="iVisible"
-        />
+      <el-col :span="18">
+        <div class="right-content">
+          <component
+            :is="activeMenu"
+            :active.sync="active"
+            :object.sync="account"
+            :provider="iSelected"
+            :providers="providers"
+            :selected.sync="iSelected"
+            :visible.sync="iVisible"
+          />
+        </div>
       </el-col>
     </el-row>
-  </Dialog>
+  </Drawer>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
+import Drawer from '@/components/Drawer'
 import ProviderPanel from '@/views/assets/Cloud/Account/components/ProviderPanel'
 import AuthPanel from '@/views/assets/Cloud/Account/components/AuthPanel'
 import AssetPanel from '@/views/assets/Cloud/Account/components/AssetPanel'
 import ResultPanel from '@/views/assets/Cloud/Account/components/ResultPanel'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'CreateDialog',
   components: {
-    Dialog,
+    IBox,
+    Drawer,
     AuthPanel,
     AssetPanel,
     ResultPanel,
@@ -111,6 +116,20 @@ export default {
 .left-step-zone {
   border-right: solid 1px var(--color-border);
   height: 350px;
+
+  .el-steps {
+    padding-left: 15px;
+  }
+}
+
+.right-content {
+  background-color: #fff;
+
+  ::v-deep {
+    .el-form {
+      padding: 20px 20px 20px 10px
+    }
+  }
 }
 
 ::v-deep .el-step {

@@ -133,6 +133,7 @@ export default {
 
       &.detail-card {
         padding-right: 0;
+        margin-top: unset;
       }
 
       // Detail 中
@@ -268,6 +269,7 @@ export default {
     }
 
     .drawer__content, .tab-page-content {
+      height: 100%;
       background: #f3f3f3;
     }
 

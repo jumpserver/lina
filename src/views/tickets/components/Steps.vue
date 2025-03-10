@@ -8,7 +8,7 @@
         >
           <div slot="description" class="description">
             <div>{{ `${this.$t('Applicant')}：${object.rel_snapshot.applicant}` }}</div>
-            <div>{{ `${this.$t('DateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
+            <div>{{ `${this.$t('DateCreated')}: ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
         <el-step
@@ -30,7 +30,7 @@
           </div>
           <div v-if="item.state ==='closed'" slot="description">
             <div>{{ $t('Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
-            <div>{{ $t('DateFinished') }}:  {{ toSafeLocalDateStr(item.approval_date) }}</div>
+            <div>{{ $t('DateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
           </div>
           <div v-if="item.state !=='pending' && item.state !=='closed'" slot="description">
             <div> {{ $t('Assignee') }}: {{ item.processor_display }}</div>
@@ -52,7 +52,7 @@
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/time'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { STATE_MAP } from '../const'
 
 export default {
@@ -68,7 +68,9 @@ export default {
     return {
       status: { open: 2, close: 3 },
       process_map: this.object.process_map.sort(
-        (a, b) => { return a.approval_level - b.approval_level }
+        (a, b) => {
+          return a.approval_level - b.approval_level
+        }
       ) || [],
       vm: this,
       statusMap: STATE_MAP

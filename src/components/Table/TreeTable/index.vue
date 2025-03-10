@@ -60,7 +60,7 @@ import Dialog from '@/components/Dialog/index.vue'
 import { setUrlParam } from '@/utils/common'
 import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import FileTree from '@/components/Table/TreeTable/components/FileTree.vue'
-import IBox from '../../IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import TabTree from '../TabTree/index.vue'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree/index.vue'
 

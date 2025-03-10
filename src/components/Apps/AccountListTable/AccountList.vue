@@ -53,7 +53,12 @@
 import { mapGetters } from 'vuex'
 import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-import { ActionsFormatter, PlatformFormatter, SecretViewerFormatter, AccountConnectFormatter } from '@/components/Table/TableFormatters'
+import {
+  AccountConnectFormatter,
+  ActionsFormatter,
+  PlatformFormatter,
+  SecretViewerFormatter
+} from '@/components/Table/TableFormatters'
 import ViewSecret from './ViewSecret.vue'
 import UpdateSecretInfo from './UpdateSecretInfo.vue'
 import ResultDialog from './BulkCreateResultDialog.vue'
@@ -138,6 +143,10 @@ export default {
     showQuickFilters: {
       type: Boolean,
       default: true
+    },
+    showActions: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -210,7 +219,7 @@ export default {
           },
           platform: {
             label: this.$t('Platform'),
-            width: '170px',
+            width: '150px',
             formatter: PlatformFormatter,
             formatterArgs: {
               platformAttr: 'asset.platform'
@@ -250,13 +259,14 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
+            has: false,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
               canDelete: () => vm.$hasPerm('accounts.delete_account'),
               moreActionsTitle: this.$t('More'),
-              extraActions: accountOtherActions(this)
+              extraActions: this.showActions ? accountOtherActions(this) : []
             }
           },
           ...this.columnsMeta
@@ -287,14 +297,13 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
-              await this.getAssetDetail()
+            callback: () => {
               setTimeout(() => {
-                vm.iAsset = this.asset
-                vm.account = {}
-                vm.addTemplate = false
-                vm.showAddDialog = true
-              })
+                // this.iAsset = {}
+                // this.account = {}
+                this.addTemplate = false
+                this.showAddDialog = true
+              }, 200)
             }
           },
           {

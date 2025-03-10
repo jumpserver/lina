@@ -20,7 +20,7 @@
       v-bind="iHeaderActions"
       @done="handleActionInitialDone"
     />
-    <IBox class="table-content">
+    <IBox v-loading="!actionInit" class="table-content">
       <AutoDataTable
         v-if="actionInit"
         ref="dataTable"
@@ -37,7 +37,7 @@
 import { getResourceFromApiUrl } from '@/utils/jms'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
-import IBox from '../../IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'

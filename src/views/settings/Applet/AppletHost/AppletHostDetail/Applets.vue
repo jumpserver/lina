@@ -1,7 +1,7 @@
 <template>
   <TwoCol>
     <template>
-      <ListTable :header-actions="headerConfig" :table-config="config" />
+      <ListTable :header-actions="headerConfig" :table-config="config" :detail-drawer="detailDrawer" />
     </template>
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
@@ -10,7 +10,7 @@
 </template>
 
 <script type="text/jsx">
-import { ListTable, QuickActions } from '@/components'
+import { DrawerListTable as ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -31,6 +31,7 @@ export default {
   },
   data() {
     return {
+      detailDrawer: () => import('@/views/settings/Applet/Applet/AppletDetail/index'),
       headerConfig: {
         hasLeftActions: false,
         hasImport: false
@@ -46,6 +47,7 @@ export default {
             label: this.$t('DisplayName'),
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               getIcon: ({ row }) => row.applet?.icon,
               getTitle: ({ row }) => row.applet.display_name,
               getRoute: ({ row }) => ({
@@ -171,7 +173,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

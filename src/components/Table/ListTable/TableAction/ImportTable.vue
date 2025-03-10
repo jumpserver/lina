@@ -105,6 +105,7 @@ export default {
       importStatusFilter: 'all',
       iTotalData: [],
       defaultTableConfig: {
+        url: '',
         hasSelection: false,
         // hasPagination: false,
         columns: [],
