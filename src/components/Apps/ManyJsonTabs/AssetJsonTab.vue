@@ -7,6 +7,7 @@
 <script>
 import { DrawerListTable as ListTable } from '@/components'
 import { toM2MJsonParams } from '@/utils/jms'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -41,15 +42,10 @@ export default {
           columnsMeta: {
             name: {
               label: this.$t('Asset'),
-              formatter: (row) => {
-                const to = {
-                  name: 'AssetDetail',
-                  params: { id: row.id }
-                }
-                if (this.$hasPerm('assets.view_asset')) {
-                  return <router-link to={to} class='text-link'>{row.name}</router-link>
-                } else {
-                  return <span>{row.name}</span>
+              formatter: DetailFormatter,
+              formatterArgs: {
+                getRoute: ({ row }) => {
+                  return { name: 'AssetDetail', params: { id: row.id }}
                 }
               }
             },
@@ -68,7 +64,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
