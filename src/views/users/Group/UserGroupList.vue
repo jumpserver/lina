@@ -4,7 +4,6 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
-    :resource="$t('Group')"
     :table-config="tableConfig"
   />
 </template>
