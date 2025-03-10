@@ -3,11 +3,14 @@
     ref="table"
     :columns="3"
     :table-config="tableConfig"
+    class="info-card-table"
     v-bind="$attrs"
+    v-on="$listeners"
   >
     <template v-slot:default="slotProps">
       <CardPanel
         :object="slotProps.item"
+        :on-view="slotProps.onView"
         :table-config="tableConfig"
         v-bind="subComponentProps"
         @refresh="reloadTable"
@@ -18,7 +21,7 @@
 
 <script type="text/jsx">
 import CardTable from '@/components/Table/CardTable/index.vue'
-import CardPanel from './CardPanel.vue'
+import CardPanel from './Panel.vue'
 
 export default {
   name: 'SmallCard',
@@ -37,8 +40,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     reloadTable() {
@@ -47,3 +49,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.info-card-table {
+  ::v-deep {
+    div.the-card {
+      padding: 0;
+    }
+  }
+}
+</style>

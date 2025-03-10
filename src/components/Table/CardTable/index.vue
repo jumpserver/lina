@@ -14,15 +14,13 @@
         <el-card
           v-for="(d, index) in totalData"
           :key="index"
-          :body-style="{ 'text-align': 'center', 'padding': '15px' }"
           :class="{'is-disabled': isDisabled(d)}"
-          class="my-card"
+          class="the-card"
           shadow="hover"
-          @click.native="onView(d)"
         >
           <keep-alive>
-            <slot :index="index" :item="d">
-              <Panel :d="d" />
+            <slot :index="index" :item="d" :onView="onView">
+              <Panel :d="d" @click.native="onView(d)" />
             </slot>
           </keep-alive>
         </el-card>
@@ -230,15 +228,18 @@ export default {
     display: flex;
     gap: 20px;
 
-    .my-card {
+    .the-card {
       min-width: 330px;
       position: relative;
       margin-bottom: 20px;
       height: 230px;
       width: 380px;
+      padding: 15px;
 
       ::v-deep .el-card__body {
         height: 100%;
+        width: 100%;
+        padding: 0;
       }
 
       &.is-disabled {

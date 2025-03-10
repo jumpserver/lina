@@ -1,16 +1,19 @@
 <template>
-  <div class="account-panel">
-    <el-row :gutter="20">
-      <el-col :span="21">
-        <div class="title">
-          <span>{{ object.name }}</span>
-        </div>
-      </el-col>
-      <el-col v-if="iActions.length !== 0" :span="3" @click.native="handleClick($event)">
+  <div class="info-panel">
+    <div class="panel-header">
+      <div class="panel-title">
+        <el-avatar :src="imageUrl" />
+        <span>{{ object.name }}</span>
+      </div>
+      <div
+        v-if="iActions.length !== 0"
+        class="panel-actions"
+        @click="handleClick($event)"
+      >
         <el-dropdown>
-          <el-link :underline="false" type="primary">
-            <i class="el-icon-more el-icon--right" style="color: var(--color-text-primary)" />
-          </el-link>
+          <el-button size="mini">
+            <i class="el-icon-more el-icon--right" />
+          </el-button>
           <el-dropdown-menu default="dropdown">
             <el-dropdown-item
               v-for="action in iActions"
@@ -18,30 +21,21 @@
               :disabled="action.disabled"
               @click.native="action.callback(object)"
             >
-              <i v-if="action.icon" :class="action.icon" /> {{ action.name }}
+              {{ action.name }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="panel-content">
-      <el-col :span="6" class="panel-image">
-        <el-image :src="imageUrl" fit="contain" />
-      </el-col>
-      <el-col :span="18" class="panel-info">
-        <InfoPanel
-          v-for="(obj, index) in getInfos(object)"
-          :key="index"
-          :content="obj.content"
-          :title="obj.title"
-        />
-      </el-col>
-    </el-row>
+      </div>
+    </div>
+    <div class="panel-content" @click="gotoDetail">
+      <InfoPanel :infos="getInfos(object)" />
+    </div>
+    <el-row class="panel-footer" />
   </div>
 </template>
 
 <script>
-import InfoPanel from './InfoPanel'
+import InfoPanel from './Info.vue'
 
 export default {
   name: 'CardPanel',
@@ -74,6 +68,11 @@ export default {
       default: (obj) => []
     },
     handleUpdate: {
+      type: Function,
+      default: () => {
+      }
+    },
+    onView: {
       type: Function,
       default: () => {
       }
@@ -120,6 +119,9 @@ export default {
       const resource = this.tableConfig.permissions?.resource
       return !this.$hasPerm(`${app}.${action}_${resource}`)
     },
+    gotoDetail() {
+      this.onView(this.object)
+    },
     handleClick(event) {
       event.stopPropagation()
     },
@@ -145,29 +147,54 @@ export default {
 
 <style lang="scss" scoped>
 
-.account-panel {
+.info-panel {
   display: flex;
   flex-direction: column;
-  //height: 100%;
-  cursor: pointer;
 
-  .title {
-    text-align: left;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 1.1em;
-    color: #555555;
+  .panel-header {
+    padding: 5px 10px;
+    border-bottom: solid 1px #e7eaec;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: default;
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+
+      ::v-deep {
+        .el-avatar {
+          background: white;
+        }
+      }
+    }
+
+    .panel-actions {
+      display: flex;
+      align-items: center;
+
+      ::v-deep {
+        button.el-button--mini {
+          padding: 5px 7px;
+
+          .el-icon--right {
+            margin-left: 0;
+          }
+        }
+      }
+    }
   }
 
   .panel-content {
-    display: flex;
-    height: 100px;
-    padding: 10px 0;
+    display: block;
+    padding: 10px 30px;
+    cursor: pointer;
 
     .panel-image {
       margin: auto 5px;
+      width: 100px;
     }
 
     .panel-info {
