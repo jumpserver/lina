@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="handleClick">
     <span v-if="d.edition === 'enterprise'" class="enterprise">
       {{ $t('Enterprise') }}
     </span>
@@ -50,6 +50,9 @@ export default {
   methods: {
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    handleClick() {
+      this.$emit('onClick', this.d)
     }
   }
 }

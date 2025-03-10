@@ -3,11 +3,14 @@
     ref="table"
     :columns="3"
     :table-config="tableConfig"
+    class="info-card-table"
     v-bind="$attrs"
+    v-on="$listeners"
   >
     <template v-slot:default="slotProps">
       <CardPanel
         :object="slotProps.item"
+        :on-view="slotProps.onView"
         :table-config="tableConfig"
         v-bind="subComponentProps"
         @refresh="reloadTable"
@@ -46,3 +49,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.info-card-table {
+  ::v-deep {
+    div.the-card {
+      padding: 0;
+    }
+  }
+}
+</style>

@@ -24,7 +24,7 @@ import { lan, privateCloudProviders, publicCloudProviders } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
 import UpdateDialog from './components/UpdateDialog.vue'
 import SyncDialog from './components/SyncDialog.vue'
-import SmallCard from '@/components/Table/SmallCardTable/index.vue'
+import SmallCard from '@/components/Table/InfoCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
 import { toSafeLocalDateStr } from '@/utils/time'
 
@@ -185,13 +185,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-.account-table {
-  ::v-deep {
-    .panel-content {
-      padding: 30px 0;
-    }
-  }
-}
 
 </style>
