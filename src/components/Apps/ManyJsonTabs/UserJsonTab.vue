@@ -8,6 +8,7 @@
 import { DrawerListTable as ListTable } from '@/components'
 import { toM2MJsonParams } from '@/utils/jms'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'User',
@@ -44,15 +45,13 @@ export default {
           columnsMeta: {
             name: {
               label: this.$t('Name'),
-              formatter: (row) => {
-                const to = {
-                  name: 'UserDetail',
-                  params: { id: row.id }
-                }
-                if (this.$hasPerm('users.view_user')) {
-                  return <router-link to={to} class='text-link'>{row.name}</router-link>
-                } else {
-                  return <span>{row.name}</span>
+              formatter: DetailFormatter,
+              formatterArgs: {
+                getRoute: ({ row }) => {
+                  return {
+                    name: 'UserDetail',
+                    params: { id: row.id }
+                  }
                 }
               }
             },
@@ -90,7 +89,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
