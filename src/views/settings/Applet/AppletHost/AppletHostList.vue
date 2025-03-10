@@ -3,7 +3,11 @@
     <el-alert type="success">
       <span v-sanitize="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
-    <ListTable class="applet-host" v-bind="$data" />
+    <ListTable
+      class="applet-host"
+      :create-drawer="createDrawer"
+      v-bind="$data"
+    />
   </div>
 </template>
 
@@ -18,27 +22,9 @@ export default {
     ListTable
   },
   data() {
-    const vm = this
-    const onAction = (row, action) => {
-      let routeAction = action
-      if (action === 'Clone') {
-        routeAction = 'Create'
-      }
-      const routeName = 'AppletHost' + routeAction
-      const route = {
-        name: routeName,
-        params: {},
-        query: {}
-      }
-      if (action === 'Clone') {
-        route.query.clone_from = row.id
-      } else if (action === 'Update') {
-        route.params.id = row.id
-        route.query.platform = row.platform.id
-      }
-      vm.$router.push(route)
-    }
     return {
+      createDrawer: () => import('./AppletHostCreateUpdate.vue'),
+      detailDrawer: () => import('./AppletHostDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
         columnsExclude: ['info', 'auto_config', 'gathered_info', 'deploy_options'],
@@ -76,8 +62,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onUpdate: ({ row }) => onAction(row, 'Update'),
-              onClone: ({ row }) => onAction(row, 'Clone'),
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/terminal/applet-hosts/${id}/`
@@ -117,5 +101,4 @@ export default {
 .applet-host ::v-deep .protocol {
   margin-left: 3px;
 }
-
 </style>

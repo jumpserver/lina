@@ -61,10 +61,10 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
-              getTitle: ({ row }) => row.snapshot.name,
+              getTitle: ({ row }) => row.automation.name,
               getRoute: ({ row }) => ({
                 name: 'AccountCheckDetail',
-                params: { id: row.automation }
+                params: { id: row.automation.id }
               })
             },
             id: ({ row }) => row.automation

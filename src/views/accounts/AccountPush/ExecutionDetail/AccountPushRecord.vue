@@ -1,23 +1,14 @@
 <template>
-  <div>
-    <RecordViewSecret
-      v-if="showViewSecretDialog"
-      :url="secretUrl"
-      :visible.sync="showViewSecretDialog"
-    />
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-  </div>
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 
 export default {
   name: 'AccountPushRecord',
   components: {
-    RecordViewSecret,
     GenericListTable
   },
   props: {
@@ -29,8 +20,6 @@ export default {
   },
   data() {
     return {
-      secretUrl: '',
-      showViewSecretDialog: false,
       tableConfig: {
         url: '/api/v1/accounts/push-account-records/',
         columns: [
@@ -82,6 +71,9 @@ export default {
               }
               return <i Class='fa fa-times text-danger'/>
             }
+          },
+          actions: {
+            has: false
           }
         }
       },
@@ -119,11 +111,15 @@ export default {
                 {
                   value: 'failed',
                   label: this.$t('Failed')
+                },
+                {
+                  value: 'pending',
+                  label: this.$t('Pending')
                 }
               ]
             },
             {
-              label: this.$t('Execution'),
+              label: this.$t('ExecutionID'),
               value: 'execution_id'
             }
           ]
@@ -133,7 +129,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
