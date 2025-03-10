@@ -126,6 +126,7 @@ export default {
       },
       headerActions: {
         searchConfig: {
+          getUrlQuery: true,
           options: [
             {
               label: this.$t('TaskID'),
