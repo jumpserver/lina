@@ -133,7 +133,7 @@ export default {
       this.reviewDrawer = true
     },
     showReview() {
-      if (this.selectedRows.length === 0) {
+      if (this.selectedRows.length === 0 && !this.row.id) {
         return this.$message.warning(`请选择需要勾选的数据`)
       }
       this.reviewDrawer = true
