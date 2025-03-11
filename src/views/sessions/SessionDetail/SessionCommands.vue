@@ -58,10 +58,13 @@ export default {
         hasRightActions: false
       }
     }
-  }
+  },
+  async mounted() {
+    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
 
+    if (drawActionMeta && drawActionMeta.id) {
+      this.tableConfig.url = `/api/v1/terminal/commands/?session_id=${drawActionMeta.id}`
+    }
+  }
 }
 </script>
-
-<style scoped>
-</style>
