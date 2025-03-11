@@ -47,11 +47,11 @@ export const accountOtherActions = (vm) => [
     can: vm.$hasPerm('accounts.change_account') && !vm.$store.getters.currentOrgIsRoot,
     callback: ({ row }) => {
       vm.isUpdateAccount = true
-      // const data = {
-      //   ...vm.asset,
-      //   ...row.asset
-      // }
-      // vm.iAsset = data
+      const data = {
+        ...vm.asset,
+        ...row.asset
+      }
+      vm.iAsset = data
       vm.account = row
       vm.addTemplate = false
       vm.showAddDialog = false

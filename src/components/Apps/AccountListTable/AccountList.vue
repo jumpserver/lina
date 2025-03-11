@@ -299,8 +299,8 @@ export default {
             },
             callback: () => {
               setTimeout(() => {
-                // this.iAsset = {}
-                // this.account = {}
+                vm.iAsset = this.asset
+                vm.account = {}
                 this.addTemplate = false
                 this.showAddDialog = true
               }, 200)
