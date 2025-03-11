@@ -53,7 +53,7 @@ export default {
         logo: {
           component: UploadField,
           el: {
-            width: '10%',
+            width: '20%',
             height: '10%',
             accept: 'image/jpg, image/png, image/jpeg, image/svg+xml'
           },
@@ -61,7 +61,14 @@ export default {
             fileChange: ([value], updateForm) => {
               this.logo_file = value
             }
-          }
+          },
+          rules: [
+            {
+              required: true,
+              message: this.$t('FieldRequiredError'),
+              trigger: 'blur'
+            }
+          ]
         }
       },
       hasSaveContinue: false,
