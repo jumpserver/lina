@@ -7,7 +7,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/time'
@@ -214,7 +214,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
