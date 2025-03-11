@@ -5,7 +5,7 @@
         <el-avatar :src="imageUrl" shape="square" />
         <div class="title-display">
           <span class="name">{{ object.name }}</span>
-          <small class="comment">{{ object.provider.label }}</small>
+          <span class="comment">{{ object.provider.label }}</span>
         </div>
       </div>
       <div
@@ -177,9 +177,15 @@ div.info-panel {
         flex-direction: column;
         text-align: left;
 
+        .name {
+          font-size: 1.1em;
+          color: #555555;
+        }
+
         .comment {
           color: #62686c;
           font-weight: 300;
+          font-size: 0.8em;
         }
       }
 
