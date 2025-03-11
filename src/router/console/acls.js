@@ -247,14 +247,14 @@ export default [
           },
           {
             path: ':id',
-            name: 'ConnectMethodAclDetail',
+            name: 'ConnectMethodACLDetail',
             component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclDetail/index'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclDetail'), activeMenu: '' }
           },
           {
             path: ':id/update',
-            name: 'ConnectMethodAclUpdate',
+            name: 'ConnectMethodACLUpdate',
             component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('ConnectMethodAclUpdate'), activeMenu: '' }
