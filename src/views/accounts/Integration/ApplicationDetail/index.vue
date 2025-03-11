@@ -33,7 +33,7 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
-            title: this.$t('Account'),
+            title: this.$t('Accounts'),
             name: 'IntegrationApplicationAccount',
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
