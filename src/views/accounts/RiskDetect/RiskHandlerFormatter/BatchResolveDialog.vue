@@ -16,13 +16,14 @@
           :cell-value="fakeCell"
           :changed="changed"
           :row="fakeRow"
+          :selected-rows="selectedRows"
           :rows="tableConfig.totalData"
           :value="1"
           class="risk-handler"
           @processDone="handleProcessDone"
         />
       </el-form>
-      <DataTable ref="table" :config="tableConfig" />
+      <DataTable ref="table" :config="tableConfig" v-on="$listeners" @selection-change="handleSelectionChange" />
     </div>
   </Dialog>
 </template>
@@ -53,6 +54,7 @@ export default {
         id: '',
         risk: {}
       },
+      selectedRows: [],
       fakeCell: {
         value: '0',
         label: this.$t('Pending')
@@ -142,6 +144,9 @@ export default {
       if (page < offset + 1) {
         this.dataTable.gotoNextPage()
       }
+    },
+    handleSelectionChange(val) {
+      this.selectedRows = val
     }
   }
 }

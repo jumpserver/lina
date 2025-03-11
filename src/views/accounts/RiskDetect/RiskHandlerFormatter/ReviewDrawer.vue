@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="drawer-footer">
-        <div v-if="row.status && row.status.value === '0'">
+        <div v-if="selectedRows.length > 0 && selectedRows[0].status.value === '0'">
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
             <el-button size="small" type="primary" @click="handleClose">
@@ -71,6 +71,10 @@ export default {
     rows: {
       type: Array, // 可能会批量 review 所以有了它
       default: () => []
+    },
+    selectedRows: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -98,7 +102,7 @@ export default {
       if (this.rows.length === 0) {
         return [this.row]
       } else {
-        return this.rows
+        return this.selectedRows
       }
     }
   },

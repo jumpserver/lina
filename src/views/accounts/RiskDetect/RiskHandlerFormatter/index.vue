@@ -46,6 +46,7 @@
     <ReviewDraw
       :row="row"
       :rows="rows"
+      :selected-rows="selectedRows"
       :show-buttons="reviewButtons"
       :visible.sync="reviewDrawer"
       @handle="handleDrawerEvent"
@@ -74,6 +75,10 @@ export default {
       default: false
     },
     rows: {
+      type: Array,
+      default: () => []
+    },
+    selectedRows: {
       type: Array,
       default: () => []
     }
@@ -128,6 +133,9 @@ export default {
       this.reviewDrawer = true
     },
     showReview() {
+      if (this.selectedRows.length === 0) {
+        return this.$message.warning(`请选择需要勾选的数据`)
+      }
       this.reviewDrawer = true
     },
     async handleCommon(cmd, payload) {
