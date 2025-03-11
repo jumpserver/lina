@@ -2,6 +2,8 @@
   <TwoCol>
     <GenericListTable
       ref="ListTable"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index'
+import { GenericListTable } from '@/layout/components'
 import GatewayDialog from '@/components/Apps/GatewayDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
@@ -37,7 +39,11 @@ export default {
     }
   },
   data() {
+    const vm = this
+
     return {
+      createDrawer: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
         columnsExclude: [
@@ -161,14 +167,24 @@ export default {
             }.bind(this)
           }
         ],
-        createRoute: {
-          name: 'GatewayCreate',
-          query: {
-            domain: this.object.id,
-            platform_type: 'linux',
-            category: 'host'
-          }
+        onCreate: () => {
+          vm.$router.push({
+            query: { domain: vm.object.id }
+          })
+
+          this.$refs.ListTable.onCreate()
         },
+        // createRoute: () => {
+        //   this.$route.query = {
+        //     domain: this.object.id,
+        //     platform_type: 'linux',
+        //     category: 'host'
+        //   }
+
+        //   return {
+        //     name: 'GatewayCreate'
+        //   }
+        // },
         extraActions: [
           {
             name: 'GatewayAdd',
@@ -222,7 +238,6 @@ export default {
     handleAddGatewayDialogClose() {
       this.reloadTable()
     }
-
   }
 }
 </script>
