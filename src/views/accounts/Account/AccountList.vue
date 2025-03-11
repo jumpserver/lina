@@ -32,7 +32,7 @@ export default {
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({ row }) => row.asset.name + row.asset.id,
+              getTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.asset.id },
