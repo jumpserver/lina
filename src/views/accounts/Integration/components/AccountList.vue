@@ -1,5 +1,5 @@
 <template>
-  <AccountListTable ref="table" :show-extra-actions="false" v-bind="tableConfig" />
+  <AccountListTable ref="table" :show-actions="false" v-bind="tableConfig" />
 </template>
 
 <script>

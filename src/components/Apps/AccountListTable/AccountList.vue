@@ -259,14 +259,14 @@ export default {
           connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
-            has: false,
+            has: this.showActions,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
               canDelete: () => vm.$hasPerm('accounts.delete_account'),
               moreActionsTitle: this.$t('More'),
-              extraActions: this.showActions ? accountOtherActions(this) : []
+              extraActions: accountOtherActions(this)
             }
           },
           ...this.columnsMeta

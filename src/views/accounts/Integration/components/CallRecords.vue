@@ -24,6 +24,14 @@ export default {
         columns: [
           'service', 'service_id', 'asset', 'account', 'remote_addr', 'datetime'
         ],
+        columnsShow: {
+          min: [
+            'service', 'account', 'datetime'
+          ],
+          default: [
+            'service', 'asset', 'account', 'remote_addr', 'datetime'
+          ]
+        },
         extraQuery: {
           order: '-datetime'
         },

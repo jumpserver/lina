@@ -2,8 +2,11 @@
   <div class="info-panel">
     <div class="panel-header">
       <div class="panel-title">
-        <el-avatar :src="imageUrl" />
-        <span>{{ object.name }}</span>
+        <el-avatar :src="imageUrl" shape="square" />
+        <div class="title-display">
+          <span class="name">{{ object.name }}</span>
+          <span class="comment">{{ object.provider.label }}</span>
+        </div>
       </div>
       <div
         v-if="iActions.length !== 0"
@@ -113,6 +116,9 @@ export default {
       return Array.from(mergedActions.values())
     }
   },
+  mounted() {
+    // console.log('Object: ', this.object)
+  },
   methods: {
     isDisabled(action) {
       const app = this.tableConfig.permissions?.app
@@ -147,13 +153,14 @@ export default {
 
 <style lang="scss" scoped>
 
-.info-panel {
+div.info-panel {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 
   .panel-header {
-    padding: 5px 10px;
-    border-bottom: solid 1px #e7eaec;
+    padding: 10px 20px;
+    //border-bottom: solid 1px #e7eaec;
     display: flex;
     justify-content: space-between;
     gap: 10px;
@@ -163,10 +170,28 @@ export default {
       display: flex;
       align-items: center;
       font-weight: 600;
+      gap: 10px;
+
+      .title-display {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+
+        .name {
+          font-size: 1.1em;
+          color: #555555;
+        }
+
+        .comment {
+          color: #62686c;
+          font-weight: 300;
+          font-size: 0.8em;
+        }
+      }
 
       ::v-deep {
         .el-avatar {
-          background: white;
+          background: #fff;
         }
       }
     }
@@ -189,7 +214,7 @@ export default {
 
   .panel-content {
     display: block;
-    padding: 10px 30px;
+    padding: 1px 25px 10px;
     cursor: pointer;
 
     .panel-image {
