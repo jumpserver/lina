@@ -68,7 +68,7 @@ export default {
         },
         {
           label: this.$t('Active'),
-          key: 'valid'
+          key: 'is_active'
         }
       ]
     }
@@ -144,7 +144,7 @@ export default {
         if (this.chart) {
           this.chart.setOption({
             series: [{
-              data: [newData.privileged, newData.resetSecret, newData.valid, newData.connectable]
+              data: [newData.privileged, newData.resetSecret, newData.connectable, newData.is_active]
             }]
           })
         }

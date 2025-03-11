@@ -29,7 +29,7 @@ export default {
         privileged: 0,
         resetSecret: 0,
         connectable: 0,
-        valid: 0
+        is_active: 0
       }
     }
   },
@@ -57,7 +57,7 @@ export default {
       this.accountConfig.privileged = data.total_privileged_accounts
       this.accountConfig.resetSecret = data.total_secret_reset_accounts
       this.accountConfig.connectable = data.total_connectivity_ok_accounts
-      this.accountConfig.valid = data.total_valid_accounts
+      this.accountConfig.is_active = data.total_valid_accounts
     }
   }
 }

@@ -49,8 +49,8 @@ export default {
       case 'connectable':
         this.tableConfig.url += '?connectivity=ok'
         break
-      case 'valid':
-        this.tableConfig.url += '?valid=1'
+      case 'is_active':
+        this.tableConfig.url += '?is_active=1'
         break
     }
   },
