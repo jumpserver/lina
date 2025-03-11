@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="drawer-footer">
-        <div v-if="selectedRows.length > 0 && selectedRows[0].status.value === '0'">
+        <div v-if="isBatch">
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
             <el-button size="small" type="primary" @click="handleClose">
@@ -104,6 +104,18 @@ export default {
       } else {
         return this.selectedRows
       }
+    },
+    isBatch() {
+      // 如果是批量，则判断批量中所选的第一个的 Status，如果是在表格中，那么会存在 row.id 那么也应该出现 button
+      if (this.selectedRows.length > 0 && this.selectedRows[0] && this.selectedRows[0].status) {
+        return this.selectedRows[0].status.value === '0'
+      }
+
+      if (this.row.status) {
+        return this.row.status.value === '0'
+      }
+
+      return false
     }
   },
   methods: {
