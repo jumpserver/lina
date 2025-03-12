@@ -64,7 +64,7 @@ export default {
             width: '135px'
           },
           automation: {
-            label: this.$t('Automation'),
+            label: this.$t('Name'),
             formatter: DetailFormatter,
             formatterArgs: {
               getTitle: ({ row }) => row.automation.name,
