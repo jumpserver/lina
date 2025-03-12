@@ -112,8 +112,8 @@ export default {
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
               onUpdate({ row, col }) {
-                vm.$route.query.type = row.type.value
-                vm.$route.query.category = row.category.value
+                vm.$route.query._type = row.type.value
+                vm.$route.query._category = row.category.value
                 vm.$refs.genericListTable.onUpdate({ row, col })
               }
             }
