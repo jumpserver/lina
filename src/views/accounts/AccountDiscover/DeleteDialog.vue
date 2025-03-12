@@ -10,7 +10,7 @@
       @confirm="handleConfirm"
       v-on="$listeners"
     >
-      <el-alert type="error">
+      <el-alert type="error" :closable="closeable">
         {{ this.$t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 
         <div class="extra-delete">
@@ -85,6 +85,10 @@ export default {
     defaultDeleteAccount: {
       type: Boolean,
       default: false
+    },
+    closeable: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
