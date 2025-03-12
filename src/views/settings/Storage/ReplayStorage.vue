@@ -28,7 +28,11 @@ export default {
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
-          dropdown: storageOptions
+          dropdown: storageOptions,
+          callback: (item) => {
+            this.$route.query.type = item.name
+            this.$refs.ListTable.onCreate()
+          }
         }
       },
       replayTableConfig: {
@@ -126,7 +130,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

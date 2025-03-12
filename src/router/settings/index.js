@@ -156,7 +156,7 @@ export default {
         app: 'assets',
         disableOrgsChange: true
       },
-      redirect: '',
+      redirect: 'PlatformList',
       children: [
         {
           path: '',
