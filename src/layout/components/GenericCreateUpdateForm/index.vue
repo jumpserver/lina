@@ -267,7 +267,7 @@ export default {
     },
     needGetObjectDetail: {
       type: Boolean,
-      default: true
+      default: null
     }
   },
   data() {
@@ -420,7 +420,11 @@ export default {
       }
     },
     async getFormValue() {
-      if (!['update', 'clone'].includes(this.action) || !this.needGetObjectDetail) {
+      let needGetObjectDetail = this.needGetObjectDetail
+      if (needGetObjectDetail === null) {
+        needGetObjectDetail = this.isUpdateMethod() || this.action === 'clone'
+      }
+      if (!needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
