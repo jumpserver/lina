@@ -420,7 +420,7 @@ export default {
       }
     },
     async getFormValue() {
-      if (this.action === 'create' || !this.needGetObjectDetail) {
+      if (!['update', 'clone'].includes(this.action) || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
