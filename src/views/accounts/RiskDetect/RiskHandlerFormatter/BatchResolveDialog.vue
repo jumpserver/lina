@@ -16,14 +16,19 @@
           :cell-value="fakeCell"
           :changed="changed"
           :row="fakeRow"
-          :selected-rows="selectedRows"
           :rows="tableConfig.totalData"
+          :selected-rows="selectedRows"
           :value="1"
           class="risk-handler"
           @processDone="handleProcessDone"
         />
       </el-form>
-      <DataTable ref="table" :config="tableConfig" v-on="$listeners" @selection-change="handleSelectionChange" />
+      <DataTable
+        ref="table"
+        :config="tableConfig"
+        v-on="$listeners"
+        @selection-change="handleSelectionChange"
+      />
     </div>
   </Dialog>
 </template>
