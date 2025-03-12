@@ -12,7 +12,11 @@
       :visible.sync="batchResolveDialog.visible"
       v-bind="batchResolveDialog"
     />
-    <RiskScanDialog v-if="detectDialog.visible" :asset="detectDialog.asset" :visible.sync="detectDialog.visible" />
+    <RiskScanDialog
+      v-if="detectDialog.visible"
+      :asset="detectDialog.asset"
+      :visible.sync="detectDialog.visible"
+    />
   </div>
 </template>
 

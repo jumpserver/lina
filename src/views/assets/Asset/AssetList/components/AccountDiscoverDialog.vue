@@ -1,7 +1,6 @@
 <template>
   <div>
     <Dialog
-      v-if="iVisible"
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
@@ -11,8 +10,9 @@
       width="80%"
       @close="loading=true"
     >
-      <span v-if="loading" v-loading="loading" class="loading" />
-      <iframe title="dialog" :src="url" style="border: none;" @load="onIframeLoad" />
+      <div v-loading="loading">
+        <iframe :src="url" style="border: none;" title="dialog" @load="onIframeLoad" />
+      </div>
     </Dialog>
   </div>
 </template>

@@ -82,7 +82,7 @@ export default {
           },
           {
             prop: 'address',
-            label: this.$t('IpDomain'),
+            label: this.$t('IPDomain'),
             sortable: 'custom'
           },
           {
