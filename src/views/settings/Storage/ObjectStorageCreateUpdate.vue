@@ -86,10 +86,18 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.type === 'sftp' && !this.$hasLicense()) this.$router.push({ name: '404' })
+    if (this.$route.query.type === 'sftp' && !this.$hasLicense()) {
+      return this.$router.push({ name: '404' })
+    }
   },
   methods: {
-    getHelpMessage() { if (!this.$hasLicense()) return ''; else return this.$t('ReplayStorageCreateUpdateHelpMessage') }
+    getHelpMessage() {
+      if (!this.$hasLicense()) {
+        return ''
+      } else {
+        return this.$t('ReplayStorageCreateUpdateHelpMessage')
+      }
+    }
   }
 }
 </script>
