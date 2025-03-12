@@ -7,7 +7,12 @@
     </div>
     <slot>
       <h3 class="no-margins ">
-        <span v-async="iCount" class="num" @click="handleClick">
+        <span
+          v-async="iCount"
+          class="num"
+          :class="{ 'can-direct': body.canDirect ? true : false }"
+          @click="handleClick"
+        >
           -
         </span>
       </h3>
@@ -105,7 +110,7 @@ export default {
     color: var(--color-text-primary);
     cursor: pointer;
 
-    &:hover {
+    &.can-direct:hover {
       color: var(--color-primary);
     }
   }

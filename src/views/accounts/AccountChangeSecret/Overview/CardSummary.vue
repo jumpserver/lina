@@ -49,7 +49,8 @@ export default {
         {
           title: this.$t('Total'),
           body: {
-            route: { name: 'AccountChangeSecret' },
+            route: { name: 'AccountChangeSecret', query: { tab: 'AccountChangeSecretList' }},
+            canDirect: true,
             count: this.data.total_count_change_secrets
           }
         },
@@ -72,7 +73,8 @@ export default {
         {
           title: this.$t('Total'),
           body: {
-            route: { name: 'AccountChangeSecretExecutionList' },
+            route: { name: 'AccountChangeSecret', query: { tab: 'AccountChangeSecretExecutionList' }},
+            canDirect: true,
             count: this.data.total_count_change_secret_executions
           }
         },
