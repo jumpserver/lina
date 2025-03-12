@@ -133,18 +133,7 @@ export default {
                     }
                   }.bind(this)
                 }
-              ],
-              onClone: function({ row }) {
-                const cloneRoute = {
-                  name: 'GatewayCreate',
-                  query: {
-                    domain: this.object.id,
-                    platform_type: row.type.value,
-                    clone_from: row.id
-                  }
-                }
-                this.$router.push(cloneRoute)
-              }.bind(this)
+              ]
             }
           }
 
