@@ -182,10 +182,14 @@ export default {
       if (this.addExtraMoreActions) {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
-      const create = this.createAction
-      if (create) {
-        create.dropdown = this.recentPlatforms
+
+      if (!actions.hasCrate) {
+        return actions
       }
+
+      const create = this.createAction
+      create.dropdown = this.recentPlatforms
+
       const extraActions = actions.extraActions || []
       actions.extraActions = [create, ...extraActions]
       // actions.extraActions[0].dropdown = platforms
