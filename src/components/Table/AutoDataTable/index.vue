@@ -139,7 +139,7 @@ export default {
       switch (name) {
         case 'id':
           if (!col.width) {
-            col.width = '290px'
+            col.width = '299px'
           }
           if (!col.formatter) {
             col.formatter = CopyableFormatter

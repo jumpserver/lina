@@ -1,9 +1,9 @@
 <template>
   <ListTable
     ref="ListTable"
+    :create-drawer="createDrawer"
     :header-actions="replayActions"
     :table-config="replayTableConfig"
-    :create-drawer="createDrawer"
   />
 </template>
 <script>
@@ -20,7 +20,7 @@ export default {
     const vm = this
     const storageOptions = this.getReplayStorageOptions()
     return {
-      createDrawer: () => import('./ReplayStorageCreateUpdate.vue'),
+      createDrawer: () => import('./ObjectStorageCreateUpdate.vue'),
       replayActions: {
         canCreate: this.$hasPerm('terminal.add_replaystorage'),
         hasExport: false,
@@ -28,6 +28,10 @@ export default {
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
+          callback: (item) => {
+            this.$route.query['type'] = item.name
+            this.$refs.ListTable.onCreate()
+          },
           dropdown: storageOptions
         }
       },

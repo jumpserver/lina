@@ -245,7 +245,7 @@ export default {
         {
           path: 'replay-storage/create',
           name: 'CreateReplayStorage',
-          component: () => import('@/views/settings/Storage/ReplayStorageCreateUpdate'),
+          component: () => import('@/views/settings/Storage/ObjectStorageCreateUpdate.vue'),
           meta: {
             title: i18n.t('CreateReplayStorage'),
             activeMenu: '/settings/storage',
@@ -256,7 +256,7 @@ export default {
         {
           path: 'replay-storage/:id/update',
           name: 'ReplayStorageUpdate',
-          component: () => import('@/views/settings/Storage/ReplayStorageCreateUpdate'),
+          component: () => import('@/views/settings/Storage/ObjectStorageCreateUpdate.vue'),
           meta: {
             title: i18n.t('ReplayStorageUpdate'),
             activeMenu: '/settings/storage',

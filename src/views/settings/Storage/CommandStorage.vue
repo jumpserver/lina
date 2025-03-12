@@ -1,9 +1,9 @@
 <template>
   <ListTable
     ref="ListTable"
+    :create-drawer="createDrawer"
     :header-actions="commandActions"
     :table-config="commandTableConfig"
-    :create-drawer="createDrawer"
   />
 </template>
 
@@ -33,6 +33,10 @@ export default {
         hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
+          callback: (item) => {
+            this.$route.query['type'] = item.name
+            this.$refs.ListTable.onCreate()
+          },
           dropdown: [
             {
               name: 'es',
@@ -74,10 +78,15 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
+                return (row.name !== 'default' && row.name !== 'null' &&
+                  vm.$hasPerm('terminal.change_commandstorage'))
               },
               canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
+                return (row.name !== 'default' && row.name !== 'null' &&
+                  vm.$hasPerm('terminal.delete_commandstorage'))
+              },
+              default: {
+                width: '130px'
               },
               hasClone: false,
               extraActions: [
