@@ -75,6 +75,12 @@ export default {
               canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_replaystorage'))
               },
+              onUpdate: ({ row }) => {
+                vm.$route.params.id = row.id
+                vm.$route.query.type = row.type.value
+
+                this.$refs.ListTable.onUpdate({ row })
+              },
               hasClone: false,
               extraActions: [
                 {
