@@ -222,7 +222,7 @@ export const accountQuickFilters = (vm) => [
         }
       },
       {
-        label: vm.$t('UnmanagedAccount'),
+        label: vm.$t('AddAccount'),
         filter: {
           risk: 'new_found'
         }

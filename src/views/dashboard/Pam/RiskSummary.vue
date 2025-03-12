@@ -27,14 +27,11 @@ export default {
         total_group_changed_accounts: '.',
         total_sudo_changed_accounts: '.',
         total_authorized_keys_changed_accounts: '.',
-        total_account_deleted_accounts: '.',
         total_password_expired_accounts: '.',
         total_long_time_password_accounts: '.',
         total_weak_password_accounts: '.',
         total_leaked_password_accounts: '.',
-        total_repeated_password_accounts: '.',
-        total_password_error_accounts: '.',
-        total_no_admin_account_accounts: '.'
+        total_repeated_password_accounts: '.'
       },
       chart: null
     }
@@ -68,11 +65,6 @@ export default {
           value: this.counter.total_authorized_keys_changed_accounts
         },
         {
-          description: 'account_deleted',
-          name: this.$t('AccountDeleted'),
-          value: this.counter.total_account_deleted_accounts
-        },
-        {
           description: 'password_expired',
           name: this.$t('PasswordExpired'),
           value: this.counter.total_password_expired_accounts
@@ -96,16 +88,6 @@ export default {
           description: 'repeated_password',
           name: this.$t('RepeatedPassword'),
           value: this.counter.total_repeated_password_accounts
-        },
-        {
-          description: 'password_error',
-          name: this.$t('PasswordError'),
-          value: this.counter.total_password_error_accounts
-        },
-        {
-          description: 'no_admin_account',
-          name: this.$t('NoAdminAccount'),
-          value: this.counter.total_no_admin_account_accounts
         }
       ]
 
@@ -225,14 +207,11 @@ export default {
           total_group_changed_accounts: 1,
           total_sudo_changed_accounts: 1,
           total_authorized_keys_changed_accounts: 1,
-          total_account_deleted_accounts: 1,
           total_password_expired_accounts: 1,
           total_long_time_password_accounts: 1,
           total_weak_password_accounts: 1,
           total_leaked_password_accounts: 1,
-          total_repeated_password_accounts: 1,
-          total_password_error_accounts: 1,
-          total_no_admin_account_accounts: 1
+          total_repeated_password_accounts: 1
         }
       })
     },
