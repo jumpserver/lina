@@ -57,11 +57,6 @@ export default {
       }
     }
   },
-  async mounted() {
-    const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-
-    console.log('drawActionMeta', drawActionMeta)
-  },
   methods: {}
 }
 </script>
