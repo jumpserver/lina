@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <BaseList ref="AssetBaseList" v-bind="tableConfig" />
+      <BaseList ref="AssetBaseList" v-bind="config" />
     </TwoCol>
     <AddAssetDialog :object="object" :setting="addAssetSetting" @close="handleAddAssetDialogClose" />
   </div>
@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      tableConfig: {
+      config: {
         category: 'all',
         url: `/api/v1/assets/assets/?domain=${this.object.id}&is_gateway=0`,
         tableConfig: {
