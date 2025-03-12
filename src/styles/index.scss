@@ -599,15 +599,15 @@ li.rmenu i.fa {
 }
 
 
-.link-btn {
-  span {
-    color: var(--color-link);
-  }
-
-  &:hover, &:focus {
-    color: var(--color-link);
-  }
-}
+//.link-btn {
+//  span {
+//    color: var(--color-link);
+//  }
+//
+//  &:hover, &:focus {
+//    color: var(--color-link);
+//  }
+//}
 
 .el-table__row {
   ::-webkit-scrollbar {
@@ -664,6 +664,10 @@ li.rmenu i.fa {
   .el-form {
     margin-top: 20px;
     margin-right: 80px;
+
+    form {
+      margin-top: 0;
+    }
   }
 }
 

@@ -13,7 +13,9 @@
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
     </div>
-    <el-button slot="reference" class="link-btn" size="mini" type="text">{{ $t('View') }}</el-button>
+    <el-button slot="reference" class="link-btn" plain size="mini" type="primary">
+      {{ $t('View') }} <i class="el-icon-arrow-down" />
+    </el-button>
   </el-popover>
 </template>
 

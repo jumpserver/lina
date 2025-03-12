@@ -6,6 +6,7 @@ import automations from './automations'
 import integrations from './integrations'
 import security from './security'
 import activity from './activity'
+import store from '@/store'
 
 export default {
   path: '/pam/',
@@ -16,7 +17,9 @@ export default {
     title: i18n.t('PAM'),
     icon: 'pam',
     type: 'view',
-    showNavSwitcher: true,
+    showNavSwitcher: () => {
+      return store.getters.consoleOrgs.length > 0
+    },
     permissions: [],
     view: 'pam'
   },

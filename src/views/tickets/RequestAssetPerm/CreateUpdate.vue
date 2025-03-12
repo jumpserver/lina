@@ -103,6 +103,7 @@ export default {
           }
         },
         org_id: {
+          label: this.$t('Organization'),
           component: Select2,
           el: {
             multiple: false,
