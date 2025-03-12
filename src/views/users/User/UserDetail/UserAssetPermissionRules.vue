@@ -1,6 +1,7 @@
 <template>
   <TwoCol>
     <ListTable
+      :create-drawer="createDrawer"
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
@@ -8,7 +9,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable as ListTable } from '@/components'
 import { AssetPermissionTableMeta, UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -26,6 +27,7 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('@/views/perms/AssetPermission/AssetPermissionCreateUpdate'),
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
         hasTree: true,
@@ -53,7 +55,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
