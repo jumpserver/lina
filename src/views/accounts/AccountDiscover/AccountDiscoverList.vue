@@ -9,6 +9,7 @@
       v-if="deleteDialog.visible"
       :account="deleteDialog.account"
       :visible.sync="deleteDialog.visible"
+      :closeable="false"
       @deleted="afterDeleteGatheredAccount"
     />
     <AssetTreeTable
@@ -109,6 +110,3 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
-
-</style>
