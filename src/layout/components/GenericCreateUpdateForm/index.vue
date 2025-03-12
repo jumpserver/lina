@@ -134,7 +134,14 @@ export default {
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
-      default: ''
+      default: function() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      }
     },
     // 获取创建和更新的url function
     getUrl: {
@@ -273,7 +280,7 @@ export default {
       action: '',
       actionId: '',
       row: {},
-      method: ''
+      method: 'post'
     }
   },
   computed: {
@@ -299,6 +306,7 @@ export default {
     this.$log.debug('Object init is: ', this.object, this.method)
     await this.setDrawerMeta()
     this.setMethod()
+    // console.log('Set method: ', this.method, this.action)
 
     try {
       const values = await this.getFormValue()
@@ -312,7 +320,7 @@ export default {
   methods: {
     async setDrawerMeta() {
       const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-      if (drawActionMeta) {
+      if (drawActionMeta && drawActionMeta.action) {
         this.drawer = true
         this.action = drawActionMeta.action
         this.row = drawActionMeta.row
@@ -325,6 +333,7 @@ export default {
       } else {
         this.method = this.submitMethod
       }
+      // console.log('Drawer: ', this.drawer, this.submitMethod)
       if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
           this.method = 'post'

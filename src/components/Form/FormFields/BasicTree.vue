@@ -47,6 +47,9 @@ export default {
   },
   computed: {
     iValue() {
+      if (!this.value) {
+        return []
+      }
       return this.value.map(item => {
         if (item.value) {
           return item.value
