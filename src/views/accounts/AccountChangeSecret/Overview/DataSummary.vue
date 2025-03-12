@@ -37,21 +37,18 @@ export default {
         {
           title: this.$t('Total'),
           body: {
-            route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret
           }
         },
         {
           title: this.$t('Assets'),
           body: {
-            route: { name: `LoginLogList` },
             count: this.data.total_count_ongoing_change_secret_assets
           }
         },
         {
           title: this.$t('Accounts'),
           body: {
-            route: { name: `OperateLogList` },
             count: this.data.total_count_ongoing_change_secret_accounts
           }
         }
