@@ -39,8 +39,7 @@ export default {
   },
   methods: {
     async getAsyncItems() {
-      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
-      const userId = drawActionMeta.row.id || 'self'
+      const userId = this.$route.params.id || 'self'
       const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}`
       this.$axios.get(url).then(res => {
         this.accountData = res?.permed_accounts || []
