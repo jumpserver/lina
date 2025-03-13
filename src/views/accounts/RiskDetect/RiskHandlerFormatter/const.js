@@ -35,7 +35,7 @@ export const riskActions = [
   },
   {
     name: 'change_password_add',
-    label: i18n.t('AddAccountAfterChangePassword'),
+    label: i18n.t('AddAccountAfterChangingPassword'),
     has: async function() {
       const risks = ['new_found', 'long_time_password', 'password_expired']
       return risks.includes(this.row.risk.value) && !await checkUserExist.call(this)
