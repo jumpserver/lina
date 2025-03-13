@@ -81,6 +81,9 @@ export const accountOtherActions = (vm) => [
   {
     name: 'Clone',
     title: vm.$t('Duplicate'),
+    has: () => {
+      return !vm.asset
+    },
     can: vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
     callback: ({ row }) => {
       vm.account = {
