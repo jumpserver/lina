@@ -10,6 +10,9 @@
     <div>
       <img v-if="preview" :class="showBG ? 'show-bg' : ''" :src="preview" v-bind="$attrs" alt="">
     </div>
+    <el-button v-if="fileName" size="mini" type="danger" @click.native.stop="resetUpload">
+      {{ this.$t('Cancel') }}
+    </el-button>
   </div>
 </template>
 
@@ -55,21 +58,29 @@ export default {
     },
     Onchange(e) {
       const upLoadFile = e.target.files[0]
+
       if (upLoadFile === undefined) {
-        this.$emit('input', this.initial)
         return
       }
+
       this.fileName = upLoadFile?.name || ''
       this.$emit('fileChange', upLoadFile)
       this.$emit('input', this.getObjectURL(upLoadFile))
     },
+    resetUpload() {
+      this.fileName = ''
+      this.preview = ''
+      this.$refs.upLoadFile.value = ''
+      this.$emit('input', '')
+      this.$emit('fileChange', null)
+    },
     getObjectURL(file) {
       let url = null
-      if (window.createObjectURL !== undefined) { // basic
+      if (window.createObjectURL !== undefined) {
         url = window.createObjectURL(file)
-      } else if (window.URL !== undefined) { // mozilla(firefox)
+      } else if (window.URL !== undefined) {
         url = window.URL.createObjectURL(file)
-      } else if (window.webkitURL !== undefined) { // webkit or chrome
+      } else if (window.webkitURL !== undefined) {
         url = window.webkitURL.createObjectURL(file)
       }
       return url
