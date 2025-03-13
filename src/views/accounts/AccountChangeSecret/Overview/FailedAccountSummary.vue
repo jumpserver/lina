@@ -56,7 +56,7 @@ export default {
             }
           },
           account: {
-            label: this.$t('Username'),
+            label: this.$t('Account'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('accounts.view_account'),
