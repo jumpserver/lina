@@ -114,20 +114,22 @@ export default {
       return resource.replace(' details', '').replace('详情', '')
     },
     getDrawerTitle() {
-      let drawerTitle = ''
-      if (this.formatterArgs?.getTitle && typeof this.formatterArgs.getTitle === 'function') {
-        drawerTitle = this.formatterArgs.getTitle({
+      if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {
+        this.formatterArgs.getDrawerTitle({
           col: this.col,
           row: this.row,
-          cellValue: this.cellValue,
-          index: this.index
+          cellValue: this.cellValue
         })
       }
-      let title = this.cellValue?.name || drawerTitle
+
+      let title = this.cellValue || this.row.name
+
       const resource = this.getResource()
+
       if (resource) {
         title = `${resource}: ${title}`
       }
+
       return title
     },
     resolveRoute() {
