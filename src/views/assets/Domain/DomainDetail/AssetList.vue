@@ -3,7 +3,12 @@
     <TwoCol>
       <BaseList ref="AssetBaseList" v-bind="config" />
     </TwoCol>
-    <AddAssetDialog :object="object" :setting="addAssetSetting" @close="handleAddAssetDialogClose" />
+    <AddAssetDialog
+      v-if="addAssetSetting.addAssetDialogVisible"
+      :object="object"
+      :setting="addAssetSetting"
+      @close="handleAddAssetDialogClose"
+    />
   </div>
 </template>
 
@@ -55,9 +60,10 @@ export default {
               name: 'AddAsset',
               title: this.$t('Add'),
               type: 'primary',
-              callback: function() {
+              callback: () => {
+                this.$route.params.id = this.object.id
                 this.addAssetSetting.addAssetDialogVisible = true
-              }.bind(this)
+              }
             }
           ]
         },

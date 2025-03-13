@@ -12,7 +12,12 @@
       :port="port"
       :visible.sync="visible"
     />
-    <AddGatewayDialog :object="object" :setting="AddGatewaySetting" @close="handleAddGatewayDialogClose" />
+    <AddGatewayDialog
+      v-if="AddGatewaySetting.addGatewayDialogVisible"
+      :object="transObject"
+      :setting="AddGatewaySetting"
+      @close="handleAddGatewayDialogClose"
+    />
   </TwoCol>
 </template>
 
@@ -44,6 +49,7 @@ export default {
     return {
       createDrawer: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
+      transObject: {},
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
         columnsExclude: [
@@ -156,33 +162,44 @@ export default {
             }.bind(this)
           }
         ],
-        onCreate: () => {
-          vm.$router.push({
-            query: { domain: vm.object.id }
-          })
-
-          this.$refs.ListTable.onCreate()
-        },
-        // createRoute: () => {
-        //   this.$route.query = {
-        //     domain: this.object.id,
-        //     platform_type: 'linux',
-        //     category: 'host'
-        //   }
-
-        //   return {
-        //     name: 'GatewayCreate'
-        //   }
-        // },
         extraActions: [
           {
             name: 'GatewayAdd',
             title: this.$t('Add'),
-            callback: function() {
-              this.AddGatewaySetting.addGatewayDialogVisible = true
-            }.bind(this)
+            callback: async() => {
+              // 由于修改成为了抽屉形式，导致传入到 AddGateway 组件中的 obj 任然为最初的数量，就会导致新增的 item 依然会出现可选的情况
+              // 此时修改为在打开 AddGateway 额外从 tableConfig.url 的接口中获取最新的 gateways 数目
+              try {
+                const res = await this.$axios.get(this.tableConfig.url)
+
+                if (res) {
+                  this.transObject = {
+                    ...this.object,
+                    gateways: res.map(item => {
+                      return {
+                        name: item.name,
+                        id: item.id
+                      }
+                    })
+                  }
+                }
+              } catch (err) {
+                throw new Error(err)
+              }
+
+              vm.$nextTick(() => {
+                this.AddGatewaySetting.addGatewayDialogVisible = true
+              })
+            }
           }
-        ]
+        ],
+        onCreate: () => {
+          vm.$route.query.domain = vm.object.id
+          vm.$route.query.platform_type = 'linux'
+          vm.$route.query.category = 'host'
+
+          vm.$refs.ListTable.onCreate()
+        }
       },
       port: 0,
       cell: '',
@@ -230,7 +247,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
