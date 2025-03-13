@@ -224,15 +224,18 @@ export default {
   max-width: 1600px;
   text-align: center;
 
-  .el-col, div {
+  .card-container {
     display: flex;
+  }
+
+  .el-col, div {
     gap: 20px;
 
     .the-card {
       min-width: 330px;
       position: relative;
       margin-bottom: 20px;
-      height: 230px;
+      //height: 230px;
       width: 380px;
       padding: 15px;
 

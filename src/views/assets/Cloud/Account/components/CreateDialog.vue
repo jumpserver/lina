@@ -113,6 +113,19 @@ export default {
   max-width: 1056px !important;
 }
 
+::v-deep .el-drawer__body {
+  overflow-x: hidden;
+
+  .drawer__content {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .el-row {
+    background: #f3f3f3;
+  }
+}
+
 .left-step-zone {
   border-right: solid 1px var(--color-border);
   height: 350px;
@@ -124,6 +137,7 @@ export default {
 
 .right-content {
   //background-color: #fff;
+  display: block;
 
   ::v-deep {
     .el-form {
