@@ -70,10 +70,13 @@ export default {
           let url = this.url
           const { id = '', action } = vm.meta
           const values = _.cloneDeep(validValues)
+
           let submitMethod = id ? 'put' : 'post'
+
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
+
           if (action === 'update') {
             url = getUpdateObjURL(url, id)
             delete values['accounts']
@@ -84,10 +87,12 @@ export default {
               return item
             })
           }
-          if (vm.meta?.payload === 'pam_asset_clone') {
+
+          if (vm.meta?.payload === 'pam_asset_clone' || vm.meta.row?.payload === 'pam_asset_clone') {
             submitMethod = 'post'
             url = this.url
           }
+
           return this.$axios[submitMethod](url, values)
         }
       }
