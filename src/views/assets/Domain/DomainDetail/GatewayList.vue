@@ -110,6 +110,9 @@ export default {
                 name: 'GatewayUpdate',
                 query: { domain: this.object.id, platform_type: 'linux', 'category': 'host' }
               },
+              onClone: ({ row }) => {
+                this.$refs.ListTable.onClone({ row: { ...row, payload: 'pam_asset_clone' }})
+              },
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
