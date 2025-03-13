@@ -55,6 +55,10 @@ export default {
           }
         }
       }
+    },
+    prevantClick: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -172,14 +176,19 @@ export default {
       if (this.formatterArgs.beforeClick) {
         this.formatterArgs.beforeClick(this.callbackArgs)
       }
+
       if (this.formatterArgs.onClick) {
-        this.formatterArgs.onClick(this.callbackArgs)
-        return
+        return this.formatterArgs.onClick(this.callbackArgs)
       }
+
       if (this.formatterArgs.drawer) {
-        this.showDrawer()
+        return this.showDrawer()
+      }
+
+      if (this.prevantClick) {
         return
       }
+
       this.goDetail()
     },
     getDetailRoute() {

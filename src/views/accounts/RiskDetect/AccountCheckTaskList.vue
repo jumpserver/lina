@@ -43,24 +43,16 @@ export default {
             formatter: AmountFormatter,
             formatterArgs: {
               async: false,
-              drawer: true,
-              getTitle: ({ row }) => row.assets[0].name,
-              getRoute: ({ row }) => ({
-                name: 'AssetDetail',
-                params: { id: row.assets[0].id }
-              })
+              drawer: false,
+              prevantClick: true
             }
           },
           nodes: {
             formatter: AmountFormatter,
             formatterArgs: {
               async: false,
-              drawer: true,
-              getRoute: ({ row }) => ({
-                name: 'AssetDetail',
-                query: { tab: 'Basic' },
-                params: { id: row.assets[0].id }
-              })
+              drawer: false,
+              prevantClick: true
             }
           },
           secret_strategy: {

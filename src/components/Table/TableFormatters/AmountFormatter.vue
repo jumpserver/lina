@@ -1,5 +1,5 @@
 <template>
-  <DetailFormatter :col="col" :row="row">
+  <DetailFormatter :col="col" :row="row" :prevant-click="formatterArgs.prevantClick">
     <template>
       <el-popover
         :disabled="!showItems"
@@ -42,7 +42,8 @@ export default {
           },
           async: false,
           ajax: {},
-          title: ''
+          title: '',
+          prevantClick: false
         }
       }
     }
