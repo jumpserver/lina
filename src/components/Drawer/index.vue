@@ -103,6 +103,16 @@ export default {
   }
 }
 
+@media (max-width: 992px) {
+  .drawer ::v-deep {
+    .el-form-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+  }
+}
+
 .drawer {
   ::v-deep {
     min-width: 565px;
