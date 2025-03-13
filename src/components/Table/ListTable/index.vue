@@ -124,6 +124,7 @@ export default {
       const has =
         (this.quickFilters && this.quickFilters.length > 0) ||
         (this.quickSummary && this.quickSummary.length > 0)
+
       return !!has
     },
     dataTable() {
