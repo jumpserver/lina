@@ -92,10 +92,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.filters)
-    console.log(this.summary)
-  },
   methods: {
     async getCount(item) {
       if (item.count || item.count === 0) {
