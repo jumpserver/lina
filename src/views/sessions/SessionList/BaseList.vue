@@ -63,6 +63,9 @@ export default {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row, col, cellValue, index }) => { return index + 1 },
+              getDrawerTitle: ({ row }) => {
+                return row.id
+              },
               getRoute: ({ row }) => {
                 return {
                   name: 'SessionDetail',
