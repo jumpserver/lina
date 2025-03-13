@@ -4,7 +4,7 @@
       :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('DiscoverAccountsDialog')"
+      :title="$tc('AccountDiscover')"
       :visible.sync="iVisible"
       top="35vh"
       width="80%"
