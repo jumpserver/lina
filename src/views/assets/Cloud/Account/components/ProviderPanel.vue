@@ -92,7 +92,7 @@ export default {
 
     .el-col {
       width: 265px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
 
       .el-card.active {
         color: var(--color-primary);
@@ -103,8 +103,8 @@ export default {
         overflow: unset;
 
         img {
-          width: 50px;
-          height: 50px;
+          width: 40px;
+          height: 40px;
         }
       }
 
