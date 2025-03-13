@@ -1,6 +1,10 @@
 <template>
   <div v-show="isExpand">
-    <div v-if="filters || summary" :class="isExpand ? 'expand': 'shrink' " class="quick-filter">
+    <div
+      v-if="(filters && filters.length > 0) || (summary && summary.length > 0)"
+      :class="isExpand ? 'expand': 'shrink' "
+      class="quick-filter"
+    >
       <div v-show="isExpand" class="quick-filter-wrap">
         <div v-if="filters" class="quick-filter-zone">
           <div v-for="category in iFilters" :key="category.label" class="item-zone">
