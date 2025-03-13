@@ -6,6 +6,7 @@
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :table-config="tableConfig"
+      :resource="$tc('Gateway')"
     />
     <GatewayDialog
       :cell="cell"
