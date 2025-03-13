@@ -24,6 +24,7 @@ export default {
       config: {
         object: null,
         activeMenu: 'Detail',
+        url: '/api/v1/accounts/virtual-accounts/',
         submenu: [
           {
             title: this.$t('Basic'),
@@ -35,7 +36,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
