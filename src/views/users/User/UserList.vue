@@ -133,9 +133,17 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail',
               routeQuery: {
                 tab: 'Basic'
+              },
+              getRoute: ({ row }) => {
+                this.$route.params.id = row.id
+                return {
+                  name: 'UserDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
               }
             }
           },

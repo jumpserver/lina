@@ -7,7 +7,7 @@
   />
 </template>
 
-<script type="text/jsx">
+<script>
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import { AccountInfoFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
