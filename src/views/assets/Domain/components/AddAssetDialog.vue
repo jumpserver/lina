@@ -52,10 +52,7 @@ export default {
         hasSaveContinue: false,
         needGetObjectDetail: false,
         createSuccessMsg: this.$t('AddSuccessMsg'),
-        updateSuccessNextRoute: {
-          name: 'ZoneDetail',
-          params: { id: this.$route.params.id }
-        },
+
         fields: ['assets'],
         fieldsMeta: {
           assets: {
@@ -95,9 +92,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.dialog ::v-deep form {
-}
-
 .dialog ::v-deep .el-dialog__footer {
   padding: 0;
 }

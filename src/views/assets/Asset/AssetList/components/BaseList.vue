@@ -125,7 +125,7 @@ export default {
       type: 'primary',
       icon: '',
       split: true,
-      has: this.headerActions.hasCrate,
+      has: this.headerActions.hasCreate,
       callback: () => {
         this.showPlatform = false
         setTimeout(() => {
@@ -182,14 +182,8 @@ export default {
       if (this.addExtraMoreActions) {
         actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
       }
-
-      if (!actions.hasCrate) {
-        return actions
-      }
-
       const create = this.createAction
       create.dropdown = this.recentPlatforms
-
       const extraActions = actions.extraActions || []
       actions.extraActions = [create, ...extraActions]
       // actions.extraActions[0].dropdown = platforms
