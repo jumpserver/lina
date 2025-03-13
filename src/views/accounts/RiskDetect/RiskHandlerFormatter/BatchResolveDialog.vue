@@ -3,7 +3,7 @@
     <div>
       <el-form class="el-form">
         <el-form-item class="risk-select" prop="selected">
-          <el-select v-model="riskSelected" :placeholder="$t('Select risk')">
+          <el-select v-model="riskSelected" :placeholder="$t('SelectRisk')">
             <el-option
               v-for="item in riskTypes"
               :key="item.value"
