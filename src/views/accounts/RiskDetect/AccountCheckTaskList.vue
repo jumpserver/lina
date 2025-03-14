@@ -97,7 +97,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canUpdate: () => true,
               updateRoute: 'AccountCheckCreateUpdate',
               extraActions: [
                 {
@@ -130,7 +129,7 @@ export default {
         hasExport: false,
         hasImport: false,
         createRoute: 'AccountCheckCreateUpdate',
-        canCreate: vm.$hasPerm('accounts.add_checkaccountautomation')
+        canCreate: vm.$hasPerm('accounts.add_checkaccountautomation') && !this.$store.getters.currentOrgIsRoot
       }
     }
   }
