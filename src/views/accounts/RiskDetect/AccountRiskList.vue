@@ -162,7 +162,7 @@ export default {
 
       if (!payload) return
 
-      const queryParams = `?risk=${payload}`
+      const queryParams = `&risk=${payload}`
 
       if (queryParams) {
         this.tableConfig.url += queryParams
