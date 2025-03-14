@@ -221,7 +221,7 @@ export default {
       const actions = _.cloneDeep(riskActions)
       const filteredActions = []
       for (const action of actions) {
-        action.disabled = await this.checkDisabled(action)
+        action.disabled = await this.checkDisabled(action) || (action.name !== 'review' && this.$store.getters.currentOrgIsRoot)
         const has = await this.checkHas(action)
         if (has) {
           filteredActions.push(action)
