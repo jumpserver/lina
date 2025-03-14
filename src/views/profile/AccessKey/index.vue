@@ -1,7 +1,8 @@
 <template>
   <div>
     <GenericListPage
-      ref="GenericListTable"
+      ref="GenericListPage"
+      :create-drawer="createDrawer"
       :header-actions="headerActions"
       :help-tip="helpMessage"
       :table-config="tableConfig"
@@ -23,6 +24,7 @@ export default {
   data() {
     const ajaxUrl = '/api/v1/authentication/access-keys/'
     return {
+      createDrawer: () => import('@/views/profile/AccessKey/CreateUpdate'),
       mfaUrl: '',
       mfaDialogVisible: false,
       helpMessage: this.$t('ApiKeyList'),
@@ -117,11 +119,8 @@ export default {
       this.reloadTable()
     },
     reloadTable() {
-      this.$refs.GenericListTable.reloadTable()
+      this.$refs.GenericListPage.reloadTable()
     }
   }
 }
 </script>
-
-<style scoped>
-</style>

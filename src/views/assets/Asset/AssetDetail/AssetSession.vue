@@ -1,6 +1,6 @@
 <template>
   <TwoCol>
-    <BaseList :columns-show="columnsShow" :url="url" />
+    <BaseList :columns-show="columnsShow" :columns-meta="columnsMeta" :url="url" />
   </TwoCol>
 </template>
 
@@ -29,9 +29,13 @@ export default {
           'id', 'user', 'asset', 'account',
           'date_start', 'duration'
         ]
+      },
+      columnsMeta: {
+        id: {
+          width: '80px'
+        }
       }
     }
   }
-
 }
 </script>
