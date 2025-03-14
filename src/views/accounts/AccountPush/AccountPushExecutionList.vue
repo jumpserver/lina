@@ -29,7 +29,7 @@ export default {
       reportUrl: '',
       detailDrawer: () => import('@/views/accounts/AccountPush/ExecutionDetail/index.vue'),
       tableConfig: {
-        url: '/api/v1/accounts/push-account-executions',
+        url: '/api/v1/accounts/push-account-executions/',
         columns: [
           'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'

@@ -23,7 +23,7 @@ export default {
       visible: false,
       reportUrl: '',
       tableConfig: {
-        url: '/api/v1/accounts/change-secret-executions',
+        url: '/api/v1/accounts/change-secret-executions/',
         columns: [
           'automation', 'change_secret_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
