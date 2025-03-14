@@ -20,7 +20,7 @@
                 >
                   {{ option.label }}
                   <span v-if="option.hasCount">
-                    (<span v-async="getCount(option)">-</span>)
+                    <span>({{ option.count }})</span>
                   </span>
                   <!--                  <i class="el-icon-circle-check" />-->
                 </span>
@@ -32,17 +32,11 @@
           <span v-for="item of iSummary" :key="item.title" class="summary-block">
             <SummaryCard
               :class="item.active ? 'active' : ''"
-              :count="getCount(item)"
+              :count="item.count"
               :title="item.title"
               @click="handleFilterClick(item)"
             />
           </span>
-        </div>
-      </div>
-      <div class="expand-bar-wrap">
-        <div class="expand-bar" @click="toggle">
-          <i :class="isExpand ? 'expand': 'shrink' " class="fa fa-angle-double-up" />
-          <span v-show="!isExpand"> 展开过滤器 </span>
         </div>
       </div>
     </div>
@@ -76,10 +70,11 @@ export default {
   },
   data() {
     return {
-      iFilters: this.cleanFilters(),
-      iSummary: this.cleanSummary(),
+      iFilters: [],
+      iSummary: [],
       filtered: {},
-      activeFilters: []
+      activeFilters: [],
+      reCount: false
     }
   },
   computed: {
@@ -92,7 +87,32 @@ export default {
       }
     }
   },
+  watch: {
+    tableUrl() {
+      this.generateCount()
+    }
+  },
+  mounted() {
+    this.iFilters = this.cleanFilters()
+    this.iSummary = this.cleanSummary()
+    this.generateCount()
+  },
   methods: {
+    async generateCount() {
+      this.iFilters.forEach(category => {
+        category.options.forEach(option => {
+          if (option.hasCount) {
+            option.count = null
+            this.getCount(option)
+          }
+        })
+      })
+
+      this.iSummary.forEach(item => {
+        item.count = null
+        this.getCount(item)
+      })
+    },
     async getCount(item) {
       if (item.count || item.count === 0) {
         return item.count
@@ -117,6 +137,7 @@ export default {
           category: 'summary',
           label: item.title,
           ...item,
+          count: null,
           filter: item.filter || {},
           active: false
         }
@@ -170,138 +191,138 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
- .quick-filter {
-   background: white;
-   padding: 10px 10px 10px 20px;
-   margin-bottom: 10px;
-   display: flex;
-   place-content: stretch flex-end;
-   justify-content: center;
-   align-content: stretch;
-   box-shadow: 0 1px 1px 0 rgba(54, 58, 80, .32);
+.quick-filter {
+  background: white;
+  padding: 10px 10px 10px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  place-content: stretch flex-end;
+  justify-content: center;
+  align-content: stretch;
+  box-shadow: 0 1px 1px 0 rgba(54, 58, 80, .32);
 
-   &.shrink {
-     background: inherit;
-     padding: 0;
-     margin-bottom: 0;
-     box-shadow: none;
-   }
+  &.shrink {
+    background: inherit;
+    padding: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+  }
 
-   .quick-filter-wrap {
-     display: inline-block;
-     width: calc(100% - 70px);
+  .quick-filter-wrap {
+    display: inline-block;
+    width: calc(100% - 70px);
 
-     .summary-zone {
-       padding-top: 10px;
-       display: flex;
-       justify-content: space-between;
-     }
+    .summary-zone {
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
 
-     .summary-block {
-       .active {
-         ::v-deep .no-margins .num {
-           color: var(--color-primary);
+    .summary-block {
+      .active {
+        ::v-deep .no-margins .num {
+          color: var(--color-primary);
 
-           &::after {
-             content: "\e720";
-             font-family: element-icons !important;
-             font-size: 13px;
-             line-height: 1;
-           }
-         }
-       }
-     }
+          &::after {
+            content: "\e720";
+            font-family: element-icons !important;
+            font-size: 13px;
+            line-height: 1;
+          }
+        }
+      }
+    }
 
-     .quick-filter-zone {
-       display: flex;
-       justify-content: flex-start;
-       flex-wrap: wrap; /* 允许 item-zone 换行 */
-       gap: 10px;
+    .quick-filter-zone {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap; /* 允许 item-zone 换行 */
+      gap: 10px;
 
-       h5 {
-         font-weight: 600;
-         text-transform: uppercase;
-         font-size: 12px;
-         margin-bottom: .5rem;
-         line-height: 1.2;
-         display: inline-block;
-       }
+      h5 {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-bottom: .5rem;
+        line-height: 1.2;
+        display: inline-block;
+      }
 
-       .item-zone {
-         margin-right: 30px;
-         margin-bottom: 5px;
-       }
+      .item-zone {
+        margin-right: 30px;
+        margin-bottom: 5px;
+      }
 
-       .item {
-         display: inline-block;
-         margin-right: 8px;
-         color: #303133;
-         font-size: 12px;
-         cursor: pointer;
+      .item {
+        display: inline-block;
+        margin-right: 8px;
+        color: #303133;
+        font-size: 12px;
+        cursor: pointer;
 
-         &::after {
-           content: "";
-           margin-left: 4px;
-           margin-bottom: 2px;
-           vertical-align: middle;
-           width: 1px; /* 分割线宽度 */
-           height: 8px; /* 分割线高度 */
-           background-color: var(--color-icon-primary); /* 分割线颜色 */
-           display: inline-block;
-         }
+        &::after {
+          content: "";
+          margin-left: 4px;
+          margin-bottom: 2px;
+          vertical-align: middle;
+          width: 1px; /* 分割线宽度 */
+          height: 8px; /* 分割线高度 */
+          background-color: var(--color-icon-primary); /* 分割线颜色 */
+          display: inline-block;
+        }
 
-         &:last-child::after {
-           display: none;
-         }
+        &:last-child::after {
+          display: none;
+        }
 
-         i {
-           visibility: hidden;
-           margin-left: -3px;
-         }
+        i {
+          visibility: hidden;
+          margin-left: -3px;
+        }
 
-         &.active {
-           color: var(--color-primary);
+        &.active {
+          color: var(--color-primary);
 
-           i {
-             visibility: visible;
-           }
-         }
+          i {
+            visibility: visible;
+          }
+        }
 
-         &:hover {
-           color: var(--color-primary);
-         }
-       }
+        &:hover {
+          color: var(--color-primary);
+        }
+      }
 
-       ul {
-         list-style: none outside none;
-         margin-block-start: 0;
-         padding-left: 0;
-       }
-     }
-   }
- }
+      ul {
+        list-style: none outside none;
+        margin-block-start: 0;
+        padding-left: 0;
+      }
+    }
+  }
+}
 
- .filter-options {
-   display: block;
- }
+.filter-options {
+  display: block;
+}
 
- .expand-bar-wrap {
-   margin: auto 0;
-   min-width: 60px;
+.expand-bar-wrap {
+  margin: auto 0;
+  min-width: 60px;
 
-   .expand-bar {
-     float: right;
-     display: block;
-     cursor: pointer;
+  .expand-bar {
+    float: right;
+    display: block;
+    cursor: pointer;
 
-     i {
-       padding: 5px;
+    i {
+      padding: 5px;
 
-       &.shrink {
-         transform: rotate(180deg);
-       }
-     }
-   }
- }
+      &.shrink {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
 
 </style>

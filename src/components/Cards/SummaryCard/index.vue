@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="summary-header">
-      <el-tooltip :content="title" placement="top" :open-delay="500">
+      <el-tooltip :content="title" :open-delay="500" placement="top">
         <span class="title">{{ title }}</span>
       </el-tooltip>
     </div>
     <slot>
       <h3 class="no-margins ">
         <span
-          v-async="iCount"
-          class="num"
           :class="{ 'can-direct': body.canDirect ? true : false }"
+          class="num"
           @click="handleClick"
         >
-          -
+          <span v-if="iCount === null"> - </span>
+          <span v-else>{{ iCount }}</span>
         </span>
       </h3>
     </slot>
@@ -35,7 +35,7 @@ export default {
     },
     count: {
       type: [Number, String, Promise],
-      default: 0
+      default: null
     },
     route: {
       type: [String, Object],
