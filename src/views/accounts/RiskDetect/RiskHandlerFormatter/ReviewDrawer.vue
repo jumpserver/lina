@@ -27,7 +27,7 @@
           </IBox>
         </div>
       </div>
-      <div class="drawer-footer">
+      <div v-if="!isRootOrg" class="drawer-footer">
         <div v-if="isBatch">
           <el-input v-model="comment" :placeholder="$tc('PleaseEnterReason')" type="textarea" />
           <span class="buttons">
@@ -116,6 +116,9 @@ export default {
       }
 
       return false
+    },
+    isRootOrg() {
+      return this.$store.getters.currentOrgIsRoot
     }
   },
   methods: {
