@@ -52,6 +52,7 @@ export default {
                 params: { id: row.id }
               }),
               getTitle: ({ row }) => row.id.slice(0, 8),
+              getDrawerTitle: ({ row }) => row.id,
               drawer: true,
               can: this.$hasPerm('accounts.view_checkaccountexecution')
             }
@@ -65,7 +66,8 @@ export default {
               getRoute: ({ row }) => ({
                 name: 'AccountCheckDetail',
                 params: { id: row.automation.id }
-              })
+              }),
+              getDrawerTitle: ({ row }) => row.automation.name
             },
             id: ({ row }) => row.automation
           },

@@ -24,15 +24,16 @@ export const gatherAccountTableConfig = (vm, url) => {
       asset: {
         formatter: DetailFormatter,
         formatterArgs: {
+          drawer: true,
           can: vm.$hasPerm('assets.view_asset'),
           getTitle: ({ row }) => row.asset.name,
+          getDrawerTitle: ({ row }) => row.asset.name,
           getRoute({ row }) {
             return {
               name: 'AssetDetail',
               params: { id: row.asset.id }
             }
-          },
-          drawer: true
+          }
         }
       },
       username: {

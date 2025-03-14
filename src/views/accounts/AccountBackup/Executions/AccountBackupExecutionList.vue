@@ -51,6 +51,7 @@ export default {
                 name: 'AccountBackupExecutionDetail',
                 params: { id: row.id }
               }),
+              getDrawerTitle: ({ row }) => row.id,
               getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_backupaccountexecution')
@@ -62,6 +63,7 @@ export default {
             formatterArgs: {
               drawer: true,
               getTitle: ({ row }) => row.automation.name,
+              getDrawerTitle: ({ row }) => row.automation.name,
               getRoute: ({ row }) => ({
                 name: 'AccountBackupDetail',
                 params: { id: row.automation.id }

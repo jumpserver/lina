@@ -118,6 +118,7 @@ export default {
             formatterArgs: {
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
+              getDrawerTitle: ({ row }) => row.asset.name,
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
