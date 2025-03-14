@@ -31,6 +31,11 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    reloadTable() {
+      this.$refs.ListTable.reloadTable()
+    }
   }
 }
 </script>
