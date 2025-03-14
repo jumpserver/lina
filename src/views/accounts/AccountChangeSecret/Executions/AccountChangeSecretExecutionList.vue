@@ -44,6 +44,7 @@ export default {
                 name: 'AccountChangeSecretExecutionDetail',
                 params: { id: row.id }
               }),
+              getDrawerTitle: ({ row }) => row.id,
               getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_changesecretexecution')

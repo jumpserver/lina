@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import AssetTreeTable from '@/components/Apps/AssetTreeTable'
+import { AssetTreeTable } from '@/components'
 import DeleteDialog from '@/views/accounts/AccountDiscover/DeleteDialog.vue'
 import { gatherAccountHeaderActions, gatherAccountTableConfig } from '@/views/accounts/const'
 import AccountDiscoverDialog from '@/views/assets/Asset/AssetList/components/AccountDiscoverDialog.vue'

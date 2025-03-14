@@ -24,6 +24,7 @@ export default {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
+              getDrawerTitle: ({ row }) => row.asset.name,
               getRoute: ({ row }) => ({
                 name: 'AssetDetail',
                 params: { id: row.asset.id },

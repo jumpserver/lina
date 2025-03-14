@@ -39,6 +39,7 @@ export default {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
+              getDrawerTitle: ({ row }) => row.asset.name,
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
@@ -54,6 +55,7 @@ export default {
               drawer: true,
               can: this.$hasPerm('accounts.view_account'),
               getTitle: ({ row }) => row.account.username,
+              getDrawerTitle: ({ row }) => row.account.username,
               getRoute({ row }) {
                 return {
                   name: 'AssetAccountDetail',
