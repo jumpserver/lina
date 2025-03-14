@@ -17,7 +17,7 @@ export const riskActions = [
   // },
   {
     name: 'delete_remote',
-    label: i18n.t('DeleteAccount'),
+    label: i18n.t('SyncDeleteSelected'),
     has: ['long_time_no_login', 'new_found']
   },
   {
