@@ -233,6 +233,7 @@ export function getDefaultConfig(vm) {
               name: 'AddAccount',
               title: vm.$t('AddAccount'),
               divided: true,
+              can: ({ row }) => !vm.$store.getters.currentOrgIsRoot,
               callback: ({ row }) => {
                 vm.asset.id = row.id
                 vm.showAddDialog = true
@@ -241,6 +242,7 @@ export function getDefaultConfig(vm) {
             {
               name: 'DiscoverAccounts',
               title: vm.$t('AccountDiscover'),
+              can: ({ row }) => !vm.$store.getters.currentOrgIsRoot,
               callback: ({ row }) => {
                 vm.discoveryDialog.asset = row.id
                 setTimeout(() => {
