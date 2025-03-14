@@ -235,7 +235,7 @@ export function getDefaultConfig(vm) {
               divided: true,
               can: ({ row }) => !vm.$store.getters.currentOrgIsRoot,
               callback: ({ row }) => {
-                vm.asset.id = row.id
+                vm.asset = row
                 vm.showAddDialog = true
               }
             },
