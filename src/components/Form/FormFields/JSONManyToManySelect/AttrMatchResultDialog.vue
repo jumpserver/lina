@@ -13,7 +13,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { DrawerListTable as ListTable } from '@/components'
+import { ListTable } from '@/components'
 
 export default {
   name: 'AttrMatchResultDialog',
