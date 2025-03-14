@@ -121,7 +121,7 @@ export default {
     ]
     const createAction = {
       name: 'create',
-      title: 'Create',
+      title: this.$t('Create'),
       type: 'primary',
       icon: '',
       split: true,

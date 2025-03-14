@@ -23,7 +23,7 @@ export default {
       visible: false,
       reportUrl: '',
       tableConfig: {
-        url: '/api/v1/accounts/change-secret-executions',
+        url: '/api/v1/accounts/change-secret-executions/',
         columns: [
           'automation', 'change_secret_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
@@ -44,6 +44,7 @@ export default {
                 name: 'AccountChangeSecretExecutionDetail',
                 params: { id: row.id }
               }),
+              getDrawerTitle: ({ row }) => row.id,
               getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_changesecretexecution')

@@ -29,7 +29,7 @@ export default {
       reportUrl: '',
       detailDrawer: () => import('@/views/accounts/AccountPush/ExecutionDetail/index.vue'),
       tableConfig: {
-        url: '/api/v1/accounts/push-account-executions',
+        url: '/api/v1/accounts/push-account-executions/',
         columns: [
           'automation', 'push_user_name', 'asset_amount', 'node_amount', 'status',
           'trigger', 'date_start', 'date_finished', 'actions'
@@ -50,6 +50,7 @@ export default {
                 name: 'AccountPushExecutionDetail',
                 params: { id: row.id }
               }),
+              getDrawerTitle: ({ row }) => row.id,
               getTitle: ({ row }) => row.id.slice(0, 8),
               drawer: true,
               can: this.$hasPerm('accounts.view_pushaccountexecution')
@@ -60,13 +61,13 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
-              getTitle: ({ row }) => row.automation.name,
+              getTitle: ({ row }) => row.automation?.name,
               getRoute: ({ row }) => ({
                 name: 'AccountPushDetail',
                 params: { id: row.automation.id }
               }),
               getDrawerTitle({ row }) {
-                return row.automation.name
+                return row.automation?.name
               }
             },
             id: ({ row }) => row.automation

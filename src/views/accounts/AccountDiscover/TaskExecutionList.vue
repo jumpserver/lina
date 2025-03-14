@@ -72,6 +72,7 @@ export default {
                 name: 'AccountDiscoverTaskDetail',
                 params: { id: row.automation.id }
               }),
+              getDrawerTitle: ({ row }) => row.automation.name,
               drawer: true
             },
             id: ({ row }) => row.automation,

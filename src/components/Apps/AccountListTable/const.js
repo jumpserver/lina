@@ -151,6 +151,7 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('CopyToAsset'),
     type: 'primary',
     divided: true,
+    can: () => vm.$hasPerm('accounts.create_account') && !vm.$store.getters.currentOrgIsRoot,
     has: () => {
       return !vm.asset
     },
@@ -166,6 +167,7 @@ export const accountOtherActions = (vm) => [
     name: 'MoveToOther',
     title: vm.$t('MoveToAsset'),
     type: 'primary',
+    can: () => vm.$hasPerm('accounts.create_account') && !vm.$store.getters.currentOrgIsRoot,
     has: () => {
       return !vm.asset
     },
@@ -246,12 +248,6 @@ export const accountQuickFilters = (vm) => [
         label: vm.$t('LongTimePassword'),
         filter: {
           long_time_no_change_secret: 'true'
-        }
-      },
-      {
-        label: vm.$t('LongTimeNoVerify'),
-        filter: {
-          long_time_no_verify: 'true'
         }
       }
     ]
