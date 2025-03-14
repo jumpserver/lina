@@ -338,6 +338,7 @@ export default {
     },
     handleTagClick(v, k) {
       let unableChange = false
+
       for (const field of this.options) {
         if (field.value === v.key) {
           if (field.type === 'choice') {
@@ -346,15 +347,20 @@ export default {
           if (field.type === 'boolean') {
             unableChange = true
           }
+          if (field.type === 'labeled_choice') {
+            unableChange = true
+          }
         }
       }
-      if (unableChange) {
-        return
-      }
+
+      if (unableChange) return
+
       if (this.filterValue.length !== 0) {
         this.handleConfirm()
       }
+
       this.$delete(this.filterTags, k)
+
       this.filterKey = v.key
       this.filterValue = v.value
       this.$refs.SearchInput.focus()
