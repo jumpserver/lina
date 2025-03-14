@@ -27,22 +27,6 @@ import BatchResolveDialog from '@/views/accounts/RiskDetect/RiskHandlerFormatter
 import RiskScanDialog from './RiskScanDialog.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
-const riskMapping = {
-  'long_time_no_login': '?long_time_no_login=1',
-  'new_found': '?risk=new_found',
-  'group_changed': '?risk=group_changed',
-  'sudo_changed': '?risk=sudo_changed',
-  'authorized_keys_changed': '?risk=authorized_keys_changed',
-  'account_deleted': '?risk=account_deleted',
-  'password_expired': '?risk=password_expired',
-  'long_time_password': '?risk=long_time_password',
-  'weak_password': '?risk=weak_password',
-  'leaked_password': '?risk=leaked_password',
-  'repeated_password': '?risk=repeated_password',
-  'password_error': '?risk=password_error',
-  'no_admin_account': '?risk=no_admin_account'
-}
-
 export default {
   components: {
     RiskScanDialog,
@@ -178,10 +162,10 @@ export default {
 
       if (!payload) return
 
-      const queryParam = riskMapping[payload]
+      const queryParams = `?risk=${payload}`
 
-      if (queryParam) {
-        this.tableConfig.url += queryParam
+      if (queryParams) {
+        this.tableConfig.url += queryParams
       }
     }
   }
