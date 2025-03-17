@@ -59,6 +59,11 @@ export default {
           default: ['name', 'is_active', 'date_last_used', 'date_created', 'actions']
         },
         columnsMeta: {
+          name: {
+            formatter: (row) => {
+              return <el-link>{row.name}</el-link>
+            }
+          },
           actions: {
             formatterArgs: {
               hasUpdate: false,
