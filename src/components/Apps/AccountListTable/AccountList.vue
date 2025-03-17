@@ -205,7 +205,6 @@ export default {
             formatter: AccountConnectFormatter,
             formatterArgs: {
               buttonIcon: 'fa fa-desktop',
-              titleText: '可选协议',
               url: '/api/v1/assets/assets/{id}',
               can: () => this.currentUserIsSuperAdmin,
               connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
