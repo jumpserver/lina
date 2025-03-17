@@ -75,6 +75,7 @@ export default {
               drawer: true,
               can: vm.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.host.name,
+              getDrawerTitle: ({ row }) => row.host.name,
               getRoute: ({ row }) => ({
                 name: 'AppletHostDetail',
                 params: { id: row.host.id }
