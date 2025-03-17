@@ -127,7 +127,8 @@ export default {
         const url = this.formatterArgs.url.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        if (res) this.protocols = res.protocols
+        // 暂将 SFTP 过滤
+        if (res) this.protocols = res.protocols.filter(protocol => protocol.name !== 'sftp')
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
