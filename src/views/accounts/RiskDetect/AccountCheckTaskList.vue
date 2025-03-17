@@ -44,7 +44,7 @@ export default {
             formatterArgs: {
               async: false,
               drawer: false,
-              prevantClick: true
+              preventClick: true
             }
           },
           nodes: {
@@ -52,7 +52,7 @@ export default {
             formatterArgs: {
               async: false,
               drawer: false,
-              prevantClick: true
+              preventClick: true
             }
           },
           secret_strategy: {

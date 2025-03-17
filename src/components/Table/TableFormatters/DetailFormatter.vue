@@ -56,7 +56,7 @@ export default {
         }
       }
     },
-    prevantClick: {
+    preventClick: {
       type: Boolean,
       default: false
     }
@@ -187,7 +187,7 @@ export default {
         return this.showDrawer()
       }
 
-      if (this.prevantClick) {
+      if (this.preventClick) {
         return
       }
 
