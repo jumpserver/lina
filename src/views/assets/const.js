@@ -42,8 +42,9 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
         'username_selector': setting.username_selector
       })
     }
+    // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
+    // updateForm({ protocols: [] })
     vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
-    updateForm({ protocols: [] })
   }), 100)
 }
 

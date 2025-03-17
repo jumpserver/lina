@@ -16,7 +16,7 @@ router.beforeEach(async(to, from, next) => {
   try {
     await store.dispatch('common/cleanDrawerActionMeta')
     await startup({ to, from, next })
-    if (to.name !== from.name) {
+    if (to.name && from.name && to.name !== from.name) {
       await beforeRouteChange(to, from, next)
     }
     next()

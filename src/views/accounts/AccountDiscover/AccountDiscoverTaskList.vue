@@ -21,7 +21,7 @@ export default {
   data() {
     const vm = this
     return {
-      createDrawer: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate.vue'),
+      createDrawer: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/AccountDiscover/TaskDetail/index.vue'),
       showViewSecretDialog: false,
       showTableUpdateDrawer: false,

@@ -69,6 +69,8 @@ export const is_periodic = {
   }
 }
 
+export const taskStatusFormatterMeta = {}
+
 export const periodicMeta = {
   is_periodic,
   interval,

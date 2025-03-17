@@ -28,7 +28,7 @@ export default [
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
+        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
         name: 'AccountDiscoverTaskCreate',
         hidden: true,
         meta: {
@@ -50,7 +50,7 @@ export default [
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/AccountDiscover/TaskCreateUpdate'),
+        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverTaskCreateUpdate.vue'),
         name: 'AccountDiscoverTaskUpdate',
         hidden: true,
         meta: {
@@ -62,7 +62,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import('@/views/accounts/AccountDiscover/TaskExecutionList.vue'),
+        component: () => import('@/views/accounts/AccountDiscover/AccountDiscoverExecutionList.vue'),
         name: 'AccountDiscoverTaskExecutionList',
         hidden: true,
         meta: {
