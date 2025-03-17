@@ -245,22 +245,17 @@ export default {
             this.initial.runAfterSave = true
             this.instantTask = true
             this.createSuccessNextRoute = { name: 'Adhoc' }
-            this.ready = true
           })
-        } else {
-          this.ready = true
         }
         break
       case 'playbook':
         this.initial.type = 'playbook'
         if (this.$route.query.id) {
           this.initial.playbook = this.$route.query.id
-          this.ready = true
-        } else {
-          this.ready = true
         }
         break
     }
+    this.ready = true
   },
   methods: {
     submitForm(form, btn) {
