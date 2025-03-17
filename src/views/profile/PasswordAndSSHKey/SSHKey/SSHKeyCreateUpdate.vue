@@ -17,7 +17,7 @@ export default {
   data() {
     const vm = this
     return {
-      isCreated: this.$route?.meta.action === 'create',
+      meta: { action: 'create' },
       loading: true,
       url: '/api/v1/authentication/ssh-key/',
       fields: [
@@ -38,12 +38,12 @@ export default {
             autosize: { minRows: 3 }
           },
           hidden: (formValue) => {
-            return formValue.generate_key_type === 'auto' || !this.isCreated
+            return formValue.generate_key_type === 'auto' || !this.isCreateAction
           }
         },
         current_public_key: {
           hidden: () => {
-            return this.isCreated
+            return this.isCreateAction
           },
           disabled: true,
           label: this.$t('OldPublicKey')
@@ -51,12 +51,12 @@ export default {
         generate_key_type: {
           helpTextAsTip: false,
           hidden: () => {
-            return !this.isCreated
+            return !this.isCreateAction
           }
         }
       },
       onSubmit(validValues) {
-        const isCreated = this.$route?.meta.action === 'create'
+        const isCreated = vm.isCreateAction || vm.meta?.action === 'clone'
         if (validValues['generate_key_type'] === 'auto' && isCreated) {
           const name = validValues['name']
           this.$axios.get(`/core/auth/profile/pubkey/generate/?name=${name}`)
@@ -75,7 +75,13 @@ export default {
       }
     }
   },
-  mounted() {
+  computed: {
+    isCreateAction() {
+      return this.meta?.action === 'create'
+    }
+  },
+  async mounted() {
+    this.meta = await this.$store.dispatch('common/getDrawerActionMeta')
     setTimeout(() => {
       this.loading = false
     })
