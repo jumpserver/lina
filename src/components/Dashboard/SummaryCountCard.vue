@@ -7,9 +7,9 @@
       <SummaryCard
         v-for="item of items"
         :key="item.title"
-        :body="item.body"
         :title="item.title"
         class="summary-card"
+        v-bind="item.body"
       />
     </div>
   </div>

@@ -8,12 +8,12 @@
     <slot>
       <h3 class="no-margins ">
         <span
-          :class="{ 'can-direct': body.canDirect ? true : false }"
+          :class="{ 'can-direct': canDirect }"
           class="num"
           @click="handleClick"
         >
-          <span v-if="iCount === null"> - </span>
-          <span v-else>{{ iCount }}</span>
+          <span v-if="count === null"> - </span>
+          <span v-else>{{ count }}</span>
         </span>
       </h3>
     </slot>
@@ -21,17 +21,12 @@
 </template>
 
 <script>
-
 export default {
   name: 'SummaryCard',
   props: {
     title: {
       type: String,
       default: ''
-    },
-    body: {
-      type: Object,
-      default: () => ({})
     },
     count: {
       type: [Number, String, Promise],
@@ -40,6 +35,10 @@ export default {
     route: {
       type: [String, Object],
       default: ''
+    },
+    canDirect: {
+      type: Boolean,
+      default: false
     },
     callback: {
       type: Function,
@@ -54,25 +53,13 @@ export default {
   data() {
     return {}
   },
-  computed: {
-    iCount() {
-      const count = this.body.count || this.count
-      return count
-    },
-    iRoute() {
-      return this.body.route || this.route
-    },
-    iDisabled() {
-      return this.body.disabled === undefined ? this.disabled : this.body.disabled
-    }
-  },
   methods: {
     handleClick() {
-      if (this.iDisabled) {
+      if (this.disabled) {
         return
       }
-      if (this.iRoute) {
-        this.$router.push(this.iRoute)
+      if (this.route) {
+        this.$router.push(this.route)
         return
       }
       this.callback.bind(this)()
