@@ -2,6 +2,8 @@
   <GenericListPage
     ref="ListPage"
     v-loading="loading"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
     :header-actions="iTicketAction"
     :table-config="ticketTableConfig"
   />
@@ -36,6 +38,8 @@ export default {
     const vm = this
     return {
       loading: true,
+      createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
+      detailDrawer: null,
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
@@ -54,18 +58,20 @@ export default {
             formatter: DetailFormatter,
             sortable: 'custom',
             formatterArgs: {
-              getRoute: function({ row }) {
+              drawer: true,
+              getRoute: ({ row }) => {
                 const type = row.type.value
-                if (type === 'apply_asset') {
-                  return 'AssetsTicketDetail'
-                } else if (type === 'login_asset_confirm') {
-                  return 'LoginAssetTicketDetail'
-                } else if (type === 'login_confirm') {
-                  return 'LoginTicketDetail'
-                } else if (type === 'command_confirm') {
-                  return 'CommandConfirmDetail'
-                } else {
-                  return 'TicketDetail'
+                this.$route.params.id = row.id
+
+                const routeMap = {
+                  apply_asset: 'AssetsTicketDetail',
+                  login_asset_confirm: 'LoginAssetTicketDetail',
+                  login_confirm: 'LoginTicketDetail'
+                }
+
+                return {
+                  name: routeMap[type] || 'TicketDetail',
+                  params: { id: row.id }
                 }
               }
             }
@@ -193,6 +199,7 @@ export default {
             }
           ]
         },
+        moreCreates: {},
         createTitle: this.$t('RequestTickets')
       }
     }

@@ -1,5 +1,11 @@
 <template>
-  <GenericListPage ref="GenericListPage" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListPage
+    ref="GenericListPage"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+  />
 </template>
 
 <script>
@@ -14,6 +20,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
+      detailDrawer: () => import('@/views/tickets/TicketFlow/Detail'),
       tableConfig: {
         url: '/api/v1/tickets/flows/',
         columnsExclude: ['rules'],
@@ -34,8 +42,20 @@ export default {
           type: {
             formatter: DetailFormatter,
             formatterArgs: {
+              drawer: true,
               permissions: 'tickets.view_ticketflow',
-              route: 'FlowDetail',
+              getRoute: ({ row }) => {
+                this.$route.params.id = row.id
+                return {
+                  name: 'FlowDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
+              },
+              getDrawerTitle: ({ row }) => {
+                return row.type.label
+              },
               getTitle: function({ row }) {
                 return row.type.label
               }
@@ -46,14 +66,8 @@ export default {
             formatterArgs: {
               hasClone: false,
               hasDelete: false,
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'TicketFlowUpdate', query: { type: row.type, clone_from: row.id }})
-              },
               canUpdate: () => {
                 return vm.$hasPerm('tickets.change_ticketflow')
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'TicketFlowUpdate', params: { id: row.id }})
               }
             }
           }
@@ -67,7 +81,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>
