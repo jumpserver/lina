@@ -1,14 +1,25 @@
 <template>
-  <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
+  <div>
+    <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
+
+    <Drawer
+      :title="this.$t('Session')"
+      :visible.sync="drawerVisible"
+      :has-footer="false"
+      :component="SessionDetail"
+    />
+  </div>
 </template>
 
 <script>
 import { STATUS_MAP } from '../../const'
+import Drawer from '@/components/Drawer/index.vue'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 
 export default {
   name: 'CommandConfirmTicketDetail',
   components: {
+    Drawer,
     GenericTicketDetail
   },
   props: {
@@ -19,6 +30,8 @@ export default {
   },
   data() {
     return {
+      drawerVisible: false,
+      SessionDetail: () => import('@/views/sessions/SessionDetail'),
       statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       imageUrl: require('@/assets/img/avatar.png'),
       form: {
@@ -51,11 +64,12 @@ export default {
           key: this.$t('ApplyFromSession'),
           value: object.apply_from_session,
           formatter: function(item, value) {
-            const to = { name: 'SessionDetail', params: { id: value?.id }, query: { oid: object.org_id }}
             if (!this.$hasPerm('terminal.view_session')) {
               return <span>{this.$t('Session')}</span>
             }
-            return <router-link to={to}>{this.$t('Session')}</router-link>
+
+            this.handleSideEffect(value)
+            return <el-link>{this.$t('Session')}</el-link>
           }
         },
         {
@@ -78,9 +92,16 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    handleSideEffect(value) {
+      this.$route.params.id = value.id
+      this.$route.query.oid = this.object.org_id
+
+      this.$nextTick(() => {
+        this.drawerVisible = true
+      })
+    }
   }
 }
 </script>
-
-<style scoped>
-</style>
