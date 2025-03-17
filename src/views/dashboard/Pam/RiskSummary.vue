@@ -24,8 +24,8 @@ export default {
       counter: {
         total_long_time_no_login_accounts: '.',
         total_new_found_accounts: '.',
-        total_group_changed_accounts: '.',
-        total_sudo_changed_accounts: '.',
+        total_groups_changed_accounts: '.',
+        total_sudoers_changed_accounts: '.',
         total_authorized_keys_changed_accounts: '.',
         total_password_expired_accounts: '.',
         total_long_time_password_accounts: '.',
@@ -50,14 +50,14 @@ export default {
           value: this.counter.total_new_found_accounts
         },
         {
-          description: 'group_changed',
-          name: this.$t('GroupChanged'),
-          value: this.counter.total_group_changed_accounts
+          description: 'groups_changed',
+          name: this.$t('GroupsChanged'),
+          value: this.counter.total_groups_changed_accounts
         },
         {
-          description: 'sudo_changed',
-          name: this.$t('SudoChanged'),
-          value: this.counter.total_sudo_changed_accounts
+          description: 'sudoers_changed',
+          name: this.$t('SudoersChanged'),
+          value: this.counter.total_sudoers_changed_accounts
         },
         {
           description: 'authorized_keys_changed',
@@ -204,8 +204,8 @@ export default {
         params: {
           total_long_time_no_login_accounts: 1,
           total_new_found_accounts: 1,
-          total_group_changed_accounts: 1,
-          total_sudo_changed_accounts: 1,
+          total_groups_changed_accounts: 1,
+          total_sudoers_changed_accounts: 1,
           total_authorized_keys_changed_accounts: 1,
           total_password_expired_accounts: 1,
           total_long_time_password_accounts: 1,
