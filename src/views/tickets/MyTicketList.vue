@@ -18,10 +18,7 @@ export default {
           dropdown: [
             {
               name: 'RequestAssetPerm',
-              title: this.$t('RequestAssetPerm'),
-              callback: () => this.$router.push({
-                name: 'RequestAssetPermTicketCreateUpdate'
-              })
+              title: this.$t('RequestAssetPerm')
             }
           ]
         }
