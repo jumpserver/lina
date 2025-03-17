@@ -6,7 +6,7 @@
     <div class="content">
       <el-row justify="space-between" type="flex">
         <el-col v-for="item of summaryItems" :key="item.title" :md="8" :sm="12" :xs="12">
-          <SummaryCard :body="item.body" :title="item.title" />
+          <SummaryCard :title="item.title" v-bind="item.body" />
         </el-col>
       </el-row>
     </div>
