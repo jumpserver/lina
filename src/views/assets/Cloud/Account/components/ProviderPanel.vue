@@ -1,7 +1,7 @@
 <template>
   <div class="cloud-select-wrap">
     <el-row :gutter="12">
-      <el-col v-for="p in providers" :key="p.name" :style="p.imageCSS ? p.imageCSS : ''">
+      <el-col v-for="p in providers" :key="p.name">
         <el-card
           :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
           :class="selected === p.name ? 'active': ''"
@@ -79,7 +79,7 @@ export default {
 
 <style lang='scss' scoped>
 .buttons {
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .cloud-select-wrap {
