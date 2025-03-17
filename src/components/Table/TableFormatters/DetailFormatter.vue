@@ -85,7 +85,7 @@ export default {
     disabled() {
       let can = this.formatterArgs.can
       if (typeof can === 'function') {
-        can = can(this.col)
+        can = can({ col: this.col, row: this.row })
       }
       return !can
     },

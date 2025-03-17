@@ -9,7 +9,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import TaskExecutionList from '../TaskExecutionList.vue'
+import TaskExecutionList from '../AccountDiscoverExecutionList.vue'
 
 export default {
   name: 'AccountDiscoverTaskDetail',

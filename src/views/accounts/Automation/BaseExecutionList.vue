@@ -1,7 +1,10 @@
 <template>
   <div>
-    <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-    <ReportDialog :visible.sync="visible" :url="reportUrl" />
+    <GenericListTable
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <ReportDialog :url="reportUrl" :visible.sync="visible" />
   </div>
 </template>
 
@@ -21,10 +24,21 @@ export default {
     GenericListTable
   },
   props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
+    url: {
+      type: String,
+      required: true
+    },
+    detailRoute: {
+      type: String,
+      required: true
+    },
+    automationRoute: {
+      type: String,
+      required: true
+    },
+    resource: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -36,7 +50,7 @@ export default {
       currentTemplate: null,
       drawerTitle: '',
       tableConfig: {
-        url: '/api/v1/accounts/gather-account-executions/',
+        url: this.url,
         columns: [
           'id', 'automation', 'status', 'trigger',
           'date_start', 'date_finished', 'actions'
@@ -45,10 +59,11 @@ export default {
           id: {
             label: this.$t('ID'),
             formatter: DetailFormatter,
+            width: '100px',
             formatterArgs: {
-              route: 'AccountDiscoverExecutionDetail',
+              route: this.detailRoute,
               getRoute: ({ row }) => ({
-                name: 'AccountDiscoverExecutionDetail',
+                name: this.detailRoute,
                 params: { id: row.id }
               }),
               getTitle: ({ row }) => row.id.slice(0, 8),
@@ -64,19 +79,20 @@ export default {
             width: '135px'
           },
           automation: {
-            label: this.$t('Name'),
+            label: this.$t('Task'),
             formatter: DetailFormatter,
+            minWidth: '180px',
             formatterArgs: {
-              getTitle: ({ row }) => row.automation.name,
+              getTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
-                name: 'AccountDiscoverTaskDetail',
+                name: this.automationRoute,
                 params: { id: row.automation.id }
               }),
-              getDrawerTitle: ({ row }) => row.automation.name,
+              can: ({ row }) => row.automation?.id,
               drawer: true
             },
             id: ({ row }) => row.automation,
-            can: this.$hasPerm('accounts.view_gatheraccountsexecution')
+            can: this.$hasPerm('accounts.view_' + this.resource)
           },
           date_start: {
             width: null
@@ -99,10 +115,10 @@ export default {
                   name: 'report',
                   title: this.$t('Report'),
                   type: 'success',
-                  can: this.$hasPerm('accounts.view_gatheraccountsexecution'),
+                  can: this.$hasPerm('accounts.view_' + this.resource),
                   callback: function({ row }) {
                     vm.visible = true
-                    vm.reportUrl = `/api/v1/accounts/gather-account-executions/${row.id}/report/`
+                    vm.reportUrl = `${this.url}${row.id}/report/`
                   }
                 }
               ]
@@ -141,10 +157,6 @@ export default {
   methods: {
     handleDetailCallback(row) {
       this.$route.params.id = row.id
-
-      this.$route.query.type = 'pam'
-
-      this.currentTemplate = 'AccountDiscoverExecutionDetail'
       this.showTableUpdateDrawer = true
     }
   }

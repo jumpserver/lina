@@ -11,7 +11,7 @@
 import BaseExecutionList from '@/views/accounts/Automation/BaseExecutionList.vue'
 
 export default {
-  name: 'CheckAccountExecutionList',
+  name: 'AccountDiscoverTaskExecutionList',
   components: {
     BaseExecutionList
   },
@@ -24,10 +24,10 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/accounts/check-account-executions/',
-      automationRoute: 'AccountCheckDetail',
-      detailRoute: 'RiskHistoryExecutionDetail',
-      resource: 'checkaccountexecution'
+      url: '/api/v1/accounts/gather-account-executions/',
+      detailRoute: 'AccountDiscoverExecutionDetail',
+      automationRoute: 'AccountDiscoverTaskDetail',
+      resource: 'gatheraccountsexecution'
     }
   }
 }
