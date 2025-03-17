@@ -24,9 +24,9 @@ export default {
         url: ajaxUrl,
         columnsExtra: ['action'],
         columnsShow: {
-          min: ['id', 'actions'],
+          min: ['id', 'actions', 'asset_display'],
           default: [
-            'id', 'type_display', 'date_expired', 'is_valid', 'actions'
+            'id', 'asset__display', 'date_expired', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
@@ -89,7 +89,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
