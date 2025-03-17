@@ -37,6 +37,22 @@ const defaultUpdateCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
+const defaultViewCallback = function({ row, col }) {
+  const id = row.id
+  let route = { params: { id: id }}
+  const viewRoute = this.colActions.viewRoute
+
+  if (typeof updateRoute === 'object') {
+    route = Object.assign(route, viewRoute)
+  } else if (typeof updateRoute === 'function') {
+    route = viewRoute({ row, col })
+  } else {
+    route.name = viewRoute
+  }
+
+  this.$router.push(route)
+}
+
 const defaultCloneCallback = function({ row, col }) {
   const id = row.id
   let route = { query: { clone_from: id }}
@@ -105,6 +121,7 @@ export default {
           cloneRoute: this.$route.name.replace('List', 'Create'),
           performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
+          onView: defaultViewCallback,
           onDelete: defaultDeleteCallback,
           onClone: defaultCloneCallback,
           extraActions: []

@@ -13,15 +13,28 @@ class StrategyAbstract {
     this.onSelect = this.onSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
   }
+
   get elTable() {
     return this.elDataTable.$refs.table
   }
-  onSelectionChange() {}
-  onSelect() {}
-  onSelectAll() {}
-  toggleRowSelection() {}
-  clearSelection() {}
-  updateElTableSelection() {}
+
+  onSelectionChange() {
+  }
+
+  onSelect() {
+  }
+
+  onSelectAll() {
+  }
+
+  toggleRowSelection() {
+  }
+
+  clearSelection() {
+  }
+
+  updateElTableSelection() {
+  }
 }
 
 /**
@@ -34,14 +47,16 @@ class StrategyNormal extends StrategyAbstract {
   onSelectionChange(val) {
     this.elDataTable.selected = val
   }
+
   /**
    * toggleRowSelection和clearSelection的表现与el-table一致
    */
   toggleRowSelection(...args) {
     return this.elTable.toggleRowSelection(...args)
   }
+
   clearSelection() {
-    return this.elTable.clearSelection()
+    return this.elTable?.clearSelection()
   }
 }
 
@@ -65,6 +80,7 @@ class StrategyPersistSelection extends StrategyAbstract {
     const isChosen = selection.indexOf(row) > -1
     this.toggleRowSelection(row, isChosen)
   }
+
   /**
    * 用户切换当前页的多选
    */
@@ -85,7 +101,7 @@ class StrategyPersistSelection extends StrategyAbstract {
     // 判断是全选还是取消全选
     const shouldSelectAll = currentPageSelectedCount < selectableRows.length
 
-    this.elTable.clearSelection()
+    this.elTable?.clearSelection()
 
     if (shouldSelectAll) {
       selectableRows.forEach(row => {
@@ -112,6 +128,7 @@ class StrategyPersistSelection extends StrategyAbstract {
 
     this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
+
   /**
    * toggleRowSelection和clearSelection管理elDataTable的selected数组
    * 记得最后要将状态同步到el-table中
@@ -133,10 +150,12 @@ class StrategyPersistSelection extends StrategyAbstract {
     this.elDataTable.$emit('toggle-row-selection', isSelected, row)
     this.updateElTableSelection()
   }
+
   clearSelection() {
     this.elDataTable.selected = []
     this.updateElTableSelection()
   }
+
   /**
    * 将selected状态同步到el-table中
    */
@@ -144,7 +163,7 @@ class StrategyPersistSelection extends StrategyAbstract {
     const { data, id, selected } = this.elDataTable
     const selectedIds = new Set(selected.map(r => r[id]))
 
-    this.elTable.clearSelection()
+    this.elTable?.clearSelection()
 
     data.forEach(row => {
       const shouldBeSelected = selectedIds.has(row[id])

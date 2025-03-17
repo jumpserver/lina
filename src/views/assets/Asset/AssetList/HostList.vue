@@ -12,7 +12,7 @@
 <script>
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
-import GatewayDialog from '@/components/Apps/GatewayDialog'
+import GatewayDialog from '@/components/Apps/GatewayTestDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {

@@ -43,7 +43,7 @@
 import ListTable from '@/components/Table/DrawerListTable'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import PlatformDialog from '../components/PlatformDialog'
-import GatewayDialog from '@/components/Apps/GatewayDialog'
+import GatewayDialog from '@/components/Apps/GatewayTestDialog'
 import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'

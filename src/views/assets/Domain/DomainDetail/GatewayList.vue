@@ -5,18 +5,18 @@
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
-      :table-config="tableConfig"
       :resource="$tc('Gateway')"
+      :table-config="tableConfig"
     />
-    <GatewayDialog
-      :cell="cell"
-      :port="port"
-      :visible.sync="visible"
+    <GatewayTestDialog
+      :cell="testConfig.cell"
+      :port="testConfig.port"
+      :visible.sync="testConfig.visible"
     />
     <AddGatewayDialog
-      v-if="AddGatewaySetting.addGatewayDialogVisible"
+      v-if="addGatewaySetting.addGatewayDialogVisible"
       :object="transObject"
-      :setting="AddGatewaySetting"
+      :setting="addGatewaySetting"
       @close="handleAddGatewayDialogClose"
     />
   </TwoCol>
@@ -24,7 +24,7 @@
 
 <script>
 import { GenericListTable } from '@/layout/components'
-import GatewayDialog from '@/components/Apps/GatewayDialog'
+import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 import AddGatewayDialog from '@/views/assets/Domain/components/AddGatewayDialog'
@@ -34,7 +34,7 @@ export default {
   components: {
     TwoCol,
     GenericListTable,
-    GatewayDialog,
+    GatewayTestDialog,
     AddGatewayDialog
   },
   props: {
@@ -146,7 +146,6 @@ export default {
               ]
             }
           }
-
         }
       },
       headerActions: {
@@ -192,7 +191,7 @@ export default {
               }
 
               vm.$nextTick(() => {
-                this.AddGatewaySetting.addGatewayDialogVisible = true
+                this.addGatewaySetting.addGatewayDialogVisible = true
               })
             }
           }
@@ -205,10 +204,12 @@ export default {
           vm.$refs.ListTable.onCreate()
         }
       },
-      port: 0,
-      cell: '',
-      visible: false,
-      AddGatewaySetting: {
+      testConfig: {
+        port: 0,
+        visible: false,
+        cell: ''
+      },
+      addGatewaySetting: {
         addGatewayDialogVisible: false
       }
     }

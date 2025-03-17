@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import BaseList from '../../Asset/AssetList/components/BaseList'
+import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 import AddAssetDialog from '@/views/assets/Domain/components/AddAssetDialog.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -63,6 +63,9 @@ export default {
               callback: () => {
                 this.$route.params.id = this.object.id
                 this.addAssetSetting.addAssetDialogVisible = true
+                setTimeout(() => {
+                  this.$route.params.id = null
+                }, 500)
               }
             }
           ]
@@ -100,6 +103,7 @@ export default {
   methods: {
     handleAddAssetDialogClose() {
       this.addAssetSetting.addAssetDialogVisible = false
+      this.$route.params.id = null
       this.reloadTable()
     },
     removeAsset(rows) {
