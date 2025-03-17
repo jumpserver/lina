@@ -4,7 +4,6 @@
     :close-on-press-escape="false"
     :destroy-on-close="true"
     :show-buttons="false"
-    :show-close="false"
     :title="$tc('SyncOnline')"
     :visible.sync="iVisible"
     v-on="$listeners"

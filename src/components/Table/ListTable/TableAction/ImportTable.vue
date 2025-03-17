@@ -490,6 +490,9 @@ export default {
 }
 
 .btn-groups {
+  display: flex;
+  justify-content: flex-end;
+
   ::v-deep .el-button.is-disabled {
     cursor: not-allowed;
   }
