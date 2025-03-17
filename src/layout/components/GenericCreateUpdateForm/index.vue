@@ -134,14 +134,7 @@ export default {
     // 获取提交的方法
     submitMethod: {
       type: [Function, String],
-      default: function() {
-        const params = this.$route.params
-        if (params.id) {
-          return 'put'
-        } else {
-          return 'post'
-        }
-      }
+      default: null
     },
     // 获取创建和更新的url function
     getUrl: {
@@ -333,7 +326,10 @@ export default {
       } else {
         this.method = this.submitMethod
       }
-      // console.log('Drawer: ', this.drawer, this.submitMethod)
+      // console.log('Drawer: ', this.drawer, this.submitMethod, this.action)
+      if (!this.drawer && !this.method) {
+        this.method = this.$route.params['id'] ? 'put' : 'post'
+      }
       if (this.drawer && !this.submitMethod) {
         if (this.action === 'clone' || this.action === 'create') {
           this.method = 'post'
@@ -424,6 +420,7 @@ export default {
       if (needGetObjectDetail === null) {
         needGetObjectDetail = this.isUpdateMethod() || this.action === 'clone'
       }
+      // console.log('Get form value: ', needGetObjectDetail, this.needGetObjectDetail, this.isUpdateMethod(), this.action)
       if (!needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }

@@ -1133,7 +1133,7 @@ export default {
      * @public
      */
     clearSelection() {
-      return this.selectStrategy.clearSelection()
+      return this.selectStrategy?.clearSelection()
     },
     // 弹窗相关
     // 除非树形结构在操作列点击新增, 否则 row 是 MouseEvent

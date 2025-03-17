@@ -41,7 +41,7 @@ export default {
         date_expired: ''
       },
       config: {
-        url: '/api/v1/perms/asset-permissions',
+        url: '/api/v1/perms/asset-permissions/',
         activeMenu: 'AssetPermissionDetail',
         submenu: [
           {

@@ -129,7 +129,7 @@ export default {
   watch: {},
   methods: {
     getList() {
-      this.$refs.table.clearSelection()
+      this.$refs.table?.clearSelection()
       return this.$refs.table.getList()
     },
     getData() {
