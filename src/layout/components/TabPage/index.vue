@@ -132,14 +132,14 @@ export default {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.iActiveMenu = tab.name
-      this.$cookie.set('activeTab', tab.name, 1)
+      localStorage.setItem('activeTab', tab.name)
     },
     getPropActiveTab() {
       let activeTab = ''
 
       const preActiveTabs = [
         this.$route.query['tab'],
-        this.$cookie.get('activeTab'),
+        localStorage.getItem('activeTab'),
         this.activeMenu
       ]
 
