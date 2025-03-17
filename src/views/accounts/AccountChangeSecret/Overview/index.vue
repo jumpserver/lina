@@ -107,6 +107,10 @@ export default {
     ::v-deep #HomeCard .el-card.no-border {
       height: 100%;
       margin-bottom: unset !important;
+
+      .ListTable .el-pagination {
+        display: block;
+      }
     }
   }
 
