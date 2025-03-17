@@ -6,20 +6,23 @@ import store from '@/store'
 import { isSameView } from '@/utils/jms'
 import { toSentenceCase } from '@/utils/common'
 
-// NProgress.configure({
-//   showSpinner: false
-// }) // NProgress Configuration
-//
+function beforeRouteChange(to, from, next) {
+  localStorage.setItem('activeTab', '')
+}
+
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   // NProgress.start()
   try {
     await store.dispatch('common/cleanDrawerActionMeta')
     await startup({ to, from, next })
+    if (to.name !== from.name) {
+      await beforeRouteChange(to, from, next)
+    }
     next()
   } catch (e) {
     const msg = 'Start service error: ' + e
-    // debug(e)
+    console.log(msg)
   }
 })
 
