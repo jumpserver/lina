@@ -26,7 +26,7 @@ export default {
         columnsShow: {
           min: ['id', 'actions', 'asset_display'],
           default: [
-            'id', 'asset__display', 'date_expired', 'is_active', 'actions'
+            'id', 'asset_display', 'date_expired', 'is_active', 'actions'
           ]
         },
         columnsMeta: {
