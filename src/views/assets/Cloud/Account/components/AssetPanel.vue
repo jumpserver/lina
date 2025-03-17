@@ -120,9 +120,6 @@ export default {
           action: 'sync_task', account_id: this.object.id
         }))
       }
-      this.ws.onclose = () => {
-        this.$emit('update:visible', false)
-      }
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
