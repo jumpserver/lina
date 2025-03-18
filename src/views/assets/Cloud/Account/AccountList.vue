@@ -14,6 +14,7 @@
     />
     <SyncDialog
       v-if="onlineSyncVisible"
+      :object="object"
       :visible.sync="onlineSyncVisible"
     />
   </div>
