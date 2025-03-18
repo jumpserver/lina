@@ -60,6 +60,7 @@ export default {
               name: 'AddAsset',
               title: this.$t('Add'),
               type: 'primary',
+              can: !this.$store.getters.currentOrgIsRoot,
               callback: () => {
                 this.$route.params.id = this.object.id
                 this.addAssetSetting.addAssetDialogVisible = true

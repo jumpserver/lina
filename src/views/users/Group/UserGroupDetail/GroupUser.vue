@@ -140,7 +140,7 @@ export default {
         },
         showHasObjects: false,
         hasObjectsId: this.object.users,
-        disabled: !this.$hasPerm('users.change_usergroup'),
+        disabled: !this.$hasPerm('users.change_usergroup') || this.$store.getters.currentOrgIsRoot,
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const groupId = this.object.id
