@@ -151,7 +151,7 @@ export const accountOtherActions = (vm) => [
     title: vm.$t('CopyToAsset'),
     type: 'primary',
     divided: true,
-    can: () => vm.$hasPerm('accounts.create_account') && !vm.$store.getters.currentOrgIsRoot,
+    can: () => vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
     has: () => {
       return !vm.asset
     },
@@ -167,7 +167,7 @@ export const accountOtherActions = (vm) => [
     name: 'MoveToOther',
     title: vm.$t('MoveToAsset'),
     type: 'primary',
-    can: () => vm.$hasPerm('accounts.create_account') && !vm.$store.getters.currentOrgIsRoot,
+    can: () => vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot,
     has: () => {
       return !vm.asset
     },
