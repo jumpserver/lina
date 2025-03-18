@@ -295,7 +295,7 @@ export default {
             type: 'primary',
             icon: 'plus',
             can: () => {
-              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
+              return vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot
             },
             callback: () => {
               setTimeout(() => {
@@ -311,7 +311,7 @@ export default {
             title: this.$t('TemplateAdd'),
             has: !(this.platform || this.asset),
             can: () => {
-              return vm.$hasPerm('accounts.add_account') && !this.$store.getters.currentOrgIsRoot
+              return vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot
             },
             callback: async() => {
               await this.getAssetDetail()

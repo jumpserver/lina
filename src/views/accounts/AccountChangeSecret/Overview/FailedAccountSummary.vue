@@ -29,12 +29,13 @@ export default {
   data() {
     const vm = this
     return {
+      url: '/api/v1/accounts/change-secret-records/dashboard/',
       showViewSecretDialog: false,
       cardConfig: {
-        title: this.$tc('ChangeSecretFailAccounts')
+        title: vm.$tc('ChangeSecretFailAccounts')
       },
       tableConfig: {
-        url: `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`,
+        url: vm.tableUrl(),
         columns: [
           'asset', 'account', 'date_finished', 'is_success', 'error', 'actions'
         ],
@@ -137,6 +138,17 @@ export default {
           }
         }
       }
+    }
+  },
+  watch: {
+    days() {
+      this.$refs.HomeCard.$refs.ListTable.tableConfig.url = this.tableUrl()
+      this.$refs.HomeCard.$refs.ListTable.reloadTable()
+    }
+  },
+  methods: {
+    tableUrl() {
+      return `/api/v1/accounts/change-secret-records/dashboard/?days=${this.days}`
     }
   }
 }
