@@ -103,6 +103,9 @@ export default {
         if (cmd === 'ignore') {
           this.row.status = { 'value': statusMap.ignored }
         }
+        if (cmd === 'delete_remote') {
+          this.row.remote_present = false
+        }
         this.row.status = { 'value': statusMap.confirmed }
       }).finally(() => {
         setTimeout(() => {
