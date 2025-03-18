@@ -1,6 +1,5 @@
 <template>
   <TabPage
-    v-if="!loading"
     :active-menu.sync="iActiveMenu"
     :submenu="iSubmenu"
     :title="iTitle"
@@ -12,7 +11,9 @@
         <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
       </span>
     </template>
-    <slot />
+    <div v-if="!loading">
+      <slot />
+    </div>
   </TabPage>
 </template>
 

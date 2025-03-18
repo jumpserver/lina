@@ -1,5 +1,5 @@
 <template>
-  <Page v-if="!loading" :title="title" class="tab-page" v-bind="$attrs">
+  <Page :title="title" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
@@ -45,7 +45,7 @@
         <el-alert v-if="helpMessage" type="success">
           <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
-        <transition appear mode="out-in" name="fade-transform">
+        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
               <component :is="computeActiveComponent" />
