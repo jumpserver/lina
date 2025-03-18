@@ -30,6 +30,11 @@
         </el-button>
       </el-tooltip>
     </span>
+    <span v-else-if="iValue === '4'">
+      <el-tooltip :content="cellValue.error">
+        <i class="fa fa-close text-danger" />
+      </el-tooltip>
+    </span>
     <el-tooltip
       v-else
       :content="iLabel"
@@ -164,7 +169,6 @@ export default {
             data
           )
         } catch (e) {
-          row.status = { value: '4', label: this.$t('Failed') }
           this.$emit('processDone', { index: i, row })
           continue
         }
