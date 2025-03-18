@@ -45,7 +45,18 @@ export const riskActions = [
     name: 'change_password',
     label: i18n.t('ChangePassword'),
     has: async function() {
-      const risks = ['long_time_password', 'weak_password', 'password_expired', 'leaked_password', 'repeated_password']
+      const risks = [
+        'long_time_password', 'weak_password', 'password_expired',
+        'leaked_password', 'repeated_password'
+      ]
+      return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
+    }
+  },
+  {
+    name: 'delete_account',
+    label: i18n.t('DeleteAccount'),
+    has: async function() {
+      const risks = ['account_deleted']
       return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
     }
   },
