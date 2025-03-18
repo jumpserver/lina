@@ -30,11 +30,6 @@
         </el-button>
       </el-tooltip>
     </span>
-    <span v-else-if="iValue === '4'">
-      <el-tooltip :content="cellValue.error">
-        <i class="fa fa-close text-danger" />
-      </el-tooltip>
-    </span>
     <el-tooltip
       v-else
       :content="iLabel"
