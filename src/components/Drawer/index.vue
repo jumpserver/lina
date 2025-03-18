@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { getDrawerWidth } from '@/utils/common'
+
 export default {
   props: {
     title: {
@@ -38,7 +40,9 @@ export default {
     },
     size: {
       type: String,
-      default: '768px'
+      default: () => {
+        return getDrawerWidth()
+      }
     },
     component: {
       type: [String, Function, Object],

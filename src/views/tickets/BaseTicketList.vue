@@ -66,7 +66,8 @@ export default {
                 const routeMap = {
                   apply_asset: 'AssetsTicketDetail',
                   login_asset_confirm: 'LoginAssetTicketDetail',
-                  login_confirm: 'LoginTicketDetail'
+                  login_confirm: 'LoginTicketDetail',
+                  command_confirm: 'CommandConfirmDetail'
                 }
 
                 return {

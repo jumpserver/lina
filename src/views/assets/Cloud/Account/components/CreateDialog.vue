@@ -9,7 +9,6 @@
     :title="$tc('CloudSyncConfig')"
     :visible.sync="iVisible"
     v-bind="$attrs"
-    width="1051px"
     v-on="$listeners"
   >
     <el-row :gutter="5" style="padding: 10px">
