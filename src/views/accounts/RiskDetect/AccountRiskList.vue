@@ -113,6 +113,7 @@ export default {
             }
           },
           username: {
+            label: this.$t('Account'),
             width: '120px'
           },
           risk: {
