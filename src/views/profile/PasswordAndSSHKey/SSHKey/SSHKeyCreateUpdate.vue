@@ -59,7 +59,8 @@ export default {
         const isCreated = vm.isCreateAction || vm.meta?.action === 'clone'
         if (validValues['generate_key_type'] === 'auto' && isCreated) {
           const name = validValues['name']
-          this.$axios.get(`/core/auth/profile/pubkey/generate/?name=${name}`)
+          const queryParams = new URLSearchParams(validValues).toString()
+          this.$axios.get(`/core/auth/profile/pubkey/generate/?${queryParams}`)
             .then((res) => {
               vm.createSuccessHandle()
               downloadText(res, `${name}.jumpserver.pem`)
