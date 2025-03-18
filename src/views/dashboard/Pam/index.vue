@@ -12,12 +12,11 @@
             <MissionSummery class="mission-summery" />
           </el-col>
         </el-row>
-
         <el-row :gutter="20">
-          <el-col :span="14" :xs="24">
+          <el-col v-if="$store.getters.hasValidLicense" :span="14" :xs="24">
             <AccountSecretSummary class="account-secret-summary" />
           </el-col>
-          <el-col :span="10" :xs="24">
+          <el-col :span="$store.getters.hasValidLicense ? 10: 24" :xs="24">
             <RiskSummary class="risk-summary" />
           </el-col>
         </el-row>
