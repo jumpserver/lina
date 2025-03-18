@@ -38,7 +38,7 @@ export default {
             name: 'Assets'
           },
           {
-            title: this.$t('Automations'),
+            title: this.$t('Automation'),
             name: 'Automation'
           }
         ],
@@ -72,7 +72,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -37,6 +37,7 @@ export const gatherAccountTableConfig = (vm, url) => {
         }
       },
       username: {
+        label: vm.$t('Account'),
         formatter: DetailFormatter,
         formatterArgs: {
           can: true,
