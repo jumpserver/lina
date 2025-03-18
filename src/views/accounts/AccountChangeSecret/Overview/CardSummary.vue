@@ -49,9 +49,11 @@ export default {
         {
           title: this.$t('Total'),
           body: {
-            route: { name: 'AccountChangeSecret', query: { tab: 'AccountChangeSecretList' }},
             canDirect: true,
-            count: this.data.total_count_change_secrets
+            count: this.data.total_count_change_secrets,
+            callback: () => {
+              this.$eventBus.$emit('change-tab', 'AccountChangeSecretList')
+            }
           }
         },
         {
@@ -73,9 +75,11 @@ export default {
         {
           title: this.$t('Total'),
           body: {
-            route: { name: 'AccountChangeSecret', query: { tab: 'AccountChangeSecretExecutionList' }},
             canDirect: true,
-            count: this.data.total_count_change_secret_executions
+            count: this.data.total_count_change_secret_executions,
+            callback: () => {
+              this.$eventBus.$emit('change-tab', 'AccountChangeSecretExecutionList')
+            }
           }
         },
         {

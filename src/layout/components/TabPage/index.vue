@@ -124,6 +124,13 @@ export default {
       return needActiveComponent
     }
   },
+  watch: {
+    activeMenu: {
+      handler(newValue) {
+        this.iActiveMenu = newValue
+      }
+    }
+  },
   created() {
     this.iActiveMenu = this.getPropActiveTab()
     this.loading = false
