@@ -97,7 +97,7 @@ export default {
       }
       this.processing = true
       this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data).then(() => {
-        if (cmd === 'add_account') {
+        if (cmd === 'add_account' || cmd === 'change_password_add') {
           this.row.present = true
         }
         if (cmd === 'ignore') {
