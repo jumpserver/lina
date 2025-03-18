@@ -54,12 +54,12 @@ export default {
         'name', 'user_display',
         {
           key: vm.$t('IpGroup'),
-          value: () => vm.object.rules.ip_group.toString()
+          value: vm.object.rules.ip_group.join(', ')
         },
         'dataVal', 'action_display', 'priority', 'date_created', 'created_by',
         {
           key: vm.$t('LoginConfirmUser'),
-          value: () => vm.object.reviewers.map(item => item.name).join(', ')
+          value: vm.object.reviewers.map(item => item.name).join(', ')
         },
         'comment'
       ]
