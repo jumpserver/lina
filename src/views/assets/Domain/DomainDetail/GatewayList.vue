@@ -169,6 +169,7 @@ export default {
           {
             name: 'GatewayAdd',
             title: this.$t('Add'),
+            can: !this.$store.getters.currentOrgIsRoot,
             callback: async() => {
               // 由于修改成为了抽屉形式，导致传入到 AddGateway 组件中的 obj 任然为最初的数量，就会导致新增的 item 依然会出现可选的情况
               // 此时修改为在打开 AddGateway 额外从 tableConfig.url 的接口中获取最新的 gateways 数目
