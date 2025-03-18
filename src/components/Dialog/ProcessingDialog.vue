@@ -4,7 +4,7 @@
     :visible="iVisible"
     class="processing-dialog"
     height="300"
-    title="Processing"
+    :title="$tc('Processing')"
     width="300"
     @confirm="iVisible=false"
   >
