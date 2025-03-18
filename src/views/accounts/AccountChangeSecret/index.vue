@@ -45,6 +45,17 @@ export default {
   },
   computed: {
     ...mapGetters(['hasValidLicense'])
+  },
+  mounted() {
+    this.$eventBus.$on('change-tab', this.handleChangeTab)
+  },
+  beforeDestroy() {
+    this.$eventBus.$off('change-tab', this.handleChangeTab)
+  },
+  methods: {
+    handleChangeTab(tab) {
+      this.config.activeMenu = tab
+    }
   }
 }
 </script>
