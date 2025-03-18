@@ -63,7 +63,7 @@ export default {
         {
           key: this.$t('ApplyFromSession'),
           value: object.apply_from_session,
-          formatter: function(item, value) {
+          formatter: (_item, value) => {
             if (!this.$hasPerm('terminal.view_session')) {
               return <span>{this.$t('Session')}</span>
             }
