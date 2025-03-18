@@ -3,7 +3,8 @@
     <el-alert type="success">
       <span v-sanitize="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
-    <ListTable
+    <DrawerListTable
+      ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
       v-bind="$data"
@@ -12,14 +13,14 @@
 </template>
 
 <script>
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AppletHost',
   components: {
-    ListTable
+    DrawerListTable
   },
   data() {
     return {
@@ -90,7 +91,10 @@ export default {
         createRoute: 'AppletHostCreate',
         hasRefresh: true,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        onCreate: () => {
+          this.$refs.table.onCreate({ type: 'windows', category: 'host', platform: 'RemoteAppHost' })
+        }
       }
     }
   }

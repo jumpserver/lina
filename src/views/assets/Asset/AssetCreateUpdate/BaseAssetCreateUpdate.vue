@@ -158,14 +158,14 @@ export default {
       const { defaultConfig } = this
       const { node, platform } = this.meta
       const nodesInitial = node ? [node] : []
-      const platformId = this.changePlatformID ? this.changePlatformID : (platform || 'Linux')
+      const platformId = this.changePlatformID || this.$route.query.platform || (platform || 'Linux')
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
         labels: [],
         is_active: true,
         nodes: nodesInitial,
-        platform: parseInt(platformId),
+        platform: parseInt(this.platform.id),
         protocols: []
       }
       if (this.updateInitial) {
