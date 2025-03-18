@@ -374,6 +374,16 @@ export function openNewWindow(url) {
   window.open(url, '_blank', params)
 }
 
+export function getDrawerWidth() {
+  const drawerWidth = localStorage.getItem('drawerWidth')
+  if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
+    return drawerWidth + 'px'
+  }
+  const width = window.innerWidth
+  if (width >= 1500) return '1080px'
+  return '90%'
+}
+
 export class ObjectLocalStorage {
   constructor(key) {
     this.key = key

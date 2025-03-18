@@ -2,7 +2,6 @@
   <Drawer
     :component="component"
     :component-listeners="listener"
-    :size="drawerSize"
     :title="title"
     :visible.sync="iVisible"
     append-to-body
@@ -49,15 +48,6 @@ export default {
     }
   },
   computed: {
-    drawerSize() {
-      const drawerWidth = localStorage.getItem('drawerWidth')
-      if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
-        return drawerWidth + 'px'
-      }
-      const width = window.innerWidth
-      if (width >= 800) return '767px'
-      return '90%'
-    },
     iVisible: {
       get() {
         return this.visible
