@@ -75,12 +75,14 @@ export default {
       title: '',
       action: '',
       drawerVisible: false,
-      drawerComponent: '',
-      drawerTitle: ''
+      drawerComponent: ''
     }
   },
   computed: {
     ...mapGetters(['inDrawer']),
+    drawerTitle() {
+      return this.getDefaultTitle()
+    },
     iHeaderActions() {
       const actions = this.headerActions
       if (!actions.onCreate) {
@@ -93,7 +95,8 @@ export default {
       const actionMap = {
         'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
         'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-        'columnsMeta.name.formatterArgs.onClick': this.onDetail
+        'columnsMeta.name.formatterArgs.drawer': true,
+        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
       }
       for (const [key, value] of Object.entries(actionMap)) {
         if (_.get(config, key)) {
@@ -105,9 +108,9 @@ export default {
       for (const value of Object.values(columnsMeta)) {
         if (
           value.formatter && value.formatter.name === 'AmountFormatter' &&
-          value.formatterArgs && value.formatterArgs.drawer !== false
+          value.formatterArgs && !value.formatterArgs.drawer
         ) {
-          value.formatterArgs.onClick = this.onDetail
+          value.formatterArgs.drawer = this.detailDrawer
         }
       }
       return config
@@ -119,11 +122,11 @@ export default {
         return
       }
       if (!val) {
-        // this.drawerVisible = false
+        this.drawerVisible = false
+        this.reloadTable()
       }
     },
     drawerVisible: {
-      immediate: true,
       handler(val, oldVal) {
         this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
         if (!val && oldVal) {
@@ -162,18 +165,9 @@ export default {
       }
 
       this.drawerComponent = ''
+      console.log('>>> afterCloseDrawer 2', this.$route)
     },
-    getDetailDrawerTitle({ col, row, cellValue, route }) {
-      let title = cellValue || row.name
-      const resource = route?.meta?.title || route?.name
-
-      if (resource) {
-        title = `${resource}: ${title}`
-      }
-
-      return title
-    },
-    getDefaultTitle({ row, col, cellValue, detailRoute }) {
+    getDefaultTitle() {
       let title = this.title
       let dispatchAction = ''
       if (!title && this.resource) {
@@ -192,13 +186,8 @@ export default {
         dispatchAction = this.$t('Create')
       } else if (action === 'update') {
         dispatchAction = this.$t('Update')
-      } else if (action === 'detail') {
-        dispatchAction = this.$t('Detail')
       }
       title = dispatchAction + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
-      if (this.action === 'detail') {
-        title = this.getDetailDrawerTitle({ row, col, cellValue, route: detailRoute })
-      }
       return title
     },
     getDefaultDrawer(action) {
@@ -225,27 +214,7 @@ export default {
         return component
       }
     },
-    resolveRoute(route) {
-      const routes = this.$router.resolve(route)
-      if (!routes) {
-        return
-      }
-      const matched = routes.resolved.matched.filter(item => item.name === route.name && item.components)
-      if (matched.length === 0) {
-        return
-      }
-      if (matched[0] && matched[0].components?.default) {
-        return matched[0]
-      }
-    },
-    getDetailComponent(r) {
-      const route = this.resolveRoute(r)
-      if (route) {
-        return route.components.default
-      }
-    },
-    async showDrawer(action, { row, col, cellValue, detailRoute }) {
-      this.drawerTitle = this.getDefaultTitle({ row, col, cellValue, detailRoute })
+    async showDrawer(action) {
       try {
         // 1. 先重置状态
         this.drawerVisible = false
@@ -260,7 +229,7 @@ export default {
         } else if (action === 'update') {
           this.drawerComponent = this.updateDrawer || this.createDrawer
         } else if (action === 'detail') {
-          this.drawerComponent = this.detailDrawer || this.getDetailComponent(detailRoute)
+          this.drawerComponent = this.detailDrawer
         } else if (action === 'clone') {
           this.drawerComponent = this.createDrawer || this.getDefaultDrawer('create')
         } else {
@@ -309,13 +278,6 @@ export default {
       }
       this.$refs.ListTable.reloadTable()
     },
-    async onDetail({ row, col, cellValue, detailRoute }) {
-      this.$route.params.id = row.id
-      await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: row, col: col, id: row.id
-      })
-      await this.showDrawer('detail', { row, col, cellValue, detailRoute })
-    },
     async onCreate(meta) {
       if (!meta) {
         meta = {}
@@ -329,7 +291,7 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'clone', row: row, col: col, id: row.id
       })
-      await this.showDrawer('clone', { row, col })
+      await this.showDrawer('clone')
     },
     async onUpdate({ row, col }) {
       this.$route.params.id = row.id
@@ -337,7 +299,7 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       })
-      await this.showDrawer('update', { row, col })
+      await this.showDrawer('update')
     }
   }
 }

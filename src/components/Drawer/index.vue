@@ -81,7 +81,6 @@ export default {
         return this.visible
       },
       set(val) {
-        this.$log.debug('>>> Drawer iVisible set: ', val)
         this.$emit('update:visible', val)
       }
     }
