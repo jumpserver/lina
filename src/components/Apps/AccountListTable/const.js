@@ -223,7 +223,7 @@ export const accountQuickFilters = (vm) => [
       {
         label: vm.$t('NoLoginLongTime'),
         filter: {
-          risk: 'long_time_no_login'
+          long_time_no_login: 'true'
         }
       },
       {
