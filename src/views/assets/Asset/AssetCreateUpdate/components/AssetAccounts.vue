@@ -57,16 +57,26 @@
         :visible.sync="templateDialogVisible"
       />
     </div>
+
+    <Drawer
+      :title="$t('Account')"
+      :component="drawerComponent"
+      :has-footer="false"
+      :visible.sync="drawerVisible"
+      class="detail-drawer"
+    />
   </div>
 </template>
 
 <script>
 import AddAccountDialog from './AddAccountDialog'
+import Drawer from '@/components/Drawer/index.vue'
 import AccountTemplateDialog from './AccountTemplateDialog'
 
 export default {
   name: 'AssetAccounts',
   components: {
+    Drawer,
     AddAccountDialog,
     AccountTemplateDialog
   },
@@ -92,10 +102,11 @@ export default {
       accounts: accounts,
       drawerRefName: null,
       account: {},
-      pamDrawerShow: false,
+      drawerVisible: false,
       initial: false,
       addAccountDialogVisible: false,
-      templateDialogVisible: false
+      templateDialogVisible: false,
+      drawerComponent: () => import('@/views/assets/Asset/AssetDetail')
     }
   },
   watch: {
@@ -156,13 +167,11 @@ export default {
         return
       }
 
-      this.$router.push({
-        name: 'AssetDetail',
-        params: { id: assetId },
-        query: {
-          tab: 'Account'
-        }
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'detail', row: {}, col: {}, id: assetId
       })
+
+      this.drawerVisible = true
     }
   }
 }
