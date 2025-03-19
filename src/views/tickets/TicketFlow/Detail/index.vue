@@ -29,16 +29,8 @@ export default {
         actions: {
           detailApiUrl: `/api/v1/tickets/flows/${this.$route.params.id}/`
         },
-        getObjectName: this.getObjectName,
         hasRightSide: false
       }
-    }
-  },
-  mounted() {
-  },
-  methods: {
-    getObjectName() {
-      return this.ticket.type.label
     }
   }
 }

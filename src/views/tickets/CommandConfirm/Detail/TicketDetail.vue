@@ -68,8 +68,7 @@ export default {
               return <span>{this.$t('Session')}</span>
             }
 
-            this.handleSideEffect(value)
-            return <el-link>{this.$t('Session')}</el-link>
+            return <el-link onClick={ () => this.handleSideEffect(value) }>{this.$t('Session')}</el-link>
           }
         },
         {
@@ -95,8 +94,9 @@ export default {
   },
   methods: {
     handleSideEffect(value) {
-      this.$route.params.id = value.id
-      this.$route.query.oid = this.object.org_id
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'detail', row: {}, col: {}, id: value.id
+      })
 
       this.$nextTick(() => {
         this.drawerVisible = true
