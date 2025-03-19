@@ -127,31 +127,46 @@ export default {
       }
     },
     drawerVisible: {
-      immediate: true,
-      handler(val) {
-        this.$log.debug('>>> DrawerListTable drawerVisible changed:', val, this)
-        if (!val) {
-          setTimeout(() => {
-            this.drawerComponent = ''
-          }, 300)
+      handler(val, oldVal) {
+        this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
+        if (!val && oldVal) {
+          this.afterCloseDrawer()
         }
       }
     }
   },
   mounted() {
-    this.key = new Date().getTime()
-    this.$log.debug('>>> DrawerListTable mounted: ', this)
+    this.routeFreeze = {
+      params: _.cloneDeep(this.$route.params),
+      query: _.cloneDeep(this.$route.query)
+    }
+    this.$log.debug('>>> DrawerListTable mounted: ', this.routeFreeze)
   },
   destroyed() {
-    this.$log.debug('>>> DrawerListTable destroyed: ', this)
-  },
-  deactivated() {
-    this.$log.debug('>>> DrawerListTable deactivated: ', this)
+    this.$log.debug('>>> DrawerListTable destroyed')
   },
   activated() {
-    this.$log.debug('>>> DrawerListTable activated: ', this)
+    this.$log.debug('>>> DrawerListTable activated')
+  },
+  deactivated() {
+    this.$log.debug('>>> DrawerListTable deactivated')
   },
   methods: {
+    afterCloseDrawer() {
+      // 清空路由参数, 恢复路由参数
+      for (const key in ['params', 'query']) {
+        for (const k in this.$route[key]) {
+          this.$route[key][k] = ''
+        }
+        const value = this.routeFreeze[key]
+        for (const k in value) {
+          this.$route[key][k] = value[k]
+        }
+      }
+
+      this.drawerComponent = ''
+      console.log('>>> afterCloseDrawer 2', this.$route)
+    },
     getDefaultTitle() {
       let title = this.title
       let dispatchAction = ''
@@ -257,40 +272,34 @@ export default {
         this.drawerComponent = ''
       }
     },
-    onCreate(meta) {
-      if (!meta) {
-        meta = {}
-      }
-      this.$route.params.id = ''
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'create', ...meta
-      }).then(() => {
-        this.showDrawer('create')
-      })
-    },
     reloadTable() {
       if (this.reloadOrderQuery) {
         this.iTableConfig.url = setUrlParam(this.iTableConfig.url, 'order', this.reloadOrderQuery)
       }
       this.$refs.ListTable.reloadTable()
     },
-    onClone({ row, col }) {
+    async onCreate(meta) {
+      if (!meta) {
+        meta = {}
+      }
       this.$route.params.id = ''
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'clone', row: row, col: col, id: row.id
-      }).then(() => {
-        this.showDrawer('clone')
-      })
+      await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
+      await this.showDrawer('create')
     },
-    onUpdate({ row, col }) {
+    async onClone({ row, col }) {
+      this.$route.params.id = ''
+      await this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'clone', row: row, col: col, id: row.id
+      })
+      await this.showDrawer('clone')
+    },
+    async onUpdate({ row, col }) {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
-      this.$log.debug('>>> On update: ', this.$route)
-      this.$store.dispatch('common/setDrawerActionMeta', {
+      await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
-      }).then(() => {
-        this.showDrawer('update')
       })
+      await this.showDrawer('update')
     }
   }
 }

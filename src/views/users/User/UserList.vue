@@ -137,7 +137,6 @@ export default {
                 tab: 'Basic'
               },
               getRoute: ({ row }) => {
-                this.$route.params.id = row.id
                 return {
                   name: 'UserDetail',
                   params: {

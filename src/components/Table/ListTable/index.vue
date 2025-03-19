@@ -103,7 +103,8 @@ export default {
       initQuery: {},
       tablePath: new URL(this.tableConfig.url || '', 'http://127.0.0.1').pathname,
       objStorage: new ObjectLocalStorage('filterExpand'),
-      iFilterExpand: null
+      iFilterExpand: null,
+      reloadTable: _.debounce(this._reloadTable, 300)
     }
   },
   computed: {
@@ -281,7 +282,7 @@ export default {
     handleSelectionChange(val) {
       this.selectedRows = val
     },
-    reloadTable() {
+    _reloadTable() {
       this.dataTable?.getList()
     },
     updateInitQuery(attrs) {
