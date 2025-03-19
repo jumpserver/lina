@@ -1,6 +1,10 @@
 import { toSafeLocalDateStr } from '@/utils/time'
 import { ActionsFormatter, DetailFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
-
+export const statusMap = {
+  pending: '0',
+  confirmed: '1',
+  ignored: '2'
+}
 export const gatherAccountTableConfig = (vm, url) => {
   if (!url) {
     url = '/api/v1/accounts/gathered-accounts/'
@@ -71,9 +75,9 @@ export const gatherAccountTableConfig = (vm, url) => {
           confirm: ({ row }) => {
             vm.$axios.put(
               `/api/v1/accounts/gathered-accounts/status/`,
-              { status: 'confirmed', ids: [row.id] }
+              { status: statusMap.confirmed, ids: [row.id] }
             ).then(res => {
-              row.status = 'confirmed'
+              row.status = statusMap.confirmed
             }).catch(() => {
               row.status = vm.$t('Error')
             })
@@ -81,9 +85,9 @@ export const gatherAccountTableConfig = (vm, url) => {
           ignore: ({ row }) => {
             vm.$axios.put(
               `/api/v1/accounts/gathered-accounts/status/`,
-              { status: 'ignored', ids: [row.id] }
+              { status: statusMap.ignored, ids: [row.id] }
             ).then(res => {
-              row.status = 'ignored'
+              row.status = statusMap.ignored
             }).catch(() => {
               row.status = vm.$t('Error')
             })
@@ -139,7 +143,7 @@ export const gatherAccountHeaderActions = (vm) => {
           })
           vm.$axios.put(
             `/api/v1/accounts/gathered-accounts/status/`,
-            { ids: ids, status: 'confirmed' }
+            { ids: ids, status: statusMap.confirmed }
           ).then(() => {
             vm.$message.success(vm.$tc('SyncSuccessMsg'))
           }).catch(err => {
