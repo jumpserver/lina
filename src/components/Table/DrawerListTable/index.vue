@@ -6,7 +6,8 @@
       :table-config="iTableConfig"
       v-bind="$attrs"
     />
-    <PageDrawer
+    <Drawer
+      v-if="drawerComponent"
       :action="action"
       :class="[action]"
       :component="drawerComponent"
@@ -20,7 +21,7 @@
 
 <script>
 import ListTable from '../ListTable'
-import PageDrawer from './PageDrawer.vue'
+import Drawer from '@/components/Drawer/index.vue'
 import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
@@ -29,7 +30,7 @@ const drawerType = [String, Function]
 export default {
   name: 'GenericListPage',
   components: {
-    ListTable, PageDrawer
+    ListTable, Drawer
   },
   props: {
     detailDrawer: {
@@ -73,7 +74,6 @@ export default {
     return {
       title: '',
       action: '',
-      visible: false,
       drawerVisible: false,
       drawerComponent: ''
     }
@@ -91,9 +91,7 @@ export default {
       return actions
     },
     iTableConfig() {
-      const config = {
-        ...this.tableConfig
-      }
+      const config = _.cloneDeep(this.tableConfig)
       const actionMap = {
         'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
         'columnsMeta.actions.formatterArgs.onClone': this.onClone,
@@ -127,7 +125,31 @@ export default {
         this.drawerVisible = false
         this.reloadTable()
       }
+    },
+    drawerVisible: {
+      immediate: true,
+      handler(val) {
+        this.$log.debug('>>> DrawerListTable drawerVisible changed:', val, this)
+        if (!val) {
+          setTimeout(() => {
+            this.drawerComponent = ''
+          }, 300)
+        }
+      }
     }
+  },
+  mounted() {
+    this.key = new Date().getTime()
+    this.$log.debug('>>> DrawerListTable mounted: ', this)
+  },
+  destroyed() {
+    this.$log.debug('>>> DrawerListTable destroyed: ', this)
+  },
+  deactivated() {
+    this.$log.debug('>>> DrawerListTable deactivated: ', this)
+  },
+  activated() {
+    this.$log.debug('>>> DrawerListTable activated: ', this)
   },
   methods: {
     getDefaultTitle() {
@@ -178,31 +200,68 @@ export default {
       }
     },
     async showDrawer(action) {
-      this.action = action
-      if (action === 'create') {
-        this.drawerComponent = this.createDrawer
-      } else if (action === 'update') {
-        this.drawerComponent = this.updateDrawer || this.createDrawer
-      } else if (action === 'detail') {
-        this.drawerComponent = this.detailDrawer
-      } else if (action === 'clone') {
-        this.drawerComponent = this.createDrawer || this.getDefaultDrawer('create')
-      } else {
-        this.drawerComponent = this.createDrawer
+      try {
+        // 1. 先重置状态
+        this.drawerVisible = false
+        this.action = action
+
+        // 2. 等待下一个 tick，确保状态已重置
+        await this.$nextTick()
+
+        // 3. 设置组件
+        if (action === 'create') {
+          this.drawerComponent = this.createDrawer
+        } else if (action === 'update') {
+          this.drawerComponent = this.updateDrawer || this.createDrawer
+        } else if (action === 'detail') {
+          this.drawerComponent = this.detailDrawer
+        } else if (action === 'clone') {
+          this.drawerComponent = this.createDrawer || this.getDefaultDrawer('create')
+        } else {
+          this.drawerComponent = this.createDrawer
+        }
+
+        // 4. 如果没有组件，尝试获取默认组件
+        if (!this.drawerComponent) {
+          this.drawerComponent = this.getDefaultDrawer(action)
+        }
+
+        // 5. 如果还是没有组件，报错
+        if (!this.drawerComponent) {
+          throw new Error(`No drawer component found for action: ${action}`)
+        }
+
+        // 6. 获取标题
+        if (this.getDrawerTitle) {
+          const actionMeta = await this.$store.getters['common/drawerActionMeta']
+          this.title = this.getDrawerTitle({ action, ...actionMeta })
+        }
+
+        // 7. 等待下一个 tick，确保组件已设置
+        await this.$nextTick()
+
+        // 8. 显示抽屉
+        this.drawerVisible = true
+
+        this.$log.debug('Drawer initialized:', {
+          title: this.title,
+          visible: this.drawerVisible,
+          component: this.drawerComponent,
+          action: this.action,
+          'this': this,
+          'vm': this.vm
+        })
+      } catch (error) {
+        console.error('Failed to show drawer:', error)
+        this.drawerVisible = false
+        this.drawerComponent = ''
       }
-      if (!this.drawerComponent) {
-        this.drawerComponent = this.getDefaultDrawer(action)
-      }
-      if (this.getDrawerTitle) {
-        const actionMeta = await this.$store.getters['common/drawerActionMeta']
-        this.title = this.getDrawerTitle({ action, ...actionMeta })
-      }
-      this.drawerVisible = true
     },
     onCreate(meta) {
       if (!meta) {
         meta = {}
       }
+      this.$route.params.id = ''
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'create', ...meta
       }).then(() => {
@@ -216,6 +275,7 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     onClone({ row, col }) {
+      this.$route.params.id = ''
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'clone', row: row, col: col, id: row.id
       }).then(() => {
@@ -225,6 +285,7 @@ export default {
     onUpdate({ row, col }) {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
+      this.$log.debug('>>> On update: ', this.$route)
       this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       }).then(() => {

@@ -299,7 +299,7 @@ export default {
     this.$log.debug('Object init is: ', this.object, this.method)
     await this.setDrawerMeta()
     this.setMethod()
-    // console.log('Set method: ', this.method, this.action)
+    // this.$log.debug('Set method: ', this.method, this.action)
 
     try {
       const values = await this.getFormValue()
@@ -326,7 +326,7 @@ export default {
       } else {
         this.method = this.submitMethod
       }
-      // console.log('Drawer: ', this.drawer, this.submitMethod, this.action)
+      // this.$log.debug('Drawer: ', this.drawer, this.submitMethod, this.action)
       if (!this.drawer && !this.method) {
         this.method = this.$route.params['id'] ? 'put' : 'post'
       }
@@ -420,7 +420,7 @@ export default {
       if (needGetObjectDetail === null) {
         needGetObjectDetail = this.isUpdateMethod() || this.action === 'clone'
       }
-      // console.log('Get form value: ', needGetObjectDetail, this.needGetObjectDetail, this.isUpdateMethod(), this.action)
+      // this.$log.debug('Get form value: ', needGetObjectDetail, this.needGetObjectDetail, this.isUpdateMethod(), this.action)
       if (!needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }

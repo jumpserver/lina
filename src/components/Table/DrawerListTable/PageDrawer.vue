@@ -6,9 +6,7 @@
     :visible.sync="iVisible"
     append-to-body
     class="form-drawer"
-    destroy-on-close
     v-bind="props"
-    @close="closeDrawer"
     v-on="$listeners"
   />
 </template>
@@ -53,17 +51,21 @@ export default {
         return this.visible
       },
       set(val) {
+        this.$log.debug('>>> PageDrawer set to: ', val, this)
         this.$emit('update:visible', val)
       }
     }
+  },
+  mounted() {
+    this.$log.debug('>>> PageDrawer component: ', this.component)
   },
   methods: {
     closeDrawer() {
       this.iVisible = false
       // 关闭 Drawer 后，清空所有 params 参数
-      Reflect.ownKeys(this.$route.params).forEach(key => {
-        Reflect.deleteProperty(this.$route.params, key)
-      })
+      // Reflect.ownKeys(this.$route.params).forEach(key => {
+      //   Reflect.deleteProperty(this.$route.params, key)
+      // })
     }
   }
 }

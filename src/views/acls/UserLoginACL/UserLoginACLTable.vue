@@ -2,6 +2,7 @@
   <ListTable
     ref="listTable"
     :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
     :header-actions="headerActions"
     :resource="$t('UserLoginACL')"
     :table-config="tableConfig"
@@ -23,6 +24,8 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./UserLoginACLCreateUpdate.vue'),
+      detailDrawer: () => import('./UserDetail/index.vue'),
       tableConfig: {
         url: this.url,
         columnsExclude: ['rules', 'users'],
@@ -63,8 +66,7 @@ export default {
         hasImport: false,
         hasMoreActions: false,
         createRoute: 'UserLoginACLCreate'
-      },
-      createDrawer: () => import('./UserLoginACLCreateUpdate.vue')
+      }
     }
   },
   activated() {

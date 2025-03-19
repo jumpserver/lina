@@ -117,7 +117,7 @@ export default {
     }
   },
   mounted() {
-    // console.log('Object: ', this.object)
+    // this.$log.debug('>>> Object: ', this.object)
   },
   methods: {
     isDisabled(action) {
