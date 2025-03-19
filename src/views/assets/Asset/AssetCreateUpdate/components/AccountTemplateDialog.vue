@@ -110,7 +110,7 @@ export default {
   },
   computed: {
     refTable() {
-      return this.$refs.listTable.$refs.dataTable.$refs.dataTable
+      return this.$refs.listTable.$refs.ListTable.$refs.dataTable.$refs.dataTable
     },
     iVisible: {
       get() {
