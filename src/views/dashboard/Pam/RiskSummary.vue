@@ -27,6 +27,7 @@ export default {
         total_groups_changed_accounts: '.',
         total_sudoers_changed_accounts: '.',
         total_authorized_keys_changed_accounts: '.',
+        total_account_deleted_accounts: '.',
         total_password_expired_accounts: '.',
         total_long_time_password_accounts: '.',
         total_weak_password_accounts: '.',
@@ -63,6 +64,11 @@ export default {
           description: 'authorized_keys_changed',
           name: this.$t('AuthorizedKeysChanged'),
           value: this.counter.total_authorized_keys_changed_accounts
+        },
+        {
+          description: 'account_deleted',
+          name: this.$t('AccountDeleted'),
+          value: this.counter.total_account_deleted_accounts
         },
         {
           description: 'password_expired',
@@ -207,6 +213,7 @@ export default {
           total_groups_changed_accounts: 1,
           total_sudoers_changed_accounts: 1,
           total_authorized_keys_changed_accounts: 1,
+          total_account_deleted_accounts: 1,
           total_password_expired_accounts: 1,
           total_long_time_password_accounts: 1,
           total_weak_password_accounts: 1,
