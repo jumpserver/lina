@@ -53,8 +53,9 @@ export default {
     this.$eventBus.$off('change-tab', this.handleChangeTab)
   },
   methods: {
-    handleChangeTab(tab) {
-      this.config.activeMenu = tab
+    handleChangeTab({ name, payload }) {
+      this.config.activeMenu = name
+      Object.assign(this.$route.params, { ...payload })
     }
   }
 }

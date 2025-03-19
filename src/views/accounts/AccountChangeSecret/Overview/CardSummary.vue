@@ -52,7 +52,14 @@ export default {
             canDirect: true,
             count: this.data.total_count_change_secrets,
             callback: () => {
-              this.$eventBus.$emit('change-tab', 'AccountChangeSecretList')
+              this.$eventBus.$emit('change-tab',
+                {
+                  name: 'AccountChangeSecretList',
+                  payload: {
+                    days: this.days
+                  }
+                }
+              )
             }
           }
         },
@@ -78,7 +85,12 @@ export default {
             canDirect: true,
             count: this.data.total_count_change_secret_executions,
             callback: () => {
-              this.$eventBus.$emit('change-tab', 'AccountChangeSecretExecutionList')
+              this.$eventBus.$emit('change-tab', {
+                name: 'AccountChangeSecretExecutionList',
+                payload: {
+                  days: this.days
+                }
+              })
             }
           }
         },
