@@ -234,6 +234,9 @@ export const accountFieldsMeta = (vm) => {
       el: {},
       hidden: (formValue) => {
         const automation = vm.iPlatform.automation || {}
+        if (!vm.iPlatform.automation) {
+          return true
+        }
         vm.fieldsMeta.params.el.method = vm.iPlatform.automation.push_account_method
         vm.fieldsMeta.params.el.pushAccountParams = vm.iPlatform.automation.push_account_params
         return !formValue.push_now ||

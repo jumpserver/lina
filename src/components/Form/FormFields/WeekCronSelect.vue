@@ -172,7 +172,10 @@ export default {
       const endVal = this.countIndex(end)
       for (let i = startVal; i < (endVal === 0 ? 48 : endVal); i++) {
         const curWeek = this.weekTimeData[idNum]
-        curWeek.child[i].check = true
+        const curChild = curWeek.child[i]
+        if (curChild) {
+          curChild.check = true
+        }
       }
     },
     // 计算索引

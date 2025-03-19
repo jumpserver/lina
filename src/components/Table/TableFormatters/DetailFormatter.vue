@@ -13,7 +13,7 @@
       </slot>
     </el-link>
     <Drawer
-      v-if="formatterArgs.drawer && drawerVisible"
+      v-if="formatterArgs.drawer && drawerComponent && drawerVisible"
       :component="drawerComponent"
       :has-footer="false"
       :title="drawerTitle"
@@ -101,6 +101,14 @@ export default {
         col: this.col,
         row: this.row,
         cellValue: this.cellValue
+      }
+    }
+  },
+  watch: {
+    drawerVisible(val) {
+      this.$log.debug('>>> DetailFormatter drawerVisible: ', val)
+      if (!val) {
+        this.drawerComponent = ''
       }
     }
   },

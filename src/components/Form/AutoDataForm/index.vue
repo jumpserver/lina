@@ -89,7 +89,7 @@ export default {
     }
   },
   mounted() {
-    // console.log('Method: ', this.method)
+    // this.$log.debug('>>> Method: ', this.method)
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {

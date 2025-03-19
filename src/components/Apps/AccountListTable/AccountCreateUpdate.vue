@@ -184,7 +184,7 @@ export default {
     },
     handleCloseDrawer() {
       this.iVisible = false
-      Reflect.deleteProperty(this.$route.query, 'flag')
+      // Reflect.deleteProperty(this.$route.query, 'flag')
     },
     handleAccountOperation(id, path, data) {
       this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then((res) => {
