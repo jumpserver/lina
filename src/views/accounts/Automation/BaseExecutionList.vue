@@ -84,6 +84,7 @@ export default {
             minWidth: '180px',
             formatterArgs: {
               getTitle: ({ row }) => row.snapshot.name,
+              getDrawerTitle: ({ row }) => row.snapshot.name,
               getRoute: ({ row }) => ({
                 name: this.automationRoute,
                 params: { id: row.automation.id }

@@ -19,23 +19,16 @@ export default {
       ticket: { title: '', user_display: '', type_display: '', status: '', assignees_display: '', date_created: '' },
       config: {
         activeMenu: 'TicketDetail',
-        url: '',
+        url: '/api/v1/tickets/apply-command-tickets/',
         submenu: [
           {
             title: this.$t('Basic'),
             name: 'TicketDetail'
           }
         ],
-        actions: {
-          detailApiUrl: `/api/v1/tickets/apply-command-tickets/${this.$route.params.id}/`
-        },
-        getObjectName: this.getObjectName,
         hasRightSide: false
       }
     }
-  },
-  mounted() {
-
   },
   methods: {
     getObjectName() {

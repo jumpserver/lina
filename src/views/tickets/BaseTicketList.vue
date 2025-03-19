@@ -61,14 +61,16 @@ export default {
               drawer: true,
               getRoute: ({ row }) => {
                 const type = row.type.value
-                this.$route.params.id = row.id
-
                 const routeMap = {
                   apply_asset: 'AssetsTicketDetail',
                   login_asset_confirm: 'LoginAssetTicketDetail',
                   login_confirm: 'LoginTicketDetail',
                   command_confirm: 'CommandConfirmDetail'
                 }
+
+                this.$store.dispatch('common/setDrawerActionMeta', {
+                  action: 'detail', row: {}, col: {}, id: row.id
+                })
 
                 return {
                   name: routeMap[type] || 'TicketDetail',
