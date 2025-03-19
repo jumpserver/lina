@@ -171,6 +171,7 @@ export default {
       }
     },
     onEditBlur() {
+      this.isEdit = false
       this.$emit('input', this.realValue)
     }
   }

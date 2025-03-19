@@ -251,4 +251,13 @@ export default {
     height: 100%;
   }
 }
+
+.detail-drawer {
+  ::v-deep {
+    .el-drawer__header {
+      border-bottom: none;
+      padding-bottom: 1px;
+    }
+  }
+}
 </style>
