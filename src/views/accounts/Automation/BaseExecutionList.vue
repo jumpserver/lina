@@ -121,6 +121,20 @@ export default {
                     vm.visible = true
                     vm.reportUrl = `${this.url}${row.id}/report/`
                   }
+                },
+                {
+                  name: 'record',
+                  title: this.$t('Record'),
+                  can: this.$hasPerm('accounts.view_changesecretrecord'),
+                  callback: function({ row }) {
+                    return this.$router.push({
+                      name: 'AccountChangeSecretList',
+                      query: {
+                        tab: 'ChangeSecretRecord',
+                        execution_id: row.id
+                      }
+                    })
+                  }
                 }
               ]
             }
