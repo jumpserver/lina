@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   components: {
@@ -68,8 +68,12 @@ export default {
         createRoute: 'UserLoginACLCreate'
       }
     }
+  },
+  activated() {
+    setTimeout(() => {
+      this.$refs.listTable.reloadTable()
+    }, 300)
   }
-
 }
 </script>
 

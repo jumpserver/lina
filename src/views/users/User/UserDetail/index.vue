@@ -5,7 +5,9 @@
     v-bind="config"
     v-on="$listeners"
   >
-    <component :is="config.activeMenu" :object="user" />
+    <keep-alive>
+      <component :is="config.activeMenu" :object="user" />
+    </keep-alive>
   </GenericDetailPage>
 </template>
 
@@ -82,12 +84,6 @@ export default {
     ...mapGetters([
       'currentUserIsSuperAdmin'
     ])
-  },
-  mounted() {
-    this.$log.debug('>>> UserDetail mounted: visible ', this)
-  },
-  destroyed() {
-    this.$log.debug('>>> UserDetail destroyed: visible ', this)
   },
   methods: {
     handleTabClick(tab) {
