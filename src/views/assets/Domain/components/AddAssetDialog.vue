@@ -42,6 +42,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       formConfig: {
         getUrl: () => {
@@ -74,7 +75,7 @@ export default {
         cleanFormValue(values) {
           const data = []
           values.assets.forEach(item => {
-            const d = { id: item, domain: this.$route.params.id }
+            const d = { id: item, domain: vm.object.id }
             data.push(d)
           })
           return data
