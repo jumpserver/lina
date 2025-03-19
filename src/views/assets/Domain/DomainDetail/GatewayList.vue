@@ -51,6 +51,11 @@ export default {
       createDrawer: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
       transObject: {},
+      testConfig: {
+        port: 0,
+        visible: false,
+        cell: ''
+      },
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
         columnsExclude: [
@@ -133,13 +138,13 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                   title: this.$t('TestConnection'),
                   callback: function(val) {
-                    this.visible = true
+                    vm.testConfig.visible = true
                     const port = val.row.protocols.find(item => item.name === 'ssh').port
                     if (!port) {
                       return this.$message.error(this.$tc('BadRequestErrorMsg'))
                     } else {
-                      this.port = port
-                      this.cell = val.row.id
+                      vm.testConfig.port = port
+                      vm.testConfig.cell = val.row.id
                     }
                   }.bind(this)
                 }
@@ -204,11 +209,6 @@ export default {
 
           vm.$refs.ListTable.onCreate()
         }
-      },
-      testConfig: {
-        port: 0,
-        visible: false,
-        cell: ''
       },
       addGatewaySetting: {
         addGatewayDialogVisible: false

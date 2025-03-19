@@ -16,8 +16,9 @@ export default {
     BaseExecutionList
   },
   data() {
+    const params = new URLSearchParams(this.$route.params).toString()
     return {
-      url: '/api/v1/accounts/change-secret-executions/',
+      url: `/api/v1/accounts/change-secret-executions/?${params}`,
       detailRoute: 'AccountChangeSecretExecutionDetail',
       automationRoute: 'AccountChangeSecretDetail',
       resource: 'changesecretexecution'
