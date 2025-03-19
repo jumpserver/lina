@@ -43,7 +43,8 @@ export default {
           async: false,
           ajax: {},
           title: '',
-          preventClick: false
+          preventClick: false,
+          onClick: null
         }
       }
     }
@@ -53,6 +54,7 @@ export default {
     return {
       formatterArgs: formatterArgs,
       listData: formatterArgs.async ? [] : (this.cellValue || []),
+      onClick: formatterArgs.onClick,
       amount: '',
       asyncGetDone: false
     }

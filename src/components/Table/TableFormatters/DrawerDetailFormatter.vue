@@ -12,14 +12,24 @@
         {{ iTitle }}
       </slot>
     </el-link>
+    <Drawer
+      v-if="ddrawerVisible"
+      :component="drawerComponent"
+      :has-footer="false"
+      :title="drawerTitle"
+      :visible.sync="ddrawerVisible"
+      class="detail-drawer"
+    />
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
+  components: { Drawer },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -39,6 +49,7 @@ export default {
           getTitle({ row, cellValue }) {
             return cellValue != null ? cellValue : row.name
           },
+          getDrawerTitle: null,
           getIcon({ col, row, cellValue }) {
             return null
           }
@@ -53,9 +64,13 @@ export default {
   data() {
     const formatterArgs = _.cloneDeep(_.merge(this.formatterArgsDefault, this.col.formatterArgs))
     return {
+      drawerTitle: '',
       linkClicked: false,
+      drawerComponent: '',
+      showTableDetailDrawer: false,
       currentTemplate: null,
-      formatterArgs: formatterArgs
+      formatterArgs: formatterArgs,
+      ddrawerVisible: false
     }
   },
   computed: {
@@ -89,14 +104,106 @@ export default {
       }
     }
   },
+  watch: {
+    ddrawerVisible: {
+      immediate: true,
+      handler(val, oldVal) {
+        this.$log.debug('>>> DetailFormatter ddrawerVisible: ', val, oldVal, this)
+        if (!val) {
+          setTimeout(() => {
+            this.drawerComponent = ''
+          }, 300)
+        }
+      }
+    }
+  },
+  mounted() {
+    this.$log.debug('>>> DetailFormatter isVisible mounted: ', this.iTitle, this)
+  },
+  destroyed() {
+    this.$log.debug('>>> DetailFormatter isVisible destroyed: ', this.iTitle, this)
+  },
   methods: {
+    getResource() {
+      const route = this.resolveRoute()
+      if (!route) {
+        return
+      }
+      const resource = route.meta.title || route.name
+      return resource.replace(' details', '').replace('详情', '')
+    },
+    getDrawerTitle() {
+      let title = this.cellValue || this.row.name
+
+      if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {
+        title = this.formatterArgs.getDrawerTitle({
+          col: this.col,
+          row: this.row,
+          cellValue: this.cellValue
+        })
+      }
+
+      const resource = this.getResource()
+
+      if (resource) {
+        title = `${resource}: ${title}`
+      }
+
+      return title
+    },
+    resolveRoute() {
+      const route = this.getDetailRoute()
+      const routes = this.$router.resolve(route)
+      if (!routes) {
+        return
+      }
+      const matched = routes.resolved.matched.filter(item => item.name === route.name && item.components)
+      if (matched.length === 0) {
+        return
+      }
+      if (matched[0] && matched[0].components?.default) {
+        return matched[0]
+      }
+    },
+    getRouteComponent() {
+      const route = this.resolveRoute()
+      if (route) {
+        return route.components.default
+      }
+    },
+    showDrawer() {
+      if (this.formatterArgs.drawerComponent) {
+        this.drawerComponent = this.formatterArgs.drawerComponent
+      } else {
+        this.drawerComponent = this.getRouteComponent()
+      }
+      const route = this.getDetailRoute()
+      if (route?.query?.tab) {
+        this.$cookie.set(route.name, route.query.tab, 1)
+        this.$route.query.tab = route.query.tab
+      }
+      const payload = {
+        action: 'detail',
+        row: this.row,
+        col: this.col,
+        id: route.params.id || this.row.id
+      }
+      this.$store.dispatch('common/setDrawerActionMeta', payload).then(() => {
+        this.drawerTitle = this.getDrawerTitle(payload)
+        this.ddrawerVisible = true
+      })
+    },
     handleClick() {
       if (this.formatterArgs.beforeClick) {
         this.formatterArgs.beforeClick(this.callbackArgs)
       }
 
       if (this.formatterArgs.onClick) {
-        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute() })
+        return this.formatterArgs.onClick(this.callbackArgs)
+      }
+
+      if (this.formatterArgs.drawer) {
+        return this.showDrawer()
       }
 
       if (this.preventClick) {
