@@ -112,7 +112,7 @@ export default {
           const res = await this.$axios.get(url)
 
           if (res && res.protocols.length > 0) {
-            const protocol = res.protocols[0]
+            const protocol = res.protocols.filter(protocol => protocol.name !== 'sftp')[0]
 
             this.formatterArgs.setMapItem(this.row.id, protocol.name)
             this.handleWindowOpen(this.row, protocol.name)
