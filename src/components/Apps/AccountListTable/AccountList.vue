@@ -185,6 +185,10 @@ export default {
             width: '120px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
+              getRoute: ({ row }) => ({
+                name: 'AccountDetail',
+                params: { id: row.id }
+              }),
               getDrawerTitle({ row }) {
                 return `${row.username}@${row.asset.name}`
               }
