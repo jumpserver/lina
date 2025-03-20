@@ -35,7 +35,7 @@
 <script>
 import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import QuickActions from '../../../../components/Common/QuickActions'
+import QuickActions from '@/components/Common/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

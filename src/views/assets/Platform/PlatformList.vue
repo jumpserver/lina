@@ -109,12 +109,13 @@ export default {
           actions: {
             formatterArgs: {
               canClone: () => vm.$hasPerm('assets.add_platform'),
+              onClone({ row }) {
+                vm.$refs.genericListTable.onClone({ row, query: { type: row.type.value, category: row.category.value }})
+              },
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
               onUpdate({ row, col }) {
-                vm.$route.query._type = row.type.value
-                vm.$route.query._category = row.category.value
-                vm.$refs.genericListTable.onUpdate({ row, col })
+                vm.$refs.genericListTable.onUpdate({ row, col, query: { type: row.type.value, category: row.category.value }})
               }
             }
           }
@@ -135,10 +136,7 @@ export default {
         },
         moreCreates: {
           callback: (item) => {
-            this.$router.push({
-              query: { _type: item.name, _category: item.category }
-            })
-            this.$refs.genericListTable.onCreate()
+            this.$refs.genericListTable.onCreate({ query: { type: item.name, category: item.category }})
           },
           dropdown: []
         }
