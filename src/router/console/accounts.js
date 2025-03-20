@@ -110,14 +110,14 @@ export default [
           action: 'update'
         },
         hidden: true
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
+        name: 'AccountTemplateDetail',
+        meta: { title: i18n.t('AccountTemplate') },
+        hidden: true
       }
-      // {
-      //   path: ':id',
-      //   component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
-      //   name: 'AccountTemplateDetail',
-      //   meta: { title: i18n.t('AccountTemplate') },
-      //   hidden: true
-      // }
     ]
   }
 ]
