@@ -32,12 +32,12 @@ export default {
             title: this.$t('Basic'),
             name: 'AccountPushExecutionInfo',
             hidden: () => !this.$hasPerm('accounts.view_pushaccountexecution')
-          },
-          {
-            title: this.$t('TaskList'),
-            name: 'AccountPushExecutionTaskList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
+          // {
+          //   title: this.$t('TaskList'),
+          //   name: 'AccountPushExecutionTaskList',
+          //   hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
+          // }
         ],
         getTitle: this.getExecutionTitle
 
