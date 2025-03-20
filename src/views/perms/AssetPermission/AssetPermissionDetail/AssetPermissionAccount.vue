@@ -14,6 +14,8 @@
         :show-quick-filters="false"
         :url="url"
       />
+    </template>
+    <template #right>
       <IBox :title="$tc('Account')" type="primary">
         <AccountFormatter
           :assets="assetIds"
