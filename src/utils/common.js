@@ -78,6 +78,18 @@ export function replaceAllUUID(string, replacement = '*') {
   return string
 }
 
+// 写个函数， id 设置到路径中，而不是 query 中, 确保已 / 结尾, 如果已 / 结尾，则不添加
+export function setUrlId(url, id) {
+  const urlArray = url.split('?')
+  const baseUrl = _.trimEnd(urlArray[0], '/')
+  if (urlArray.length === 1) {
+    url = `${baseUrl}/${id}/`
+  } else {
+    url = `${baseUrl}/${id}/?${urlArray[1]}`
+  }
+  return url
+}
+
 export function setUrlParam(url, name, value) {
   const urlArray = url.split('?')
   if (urlArray.length === 1) {

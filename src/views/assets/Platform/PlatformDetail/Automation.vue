@@ -8,6 +8,7 @@
 import IBox from '@/components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
+import { setUrlId } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -67,7 +68,8 @@ export default {
       if (!this.canSubmit || !this.isSystemAdmin) {
         return this.$message.error(this.$tc('NoPermission'))
       }
-      this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
+      const url = setUrlId(this.url, this.object.id)
+      this.$axios.patch(url, validValues).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
