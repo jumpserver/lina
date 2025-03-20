@@ -62,7 +62,7 @@ export default {
                   name: 'RoleDetail',
                   query: {
                     tab: 'RoleUsers',
-                    scope: row.scope.value
+                    _scope: row.scope.value
                   },
                   params: {
                     id: row.id
