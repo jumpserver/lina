@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable as ListTable } from '@/components'
 import { GenericListTableDialog } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import PermUserGroupCard from './components/PermUserGroupCard'
