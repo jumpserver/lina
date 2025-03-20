@@ -1,5 +1,5 @@
 <template>
-  <ListTable
+  <DrawerListTable
     ref="ListTable"
     :create-drawer="createDrawer"
     :header-actions="headerActions"
@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseRoleList',
   components: {
-    ListTable
+    DrawerListTable
   },
   props: {
     scope: {
@@ -45,21 +45,13 @@ export default {
                 return {
                   name: 'RoleDetail',
                   query: {
-                    _scope: row.scope.value
+                    scope: row.scope.value
                   },
                   params: {
                     id: row.id
                   }
                 }
-              },
-              beforeClick: ({ row }) => {
-                vm.$router.push({
-                  query: {
-                    _scope: row.scope.value
-                  }
-                })
-              },
-              drawer: true
+              }
             }
           },
           users_amount: {
@@ -103,13 +95,7 @@ export default {
                 return this.$hasPerm(`rbac.add_${row.scope?.value}role`)
               },
               onClone: ({ row }) => {
-                return vm.$router.push({
-                  name: 'RoleCreate',
-                  query: {
-                    scope: row.scope?.value,
-                    clone_from: row.id
-                  }
-                })
+                this.$refs.ListTable.onClone({ row, query: { scope: row.scope?.value }})
               }
             }
           }
@@ -117,10 +103,7 @@ export default {
       },
       headerActions: {
         onCreate: () => {
-          vm.$router.push({
-            query: { _scope: vm.scope }
-          })
-          this.$refs.ListTable.onCreate()
+          this.$refs.ListTable.onCreate({ query: { scope: vm.scope }})
         },
         searchConfig: {
           exclude: ['scope']

@@ -286,11 +286,15 @@ export default {
       }
     },
 
-    async showDrawer(action, { row = {}, col = {}, cellValue = '', payload = {}} = {}) {
+    async showDrawer(action, { row = {}, col = {}, query = {}, cellValue = '', payload = {}} = {}) {
       try {
         // 1. 先重置状态
         this.drawerVisible = false
         this.action = action
+
+        for (const key in query) {
+          this.$route.query[key] = query[key]
+        }
 
         // 2. 等待下一个 tick，确保状态已重置
         await this.$nextTick()
@@ -367,22 +371,22 @@ export default {
       }
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
-      await this.showDrawer('create', {})
+      await this.showDrawer('create', meta)
     },
-    async onClone({ row, col }) {
+    async onClone({ row, col, query = {}}) {
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'clone', row: row, col: col, id: row.id
       })
-      await this.showDrawer('clone')
+      await this.showDrawer('clone', { query })
     },
-    async onUpdate({ row, col }) {
+    async onUpdate({ row, col, query = {}}) {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       })
-      await this.showDrawer('update')
+      await this.showDrawer('update', { query })
     }
   }
 }

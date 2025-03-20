@@ -11,7 +11,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const scope = this.$route.query['_scope']
+    const scope = this.$route.query['scope']
     return {
       loading: true,
       scope: scope,

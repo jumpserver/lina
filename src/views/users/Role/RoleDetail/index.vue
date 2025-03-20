@@ -24,7 +24,7 @@ export default {
   },
   data() {
     const vm = this
-    const scope = this.$route.query['_scope']
+    const scope = this.$route.query['scope']
     const scopeRole = `${scope}role`
     return {
       scope: scope,

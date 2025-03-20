@@ -105,10 +105,7 @@ export default {
               canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
               onUpdate: ({ row, col }) => {
-                vm.$router.push({
-                  query: { _type: this.type }
-                })
-                vm.$refs.ListTable.onUpdate({ row, col })
+                vm.$refs.ListTable.onUpdate({ row, col, query: { _type: this.type }})
               },
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
@@ -141,10 +138,7 @@ export default {
       },
       headerActions: {
         onCreate: () => {
-          vm.$router.push({
-            query: { _type: this.type }
-          })
-          vm.$refs.ListTable.onCreate()
+          vm.$refs.ListTable.onCreate({ query: { _type: this.type }})
         },
         hasRefresh: true,
         hasExport: false,

@@ -242,15 +242,8 @@ export default {
         category: platform.category.value,
         node: this.$route.query?.node || this.$route.query?.node_id || ''
       }
-      for (const key in createProps) {
-        this.$route.query[key] = createProps[key]
-      }
-      this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'create',
-        ...createProps
-      }).then(() => {
-        this.$refs.ListTable.showDrawer('create')
-      })
+      this.$log.debug('createProps', createProps)
+      this.$refs.ListTable.onCreate({ query: createProps })
     },
     handleAssetBulkUpdate() {
       this.updateSelectedDialogSetting.visible = false

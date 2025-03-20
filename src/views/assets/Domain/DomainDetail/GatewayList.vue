@@ -203,11 +203,7 @@ export default {
           }
         ],
         onCreate: () => {
-          vm.$route.query.domain = vm.object.id
-          vm.$route.query.platform_type = 'linux'
-          vm.$route.query.category = 'host'
-
-          vm.$refs.ListTable.onCreate()
+          vm.$refs.ListTable.onCreate({ query: { domain: vm.object.id, platform_type: 'linux', category: 'host' }})
         }
       },
       addGatewaySetting: {
