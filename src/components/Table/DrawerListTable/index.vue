@@ -75,12 +75,14 @@ export default {
       title: '',
       action: '',
       drawerVisible: false,
-      drawerComponent: '',
-      drawerTitle: ''
+      drawerComponent: ''
     }
   },
   computed: {
     ...mapGetters(['inDrawer']),
+    drawerTitle() {
+      return this.getDefaultTitle()
+    },
     iHeaderActions() {
       const actions = this.headerActions
       if (!actions.onCreate) {
@@ -93,7 +95,8 @@ export default {
       const actionMap = {
         'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
         'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-        'columnsMeta.name.formatterArgs.onClick': this.onDetail
+        'columnsMeta.name.formatterArgs.drawer': true,
+        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
       }
       for (const [key, value] of Object.entries(actionMap)) {
         if (_.get(config, key)) {
@@ -121,11 +124,11 @@ export default {
         return
       }
       if (!val) {
-        // this.drawerVisible = false
+        this.drawerVisible = false
+        this.reloadTable()
       }
     },
     drawerVisible: {
-      immediate: true,
       handler(val, oldVal) {
         this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
         if (!val && oldVal) {
@@ -358,7 +361,7 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'clone', row: row, col: col, id: row.id
       })
-      await this.showDrawer('clone', { row, col })
+      await this.showDrawer('clone')
     },
     async onUpdate({ row, col }) {
       this.$route.params.id = row.id
@@ -366,7 +369,7 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       })
-      await this.showDrawer('update', { row, col })
+      await this.showDrawer('update')
     }
   }
 }

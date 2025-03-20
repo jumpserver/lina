@@ -12,14 +12,24 @@
         {{ iTitle }}
       </slot>
     </el-link>
+    <Drawer
+      v-if="formatterArgs.drawer && drawerComponent && drawerVisible"
+      :component="drawerComponent"
+      :has-footer="false"
+      :title="drawerTitle"
+      :visible.sync="drawerVisible"
+      class="detail-drawer"
+    />
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
+  components: { Drawer },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -39,6 +49,7 @@ export default {
           getTitle({ row, cellValue }) {
             return cellValue != null ? cellValue : row.name
           },
+          getDrawerTitle: null,
           getIcon({ col, row, cellValue }) {
             return null
           }
@@ -51,11 +62,15 @@ export default {
     }
   },
   data() {
-    const formatterArgs = _.cloneDeep(_.merge(this.formatterArgsDefault, this.col.formatterArgs))
+    const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     return {
+      drawerTitle: '',
       linkClicked: false,
+      drawerComponent: '',
+      showTableDetailDrawer: false,
       currentTemplate: null,
-      formatterArgs: formatterArgs
+      formatterArgs: formatterArgs,
+      drawerVisible: false
     }
   },
   computed: {
@@ -86,6 +101,14 @@ export default {
         col: this.col,
         row: this.row,
         cellValue: this.cellValue
+      }
+    }
+  },
+  watch: {
+    drawerVisible(val) {
+      this.$log.debug('>>> DetailFormatter drawerVisible: ', val)
+      if (!val) {
+        this.drawerComponent = ''
       }
     }
   },
