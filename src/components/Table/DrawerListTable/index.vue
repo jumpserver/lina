@@ -380,13 +380,13 @@ export default {
       })
       await this.showDrawer('clone', { query })
     },
-    async onUpdate({ row, col }) {
+    async onUpdate({ row, col, query = {}}) {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'update', row: row, col: col, id: row.id
       })
-      await this.showDrawer('update')
+      await this.showDrawer('update', { query })
     }
   }
 }
