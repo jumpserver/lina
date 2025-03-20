@@ -215,9 +215,7 @@ export default {
   },
   methods: {
     async updateOrCloneAsset(row, action) {
-      if (action === 'update') {
-        this.$route.params.id = row.id
-      }
+      this.createDrawer = this.drawer[row.category.value]
       const meta = {
         action: action,
         id: row.id,
@@ -227,11 +225,7 @@ export default {
         row: row,
         payload: row.payload
       }
-      await this.$store.dispatch('common/setDrawerActionMeta', meta)
-      this.createDrawer = this.drawer[row.category.value]
-      setTimeout(() => {
-        this.$refs.ListTable.showDrawer(action)
-      }, 100)
+      this.$refs.ListTable.onUpdate({ row, query: meta })
     },
     createAsset(platform) {
       this.showPlatform = false
