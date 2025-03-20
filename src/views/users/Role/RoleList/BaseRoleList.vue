@@ -96,6 +96,9 @@ export default {
               },
               onClone: ({ row }) => {
                 this.$refs.ListTable.onClone({ row, query: { scope: row.scope?.value }})
+              },
+              onUpdate: ({ row }) => {
+                this.$refs.ListTable.onUpdate({ row, query: { scope: row.scope?.value }})
               }
             }
           }
