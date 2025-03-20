@@ -4,7 +4,6 @@
       :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
-      :resource="$tc('AccountTemplate')"
       :table-config="tableConfig"
     />
     <ViewSecret
@@ -23,6 +22,7 @@ import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
 // import { DrawerListTable as ListTable } from '@/components'
 import ListTable from '@/components/Table/DrawerListTable'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'AccountTemplateTable',
@@ -47,6 +47,20 @@ export default {
           default: ['name', 'username', 'secret_type', 'has_secret', 'privileged', 'actions']
         },
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getTitle: ({ row }) => {
+                return row.name
+              },
+              getRoute: ({ row }) => {
+                return {
+                  name: 'AccountTemplateDetail',
+                  params: { id: row.id }
+                }
+              }
+            }
+          },
           privileged: {
             width: '120px',
             formatterArgs: {
