@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListTable
+    <DrawerListTable
       :header-actions="headerActions"
       :table-config="tableConfig"
     />
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
@@ -21,7 +21,7 @@ export default {
   name: 'AccountDiscoverTaskExecutionList',
   components: {
     ReportDialog,
-    GenericListTable
+    DrawerListTable
   },
   props: {
     url: {

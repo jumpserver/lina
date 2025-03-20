@@ -113,73 +113,12 @@ export default {
     }
   },
   methods: {
-    getResource() {
-      const route = this.resolveRoute()
-      if (!route) {
-        return
-      }
-      const resource = route.meta.title || route.name
-      return resource.replace(' details', '').replace('详情', '')
-    },
-    getDrawerTitle() {
-      let title = this.cellValue || this.row.name
-
-      if (this.formatterArgs?.getDrawerTitle && typeof this.formatterArgs.getDrawerTitle === 'function') {
-        title = this.formatterArgs.getDrawerTitle({
-          col: this.col,
-          row: this.row,
-          cellValue: this.cellValue
-        })
-      }
-
-      const resource = this.getResource()
-
-      if (resource) {
-        title = `${resource}: ${title}`
-      }
-
-      return title
-    },
-    resolveRoute() {
-      const route = this.getDetailRoute()
-      const routes = this.$router.resolve(route)
-      if (!routes) {
-        return
-      }
-      const matched = routes.resolved.matched.filter(item => item.name === route.name && item.components)
-      if (matched.length === 0) {
-        return
-      }
-      if (matched[0] && matched[0].components?.default) {
-        return matched[0]
-      }
-    },
-    getRouteComponent() {
-      const route = this.resolveRoute()
-      if (route) {
-        return route.components.default
-      }
-    },
-    showDrawer() {
-      if (this.formatterArgs.drawerComponent) {
-        this.drawerComponent = this.formatterArgs.drawerComponent
-      } else {
-        this.drawerComponent = this.getRouteComponent()
-      }
-      const route = this.getDetailRoute()
-      if (route?.query?.tab) {
-        this.$cookie.set(route.name, route.query.tab, 1)
-        this.$route.query.tab = route.query.tab
-      }
-      const payload = {
-        action: 'detail',
-        row: this.row,
+    getTitle() {
+      return this.formatterArgs.getTitle({
         col: this.col,
-        id: route.params.id || this.row.id
-      }
-      this.$store.dispatch('common/setDrawerActionMeta', payload).then(() => {
-        this.drawerTitle = this.getDrawerTitle(payload)
-        this.drawerVisible = true
+        row: this.row,
+        cellValue: this.cellValue,
+        index: this.index
       })
     },
     handleClick() {
@@ -188,11 +127,7 @@ export default {
       }
 
       if (this.formatterArgs.onClick) {
-        return this.formatterArgs.onClick(this.callbackArgs)
-      }
-
-      if (this.formatterArgs.drawer) {
-        return this.showDrawer()
+        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute(), formatterArgs: this.formatterArgs })
       }
 
       if (this.preventClick) {
