@@ -115,6 +115,11 @@ export default {
                 vm.$route.query._type = row.type.value
                 vm.$route.query._category = row.category.value
                 vm.$refs.genericListTable.onUpdate({ row, col })
+              },
+              onClone: ({ row, col }) => {
+                vm.$route.query._type = row.type.value
+                vm.$route.query._category = row.category.value
+                vm.$refs.genericListTable.onClone({ row, col })
               }
             }
           }
