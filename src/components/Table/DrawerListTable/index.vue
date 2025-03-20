@@ -182,7 +182,7 @@ export default {
       if (formatterArgs.getTitle) {
         title = formatterArgs.getTitle({ col, row, cellValue })
       }
-      let resource = resolvedRoute?.meta?.title || resolvedRoute?.name
+      let resource = resolvedRoute?.meta?.title || resolvedRoute?.name || ''
       resource = resource.replace('Detail', '').replace('详情', '')
 
       if (resource) {
