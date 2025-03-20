@@ -67,7 +67,7 @@ export default {
       if (!this.canSubmit || !this.isSystemAdmin) {
         return this.$message.error(this.$tc('NoPermission'))
       }
-      this.$axios.patch(`${this.url}`, validValues).then(() => {
+      this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
