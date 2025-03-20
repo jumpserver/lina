@@ -1,5 +1,5 @@
 <template>
-  <ListTable
+  <DrawerListTable
     ref="ListTable"
     :create-drawer="createDrawer"
     :header-actions="headerActions"
@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import { DrawerListTable as ListTable } from '@/components'
+import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseRoleList',
   components: {
-    ListTable
+    DrawerListTable
   },
   props: {
     scope: {
@@ -70,7 +70,7 @@ export default {
                   name: 'RoleDetail',
                   query: {
                     tab: 'RoleUsers',
-                    scope: row.scope.value
+                    _scope: row.scope.value
                   },
                   params: {
                     id: row.id
