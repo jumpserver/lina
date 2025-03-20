@@ -256,19 +256,29 @@ export default {
       }
     },
     getDetailComponent({ detailRoute }) {
-      const route = this.resolveRoute(detailRoute)
-      if (route) {
-        return route.components.default
+      if (!detailRoute) {
+        return this.detailDrawer
       }
+      this.$log.debug('>>> getDetailComponent: ', detailRoute)
+      const route = this.resolveRoute(detailRoute)
+      let component = null
+      if (route) {
+        component = route.components.default
+      }
+      if (!component) {
+        component = this.detailDrawer
+      }
+      return component
     },
     getDrawerComponent(action, payload) {
+      this.$log.debug('>>> getDrawerComponent: ', action, payload)
       switch (action) {
         case 'create':
           return this.createDrawer
         case 'update':
           return this.updateDrawer || this.createDrawer
         case 'detail':
-          return this.detailDrawer || this.getDetailComponent(payload)
+          return this.getDetailComponent(payload)
         case 'clone':
           return this.createDrawer || this.getDefaultDrawer('create')
         default:
@@ -287,6 +297,7 @@ export default {
 
         // 3. 设置组件
         this.drawerComponent = this.getDrawerComponent(action, payload)
+        this.$log.debug('>>> drawerComponent: ', this.drawerComponent)
         this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
 
         // 4. 如果没有组件，尝试获取默认组件
