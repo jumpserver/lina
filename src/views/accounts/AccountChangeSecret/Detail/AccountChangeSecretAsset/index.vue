@@ -1,7 +1,7 @@
 <template>
   <TwoCol>
     <template>
-      <GenericListTable
+      <DrawerListTable
         ref="listTable"
         :header-actions="headerActions"
         :table-config="tableConfig"
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 import RelationCard from '@/components/Cards/RelationCard/index.vue'
 import AssetRelationCard from '@/components/Apps/AssetRelationCard/index.vue'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
@@ -24,8 +24,7 @@ import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 export default {
   name: 'AccountChangeSecretAsset',
   components: {
-    TwoCol,
-    GenericListTable, RelationCard, AssetRelationCard
+    TwoCol, DrawerListTable, RelationCard, AssetRelationCard
   },
   props: {
     object: {
