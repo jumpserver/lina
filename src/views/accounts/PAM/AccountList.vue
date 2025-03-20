@@ -22,6 +22,10 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
+              getRoute: ({ row }) => ({
+                name: 'AssetDetail',
+                params: { id: row.asset.id }
+              }),
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name
             }
