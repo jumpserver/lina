@@ -5,6 +5,7 @@
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :table-config="tableConfig"
+      :resource="$t('AssetPermissionRules')"
     />
   </TwoCol>
 </template>
