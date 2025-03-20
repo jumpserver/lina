@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      title: '',
+      drawerTitle: '',
       action: '',
       drawerVisible: false,
       drawerComponent: ''
@@ -80,9 +80,6 @@ export default {
   },
   computed: {
     ...mapGetters(['inDrawer']),
-    drawerTitle() {
-      return this.getDefaultTitle()
-    },
     iHeaderActions() {
       const actions = this.headerActions
       if (!actions.onCreate) {
