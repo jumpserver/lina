@@ -34,8 +34,7 @@ export default {
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
-            this.$route.query['type'] = item.name
-            this.$refs.ListTable.onCreate()
+            this.$refs.ListTable.onCreate({ query: { type: item.name }})
           },
           dropdown: [
             {
@@ -127,9 +126,6 @@ export default {
     }
   },
   methods: {
-    createEs() {
-      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
-    }
   }
 }
 </script>

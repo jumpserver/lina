@@ -71,7 +71,7 @@ export default {
           const { id = '', action } = vm.meta
           const values = _.cloneDeep(validValues)
 
-          let submitMethod = id ? 'put' : 'post'
+          const submitMethod = id ? 'put' : 'post'
 
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
@@ -87,12 +87,6 @@ export default {
               return item
             })
           }
-
-          if (vm.meta?.payload === 'pam_asset_clone' || vm.meta.row?.payload === 'pam_asset_clone') {
-            submitMethod = 'post'
-            url = this.url
-          }
-
           return this.$axios[submitMethod](url, values)
         }
       }
@@ -104,7 +98,6 @@ export default {
   methods: {
     async init() {
       try {
-        await this.getMeta()
         await this.genConfig()
         await this.setInitial()
         await this.setPlatformConstrains()
@@ -114,11 +107,11 @@ export default {
     },
     async genConfig() {
       const { addFields, addFieldsMeta, defaultConfig } = this
-      defaultConfig.fieldsMeta = assetFieldsMeta(this, this.meta.type)
+      defaultConfig.fieldsMeta = assetFieldsMeta(this, this.$route.query.type)
       let url = this.url
-      const { id = '' } = this.meta
-      if (this.meta.platform && !id) {
-        url = setUrlParam(url, 'platform', this.meta.platform)
+      const { id = '', platform } = this.$route.query
+      if (platform && !id) {
+        url = setUrlParam(url, 'platform', platform)
       }
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
@@ -141,22 +134,9 @@ export default {
       }
       this.iConfig = config
     },
-    async getMeta() {
-      let meta = await this.$store.dispatch('common/getDrawerActionMeta')
-      if (!meta || !meta.action) {
-        meta = {
-          action: 'create',
-          platform: this.$route.query.platform || '',
-          type: this.$route.query.type || '',
-          category: this.$route.query.category || '',
-          node: this.$route.query.node || this.$route.query.node_id || ''
-        }
-      }
-      this.meta = meta
-    },
     async setInitial() {
       const { defaultConfig } = this
-      const { node, platform } = this.meta
+      const { node, platform } = this.$route.query
       const nodesInitial = node ? [node] : []
       const platformId = this.changePlatformID || this.$route.query.platform || (platform || 'Linux')
       const url = `/api/v1/assets/platforms/${platformId}/`
