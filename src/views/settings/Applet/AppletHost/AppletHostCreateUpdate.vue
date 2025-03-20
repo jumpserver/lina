@@ -16,7 +16,7 @@ export default {
       config: {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
-          [this.$t('Automations'), ['deploy_options'], 3],
+          [this.$t('Automation'), ['deploy_options'], 3],
           [this.$t('Account'), ['using_same_account', 'auto_create_accounts', 'accounts_create_amount']]
         ],
         addFieldsMeta: {
