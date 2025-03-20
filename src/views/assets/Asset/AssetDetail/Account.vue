@@ -59,7 +59,7 @@ export default {
     return {
       title: this.$t('Test'),
       templateDialogVisible: false,
-      columnsDefault: ['name', 'username', 'asset'],
+      columnsDefault: ['name', 'username', 'asset', 'connect'],
       headerExtraActions: [
         {
           name: this.$t('AccountTemplate'),
