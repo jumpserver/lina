@@ -1,12 +1,33 @@
 import i18n from '@/i18n/i18n'
+const accountExistCache = new Map()
 
-async function checkUserExist() {
-  if (!this.row.username) {
-    return false
+async function checkAccountExist(username, asset) {
+  const cacheKey = `${username}-${asset}`
+  if (accountExistCache.has(cacheKey)) {
+    return accountExistCache.get(cacheKey)
   }
-  const url = `/api/v1/accounts/accounts/?username=${encodeURIComponent(this.row.username)}&asset=${this.row.asset.id}`
+  const url = `/api/v1/accounts/accounts/?username=${encodeURIComponent(username)}&asset=${asset}`
   const data = await this.$axios.get(url)
-  return data.length > 0
+  const result = data.length > 0
+  accountExistCache.set(cacheKey, result)
+  return result
+}
+
+async function checkAccountsExist() {
+  // 批量选择,所有都存在返回 true
+  if (this.rows.length > 0) {
+    for (const row of this.rows) {
+      if (!await checkAccountExist.call(this, row.username, row.asset.id)) {
+        return false
+      }
+    }
+    return true
+  }
+  // 单个选择
+  if (this.row.username) {
+    return await checkAccountExist.call(this, this.row.username, this.row.asset.id)
+  }
+  return false
 }
 
 export const riskActions = [
@@ -30,7 +51,7 @@ export const riskActions = [
     label: i18n.t('AddAccount'),
     has: ['new_found'],
     disabled: async function() {
-      return await checkUserExist.call(this)
+      return await checkAccountsExist.call(this)
     }
   },
   {
@@ -38,7 +59,7 @@ export const riskActions = [
     label: i18n.t('AddAccountAfterChangingPassword'),
     has: async function() {
       const risks = ['new_found', 'long_time_password', 'password_expired']
-      return risks.includes(this.row.risk.value) && !await checkUserExist.call(this)
+      return risks.includes(this.row.risk.value) && !await checkAccountsExist.call(this)
     }
   },
   {
@@ -49,7 +70,7 @@ export const riskActions = [
         'long_time_password', 'weak_password', 'password_expired',
         'leaked_password', 'repeated_password'
       ]
-      return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
+      return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
     }
   },
   {
@@ -57,7 +78,7 @@ export const riskActions = [
     label: i18n.t('DeleteAccount'),
     has: async function() {
       const risks = ['account_deleted']
-      return risks.includes(this.row.risk.value) && await checkUserExist.call(this)
+      return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
     }
   },
   // {
