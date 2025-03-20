@@ -103,11 +103,13 @@ export default {
       }
       const columnsMeta = config.columnsMeta
       for (const value of Object.values(columnsMeta)) {
-        if (
-          value.formatter && value.formatter.name === 'AmountFormatter' &&
-          value.formatterArgs && value.formatterArgs.drawer !== false
-        ) {
-          value.formatterArgs.onClick = this.onDetail
+        const formatter = value?.formatter
+        const formatterArgs = value?.formatterArgs
+        // console.log('>>> name: ', key)
+        // console.log('>>> formatter: ', formatter)
+        const detailFormaters = ['AmountFormatter', 'DetailFormatter']
+        if (formatter && detailFormaters.includes(formatter.name) && formatterArgs.drawer !== false) {
+          formatterArgs.onClick = this.onDetail
         }
       }
       return config
@@ -160,22 +162,35 @@ export default {
           this.$route[key][k] = value[k]
         }
       }
-
       this.drawerComponent = ''
     },
-    getDetailDrawerTitle({ col, row, cellValue, route }) {
+    getDetailDrawerTitle({ col, row, cellValue, payload = {}}) {
+      this.$log.debug('>>> getDetailDrawerTitle: ', col, row, cellValue, payload)
+      const { detailRoute = {}, formatterArgs = {}} = payload
+      const getTitle = formatterArgs.getDrawerTitle || this.getTitle
+      this.$log.debug('>>> getTitle: ', getTitle)
+      if (getTitle && typeof getTitle === 'function') {
+        return getTitle({ col, row, cellValue })
+      }
+      if (formatterArgs.title) {
+        return formatterArgs.title
+      }
+      const resolvedRoute = this.resolveRoute(detailRoute)
       let title = cellValue || row.name
-      const resource = route?.meta?.title || route?.name
+      let resource = resolvedRoute?.meta?.title || resolvedRoute?.name
+      resource = resource.replace('Detail', '').replace('详情', '')
 
       if (resource) {
         title = `${resource}: ${title}`
       }
-
       return title
     },
-    getDefaultTitle({ row, col, cellValue, detailRoute }) {
+    getActionDrawerTitle({ action, row, col, cellValue, payload }) {
+      if (action === 'detail') {
+        return this.getDetailDrawerTitle({ col, row, cellValue, payload })
+      }
+
       let title = this.title
-      let dispatchAction = ''
       if (!title && this.resource) {
         title = this.resource
       }
@@ -187,18 +202,15 @@ export default {
       if (!title) {
         title = this.$t('NoTitle')
       }
-      const action = this.action
+      let actionLabel = ''
       if (action === 'clone' || action === 'create') {
-        dispatchAction = this.$t('Create')
+        actionLabel = this.$t('Create')
       } else if (action === 'update') {
-        dispatchAction = this.$t('Update')
+        actionLabel = this.$t('Update')
       } else if (action === 'detail') {
-        dispatchAction = this.$t('Detail')
+        actionLabel = this.$t('Detail')
       }
-      title = dispatchAction + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
-      if (this.action === 'detail') {
-        title = this.getDetailDrawerTitle({ row, col, cellValue, route: detailRoute })
-      }
+      title = actionLabel + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
       return title
     },
     getDefaultDrawer(action) {
@@ -238,14 +250,28 @@ export default {
         return matched[0]
       }
     },
-    getDetailComponent(r) {
-      const route = this.resolveRoute(r)
+    getDetailComponent({ detailRoute }) {
+      const route = this.resolveRoute(detailRoute)
       if (route) {
         return route.components.default
       }
     },
-    async showDrawer(action, { row, col, cellValue, detailRoute }) {
-      this.drawerTitle = this.getDefaultTitle({ row, col, cellValue, detailRoute })
+    getDrawerComponent(action, payload) {
+      switch (action) {
+        case 'create':
+          return this.createDrawer
+        case 'update':
+          return this.updateDrawer || this.createDrawer
+        case 'detail':
+          return this.detailDrawer || this.getDetailComponent(payload)
+        case 'clone':
+          return this.createDrawer || this.getDefaultDrawer('create')
+        default:
+          return this.createDrawer
+      }
+    },
+
+    async showDrawer(action, { row = {}, col = {}, cellValue = '', payload = {}} = {}) {
       try {
         // 1. 先重置状态
         this.drawerVisible = false
@@ -255,17 +281,8 @@ export default {
         await this.$nextTick()
 
         // 3. 设置组件
-        if (action === 'create') {
-          this.drawerComponent = this.createDrawer
-        } else if (action === 'update') {
-          this.drawerComponent = this.updateDrawer || this.createDrawer
-        } else if (action === 'detail') {
-          this.drawerComponent = this.detailDrawer || this.getDetailComponent(detailRoute)
-        } else if (action === 'clone') {
-          this.drawerComponent = this.createDrawer || this.getDefaultDrawer('create')
-        } else {
-          this.drawerComponent = this.createDrawer
-        }
+        this.drawerComponent = this.getDrawerComponent(action, payload)
+        this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
 
         // 4. 如果没有组件，尝试获取默认组件
         if (!this.drawerComponent) {
@@ -309,12 +326,24 @@ export default {
       }
       this.$refs.ListTable.reloadTable()
     },
-    async onDetail({ row, col, cellValue, detailRoute }) {
+    async onDetail({ row, col, cellValue, detailRoute, formatterArgs }) {
+      this.$log.debug('>>> onDetail: ', detailRoute, formatterArgs)
       this.$route.params.id = row.id
+      // 因为使用 detail formatter 时，id 可能并非 row 的，比如 execution 的 task id
+      const query = detailRoute?.query || {}
+      const params = detailRoute?.params || {}
+      for (const key in query) {
+        this.$route.query[key] = query[key]
+      }
+      for (const key in params) {
+        this.$route.params[key] = params[key]
+      }
+      // 有可能来自 params 或者 row
+      const id = params.id || row.id
       await this.$store.dispatch('common/setDrawerActionMeta', {
-        action: 'detail', row: row, col: col, id: row.id
+        action: 'detail', row: row, col: col, id: id
       })
-      await this.showDrawer('detail', { row, col, cellValue, detailRoute })
+      await this.showDrawer('detail', { row, col, cellValue, payload: { detailRoute, formatterArgs }})
     },
     async onCreate(meta) {
       if (!meta) {
@@ -322,7 +351,7 @@ export default {
       }
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
-      await this.showDrawer('create')
+      await this.showDrawer('create', {})
     },
     async onClone({ row, col }) {
       this.$route.params.id = ''

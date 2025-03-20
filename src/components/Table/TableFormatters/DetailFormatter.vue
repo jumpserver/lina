@@ -90,13 +90,21 @@ export default {
     }
   },
   methods: {
+    getTitle() {
+      return this.formatterArgs.getTitle({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue,
+        index: this.index
+      })
+    },
     handleClick() {
       if (this.formatterArgs.beforeClick) {
         this.formatterArgs.beforeClick(this.callbackArgs)
       }
 
       if (this.formatterArgs.onClick) {
-        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute() })
+        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute(), formatterArgs: this.formatterArgs })
       }
 
       if (this.preventClick) {
