@@ -1,52 +1,173 @@
-import { CronTab } from '@/components'
-import i18n from '@/i18n/i18n'
-import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
-import store from '@/store'
-
-const validatorInterval = (rule, value, callback) => {
-  // value只能是 null 或者 >=1
-  if (value === null || (!isNaN(value) && Number(value) >= 1)) {
-    callback()
-  } else {
-    callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
+import { toSafeLocalDateStr } from '@/utils/time'
+import { ActionsFormatter, DetailFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
+export const statusMap = {
+  pending: '0',
+  confirmed: '1',
+  ignored: '2'
+}
+export const gatherAccountTableConfig = (vm, url) => {
+  if (!url) {
+    url = '/api/v1/accounts/gathered-accounts/'
+  }
+  return {
+    url: url,
+    hasTree: true,
+    columns: [
+      'asset', 'username', 'date_last_login',
+      'address_last_login', 'present',
+      'remote_present', 'status',
+      'date_updated'
+    ],
+    columnsShow: {
+      default: [
+        'username', 'asset', 'address_last_login',
+        'date_last_login', 'status'
+      ]
+    },
+    columnsMeta: {
+      asset: {
+        formatter: DetailFormatter,
+        formatterArgs: {
+          drawer: true,
+          can: vm.$hasPerm('assets.view_asset'),
+          getTitle: ({ row }) => row.asset.name,
+          getDrawerTitle: ({ row }) => row.asset.name,
+          getRoute({ row }) {
+            return {
+              name: 'AssetDetail',
+              params: { id: row.asset.id }
+            }
+          }
+        }
+      },
+      username: {
+        label: vm.$t('Account'),
+        formatter: DetailFormatter,
+        formatterArgs: {
+          can: true,
+          getRoute({ row }) {
+            return {
+              name: 'DiscoverAccountDetail',
+              params: { id: row.id }
+            }
+          },
+          drawer: true
+        }
+      },
+      present: {
+        width: '110px'
+      },
+      remote_present: {
+        width: '120px'
+      },
+      date_updated: {
+        formatter: function(row, col, cell) {
+          return toSafeLocalDateStr(row.date_updated)
+        }
+      },
+      address_last_login: {
+        width: '150px'
+      },
+      status: {
+        formatter: DiscoverConfirmFormatter,
+        width: '100px',
+        formatterArgs: {
+          confirm: ({ row }) => {
+            vm.$axios.put(
+              `/api/v1/accounts/gathered-accounts/status/`,
+              { status: statusMap.confirmed, ids: [row.id] }
+            ).then(res => {
+              row.status = statusMap.confirmed
+            }).catch(() => {
+              row.status = vm.$t('Error')
+            })
+          },
+          ignore: ({ row }) => {
+            vm.$axios.put(
+              `/api/v1/accounts/gathered-accounts/status/`,
+              { status: statusMap.ignored, ids: [row.id] }
+            ).then(res => {
+              row.status = statusMap.ignored
+            }).catch(() => {
+              row.status = vm.$t('Error')
+            })
+          },
+          remove({ row }) {
+            vm.deleteDialog.visible = true
+            vm.deleteDialog.account = row
+          }
+        }
+      },
+      actions: {
+        formatter: ActionsFormatter,
+        formatterArgs: {
+          hasClone: false,
+          hasUpdate: false, // can set function(row, value)
+          moreActionsTitle: vm.$t('More'),
+          onDelete: ({ row }) => {
+            vm.deleteDialog.visible = true
+            vm.deleteDialog.account = row
+          }
+        }
+      }
+    }
   }
 }
 
-export const crontab = {
-  type: 'cronTab',
-  component: CronTab,
-  label: i18n.t('Crontab'),
-  hidden: (formValue) => {
-    return formValue.is_periodic === false
-  },
-  helpText: i18n.t('CrontabHelpText'),
-  helpTip: i18n.t('CrontabHelpTip')
-}
-
-export const interval = {
-  label: i18n.t('Interval'),
-  hidden: (formValue) => {
-    return formValue.is_periodic === false
-  },
-  component: InputWithUnit,
-  el: {
-    unit: 'hour'
-  },
-  rules: [
-    { validator: validatorInterval }
-  ]
-}
-
-export const is_periodic = {
-  type: 'switch',
-  hidden: (formValue) => {
-    return !store.getters.hasValidLicense
+export const gatherAccountHeaderActions = (vm) => {
+  return {
+    hasCreate: false,
+    hasImport: false,
+    hasExport: true,
+    searchConfig: {
+      exclude: ['asset', 'id'],
+      options: [
+        {
+          label: vm.$t('AssetName'),
+          value: 'asset_name'
+        }
+      ]
+    },
+    extraMoreActions: [
+      {
+        name: 'SyncSelected',
+        title: vm.$t('SyncSelected'),
+        type: 'primary',
+        icon: 'fa fa-check',
+        can: ({ selectedRows }) => {
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.add_account')
+        },
+        callback: function({ selectedRows }) {
+          const ids = selectedRows.map(v => {
+            return v.id
+          })
+          vm.$axios.put(
+            `/api/v1/accounts/gathered-accounts/status/`,
+            { ids: ids, status: statusMap.confirmed }
+          ).then(() => {
+            vm.$message.success(vm.$tc('SyncSuccessMsg'))
+          }).catch(err => {
+            vm.$message.error(vm.$tc('SyncErrorMsg' + ' ' + err))
+          })
+        }
+      },
+      {
+        name: 'SyncDeleteSelected',
+        title: vm.$t('SyncDeleteSelected'),
+        type: 'primary',
+        icon: 'fa fa-exchange',
+        can: ({ selectedRows }) => {
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account')
+        },
+        callback: function({ selectedRows }) {
+          vm.gatherAccounts = selectedRows
+          vm.showDeleteAccountDialog = false
+          setTimeout(() => {
+            vm.showDeleteAccountDialog = true
+          })
+        }
+      }
+    ]
   }
-}
-
-export default {
-  crontab: crontab,
-  interval: interval,
-  is_periodic: is_periodic
 }
 

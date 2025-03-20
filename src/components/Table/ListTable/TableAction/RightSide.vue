@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
+import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
 import { assignIfNot } from '@/utils/common'
@@ -98,11 +98,23 @@ export default {
     canBulkUpdate: {
       type: [Boolean, Function, String],
       default: false
+    },
+    hasQuickFilter: defaultTrue,
+    quickFilterExpand: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       defaultRightSideActions: [
+        {
+          name: 'actionFilter',
+          icon: 'filter',
+          tip: this.$t('Filter'),
+          has: this.hasQuickFilter,
+          callback: this.handleFilterClick.bind(this)
+        },
         {
           name: 'actionSetting',
           icon: 'system-setting',
@@ -164,12 +176,15 @@ export default {
       // return assignIfNot(this.exportOptions, { url: this.tableUrl })
 
       return {
-        ...this.exportOptions,
-        url: this.tableUrl
+        url: this.tableUrl,
+        ...this.exportOptions
       }
     }
   },
   methods: {
+    handleFilterClick() {
+      this.$emit('update:quick-filter-expand', !this.quickFilterExpand)
+    },
     handleTagSearch(val) {
       this.searchTable(val)
     },
@@ -196,7 +211,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 10px;
   height: 30px;
   line-height: 30px;
 

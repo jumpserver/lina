@@ -1,71 +1,70 @@
 <template>
   <Page v-bind="$attrs">
-    <div>
-      <el-row :gutter="20">
-        <el-col :md="15" :sm="24">
-          <DetailCard :items="detailCardItems" />
-        </el-col>
-        <el-col :md="9" :sm="24">
-          <QuickActions
-            :actions="authQuickActions"
-            :title="$tc('AuthSettings')"
+    <TwoCol>
+      <template>
+        <DetailCard :items="detailCardItems" />
+      </template>
+      <template #right>
+        <QuickActions
+          :actions="authQuickActions"
+          :title="$tc('AuthSettings')"
+          type="primary"
+        />
+        <QuickActions
+          :actions="messageSubscriptionQuickActions"
+          :title="$tc('NotificationConfiguration')"
+          fa="fa-info-circle"
+          style="margin-top: 15px"
+          type="info"
+        />
+        <QuickActions
+          v-if="biometricFeaturesActions.some(action => action.has)"
+          :actions="biometricFeaturesActions"
+          :title="$tc('BiometricFeatures')"
+          style="margin-top: 15px"
+          type="warning"
+        />
+        <IBox :title="$tc('InformationModification')" fa="fa-edit">
+          <table>
+            <tr>
+              <td> {{ $t('Phone') }}</td>
+              <td>
+                <PhoneInput :value="object.phone" />
+              </td>
+            </tr>
+            <tr>
+              <td> {{ $t('WeChat') }}</td>
+              <td>
+                <el-input v-model="object.wechat" />
+              </td>
+            </tr>
+          </table>
+          <el-button
+            size="small"
+            style="margin-top: 10px"
             type="primary"
-          />
-          <QuickActions
-            :actions="messageSubscriptionQuickActions"
-            :title="$tc('NotificationConfiguration')"
-            fa="fa-info-circle"
-            style="margin-top: 15px"
-            type="info"
-          />
-          <QuickActions
-            v-if="biometricFeaturesActions.some(action => action.has)"
-            :title="$tc('BiometricFeatures')"
-            type="warning"
-            :actions="biometricFeaturesActions"
-            style="margin-top: 15px"
-          />
-          <IBox :title="$tc('InformationModification')" fa="fa-edit">
-            <table>
-              <tr>
-                <td> {{ $t('Phone') }}</td>
-                <td>
-                  <PhoneInput :value="object.phone" />
-                </td>
-              </tr>
-              <tr>
-                <td> {{ $t('WeChat') }}</td>
-                <td>
-                  <el-input v-model="object.wechat" />
-                </td>
-              </tr>
-            </table>
-            <el-button
-              size="small"
-              style="margin-top: 10px"
-              type="primary"
-              @click="updateProfile"
-            >
-              {{ $t('Update') }}
-            </el-button>
-          </IBox>
-        </el-col>
-      </el-row>
-    </div>
+            @click="updateProfile"
+          >
+            {{ $t('Update') }}
+          </el-button>
+        </IBox>
+      </template>
+    </TwoCol>
   </Page>
 </template>
 
 <script type="text/jsx">
-import { IBox } from '@/components'
+import { IBox, QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
-import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/time'
 import store from '@/store'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     Page,
     IBox,
     PhoneInput,
@@ -87,7 +86,7 @@ export default {
         {
           title: this.$t('FacialFeatures'),
           has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-              this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
+            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
@@ -479,19 +478,5 @@ export default {
 }
 </script>
 <style scoped>
-.ibox ::v-deep table {
-  width: 100%;
-}
 
-.ibox ::v-deep tr > td > span:first-child {
-  line-height: 1.43;
-  padding-right: 30px;
-  vertical-align: top;
-  font-size: 13px;
-  width: 50%;
-}
-
-.ibox ::v-deep tr > td > span:last-child {
-  float: right;
-}
 </style>

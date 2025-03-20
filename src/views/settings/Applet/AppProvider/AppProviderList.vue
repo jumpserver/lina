@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 
 export default {
@@ -78,5 +78,4 @@ export default {
 .App-Provider ::v-deep .protocol {
   margin-left: 3px;
 }
-
 </style>

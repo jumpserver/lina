@@ -1,52 +1,62 @@
 <template>
-  <IBox
-    :fa="icon"
-    :title="title"
-    :type="type"
-    v-bind="$attrs"
-  >
-    <table class="card-table">
-      <div v-cloak v-if="iObjects.length > 0">
-        <tr v-for="obj of iObjects" :key="obj.value" class="item">
-          <td>
-            <el-tooltip
-              :content="obj.label"
-              :open-delay="500"
-              effect="dark"
-              placement="left"
-              style="margin: 4px;"
-            >
-              <el-link class="detail" @click="goDetail(obj)">
-                {{ obj.label }}
-              </el-link>
-            </el-tooltip>
-          </td>
-          <td>
-            <el-button
-              size="mini"
-              style="float: right"
-              type="primary"
-              @click="buttonClickCallback(obj)"
-            >
-              {{ buttonTitle }}
-            </el-button>
-          </td>
-        </tr>
-      </div>
-      <div v-cloak v-else style="text-align: center;">
-        {{ $t('NoData') }}
-      </div>
-    </table>
-  </IBox>
+  <div>
+    <IBox
+      :fa="icon"
+      :title="title"
+      :type="type"
+      v-bind="$attrs"
+    >
+      <table class="card-table">
+        <div v-cloak v-if="iObjects.length > 0">
+          <tr v-for="obj of iObjects" :key="obj.value" class="item">
+            <td>
+              <el-tooltip
+                :content="obj.label"
+                :open-delay="500"
+                effect="dark"
+                placement="left"
+                style="margin: 4px;"
+              >
+                <el-link class="detail" @click="goDetail(obj)">
+                  {{ obj.label }}
+                </el-link>
+              </el-tooltip>
+            </td>
+            <td>
+              <el-button
+                size="mini"
+                style="float: right"
+                type="primary"
+                @click="buttonClickCallback(obj)"
+              >
+                {{ buttonTitle }}
+              </el-button>
+            </td>
+          </tr>
+        </div>
+        <div v-cloak v-else style="text-align: center;">
+          {{ $t('NoData') }}
+        </div>
+      </table>
+    </IBox>
+    <Drawer
+      :component="detailDrawer"
+      :has-footer="false"
+      :title="title"
+      :visible.sync="drawerVisible"
+    />
+  </div>
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'PermUserGroupCard',
   components: {
-    IBox
+    IBox,
+    Drawer
   },
   props: {
     icon: {
@@ -66,7 +76,7 @@ export default {
       required: true
     },
     detailRoute: {
-      type: String,
+      type: [String, Function],
       default: ''
     },
     buttonTitle: {
@@ -75,11 +85,14 @@ export default {
     },
     buttonClickCallback: {
       type: Function,
-      default: (obj) => {}
+      default: (obj) => {
+      }
     }
   },
   data() {
     return {
+      detailDrawer: '',
+      drawerVisible: false,
       objects: []
     }
   },
@@ -100,42 +113,54 @@ export default {
       this.objects = data
     },
     goDetail(obj) {
-      this.$router.push({ name: this.detailRoute, params: { id: obj.id }})
+      this.detailDrawer = this.detailRoute
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'create',
+        row: {},
+        id: obj.id
+      }).then(() => {
+        this.drawerVisible = true
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .card-table {
-    width: 100%;
-    table-layout:fixed;
-  }
-  [v-cloak]{
-    display: none!important;
-  }
-  b, strong {
-    font-size: 13px;
-  }
-  tr td {
-    line-height: 1.2;
-    padding: 4px 8px;
-    vertical-align: top;
-    display: inline;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  tr.item {
-    border-bottom: 1px solid #e7eaec;
-    padding: 4px  8px;
-    display: block;
-    //&:last-child {
-    //   border-bottom: 0;
-    //}
-  }
-  .box-margin {
-    margin-bottom: 20px;
-  }
+.card-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+[v-cloak] {
+  display: none !important;
+}
+
+b, strong {
+  font-size: 13px;
+}
+
+tr td {
+  line-height: 1.2;
+  padding: 4px 8px;
+  vertical-align: top;
+  display: inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tr.item {
+  border-bottom: 1px solid #e7eaec;
+  padding: 4px 8px;
+  display: block;
+  //&:last-child {
+  //   border-bottom: 0;
+  //}
+}
+
+.box-margin {
+  margin-bottom: 20px;
+}
 
 </style>

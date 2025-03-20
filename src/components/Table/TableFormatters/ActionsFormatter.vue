@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index.vue'
 import BaseFormatter from './base.vue'
+import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
@@ -33,6 +33,23 @@ const defaultUpdateCallback = function({ row, col }) {
   } else {
     route.name = updateRoute
   }
+
+  this.$router.push(route)
+}
+
+const defaultViewCallback = function({ row, col }) {
+  const id = row.id
+  let route = { params: { id: id }}
+  const viewRoute = this.colActions.viewRoute
+
+  if (typeof updateRoute === 'object') {
+    route = Object.assign(route, viewRoute)
+  } else if (typeof updateRoute === 'function') {
+    route = viewRoute({ row, col })
+  } else {
+    route.name = viewRoute
+  }
+
   this.$router.push(route)
 }
 
@@ -104,9 +121,10 @@ export default {
           cloneRoute: this.$route.name.replace('List', 'Create'),
           performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
+          onView: defaultViewCallback,
           onDelete: defaultDeleteCallback,
           onClone: defaultCloneCallback,
-          extraActions: [] // format see defaultActions
+          extraActions: []
         }
       }
     }
@@ -135,7 +153,7 @@ export default {
       {
         name: 'clone',
         title: this.$t('Duplicate'),
-        type: 'info',
+        type: 'primary',
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,
@@ -146,8 +164,8 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: ''
       // moreActionsTitle: colActions.moreActionsTitle || null
+      moreActionsTitle: ''
     }
   },
   computed: {
@@ -223,7 +241,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .table-actions {
   ::v-deep {
     .el-icon-arrow-down {

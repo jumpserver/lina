@@ -1,9 +1,9 @@
 <template>
   <TabPage
-    v-if="!loading"
     :active-menu.sync="iActiveMenu"
     :submenu="iSubmenu"
     :title="iTitle"
+    class="generic-detail-page"
     @tab-click="handleTabClick"
   >
     <template #headingRightSide>
@@ -11,7 +11,9 @@
         <ActionsGroup slot="headingRightSide" :actions="pageActions" class="header-buttons" />
       </span>
     </template>
-    <slot />
+    <div v-if="!loading">
+      <slot />
+    </div>
   </TabPage>
 </template>
 
@@ -19,7 +21,7 @@
 import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
-import ActionsGroup from '@/components/ActionsGroup'
+import ActionsGroup from '@/components/Common/ActionsGroup'
 import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
@@ -35,7 +37,6 @@ export default {
   props: {
     url: {
       type: String,
-      required: false,
       default: ''
     },
     object: {
@@ -98,37 +99,34 @@ export default {
   },
   data() {
     const vm = this
-    const detailApiUrl = (function() {
-      if (vm.url) {
-        return `${vm.url}/${vm.$route.params.id}/`
-      } else {
-        return getApiPath(vm)
-      }
-    }())
     const defaultActions = {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
+      hasDelete: true,
       deleteCallback: function(item) {
         vm.defaultDelete(item)
       },
-      deleteApiUrl: detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
       // Update button
       canUpdate: () => {
         return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
+      hasUpdate: true,
       updateCallback: function(item) {
         this.defaultUpdate(item)
       },
       updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
-      detailApiUrl,
       defaultActions,
       loading: true,
+      drawer: false,
+      action: '',
+      actionId: '',
       validActions: Object.assign(defaultActions, this.actions)
     }
   },
+
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
     pageActions() {
@@ -139,7 +137,7 @@ export default {
           icon: 'el-icon-edit-outline',
           size: 'small',
           can: this.validActions.canUpdate,
-          has: this.validActions.hasUpdate,
+          has: this.validActions.hasUpdate && !this.drawer,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
@@ -150,12 +148,15 @@ export default {
           icon: 'el-icon-delete',
           size: 'small',
           can: this.validActions.canDelete,
-          has: this.validActions.hasDelete,
+          has: this.validActions.hasDelete && !this.drawer,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
     },
     iTitle() {
+      if (this.drawer) {
+        return 'null'
+      }
       return this.title || this.getTitle(this.object)
     },
     iActiveMenu: {
@@ -178,20 +179,49 @@ export default {
       return [...this.submenu, activity]
     }
   },
-  async mounted() {
+  async created() {
     try {
       this.loading = true
+      await this.checkDrawer()
       await this.getObject()
     } finally {
       this.loading = false
     }
   },
   methods: {
+    async checkDrawer() {
+      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      if (drawActionMeta && drawActionMeta.action) {
+        this.drawer = true
+        this.row = drawActionMeta.row
+        this.actionId = drawActionMeta.id
+      }
+    },
+    getDetailUrl() {
+      const vm = this
+      const objectId = this.actionId || this.$route.params.id
+      // 兼容之前的 detailApiUrl
+      if (vm.validActions.detailApiUrl || vm.detailApiUrl) {
+        return vm.validActions.detailApiUrl || vm.detailApiUrl
+      }
+      const url = _.trimEnd(vm.url, '/')
+      return url ? `${url}/${objectId}/` : getApiPath(vm, objectId)
+    },
+    afterDelete() {
+      if (this.drawer) {
+        this.$emit('close-drawer')
+        this.$emit('detail-delete-success')
+        this.$emit('reload-table')
+      } else {
+        this.$message.success(this.$tc('DeleteSuccessMsg'))
+        this.$router.push({ name: this.validActions.deleteSuccessRoute })
+      }
+    },
     defaultDelete() {
       const msg = this.$t('DeleteWarningMsg') + ' ' + this.iTitle + ' ?'
       const title = this.$t('Info')
       const performDelete = () => {
-        const url = this.validActions.deleteApiUrl
+        const url = this.getDetailUrl()
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)
       }
@@ -206,8 +236,7 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$tc('DeleteSuccessMsg'))
-            this.$router.push({ name: this.validActions.deleteSuccessRoute })
+            this.afterDelete()
           } catch (error) {
             const errorDetail = error?.response?.data?.detail || ''
             if (errorDetail) {
@@ -238,13 +267,13 @@ export default {
     },
     getObject() {
       // 兼容之前的 detailApiUrl
-      const url = this.validActions.detailApiUrl || this.detailApiUrl
+      const url = this.getDetailUrl()
       return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
         this.$emit('getObjectDone', data)
       }).catch(error => {
         if (error.response && error.response.status === 404) {
-          const msg = this.$t('ObjectNotFoundOrDeletedMsg')
+          const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
           this.$message.error(msg)
         } else {
           flashErrorMsg({ error, response: error.response })
@@ -260,8 +289,17 @@ export default {
 }
 </script>
 
-<style scoped>
-  .header-buttons {
-    z-index: 999;
+<style lang="scss" scoped>
+.header-buttons {
+  z-index: 999;
+}
+
+.generic-detail-page {
+  ::v-deep {
+    .tab-page-content {
+      padding-left: 20px;
+      padding-right: 15px;
+    }
   }
+}
 </style>

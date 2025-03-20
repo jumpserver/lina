@@ -12,7 +12,7 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import i18n from '@/i18n/i18n'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import { Required } from '@/components/Form/DataForm/rules'
-import { crontab, interval } from '@/views/accounts/const'
+import { crontab, interval } from '@/components/const'
 import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
 
@@ -197,7 +197,7 @@ export default {
           }
         },
         is_periodic: {
-          type: 'switch',
+          type: 'checkbox',
           hidden: () => {
             return this.instantTask
           }
@@ -233,38 +233,29 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query && this.$route.query.type) {
-      this.initial.type = 'adhoc'
-      switch (this.$route.query.type) {
-        case 'adhoc':
-          this.initial.type = 'adhoc'
-          if (this.$route.query.id) {
-            this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
-              this.initial.module = data.module
-              this.initial.args = data.args
-              this.initial.instant = true
-              this.initial.runAfterSave = true
-              this.instantTask = true
-              this.createSuccessNextRoute = { name: 'Adhoc' }
-              this.ready = true
-            })
-          } else {
-            this.ready = true
-          }
-          break
-        case 'playbook':
-          this.initial.type = 'playbook'
-          if (this.$route.query.id) {
-            this.initial.playbook = this.$route.query.id
-            this.ready = true
-          } else {
-            this.ready = true
-          }
-          break
-      }
-    } else {
-      this.ready = true
+    const type = this.$route.query['_type']
+    switch (type) {
+      case 'adhoc':
+        this.initial.type = 'adhoc'
+        if (this.$route.query.id) {
+          this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
+            this.initial.module = data.module
+            this.initial.args = data.args
+            this.initial.instant = true
+            this.initial.runAfterSave = true
+            this.instantTask = true
+            this.createSuccessNextRoute = { name: 'Adhoc' }
+          })
+        }
+        break
+      case 'playbook':
+        this.initial.type = 'playbook'
+        if (this.$route.query.id) {
+          this.initial.playbook = this.$route.query.id
+        }
+        break
     }
+    this.ready = true
   },
   methods: {
     submitForm(form, btn) {

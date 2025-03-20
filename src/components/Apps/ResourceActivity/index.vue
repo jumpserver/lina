@@ -1,43 +1,43 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="16" :sm="24">
-        <IBox :title="title" class="block" v-bind="$attrs">
-          <el-timeline>
-            <el-timeline-item
-              v-for="(activity, index) in activities"
-              :key="index"
-              :size="activity.size"
-              :timestamp="activity.timestamp"
-              :type="activity.type"
-              placement="bottom"
+    <TwoCol>
+      <IBox :title="title" class="block" v-bind="$attrs">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(activity, index) in activities"
+            :key="index"
+            :size="activity.size"
+            :timestamp="activity.timestamp"
+            :type="activity.type"
+            placement="bottom"
+          >
+            {{ activity.content }}
+            <el-link
+              v-if="activity['detail_url']"
+              type="primary"
+              @click.native="onClick(activity)"
             >
-              {{ activity.content }}
-              <el-link
-                v-if="activity['detail_url']"
-                type="primary"
-                @click.native="onClick(activity)"
-              >
-                {{ $tc('Detail') }}
-              </el-link>
-            </el-timeline-item>
-          </el-timeline>
-        </IBox>
-      </el-col>
-    </el-row>
+              {{ $tc('Detail') }}
+            </el-link>
+          </el-timeline-item>
+        </el-timeline>
+      </IBox>
+    </TwoCol>
     <DiffDetail ref="DetailDialog" :title="$tc('OperateLog')" />
   </div>
 </template>
 
 <script>
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
 import { openTaskPage } from '@/utils/jms'
 import { toSafeLocalDateStr } from '@/utils/time'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'ResourceActivity',
   components: {
+    TwoCol,
     IBox,
     DiffDetail
   },

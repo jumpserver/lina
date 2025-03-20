@@ -9,7 +9,7 @@
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { openTaskPage } from '@/utils/jms'
 import store from '@/store'
 import HashiCorpKV from './HCP.vue'

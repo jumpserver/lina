@@ -1,6 +1,7 @@
 <template>
   <Dialog
     v-if="detailVisible"
+    :modal="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="title"

@@ -57,18 +57,28 @@
         :visible.sync="templateDialogVisible"
       />
     </div>
+
+    <Drawer
+      :title="$t('Account')"
+      :component="drawerComponent"
+      :has-footer="false"
+      :visible.sync="drawerVisible"
+      class="detail-drawer"
+    />
   </div>
 </template>
 
 <script>
-import AccountTemplateDialog from './AccountTemplateDialog'
 import AddAccountDialog from './AddAccountDialog'
+import Drawer from '@/components/Drawer/index.vue'
+import AccountTemplateDialog from './AccountTemplateDialog'
 
 export default {
   name: 'AssetAccounts',
   components: {
-    AccountTemplateDialog,
-    AddAccountDialog
+    Drawer,
+    AddAccountDialog,
+    AccountTemplateDialog
   },
   props: {
     platform: {
@@ -90,10 +100,13 @@ export default {
     const accounts = this.value || []
     return {
       accounts: accounts,
+      drawerRefName: null,
       account: {},
+      drawerVisible: false,
       initial: false,
       addAccountDialogVisible: false,
-      templateDialogVisible: false
+      templateDialogVisible: false,
+      drawerComponent: () => import('@/views/assets/Asset/AssetDetail')
     }
   },
   watch: {
@@ -153,13 +166,12 @@ export default {
         })
         return
       }
-      this.$router.push({
-        name: 'AssetDetail',
-        params: { id: assetId },
-        query: {
-          tab: 'Account'
-        }
+
+      this.$store.dispatch('common/setDrawerActionMeta', {
+        action: 'detail', row: {}, col: {}, id: assetId
       })
+
+      this.drawerVisible = true
     }
   }
 }
@@ -222,6 +234,30 @@ export default {
 
   .cell {
     padding-top: 3px !important;
+  }
+}
+
+::v-deep .page.tab-page {
+  .page-heading .el-row--flex {
+    flex-wrap: wrap;
+
+    .page-heading-left .el-button {
+      display: none;
+    }
+  }
+
+  .tab-page-content {
+    overflow: auto;
+    height: 100%;
+  }
+}
+
+.detail-drawer {
+  ::v-deep {
+    .el-drawer__header {
+      border-bottom: none;
+      padding-bottom: 1px;
+    }
   }
 }
 </style>

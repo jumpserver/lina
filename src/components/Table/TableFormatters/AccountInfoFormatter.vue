@@ -5,7 +5,7 @@
     trigger="click"
     @show="getAsyncItems"
   >
-    <div class="detail-content">
+    <div v-if="!loading" class="detail-content">
       <div v-if="accountData.length === 0" class="empty-item">
         <span>{{ $t('No accounts') }}</span>
       </div>
@@ -13,7 +13,9 @@
         <span>{{ account.name }}({{ account.username }})</span>
       </div>
     </div>
-    <el-button slot="reference" class="link-btn" size="mini" type="text">{{ $t('View') }}</el-button>
+    <el-button slot="reference" class="link-btn" plain size="mini" type="primary">
+      {{ $t('View') }} <i class="el-icon-arrow-down" />
+    </el-button>
   </el-popover>
 </template>
 
@@ -27,7 +29,8 @@ export default {
     return {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
       value: this.cellValue,
-      accountData: []
+      accountData: [],
+      loading: false
     }
   },
   computed: {
@@ -37,10 +40,13 @@ export default {
   },
   methods: {
     async getAsyncItems() {
+      this.loading = true
       const userId = this.$route.params.id || 'self'
       const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}`
       this.$axios.get(url).then(res => {
         this.accountData = res?.permed_accounts || []
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

@@ -24,7 +24,8 @@ export default {
         interval: 24,
         accounts: [],
         secret_type: 'password',
-        secret_strategy: 'specific'
+        secret_strategy: 'specific',
+        ssh_key_change_strategy: 'set_jms'
       },
       url: '/api/v1/accounts/change-secret-automations/',
       encryptedFields: ['secret'],
@@ -39,9 +40,9 @@ export default {
             'ssh_key', 'passphrase'
           ]
         ],
-        [this.$t('Automations'), ['params']],
+        [this.$t('Params'), ['params']],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Other'), ['is_active', 'recipients', 'comment']]
+        [this.$t('Other'), ['check_conn_after_change', 'is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {
         ...getChangeSecretFields(),
@@ -82,6 +83,18 @@ export default {
             method: 'change_secret_method',
             assets: this.asset_ids,
             nodes: this.node_ids
+          }
+        },
+        recipients: {
+          helpText: this.$t('OnlyMailSend'),
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            }
           }
         }
       },

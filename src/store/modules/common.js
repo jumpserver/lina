@@ -7,7 +7,10 @@ const getDefaultState = () => {
     isRouterAlive: true,
     sqlQueryCounter: [],
     showSqlQueryCounter: true,
-    confirmDialogVisible: false
+    confirmDialogVisible: false,
+    drawerActionMeta: {},
+    successActionMeta: {},
+    inDrawer: false
   }
 }
 
@@ -24,6 +27,9 @@ const mutations = {
     }, 0)
   },
   addSQLQueryCounter: (state, { url, count }) => {
+    if (count < 5) {
+      return
+    }
     state.sqlQueryCounter = state.sqlQueryCounter.filter(item => item.url !== url)
     state.sqlQueryCounter.push({ url, count, time: new Date().getTime() })
     if (state.sqlQueryCounter.length > 5) {
@@ -38,8 +44,9 @@ const mutations = {
 const actions = {
   // get user info
   getUrlMeta({ commit, state }, { url }) {
+    const ignoreCache = url.includes('_meta_cache')
     const meta = state.metaMap[url]
-    if (meta) {
+    if (meta && !ignoreCache) {
       return new Promise((resolve, reject) => {
         resolve(meta)
       })
@@ -85,6 +92,22 @@ const actions = {
   },
   showSqlQueryCounter({ commit, state }, show) {
     state.showSqlQueryCounter = show
+  },
+  setDrawerActionMeta({ commit, state }, meta) {
+    state.drawerActionMeta = meta
+    state.inDrawer = true
+  },
+  getDrawerActionMeta({ commit, state }) {
+    return state.drawerActionMeta
+  },
+  cleanDrawerActionMeta({ commit, state }) {
+    state.drawerActionMeta = {}
+    state.inDrawer = false
+  },
+  finishDrawerActionMeta({ commit, state }, payload) {
+    state.successActionMeta = payload
+    state.drawerActionMeta = {}
+    state.inDrawer = false
   }
 }
 

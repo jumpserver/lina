@@ -38,6 +38,7 @@ export default {
       AccountVisible: false,
       account: {},
       config: {
+        url: '/api/v1/accounts/accounts',
         activeMenu: 'Detail',
         submenu: [
           {
@@ -61,6 +62,9 @@ export default {
   methods: {
     addAccountSuccess() {
       this.$store.commit('common/reload')
+    },
+    getPageTitle({ row }) {
+      return `${row.username}@${row.asset.name}`
     }
   }
 }

@@ -16,16 +16,22 @@ export default {
         activeMenu: 'AccountPushList',
         submenu: [
           {
-            title: this.$t('AccountPushList'),
+            title: this.$tc('AccountPushTask', 2),
             name: 'AccountPushList',
             hidden: !this.$hasPerm('accounts.view_pushaccountautomation'),
             component: () => import('@/views/accounts/AccountPush/AccountPushList.vue')
           },
           {
-            title: this.$t('ExecutionList'),
+            title: this.$t('ExecutionHistory'),
             name: 'AccountPushExecutionList',
             hidden: !this.$hasPerm('accounts.view_pushaccountexecution'),
             component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue')
+          },
+          {
+            title: this.$t('ExecutionRecord'),
+            name: 'AccountPushRecord',
+            hidden: () => !this.$hasPerm('accounts.view_pushsecretrecord'),
+            component: () => import('@/views/accounts/AccountPush/ExecutionDetail/AccountPushRecord.vue')
           }
         ]
       }

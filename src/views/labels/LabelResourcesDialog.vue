@@ -11,8 +11,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
-import { Dialog } from '@/components'
+import { Dialog, DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'LabelResourcesDialog',

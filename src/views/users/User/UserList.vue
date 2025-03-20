@@ -2,7 +2,10 @@
   <div>
     <GenericListPage
       ref="GenericListPage"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
       :header-actions="headerActions"
+      :quick-filters="quickFilters"
       :table-config="tableConfig"
     />
     <GenericUpdateFormDialog
@@ -12,19 +15,23 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
-    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
+    <InviteUsersDialog
+      :setting="InviteDialogSetting"
+      @close="handleInviteDialogClose"
+    />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
+import { mapGetters } from 'vuex'
 import { getDayFuture } from '@/utils/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import store from '@/store'
 import { MFASystemSetting } from '../const'
+import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export default {
   components: {
@@ -44,6 +51,68 @@ export default {
       return !vm.currentOrgIsRoot
     }
     return {
+      createDrawer: () => import('./UserCreateUpdate.vue'),
+      detailDrawer: () => import('./UserDetail/index.vue'),
+      quickFilters: [
+        {
+          label: this.$t('QuickFilter'),
+          options: [
+            {
+              label: this.$t('Invalid'),
+              filter: {
+                is_valid: false
+              }
+            },
+            {
+              label: this.$t('Disabled'),
+              filter: {
+                is_active: false
+              }
+            },
+            {
+              label: this.$t('Expired'),
+              filter: {
+                is_expired: true
+              }
+            },
+            {
+              label: this.$t('NeverLogin'),
+              filter: {
+                is_first_login: true
+              }
+            }
+          ]
+        },
+        {
+          label: this.$t('Auth'),
+          options: [
+            {
+              label: this.$t('PasswordExpired'),
+              filter: {
+                is_password_expired: true
+              }
+            },
+            {
+              label: this.$t('NoLoginLongTime'),
+              filter: {
+                is_long_time_no_login: true
+              }
+            },
+            {
+              label: this.$t('NoMFA'),
+              filter: {
+                mfa_level: 0
+              }
+            },
+            {
+              label: this.$t('LoginBlocked'),
+              filter: {
+                is_login_blocked: true
+              }
+            }
+          ]
+        }
+      ],
       tableConfig: {
         url: '/api/v1/users/users/',
         permissions: {
@@ -62,8 +131,19 @@ export default {
         },
         columnsMeta: {
           name: {
+            formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail'
+              routeQuery: {
+                tab: 'Basic'
+              },
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
             }
           },
           mfa_level: {
@@ -207,6 +287,17 @@ export default {
               this.InviteDialogSetting.InviteDialogVisible = true
             }
           }
+          // {
+          // name: this.$t('Roles'),
+          // title: this.$t('Roles'),
+          // has: () => {
+          // return this.publicSettings.XPACK_LICENSE_IS_VALID &&
+          // this.$hasPerm(['rbac.view_orgrole | rbac.view_systemrole'],)
+          // },
+          // callback: () => {
+          // this.$router.push({ name: 'RoleList' })
+          // }
+          // }
         ],
         hasBulkUpdate: true,
         canBulkUpdate: ({ selectedRows }) => {

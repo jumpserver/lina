@@ -1,9 +1,9 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+  <TwoCol>
+    <template>
       <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
-    </el-col>
-    <el-col :md="9" :sm="24">
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <IBox :title="$tc('Protocols')">
         <ProtocolSelector
@@ -22,26 +22,28 @@
           {{ $t('Update') }}
         </el-button>
       </IBox>
-    </el-col>
-    <PlatformDetailUpdateDialog
-      v-if="visible"
-      :object="object"
-      :show-fields="fields"
-      :visible.sync="visible"
-    />
-  </el-row>
+      <PlatformDetailUpdateDialog
+        v-if="visible"
+        :object="object"
+        :show-fields="fields"
+        :visible.sync="visible"
+      />
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import QuickActions from '@/components/QuickActions'
+import QuickActions from '@/components/Common/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
 import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     IBox,
     QuickActions,
     AutoDetailCard,
@@ -59,7 +61,7 @@ export default {
       visible: false,
       fields: ['domain_enabled'],
       quickActions: [],
-      url: `/api/v1/assets/platforms/${this.object.id}`,
+      url: `/api/v1/assets/platforms/${this.object.id}/`,
       detailFields: [
         'id', 'name', 'charset', 'internal',
         {

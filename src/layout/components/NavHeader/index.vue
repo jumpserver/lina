@@ -24,7 +24,7 @@
       <li class="header-item active-menu">
         <Help />
       </li>
-      <li class="header-item">
+      <li v-if="!isMobile" class="header-item language">
         <Language />
       </li>
       <li class="header-item header-profile">
@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
+      'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute', 'isMobile'
     ]),
     ticketsEnabled() {
       return this.publicSettings['TICKETS_ENABLED'] &&

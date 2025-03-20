@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="TaskDetail" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="instance" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="instance" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -22,9 +22,10 @@ export default {
   },
   data() {
     return {
-      TaskDetail: {},
+      instance: {},
       actions: {},
       config: {
+        url: '/api/v1/assets/platforms/',
         title: this.$t('PlatformDetail'),
         activeMenu: 'Detail',
         submenu: [
@@ -37,19 +38,19 @@ export default {
             name: 'Assets'
           },
           {
-            title: this.$t('Automations'),
+            title: this.$t('Automation'),
             name: 'Automation'
           }
         ],
         actions: {
           canUpdate: () => {
-            return !this.TaskDetail.internal && this.$hasPerm('assets.change_platform')
+            return !this.instance.internal && this.$hasPerm('assets.change_platform')
           },
           canDelete: () => {
-            return !this.TaskDetail.internal && this.$hasPerm('assets.delete_platform')
+            return !this.instance.internal && this.$hasPerm('assets.delete_platform')
           },
           updateCallback: () => {
-            const { id, type, category } = this.TaskDetail
+            const { id, type, category } = this.instance
             this.$router.push({
               name: 'PlatformUpdate',
               params: { id },
@@ -71,7 +72,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

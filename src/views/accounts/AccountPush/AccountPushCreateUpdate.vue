@@ -6,7 +6,8 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 import { AssetSelect, AutomationParams } from '@/components'
-import { crontab, interval, is_periodic } from '@/views/accounts/const'
+import { periodicMeta } from '@/components/const'
+import { TagInput } from '@/components/Form/FormFields'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -41,12 +42,13 @@ export default {
           ]
         ],
         [
-          this.$t('Automations'), ['params']
+          this.$t('Params'), ['params']
         ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Other'), ['is_active', 'comment']]
+        [this.$t('Other'), ['check_conn_after_change', 'is_active', 'comment']]
       ],
       fieldsMeta: {
+        ...periodicMeta,
         ...getChangeSecretFields(),
         assets: {
           type: 'assetSelect',
@@ -91,9 +93,10 @@ export default {
             readonly: true
           }
         },
-        is_periodic,
-        crontab,
-        interval,
+        accounts: {
+          component: TagInput,
+          helpText: this.$t('PushAccountHelpText')
+        },
         params: {
           component: AutomationParams,
           label: this.$t('PushParams'),
@@ -143,9 +146,6 @@ export default {
     }
   },
   methods: {
-    hasType(type) {
-      return this.isAssetType.indexOf(type) > -1
-    },
     handleAfterGetRemoteMeta(meta) {
       const needSetOptionFields = [
         'secret_type', 'secret_strategy', 'ssh_key_change_strategy'

@@ -1,7 +1,7 @@
 <template>
   <div class="cloud-select-wrap">
     <el-row :gutter="12">
-      <el-col v-for="p in providers" :key="p.name" :style="p.imageCSS ? p.imageCSS : ''">
+      <el-col v-for="p in providers" :key="p.name">
         <el-card
           :body-style="{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }"
           :class="selected === p.name ? 'active': ''"
@@ -18,16 +18,17 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row>
-      <el-button size="small" style="float: right;" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
-      <el-button
-        size="small"
-        style="float: right; margin-right: 10px;"
-        type="primary"
-        @click="handleNext"
-      >
-        {{ $tc('Next') }}
-      </el-button>
+    <el-row class="buttons">
+      <el-col>
+        <el-button size="small" @click="handleCancel">{{ $tc('Cancel') }}</el-button>
+        <el-button
+          size="small"
+          type="primary"
+          @click="handleNext"
+        >
+          {{ $tc('Next') }}
+        </el-button>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -51,7 +52,6 @@ export default {
     }
   },
   data() {
-    console.log('ProviderPanel', this.providers)
     return {}
   },
   methods: {
@@ -78,8 +78,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.buttons {
+  margin-top: 30px;
+}
+
 .cloud-select-wrap {
-  height: 300px;
+  background: #f3f3f3;
 
   .el-row {
     flex-direction: column;
@@ -88,7 +92,7 @@ export default {
 
     .el-col {
       width: 265px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
 
       .el-card.active {
         color: var(--color-primary);
@@ -99,8 +103,8 @@ export default {
         overflow: unset;
 
         img {
-          width: 50px;
-          height: 50px;
+          width: 40px;
+          height: 40px;
         }
       }
 

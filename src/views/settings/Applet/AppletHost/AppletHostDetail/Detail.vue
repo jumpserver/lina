@@ -1,11 +1,11 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+  <TwoCol>
+    <template>
       <AutoDetailCard v-bind="detailBasicConfig" />
       <AutoDetailCard v-bind="detailSpecInfoConfig" />
       <AutoDetailCard v-bind="detailInfoConfig" />
-    </el-col>
-    <el-col :md="9" :sm="24">
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="LabelRelation"
@@ -14,19 +14,21 @@
         type="warning"
         v-bind="labelConfig"
       />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import RelationCard from '@/components/Cards/RelationCard/index.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     RelationCard,
     AutoDetailCard,
     QuickActions
@@ -34,7 +36,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -162,7 +165,7 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: false,
+        showUndefined: false,
         excludes: ['spec_info.script']
       },
       detailInfoConfig: {
@@ -170,16 +173,14 @@ export default {
         title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'info',
-        showUndefine: false
+        showUndefined: false
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'BlockedIPList',

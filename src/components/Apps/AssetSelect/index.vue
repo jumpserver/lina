@@ -56,6 +56,10 @@ export default {
     treeSetting: {
       type: Object,
       default: () => ({})
+    },
+    disabled: {
+      type: [Boolean, Function],
+      default: false
     }
   },
   data() {
@@ -71,6 +75,7 @@ export default {
       dialogVisible: false,
       initialValue: _.cloneDeep(iValue),
       select2Config: {
+        disabled: this.disabled,
         value: iValue,
         multiple: true,
         clearable: true,

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 import { DateFormatter } from '@/components/Table/TableFormatters'
 
 export default {

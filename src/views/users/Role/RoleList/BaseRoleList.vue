@@ -1,15 +1,20 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <DrawerListTable
+    ref="ListTable"
+    :create-drawer="createDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   name: 'BaseRoleList',
   components: {
-    ListTable
+    DrawerListTable
   },
   props: {
     scope: {
@@ -23,6 +28,7 @@ export default {
     return {
       loading: true,
       scopeRole: scopeRole,
+      createDrawer: () => import('@/views/users/Role/RoleCreateUpdate.vue'),
       tableConfig: {
         url: `/api/v1/rbac/${this.scope}-roles/`,
         columnsExclude: ['name', 'permissions'],
@@ -89,24 +95,18 @@ export default {
                 return this.$hasPerm(`rbac.add_${row.scope?.value}role`)
               },
               onClone: ({ row }) => {
-                return vm.$router.push({
-                  name: 'RoleCreate',
-                  query: {
-                    scope: row.scope?.value,
-                    clone_from: row.id
-                  }
-                })
+                this.$refs.ListTable.onClone({ row, query: { scope: row.scope?.value }})
+              },
+              onUpdate: ({ row }) => {
+                this.$refs.ListTable.onUpdate({ row, query: { scope: row.scope?.value }})
               }
             }
           }
         }
       },
       headerActions: {
-        createRoute: {
-          name: 'RoleCreate',
-          query: {
-            scope: this.scope
-          }
+        onCreate: () => {
+          this.$refs.ListTable.onCreate({ query: { scope: vm.scope }})
         },
         searchConfig: {
           exclude: ['scope']

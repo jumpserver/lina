@@ -8,7 +8,7 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage'
-import ReplayStorage from './ReplayStorage.vue'
+import ReplayStorage from './ObjectStorage.vue'
 import CommandStorage from './CommandStorage.vue'
 
 export default {
@@ -48,7 +48,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import AclsMenus from './acls'
+import ACLsMenus from './acls'
 
 export default [
   {
@@ -44,5 +44,5 @@ export default [
       }
     ]
   },
-  ...AclsMenus
+  ...ACLsMenus
 ]

@@ -1,17 +1,14 @@
 <template>
-  <el-row>
-    <el-col :md="24" :sm="24">
-      <IBox v-if="!loading">
-        <GenericCreateUpdateForm class="form" v-bind="$data" />
-      </IBox>
-    </el-col>
-  </el-row>
+  <IBox>
+    <GenericCreateUpdateForm :object="object" class="form" v-bind="$data" />
+  </IBox>
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
+import { setUrlId } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -22,8 +19,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data() {
@@ -35,7 +31,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/`,
+      url: `/api/v1/assets/platforms/?_meta_cache=0`,
       disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,
@@ -56,20 +52,24 @@ export default {
   },
   async mounted() {
     try {
-      const { category, type } = this.object
-      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
-      this.defaultOptions = await this.$axios.get(url)
-      await setAutomations(this)
+      await this.setDefaultAutomations()
     } finally {
       this.loading = false
     }
   },
   methods: {
+    async setDefaultAutomations() {
+      const { category, type } = this.object
+      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
+      this.defaultOptions = await this.$axios.get(url)
+      await setAutomations(this)
+    },
     submit(validValues) {
       if (!this.canSubmit || !this.isSystemAdmin) {
         return this.$message.error(this.$tc('NoPermission'))
       }
-      this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
+      const url = setUrlId(this.url, this.object.id)
+      this.$axios.patch(url, validValues).then(() => {
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       })
     }
@@ -92,7 +92,7 @@ export default {
     width: 100%;;
 
     .el-form-item__content {
-      width: calc(75% - 50px);
+      width: calc(75% - 50px) !important;
     }
 
     .el-select {
@@ -105,8 +105,7 @@ export default {
   .item-params.el-form-item {
     display: inline-block;
     position: absolute;
-    right: 18px;
-    margin-top: -10px;
+    right: 10px;
   }
 }
 

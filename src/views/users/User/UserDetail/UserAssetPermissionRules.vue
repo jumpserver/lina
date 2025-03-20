@@ -1,19 +1,25 @@
 <template>
-  <el-row :gutter="10">
-    <el-col ::md="20" :sm="24">
-      <ListTable :header-actions="headerActions" :table-config="tableConfig" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <DrawerListTable
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :resource="$t('AssetPermissionRules')"
+    />
+  </TwoCol>
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable } from '@/components'
 import { AssetPermissionTableMeta, UserAssetPermissionListPageSearchConfigOptions } from '@/views/perms/const'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'UserAssetPermission',
   components: {
-    ListTable
+    TwoCol,
+    DrawerListTable
   },
   props: {
     object: {
@@ -23,16 +29,17 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('@/views/perms/AssetPermission/AssetPermissionCreateUpdate'),
+      detailDrawer: () => import('@/views/perms/AssetPermission/AssetPermissionDetail/index.vue'),
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
         hasTree: true,
-        columnsExclude: ['actions'],
         columnsExtra: ['action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-            'nodes_amount', 'accounts', 'is_valid', 'actions'
+            'name', 'users_amount', 'user_groups_amount',
+            'assets_amount', 'nodes_amount', 'accounts', 'actions'
           ]
         },
         columnsMeta: AssetPermissionTableMeta
@@ -50,7 +57,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

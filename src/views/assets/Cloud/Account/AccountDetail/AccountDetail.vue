@@ -1,13 +1,17 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="15" :sm="24">
-        <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+    <TwoCol>
+      <template>
+        <AutoDetailCard
+          :excludes="excludes"
+          :object="object"
+          :url="url"
+        />
         <AutoDetailCard :fields="detailFields" :object="object" :title="$tc('TaskDetail')" :url="url" />
-      </el-col>
-      <el-col :md="9" :sm="24">
+      </template>
+      <template #right>
         <QuickActions :actions="quickEditActions" type="primary" />
-        <QuickActions :actions="quickExecuteActions" type="primary" />
+        <QuickActions :actions="quickExecuteActions" :title="$t('Sync')" type="primary" />
         <RelationCard
           ref="StrategyRelation"
           v-perms="'xpack.change_strategy'"
@@ -15,8 +19,8 @@
           type="info"
           v-bind="strategyRelationConfig"
         />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
     <Dialog
       :close-on-click-modal="false"
       :destroy-on-close="true"
@@ -33,14 +37,16 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import { toSafeLocalDateStr } from '@/utils/time'
 import RelationCard from '@/components/Cards/RelationCard'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions } from '@/components'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
 import { openTaskPage } from '@/utils/jms'
 import Dialog from '@/components/Dialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'CloudAccountDetail',
   components: {
+    TwoCol,
     Dialog,
     TimingPanel,
     QuickActions,
@@ -69,8 +75,8 @@ export default {
             clearable: false,
             showSelect: true,
             options: [
-              { label: this.$t('PublicIp'), value: 1 },
-              { label: this.$t('PrivateIp'), value: 0 }
+              { label: this.$t('PublicIP'), value: 1 },
+              { label: this.$t('PrivateIP'), value: 0 }
             ],
             disabled: !this.hasEditPerm()
           },

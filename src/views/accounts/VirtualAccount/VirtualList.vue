@@ -1,11 +1,15 @@
 <template>
   <div>
-    <ListTable ref="listTable" v-bind="config" />
+    <ListTable
+      ref="listTable"
+      :update-drawer="updateDrawer"
+      v-bind="config"
+    />
   </div>
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import { DrawerListTable as ListTable } from '@/components'
 
 export default {
   name: 'VirtualAccountList',
@@ -14,6 +18,7 @@ export default {
   },
   data() {
     return {
+      updateDrawer: () => import('@/views/accounts/VirtualAccount/VirtualUpdate.vue'),
       config: {
         tableConfig: {
           url: '/api/v1/accounts/virtual-accounts/',
@@ -22,7 +27,15 @@ export default {
             name: {
               sortable: false,
               formatterArgs: {
-                route: 'VirtualAccountDetail'
+                drawer: true,
+                getRoute: ({ row }) => {
+                  return {
+                    name: 'VirtualAccountDetail',
+                    params: {
+                      id: row.id
+                    }
+                  }
+                }
               }
             },
             actions: {

@@ -93,8 +93,14 @@ export default {
         hasButtons: true,
         hasReset: false,
         fields: [],
-        method: 'get',
-        fieldsMeta: {}
+        method: 'get'
+      },
+      preFieldsMeta: {
+        'change_secret_by_ssh': {
+          commands: {
+            helpTextAsTip: false
+          }
+        }
       }
     }
   },
@@ -141,21 +147,35 @@ export default {
       if (Object.keys(filterField?.children || {}).length > 0) {
         for (const [k, v] of Object.entries(filterField.children)) {
           let component = 'el-input'
+          const el = {}
           switch (v?.type) {
             case 'list':
               component = DynamicInput
               break
             case 'boolean':
               component = Switcher
+              // component = 'checkbox'
+              break
+            case 'text':
+              el['text'] = 'textarea'
               break
           }
 
           if (param) {
             v.default = param[k] || v.default
           }
-          const item = { ...v, component: component }
+          const item = { ...v, component: component, el: el }
           fieldsMeta[method].fields.push(k)
           fieldsMeta[method].fieldsMeta[k] = item
+        }
+      }
+
+      const preDefineFieldMeta = this.preFieldsMeta[method]
+      if (preDefineFieldMeta) {
+        for (const [k, v] of Object.entries(preDefineFieldMeta)) {
+          for (const [j, l] of Object.entries(v)) {
+            fieldsMeta[method]['fieldsMeta'][k][j] = l
+          }
         }
       }
 

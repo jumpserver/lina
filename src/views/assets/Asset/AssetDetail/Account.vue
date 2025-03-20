@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-row :gutter="24">
-      <el-col :md="15" :sm="24">
+    <TwoCol>
+      <template>
         <AccountListTable
           ref="ListTable"
           :asset="object"
@@ -20,24 +20,21 @@
           :visible.sync="templateDialogVisible"
           @onConfirm="onConfirm"
         />
-      </el-col>
-      <el-col :md="9" :sm="24">
-        <QuickActions :actions="quickActions" :title="title" type="primary" />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
   </div>
 </template>
 
 <script>
 import { AccountListTable } from '@/components'
-import QuickActions from '@/components/QuickActions'
 import AccountTemplateDialog from '@/views/assets/Asset/AssetCreateUpdate/components/AccountTemplateDialog'
 import { openTaskPage } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
-    QuickActions,
+    TwoCol,
     AccountListTable,
     AccountTemplateDialog
   },
@@ -62,7 +59,7 @@ export default {
     return {
       title: this.$t('Test'),
       templateDialogVisible: false,
-      columnsDefault: ['name', 'username', 'asset'],
+      columnsDefault: ['name', 'username', 'asset', 'connect'],
       headerExtraActions: [
         {
           name: this.$t('AccountTemplate'),

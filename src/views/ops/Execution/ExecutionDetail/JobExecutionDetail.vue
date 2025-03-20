@@ -1,14 +1,14 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+  <TwoCol>
+    <template>
       <AutoDetailCard
         :excludes="excludes"
+        :fields="detailFields"
         :object="object"
         :url="url"
-        :fields="detailFields"
       />
-    </el-col>
-    <el-col v-if="hasSummary" :md="9" :sm="24">
+    </template>
+    <template v-if="hasSummary" #right class="detail-right-quick-actions">
       <IBox
         v-if="object.summary.ok"
         :title="`${$tc('SuccessAsset')} (${object.summary.ok.length})` "
@@ -63,16 +63,18 @@
       >
         {{ object.summary.error }}
       </IBox>
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script type="text/jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     IBox,
     AutoDetailCard
   },

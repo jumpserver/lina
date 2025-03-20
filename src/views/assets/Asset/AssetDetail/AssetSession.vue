@@ -1,17 +1,17 @@
 <template>
-  <el-row :gutter="24">
-    <el-col :md="24" :sm="24">
-      <BaseList :columns-show="columnsShow" :url="url" />
-    </el-col>
-  </el-row>
+  <TwoCol>
+    <BaseList :columns-show="columnsShow" :columns-meta="columnsMeta" :url="url" />
+  </TwoCol>
 </template>
 
 <script>
 import BaseList from '@/views/sessions/SessionList/BaseList.vue'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'AssetsSession',
   components: {
+    TwoCol,
     BaseList
   },
   props: {
@@ -29,9 +29,13 @@ export default {
           'id', 'user', 'asset', 'account',
           'date_start', 'duration'
         ]
+      },
+      columnsMeta: {
+        id: {
+          width: '80px'
+        }
       }
     }
   }
-
 }
 </script>

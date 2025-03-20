@@ -215,6 +215,7 @@ export default {
     form {
       margin-right: 0;
       padding-right: 0;
+      padding-bottom: 10px;
     }
   }
 }

@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
+import IBox from '@/components/Common/IBox'
 import { IsSupportPauseSessionType } from '@/utils/jms'
 
 export default {
@@ -159,42 +159,42 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .box {
-    margin-top: 15px;
-    margin-bottom: 15px;
+.box {
+  margin-top: 15px;
+  margin-bottom: 15px;
 
-    & ::v-deep .el-divider--horizontal {
-      margin: 10px 0;
-    }
+  & ::v-deep .el-divider--horizontal {
+    margin: 10px 0;
+  }
+}
+
+.content {
+  line-height: 2.5;
+  font-size: 13px;
+  color: #676A6C;
+
+  .item-label {
+    font-weight: 700;
   }
 
-  .content {
-    line-height: 2.5;
-    font-size: 13px;
+  .item-value {
     color: #676A6C;
-
-    .item-label {
-      font-weight: 700;
-    }
-
-    .item-value {
-      color: #676A6C;
-    }
-
-    & ::v-deep .el-col {
-      line-height: 24px;
-    }
   }
 
-  .bottom-btn {
-    text-align: right;
+  & ::v-deep .el-col {
+    line-height: 24px;
   }
+}
 
-  .cur-color {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    vertical-align: text-top;
-    border-radius: 50%;
-  }
+.bottom-btn {
+  text-align: right;
+}
+
+.cur-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: text-top;
+  border-radius: 50%;
+}
 </style>

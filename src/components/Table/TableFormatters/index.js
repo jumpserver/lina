@@ -6,9 +6,10 @@ import ActionsFormatter from './ActionsFormatter.vue'
 import DeleteActionFormatter from './DeleteActionFormatter.vue'
 import DateFormatter from './DateFormatter.vue'
 import AccountShowFormatter from './GrantedAccountShowFormatter.vue'
-import ShowKeyCopyFormatter from './ShowKeyCopyFormatter.vue'
+import SecretViewerFormatter from './SecretViewerFormatter.vue'
 import DialogDetailFormatter from './DialogDetailFormatter.vue'
 import EditableInputFormatter from './EditableInputFormatter.vue'
+import CopyableFormatter from './CopyableFormatter.vue'
 import StatusFormatter from './StatusFormatter.vue'
 import TagsFormatter from './TagsFormatter.vue'
 import LabelsFormatter from './LabelsFormatter.vue'
@@ -18,6 +19,9 @@ import ProtocolsFormatter from './ProtocolsFormatter.vue'
 import TagChoicesFormatter from './TagChoicesFormatter.vue'
 import SwitchFormatter from './SwitchFormatter.vue'
 import AccountInfoFormatter from './AccountInfoFormatter.vue'
+import PlatformFormatter from './PlatformFormatter.vue'
+import DiscoverConfirmFormatter from './DiscoverConfirmFormatter.vue'
+import AccountConnectFormatter from './AccountConnectFormatter.vue'
 
 export default {
   DetailFormatter,
@@ -27,7 +31,7 @@ export default {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
@@ -39,7 +43,11 @@ export default {
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
-  AccountInfoFormatter
+  PlatformFormatter,
+  AccountInfoFormatter,
+  CopyableFormatter,
+  DiscoverConfirmFormatter,
+  AccountConnectFormatter
 }
 
 export {
@@ -50,17 +58,21 @@ export {
   DeleteActionFormatter,
   DateFormatter,
   AccountShowFormatter,
-  ShowKeyCopyFormatter,
+  SecretViewerFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
+  CopyableFormatter,
   ObjectRelatedFormatter,
   TwoTabFormatter,
   ProtocolsFormatter,
   TagChoicesFormatter,
   LabelsFormatter,
   SwitchFormatter,
-  AccountInfoFormatter
+  PlatformFormatter,
+  DiscoverConfirmFormatter,
+  AccountInfoFormatter,
+  AccountConnectFormatter
 }

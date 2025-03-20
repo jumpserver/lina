@@ -1,8 +1,18 @@
 <template>
   <div>
+    <QuickFilter
+      :expand.sync="filterExpand"
+      :filters="quickFilters"
+      :summary="quickSummary"
+      :table-url="tableUrl"
+      @filter="filter"
+    />
     <TableAction
       v-if="hasActions"
+      :class="{'filter-expand': filterExpand}"
       :date-pick="handleDateChange"
+      :has-quick-filter="iHasQuickFilter"
+      :quick-filter-expand.sync="filterExpand"
       :reload-table="reloadTable"
       :search-table="search"
       :selected-rows="selectedRows"
@@ -10,7 +20,7 @@
       v-bind="iHeaderActions"
       @done="handleActionInitialDone"
     />
-    <IBox class="table-content">
+    <IBox v-loading="!actionInit" class="table-content">
       <AutoDataTable
         v-if="actionInit"
         ref="dataTable"
@@ -27,15 +37,18 @@
 import { getResourceFromApiUrl } from '@/utils/jms'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
-import IBox from '../../IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
+import QuickFilter from './TableAction/QuickFilter.vue'
 import { getDayEnd, getDaysAgo } from '@/utils/time'
+import { ObjectLocalStorage } from '@/utils/common'
 
 export default {
   name: 'ListTable',
   components: {
+    QuickFilter,
     AutoDataTable,
     TableAction,
     IBox
@@ -51,6 +64,14 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    quickFilters: {
+      type: Array,
+      default: () => null
+    },
+    quickSummary: {
+      type: Array,
+      default: () => null
     }
   },
   data() {
@@ -79,13 +100,36 @@ export default {
       isDeactivated: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
-      initQuery: {}
+      initQuery: {},
+      tablePath: new URL(this.tableConfig.url || '', 'http://127.0.0.1').pathname,
+      objStorage: new ObjectLocalStorage('filterExpand'),
+      iFilterExpand: null,
+      reloadTable: _.debounce(this._reloadTable, 300)
     }
   },
   computed: {
     ...mapGetters(['currentOrgIsRoot']),
+    filterExpand: {
+      get() {
+        if (this.iFilterExpand !== null) {
+          return this.iFilterExpand
+        }
+        return this.objStorage.get(this.tablePath)
+      },
+      set(val) {
+        this.iFilterExpand = val
+        this.objStorage.set(this.tablePath, val)
+      }
+    },
+    iHasQuickFilter() {
+      const has =
+        (this.quickFilters && this.quickFilters.length > 0) ||
+        (this.quickSummary && this.quickSummary.length > 0)
+
+      return !!has
+    },
     dataTable() {
-      return this.$refs.dataTable.$refs.dataTable
+      return this.$refs.dataTable?.$refs.dataTable
     },
     iHeaderActions() {
       // 如果路由中锁定了 root 组织，就不在检查 root 组织下是否可以创建等
@@ -208,6 +252,28 @@ export default {
     })
   },
   methods: {
+    handleFilterExpandChanged(expand) {
+      this.filterExpand = expand
+    },
+    handleQuickFilter(option) {
+      if (option.route) {
+        this.$router.push(option.route)
+        return
+      }
+      if (option.filter) {
+        const filter = { ...option.filter }
+        if (option.active) {
+          for (const key in filter) {
+            filter[key] = ''
+          }
+        }
+        this.filter(option.filter)
+        return
+      }
+      if (option.callback) {
+        option.callback(option.active)
+      }
+    },
     handleActionInitialDone() {
       setTimeout(() => {
         this.actionInit = true
@@ -216,7 +282,7 @@ export default {
     handleSelectionChange(val) {
       this.selectedRows = val
     },
-    reloadTable() {
+    _reloadTable() {
       this.dataTable?.getList()
     },
     updateInitQuery(attrs) {
@@ -282,6 +348,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-expand {
+  &::v-deep button.actionFilter {
+    background-color: rgb(0, 0, 0, 0.08) !important;
+  }
+}
+
 .table-content {
   margin-top: 10px;
 

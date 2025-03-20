@@ -1,10 +1,10 @@
 <template>
-  <Page v-if="!loading" class="tab-page" v-bind="$attrs">
+  <Page :title="title" class="tab-page" v-bind="$attrs">
     <template #headingRightSide>
       <slot name="headingRightSide" />
     </template>
 
-    <div style="height: 100%">
+    <div class="tab-page-wrapper">
       <el-tabs
         v-if="tabIndices.length > 1"
         slot="submenu"
@@ -16,11 +16,10 @@
           <el-tab-pane
             :key="item.name"
             :disabled="item.disabled"
-            :label-content="item.labelContent"
             :name="item.name"
           >
             <span slot="label">
-              <i v-if="item.icon" :class="item.icon" class="fa pre-icon " />
+              <Icon v-if="item.icon" :icon="item.icon" class="pre-icon" />
               {{ toSentenceCase(item.title) }}
               <slot :tab="item.name" name="badge" />
               <el-tooltip
@@ -46,7 +45,7 @@
         <el-alert v-if="helpMessage" type="success">
           <span v-sanitize="helpMessage" class="announcement-main" />
         </el-alert>
-        <transition appear mode="out-in" name="fade-transform">
+        <transition v-if="!loading" appear mode="out-in" name="fade-transform">
           <slot>
             <keep-alive>
               <component :is="computeActiveComponent" />
@@ -60,12 +59,14 @@
 
 <script>
 import Page from '../Page/'
+import Icon from '@/components/Widgets/Icon'
 import { toSentenceCase } from '@/utils/common'
 
 export default {
   name: 'TabPage',
   components: {
-    Page
+    Page,
+    Icon
   },
   props: {
     submenu: {
@@ -77,6 +78,10 @@ export default {
       required: true
     },
     helpMessage: {
+      type: String,
+      default: ''
+    },
+    title: {
       type: String,
       default: ''
     }
@@ -120,12 +125,10 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
-      // 好像没必要
-      // const activeTab = to.query?.tab
-      // if (activeTab && this.iActiveMenu !== activeTab) {
-      //   this.iActiveMenu = activeTab
-      // }
+    activeMenu: {
+      handler(newValue) {
+        this.iActiveMenu = newValue
+      }
     }
   },
   created() {
@@ -136,14 +139,14 @@ export default {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.iActiveMenu = tab.name
-      this.$cookie.set(this.$route.path, tab.name, 1)
+      localStorage.setItem('activeTab', tab.name)
     },
     getPropActiveTab() {
       let activeTab = ''
 
       const preActiveTabs = [
         this.$route.query['tab'],
-        this.$cookie.get(this.$route.path),
+        localStorage.getItem('activeTab'),
         this.activeMenu
       ]
 
@@ -166,6 +169,18 @@ export default {
 
 <style lang='scss' scoped>
 
+.page.no-title {
+  ::v-deep {
+    .page-submenu .el-tabs__header {
+      margin-top: 0;
+    }
+
+    .tab-page-content {
+      height: calc(100% - 45px);
+    }
+  }
+}
+
 .page-submenu ::v-deep .el-tabs__header {
   background-color: white;
   margin-top: -10px;
@@ -173,8 +188,16 @@ export default {
   margin-bottom: 5px;
 
   .el-tabs__item {
-    i.pre-icon {
+    .pre-icon {
+      width: 16px;
+      display: inline-block;
       opacity: 0.6;
+    }
+
+    &.is-active {
+      .pre-icon {
+        opacity: 1;
+      }
     }
   }
 
@@ -188,19 +211,23 @@ export default {
 }
 
 .tab-page {
+  .tab-page-wrapper {
+    height: 100%;
+  }
+
   ::v-deep .page-heading {
     border-bottom: none;
   }
 
   ::v-deep .page-content {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
     padding: 0;
   }
 
   .tab-page-content {
     padding: 10px 30px 22px;
     overflow-y: auto;
-    height: calc(100% - 50px);
+    height: calc(100% - 33px);
 
     .el-alert {
       margin-top: 0;

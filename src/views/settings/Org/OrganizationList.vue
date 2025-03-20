@@ -33,8 +33,8 @@ export default {
       form: {
         url: '/api/v1/settings/setting/?category=basic',
         fields: ['GLOBAL_ORG_DISPLAY_NAME'],
-        fieldsMeta: {
-        },
+        labelWidth: '200px',
+        fieldsMeta: {},
         submitMethod() {
           return 'patch'
         }
@@ -54,19 +54,19 @@ export default {
         ],
         columnsMeta: {
           'resource_statistics.users_amount': {
-            label: this.$t('UsersAmount'),
+            label: this.$t('Users'),
             width: '100px'
           },
           'resource_statistics.groups_amount': {
-            label: this.$t('GroupsAmount'),
+            label: this.$t('Groups'),
             width: '100px'
           },
           'resource_statistics.assets_amount': {
-            label: this.$t('AssetsAmount'),
+            label: this.$t('Assets'),
             width: '100px'
           },
           'resource_statistics.asset_perms_amount': {
-            label: this.$t('AssetPermsAmount'),
+            label: this.$tc('AssetPermission', 2),
             width: '200px'
           },
           actions: {

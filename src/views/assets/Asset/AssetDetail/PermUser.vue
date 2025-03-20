@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="15" :sm="24">
+    <TwoCol>
+      <template>
         <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </el-col>
-      <el-col :md="9" :sm="24">
+      </template>
+      <template #right>
         <PermUserGroupCard v-bind="UserGroupCardConfig" />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
     <GenericListTableDialog
       :visible.sync="GenericListTableDialogConfig.visible"
       v-bind="GenericListTableDialogConfig"
@@ -16,20 +16,23 @@
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable'
+import { DrawerListTable as ListTable } from '@/components'
 import { GenericListTableDialog } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import PermUserGroupCard from './components/PermUserGroupCard'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'PermUserList',
   components: {
+    TwoCol,
     ListTable, GenericListTableDialog, PermUserGroupCard
   },
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -38,25 +41,25 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/assets/${this.object.id}/perm-users/`,
         columns: [
-          'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'system_roles', 'org_roles', 'source',
-          'is_valid', 'login_blocked', 'mfa_enabled',
-          'mfa_force_enabled', 'is_expired',
-          'last_login', 'date_joined', 'date_password_last_updated',
-          'comment', 'created_by', 'actions'
+          'name', 'username', 'email',
+          'comment', 'created_by'
         ],
         columnsShow: {
-          min: ['name', 'username', 'actions'],
-          default: [
-            'name', 'username',
-            'source', 'is_valid', 'actions'
-          ]
+          min: ['name', 'username'],
+          default: ['name', 'username']
         },
         columnsMeta: {
           name: {
-            formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
+            formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail'
+              drawer: true,
+              can: vm.$hasPerm('users.view_user'),
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: { id: row.id }
+                }
+              }
             }
           },
           source: {
@@ -130,7 +133,7 @@ export default {
       UserGroupCardConfig: {
         title: this.$t('UserGroups'),
         url: `/api/v1/assets/assets/${vm.object.id}/perm-user-groups/`,
-        detailRoute: 'UserGroupDetail',
+        detailRoute: () => import('@/views/users/Group/UserGroupDetail'),
         buttonTitle: this.$t('ViewPerm'),
         buttonClickCallback(obj) {
           vm.GenericListTableDialogConfig.visible = true

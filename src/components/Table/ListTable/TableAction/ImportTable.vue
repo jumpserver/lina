@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tableFilter">
-      <el-radio-group v-model="importStatusFilter" size="small">
+      <el-radio-group v-model="importStatusFilter" size="mini">
         <el-radio-button label="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
         <el-radio-button label="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
         <el-radio-button label="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
@@ -13,7 +13,7 @@
     </div>
     <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
-      <div class="btn-groups" style="float: right">
+      <div class="btn-groups">
         <el-button v-if="showCancel" size="small" @click="performCancel">{{ $t('Cancel') }}</el-button>
         <el-button
           v-show="!disableImportBtn"
@@ -27,8 +27,8 @@
           v-for="button in moreButtons"
           v-show="!button.hidden"
           :key="button.title"
-          :loading="button.loading"
           :disabled="disableImportBtn"
+          :loading="button.loading"
           size="small"
           v-bind="button"
           @click="handleClick(button)"
@@ -105,6 +105,7 @@ export default {
       importStatusFilter: 'all',
       iTotalData: [],
       defaultTableConfig: {
+        url: '',
         hasSelection: false,
         // hasPagination: false,
         columns: [],
@@ -489,6 +490,9 @@ export default {
 }
 
 .btn-groups {
+  display: flex;
+  justify-content: flex-end;
+
   ::v-deep .el-button.is-disabled {
     cursor: not-allowed;
   }

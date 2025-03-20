@@ -1,21 +1,30 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" class="user-create-update" v-bind="$data" @getObjectDone="afterGetUser" />
+  <div v-loading="loading">
+    <GenericCreateUpdatePage
+      v-if="!loading"
+      class="user-create-update"
+      v-bind="$data"
+      @getObjectDone="afterGetUser"
+      v-on="$listeners"
+    />
+  </div>
 </template>
 
 <script>
+import store from '@/store'
+import { mapGetters } from 'vuex'
+import { Select2 } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
-import { mapGetters } from 'vuex'
-import { Select2 } from '@/components'
-import store from '@/store'
-import { MFASystemSetting, MFALevel } from '../const'
+import { MFALevel, MFASystemSetting } from '../const'
 
 export default {
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const roleManage = this.$t('RoleManage')
     return {
       loading: true,
       initial: {
@@ -60,8 +69,7 @@ export default {
             if (formValue.update_password) {
               return true
             }
-
-            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
+            return formValue.source !== 'local' || this.$route.params.action !== 'update'
           }
         },
         password: {
@@ -126,6 +134,17 @@ export default {
           component: Select2,
           label: this.$t('OrgRoles'),
           rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
+          helpTextFormatter: () => {
+            const handleClick = () => {
+              this.$router.push({ name: 'RoleList' })
+              // window.open('/settings/roles', '_blank')
+            }
+            return (
+              <el-link onClick={handleClick}>
+                <i class='fa fa-external-link'></i> {roleManage}
+              </el-link>
+            )
+          },
           el: {
             multiple: true,
             ajax: {

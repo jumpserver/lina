@@ -23,11 +23,17 @@
 <script type="text/jsx">
 import DataTable from '@/components/Table/DataTable/index.vue'
 import {
-  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  CopyableFormatter,
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
   ObjectRelatedFormatter
 } from '@/components/Table/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { newURL, replaceAllUUID, toSentenceCase } from '@/utils/common'
+import { newURL, ObjectLocalStorage, replaceAllUUID, toSentenceCase } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
 
@@ -62,7 +68,8 @@ export default {
         currentCols: [],
         defaultCols: []
       },
-      isDeactivated: false
+      isDeactivated: false,
+      objTableColumns: new ObjectLocalStorage('tableColumns')
     }
   },
   computed: {
@@ -130,6 +137,15 @@ export default {
     },
     generateColumnByName(name, col) {
       switch (name) {
+        case 'id':
+          if (!col.width) {
+            col.width = '299px'
+          }
+          if (!col.formatter) {
+            col.formatter = CopyableFormatter
+            col.iconPosition = 'left'
+          }
+          break
         case 'name':
           col.formatter = DetailFormatter
           col.sortable = 'custom'
@@ -197,7 +213,7 @@ export default {
           break
         case 'datetime':
           col.formatter = DateFormatter
-          col.width = '175px'
+          col.width = '155px'
           break
         case 'object_related_field':
           col.formatter = ObjectRelatedFormatter
@@ -358,6 +374,8 @@ export default {
 
       let configColumns = config.columns || allColumnNames
       const columnsExclude = config.columnsExclude || []
+      const columnsAdd = config.columnsAdd || []
+      configColumns = configColumns.concat(columnsAdd)
       configColumns = configColumns.filter(item => !columnsExclude.includes(item))
 
       // 解决后端 API 返回字段中包含 actions 的问题;
@@ -427,13 +445,9 @@ export default {
       const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
         .filter(n => totalColumnsNames.includes(n))
 
-      // 应该显示的列
-      const _tableConfig = localStorage.getItem('tableConfig')
-        ? JSON.parse(localStorage.getItem('tableConfig'))
-        : {}
       let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
       tableName = replaceAllUUID(tableName)
-      const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
+      const configShowColumnsNames = this.objTableColumns.get(tableName)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
         showColumnsNames = totalColumnsNames
@@ -480,17 +494,12 @@ export default {
       }
       this.popoverColumns.currentCols = columns
 
-      const _tableConfig = localStorage.getItem('tableConfig')
-        ? JSON.parse(localStorage.getItem('tableConfig'))
-        : {}
       let tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
       // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用.
       tableName = replaceAllUUID(tableName)
 
-      _tableConfig[tableName] = {
-        'showColumns': columns
-      }
-      localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
+      this.objTableColumns.set(tableName, columns)
+
       this.filterShowColumns()
     },
     filterChange(filters) {

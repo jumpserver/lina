@@ -19,7 +19,7 @@ export const volcengine = 'volcengine'
 
 export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
-export const state_private = 'state_private'
+export const ctyun_private = 'ctyun_private'
 export const openstack = 'openstack'
 export const zstack = 'zstack'
 export const nutanix = 'nutanix'
@@ -28,6 +28,18 @@ export const fc = 'fc'
 export const scp = 'scp'
 export const apsara_stack = 'apsara_stack'
 export const lan = 'lan'
+
+export const publicCloudProviders = [
+  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
+  baiducloud, jdcloud, kingsoftcloud, aws_china,
+  aws_international, azure, azure_international,
+  gcp, ucloud, volcengine
+]
+
+export const privateCloudProviders = [
+  vmware, qingcloud_private, huaweicloud_private, ctyun_private,
+  openstack, zstack, nutanix, fc, scp, apsara_stack
+]
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
@@ -156,9 +168,9 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     attrs: ['api_endpoint', 'username', 'password'],
     image: require('@/assets/img/cloud/huawei.svg')
   },
-  [state_private]: {
-    name: state_private,
-    title: i18n.t('StatePrivate'),
+  [ctyun_private]: {
+    name: ctyun_private,
+    title: i18n.t('CTYunPrivate'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint', 'cert_file', 'key_file'],
     image: require('@/assets/img/cloud/state.svg')
   },
@@ -179,7 +191,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     title: i18n.t('LAN'),
     attrs: ['ip_group', 'test_port', 'test_timeout', 'hostname_prefix'],
     image: require('@/assets/img/cloud/lan.svg'),
-    imageCSS: { height: '250px' }
+    imageCSS: {}
   }
 }
 

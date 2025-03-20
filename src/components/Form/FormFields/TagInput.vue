@@ -151,7 +151,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 1px 2px 1px;
+  //padding: 0 6px;
   border: 1px solid #dcdee2;
   border-radius: 1px;
   background-color: #fff;
@@ -162,8 +162,9 @@ export default {
   }
 
   & ::v-deep .el-tag {
-    margin-top: 1px;
+    margin-bottom: 1px;
     font-family: sans-serif !important;
+    margin-left: 5px;
   }
 
   & ::v-deep .el-autocomplete {
@@ -177,7 +178,8 @@ export default {
   & ::v-deep .el-input__inner {
     max-width: 100%;
     border: none;
-    padding-left: 10px;
+    padding-left: 12px;
+    height: 28px;
   }
 }
 
@@ -187,7 +189,7 @@ export default {
 }
 
 .filter-field ::v-deep .el-input__inner {
-  height: 28px;
+  height: 28px !important;
 }
 
 .show-password {

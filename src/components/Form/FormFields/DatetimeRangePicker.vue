@@ -5,11 +5,11 @@
     :default-time="['00:00:01', '23:59:59']"
     :end-placeholder="$tc('DateEnd')"
     :picker-options="pickerOptions"
-    :range-separator="$tc('To')"
     :start-placeholder="$tc('DateStart')"
+    :type="type"
     class="datepicker"
+    range-separator="-"
     size="small"
-    type="datetimerange"
     v-bind="$attrs"
     @change="handleDateChange"
     v-on="$listeners"
@@ -28,6 +28,15 @@ export default {
     dateEnd: {
       type: [Number, String, Date],
       default: null
+    },
+    type: {
+      type: String,
+      default: 'daterange'
+      // default: 'datetimerange'
+    },
+    toMinMax: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -35,6 +44,10 @@ export default {
     const endValue = this.dateEnd || this.$route.query['date_end']
     const dateStart = new Date(startValue)
     const dateTo = new Date(endValue)
+    if (this.toMinMax) {
+      dateStart.setHours(0, 0, 0, 0)
+      dateTo.setHours(23, 59, 59, 999)
+    }
     return {
       value: [dateStart, dateTo],
       pickerOptions: {
@@ -74,9 +87,13 @@ export default {
       }
     },
     onShortcutClick(picker, day) {
-      const end = new Date()
-      const start = new Date()
+      let start = new Date()
+      let end = new Date()
       start.setTime(start.getTime() - 3600 * 1000 * 24 * day)
+      if (this.toMinMax) {
+        start = new Date(start.setHours(0, 0, 0, 0))
+        end = new Date(end.setHours(23, 59, 59, 999))
+      }
       picker.$emit('pick', [start, end])
     }
   }
@@ -91,8 +108,11 @@ html:lang(pt-br) {
 }
 
 .datepicker {
+  &.el-date-editor--daterange.el-input__inner {
+    width: 243px;
+  }
+
   margin-left: 10px;
-  width: 233px;
   border: 1px solid #dcdee2;
   border-radius: 2px;
   height: 28px;

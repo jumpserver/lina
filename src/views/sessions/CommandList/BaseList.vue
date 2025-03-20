@@ -36,7 +36,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     const dateFrom = getDaysAgo(7).toISOString()
     const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
     return {
@@ -82,12 +81,8 @@ export default {
           session: {
             formatter: DetailFormatter,
             formatterArgs: {
-              openInNewPage: true,
-              removeColorOnClick: true,
+              drawer: true,
               can: this.$hasPerm('terminal.view_session'),
-              getTitle() {
-                return vm.$t('Goto')
-              },
               getRoute({ cellValue }) {
                 return {
                   name: 'SessionDetail',

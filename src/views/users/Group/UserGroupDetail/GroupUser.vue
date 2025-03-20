@@ -1,13 +1,18 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :md="15" :sm="24">
-        <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
-      </el-col>
-      <el-col :md="9" :sm="24">
+    <TwoCol>
+      <template>
+        <GenericListTable
+          ref="listTable"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+        />
+      </template>
+      <template #right>
         <RelationCard :key="relationKey" v-bind="relationConfig" @addSuccess="addSuccess" />
-      </el-col>
-    </el-row>
+      </template>
+    </TwoCol>
+    <TwoCol />
   </div>
 </template>
 
@@ -15,10 +20,12 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/Cards/RelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'GroupUser',
   components: {
+    TwoCol,
     RelationCard,
     GenericListTable
   },
@@ -30,7 +37,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       quickActions: [
         {
@@ -65,14 +71,14 @@ export default {
       tableConfig: {
         url: `/api/v1/users/users/?group_id=${this.object.id}`,
         columns: [
-          'name', 'username', 'is_valid', 'delete_action'
+          'name', 'delete_action'
         ],
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'UserDetail',
-              can: vm.$hasPerm('user.view_user')
+              can: false,
+              getTitle: ({ row }) => row.name + '(' + row.username + ')'
             }
           },
           delete_action: {
@@ -134,7 +140,7 @@ export default {
         },
         showHasObjects: false,
         hasObjectsId: this.object.users,
-        disabled: !this.$hasPerm('users.change_usergroup'),
+        disabled: !this.$hasPerm('users.change_usergroup') || this.$store.getters.currentOrgIsRoot,
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
           const groupId = this.object.id

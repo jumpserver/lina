@@ -1,12 +1,12 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="15" :sm="24">
+  <TwoCol>
+    <template>
       <AutoDetailCard v-bind="basicInfoConfig" />
       <AutoDetailCard v-if="isShowSpecInfo" v-bind="specInfoConfig" />
       <AutoDetailCard v-bind="customInfoConfig" />
       <AutoDetailCard v-bind="gatheredInfoConfig" />
-    </el-col>
-    <el-col :md="9" :sm="24">
+    </template>
+    <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard
         ref="NodeRelation"
@@ -22,19 +22,20 @@
         type="warning"
         v-bind="labelConfig"
       />
-    </el-col>
-  </el-row>
+    </template>
+  </TwoCol>
 </template>
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import RelationCard from '@/components/Cards/RelationCard'
-import QuickActions from '@/components/QuickActions'
+import { QuickActions, RelationCard } from '@/components/'
 import { openTaskPage } from '@/utils/jms'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   name: 'Detail',
   components: {
+    TwoCol,
     AutoDetailCard,
     QuickActions,
     RelationCard
@@ -202,21 +203,21 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'spec_info',
-        showUndefine: true
+        showUndefined: true
       },
       customInfoConfig: {
         title: this.$t('CustomInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         nested: 'custom_info',
-        showUndefine: false
+        showUndefined: false
       },
       gatheredInfoConfig: {
         url: `/api/v1/assets/hosts/${this.object.id}/`,
         title: this.$t('HardwareInfo'),
         object: this.object,
         nested: 'gathered_info',
-        showUndefine: false
+        showUndefined: false
       }
     }
   },

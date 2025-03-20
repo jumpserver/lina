@@ -42,15 +42,15 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
         'username_selector': setting.username_selector
       })
     }
+    // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
+    // updateForm({ protocols: [] })
     vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
-    updateForm({ protocols: [] })
   }), 100)
 }
 
-export const assetFieldsMeta = (vm) => {
+export const assetFieldsMeta = (vm, platformType) => {
   const platformProtocols = []
   const secretTypes = []
-  const platformType = vm?.$route.query?.type
   const asset = { address: 'https://jumpserver:330' }
   return {
     address: {
@@ -161,7 +161,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     is_active: {
-      type: 'switch'
+      type: 'checkbox'
     },
     cluster: {
       label: i18n.t('Cluster')

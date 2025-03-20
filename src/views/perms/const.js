@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('Name'), value: 'name' },
@@ -33,9 +34,14 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
 
 export const AssetPermissionTableMeta = {
   name: {
+    formatter: DetailFormatter,
     minWidth: '120px',
     formatterArgs: {
-      route: 'AssetPermissionDetail'
+      route: 'AssetPermissionDetail',
+      drawer: true,
+      routeQuery: {
+        tab: 'Basic'
+      }
     }
   },
   action: {
@@ -65,6 +71,7 @@ export const AssetPermissionTableMeta = {
     formatterArgs: {
       async: true,
       route: 'AssetPermissionDetail',
+      drawer: true,
       routeQuery: {
         tab: 'AssetPermissionUser'
       }
@@ -75,6 +82,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionUser'
@@ -85,6 +93,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
@@ -96,6 +105,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
+      drawer: true,
       route: 'AssetPermissionDetail',
       routeQuery: {
         tab: 'AssetPermissionAsset'
@@ -106,6 +116,7 @@ export const AssetPermissionTableMeta = {
     formatter: AmountFormatter,
     formatterArgs: {
       cellValueToRemove: ['@SPEC'],
+      drawer: true,
       getItem(item) {
         if (item !== '@SPEC') {
           return AccountLabelMapper[item] || item

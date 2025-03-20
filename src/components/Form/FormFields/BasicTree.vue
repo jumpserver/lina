@@ -47,6 +47,9 @@ export default {
   },
   computed: {
     iValue() {
+      if (!this.value) {
+        return []
+      }
       return this.value.map(item => {
         if (item.value) {
           return item.value
@@ -115,6 +118,73 @@ export default {
     color: #999;
   }
 
+  .el-tree > .el-tree-node:after {
+    border-top: none;
+  }
+
+  //节点有间隙，隐藏掉展开按钮就好了,如果觉得空隙没事可以删掉
+  .el-tree-node__expand-icon.is-leaf {
+    display: none;
+  }
+
+  .el-tree > .el-tree-node:before {
+    border-left: none;
+    display: none;
+  }
+
+  .el-tree > .el-tree-node:after {
+    border-top: none;
+    display: none;
+  }
+
+  .el-tree-node__children {
+    padding-left: 13px;
+
+    .el-tree-node {
+      position: relative;
+      padding-left: 13px;
+
+      &:before {
+        content: "";
+        left: -4px;
+        position: absolute;
+        right: auto;
+        border-width: 1px;
+      }
+
+      &:first-child::before {
+        display: none;
+      }
+
+      &:last-child:before {
+        height: 38px;
+      }
+
+      &:before {
+        border-left: 1px dashed #dcdcdc;
+        bottom: 0;
+        height: 100%;
+        top: -26px;
+        width: 1px;
+      }
+
+      &:after {
+        content: "";
+        left: -4px;
+        position: absolute;
+        right: auto;
+        border-width: 1px;
+      }
+
+      &:after {
+        border-top: 1px dashed #dcdcdc;
+        height: 20px;
+        top: 12px;
+        width: 24px;
+      }
+    }
+  }
+
   .el-tree-node__content:hover {
     background-color: transparent;
   }
@@ -129,7 +199,7 @@ export default {
     }
 
     .el-tree-node__children {
-      margin-left: -25px;
+      //margin-left: -25px;
     }
   }
 }

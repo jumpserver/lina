@@ -6,20 +6,30 @@
       :disabled="disabled"
       :type="col.type || 'info'"
       class="detail"
-      @click="goDetail"
+      @click="handleClick"
     >
       <slot>
         {{ iTitle }}
       </slot>
     </el-link>
+    <Drawer
+      v-if="formatterArgs.drawer && drawerComponent && drawerVisible"
+      :component="drawerComponent"
+      :has-footer="false"
+      :title="drawerTitle"
+      :visible.sync="drawerVisible"
+      class="detail-drawer"
+    />
   </div>
 </template>
 
 <script>
 import BaseFormatter from './base.vue'
+import Drawer from '@/components/Drawer/index.vue'
 
 export default {
   name: 'DetailFormatter',
+  components: { Drawer },
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -27,26 +37,40 @@ export default {
       default() {
         return {
           route: this.$route.name.replace('List', 'Detail'),
+          can: true,
           getRoute: null,
           routeQuery: null,
-          can: true,
+          drawer: false,
+          onClick: null,
           openInNewPage: false,
           removeColorOnClick: false,
-          getTitle({ col, row, cellValue }) {
-            return cellValue
+          beforeClick: () => {
           },
+          getTitle({ row, cellValue }) {
+            return cellValue != null ? cellValue : row.name
+          },
+          getDrawerTitle: null,
           getIcon({ col, row, cellValue }) {
             return null
           }
         }
       }
+    },
+    preventClick: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     return {
+      drawerTitle: '',
       linkClicked: false,
-      formatterArgs: formatterArgs
+      drawerComponent: '',
+      showTableDetailDrawer: false,
+      currentTemplate: null,
+      formatterArgs: formatterArgs,
+      drawerVisible: false
     }
   },
   computed: {
@@ -54,13 +78,14 @@ export default {
       return this.formatterArgs.getTitle({
         col: this.col,
         row: this.row,
-        cellValue: this.cellValue
+        cellValue: this.cellValue,
+        index: this.index
       })
     },
     disabled() {
       let can = this.formatterArgs.can
       if (typeof can === 'function') {
-        can = can(this.col)
+        can = can({ col: this.col, row: this.row })
       }
       return !can
     },
@@ -70,18 +95,52 @@ export default {
         row: this.row,
         cellValue: this.cellValue
       })
+    },
+    callbackArgs() {
+      return {
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      }
+    }
+  },
+  watch: {
+    drawerVisible(val) {
+      this.$log.debug('>>> DetailFormatter drawerVisible: ', val)
+      if (!val) {
+        this.drawerComponent = ''
+      }
     }
   },
   methods: {
+    getTitle() {
+      return this.formatterArgs.getTitle({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue,
+        index: this.index
+      })
+    },
+    handleClick() {
+      if (this.formatterArgs.beforeClick) {
+        this.formatterArgs.beforeClick(this.callbackArgs)
+      }
+
+      if (this.formatterArgs.onClick) {
+        return this.formatterArgs.onClick({ ...this.callbackArgs, detailRoute: this.getDetailRoute(), formatterArgs: this.formatterArgs })
+      }
+
+      if (this.preventClick) {
+        return
+      }
+
+      this.goDetail()
+    },
     getDetailRoute() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
       if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
-        route = this.formatterArgs.getRoute({
-          row: this.row,
-          col: this.col,
-          cellValue: this.cellValue
-        })
+        route = this.formatterArgs.getRoute(this.callbackArgs)
       }
       if (!route) {
         console.error('No route found')
@@ -89,7 +148,6 @@ export default {
       }
 
       let detailRoute = { replace: true }
-
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: this.row.id }
@@ -107,18 +165,18 @@ export default {
       const detailRoute = this.getDetailRoute()
 
       if (this.formatterArgs.openInNewPage) {
-        this.linkClicked = this.formatterArgs.removeColorOnClick
         const { href } = this.$router.resolve(detailRoute)
-        window.open(href, '_blank')
-      } else {
-        this.$router.push(detailRoute)
+        this.linkClicked = this.formatterArgs.removeColorOnClick
+        return window.open(href, '_blank')
       }
+
+      this.$router.push(detailRoute)
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail {
   display: inline-block;
   max-width: 100%;
@@ -142,4 +200,18 @@ export default {
   width: 28px;
   height: 28px;
 }
+
+::v-deep .go-back {
+  display: none;
+}
+
+.detail-drawer {
+  ::v-deep {
+    .el-drawer__header {
+      border-bottom: none;
+      padding-bottom: 1px;
+    }
+  }
+}
+
 </style>

@@ -1,5 +1,10 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="user" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :active-menu.sync="config.activeMenu"
+    :object.sync="user"
+    v-bind="config"
+    v-on="$listeners"
+  >
     <keep-alive>
       <component :is="config.activeMenu" :object="user" />
     </keep-alive>
@@ -12,7 +17,7 @@ import { GenericDetailPage } from '@/layout/components'
 
 import UserInfo from './UserInfo'
 import UserSession from './UserSession.vue'
-import UserLoginAcl from './UserLoginAcl.vue'
+import UserLoginACL from './UserLoginACL.vue'
 import UserGrantedAssets from './UserGrantedAssets'
 import AssetPermissionUser from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionUser.vue'
 import AssetPermissionAsset from '@/views/perms/AssetPermission/AssetPermissionDetail/AssetPermissionAsset.vue'
@@ -24,7 +29,7 @@ export default {
   components: {
     UserInfo,
     UserSession,
-    UserLoginAcl,
+    UserLoginACL,
     GenericDetailPage,
     UserGrantedAssets,
     AssetPermissionUser,
@@ -38,6 +43,7 @@ export default {
     return {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
+        url: '/api/v1/users/users',
         activeMenu: 'UserInfo',
         actions: {
           canUpdate: () => {
@@ -61,8 +67,8 @@ export default {
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
-            title: this.$t('UserAclLists'),
-            name: 'UserLoginAcl',
+            title: this.$t('UserACLss'),
+            name: 'UserLoginACL',
             hidden: () => !vm.$hasPerm('acls.view_loginacl')
           },
           {

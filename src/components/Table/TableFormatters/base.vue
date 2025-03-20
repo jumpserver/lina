@@ -47,6 +47,11 @@ export default {
     return {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
+  },
+  methods: {
+    cellValueIsLabelChoice() {
+      return typeof this.cellValue === 'object' && this.cellValue['value'] !== undefined
+    }
   }
 }
 </script>

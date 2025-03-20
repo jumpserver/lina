@@ -1,9 +1,5 @@
 <template>
-  <el-row :gutter="24">
-    <el-col :md="24" :sm="24">
-      <BaseList :asset-id="object.id" :is-page="false" />
-    </el-col>
-  </el-row>
+  <BaseList :asset-id="object.id" :is-page="false" />
 </template>
 
 <script>

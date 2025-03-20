@@ -8,14 +8,16 @@
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
-import DataActions from '@/components/DataActions/index.vue'
-import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
+import { createSourceIdCache } from '@/api/common'
 import { getErrorResponseMsg } from '@/utils/common'
+
+import i18n from '@/i18n/i18n'
+import DataActions from '@/components/Common/DataActions/index.vue'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 const defaultFalse = { type: [Boolean, Function, String], default: false }
+
 export default {
   name: 'LeftSide',
   components: {
@@ -30,6 +32,10 @@ export default {
       default() {
         return this.$route.name?.replace('List', 'Create')
       }
+    },
+    beforeCreate: {
+      type: Function,
+      default: () => null
     },
     onCreate: {
       type: Function,
@@ -76,6 +82,10 @@ export default {
     },
     moreActionsTitle: {
       type: String,
+      default: ''
+    },
+    moreActionsType: {
+      type: String,
       default: null
     },
     moreCreates: {
@@ -95,7 +105,7 @@ export default {
           title: this.$t('DeleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
-          icon: 'fa fa-trash-o',
+          icon: 'trash',
           can({ selectedRows }) {
             return selectedRows.length > 0 && vm.canBulkDelete
           },
@@ -128,7 +138,11 @@ export default {
           has: this.hasCreate && !this.moreCreates,
           can: this.canCreate,
           icon: 'plus',
-          callback: this.onCreate || this.handleCreate
+          callback: () => {
+            this.beforeCreate()
+            const callback = this.onCreate || this.handleCreate
+            callback()
+          }
         }
       ]
       if (this.moreCreates) {
@@ -140,7 +154,11 @@ export default {
           icon: 'plus',
           can: this.canCreate,
           dropdown: [],
-          callback: this.onCreate || this.handleCreate
+          callback: () => {
+            this.beforeCreate()
+            const callback = this.onCreate || this.handleCreate
+            callback()
+          }
         }
         const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
         defaultActions.push(createCreateAction)
@@ -181,7 +199,8 @@ export default {
       return {
         name: 'moreActions',
         title: this.moreActionsTitle || this.$t('MoreActions'),
-        dropdown: dropdown
+        dropdown: dropdown,
+        type: this.moreActionsType
       }
     },
     hasSelectedRows() {
@@ -194,6 +213,7 @@ export default {
   methods: {
     handleCreate() {
       let route
+
       if (typeof this.createRoute === 'string') {
         route = { name: this.createRoute }
         route.name = this.createRoute
@@ -202,7 +222,9 @@ export default {
       } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
+
       this.$log.debug('handle create')
+
       if (this.createInNewPage) {
         const { href } = this.$router.resolve(route)
         window.open(href, '_blank')
@@ -248,3 +270,6 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

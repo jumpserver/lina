@@ -1,25 +1,27 @@
 <template>
-  <DataForm
-    v-if="!loading"
-    ref="dataForm"
-    :fields="totalFields"
-    :form="iForm"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >
-    <div
-      v-for="(group, i) in groups"
-      :key="'group-'+group.name"
-      :slot="'id:'+group.name"
+  <div>
+    <DataForm
+      v-if="!loading"
+      ref="dataForm"
+      :fields="totalFields"
+      :form="iForm"
+      v-bind="$attrs"
+      v-on="$listeners"
     >
-      <FormGroupHeader
-        v-if="!groupHidden(group, i)"
-        :group="group"
-        :index="i"
-        :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
-      />
-    </div>
-  </DataForm>
+      <template
+        v-for="(group, i) in groups"
+        :slot="'id:'+group.name"
+      >
+        <FormGroupHeader
+          v-if="!groupHidden(group, i)"
+          :key="'group-' + group.name"
+          :group="group"
+          :index="i"
+          :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+        />
+      </template>
+    </DataForm>
+  </div>
 </template>
 
 <script>
@@ -87,6 +89,7 @@ export default {
     }
   },
   mounted() {
+    // this.$log.debug('>>> Method: ', this.method)
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
@@ -163,5 +166,6 @@ export default {
       return true
     }
   }
+
 }
 </script>

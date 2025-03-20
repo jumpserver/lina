@@ -9,7 +9,6 @@ const clouds = {
   },
   hidden: true,
   meta: {
-    title: i18n.t('BaseCloudSync'),
     app: 'xpack',
     resource: 'account'
   },
@@ -41,30 +40,8 @@ const clouds = {
           hidden: true,
           redirect: '/console/assets/cloud',
           meta: {
-            title: i18n.t('CloudAccountList'),
+            title: i18n.t('CloudSync'),
             permissions: ['xpack.view_account']
-          }
-        },
-        {
-          path: 'create',
-          component: () => import('@/views/assets/Cloud/Account/AccountCreateUpdate'),
-          name: 'AccountCreate',
-          hidden: true,
-          meta: {
-            title: i18n.t('CloudAccountCreate'),
-            action: 'create',
-            permissions: ['xpack.add_account']
-          }
-        },
-        {
-          path: ':id/update',
-          component: () => import('@/views/assets/Cloud/Account/AccountCreateUpdate'),
-          name: 'AccountUpdate',
-          hidden: true,
-          meta: {
-            title: i18n.t('CloudAccountUpdate'),
-            action: 'update',
-            permissions: ['xpack.change_account']
           }
         },
         {

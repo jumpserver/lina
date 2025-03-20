@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { newURL, ObjectLocalStorage } from '@/utils/common'
 import { default as ElDatableTable } from './compenents/el-data-table'
 import { mapGetters } from 'vuex'
 
@@ -27,7 +28,11 @@ export default {
   },
   data() {
     const userTableActions = this.config.tableActions || {}
+    const objTableSize = new ObjectLocalStorage('tableSize')
+    const pathName = newURL(this.config.url).pathname
     return {
+      objTableSize: objTableSize,
+      pathName: pathName,
       defaultConfig: {
         axiosConfig: {
           raw: 1,
@@ -70,7 +75,7 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
-        paginationSize: JSON.parse(localStorage.getItem('paginationSize')) || 15,
+        paginationSize: objTableSize.get(pathName) || 15,
         paginationSizes: [15, 30, 50, 100],
         paginationBackground: true,
         transformQuery: query => {
@@ -107,7 +112,7 @@ export default {
       return this.$refs.table
     },
     tableConfig() {
-      const tableDefaultConfig = this.defaultConfig
+      const tableDefaultConfig = this.defaultConfig || {}
       let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
         tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
@@ -124,7 +129,7 @@ export default {
   watch: {},
   methods: {
     getList() {
-      this.$refs.table.clearSelection()
+      this.$refs.table?.clearSelection()
       return this.$refs.table.getList()
     },
     getData() {
@@ -157,13 +162,7 @@ export default {
       this.$emit('loaded')
     },
     handleSizeChange(val) {
-      localStorage.setItem('paginationSize', val)
-      this.$store.commit('table/SET_TABLE_CONFIG',
-        {
-          key: 'paginationSize',
-          value: val
-        }
-      )
+      this.objTableSize.set(this.pathName, val)
     }
   }
 }

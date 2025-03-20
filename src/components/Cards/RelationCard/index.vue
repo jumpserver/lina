@@ -49,7 +49,7 @@
 <script>
 import { createSourceIdCache } from '@/api/common'
 import { Select2 } from '@/components/Form/FormFields'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -340,13 +340,13 @@ b, strong {
 }
 
 tr td {
-  line-height: 1.42857;
-  padding: 8px;
+  line-height: 1.4;
+  padding: 8px 0;
   vertical-align: top;
 }
 
 tr.item td {
-  border-top: 1px solid #e7eaec;
+  border-top: 1px dashed #EBEEF5;
 }
 
 .box-margin {

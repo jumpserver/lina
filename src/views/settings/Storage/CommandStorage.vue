@@ -1,9 +1,14 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="commandActions" :table-config="commandTableConfig" />
+  <ListTable
+    ref="ListTable"
+    :create-drawer="createDrawer"
+    :header-actions="commandActions"
+    :table-config="commandTableConfig"
+  />
 </template>
 
 <script>
-import ListTable from '@/components/Table/ListTable/index.vue'
+import { DrawerListTable as ListTable } from '@/components'
 import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
 
 export default {
@@ -20,6 +25,7 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('./CommandStorageCreateUpdate.vue'),
       commandActions: {
         canCreate: this.$hasPerm('terminal.add_commandstorage'),
         hasExport: false,
@@ -28,7 +34,7 @@ export default {
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
-            this.$router.push({ name: 'CreateCommandStorage', query: { type: item.name }})
+            this.$refs.ListTable.onCreate({ query: { type: item.name }})
           },
           dropdown: [
             {
@@ -71,13 +77,15 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
-              },
-              onUpdate: function({ row }) {
-                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }, query: { type: row.type.value }})
+                return (row.name !== 'default' && row.name !== 'null' &&
+                  vm.$hasPerm('terminal.change_commandstorage'))
               },
               canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
+                return (row.name !== 'default' && row.name !== 'null' &&
+                  vm.$hasPerm('terminal.delete_commandstorage'))
+              },
+              default: {
+                width: '130px'
               },
               hasClone: false,
               extraActions: [
@@ -118,14 +126,6 @@ export default {
     }
   },
   methods: {
-    createEs() {
-      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
-    }
   }
 }
-
 </script>
-
-<style scoped>
-
-</style>

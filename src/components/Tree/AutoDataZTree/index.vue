@@ -1,15 +1,22 @@
 <template>
   <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
-    <slot v-if="treeSetting.hasRightMenu" slot="rMenu">
-      <li v-if="treeSetting.showCreate" id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
-        <i class="fa fa-plus-square-o" /> {{ this.$t('CreateNode') }}
-      </li>
-      <li v-if="treeSetting.showUpdate" id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
-        <i class="fa fa-pencil-square-o" /> {{ this.$t('RenameNode') }}
-      </li>
-      <li v-if="treeSetting.showDelete" id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
-        <i class="fa fa-minus-square" /> {{ this.$t('DeleteNode') }}
-      </li>
+    <slot slot="rMenu">
+      <div v-if="menu && menu.length > 0">
+        <span v-for="item in menu" :key="item.id">
+          <li
+            v-if="hasMenuItem(item)"
+            :id="item.id"
+            :key="item.id"
+            :class="{ 'disabled': checkDisabled(item) }"
+            class="rmenu"
+            tabindex="-1"
+            @click="onMenuItemClick(item)"
+          >
+            <Icon :icon="item.icon" class="icon" /> {{ item.name }}
+          </li>
+          <li v-if="item.divided" class="divider" />
+        </span>
+      </div>
       <slot name="rMenu" />
     </slot>
   </DataZTree>
@@ -17,13 +24,15 @@
 
 <script>
 import DataZTree from '../DataZTree/index.vue'
+import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'AutoDataZTree',
   components: {
-    DataZTree
+    DataZTree,
+    Icon
   },
   props: {
     setting: {
@@ -34,7 +43,32 @@ export default {
   },
   data() {
     return {
+      defaultMenu: [
+        {
+          id: 'm_create',
+          name: this.$t('CreateNode'),
+          icon: 'fa-plus-square-o',
+          callback: this.createTreeNode,
+          has: () => this.setting.showCreate
+        },
+        {
+          id: 'm_edit',
+          name: this.$t('RenameNode'),
+          icon: 'fa-pencil-square-o',
+          callback: this.editTreeNode,
+          has: () => this.setting.showUpdate
+        },
+        {
+          id: 'm_del',
+          name: this.$t('DeleteNode'),
+          icon: 'fa-minus-square',
+          callback: this.removeTreeNode,
+          has: () => this.setting.showDelete
+        }
+      ],
       defaultSetting: {
+        showDefaultMenu: true,
+        showMenu: false,
         showCreate: true,
         showDelete: true,
         showUpdate: true,
@@ -80,12 +114,49 @@ export default {
     },
     rMenu() {
       return this.$refs.dataztree.rMenu
+    },
+    menu() {
+      let menu = []
+      if (this.setting.showDefaultMenu) {
+        menu = menu.concat(this.defaultMenu)
+      }
+      if (this.setting.menu && this.setting.menu.length > 0) {
+        menu = menu.concat(this.setting.menu)
+      }
+      return menu
     }
   },
   beforeDestroy() {
     $('body').unbind('mousedown')
   },
   methods: {
+    checkDisabled(item) {
+      let disabled = item.disabled
+      if (typeof disabled === 'function') {
+        disabled = disabled(this.currentNode)
+      }
+      if (typeof disabled === 'undefined') {
+        disabled = false
+      }
+      return disabled
+    },
+    hasMenu(node) {
+      return false
+    },
+    hasMenuItem(item) {
+      let has = item.has
+      if (typeof has === 'function') {
+        has = has(this.currentNode)
+      }
+      if (typeof has === 'undefined') {
+        has = true
+      }
+      return has
+    },
+    onMenuItemClick(item) {
+      item.callback(this.currentNode)
+      this.hideRMenu()
+    },
     onAsyncSuccess(event, treeId, treeNode, msg) {
       const nodes = JSON.parse(msg)
       nodes.forEach((node) => {
@@ -115,7 +186,7 @@ export default {
       if (this.rMenu) this.rMenu.css({ 'visibility': 'hidden' })
       $('body').unbind('mousedown', this.onBodyMouseDown)
     },
-    // Request URL: http://localhost/api/v1/assets/assets/?node_id=d8212328-538d-41a6-bcfd-1e8cc7e3aed4&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
+    // Request URL: http://localhost/api/v1/assets/assets/?node_id=ID&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
     onSelected: function(event, treeNode) {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
       if (!this.setting.url) {
@@ -191,6 +262,8 @@ export default {
       const offset = $(`#${zTreeID}`).offset()
       const scrollTop = document.querySelector('.treebox')?.scrollTop
       x -= offset.left
+      x = x < 0 ? 0 : x
+
       // Tmp
       y -= (offset.top + scrollTop) / 3 - 10
       x += document.body.scrollLeft
@@ -199,15 +272,25 @@ export default {
       if (y + $(`#${rMenuID} ul`).height() >= window.innerHeight) {
         y -= $(`#${rMenuID} ul`).height()
       }
+      y = y < 0 ? 0 : y
 
       this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
       $(`#${rMenuID} ul`).show()
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function(event, treeId, treeNode) {
-      if (!this.setting.showMenu) {
+      let showMenu = this.setting.showMenu
+      if (typeof showMenu === 'function') {
+        showMenu = showMenu(treeNode)
+      }
+      if (!showMenu) {
         return
       }
+      if (!treeNode) {
+        return
+      }
+      this.currentNode = treeNode
+      this.currentNodeId = treeNode.meta.data.id
       // 屏蔽收藏资产
       if (treeNode?.id === '-12') {
         return
@@ -321,9 +404,14 @@ export default {
   background-color: #f5f7fa;
 }
 
+.icon {
+  width: 15px;
+  display: inline-block;
+}
+
 .data-z-tree {
   ::v-deep {
-    .fa {
+    .icon {
       width: 10px;
       margin-right: 3px;
     }

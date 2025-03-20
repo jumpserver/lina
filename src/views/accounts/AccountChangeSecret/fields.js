@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
-import { PasswordRule, TagInput, UpdateToken } from '@/components/Form/FormFields'
-import { crontab, interval, is_periodic } from '../const'
+import { PasswordRule, Select2, TagInput, UpdateToken } from '@/components/Form/FormFields'
+import { periodicMeta } from '@/components/const'
 
 export const getChangeSecretFields = () => {
   return {
@@ -49,8 +49,9 @@ export const getChangeSecretFields = () => {
       label: i18n.t('PasswordRule'),
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     },
-    recipients: {
-      label: i18n.t('Recipient'),
+    pre_notify: {
+      label: i18n.t('Pre Recipient'),
+      component: Select2,
       el: {
         value: [],
         ajax: {
@@ -61,9 +62,20 @@ export const getChangeSecretFields = () => {
         }
       }
     },
-    interval,
-    crontab,
-    is_periodic,
+    post_notify: {
+      label: i18n.t('Post Recipient'),
+      component: Select2,
+      el: {
+        value: [],
+        ajax: {
+          url: '/api/v1/users/users/?fields_size=mini',
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
+          }
+        }
+      }
+    },
+    ...periodicMeta,
     accounts: {
       label: i18n.t('Accounts'),
       component: TagInput,

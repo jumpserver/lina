@@ -25,7 +25,7 @@ export default {
     {
       path: '/workbench/home',
       name: 'MyHome',
-      component: () => import('@/views/workbench/myhome'),
+      component: () => import('@/views/workbench/overview/index.vue'),
       meta: {
         icon: 'overview',
         title: i18n.t('Overview'),
@@ -172,7 +172,7 @@ export default {
           name: 'Execution',
           component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('ExecutionList'),
+            title: i18n.t('ExecutionHistory'),
             icon: 'history',
             permissions: ['ops.view_jobexecution']
           }

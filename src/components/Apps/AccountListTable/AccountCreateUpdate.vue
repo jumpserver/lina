@@ -1,36 +1,38 @@
-<template>
-  <Dialog
-    v-if="iVisible"
-    :close-on-click-modal="false"
-    :destroy-on-close="true"
-    :show-cancel="false"
-    :show-confirm="false"
+<template v-if="iVisible">
+  <Drawer
     :title="title"
-    :visible.sync="iVisible"
-    v-bind="$attrs"
-    width="900px"
-    v-on="$listeners"
+    :visible="iVisible"
+    class="drawer"
+    @close-drawer="handleCloseDrawer"
   >
-    <AccountCreateUpdateForm
-      v-if="!loading"
-      ref="form"
-      :account="account"
-      :add-template="addTemplate"
-      :asset="asset"
-      @add="addAccount"
-      @edit="editAccount"
-    />
-  </Dialog>
+    <Page :title="'null'">
+      <IBox class="content">
+        <AccountCreateUpdateForm
+          v-if="!loading"
+          ref="form"
+          :account="account"
+          :add-template="addTemplate"
+          :asset="asset"
+          @add="addAccount"
+          @edit="editAccount"
+        />
+      </IBox>
+    </Page>
+  </Drawer>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog/index.vue'
+import Drawer from '@/components/Drawer/index.vue'
 import AccountCreateUpdateForm from '@/components/Apps/AccountCreateUpdateForm/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
+import Page from '@/layout/components/Page/index.vue'
 
 export default {
   name: 'CreateAccountDialog',
   components: {
-    Dialog,
+    IBox,
+    Drawer,
+    Page,
     AccountCreateUpdateForm
   },
   props: {
@@ -111,11 +113,22 @@ export default {
     },
     editAccount(form) {
       const data = { ...form }
-      this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
-        this.iVisible = false
-        this.$emit('add', true)
-        this.$message.success(this.$tc('UpdateSuccessMsg'))
-      }).catch(error => this.setFieldError(error))
+      const flag = this.$route.query.flag
+
+      switch (flag) {
+        case 'copy':
+          this.handleAccountOperation(this.account.id, 'copy-to-assets', data)
+          break
+        case 'move':
+          this.handleAccountOperation(this.account.id, 'move-to-assets', data)
+          break
+        default:
+          this.$axios.patch(`/api/v1/accounts/accounts/${this.account.id}/`, data).then(() => {
+            this.iVisible = false
+            this.$emit('add', true)
+            this.$message.success(this.$tc('UpdateSuccessMsg'))
+          }).catch(error => this.setFieldError(error))
+      }
     },
     handleResult(resp, error) {
       let bulkCreate = !this.asset
@@ -168,7 +181,29 @@ export default {
           refsAutoDataForm.setFieldError(current, err)
         }
       }
+    },
+    handleCloseDrawer() {
+      this.iVisible = false
+      // Reflect.deleteProperty(this.$route.query, 'flag')
+    },
+    handleAccountOperation(id, path, data) {
+      this.$axios.post(`/api/v1/accounts/accounts/${id}/${path}/`, data).then((res) => {
+        this.iVisible = false
+        this.$emit('add', true)
+        this.handleResult(res, null)
+      }).catch(error => this.handleResult(null, error))
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.drawer {
+  ::v-deep .el-drawer__body {
+
+    .el-form {
+      margin-right: 30px;
+    }
+  }
+}
+</style>

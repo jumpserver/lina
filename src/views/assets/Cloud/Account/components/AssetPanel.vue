@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="asset-panel">
     <el-alert
       :center="false"
       :closable="true"
@@ -9,8 +9,8 @@
     </el-alert>
     <ImportTable
       ref="importTable"
-      v-bind="settings"
       origin="cloudSync"
+      v-bind="settings"
       @cancel="closeDialog"
       @finish="showResult"
     />
@@ -67,6 +67,7 @@ export default {
           }
         ],
         config: {
+          url: '',
           hasSelection: true,
           persistSelection: false,
           hasPagination: false,
@@ -119,9 +120,6 @@ export default {
           action: 'sync_task', account_id: this.object.id
         }))
       }
-      this.ws.onclose = () => {
-        this.$emit('update:visible', false)
-      }
       this.ws.onerror = () => {
         this.$message.error(this.$tc('ConnectWebSocketError'))
       }
@@ -162,3 +160,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.asset-panel {
+  display: block;
+
+}
+</style>

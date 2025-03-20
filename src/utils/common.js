@@ -3,13 +3,16 @@ import { message } from '@/utils/message'
 
 const _ = require('lodash')
 
-export function getApiPath(that) {
+export function getApiPath(that, objectId) {
   let pagePath = that.$route.path
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
   } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
+  }
+  if (pagePathArray.indexOf(objectId) === -1) {
+    pagePathArray.push(objectId)
   }
   if (pagePathArray.indexOf('tickets') !== -1) {
     // ticket ...
@@ -73,6 +76,18 @@ export function replaceAllUUID(string, replacement = '*') {
     string = string.replace(/[0-9a-zA-Z\-]{36}/g, replacement)
   }
   return string
+}
+
+// 写个函数， id 设置到路径中，而不是 query 中, 确保已 / 结尾, 如果已 / 结尾，则不添加
+export function setUrlId(url, id) {
+  const urlArray = url.split('?')
+  const baseUrl = _.trimEnd(urlArray[0], '/')
+  if (urlArray.length === 1) {
+    url = `${baseUrl}/${id}/`
+  } else {
+    url = `${baseUrl}/${id}/?${urlArray[1]}`
+  }
+  return url
 }
 
 export function setUrlParam(url, name, value) {
@@ -140,6 +155,9 @@ function customizer(objValue, srcValue) {
 
 export function newURL(url) {
   let obj
+  if (!url) {
+    return ''
+  }
   if (url.indexOf('//') > -1) {
     obj = new URL(url)
   } else {
@@ -329,6 +347,22 @@ export function toSentenceCase(string) {
   return s[0].toUpperCase() + s.slice(1)
 }
 
+export function toLowerCaseExcludeAbbr(s) {
+  if (!s) return ''
+
+  return s.split(' ').map(word => {
+    // 如果单词包含超过 2 个大写字母，则不转换
+    const uppercaseCount = word.split('').filter(char => {
+      return char === char.toUpperCase() && char !== char.toLowerCase()
+    }).length
+    if (uppercaseCount > 2) {
+      return word
+    }
+    // 否则将单词转换为小写
+    return word.toLowerCase()
+  }).join(' ')
+}
+
 export { BASE_URL }
 
 export function openNewWindow(url) {
@@ -350,4 +384,55 @@ export function openNewWindow(url) {
   params = params + `,top=${top},left=${left},width=${screen.width / 3},height=${screen.height / 3}`
   window.sessionStorage.setItem('newWindowCount', `${count + 1}`)
   window.open(url, '_blank', params)
+}
+
+export function getDrawerWidth() {
+  const drawerWidth = localStorage.getItem('drawerWidth')
+  if (drawerWidth && drawerWidth > 100 && drawerWidth < 2000) {
+    return drawerWidth + 'px'
+  }
+  const width = window.innerWidth
+  if (width >= 1500) return '1080px'
+  return '90%'
+}
+
+export class ObjectLocalStorage {
+  constructor(key) {
+    this.key = key
+  }
+
+  b64(val) {
+    return btoa(unescape(encodeURIComponent(val)))
+  }
+
+  getObject() {
+    const stored = window.localStorage.getItem(this.key)
+    let value = {}
+    try {
+      value = JSON.parse(stored)
+    } catch (e) {
+      console.warn('localStorage value is not a valid JSON: ', this.key)
+    }
+    if (!value || typeof value !== 'object') {
+      value = {}
+    }
+    return value
+  }
+
+  get(attr, defaults) {
+    const obj = this.getObject(this.key)
+    const attrSafe = this.b64(attr)
+    const val = obj[attrSafe]
+    if (val === undefined) {
+      return defaults
+    }
+    return val
+  }
+
+  set(attr, value) {
+    const obj = this.getObject(this.key)
+    const attrSafe = this.b64(attr)
+    obj[attrSafe] = value
+    window.localStorage.setItem(this.key, JSON.stringify(obj))
+  }
 }

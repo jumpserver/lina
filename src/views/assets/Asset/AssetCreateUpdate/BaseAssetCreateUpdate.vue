@@ -1,12 +1,12 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" v-on="$listeners" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '@/views/assets/const'
 import { encryptPassword } from '@/utils/crypto'
 import { getUpdateObjURL, setUrlParam } from '@/utils/common'
+import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
   components: { GenericCreateUpdatePage },
@@ -48,6 +48,8 @@ export default {
       loading: true,
       platform: {},
       changePlatformID: '',
+      meta: {},
+      iConfig: {},
       defaultConfig: {
         initial: {},
         platform: {},
@@ -62,16 +64,18 @@ export default {
           [this.$t('Account'), ['accounts']],
           [this.$t('Other'), ['domain', 'labels', 'is_active', 'comment']]
         ],
-        fieldsMeta: assetFieldsMeta(this),
+        fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.params
+          const { id = '' } = this.$route.query
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
+
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
-          if (id) {
+
+          if (submitMethod === 'put') {
             url = getUpdateObjURL(url, id)
             delete values['accounts']
           } else {
@@ -86,13 +90,26 @@ export default {
       }
     }
   },
-  computed: {
-    iConfig() {
+  async created() {
+    await this.init()
+  },
+  methods: {
+    async init() {
+      try {
+        await this.genConfig()
+        await this.setInitial()
+        await this.setPlatformConstrains()
+      } finally {
+        this.loading = false
+      }
+    },
+    async genConfig() {
       const { addFields, addFieldsMeta, defaultConfig } = this
+      defaultConfig.fieldsMeta = assetFieldsMeta(this, this.$route.query.type)
       let url = this.url
-      const { id = '' } = this.$route.params
-      if (this.$route.query.platform && !id) {
-        url = setUrlParam(url, 'platform', this.$route.query.platform)
+      const { id = '', platform } = this.$route.query
+      if (platform && !id) {
+        url = setUrlParam(url, 'platform', platform)
       }
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
@@ -113,39 +130,26 @@ export default {
           config.fieldsMeta[name] = meta
         }
       }
-      return config
-    }
-  },
-  created() {
-    this.init()
-  },
-  methods: {
-    async init() {
-      try {
-        await this.setInitial()
-        await this.setPlatformConstrains()
-      } finally {
-        this.loading = false
-      }
+      this.iConfig = config
     },
     async setInitial() {
       const { defaultConfig } = this
-      const { node, platform } = this.$route?.query || {}
+      const { node, platform } = this.$route.query
       const nodesInitial = node ? [node] : []
-      const platformId = this.changePlatformID ? this.changePlatformID : (platform || 'Linux')
+      const platformId = this.changePlatformID || this.$route.query.platform || (platform || 'Linux')
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
         labels: [],
         is_active: true,
         nodes: nodesInitial,
-        platform: parseInt(platformId),
+        platform: parseInt(this.platform.id),
         protocols: []
       }
       if (this.updateInitial) {
         await this.updateInitial(initial)
       }
-      this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
+      this.iConfig.initial = Object.assign({}, initial, defaultConfig.initial)
     },
     async setPlatformConstrains() {
       const { platform } = this
@@ -158,14 +162,14 @@ export default {
         delete i['id']
         return i
       })
-      const protocolChoices = this.defaultConfig.fieldsMeta.protocols.el.choices
+      const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
-      this.defaultConfig.fieldsMeta.accounts.el.platform = platform
+      this.iConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 
       for (const field of hiddenCheckFields) {
         if (platform[field + '_enabled'] === false) {
-          this.defaultConfig.fieldsMeta[field].hidden = () => true
+          this.iConfig.fieldsMeta[field].hidden = () => true
         }
       }
     }

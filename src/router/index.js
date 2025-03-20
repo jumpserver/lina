@@ -32,6 +32,7 @@ import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
+import pamViewRoutes from './pam'
 import { getPropView } from '@/utils/jms'
 import store from '@/store'
 
@@ -57,7 +58,7 @@ export const constantRoutes = [
       {
         path: '',
         name: 'home',
-        component: () => import('@/views/workbench/myhome/index'),
+        component: () => import('@/views/workbench/overview/index'),
         meta: {
           icon: 'dashboard',
           title: i18n.t('Overview')
@@ -90,6 +91,7 @@ export const constantRoutes = [
  */
 export const viewRoutes = [
   consoleViewRoutes,
+  pamViewRoutes,
   auditViewRoutes,
   workbenchViewRoutes,
   ticketsRoutes,

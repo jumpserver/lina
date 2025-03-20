@@ -1,32 +1,40 @@
 <template>
-  <div>
-    <el-col :md="24" :sm="24">
-      <GenericListTable
-        ref="ListTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-      />
-      <GatewayDialog
-        :cell="cell"
-        :port="port"
-        :visible.sync="visible"
-      />
-      <AddGatewayDialog :object="object" :setting="AddGatewaySetting" @close="handleAddGatewayDialogClose" />
-    </el-col>
-  </div>
+  <TwoCol>
+    <GenericListTable
+      ref="ListTable"
+      :create-drawer="createDrawer"
+      :detail-drawer="detailDrawer"
+      :header-actions="headerActions"
+      :resource="$tc('Gateway')"
+      :table-config="tableConfig"
+    />
+    <GatewayTestDialog
+      :cell="testConfig.cell"
+      :port="testConfig.port"
+      :visible.sync="testConfig.visible"
+    />
+    <AddGatewayDialog
+      v-if="addGatewaySetting.addGatewayDialogVisible"
+      :object="transObject"
+      :setting="addGatewaySetting"
+      @close="handleAddGatewayDialogClose"
+    />
+  </TwoCol>
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index'
-import GatewayDialog from '@/components/Apps/GatewayDialog'
+import { GenericListTable } from '@/layout/components'
+import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
 import AddGatewayDialog from '@/views/assets/Domain/components/AddGatewayDialog'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
+    TwoCol,
     GenericListTable,
-    GatewayDialog,
+    GatewayTestDialog,
     AddGatewayDialog
   },
   props: {
@@ -37,16 +45,26 @@ export default {
     }
   },
   data() {
+    const vm = this
+
     return {
+      createDrawer: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
+      transObject: {},
+      testConfig: {
+        port: 0,
+        visible: false,
+        cell: ''
+      },
       tableConfig: {
-        url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
         columnsExclude: [
           'info', 'spec_info', 'auto_config'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'address', 'protocols',
+            'name', 'address',
             'connectivity', 'actions'
           ]
         },
@@ -97,6 +115,9 @@ export default {
                 name: 'GatewayUpdate',
                 query: { domain: this.object.id, platform_type: 'linux', 'category': 'host' }
               },
+              onClone: ({ row }) => {
+                this.$refs.ListTable.onClone({ row: { ...row, payload: 'pam_asset_clone' }})
+              },
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
@@ -117,31 +138,19 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity') && !this.$store.getters.currentOrgIsRoot,
                   title: this.$t('TestConnection'),
                   callback: function(val) {
-                    this.visible = true
+                    vm.testConfig.visible = true
                     const port = val.row.protocols.find(item => item.name === 'ssh').port
                     if (!port) {
                       return this.$message.error(this.$tc('BadRequestErrorMsg'))
                     } else {
-                      this.port = port
-                      this.cell = val.row.id
+                      vm.testConfig.port = port
+                      vm.testConfig.cell = val.row.id
                     }
                   }.bind(this)
                 }
-              ],
-              onClone: function({ row }) {
-                const cloneRoute = {
-                  name: 'GatewayCreate',
-                  query: {
-                    domain: this.object.id,
-                    platform_type: row.type.value,
-                    clone_from: row.id
-                  }
-                }
-                this.$router.push(cloneRoute)
-              }.bind(this)
+              ]
             }
           }
-
         }
       },
       headerActions: {
@@ -161,28 +170,43 @@ export default {
             }.bind(this)
           }
         ],
-        createRoute: {
-          name: 'GatewayCreate',
-          query: {
-            domain: this.object.id,
-            platform_type: 'linux',
-            category: 'host'
-          }
-        },
         extraActions: [
           {
             name: 'GatewayAdd',
             title: this.$t('Add'),
-            callback: function() {
-              this.AddGatewaySetting.addGatewayDialogVisible = true
-            }.bind(this)
+            can: !this.$store.getters.currentOrgIsRoot,
+            callback: async() => {
+              // 由于修改成为了抽屉形式，导致传入到 AddGateway 组件中的 obj 任然为最初的数量，就会导致新增的 item 依然会出现可选的情况
+              // 此时修改为在打开 AddGateway 额外从 tableConfig.url 的接口中获取最新的 gateways 数目
+              try {
+                const res = await this.$axios.get(this.tableConfig.url)
+
+                if (res) {
+                  this.transObject = {
+                    ...this.object,
+                    gateways: res.map(item => {
+                      return {
+                        name: item.name,
+                        id: item.id
+                      }
+                    })
+                  }
+                }
+              } catch (err) {
+                throw new Error(err)
+              }
+
+              vm.$nextTick(() => {
+                this.addGatewaySetting.addGatewayDialogVisible = true
+              })
+            }
           }
-        ]
+        ],
+        onCreate: () => {
+          vm.$refs.ListTable.onCreate({ query: { domain: vm.object.id, platform_type: 'linux', category: 'host' }})
+        }
       },
-      port: 0,
-      cell: '',
-      visible: false,
-      AddGatewaySetting: {
+      addGatewaySetting: {
         addGatewayDialogVisible: false
       }
     }
@@ -222,11 +246,6 @@ export default {
     handleAddGatewayDialogClose() {
       this.reloadTable()
     }
-
   }
 }
 </script>
-
-<style>
-
-</style>

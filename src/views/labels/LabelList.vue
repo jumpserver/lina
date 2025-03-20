@@ -45,7 +45,7 @@ export default {
                 vm.handleClickResCount(row)
               }
               return (
-                <el-link type='success' onClick={onClick}>{ row['res_count'] }</el-link>
+                <el-link type='success' onClick={onClick}>{row['res_count']}</el-link>
               )
             }
           },

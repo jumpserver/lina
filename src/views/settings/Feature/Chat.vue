@@ -8,7 +8,7 @@
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
-import IBox from '@/components/IBox/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -34,7 +34,9 @@ export default {
               vm.$message.success(res['msg'])
             }).catch(() => {
               vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         }
       ],

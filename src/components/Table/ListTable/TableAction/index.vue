@@ -1,5 +1,5 @@
 <template>
-  <div :class="device" class="table-header clearfix">
+  <div :class="device" class="table-header clearfix container">
     <slot name="header">
       <LeftSide
         v-if="hasLeftActions"
@@ -10,6 +10,7 @@
         v-on="$listeners"
         @init-actions-done="handleActionsDone"
       />
+
       <RightSide
         v-if="hasRightActions"
         :selected-rows="selectedRows"
@@ -18,6 +19,7 @@
         v-bind="$attrs"
         v-on="$listeners"
       />
+
       <div :class="searchClass" class="search">
         <LabelSearch
           v-if="hasLabelSearch"
@@ -158,7 +160,7 @@ $headerHeight: 30px;
 .table-header {
   .left-side {
     display: block;
-    float: left;
+    //float: left;
 
     ::v-deep .action-item.el-dropdown > .el-button {
       height: 100%;
@@ -166,13 +168,14 @@ $headerHeight: 30px;
   }
 
   .right-side {
-    float: right;
+    //float: right;
     height: 30px;
   }
 
   .search {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
 
     .right-side-item.action-search {
       border: 1px solid var(--color-border);
@@ -181,13 +184,55 @@ $headerHeight: 30px;
   }
 
   .search.left {
-    float: left;
     padding: 0 !important;
+    gap: 10px;
   }
 
   .search.right {
-    float: right;
+    display: flex;
+    flex-wrap: wrap;
+    padding-right: 10px;
   }
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 0;
+
+  &.mobile {
+    justify-content: flex-start;
+
+    .left-side {
+      gap: 0;
+    }
+
+    .search {
+      justify-content: flex-start;
+      gap: 10px;
+    }
+  }
+}
+
+.left-side {
+  order: 1;
+}
+
+.search {
+  order: 2;
+  flex-grow: 1; /* This allows it to grow and fill available space */
+}
+
+.right-side {
+  order: 3;
+}
+
+/* When .left-side is not present, adjust the layout */
+.container:not(:has(.left-side)) .search {
+  margin-right: auto; /* Pushes .search to the left */
+  justify-content: flex-start;
 }
 
 .export-item {
@@ -195,51 +240,4 @@ $headerHeight: 30px;
   padding: 5px 20px;
 }
 
-.mobile .search {
-  display: inherit;
-}
-
-.mobile .search .datepicker {
-  margin-left: 0;
-}
-
-.mobile .search.right {
-  clear: both;
-  float: none;
-  padding-top: 10px;
-
-  .label-search {
-    margin-right: 0;
-
-    ::v-deep .el-button.label-button {
-      border: 1px solid var(--color-border);
-    }
-
-    ::v-deep .label-cascader {
-      display: block;
-      width: 100%;
-    }
-  }
-}
-
-.mobile .search.right .action-search {
-  display: inline-block;
-  width: 100%;
-  margin-top: 5px;
-}
-
-.mobile .right-side {
-  padding-top: 3px;
-}
-
-@media (max-width: 481px) {
-  .mobile .right-side {
-    float: left;
-    margin-left: -15px;
-  }
-
-  .mobile .left-side {
-    width: 100%;
-  }
-}
 </style>

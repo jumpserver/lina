@@ -16,11 +16,8 @@ export default {
       config: {
         url: '/api/v1/terminal/applet-hosts/',
         addFields: [
-          [this.$t('Automations'), ['deploy_options'], 3],
-          [this.$t('Account'), [
-            'using_same_account',
-            'auto_create_accounts', 'accounts_create_amount']
-          ]
+          [this.$t('Automation'), ['deploy_options'], 3],
+          [this.$t('Account'), ['using_same_account', 'auto_create_accounts', 'accounts_create_amount']]
         ],
         addFieldsMeta: {
           name: {
@@ -78,14 +75,8 @@ export default {
     }
   },
   async mounted() {
-    const platform = await this.$axios.get('/api/v1/assets/platforms/RemoteAppHost/')
-    this.$route.query.platform = platform['id']
     this.loading = false
   },
   methods: {}
 }
 </script>
-
-<style lang="less" scoped>
-
-</style>

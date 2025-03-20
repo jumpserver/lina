@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import GenericListPage from '@/layout/components/GenericListPage'
+import { GenericListPage } from '@/layout/components'
+import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
   components: {
@@ -47,15 +48,19 @@ export default {
           },
           user_display: {
             label: this.$t('User'),
-            formatter: function(row) {
-              const to = {
-                name: 'UserDetail',
-                params: { id: row.user.id }
-              }
-              if (vm.$hasPerm('users.view_user')) {
-                return <router-link to={to}>{row.user.name}</router-link>
-              } else {
-                return <span>{row.user.name}</span>
+            formatter: DetailFormatter,
+            formatterArgs: {
+              drawer: true,
+              can: this.$hasPerm('users.view_user'),
+              getTitle: ({ row }) => { return row.user.name },
+              getDrawerTitle({ row }) { return row.user.name },
+              getRoute: ({ row }) => {
+                return {
+                  name: 'UserDetail',
+                  params: {
+                    id: row.user.id
+                  }
+                }
               }
             }
           },

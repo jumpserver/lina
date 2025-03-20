@@ -2,6 +2,7 @@
   <Dialog
     v-if="iVisible"
     :destroy-on-close="true"
+    :model="false"
     :show-cancel="false"
     :show-confirm="false"
     :title="$tc('AddAccount')"
@@ -11,6 +12,7 @@
     <AccountCreateForm
       :account="account"
       :encrypt-password="false"
+      :label-position="'right'"
       :platform="platform"
       @add="addAccount"
       @edit="editAccount"
@@ -76,7 +78,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

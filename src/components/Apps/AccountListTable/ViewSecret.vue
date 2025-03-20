@@ -18,7 +18,7 @@
           <span>{{ account['username'] }}</span>
         </el-form-item>
         <el-form-item :label="secretTypeLabel">
-          <ShowKeyCopyFormatter
+          <SecretViewerFormatter
             :cell-value="secretInfo.secret"
             :col="{ formatterArgs: {
               name: account['name'],
@@ -60,7 +60,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
-import { ShowKeyCopyFormatter } from '@/components/Table/TableFormatters'
+import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
 import { encryptPassword } from '@/utils/crypto'
 
 export default {
@@ -68,7 +68,7 @@ export default {
   components: {
     Dialog,
     PasswordHistoryDialog,
-    ShowKeyCopyFormatter
+    SecretViewerFormatter
   },
   props: {
     account: {
