@@ -129,7 +129,9 @@ export default {
       handler(val, oldVal) {
         this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val)
         if (!val && oldVal) {
-          this.afterCloseDrawer()
+          this.$nextTick(() => {
+            this.afterCloseDrawer()
+          })
         }
       }
     }
@@ -153,11 +155,12 @@ export default {
   methods: {
     afterCloseDrawer() {
       // 清空路由参数, 恢复路由参数
-      for (const key in ['params', 'query']) {
-        for (const k in this.$route[key]) {
+      for (const key of ['params', 'query']) {
+        const curValue = this.$route[key] || {}
+        for (const k in curValue) {
           this.$route[key][k] = ''
         }
-        const value = this.routeFreeze[key]
+        const value = this.routeFreeze[key] || {}
         for (const k in value) {
           this.$route[key][k] = value[k]
         }
