@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import GenericListPage from '@/layout/components/GenericListPage'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
