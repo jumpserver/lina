@@ -39,6 +39,10 @@ export default {
     resource: {
       type: String,
       required: true
+    },
+    customActions: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -121,20 +125,6 @@ export default {
                     vm.visible = true
                     vm.reportUrl = `${this.url}${row.id}/report/`
                   }
-                },
-                {
-                  name: 'record',
-                  title: this.$t('Record'),
-                  can: this.$hasPerm('accounts.view_changesecretrecord'),
-                  callback: function({ row }) {
-                    return this.$router.push({
-                      name: 'AccountChangeSecretList',
-                      query: {
-                        tab: 'ChangeSecretRecord',
-                        execution_id: row.id
-                      }
-                    })
-                  }
                 }
               ]
             }
@@ -167,6 +157,15 @@ export default {
     const automation_id = this.$route.query.automation_id
     if (automation_id !== undefined) {
       this.tableConfig.url = `${this.tableConfig.url}?automation_id=${automation_id}`
+    }
+
+    const defaultExtraActions = this.tableConfig.columnsMeta.actions.formatterArgs.extraActions
+
+    if (this.customActions) {
+      this.tableConfig.columnsMeta.actions.formatterArgs.extraActions = [
+        ...defaultExtraActions,
+        this.customActions
+      ]
     }
   },
   methods: {
