@@ -67,7 +67,7 @@ export default {
               can: vm.$hasPerm('accounts.view_changesecretexecution'),
               getRoute({ row }) {
                 return {
-                  name: 'AccountChangeSecretList',
+                  name: 'AccountChangeSecretDetail',
                   query: {
                     tab: 'AccountChangeSecretExecutionList',
                     automation_id: row.id

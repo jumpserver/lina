@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IBox from '../../../../components/Common/IBox'
+import IBox from '@/components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
 import { mapGetters } from 'vuex'
@@ -30,7 +30,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/${this.object.id}/`,
+      url: `/api/v1/assets/platforms/`,
       disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,
