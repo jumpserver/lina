@@ -44,7 +44,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       loading: true,
       platform: {},
@@ -68,16 +67,15 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '', action } = vm.meta
+          const { id = '' } = this.$route.query
           const values = _.cloneDeep(validValues)
-
           const submitMethod = id ? 'put' : 'post'
 
           if (values.nodes && values.nodes.length === 0) {
             delete values['nodes']
           }
 
-          if (action === 'update') {
+          if (submitMethod === 'put') {
             url = getUpdateObjURL(url, id)
             delete values['accounts']
           } else {
