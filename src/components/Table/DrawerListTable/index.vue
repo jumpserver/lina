@@ -92,8 +92,7 @@ export default {
       const actionMap = {
         'columnsMeta.actions.formatterArgs.onUpdate': this.onUpdate,
         'columnsMeta.actions.formatterArgs.onClone': this.onClone,
-        'columnsMeta.name.formatterArgs.drawer': true,
-        'columnsMeta.name.formatterArgs.drawerComponent': this.detailDrawer
+        'columnsMeta.name.formatterArgs.onClick': this.onDetail
       }
       for (const [key, value] of Object.entries(actionMap)) {
         if (_.get(config, key)) {
@@ -167,7 +166,7 @@ export default {
     getDetailDrawerTitle({ col, row, cellValue, payload = {}}) {
       this.$log.debug('>>> getDetailDrawerTitle: ', col, row, cellValue, payload)
       const { detailRoute = {}, formatterArgs = {}} = payload
-      const getTitle = formatterArgs.getDrawerTitle || this.getTitle
+      const getTitle = formatterArgs.getDrawerTitle
       this.$log.debug('>>> getTitle: ', getTitle)
       if (getTitle && typeof getTitle === 'function') {
         return getTitle({ col, row, cellValue })
@@ -177,6 +176,9 @@ export default {
       }
       const resolvedRoute = this.resolveRoute(detailRoute)
       let title = cellValue || row.name
+      if (formatterArgs.getTitle) {
+        title = formatterArgs.getTitle({ col, row, cellValue })
+      }
       let resource = resolvedRoute?.meta?.title || resolvedRoute?.name
       resource = resource.replace('Detail', '').replace('详情', '')
 
