@@ -89,7 +89,6 @@ function ifBadRequest({ response, error }) {
   }
   if (response.status === 403) {
     error.message = i18n.t('BadRoleErrorMsg')
-    router.push({ name: '403' })
   }
   if (response.status === 409) {
     error.response.status = 409
