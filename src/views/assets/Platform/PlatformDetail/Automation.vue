@@ -30,7 +30,7 @@ export default {
           ansible_enabled: true
         }
       },
-      url: `/api/v1/assets/platforms/`,
+      url: `/api/v1/assets/platforms/?_meta_cache=0`,
       disabled: !canEdit,
       hasReset: false,
       hasDetailInMsg: false,

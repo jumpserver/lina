@@ -44,8 +44,9 @@ const mutations = {
 const actions = {
   // get user info
   getUrlMeta({ commit, state }, { url }) {
+    const ignoreCache = url.includes('_meta_cache')
     const meta = state.metaMap[url]
-    if (meta) {
+    if (meta && !ignoreCache) {
       return new Promise((resolve, reject) => {
         resolve(meta)
       })
