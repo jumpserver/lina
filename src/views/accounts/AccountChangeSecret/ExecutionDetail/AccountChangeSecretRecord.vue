@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index.vue'
+import { GenericListTable } from '@/layout/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
@@ -40,7 +40,7 @@ export default {
               can: this.$hasPerm('assets.view_asset'),
               getTitle: ({ row }) => row.asset.name,
               getDrawerTitle: ({ row }) => row.asset.name,
-              getRoute({ row }) {
+              getRoute: ({ row }) => {
                 return {
                   name: 'AssetDetail',
                   params: { id: row.asset.id }
@@ -56,7 +56,7 @@ export default {
               can: this.$hasPerm('accounts.view_account'),
               getTitle: ({ row }) => row.account.username,
               getDrawerTitle: ({ row }) => row.account.username,
-              getRoute({ row }) {
+              getRoute: ({ row }) => {
                 return {
                   name: 'AssetAccountDetail',
                   params: { id: row.account.id }
