@@ -1,5 +1,5 @@
 <template>
-  <DetailFormatter :col="col" :row="row" :prevant-click="formatterArgs.preventClick">
+  <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
     <template>
       <el-popover
         :disabled="!showItems"
