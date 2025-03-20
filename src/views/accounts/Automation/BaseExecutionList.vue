@@ -123,6 +123,7 @@ export default {
                   can: this.$hasPerm('accounts.view_' + this.resource),
                   callback: function({ row }) {
                     vm.visible = true
+                    this.url = this.url.split('?')[0]
                     vm.reportUrl = `${this.url}${row.id}/report/`
                   }
                 }
