@@ -194,7 +194,7 @@ export function getDefaultConfig(vm) {
         formatter: ActionsFormatter,
         formatterArgs: {
           onUpdate: ({ row }) => onAction(row, 'Update'),
-          onClone: ({ row }) => onAction({ ...row, payload: 'pam_asset_clone' }, 'Clone'),
+          onClone: ({ row }) => onAction(row, 'Clone'),
           performDelete: ({ row }) => {
             const id = row.id
             const url = `/api/v1/assets/assets/${id}/`

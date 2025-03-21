@@ -216,6 +216,7 @@ export default {
   methods: {
     async updateOrCloneAsset(row, action) {
       this.createDrawer = this.drawer[row.category.value]
+
       const meta = {
         action: action,
         id: row.id,
@@ -225,6 +226,11 @@ export default {
         row: row,
         payload: row.payload
       }
+
+      if (action === 'clone') {
+        return this.$refs.ListTable.onClone({ row, query: meta })
+      }
+
       this.$refs.ListTable.onUpdate({ row, query: meta })
     },
     createAsset(platform) {
