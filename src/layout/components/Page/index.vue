@@ -38,7 +38,7 @@
             <div class="disabled-text">
               {{ $t('UpgradeEnterpriseEditionHelpText') }}
             </div>
-            <el-button class="upgrade-btn" type="primary">
+            <el-button class="upgrade-btn" type="primary" @click="handleUpgrade">
               {{ $t('UpgradeEnterpriseEdition') }}
             </el-button>
           </div>
