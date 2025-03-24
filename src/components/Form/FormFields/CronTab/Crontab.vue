@@ -361,9 +361,10 @@ export default {
     },
     // 填充表达式
     submitFill() {
+      const minMinutes = 60
       const crontabDiffMin = this.crontabDiff / 1000 / 60
-      if (crontabDiffMin > 0 && crontabDiffMin < 10) {
-        const msg = this.$tc('CrontabDiffError')
+      if (crontabDiffMin > 0 && crontabDiffMin < minMinutes) {
+        const msg = this.$t('CrontabDiffError', { minutes: minMinutes })
         this.$message.error(msg)
         return
       }
