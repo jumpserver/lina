@@ -134,7 +134,7 @@ export default {
     },
     onMonitor() {
       const joinUrl = `/luna/monitor/${this.session.id}?ticket_id=${this.object.id}`
-      window.open(joinUrl, 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+      window.open(joinUrl, '_blank', 'height=600, width=850, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
     },
     onToggleLock() {
       const url = '/api/v1/terminal/tasks/toggle-lock-session-for-ticket/'
