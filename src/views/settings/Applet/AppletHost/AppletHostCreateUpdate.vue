@@ -75,6 +75,7 @@ export default {
     }
   },
   async mounted() {
+    this.$route.query.platform = 'RemoteAppHost'
     this.loading = false
   },
   methods: {}
