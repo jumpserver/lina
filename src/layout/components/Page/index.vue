@@ -44,8 +44,8 @@
           </div>
         </IBox>
       </div>
-      <el-alert v-if="helpMessage" type="success">
-        <span v-sanitize="helpMessage" class="announcement-main" />
+      <el-alert v-if="iHelpMessage" type="success">
+        <span v-sanitize="iHelpMessage" class="announcement-main" />
       </el-alert>
       <slot />
     </PageContent>
@@ -119,6 +119,9 @@ export default {
         return true
       }
       return window.history.length <= 2
+    },
+    iHelpMessage() {
+      return this.helpMessage || this.helpTip
     }
   },
   methods: {
@@ -153,8 +156,8 @@ export default {
   overflow-x: hidden;
 
   .el-alert {
-    margin-top: -5px;
-    margin-bottom: 5px;
+    margin: -5px 0 5px 0!important;
+    width: calc(100% - 10px);
   }
 
   .page-content {
