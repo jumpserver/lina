@@ -121,6 +121,9 @@ export default {
         system_roles: {
           component: Select2,
           label: this.$t('users.SystemRoles'),
+          rules: [
+            rules.Required
+          ],
           el: {
             multiple: true,
             ajax: {
