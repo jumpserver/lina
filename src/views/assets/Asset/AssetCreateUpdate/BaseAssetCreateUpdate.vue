@@ -47,7 +47,9 @@ export default {
     return {
       loading: true,
       platform: {},
-      changePlatformID: '',
+      initing: false,
+      // 在 meta 中，可能改变 platform id
+      platformID: this.$route.query.platform || '',
       meta: {},
       iConfig: {},
       defaultConfig: {
@@ -95,11 +97,18 @@ export default {
   },
   methods: {
     async init() {
+      // 更改平台时，就不重新 loading 了
+      this.$log.debug('Initing asset base upcate create', this.initing)
+      if (this.initing) {
+        return
+      }
+      this.initing = true
       try {
         await this.genConfig()
         await this.setInitial()
         await this.setPlatformConstrains()
       } finally {
+        this.initing = false
         this.loading = false
       }
     },
@@ -107,9 +116,9 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this, this.$route.query.type)
       let url = this.url
-      const { id = '', platform } = this.$route.query
-      if (platform && !id) {
-        url = setUrlParam(url, 'platform', platform)
+      const id = this.$route.params.id
+      if (!id) {
+        url = setUrlParam(url, 'platform', this.platformID)
       }
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
@@ -134,9 +143,9 @@ export default {
     },
     async setInitial() {
       const { defaultConfig } = this
-      const { node, platform } = this.$route.query
+      const { node } = this.$route.query
       const nodesInitial = node ? [node] : []
-      const platformId = this.changePlatformID || this.$route.query.platform || (platform || 'Linux')
+      const platformId = this.platformID || 'Linux'
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
@@ -165,13 +174,6 @@ export default {
       const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
       this.iConfig.fieldsMeta.accounts.el.platform = platform
-      const hiddenCheckFields = ['protocols', 'domain']
-
-      for (const field of hiddenCheckFields) {
-        if (platform[field + '_enabled'] === false) {
-          this.iConfig.fieldsMeta[field].hidden = () => true
-        }
-      }
     }
   }
 }
