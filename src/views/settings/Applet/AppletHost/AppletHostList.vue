@@ -23,6 +23,7 @@ export default {
     DrawerListTable
   },
   data() {
+    const appletRouteQuery = { type: 'windows', category: 'host', platform: 'RemoteAppHost' }
     return {
       createDrawer: () => import('./AppletHostCreateUpdate.vue'),
       detailDrawer: () => import('./AppletHostDetail/index.vue'),
@@ -68,6 +69,9 @@ export default {
                 const url = `/api/v1/terminal/applet-hosts/${id}/`
                 return this.$axios.delete(url)
               },
+              onUpdate: ({ row }) => {
+                this.$refs.table.onUpdate({ row: row, query: appletRouteQuery })
+              },
               extraActions: [
                 {
                   name: 'Test',
@@ -93,7 +97,7 @@ export default {
         hasExport: false,
         hasImport: false,
         onCreate: () => {
-          this.$refs.table.onCreate({ type: 'windows', category: 'host', platform: 'RemoteAppHost' })
+          this.$refs.table.onCreate({ query: appletRouteQuery })
         }
       }
     }
