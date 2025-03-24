@@ -38,10 +38,20 @@ export const crontab = {
     return formValue.is_periodic === false
   },
   helpText: i18n.t('CrontabHelpText'),
-  helpTip: i18n.t('CrontabHelpTip')
+  helpTip: i18n.t('CrontabHelpTip'),
+  on: {
+    change: (val, updateForm) => {
+      updateForm({
+        interval: ''
+      })
+    }
+  }
 }
 
 const validatorInterval = (rule, value, callback) => {
+  if (value === '') {
+    return callback()
+  }
   if (parseInt(value) < 1) {
     return callback(new Error(i18n.t('EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
@@ -59,7 +69,15 @@ export const interval = {
   },
   rules: [
     { validator: validatorInterval }
-  ]
+  ],
+  on: {
+    input: (val, updateForm) => {
+      console.log('interval input', val)
+      updateForm({
+        crontab: ''
+      })
+    }
+  }
 }
 
 export const is_periodic = {
