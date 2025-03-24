@@ -220,7 +220,8 @@ export default {
       const query = {
         platform: row.platform.id,
         type: row.type.value,
-        category: row.category.value
+        category: row.category.value,
+        action: action
       }
 
       if (action === 'clone') {
