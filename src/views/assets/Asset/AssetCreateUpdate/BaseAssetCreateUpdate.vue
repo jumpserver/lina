@@ -67,7 +67,7 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const { id = '' } = this.$route.query
+          const { id = '' } = this.$route.params
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
