@@ -53,24 +53,24 @@ export default {
       resizeObserver: null,
       span: 12,
       isShow: true,
-      iValue: this.value
+      iValue: this.sanitizeContent(this.value)
     }
   },
   computed: {
     sanitizedValue() {
-      // 转义特殊字符
-      let content = this.iValue.replace(/\\/g, '\\\\').replace(/\$/g, '\\$')
+      const content = this.iValue.replace(/\\/g, '\\\\').replace(/\$/g, '\\$')
 
-      // 使用 DOMPurify 进行 XSS 过滤
-      content = DOMPurify.sanitize(content)
-
-      return content
+      return this.sanitizeContent(content)
+    }
+  },
+  watch: {
+    value(newVal) {
+      this.iValue = this.sanitizeContent(newVal)
     }
   },
   mounted() {
     this.$nextTick(() => {
       this.resizeObserver = new ResizeObserver(entries => {
-        // 监听高度变化
         const height = entries[0].target.offsetHeight
         if (height) {
           this.height = height
@@ -90,8 +90,19 @@ export default {
     this.resizeObserver = null
   },
   methods: {
+    sanitizeContent(content) {
+      if (!content) return ''
+
+      return DOMPurify.sanitize(content, {
+        ALLOWED_TAGS: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'strong', 'em', 'code', 'pre', 'blockquote', 'a'],
+        FORBID_TAGS: ['script', 'style', 'iframe', 'frame', 'object', 'embed'],
+        FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
+      })
+    },
     onChange() {
-      this.$emit('change', this.iValue)
+      const sanitizedValue = this.sanitizeContent(this.iValue)
+      this.iValue = sanitizedValue
+      this.$emit('change', sanitizedValue)
     },
     onView() {
       this.isShow = !this.isShow
