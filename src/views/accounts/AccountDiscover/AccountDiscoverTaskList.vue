@@ -69,19 +69,9 @@ export default {
           },
           periodic_display: {},
           executed_amount: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AccountDiscoverList',
-              can: vm.$hasPerm('accounts.view_gatheraccountsexecution'),
-              getRoute({ row }) {
-                return {
-                  name: 'AccountDiscoverList',
-                  query: {
-                    tab: 'AccountDiscoverTaskExecutionList',
-                    automation_id: row.id
-                  }
-                }
-              }
+            formatter: (row) => {
+              const can = vm.$hasPerm('accounts.view_gatheraccountsexecution')
+              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
             }
           },
           actions: {
@@ -123,6 +113,17 @@ export default {
           getUrlQuery: false
         }
       }
+    }
+  },
+  methods: {
+    handleExecAmount(row) {
+      this.$router.push({
+        name: 'AccountDiscoverList',
+        query: {
+          tab: 'AccountDiscoverTaskExecutionList',
+          automation_id: row.id
+        }
+      })
     }
   }
 }
