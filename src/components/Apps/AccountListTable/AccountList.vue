@@ -211,7 +211,7 @@ export default {
               buttonIcon: 'fa fa-desktop',
               url: '/api/v1/assets/assets/{id}',
               can: () => this.currentUserIsSuperAdmin,
-              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
+              connectUrlTemplate: (row) => `/luna/direct_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
               setMapItem: (id, protocol) => {
                 this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
                   key: id,
