@@ -122,8 +122,13 @@ export default {
       })
     },
     iExportOptions() {
-      const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
-      return options
+      // const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
+      // return options
+
+      return {
+        url: this.tableUrl,
+        ...this.exportOptions
+      }
     }
   },
   methods: {
