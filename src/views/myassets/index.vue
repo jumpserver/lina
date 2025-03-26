@@ -36,6 +36,11 @@ export default {
               this.tableConfig.url = `/api/v1/perms/users/self/nodes/${currentNodeId}/assets/?cache_policy=1`
             }
           }.bind(this)
+        },
+        edit: {
+          drag: {
+            isMove: false
+          }
         }
       },
       tableConfig: {

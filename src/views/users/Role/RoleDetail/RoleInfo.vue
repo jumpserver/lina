@@ -54,6 +54,11 @@ export default {
         showRefresh: true,
         showSearch: false,
         treeUrl: '',
+        edit: {
+          drag: {
+            isMove: false
+          }
+        },
         check: {
           enable: true
         },

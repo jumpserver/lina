@@ -290,6 +290,11 @@ export default {
         view: {
           dblClickExpand: false,
           showLine: true
+        },
+        edit: {
+          drag: {
+            isMove: false
+          }
         }
       },
       iShowTree: true

@@ -51,6 +51,11 @@ export default {
         url: this.tableUrl,
         // ?assets=0不显示资产. =1显示资产
         treeUrl: this.treeUrl,
+        edit: {
+          drag: {
+            isMove: false
+          }
+        },
         callback: {
           onSelected: (event, node) => vm.onSelected(node, vm),
           refresh: vm.refreshObjectAssetPermission
