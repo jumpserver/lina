@@ -30,7 +30,12 @@ export default {
         showMenu: false,
         showAssets: true,
         url: '/api/v1/accounts/accounts/',
-        countResource: 'account'
+        countResource: 'account',
+        edit: {
+          drag: {
+            isMove: false
+          }
+        }
       }
     }
   }

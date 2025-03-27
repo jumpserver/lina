@@ -107,6 +107,13 @@ export default {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$store.commit('common/reload')
+        },
+        treeSetting: {
+          edit: {
+            drag: {
+              isMove: false
+            }
+          }
         }
       },
       nodeRelationConfig: {

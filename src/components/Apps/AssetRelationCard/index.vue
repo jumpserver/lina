@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" />
+          <AssetSelect ref="assetSelect" :can-select="canSelect" :disabled="disabled" :tree-setting="treeSetting" />
         </td>
       </tr>
       <tr>
@@ -59,6 +59,10 @@ export default {
       default(row, index) {
         return true
       }
+    },
+    treeSetting: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
