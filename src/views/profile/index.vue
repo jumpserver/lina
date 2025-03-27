@@ -24,7 +24,7 @@
           style="margin-top: 15px"
           type="warning"
         />
-        <IBox :title="$tc('InformationModification')" fa="fa-edit">
+        <IBox v-if="!store.getters.publicSettings['PRIVACY_MODE']" :title="$tc('InformationModification')" fa="fa-edit">
           <table>
             <tr>
               <td> {{ $t('Phone') }}</td>
@@ -86,7 +86,8 @@ export default {
         {
           title: this.$t('FacialFeatures'),
           has: this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE,
+            this.$store.getters.publicSettings.XPACK_LICENSE_EDITION_ULTIMATE &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_face_code_set ? this.$t('Unbind') : this.$t('Bind')
@@ -111,7 +112,8 @@ export default {
             showTip: this.isDisabled('wecom'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_WECOM,
+          has: this.$store.getters.publicSettings.AUTH_WECOM &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
             click: function() {
               this.currentEdit = 'wecom'
@@ -128,7 +130,8 @@ export default {
             showTip: this.isDisabled('dingtalk'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_DINGTALK,
+          has: this.$store.getters.publicSettings.AUTH_DINGTALK &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
             click: function() {
               this.currentEdit = 'dingtalk'
@@ -145,7 +148,8 @@ export default {
             showTip: this.isDisabled('feishu'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          has: this.$store.getters.publicSettings.AUTH_FEISHU &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
             click: function() {
               this.currentEdit = 'feishu'
@@ -162,7 +166,8 @@ export default {
             showTip: this.isDisabled('lark'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_LARK,
+          has: this.$store.getters.publicSettings.AUTH_LARK &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
             click: function() {
               this.currentEdit = 'lark'
@@ -179,7 +184,8 @@ export default {
             showTip: this.isDisabled('slack'),
             tip: this.$t('UnbindHelpText')
           },
-          has: this.$store.getters.publicSettings.AUTH_SLACK,
+          has: this.$store.getters.publicSettings.AUTH_SLACK &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           callbacks: {
             click: function() {
               this.currentEdit = 'slack'
@@ -314,6 +320,9 @@ export default {
     }
   },
   computed: {
+    store() {
+      return store
+    },
     detailCardItems() {
       return [
         {
@@ -337,7 +346,8 @@ export default {
             } else {
               return '-'
             }
-          }
+          },
+          has: !store.getters.publicSettings['PRIVACY_MODE']
         },
         {
           value: this.object.groups?.map(item => item.name).join(' ｜ '),

@@ -39,7 +39,10 @@ export default {
           disabled: true
         },
         phone: {
-          component: PhoneInput
+          component: PhoneInput,
+          hidden: () => {
+            return store.getters.publicSettings['PRIVACY_MODE']
+          }
         },
         mfa_level: {
           disabled: (formValue) => {
