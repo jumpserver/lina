@@ -212,9 +212,6 @@ export default {
   ::v-deep {
     .el-empty {
       margin: 0 auto;
-
-      .el-empty__image {
-      }
     }
   }
 }
@@ -226,6 +223,8 @@ export default {
 
   .card-container {
     display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
   }
 
   .el-col, div {
