@@ -29,13 +29,22 @@ export default {
             ]
           ]
         ],
-        fieldsMeta: {}
+        fieldsMeta: {},
+        onSubmit: async(validValues) => {
+          const url = '/api/v1/settings/setting/?category=security_session'
+
+          try {
+            await this.$axios.patch(url, validValues)
+
+            this.$message.success(this.$t('UpdateSuccessMsg'))
+
+            window.location.reload()
+          } catch (error) {
+            throw new Error(error)
+          }
+        }
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
