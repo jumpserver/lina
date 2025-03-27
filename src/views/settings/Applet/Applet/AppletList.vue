@@ -57,6 +57,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$store.dispatch('users/enterSettingOrg')
+  },
   methods: {
     handleUpload(res) {
       this.$refs.CardTable.reloadTable()
