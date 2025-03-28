@@ -58,7 +58,7 @@ export default {
             width: '100px'
           },
           'resource_statistics.groups_amount': {
-            label: this.$t('Groups'),
+            label: this.$t('UserGroups'),
             width: '100px'
           },
           'resource_statistics.assets_amount': {
