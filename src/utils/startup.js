@@ -138,13 +138,20 @@ export async function generatePageRoutes({ to, from, next }) {
 }
 
 export async function checkUserFirstLogin({ to, from, next }) {
+  // 防止递归调用
+  if (to.path === '/profile/improvement') return true
   if (store.state.users.profile.is_first_login) {
-    next('/profile/improvement')
-  }
-  const nextRoute = localStorage.getItem('next')
-  if (nextRoute) {
-    localStorage.setItem('next', '')
-    next(nextRoute.replace('#', ''))
+    next({
+      name: 'Improvement',
+      replace: true,
+      query: { _t: Date.now() } // 添加时间戳，防止 from 一样 next 不触发 guard.js router.beforeEach逻辑
+    })
+  } else {
+    const nextRoute = localStorage.getItem('next')
+    if (nextRoute) {
+      localStorage.setItem('next', '')
+      next(nextRoute.replace('#', ''))
+    }
   }
 }
 
@@ -188,6 +195,8 @@ function onI18nLoaded() {
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
   if (store.getters.inited) {
+    // 页面初始化后也需要检测
+    await checkUserFirstLogin({ to, from, next })
     return true
   }
 
