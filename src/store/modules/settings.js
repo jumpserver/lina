@@ -29,6 +29,9 @@ const mutations = {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
     }
   },
+  SET_SECURITY_WATERMARK_ENABLED: (state, value) => {
+    state.publicSettings['SECURITY_WATERMARK_ENABLED'] = value
+  },
   setTheme(state, data) {
     state.themeColors = data
     localStorage.setItem('themeColors', JSON.stringify(data))

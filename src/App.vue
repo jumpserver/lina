@@ -32,15 +32,23 @@ export default {
     },
     'publicSettings.SECURITY_WATERMARK_ENABLED': {
       handler(newVal) {
+        if (!newVal) {
+          return setTimeout(() => {
+            this.watermark?.destroy()
+            this.watermark = null
+          })
+        }
+
         this.createWatermark()
       }
     }
   },
   methods: {
     createWatermark() {
+      console.log('currentUser', this.currentUser)
       if (this.currentUser?.username && this.publicSettings?.SECURITY_WATERMARK_ENABLED) {
         this.watermark = new Watermark({
-          content: this.currentUser.username,
+          content: `${this.currentUser.username}(${this.currentUser.name})`,
           width: 200,
           height: 200,
           rotate: 45,
