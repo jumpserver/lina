@@ -34,11 +34,12 @@ export default {
           const url = '/api/v1/settings/setting/?category=security_session'
 
           try {
-            await this.$axios.patch(url, validValues)
+            const res = await this.$axios.patch(url, validValues)
 
-            this.$message.success(this.$t('UpdateSuccessMsg'))
-
-            window.location.reload()
+            if (res) {
+              this.$message.success(this.$t('UpdateSuccessMsg'))
+              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
+            }
           } catch (error) {
             throw new Error(error)
           }
