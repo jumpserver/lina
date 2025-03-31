@@ -18,13 +18,13 @@ export default {
       tableConfig: {
         url: '/api/v1/audits/jobs/',
         columnsShow: {
-          min: ['name', 'material'],
+          min: ['name', 'args'],
           default: [
-            'name', 'material', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
+            'name', 'args', 'type', 'crontab', 'interval', 'created_by', 'is_periodic_display', 'is_periodic'
           ]
         },
         columns: [
-          'name', 'args', 'material', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
+          'name', 'args', 'type', 'crontab', 'interval', 'date_last_run', 'summary',
           'created_by', 'is_periodic_display', 'is_periodic'
         ],
         columnsMeta: {
@@ -33,10 +33,6 @@ export default {
           },
           name: {
             formatter: (row) => row.name
-          },
-          material: {
-            width: '200px',
-            label: this.$t('Command')
           },
           summary: {
             width: '130px',
