@@ -41,7 +41,7 @@ export default {
         ]
       },
       tableConfig: {
-        url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/instances/`,
+        url: '',
         hasSelection: false,
         columns: [
           'instance_id',
@@ -76,9 +76,20 @@ export default {
       }
     }
   },
+  computed: {
+    dynamicUrl() {
+      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/instances/'
+      return this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
+    }
+  },
+  mounted() {
+    this.tableConfig.url = this.dynamicUrl
+  },
   methods: {
     DeleteReleasedAssets() {
-      this.$axios.delete(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task?.id}/released-assets/`).then(
+      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/'
+      const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
+      this.$axios.delete(url).then(
         res => {
           this.$message.success(this.$tc('DeleteSuccessMsg'))
           this.$refs.GenericListTable.$refs.ListTable.reloadTable()

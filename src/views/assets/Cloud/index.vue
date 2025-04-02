@@ -26,6 +26,12 @@ export default {
             name: 'StrategyList',
             hidden: () => !this.$hasPerm('xpack.view_strategy'),
             component: () => import('@/views/assets/Cloud/Strategy/StrategyList.vue')
+          },
+          {
+            title: this.$t('SyncInstanceTaskHistoryAssetList'),
+            name: 'TaskSyncAssetList',
+            hidden: () => !this.$hasLicense() || !this.$hasPerm('xpack.view_syncinstancedetail'),
+            component: () => import('@/views/assets/Cloud/Account/AccountDetail/TaskSyncAssetList.vue')
           }
         ],
         actions: {
