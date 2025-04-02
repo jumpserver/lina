@@ -33,7 +33,11 @@ export default {
               <ul>
                 {
                   newArr.map((r, index) => {
-                    return <li key={index}>{`${r.attr.label} ${r.match.label} ${r.value}`} </li>
+                    return <li>
+                      <el-tag size='mini' key={index}>
+                        {r.attr.label}<strong> {`${r.match.label}`} </strong>{r.value}
+                      </el-tag>
+                    </li>
                   })
                 }
               </ul>
@@ -48,7 +52,11 @@ export default {
               <ul>
                 {
                   newArr.map((a, index) => {
-                    return <li key={index}>{`${a.attr.label}: ${a.value.label}`} </li>
+                    return <li>
+                      <el-tag size='mini' key={index}>
+                        <strong>{a.attr.label}: </strong>{`${a.value.label}`}
+                      </el-tag>
+                    </li>
                   })
                 }
               </ul>
@@ -58,42 +66,21 @@ export default {
         'comment', 'org_name'
       ]
     }
-  },
-  computed: {
-    cardTitle() {
-      return this.object.name
-    }
   }
 }
 </script>
 
 <style scoped>
 ul {
-  counter-reset: my-counter;
-  list-style-type: none;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
 }
 
 li {
-  counter-increment: my-counter;
-  position: relative;
-  padding-left: 20px;
-}
-
-li:before {
-  content: counter(my-counter);
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 32%;
-  width: 14px;
-  height: 14px;
-  line-height: 12px;
-  text-align: center;
-  border: 1px solid;
-  border-radius: 50%;
-  background-color: #fff;
+  list-style: none;
+  margin: 3px 0;
 }
 </style>
 
