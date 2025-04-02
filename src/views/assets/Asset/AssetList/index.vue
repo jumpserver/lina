@@ -58,6 +58,12 @@ export default {
           },
           {
             icon: 'fa-comment',
+            name: 'ad',
+            hidden: true,
+            component: () => import('@/views/assets/Asset/AssetList/ADList.vue')
+          },
+          {
+            icon: 'fa-comment',
             name: 'gpt',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/GPTList.vue')

@@ -147,6 +147,10 @@ export default {
     showActions: {
       type: Boolean,
       default: true
+    },
+    target: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -182,7 +186,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            width: '120px',
+            minWidth: '120px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => ({
@@ -234,7 +238,14 @@ export default {
             }
           },
           username: {
-            width: '120px'
+            minWidth: '120px',
+            formatter: function(row) {
+              if (row.ad_domain) {
+                return `${row.username}@${row.ad_domain}`
+              } else {
+                return row.username
+              }
+            }
           },
           secret_type: {
             formatter: function(row) {

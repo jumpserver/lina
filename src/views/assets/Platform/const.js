@@ -81,6 +81,19 @@ export const platformFieldsMeta = (vm) => {
         disabled: false
       }
     },
+    ad_enabled: {
+      el: {
+        disabled: false
+      }
+    },
+    ad: {
+      el: {
+        multiple: false,
+        url: '/api/v1/assets/directories/',
+        disabled: false
+      },
+      hidden: (formValue) => !formValue['ad_enabled']
+    },
     protocols: {
       label: i18n.t('SupportedProtocol'),
       ...assetMeta.protocols,

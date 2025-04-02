@@ -11,6 +11,7 @@
       :has-reset="false"
       :initial="initial"
       :url="url"
+      @submitSuccess="onSubmitSuccess"
     />
   </div>
 </template>
@@ -49,7 +50,8 @@ export default {
         ]],
         [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method',
-          'domain_enabled', 'charset'
+          'domain_enabled', 'ad_enabled', 'ad',
+          'charset'
         ]],
         [this.$t('Automations'), ['automation']],
         [this.$t('Other'), ['comment']]
@@ -105,6 +107,9 @@ export default {
     }
   },
   methods: {
+    onSubmitSuccess() {
+      this.$store.dispatch('assets/cleanPlatforms')
+    },
     updateSuMethodOptions() {
       const options = this.suMethods.filter(i => {
         return this.suMethodLimits.includes(i.value)
@@ -141,7 +146,6 @@ export default {
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints
 
-      const fieldsCheck = ['domain_enabled', 'su_enabled']
       let protocols = constraints?.protocols || []
       protocols = protocols?.map(i => {
         if (i.name === 'http') {
@@ -151,6 +155,7 @@ export default {
       })
       this.fieldsMeta.protocols.el.choices = protocols
 
+      const fieldsCheck = ['domain_enabled', 'su_enabled', 'ad_enabled']
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled

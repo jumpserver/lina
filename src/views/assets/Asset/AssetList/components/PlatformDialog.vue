@@ -76,7 +76,7 @@ export default {
       platforms: [],
       recentPlatformIds: [],
       loading: true,
-      activeType: 'host',
+      activeType: [],
       recentUsedLabel: this.$t('RecentlyUsed'),
       typeIconMapper: {
         linux: 'fa-linux',
@@ -130,9 +130,7 @@ export default {
   async created() {
     this.platforms = await this.$store.dispatch('assets/getPlatforms')
     this.allRecentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
-    if (this.allRecentPlatforms.length > 0) {
-      this.activeType = this.recentUsedLabel
-    }
+    this.activeType = Object.keys(this.iPlatforms)[0]
     this.loading = false
   },
   methods: {
