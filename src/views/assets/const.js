@@ -48,7 +48,9 @@ function updatePlatformProtocols(vm, platformType, updateForm, platformChanged =
   }), 100)
 }
 
-export const assetFieldsMeta = (vm, platformType) => {
+export const assetFieldsMeta = (vm, category, type) => {
+  const platformCategory = category || vm.$route.query.category
+  const platformType = type || vm.$route.query.type
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://jumpserver:330' }
@@ -92,7 +94,7 @@ export const assetFieldsMeta = (vm, platformType) => {
       el: {
         multiple: false,
         ajax: {
-          url: `/api/v1/assets/platforms/?type=${platformType}`,
+          url: `/api/v1/assets/platforms/?category=${platformCategory}&type=${platformType}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }

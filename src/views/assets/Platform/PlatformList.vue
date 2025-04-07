@@ -115,7 +115,11 @@ export default {
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
               onUpdate({ row, col }) {
-                vm.$refs.genericListTable.onUpdate({ row, col, query: { type: row.type.value, category: row.category.value }})
+                vm.$refs.genericListTable.onUpdate({
+                  row,
+                  col,
+                  query: { type: row.type.value, category: row.category.value }
+                })
               }
             }
           }
@@ -169,14 +173,10 @@ export default {
       const types = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
       }).map(item => {
-        if (!item.group) {
-          return item
-        } else {
-          return {
-            ...item,
-            group: item.group + this.$t('WordSep') + this.$t('Type')
-          }
+        if (item.group && !item.group.includes(this.$t('Type'))) {
+          item.group += this.$t('WordSep') + this.$t('Type')
         }
+        return item
       })
       this.headerActions.moreCreates.dropdown = types
     },
@@ -188,7 +188,7 @@ export default {
         cloud: 'fa-cloud',
         web: 'fa-globe',
         gpt: 'fa-comment',
-        ad: 'fa-comment',
+        ds: 'fa-id-card-o',
         custom: 'fa-cube'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')

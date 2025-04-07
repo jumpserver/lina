@@ -5,7 +5,7 @@
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
     :visible.sync="iVisible"
-    size="600px"
+    size="700px"
     top="1vh"
   >
     <template #title>
@@ -61,6 +61,7 @@ import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
   name: 'PlatformDrawer',
+  components: {},
   props: {
     visible: {
       type: Boolean,

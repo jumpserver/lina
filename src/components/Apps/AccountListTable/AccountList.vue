@@ -148,6 +148,7 @@ export default {
       type: Boolean,
       default: true
     },
+    // target for ad connect btn, if not has, ad account should be select one
     target: {
       type: Object,
       default: null
@@ -186,7 +187,7 @@ export default {
         },
         columnsMeta: {
           name: {
-            minWidth: '120px',
+            minWidth: '60px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => ({
@@ -212,15 +213,9 @@ export default {
             width: '80px',
             formatter: AccountConnectFormatter,
             formatterArgs: {
-              buttonIcon: 'fa fa-desktop',
-              url: '/api/v1/assets/assets/{id}',
               can: () => this.currentUserIsSuperAdmin,
-              connectUrlTemplate: (row) => `/luna/direct_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
-              setMapItem: (id, protocol) => {
-                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
-                  key: id,
-                  value: protocol
-                })
+              connectUrlTemplate: (row) => {
+
               }
             }
           },
@@ -238,7 +233,7 @@ export default {
             }
           },
           username: {
-            minWidth: '120px',
+            minWidth: '60px',
             formatter: function(row) {
               if (row.ad_domain) {
                 return `${row.username}@${row.ad_domain}`

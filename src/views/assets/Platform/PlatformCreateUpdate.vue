@@ -50,7 +50,7 @@ export default {
         ]],
         [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method',
-          'domain_enabled', 'ad_enabled', 'ad',
+          'domain_enabled', 'ds_enabled', 'ds',
           'charset'
         ]],
         [this.$t('Automations'), ['automation']],
@@ -155,16 +155,20 @@ export default {
       })
       this.fieldsMeta.protocols.el.choices = protocols
 
-      const fieldsCheck = ['domain_enabled', 'su_enabled', 'ad_enabled']
+      const fieldsCheck = ['domain_enabled', 'su_enabled']
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
 
-      if (constraints['charset_enabled'] === false) {
-        this.fieldsMeta.charset.hidden = () => true
+      const fieldsHidden = ['charset_enabled', 'ds_enabled']
+      for (const field of fieldsHidden) {
+        if (constraints[field] === false) {
+          this.fieldsMeta[field].hidden = () => true
+        }
       }
+
       await setAutomations(this)
       await this.updateSuMethods(constraints)
     }

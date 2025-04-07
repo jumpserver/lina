@@ -12,7 +12,7 @@ export default {
     return {
       url: '/api/v1/assets/directories/',
       addFields: [
-        [this.$t('Domain name'), ['domain_name'], 1]
+        [this.$t('DomainName'), ['domain_name'], 1]
       ]
     }
   }

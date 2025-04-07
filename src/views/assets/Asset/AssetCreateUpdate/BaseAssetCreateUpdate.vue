@@ -114,7 +114,7 @@ export default {
     },
     async genConfig() {
       const { addFields, addFieldsMeta, defaultConfig } = this
-      defaultConfig.fieldsMeta = assetFieldsMeta(this, this.$route.query.type)
+      defaultConfig.fieldsMeta = assetFieldsMeta(this)
       let url = this.url
       const id = this.$route.params.id
       if (!id) {

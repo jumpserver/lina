@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        category: 'ad',
+        category: 'ds',
         url: '/api/v1/assets/directories/'
       }
     }
