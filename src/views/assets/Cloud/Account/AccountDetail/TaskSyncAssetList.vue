@@ -49,6 +49,10 @@ export default {
             prop: 'asset_ip',
             label: this.$t('IP')
           },
+          {
+            prop: 'asset_display',
+            label: this.$t('Asset')
+          },
           'region',
           {
             prop: 'status',
