@@ -191,8 +191,8 @@ export default {
               }),
               getTitle: ({ row }) => {
                 let title = row.name
-                if (row.ds_id && this.asset && this.asset.id !== row.asset.id) {
-                  const dsID = row.ds_id.split('-')[0]
+                if (row.ds && this.asset && this.asset.id !== row.asset.id) {
+                  const dsID = row.ds.id.split('-')[0]
                   title = `${row.name}@${dsID}`
                 }
                 return title
@@ -221,8 +221,15 @@ export default {
               }
             }
           },
-          ds_domain: {
-            width: '100px'
+          ds: {
+            width: '100px',
+            formatter: (row) => {
+              if (row.ds && row.ds['domain_name']) {
+                return row.ds['domain_name']
+              } else {
+                return ''
+              }
+            }
           },
           platform: {
             label: this.$t('Platform'),
@@ -241,8 +248,8 @@ export default {
           username: {
             minWidth: '60px',
             formatter: function(row) {
-              if (row.ds_domain) {
-                return `${row.username}@${row.ds_domain}`
+              if (row.ds && row.ds['domain_name']) {
+                return `${row.username}@${row.ds['domain_name']}`
               } else {
                 return row.username
               }
