@@ -2,7 +2,7 @@
   "name": "lina",
   "version": "v4.0.0",
   "description": "JumpServer Web UI",
-  "author": "JumpServer Team <support@fit2cloud.com>",
+  "author": "JumpServer Team <support@lxware.hk>",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
