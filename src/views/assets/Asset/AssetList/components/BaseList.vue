@@ -144,7 +144,7 @@ export default {
         'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         'device': () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
-        'ds': () => import('@/views/assets/Asset/AssetCreateUpdate/ADCreateUpdate.vue')
+        'ds': () => import('@/views/assets/Asset/AssetCreateUpdate/DSCreateUpdate.vue')
       },
       createProps: {},
       showPlatform: false,

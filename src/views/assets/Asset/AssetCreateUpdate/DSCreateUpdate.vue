@@ -6,7 +6,7 @@
 import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 
 export default {
-  name: 'ADCreateUpdate',
+  name: 'DSCreateUpdate',
   components: { BaseAssetCreateUpdate },
   data() {
     return {
