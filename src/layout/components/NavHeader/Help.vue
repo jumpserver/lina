@@ -51,7 +51,7 @@ export default {
           window.open(this.URLSite.HELP_SUPPORT_URL, '_blank')
           break
         case 'enterprise':
-          window.open('https://jumpserver.org/enterprise.html', '_blank')
+          window.open('https://www.jumpserver.com/#section-edition', '_blank')
           break
         case 'about':
           this.visible = true
