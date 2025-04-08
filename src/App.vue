@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     createWatermark() {
-      console.log('currentUser', this.currentUser)
       if (this.currentUser?.username && this.publicSettings?.SECURITY_WATERMARK_ENABLED) {
         this.watermark = new Watermark({
           content: `${this.currentUser.username}(${this.currentUser.name})`,
