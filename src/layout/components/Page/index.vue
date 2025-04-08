@@ -139,7 +139,7 @@ export default {
       clearTimeout(this.longPressTimer)
     },
     handleUpgrade() {
-      const url = 'http://www.jumpserver.org/support/'
+      const url = 'https://www.lxware.hk/pages/about'
       window.open(url, '_blank')
     }
   }

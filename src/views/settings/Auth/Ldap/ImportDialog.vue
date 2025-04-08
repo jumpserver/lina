@@ -46,7 +46,7 @@
 <script>
 import store from '@/store'
 import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
-import { DrawerListTable as ListTable } from '@/components'
+import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
