@@ -59,7 +59,7 @@ export default {
     return {
       title: this.$t('Test'),
       templateDialogVisible: false,
-      columnsDefault: ['name', 'username', 'asset', 'connect'],
+      columnsDefault: ['name', 'username', 'connect'],
       headerExtraActions: [
         {
           name: this.$t('AccountTemplate'),
@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     iUrl() {
-      return this.url || `/api/v1/accounts/accounts/?asset=${this.object.id}`
+      return this.url || `/api/v1/assets/assets/${this.object.id}/accounts/`
     }
   },
   methods: {

@@ -57,6 +57,12 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
+            icon: 'fa-id-card-o',
+            name: 'ds',
+            hidden: true,
+            component: () => import('@/views/assets/Asset/AssetList/DSList.vue')
+          },
+          {
             icon: 'fa-comment',
             name: 'gpt',
             hidden: true,

@@ -52,7 +52,7 @@ export default {
           height: 200,
           rotate: 45,
           fontWeight: 'normal',
-          fontColor: 'rgba(128, 128, 128, 0.3)'
+          fontColor: 'rgba(128, 128, 128, 0.2)'
         })
 
         this.watermark.create()

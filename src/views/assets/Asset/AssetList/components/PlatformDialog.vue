@@ -5,7 +5,7 @@
     :show-confirm="false"
     :title="$tc('SelectPlatform')"
     :visible.sync="iVisible"
-    size="600px"
+    size="700px"
     top="1vh"
   >
     <template #title>
@@ -61,6 +61,7 @@ import { loadPlatformIcon } from '@/utils/jms'
 
 export default {
   name: 'PlatformDrawer',
+  components: {},
   props: {
     visible: {
       type: Boolean,
@@ -76,7 +77,7 @@ export default {
       platforms: [],
       recentPlatformIds: [],
       loading: true,
-      activeType: 'host',
+      activeType: [],
       recentUsedLabel: this.$t('RecentlyUsed'),
       typeIconMapper: {
         linux: 'fa-linux',
@@ -130,9 +131,7 @@ export default {
   async created() {
     this.platforms = await this.$store.dispatch('assets/getPlatforms')
     this.allRecentPlatforms = await this.$store.dispatch('assets/getRecentPlatforms')
-    if (this.allRecentPlatforms.length > 0) {
-      this.activeType = this.recentUsedLabel
-    }
+    this.activeType = Object.keys(this.iPlatforms)[0]
     this.loading = false
   },
   methods: {

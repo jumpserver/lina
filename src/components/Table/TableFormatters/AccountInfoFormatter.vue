@@ -10,7 +10,7 @@
         <span>{{ $t('No accounts') }}</span>
       </div>
       <div v-for="account of accountData" :key="account.id" class="detail-item">
-        <span>{{ account.name }}({{ account.username }})</span>
+        <span>{{ getDisplay(account) }}</span>
       </div>
     </div>
     <el-button slot="reference" class="link-btn" plain size="mini" type="primary">
@@ -39,10 +39,20 @@ export default {
     }
   },
   methods: {
+    getDisplay(account) {
+      const { username, name } = account
+      if (username.startsWith('@')) {
+        return name
+      } else if (name === username) {
+        return username
+      } else {
+        return `${name}(${username})`
+      }
+    },
     async getAsyncItems() {
       this.loading = true
       const userId = this.$route.params.id || 'self'
-      const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}`
+      const url = `/api/v1/perms/users/${userId}/assets/${this.row.id}/`
       this.$axios.get(url).then(res => {
         this.accountData = res?.permed_accounts || []
       }).finally(() => {
