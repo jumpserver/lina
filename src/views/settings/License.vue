@@ -159,7 +159,7 @@ export default {
       this.dialogLicenseImport = true
     },
     consultAction: function() {
-      const url = 'http://www.jumpserver.org/support/'
+      const url = 'https://www.lxware.hk/pages/about'
       window.open(url, '_blank')
     },
     importLicense() {
