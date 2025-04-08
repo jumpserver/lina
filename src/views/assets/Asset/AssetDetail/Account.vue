@@ -10,6 +10,7 @@
           :has-import="false"
           :has-left-actions="true"
           :header-extra-actions="headerExtraActions"
+          :target="object"
           :url="iUrl"
           v-bind="$attrs"
         />

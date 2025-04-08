@@ -80,7 +80,7 @@ export default {
       return this.formatterArgs.buttonIcon
     },
     hasPerm() {
-      return this.formatterArgs.can(this.row, this.cellValue)
+      return this.formatterArgs.can({ row: this.row, cellValue: this.cellValue })
     }
   },
   methods: {

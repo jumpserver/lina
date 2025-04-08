@@ -147,11 +147,6 @@ export default {
     showActions: {
       type: Boolean,
       default: true
-    },
-    // target for ad connect btn, if not has, ad account should be select one
-    target: {
-      type: Object,
-      default: null
     }
   },
   data() {
@@ -194,6 +189,14 @@ export default {
                 name: 'AccountDetail',
                 params: { id: row.id }
               }),
+              getTitle: ({ row }) => {
+                let title = row.name
+                if (row.ds_id && this.asset && this.asset.id !== row.asset.id) {
+                  const dsID = row.ds_id.split('-')[0]
+                  title = `${row.name}@${dsID}`
+                }
+                return title
+              },
               getDrawerTitle({ row }) {
                 return `${row.username}@${row.asset.name}`
               }
@@ -213,11 +216,13 @@ export default {
             width: '80px',
             formatter: AccountConnectFormatter,
             formatterArgs: {
-              can: () => this.currentUserIsSuperAdmin,
-              connectUrlTemplate: (row) => {
-
+              can: ({ row }) => {
+                return this.currentUserIsSuperAdmin
               }
             }
+          },
+          ds_domain: {
+            width: '100px'
           },
           platform: {
             label: this.$t('Platform'),
@@ -228,6 +233,7 @@ export default {
             }
           },
           asset: {
+            minWidth: '100px',
             formatter: function(row) {
               return row.asset.name
             }
@@ -235,8 +241,8 @@ export default {
           username: {
             minWidth: '60px',
             formatter: function(row) {
-              if (row.ad_domain) {
-                return `${row.username}@${row.ad_domain}`
+              if (row.ds_domain) {
+                return `${row.username}@${row.ds_domain}`
               } else {
                 return row.username
               }

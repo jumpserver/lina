@@ -57,7 +57,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           },
           {
-            icon: 'fa-vcard-o',
+            icon: 'fa-id-card-o',
             name: 'ds',
             hidden: true,
             component: () => import('@/views/assets/Asset/AssetList/DSList.vue')
