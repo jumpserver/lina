@@ -1,22 +1,24 @@
 <template>
   <Dialog
-    :title="$t('确认运行资产')"
+    :title="$t('ConfirmRunningAssets')"
     :visible.sync="visible"
     :show-buttons="true"
     :show-confirm="true"
     :show-cancel="true"
-    width="1000px"
+    width="1200px"
     @confirm="onConfirm"
     @cancel="onCancel"
   >
     <div class="confirm-run-assets-dialog">
-      <div class="assets-list">
+      <div class="runnable-assets">
         <div class="asset-group">
-          <div class="group-title">可运行资产：</div>
+          <div class="group-title">
+            {{ $t('RunnableAssets') }}
+          </div>
           <el-checkbox
             v-model="checkAll"
             :indeterminate="isIndeterminate"
-            style="margin-left: 10px"
+            style="padding-bottom: 5px"
             @change="handleCheckAllChange"
           >
             {{ $t('All') }}
@@ -29,34 +31,24 @@
               class="asset-item"
             >
               <div class="asset-item">
-                <span>{{ asset.name }}</span>
-                <span class="asset-ip">{{ asset.ip }}</span>
+                <span>{{ asset.name }}({{ asset.ip }})</span>
               </div>
             </el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
-      <div class="asset-group">
-        <div class="group-title">不可运行资产：</div>
-        <el-checkbox-group class="group-assets">
-          <el-checkbox
-            v-for="asset in failedAssets"
-            :key="asset.id"
-            :label="asset.name"
-            class="asset-item"
-            disabled
-          >
-            <div class="asset-item">
-              <span>{{ asset.name }}</span>
-              <span class="asset-status">{{ asset.error }}</span>
-            </div>
-
-          </el-checkbox>
-        </el-checkbox-group>
+      <div class="error-assets">
+        <div class="group-title">{{ $t('NonRunnableAssets') }}</div>
+        <div class="group-assets">
+          <div v-for="asset in failedAssets" :key="asset.id" class="asset-item">
+            <span><i class="fa fa-times-circle icon" />{{ asset.name }}</span>
+            <span class="asset-status">{{ asset.error }}</span>
+          </div>
+        </div>
       </div>
     </div>
     <div>
-      <div class="selected-count">已选 {{ selectedAssets.length }} 个资产</div>
+      <div class="selected-count">{{ $t('AssetsSelected', {count: selectedAssets.length}) }}</div>
     </div>
   </Dialog>
 </template>
@@ -82,7 +74,7 @@ export default {
   },
   data() {
     return {
-      checkAll: false,
+      checkAll: true,
       selectedAssets: [],
       isIndeterminate: true
     }
@@ -93,6 +85,13 @@ export default {
     },
     failedAssets() {
       return this.assets.error
+    }
+  },
+  watch: {
+    visible(val) {
+      if (val === true) {
+        this.selectedAssets = this.runnableAssets.map((item) => item.id)
+      }
     }
   },
   methods: {
@@ -118,51 +117,65 @@ export default {
 
 <style scoped lang="scss">
 .confirm-run-assets-dialog {
-
-  .assets-list {
-    max-height: 300px;
-    overflow-y: auto;
+  .runnable-assets {
+    padding-right: 10px
   }
 
-  .asset-group {
-    margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 10px;
 
-    .group-title {
-      font-weight: bold;
-      margin-bottom: 8px;
+  .group-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 15px;
+    background: #fbfbfd;
+    padding: 10px;
+  }
+
+  .group-assets {
+    ::v-deep .el-checkbox__label {
+      display: inline-block;
+      padding-left: 10px;
+      line-height: 19px;
+      font-size: 13px;
+      width: 100%;
     }
 
-    .group-assets {
-      ::v-deep .el-checkbox__label {
-        display: inline-block;
-        padding-left: 10px;
-        line-height: 19px;
-        font-size: 13px;
-        width: 100%;
-      }
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 5px;
+    justify-items: start;
 
-      display: grid;
+    .asset-item {
+      display: flex;
       grid-template-columns: 1fr 1fr;
-      grid-row-gap: 5px;
-      justify-items: start;
+      justify-content: space-between;
+      width: 100%;
+      border-bottom: 1px solid #eee;
 
-      .asset-item {
-        display: flex;
-        grid-template-columns: 1fr 1fr;
-        justify-content: space-between;
-        width: 100%;
-
-        .asset-ip {
-          padding-right: 10px;
-        }
-
-        .asset-status {
-          padding-right: 10px;
-          color: #ed5565
-        }
+      .icon {
+        color: #ed5565;
+        padding-right: 3px
       }
 
+      .asset-ip {
+        padding-right: 10px;
+      }
+
+      .asset-status {
+        padding-right: 10px;
+        color: #ed5565
+      }
     }
+
+  }
+
+  .group-assets::-webkit-scrollbar {
+    display: none;
   }
 
   .footer {
