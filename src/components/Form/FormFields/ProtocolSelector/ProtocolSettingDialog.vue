@@ -53,6 +53,7 @@ export default {
     const vm = this
     const platform = this.$route.query.platform
     return {
+      platform: '',
       loading: true,
       form: this.protocol,
       platformDetail: platform ? '#/console/assets/platforms/' + platform : '',
@@ -97,11 +98,29 @@ export default {
       }
     }
   },
+  async mounted() {
+    try {
+      const drawActionMeta = await this.$store.dispatch('common/getDrawerActionMeta')
+      const platform = drawActionMeta.row.platform.id
+      const name = drawActionMeta.row.platform.name
+
+      if (platform) {
+        this.platformDetail = `/ui/#/settings/platforms?id=${platform}&name=${name}`
+      } else {
+        this.platformDetail = ''
+      }
+    } catch (e) {
+      throw new Error(e)
+    }
+  },
   methods: {
     onSubmit(form) {
       this.protocol = Object.assign(this.protocol, form)
       this.$emit('update:visible', false)
       this.$emit('confirm', this.protocol)
+    },
+    openInNewTab() {
+      window.open(this.platformDetail, '_blank')
     }
   }
 }
