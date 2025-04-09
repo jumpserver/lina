@@ -9,7 +9,7 @@
       class="text edit-input"
       @blur="onEditBlur"
     />
-    <span v-if="realValue" class="action">
+    <span class="action">
       <template v-for="(item, index) in iActions">
         <el-tooltip
           v-if="item.has"
