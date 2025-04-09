@@ -7,6 +7,16 @@
         class="header-status"
       >
         <span class="status-item">
+          <el-link
+            @click="viewConfirmRunAssets"
+          >
+            <span>{{ selectAssets.length }}</span>
+          </el-link>
+          <span style="display: inline-block;" @click="viewConfirmRunAssets">
+            {{ $t('AssetsSelected') }}
+          </span>
+        </span>
+        <span class="status-item">
           <span>{{ $tc('Status') }}: </span>
           <span
             :class="{'status_success':executionInfo.status.value==='success',
@@ -67,6 +77,10 @@ export default {
       type: Object,
       // eslint-disable-next-line vue/require-valid-default-prop
       default: {}
+    },
+    selectAssets: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -153,6 +167,9 @@ export default {
         this.showScrollButton = true
         this.xterm.scrollToBottom()
       })
+    },
+    viewConfirmRunAssets() {
+      this.$emit('view-assets')
     }
   }
 }

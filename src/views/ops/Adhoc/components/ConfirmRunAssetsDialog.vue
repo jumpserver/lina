@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :title="$t('ConfirmRunningAssets')"
-    :visible.sync="visible"
+    :visible.sync="iVisible"
     :show-buttons="true"
     :show-confirm="true"
     :show-cancel="true"
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div>
-      <div class="selected-count">{{ $t('AssetsSelected', {count: selectedAssets.length}) }}</div>
+      <div class="selected-count">{{ selectedAssets.length }}{{ $t('AssetsSelected') }}</div>
     </div>
   </Dialog>
 </template>
@@ -80,6 +80,14 @@ export default {
     }
   },
   computed: {
+    iVisible: {
+      set(val) {
+        this.$emit('update:visible', val)
+      },
+      get() {
+        return this.visible
+      }
+    },
     runnableAssets() {
       return this.assets.runnable
     },
@@ -89,7 +97,7 @@ export default {
   },
   watch: {
     visible(val) {
-      if (val === true) {
+      if (val === true && this.selectedAssets.length === 0) {
         this.selectedAssets = this.runnableAssets.map((item) => item.id)
       }
     }

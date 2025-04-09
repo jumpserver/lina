@@ -34,8 +34,10 @@
             <QuickJobTerm
               ref="xterm"
               :show-tool-bar="true"
+              :select-assets="selectAssets"
               :xterm-config="xtermConfig"
               :execution-info="executionInfo"
+              @view-assets="viewConfirmRunAssets"
             />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
@@ -47,6 +49,7 @@
 
 <script>
 import $ from '@/utils/jquery-vendor.js'
+import _isequal from 'lodash.isequal'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
@@ -325,7 +328,9 @@ export default {
         error: [],
         runnable: [],
         skipped: []
-      }
+      },
+      selectAssets: [],
+      lastRequestPayload: null
     }
   },
   computed: {
@@ -455,6 +460,12 @@ export default {
       })
       return { hosts, nodes }
     },
+    shouldReRequest(payload) {
+      if (!this.lastRequestPayload) return true
+      const current = _.omit(payload, ['args'])
+      const last = _.omit(this.lastRequestPayload, ['args'])
+      return !_isequal(current, last)
+    },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
@@ -471,13 +482,22 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
-      this.$axios.post('/api/v1/ops/inventory/classified-hosts/', {
+      const payload = {
         assets: hosts,
         nodes: nodes,
         module: this.module,
         args: this.command,
         runas: this.runas,
         runas_policy: this.runasPolicy
+      }
+      if (!this.shouldReRequest(payload)) {
+        this.onConfirmRunAsset(this.selectAssets, nodes)
+        return
+      }
+
+      this.lastRequestPayload = { ...payload }
+      this.$axios.post('/api/v1/ops/classified-hosts/', {
+        ...payload
       }).then(data => {
         this.classifiedAssets = data
         if (this.classifiedAssets.error.length === 0) {
@@ -514,6 +534,10 @@ export default {
         this.writeExecutionOutput()
         this.setBtn()
       })
+      this.selectAssets = assets
+    },
+    viewConfirmRunAssets() {
+      this.showConfirmRunAssetsDialog = true
     },
     stop() {
       stopJob({ task_id: this.currentTaskId }).then(() => {
