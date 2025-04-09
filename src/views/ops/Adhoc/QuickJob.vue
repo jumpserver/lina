@@ -14,6 +14,7 @@
       :visible.sync="showSetVariableDialog"
       @submit="onSubmitVariable"
     />
+    <ConfirmRunAssetsDialog :visible.sync="showConfirmRunAssetsDialog" :assets="classifiedAssets" />
     <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -49,6 +50,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from './AdhocOpenDialog.vue'
 import AdhocSaveDialog from './AdhocSaveDialog.vue'
 import VariableHelpDialog from './VariableHelpDialog.vue'
+import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
 
@@ -62,7 +64,8 @@ export default {
     AssetTreeTable,
     Page,
     QuickJobTerm,
-    CodeEditor
+    CodeEditor,
+    ConfirmRunAssetsDialog
   },
   data() {
     return {
@@ -79,6 +82,7 @@ export default {
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
       showSetVariableDialog: false,
+      showConfirmRunAssetsDialog: false,
       DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
@@ -312,7 +316,12 @@ export default {
       },
       iShowTree: true,
       variableFormData: [],
-      variableQueryParam: ''
+      variableQueryParam: '',
+      classifiedAssets: {
+        error: [],
+        runnable: [],
+        skipped: []
+      }
     }
   },
   computed: {
@@ -475,6 +484,17 @@ export default {
       if (this.parameters) {
         data.parameters = this.parameters
       }
+      this.showConfirmRunAssetsDialog = true
+      this.$axios.post('/api/v1/ops/inventory/classified-hosts/', {
+        assets: hosts,
+        nodes: nodes,
+        module: this.module,
+        args: this.command,
+        runas: this.runas,
+        runas_policy: this.runasPolicy
+      }).then(data => {
+        this.classifiedAssets = data
+      })
       createJob(data).then(res => {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = { value: 'running', label: this.$t('Running') }
