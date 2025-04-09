@@ -162,7 +162,7 @@ export default {
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
 
-      const fieldsHidden = ['charset_enabled', 'ds_enabled']
+      const fieldsHidden = ['charset', 'ds_enabled']
       for (const field of fieldsHidden) {
         if (constraints[field] === false) {
           this.fieldsMeta[field].hidden = () => true
