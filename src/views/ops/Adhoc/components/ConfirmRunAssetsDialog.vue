@@ -6,16 +6,26 @@
     :show-confirm="true"
     :show-cancel="true"
     width="1000px"
+    @confirm="onConfirm"
+    @cancel="onCancel"
   >
     <div class="confirm-run-assets-dialog">
       <div class="assets-list">
         <div class="asset-group">
           <div class="group-title">可运行资产：</div>
-          <el-checkbox-group v-model="selectedAssets" class="group-assets">
+          <el-checkbox
+            v-model="checkAll"
+            :indeterminate="isIndeterminate"
+            style="margin-left: 10px"
+            @change="handleCheckAllChange"
+          >
+            {{ $t('All') }}
+          </el-checkbox>
+          <el-checkbox-group v-model="selectedAssets" class="group-assets" @change="handleCheckedAssetChange">
             <el-checkbox
               v-for="asset in runnableAssets"
               :key="asset.id"
-              :label="asset.name"
+              :label="asset.id"
               class="asset-item"
             >
               <div class="asset-item">
@@ -72,8 +82,9 @@ export default {
   },
   data() {
     return {
-      searchQuery: '',
-      selectedAssets: []
+      checkAll: false,
+      selectedAssets: [],
+      isIndeterminate: true
     }
   },
   computed: {
@@ -81,7 +92,7 @@ export default {
       return this.assets.runnable
     },
     failedAssets() {
-      return [...this.assets.skipped, ...this.assets.error]
+      return this.assets.error
     }
   },
   methods: {
@@ -89,7 +100,17 @@ export default {
       this.$emit('update:visible', false)
     },
     onConfirm() {
-      this.$emit('confirm', this.selectedAssets)
+      this.$emit('submit', this.selectedAssets, [])
+      this.$emit('update:visible', false)
+    },
+    handleCheckAllChange(value) {
+      this.selectedAssets = value ? this.runnableAssets.map((item) => item.id) : []
+      this.isIndeterminate = false
+    },
+    handleCheckedAssetChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.runnableAssets.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.runnableAssets.length
     }
   }
 }

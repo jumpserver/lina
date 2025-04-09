@@ -14,7 +14,11 @@
       :visible.sync="showSetVariableDialog"
       @submit="onSubmitVariable"
     />
-    <ConfirmRunAssetsDialog :visible.sync="showConfirmRunAssetsDialog" :assets="classifiedAssets" />
+    <ConfirmRunAssetsDialog
+      :visible.sync="showConfirmRunAssetsDialog"
+      :assets="classifiedAssets"
+      @submit="onConfirmRunAsset"
+    />
     <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -467,8 +471,25 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
-      const data = {
+      this.$axios.post('/api/v1/ops/inventory/classified-hosts/', {
         assets: hosts,
+        nodes: nodes,
+        module: this.module,
+        args: this.command,
+        runas: this.runas,
+        runas_policy: this.runasPolicy
+      }).then(data => {
+        this.classifiedAssets = data
+        if (this.classifiedAssets.error.length === 0) {
+          this.onConfirmRunAsset(hosts, nodes)
+        } else {
+          this.showConfirmRunAssetsDialog = true
+        }
+      })
+    },
+    onConfirmRunAsset(assets, nodes) {
+      const data = {
+        assets: assets,
         nodes: nodes,
         module: this.module,
         args: this.command,
@@ -484,17 +505,6 @@ export default {
       if (this.parameters) {
         data.parameters = this.parameters
       }
-      this.showConfirmRunAssetsDialog = true
-      this.$axios.post('/api/v1/ops/inventory/classified-hosts/', {
-        assets: hosts,
-        nodes: nodes,
-        module: this.module,
-        args: this.command,
-        runas: this.runas,
-        runas_policy: this.runasPolicy
-      }).then(data => {
-        this.classifiedAssets = data
-      })
       createJob(data).then(res => {
         this.executionInfo.timeCost = 0
         this.executionInfo.status = { value: 'running', label: this.$t('Running') }
