@@ -161,6 +161,15 @@ export default {
     } finally {
       this.loading = false
     }
+
+    const name = this.$route.query?.name
+    const platform = this.$route.query?.id
+
+    if (platform) {
+      this.$nextTick(() => {
+        this.$refs.genericListTable.onDetail({ row: { id: platform, name }})
+      })
+    }
   },
   updated() {
     this.changeMoreCreates()
