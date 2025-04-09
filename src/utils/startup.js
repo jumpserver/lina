@@ -167,13 +167,18 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   Vue.$log.debug('Change has current view, has perm: ', viewName, '=>', has)
   if (has) {
     await store.dispatch('users/changeToView', viewName)
-    return
+    return { status: 'continue' }
   }
   viewName = getPropView()
   // Next 之前要重置 init 状态，否则这些路由守卫就不走了
   await store.dispatch('app/reset')
   next(`/${viewName}/`)
-  return new Promise((resolve, reject) => reject(''))
+
+  // new Promise((resolve, reject) => reject('')) 这种方式通过输出发现在页面除此渲染的时候执行两次，
+  // 返回一个 Promise 我理解是为了中断第一次导航，确保只有第二次导航到到有权限的视图。由于第一个 has 为 false
+  // 导致被 startup catch 捕获，而 error 的 trace 之所以锁定为到 runtime 等中也是因为由于 Babel 和 Polyfill 的缘故
+
+  return { status: 'redirected', to: viewName }
 }
 
 function onI18nLoaded() {
@@ -209,7 +214,8 @@ export async function startup({ to, from, next }) {
     await checkLogin({ to, from, next })
     await onI18nLoaded()
     await getPublicSetting({ to, from, next }, false)
-    await changeCurrentViewIfNeed({ to, from, next })
+    const viewResult = await changeCurrentViewIfNeed({ to, from, next })
+    if (viewResult && viewResult.status === 'redirected') return true
     await changeCurrentOrgIfNeed({ to, from, next })
     await generatePageRoutes({ to, from, next })
     await checkUserFirstLogin({ to, from, next })
