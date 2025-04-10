@@ -137,9 +137,10 @@ export default {
         return
       }
       const pageQuery = this.getPageQuery(this.page, this.paginationSize)
-      const query = Object.assign(this.extraQuery, pageQuery)
+      const query = Object.assign(this.extraQuery, pageQuery, this.tableConfig.extraQuery)
       const queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&')
-      const url = `${this.tableUrl}?${queryString}`
+      const connector = this.tableUrl.indexOf('?') === -1 ? '?' : '&'
+      const url = `${this.tableUrl}${connector}${queryString}`
 
       const resp = await this.$axios.get(url, this.axiosConfig)
       const data = resp.data
