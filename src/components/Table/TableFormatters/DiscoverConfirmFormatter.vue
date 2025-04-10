@@ -6,7 +6,7 @@
           <i class="fa fa-check" />
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item of iActions" :key="item.name" :command="item.name">
+          <el-dropdown-item v-for="item of iActions" :key="item.name" :command="item.name" :disabled="item.disabled">
             {{ item.label }}
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -123,17 +123,20 @@ export default {
         {
           name: 'delete_remote',
           label: this.$t('DeleteRemoteAccount'),
-          has: this.row.remote_present
+          has: this.row.remote_present,
+          disabled: this.$store.getters.currentOrgIsRoot
         },
         {
           name: 'add_account',
           label: this.$t('AddAccount'),
-          has: !this.row.present
+          has: !this.row.present,
+          disabled: this.$store.getters.currentOrgIsRoot
         },
         {
           name: 'change_password_add',
           label: this.$t('AddAccountAfterChangingPassword'),
-          has: !this.row.present
+          has: !this.row.present,
+          disabled: this.$store.getters.currentOrgIsRoot
         }
       ]
       return actions.filter(action => {
