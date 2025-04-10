@@ -55,7 +55,7 @@ export default {
             formatter: DetailFormatter
           },
           secret: {
-            label: this.$t('Secret'),
+            label: 'Secret',
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
