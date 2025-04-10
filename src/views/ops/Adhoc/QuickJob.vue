@@ -146,7 +146,7 @@ export default {
               query: (query, cb) => {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
-                if (hosts.length === 0) {
+                if (hosts.length === 0 && nodes.length === 0) {
                   this.$message.warning(`${this.$t('RequiredAssetOrNode')}`)
                   return cb([])
                 }
