@@ -7,7 +7,7 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <el-alert type="success"> {{ $t('ImportLdapUserTip') }}</el-alert>
+      <el-alert type="success" style="margin-bottom: 10px"> {{ $t('ImportLdapUserTip') }}</el-alert>
       <ListTable
         ref="listTable"
         :header-actions="headerActions"
