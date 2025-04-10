@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       config: {
+        title: '',
         activeMenu: 'CloudAccountList',
         submenu: [
           {
@@ -39,6 +40,11 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    const category = this.$route.query.category || 'host'
+    const display = category === 'host' ? this.$t('Host') : this.$t('Database')
+    this.config.title = `${display} - ${this.$t('CloudSync')}`
   }
 }
 </script>

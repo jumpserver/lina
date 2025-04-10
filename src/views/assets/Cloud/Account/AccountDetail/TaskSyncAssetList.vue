@@ -82,8 +82,9 @@ export default {
   },
   computed: {
     dynamicUrl() {
-      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/instances/'
-      return this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
+      const category = this.$route.query.category
+      const baseUrl = `/api/v1/xpack/cloud/sync-instance-tasks/instances/?category=${category}`
+      return this.object ? `${baseUrl}&task_id=${this.object.task.id}` : baseUrl
     }
   },
   mounted() {

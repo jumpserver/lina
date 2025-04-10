@@ -21,7 +21,7 @@ export default {
       createDrawer: () => import('@/views/assets/Cloud/Strategy/StrategyCreateUpdate.vue'),
       detailDrawer: () => import('@/views/assets/Cloud/Strategy/StrategyDetail/index.vue'),
       tableConfig: {
-        url: '/api/v1/xpack/cloud/strategies/',
+        url: '',
         permissions: {
           app: 'xpack',
           resource: 'strategy'
@@ -69,8 +69,15 @@ export default {
       }
     }
   },
+  computed: {
+    iCategory() {
+      return this.$route.query.category || 'host'
+    }
+  },
+  mounted() {
+    this.tableConfig.url = `/api/v1/xpack/cloud/strategies/?category=${this.iCategory}`
+  },
   methods: {}
-
 }
 </script>
 
