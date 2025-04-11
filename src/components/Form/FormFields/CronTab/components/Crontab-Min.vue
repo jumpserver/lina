@@ -9,7 +9,7 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('From') }}
-        <el-input-number v-model="average02" :max="60" :min="1" size="mini" />
+        <el-input-number v-model="average02" :max="59" :min="1" size="mini" />
         {{ this.$t('Min') }} {{ this.$t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
