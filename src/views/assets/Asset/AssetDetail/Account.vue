@@ -46,7 +46,7 @@ export default {
     },
     url: {
       type: String,
-      default: '/api/v1/accounts/accounts/'
+      default: ''
     },
     extraQuickActions: {
       type: Array,
