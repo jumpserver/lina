@@ -283,6 +283,11 @@ export default {
             formatter: ActionsFormatter,
             has: this.showActions,
             formatterArgs: {
+              performDelete: ({ row }) => {
+                const id = row.id
+                const url = `/api/v1/accounts/accounts/${id}/`
+                return this.$axios.delete(url)
+              },
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
