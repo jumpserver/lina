@@ -60,23 +60,21 @@ export default {
       url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
         const protocols = values['protocols'] || []
-        const query = this.$route.query || {}
         const automation = values['automation'] || {}
         const category_type = values['category_type']
         const ansibleConfig = automation?.['ansible_config'] || {}
         automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
-        if (query.hasOwnProperty('_clone_from')) {
-          if (automation.hasOwnProperty('id')) {
-            delete automation['id']
-          }
-          values['protocols'] = protocols.map(i => {
-            if (i.hasOwnProperty('id')) {
-              delete i['id']
-            }
-            return i
-          })
+        if (automation.hasOwnProperty('id')) {
+          console.log('exec')
+          delete automation['id']
         }
+        values['protocols'] = protocols.map(i => {
+          if (i.hasOwnProperty('id')) {
+            delete i['id']
+          }
+          return i
+        })
         values['category'] = category_type[0]
         values['type'] = category_type[1]
         return values
