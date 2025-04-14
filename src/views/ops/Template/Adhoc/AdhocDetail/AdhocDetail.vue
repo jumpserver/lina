@@ -1,6 +1,6 @@
 <template>
   <TwoCol>
-    <AutoDetailCard :fields="detailFields" :object="object" :url="url" />
+    <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
     <template #right>
       <IBox :title="$tc('Variable')">
         <Variable
