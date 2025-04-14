@@ -66,7 +66,6 @@ export default {
         automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
         if (automation.hasOwnProperty('id')) {
-          console.log('exec')
           delete automation['id']
         }
         values['protocols'] = protocols.map(i => {
