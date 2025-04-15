@@ -14,9 +14,10 @@
         plain
         size="mini"
         type="primary"
+        :disabled="!hasPerm"
         @click="handleBtnConnect"
       >
-        <i :class="iButtonIcon" />
+        <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
 
       <el-dropdown-menu v-if="!isClick" slot="dropdown">
