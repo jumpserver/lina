@@ -53,7 +53,7 @@ export default {
           ]
         },
         columns: [
-          'name', 'type', 'summary', 'average_time_cost', 'asset_amount',
+          'name', 'type', 'summary', 'average_time_cost', 'asset_amount', 'crontab', 'interval',
           'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
         ],
         columnsMeta: {

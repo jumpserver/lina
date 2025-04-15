@@ -42,7 +42,7 @@ export const crontab = {
   on: {
     change: (val, updateForm) => {
       updateForm({
-        interval: ''
+        interval: null
       })
     }
   }
