@@ -102,8 +102,15 @@ export default {
   watch: {
     visible(val) {
       if (val === true && this.selectedAssets.length === 0) {
+        // 首次打开时，默认选中所有可运行的资产
         this.selectedAssets = this.runnableAssets.map((item) => item.id)
       }
+    },
+    runnableAssets(val) {
+      // 去掉 selectedAssets 中不存在的 id
+      this.selectedAssets = this.selectedAssets.filter((item) => {
+        return val.some((asset) => asset.id === item)
+      })
     }
   },
   methods: {

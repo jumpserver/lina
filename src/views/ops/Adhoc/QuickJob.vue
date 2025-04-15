@@ -331,6 +331,7 @@ export default {
         skipped: []
       },
       selectAssets: [],
+      selectNodes: [],
       lastRequestPayload: null
     }
   },
@@ -495,7 +496,7 @@ export default {
         runas_policy: this.runasPolicy
       }
       if (!this.shouldReRequest(payload)) {
-        this.onConfirmRunAsset(this.selectAssets, nodes)
+        this.onConfirmRunAsset(this.selectAssets, this.selectNodes)
         return
       }
 
@@ -537,8 +538,9 @@ export default {
         this.setCostTimeInterval()
         this.writeExecutionOutput()
         this.setBtn()
+        this.selectAssets = assets
+        this.selectNodes = nodes
       })
-      this.selectAssets = assets
     },
     viewConfirmRunAssets() {
       this.showConfirmRunAssetsDialog = true
