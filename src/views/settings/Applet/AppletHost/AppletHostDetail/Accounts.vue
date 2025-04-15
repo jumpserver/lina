@@ -1,5 +1,10 @@
 <template>
-  <Account :columns-meta="columnsMeta" :extra-quick-actions="quickActions" :object.sync="object" />
+  <Account
+    :url="url"
+    :columns-meta="columnsMeta"
+    :extra-quick-actions="quickActions"
+    :object.sync="object"
+  />
 </template>
 
 <script>
@@ -19,6 +24,7 @@ export default {
   },
   data() {
     return {
+      url: '/api/v1/accounts/accounts/',
       columnsMeta: {
         name: {
           formatter: (row) => <span>{row.name}</span>
@@ -50,7 +56,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
