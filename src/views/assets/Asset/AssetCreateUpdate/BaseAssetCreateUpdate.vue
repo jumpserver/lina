@@ -64,7 +64,7 @@ export default {
           [this.$t('Basic'), ['name', 'address', 'platform', 'nodes']],
           [this.$t('Protocol'), ['protocols']],
           [this.$t('Account'), ['accounts']],
-          [this.$t('Other'), ['domain', 'labels', 'is_active', 'comment']]
+          [this.$t('Other'), ['directory_services', 'domain', 'labels', 'is_active', 'comment']]
         ],
         fieldsMeta: {},
         performSubmit(validValues) {

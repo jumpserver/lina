@@ -72,7 +72,6 @@ export const interval = {
   ],
   on: {
     input: (val, updateForm) => {
-      console.log('interval input', val)
       updateForm({
         crontab: ''
       })

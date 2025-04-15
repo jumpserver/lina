@@ -51,7 +51,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
+import { accountOtherActions, accountQuickFilters, connectivityMeta, isDirectoryServiceAccount } from './const'
 import { openTaskPage } from '@/utils/jms'
 import {
   AccountConnectFormatter,
@@ -216,6 +216,7 @@ export default {
             width: '80px',
             formatter: AccountConnectFormatter,
             formatterArgs: {
+              asset: this.asset,
               can: ({ row }) => {
                 return this.currentUserIsSuperAdmin
               }
@@ -291,7 +292,7 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
-              canDelete: () => vm.$hasPerm('accounts.delete_account'),
+              canDelete: ({ row }) => vm.$hasPerm('accounts.delete_account') && !isDirectoryServiceAccount(row, this),
               moreActionsTitle: this.$t('More'),
               extraActions: accountOtherActions(this)
             }
