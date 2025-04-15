@@ -16,6 +16,7 @@
     />
     <ConfirmRunAssetsDialog
       :visible.sync="showConfirmRunAssetsDialog"
+      :is-running="isRunning"
       :assets="classifiedAssets"
       @submit="onConfirmRunAsset"
     />
@@ -339,6 +340,9 @@ export default {
     },
     ztree() {
       return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+    },
+    isRunning() {
+      return this.executionInfo.status.value === 'running'
     }
   },
   watch: {
@@ -552,12 +556,12 @@ export default {
       })
     },
     setBtn() {
-      if (this.executionInfo.status.value !== 'running') {
+      if (!this.isRunning) {
         clearInterval(this.executionInfo.cancel)
         this.toolbar.left.run.icon = 'fa fa-play'
       }
-      this.toolbar.left.run.isVisible = this.executionInfo.status.value === 'running'
-      this.toolbar.left.stop.isVisible = this.executionInfo.status.value !== 'running'
+      this.toolbar.left.run.isVisible = this.isRunning
+      this.toolbar.left.stop.isVisible = !this.isRunning
     },
     onSubmitVariable(parameters) {
       this.parameters = parameters

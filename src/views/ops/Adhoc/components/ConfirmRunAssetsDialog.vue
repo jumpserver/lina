@@ -2,7 +2,7 @@
   <Dialog
     :title="$t('ConfirmRunningAssets')"
     :visible.sync="iVisible"
-    :show-buttons="true"
+    :show-buttons="!isRunning"
     :show-confirm="true"
     :show-cancel="true"
     width="1200px"
@@ -70,6 +70,10 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    isRunning: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
