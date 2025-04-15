@@ -1,7 +1,7 @@
 <template>
   <div class="item-info">
     <el-row>
-      <el-col v-for="item of infos" :key="item.content" :span="12" class="panel-item">
+      <el-col v-for="(item, i) of infos" :key="i" :span="12" class="panel-item">
         <small class="item-label">{{ item.title }}</small>
         <h4 class="item-value">{{ item.content }}</h4>
       </el-col>
