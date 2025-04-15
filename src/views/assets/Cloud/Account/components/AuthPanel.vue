@@ -175,18 +175,16 @@ export default {
       form.validate((valid) => {
         if (valid) {
           btn.loading = true
+          this.$refs.form.$refs.form.dataForm.submitForm('form', false)
+          if (this.origin === 'update') {
+            setTimeout(() => {
+              this.$emit('submitSuccess')
+              this.$emit('update:visible', false)
+            }, 500)
+          }
+          this.submitType = submitType
         }
       })
-
-      this.$refs.form.$refs.form.dataForm.submitForm('form', false)
-
-      if (this.origin === 'update') {
-        setTimeout(() => {
-          this.$emit('submitSuccess')
-          this.$emit('update:visible', false)
-        }, 500)
-      }
-      this.submitType = submitType
     },
     handleSubmitSuccess(res) {
       if (this.submitType === 'manual') {
