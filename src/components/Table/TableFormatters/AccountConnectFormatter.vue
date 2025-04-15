@@ -53,13 +53,15 @@ export default {
       default() {
         return {
           can: () => true,
-          getConnectUrl: (row, protocol) => {
+          getConnectUrl: (row, protocol, asset) => {
+            const assetId = asset ? asset.id : row.asset.id
             return `/luna/admin-connect/?
-              asset=${row.asset.id}
+              asset=${assetId}
               &account=${row.id}
               &protocol=${protocol}
             `.replace(/\s+/g, '')
           },
+          asset: null,
           assetUrl: '/api/v1/assets/assets/{id}/',
           buttonIcon: 'fa fa-desktop'
         }
@@ -85,7 +87,7 @@ export default {
   },
   methods: {
     handleProtocolConnect(protocol) {
-      const url = this.formatterArgs.getConnectUrl(this.row, protocol)
+      const url = this.formatterArgs.getConnectUrl(this.row, protocol, this.formatterArgs.asset)
       window.open(url, '_blank')
     },
     visibleChange(visible) {

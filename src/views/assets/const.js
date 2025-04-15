@@ -133,6 +133,15 @@ export const assetFieldsMeta = (vm, category, type) => {
         default: []
       }
     },
+    directory_services: {
+      el: {
+        url: '/api/v1/assets/directories/',
+        disabled: false
+      },
+      hidden: () => {
+        return vm.platform.ds_enabled === false
+      }
+    },
     nodes: {
       rules: [rules.RequiredChange],
       el: {

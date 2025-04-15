@@ -50,7 +50,7 @@ export default {
         ]],
         [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method',
-          'domain_enabled', 'ds_enabled', 'ds',
+          'domain_enabled', 'ds_enabled',
           'charset'
         ]],
         [this.$t('Automations'), ['automation']],
