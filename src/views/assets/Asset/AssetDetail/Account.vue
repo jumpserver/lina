@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     iUrl() {
-      return this.url || `/api/v1/assets/assets/${this.object.id}/accounts/`
+      return this.url || `/api/v1/accounts/accounts/?asset=${this.object.id}`
     }
   },
   methods: {
