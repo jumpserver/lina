@@ -17,6 +17,7 @@ export default {
   },
   data() {
     const currentUserID = this.$store.state.users.profile.id
+    const isSuperuser = this.$store.state.users.profile.is_superuser
     return {
       createDrawer: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate.vue'),
       detailDrawer: () => import('@/views/ops/Template/Adhoc/AdhocDetail/index.vue'),
@@ -43,7 +44,7 @@ export default {
               updateRoute: 'AdhocUpdate',
               hasDelete: true,
               canDelete: ({ row }) => {
-                return this.$hasPerm('ops.delete_adhoc') && row.creator === currentUserID
+                return this.$hasPerm('ops.delete_adhoc') && row.creator === currentUserID || isSuperuser
               },
               hasClone: true,
               cloneRoute: 'AdhocCreate'
