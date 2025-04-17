@@ -20,7 +20,7 @@ export default {
         category: 'all'
       },
       tableConfig: {
-        columnsExclude: ['date_verified']
+        columnsExclude: ['date_verified', 'spec_info']
       },
       headerActions: {
         handleImportClick: ({ selectedRows }) => {
