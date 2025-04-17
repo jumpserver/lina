@@ -224,3 +224,8 @@ export default {
 }
 </script>
 
+<style scoped lang="scss">
+::v-deep .el-card__body .el-form {
+  margin-top: unset;
+}
+</style>
