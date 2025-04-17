@@ -70,12 +70,11 @@ export default {
         }
       },
       headerActions: {
+        hasLeft: false,
         hasSearch: true,
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        hasCreate: false,
-        hasMoreActions: false
+        hasImport: false
       },
       userRelationConfig: {
         icon: 'fa-user',
@@ -103,7 +102,8 @@ export default {
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
-          this.$store.commit('common/reload')
+          that.$refs.select2.clearSelected()
+          this.$refs.ListTable.reloadTable()
         }
       },
       groupRelationConfig: {

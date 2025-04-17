@@ -1,5 +1,5 @@
 <template>
-  <BaseList v-bind="tableConfig" />
+  <BaseList v-bind="config" />
 </template>
 
 <script>
@@ -11,9 +11,10 @@ export default {
   },
   data() {
     return {
-      tableConfig: {
+      config: {
+        url: '/api/v1/assets/directories/',
         category: 'ds',
-        url: '/api/v1/assets/directories/'
+        helpMessage: this.$t('DirectoryServiceHelpMessage')
       }
     }
   }
