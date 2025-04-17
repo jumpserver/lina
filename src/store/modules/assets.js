@@ -89,6 +89,9 @@ const actions = {
         })
     })
   },
+  cleanPlatforms({ commit, dispatch, state }) {
+    state.platforms = []
+  },
   addToRecentPlatforms({ commit, display, state }, platform) {
     const recentPlatformIds = state.recentPlatformIds.filter(i => i !== platform.id)
     recentPlatformIds.unshift(platform.id)

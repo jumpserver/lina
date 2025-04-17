@@ -1,5 +1,6 @@
 import { toSafeLocalDateStr } from '@/utils/time'
 import { ActionsFormatter, DetailFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
+
 export const statusMap = {
   pending: '0',
   confirmed: '1',
@@ -135,7 +136,7 @@ export const gatherAccountHeaderActions = (vm) => {
         type: 'primary',
         icon: 'fa fa-check',
         can: ({ selectedRows }) => {
-          return selectedRows.length > 0 && vm.$hasPerm('accounts.add_account')
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot
         },
         callback: function({ selectedRows }) {
           const ids = selectedRows.map(v => {
@@ -157,7 +158,7 @@ export const gatherAccountHeaderActions = (vm) => {
         type: 'primary',
         icon: 'fa fa-exchange',
         can: ({ selectedRows }) => {
-          return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account')
+          return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account') && !vm.$store.getters.currentOrgIsRoot
         },
         callback: function({ selectedRows }) {
           vm.gatherAccounts = selectedRows

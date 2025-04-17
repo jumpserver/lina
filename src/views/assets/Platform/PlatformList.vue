@@ -115,7 +115,11 @@ export default {
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
               onUpdate({ row, col }) {
-                vm.$refs.genericListTable.onUpdate({ row, col, query: { type: row.type.value, category: row.category.value }})
+                vm.$refs.genericListTable.onUpdate({
+                  row,
+                  col,
+                  query: { type: row.type.value, category: row.category.value }
+                })
               }
             }
           }
@@ -149,20 +153,22 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
-  deactivated() {
-    window.localStorage.setItem('lastTab', this.tab.activeMenu)
-  },
   activated() {
-    setTimeout(() => {
-      this.tab.activeMenu = window.localStorage.getItem('lastTab') || 'host'
-      this.$refs.genericListTable?.reloadTable()
-    }, 300)
   },
   async mounted() {
     try {
       await this.setCategoriesTab()
     } finally {
       this.loading = false
+    }
+
+    const name = this.$route.query?.name
+    const platform = this.$route.query?.id
+
+    if (platform) {
+      this.$nextTick(() => {
+        this.$refs.genericListTable.onDetail({ row: { id: platform, name }})
+      })
     }
   },
   updated() {
@@ -173,9 +179,15 @@ export default {
       this.tableConfig.url = this.url
       this.headerActions.importOptions.url = this.url
       this.headerActions.exportOptions.url = this.url
-      this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
+      const types = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
+      }).map(item => {
+        if (item.group && !item.group.includes(this.$t('Type'))) {
+          item.group += this.$t('WordSep') + this.$t('Type')
+        }
+        return item
       })
+      this.headerActions.moreCreates.dropdown = types
     },
     async setCategoriesTab() {
       const categoryIcon = {
@@ -185,6 +197,7 @@ export default {
         cloud: 'fa-cloud',
         web: 'fa-globe',
         gpt: 'fa-comment',
+        ds: 'fa-id-card-o',
         custom: 'fa-cube'
       }
       const state = await this.$store.dispatch('assets/getAssetCategories')

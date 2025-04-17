@@ -52,10 +52,11 @@ export default {
               updateRoute: 'CloudStrategyUpdate',
               hasClone: false,
               canDelete: ({ row }) => {
-                return row.name !== 'default'
+                return this.$hasPerm('xpack.delete_strategy') && row.name !== 'default'
               },
               canUpdate: ({ row }) => {
-                return row.name !== 'default'
+                return this.$hasPerm('xpack.change_strategy') && row.name !== 'default' &&
+                  !this.$store.getters.currentOrgIsRoot
               }
             }
           }

@@ -38,14 +38,14 @@
             <div class="disabled-text">
               {{ $t('UpgradeEnterpriseEditionHelpText') }}
             </div>
-            <el-button class="upgrade-btn" type="primary">
+            <el-button class="upgrade-btn" type="primary" @click="handleUpgrade">
               {{ $t('UpgradeEnterpriseEdition') }}
             </el-button>
           </div>
         </IBox>
       </div>
-      <el-alert v-if="helpMessage" type="success">
-        <span v-sanitize="helpMessage" class="announcement-main" />
+      <el-alert v-if="iHelpMessage" type="success">
+        <span v-sanitize="iHelpMessage" class="announcement-main" />
       </el-alert>
       <slot />
     </PageContent>
@@ -119,6 +119,9 @@ export default {
         return true
       }
       return window.history.length <= 2
+    },
+    iHelpMessage() {
+      return this.helpMessage || this.helpTip
     }
   },
   methods: {
@@ -136,7 +139,7 @@ export default {
       clearTimeout(this.longPressTimer)
     },
     handleUpgrade() {
-      const url = 'http://www.jumpserver.org/support/'
+      const url = 'https://www.lxware.hk/pages/about'
       window.open(url, '_blank')
     }
   }
@@ -153,8 +156,8 @@ export default {
   overflow-x: hidden;
 
   .el-alert {
-    margin-top: -5px;
-    margin-bottom: 5px;
+    margin: -5px 0 5px 0!important;
+    width: calc(100% - 10px);
   }
 
   .page-content {

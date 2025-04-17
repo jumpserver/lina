@@ -61,14 +61,7 @@ export default {
             fileChange: ([value], updateForm) => {
               this.logo_file = value
             }
-          },
-          rules: [
-            {
-              required: true,
-              message: this.$t('FieldRequiredError'),
-              trigger: 'blur'
-            }
-          ]
+          }
         }
       },
       hasSaveContinue: false,
@@ -100,7 +93,6 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>

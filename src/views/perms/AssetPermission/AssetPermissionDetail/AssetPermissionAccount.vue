@@ -3,7 +3,6 @@
     <template>
       <AccountListTable
         ref="ListTable"
-        :asset="object"
         :columns-default="columns"
         :has-clone="false"
         :has-column-actions="false"

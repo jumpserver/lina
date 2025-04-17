@@ -64,18 +64,9 @@ export default {
             showOverflowTooltip: true
           },
           executed_amount: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              can: vm.$hasPerm('accounts.view_pushaccountexecution'),
-              getRoute({ row }) {
-                return {
-                  name: 'AccountPushList',
-                  query: {
-                    tab: 'AccountPushExecutionList',
-                    automation_id: row.id
-                  }
-                }
-              }
+            formatter: (row) => {
+              const can = vm.$hasPerm('accounts.view_pushaccountexecution')
+              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
             }
           },
           actions: {
@@ -115,6 +106,17 @@ export default {
         hasImport: false,
         createRoute: 'AccountPushCreate'
       }
+    }
+  },
+  methods: {
+    handleExecAmount(row) {
+      this.$router.push({
+        name: 'AccountPushList',
+        query: {
+          tab: 'AccountPushExecutionList',
+          automation_id: row.id
+        }
+      })
     }
   }
 }

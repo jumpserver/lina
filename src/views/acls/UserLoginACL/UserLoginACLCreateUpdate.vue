@@ -81,6 +81,13 @@ export default {
         return url
       },
       cleanFormValue(value) {
+        if (
+          Array.isArray(value.rules.time_period) &&
+          value.rules.time_period.every(item => item.value === '')
+        ) {
+          value.rules.time_period = []
+        }
+
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []
         }

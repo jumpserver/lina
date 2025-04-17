@@ -11,6 +11,7 @@
       :has-reset="false"
       :initial="initial"
       :url="url"
+      @submitSuccess="onSubmitSuccess"
     />
   </div>
 </template>
@@ -49,7 +50,8 @@ export default {
         ]],
         [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method',
-          'domain_enabled', 'charset'
+          'domain_enabled', 'ds_enabled',
+          'charset'
         ]],
         [this.$t('Automations'), ['automation']],
         [this.$t('Other'), ['comment']]
@@ -58,23 +60,20 @@ export default {
       url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
         const protocols = values['protocols'] || []
-        const query = this.$route.query || {}
         const automation = values['automation'] || {}
         const category_type = values['category_type']
         const ansibleConfig = automation?.['ansible_config'] || {}
         automation.ansible_config = ansibleConfig instanceof Object ? ansibleConfig : JSON.parse(ansibleConfig)
 
-        if (query.hasOwnProperty('_clone_from')) {
-          if (automation.hasOwnProperty('id')) {
-            delete automation['id']
-          }
-          values['protocols'] = protocols.map(i => {
-            if (i.hasOwnProperty('id')) {
-              delete i['id']
-            }
-            return i
-          })
+        if (automation.hasOwnProperty('id')) {
+          delete automation['id']
         }
+        values['protocols'] = protocols.map(i => {
+          if (i.hasOwnProperty('id')) {
+            delete i['id']
+          }
+          return i
+        })
         values['category'] = category_type[0]
         values['type'] = category_type[1]
         return values
@@ -105,6 +104,9 @@ export default {
     }
   },
   methods: {
+    onSubmitSuccess() {
+      this.$store.dispatch('assets/cleanPlatforms')
+    },
     updateSuMethodOptions() {
       const options = this.suMethods.filter(i => {
         return this.suMethodLimits.includes(i.value)
@@ -141,7 +143,6 @@ export default {
       const constraints = await this.$axios.get(url)
       this.defaultOptions = constraints
 
-      const fieldsCheck = ['domain_enabled', 'su_enabled']
       let protocols = constraints?.protocols || []
       protocols = protocols?.map(i => {
         if (i.name === 'http') {
@@ -151,15 +152,20 @@ export default {
       })
       this.fieldsMeta.protocols.el.choices = protocols
 
+      const fieldsCheck = ['domain_enabled', 'su_enabled']
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
 
-      if (constraints['charset_enabled'] === false) {
-        this.fieldsMeta.charset.hidden = () => true
+      const fieldsHidden = ['charset', 'ds_enabled']
+      for (const field of fieldsHidden) {
+        if (constraints[field] === false) {
+          this.fieldsMeta[field].hidden = () => true
+        }
       }
+
       await setAutomations(this)
       await this.updateSuMethods(constraints)
     }

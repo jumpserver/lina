@@ -322,15 +322,15 @@ export default {
       // this.$emit('tagSearch', this.filterMaps)
 
       // 修改查询参数时改变url中保存的参数
-      if (this.getUrlQuery) {
-        let newQuery = _.cloneDeep(this.$route.query)
-        if (this.filterKey.startsWith('search')) {
-          newQuery = { ...newQuery, search: encodeURI(this.filterMaps.search) }
-        } else {
-          newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
-        }
-        this.$router.replace({ query: newQuery })
-      }
+      // if (this.getUrlQuery) {
+      // let newQuery = _.cloneDeep(this.$route.query)
+      // if (this.filterKey.startsWith('search')) {
+      // newQuery = { ...newQuery, search: encodeURI(this.filterMaps.search) }
+      // } else {
+      // newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
+      // }
+      // this.$router.replace({ query: newQuery })
+      // }
 
       this.filterKey = ''
       this.filterValue = ''

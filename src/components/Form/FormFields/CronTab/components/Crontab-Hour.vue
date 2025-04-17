@@ -10,15 +10,18 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="2">
         {{ this.$t('From') }}
-        <el-input-number v-model="cycle01" :max="60" :min="0" size="mini" /> -
-        <el-input-number v-model="cycle02" :max="60" :min="0" size="mini" /> {{ this.$t('Hour') }}
+        <el-input-number v-model="cycle01" :max="23" :min="0" size="mini" />
+        -
+        <el-input-number v-model="cycle02" :max="23" :min="0" size="mini" />
+        {{ this.$t('Hour') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('Every') }}
-        <el-input-number v-model="average02" :max="60" :min="1" size="mini" /> {{ this.$t('Hour') }} {{ this.$t('ExecuteOnce') }}
+        <el-input-number v-model="average02" :max="23" :min="1" size="mini" />
+        {{ this.$t('Hour') }} {{ this.$t('ExecuteOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -32,7 +35,7 @@
           multiple
           style="width:100%"
         >
-          <el-option v-for="item in 24" :key="item" :value="item-1">{{ item-1 }}</el-option>
+          <el-option v-for="item in 24" :key="item" :value="item-1">{{ item - 1 }}</el-option>
         </el-select>
       </el-radio>
     </el-form-item>

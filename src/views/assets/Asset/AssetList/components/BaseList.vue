@@ -143,7 +143,8 @@ export default {
         'custom': () => import('@/views/assets/Asset/AssetCreateUpdate/CustomCreateUpdate.vue'),
         'cloud': () => import('@/views/assets/Asset/AssetCreateUpdate/CloudCreateUpdate.vue'),
         'device': () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
-        'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue')
+        'database': () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
+        'ds': () => import('@/views/assets/Asset/AssetCreateUpdate/DSCreateUpdate.vue')
       },
       createProps: {},
       showPlatform: false,
@@ -216,16 +217,19 @@ export default {
   methods: {
     async updateOrCloneAsset(row, action) {
       this.createDrawer = this.drawer[row.category.value]
-      const meta = {
-        action: action,
-        id: row.id,
+
+      const query = {
         platform: row.platform.id,
         type: row.type.value,
         category: row.category.value,
-        row: row,
-        payload: row.payload
+        action: action
       }
-      this.$refs.ListTable.onUpdate({ row, query: meta })
+
+      if (action === 'clone') {
+        return this.$refs.ListTable.onClone({ row, query })
+      }
+
+      this.$refs.ListTable.onUpdate({ row, query })
     },
     createAsset(platform) {
       this.showPlatform = false

@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .platform-td {
   display: flex;
   flex-wrap: nowrap;
@@ -55,6 +55,7 @@ export default {
   .icon-zone {
     width: 1.5em;
     height: 1.5em;
+    flex-shrink: 0;
 
     .asset-icon {
       height: 100%;
@@ -66,6 +67,10 @@ export default {
 
   .platform-name {
     flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
   }
 }
 

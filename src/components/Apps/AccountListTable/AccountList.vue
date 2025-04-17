@@ -51,7 +51,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { accountOtherActions, accountQuickFilters, connectivityMeta } from './const'
+import { accountOtherActions, accountQuickFilters, connectivityMeta, isDirectoryServiceAccount } from './const'
 import { openTaskPage } from '@/utils/jms'
 import {
   AccountConnectFormatter,
@@ -182,13 +182,21 @@ export default {
         },
         columnsMeta: {
           name: {
-            width: '120px',
+            minWidth: '60px',
             formatterArgs: {
               can: () => vm.$hasPerm('accounts.view_account'),
               getRoute: ({ row }) => ({
                 name: 'AccountDetail',
                 params: { id: row.id }
               }),
+              getTitle: ({ row }) => {
+                let title = row.name
+                if (row.ds && this.asset && this.asset.id !== row.asset.id) {
+                  const dsID = row.ds.id.split('-')[0]
+                  title = `${row.name}@${dsID}`
+                }
+                return title
+              },
               getDrawerTitle({ row }) {
                 return `${row.username}@${row.asset.name}`
               }
@@ -208,15 +216,19 @@ export default {
             width: '80px',
             formatter: AccountConnectFormatter,
             formatterArgs: {
-              buttonIcon: 'fa fa-desktop',
-              url: '/api/v1/assets/assets/{id}',
-              can: () => this.currentUserIsSuperAdmin,
-              connectUrlTemplate: (row) => `/luna/pam_connect/${row.id}/${row.username}/${row.asset.id}/${row.asset.name}/`,
-              setMapItem: (id, protocol) => {
-                this.$store.commit('table/SET_PROTOCOL_MAP_ITEM', {
-                  key: id,
-                  value: protocol
-                })
+              asset: this.asset,
+              can: ({ row }) => {
+                return this.currentUserIsSuperAdmin
+              }
+            }
+          },
+          ds: {
+            width: '100px',
+            formatter: (row) => {
+              if (row.ds && row.ds['domain_name']) {
+                return row.ds['domain_name']
+              } else {
+                return ''
               }
             }
           },
@@ -229,12 +241,20 @@ export default {
             }
           },
           asset: {
+            minWidth: '100px',
             formatter: function(row) {
               return row.asset.name
             }
           },
           username: {
-            width: '120px'
+            minWidth: '60px',
+            formatter: function(row) {
+              if (row.ds && row.ds['domain_name']) {
+                return `${row.username}@${row.ds['domain_name']}`
+              } else {
+                return row.username
+              }
+            }
           },
           secret_type: {
             formatter: function(row) {
@@ -264,10 +284,15 @@ export default {
             formatter: ActionsFormatter,
             has: this.showActions,
             formatterArgs: {
+              performDelete: ({ row }) => {
+                const id = row.id
+                const url = `/api/v1/accounts/accounts/${id}/`
+                return this.$axios.delete(url)
+              },
               hasUpdate: false, // can set function(row, value)
               hasDelete: true, // can set function(row, value)
               hasClone: false,
-              canDelete: () => vm.$hasPerm('accounts.delete_account'),
+              canDelete: ({ row }) => vm.$hasPerm('accounts.delete_account') && !isDirectoryServiceAccount(row, this),
               moreActionsTitle: this.$t('More'),
               extraActions: accountOtherActions(this)
             }

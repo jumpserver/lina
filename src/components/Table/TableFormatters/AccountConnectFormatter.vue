@@ -1,24 +1,33 @@
 <template>
   <div>
     <el-dropdown
-      v-if="hasPerm"
+      :disabled="!hasPerm"
+      :show-timeout="500"
+      class="action-connect"
       size="small"
       trigger="hover"
-      :show-timeout="500"
-      @command="handleCommand"
+      type="primary"
+      @command="handleProtocolConnect"
       @visible-change="visibleChange"
     >
       <el-button
         plain
         size="mini"
         type="primary"
-        @click="handlePamConnect"
+        :disabled="!hasPerm"
+        @click="handleBtnConnect"
       >
-        <i :class="IButtonIcon" />
+        <i :class="iButtonIcon" :style="{ color: hasPerm ? '' : '#fff' }" />
       </el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="Title" disabled>
-          {{ ITitleText }}
+
+      <el-dropdown-menu v-if="!isClick" slot="dropdown">
+        <el-dropdown-item command="title" disabled>
+          <div v-if="getProtocolsLoading">
+            {{ $t('Loading') }}
+          </div>
+          <div v-else>
+            {{ dropdownTitle }}
+          </div>
         </el-dropdown-item>
         <el-dropdown-item divided />
         <el-dropdown-item
@@ -30,16 +39,6 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-
-    <el-button
-      v-else
-      plain
-      size="mini"
-      type="primary"
-      :disabled="!hasPerm"
-    >
-      <i :class="IButtonIcon" style="color: #fff" />
-    </el-button>
   </div>
 </template>
 
@@ -50,85 +49,74 @@ export default {
   name: 'AccountConnectFormatter',
   extends: BaseFormatter,
   props: {
-    buttonIcon: {
-      type: String,
-      default: 'fa fa-desktop'
-    },
-    titleText: {
-      type: String,
-      default: ''
-    },
-    url: {
-      type: String,
-      default: ''
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          can: () => true,
+          getConnectUrl: (row, protocol, asset) => {
+            const assetId = asset ? asset.id : row.asset.id
+            return `/luna/admin-connect/?
+              asset=${assetId}
+              &account=${row.id}
+              &protocol=${protocol}
+            `.replace(/\s+/g, '')
+          },
+          asset: null,
+          assetUrl: '/api/v1/assets/assets/{id}/',
+          buttonIcon: 'fa fa-desktop'
+        }
+      }
     }
   },
   data() {
     return {
-      hasPerm: false,
-      protocols: []
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs),
+      protocols: [],
+      isClick: false,
+      getProtocolsLoading: false,
+      dropdownTitle: this.$t('Protocols')
     }
   },
   computed: {
-    IButtonIcon() {
-      return this.buttonIcon
+    iButtonIcon() {
+      return this.formatterArgs.buttonIcon
     },
-    ITitleText() {
-      return this.titleText || this.$t('SelectProtocol')
+    hasPerm() {
+      return this.formatterArgs.can({ row: this.row, cellValue: this.cellValue })
     }
   },
-  mounted() {
-    this.hasPerm = this.formatterArgs.can()
-  },
   methods: {
-    handleCommand(protocol) {
-      if (protocol === 'Title') return
-
-      this.formatterArgs.setMapItem(this.row.id, protocol)
-      this.handleWindowOpen(this.row, protocol)
+    handleProtocolConnect(protocol) {
+      const url = this.formatterArgs.getConnectUrl(this.row, protocol, this.formatterArgs.asset)
+      window.open(url, '_blank')
     },
     visibleChange(visible) {
       if (visible) {
         this.getProtocols(this.row.asset.id)
       }
     },
-    handleWindowOpen(row, protocol) {
-      const url = this.formatterArgs.connectUrlTemplate(row) + `${protocol}`
-
-      this.$nextTick(() => {
-        window.open(url, '_blank')
-      })
-    },
-    async handlePamConnect() {
-      const protocolMap = this.$store.getters.protocolMap
-
-      if (protocolMap.has(this.row.id)) {
-        // 直连
-        const protocol = protocolMap.get(this.row.id)
-        this.handleWindowOpen(this.row, protocol)
-      } else {
-        try {
-          const url = this.formatterArgs.url.replace('{id}', this.row.asset.id)
-          const res = await this.$axios.get(url)
-
-          if (res && res.protocols.length > 0) {
-            const protocol = res.protocols.filter(protocol => protocol.name !== 'sftp')[0]
-
-            this.formatterArgs.setMapItem(this.row.id, protocol.name)
-            this.handleWindowOpen(this.row, protocol.name)
-          }
-        } catch (e) {
-          throw new Error(`Error getting protocols: ${e}`)
-        }
+    async handleBtnConnect() {
+      this.isClick = true
+      if (this.protocols === 0) {
+        await this.getProtocols(this.row.asset.id)
       }
+
+      if (this.protocols.length > 0) {
+        this.handleProtocolConnect(this.protocols[0].name)
+      }
+      setTimeout(() => {
+        this.isClick = false
+      }, 1000)
     },
     async getProtocols(assetId) {
+      if (this.protocols.length > 0) return
       try {
-        const url = this.formatterArgs.url.replace('{id}', assetId)
+        const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        // 暂将 SFTP 过滤
-        if (res) this.protocols = res.protocols.filter(protocol => protocol.name !== 'sftp')
+        // TODO 暂时将 sftp 隐藏
+        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'sftp') && (protocol.name !== 'winrm')) || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
@@ -137,7 +125,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .el-dropdown-menu__item.is-disabled {
   font-weight: 500;
   color: var(--el-text-color-secondary);

@@ -67,13 +67,13 @@
             style="width: 100%; height: 800px;border: none;"
           />
 
-          <span v-if="subTypeSelected === 'sms'" style="margin: -1px 0 0 20px;">
+          <span v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'" style="margin: -1px 0 0 20px;">
             <el-button
               :disabled="smsBtnDisabled"
               size="mini"
               style="line-height: 14px; float: right;"
               type="primary"
-              @click="sendSMSCode"
+              @click="sendCode"
             >
               {{ smsBtnText }}
             </el-button>
@@ -204,8 +204,8 @@ export default {
     logout() {
       window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
-    sendSMSCode() {
-      this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: 'sms' }).then(res => {
+    sendCode() {
+      this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: this.subTypeSelected }).then(res => {
         this.$message.success(this.$tc('VerificationCodeSent'))
         let time = 60
         this.smsBtnDisabled = true

@@ -39,6 +39,13 @@ export default {
       showCron: false
     }
   },
+  watch: {
+    value: {
+      handler(val) {
+        this.crontabFill(val)
+      }
+    }
+  },
   methods: {
     crontabFill(value) {
       // 确定后回传的值

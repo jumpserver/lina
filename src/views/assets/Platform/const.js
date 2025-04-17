@@ -81,6 +81,12 @@ export const platformFieldsMeta = (vm) => {
         disabled: false
       }
     },
+    ds_enabled: {
+      el: {
+        disabled: false
+      }
+    },
+
     protocols: {
       label: i18n.t('SupportedProtocol'),
       ...assetMeta.protocols,

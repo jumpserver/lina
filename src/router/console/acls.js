@@ -25,7 +25,8 @@ export default [
           title: i18n.t('UserLoginACLs'),
           app: 'acls',
           resource: 'loginacl',
-          disableOrgsChange: true
+          disableOrgsChange: true,
+          licenseRequired: true
         },
         children: [
           {

@@ -26,12 +26,12 @@ export const filterSelectValues = (values) => {
   return selects
 }
 
-function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged = false) {
+function updatePlatformProtocols(vm, platformType, updateForm, platformChanged = false) {
   setTimeout(() => vm.init().then(() => {
-    const isCreate = vm?.$route?.meta.action === 'create' && vm?.$route?.query.clone_from === undefined
-    const need_modify = isCreate || isPlatformChanged
+    const isCreate = vm.$route.query.action === 'create' && vm?.$route?.query.clone_from === undefined
+    const needModify = isCreate || platformChanged
     const platformProtocols = vm.platform.protocols
-    if (!need_modify) return
+    if (!needModify) return
     if (platformType === 'website') {
       const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
       updateForm({
@@ -48,7 +48,9 @@ function updatePlatformProtocols(vm, platformType, updateForm, isPlatformChanged
   }), 100)
 }
 
-export const assetFieldsMeta = (vm, platformType) => {
+export const assetFieldsMeta = (vm, category, type) => {
+  const platformCategory = category || vm.$route.query.category
+  const platformType = type || vm.$route.query.type
   const platformProtocols = []
   const secretTypes = []
   const asset = { address: 'https://jumpserver:330' }
@@ -92,28 +94,22 @@ export const assetFieldsMeta = (vm, platformType) => {
       el: {
         multiple: false,
         ajax: {
-          url: `/api/v1/assets/platforms/?type=${platformType}`,
+          url: `/api/v1/assets/platforms/?category=${platformCategory}&type=${platformType}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         }
       },
       on: {
-        change: ([event], updateForm) => {
+        change: _.debounce(([event], updateForm) => {
           const pk = event.pk
-          const url = window.location.href
-          vm.changePlatformID = pk
-          if (url.includes('clone')) {
-            updatePlatformProtocols(vm, platformType, updateForm, true)
-          } else {
-            vm.$nextTick(() => {
-              updatePlatformProtocols(vm, platformType, updateForm, true)
-            })
-          }
-        },
-        input: ([event], updateForm) => {
+          vm.platformID = pk
+          updatePlatformProtocols(vm, platformType, updateForm, true)
+        }, 200),
+        input: _.debounce(([event], updateForm) => {
+          // 初始化的时候，mounted 中没有这个逻辑
           updatePlatformProtocols(vm, platformType, updateForm)
-        }
+        }, 200)
       }
     },
     domain: {
@@ -125,6 +121,9 @@ export const assetFieldsMeta = (vm, platformType) => {
         ajax: {
           url: '/api/v1/assets/domains/'
         }
+      },
+      hidden: () => {
+        return vm.platform.domain_enabled === false
       }
     },
     accounts: {
@@ -132,6 +131,15 @@ export const assetFieldsMeta = (vm, platformType) => {
       el: {
         platform: {},
         default: []
+      }
+    },
+    directory_services: {
+      el: {
+        url: '/api/v1/assets/directories/',
+        disabled: false
+      },
+      hidden: () => {
+        return vm.platform.ds_enabled === false
       }
     },
     nodes: {

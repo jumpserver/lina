@@ -51,7 +51,7 @@ export default {
         [
           this.$t('Other'),
           [
-            'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
+            'AUTH_LDAP_STRICT_SYNC', 'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
             'AUTH_LDAP_CACHE_TIMEOUT'
           ]
         ]

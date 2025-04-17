@@ -6,6 +6,13 @@ import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSettin
 export const accountFieldsMeta = (vm) => {
   const defaultPrivilegedAccounts = ['root', 'administrator']
 
+  function onPrivilegedUser(value, updateForm) {
+    const maybePrivileged = defaultPrivilegedAccounts.includes(value)
+    if (maybePrivileged) {
+      updateForm({ privileged: true, secret_reset: false, push_now: false })
+    }
+  }
+
   return {
     assets: {
       component: Select2,
@@ -70,11 +77,8 @@ export const accountFieldsMeta = (vm) => {
             if (!vm.account?.name) {
               updateForm({ username: value })
             }
-            const maybePrivileged = defaultPrivilegedAccounts.includes(value)
-            if (maybePrivileged) {
-              updateForm({ privileged: true })
-            }
           }
+          onPrivilegedUser(value, updateForm)
         }
       },
       hidden: () => {
@@ -92,10 +96,7 @@ export const accountFieldsMeta = (vm) => {
           vm.usernameChanged = true
         },
         change: ([value], updateForm) => {
-          const maybePrivileged = defaultPrivilegedAccounts.includes(value)
-          if (maybePrivileged) {
-            updateForm({ privileged: true })
-          }
+          onPrivilegedUser(value, updateForm)
         }
       },
       hidden: () => {

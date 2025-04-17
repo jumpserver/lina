@@ -45,20 +45,29 @@ export default {
           app: 'orgs',
           resource: 'organization'
         },
-        columns: ['name',
+        columns: ['name', 'id',
           'resource_statistics.users_amount',
           'resource_statistics.groups_amount',
           'resource_statistics.assets_amount',
           'resource_statistics.asset_perms_amount',
           'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'resource_statistics.users_amount',
+            'resource_statistics.groups_amount',
+            'resource_statistics.assets_amount',
+            'resource_statistics.asset_perms_amount'
+          ]
+        },
         columnsMeta: {
           'resource_statistics.users_amount': {
             label: this.$t('Users'),
             width: '100px'
           },
           'resource_statistics.groups_amount': {
-            label: this.$t('Groups'),
+            label: this.$t('UserGroups'),
             width: '100px'
           },
           'resource_statistics.assets_amount': {

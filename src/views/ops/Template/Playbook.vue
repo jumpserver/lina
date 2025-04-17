@@ -27,6 +27,7 @@ export default {
   },
   data() {
     const currentUserID = this.$store.state.users.profile.id
+    const isSuperuser = this.$store.state.users.profile.is_superuser
     return {
       createDrawer: () => import('@/views/ops/Template/Playbook/PlaybookCreateUpdate.vue'),
       detailDrawer: () => import('@/views/ops/Template/Playbook/PlaybookDetail/index.vue'),
@@ -55,7 +56,7 @@ export default {
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
               canDelete: ({ row }) => {
-                return this.$hasPerm('ops.delete_playbook') && row.creator === currentUserID
+                return this.$hasPerm('ops.delete_playbook') && row.creator === currentUserID || isSuperuser
               },
               hasClone: true,
               cloneRoute: 'PlaybookCreate'

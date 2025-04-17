@@ -29,13 +29,23 @@ export default {
             ]
           ]
         ],
-        fieldsMeta: {}
+        fieldsMeta: {},
+        onSubmit: async(validValues) => {
+          const url = '/api/v1/settings/setting/?category=security_session'
+
+          try {
+            const res = await this.$axios.patch(url, validValues)
+
+            if (res) {
+              this.$message.success(this.$t('UpdateSuccessMsg'))
+              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
+            }
+          } catch (error) {
+            throw new Error(error)
+          }
+        }
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

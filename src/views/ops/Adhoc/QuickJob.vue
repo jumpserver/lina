@@ -14,6 +14,12 @@
       :visible.sync="showSetVariableDialog"
       @submit="onSubmitVariable"
     />
+    <ConfirmRunAssetsDialog
+      :visible.sync="showConfirmRunAssetsDialog"
+      :is-running="isRunning"
+      :assets="classifiedAssets"
+      @submit="onConfirmRunAsset"
+    />
     <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -29,8 +35,10 @@
             <QuickJobTerm
               ref="xterm"
               :show-tool-bar="true"
+              :select-assets="selectAssets"
               :xterm-config="xtermConfig"
               :execution-info="executionInfo"
+              @view-assets="viewConfirmRunAssets"
             />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
@@ -42,6 +50,7 @@
 
 <script>
 import $ from '@/utils/jquery-vendor.js'
+import _isequal from 'lodash.isequal'
 import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
@@ -49,6 +58,7 @@ import Page from '@/layout/components/Page'
 import AdhocOpenDialog from './AdhocOpenDialog.vue'
 import AdhocSaveDialog from './AdhocSaveDialog.vue'
 import VariableHelpDialog from './VariableHelpDialog.vue'
+import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
 
@@ -62,7 +72,8 @@ export default {
     AssetTreeTable,
     Page,
     QuickJobTerm,
-    CodeEditor
+    CodeEditor,
+    ConfirmRunAssetsDialog
   },
   data() {
     return {
@@ -79,6 +90,7 @@ export default {
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
       showSetVariableDialog: false,
+      showConfirmRunAssetsDialog: false,
       DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
@@ -135,7 +147,7 @@ export default {
               query: (query, cb) => {
                 const { hosts, nodes } = this.getSelectedNodesAndHosts()
 
-                if (hosts.length === 0) {
+                if (hosts.length === 0 && nodes.length === 0) {
                   this.$message.warning(`${this.$t('RequiredAssetOrNode')}`)
                   return cb([])
                 }
@@ -312,7 +324,15 @@ export default {
       },
       iShowTree: true,
       variableFormData: [],
-      variableQueryParam: ''
+      variableQueryParam: '',
+      classifiedAssets: {
+        error: [],
+        runnable: [],
+        skipped: []
+      },
+      selectAssets: [],
+      selectNodes: [],
+      lastRequestPayload: null
     }
   },
   computed: {
@@ -321,6 +341,9 @@ export default {
     },
     ztree() {
       return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
+    },
+    isRunning() {
+      return this.executionInfo.status.value === 'running'
     }
   },
   watch: {
@@ -442,6 +465,12 @@ export default {
       })
       return { hosts, nodes }
     },
+    shouldReRequest(payload) {
+      if (!this.lastRequestPayload) return true
+      const current = _.omit(payload, ['args'])
+      const last = _.omit(this.lastRequestPayload, ['args'])
+      return !_isequal(current, last)
+    },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
@@ -458,8 +487,34 @@ export default {
         this.$message.error(this.$tc('RequiredRunas'))
         return
       }
-      const data = {
+      const payload = {
         assets: hosts,
+        nodes: nodes,
+        module: this.module,
+        args: this.command,
+        runas: this.runas,
+        runas_policy: this.runasPolicy
+      }
+      if (!this.shouldReRequest(payload)) {
+        this.onConfirmRunAsset(this.selectAssets, this.selectNodes)
+        return
+      }
+
+      this.lastRequestPayload = { ...payload }
+      this.$axios.post('/api/v1/ops/classified-hosts/', {
+        ...payload
+      }).then(data => {
+        this.classifiedAssets = data
+        if (this.classifiedAssets.error.length === 0) {
+          this.onConfirmRunAsset(hosts, nodes)
+        } else {
+          this.showConfirmRunAssetsDialog = true
+        }
+      })
+    },
+    onConfirmRunAsset(assets, nodes) {
+      const data = {
+        assets: assets,
         nodes: nodes,
         module: this.module,
         args: this.command,
@@ -483,7 +538,12 @@ export default {
         this.setCostTimeInterval()
         this.writeExecutionOutput()
         this.setBtn()
+        this.selectAssets = assets
+        this.selectNodes = nodes
       })
+    },
+    viewConfirmRunAssets() {
+      this.showConfirmRunAssetsDialog = true
     },
     stop() {
       stopJob({ task_id: this.currentTaskId }).then(() => {
@@ -498,12 +558,12 @@ export default {
       })
     },
     setBtn() {
-      if (this.executionInfo.status.value !== 'running') {
+      if (!this.isRunning) {
         clearInterval(this.executionInfo.cancel)
         this.toolbar.left.run.icon = 'fa fa-play'
       }
-      this.toolbar.left.run.isVisible = this.executionInfo.status.value === 'running'
-      this.toolbar.left.stop.isVisible = this.executionInfo.status.value !== 'running'
+      this.toolbar.left.run.isVisible = this.isRunning
+      this.toolbar.left.stop.isVisible = !this.isRunning
     },
     onSubmitVariable(parameters) {
       this.parameters = parameters

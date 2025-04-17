@@ -116,6 +116,9 @@ export default {
         },
         system_roles: {
           component: Select2,
+          rules: [
+            rules.Required
+          ],
           el: {
             multiple: true,
             ajax: {

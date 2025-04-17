@@ -61,19 +61,9 @@ export default {
             width: '180px'
           },
           executed_amount: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AccountDiscoverList',
-              can: vm.$hasPerm('accounts.view_changesecretexecution'),
-              getRoute({ row }) {
-                return {
-                  name: 'AccountChangeSecretDetail',
-                  query: {
-                    tab: 'AccountChangeSecretExecutionList',
-                    automation_id: row.id
-                  }
-                }
-              }
+            formatter: (row) => {
+              const can = vm.$hasPerm('accounts.view_changesecretexecution')
+              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
             }
           },
           actions: {
@@ -113,6 +103,17 @@ export default {
         hasImport: false,
         createRoute: 'AccountChangeSecretCreate'
       }
+    }
+  },
+  methods: {
+    handleExecAmount(row) {
+      this.$router.push({
+        name: 'AccountChangeSecretList',
+        query: {
+          tab: 'AccountChangeSecretExecutionList',
+          automation_id: row.id
+        }
+      })
     }
   }
 }
