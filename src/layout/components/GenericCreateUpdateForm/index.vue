@@ -244,6 +244,7 @@ export default {
             this.$refs.form.setFieldError(key, err)
           }
         }
+        this.$emit('performError', data)
       }
     },
     hasSaveContinue: {

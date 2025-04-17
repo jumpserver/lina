@@ -3,6 +3,7 @@
     ref="form"
     class="form"
     v-bind="settings"
+    @performError="handlePerformError"
     @performFinished="handlePerformFinished"
     @submitSuccess="handleSubmitSuccess"
   />
@@ -54,6 +55,7 @@ export default {
     }
 
     return {
+      priSubmitForm: null,
       submitType: 'auto',
       settings: {
         url: `/api/v1/xpack/cloud/accounts/`,
@@ -106,6 +108,9 @@ export default {
               },
               project: {
                 label: this.$t('Project')
+              },
+              hostname_prefix: {
+                required: false
               }
             }
           },
@@ -172,16 +177,11 @@ export default {
   },
   methods: {
     submitForm(form, btn, submitType) {
+      this.priSubmitForm = form
       form.validate((valid) => {
         if (valid) {
           btn.loading = true
           this.$refs.form.$refs.form.dataForm.submitForm('form', false)
-          if (this.origin === 'update') {
-            setTimeout(() => {
-              this.$emit('submitSuccess')
-              this.$emit('update:visible', false)
-            }, 500)
-          }
           this.submitType = submitType
         }
       })
@@ -190,11 +190,39 @@ export default {
       if (this.submitType === 'manual') {
         this.$emit('update:object', res)
         this.$emit('update:active', 2)
+      } else if (this.submitType === 'update') {
+        setTimeout(() => {
+          this.$emit('submitSuccess')
+          this.$emit('update:visible', false)
+        }, 500)
       }
     },
     handlePerformFinished() {
       for (const btn of this.settings.moreButtons) {
         btn.loading = false
+      }
+    },
+    handlePerformError(errorData) {
+      if (errorData.hasOwnProperty('attrs')) {
+        for (const f in errorData['attrs']) {
+          this.setAttrsFieldError(f, errorData['attrs'][f])
+        }
+      }
+    },
+    setAttrsFieldError(name, errors) {
+      for (const item of this.priSubmitForm.content) {
+        if (item.id === 'attrs') {
+          errors = Array.isArray(errors) ? errors.join(',') : errors
+          const totalFields = item.el.fields
+          const field = totalFields.find((v) => v.prop === name)
+          if (!field) {
+            return
+          }
+          if (typeof errors === 'string') {
+            field.el.errors = errors
+            field.attrs.error = errors
+          }
+        }
       }
     }
   }
