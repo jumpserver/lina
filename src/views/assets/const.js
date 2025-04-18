@@ -112,18 +112,18 @@ export const assetFieldsMeta = (vm, category, type) => {
         }, 200)
       }
     },
-    domain: {
+    zone: {
       component: Select2,
       disabled: false,
       el: {
         multiple: false,
         clearable: true,
         ajax: {
-          url: '/api/v1/assets/domains/'
+          url: '/api/v1/assets/zones/'
         }
       },
       hidden: () => {
-        return vm.platform.domain_enabled === false
+        return vm.platform.gateway_enabled === false
       }
     },
     accounts: {

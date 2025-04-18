@@ -4,7 +4,7 @@
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('AddGatewayInDomain')"
+    :title="$tc('AddGatewayInZone')"
     :visible.sync="setting.addGatewayDialogVisible"
     after
     custom-class="asset-select-dialog"
@@ -65,7 +65,7 @@ export default {
               multiple: true,
               clearable: true,
               ajax: {
-                url: '/api/v1/assets/assets/?domain_enabled=true&is_gateway=1'
+                url: '/api/v1/assets/assets/?gateway_enabled=true&is_gateway=1'
               },
               disabledValues: this.object.gateways.map(item => item.id)
             }
@@ -74,7 +74,7 @@ export default {
         cleanFormValue(values) {
           const data = []
           values.gateways.forEach(item => {
-            const d = { id: item.pk, domain: vm.object.id }
+            const d = { id: item.pk, zone: vm.object.id }
             data.push(d)
           })
           return data

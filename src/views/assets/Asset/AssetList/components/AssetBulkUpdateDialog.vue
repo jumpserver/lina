@@ -41,7 +41,7 @@ export default {
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
-        fields: ['platform', 'nodes', 'domain', 'labels', 'is_active', 'comment'],
+        fields: ['platform', 'nodes', 'zone', 'labels', 'is_active', 'comment'],
         fieldsMeta: {
           platform: {
             el: {
@@ -63,8 +63,8 @@ export default {
             ...meta.nodes,
             label: this.$t('Node')
           },
-          domain: {
-            ...meta.domain,
+          zone: {
+            ...meta.zone,
             label: this.$tc('Zone'),
             disabled: exclude.includes(this.category)
           },

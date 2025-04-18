@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       visible: false,
-      fields: ['domain_enabled'],
+      fields: ['gateway_enabled'],
       quickActions: [],
       url: `/api/v1/assets/platforms/${this.object.id}/`,
       detailFields: [
@@ -101,16 +101,16 @@ export default {
       const { object } = this
       const quickActions = [
         {
-          title: this.$t('EnableDomain'),
+          title: this.$t('EnableGateway'),
           type: 'switch',
           attrs: {
             label: this.$t('Update'),
-            model: object['domain_enabled'],
-            disabled: !this.canEdit || this.constraints['domain_enabled'] === false
+            model: object['gateway_enabled'],
+            disabled: !this.canEdit || this.constraints['gateway_enabled'] === false
           },
           callbacks: Object.freeze({
             change: (val) => {
-              const data = { domain_enabled: val }
+              const data = { gateway_enabled: val }
               this.$axios.patch(
                 `/api/v1/assets/platforms/${object.id}/`, data).then(res => {
                 this.$message.success(this.$tc('UpdateSuccessMsg'))

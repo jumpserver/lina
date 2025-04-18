@@ -17,11 +17,11 @@ export default {
         const url = `/api/v1/assets/platforms/?name__startswith=Gateway`
         const platform = await this.$axios.get(url)
         initial.platform = parseInt(platform[0].id)
-        initial.domain = this.$route.query.domain
+        initial.zone = this.$route.query.zone
         return initial
       },
       addFieldsMeta: {
-        domain: {
+        zone: {
           disabled: true
         },
         platform: {
@@ -40,7 +40,7 @@ export default {
       createSuccessNextRoute: {
         name: 'ZoneDetail',
         params: {
-          id: this.$route.query.domain
+          id: this.$route.query.zone
         },
         query: {
           tab: 'GatewayList'
@@ -49,7 +49,7 @@ export default {
       updateSuccessNextRoute: {
         name: 'ZoneDetail',
         params: {
-          id: this.$route.query.domain
+          id: this.$route.query.zone
         },
         query: {
           tab: 'GatewayList'

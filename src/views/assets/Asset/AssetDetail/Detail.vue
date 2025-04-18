@@ -184,7 +184,7 @@ export default {
         object: this.object,
         fields: [
           'id', 'name', 'category', 'type',
-          'address', 'platform', 'protocols', 'domain',
+          'address', 'platform', 'protocols', 'zone',
           'is_active', 'date_created', 'date_updated',
           'created_by', 'comment'
         ],

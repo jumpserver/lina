@@ -25,9 +25,9 @@ export default {
           component: AssetSelect,
           el: {
             value: [],
-            baseUrl: '/api/v1/assets/assets/?domain_enabled=true',
+            baseUrl: '/api/v1/assets/assets/?gateway_enabled=true',
             treeUrlQuery: {
-              domain_enabled: true
+              gateway_enabled: true
             },
             canSelect: (row) => {
               return !row.platform?.name.startsWith('Gateway')
@@ -42,7 +42,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/assets/domains/'
+      url: '/api/v1/assets/zones/'
     }
   }
 }
