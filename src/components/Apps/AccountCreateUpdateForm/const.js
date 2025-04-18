@@ -16,7 +16,7 @@ export const accountFieldsMeta = (vm) => {
   return {
     assets: {
       component: Select2,
-      label: vm.$t('Assets'),
+      label: vm.$t('Asset'),
       rules: [Required],
       el: {
         multiple: true,
