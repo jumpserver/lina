@@ -5,7 +5,7 @@
     :modal="false"
     :show-cancel="false"
     :show-confirm="false"
-    :title="$tc('AddAssetInDomain')"
+    :title="$tc('AddAssetInZone')"
     :visible.sync="setting.addAssetDialogVisible"
     after
     custom-class="asset-select-dialog"
@@ -62,9 +62,9 @@ export default {
             type: 'select2',
             el: {
               value: [],
-              url: '/api/v1/assets/assets/?domain_enabled=true',
+              url: '/api/v1/assets/assets/?gateway_enabled=true',
               treeUrlQuery: {
-                domain_enabled: true
+                gateway_enabled: true
               },
               canSelect: (row) => {
                 return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
@@ -75,7 +75,7 @@ export default {
         cleanFormValue(values) {
           const data = []
           values.assets.forEach(item => {
-            const d = { id: item, domain: vm.object.id }
+            const d = { id: item, zone: vm.object.id }
             data.push(d)
           })
           return data

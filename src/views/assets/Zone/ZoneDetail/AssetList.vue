@@ -14,7 +14,7 @@
 
 <script>
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
-import AddAssetDialog from '@/views/assets/Domain/components/AddAssetDialog.vue'
+import AddAssetDialog from '@/views/assets/Zone/components/AddAssetDialog.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -34,7 +34,7 @@ export default {
     return {
       config: {
         category: 'all',
-        url: `/api/v1/assets/assets/?domain=${this.object.id}&is_gateway=0`,
+        url: `/api/v1/assets/assets/?zone=${this.object.id}&is_gateway=0`,
         tableConfig: {
           columns: ['name', 'address', 'platform', 'actions'],
           columnsMeta: {
@@ -114,14 +114,14 @@ export default {
         patch_data = rows.selectedRows.map(row => {
           return {
             id: row.id,
-            domain: null
+            zone: null
           }
         })
         msg = patch_data.length + ' ' + this.$t('Rows')
       } else {
         patch_data = [{
           id: rows.row.id,
-          domain: null
+          zone: null
         }]
         msg = rows.row.name
       }

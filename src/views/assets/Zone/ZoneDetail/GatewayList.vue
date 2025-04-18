@@ -27,7 +27,7 @@ import { GenericListTable } from '@/layout/components'
 import GatewayTestDialog from '@/components/Apps/GatewayTestDialog'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/Table/TableFormatters'
-import AddGatewayDialog from '@/views/assets/Domain/components/AddGatewayDialog'
+import AddGatewayDialog from '@/views/assets/Zone/components/AddGatewayDialog'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -48,7 +48,7 @@ export default {
     const vm = this
 
     return {
-      createDrawer: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+      createDrawer: () => import('@/views/assets/Zone/ZoneDetail/GatewayCreateUpdate.vue'),
       detailDrawer: () => import('@/views/assets/Asset/AssetDetail'),
       transObject: {},
       testConfig: {
@@ -57,7 +57,7 @@ export default {
         cell: ''
       },
       tableConfig: {
-        url: `/api/v1/assets/gateways/?domain=${this.object.id}`,
+        url: `/api/v1/assets/gateways/?zone=${this.object.id}`,
         columnsExclude: [
           'info', 'spec_info', 'auto_config'
         ],
@@ -113,7 +113,7 @@ export default {
             formatterArgs: {
               updateRoute: {
                 name: 'GatewayUpdate',
-                query: { domain: this.object.id, platform_type: 'linux', 'category': 'host' }
+                query: { zone: this.object.id, platform_type: 'linux', 'category': 'host' }
               },
               onClone: ({ row }) => {
                 this.$refs.ListTable.onClone({ row: { ...row, payload: 'pam_asset_clone' }})
@@ -203,7 +203,7 @@ export default {
           }
         ],
         onCreate: () => {
-          vm.$refs.ListTable.onCreate({ query: { domain: vm.object.id, platform_type: 'linux', category: 'host' }})
+          vm.$refs.ListTable.onCreate({ query: { zone: vm.object.id, platform_type: 'linux', category: 'host' }})
         }
       },
       addGatewaySetting: {
@@ -222,14 +222,14 @@ export default {
         patch_data = rows.selectedRows.map(row => {
           return {
             id: row.id,
-            domain: null
+            zone: null
           }
         })
         msg = patch_data.length + ' ' + this.$t('Rows')
       } else {
         patch_data = [{
           id: rows.row.id,
-          domain: null
+          zone: null
         }]
         msg = rows.row.name
       }

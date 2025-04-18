@@ -228,35 +228,35 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      resource: 'domain',
+      resource: 'zone',
       icon: 'zone',
-      permissions: ['assets.view_domain']
+      permissions: ['assets.view_zone']
     },
     children: [
       {
         path: '',
         name: 'ZoneList',
-        component: () => import('@/views/assets/Domain/DomainList.vue'),
+        component: () => import('@/views/assets/Zone/ZoneList.vue'),
         meta: { title: i18n.t('ZoneList') }
       },
       {
         path: 'create',
         name: 'ZoneCreate',
-        component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
+        component: () => import('@/views/assets/Zone/ZoneCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('ZoneCreate') }
       },
       {
         path: ':id/update',
         name: 'ZoneUpdate',
-        component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
+        component: () => import('@/views/assets/Zone/ZoneCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('ZoneUpdate') }
       },
       {
         path: ':id',
         name: 'ZoneDetail',
-        component: () => import('@/views/assets/Domain/DomainDetail'),
+        component: () => import('@/views/assets/Zone/ZoneDetail'),
         hidden: true,
         meta: { title: i18n.t('Zone') }
       }
@@ -274,7 +274,7 @@ export default [
       {
         path: 'create',
         name: 'GatewayCreate',
-        component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+        component: () => import('@/views/assets/Zone/ZoneDetail/GatewayCreateUpdate.vue'),
         meta: {
           title: i18n.t('GatewayCreate'),
           permissions: ['assets.view_gateway']
@@ -283,7 +283,7 @@ export default [
       {
         path: ':id/update',
         name: 'GatewayUpdate',
-        component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+        component: () => import('@/views/assets/Zone/ZoneDetail/GatewayCreateUpdate.vue'),
         meta: {
           title: i18n.t('GatewayUpdate'),
           permissions: ['assets.change_gateway']

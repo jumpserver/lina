@@ -73,7 +73,7 @@ export default {
           category: {
             formatter: ChoicesFormatter
           },
-          domain_enabled: {
+          gateway_enabled: {
             formatterArgs: {
               showFalse: false
             }
