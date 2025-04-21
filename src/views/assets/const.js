@@ -121,9 +121,6 @@ export const assetFieldsMeta = (vm, category, type) => {
         ajax: {
           url: '/api/v1/assets/zones/'
         }
-      },
-      hidden: () => {
-        return vm.platform.gateway_enabled === false
       }
     },
     accounts: {
