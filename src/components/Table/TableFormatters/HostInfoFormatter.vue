@@ -50,22 +50,74 @@ export default {
       return cellValue
     },
     viewText() {
-      const cpuCount = this.items['cpu_count']
-      const cpuCores = this.items['cpu_cores']
-      const cpuVcpus = this.items['cpu_vcpus']
-      const memory = this.items['memory']
-      const diskTotal = this.items['disk_total']
+      const cpuCount = Number(this.items['cpu_count'] || 0)
+      const cpuCores = Number(this.items['cpu_cores'] || 0)
+      const cpuVcpus = Number(this.items['cpu_vcpus'] || 0)
+      const memory = Number(this.items['memory'] || 0)
+      const diskTotal = Number(this.items['disk_total'] || 0)
+      const rawCpuModel = this.items['cpu_model']
+      const rawGpuModel = this.items['gpu_model']
+
+      let summary = ''
+
       if (cpuCount) {
-        let text = `${cpuVcpus || cpuCores * cpuCount} Core`
+        const coreCount = cpuVcpus || (cpuCores * cpuCount)
+        summary = `${coreCount} Core`
+
         if (memory) {
-          text += ` ${memory}G`
+          summary += ` ${Math.round(memory)}G`
         }
+
         if (diskTotal) {
-          text += ` ${diskTotal}G`
+          summary += ` ${Math.round(diskTotal)}G`
         }
-        return text
+
+        const cpuModel = this.formatCpuModel(rawCpuModel)
+        if (cpuModel) {
+          summary += ` (${cpuModel})`
+        }
+
+        if (rawGpuModel) {
+          const gpu = this.formatGpuModel(rawGpuModel)
+          summary += ` ${gpu}`
+        }
+
+        return summary
       }
+
       return this.items?.distribution || '-'
+    }
+  },
+  methods: {
+    formatCpuModel(raw) {
+      if (!raw) return ''
+
+      const match = raw.match(/^([^\s]+)\s*(x\d+)?$/)
+      let base = match?.[1] || raw
+      const suffix = match?.[2] || ''
+
+      base = base
+        .replace(/GenuineIntel/i, '')
+        .replace(/\b\d+(st|nd|rd|th)? Gen\b/i, '')
+        .replace(/\(R\)/g, '')
+        .replace(/\(TM\)/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+
+      return `${base}${suffix}`
+    },
+    formatGpuModel(raw) {
+      if (!raw) return ''
+
+      const match = raw.match(/(.+?),\s*(\d+),\s*([\d.]+)(?:\s*x(\d+))?/)
+      if (match) {
+        const [, model, vramMb, driverVersion, countStr] = match
+        const count = countStr ? parseInt(countStr) : 1
+        const vramGb = Math.round(parseInt(vramMb) / 1024)
+        const label = `${model} (${vramGb}GB, Driver ${driverVersion})`
+        return count > 1 ? `${label} x${count}` : label
+      }
+      return raw // fallback
     }
   }
 }
