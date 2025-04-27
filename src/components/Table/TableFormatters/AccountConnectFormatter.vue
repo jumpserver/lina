@@ -115,8 +115,7 @@ export default {
         const url = this.formatterArgs.assetUrl.replace('{id}', assetId)
         const res = await this.$axios.get(url)
 
-        // TODO 暂时将 sftp 隐藏
-        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'sftp') && (protocol.name !== 'winrm')) || []
+        this.protocols = res.protocols.filter(protocol => (protocol.name !== 'winrm')) || []
       } catch (e) {
         throw new Error(`Error getting protocols: ${e}`)
       }
