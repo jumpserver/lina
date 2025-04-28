@@ -865,10 +865,10 @@ export default {
     }
   },
   mounted() {
-    console.log('>>> Mounted: ', this.columns, this.columns.length)
-    setInterval(() => {
-      console.log('>>> Mounted: ', this.columns, this.columns.length)
-    }, 5000)
+    // console.log('>>> Mounted: ', this.columns, this.columns.length)
+    // setInterval(() => {
+    //   console.log('>>> Mounted: ', this.columns, this.columns.length)
+    // }, 5000)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {

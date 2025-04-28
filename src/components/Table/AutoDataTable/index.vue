@@ -47,6 +47,7 @@ export default {
     return {
       loading: true,
       method: 'get',
+      draggingItem: null,
       meta: {},
       iConfig: {},
       autoConfig: {},
@@ -59,7 +60,8 @@ export default {
         defaultCols: []
       },
       isDeactivated: false,
-      tableColumnsStorage: this.getTableColumnsStorage()
+      tableColumnsStorage: this.getTableColumnsStorage(),
+      sortable: null
     }
   },
   watch: {
@@ -98,32 +100,68 @@ export default {
   },
   methods: {
     setColumnDrag() {
-      // 这里找到 table 的 header 部分
       const el = this.$el.querySelector('.el-table__header-wrapper thead tr')
+
       if (!el) {
-        console.log('No el found')
+        return
       }
-      Sortable.create(el, {
+
+      if (this.sortable) {
+        this.sortable.destroy()
+      }
+
+      this.sortable = Sortable.create(el, {
         animation: 150,
         onEnd: (evt) => {
-          console.log('Event: ', evt)
           const { oldIndex, newIndex } = evt
-          if (oldIndex === newIndex) return
-          const columnNames = this.cleanedColumnsShow.show
-          console.log('Columns before: ', columnNames)
-          const movedItem = columnNames.splice(oldIndex, 1)[0]
-          console.log('Move item: ', movedItem, oldIndex, newIndex)
-          console.log(('After splice: ', columnNames))
-          columnNames.splice(newIndex - 1, 0, movedItem)
-          this.$log.debug('Column moved: ', columnNames)
-          this.tableColumnsStorage.set(null, columnNames)
-          this.loading = true
-          setTimeout(() => {
-            this.loading = false
-            this.$nextTick(() => {
-              this.setColumnDrag()
-            })
-          }, 200)
+
+          if (oldIndex === newIndex) {
+            return
+          }
+
+          // 检测表格是否有选择列
+          const hasSelectionColumn = this.$el.querySelector('.el-table-column--selection') !== null
+
+          let actualOldIndex = oldIndex
+          let actualNewIndex = newIndex
+
+          if (hasSelectionColumn) {
+            // 如果有选择列，调整索引
+            if (oldIndex > 0) actualOldIndex = oldIndex - 1
+            if (newIndex > 0) actualNewIndex = newIndex - 1
+          }
+
+          const columnNames = [...this.cleanedColumnsShow.show]
+
+          // 边界
+          if (actualOldIndex >= 0 && actualOldIndex < columnNames.length &&
+              actualNewIndex >= 0 && actualNewIndex < columnNames.length) {
+            const movedItem = columnNames.splice(actualOldIndex, 1)[0]
+            columnNames.splice(actualNewIndex, 0, movedItem)
+
+            this.$log.debug('Column moved: ', columnNames)
+
+            // 保存更新的列顺序
+            this.tableColumnsStorage.set(null, columnNames)
+
+            // 更新内部状态
+            this.cleanedColumnsShow.show = columnNames
+            this.popoverColumns.currentCols = columnNames
+
+            // 重新应用列顺序
+            this.filterShowColumns()
+
+            this.loading = true
+            setTimeout(() => {
+              this.loading = false
+              // 在DOM完全更新后重新初始化拖拽
+              this.$nextTick(() => {
+                setTimeout(() => {
+                  this.setColumnDrag()
+                }, 150)
+              })
+            }, 300)
+          }
         }
       })
     },
