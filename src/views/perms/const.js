@@ -67,6 +67,7 @@ export const AssetPermissionTableMeta = {
     }
   },
   users_amount: {
+    width: 80,
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
@@ -78,7 +79,7 @@ export const AssetPermissionTableMeta = {
     }
   },
   user_groups_amount: {
-    width: 100,
+    width: 80,
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
@@ -90,6 +91,7 @@ export const AssetPermissionTableMeta = {
     }
   },
   assets_amount: {
+    width: 80,
     formatter: AmountFormatter,
     formatterArgs: {
       async: true,
@@ -113,6 +115,7 @@ export const AssetPermissionTableMeta = {
     }
   },
   accounts: {
+    width: 80,
     formatter: AmountFormatter,
     formatterArgs: {
       cellValueToRemove: ['@SPEC'],
