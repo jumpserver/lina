@@ -169,7 +169,7 @@ export default {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
       this.config.columns = this.totalColumns
-      this.iConfig = this.config
+      this.iConfig = _.cloneDeep(this.config)
     },
     async optionUrlMetaAndGenCols() {
       if (this.config.url === '') {
@@ -178,19 +178,39 @@ export default {
       const url = (this.config.url.indexOf('?') === -1)
         ? `${this.config.url}?display=1`
         : `${this.config.url}&display=1`
-      this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
+
+      /**
+       * 原有代码无法正确的同步 storage 的原因是 currentOrder 总是在 totalColumns 之前进行的
+       * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
+       */
+      try {
+        const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
         const method = this.method.toUpperCase()
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
-        this.generateTotalColumns()
-      }).then(() => {
-        //  根据当前列重新生成最终渲染表格
-        this.filterShowColumns()
-      }).then(() => {
-        // 生成给子组件使用的TotalColList
+
+        const currentOrder = this.cleanedColumnsShow.show || []
+        const generator = new TableColumnsGenerator(this.config, this.meta, this)
+
+        this.totalColumns = generator.generateColumns()
+
+        // 确保config.columns和iConfig同步
+        this.config.columns = this.totalColumns
+        this.iConfig = _.cloneDeep(this.config)
+
+        // 如果有保存的列顺序，使用它；否则使用默认顺序
+        if (currentOrder.length > 0) {
+          this.cleanColumnsShow()
+          this.filterShowColumns()
+        } else {
+          // 首次加载，使用默认顺序
+          this.cleanColumnsShow()
+          this.filterShowColumns()
+        }
+
         this.generatePopoverColumns()
-      }).catch((error) => {
+      } catch (error) {
         this.$log.error('Error occur: ', error)
-      })
+      }
     },
     getTableColumnsStorage() {
       let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
@@ -205,8 +225,6 @@ export default {
       if (defaultColumnsNames.length === 0) {
         defaultColumnsNames = totalColumnsNames
       }
-      // Clean it
-      defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
       const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
@@ -223,8 +241,6 @@ export default {
           showColumnsNames.push(v)
         }
       })
-      // Clean it
-      showColumnsNames = showColumnsNames.filter(n => totalColumnsNames.indexOf(n) > -1)
 
       this.cleanedColumnsShow = {
         default: defaultColumnsNames,
@@ -242,6 +258,15 @@ export default {
       })
       showFields = this.orderingColumns(showFields)
       this.iConfig.columns = showFields
+
+      // 确保最新的列配置也应用到config对象上，保持同步
+      this.config.columns = this.iConfig.columns
+
+      this.$nextTick(() => {
+        if (this.$refs.dataTable) {
+          this.$refs.dataTable.getList()
+        }
+      })
     },
     orderingColumns(columns) {
       const cols = _.cloneDeep(this.config.columns)

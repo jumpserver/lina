@@ -862,6 +862,12 @@ export default {
         this.total = val.length
         this.getList()
       }
+    },
+    columns: {
+      handler(val) {
+        console.log('this.columns', val)
+      },
+      deep: true
     }
   },
   mounted() {
