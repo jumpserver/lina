@@ -24,17 +24,22 @@
           style="margin-top: 15px"
           type="warning"
         />
-        <IBox v-if="!store.getters.publicSettings['PRIVACY_MODE']" :title="$tc('InformationModification')" fa="fa-edit">
+        <IBox
+          v-if="!store.getters.publicSettings['PRIVACY_MODE']"
+          :title="$tc('InformationModification')"
+          class="update-info"
+          fa="fa-edit"
+        >
           <table>
             <tr>
-              <td> {{ $t('Phone') }}</td>
-              <td>
+              <td class="label"> {{ $t('Phone') }}</td>
+              <td class="value">
                 <PhoneInput :value="object.phone" />
               </td>
             </tr>
             <tr>
-              <td> {{ $t('WeChat') }}</td>
-              <td>
+              <td class="label"> {{ $t('WeChat') }}</td>
+              <td class="value">
                 <el-input v-model="object.wechat" />
               </td>
             </tr>
@@ -487,6 +492,21 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+
+.update-info {
+
+  table {
+    width: 100%;
+
+    .label {
+      width: 20%;
+    }
+
+    .value {
+      width: 60%;
+    }
+  }
+}
 
 </style>

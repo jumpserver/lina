@@ -154,6 +154,7 @@ export const AssetPermissionListPageSearchConfigOptions = [
 
 export const AllAccount = '@ALL'
 export const SpecAccount = '@SPEC'
+export const NotAccount = '@NOT'
 export const SameAccount = '@USER'
 export const ManualAccount = '@INPUT'
 export const AnonymousAccount = '@ANON'
@@ -161,7 +162,82 @@ export const AnonymousAccount = '@ANON'
 export const AccountLabelMapper = {
   [AllAccount]: i18n.t('AllAccounts'),
   [SpecAccount]: i18n.t('SpecAccount'),
+  [NotAccount]: i18n.t('ExcludeAccount'),
   [SameAccount]: i18n.t('SameAccount'),
   [ManualAccount]: i18n.t('ManualAccount'),
   [AnonymousAccount]: i18n.t('AnonymousAccount')
+}
+
+export const realChoices = [
+  {
+    label: AccountLabelMapper[AllAccount],
+    value: AllAccount,
+    tip: i18n.t('AllAccountTip')
+  },
+  {
+    label: AccountLabelMapper[SpecAccount],
+    value: SpecAccount,
+    tip: i18n.t('SpecAccountTip')
+  }
+  // {
+  //   label: AccountLabelMapper[NotAccount],
+  //   value: NotAccount,
+  //   tip: i18n.t('NotAccountTip')
+  // }
+]
+
+export const virtualAccounts = [
+  {
+    label: AccountLabelMapper[ManualAccount],
+    value: ManualAccount,
+    tip: i18n.t('ManualAccountTip')
+  },
+  {
+    label: AccountLabelMapper[SameAccount],
+    value: SameAccount,
+    tip: i18n.t('SameAccountTip')
+  },
+  {
+    label: AccountLabelMapper[AnonymousAccount],
+    value: AnonymousAccount,
+    tip: i18n.t('AnonymousAccountTip')
+  }
+]
+
+export const accountTemplateTable = {
+  tableConfig: {
+    url: '/api/v1/accounts/account-templates/',
+    columns: [
+      'name', 'username', 'has_secret', 'comment',
+      'date_created', 'date_updated'
+    ],
+    columnsMeta: {
+      name: {
+        formatterArgs: {
+          openInNewPage: true,
+          getRoute({ row, col, cellValue }) {
+            return {
+              name: 'AccountTemplateDetail',
+              params: {
+                id: row.id
+              }
+            }
+          }
+        }
+      },
+      has_secret: {
+        formatterArgs: {
+          showFalse: false
+        }
+      },
+      actions: {
+        has: false
+      }
+    }
+  },
+  headerActions: {
+    hasLeftActions: false,
+    hasImport: false,
+    hasExport: false
+  }
 }

@@ -16,7 +16,7 @@
       :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
-      :fetch-suggestions="autocomplete"
+      :fetch-suggestions="autocomplete ? autocomplete : () => {}"
       :placeholder="iPlaceholder"
       :type="inputType"
       class="search-input"
@@ -78,16 +78,18 @@ export default {
   },
   data() {
     return {
-      filterTags: this.value,
       focus: false,
       filterValue: '',
-      isCheckShowPassword: this.replaceShowPassword,
-      component: this.autocomplete ? 'el-autocomplete' : 'el-input'
+      filterTags: this.value,
+      isCheckShowPassword: this.replaceShowPassword
     }
   },
   computed: {
     iPlaceholder() {
       return `${this.placeholder} (${this.$t('EnterToContinue')})`
+    },
+    component() {
+      return this.autocomplete !== null ? 'el-autocomplete' : 'el-input'
     }
   },
   watch: {
@@ -98,7 +100,7 @@ export default {
   methods: {
     handleTagClose(tag) {
       this.filterTags.splice(this.filterTags.indexOf(tag), 1)
-      this.$emit('change', this.filterTags)
+      this.handleConfirm()
     },
     handleSelect(item) {
       this.filterValue = item.value
@@ -113,14 +115,15 @@ export default {
       if (!this.filterTags.includes(this.filterValue)) {
         this.filterTags.push(this.filterValue)
         this.filterValue = ''
-        this.$emit('change', this.filterTags)
       }
-      this.$refs.SearchInput.focus()
+      this.$emit('change', this.filterTags)
+      this.$emit('input', this.filterTags)
+      // this.$refs.SearchInput.focus()
     },
     handleTagClick(v, k) {
       this.$delete(this.filterTags, k)
       this.filterValue = v
-      this.$refs.SearchInput.focus()
+      // this.$refs.SearchInput.focus()
     },
     matchRule(value) {
       const regex = new RegExp(this.replaceRule)
@@ -189,7 +192,7 @@ export default {
 }
 
 .filter-field ::v-deep .el-input__inner {
-  height: 28px !important;
+  height: 27px !important;
 }
 
 .show-password {
