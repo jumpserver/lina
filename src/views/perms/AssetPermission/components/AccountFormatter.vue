@@ -15,7 +15,7 @@
         </el-radio>
       </el-radio-group>
 
-      <div v-if="showSpecAccounts" class="spec-accounts spec-zone">
+      <div v-if="showSpecZone" class="spec-accounts spec-zone">
         <div class="group-title">{{ $t('SpecAccount') }}</div>
         <TagInput
           v-model="specAccountsInput"
@@ -33,14 +33,22 @@
         </span>
       </div>
 
-      <div v-if="showNotAccounts" class="not-accounts spec-zone">
-        <div class="group-title">{{ $t('ExcludeAccount') }}</div>
-        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />
-      </div>
+      <!--      <div v-if="showNotAccounts" class="not-accounts spec-zone">-->
+      <!--        <div class="group-title">{{ $t('ExcludeAccount') }}</div>-->
+      <!--        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />-->
+      <!--      </div>-->
 
-      <div v-if="showVirtualAccount" class="spec-zone virtual-choices">
-        <el-checkbox v-model="virtualChecked"> Virtual Account</el-checkbox>
-        <el-select v-model="virtualSelected" :multiple="true" @change="handleVirtualChecked">
+      <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
+        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
+          {{ virtualAccount.label }}
+        </el-checkbox>
+        <el-select
+          v-if="virtualChecked"
+          v-model="virtualSelected"
+          :multiple="true"
+          :placeholder="$t('SelectVirtualAccount')"
+          @change="handleVirtualChecked"
+        >
           <el-option
             v-for="i in virtualAccounts"
             :key="i.label"
@@ -79,6 +87,7 @@ import {
   realChoices,
   SameAccount,
   SpecAccount,
+  virtualAccount,
   virtualAccounts
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
@@ -111,7 +120,7 @@ export default {
       type: Boolean,
       default: true
     },
-    showVirtualAccount: {
+    enableVirtualAccount: {
       type: Boolean,
       default: true
     },
@@ -141,7 +150,7 @@ export default {
       virtualAccountsNames: [ManualAccount, SameAccount, AnonymousAccount],
       specAccountsInput: [],
       specAccountsTemplate: [],
-      showSpecAccounts: false,
+      showSpecZone: false,
       getTagType: (tag) => {
         if (vm.specAccountsTemplate.filter(i => i.username === tag).length > 0) {
           return 'primary'
@@ -149,7 +158,7 @@ export default {
           return 'info'
         }
       },
-      showNotAccounts: false,
+      showExcludeZone: false,
       accountTemplateTable: accountTemplateTable,
       autocomplete: (query, cb) => {
         const data = {
@@ -172,10 +181,15 @@ export default {
       }
     }
   },
+  computed: {
+    virtualAccount() {
+      return virtualAccount
+    }
+  },
   watch: {
     realRadioSelected(val) {
-      this.showSpecAccounts = val === this.SPEC
-      this.showNotAccounts = val === this.EXCLUDE
+      this.showSpecZone = val === this.SPEC
+      this.showExcludeZone = val === this.EXCLUDE
     }
   },
   mounted() {
@@ -236,6 +250,7 @@ export default {
       }, 100)
     },
     handleVirtualChecked(evt, checked) {
+      console.log('Vhcek cch')
       this.outputValue()
     },
     handleRadioChanged(value) {
@@ -249,7 +264,7 @@ export default {
       let choicesSelected = []
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
-      } else if (this.realRadioSelected === this.SPEC && this.showSpecAccounts) {
+      } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       }
@@ -260,6 +275,8 @@ export default {
       if (this.virtualChecked) {
         choicesSelected = [...choicesSelected, ...this.virtualSelected]
       }
+
+      this.$log.debug('choicesSelected', choicesSelected)
 
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)

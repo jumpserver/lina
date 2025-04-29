@@ -168,6 +168,12 @@ export const AccountLabelMapper = {
   [AnonymousAccount]: i18n.t('AnonymousAccount')
 }
 
+export const virtualAccount = {
+  label: i18n.t('VirtualAccounts'),
+  value: '@VIRTUAL',
+  tip: i18n.t('VirtualAccountHelpMsg')
+}
+
 export const realChoices = [
   {
     label: AccountLabelMapper[AllAccount],
