@@ -79,7 +79,6 @@ export default {
             width: '200px'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               canUpdate: this.$hasPerm('orgs.change_organization'),
               canDelete: function({ row }) {
