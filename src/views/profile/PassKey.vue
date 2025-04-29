@@ -129,7 +129,7 @@ export default {
       this.$axios.get(url).then(res => {
         return this.makeCredReq(res)
       }).then((options) => {
-        if (!location.protocol.startsWith('https')) {
+        if (!location.protocol.startsWith('https') && location.host !== 'localhost') {
           throw new Error(this.$tc('HTTPSRequiredForSupport'))
         }
         return navigator.credentials.create(options)
