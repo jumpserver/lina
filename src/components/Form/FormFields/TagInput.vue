@@ -16,7 +16,7 @@
       :is="component"
       ref="SearchInput"
       v-model.trim="filterValue"
-      :fetch-suggestions="autocomplete ? autocomplete : () => {}"
+      :fetch-suggestions="autocomplete"
       :placeholder="iPlaceholder"
       :type="inputType"
       class="search-input"
