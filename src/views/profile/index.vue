@@ -43,15 +43,20 @@
                 <el-input v-model="object.wechat" />
               </td>
             </tr>
+            <tr>
+              <td class="label" />
+              <td class="value">
+                <el-button
+                  size="small"
+                  style="margin-top: 10px"
+                  type="primary"
+                  @click="updateProfile"
+                >
+                  {{ $t('Update') }}
+                </el-button>
+              </td>
+            </tr>
           </table>
-          <el-button
-            size="small"
-            style="margin-top: 10px"
-            type="primary"
-            @click="updateProfile"
-          >
-            {{ $t('Update') }}
-          </el-button>
         </IBox>
       </template>
     </TwoCol>
@@ -495,6 +500,13 @@ export default {
 <style lang="scss" scoped>
 
 .update-info {
+  ::v-deep {
+    .el-input-group {
+      .el-select {
+        width: 80px;
+      }
+    }
+  }
 
   table {
     width: 100%;
@@ -506,6 +518,7 @@ export default {
     .value {
       width: 60%;
     }
+
   }
 }
 

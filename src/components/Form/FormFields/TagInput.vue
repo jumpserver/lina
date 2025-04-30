@@ -118,12 +118,12 @@ export default {
       }
       this.$emit('change', this.filterTags)
       this.$emit('input', this.filterTags)
-      // this.$refs.SearchInput.focus()
+      this.$refs.SearchInput.focus()
     },
     handleTagClick(v, k) {
       this.$delete(this.filterTags, k)
       this.filterValue = v
-      // this.$refs.SearchInput.focus()
+      this.$refs.SearchInput.focus()
     },
     matchRule(value) {
       const regex = new RegExp(this.replaceRule)
