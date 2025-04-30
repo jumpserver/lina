@@ -5,7 +5,6 @@
         slot="prepend"
         :placeholder="$tc('Select')"
         :value="rawValue.code"
-        style="width: 105px;"
         @change="onChange"
       >
         <el-option
@@ -69,7 +68,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.el-select {
+  width: 85px;
+}
+
 .country-name {
   display: inline-block;
   width: 150px;
