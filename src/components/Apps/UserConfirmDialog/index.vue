@@ -49,27 +49,29 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 0 auto;">
+      <el-row v-if="!noCodeMFA.includes(subTypeSelected)" :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24" style="display: flex; align-items: center; ">
-          <div v-if="!noCodeMFA.includes(subTypeSelected)">
-            <el-input
-              v-model="secretValue"
-              :placeholder="inputPlaceholder"
-              :show-password="showPassword"
-              @keyup.enter.native="handleConfirm"
-            />
-            <span style="margin: -1px 0 0 20px;">
-              <el-button
-                :disabled="smsBtnDisabled"
-                size="mini"
-                style="line-height: 14px; float: right;"
-                type="primary"
-                @click="sendCode"
-              >
-                {{ smsBtnText }}
-              </el-button>
-            </span>
-          </div>
+          <el-input
+            v-model="secretValue"
+            :placeholder="inputPlaceholder"
+            :show-password="showPassword"
+            @keyup.enter.native="handleConfirm"
+          />
+          <span v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'" style="margin: -1px 0 0 20px;">
+            <el-button
+              :disabled="smsBtnDisabled"
+              size="mini"
+              style="line-height: 14px; float: right;"
+              type="primary"
+              @click="sendCode"
+            >
+              {{ smsBtnText }}
+            </el-button>
+          </span>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
           <iframe
             v-if="passkeyVisible"
             :src="passkeyUrl"
@@ -96,7 +98,7 @@
             {{ this.$t('Confirm') }}
           </el-button>
           <el-button
-            v-if="subTypeSelected === 'face'"
+            v-if="sendCodeMFA.includes(subTypeSelected)"
             :disabled="isFaceCaptureVisible"
             class="confirm-btn"
             size="mini"
@@ -158,6 +160,7 @@ export default {
       faceToken: null,
       faceCaptureUrl: null,
       noCodeMFA: ['face', 'passkey'],
+      sendCodeMFA: ['email', 'sms'],
       passkeyVisible: false,
       passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1'
     }
