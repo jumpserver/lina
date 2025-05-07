@@ -50,15 +50,31 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
-        <el-col :md="24" :sm="24" style="display: flex; align-items: center; margin-bottom: 20px;">
-          <el-input
-            v-if="subTypeSelected !== 'face'"
-            v-model="secretValue"
-            :placeholder="inputPlaceholder"
-            :show-password="showPassword"
-            @keyup.enter.native="handleConfirm"
+        <el-col :md="24" :sm="24" style="display: flex; align-items: center; ">
+          <div v-if="!noCodeMFA.includes(subTypeSelected)">
+            <el-input
+              v-model="secretValue"
+              :placeholder="inputPlaceholder"
+              :show-password="showPassword"
+              @keyup.enter.native="handleConfirm"
+            />
+            <span style="margin: -1px 0 0 20px;">
+              <el-button
+                :disabled="smsBtnDisabled"
+                size="mini"
+                style="line-height: 14px; float: right;"
+                type="primary"
+                @click="sendCode"
+              >
+                {{ smsBtnText }}
+              </el-button>
+            </span>
+          </div>
+          <iframe
+            v-if="passkeyVisible"
+            :src="passkeyUrl"
+            style="display: none"
           />
-
           <iframe
             v-if="isFaceCaptureVisible && subTypeSelected ==='face' && faceCaptureUrl"
             :src="faceCaptureUrl"
@@ -66,24 +82,12 @@
             sandbox="allow-scripts allow-same-origin"
             style="width: 100%; height: 800px;border: none;"
           />
-
-          <span v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'" style="margin: -1px 0 0 20px;">
-            <el-button
-              :disabled="smsBtnDisabled"
-              size="mini"
-              style="line-height: 14px; float: right;"
-              type="primary"
-              @click="sendCode"
-            >
-              {{ smsBtnText }}
-            </el-button>
-          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 10px auto;">
+      <el-row :gutter="24" style="margin: 20px auto 10px;">
         <el-col :md="24" :sm="24">
           <el-button
-            v-if="subTypeSelected!=='face'"
+            v-if="!noCodeMFA.includes(subTypeSelected)"
             class="confirm-btn"
             size="mini"
             type="primary"
@@ -92,13 +96,24 @@
             {{ this.$t('Confirm') }}
           </el-button>
           <el-button
-            v-if="subTypeSelected==='face'&&!isFaceCaptureVisible"
+            v-if="subTypeSelected === 'face'"
+            :disabled="isFaceCaptureVisible"
             class="confirm-btn"
             size="mini"
             type="primary"
             @click="handleFaceCapture"
           >
             {{ this.$tc('VerifyFace') }}
+          </el-button>
+          <el-button
+            v-if="subTypeSelected === 'passkey'"
+            v-loading="passkeyVisible"
+            class="confirm-btn"
+            size="mini"
+            type="primary"
+            @click="handlePasskeyVerify"
+          >
+            {{ this.$tc('Next') }}
           </el-button>
         </el-col>
       </el-row>
@@ -141,7 +156,10 @@ export default {
       processing: false,
       isFaceCaptureVisible: false,
       faceToken: null,
-      faceCaptureUrl: null
+      faceCaptureUrl: null,
+      noCodeMFA: ['face', 'passkey'],
+      passkeyVisible: false,
+      passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1'
     }
   },
   computed: {
@@ -224,6 +242,26 @@ export default {
         this.$message.error(this.$tc('FailedToSendVerificationCode'))
       })
     },
+    handlePasskeyVerify() {
+      this.passkeyVisible = true
+      this.checkPasskeyStatus()
+    },
+    checkPasskeyStatus() {
+      const url = '/api/v1/authentication/confirm/check/?confirm_type=mfa'
+      const t = setInterval(() => {
+        this.$axios.get(url).then(data => {
+          this.passkeyVisible = false
+          this.onSuccess()
+        })
+      }, 1000)
+      setTimeout(() => {
+        clearInterval(t)
+        if (this.passkeyVisible) {
+          this.passkeyVisible = false
+          this.$message.error(this.$tc('PasskeyTimeout'))
+        }
+      }, 10000)
+    },
     startFaceCapture() {
       const url = '/api/v1/authentication/face/context/'
       this.$axios.post(url).then(data => {
@@ -247,6 +285,13 @@ export default {
     handleFaceCapture() {
       this.startFaceCapture()
     },
+    onSuccess() {
+      this.secretValue = ''
+      this.visible = false
+      this.$nextTick(() => {
+        this.callback()
+      })
+    },
     handleConfirm() {
       if (this.confirmTypeRequired === 'relogin') {
         return this.logout()
@@ -262,11 +307,7 @@ export default {
       }
 
       this.$axios.post(`/api/v1/authentication/confirm/`, data).then(() => {
-        this.secretValue = ''
-        this.visible = false
-        this.$nextTick(() => {
-          this.callback()
-        })
+        this.onSuccess()
       }).catch((err) => {
         this.$message.error(err.message || this.$tc('ConfirmFailed'))
         this.faceCaptureUrl = null
