@@ -21,7 +21,6 @@ export default {
     TabPage
   },
   data() {
-    const vm = this
     return {
       Account: {
         name: '', provider: '', provider_display: '', validity_display: '', comment: '', date_created: '', created_by: '', task: {}
@@ -44,20 +43,7 @@ export default {
             name: 'TaskSyncAssetList',
             hidden: () => { return !this.Account.task?.id }
           }
-        ],
-        actions: {
-          hasUpdate: false,
-          deleteSuccessRoute: 'CloudAccountList',
-          updateCallback: () => {
-            const id = this.$route.params.id
-            const routeName = 'AccountUpdate'
-            this.$router.push({
-              name: routeName,
-              params: { id: id },
-              query: { provider: vm.Account.provider.value }
-            })
-          }
-        }
+        ]
       }
     }
   }

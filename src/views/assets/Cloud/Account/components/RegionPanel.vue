@@ -105,9 +105,10 @@ export default {
       let url = `/api/v1/xpack/cloud/regions/?account_id=${authInfo}`
       if (typeof authInfo === 'object') {
         const attrs = JSON.parse(JSON.stringify(authInfo))
+        const category = this.$route.query.category || 'host'
 
         method = 'post'
-        url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}`
+        url = `/api/v1/xpack/cloud/regions/?provider=${this.provider}&category=${category}`
         data = { 'attrs': encryptAttrsField(attrs) }
       }
 

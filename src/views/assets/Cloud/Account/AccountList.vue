@@ -137,7 +137,8 @@ export default {
               }
             ]
           }
-        }
+        },
+        detailDrawer: () => import('@/views/assets/Cloud/Account/AccountDetail/index.vue')
       },
       providerConfig: {
         providers: []
