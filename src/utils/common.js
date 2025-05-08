@@ -435,7 +435,8 @@ export class ObjectLocalStorage {
 
   set(attr, value) {
     const obj = this.getObject(this.key)
-    if (!attr && this.attr) {
+    if (value === undefined && this.attr) {
+      value = attr
       attr = this.attr
     }
     const attrSafe = this.b64(attr)

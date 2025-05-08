@@ -93,7 +93,7 @@
         <template v-else>
           <el-data-table-column v-if="hasSelection" :align="selectionAlign" :selectable="canSelect" type="selection" />
           <el-data-table-column
-            v-for="(col, index) in columns"
+            v-for="col in columns"
             :key="col.prop"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             :filter-multiple="false"
@@ -103,7 +103,7 @@
             v-bind="{align: columnsAlign, ...col}"
           >
             <template #header>
-              <span :title="col.label">{{ index }}{{ col.label }}</span>
+              <span :title="col.label">{{ col.label }}</span>
             </template>
             <template
               v-if="col.formatter && typeof col.formatter !== 'function'"
@@ -862,19 +862,9 @@ export default {
         this.total = val.length
         this.getList()
       }
-    },
-    columns: {
-      handler(val) {
-        console.log('this.columns', val)
-      },
-      deep: true
     }
   },
   mounted() {
-    // console.log('>>> Mounted: ', this.columns, this.columns.length)
-    // setInterval(() => {
-    //   console.log('>>> Mounted: ', this.columns, this.columns.length)
-    // }, 5000)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {

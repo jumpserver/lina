@@ -47,7 +47,6 @@ export default {
     return {
       loading: true,
       method: 'get',
-      draggingItem: null,
       meta: {},
       iConfig: {},
       autoConfig: {},
@@ -87,11 +86,6 @@ export default {
     await this.optionUrlMetaAndGenCols()
     this.loading = false
   },
-  async mounted() {
-    setTimeout(() => {
-      this.setColumnDrag()
-    }, 500)
-  },
   deactivated() {
     this.isDeactivated = true
   },
@@ -99,13 +93,12 @@ export default {
     this.isDeactivated = false
   },
   methods: {
-    setColumnDrag() {
+    setColumnDraggable() {
       const el = this.$el.querySelector('.el-table__header-wrapper thead tr')
-
       if (!el) {
+        setTimeout(() => this.setColumnDraggable(), 500)
         return
       }
-
       if (this.sortable) {
         this.sortable.destroy()
       }
@@ -113,36 +106,33 @@ export default {
       this.sortable = Sortable.create(el, {
         animation: 150,
         onEnd: (evt) => {
-          const { oldIndex, newIndex } = evt
-
+          let { oldIndex, newIndex } = evt
           if (oldIndex === newIndex) {
             return
           }
-
           // 检测表格是否有选择列
           const hasSelectionColumn = this.$el.querySelector('.el-table-column--selection') !== null
-
-          let actualOldIndex = oldIndex
-          let actualNewIndex = newIndex
-
           if (hasSelectionColumn) {
             // 如果有选择列，调整索引
-            if (oldIndex > 0) actualOldIndex = oldIndex - 1
-            if (newIndex > 0) actualNewIndex = newIndex - 1
+            if (oldIndex > 0) oldIndex -= 1
+            if (newIndex > 0) newIndex -= 1
           }
 
-          const columnNames = [...this.cleanedColumnsShow.show]
-
+          let columnNames = [...this.cleanedColumnsShow.show]
+          if (columnNames.includes('actions')) {
+            columnNames = columnNames.filter(item => item !== 'actions')
+            columnNames.push('actions')
+          }
           // 边界
-          if (actualOldIndex >= 0 && actualOldIndex < columnNames.length &&
-              actualNewIndex >= 0 && actualNewIndex < columnNames.length) {
-            const movedItem = columnNames.splice(actualOldIndex, 1)[0]
-            columnNames.splice(actualNewIndex, 0, movedItem)
+          if (oldIndex >= 0 && oldIndex < columnNames.length &&
+            newIndex >= 0 && newIndex < columnNames.length) {
+            const movedItem = columnNames.splice(oldIndex, 1)[0]
+            columnNames.splice(newIndex, 0, movedItem)
 
-            this.$log.debug('Column moved: ', columnNames)
-
+            this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
+            console.log('New column names: ', columnNames)
             // 保存更新的列顺序
-            this.tableColumnsStorage.set(null, columnNames)
+            this.tableColumnsStorage.set(columnNames)
 
             // 更新内部状态
             this.cleanedColumnsShow.show = columnNames
@@ -157,7 +147,7 @@ export default {
               // 在DOM完全更新后重新初始化拖拽
               this.$nextTick(() => {
                 setTimeout(() => {
-                  this.setColumnDrag()
+                  this.setColumnDraggable()
                 }, 150)
               })
             }, 300)
@@ -188,26 +178,11 @@ export default {
         const method = this.method.toUpperCase()
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
 
-        const currentOrder = this.cleanedColumnsShow.show || []
-        const generator = new TableColumnsGenerator(this.config, this.meta, this)
-
-        this.totalColumns = generator.generateColumns()
-
-        // 确保config.columns和iConfig同步
-        this.config.columns = this.totalColumns
-        this.iConfig = _.cloneDeep(this.config)
-
-        // 如果有保存的列顺序，使用它；否则使用默认顺序
-        if (currentOrder.length > 0) {
-          this.cleanColumnsShow()
-          this.filterShowColumns()
-        } else {
-          // 首次加载，使用默认顺序
-          this.cleanColumnsShow()
-          this.filterShowColumns()
-        }
-
+        this.generateTotalColumns()
+        this.cleanColumnsShow()
+        this.filterShowColumns()
         this.generatePopoverColumns()
+        this.setColumnDraggable()
       } catch (error) {
         this.$log.error('Error occur: ', error)
       }
@@ -271,7 +246,6 @@ export default {
     orderingColumns(columns) {
       const cols = _.cloneDeep(this.config.columns)
       const show = this.cleanedColumnsShow.show
-      console.log('Total columns: ', this.cleanedColumnsShow)
       const ordering = (show || cols || []).map(item => {
         let prop = item
         if (typeof item === 'object') {
@@ -280,10 +254,6 @@ export default {
         return prop
       })
       const sorted = _.sortBy(columns, (item) => {
-        if (item.prop === 'actions') {
-          item.order = 1000
-          return 1000
-        }
         const i = ordering.indexOf(item.prop)
         item.order = i
         return i === -1 ? 999 : i
@@ -308,7 +278,7 @@ export default {
         columns = this.cleanedColumnsShow.default
       }
       this.popoverColumns.currentCols = columns
-      this.tableColumnsStorage.set(null, columns)
+      this.tableColumnsStorage.set(columns)
       this.filterShowColumns()
     },
     filterChange(filters) {
