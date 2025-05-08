@@ -1,7 +1,7 @@
 <template>
   <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
-      <component :is="activeMenu" />
+      <component :is="activeMenu" @update:tabs="updateActiveMenu" />
     </keep-alive>
   </TabPage>
 </template>
@@ -24,6 +24,7 @@ import SAML2 from './SAML2'
 import OAuth2 from './OAuth2'
 import Passkey from './Passkey.vue'
 import Slack from './Slack.vue'
+import { authLocalStorage } from './const'
 
 export default {
   components: {
@@ -46,10 +47,27 @@ export default {
     Slack
   },
   data() {
-    let extraBackends = []
-    let ldapHABackends = []
-    if (this.$store.getters.hasValidLicense) {
-      extraBackends = [
+    return {
+      loading: true,
+      activeMenu: 'Basic',
+      defaultBackends: [
+        {
+          title: this.$t('Ldap'),
+          name: 'LDAP',
+          key: 'AUTH_LDAP'
+        },
+        {
+          title: this.$t('CAS'),
+          name: 'CAS',
+          key: 'AUTH_CAS'
+        },
+        {
+          title: this.$t('Passkey'),
+          name: 'Passkey',
+          key: 'AUTH_PASSKEY'
+        }
+      ],
+      extraBackends: [
         {
           title: this.$t('OIDC'),
           name: 'OIDC',
@@ -95,47 +113,24 @@ export default {
           name: 'Radius',
           key: 'AUTH_RADIUS'
         }
-      ]
-      ldapHABackends = [
+      ],
+      ldapHABackends: [
         {
           title: this.$t('LDAP HA'),
           name: 'LdapHA',
           key: 'AUTH_LDAP_HA'
         }
-      ]
-    }
-    return {
-      loading: true,
-      activeMenu: 'Basic',
-      submenu: [
-        {
-          title: this.$t('Basic'),
-          name: 'Basic'
-        },
-        {
-          title: this.$t('Ldap'),
-          name: 'LDAP',
-          key: 'AUTH_LDAP'
-        },
-        ...ldapHABackends,
-        {
-          title: this.$t('CAS'),
-          name: 'CAS',
-          key: 'AUTH_CAS'
-        },
-        {
-          title: this.$t('Passkey'),
-          name: 'Passkey',
-          key: 'AUTH_PASSKEY'
-        },
-        ...extraBackends
-      ]
+      ],
+      submenu: []
     }
   },
   computed: {
     componentData() {
       return {}
     }
+  },
+  created() {
+    this.filterAuthItems()
   },
   mounted() {
     this.$axios.get('/api/v1/settings/setting/?category=auth').then(res => {
@@ -152,7 +147,45 @@ export default {
       this.loading = false
     })
   },
-  methods: {}
+  methods: {
+    updateActiveMenu(key, status) {
+      const targetTab =
+        this.extraBackends.find((item) => item.key === key) ||
+        this.ldapHABackends.find((item) => item.key === key) ||
+        this.defaultBackends.find((item) => item.key === key)
+
+      status ? this.submenu.push(targetTab) : this.submenu.splice(this.submenu.indexOf(targetTab), 1)
+    },
+    filterAuthItems() {
+      const authItems = authLocalStorage.get('authItems')
+
+      const defaultBackends = this.defaultBackends.filter((defaultItem) => {
+        const authItem = authItems.find((item) => item.enabled && item.authKey === defaultItem.key)
+
+        return authItem
+      })
+      const ldapHABackends = this.ldapHABackends.filter((ldapHABackendItem) => {
+        const authItem = authItems.find((item) => item.enabled && item.authKey === ldapHABackendItem.key)
+
+        return authItem
+      })
+      const extraBackends = this.extraBackends.filter((extraItem) => {
+        const authItem = authItems.find((item) => item.enabled && item.authKey === extraItem.key)
+
+        return authItem
+      })
+
+      this.submenu = [
+        {
+          title: this.$t('Basic'),
+          name: 'Basic'
+        },
+        ...defaultBackends,
+        ...ldapHABackends,
+        ...extraBackends
+      ]
+    }
+  }
 }
 </script>
 
