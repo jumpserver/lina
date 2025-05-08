@@ -130,7 +130,6 @@ export default {
             columnNames.splice(newIndex, 0, movedItem)
 
             this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
-            console.log('New column names: ', columnNames)
             // 保存更新的列顺序
             this.tableColumnsStorage.set(columnNames)
 
@@ -146,9 +145,7 @@ export default {
               this.loading = false
               // 在DOM完全更新后重新初始化拖拽
               this.$nextTick(() => {
-                setTimeout(() => {
-                  this.setColumnDraggable()
-                }, 150)
+                setTimeout(() => this.setColumnDraggable(), 200)
               })
             }, 300)
           }

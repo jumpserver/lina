@@ -215,20 +215,10 @@
   resolved "https://registry.npmmirror.com/@babel/helper-string-parser/-/helper-string-parser-7.23.4.tgz"
   integrity sha512-803gmbQdqwdf4olxrX4AJyFBV/RTr3rSmOj0rKwesmzlfhYNDEs+/iOcznzpNWlJlIlTJC2QfPFcHB6DlzdVLQ==
 
-"@babel/helper-string-parser@^7.25.9":
-  version "7.25.9"
-  resolved "https://registry.npmmirror.com/@babel/helper-string-parser/-/helper-string-parser-7.25.9.tgz#1aabb72ee72ed35789b4bbcad3ca2862ce614e8c"
-  integrity sha512-4A/SCr/2KLd5jrtOMFzaKjVtAei3+2r/NChoBNoZ3EyP/+GlhoaEGoWOZUmFmoITP7zOJyHIMm+DYRd8o3PvHA==
-
 "@babel/helper-validator-identifier@^7.22.20":
   version "7.22.20"
   resolved "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.22.20.tgz"
   integrity sha512-Y4OZ+ytlatR8AI+8KZfKuL5urKp7qey08ha31L8b3BwewJAoJamTzyvxPR/5D+KkdJCGPq/+8TukHBlY10FX9A==
-
-"@babel/helper-validator-identifier@^7.25.9":
-  version "7.25.9"
-  resolved "https://registry.npmmirror.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.25.9.tgz#24b64e2c3ec7cd3b3c547729b8d16871f22cbdc7"
-  integrity sha512-Ed61U6XJc3CVRfkERJWDz4dJwKe7iLmmJsbOGu9wSloNSFttHV0I8g6UAgb7qnK5ly5bGLPd4oXZlxCdANBOWQ==
 
 "@babel/helper-validator-option@^7.23.5":
   version "7.23.5"
@@ -266,13 +256,6 @@
   version "7.23.6"
   resolved "https://registry.npmmirror.com/@babel/parser/-/parser-7.23.6.tgz"
   integrity sha512-Z2uID7YJ7oNvAI20O9X0bblw7Qqs8Q2hFy0R9tAfnfLkp5MW0UH9eUvnDSnFwKZ0AvgS1ucqR4KzvVHgnke1VQ==
-
-"@babel/parser@^7.23.5":
-  version "7.27.0"
-  resolved "https://registry.npmmirror.com/@babel/parser/-/parser-7.27.0.tgz#3d7d6ee268e41d2600091cbd4e145ffee85a44ec"
-  integrity sha512-iaepho73/2Pz7w2eMS0Q5f83+0RKI7i4xmiYeBmDzfRVbQtTOG7Ts0S4HzJVsTMGI9keU8rNfuZr8DKfSt7Yyg==
-  dependencies:
-    "@babel/types" "^7.27.0"
 
 "@babel/plugin-proposal-async-generator-functions@^7.2.0":
   version "7.20.7"
@@ -755,14 +738,6 @@
     "@babel/helper-string-parser" "^7.23.4"
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
-
-"@babel/types@^7.27.0":
-  version "7.27.0"
-  resolved "https://registry.npmmirror.com/@babel/types/-/types-7.27.0.tgz#ef9acb6b06c3173f6632d993ecb6d4ae470b4559"
-  integrity sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==
-  dependencies:
-    "@babel/helper-string-parser" "^7.25.9"
-    "@babel/helper-validator-identifier" "^7.25.9"
 
 "@colors/colors@1.5.0":
   version "1.5.0"
@@ -1429,17 +1404,6 @@
     "@babel/parser" "^7.18.4"
     postcss "^8.4.14"
     source-map "^0.6.1"
-
-"@vue/compiler-sfc@2.7.16":
-  version "2.7.16"
-  resolved "https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-2.7.16.tgz#ff81711a0fac9c68683d8bb00b63f857de77dc83"
-  integrity sha512-KWhJ9k5nXuNtygPU7+t1rX6baZeqOYLEforUPjgNDBnLicfHCoi48H87Q8XyLZOrNNsmhuwKqtpDQWjEFe6Ekg==
-  dependencies:
-    "@babel/parser" "^7.23.5"
-    postcss "^8.4.14"
-    source-map "^0.6.1"
-  optionalDependencies:
-    prettier "^1.18.2 || ^2.0.0"
 
 "@vue/component-compiler-utils@^2.6.0":
   version "2.6.0"
@@ -3587,11 +3551,6 @@ core-js@^3.4.4:
   resolved "https://registry.npmmirror.com/core-js/-/core-js-3.34.0.tgz"
   integrity sha512-aDdvlDder8QmY91H88GzNi9EtQi2TjvQhpCX6B1v/dAZHU1AuLgHvRh54RiOerpEhEW46Tkf+vgAViB/CWC0ag==
 
-core-js@^3.6.5:
-  version "3.41.0"
-  resolved "https://registry.npmmirror.com/core-js/-/core-js-3.41.0.tgz#57714dafb8c751a6095d028a7428f1fb5834a776"
-  integrity sha512-SJ4/EHwS36QMJd6h/Rg+GyR4A5xE0FSI3eZ+iBVpfqf1x0eTSg1smWLHrA+2jQThZSh97fmSgFSU8B61nxosxA==
-
 core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/core-util-is/-/core-util-is-1.0.2.tgz"
@@ -4483,18 +4442,6 @@ ejs@^2.6.1:
   version "2.7.4"
   resolved "https://registry.npmmirror.com/ejs/-/ejs-2.7.4.tgz"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
-
-el-table-draggable@^1.4.12:
-  version "1.4.12"
-  resolved "https://registry.npmmirror.com/el-table-draggable/-/el-table-draggable-1.4.12.tgz#eb1400f5d8272fdb89972265cda97563afa6c251"
-  integrity sha512-M2ZC1UNr5YJ6dS0aTdhP4eIg/+FtwlqBHGsbCWKoJl0hQZMcATllUY4mCkpoMYKGyMHXet7bBuSjs/MW1P8qGw==
-  dependencies:
-    core-js "^3.6.5"
-    highlight.js "^9.18.5"
-    lodash "^4.17.21"
-    sortablejs "^1.14.0"
-    vue "^2.6.11"
-    vue-highlight-component "^1.0.0"
 
 electron-to-chromium@^1.4.601:
   version "1.4.611"
@@ -6098,7 +6045,7 @@ highlight.js@^11.9.0:
   resolved "https://registry.npmmirror.com/highlight.js/-/highlight.js-11.9.0.tgz"
   integrity sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==
 
-highlight.js@^9.12.0, highlight.js@^9.18.5:
+highlight.js@^9.12.0:
   version "9.18.5"
   resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-9.18.5.tgz"
   integrity sha512-a5bFyofd/BHCX52/8i8uJkjr9DYwXIPnM/plwI6W7ezItLGqzt7X2G2nXuYSfsIJdkwwj/g9DG1LkcGJI/dDoA==
@@ -11870,7 +11817,7 @@ sort-keys@^2.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
-sortablejs@^1.14.0, sortablejs@^1.15.6:
+sortablejs@^1.15.6:
   version "1.15.6"
   resolved "https://registry.npmmirror.com/sortablejs/-/sortablejs-1.15.6.tgz#ff93699493f5b8ab8d828f933227b4988df1d393"
   integrity sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==
@@ -13193,11 +13140,6 @@ vue-eslint-parser@^6.0.3:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
-vue-highlight-component@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmmirror.com/vue-highlight-component/-/vue-highlight-component-1.0.0.tgz#c1f1d8d0ff41f9bc3b3163d46b25805b1e288541"
-  integrity sha512-oqOmQ4WgHp+yYdhg+kVm3UB6XlWQvpM+iQyiyElakHAZB9LHgnCs07G0NDtB1wqGtnAr6ofQYiGB+BEt+wrWPQ==
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.npmmirror.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
@@ -13332,14 +13274,6 @@ vue@^2.2.6:
   integrity sha512-a29fsXd2G0KMRqIFTpRgpSbWaNBK3lpCTOLuGLEDnlHWdjB8fwl6zyYZ8xCrqkJdatwZb4mGHiEfJjnw0Q6AwQ==
   dependencies:
     "@vue/compiler-sfc" "2.7.15"
-    csstype "^3.1.0"
-
-vue@^2.6.11:
-  version "2.7.16"
-  resolved "https://registry.npmmirror.com/vue/-/vue-2.7.16.tgz#98c60de9def99c0e3da8dae59b304ead43b967c9"
-  integrity sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==
-  dependencies:
-    "@vue/compiler-sfc" "2.7.16"
     csstype "^3.1.0"
 
 vuejs-logger@^1.5.4:
