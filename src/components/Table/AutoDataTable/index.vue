@@ -21,21 +21,11 @@
 </template>
 
 <script type="text/jsx">
+import Sortable from 'sortablejs'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import {
-  ActionsFormatter,
-  ArrayFormatter,
-  ChoicesFormatter,
-  CopyableFormatter,
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
-  ObjectRelatedFormatter
-} from '@/components/Table/TableFormatters'
-import i18n from '@/i18n/i18n'
-import { newURL, ObjectLocalStorage, replaceAllUUID, toSentenceCase } from '@/utils/common'
+import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
-import LabelsFormatter from '@/components/Table/TableFormatters/LabelsFormatter.vue'
+import { TableColumnsGenerator } from './utils'
 
 export default {
   name: 'AutoDataTable',
@@ -57,9 +47,9 @@ export default {
     return {
       loading: true,
       method: 'get',
-      autoConfig: {},
-      iConfig: {},
       meta: {},
+      iConfig: {},
+      autoConfig: {},
       cleanedColumnsShow: {},
       totalColumns: [],
       popoverColumns: {
@@ -69,18 +59,8 @@ export default {
         defaultCols: []
       },
       isDeactivated: false,
-      objTableColumns: new ObjectLocalStorage('tableColumns')
-    }
-  },
-  computed: {
-    dynamicActionWidth() {
-      if (this.$i18n.locale === 'en') {
-        return '120px'
-      }
-      if (this.$i18n.locale === 'pt-br') {
-        return '160px'
-      }
-      return '100px'
+      tableColumnsStorage: this.getTableColumnsStorage(),
+      sortable: null
     }
   },
   watch: {
@@ -102,8 +82,9 @@ export default {
       }, 200)
     }
   },
-  created() {
-    this.optionUrlMetaAndGenCols()
+  async created() {
+    await this.optionUrlMetaAndGenCols()
+    this.loading = false
   },
   deactivated() {
     this.isDeactivated = true
@@ -112,323 +93,101 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    setColumnDraggable() {
+      const el = this.$el.querySelector('.el-table__header-wrapper thead tr')
+      if (!el) {
+        setTimeout(() => this.setColumnDraggable(), 500)
+        return
+      }
+      if (this.sortable) {
+        this.sortable.destroy()
+      }
+
+      this.sortable = Sortable.create(el, {
+        animation: 150,
+        onEnd: (evt) => {
+          let { oldIndex, newIndex } = evt
+          if (oldIndex === newIndex) {
+            return
+          }
+          // 检测表格是否有选择列
+          const hasSelectionColumn = this.$el.querySelector('.el-table-column--selection') !== null
+          if (hasSelectionColumn) {
+            // 如果有选择列，调整索引
+            if (oldIndex > 0) oldIndex -= 1
+            if (newIndex > 0) newIndex -= 1
+          }
+
+          let columnNames = [...this.cleanedColumnsShow.show]
+          if (columnNames.includes('actions')) {
+            columnNames = columnNames.filter(item => item !== 'actions')
+            columnNames.push('actions')
+          }
+          // 边界
+          if (oldIndex >= 0 && oldIndex < columnNames.length &&
+            newIndex >= 0 && newIndex < columnNames.length) {
+            const movedItem = columnNames.splice(oldIndex, 1)[0]
+            columnNames.splice(newIndex, 0, movedItem)
+
+            this.$log.debug('Column moved: ', movedItem, oldIndex, ' => ', newIndex)
+            // 保存更新的列顺序
+            this.tableColumnsStorage.set(columnNames)
+
+            // 更新内部状态
+            this.cleanedColumnsShow.show = columnNames
+            this.popoverColumns.currentCols = columnNames
+
+            // 重新应用列顺序
+            this.filterShowColumns()
+
+            this.loading = true
+            setTimeout(() => {
+              this.loading = false
+              // 在DOM完全更新后重新初始化拖拽
+              this.$nextTick(() => {
+                setTimeout(() => this.setColumnDraggable(), 200)
+              })
+            }, 300)
+          }
+        }
+      })
+    },
+    generateTotalColumns() {
+      const generator = new TableColumnsGenerator(this.config, this.meta, this)
+      this.totalColumns = generator.generateColumns()
+      this.config.columns = this.totalColumns
+      this.iConfig = _.cloneDeep(this.config)
+    },
     async optionUrlMetaAndGenCols() {
       if (this.config.url === '') {
         return
       }
       const url = (this.config.url.indexOf('?') === -1)
-        ? `${this.config.url}?draw=1&display=1`
-        : `${this.config.url}&draw=1&display=1`
-      this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
+        ? `${this.config.url}?display=1`
+        : `${this.config.url}&display=1`
+
+      /**
+       * 原有代码无法正确的同步 storage 的原因是 currentOrder 总是在 totalColumns 之前进行的
+       * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
+       */
+      try {
+        const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
         const method = this.method.toUpperCase()
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
+
         this.generateTotalColumns()
-      }).then(() => {
-        //  根据当前列重新生成最终渲染表格
+        this.cleanColumnsShow()
         this.filterShowColumns()
-      }).then(() => {
-        // 生成给子组件使用的TotalColList
         this.generatePopoverColumns()
-      }).catch((error) => {
+        this.setColumnDraggable()
+      } catch (error) {
         this.$log.error('Error occur: ', error)
-      }).finally(() => {
-        this.loading = false
-      })
+      }
     },
-    generateColumnByName(name, col) {
-      switch (name) {
-        case 'id':
-          if (!col.width) {
-            col.width = '299px'
-          }
-          if (!col.formatter) {
-            col.formatter = CopyableFormatter
-            col.iconPosition = 'left'
-          }
-          break
-        case 'name':
-          col.formatter = DetailFormatter
-          col.sortable = 'custom'
-          col.showOverflowTooltip = true
-          col.minWidth = '150px'
-          break
-        case 'actions':
-          col = {
-            prop: 'actions',
-            label: i18n.t('Actions'),
-            align: 'center',
-            width: this.dynamicActionWidth,
-            formatter: ActionsFormatter,
-            fixed: 'right',
-            formatterArgs: {}
-          }
-          break
-        case 'is_valid':
-          col.label = i18n.t('Valid')
-          col.formatter = ChoicesFormatter
-          col.formatterArgs = {
-            textChoices: {
-              true: i18n.t('Yes'),
-              false: i18n.t('No')
-            }
-          }
-          col.width = '80px'
-          break
-        case 'is_active':
-          col.formatter = ChoicesFormatter
-          col.formatterArgs = {
-            textChoices: {
-              true: i18n.t('Active'),
-              false: i18n.t('Inactive')
-            }
-          }
-          col.width = '100px'
-          break
-        case 'datetime':
-        case 'date_start':
-          col.formatter = DateFormatter
-          break
-        case 'labels':
-          col.formatter = LabelsFormatter
-          col.width = '200px'
-          break
-        case 'comment':
-          col.showOverflowTooltip = true
-      }
-      return col
-    },
-    generateColumnByType(type, col, meta) {
-      switch (type) {
-        case 'choice':
-          col.sortable = 'custom'
-          col.formatter = DisplayFormatter
-          break
-        case 'labeled_choice':
-          col.sortable = 'custom'
-          col.formatter = ChoicesFormatter
-          break
-        case 'boolean':
-          col.formatter = ChoicesFormatter
-          // col.width = '80px'
-          break
-        case 'datetime':
-          col.formatter = DateFormatter
-          col.width = '155px'
-          break
-        case 'object_related_field':
-          col.formatter = ObjectRelatedFormatter
-          break
-        case 'm2m_related_field':
-          col.formatter = ObjectRelatedFormatter
-          break
-        case 'list':
-          col.formatter = ArrayFormatter
-          break
-        case 'json':
-        case 'field':
-          if (meta.child && meta.child.type === 'nested object') {
-            col.formatter = ObjectRelatedFormatter
-          }
-          break
-      }
-      // this.$log.debug('Field: ', type, col.prop, col)
-      return col
-    },
-    addHelpTipIfNeed(col) {
-      const helpTip = col.helpTip
-      if (!helpTip) {
-        return col
-      }
-      col.renderHeader = (h, { column, $index }) => {
-        const binds = {
-          props: {
-            placement: 'bottom',
-            effect: 'dark',
-            openDelay: 500,
-            popperClass: 'help-tips'
-          }
-        }
-
-        return (
-          <span>{column.label}
-            <el-tooltip {...binds}>
-              <div slot='content' v-sanitize={helpTip}/>
-              <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px'/>
-            </el-tooltip>
-          </span>
-        )
-      }
-      return col
-    },
-    addFilterIfNeed(col) {
-      if (col.prop) {
-        const column = this.meta[col.prop] || {}
-        if (!column.filter) {
-          return col
-        }
-        if (column.type === 'boolean') {
-          col.filters = [
-            { text: i18n.t('Yes'), value: true },
-            { text: i18n.t('No'), value: false }
-          ]
-          col.sortable = false
-          col['column-key'] = col.prop
-        }
-        if (column.type === 'choice' && column.choices) {
-          col.filters = column.choices.map(item => {
-            if (typeof (item.value) === 'boolean') {
-              if (item.value) {
-                return { text: item['label'], value: 'True' }
-              } else {
-                return { text: item['label'], value: 'False' }
-              }
-            }
-            return { text: item['label'], value: item.value }
-          })
-          col.sortable = false
-          col['column-key'] = col.prop
-        }
-      }
-      return col
-    },
-    addOrderingIfNeed(col) {
-      if (col.prop) {
-        const column = this.meta[col.prop] || {}
-        if (column.order) {
-          col.sortable = 'custom'
-          col['column-key'] = col.prop
-        }
-      }
-      return col
-    },
-    setDefaultFormatterIfNeed(col) {
-      if (!col.formatter) {
-        col.formatter = (row, column, cellValue) => {
-          let value = cellValue
-          let padding = '0'
-          const excludes = [undefined, null, '']
-          if (excludes.indexOf(value) !== -1) {
-            padding = '6px'
-            value = '-'
-          }
-          return <span style={{ marginLeft: padding }}>{value}</span>
-        }
-      }
-      return col
-    },
-    setDefaultWidthIfNeed(col) {
-      const lang = this.$i18n.locale
-      let factor = 10
-      if (lang === 'zh') {
-        factor = 20
-      }
-      let [sortable, filters] = [0, 0]
-      if (col && col?.sortable === 'custom') {
-        sortable = 10
-      }
-      if (col && col?.filters?.length > 0) {
-        filters = 12
-      }
-      if (col && !col.width && col.label && !col.minWidth) {
-        col.minWidth = `${col.label.length * factor + sortable + filters + 30}px`
-      }
-      return col
-    },
-    generateColumn(name) {
-      const colMeta = this.meta[name] || {}
-      const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-      let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
-
-      col = this.generateColumnByType(colMeta.type, col, colMeta)
-      col = this.generateColumnByName(name, col)
-      col = this.setDefaultFormatterIfNeed(col)
-      col = Object.assign(col, customMeta)
-      col = this.addHelpTipIfNeed(col)
-      col = this.addFilterIfNeed(col)
-      col = this.addOrderingIfNeed(col)
-      col = this.updateLabelIfNeed(col)
-      col = this.setDefaultWidthIfNeed(col)
-      return col
-    },
-    updateLabelIfNeed(col) {
-      if (!col.label) {
-        return col
-      }
-      col.label = col.label
-        .replace(' Amount', '')
-        .replace(' amount', '')
-        .replace('数量', '')
-      if (col.label.startsWith('Is ')) {
-        col.label = col.label.replace('Is ', '')
-      }
-      col.label = toSentenceCase(col.label)
-      return col
-    },
-    generateTotalColumns() {
-      const config = _.cloneDeep(this.config)
-      let columns = []
-      const allColumnNames = Object.entries(this.meta)
-        .filter(([name, meta]) => !meta['write_only'])
-        .map(([name, meta]) => name)
-        .concat(config.columnsExtra || [])
-
-      let configColumns = config.columns || allColumnNames
-      const columnsExclude = config.columnsExclude || []
-      const columnsAdd = config.columnsAdd || []
-      configColumns = configColumns.concat(columnsAdd)
-      configColumns = configColumns.filter(item => !columnsExclude.includes(item))
-
-      // 解决后端 API 返回字段中包含 actions 的问题;
-      const hasColumnActions = configColumns.findIndex(item => item?.prop === 'actions') !== -1
-      if (!hasColumnActions) {
-        configColumns = [...configColumns.filter(i => i !== 'actions'), 'actions']
-      }
-
-      for (let col of configColumns) {
-        if (typeof col === 'object') {
-          columns.push(col)
-        } else if (typeof col === 'string') {
-          col = this.generateColumn(col)
-          columns.push(col)
-        }
-      }
-
-      columns = columns.filter(item => {
-        if (item?.showFullContent) {
-          item.className = 'show-full-content'
-        }
-        let has = item.has
-        if (has === undefined) {
-          has = true
-        } else if (typeof has === 'function') {
-          has = has()
-        }
-        return has
-      })
-
-      columns = this.orderingColumns(columns)
-      // 第一次初始化时记录 totalColumns
-      this.totalColumns = columns
-      config.columns = columns
-      this.iConfig = config
-    },
-    orderingColumns(columns) {
-      const cols = _.cloneDeep(this.config.columns)
-      const defaults = _.get(this.config, 'columnsShow.default')
-      const ordering = (cols || defaults || []).map(item => {
-        let prop = item
-        if (typeof item === 'object') {
-          prop = item.prop
-        }
-        return prop
-      })
-      return _.sortBy(columns, (item) => {
-        if (item.prop === 'actions') {
-          return 1000
-        }
-        const i = ordering.indexOf(item.prop)
-        return i === -1 ? 999 : i
-      })
+    getTableColumnsStorage() {
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
+      tableName = replaceAllUUID(tableName)
+      return new ObjectLocalStorage('tableColumns', tableName)
     },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
@@ -438,16 +197,12 @@ export default {
       if (defaultColumnsNames.length === 0) {
         defaultColumnsNames = totalColumnsNames
       }
-      // Clean it
-      defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
       const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
         .filter(n => totalColumnsNames.includes(n))
 
-      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
-      tableName = replaceAllUUID(tableName)
-      const configShowColumnsNames = this.objTableColumns.get(tableName)
+      const configShowColumnsNames = this.tableColumnsStorage.get()
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
         showColumnsNames = totalColumnsNames
@@ -458,8 +213,6 @@ export default {
           showColumnsNames.push(v)
         }
       })
-      // Clean it
-      showColumnsNames = totalColumnsNames.filter(n => showColumnsNames.indexOf(n) > -1)
 
       this.cleanedColumnsShow = {
         default: defaultColumnsNames,
@@ -471,9 +224,38 @@ export default {
     },
     filterShowColumns() {
       this.cleanColumnsShow()
-      this.iConfig.columns = this.totalColumns.filter(obj => {
-        return this.cleanedColumnsShow.show.indexOf(obj.prop) > -1
+      const showFieldNames = this.cleanedColumnsShow.show
+      let showFields = this.totalColumns.filter(obj => {
+        return showFieldNames.indexOf(obj.prop) > -1
       })
+      showFields = this.orderingColumns(showFields)
+      this.iConfig.columns = showFields
+
+      // 确保最新的列配置也应用到config对象上，保持同步
+      this.config.columns = this.iConfig.columns
+
+      this.$nextTick(() => {
+        if (this.$refs.dataTable) {
+          this.$refs.dataTable.getList()
+        }
+      })
+    },
+    orderingColumns(columns) {
+      const cols = _.cloneDeep(this.config.columns)
+      const show = this.cleanedColumnsShow.show
+      const ordering = (show || cols || []).map(item => {
+        let prop = item
+        if (typeof item === 'object') {
+          prop = item.prop
+        }
+        return prop
+      })
+      const sorted = _.sortBy(columns, (item) => {
+        const i = ordering.indexOf(item.prop)
+        item.order = i
+        return i === -1 ? 999 : i
+      })
+      return sorted
     },
     generatePopoverColumns() {
       this.popoverColumns.totalColumnsList = this.totalColumns.filter(obj => {
@@ -493,13 +275,7 @@ export default {
         columns = this.cleanedColumnsShow.default
       }
       this.popoverColumns.currentCols = columns
-
-      let tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
-      // 替换url中的uuid，避免同一个类型接口生成多个key，localStorage中的数据无法共用.
-      tableName = replaceAllUUID(tableName)
-
-      this.objTableColumns.set(tableName, columns)
-
+      this.tableColumnsStorage.set(columns)
       this.filterShowColumns()
     },
     filterChange(filters) {
