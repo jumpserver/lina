@@ -67,9 +67,11 @@ export default {
                 let url = ''
                 let options = []
                 switch (val) {
-                  case 'platform':
-                    url = '/api/v1/assets/platforms/?category=host'
+                  case 'platform': {
+                    const category = this.$route.query.category || 'host'
+                    url = `/api/v1/assets/platforms/?category=${category}`
                     break
+                  }
                   case 'node':
                     url = '/api/v1/assets/nodes/'
                     break

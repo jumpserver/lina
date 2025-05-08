@@ -38,6 +38,10 @@ export default {
       },
       updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
       createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
+      cleanFormValue: (value) => {
+        value['category'] = this.$route.query.category || 'host'
+        return value
+      },
       getUrl() {
         const id = this.$route.params?.id
         return id ? `${this.url}${id}/` : this.url
