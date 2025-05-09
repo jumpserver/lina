@@ -1,5 +1,5 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="menu">
+  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
     <keep-alive>
       <component :is="activeMenu" />
     </keep-alive>
@@ -51,15 +51,14 @@ export default {
     return {
       loading: true,
       activeMenu: 'Basic',
-      authMethods: [],
-      submenu: []
+      authMethods: []
     }
   },
   computed: {
     ...mapState({
       authMethodsSetting: state => state.settings.authMethods
     }),
-    menu() {
+    submenu() {
       return [
         {
           title: this.$t('Basic'),
@@ -78,7 +77,7 @@ export default {
     this.$store.dispatch('settings/getAuthMethods').then()
   },
   async mounted() {
-    this.authMethods = await getAuthItems()
+    this.authMethods = getAuthItems()
     this.loading = false
   }
 }
