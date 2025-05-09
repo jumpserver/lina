@@ -55,9 +55,9 @@ export default {
       authMethodsSetting: state => state.settings.authMethods
     })
   },
-  mounted() {
-    this.$store.dispatch('settings/getAuthMethods')
-    this.initAuthItems()
+  async mounted() {
+    await this.$store.dispatch('settings/getAuthMethods')
+    await this.initAuthItems()
   },
   methods: {
     async initAuthItems() {
