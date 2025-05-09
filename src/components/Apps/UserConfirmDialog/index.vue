@@ -98,7 +98,7 @@
             {{ this.$t('Confirm') }}
           </el-button>
           <el-button
-            v-if="!sendCodeMFA.includes(subTypeSelected)"
+            v-if="subTypeSelected === 'face'"
             :disabled="isFaceCaptureVisible"
             class="confirm-btn"
             size="mini"
