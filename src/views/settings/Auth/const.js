@@ -47,7 +47,7 @@ export function getAuthItems() {
       description: ''
     },
     {
-      name: 'OAUTH2',
+      name: 'OAuth2',
       logo: require('@/assets/img/auth/oauth2_logo.png'),
       title: i18n.t('OAuth2'),
       authKey: 'AUTH_OAUTH2',
