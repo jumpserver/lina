@@ -1,10 +1,10 @@
 <template>
-  <el-col :span="8" :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="auth-item-col">
-    <el-card ref="card" shadow="hover" class="auth-card">
+  <el-col :lg="6" :md="8" :sm="12" :span="8" :xl="4" :xs="24" class="auth-item-col">
+    <el-card ref="card" class="auth-card" shadow="hover">
       <div slot="header" class="auth-item-header">
         <div class="auth-item-header-left">
           <img :src="logo" alt="auth-logo" class="auth-logo">
-          <div class="auth-item-header-title" :title="title">{{ title }}</div>
+          <div :title="title" class="auth-item-header-title">{{ title }}</div>
         </div>
         <div class="auth-item-actions">
           <el-switch
@@ -54,20 +54,15 @@ export default {
       this.isEnabled = newVal
     }
   },
-  mounted() {
-    const card = this.$refs.card
-    this.cardBody = card.$el.querySelector('.el-card__body')
-    this.cardBody.style.display = 'none'
-  },
   methods: {
     onChangeStatus(value) {
-      this.$emit('update:enabled', value, this.authKey)
+      this.$store.dispatch('settings/updateAuthItemStatus', [this.authKey, value])
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .auth-item-col {
   margin: 10px 0;
   padding: 0 10px;
@@ -81,6 +76,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 5px;
 
       .auth-item-header-left {
         display: flex;
@@ -109,8 +105,8 @@ export default {
       }
     }
 
-    ::v-deep(.el-card__body) {
-      display: none !important;
+    ::v-deep .el-card__body {
+      display: none;
     }
   }
 }
