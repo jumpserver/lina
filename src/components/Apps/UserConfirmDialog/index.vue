@@ -98,7 +98,7 @@
             {{ this.$t('Confirm') }}
           </el-button>
           <el-button
-            v-if="sendCodeMFA.includes(subTypeSelected)"
+            v-if="!sendCodeMFA.includes(subTypeSelected)"
             :disabled="isFaceCaptureVisible"
             class="confirm-btn"
             size="mini"
@@ -160,7 +160,7 @@ export default {
       faceToken: null,
       faceCaptureUrl: null,
       noCodeMFA: ['face', 'passkey'],
-      sendCodeMFA: ['email', 'sms'],
+      sendCodeMFA: ['email', 'sms', 'otp'],
       passkeyVisible: false,
       passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1'
     }
