@@ -1,33 +1,32 @@
 <template>
   <div class="auth-container">
-    <IBox class="auth-box-wrapper">
+    <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper">
       <el-row :gutter="20">
-        <AuthItem
+        <AuthMethod
           v-for="item in authItems"
           :key="item.title"
           v-bind="item"
-          @update:enabled="updateAuthItemStatus"
         />
       </el-row>
     </IBox>
-
-    <IBox>
+    <IBox :title="$tc('BasicSettings')" class="auth-box-wrapper">
       <GenericCreateUpdateForm v-bind="$data" />
     </IBox>
   </div>
 </template>
 
 <script>
-import AuthItem from './AuthItem.vue'
+import AuthMethod from './components/AuthMethod.vue'
 import IBox from '@/components/Common/IBox'
-import { getAuthItem, setAuthItem } from './const'
+import { getAuthItems } from './const'
 import { GenericCreateUpdateForm } from '@/layout/components'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     IBox,
-    GenericCreateUpdateForm,
-    AuthItem
+    AuthMethod,
+    GenericCreateUpdateForm
   },
   data() {
     return {
@@ -51,23 +50,37 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      authMethodsSetting: state => state.settings.authMethods
+    })
+  },
   mounted() {
-    this.authItems = getAuthItem(this)
+    this.$store.dispatch('settings/getAuthMethods')
+    this.initAuthItems()
   },
   methods: {
-    updateAuthItemStatus(value, key) {
-      setAuthItem(value, key)
-
-      this.$nextTick(() => {
-        this.authItems = getAuthItem(this)
-        this.$emit('update:tabs', key, value)
+    async initAuthItems() {
+      let authItems = await getAuthItems(this)
+      authItems = authItems.map(item => {
+        return {
+          ...item,
+          enabled: this.authMethodsSetting[item.authKey]
+        }
+      })
+      this.authItems = authItems.sort((a, b) => {
+        if (a.enabled !== b.enabled) {
+          return a.enabled ? -1 : 1
+        }
+        return a.title.localeCompare(b.title)
       })
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+
 .auth-container {
   width: 100%;
 

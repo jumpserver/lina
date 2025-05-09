@@ -1,7 +1,7 @@
 <template>
-  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="submenu">
+  <TabPage v-if="!loading" :active-menu.sync="activeMenu" :submenu="menu">
     <keep-alive>
-      <component :is="activeMenu" @update:tabs="updateActiveMenu" />
+      <component :is="activeMenu" />
     </keep-alive>
   </TabPage>
 </template>
@@ -24,7 +24,8 @@ import SAML2 from './SAML2'
 import OAuth2 from './OAuth2'
 import Passkey from './Passkey.vue'
 import Slack from './Slack.vue'
-import { authLocalStorage } from './const'
+import { getAuthItems } from './const'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -50,141 +51,35 @@ export default {
     return {
       loading: true,
       activeMenu: 'Basic',
-      defaultBackends: [
-        {
-          title: this.$t('Ldap'),
-          name: 'LDAP',
-          key: 'AUTH_LDAP'
-        },
-        {
-          title: this.$t('CAS'),
-          name: 'CAS',
-          key: 'AUTH_CAS'
-        },
-        {
-          title: this.$t('Passkey'),
-          name: 'Passkey',
-          key: 'AUTH_PASSKEY'
-        }
-      ],
-      extraBackends: [
-        {
-          title: this.$t('OIDC'),
-          name: 'OIDC',
-          key: 'AUTH_OPENID'
-        },
-        {
-          title: this.$t('SAML2'),
-          name: 'SAML2',
-          key: 'AUTH_SAML2'
-        },
-        {
-          title: this.$t('OAuth2'),
-          name: 'OAuth2',
-          key: 'AUTH_OAUTH2'
-        },
-        {
-          title: this.$t('WeCom'),
-          name: 'WeCom',
-          key: 'AUTH_WECOM'
-        },
-        {
-          title: this.$t('DingTalk'),
-          name: 'DingTalk',
-          key: 'AUTH_DINGTALK'
-        },
-        {
-          title: this.$t('FeiShu'),
-          name: 'FeiShu',
-          key: 'AUTH_FEISHU'
-        },
-        {
-          title: 'Lark',
-          name: 'Lark',
-          key: 'AUTH_LARK'
-        },
-        {
-          title: this.$t('Slack'),
-          name: 'Slack',
-          key: 'AUTH_SLACK'
-        },
-        {
-          title: this.$t('Radius'),
-          name: 'Radius',
-          key: 'AUTH_RADIUS'
-        }
-      ],
-      ldapHABackends: [
-        {
-          title: this.$t('LDAP HA'),
-          name: 'LdapHA',
-          key: 'AUTH_LDAP_HA'
-        }
-      ],
+      authMethods: [],
       submenu: []
     }
   },
   computed: {
-    componentData() {
-      return {}
-    }
-  },
-  created() {
-    this.filterAuthItems()
-  },
-  mounted() {
-    this.$axios.get('/api/v1/settings/setting/?category=auth').then(res => {
-      for (const item of this.submenu) {
-        const key = item.key
-        if (!key) {
-          continue
-        }
-        if (res[key]) {
-          item.icon = 'fa-check-circle text-primary'
-        }
-      }
-    }).finally(() => {
-      this.loading = false
-    })
-  },
-  methods: {
-    updateActiveMenu(key, status) {
-      const targetTab =
-        this.extraBackends.find((item) => item.key === key) ||
-        this.ldapHABackends.find((item) => item.key === key) ||
-        this.defaultBackends.find((item) => item.key === key)
-
-      status ? this.submenu.push(targetTab) : this.submenu.splice(this.submenu.indexOf(targetTab), 1)
-    },
-    filterAuthItems() {
-      const authItems = authLocalStorage.get('authItems')
-
-      const defaultBackends = this.defaultBackends.filter((defaultItem) => {
-        const authItem = authItems.find((item) => item.enabled && item.authKey === defaultItem.key)
-
-        return authItem
-      })
-      const ldapHABackends = this.ldapHABackends.filter((ldapHABackendItem) => {
-        const authItem = authItems.find((item) => item.enabled && item.authKey === ldapHABackendItem.key)
-
-        return authItem
-      })
-      const extraBackends = this.extraBackends.filter((extraItem) => {
-        const authItem = authItems.find((item) => item.enabled && item.authKey === extraItem.key)
-
-        return authItem
-      })
-
-      this.submenu = [
+    ...mapState({
+      authMethodsSetting: state => state.settings.authMethods
+    }),
+    menu() {
+      return [
         {
           title: this.$t('Basic'),
           name: 'Basic'
         },
-        ...defaultBackends,
-        ...ldapHABackends,
-        ...extraBackends
+        ...this.authMethods.map(item => {
+          return {
+            ...item,
+            hidden: () => !this.authMethodsSetting[item.authKey]
+          }
+        })
       ]
     }
+  },
+  created() {
+    this.$store.dispatch('settings/getAuthMethods').then()
+  },
+  async mounted() {
+    this.authMethods = await getAuthItems()
+    this.loading = false
   }
 }
 </script>
