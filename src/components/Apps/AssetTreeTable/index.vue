@@ -114,6 +114,11 @@ export default {
               treeUrl: `${this.typeUrl}?assets=${showAssets ? '1' : '0'}&count_resource=${this.treeSetting.countResource || 'asset'}`,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
+              },
+              edit: {
+                drag: {
+                  isMove: false
+                }
               }
             }
           }
