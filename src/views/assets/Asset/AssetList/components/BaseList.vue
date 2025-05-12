@@ -126,6 +126,7 @@ export default {
       icon: '',
       split: true,
       has: this.headerActions.hasCreate,
+      can: !this.$store.getters.currentOrgIsRoot,
       callback: () => {
         this.showPlatform = false
         setTimeout(() => {
@@ -185,6 +186,10 @@ export default {
       }
       const create = this.createAction
       create.dropdown = this.recentPlatforms
+      create.dropdown.map((item) => {
+        item.can = !this.$store.getters.currentOrgIsRoot
+        return item
+      })
       const extraActions = actions.extraActions || []
       actions.extraActions = [create, ...extraActions]
       // actions.extraActions[0].dropdown = platforms
