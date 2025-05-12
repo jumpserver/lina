@@ -13,17 +13,12 @@
       <tr>
         <th>{{ $tc('Variable') }}</th>
         <th>{{ $tc('Description') }}</th>
-        <th>{{ $tc('isConsoleCanUse') }}</th>
       </tr>
       <tr v-for="(val, key, index) in variables" :key="index">
         <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
           <label class="item-label">{{ key }}</label>
         </td>
         <td><span>{{ val }}</span></td>
-        <td>
-          <span v-if="key.startsWith('asset')" class="text-danger"> <i class="fa fa-times-circle" /> </span>
-          <span v-else class="text-primary"> <i class="fa fa-check-circle" /> </span>
-        </td>
       </tr>
     </table>
   </Dialog>
@@ -41,20 +36,15 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    variables: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
-      title: this.$t('BuiltinVariable'),
-      variables: {
-        'userId': this.$t('userId'),
-        'name': this.$t('name'),
-        'userName': this.$t('userName'),
-        'currentTime': this.$t('currentTime'),
-        'assetId': this.$t('assetId'),
-        'assetName': this.$t('assetName'),
-        'assetAddress': this.$t('assetAddress')
-      }
+      title: this.$t('BuiltinVariable')
     }
   },
   computed: {
