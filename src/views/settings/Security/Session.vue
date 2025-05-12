@@ -1,7 +1,8 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm submit-method="patch" v-bind="config" />
-    <WatermarkHelpDialog :visible.sync="showHelpDialog" />
+    <WatermarkHelpDialog :variables="sessionVariables" :visible.sync="showSessionHelpDialog" />
+    <WatermarkHelpDialog :variables="consoleVariables" :visible.sync="showConsoleHelpDialog" />
   </IBox>
 </template>
 
@@ -15,7 +16,23 @@ export default {
   components: { GenericCreateUpdateForm, IBox, WatermarkHelpDialog },
   data() {
     return {
-      showHelpDialog: false,
+      showSessionHelpDialog: false,
+      showConsoleHelpDialog: false,
+      sessionVariables: {
+        'userId': this.$t('userId'),
+        'name': this.$t('name'),
+        'userName': this.$t('userName'),
+        'currentTime': this.$t('currentTime'),
+        'assetId': this.$t('assetId'),
+        'assetName': this.$t('assetName'),
+        'assetAddress': this.$t('assetAddress')
+      },
+      consoleVariables: {
+        'userId': this.$t('userId'),
+        'name': this.$t('name'),
+        'userName': this.$t('userName'),
+        'currentTime': this.$t('currentTime')
+      },
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
@@ -48,20 +65,20 @@ export default {
           SECURITY_WATERMARK_SESSION_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
-                this.showHelpDialog = true
+                this.showSessionHelpDialog = true
               }
               return (
-                <i onClick={handleClick} class='fa fa-external-link'>{this.$t('Help')}</i>
+                <i onClick={handleClick} class='fa fa-question-circle' style='cursor: pointer'>{this.$t('Help')}</i>
               )
             }
           },
           SECURITY_WATERMARK_CONSOLE_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
-                this.showHelpDialog = true
+                this.showConsoleHelpDialog = true
               }
               return (
-                <i onClick={handleClick} class='fa fa-external-link'>{this.$t('Help')}</i>
+                <i onClick={handleClick} class='fa fa-question-circle' style='cursor: pointer'>{this.$t('Help')}</i>
               )
             }
           },
