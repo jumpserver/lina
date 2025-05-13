@@ -24,7 +24,6 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/accounts/accounts/',
       columnsMeta: {
         name: {
           formatter: (row) => <span>{row.name}</span>
