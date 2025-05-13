@@ -138,7 +138,7 @@ export default {
       strategyRelationConfig: {
         title: this.$t('Strategy'),
         objectsAjax: {
-          url: '/api/v1/xpack/cloud/strategies/',
+          url: `/api/v1/xpack/cloud/strategies/?category=${this.object.category}`,
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
