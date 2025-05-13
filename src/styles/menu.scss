@@ -144,6 +144,9 @@ $single-menu-height: 38px;
       line-height: $single-menu-height;
       display: inline-block;
 
+      .el-tooltip {
+          width: 55px !important;
+        }
     }
 
     .group-title {
