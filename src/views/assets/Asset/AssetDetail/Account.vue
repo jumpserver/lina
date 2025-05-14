@@ -64,6 +64,7 @@ export default {
         {
           name: this.$t('AccountTemplate'),
           title: this.$t('AccountTemplate'),
+          has: this.$hasLicense() || this.$route.name !== 'Applets',
           can: () => this.$hasPerm('accounts.view_accounttemplate') && !this.$store.getters.currentOrgIsRoot,
           callback: () => {
             this.templateDialogVisible = true

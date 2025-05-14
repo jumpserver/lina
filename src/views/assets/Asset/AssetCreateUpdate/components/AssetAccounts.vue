@@ -37,6 +37,7 @@
           {{ $t('Add') }}
         </el-button>
         <el-button
+          v-if="$hasLicense() || $route.name !== 'Applets'"
           :disabled="!$hasPerm('accounts.view_accounttemplate')"
           size="mini"
           type="success"
@@ -98,6 +99,7 @@ export default {
   },
   data() {
     const accounts = this.value || []
+
     return {
       accounts: accounts,
       drawerRefName: null,
