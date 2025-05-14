@@ -256,14 +256,14 @@ export default {
           this.passkeyVisible = false
           this.onSuccess()
         })
-      }, 1000)
+      }, 2000)
       setTimeout(() => {
         clearInterval(t)
         if (this.passkeyVisible) {
           this.passkeyVisible = false
           this.$message.error(this.$tc('PasskeyTimeout'))
         }
-      }, 10000)
+      }, 20000)
     },
     startFaceCapture() {
       const url = '/api/v1/authentication/face/context/'

@@ -23,6 +23,9 @@ export default {
           'AUTH_PASSKEY', 'FIDO_SERVER_ID', 'FIDO_SERVER_NAME'
         ],
         fieldsMeta: {
+          'AUTH_PASSKEY': {
+            'helpTextAsTip': false
+          },
           'FIDO_SERVER_ID': {
             placeholder: 'js.example.org'
           }
