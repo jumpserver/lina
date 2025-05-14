@@ -83,7 +83,8 @@ export default {
           fontWeight: 'normal',
           fontSize: this.publicSettings?.SECURITY_WATERMARK_FONT_SIZE + 'px',
           fontColor: this.publicSettings?.SECURITY_WATERMARK_COLOR,
-          contentType: 'multi-line-text'
+          contentType: 'multi-line-text',
+          lineHeight: this.publicSettings?.SECURITY_WATERMARK_FONT_SIZE
         })
         this.watermark.create()
       }
