@@ -15,7 +15,7 @@
         @click="handleClick(action)"
         @command="handleDropdownCallback"
       >
-        <span v-if="action.split">
+        <span v-if="action.split" :style="{ cursor: action.disabled ? 'not-allowed' : 'pointer' }">
           {{ action.title }}
         </span>
         <el-button
