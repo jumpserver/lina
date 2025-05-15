@@ -1,53 +1,67 @@
 <template>
   <el-form class="account-content" @submit.native.prevent>
     <el-form-item>
-      <el-checkbox-group v-model="choicesSelected">
-        <el-checkbox
-          v-for="(i) in choices"
+      <el-radio-group v-model="realRadioSelected" @input="handleRadioChanged">
+        <el-radio
+          v-for="(i) in realChoices"
           :key="i.label"
           :disabled="i.disabled"
           :label="i.value"
-          @change="handleCheckboxCheck(i, $event)"
         >
           {{ i.label }}
           <el-tooltip :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
-        </el-checkbox>
+        </el-radio>
+      </el-radio-group>
 
-        <div v-if="showSpecAccounts" class="spec-accounts spec-zone">
-          <div class="group-title">{{ $t('SpecAccount') }}</div>
-          <TagInput
-            :autocomplete="autocomplete"
-            :tag-type="getTagType"
-            :value="specAccountsInput"
-            @change="handleTagChange"
-          />
-          <span v-if="showAddTemplate">
-            <el-button size="mini" type="primary" @click="showTemplateDialog=true">
-              {{ $t('TemplateAdd') }}
-            </el-button>
-            <span class="help-block">
-              {{ addTemplateHelpText }}
-            </span>
+      <div v-if="showSpecZone" class="spec-accounts spec-zone">
+        <div class="group-title">{{ $t('SpecAccount') }}</div>
+        <TagInput
+          v-model="specAccountsInput"
+          :autocomplete="autocomplete"
+          :tag-type="getTagType"
+          @change="handleTagChange"
+        />
+        <span v-if="showAddTemplate">
+          <el-button size="mini" type="primary" @click="showTemplateDialog=true">
+            {{ $t('TemplateAdd') }}
+          </el-button>
+          <span class="help-block">
+            {{ addTemplateHelpText }}
           </span>
-        </div>
+        </span>
+      </div>
 
-        <div v-if="showVirtualAccountCheckbox" class="spec-zone">
-          <div class="group-title">{{ $t('VirtualAccounts') }}</div>
-          <el-checkbox
+      <!--      <div v-if="showNotAccounts" class="not-accounts spec-zone">-->
+      <!--        <div class="group-title">{{ $t('ExcludeAccount') }}</div>-->
+      <!--        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />-->
+      <!--      </div>-->
+
+      <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
+        <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
+          {{ virtualAccount.label }}
+        </el-checkbox>
+        <el-select
+          v-if="virtualChecked"
+          v-model="virtualSelected"
+          :multiple="true"
+          :placeholder="$t('SelectVirtualAccount')"
+          @change="handleVirtualChecked"
+        >
+          <el-option
             v-for="i in virtualAccounts"
             :key="i.label"
-            :label="i.value"
-            @change="handleCheckboxCheck(i, $event)"
+            :label="i.label"
+            :value="i.value"
           >
             {{ i.label }}
             <el-tooltip :content="i.tip" :open-delay="500" placement="top">
               <i class="fa fa-question-circle-o" />
             </el-tooltip>
-          </el-checkbox>
-        </div>
-      </el-checkbox-group>
+          </el-option>
+        </el-select>
+      </div>
     </el-form-item>
 
     <Dialog
@@ -65,12 +79,16 @@
 <script>
 import { TagInput } from '@/components/Form/FormFields'
 import {
-  AccountLabelMapper,
+  accountTemplateTable,
   AllAccount,
   AnonymousAccount,
   ManualAccount,
+  NotAccount,
+  realChoices,
   SameAccount,
-  SpecAccount
+  SpecAccount,
+  virtualAccount,
+  virtualAccounts
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
@@ -102,7 +120,7 @@ export default {
       type: Boolean,
       default: true
     },
-    showVirtualAccount: {
+    enableVirtualAccount: {
       type: Boolean,
       default: true
     },
@@ -116,53 +134,23 @@ export default {
   data() {
     const vm = this
     const virtual = '@VIRTUAL'
-    const choices = [
-      {
-        label: AccountLabelMapper[AllAccount],
-        value: AllAccount,
-        tip: this.$t('AllAccountTip')
-      },
-      {
-        label: AccountLabelMapper[SpecAccount],
-        value: SpecAccount,
-        tip: this.$t('SpecAccountTip')
-      },
-      {
-        label: this.$t('VirtualAccounts'),
-        value: virtual,
-        tip: this.$t('VirtualAccountHelpMsg'),
-        disabled: !this.showVirtualAccount,
-        has: this.showVirtualAccount !== false
-      }
-    ]
     return {
       ALL: AllAccount,
       SPEC: SpecAccount,
       VIRTUAL: virtual,
+      EXCLUDE: NotAccount,
       showTemplateDialog: false,
-      choices: choices,
-      virtualAccounts: [
-        {
-          label: AccountLabelMapper[ManualAccount],
-          value: ManualAccount,
-          tip: this.$t('ManualAccountTip')
-        },
-        {
-          label: AccountLabelMapper[SameAccount],
-          value: SameAccount,
-          tip: this.$t('SameAccountTip')
-        },
-        {
-          label: AccountLabelMapper[AnonymousAccount],
-          value: AnonymousAccount,
-          tip: this.$t('AnonymousAccountTip')
-        }
-      ],
+      realRadioSelected: this.ALL,
+      realChoices: realChoices,
+      virtualChecked: false,
+      virtualSelected: [],
+      output: [],
+      excludeAccountsInput: [],
+      virtualAccounts: virtualAccounts,
       virtualAccountsNames: [ManualAccount, SameAccount, AnonymousAccount],
-      choicesSelected: [this.ALL],
       specAccountsInput: [],
       specAccountsTemplate: [],
-      showSpecAccounts: false,
+      showSpecZone: false,
       getTagType: (tag) => {
         if (vm.specAccountsTemplate.filter(i => i.username === tag).length > 0) {
           return 'primary'
@@ -170,43 +158,8 @@ export default {
           return 'info'
         }
       },
-      accountTemplateTable: {
-        tableConfig: {
-          url: '/api/v1/accounts/account-templates/',
-          columns: [
-            'name', 'username', 'has_secret', 'comment',
-            'date_created', 'date_updated'
-          ],
-          columnsMeta: {
-            name: {
-              formatterArgs: {
-                openInNewPage: true,
-                getRoute({ row, col, cellValue }) {
-                  return {
-                    name: 'AccountTemplateDetail',
-                    params: {
-                      id: row.id
-                    }
-                  }
-                }
-              }
-            },
-            has_secret: {
-              formatterArgs: {
-                showFalse: false
-              }
-            },
-            actions: {
-              has: false
-            }
-          }
-        },
-        headerActions: {
-          hasLeftActions: false,
-          hasImport: false,
-          hasExport: false
-        }
-      },
+      showExcludeZone: false,
+      accountTemplateTable: accountTemplateTable,
       autocomplete: (query, cb) => {
         const data = {
           username: query,
@@ -229,51 +182,59 @@ export default {
     }
   },
   computed: {
-    showVirtualAccountCheckbox() {
-      if (!this.showVirtualAccount) {
-        return false
-      }
-      const hasVirtual = this.choicesSelected.filter(i => {
-        return i && i.startsWith('@') && i !== '@ALL' && i !== '@SPEC'
-      })
-      return hasVirtual.length > 0
+    virtualAccount() {
+      return virtualAccount
+    }
+  },
+  watch: {
+    realRadioSelected(val) {
+      this.showSpecZone = val === this.SPEC
+      this.showExcludeZone = val === this.EXCLUDE
     }
   },
   mounted() {
     this.initDefaultChoice()
-    setTimeout(() => {
-      if (this.value.length === 0) {
-        this.$emit('input', ['@ALL'])
-      } else {
-        this.$emit('input', this.value)
-      }
-    })
   },
   methods: {
+    getVirtualChoices(val) {
+      return this.virtualAccounts.filter(i => {
+        return val.includes(i.value)
+      }).map(i => i.value)
+    },
+    getExcludeChoices(val) {
+      return val.filter(i => i.startsWith('!')).map(i => i.substring(1))
+    },
+    getSpecValues(val) {
+      return val.filter(i => !i.startsWith('@') && !i.startsWith('!'))
+    },
     initDefaultChoice() {
-      const choicesSelected = this.value.filter(i => {
-        return i.startsWith('@') && i !== this.SPEC && i !== this.VIRTUAL
-      })
-      // 是否添加特定账号选择
-      const specAccountsInput = this.value.filter(i => !i.startsWith('@') && i !== this.SPEC)
-      if (specAccountsInput.length > 0 && !choicesSelected.includes(this.ALL)) {
-        choicesSelected.push(this.SPEC)
-        this.showSpecAccounts = true
-      }
-      // 是否添加虚拟账号选择
-      const hasVirtual = this.value.filter(i => {
-        return i && i.startsWith('@') && i !== '@ALL' && i !== '@SPEC'
-      })
-      if (hasVirtual.length > 0 && !choicesSelected.includes(this.VIRTUAL)) {
-        choicesSelected.push(this.VIRTUAL)
+      const value = this.value || []
+      if (value.length === 0) {
+        value.push(this.ALL)
       }
 
-      // 如果没有就设置 ALL
-      if (choicesSelected.length === 0) {
-        choicesSelected.push(this.ALL)
+      const specAccountsInput = this.getSpecValues(value)
+      // const excludeAccountsInput = this.getExcludeChoices(value)
+      // 先清理 radio
+      const isAll = value.includes(this.ALL)
+      if (isAll) {
+        this.realRadioSelected = this.ALL
+      } else if (specAccountsInput.length > 0) {
+        this.realRadioSelected = this.SPEC
+        this.specAccountsInput = specAccountsInput
+        // } else if (excludeAccountsInput.length > 0) {
+        //   this.realRadioSelected = this.EXCLUDE
+        //   this.excludeAccountsInput = excludeAccountsInput
+      } else {
+        this.realRadioSelected = this.ALL
       }
-      this.choicesSelected = choicesSelected
-      this.specAccountsInput = specAccountsInput
+
+      // 清理虚拟账号
+      const virtualChoices = this.getVirtualChoices(this.value)
+      if (virtualChoices.length > 0) {
+        this.virtualChecked = true
+        this.virtualSelected = virtualChoices
+      }
     },
     handleAccountTemplateCancel() {
       this.showTemplateDialog = false
@@ -288,33 +249,35 @@ export default {
         this.outputValue()
       }, 100)
     },
-    handleCheckboxCheck(item, checked) {
-      if (item.value === this.SPEC) {
-        this.showSpecAccounts = checked
-      } else if (item.value === this.ALL) {
-        this.showSpecAccounts = checked ? false : checked
-      }
-      if (item.value === this.ALL) {
-        this.choicesSelected = this.choicesSelected.filter(i => i !== this.SPEC)
-      } else if (item.value === this.SPEC) {
-        this.choicesSelected = this.choicesSelected.filter(i => i !== this.ALL)
-      } else if (item.value === this.VIRTUAL) {
-        if (!checked) {
-          this.choicesSelected = this.choicesSelected.filter(i => !this.virtualAccountsNames.includes(i))
-        }
-      }
+    handleVirtualChecked(evt, checked) {
+      console.log('Vhcek cch')
       this.outputValue()
     },
-    handleTagChange(val) {
-      this.specAccountsInput = val
+    handleRadioChanged(value) {
+      this.outputValue()
+    },
+    handleTagChange() {
       this.outputValue()
     },
     outputValue() {
-      let choicesSelected = this.choicesSelected
-      if (this.showSpecAccounts) {
+      // 这是真是的
+      let choicesSelected = []
+      if (this.realRadioSelected === this.ALL) {
+        choicesSelected = [this.ALL]
+      } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
-        choicesSelected = [...this.choicesSelected, ...this.specAccountsInput, ...templateIds]
+        choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       }
+      // else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
+      //   choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)
+      // }
+
+      if (this.virtualChecked) {
+        choicesSelected = [...choicesSelected, ...this.virtualSelected]
+      }
+
+      this.$log.debug('choicesSelected', choicesSelected)
+
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
     }
@@ -349,10 +312,16 @@ export default {
 
 .spec-zone {
   border-bottom: dashed 1px var(--color-border);
-  padding-bottom: 5px;
+  padding-bottom: 10px;
 
   &:last-child {
     border-bottom: none;
+  }
+}
+
+.virtual-choices {
+  .el-select {
+    width: 100%;
   }
 }
 

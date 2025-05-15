@@ -76,7 +76,7 @@ export const platformFieldsMeta = (vm) => {
       }
     },
     charset: {},
-    domain_enabled: {
+    gateway_enabled: {
       el: {
         disabled: false
       }

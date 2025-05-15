@@ -30,6 +30,7 @@ export default {
         columnsMeta: {
           users_amount: {
             formatter: AmountFormatter,
+            width: 100,
             formatterArgs: {
               async: true,
               getItem(item) {

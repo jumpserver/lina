@@ -2,6 +2,7 @@ import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
 import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 import { changeMenuColor } from '@/utils/theme/color'
+import request from '@/utils/request'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -12,6 +13,7 @@ const state = {
   tagsView: tagsView,
   publicSettings: {},
   hasValidLicense: false,
+  authMethods: {},
   themeColors: JSON.parse(localStorage.getItem('themeColors')) || {}
 }
 
@@ -78,6 +80,34 @@ const actions = {
     changeMenuColor(themeColors)
     changeElementColor(themeColors)
     commit('setTheme', themeColors)
+  },
+  updateAuthItemStatus({ commit }, payload) {
+    const [key, value] = payload
+    return new Promise((resolve, reject) => {
+      const url = '/api/v1/settings/setting/?category=auth'
+      const data = { [key]: value }
+      request.patch(url, data).then(res => {
+        state.authMethods[key] = value
+        resolve(res)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  getAuthMethods({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      if (state.authMethods && Object.keys(state.authMethods).length > 0) {
+        resolve(state.authMethods)
+      } else {
+        const url = '/api/v1/settings/setting/?category=auth'
+        request.get(url).then(res => {
+          state.authMethods = res
+          resolve(res)
+        }).catch(error => {
+          reject(error)
+        })
+      }
+    })
   }
 }
 

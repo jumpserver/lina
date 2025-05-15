@@ -31,7 +31,7 @@
               class="asset-item"
             >
               <div class="asset-item">
-                <span>{{ asset.name }}({{ asset.ip }})</span>
+                <span>{{ asset.name }}<span v-if="asset.ip">({{ asset.ip }})</span></span>
               </div>
             </el-checkbox>
           </el-checkbox-group>

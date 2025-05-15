@@ -7,11 +7,23 @@ export const connectivityMeta = {
     faChoices: {
       '-': '',
       ok: 'fa-check-circle',
-      err: 'fa-times-circle'
+      err: 'fa-times-circle',
+      auth_err: 'fa-times-circle',
+      rdp_err: 'fa-times-circle',
+      password_err: 'fa-times-circle',
+      openssh_key_err: 'fa-times-circle',
+      ntlm_err: 'fa-times-circle',
+      create_temp_err: 'fa-times-circle'
     },
     classChoices: {
       ok: 'text-primary',
-      err: 'text-danger'
+      err: 'text-danger',
+      auth_err: 'text-danger',
+      rdp_err: 'text-danger',
+      password_err: 'text-danger',
+      openssh_key_err: 'text-danger',
+      ntlm_err: 'text-danger',
+      create_temp_err: 'text-danger'
     },
     getText({ cellValue }) {
       if (cellValue?.value === '-' || cellValue?.value === 'unknown') {

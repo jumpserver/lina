@@ -67,14 +67,16 @@ export default {
                 let url = ''
                 let options = []
                 switch (val) {
-                  case 'platform':
-                    url = '/api/v1/assets/platforms/?category=host'
+                  case 'platform': {
+                    const category = this.$route.query.category || 'host'
+                    url = `/api/v1/assets/platforms/?category=${category}`
                     break
+                  }
                   case 'node':
                     url = '/api/v1/assets/nodes/'
                     break
-                  case 'domain':
-                    url = '/api/v1/assets/domains/'
+                  case 'zone':
+                    url = '/api/v1/assets/zones/'
                     break
                   case 'account_template':
                     url = '/api/v1/accounts/account-templates/'
@@ -209,7 +211,7 @@ export default {
     beforeSubmit(data) {
       let status = true
       const labelMap = {
-        platform: this.$tc('Platform'), domain: this.$tc('Zone'),
+        platform: this.$tc('Platform'), zone: this.$tc('Zone'),
         name_strategy: this.$tc('Strategy')
       }
       this.tableConfig.totalData.map(item => {

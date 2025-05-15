@@ -14,6 +14,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import IBox from '@/components/Common/IBox/index.vue'
+import { LeakPasswords } from '@/components'
 
 export default {
   name: 'EmailContent',
@@ -35,14 +36,18 @@ export default {
         [
           this.$t('PasswordRule'),
           [
-            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH',
+            'SECURITY_LEAK_PASSWORD_LIST', 'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH',
             'SECURITY_PASSWORD_UPPER_CASE', 'SECURITY_PASSWORD_LOWER_CASE',
             'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
           ]
         ]
       ],
-      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
-      fieldsMeta: {},
+      fieldsMeta: {
+        SECURITY_LEAK_PASSWORD_LIST: {
+          component: LeakPasswords,
+          label: this.$t('LeakPasswordList')
+        }
+      },
       url: '/api/v1/settings/setting/?category=security_password'
     }
   },

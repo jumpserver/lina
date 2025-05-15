@@ -50,7 +50,7 @@ export default {
         ]],
         [this.$t('Config'), [
           'protocols', 'su_enabled', 'su_method',
-          'domain_enabled', 'ds_enabled',
+          'gateway_enabled', 'ds_enabled',
           'charset'
         ]],
         [this.$t('Automations'), ['automation']],
@@ -152,7 +152,7 @@ export default {
       })
       this.fieldsMeta.protocols.el.choices = protocols
 
-      const fieldsCheck = ['domain_enabled', 'su_enabled']
+      const fieldsCheck = ['gateway_enabled', 'su_enabled']
       for (const field of fieldsCheck) {
         const disabled = constraints[field] === false
         this.initial[field] = !disabled

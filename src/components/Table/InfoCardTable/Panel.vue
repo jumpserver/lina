@@ -1,5 +1,5 @@
 <template>
-  <div class="info-panel">
+  <div class="info-panel" @click="gotoDetail">
     <div class="panel-header">
       <div class="panel-title">
         <el-avatar :src="imageUrl" shape="square" />
@@ -30,7 +30,7 @@
         </el-dropdown>
       </div>
     </div>
-    <div class="panel-content" @click="gotoDetail">
+    <div class="panel-content">
       <InfoPanel :infos="getInfos(object)" />
     </div>
     <el-row class="panel-footer" />
@@ -158,6 +158,7 @@ div.info-panel {
   flex-direction: column;
   padding: 10px;
   gap: 10px;
+  cursor: pointer;
 
   .panel-header {
     padding: 10px 20px;
@@ -165,7 +166,6 @@ div.info-panel {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    cursor: default;
 
     .panel-title {
       display: flex;
@@ -216,7 +216,6 @@ div.info-panel {
   .panel-content {
     display: block;
     padding: 1px 25px 10px;
-    cursor: pointer;
 
     .panel-image {
       margin: auto 5px;

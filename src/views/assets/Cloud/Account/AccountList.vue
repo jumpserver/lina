@@ -21,7 +21,7 @@
 </template>
 
 <script type="text/jsx">
-import { lan, privateCloudProviders, publicCloudProviders } from '../const'
+import { lan, privateCloudProviders, publicHostProviders, publicDBProviders } from '../const'
 import CreateDialog from './components/CreateDialog.vue'
 import UpdateDialog from './components/UpdateDialog.vue'
 import SyncDialog from './components/SyncDialog.vue'
@@ -43,11 +43,12 @@ export default {
       object: null,
       table: {
         tableConfig: {
-          url: '/api/v1/xpack/cloud/accounts/',
+          url: '',
           permissions: {
             app: 'xpack',
             resource: 'account'
-          }
+          },
+          extraQuery: {}
         },
         subComponentProps: {
           handleUpdate: (obj) => {
@@ -102,7 +103,8 @@ export default {
                 title: this.$t('PublicCloud'),
                 icon: 'public-cloud',
                 callback: () => {
-                  this.providerConfig.providers = publicCloudProviders.map(
+                  const providers = this.iCategory === 'host' ? publicHostProviders : publicDBProviders
+                  this.providerConfig.providers = providers.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
                   )
                   this.visible = true
@@ -110,8 +112,9 @@ export default {
               },
               {
                 name: 'privateCloud',
-                icon: 'private-cloud',
                 title: this.$t('PrivateCloud'),
+                icon: 'private-cloud',
+                has: () => this.iCategory === 'host',
                 callback: () => {
                   this.providerConfig.providers = privateCloudProviders.map(
                     (item) => ACCOUNT_PROVIDER_ATTRS_MAP[item]
@@ -123,6 +126,7 @@ export default {
                 name: 'LAN',
                 title: this.$t('LAN'),
                 icon: 'computer',
+                has: () => this.iCategory === 'host',
                 callback: () => {
                   const providers = [lan]
                   this.providerConfig.providers = providers.map(
@@ -133,7 +137,8 @@ export default {
               }
             ]
           }
-        }
+        },
+        detailDrawer: () => import('@/views/assets/Cloud/Account/AccountDetail/index.vue')
       },
       providerConfig: {
         providers: []
@@ -141,6 +146,11 @@ export default {
       visible: false,
       updateVisible: false,
       onlineSyncVisible: false
+    }
+  },
+  computed: {
+    iCategory() {
+      return this.$route.query.category || 'host'
     }
   },
   watch: {
@@ -165,6 +175,10 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.table.tableConfig.url = '/api/v1/xpack/cloud/accounts/'
+    this.table.tableConfig.extraQuery = { category: this.iCategory }
   },
   methods: {
     valid(status) {

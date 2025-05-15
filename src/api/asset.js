@@ -16,9 +16,9 @@ export function getSystemUserList(data) {
   })
 }
 
-export function getDomainList(data) {
+export function getZoneList(data) {
   return request({
-    url: '/api/v1/assets/domains/',
+    url: '/api/v1/assets/zones/',
     method: 'get',
     params: data
   })

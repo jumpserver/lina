@@ -183,8 +183,8 @@ export default {
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
         fields: [
-          'id', 'name', 'category', 'type',
-          'address', 'platform', 'protocols', 'domain',
+          'id', 'name', 'category', 'type', 'address',
+          'platform', 'protocols', 'zone', 'directory_services',
           'is_active', 'date_created', 'date_updated',
           'created_by', 'comment'
         ],

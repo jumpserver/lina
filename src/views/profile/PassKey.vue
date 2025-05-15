@@ -68,6 +68,7 @@ export default {
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,
+              width: '180px',
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.reloadTable()
@@ -129,7 +130,7 @@ export default {
       this.$axios.get(url).then(res => {
         return this.makeCredReq(res)
       }).then((options) => {
-        if (!location.protocol.startsWith('https')) {
+        if (!location.protocol.startsWith('https') && !location.host.startsWith('localhost:')) {
           throw new Error(this.$tc('HTTPSRequiredForSupport'))
         }
         return navigator.credentials.create(options)

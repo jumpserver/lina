@@ -24,6 +24,8 @@ import SAML2 from './SAML2'
 import OAuth2 from './OAuth2'
 import Passkey from './Passkey.vue'
 import Slack from './Slack.vue'
+import { getAuthItems } from './const'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -46,113 +48,38 @@ export default {
     Slack
   },
   data() {
-    let extraBackends = []
-    let ldapHABackends = []
-    if (this.$store.getters.hasValidLicense) {
-      extraBackends = [
-        {
-          title: this.$t('OIDC'),
-          name: 'OIDC',
-          key: 'AUTH_OPENID'
-        },
-        {
-          title: this.$t('SAML2'),
-          name: 'SAML2',
-          key: 'AUTH_SAML2'
-        },
-        {
-          title: this.$t('OAuth2'),
-          name: 'OAuth2',
-          key: 'AUTH_OAUTH2'
-        },
-        {
-          title: this.$t('WeCom'),
-          name: 'WeCom',
-          key: 'AUTH_WECOM'
-        },
-        {
-          title: this.$t('DingTalk'),
-          name: 'DingTalk',
-          key: 'AUTH_DINGTALK'
-        },
-        {
-          title: this.$t('FeiShu'),
-          name: 'FeiShu',
-          key: 'AUTH_FEISHU'
-        },
-        {
-          title: 'Lark',
-          name: 'Lark',
-          key: 'AUTH_LARK'
-        },
-        {
-          title: this.$t('Slack'),
-          name: 'Slack',
-          key: 'AUTH_SLACK'
-        },
-        {
-          title: this.$t('Radius'),
-          name: 'Radius',
-          key: 'AUTH_RADIUS'
-        }
-      ]
-      ldapHABackends = [
-        {
-          title: this.$t('LDAP HA'),
-          name: 'LdapHA',
-          key: 'AUTH_LDAP_HA'
-        }
-      ]
-    }
     return {
       loading: true,
       activeMenu: 'Basic',
-      submenu: [
+      authMethods: []
+    }
+  },
+  computed: {
+    ...mapState({
+      authMethodsSetting: state => state.settings.authMethods
+    }),
+    submenu() {
+      return [
         {
           title: this.$t('Basic'),
           name: 'Basic'
         },
-        {
-          title: this.$t('Ldap'),
-          name: 'LDAP',
-          key: 'AUTH_LDAP'
-        },
-        ...ldapHABackends,
-        {
-          title: this.$t('CAS'),
-          name: 'CAS',
-          key: 'AUTH_CAS'
-        },
-        {
-          title: this.$t('Passkey'),
-          name: 'Passkey',
-          key: 'AUTH_PASSKEY'
-        },
-        ...extraBackends
+        ...this.authMethods.map(item => {
+          return {
+            ...item,
+            hidden: () => !this.authMethodsSetting[item.authKey]
+          }
+        })
       ]
     }
   },
-  computed: {
-    componentData() {
-      return {}
-    }
+  created() {
+    this.$store.dispatch('settings/getAuthMethods').then()
   },
-  mounted() {
-    this.$axios.get('/api/v1/settings/setting/?category=auth').then(res => {
-      for (const item of this.submenu) {
-        const key = item.key
-        if (!key) {
-          continue
-        }
-        if (res[key]) {
-          item.icon = 'fa-check-circle text-primary'
-        }
-      }
-    }).finally(() => {
-      this.loading = false
-    })
-  },
-  methods: {}
+  async mounted() {
+    this.authMethods = getAuthItems()
+    this.loading = false
+  }
 }
 </script>
 

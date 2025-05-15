@@ -129,8 +129,18 @@ export default {
     parseArrayValue(value, excludes, label) {
       if (Array.isArray(value)) {
         const tp = typeof value[0]
+        let object = {}
+
+        if (value.length === 0) {
+          object = {
+            key: label,
+            value: '-'
+          }
+          return this.items.push(object)
+        }
+
+        // 如果是空数组，那么循环体将不会执行
         for (const [index, item] of value.entries()) {
-          let object = {}
           if (tp === 'object') {
             const firstValue = value[0]
             if (firstValue.hasOwnProperty('name')) {

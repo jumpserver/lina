@@ -56,7 +56,7 @@ export default {
           platform: {
             hidden: () => true
           },
-          domain: {
+          zone: {
             hidden: () => {
               return !this.$store.getters.hasValidLicense
             },

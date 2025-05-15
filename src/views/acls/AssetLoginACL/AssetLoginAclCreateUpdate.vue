@@ -55,7 +55,7 @@ export default {
           component: AccountFormatter,
           el: {
             showAddTemplate: false,
-            showVirtualAccount: false,
+            enableVirtualAccount: false,
             value: ['@ALL'],
             assets: []
           },

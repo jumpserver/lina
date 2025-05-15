@@ -170,7 +170,7 @@ export default {
       const [start, end] = val.split('~')
       const startVal = this.countIndex(start)
       const endVal = this.countIndex(end)
-      for (let i = startVal; i < (endVal === 0 ? 48 : endVal); i++) {
+      for (let i = startVal; i < (endVal === 0 ? 24 : endVal); i++) {
         const curWeek = this.weekTimeData[idNum]
         const curChild = curWeek.child[i]
         if (curChild) {
@@ -181,11 +181,8 @@ export default {
     // 计算索引
     countIndex(val) {
       const one = val.substr(0, 2)
-      const a1 = one.startsWith('0') ? one.substr(1, 2) : one
-      var reg = RegExp(/30/)
-      const a2 = val.match(reg) ? 1 : 0
-      const curIndex = (a1 * 2) + a2
-      return curIndex
+      const index = one.startsWith('0') ? one.substr(1, 2) : one
+      return Number(index)
     },
     formatDate(date, fmt) {
       const o = {

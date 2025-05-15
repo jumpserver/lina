@@ -397,8 +397,9 @@ export function getDrawerWidth() {
 }
 
 export class ObjectLocalStorage {
-  constructor(key) {
+  constructor(key, attr) {
     this.key = key
+    this.attr = attr
   }
 
   b64(val) {
@@ -421,6 +422,9 @@ export class ObjectLocalStorage {
 
   get(attr, defaults) {
     const obj = this.getObject(this.key)
+    if (!attr && this.attr) {
+      attr = this.attr
+    }
     const attrSafe = this.b64(attr)
     const val = obj[attrSafe]
     if (val === undefined) {
@@ -431,6 +435,10 @@ export class ObjectLocalStorage {
 
   set(attr, value) {
     const obj = this.getObject(this.key)
+    if (value === undefined && this.attr) {
+      value = attr
+      attr = this.attr
+    }
     const attrSafe = this.b64(attr)
     obj[attrSafe] = value
     window.localStorage.setItem(this.key, JSON.stringify(obj))

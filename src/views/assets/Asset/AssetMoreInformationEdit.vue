@@ -22,7 +22,7 @@ export default {
           fields: [
             'vendor', 'model', 'sn', 'cpu_model', 'cpu_count',
             'cpu_cores', 'cpu_vcpus', 'memory', 'disk_total',
-            'distribution', 'distribution_version', 'arch'
+            'distribution', 'distribution_version', 'arch', 'gpu_model'
           ]
         }
       },

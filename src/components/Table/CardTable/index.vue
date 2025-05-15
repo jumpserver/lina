@@ -34,6 +34,12 @@
       @currentSizeChange="handleCurrentChange"
       @sizeChange="handleSizeChange"
     />
+    <Drawer
+      v-if="detailDrawer"
+      :component="detailDrawer"
+      :title="detailTitle"
+      :visible.sync="detailDrawerVisible"
+    />
   </div>
 </template>
 
@@ -43,12 +49,14 @@ import { Pagination } from '@/components'
 import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'
+import Drawer from '@/components/Drawer/index.vue'
 
 const defaultFirstPage = 1
 
 export default {
   name: 'CardTable',
   components: {
+    Drawer,
     IBox,
     Panel,
     TableAction,
@@ -79,6 +87,10 @@ export default {
     subComponentProps: {
       type: Object,
       default: () => ({})
+    },
+    detailDrawer: {
+      type: [String, Function],
+      default: ''
     }
   },
   data() {
@@ -97,7 +109,9 @@ export default {
           display: 1,
           draw: 1
         }
-      }
+      },
+      detailDrawerVisible: false,
+      detailTitle: ''
     }
   },
   computed: {
@@ -137,9 +151,10 @@ export default {
         return
       }
       const pageQuery = this.getPageQuery(this.page, this.paginationSize)
-      const query = Object.assign(this.extraQuery, pageQuery)
+      const query = Object.assign(this.extraQuery, pageQuery, this.tableConfig.extraQuery)
       const queryString = Object.keys(query).map(key => key + '=' + query[key]).join('&')
-      const url = `${this.tableUrl}?${queryString}`
+      const connector = this.tableUrl.indexOf('?') === -1 ? '?' : '&'
+      const url = `${this.tableUrl}${connector}${queryString}`
 
       const resp = await this.$axios.get(url, this.axiosConfig)
       const data = resp.data
@@ -177,12 +192,20 @@ export default {
     defaultPerformDelete(obj) {
       this.$axios.delete(`${this.tableConfig.url}${obj.id}/`)
     },
-    onView(obj) {
+    async onView(obj) {
       if (this.isDisabled(obj)) {
         return
       }
-      const viewFunc = this.tableConfig.onView || this.defaultPerformView
-      viewFunc(obj)
+      if (this.detailDrawer) {
+        await this.$store.dispatch('common/setDrawerActionMeta', {
+          action: 'detail', row: obj, col: {}, id: obj.id
+        })
+        this.detailTitle = `${this.$t('Detail')}: ${obj.name}`
+        this.detailDrawerVisible = true
+      } else {
+        const viewFunc = this.tableConfig.onView || this.defaultPerformView
+        await viewFunc(obj)
+      }
     },
     onDelete(obj) {
       const msg = `${this.$t('DeleteWarningMsg')} "${obj.name}" ?`

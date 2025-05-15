@@ -18,10 +18,10 @@ export default {
   },
   data() {
     return {
-      createDrawer: () => import('./DomainCreateUpdate.vue'),
-      detailDrawer: () => import('./DomainDetail/index.vue'),
+      createDrawer: () => import('./ZoneCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/assets/Zone/ZoneDetail/index.vue'),
       tableConfig: {
-        url: '/api/v1/assets/domains/',
+        url: '/api/v1/assets/zones/',
         columnsExclude: ['gateway'],
         columnsExtra: ['gateways'],
         columns: ['name', 'assets_amount', 'gateways', 'labels', 'comment', 'actions'],
