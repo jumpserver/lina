@@ -39,7 +39,8 @@ export default {
     },
     columnsMeta: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     columnsExclude: {
       type: Array,
@@ -57,12 +58,15 @@ export default {
           id: {
             prop: 'id',
             label: this.$t('Number'),
+            width: '80px',
             align: 'center',
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
               can: this.$hasPerm('assets.view_asset'),
-              getTitle: ({ row, col, cellValue, index }) => { return index + 1 },
+              getTitle: ({ row, col, cellValue, index }) => {
+                return index + 1
+              },
               getDrawerTitle: ({ row }) => {
                 return row.id
               },
@@ -78,7 +82,9 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
-              getTitle: ({ row }) => { return row.user },
+              getTitle: ({ row }) => {
+                return row.user
+              },
               getRoute: ({ row }) => {
                 return {
                   name: 'UserDetail',
