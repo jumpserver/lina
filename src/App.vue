@@ -74,7 +74,7 @@ export default {
     },
 
     createWatermark() {
-      if (this.currentUser?.username && this.publicSettings?.SECURITY_WATERMARK_ENABLED && this.$store.getters.hasValidLicense) {
+      if (this.currentUser?.username && this.publicSettings?.SECURITY_WATERMARK_ENABLED) {
         this.watermark = new Watermark({
           content: this.getWaterMarkContent(),
           width: this.publicSettings?.SECURITY_WATERMARK_WIDTH,
