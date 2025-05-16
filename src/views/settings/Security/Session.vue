@@ -58,7 +58,7 @@ export default {
               'SECURITY_WATERMARK_HEIGHT',
               'SECURITY_WATERMARK_WIDTH',
               'SECURITY_WATERMARK_ROTATE'
-            ] : []
+            ] : ['SECURITY_WATERMARK_ENABLED']
           ]
         ],
         fieldsMeta: {
