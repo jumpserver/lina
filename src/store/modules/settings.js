@@ -62,7 +62,7 @@ const actions = {
             link.href = faviconURL
           }
           // 动态修改Title
-          document.title = data['INTERFACE']['login_title']
+          document.title = data?.INTERFACE?.login_title || ''
         }
         const themeColors = data?.INTERFACE?.theme_info?.colors || {}
         commit('SET_PUBLIC_SETTINGS', data)
