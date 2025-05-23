@@ -22,6 +22,19 @@ export default {
               component: BoolTextReadonly
             }
           }
+        },
+        basic: {
+          fieldsMeta: {
+            lang: {
+              on: {
+                change: ([value], updateForm) => {
+                  this.$axios.get(`/core/i18n/${value}/`).then(() => {
+                    window.location.reload()
+                  })
+                }
+              }
+            }
+          }
         }
       }
     }
