@@ -28,19 +28,20 @@ export const fc = 'fc'
 export const scp = 'scp'
 export const apsara_stack = 'apsara_stack'
 export const lan = 'lan'
+export const smartx = 'smartx'
 
 export const publicHostProviders = [
   aliyun, qcloud, qcloud_lighthouse, huaweicloud,
   baiducloud, jdcloud, kingsoftcloud, aws_china,
   aws_international, azure, azure_international,
-  gcp, ucloud, volcengine
+  gcp, ucloud, volcengine, smartx
 ]
 
 export const publicDBProviders = [aliyun]
 
 export const privateCloudProviders = [
   vmware, qingcloud_private, huaweicloud_private, ctyun_private,
-  openstack, zstack, nutanix, fc, scp, apsara_stack
+  openstack, zstack, nutanix, fc, scp, apsara_stack, smartx
 ]
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
@@ -163,6 +164,12 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     title: i18n.t('ZStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
     image: require('@/assets/img/cloud/zstack.svg')
+  },
+  [smartx]: {
+    name: smartx,
+    title: i18n.t('SmartX CloudTower'),
+    attrs: ['username', 'password', 'api_endpoint'],
+    image: require('@/assets/img/cloud/smartx.svg')
   },
   [fc]: {
     name: fc,
