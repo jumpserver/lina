@@ -42,11 +42,12 @@ export default {
         hasCreate: true,
         hasSearch: true,
         hasRefresh: true,
-        hasBulkDelete: false,
+        hasBulkDelete: true,
         hasBulkUpdate: false,
         hasLeftActions: true,
         hasRightActions: true,
-        canCreate: this.$hasPerm('settings.change_security')
+        canCreate: this.$hasPerm('settings.change_security'),
+        canBulkDelete: this.$hasPerm('settings.change_security')
       }
     }
   }
