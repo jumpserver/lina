@@ -38,6 +38,12 @@ export default {
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
             component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
+          },
+          {
+            title: this.$t('ChangeSecretAccount'),
+            name: 'ChangeSecretAccount',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountList.vue')
           }
         ]
       }
