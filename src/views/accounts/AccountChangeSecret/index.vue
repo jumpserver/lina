@@ -38,13 +38,22 @@ export default {
             name: 'ChangeSecretRecord',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord'),
             component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
+          },
+          {
+            title: this.$t('ChangeSecretAccount'),
+            name: 'ChangeSecretAccount',
+            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution') || !this.ChangeSecretAfterSessionEnd,
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountList.vue')
           }
         ]
       }
     }
   },
   computed: {
-    ...mapGetters(['hasValidLicense'])
+    ...mapGetters(['hasValidLicense']),
+    ChangeSecretAfterSessionEnd() {
+      return this.publicSettings?.CHANGE_SECRET_AFTER_SESSION_END
+    }
   },
   mounted() {
     this.$eventBus.$on('change-tab', this.handleChangeTab)
