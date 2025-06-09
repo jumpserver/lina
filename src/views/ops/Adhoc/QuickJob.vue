@@ -157,10 +157,6 @@ export default {
                   assets: hosts,
                   query: query
                 }).then(data => {
-                  if (Array.isArray(data) && data.length === 0) {
-                    this.$message.info(`${this.$t('NoAccountFound')}`)
-                    return cb([])
-                  }
                   const ns = data.map(item => {
                     return { value: item.username }
                   })
