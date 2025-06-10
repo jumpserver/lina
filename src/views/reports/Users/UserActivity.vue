@@ -1,91 +1,76 @@
 <template>
   <div>
-    <div class="header nav-bar">
-      <div class="nav-bar-logo">
-        <Logo />
-      </div>
-      <div class="nav-bar-right">
-        <el-button type="primary" size="small">Export</el-button>
-        <el-button type="primary" size="small">Print</el-button>
-      </div>
-    </div>
-    <div class="content">
-      <div class="title">
-        用户活跃度分析报告
-      </div>
-      <div class="description">
-        This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.
-      </div>
-
-      <div class="charts-grid">
-        <!-- 用户登录趋势 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">用户登录趋势</div>
-            <div class="chart">
-              <echarts
-                ref="loginTrend"
-                :options="loginTrendOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 密码重置统计 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">密码重置统计</div>
-            <div class="chart">
-              <echarts
-                ref="passwordReset"
-                :options="passwordResetOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 用户活跃度分布 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">用户活跃度分布</div>
-            <div class="chart">
-              <echarts
-                ref="userActivity"
-                :options="userActivityOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 访问时段分布 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">访问时段分布</div>
-            <div class="chart">
-              <echarts
-                ref="timeDistribution"
-                :options="timeDistributionOptions"
-                :autoresize="true"
-              />
-            </div>
+    <BaseReport
+      title="用户活跃度分析报告"
+      description="This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details."
+    >
+      <!-- 用户登录趋势 -->
+      <div class="chart-container">
+        <div class="chart-container-title">
+          <div class="chart-container-title-text">用户登录趋势</div>
+          <div class="chart">
+            <echarts
+              ref="loginTrend"
+              :options="loginTrendOptions"
+              :autoresize="true"
+            />
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- 密码重置统计 -->
+      <div class="chart-container">
+        <div class="chart-container-title">
+          <div class="chart-container-title-text">密码重置统计</div>
+          <div class="chart">
+            <echarts
+              ref="passwordReset"
+              :options="passwordResetOptions"
+              :autoresize="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户活跃度分布 -->
+      <div class="chart-container">
+        <div class="chart-container-title">
+          <div class="chart-container-title-text">用户活跃度分布</div>
+          <div class="chart">
+            <echarts
+              ref="userActivity"
+              :options="userActivityOptions"
+              :autoresize="true"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 访问时段分布 -->
+      <div class="chart-container">
+        <div class="chart-container-title">
+          <div class="chart-container-title-text">访问时段分布</div>
+          <div class="chart">
+            <echarts
+              ref="timeDistribution"
+              :options="timeDistributionOptions"
+              :autoresize="true"
+            />
+          </div>
+        </div>
+      </div>
+    </BaseReport>
   </div>
 </template>
 
 <script>
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
-import Logo from '@/layout/components/NavLeft/Logo'
+import BaseReport from '@/views/reports/base/BaseReport.vue'
 
 export default {
   components: {
-    Logo
+    BaseReport
   },
   data() {
     return {
@@ -442,5 +427,50 @@ export default {
       font-size: 11px;
     }
   }
+
+.export-bar {
+  background: #1da1f2;
+  padding: 0 16px;
+  border-radius: 0 0 4px 4px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.export-btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0 2px;
+
+  &.el-button--text {
+    color: #fff;
+  }
+
+  span {
+    color: #fff;
+  }
+}
+.export-btn .el-icon-document,
+.export-btn .el-icon-printer,
+.export-btn .el-icon-message {
+  margin-right: 4px;
+}
+.divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(255,255,255,0.5);
+  margin: 0 8px;
+  display: inline-block;
+}
+.el-button-group {
+  background: transparent;
+  box-shadow: none;
+}
+.export-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
 }
 </style>
