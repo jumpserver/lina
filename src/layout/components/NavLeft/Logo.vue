@@ -19,7 +19,7 @@ export default {
   props: {
     collapse: {
       type: Boolean,
-      required: true
+      default: false
     }
   },
   data() {

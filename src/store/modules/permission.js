@@ -74,9 +74,17 @@ function cleanRouteAction(route) {
 }
 
 function cleanRoute(tmp, parent) {
-  if (!parent) { parent = { meta: { level: 0, fullPath: '' }} }
-  if (!parent.meta) { parent.meta = {} }
-  if (!tmp.meta) { tmp.meta = {} }
+  if (!parent) {
+    parent = { meta: { level: 0, fullPath: '' } }
+  }
+  if (!parent.meta) {
+    parent.meta = {}
+  }
+  if (!tmp.meta) {
+    tmp.meta = {}
+  }
+
+  console.log('tmp', tmp.name)
 
   // 根据层级来标识 类型是 view, app, resource 还是crud
   if (!tmp.meta.level) {
@@ -135,7 +143,7 @@ function cleanRoute(tmp, parent) {
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
   if (!tmp.meta.fullPath) {
-    if (tmp.path[0] === '/') {
+    if (tmp.path && tmp.path[0] === '/') {
       tmp.meta['fullPath'] = tmp.path
     } else {
       tmp.meta.fullPath = parentFullPath ? parentFullPath + '/' + tmp.path : parentFullPath
