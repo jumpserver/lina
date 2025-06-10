@@ -140,14 +140,11 @@ export default {
       this._cleanFormValue(this.iForm, this.remoteMeta)
     },
     setFieldError(name, error) {
+      error = error.replace(/[。.]+$/, '')
       const field = this.totalFields.find((v) => v.prop === name)
       if (!field) {
         return
       }
-      if (field.attrs.error === error) {
-        error += '.'
-      }
-
       if (typeof error === 'string') {
         field.el.errors = error
         field.attrs.error = error
