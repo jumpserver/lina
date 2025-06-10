@@ -5,6 +5,7 @@
 <script>
 import { TabPage } from '@/layout/components'
 import { mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'Index',
@@ -40,8 +41,8 @@ export default {
             component: () => import('@/views/accounts/AccountChangeSecret/ExecutionDetail/AccountChangeSecretRecord.vue')
           },
           {
-            title: this.$t('ChangeSecretAccount'),
-            name: 'ChangeSecretAccount',
+            title: this.$t('ChangeSecretStatus'),
+            name: 'ChangeSecretStatus',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution') || !this.ChangeSecretAfterSessionEnd,
             component: () => import('@/views/accounts/AccountChangeSecret/AccountList.vue')
           }
@@ -52,7 +53,7 @@ export default {
   computed: {
     ...mapGetters(['hasValidLicense']),
     ChangeSecretAfterSessionEnd() {
-      return this.publicSettings?.CHANGE_SECRET_AFTER_SESSION_END
+      return store.getters.publicSettings?.CHANGE_SECRET_AFTER_SESSION_END
     }
   },
   mounted() {
