@@ -97,6 +97,11 @@ export default {
       this.$refs.drawer.handleHeaderMoveDown(event)
     },
     handleMouseMoveUp(event) {
+      // Prevent the new chat button from triggering the header move up
+      const newButton = event.target.closest('.new')
+      if (newButton) {
+        return
+      }
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
     initWebSocket() {
