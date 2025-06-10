@@ -43,7 +43,7 @@ export default {
         },
         {
           key: this.$t('LastPublishedTime'),
-          value: this.object.last_published_time
+          value: this.object.date_last_publish
         },
         {
           key: this.$t('Description'),
