@@ -4,7 +4,7 @@
       <Title :config="config" />
     </div>
     <div class="metrics-section">
-      <div ref="chartRef" class="chart-container" />
+      <div ref="chartRef" class="the-chart" />
     </div>
   </div>
 </template>
@@ -299,7 +299,7 @@ export default {
   }
 }
 
-.chart-container {
+.the-chart {
   width: 100%;
   height: 16rem;
 }

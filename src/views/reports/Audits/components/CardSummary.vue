@@ -76,7 +76,7 @@ export default {
         {
           title: this.$t('OnlineSessions'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' } },
             count: this.data.total_count_online_sessions,
             disabled: !this.$hasPerm('terminal.view_session')
           }
@@ -84,7 +84,7 @@ export default {
         {
           title: this.$t('HistoricalSessionNum'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OfflineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OfflineList' } },
             count: this.data.total_count_history_sessions,
             disabled: !this.$hasPerm('terminal.view_session')
           }

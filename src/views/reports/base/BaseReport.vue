@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="header nav-bar">
+  <div :class="{ 'no-nav': onlyCharts }">
+    <div v-if="!onlyCharts" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
       </div>
@@ -22,17 +22,18 @@
       </div>
     </div>
     <div class="content">
-      <div class="title">
-        {{ title }}
+      <div v-if="!onlyCharts">
+        <div class="title">
+          {{ title }}
 
-        <span class="datetime">
-          [{{ new Date().toLocaleString() }}]
-        </span>
+          <span class="datetime">
+            [{{ new Date().toLocaleString() }}]
+          </span>
+        </div>
+        <div class="description">
+          {{ description }}
+        </div>
       </div>
-      <div class="description">
-        {{ description }}
-      </div>
-
       <div class="charts-zone">
         <slot />
       </div>
@@ -50,6 +51,10 @@ export default {
     Logo
   },
   props: {
+    onlyCharts: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: ''
@@ -60,7 +65,13 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+    }
+  },
+  mounted() {
+  },
+  beforeDestroy() {
+
   },
   methods: {
     exportExcel() {
@@ -73,7 +84,7 @@ export default {
       console.log('emailReport')
     },
     printReport() {
-      console.log('printReport')
+      window.print()
     },
     openSettings() {
       console.log('openSettings')
@@ -165,6 +176,18 @@ export default {
     overflow-y: auto;
   }
 
+  .no-nav {
+    .content {
+      height: auto;
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+
+    .charts-zone {
+      padding: 0;
+    }
+  }
+
   @media print {
     .content {
         overflow-y: hidden;
@@ -177,72 +200,71 @@ export default {
     }
   }
 
-  .charts-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-
-  .chart-container {
-    background-color: white;
-    border-radius: 4px;
-    padding: 16px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-
-  .chart-container-title {
-    margin-bottom: 16px;
-  }
-
-  .chart-container-title-text {
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 8px;
-  }
-
   .charts-zone {
     padding: 16px 30px;
     margin: 0 auto;
-    width: 1046px;
+    // width: 100%;
+    // max-width: 1046px;
+    box-sizing: border-box;
+    min-height: 100px; // 添加最小高度确保容器始终存在
 
     ::v-deep {
       .full-width-chart {
-         width: 100%;
-         margin-bottom: 32px;
+        width: 100%;
+        margin-bottom: 32px;
+        position: relative; // 添加相对定位
+      }
 
-         .chart-container-title {
-           margin-bottom: 0;
-         }
-         .chart {
-           width: 100%;
-           height: 350px;
-         }
-       }
+      .chart {
+        height: 300px;
+        position: relative; // 添加相对定位
+      }
 
-       .charts-grid {
-         display: grid;
-         grid-template-columns: repeat(2, 1fr);
-         gap: 16px;
-         max-width: 1600px;
-         margin: 0 auto;
-       }
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        width: 100%;
+        margin: 0 auto;
+      }
 
-       .full-width {
-         grid-column: 1 / -1;
-       }
+      .full-width {
+        grid-column: 1 / -1;
+      }
 
-       @media (max-width: 767px) {
-         .charts-grid {
-           grid-template-columns: 1fr;
-         }
-         .full-width {
-           grid-column: 1 / -1;
-         }
-       }
+      .chart-container {
+        background-color: white;
+        border-radius: 4px;
+        padding: 16px;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        max-width: calc(50vw - 30px);
+        min-width: 300px;
+
+        &.full-width {
+          max-width: calc(100vw - 60px);
+        }
+      }
+
+      .chart-container-title {
+        margin-bottom: 16px;
+      }
+
+      .chart-container-title-text {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      // @media (max-width: 767px) {
+      //   .charts-grid {
+      //     grid-template-columns: 1fr;
+      //   }
+      //   .full-width {
+      //     grid-column: 1 / -1;
+      //   }
+      // }
     }
   }
 

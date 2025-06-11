@@ -24,6 +24,36 @@ export default {
         icon: 'attestation',
         permissions: []
       }
+    },
+    {
+      path: '/reports/audits',
+      name: 'Audits',
+      component: () => import('@/views/reports/Audits/Dashboard.vue'),
+      meta: {
+        title: i18n.t('Audits'),
+        icon: 'attestation',
+        permissions: []
+      }
+    },
+    {
+      path: '/reports/console',
+      name: 'Console',
+      component: () => import('@/views/reports/Console/index.vue'),
+      meta: {
+        title: i18n.t('Console'),
+        icon: 'attestation',
+        permissions: []
+      }
+    },
+    {
+      path: '/reports/pam',
+      name: 'Pam',
+      component: () => import('@/views/reports/PAM/index.vue'),
+      meta: {
+        title: i18n.t('PAM'),
+        icon: 'attestation',
+        permissions: []
+      }
     }
   ]
 }

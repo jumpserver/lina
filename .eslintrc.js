@@ -265,13 +265,31 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'array-bracket-spacing': [2, 'never'],
     'spellcheck/spell-checker': [
-      1,
+      'warn',
       {
         comments: true,
-        strings: true,
-        identifiers: true,
+        strings: false,
+        identifiers: false,
         lang: 'en_US',
-        skipWords: ['dict', 'aff', 'hunspellchecker', 'hunspell', 'utils'],
+        skipWords: [
+          'echarts',
+          'resize',
+          'vue',
+          'eslint',
+          'babel',
+          'jsx',
+          'scss',
+          'v-deep',
+          'calc',
+          'vw',
+          'vh',
+          'px',
+          'rgba',
+          'rgb',
+          'var',
+          'lang',
+          'scoped'
+        ],
         skipIfMatch: [
           'http://[^s]*',
           '^[-\\w]+/[-\\w\\.]+$' // For import paths
