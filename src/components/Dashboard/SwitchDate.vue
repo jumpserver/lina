@@ -47,6 +47,16 @@ export default {
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
+  created() {
+    const days = this.$route.query.days
+    if (days && days !== this.select) {
+      this.select = days
+      this.$emit('change', days)
+    }
+  },
+  mounted() {
+    this.$emit('change', this.select)
+  },
   methods: {
     onChange(val) {
       this.$emit('change', val)

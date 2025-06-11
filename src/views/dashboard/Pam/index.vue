@@ -13,7 +13,7 @@
 import { Page } from '@/layout/components'
 import { Announcement } from '@/components'
 import Page403 from '@/views/403'
-import PamReport from '@/views/reports/PAM/index.vue'
+import PamReport from '@/views/reports/PAM/Dashboard/index.vue'
 
 export default {
   name: 'Dashboard',

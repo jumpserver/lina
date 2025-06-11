@@ -26,12 +26,12 @@
 </template>
 
 <script>
-import DataSummary from './DataSummary'
+import DataSummary from './DataSummary.vue'
 import RiskSummary from './RiskSummary.vue'
-import AssetProportionSummary from './AssetProportionSummary'
+import AssetProportionSummary from './AssetProportionSummary.vue'
 import MissionSummery from './MissionSummery.vue'
-import AccountSecretSummary from '@/views/accounts/AccountChangeSecret/Overview/AccountSummary.vue'
-import BaseReport from '../base/BaseReport.vue'
+import AccountSecretSummary from '@/views/reports/PAM/ChangeSecret/AccountSummary.vue'
+import BaseReport from '../../base/BaseReport.vue'
 
 export default {
   name: 'Dashboard',

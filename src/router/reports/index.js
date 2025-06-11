@@ -48,9 +48,19 @@ export default {
     {
       path: '/reports/pam',
       name: 'Pam',
-      component: () => import('@/views/reports/PAM/index.vue'),
+      component: () => import('@/views/reports/PAM/Dashboard/index.vue'),
       meta: {
         title: i18n.t('PAM'),
+        icon: 'attestation',
+        permissions: []
+      }
+    },
+    {
+      path: '/reports/change-secret',
+      name: 'ChangeSecretOverview',
+      component: () => import('@/views/reports/PAM/ChangeSecret/index.vue'),
+      meta: {
+        title: i18n.t('ChangeSecret'),
         icon: 'attestation',
         permissions: []
       }
