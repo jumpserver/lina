@@ -163,6 +163,7 @@ export default {
 
 ::v-deep .el-drawer__body {
   padding: 0 20px;
+  overflow-y: scroll;
 }
 
 .platform-content {
