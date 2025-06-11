@@ -30,7 +30,7 @@ export default {
           '',
           [
             'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port_range'
+            'redis_port', 'sqlserver_port', 'oracle_port'
           ]
         ],
         [this.$t('Other'), ['is_active', 'comment']]
@@ -39,7 +39,7 @@ export default {
         host: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
         },
-        oracle_port_range: {
+        oracle_port: {
           disabled: true
         },
         is_active: {
