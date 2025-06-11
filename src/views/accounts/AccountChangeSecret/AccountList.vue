@@ -131,20 +131,8 @@ export default {
           getUrlQuery: true,
           options: [
             {
-              label: this.$t('AssetID'),
-              value: 'asset_id'
-            },
-            {
               label: this.$t('AssetName'),
               value: 'asset_name'
-            },
-            {
-              label: this.$t('AccountID'),
-              value: 'id'
-            },
-            {
-              label: this.$t('Username'),
-              value: 'username'
             },
             {
               label: this.$t('ExecutionID'),
