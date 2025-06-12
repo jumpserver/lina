@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" />
+      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" @insert-code="insertCode" />
     </div>
     <div class="input-box">
       <el-button
@@ -28,7 +28,7 @@
         size="small"
         @click="onStopHandle"
       >{{ $tc('Stop') }}</el-button>
-      <ChatInput ref="chatInput" :expanded="expanded" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
+      <ChatInput ref="chatInput" :expanded="expanded" :has-prompt="!isTerminal" @send="onSendHandle" @select-prompt="onSelectPromptHandle" />
     </div>
   </div>
 </template>
@@ -68,7 +68,10 @@ export default {
       prompt: '',
       conversationId: '',
       showIntroduction: false,
-      introduction: []
+      introduction: [],
+      terminalContext: null,
+      isTerminal: false,
+      sessionChat: {}
     }
   },
   computed: {
@@ -100,6 +103,9 @@ export default {
       this.showIntroduction = true
       this.conversationId = ''
       this.$refs.chatInput.select.value = ''
+      if (this.terminalContext) {
+        this.prompt = this.terminalContext.content || ''
+      }
       const chat = {
         message: {
           content: this.$t('ChatHello'),
@@ -150,6 +156,32 @@ export default {
       addMessageToActiveChat(data)
       setLoading(true)
     },
+    onTerminalContext(terminalContext) {
+      const originSessionId = this.terminalContext?.sessionId
+      const newSessionId = terminalContext.sessionId || ''
+      if (originSessionId) {
+        this.saveSessionChat(originSessionId)
+      }
+      this.terminalContext = terminalContext
+      this.isTerminal = true
+      this.prompt = terminalContext.content || ''
+      if (originSessionId !== newSessionId) {
+        if (this.sessionChat[newSessionId]) {
+          clearChats()
+          for (const chat of this.sessionChat[newSessionId]) {
+            addChatMessageById(chat)
+          }
+        } else {
+          this.onNewChat()
+        }
+      }
+    },
+    saveSessionChat(sessionId) {
+      if (this.terminalContext) {
+        this.sessionChat[sessionId] = JSON.parse(JSON.stringify(this.activeChat.chats))
+      }
+    },
+
     onSendHandle(value) {
       this.showIntroduction = false
       this.socket = ws || {}
@@ -204,6 +236,15 @@ export default {
     sendIntroduction(item) {
       this.showIntroduction = false
       this.onSendHandle(item.content)
+    },
+    insertCode(code) {
+      this.sendPostMessage({
+        name: 'INSERT_TERMINAL_CODE',
+        data: code.replace(/^[\s\r\n]+|[\s\r\n]+$/g, '')
+      })
+    },
+    sendPostMessage(data) {
+      window.parent.postMessage(data)
     }
   }
 }
