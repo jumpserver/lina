@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" />
+      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" @insert-code="insertCode" />
     </div>
     <div class="input-box">
       <el-button
@@ -204,7 +204,11 @@ export default {
     sendIntroduction(item) {
       this.showIntroduction = false
       this.onSendHandle(item.content)
+    },
+    insertCode(code) {
+      console.log(' receive insertCode', code)
     }
+
   }
 }
 </script>

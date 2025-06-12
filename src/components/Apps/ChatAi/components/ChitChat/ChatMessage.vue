@@ -33,7 +33,7 @@
                 <!-- eslint-disable-next-line -->
                 <div class="divider"></div>
                 <p>
-                  <MessageText :message="item.reasoning" />
+                  <MessageText :message="item.reasoning" @insert-code="handleInsertCode" />
                 </p>
               </div>
 
@@ -41,7 +41,7 @@
                 <span v-if="isServerError" class="error">
                   {{ isServerError }}
                 </span>
-                <MessageText :message="item.result" />
+                <MessageText :message="item.result" @insert-code="handleInsertCode" />
               </div>
             </div>
           </div>
@@ -142,6 +142,9 @@ export default {
       if (value === 'copy') {
         copy(this.item.result.content)
       }
+    },
+    handleInsertCode(code) {
+      this.$emit('insert-code', code)
     }
   }
 }
