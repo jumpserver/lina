@@ -69,26 +69,61 @@ export default {
       this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
     },
     highlightBlock(str, lang) {
-      return `<pre class="code-block-wrapper"><div class="code-block-header"><span class="code-block-header__lang">${lang}</span><span class="code-block-header__copy">${'Copy'}</span></div><code class="hljs code-block-body ${lang}">${str}</code></pre>`
+      return `<pre class="code-block-wrapper">
+        <div class="code-block-header">
+        <span class="code-block-header__lang">${lang}</span>  
+        <span class="code-block-header__actions">
+          <span class="code-block-header__insert">${'insert'}</span>
+          <span class="code-block-header__copy">${'Copy'}</span>
+        </span>
+        </div>
+        <code class="hljs code-block-body ${lang}">${str}</code></pre>`
     },
     addCopyEvents() {
-      const copyBtn = document.querySelectorAll('.code-block-header__copy')
-      copyBtn.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const code = btn.parentElement?.nextElementSibling?.textContent
-          if (code) {
-            copy(code)
-          }
+      this.addBtnClickEvents('.code-block-header__copy', this.handlerClickCopy)
+      this.addBtnClickEvents('.code-block-header__insert', this.handlerClickInsert)
+    },
+
+    handlerClickCopy(event) {
+      const wrapper = event.target.closest('.code-block-wrapper')
+      if (wrapper) {
+        // 查找里面的 code 元素
+        const codeElement = wrapper.querySelector('code.code-block-body')
+        if (codeElement) {
+          const codeText = codeElement.textContent
+          copy(codeText)
+        }
+      }
+    },
+    handlerClickInsert(event) {
+      const wrapper = event.target.closest('.code-block-wrapper')
+      if (wrapper) {
+        // 查找里面的 code 元素
+        const codeElement = wrapper.querySelector('code.code-block-body')
+        if (codeElement) {
+          const codeText = codeElement.textContent
+          console.log('insert code', codeText)
+          this.$emit('insert-code', codeText)
+        }
+      }
+    },
+    addBtnClickEvents(selector, callback) {
+      const buttons = this.$refs.textRef.querySelectorAll(selector)
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', callback)
+      })
+    },
+    removeBtnClickEvent(selector) {
+      const buttons = this.$refs.textRef.querySelectorAll(selector)
+      buttons.forEach((btn) => {
+        btn.removeEventListener('click', () => {
         })
       })
     },
     removeCopyEvents() {
       if (this.$refs.textRef) {
-        const copyBtn = this.$refs.textRef.querySelectorAll('.code-block-header__copy')
-        copyBtn.forEach((btn) => {
-          btn.removeEventListener('click', () => {
-          })
-        })
+        this.removeBtnClickEvent('.code-block-header__copy')
+        this.addBtnClickEvents('.code-block-header__insert')
       }
     }
   }
@@ -115,26 +150,46 @@ export default {
 
   &::v-deep .code-block-wrapper {
     background: #1F2329;
-    padding: 2px 6px;
+    padding: 0;
     margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 
     .code-block-body {
-      padding: 5px 10px 0;
+      padding: 5px 10px;
     }
-  ;
 
     .code-block-header {
       margin-bottom: 4px;
       overflow: hidden;
       background: #353946;
       color: #c2d1e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      width: 100%;
+      box-sizing: border-box;
 
-      .code-block-header__copy {
-        float: right;
-        cursor: pointer;
+      .code-block-header__actions {
+        display: flex;
+        gap: 8px;
 
-        &:hover {
-          color: #6e747b;
+        .code-block-header__copy {
+          cursor: pointer;
+
+          &:hover {
+            color: #6e747b;
+          }
+        }
+
+        .code-block-header__insert {
+          cursor: pointer;
+
+          &:hover {
+            color: #6e747b;
+          }
         }
       }
     }
@@ -178,6 +233,7 @@ export default {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

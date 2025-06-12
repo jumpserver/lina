@@ -89,6 +89,14 @@ export default {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
+          return
+        }
+        const msg = event.data
+        switch (msg.name) {
+          case 'current_terminal_content':
+            // {content: '...', terminalId: '',sessionId: ''}
+            this.$log.debug('current_terminal_content', msg)
+            break
         }
       })
     },
