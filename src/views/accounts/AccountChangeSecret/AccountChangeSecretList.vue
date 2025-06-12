@@ -122,8 +122,52 @@ export default {
           return {
             name: 'AccountChangeSecretCreate'
           }
-        }
+        },
+        extraMoreActions: [
+          {
+            name: 'BatchDisable',
+            title: this.$t('common.BatchDisable'),
+            icon: 'fa fa-ban',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkDisableCallback(selectedRows, reloadTable)
+          },
+          {
+            name: 'BatchActivate',
+            title: this.$t('common.BatchActivate'),
+            icon: 'fa fa-check-circle-o',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkActivateCallback(selectedRows, reloadTable)
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    bulkDisableCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/change-secret-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: false }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('common.disableSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateError') + ' ' + error)
+      })
+    },
+    bulkActivateCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/change-secret-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: true }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('common.activateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateError') + ' ' + error)
+      })
     }
   }
 }
