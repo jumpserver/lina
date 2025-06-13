@@ -76,7 +76,8 @@ export default {
       robotUrl: require('@/assets/img/robot-assistant.png'),
       height: '400px',
       expanded: false,
-      clientOffset: {}
+      clientOffset: {},
+      currentTerminalContent: {}
     }
   },
   watch: {
@@ -94,8 +95,9 @@ export default {
         const msg = event.data
         switch (msg.name) {
           case 'current_terminal_content':
-            // {content: '...', terminalId: '',sessionId: ''}
+            // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
             this.$log.debug('current_terminal_content', msg)
+            this.currentTerminalContent = msg.data
             break
         }
       })

@@ -60,6 +60,10 @@ export default {
     expanded: {
       type: Boolean,
       default: false
+    },
+    terminalContent: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -68,7 +72,8 @@ export default {
       prompt: '',
       conversationId: '',
       showIntroduction: false,
-      introduction: []
+      introduction: [],
+      terminalContext: this.terminalContent || null
     }
   },
   computed: {
