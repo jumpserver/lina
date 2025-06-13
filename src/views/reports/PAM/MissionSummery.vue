@@ -4,9 +4,9 @@
       <Title :config="config" />
     </div>
 
-    <div class="content">
+    <div class="chart-content">
       <!-- eslint-disable-next-line -->
-      <div ref="chartRef" class="chart-container"></div>
+      <echarts ref="chartRef" :options="chartOption" :autoresize="true" />
     </div>
   </div>
 </template>
@@ -116,17 +116,17 @@ export default {
     }
   },
   async mounted() {
-    this.initChart()
+    // this.initChart()
     this.counter = await this.getResourcesCount()
-    this.updateChart()
-    window.addEventListener('resize', this.resizeChart)
+    // this.updateChart()
+    // window.addEventListener('resize', this.resizeChart)
   },
   beforeDestroy() {
-    if (this.chart) {
-      this.chart.dispose()
-      this.chart = null
-    }
-    window.removeEventListener('resize', this.resizeChart)
+    // if (this.chart) {
+    //   this.chart.dispose()
+    //   this.chart = null
+    // }
+    // window.removeEventListener('resize', this.resizeChart)
   },
   methods: {
     async getResourcesCount() {
@@ -169,14 +169,9 @@ export default {
   .header {
     padding: 1.2rem 1.25rem 0;
     margin-bottom: 8px;
-
-    .content {
-      justify-content: flex-start;
-      padding: unset;
-    }
   }
 
-  .content {
+  .chart-content {
     flex: 1;
     min-height: 0;
     padding: 0 10px 0;
@@ -184,8 +179,7 @@ export default {
     align-items: center;
     justify-content: center;
 
-    .chart-container {
-      width: 100%;
+    ::v-deep .echarts {
       height: 14.25rem;
     }
   }
