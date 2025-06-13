@@ -39,6 +39,9 @@ export default {
         ['', ['name', 'var_name', 'type', 'text_default_value', 'select_default_value', 'extra_args', 'tips', 'required']]
       ],
       fieldsMeta: {
+        var_name: {
+          helpTextAsTip: false
+        },
         text_default_value: {
           label: this.$t('DefaultValue'),
           hidden: (formValue) => {
