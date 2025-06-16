@@ -89,6 +89,7 @@ export default {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
+          this.initWebSocket()
         }
       })
     },
