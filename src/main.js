@@ -24,6 +24,8 @@ import { message } from '@/utils/message'
 import xss from '@/utils/xss'
 import request from '@/utils/request'
 import ElTableTooltipPatch from '@/utils/elTableTooltipPatch.js'
+import moment from 'moment'
+moment.locale('zh-cn')
 
 /**
  * If you don't want to use mock-server
@@ -50,11 +52,7 @@ Vue.config.productionTip = false
 Vue.use(VueCookie)
 window.$cookie = VueCookie
 
-const moment = require('moment')
-require('moment/locale/zh-cn')
-Vue.use(require('vue-moment'), {
-  moment
-})
+Vue.prototype.$moment = moment
 
 Vue.use(VueLogger, loggerOptions)
 
