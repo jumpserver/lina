@@ -30,7 +30,8 @@ export default {
           '',
           [
             'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port'
+            'redis_port', 'sqlserver_port', 'oracle_port',
+            'mongodb_port'
           ]
         ],
         [this.$t('Other'), ['is_active', 'comment']]
