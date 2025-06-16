@@ -175,7 +175,7 @@ export default {
       }
     },
     handleClick(item) {
-      this.$router.push({ name: this.config.route.name, query: { payload: item.key }})
+      this.$router.push({ name: this.config.route.name, query: { payload: item.key } })
     }
   }
 }

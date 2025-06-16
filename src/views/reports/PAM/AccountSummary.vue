@@ -39,7 +39,7 @@ export default {
         {
           title: this.$t('Privileged'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' } },
             count: this.counter.total_privileged_accounts,
             disabled: !this.$hasPerm('terminal.view_session')
           }
@@ -47,7 +47,7 @@ export default {
         {
           title: this.$t('GeneralAccounts'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' } },
             count: this.counter.total_ordinary_accounts
           }
         },

@@ -106,6 +106,7 @@
         "deasync": "^0.1.29",
         "element-theme-chalk": "^2.13.1",
         "eslint": "^5.15.3",
+        "eslint-plugin-spellcheck": "^0.0.20",
         "eslint-plugin-vue": "5.2.2",
         "eslint-plugin-vue-i18n": "^0.3.0",
         "github-markdown-css": "^5.1.0",
