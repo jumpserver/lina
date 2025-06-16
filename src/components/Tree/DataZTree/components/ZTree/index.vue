@@ -376,6 +376,7 @@ export default {
   .ztree {
     width: 100%;
     overflow: auto;
+    z-index: 1000;
     height: 648px;
     background-color: #ffffff;
 
