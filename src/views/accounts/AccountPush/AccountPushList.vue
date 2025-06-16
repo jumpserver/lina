@@ -104,7 +104,23 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: 'AccountPushCreate'
+        createRoute: 'AccountPushCreate',
+        extraMoreActions: [
+          {
+            name: 'BatchDisable',
+            title: this.$t('DisableSelected'),
+            icon: 'fa fa-ban',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkDisableCallback(selectedRows, reloadTable)
+          },
+          {
+            name: 'BatchActivate',
+            title: this.$t('ActivateSelected'),
+            icon: 'fa fa-check-circle-o',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_pushaccountautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkActivateCallback(selectedRows, reloadTable)
+          }
+        ]
       }
     }
   },
@@ -116,6 +132,32 @@ export default {
           tab: 'AccountPushExecutionList',
           automation_id: row.id
         }
+      })
+    },
+    bulkDisableCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/push-account-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: false }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('common.disableSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateError') + ' ' + error)
+      })
+    },
+    bulkActivateCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/push-account-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: true }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('common.activateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateError') + ' ' + error)
       })
     }
   }
