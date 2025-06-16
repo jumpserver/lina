@@ -961,7 +961,8 @@
     "ID": "ID",
     "Ports": "Ports",
     "EnterMessage": "Please enter a question, press Enter to send",
-    "Label": "Label"
+    "Label": "Label",
+    "UserValidity": "用户有效"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
