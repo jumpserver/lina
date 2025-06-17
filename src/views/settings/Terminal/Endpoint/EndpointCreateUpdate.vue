@@ -40,9 +40,6 @@ export default {
         host: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
         },
-        oracle_port: {
-          disabled: true
-        },
         is_active: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
         }
