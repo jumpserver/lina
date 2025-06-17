@@ -142,9 +142,9 @@ export default {
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
-        this.$message.success(this.$t('common.disableSuccessMsg'))
+        this.$message.success(this.$t('DisableSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateError') + ' ' + error)
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
       })
     },
     bulkActivateCallback(selectedRows, reloadTable) {
@@ -155,9 +155,9 @@ export default {
       if (data.length === 0) return
       this.$axios.patch(url, data).then(() => {
         reloadTable()
-        this.$message.success(this.$t('common.activateSuccessMsg'))
+        this.$message.success(this.$t('DisableSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateError') + ' ' + error)
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
       })
     }
   }
