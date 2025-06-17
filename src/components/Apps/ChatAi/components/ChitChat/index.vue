@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" @insert-code="insertCode" />
+      <ChatMessage v-for="(item, index) in activeChat.chats" :key="index" :item="item" :is-terminal="isTerminal" @insert-code="insertCode" />
     </div>
     <div class="input-box">
       <el-button

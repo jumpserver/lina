@@ -41,8 +41,7 @@
                 <span v-if="isServerError" class="error">
                   {{ isServerError }}
                 </span>
-                <MessageText :message="item.result" @insert-code="handleInsertCode" />
-              </div>
+                <MessageText :message="item.result" :is-terminal="isTerminal" @insert-code="handleInsertCode" /></div>
             </div>
           </div>
           <div class="action">
@@ -93,6 +92,10 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    isTerminal: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

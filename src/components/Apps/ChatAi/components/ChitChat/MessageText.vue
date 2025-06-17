@@ -25,6 +25,10 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    isTerminal: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -45,10 +49,10 @@ export default {
     this.init()
   },
   updated() {
-    this.addCopyEvents()
+    this.addEvents()
   },
   destroyed() {
-    this.removeCopyEvents()
+    this.removeEvents()
   },
   methods: {
     init() {
@@ -69,17 +73,21 @@ export default {
       this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
     },
     highlightBlock(str, lang) {
+      let insertSpanHmtl = `<span class="code-block-header__insert">${this.$t('insert')}</span>`
+      if (!this.isTerminal) {
+        insertSpanHmtl = ''
+      }
       return `<pre class="code-block-wrapper">
         <div class="code-block-header">
         <span class="code-block-header__lang">${lang}</span>  
         <span class="code-block-header__actions">
-          <span class="code-block-header__insert">${'insert'}</span>
+        ${insertSpanHmtl}
           <span class="code-block-header__copy">${'Copy'}</span>
         </span>
         </div>
         <code class="hljs code-block-body ${lang}">${str}</code></pre>`
     },
-    addCopyEvents() {
+    addEvents() {
       this.addBtnClickEvents('.code-block-header__copy', this.handlerClickCopy)
       this.addBtnClickEvents('.code-block-header__insert', this.handlerClickInsert)
     },
@@ -102,7 +110,6 @@ export default {
         const codeElement = wrapper.querySelector('code.code-block-body')
         if (codeElement) {
           const codeText = codeElement.textContent
-          console.log('insert code', codeText)
           this.$emit('insert-code', codeText)
         }
       }
@@ -120,7 +127,7 @@ export default {
         })
       })
     },
-    removeCopyEvents() {
+    removeEvents() {
       if (this.$refs.textRef) {
         this.removeBtnClickEvent('.code-block-header__copy')
         this.addBtnClickEvents('.code-block-header__insert')
