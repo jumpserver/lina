@@ -37,7 +37,7 @@ export default {
         name: 'Template'
       },
       cleanFormValue(value) {
-        const isClone = this?.$route?.query.clone_from !== undefined
+        const isClone = this?.action === 'clone'
         if (isClone) {
           value?.variable.map((item) => {
             delete item.id
