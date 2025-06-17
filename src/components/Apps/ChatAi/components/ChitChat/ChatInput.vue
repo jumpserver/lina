@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="chat-action">
+    <div v-if="hasPrompt" class="chat-action">
       <Select2
         v-model="select.value"
         :disabled="isLoading || isSelectDisabled"
@@ -36,6 +36,10 @@ export default {
     expanded: {
       type: Boolean,
       default: false
+    },
+    hasPrompt: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
