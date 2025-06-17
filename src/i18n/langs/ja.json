@@ -960,7 +960,8 @@
     "ID": "ID",
     "Ports": "ポート",
     "EnterMessage": "質問を入力してください、Enter キーを押して送信",
-    "Label": "ラベル"
+    "Label": "ラベル",
+    "UserValidity": "ユーザーラベル"
   },
   "dashboard": {
     "TotalJobLog": "ジョブ実行総数",
