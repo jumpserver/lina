@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { newURL, ObjectLocalStorage } from '@/utils/common'
+import { newURL, ObjectLocalStorage } from '@/utils/common/index'
 import { default as ElDatableTable } from './compenents/el-data-table'
 import { mapGetters } from 'vuex'
 
@@ -65,7 +65,7 @@ export default {
         onEdit: (row) => {
           const defaultOnEdit = (row) => {
             const routeName = userTableActions.editRoute
-            this.$router.push({ name: routeName, params: { id: row.id }})
+            this.$router.push({ name: routeName, params: { id: row.id } })
           }
           let onEdit = userTableActions.onEdit
           if (!onEdit) {

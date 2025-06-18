@@ -5,7 +5,7 @@
 <script>
 import HomeCard from './HomeCard.vue'
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common'
+import { openNewWindow } from '@/utils/common/index'
 
 export default {
   name: 'Announcement',
@@ -31,7 +31,7 @@ export default {
             width: '50px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
-              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
+              const route = { to: { name: 'SessionDetail', params: { id: row.id } } }
               if (vm.$hasPerm('terminal.view_session')) {
                 return <router-link {...{ attrs: route }} >{label}</router-link>
               } else {

@@ -18,8 +18,8 @@
 </template>
 <script>
 import AutoDataForm from '@/components/Form/AutoDataForm'
-import { getUpdateObjURL } from '@/utils/common'
-import { encryptPassword } from '@/utils/crypto'
+import { getUpdateObjURL } from '@/utils/common/index'
+import { encryptPassword } from '@/utils/secure'
 import deepmerge from 'deepmerge'
 
 export default {
@@ -443,7 +443,7 @@ export default {
     },
     async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      let data = await this.$axios.get(url, { params: { id }})
+      let data = await this.$axios.get(url, { params: { id } })
       if (Array.isArray(data)) {
         data = {}
       }

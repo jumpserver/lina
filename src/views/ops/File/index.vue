@@ -133,7 +133,7 @@ import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
-import { formatFileSize } from '@/utils/common'
+import { formatFileSize } from '@/utils/common/index'
 import store from '@/store'
 
 export default {

@@ -8,7 +8,7 @@
 import IBox from '@/components/Common/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { platformFieldsMeta, setAutomations, updateAutomationParams } from '../const'
-import { setUrlId } from '@/utils/common'
+import { setUrlId } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
 
 export default {

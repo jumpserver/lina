@@ -30,7 +30,7 @@ import DataSummary from './DataSummary.vue'
 import RiskSummary from './RiskSummary.vue'
 import AssetProportionSummary from './AssetProportionSummary.vue'
 import MissionSummery from './MissionSummery.vue'
-import AccountSecretSummary from '@/views/reports/PAM/ChangeSecret/AccountSummary.vue'
+import AccountSecretSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
 
 export default {

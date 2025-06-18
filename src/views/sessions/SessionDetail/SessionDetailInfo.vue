@@ -13,7 +13,7 @@
 import DetailCard from '@/components/Cards/DetailCard/index'
 import { QuickActions } from '@/components'
 import { terminateSession } from '@/api/sessions'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

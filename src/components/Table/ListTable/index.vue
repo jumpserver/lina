@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getResourceFromApiUrl } from '@/utils/jms'
+import { getResourceFromApiUrl } from '@/utils/jms/index'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
 import IBox from '@/components/Common/IBox/index.vue'
@@ -42,8 +42,8 @@ import TableAction from './TableAction/index.vue'
 import Emitter from '@/mixins/emitter'
 import AutoDataTable from '../AutoDataTable/index.vue'
 import QuickFilter from './TableAction/QuickFilter.vue'
-import { getDayEnd, getDaysAgo } from '@/utils/time'
-import { ObjectLocalStorage } from '@/utils/common'
+import { getDayEnd, getDaysAgo } from '@/utils/common/time'
+import { ObjectLocalStorage } from '@/utils/common/index'
 
 export default {
   name: 'ListTable',

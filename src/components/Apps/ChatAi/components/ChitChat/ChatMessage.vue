@@ -78,9 +78,9 @@
 <script>
 import MessageText from './MessageText.vue'
 import { mapGetters, mapState } from 'vuex'
-import { copy } from '@/utils/common'
+import { copy } from '@/utils/common/index'
 import { useChat } from '../../useChat.js'
-import { reconnect } from '@/utils/socket'
+import { reconnect } from '@/utils/request'
 
 const { setLoading, removeLoadingMessageInChat } = useChat()
 

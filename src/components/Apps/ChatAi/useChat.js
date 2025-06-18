@@ -1,5 +1,5 @@
 import store from '@/store'
-import { pageScroll } from '@/utils/common'
+import { pageScroll } from '@/utils/common/index'
 
 export const getInputFocus = () => {
   const dom = document.querySelector('.chat-input .el-textarea__inner')
@@ -9,11 +9,11 @@ export const getInputFocus = () => {
 export function useChat() {
   const chatStore = {}
 
-  const setLoading = (loading) => {
+  const setLoading = loading => {
     store.commit('chat/setLoading', loading)
   }
 
-  const onNewChat = (name) => {
+  const onNewChat = name => {
     const data = {
       name: name || `new chat`,
       id: 1,
@@ -27,7 +27,7 @@ export function useChat() {
     store.commit('chat/clearChats')
   }
 
-  const addMessageToActiveChat = (chat) => {
+  const addMessageToActiveChat = chat => {
     store.commit('chat/addMessageToActiveChat', chat)
   }
 
@@ -35,7 +35,7 @@ export function useChat() {
     store.commit('chat/removeLoadingMessageInChat')
   }
 
-  const addChatMessageById = (chat) => {
+  const addChatMessageById = chat => {
     store.commit('chat/addMessageToActiveChat', chat)
     if (chat?.conversation_id) {
       store.commit('chat/setActiveChatConversationId', chat.conversation_id)
@@ -54,7 +54,7 @@ export function useChat() {
     addChatMessageById(temporaryChat)
   }
 
-  const newChatAndAddMessageById = (chat) => {
+  const newChatAndAddMessageById = chat => {
     onNewChat(chat.message.content)
     addChatMessageById(chat)
   }

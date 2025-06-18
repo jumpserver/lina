@@ -1,69 +1,45 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+import users from './users'
+
 export default {
   path: '/reports',
-  redirect: '/reports/index',
+  redirect: '/reports/users',
   component: empty,
   meta: {
-    title: i18n.t('PersonalSettings'),
-    icon: 'personal',
-    view: 'profile',
+    title: i18n.t('Reports'),
+    icon: 'fa-bar-chart-o',
+    view: 'reports',
     type: 'view',
-    showNavSwitcher: false,
-    showOrganization: false,
+    showNavSwitcher: true,
+    showOrganization: true,
     permissions: []
   },
   children: [
     {
-      path: '/reports/index',
-      name: 'Reports',
-      component: () => import('@/views/reports/Users/UserActivity.vue'),
+      path: '/reports/users',
+      component: empty,
+      redirect: 'users',
+      name: 'ReportsUsers',
       meta: {
-        title: i18n.t('YourProfile'),
-        icon: 'attestation',
+        title: i18n.t('ReportsUsers'),
+        icon: 'reports',
         permissions: []
-      }
-    },
-    {
-      path: '/reports/audits',
-      name: 'Audits',
-      component: () => import('@/views/reports/Audits/Dashboard.vue'),
-      meta: {
-        title: i18n.t('Audits'),
-        icon: 'attestation',
-        permissions: []
-      }
-    },
-    {
-      path: '/reports/console',
-      name: 'Console',
-      component: () => import('@/views/reports/Console/index.vue'),
-      meta: {
-        title: i18n.t('Console'),
-        icon: 'attestation',
-        permissions: []
-      }
-    },
-    {
-      path: '/reports/pam',
-      name: 'Pam',
-      component: () => import('@/views/reports/PAM/Dashboard/index.vue'),
-      meta: {
-        title: i18n.t('PAM'),
-        icon: 'attestation',
-        permissions: []
-      }
-    },
-    {
-      path: '/reports/change-secret',
-      name: 'ChangeSecretOverview',
-      component: () => import('@/views/reports/PAM/ChangeSecret/index.vue'),
-      meta: {
-        title: i18n.t('ChangeSecret'),
-        icon: 'attestation',
-        permissions: []
-      }
+      },
+      children: users
     }
+    // {
+    //   path: '/reports/assets',
+    //   component: empty,
+    //   redirect: '/reports/users/users',
+    //   name: 'ReportsAssets',
+    //   meta: {
+    //     title: i18n.t('ReportsAssets'),
+    //     icon: 'reports',
+    //     permissions: []
+    //   },
+    //   children: users
+    // }
   ]
 }

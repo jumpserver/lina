@@ -11,7 +11,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/Form/FormFields/Select2'
-import { getDaysFuture } from '@/utils/time'
+import { getDaysFuture } from '@/utils/common/time'
 import { mapGetters, mapState } from 'vuex'
 import store from '@/store'
 

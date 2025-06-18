@@ -45,7 +45,7 @@
 
 <script>
 import store from '@/store'
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/org'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog/index.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
@@ -77,7 +77,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        handleRefreshClick: async({ reloadTable }) => {
+        handleRefreshClick: async ({ reloadTable }) => {
           reloadTable()
         }
       },

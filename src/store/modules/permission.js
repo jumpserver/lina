@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { constantRoutes, viewRoutes } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
-import { getResourceNameByPath, hasPermission } from '@/utils/jms'
+import { getResourceNameByPath, hasPermission } from '@/utils/jms/index'
 import i18n from '@/i18n/i18n'
 
 function hasLicense(route, rootState) {

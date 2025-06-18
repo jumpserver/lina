@@ -21,7 +21,7 @@
         :index="view.name"
       >
         <span class="outline" />
-        <svg-icon :icon-class="view.meta.icon" class="icons" />
+        <Icon :icon="view.meta.icon" class="icons" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-menu>
@@ -30,10 +30,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Icon from '@/components/Widgets/Icon'
 import store from '@/store'
 
 export default {
   name: 'ViewSwitcher',
+  components: {
+    Icon
+  },
   props: {
     showTitle: {
       type: Boolean,

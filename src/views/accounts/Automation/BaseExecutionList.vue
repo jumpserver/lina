@@ -11,7 +11,7 @@
 <script>
 import DrawerListTable from '@/components/Table/DrawerListTable/index.vue'
 
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import { taskStatusFormatterMeta } from '@/components/const'
 import TaskStatusChoicesFormatter from '@/components/Table/TableFormatters/TaskStatusFormatter.vue'

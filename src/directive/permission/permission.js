@@ -1,4 +1,4 @@
-import { hasPermission } from '@/utils/jms'
+import { hasPermission } from '@/utils/jms/index'
 
 function checkPermission(el, binding) {
   const { value } = binding

@@ -34,7 +34,7 @@ import settingsRoutes from './settings'
 import profileRoutes from './profile'
 import pamViewRoutes from './pam'
 import reportsViewRoutes from './reports'
-import { getPropView } from '@/utils/jms'
+import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
 
 Vue.use(Router)

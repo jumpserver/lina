@@ -16,7 +16,7 @@ import GrantedAssets from '@/components/Apps/GrantedAssets/index.vue'
 import Page from '@/layout/components/Page/index.vue'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
 import { getPreference } from '@/api/settings'
-import { openNewWindow } from '@/utils/common'
+import { openNewWindow } from '@/utils/common/index'
 
 export default {
   components: {

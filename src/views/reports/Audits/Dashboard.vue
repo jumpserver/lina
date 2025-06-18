@@ -1,5 +1,5 @@
 <template>
-  <BaseReport :only-charts="!nav">
+  <BaseReport :only-charts="onlyCharts" :nav="nav">
     <SwitchDate class="switch-date" @change="onChange" />
     <CardSummary :days="days" />
     <el-row :gutter="16">
@@ -35,6 +35,10 @@ export default {
     nav: {
       type: Boolean,
       default: true
+    },
+    onlyCharts: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

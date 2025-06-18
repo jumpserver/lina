@@ -1,3 +1,49 @@
+/**
+ * Created by PanJiaChen on 16/11/18.
+ */
+
+/**
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternal(path) {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validUsername(str) {
+  const valid_map = ['admin', 'editor']
+  return valid_map.indexOf(str.trim()) >= 0
+}
+
+const xss = require('xss')
+const excludeTags = ['iframe', 'script']
+
+const options = {
+  css: false,
+  stripIgnoreTagBody: ['script'],
+  onTag(tag, html, options) {
+    if (excludeTags.indexOf(tag) !== -1) {
+      return html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    }
+  },
+  // 避免把页面样式过滤掉
+  onTagAttr(tag, name, value, isWhiteAttr) {
+    // 过滤掉标签上的事件
+    if (/^on/.test(name)) {
+      return name + '=' + '.'
+    }
+    if (['src', 'href'].indexOf(name) !== -1) {
+      return name + '=' + value.replace('javascript:', 'java:').replace('data:', 'dt:')
+    }
+    return name + '="' + xss.escapeAttrValue(value) + '"'
+  }
+}
+const filter = new xss.FilterXSS(options)
+
 import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
 import CryptoJS from 'crypto-js'
 import VueCookie from 'vue-cookie'
@@ -53,3 +99,4 @@ export function encryptPassword(password) {
 window.aesEncrypt = aesEncrypt
 window.fillKey = fillKey
 
+export default filter

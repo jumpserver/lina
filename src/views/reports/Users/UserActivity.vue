@@ -2,9 +2,9 @@
   <div>
     <BaseReport
       title="用户活跃度分析报告"
-      description="This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details."
+      :nav="nav"
+      :description="description"
     >
-
       <div class="charts-grid">
         <SwitchDate class="switch-date" />
         <!-- 全宽图表 -->
@@ -91,6 +91,12 @@ export default {
     BaseReport,
     SwitchDate
   },
+  props: {
+    nav: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       // 生成随机数据的辅助函数
@@ -98,7 +104,8 @@ export default {
         return Array.from({ length: count }, () =>
           Math.floor(Math.random() * (max - min + 1)) + min
         )
-      }
+      },
+      description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.'
     }
   },
   computed: {
@@ -274,6 +281,9 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    console.log('>>> ', this.nav)
   }
 }
 </script>

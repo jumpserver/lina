@@ -23,7 +23,7 @@
 <script type="text/jsx">
 import Sortable from 'sortablejs'
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common'
+import { newURL, ObjectLocalStorage, replaceAllUUID } from '@/utils/common/index'
 import ColumnSettingPopover from './components/ColumnSettingPopover.vue'
 import { TableColumnsGenerator } from './utils'
 

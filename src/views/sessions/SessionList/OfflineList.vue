@@ -4,7 +4,7 @@
 
 <script>
 import BaseList from './BaseList'
-import { download } from '@/utils/common'
+import { download } from '@/utils/common/index'
 
 export default {
   name: 'OfflineList',

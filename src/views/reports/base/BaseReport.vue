@@ -1,34 +1,21 @@
 <template>
-  <div :class="{ 'no-nav': onlyCharts }">
-    <div v-if="!onlyCharts" class="header nav-bar">
+  <div :class="{ 'no-padding': onlyCharts }">
+    <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
       </div>
-      <div class="nav-bar-right export-bar">
-        <el-button-group>
-          <el-button class="export-btn" type="text" icon="el-icon-printer" @click="exportPDF">
-            Export as PDF
-          </el-button>
-          <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
-            E-Mail this Report
-          </el-button>
-          <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
-            Print
-          </el-button>
-          <el-button class="export-btn" type="text" icon="el-icon-setting" @click="openSettings">
-            Settings
-          </el-button>
-        </el-button-group>
-      </div>
+      <RightAction />
     </div>
     <div class="content">
-      <div v-if="!onlyCharts">
+      <div v-if="!onlyCharts" class="title-bar">
         <div class="title">
           {{ title }}
 
           <span class="datetime">
             [{{ new Date().toLocaleString() }}]
           </span>
+
+          <RightAction />
         </div>
         <div class="description">
           {{ description }}
@@ -45,13 +32,19 @@
 import Logo from '@/layout/components/NavLeft/Logo'
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
+import RightAction from './RightAction.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
+    RightAction
   },
   props: {
     onlyCharts: {
+      type: Boolean,
+      default: false
+    },
+    nav: {
       type: Boolean,
       default: false
     },
@@ -106,45 +99,6 @@ export default {
     background-color: var(--banner-bg);
     padding: 16px;
     height: 40px;
-
-    .export-bar {
-      padding: 0 16px;
-      border-radius: 0 0 4px 4px;
-      display: flex;
-      align-items: center;
-      height: 40px;
-    }
-
-    .export-btn {
-      background: transparent;
-      color: #fff;
-      border: none;
-      font-weight: 500;
-      font-size: 14px;
-      margin: 0 2px;
-
-      &.el-button--text {
-        color: #fff;
-      }
-
-      & + span {
-        color: #fff;
-        margin-left: 2px;
-      }
-    }
-    .export-btn .el-icon-document,
-    .export-btn .el-icon-printer,
-    .export-btn .el-icon-message {
-      margin-right: 4px;
-    }
-    .el-button-group {
-      background: transparent;
-      box-shadow: none;
-    }
-    .export-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
   }
 
   .title {
@@ -174,9 +128,25 @@ export default {
     background-color: #F1F1F1;
     height: calc(100vh - 40px);
     overflow-y: auto;
+
+    ::v-deep .export-bar {
+      float: right;
+
+      .export-btn.el-button--text {
+        color: #333;
+        border: none;
+        font-weight: 500;
+        font-size: 13px;
+        margin-left: 16px;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
   }
 
-  .no-nav {
+  .no-padding {
     .content {
       height: auto;
       overflow-y: hidden;
@@ -236,7 +206,8 @@ export default {
         background-color: white;
         border-radius: 4px;
         padding: 16px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--color-border);
         transition: all 0.3s ease;
         max-width: calc(50vw - 30px);
         min-width: 300px;

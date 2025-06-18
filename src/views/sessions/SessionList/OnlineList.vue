@@ -5,7 +5,7 @@
 <script>
 import BaseList from './BaseList'
 import { terminateSession, toggleLockSession } from '@/api/sessions'
-import { IsSupportPauseSessionType } from '@/utils/jms'
+import { IsSupportPauseSessionType } from '@/utils/jms/index'
 
 export default {
   name: 'OnlineList',

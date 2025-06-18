@@ -12,7 +12,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import RecordViewSecret from '@/components/Apps/ChangeSecret/RecordViewSecret.vue'
 
 export default {

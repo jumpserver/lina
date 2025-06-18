@@ -45,7 +45,7 @@
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
-import { ws } from '@/utils/socket'
+import { ws } from '@/utils/request'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 
 export default {

@@ -7,7 +7,7 @@
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { stopJob } from '@/api/ops'
 
 export default {

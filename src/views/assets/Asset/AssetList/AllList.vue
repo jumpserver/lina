@@ -28,7 +28,7 @@ import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
 import $ from '@/utils/jquery-vendor'
-import { setRouterQuery, setUrlParam } from '@/utils/common'
+import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 
 export default {
   components: {

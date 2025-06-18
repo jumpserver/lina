@@ -26,7 +26,7 @@
 
 <script>
 import { Dialog } from '@/components'
-import { copy } from '@/utils/common'
+import { copy } from '@/utils/common/index'
 
 export default {
   components: {

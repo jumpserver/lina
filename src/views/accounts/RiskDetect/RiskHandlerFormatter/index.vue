@@ -57,7 +57,7 @@
 <script>
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import { sleep } from '@/utils/time'
+import { sleep } from '@/utils/common/time'
 import ReviewDraw from '@/views/accounts/RiskDetect/RiskHandlerFormatter/ReviewDrawer.vue'
 import { riskActions } from './const'
 

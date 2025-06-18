@@ -34,7 +34,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'GatewayDialog',

@@ -2,7 +2,7 @@
 import { Table } from 'element-ui'
 import { getCell, getColumnByCell } from 'element-ui/packages/table/src/util'
 import { getStyle, hasClass } from 'element-ui/src/utils/dom'
-import { copy } from './common'
+import { copy } from '../common/index'
 
 Object.assign(Table.components.TableBody.methods, {
   handleCellMouseEnter(event, row) {
@@ -28,12 +28,13 @@ Object.assign(Table.components.TableBody.methods, {
     range.setEnd(cellChild, cellChild.childNodes.length)
     // rangeWidth 有可能是小数，因此就会导致原本 rangeWidth + padding = cellChild.offsetWidth 的大于了 cellChild.offsetWidth
     const rangeWidth = Math.floor(range.getBoundingClientRect().width)
-    const padding = (parseInt(getStyle(cellChild, 'paddingLeft'), 10) || 0) +
-        (parseInt(getStyle(cellChild, 'paddingRight'), 10) || 0)
+    const padding =
+      (parseInt(getStyle(cellChild, 'paddingLeft'), 10) || 0) +
+      (parseInt(getStyle(cellChild, 'paddingRight'), 10) || 0)
     if (
       (rangeWidth + padding > cellChild.offsetWidth ||
-          cellChild.scrollWidth > cellChild.offsetWidth) &&
-        this.$refs.tooltip
+        cellChild.scrollWidth > cellChild.offsetWidth) &&
+      this.$refs.tooltip
     ) {
       const { tooltip } = this.$refs
       const { tooltipEnterable } = this.table
@@ -91,15 +92,14 @@ Object.assign(Table.components.TableBody.methods, {
       oldHoverState.row,
       oldHoverState.column,
       oldHoverState.cell,
-      event,
+      event
     )
   }
 })
 
 /**
  * @description 扩展el-table，实现当showOverflowTooltip时，鼠标可移入tooltip功能
- * @prop {Boolean} tooltipEnterable 仅在列属性showOverflowTooltip为true时生效，鼠标是否可进入到 tooltip 中，默认为true
-*/
+ */
 const ElTable = {
   extends: Table,
   props: {
@@ -109,6 +109,6 @@ const ElTable = {
     }
   }
 }
-export default (Vue) => {
+export default Vue => {
   Vue.component('ElTable', ElTable)
 }

@@ -25,7 +25,7 @@ import GenericListTable from '@/layout/components/GenericListTable'
 import { QuickActions } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

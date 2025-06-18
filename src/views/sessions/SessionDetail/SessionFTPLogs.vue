@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable'
-import { download } from '@/utils/common'
+import { download } from '@/utils/common/index'
 
 export default {
   name: 'SessionFTPLogs',

@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { formatTime, getDateTimeStamp } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import { STATUS_MAP, treeNodes } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
@@ -159,7 +159,7 @@ export default {
           key: this.$tc('PermissionName'),
           value: object.apply_permission_name,
           formatter: function(item, value) {
-            const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id }}
+            const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id } }
             if (vm.$hasPerm('perms.view_assetpermission') && object.status.value === 'closed' && object.state.value === 'approved') {
               return <router-link to={to}>{value}</router-link>
             } else {

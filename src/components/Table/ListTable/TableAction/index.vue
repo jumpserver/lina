@@ -49,7 +49,7 @@ import LeftSide from './LeftSide.vue'
 import RightSide from './RightSide.vue'
 import AutoDataSearch from '@/components/Table/AutoDataSearch/index.vue'
 import DatetimeRangePicker from '@/components/Form/FormFields/DatetimeRangePicker.vue'
-import { getDaysAgo, getDaysFuture } from '@/utils/time'
+import { getDaysAgo, getDaysFuture } from '@/utils/common/time'
 import LabelSearch from '@/components/Table/ListTable/TableAction/LabelSearch.vue'
 
 const defaultTrue = { type: Boolean, default: true }

@@ -59,7 +59,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam } from '@/utils/common/index'
 import ListTable from '@/components/Table/DrawerListTable/index.vue'
 import FileTree from '@/components/Table/TreeTable/components/FileTree.vue'
 import IBox from '@/components/Common/IBox/index.vue'

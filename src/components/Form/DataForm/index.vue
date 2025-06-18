@@ -70,8 +70,20 @@
 
 <script>
 import ElFormRender from './components/el-form-renderer'
-import { randomString } from '@/utils/string'
-import { scrollToError } from '@/utils'
+import { randomString } from '@/utils/common/index'
+
+const scrollToError = (
+  el,
+  scrollOption = {
+    behavior: 'smooth',
+    block: 'center'
+  }
+) => {
+  setTimeout(() => {
+    const isError = el.getElementsByClassName('is-error')
+    isError[0].scrollIntoView(scrollOption)
+  }, 0)
+}
 
 export default {
   components: {

@@ -1,5 +1,5 @@
 import store from '@/store'
-import { getQueryFromPath } from '@/utils/common'
+import { getQueryFromPath } from '@/utils/common/index'
 
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 export const SYSTEM_ORG_ID = '00000000-0000-0000-0000-000000000004'
@@ -9,11 +9,11 @@ export const GLOBAL_ORG_ID = '00000000-0000-0000-0000-000000000000'
 function getPropOrg() {
   const orgs = store.getters.usingOrgs
   const preOrg = store.getters.preOrg || {}
-  const preFound = orgs.find((item) => item.id === preOrg.id)
+  const preFound = orgs.find(item => item.id === preOrg.id)
   if (preFound) {
     return preFound
   }
-  const defaultOrg = orgs.find((item) => item.is_default)
+  const defaultOrg = orgs.find(item => item.is_default)
   if (defaultOrg) {
     return defaultOrg
   }
@@ -57,7 +57,9 @@ async function changeOrg(org, reload = true, vm = null) {
       newQuery[key] = value
     }
   }
-  const queryStr = Object.entries(newQuery).map(([key, value]) => `${key}=${value}`).join('&')
+  const queryStr = Object.entries(newQuery)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&')
   path = path + (queryStr ? '?' + queryStr : '')
 
   if (vm) {
@@ -74,7 +76,7 @@ function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
   const currentOrgId = currentOrg.id
   const orgs = store.getters.usingOrgs
-  return orgs.find((item) => item.id === currentOrgId)
+  return orgs.find(item => item.id === currentOrgId)
 }
 
 export default {

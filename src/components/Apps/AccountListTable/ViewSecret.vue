@@ -61,7 +61,7 @@
 import Dialog from '@/components/Dialog/index.vue'
 import PasswordHistoryDialog from './PasswordHistoryDialog.vue'
 import { SecretViewerFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'ShowSecretInfo',

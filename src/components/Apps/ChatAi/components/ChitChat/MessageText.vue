@@ -17,7 +17,7 @@ import mdKatex from '@traptitech/markdown-it-katex'
 import mila from 'markdown-it-link-attributes'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
-import { copy } from '@/utils/common'
+import { copy } from '@/utils/common/index'
 
 export default {
   props: {
@@ -65,7 +65,7 @@ export default {
           return vm.highlightBlock(hljs.highlightAuto(code).value, '')
         }
       })
-      this.markdown.use(mila, { attrs: { target: '_blank', rel: 'noopener', class: 'link-style' }})
+      this.markdown.use(mila, { attrs: { target: '_blank', rel: 'noopener', class: 'link-style' } })
       this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
     },
     highlightBlock(str, lang) {

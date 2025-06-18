@@ -1,6 +1,6 @@
 <script>
 import BaseFormatter from './base.vue'
-import { copy } from '@/utils/common'
+import { copy } from '@/utils/common/index'
 
 export default {
   name: 'CopyableFormatter',

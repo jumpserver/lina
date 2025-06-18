@@ -65,8 +65,8 @@
 
 <script>
 import IBox from '@/components/Common/IBox'
-import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { formatTime, getDateTimeStamp } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import MarkDown from '@/components/Widgets/MarkDown'
 
 export default {

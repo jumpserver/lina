@@ -13,19 +13,32 @@ export default [
     children: [
       {
         path: 'activity',
+        // props: () => ({ nav: false }),
         name: 'UserActivity',
-        component: () => import('@/views/reports/Users/UserActivity'),
+        component: () => import('@/views/reports/users/index.vue'),
         meta: {
           title: i18n.t('UserActivity'),
           permissions: []
         }
-      },
+      }
+    ]
+  },
+  {
+    path: 'assets',
+    name: 'assets',
+    component: empty,
+    meta: {
+      title: i18n.t('GroupActivity'),
+      permissions: []
+    },
+    children: [
       {
-        path: 'activity1',
-        name: 'UserActivity1',
-        component: () => import('@/views/reports/Users/UserActivity'),
+        path: 'activity',
+        props: () => ({ nav: false }),
+        name: 'AssetActivity',
+        component: () => import('@/views/reports/assets/index.vue'),
         meta: {
-          title: i18n.t('UserActivity1'),
+          title: i18n.t('AssetActivity'),
           permissions: []
         }
       }

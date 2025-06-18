@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import GenericTicketDetail from '@/views/tickets/TicketFlow/components/GenericTicketDetail'
 
 export default {

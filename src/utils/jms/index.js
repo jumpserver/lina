@@ -3,7 +3,13 @@ import store from '@/store'
 
 let openedTaskWindow = null // 保存已打开的窗口对象
 
-function openOrReuseWindow(url, windowName = 'task', windowFeatures = '', iWidth = 900, iHeight = 600) {
+function openOrReuseWindow(
+  url,
+  windowName = 'task',
+  windowFeatures = '',
+  iWidth = 900,
+  iHeight = 600
+) {
   const iTop = (window.screen.height - 30 - iHeight) / 2
   const iLeft = (window.screen.width - 10 - iWidth) / 2
 
@@ -13,7 +19,11 @@ function openOrReuseWindow(url, windowName = 'task', windowFeatures = '', iWidth
     openedTaskWindow.focus() // 将窗口置于前台
   } else {
     // 如果窗口未打开或已关闭，创建新窗口
-    openedTaskWindow = window.open(url, windowName, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
+    openedTaskWindow = window.open(
+      url,
+      windowName,
+      'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
+    )
   }
 }
 
@@ -174,11 +184,11 @@ export function IsSupportPauseSessionType(terminalType) {
 
 export function loadPlatformIcon(name, type) {
   const platformMap = {
-    'Huawei': 'huawei',
-    'Cisco': 'cisco',
-    'Gateway': 'gateway',
-    'macOS': 'macos',
-    'BSD': 'bsd',
+    Huawei: 'huawei',
+    Cisco: 'cisco',
+    Gateway: 'gateway',
+    macOS: 'macos',
+    BSD: 'bsd',
     'Vmware-vSphere': 'vmware'
   }
 

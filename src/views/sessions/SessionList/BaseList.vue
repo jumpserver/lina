@@ -8,7 +8,7 @@
 
 <script type="text/jsx">
 import { DrawerListTable as ListTable } from '@/components'
-import { timeOffset } from '@/utils/time'
+import { timeOffset } from '@/utils/common/time'
 import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {

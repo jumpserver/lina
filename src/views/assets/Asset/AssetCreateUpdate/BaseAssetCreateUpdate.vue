@@ -4,8 +4,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { encryptPassword } from '@/utils/crypto'
-import { getUpdateObjURL, setUrlParam } from '@/utils/common'
+import { encryptPassword } from '@/utils/secure'
+import { getUpdateObjURL, setUrlParam } from '@/utils/common/index'
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {

@@ -4,10 +4,10 @@ import store from '@/store'
 
 function getTimeUnits(u) {
   const units = {
-    'd': '天',
-    'h': '时',
-    'm': '分',
-    's': '秒'
+    d: '天',
+    h: '时',
+    m: '分',
+    s: '秒'
   }
   if (getLangCode(true) === 'zh-hans') {
     return units[u]
@@ -94,8 +94,13 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  const zoneTime = moment(now).utc().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-  return moment(zoneTime).utc().toDate()
+  const zoneTime = moment(now)
+    .utc()
+    .endOf('day')
+    .format('YYYY-MM-DD HH:mm:ss')
+  return moment(zoneTime)
+    .utc()
+    .toDate()
 }
 
 export function getDayFuture(days, now) {
@@ -106,22 +111,22 @@ export function getDayFuture(days, now) {
 }
 
 export function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time))
+  return new Promise(resolve => setTimeout(resolve, time))
 }
 
 export function formatDate(inputTime) {
   const date = new Date(inputTime)
   const y = date.getFullYear()
   let m = date.getMonth() + 1
-  m = m < 10 ? ('0' + m) : m
+  m = m < 10 ? '0' + m : m
   let d = date.getDate()
-  d = d < 10 ? ('0' + d) : d
+  d = d < 10 ? '0' + d : d
   let h = date.getHours()
-  h = h < 10 ? ('0' + h) : h
+  h = h < 10 ? '0' + h : h
   let minute = date.getMinutes()
   let second = date.getSeconds()
-  minute = minute < 10 ? ('0' + minute) : minute
-  second = second < 10 ? ('0' + second) : second
+  minute = minute < 10 ? '0' + minute : minute
+  second = second < 10 ? '0' + second : second
   // return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
   return y + '-' + m + '-' + d + 'T' + h + ':' + minute + ':' + second
 }
@@ -129,4 +134,87 @@ export function formatDate(inputTime) {
 export function getDefaultExpiredDays() {
   const years = store.getters.publicSettings.DEFAULT_EXPIRED_YEARS
   return getDayFuture(years * 365, new Date()).toISOString()
+}
+
+/**
+ * Parse the time to string
+ * @param {(Object|string|number)} time
+ * @param {string} cFormat
+ * @returns {string | null}
+ */
+export function parseTime(time, cFormat) {
+  if (arguments.length === 0) {
+    return null
+  }
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  let date
+  if (typeof time === 'object') {
+    date = time
+  } else {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
+      time = parseInt(time)
+    }
+    if (typeof time === 'number' && time.toString().length === 10) {
+      time = time * 1000
+    }
+    date = new Date(time)
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay()
+  }
+  const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+    const value = formatObj[key]
+    // Note: getDay() returns 0 on Sunday
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
+    return value.toString().padStart(2, '0')
+  })
+  return time_str
+}
+
+/**
+ * @param {number} time
+ * @param {string} option
+ * @returns {string}
+ */
+export function formatTime(time, option) {
+  if (('' + time).length === 10) {
+    time = parseInt(time) * 1000
+  } else {
+    time = +time
+  }
+  const d = new Date(time)
+  const now = Date.now()
+
+  const diff = (now - d) / 1000
+
+  if (diff < 30) {
+    return '刚刚'
+  } else if (diff < 3600) {
+    // less 1 hour
+    return Math.ceil(diff / 60) + '分钟前'
+  } else if (diff < 3600 * 24) {
+    return Math.ceil(diff / 3600) + '小时前'
+  } else if (diff < 3600 * 24 * 2) {
+    return '1天前'
+  }
+  if (option) {
+    return parseTime(time, option)
+  } else {
+    return (
+      d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
+    )
+  }
+}
+
+// 将标准时间转换成时间戳
+export function getDateTimeStamp(dateStr) {
+  return Date.parse(dateStr.replace(/-/gi, '/'))
 }

@@ -23,7 +23,7 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
 
 export default {

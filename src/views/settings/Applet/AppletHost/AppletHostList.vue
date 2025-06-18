@@ -14,7 +14,7 @@
 
 <script>
 import { DrawerListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 
 export default {

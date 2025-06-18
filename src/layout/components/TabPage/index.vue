@@ -60,7 +60,7 @@
 <script>
 import Page from '../Page/'
 import Icon from '@/components/Widgets/Icon'
-import { toSentenceCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common/index'
 
 export default {
   name: 'TabPage',

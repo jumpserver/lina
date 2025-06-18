@@ -12,7 +12,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import { APPROVE, CLOSED, OPEN, REJECT } from './const'
 
 export default {

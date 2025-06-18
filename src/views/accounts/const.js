@@ -1,5 +1,9 @@
-import { toSafeLocalDateStr } from '@/utils/time'
-import { ActionsFormatter, DetailFormatter, DiscoverConfirmFormatter } from '@/components/Table/TableFormatters'
+import { toSafeLocalDateStr } from '@/utils/common/time'
+import {
+  ActionsFormatter,
+  DetailFormatter,
+  DiscoverConfirmFormatter
+} from '@/components/Table/TableFormatters'
 
 export const statusMap = {
   pending: '0',
@@ -14,16 +18,17 @@ export const gatherAccountTableConfig = (vm, url) => {
     url: url,
     hasTree: true,
     columns: [
-      'asset', 'username', 'date_last_login',
-      'address_last_login', 'present',
-      'remote_present', 'status',
+      'asset',
+      'username',
+      'date_last_login',
+      'address_last_login',
+      'present',
+      'remote_present',
+      'status',
       'date_updated'
     ],
     columnsShow: {
-      default: [
-        'username', 'asset', 'address_last_login',
-        'date_last_login', 'status'
-      ]
+      default: ['username', 'asset', 'address_last_login', 'date_last_login', 'status']
     },
     columnsMeta: {
       asset: {
@@ -74,24 +79,30 @@ export const gatherAccountTableConfig = (vm, url) => {
         width: '100px',
         formatterArgs: {
           confirm: ({ row }) => {
-            vm.$axios.put(
-              `/api/v1/accounts/gathered-accounts/status/`,
-              { status: statusMap.confirmed, ids: [row.id] }
-            ).then(res => {
-              row.status = statusMap.confirmed
-            }).catch(() => {
-              row.status = vm.$t('Error')
-            })
+            vm.$axios
+              .put(`/api/v1/accounts/gathered-accounts/status/`, {
+                status: statusMap.confirmed,
+                ids: [row.id]
+              })
+              .then(res => {
+                row.status = statusMap.confirmed
+              })
+              .catch(() => {
+                row.status = vm.$t('Error')
+              })
           },
           ignore: ({ row }) => {
-            vm.$axios.put(
-              `/api/v1/accounts/gathered-accounts/status/`,
-              { status: statusMap.ignored, ids: [row.id] }
-            ).then(res => {
-              row.status = statusMap.ignored
-            }).catch(() => {
-              row.status = vm.$t('Error')
-            })
+            vm.$axios
+              .put(`/api/v1/accounts/gathered-accounts/status/`, {
+                status: statusMap.ignored,
+                ids: [row.id]
+              })
+              .then(res => {
+                row.status = statusMap.ignored
+              })
+              .catch(() => {
+                row.status = vm.$t('Error')
+              })
           },
           remove({ row }) {
             vm.deleteDialog.visible = true
@@ -115,7 +126,7 @@ export const gatherAccountTableConfig = (vm, url) => {
   }
 }
 
-export const gatherAccountHeaderActions = (vm) => {
+export const gatherAccountHeaderActions = vm => {
   return {
     hasCreate: false,
     hasImport: false,
@@ -136,20 +147,27 @@ export const gatherAccountHeaderActions = (vm) => {
         type: 'primary',
         icon: 'fa fa-check',
         can: ({ selectedRows }) => {
-          return selectedRows.length > 0 && vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot
+          return (
+            selectedRows.length > 0 &&
+            vm.$hasPerm('accounts.add_account') &&
+            !vm.$store.getters.currentOrgIsRoot
+          )
         },
         callback: function({ selectedRows }) {
           const ids = selectedRows.map(v => {
             return v.id
           })
-          vm.$axios.put(
-            `/api/v1/accounts/gathered-accounts/status/`,
-            { ids: ids, status: statusMap.confirmed }
-          ).then(() => {
-            vm.$message.success(vm.$tc('SyncSuccessMsg'))
-          }).catch(err => {
-            vm.$message.error(vm.$tc('SyncErrorMsg' + ' ' + err))
-          })
+          vm.$axios
+            .put(`/api/v1/accounts/gathered-accounts/status/`, {
+              ids: ids,
+              status: statusMap.confirmed
+            })
+            .then(() => {
+              vm.$message.success(vm.$tc('SyncSuccessMsg'))
+            })
+            .catch(err => {
+              vm.$message.error(vm.$tc('SyncErrorMsg' + ' ' + err))
+            })
         }
       },
       {
@@ -158,7 +176,11 @@ export const gatherAccountHeaderActions = (vm) => {
         type: 'primary',
         icon: 'fa fa-exchange',
         can: ({ selectedRows }) => {
-          return selectedRows.length > 0 && vm.$hasPerm('accounts.remove_account') && !vm.$store.getters.currentOrgIsRoot
+          return (
+            selectedRows.length > 0 &&
+            vm.$hasPerm('accounts.remove_account') &&
+            !vm.$store.getters.currentOrgIsRoot
+          )
         },
         callback: function({ selectedRows }) {
           vm.gatherAccounts = selectedRows
@@ -171,4 +193,3 @@ export const gatherAccountHeaderActions = (vm) => {
     ]
   }
 }
-

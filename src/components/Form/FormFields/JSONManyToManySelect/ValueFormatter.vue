@@ -10,7 +10,7 @@
 
 <script>
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam } from '@/utils/common/index'
 
 export default {
   name: 'ValueFormatter',

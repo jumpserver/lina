@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ChangeSecretReport from '@/views/reports/PAM/ChangeSecret/index.vue'
+import ChangeSecretReport from '@/views/reports/pam/ChangeSecret/index.vue'
 
 export default {
   name: 'ChangeSecret',

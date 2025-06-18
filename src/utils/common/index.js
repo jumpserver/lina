@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { message } from '@/utils/message'
+import { message } from '@/utils/vue/message'
 
 const _ = require('lodash')
 
@@ -8,7 +8,10 @@ export function getApiPath(that, objectId) {
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
-  } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
+  } else if (
+    pagePathArray.indexOf('gathered-user') !== -1 ||
+    pagePathArray.indexOf('change-auth-plan') !== -1
+  ) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
   if (pagePathArray.indexOf(objectId) === -1) {
@@ -29,7 +32,7 @@ export function confirm({ msg, title, perform, success, failed, type = 'warning'
     type: type,
     confirmButtonClass: 'el-button--info',
     showCancelButton: true,
-    beforeClose: async(action, instance, done) => {
+    beforeClose: async (action, instance, done) => {
       if (action !== 'confirm') return done()
       instance.confirmButtonLoading = true
       try {
@@ -131,16 +134,19 @@ export function getErrorResponseMsg(error) {
   if (error?.response?.status === 500) {
     data = i18n.t('ServerError')
   } else {
-    data = error?.response && error?.response.data || error
+    data = (error?.response && error?.response.data) || error
   }
   if (data && (data.error || data.msg || data.detail)) {
     msg = data.error || data.msg || data.detail
   } else if (data && data['non_field_errors']) {
     msg = data['non_field_errors'].join(' ')
   } else if (Array.isArray(data)) {
-    msg = data.map((item, i) => {
-      return getErrorResponseMsg(item)
-    }).filter(i => i).join('; ')
+    msg = data
+      .map((item, i) => {
+        return getErrorResponseMsg(item)
+      })
+      .filter(i => i)
+      .join('; ')
   } else if (typeof data === 'string') {
     return data
   } else {
@@ -222,7 +228,11 @@ export function groupedDropdownToCascader(group) {
 export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
   var iTop = (window.screen.height - 30 - iHeight) / 2
   var iLeft = (window.screen.width - 10 - iWidth) / 2
-  window.open(url, name, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
+  window.open(
+    url,
+    name,
+    'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
+  )
 }
 
 /**
@@ -271,7 +281,8 @@ export function download(downloadUrl, filename) {
 export function diffObject(object, base) {
   return _.transform(object, (result, value, key) => {
     if (!_.isEqual(value, base[key])) {
-      result[key] = (_.isObject(value) && _.isObject(base[key])) ? diffObject(value, base[key]) : value
+      result[key] =
+        _.isObject(value) && _.isObject(base[key]) ? diffObject(value, base[key]) : value
     }
   })
 }
@@ -296,7 +307,7 @@ export function getQueryFromPath(path) {
   return Object.fromEntries(url.searchParams)
 }
 
-export const pageScroll = _.throttle((id) => {
+export const pageScroll = _.throttle(id => {
   const dom = document.getElementById(id)
   if (dom) {
     dom.scrollTop = dom?.scrollHeight
@@ -315,52 +326,63 @@ const notUppercase = ['to', 'a', 'from', 'by']
 
 export function toTitleCase(string) {
   if (!string) return string
-  return string.trim().split(' ').map(item => {
-    if (notUppercase.includes(item.toLowerCase())) {
-      return item
-    }
-    return item[0].toUpperCase() + item.slice(1)
-  }).join(' ')
+  return string
+    .trim()
+    .split(' ')
+    .map(item => {
+      if (notUppercase.includes(item.toLowerCase())) {
+        return item
+      }
+      return item[0].toUpperCase() + item.slice(1)
+    })
+    .join(' ')
 }
 
 export function toSentenceCase(string) {
   if (!string) return string
   if (string.indexOf('/') > 0) return string
-  const s = string.trim().split(' ').map((item, index) => {
-    if (item.length === 0) return ''
-    if (item.length === 1) return item.toLowerCase()
+  const s = string
+    .trim()
+    .split(' ')
+    .map((item, index) => {
+      if (item.length === 0) return ''
+      if (item.length === 1) return item.toLowerCase()
 
-    // 如果首字母大写，且第二个字母也大写，不处理
-    if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
+      // 如果首字母大写，且第二个字母也大写，不处理
+      if (item[0] === item[0].toUpperCase() && item[1] === item[1].toUpperCase()) {
+        return item
+      }
+
+      if (index === 0) {
+        return item[0].toUpperCase() + item.slice(1)
+      }
+      // 仅处理首字母大写，别的是小写的情况
+      if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
+        return item[0].toLowerCase() + item.slice(1)
+      }
       return item
-    }
-
-    if (index === 0) {
-      return item[0].toUpperCase() + item.slice(1)
-    }
-    // 仅处理首字母大写，别的是小写的情况
-    if (item[0] !== item[0].toLowerCase() && item.slice(1) === item.slice(1).toLowerCase()) {
-      return item[0].toLowerCase() + item.slice(1)
-    }
-    return item
-  }).join(' ')
+    })
+    .join(' ')
   return s[0].toUpperCase() + s.slice(1)
 }
 
 export function toLowerCaseExcludeAbbr(s) {
   if (!s) return ''
 
-  return s.split(' ').map(word => {
-    // 如果单词包含超过 2 个大写字母，则不转换
-    const uppercaseCount = word.split('').filter(char => {
-      return char === char.toUpperCase() && char !== char.toLowerCase()
-    }).length
-    if (uppercaseCount > 2) {
-      return word
-    }
-    // 否则将单词转换为小写
-    return word.toLowerCase()
-  }).join(' ')
+  return s
+    .split(' ')
+    .map(word => {
+      // 如果单词包含超过 2 个大写字母，则不转换
+      const uppercaseCount = word.split('').filter(char => {
+        return char === char.toUpperCase() && char !== char.toLowerCase()
+      }).length
+      if (uppercaseCount > 2) {
+        return word
+      }
+      // 否则将单词转换为小写
+      return word.toLowerCase()
+    })
+    .join(' ')
 }
 
 export { BASE_URL }
@@ -443,4 +465,40 @@ export class ObjectLocalStorage {
     obj[attrSafe] = value
     window.localStorage.setItem(this.key, JSON.stringify(obj))
   }
+}
+
+export function randomString(length, includeSymbols = false) {
+  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const lowerCase = 'abcdefghijklmnopqrstuvwxyz'
+  const numbers = '0123456789'
+  const symbols = '!@#$%^&*()-_=+[]{}|;:,.<>?'
+
+  // 根据是否包含特殊字符来决定字符集
+  let allCharacters = upperCase + lowerCase + numbers
+  if (includeSymbols) {
+    allCharacters += symbols
+  }
+
+  let result = ''
+
+  // 如果包含特殊字符，确保至少包含一个大写字母、一个小写字母、一个数字、一个符号
+  if (includeSymbols) {
+    result += upperCase.charAt(Math.floor(Math.random() * upperCase.length))
+    result += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length))
+    result += numbers.charAt(Math.floor(Math.random() * numbers.length))
+    result += symbols.charAt(Math.floor(Math.random() * symbols.length))
+  }
+
+  const allCharactersLength = allCharacters.length
+
+  // 填充剩余的字符
+  for (let i = result.length; i < length; i++) {
+    result += allCharacters.charAt(Math.floor(Math.random() * allCharactersLength))
+  }
+
+  // 随机打乱结果
+  return result
+    .split('')
+    .sort(() => 0.5 - Math.random())
+    .join('')
 }

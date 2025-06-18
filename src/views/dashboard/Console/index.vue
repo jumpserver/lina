@@ -12,7 +12,7 @@
 import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
-import ConsoleReport from '@/views/reports/Console/index.vue'
+import ConsoleReport from '@/views/reports/console/index.vue'
 
 export default {
   name: 'Dashboard',

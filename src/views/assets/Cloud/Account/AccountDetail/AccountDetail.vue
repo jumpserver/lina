@@ -35,11 +35,11 @@
 
 <script>
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import RelationCard from '@/components/Cards/RelationCard'
 import { QuickActions } from '@/components'
 import TimingPanel from '@/views/assets/Cloud/Account/components/TimingPanel'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import Dialog from '@/components/Dialog'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 

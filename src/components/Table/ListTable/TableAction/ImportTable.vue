@@ -42,10 +42,10 @@
 
 <script>
 import DataTable from '@/components/Table/DataTable/index.vue'
-import { getUpdateObjURL } from '@/utils/common'
-import { sleep } from '@/utils/time'
+import { getUpdateObjURL } from '@/utils/common/index'
+import { sleep } from '@/utils/common/time'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 
 export default {
