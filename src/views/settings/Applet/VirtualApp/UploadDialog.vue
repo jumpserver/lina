@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :before-close="handleClose"
-    :loading-status="!isFinished"
+    :disabled-status="!isFinished"
     :show-cancel="false"
     :title="$tc('OfflineUpload')"
     v-bind="$attrs"
@@ -102,11 +102,9 @@ export default {
         const error = err.response.data
         const msg = error?.message || error?.detail || error?.error || JSON.stringify(error)
         this.$message.error(msg)
-      })
-
-      setTimeout(() => {
+      }).finally(() => {
         this.$refs.upload.clearFiles()
-      }, 400)
+      })
     }
   }
 }
