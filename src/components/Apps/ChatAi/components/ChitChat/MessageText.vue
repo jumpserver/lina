@@ -73,16 +73,16 @@ export default {
       this.markdown.use(mdKatex, { blockClass: 'katexmath-block rounded-md', errorColor: ' #cc0000' })
     },
     highlightBlock(str, lang) {
-      let insertSpanHmtl = `<span class="code-block-header__insert">${this.$t('insert')}</span>`
+      let insertSpanHtml = `<span class="code-block-header__insert">${this.$t('Insert')}</span>`
       if (!this.isTerminal) {
-        insertSpanHmtl = ''
+        insertSpanHtml = ''
       }
       return `<pre class="code-block-wrapper">
         <div class="code-block-header">
         <span class="code-block-header__lang">${lang}</span>  
         <span class="code-block-header__actions">
-        ${insertSpanHmtl}
-          <span class="code-block-header__copy">${'Copy'}</span>
+        ${insertSpanHtml}
+          <span class="code-block-header__copy">${this.$t('Copy')}</span>
         </span>
         </div>
         <code class="hljs code-block-body ${lang}">${str}</code></pre>`
