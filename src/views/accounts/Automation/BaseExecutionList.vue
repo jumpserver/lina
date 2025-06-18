@@ -155,11 +155,6 @@ export default {
     }
   },
   mounted() {
-    const automation_id = this.$route.query.automation_id
-    if (automation_id !== undefined) {
-      this.tableConfig.url = `${this.tableConfig.url}?automation_id=${automation_id}`
-    }
-
     const defaultExtraActions = this.tableConfig.columnsMeta.actions.formatterArgs.extraActions
 
     if (this.customActions) {
