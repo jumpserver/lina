@@ -6,6 +6,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
       :create-drawer="createDrawer"
+      :resource="$t('Endpoint')"
     />
   </div>
 </template>
@@ -31,7 +32,7 @@ export default {
             'name', 'host', 'actions',
             'http_port', 'https_port', 'ssh_port', 'rdp_port', 'vnc_port',
             'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port', 'is_active'
+            'redis_port', 'sqlserver_port', 'oracle_port', 'mongodb_port', 'is_active'
           ]
         },
         columnsMeta: {
@@ -43,7 +44,8 @@ export default {
               canUpdate: this.$hasPerm('terminal.change_endpoint'),
               updateRoute: 'EndpointUpdate',
               cloneRoute: 'EndpointCreate',
-              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001' && this.$hasPerm('terminal.delete_endpoint')
+              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001' &&
+                  this.$hasPerm('terminal.delete_endpoint')
             }
           }
         }

@@ -21,13 +21,16 @@ export class TableColumnsGenerator {
   }
 
   dynamicActionWidth() {
-    if (i18n.locale === 'en') {
+    console.log(i18n.locale)
+    if (i18n.locale === 'zh-hans' || i18n.locale === 'zh-hant') {
+      return '100px'
+    }
+
+    if (i18n.locale === 'ja' || i18n.locale === 'ko') {
       return '120px'
     }
-    if (i18n.locale === 'pt-br') {
-      return '160px'
-    }
-    return '100px'
+
+    return '160px'
   }
 
   generateColumns() {

@@ -3,7 +3,7 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
-    :resource="$tc('AccountDiscoverTask')"
+    :resource="$tc('DiscoverAccountTask')"
     :table-config="tableConfig"
   />
 </template>

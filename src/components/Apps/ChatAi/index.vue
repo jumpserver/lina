@@ -47,7 +47,9 @@ import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import { ws } from '@/utils/socket'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
+import { ObjectLocalStorage } from '@/utils/common'
 
+const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
 export default {
   components: {
     DrawerPanel,
@@ -76,12 +78,15 @@ export default {
       robotUrl: require('@/assets/img/robot-assistant.png'),
       height: '400px',
       expanded: false,
-      clientOffset: {}
+      clientOffset: {},
+      currentTerminalContent: {}
     }
   },
   watch: {
   },
   mounted() {
+    const expanded = aiPannelLocalStorage.get('expanded')
+    this.updateExpandedState(expanded)
     this.handlePostMessage()
   },
   methods: {
@@ -89,6 +94,17 @@ export default {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
+          this.initWebSocket()
+          return
+        }
+        const msg = event.data
+        switch (msg.name) {
+          case 'current_terminal_content':
+            // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
+            this.$log.debug('current_terminal_content', msg)
+            this.currentTerminalContent = msg.data
+            this.$refs.component?.onTerminalContext(msg.data)
+            break
         }
       })
     },
@@ -96,6 +112,11 @@ export default {
       this.$refs.drawer.handleHeaderMoveDown(event)
     },
     handleMouseMoveUp(event) {
+      // Prevent the new chat button from triggering the header move up
+      const newButton = event.target.closest('.new')
+      if (newButton) {
+        return
+      }
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
     initWebSocket() {
@@ -107,12 +128,20 @@ export default {
       this.$refs.drawer.show = false
     },
     expandFull() {
-      this.height = '100%'
-      this.expanded = true
+      this.updateExpandedState(true)
+      this.save_pannel_settings()
     },
     compress() {
-      this.height = '400px'
-      this.expanded = false
+      this.updateExpandedState(false)
+      this.save_pannel_settings()
+    },
+    save_pannel_settings() {
+      aiPannelLocalStorage.set('expanded', this.expanded)
+      console.log('AI panel settings saved:', this.expanded)
+    },
+    updateExpandedState(expanded) {
+      this.expanded = expanded
+      this.height = expanded ? '100%' : '400px'
     },
     onNewChat() {
       this.active = 'chat'
