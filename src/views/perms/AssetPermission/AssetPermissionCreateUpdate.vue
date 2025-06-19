@@ -10,6 +10,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import UserSelect from '@/components/Apps/UserSelect'
 import AssetSelect from '@/components/Apps/AssetSelect'
 import AccountFormatter from './components/AccountFormatter'
 import { AllAccount } from '../const'
@@ -49,14 +50,15 @@ export default {
       createSuccessNextRoute: { name: 'AssetPermissionDetail' },
       fieldsMeta: {
         users: {
+          type: 'userSelect',
+          component: UserSelect,
+          rules: [{
+            required: false
+          }],
           el: {
             value: [],
-            ajax: {
-              url: '/api/v1/users/users/?fields_size=mini',
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+            defaultPageSize: 300,
+            baseUrl: '/api/v1/users/users/?fields_size=small'
           }
         },
         user_groups: {

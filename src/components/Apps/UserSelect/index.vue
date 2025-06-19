@@ -1,0 +1,130 @@
+<template>
+  <div class="user-select-formatter">
+    <Select2
+      ref="select2"
+      v-model="select2Config.value"
+      v-bind="select2Config"
+      @input="onInputChange"
+      v-on="$listeners"
+      @focus.stop="handleFocus"
+    />
+    <UserSelectDialog
+      v-if="dialogVisible"
+      ref="dialog"
+      :base-url="baseUrl"
+      :value="value"
+      :visible.sync="dialogVisible"
+      v-bind="$attrs"
+      @cancel="handleCancel"
+      @confirm="handleConfirm"
+      v-on="$listeners"
+    />
+  </div>
+</template>
+
+<script>
+import Select2 from '@/components/Form/FormFields/Select2.vue'
+import UserSelectDialog from './dialog.vue'
+
+export default {
+  componentName: 'UserSelect',
+  components: { UserSelectDialog, Select2 },
+  props: {
+    baseUrl: {
+      type: String,
+      default: '/api/v1/users/users/?fields_size=small'
+    },
+    defaultPageSize: {
+      type: Number,
+      default: 10
+    },
+    value: {
+      type: Array,
+      default: () => []
+    },
+    disabled: {
+      type: [Boolean, Function],
+      default: false
+    }
+  },
+  data() {
+    const iValue = []
+    for (const item of this.value) {
+      if (typeof item === 'object') {
+        iValue.push(item.id)
+      } else {
+        iValue.push(item)
+      }
+    }
+    return {
+      dialogVisible: false,
+      initialValue: _.cloneDeep(iValue),
+      select2Config: {
+        disabled: this.disabled,
+        value: iValue,
+        multiple: true,
+        clearable: true,
+        defaultPageSize: this.defaultPageSize,
+        ajax: {
+          url: this.baseUrl,
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    handleFocus() {
+      this.$refs.select2.selectRef.blur()
+      this.dialogVisible = true
+    },
+    handleConfirm(valueSelected, rowsAdd) {
+      if (valueSelected === undefined) {
+        return
+      }
+      this.$refs.select2.iValue = valueSelected
+      this.addRowsToSelect(rowsAdd)
+      this.onInputChange(valueSelected)
+      this.dialogVisible = false
+    },
+    handleCancel() {
+      this.dialogVisible = false
+    },
+    onInputChange(val) {
+      this.$emit('change', val)
+    },
+    addToSelect(options, row) {
+      const selectOptionsHas = options.find(item => item.value === row.id)
+      // 如果select2的options中没有，那么可能无法显示正常的值
+      if (selectOptionsHas === undefined) {
+        const option = {
+          label: `${row.name}(${row.username})`,
+          value: row.id
+        }
+        options.push(option)
+      }
+    },
+    addRowsToSelect(rows) {
+      const outSelectOptions = this.$refs.select2.options
+      for (const row of rows) {
+        this.addToSelect(outSelectOptions, row)
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.el-select {
+  width: 100%;
+}
+
+.page ::v-deep .page-heading {
+  display: none;
+}
+
+.page ::v-deep .treebox {
+  height: inherit !important;
+}
+</style>
