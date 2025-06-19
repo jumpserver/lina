@@ -104,8 +104,9 @@ export default {
       // 使用 dialog 的高度
       const dialogs = [...document.getElementsByClassName('el-dialog__body')]
       if (dialogs.length > 0) {
-        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.iZTreeID) !== -1) || dialogs[dialogs.length - 1]
+        const dialog = dialogs.find((d) => d.innerHTML.indexOf(this.iZTreeID) !== -1)
         if (dialog) {
+          // 对话框内的 zTree 才需要重新计算高度
           const dialogRect = dialog.getBoundingClientRect()
           tree.style.height = `${dialogRect.height - 60}px`
           return
@@ -439,21 +440,21 @@ div.rMenu li {
 }
 
 .menu-item {
-    font-size: 12px;
-    padding: 0 16px;
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #606266;
-    height: 24px;
-    line-height: 24px;
-    box-sizing: border-box;
-    cursor: pointer;
+  font-size: 12px;
+  padding: 0 16px;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #606266;
+  height: 24px;
+  line-height: 24px;
+  box-sizing: border-box;
+  cursor: pointer;
 
-    i {
-      width: 15px;
-    }
+  i {
+    width: 15px;
+  }
 }
 
 .dropdown-menu {
