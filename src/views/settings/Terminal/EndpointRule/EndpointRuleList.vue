@@ -6,6 +6,7 @@
       :header-actions="headerActions"
       :table-config="tableConfig"
       :create-drawer="createDrawer"
+      :resource="$t('EndpointRules')"
     />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :active-menu.sync="config.activeMenu" :object.sync="ticket" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :title="ticket.title" :active-menu.sync="config.activeMenu" :object.sync="ticket" v-bind="config" v-on="$listeners">
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>
