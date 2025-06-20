@@ -131,7 +131,7 @@ export default {
       })
     },
     handleConfirm() {
-      const url = '/api/v1/accounts/gathered-accounts/'
+      const url = `/api/v1/accounts/gathered-accounts/${this.account.id}/`
       this.$axios.delete(url, {
         params: {
           username: this.account.username,
