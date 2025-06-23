@@ -33,8 +33,8 @@ export default {
         return this.$t('PasswordExpired')
       }
       if (securityPasswordExpirationTime - intervalTime <= 5) {
-        return this.$t('PasswordWillExpiredPrefixMsg') +
-          (securityPasswordExpirationTime - intervalTime) +
+        return this.$t('PasswordWillExpiredPrefixMsg') + ' ' +
+          (securityPasswordExpirationTime - intervalTime) + ' ' +
           this.$t('PasswordWillExpiredSuffixMsg')
       }
       return false
