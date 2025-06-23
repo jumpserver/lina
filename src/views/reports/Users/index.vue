@@ -6,7 +6,9 @@
           <h5>报表类型</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
             <li v-for="chart in charts" :key="chart.name">
-              <a @click="component = chart.component"> <i :class="chart.icon" /> {{ chart.name }} </a>
+              <a @click="component = resolveRoute(chart)">
+                <i :class="chart.icon" /> {{ chart.title }}
+              </a>
             </li>
           </ul>
         </div>
@@ -21,6 +23,7 @@
 <script>
 import UserActivity from './UserActivity.vue'
 import Page from '@/layout/components/Page'
+import { getComponentFromRoute } from '@/utils/vue/index'
 
 export default {
   name: 'Users',
@@ -33,16 +36,21 @@ export default {
       component: 'UserActivity',
       charts: [
         {
-          name: '用户登录趋势',
-          icon: 'fa fa-user-o',
-          url: '/reports/users/user-activity'
+          title: '用户登录趋势',
+          name: 'UserActivity',
+          icon: 'fa fa-user-o'
         },
         {
-          name: '用户密码更改',
-          icon: 'fa fa-envelope-o',
-          url: '/reports/users/user-activity'
+          title: '用户密码更改',
+          name: 'GroupActivity',
+          icon: 'fa fa-envelope-o'
         }
       ]
+    }
+  },
+  methods: {
+    resolveRoute(chart) {
+      return getComponentFromRoute({ name: chart.name }, this.$router)
     }
   }
 }
@@ -74,6 +82,8 @@ h5 {
   border-radius: 5px;
 }
 .chart {
+  padding: 10px;
+
   ::v-deep .content {
     background-color: #fff;
     overflow-y: hidden !important;

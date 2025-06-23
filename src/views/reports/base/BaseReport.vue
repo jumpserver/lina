@@ -15,7 +15,12 @@
             [{{ new Date().toLocaleString() }}]
           </span>
 
-          <RightAction />
+          <span style="float: right; line-height: 40px;">
+            <el-button type="text" @click="openNewWindow">
+              <i class="fa fa-external-link" />
+              New open
+            </el-button>
+          </span>
         </div>
         <div class="description">
           {{ description }}
@@ -55,6 +60,10 @@ export default {
     description: {
       type: String,
       default: ''
+    },
+    url: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -67,6 +76,30 @@ export default {
 
   },
   methods: {
+    handleChangeChart(event) {
+      console.log(event)
+    },
+    openNewWindow() {
+      const url = '/ui/#/reports/users/user-activity'
+      try {
+        if (!this.win || this.win.closed) {
+          // 计算窗口居中位置
+          const width = 1000
+          const height = 800
+          const left = (screen.width - width) / 2
+          const top = (screen.height - height) / 2
+
+          this.win = window.open('', '_blank', `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`)
+        }
+        // 确保窗口在最前面
+        this.win.focus()
+        this.win.location.href = url
+      } catch (error) {
+        console.error('打开新窗口失败:', error)
+        // 降级处理：在当前窗口打开
+        window.location.href = url
+      }
+    },
     exportExcel() {
       console.log('exportExcel')
     },

@@ -14,7 +14,7 @@ export default [
       {
         path: 'activity',
         // props: () => ({ nav: false }),
-        name: 'UserActivity',
+        name: 'UserActivityIndex',
         component: () => import('@/views/reports/users/index.vue'),
         meta: {
           title: i18n.t('UserActivity'),
@@ -35,7 +35,7 @@ export default [
       {
         path: 'activity',
         props: () => ({ nav: false }),
-        name: 'AssetActivity',
+        name: 'AssetActivityIndex',
         component: () => import('@/views/reports/assets/index.vue'),
         meta: {
           title: i18n.t('AssetActivity'),

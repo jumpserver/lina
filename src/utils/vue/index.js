@@ -13,3 +13,11 @@ export function resolveRoute(route, router) {
     return matched[0]
   }
 }
+
+export function getComponentFromRoute(route, router) {
+  const r = resolveRoute(route, router)
+  if (!r) {
+    return
+  }
+  return r.components.default
+}

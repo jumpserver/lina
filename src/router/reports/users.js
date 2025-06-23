@@ -4,6 +4,7 @@ export default [
   {
     path: 'user-activity',
     component: () => import('@/views/reports/users/UserActivity.vue'), // Parent router-view
+    name: 'UserActivity',
     meta: {
       permissions: [],
       icon: 'user-o',
@@ -13,7 +14,8 @@ export default [
   },
   {
     path: 'group-activity',
-    component: () => import('@/views/reports/users/UserActivity.vue'), // Parent router-view
+    component: () => import('@/views/reports/audits/Dashboard.vue'), // Parent router-view
+    name: 'GroupActivity',
     meta: {
       permissions: [],
       expanded: true,
