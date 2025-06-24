@@ -1,5 +1,5 @@
 <template>
-  <BaseReport :only-charts="onlyCharts" :nav="nav">
+  <BaseReport v-bind="$attrs">
     <SwitchDate class="switch-date" @change="onChange" />
     <CardSummary :days="days" />
     <el-row :gutter="16">
@@ -30,16 +30,6 @@ export default {
     CardSummary,
     RightSummary,
     BaseReport
-  },
-  props: {
-    nav: {
-      type: Boolean,
-      default: true
-    },
-    onlyCharts: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {

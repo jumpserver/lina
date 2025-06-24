@@ -4,7 +4,7 @@
       <div class="nav-bar-logo">
         <Logo />
       </div>
-      <RightAction />
+      <RightAction :name="name" />
     </div>
     <div class="content">
       <div v-if="!onlyCharts" class="title-bar">
@@ -15,10 +15,10 @@
             [{{ new Date().toLocaleString() }}]
           </span>
 
-          <span style="float: right; line-height: 40px;">
+          <span v-if="!nav && url" style="float: right; line-height: 40px;">
             <el-button type="text" @click="openNewWindow">
-              <i class="fa fa-external-link" />
-              New open
+              <i class="fa fa-external-link" style="font-size: 15px;" />
+              {{ $t('Export') }}
             </el-button>
           </span>
         </div>
@@ -53,6 +53,10 @@ export default {
       type: Boolean,
       default: false
     },
+    name: {
+      type: String,
+      default: ''
+    },
     title: {
       type: String,
       default: ''
@@ -71,16 +75,13 @@ export default {
     }
   },
   mounted() {
-  },
-  beforeDestroy() {
-
+    console.log('BReport mounted: ', this.name)
   },
   methods: {
     handleChangeChart(event) {
       console.log(event)
     },
     openNewWindow() {
-      const url = '/ui/#/reports/users/user-activity'
       try {
         if (!this.win || this.win.closed) {
           // 计算窗口居中位置
@@ -88,29 +89,17 @@ export default {
           const height = 800
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
+          const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
 
-          this.win = window.open('', '_blank', `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`)
+          this.win = window.open(this.url, '_blank', options)
         }
         // 确保窗口在最前面
         this.win.focus()
-        this.win.location.href = url
       } catch (error) {
         console.error('打开新窗口失败:', error)
         // 降级处理：在当前窗口打开
-        window.location.href = url
+        window.location.href = this.url
       }
-    },
-    exportExcel() {
-      console.log('exportExcel')
-    },
-    exportPDF() {
-      console.log('exportPDF')
-    },
-    emailReport() {
-      console.log('emailReport')
-    },
-    printReport() {
-      window.print()
     },
     openSettings() {
       console.log('openSettings')
@@ -122,7 +111,7 @@ export default {
 <style lang="scss" scoped>
   .echarts {
     width: 100%;
-    height: 300px;
+    height: 270px;
   }
 
   .header {
@@ -192,14 +181,28 @@ export default {
   }
 
   @media print {
+    .header {
+      display: none;
+    }
+
     .content {
-        overflow-y: hidden;
-        height: auto;
-        background-color: white;
+      overflow-y: hidden;
+      height: auto;
+      background-color: white;
     }
 
     .charts-zone {
-        width: 1046px;
+      width: 1046px;
+
+      ::v-deep {
+        .chart-container{
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+        .box-container {
+          display: block !important;
+        }
+      }
     }
   }
 
@@ -207,7 +210,7 @@ export default {
     padding: 16px 30px;
     margin: 0 auto;
     // width: 100%;
-    // max-width: 1046px;
+    // max-width: 1046px; 不能设置，因为 dashboard 中会引用
     box-sizing: border-box;
     min-height: 100px; // 添加最小高度确保容器始终存在
 
@@ -219,7 +222,7 @@ export default {
       }
 
       .chart {
-        height: 300px;
+        height: 260px;
         position: relative; // 添加相对定位
       }
 

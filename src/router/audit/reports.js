@@ -8,12 +8,12 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('UserActivity'),
+      icon: 'user-o',
       permissions: []
     },
     children: [
       {
         path: 'activity',
-        // props: () => ({ nav: false }),
         name: 'UserActivityIndex',
         component: () => import('@/views/reports/users/index.vue'),
         meta: {
@@ -28,6 +28,7 @@ export default [
     name: 'assets',
     component: empty,
     meta: {
+      icon: 'assets',
       title: i18n.t('GroupActivity'),
       permissions: []
     },

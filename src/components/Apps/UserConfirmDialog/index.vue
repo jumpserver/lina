@@ -8,7 +8,7 @@
     :visible.sync="visible"
     class="dialog-content"
     v-bind="$attrs"
-    width="740px"
+    width="600px"
     @confirm="visible = false"
     v-on="$listeners"
   >

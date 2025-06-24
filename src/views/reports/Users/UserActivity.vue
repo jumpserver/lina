@@ -3,7 +3,9 @@
     <BaseReport
       title="用户活跃度分析报告"
       :nav="nav"
+      :name="name"
       :description="description"
+      v-bind="$attrs"
     >
       <div class="charts-grid">
         <SwitchDate class="switch-date" />
@@ -99,6 +101,7 @@ export default {
   },
   data() {
     return {
+      name: 'UserActivity',
       // 生成随机数据的辅助函数
       generateRandomData: (min, max, count) => {
         return Array.from({ length: count }, () =>

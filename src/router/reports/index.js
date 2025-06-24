@@ -11,9 +11,7 @@ export default {
     title: i18n.t('Reports'),
     icon: 'fa-bar-chart-o',
     view: 'reports',
-    type: 'view',
-    showNavSwitcher: true,
-    showOrganization: true,
+    showNavSwitcher: false,
     permissions: []
   },
   children: [

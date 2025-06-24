@@ -1,7 +1,14 @@
 <template>
   <div class="nav-bar-right export-bar">
     <el-button-group>
-      <el-button class="export-btn" type="text" icon="el-icon-printer" @click="exportPDF">
+      <el-button
+        :loading="exportLoading"
+        :disabled="exportLoading"
+        class="export-btn"
+        type="text"
+        icon="el-icon-printer"
+        @click="exportPdf"
+      >
         Export as PDF
       </el-button>
       <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
@@ -20,15 +27,38 @@
 <script>
 export default {
   name: 'RightAction',
+  props: {
+    name: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      exportLoading: false
+    }
+  },
   methods: {
-    exportPDF() {
-      console.log('exportPDF')
+    exportPdf() {
+      if (!this.name) {
+        this.$message.error('Please select a chart')
+        return
+      }
+      const exportUrl = `/core/reports/export-pdf/?chart=${this.name}`
+      const link = document.createElement('a')
+      link.href = exportUrl
+      link.target = '_self'
+      link.download = ''
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      this.$message.success('Exporting...')
     },
     emailReport() {
       console.log('emailReport')
     },
     printReport() {
-      console.log('printReport')
+      window.print()
     },
     openSettings() {
       console.log('openSettings')

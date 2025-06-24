@@ -6,7 +6,7 @@
           <h5>报表类型</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
             <li v-for="chart in charts" :key="chart.name">
-              <a @click="component = resolveRoute(chart)">
+              <a @click="handleChangeChart(chart)">
                 <i :class="chart.icon" /> {{ chart.title }}
               </a>
             </li>
@@ -14,7 +14,7 @@
         </div>
       </el-col>
       <el-col :span="20" style="background-color: #fff" class="chart">
-        <component :is="component" :nav="false" />
+        <component :is="component" :nav="false" :url="url" />
       </el-col>
     </el-row>
   </Page>
@@ -23,7 +23,7 @@
 <script>
 import UserActivity from './UserActivity.vue'
 import Page from '@/layout/components/Page'
-import { getComponentFromRoute } from '@/utils/vue/index'
+import { resolveRoute } from '@/utils/vue/index'
 
 export default {
   name: 'Users',
@@ -33,7 +33,8 @@ export default {
   },
   data() {
     return {
-      component: 'UserActivity',
+      url: '',
+      component: '',
       charts: [
         {
           title: '用户登录趋势',
@@ -48,9 +49,16 @@ export default {
       ]
     }
   },
+  created() {
+    this.handleChangeChart(this.charts[0])
+  },
   methods: {
-    resolveRoute(chart) {
-      return getComponentFromRoute({ name: chart.name }, this.$router)
+    handleChangeChart(chart) {
+      const route = resolveRoute({ name: chart.name }, this.$router)
+      this.component = route.components.default
+      const routePath = route.path
+      this.url = '/ui/#' + routePath
+      this.name = chart.name
     }
   }
 }
