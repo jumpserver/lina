@@ -94,7 +94,7 @@ h5 {
 
   ::v-deep .content {
     background-color: #fff;
-    overflow-y: hidden !important;
+    overflow: hidden;
     height: 100%;
   }
 }

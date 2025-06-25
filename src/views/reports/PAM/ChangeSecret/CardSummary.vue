@@ -145,6 +145,7 @@ export default {
   flex: 1;
   width: 33%;
   max-width: 33%;
+  overflow: hidden;
 
   .summary-header {
     text-overflow: ellipsis;
