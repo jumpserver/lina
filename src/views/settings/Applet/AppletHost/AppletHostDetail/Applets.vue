@@ -42,9 +42,16 @@ export default {
           'applet.display_name', 'applet.version',
           'date_updated', 'status', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'applet.display_name', 'status', 'actions'
+          ]
+        },
         columnsMeta: {
           'applet.display_name': {
             label: this.$t('DisplayName'),
+            width: '160px',
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: true,
@@ -61,7 +68,7 @@ export default {
             label: this.$t('Version')
           },
           status: {
-            label: this.$t('PublishStatus'),
+            label: this.$t('Status'),
             formatter: (row) => {
               const typeMapper = {
                 'pending': 'success',
@@ -77,7 +84,7 @@ export default {
             label: this.$t('Date')
           },
           actions: {
-            width: '160px',
+            width: '138px',
             formatterArgs: {
               hasUpdate: false,
               hasDelete: false,
