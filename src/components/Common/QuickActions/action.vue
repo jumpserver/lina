@@ -1,25 +1,23 @@
 <template>
   <tr>
-    <td>{{ getActionTitle(action) }}</td>
     <td>
-      <el-popover
-        :content="action.attrs.tip"
-        :disabled="!action.attrs.showTip"
-        placement="left-end"
-        trigger="hover"
-      >
-        <span slot="reference">
-          <component
-            :is="iType"
-            v-model="action.attrs.model"
-            :title="label"
-            v-bind="action.attrs"
-            v-on="callbacks"
-          >
-            {{ label }}
-          </component>
-        </span>
-      </el-popover>
+      {{ getActionTitle(action) }}
+      <el-tooltip v-if="action.attrs.showTip" :content="action.attrs.tip" :open-delay="500" effect="dark">
+        <i class="fa fa-question-circle-o" />
+      </el-tooltip>
+    </td>
+    <td>
+      <span slot="reference">
+        <component
+          :is="iType"
+          v-model="action.attrs.model"
+          :title="label"
+          v-bind="action.attrs"
+          v-on="callbacks"
+        >
+          {{ label }}
+        </component>
+      </span>
     </td>
   </tr>
 </template>
