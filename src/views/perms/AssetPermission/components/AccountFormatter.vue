@@ -27,8 +27,14 @@
           <el-button size="mini" type="primary" @click="showTemplateDialog=true">
             {{ $t('TemplateAdd') }}
           </el-button>
+          <span v-if="showAddAccount">
+            <el-button size="mini" type="primary" @click="showAccountSelectDialog=true">
+              {{ $t('AssetAccount') }}
+            </el-button>
+          </span>
           <span class="help-block">
             {{ addTemplateHelpText }}
+            {{ addAccountSelectHelpText }}
           </span>
         </span>
       </div>
@@ -73,6 +79,15 @@
     >
       <ListTable ref="templateTable" v-bind="accountTemplateTable" />
     </Dialog>
+    <AccountSelectDialog
+      v-if="showAccountSelectDialog"
+      :value="value"
+      :visible.sync="showAccountSelectDialog"
+      v-bind="$attrs"
+      @cancel="handleCancel"
+      @confirm="handleConfirm"
+      v-on="$listeners"
+    />
   </el-form>
 </template>
 
@@ -92,9 +107,11 @@ import {
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
+import AccountSelectDialog from '@/components/Apps/AccountSelect/dialog.vue'
 
 export default {
   components: {
+    AccountSelectDialog,
     TagInput,
     ListTable,
     Dialog
@@ -129,6 +146,16 @@ export default {
       default() {
         return this.$t('TemplateHelpText')
       }
+    },
+    addAccountSelectHelpText: {
+      type: String,
+      default() {
+        return this.$t('AccountSelectHelpText')
+      }
+    },
+    showAddAccount: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -140,6 +167,7 @@ export default {
       VIRTUAL: virtual,
       EXCLUDE: NotAccount,
       showTemplateDialog: false,
+      showAccountSelectDialog: false,
       realRadioSelected: this.ALL,
       realChoices: realChoices,
       virtualChecked: false,
@@ -280,6 +308,19 @@ export default {
 
       this.$emit('input', choicesSelected)
       this.$emit('change', choicesSelected)
+    },
+    handleConfirm(valueSelected, rowsAdd) {
+      if (valueSelected === undefined) { return }
+      const newUsernames = [...new Set(rowsAdd.map(row => row.username))]
+      this.specAccountsInput = [...new Set([...this.specAccountsInput, ...newUsernames])]
+      this.outputValue()
+      setTimeout(() => {
+        this.showAccountSelectDialog = false
+        this.outputValue()
+      }, 100)
+    },
+    handleCancel() {
+      this.showAccountSelectDialog = false
     }
   }
 }
@@ -329,6 +370,35 @@ export default {
   ::v-deep {
     .el-form-item__content {
       width: 90% !important;
+    }
+  }
+}
+
+.el-dialog__wrapper ::v-deep .el-dialog__body {
+  padding: 0 0 0 3px;
+
+  .tree-table {
+    .left {
+      padding: 5px 0;
+
+      .ztree {
+        height: 100%;
+      }
+    }
+
+    .right {
+      .transition-box {
+        padding-left: 0;
+      }
+    }
+
+    .mini {
+      padding-top: 8px;
+      width: 1px;
+    }
+
+    .transition-box {
+      padding: 10px 5px;
     }
   }
 }
