@@ -232,7 +232,7 @@ export default {
         fold: {
           timeout: {
             type: 'select',
-            name: this.$t('Timeout'),
+            name: this.$t('Timeout(s)'),
             align: 'left',
             value: 60,
             options: [
