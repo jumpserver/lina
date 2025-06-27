@@ -110,7 +110,7 @@
             </span>
             <span>
               <span><b>{{ $tc('TimeDelta') }}: </b></span>
-              <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
+              <span>{{ executionInfo.timeCost }}</span>
             </span>
           </span>
           <div class="output">
@@ -325,8 +325,8 @@ export default {
       this.runButton.icon = 'fa fa-spinner fa-spin'
       this.runButton.disabled = true
       this.executionInfo.cancel = setInterval(() => {
-        this.executionInfo.timeCost += 0.1
-      }, 100)
+        this.executionInfo.timeCost += 1
+      }, 1000)
     },
     getSelectedNodesAndHosts() {
       const hosts = this.getSelectedNodes().filter((item) => {
@@ -424,6 +424,7 @@ export default {
       }
       createJob(data).then(res => {
         this.progressLength = 0
+        this.executionInfo.timeCost = 0
         this.ShowProgress = true
         const form = new FormData()
         for (const file of this.uploadFileList) {
@@ -438,7 +439,6 @@ export default {
           this.progressLength += 1
         }, 100)
         JobUploadFile(form).then(res => {
-          this.executionInfo.timeCost = 0
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
@@ -450,7 +450,6 @@ export default {
       })
     },
     execute_stop() {
-      this.executionInfo.timeCost = 0
       this.progressLength = 0
       this.ShowProgress = false
       this.runButton.disabled = false

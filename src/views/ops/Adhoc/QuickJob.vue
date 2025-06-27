@@ -443,8 +443,8 @@ export default {
       this.toolbar.left.run.icon = 'fa fa-spinner fa-spin'
       this.toolbar.left.run.isVisible = true
       this.executionInfo.cancel = setInterval(() => {
-        this.executionInfo.timeCost += 0.1
-      }, 100)
+        this.executionInfo.timeCost += 1
+      }, 1000)
     },
 
     getSelectedNodesAndHosts() {
