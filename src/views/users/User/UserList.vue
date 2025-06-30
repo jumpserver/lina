@@ -216,7 +216,7 @@ export default {
             width: '120px',
             formatter: (row) => {
               const phoneObj = row.phone
-              return <div>{phoneObj?.code}{phoneObj?.phone}</div>
+              return phoneObj?.phone ? <div>{phoneObj?.code}{phoneObj?.phone}</div> : ''
             }
           },
           login_blocked: {
