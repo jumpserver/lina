@@ -143,14 +143,6 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
-          default: {
-            state: {
-              key: 'state',
-              label: this.$t('Action'),
-              value: 'pending',
-              valueLabel: this.$t('Open')
-            }
-          },
           exclude: ['id', 'title', 'type', 'applicant'],
           options: [
             {
