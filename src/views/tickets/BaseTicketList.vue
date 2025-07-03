@@ -133,6 +133,9 @@ export default {
             label: this.$t('Date'),
             sortable: 'custom',
             formatter: (row) => toSafeLocalDateStr(row.date_created)
+          },
+          actions: {
+            has: this.$route.name !== 'AuditTicketList'
           }
         }
       },
