@@ -1,7 +1,7 @@
 // 鼠标可移入tooltip功能
-import { Table } from 'element-ui'
-import { getCell, getColumnByCell } from 'element-ui/packages/table/src/util'
-import { getStyle, hasClass } from 'element-ui/src/utils/dom'
+import { Table } from 'elementui-lts'
+import { getCell, getColumnByCell } from 'elementui-lts/packages/table/src/util'
+import { getStyle, hasClass } from 'elementui-lts/src/utils/dom'
 import { copy } from './common'
 
 Object.assign(Table.components.TableBody.methods, {
