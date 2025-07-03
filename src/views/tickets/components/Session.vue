@@ -33,7 +33,7 @@
       </el-row>
     </div>
     <el-divider />
-    <div class="bottom-btn">
+    <div v-if="!isAuditRoute" class="bottom-btn">
       <el-button
         :disabled="!session.can_terminate"
         size="small"
@@ -88,7 +88,11 @@ export default {
       supportedLock: false
     }
   },
-
+  computed: {
+    isAuditRoute() {
+      return this.$route.name === 'AuditTicketList'
+    }
+  },
   created() {
     if (this.object.state.value === 'approved' && this.object.type.value === 'login_asset_confirm') {
       this.init()

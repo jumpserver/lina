@@ -19,11 +19,11 @@
     </template>
     <slot />
     <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item :label="$tc('Reply')">
+      <el-form-item v-if="!isAuditRoute" :label="$tc('Reply')">
         <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
       </el-form-item>
       <el-form-item style="float: right">
-        <template v-if="hasActionPerm">
+        <template v-if="hasActionPerm && !isAuditRoute">
           <el-button
             :disabled="isDisabled || object.status.value === 'closed'"
             size="small"
@@ -42,7 +42,7 @@
           </el-button>
         </template>
         <el-button
-          v-if="isSelfTicket"
+          v-if="isSelfTicket && !isAuditRoute"
           :disabled="isDisabled || object.status.value === 'closed'"
           size="small"
           type="danger"
@@ -51,6 +51,7 @@
           <i class="fa fa-times" /> {{ $t('CancelTicket') }}
         </el-button>
         <el-button
+          v-if="!isAuditRoute"
           :disabled="object.status.value === 'closed'"
           size="small"
           type="info"
@@ -103,6 +104,9 @@ export default {
     }
   },
   computed: {
+    isAuditRoute() {
+      return this.$route.name === 'AuditTicketList'
+    },
     hasActionPerm() {
       return this.object.process_map.filter(
         item => item.approval_level === this.object.approval_step.value
