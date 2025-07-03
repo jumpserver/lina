@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui'
+import ElementUI from 'elementui-lts'
 import locale from 'elementLocale'
 import '@/styles/index.scss' // global css
 import App from './App'

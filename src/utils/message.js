@@ -1,5 +1,5 @@
 // 重置message，防止重复点击重复弹出message弹框
-import { Message as elMessage } from 'element-ui'
+import { Message as elMessage } from 'elementui-lts'
 import { toSentenceCase } from '@/utils/common'
 
 let messageDom = null
