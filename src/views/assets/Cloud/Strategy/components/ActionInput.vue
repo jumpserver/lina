@@ -109,8 +109,7 @@ export default {
               options: [],
               value: [],
               ajax: {
-                url: '',
-                clearable: false,
+                url: '/api/v1/assets/platforms/',
                 transformOption: (item) => {
                   let display
                   switch (this.resourceType) {
@@ -157,6 +156,7 @@ export default {
             el: {
               hidden: true,
               settingReadonly: true,
+              showSetting: () => false,
               choices: []
             }
           }
