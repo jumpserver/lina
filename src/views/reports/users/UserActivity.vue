@@ -8,23 +8,9 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <SwitchDate class="switch-date" />
+        <SwitchDate class="switch-date" @change="onChange" />
         <!-- 全宽图表 -->
         <div class="chart-container full-width">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">用户总活跃趋势（全宽）</div>
-            <div class="chart">
-              <echarts
-                ref="totalActivity"
-                :options="totalActivityOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 用户登录趋势 -->
-        <div class="chart-container">
           <div class="chart-container-title">
             <div class="chart-container-title-text">用户登录趋势</div>
             <div class="chart">
@@ -37,14 +23,28 @@
           </div>
         </div>
 
+        <!-- 用户登录趋势 -->
+        <div class="chart-container">
+          <div class="chart-container-title">
+            <div class="chart-container-title-text">用户登录失败趋势</div>
+            <div class="chart">
+              <echarts
+                ref="loginFailed"
+                :options="loginFailedOptions"
+                :autoresize="true"
+              />
+            </div>
+          </div>
+        </div>
+
         <!-- 密码重置统计 -->
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">密码重置统计</div>
+            <div class="chart-container-title-text">登录方法统计</div>
             <div class="chart">
               <echarts
                 ref="passwordReset"
-                :options="passwordResetOptions"
+                :options="loginMethodOptions"
                 :autoresize="true"
               />
             </div>
@@ -54,7 +54,7 @@
         <!-- 用户活跃度分布 -->
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">用户活跃度分布</div>
+            <div class="chart-container-title-text">登录城市分布</div>
             <div class="chart">
               <echarts
                 ref="userActivity"
@@ -103,39 +103,45 @@ export default {
     return {
       name: 'UserActivity',
       // 生成随机数据的辅助函数
-      generateRandomData: (min, max, count) => {
-        return Array.from({ length: count }, () =>
-          Math.floor(Math.random() * (max - min + 1)) + min
-        )
-      },
-      description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.'
+      description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.',
+      days: localStorage.getItem('reportDays') || '7',
+      config: {
+        user_login_failed_metrics: {
+          dates_metrics_date: [],
+          dates_metrics_total: [0]
+        },
+        user_login_log_metrics: {
+          dates_metrics_date: [],
+          dates_metrics_total: [0]
+        },
+        user_login_method_metrics: {
+          dates_metrics_date: [],
+          dates_metrics_total: {}
+        },
+        user_login_region_distribution: [],
+        user_login_time_metrics: {}
+      }
     }
   },
   computed: {
-    // 新增全宽图表配置
-    totalActivityOptions() {
-      const dates = Array.from({ length: 30 }, (_, i) => {
-        const date = new Date()
-        date.setDate(date.getDate() - (29 - i))
-        return date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })
-      })
+    loginFailedOptions() {
       return {
         tooltip: { trigger: 'axis' },
         xAxis: {
           type: 'category',
-          data: dates,
+          data: this.config.user_login_failed_metrics.dates_metrics_date,
           axisLabel: { rotate: 45 }
         },
         yAxis: {
           type: 'value',
-          name: '总活跃度'
+          name: '失败次数'
         },
         series: [
           {
-            name: '总活跃度',
-            data: this.generateRandomData(500, 2000, 30),
+            name: '失败次数',
+            data: this.config.user_login_failed_metrics.dates_metrics_total,
             type: 'bar',
-            itemStyle: { color: '#1da1f2' },
+            itemStyle: { color: '#c23531' },
             areaStyle: { opacity: 0.2 }
           }
         ]
@@ -143,19 +149,13 @@ export default {
     },
     // 用户登录趋势（折线图）
     loginTrendOptions() {
-      const dates = Array.from({ length: 30 }, (_, i) => {
-        const date = new Date()
-        date.setDate(date.getDate() - (29 - i))
-        return date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })
-      })
-
       return {
         tooltip: {
           trigger: 'axis'
         },
         xAxis: {
           type: 'category',
-          data: dates,
+          data: this.config.user_login_log_metrics.dates_metrics_date,
           axisLabel: {
             rotate: 45
           }
@@ -167,42 +167,39 @@ export default {
         series: [
           {
             name: '登录次数',
-            data: this.generateRandomData(100, 500, 30),
-            type: 'line',
-            smooth: true,
-            areaStyle: {
-              opacity: 0.3
+            data: this.config.user_login_log_metrics.dates_metrics_total,
+            type: 'bar',
+            barWidth: '40%',
+            itemStyle: {
+              color: '#91cc75',
+              borderRadius: [4, 4, 0, 0]
             }
           }
         ]
       }
     },
-
-    // 密码重置统计（柱状图）
-    passwordResetOptions() {
+    loginMethodOptions() {
       return {
         tooltip: {
           trigger: 'axis'
         },
         xAxis: {
           type: 'category',
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          data: this.config.user_login_method_metrics.dates_metrics_date,
+          axisLabel: {
+            rotate: 45
+          }
         },
         yAxis: {
           type: 'value',
-          name: '重置次数'
+          name: ''
         },
-        series: [
-          {
-            name: '重置次数',
-            data: this.generateRandomData(5, 30, 7),
-            type: 'bar',
-            barWidth: '40%',
-            itemStyle: {
-              borderRadius: [4, 4, 0, 0]
-            }
-          }
-        ]
+        series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(name => ({
+          name,
+          stack: 'name',
+          type: 'bar',
+          data: this.config.user_login_method_metrics.dates_metrics_total[name]
+        }))
       }
     },
 
@@ -213,58 +210,30 @@ export default {
           trigger: 'item'
         },
         legend: {
-          orient: 'vertical',
-          right: 10,
-          top: 'center'
+          show: false
         },
         series: [
           {
-            name: '活跃度分布',
+            name: '登录城市分布',
             type: 'pie',
             radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '20',
-                fontWeight: 'bold'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              { value: this.generateRandomData(100, 500, 1)[0], name: '高活跃' },
-              { value: this.generateRandomData(100, 500, 1)[0], name: '中活跃' },
-              { value: this.generateRandomData(100, 500, 1)[0], name: '低活跃' },
-              { value: this.generateRandomData(100, 500, 1)[0], name: '不活跃' }
-            ]
+            data: this.config.user_login_region_distribution
           }
         ]
       }
     },
-
-    // 访问时段分布（雷达图）
     timeDistributionOptions() {
+      const max = Math.max(...Object.values(this.config.user_login_time_metrics))
       return {
         tooltip: {
           trigger: 'item'
         },
         radar: {
           indicator: [
-            { name: '00:00-06:00', max: 100 },
-            { name: '06:00-12:00', max: 100 },
-            { name: '12:00-18:00', max: 100 },
-            { name: '18:00-24:00', max: 100 }
+            { name: '00:00-06:00', max: max },
+            { name: '06:00-12:00', max: max },
+            { name: '12:00-18:00', max: max },
+            { name: '18:00-24:00', max: max }
           ]
         },
         series: [
@@ -273,7 +242,7 @@ export default {
             type: 'radar',
             data: [
               {
-                value: this.generateRandomData(20, 100, 4),
+                value: Object.values(this.config.user_login_time_metrics),
                 name: '访问量',
                 areaStyle: {
                   opacity: 0.3
@@ -285,8 +254,30 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log('>>> ', this.nav)
+  watch: {
+    days() {
+      this.getData()
+    }
+  },
+  async mounted() {
+    await this.getData()
+  },
+  methods: {
+    onChange(val) {
+      this.days = val
+      localStorage.setItem('reportDays', val)
+    },
+    async getData() {
+      const data = await this.$axios.get(`/api/v1/reports/reports/users/?days=${this.days}`)
+      this.$set(this.config.user_login_log_metrics, 'dates_metrics_date', data.user_login_log_metrics.dates_metrics_date)
+      this.$set(this.config.user_login_log_metrics, 'dates_metrics_total', data.user_login_log_metrics.dates_metrics_total)
+      this.$set(this.config, 'user_login_region_distribution', data.user_login_region_distribution)
+      this.$set(this.config.user_login_method_metrics, 'dates_metrics_date', data.user_login_method_metrics.dates_metrics_date)
+      this.$set(this.config.user_login_method_metrics, 'dates_metrics_total', data.user_login_method_metrics.dates_metrics_total)
+      this.$set(this.config, 'user_login_time_metrics', data.user_login_time_metrics)
+      this.$set(this.config.user_login_failed_metrics, 'dates_metrics_date', data.user_login_failed_metrics.dates_metrics_date)
+      this.$set(this.config.user_login_failed_metrics, 'dates_metrics_total', data.user_login_failed_metrics.dates_metrics_total)
+    }
   }
 }
 </script>
