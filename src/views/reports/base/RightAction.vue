@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { download } from '@/utils/common'
+
 export default {
   name: 'RightAction',
   props: {
@@ -44,14 +46,9 @@ export default {
         this.$message.error('Please select a chart')
         return
       }
+
       const exportUrl = `/core/reports/export-pdf/?chart=${this.name}`
-      const link = document.createElement('a')
-      link.href = exportUrl
-      link.target = '_self'
-      link.download = ''
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      download(exportUrl)
       this.$message.success('Exporting...')
     },
     emailReport() {
