@@ -284,9 +284,6 @@ export default {
         ]
       }
     }
-  },
-  mounted() {
-    console.log('>>> ', this.nav)
   }
 }
 </script>

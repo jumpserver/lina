@@ -74,12 +74,9 @@ export default {
     return {
     }
   },
-  mounted() {
-    console.log('BReport mounted: ', this.name)
-  },
   methods: {
     handleChangeChart(event) {
-      console.log(event)
+      // console.log(event)
     },
     openNewWindow() {
       try {

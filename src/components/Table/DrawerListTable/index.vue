@@ -229,14 +229,14 @@ export default {
       if (action === 'detail' || action === 'update') {
         route.params = { id: '1' }
       }
-      return this.$router.resolve(route)
+      return resolveRoute(route, this.$router)
     },
     getDetailComponent({ detailRoute }) {
       if (!detailRoute) {
         return this.detailDrawer
       }
       this.$log.debug('>>> getDetailComponent: ', detailRoute)
-      const route = this.resolveRoute(detailRoute)
+      const route = resolveRoute(detailRoute, this.$router)
       let component = null
       if (route) {
         component = route.components.default
@@ -248,6 +248,7 @@ export default {
     },
     getDrawerComponent(action, payload) {
       this.$log.debug('>>> getDrawerComponent: ', action, payload)
+      // console.log('>>> createDrawer: ', this.createDrawer)
       switch (action) {
         case 'create':
           return this.createDrawer

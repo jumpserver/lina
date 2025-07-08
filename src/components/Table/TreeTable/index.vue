@@ -48,6 +48,7 @@
               :quick-filters="quickFilters"
               :quick-summary="quickSummary"
               :table-config="iTableConfig"
+              :create-drawer="createDrawer"
               v-on="$listeners"
             />
           </slot>
