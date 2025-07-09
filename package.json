@@ -112,6 +112,7 @@
         "less-loader": "^5.0.0",
         "lint-staged": "^10.1.2",
         "mockjs": "1.0.1-beta3",
+        "pretty-bytes": "^5.6.0",
         "runjs": "^4.3.2",
         "sass": "~1.32.6",
         "sass-loader": "^7.1.0",
