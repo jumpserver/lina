@@ -263,12 +263,9 @@ export default {
       // 这是真是的
       let choicesSelected = []
 
-      console.log('realRadioSelected', this.realRadioSelected)
-      console.log('showSpecZone', this.showSpecZone)
-
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
-      } else if (this.realRadioSelected === this.SPEC) {
+      } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       }
