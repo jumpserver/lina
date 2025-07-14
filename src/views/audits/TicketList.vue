@@ -12,7 +12,9 @@ export default {
   },
   data() {
     return {
-      extraActions: {}
+      extraTicketAction: {
+        hasImport: false
+      }
     }
   },
   computed: {
