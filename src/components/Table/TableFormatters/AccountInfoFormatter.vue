@@ -1,9 +1,9 @@
 <template>
   <el-popover
     :title="title"
-    placement="left-start"
+    placement="left"
     trigger="click"
-    :offset="-200"
+    width="400"
     @show="getAsyncItems"
   >
     <div v-if="!loading" class="detail-content">
@@ -84,10 +84,6 @@ export default {
 
   &:hover {
     background-color: #F5F7FA;
-  }
-
-  .expired-date {
-
   }
 }
 </style>
