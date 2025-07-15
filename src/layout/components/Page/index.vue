@@ -156,8 +156,7 @@ export default {
   overflow-x: hidden;
 
   .el-alert {
-    margin: -5px 0 5px 0!important;
-    width: calc(100% - 10px);
+    margin: -5px 0 5px 0 !important;
   }
 
   .page-content {
