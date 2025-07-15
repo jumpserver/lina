@@ -3,7 +3,7 @@
     :title="title"
     placement="left"
     trigger="click"
-    width="400"
+    width="300"
     @show="getAsyncItems"
   >
     <div v-if="!loading" class="detail-content">
@@ -12,10 +12,6 @@
       </div>
       <div v-for="account of accountData" :key="account.id" class="detail-item">
         <span>{{ getDisplay(account) }}</span>
-        <el-tag style="float:right" type="success" size="mini" class="expired-date">{{ $t('Expired') }} : {{
-          $moment(account.date_expired).format('YYYY-MM-DD HH:mm:ss')
-        }}
-        </el-tag>
       </div>
     </div>
     <el-button slot="reference" class="link-btn" plain size="mini" type="primary">
@@ -72,15 +68,13 @@ export default {
 .detail-content {
   max-height: 150px;
   overflow-y: auto;
-  min-width: 350px;
+  min-width: 300px;
 }
 
 .detail-item {
   border-bottom: 1px solid #EBEEF5;
   padding: 5px 0;
   margin-bottom: 0;
-  display: flex;
-  justify-content: space-between;
 
   &:hover {
     background-color: #F5F7FA;
