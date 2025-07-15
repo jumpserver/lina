@@ -60,6 +60,7 @@ export default {
               asset=${assetId}
               &account=${row.id}
               &protocol=${protocol}
+              &org_id=${this.$store.getters.currentOrg.id}
             `.replace(/\s+/g, '')
           },
           asset: null,
