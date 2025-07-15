@@ -20,18 +20,18 @@ export class TableColumnsGenerator {
     this.vm = vm
   }
 
-  // dynamicActionWidth() {
-  //   console.log(i18n.locale)
-  //   if (i18n.locale === 'zh-hans' || i18n.locale === 'zh-hant') {
-  //     return '100px'
-  //   }
+  dynamicActionWidth() {
+    console.log(i18n.locale)
+    if (i18n.locale === 'zh-hans' || i18n.locale === 'zh-hant') {
+      return '100px'
+    }
 
-  //   if (i18n.locale === 'ja' || i18n.locale === 'ko') {
-  //     return '120px'
-  //   }
+    if (i18n.locale === 'ja' || i18n.locale === 'ko') {
+      return '120px'
+    }
 
-  //   return '160px'
-  // }
+    return '160px'
+  }
 
   generateColumns() {
     const config = _.cloneDeep(this.config)
@@ -135,7 +135,7 @@ export class TableColumnsGenerator {
           prop: 'actions',
           label: i18n.t('Actions'),
           align: 'center',
-          width: '120px',
+          width: this.dynamicActionWidth(),
           formatter: ActionsFormatter,
           fixed: 'right',
           formatterArgs: {}
