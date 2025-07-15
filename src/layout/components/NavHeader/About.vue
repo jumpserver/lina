@@ -76,22 +76,16 @@ export default {
     items() {
       return [
         {
-          label: this.$t('common.Product'),
-          value: 'JumpServer ' + this.versionType
+          label: '产品',
+          value: 'JumpServer 运维安全审计系统'
         },
         {
-          label: this.$t('common.Version'),
-          value: 'version-dev'
-        },
-        {
-          label: this.$t('common.PermissionCompany'),
-          value: this.corporation,
-          has: this.hasXPack
+          label: '版本',
+          value: 'v3'
         },
         {
           label: 'Copyright',
-          value: this.copyright,
-          has: !this.hasXPack
+          value: ''
         }
       ]
     },
