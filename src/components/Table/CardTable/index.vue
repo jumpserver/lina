@@ -248,6 +248,10 @@ export default {
     display: flex;
     justify-content: left;
     flex-wrap: wrap;
+
+    .el-card .el-card__body div {
+      height: inherit;
+    }
   }
 
   .el-col, div {

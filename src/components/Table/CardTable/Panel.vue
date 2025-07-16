@@ -4,7 +4,7 @@
       {{ $t('Enterprise') }}
     </span>
     <el-row class="panel">
-      <el-col v-if="d.icon" :span="8" class="image">
+      <el-col v-if="d.icon" :span="d.icon ? 8 : 0" class="image">
         <img
           v-if="d.icon.startsWith('/') || d.icon.startsWith('data:')"
           :alt="d.display_name"
@@ -12,20 +12,20 @@
         >
         <Icon v-else :icon="d.icon" />
       </el-col>
-      <el-col :span="16" class="text-zone">
+      <el-col :span="d.icon ? 16 : 24" class="text-zone">
         <div class="one-line">
           <b>{{ d.display_name }}</b>
-          <el-tag v-if="d.version" size="mini" style="margin-left: 5px">
+        </div>
+        <div class="tag-zone">
+          <el-tag v-if="d.version" size="mini" style="margin-left: 5px; background-color: #ecf5ff; color: #409eff;">
             {{ d.version }}
+          </el-tag>
+          <el-tag v-for="tag of d.tags" :key="tag" size="mini">
+            {{ capitalize(tag) }}
           </el-tag>
         </div>
         <div :title="d.comment " class="comment">
           {{ d.comment }}
-        </div>
-        <div class="tag-zone">
-          <el-tag v-for="tag of d.tags" :key="tag" size="mini">
-            {{ capitalize(tag) }}
-          </el-tag>
         </div>
       </el-col>
     </el-row>
@@ -107,22 +107,20 @@ export default {
 
     .comment {
       display: -webkit-box;
-      height: 120px;
+      margin-top: 10px;
       font-size: 12px;
-      padding: 10px 0;
       cursor: pointer;
       overflow: hidden;
       -webkit-line-clamp: 4;
-      -webkit-box-flex: 1;
       -webkit-box-orient: vertical;
-      text-align: left;
     }
 
     .tag-zone {
       display: flex;
-      height: 30%;
       align-items: center;
       cursor: pointer;
+      margin-top: 10px;
+      margin-left: -5px;
     }
   }
 }
