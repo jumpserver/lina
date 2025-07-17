@@ -187,9 +187,12 @@ export default {
     }
   },
   watch: {
-    realRadioSelected(val) {
-      this.showSpecZone = val === this.SPEC
-      this.showExcludeZone = val === this.EXCLUDE
+    realRadioSelected: {
+      handler(val) {
+        this.showSpecZone = val === this.SPEC
+        this.showExcludeZone = val === this.EXCLUDE
+      },
+      sync: true
     }
   },
   mounted() {
@@ -209,17 +212,20 @@ export default {
     },
     initDefaultChoice() {
       const value = this.value || []
+
       if (value.length === 0) {
         value.push(this.ALL)
       }
 
       const specAccountsInput = this.getSpecValues(value)
+
       // const excludeAccountsInput = this.getExcludeChoices(value)
       // 先清理 radio
       const isAll = value.includes(this.ALL)
+
       if (isAll) {
         this.realRadioSelected = this.ALL
-      } else if (specAccountsInput.length > 0) {
+      } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
         this.specAccountsInput = specAccountsInput
         // } else if (excludeAccountsInput.length > 0) {
@@ -250,7 +256,6 @@ export default {
       }, 100)
     },
     handleVirtualChecked(evt, checked) {
-      console.log('Vhcek cch')
       this.outputValue()
     },
     handleRadioChanged(value) {
@@ -262,6 +267,7 @@ export default {
     outputValue() {
       // 这是真是的
       let choicesSelected = []
+
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
       } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {

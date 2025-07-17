@@ -4,6 +4,7 @@ import i18n from '@/i18n/i18n'
 import SessionRoutes from './sessions'
 import LogRoutes from './audits'
 import JobRoutes from './jobs'
+import TicketRoutes from './tickets'
 import empty from '@/layout/empty'
 import store from '@/store'
 
@@ -67,6 +68,18 @@ export default {
         permissions: ['audits.view_joblog']
       },
       children: JobRoutes
+    },
+    {
+      path: '/audit/tickets',
+      component: empty,
+      redirect: '',
+      name: 'TicketRoutes',
+      meta: {
+        title: i18n.t('TicketsAudit'),
+        icon: 'job',
+        permissions: ['tickets.view_ticket']
+      },
+      children: TicketRoutes
     }
   ]
 }

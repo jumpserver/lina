@@ -196,18 +196,23 @@ export default {
       }
 
       let title = this.title
+
       if (!title && this.resource) {
         title = this.resource
       }
+
       if (!title) {
         title = this.$route.meta?.title
         title = title.replace('List', '').replace('列表', '')
         title = _.trimEnd(title, 's')
       }
+
       if (!title) {
         title = this.$t('NoTitle')
       }
+
       let actionLabel = ''
+
       if (action === 'clone' || action === 'create') {
         actionLabel = this.$t('Create')
       } else if (action === 'update') {
@@ -215,7 +220,9 @@ export default {
       } else if (action === 'detail') {
         actionLabel = this.$t('Detail')
       }
+
       title = actionLabel + this.$t('WordSep') + toLowerCaseExcludeAbbr(title)
+
       return title
     },
     getDefaultDrawer(action) {

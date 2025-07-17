@@ -133,14 +133,7 @@ export default {
   },
   methods: {
     orgIds() {
-      let orgIds = []
-      if (store.getters.hasValidLicense) {
-        const allOrgIds = store.getters.publicSettings.AUTH_LDAP_SYNC_ORG_IDS
-        orgIds = allOrgIds.filter(item => item.id !== SYSTEM_ORG_ID)
-      } else {
-        orgIds = [DEFAULT_ORG_ID]
-      }
-      return orgIds
+      return [DEFAULT_ORG_ID]
     },
     importUserClick() {
       this.dialogLdapUserImportLoginStatus = true

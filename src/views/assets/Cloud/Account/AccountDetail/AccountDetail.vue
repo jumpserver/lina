@@ -98,6 +98,21 @@ export default {
               this.updateTaskData({ 'release_assets': val })
             }.bind(this)
           }
+        },
+        {
+          title: this.$t('IsAlwaysUpdate'),
+          type: 'switch',
+          attrs: {
+            showTip: true,
+            tip: this.$t('IsAlwaysUpdateHelpTip'),
+            model: this.object.task.is_always_update,
+            disabled: !this.hasEditPerm()
+          },
+          callbacks: {
+            change: function(val) {
+              this.updateTaskData({ 'is_always_update': val })
+            }.bind(this)
+          }
         }
       ],
       quickExecuteActions: [

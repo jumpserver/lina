@@ -7,6 +7,7 @@
 </template>
 
 <script type="text/jsx">
+import prettyBytes from 'pretty-bytes'
 import { DrawerListTable as ListTable } from '@/components'
 import { timeOffset } from '@/utils/time'
 import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
@@ -154,6 +155,12 @@ export default {
             formatter: ChoicesFormatter,
             formatterArgs: {
               showFalse: true
+            }
+          },
+          replay_size: {
+            width: '120px',
+            formatter: (row) => {
+              return prettyBytes(Number(row.replay_size))
             }
           },
           actions: {
