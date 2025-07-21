@@ -13,14 +13,15 @@ export default [
     }
   },
   {
-    path: 'group-activity',
-    component: () => import('@/views/reports/audits/Dashboard.vue'), // Parent router-view
-    name: 'GroupActivity',
+    path: 'change-password',
+    component: () => import('@/views/reports/users/ChangePassword.vue'), // Parent router-view
+    // component: () => import('@/views/reports/audits/Dashboard.vue'), // Parent router-view
+    name: 'ChangePassword',
     meta: {
       permissions: [],
       expanded: true,
       icon: 'user-o',
-      title: i18n.t('ReportsGroups')
+      title: i18n.t('ChangePassword')
     }
   }
 ]

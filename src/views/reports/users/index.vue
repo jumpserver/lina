@@ -43,7 +43,7 @@ export default {
         },
         {
           title: '用户密码更改',
-          name: 'GroupActivity',
+          name: 'ChangePassword',
           icon: 'fa fa-envelope-o'
         }
       ]
