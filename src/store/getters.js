@@ -6,6 +6,7 @@ const getters = {
   isMobile: state => state.app.device === 'mobile',
   token: state => state.users.token,
   consoleOrgs: state => state.users.consoleOrgs,
+  pamOrgs: state => state.users.pamOrgs,
   auditOrgs: state => state.users.auditOrgs,
   workbenchOrgs: state => state.users.workbenchOrgs,
   noRootWorkbenchOrgs: state => state.users.noRootWorkbenchOrgs,

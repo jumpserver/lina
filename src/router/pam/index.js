@@ -18,7 +18,7 @@ export default {
     icon: 'pam',
     type: 'view',
     showNavSwitcher: () => {
-      return store.getters.consoleOrgs.length > 0
+      return store.getters.pamOrgs.length > 0
     },
     permissions: [],
     view: 'pam'
