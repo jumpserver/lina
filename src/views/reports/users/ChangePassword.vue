@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      title="用户活跃度分析报告"
+      title="用户修改密码分析报告"
       :nav="nav"
       :name="name"
       :description="description"
@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       name: 'ChangePassword',
-      description: 'xxxxxxxxxx.',
+      description: 'This report provides an analysis of user password change activities.',
       days: localStorage.getItem('reportDays') || '7',
       total_count_change_password: {
         'total': 0,
