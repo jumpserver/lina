@@ -261,8 +261,8 @@ export default {
       min-width: 330px;
       position: relative;
       margin-bottom: 20px;
-      //height: 230px;
-      //width: 380px;
+      height: 180px;
+      width: 380px;
       padding: 15px;
 
       ::v-deep .el-card__body {
