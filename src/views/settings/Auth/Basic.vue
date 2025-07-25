@@ -1,9 +1,10 @@
 <template>
   <div class="auth-container">
-    <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper">
-      <el-row :gutter="20">
+    <IBox :title="$tc('AuthIntegration')" class="auth-box-wrapper auth-method-box">
+      <el-row v-for="[type, items] in Object.entries(authItems)" :key="type" :gutter="20">
+        <h3 class="auth-method-type">{{ typeMap[type] }}</h3>
         <AuthMethod
-          v-for="item in authItems"
+          v-for="item in items"
           :key="item.title"
           v-bind="item"
         />
@@ -31,6 +32,11 @@ export default {
   data() {
     return {
       authItems: [],
+      typeMap: {
+        common: this.$t('Common'),
+        SSO: this.$t('SSO'),
+        IdP: this.$t('IdP')
+      },
       searchQuery: '',
       url: '/api/v1/settings/setting/?category=auth',
       fields: [
@@ -68,18 +74,39 @@ export default {
           enabled: this.authMethodsSetting[item.authKey]
         }
       })
-      this.authItems = authItems.sort((a, b) => {
+      authItems = authItems.sort((a, b) => {
         if (a.enabled !== b.enabled) {
           return a.enabled ? -1 : 1
         }
         return a.title.localeCompare(b.title)
       })
+
+      this.authItems = authItems.reduce((acc, item) => {
+        acc[item.type] = acc[item.type] || []
+        acc[item.type].push(item)
+        return acc
+      }, {})
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.auth-method-box {
+  ::v-deep {
+    .el-card__body {
+      padding-top: 10px;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+}
+
+h3.auth-method-type {
+  margin-bottom: 8px;
+  margin-top: 10px;
+  padding-left: 10px;
+}
 
 .auth-container {
   width: 100%;
