@@ -1,10 +1,22 @@
 <template>
-  <el-col :lg="6" :md="8" :sm="12" :span="8" :xl="4" :xs="24" class="auth-item-col">
-    <el-card ref="card" class="auth-card" shadow="hover">
+  <el-col :lg="8" :md="8" :sm="12" :span="8" :xl="8" :xs="24" class="auth-item-col">
+    <el-card ref="card" class="auth-card" shadow="never">
       <div slot="header" class="auth-item-header">
         <div class="auth-item-header-left">
           <img :src="logo" alt="auth-logo" class="auth-logo">
-          <div :title="title" class="auth-item-header-title">{{ title }}</div>
+          <div :title="title" class="auth-item-header-title">
+            <div>
+              <span>
+                {{ title }}
+              </span>
+              <!-- <el-tag v-if="type" type="success" class="auth-item-type" size="mini">
+                {{ type }}
+              </el-tag> -->
+            </div>
+            <!-- <div v-if="description" class="auth-item-header-description">
+              {{ description || '' }}
+            </div> -->
+          </div>
         </div>
         <div class="auth-item-actions">
           <el-switch
@@ -41,6 +53,10 @@ export default {
     enabled: {
       type: Boolean,
       default: false
+    },
+    type: {
+      type: String,
+      default: 'enterprise'
     }
   },
   data() {
@@ -64,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 .auth-item-col {
-  margin: 10px 0;
+  margin: 5px 0;
   padding: 0 10px;
 
   .auth-card {
@@ -74,14 +90,15 @@ export default {
 
     .auth-item-header {
       display: flex;
-      align-items: center;
+      align-items: left;
       justify-content: space-between;
       padding: 5px;
 
       .auth-item-header-left {
         display: flex;
-        align-items: center;
+        align-items: left;
         gap: 8px;
+        width: calc(100% - 42px);
 
         .auth-logo {
           width: 32px;
@@ -90,11 +107,30 @@ export default {
         }
 
         .auth-item-header-title {
-          max-width: 100px;
+          max-width: calc(100% - 62px);
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
           font-weight: 500;
+          min-height: 17px; /* 确保标题区域有固定高度 */
+          line-height: 32px;
+        }
+
+        .auth-item-type {
+          margin-left: 8px;
+        }
+
+        .auth-item-header-description {
+          font-size: 12px;
+          color: #999;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          overflow: hidden;
+          word-break: keep-all;
+          white-space: normal;
+          line-height: 1.4;
+          height: 20px; /* 最大高度：2行 * 1.4行高 * 12px字体 ≈ 34px */
         }
       }
 
