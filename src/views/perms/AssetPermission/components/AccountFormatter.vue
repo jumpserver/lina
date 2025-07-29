@@ -9,7 +9,7 @@
           :label="i.value"
         >
           {{ i.label }}
-          <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
         </el-radio>
@@ -88,7 +88,8 @@ import {
   SameAccount,
   SpecAccount,
   virtualAccount,
-  virtualAccounts
+  virtualAccounts,
+  NoneAccount
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
@@ -212,11 +213,6 @@ export default {
     },
     initDefaultChoice() {
       const value = this.value || []
-
-      if (value.length === 0) {
-        value.push(this.ALL)
-      }
-
       const specAccountsInput = this.getSpecValues(value)
 
       // const excludeAccountsInput = this.getExcludeChoices(value)
@@ -232,7 +228,7 @@ export default {
         //   this.realRadioSelected = this.EXCLUDE
         //   this.excludeAccountsInput = excludeAccountsInput
       } else {
-        this.realRadioSelected = this.ALL
+        this.realRadioSelected = NoneAccount
       }
 
       // 清理虚拟账号
@@ -273,6 +269,8 @@ export default {
       } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
+      } else if (this.realRadioSelected === NoneAccount) {
+        choicesSelected = []
       }
       // else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
       //   choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)

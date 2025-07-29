@@ -10,25 +10,19 @@ export const UserAssetPermissionListPageSearchConfigOptions = [
   { label: i18n.t('AssetAddress'), value: 'address' },
   { label: i18n.t('Account'), value: 'accounts' },
   {
-    label: i18n.t('Valid'), value: 'is_valid',
-    children: [
-      { value: '1', label: i18n.t('Yes') },
-      { value: '0', label: i18n.t('No') }
-    ]
+    label: i18n.t('Valid'),
+    value: 'is_valid',
+    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
   },
   {
-    label: i18n.t('Effective'), value: 'is_effective',
-    children: [
-      { value: '1', label: i18n.t('Yes') },
-      { value: '0', label: i18n.t('No') }
-    ]
+    label: i18n.t('Effective'),
+    value: 'is_effective',
+    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
   },
   {
-    label: i18n.t('FromTicket'), value: 'from_ticket',
-    children: [
-      { value: '1', label: i18n.t('Yes') },
-      { value: '0', label: i18n.t('No') }
-    ]
+    label: i18n.t('FromTicket'),
+    value: 'from_ticket',
+    children: [{ value: '1', label: i18n.t('Yes') }, { value: '0', label: i18n.t('No') }]
   }
 ]
 
@@ -46,13 +40,15 @@ export const AssetPermissionTableMeta = {
   },
   action: {
     label: i18n.t('Action'),
-    formatter: (row) => {
+    formatter: row => {
       if (row.actions.length === 6) {
         return i18n.t('All')
       }
-      return row.actions.map(item => {
-        return item.label.replace(/ \([^)]*\)/, '')
-      }).join(',')
+      return row.actions
+        .map(item => {
+          return item.label.replace(/ \([^)]*\)/, '')
+        })
+        .join(',')
     }
   },
   is_expired: {
@@ -147,7 +143,8 @@ export const AssetPermissionTableMeta = {
 export const AssetPermissionListPageSearchConfigOptions = [
   ...UserAssetPermissionListPageSearchConfigOptions,
   {
-    label: i18n.t('NodeSearchStrategy'), value: 'all',
+    label: i18n.t('NodeSearchStrategy'),
+    value: 'all',
     children: [
       { value: '0', label: i18n.t('OnlySearchCurrentNodePerm') },
       { value: '1', label: i18n.t('SearchAncestorNodePerm') }
@@ -161,11 +158,13 @@ export const NotAccount = '@NOT'
 export const SameAccount = '@USER'
 export const ManualAccount = '@INPUT'
 export const AnonymousAccount = '@ANON'
+export const NoneAccount = '@NONE'
 
 export const AccountLabelMapper = {
   [AllAccount]: i18n.t('AllAccounts'),
   [SpecAccount]: i18n.t('SpecAccount'),
   [NotAccount]: i18n.t('ExcludeAccount'),
+  [NoneAccount]: i18n.t('None'),
   [SameAccount]: i18n.t('SameAccount'),
   [ManualAccount]: i18n.t('ManualAccount'),
   [AnonymousAccount]: i18n.t('AnonymousAccount')
@@ -187,6 +186,10 @@ export const realChoices = [
     label: AccountLabelMapper[SpecAccount],
     value: SpecAccount,
     tip: i18n.t('SpecAccountTip')
+  },
+  {
+    label: AccountLabelMapper[NoneAccount],
+    value: NoneAccount
   }
   // {
   //   label: AccountLabelMapper[NotAccount],
@@ -216,10 +219,7 @@ export const virtualAccounts = [
 export const accountTemplateTable = {
   tableConfig: {
     url: '/api/v1/accounts/account-templates/',
-    columns: [
-      'name', 'username', 'has_secret', 'comment',
-      'date_created', 'date_updated'
-    ],
+    columns: ['name', 'username', 'has_secret', 'comment', 'date_created', 'date_updated'],
     columnsMeta: {
       name: {
         formatterArgs: {
