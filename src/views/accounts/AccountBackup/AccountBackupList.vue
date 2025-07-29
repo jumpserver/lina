@@ -71,7 +71,9 @@ export default {
                   order: 1,
                   name: 'execute',
                   type: 'primary',
-                  can: this.$hasPerm('accounts.add_backupaccountexecution'),
+                  can: ({ row }) => {
+                    return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active
+                  },
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,
