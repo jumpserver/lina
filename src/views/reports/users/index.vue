@@ -37,12 +37,12 @@ export default {
       component: '',
       charts: [
         {
-          title: '用户登录趋势',
+          title: '用户登录报表',
           name: 'UserActivity',
           icon: 'fa fa-user-o'
         },
         {
-          title: '用户密码更改',
+          title: '密码更改报表',
           name: 'ChangePassword',
           icon: 'fa fa-envelope-o'
         }

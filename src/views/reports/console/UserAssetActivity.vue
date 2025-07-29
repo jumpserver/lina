@@ -16,7 +16,14 @@ export default {
     Title,
     LineChart
   },
-  props: {},
+  props: {
+    days: {
+      type: String,
+      default() {
+        return 7
+      }
+    }
+  },
   data() {
     return {
       loading: false,
@@ -33,6 +40,11 @@ export default {
       }
     }
   },
+  watch: {
+    days() {
+      this.getMetricData()
+    }
+  },
   mounted() {
     try {
       this.getMetricData()
@@ -42,7 +54,7 @@ export default {
   },
   methods: {
     async getMetricData() {
-      const url = '/api/v1/index/?dates_metrics=1&days=7'
+      const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
       const data = await this.$axios.get(url)
       const activeUsers = data?.dates_metrics_total_count_active_users
       const activeAssets = data?.dates_metrics_total_count_active_assets

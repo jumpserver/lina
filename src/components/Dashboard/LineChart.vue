@@ -110,7 +110,6 @@ export default {
             },
             axisLabel: {
               textStyle: {
-                // 坐标轴颜色
                 color: '#8F959E'
               }
             },

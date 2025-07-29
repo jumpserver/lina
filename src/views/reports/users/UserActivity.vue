@@ -8,8 +8,32 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
+
+        <div class="chart-container">
+          <div class="chart-container-title">
+            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <SummaryCountCard
+              :items="totalData"
+            />
+            <SummaryCountCard
+              :items="otherData"
+            />
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-container-title">
+            <div class="chart-container-title-text">远程登录协议</div>
+            <div class="chart">
+              <echarts
+                :options="SourceProtocolOptions"
+                :autoresize="true"
+              />
+            </div>
+          </div>
+        </div>
+
         <SwitchDate class="switch-date" @change="onChange" />
-        <!-- 全宽图表 -->
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">用户登录趋势</div>
@@ -23,35 +47,6 @@
           </div>
         </div>
 
-        <!-- 用户登录趋势 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">用户登录失败趋势</div>
-            <div class="chart">
-              <echarts
-                ref="loginFailed"
-                :options="loginFailedOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 密码重置统计 -->
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">登录方法统计</div>
-            <div class="chart">
-              <echarts
-                ref="passwordReset"
-                :options="loginMethodOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- 用户活跃度分布 -->
         <div class="chart-container">
           <div class="chart-container-title">
             <div class="chart-container-title-text">登录城市分布</div>
@@ -65,7 +60,6 @@
           </div>
         </div>
 
-        <!-- 访问时段分布 -->
         <div class="chart-container">
           <div class="chart-container-title">
             <div class="chart-container-title-text">访问时段分布</div>
@@ -78,18 +72,34 @@
             </div>
           </div>
         </div>
+
+        <div class="chart-container full-width">
+          <div class="chart-container-title">
+            <div class="chart-container-title-text">登录方法统计</div>
+            <div class="chart">
+              <echarts
+                ref="passwordReset"
+                :options="loginMethodOptions"
+                :autoresize="true"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </BaseReport>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 import BaseReport from '@/views/reports/base/BaseReport.vue'
 import SwitchDate from '@/components/Dashboard/SwitchDate'
+import * as echarts from 'echarts'
+import { mixColors } from '@/views/reports/const'
+import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 
 export default {
   components: {
+    SummaryCountCard,
     BaseReport,
     SwitchDate
   },
@@ -105,6 +115,17 @@ export default {
       // 生成随机数据的辅助函数
       description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.',
       days: localStorage.getItem('reportDays') || '7',
+      user_stats: {
+        total: 0,
+        not_enabled_mfa: 0,
+        valid: 0,
+        first_login: 0,
+        face_vector: 0,
+        need_update_password: 0
+      },
+      pie: {
+        'user_by_source': [{ 'name': this.$t('Nothing'), 'value': 0 }]
+      },
       config: {
         user_login_failed_metrics: {
           dates_metrics_date: [],
@@ -112,68 +133,232 @@ export default {
         },
         user_login_log_metrics: {
           dates_metrics_date: [],
-          dates_metrics_total: [0]
+          dates_metrics_success_total: [0],
+          dates_metrics_failure_total: [0]
         },
         user_login_method_metrics: {
           dates_metrics_date: [],
           dates_metrics_total: {}
         },
-        user_login_region_distribution: [],
+        user_login_region_distribution: [{ 'name': this.$t('Nothing'), 'value': 0 }],
         user_login_time_metrics: {}
       }
     }
   },
   computed: {
-    loginFailedOptions() {
-      return {
-        tooltip: { trigger: 'axis' },
-        xAxis: {
-          type: 'category',
-          data: this.config.user_login_failed_metrics.dates_metrics_date,
-          axisLabel: { rotate: 45 }
+    totalData() {
+      return [
+        {
+          title: this.$t('UserTotal'),
+          body: {
+            count: this.user_stats.total
+          }
         },
-        yAxis: {
-          type: 'value',
-          name: '失败次数'
+        {
+          title: this.$t('NotEnableMfa'),
+          body: {
+            count: this.user_stats.not_enabled_mfa
+          }
+        },
+        {
+          title: this.$t('valid'),
+          body: {
+            count: this.user_stats.valid
+          }
+        }
+      ]
+    },
+    otherData() {
+      return [
+        {
+          title: this.$t('FirstLogin'),
+          body: {
+            count: this.user_stats.first_login
+          }
+        },
+        {
+          title: this.$t('FaceVector'),
+          body: {
+            count: this.user_stats.face_vector
+          }
+        },
+        {
+          title: this.$t('NeedUpdatePassword'),
+          body: {
+            count: this.user_stats.need_update_password
+          }
+        }
+      ]
+    },
+    SourceProtocolOptions() {
+      return {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
         },
         series: [
           {
-            name: '失败次数',
-            data: this.config.user_login_failed_metrics.dates_metrics_total,
-            type: 'bar',
-            itemStyle: { color: '#c23531' },
-            areaStyle: { opacity: 0.2 }
+            type: 'pie',
+            radius: ['40%', '70%'],
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: 40,
+                fontWeight: 'bold'
+              }
+            },
+            data: this.pie.user_by_source
           }
         ]
       }
     },
-    // 用户登录趋势（折线图）
     loginTrendOptions() {
+      const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = mixColors()
       return {
-        tooltip: {
-          trigger: 'axis'
+        title: {
+          show: false
         },
-        xAxis: {
-          type: 'category',
-          data: this.config.user_login_log_metrics.dates_metrics_date,
-          axisLabel: {
-            rotate: 45
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
           }
         },
-        yAxis: {
-          type: 'value',
-          name: '登录次数'
+        legend: {
+          left: 'auto',
+          icon: 'rect',
+          itemWidth: 10,
+          itemHeight: 10
         },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        color: [primary, '#F3B44B'],
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            axisLine: {
+              lineStyle: {
+                color: '#8F959E'
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#8F959E'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            data: this.config.user_login_log_metrics.dates_metrics_date
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '',
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#fff'
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                color: '#8F959E'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            // 坐标轴线样式
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#EFF0F1'
+              }
+            }
+          }
+        ],
+
+        animationDuration: 500,
         series: [
           {
-            name: '登录次数',
-            data: this.config.user_login_log_metrics.dates_metrics_total,
-            type: 'bar',
-            barWidth: '40%',
-            itemStyle: {
-              color: '#91cc75',
-              borderRadius: [4, 4, 0, 0]
-            }
+            name: '成功',
+            type: 'line',
+            smooth: true,
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: primary
+                  }, {
+                    offset: 0.6,
+                    color: TwoLevelColor
+                  }, {
+                    offset: 0.8,
+                    color: ThreeLevelColor
+                  }],
+                  false
+                ),
+                shadowColor: shadowColor,
+                shadowBlur: 5
+              }
+            },
+            data: this.config.user_login_log_metrics.dates_metrics_success_total
+          },
+          {
+            name: '失败',
+            type: 'line',
+            smooth: true,
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: 'rgba(249, 199, 79, 0.6)'
+                  }, {
+                    offset: 0.6,
+                    color: 'rgba(249, 199, 79, 0.2)'
+                  }, {
+                    offset: 0.8,
+                    color: 'rgba(249, 199, 79, 0.1)'
+                  }],
+                  false
+                ),
+                shadowColor: 'rgba(249, 199, 79, 0.1)',
+                shadowBlur: 6
+              }
+            },
+            data: this.config.user_login_log_metrics.dates_metrics_failure_total
           }
         ]
       }
@@ -203,7 +388,6 @@ export default {
       }
     },
 
-    // 用户活跃度分布（饼图）
     userActivityOptions() {
       return {
         tooltip: {
@@ -269,14 +453,28 @@ export default {
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/users/?days=${this.days}`)
+      this.$set(this.user_stats, 'total', data.user_stats.total)
+      this.$set(this.user_stats, 'not_enabled_mfa', data.user_stats.not_enabled_mfa)
+      this.$set(this.user_stats, 'valid', data.user_stats.valid)
+      this.$set(this.user_stats, 'first_login', data.user_stats.first_login)
+      this.$set(this.user_stats, 'face_vector', data.user_stats.face_vector)
+      this.$set(this.user_stats, 'need_update_password', data.user_stats.need_update_password)
       this.$set(this.config.user_login_log_metrics, 'dates_metrics_date', data.user_login_log_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_log_metrics, 'dates_metrics_total', data.user_login_log_metrics.dates_metrics_total)
-      this.$set(this.config, 'user_login_region_distribution', data.user_login_region_distribution)
+      this.$set(this.config.user_login_log_metrics, 'dates_metrics_success_total', data.user_login_log_metrics.dates_metrics_success_total)
+      this.$set(this.config.user_login_log_metrics, 'dates_metrics_failure_total', data.user_login_log_metrics.dates_metrics_failure_total)
       this.$set(this.config.user_login_method_metrics, 'dates_metrics_date', data.user_login_method_metrics.dates_metrics_date)
       this.$set(this.config.user_login_method_metrics, 'dates_metrics_total', data.user_login_method_metrics.dates_metrics_total)
       this.$set(this.config, 'user_login_time_metrics', data.user_login_time_metrics)
-      this.$set(this.config.user_login_failed_metrics, 'dates_metrics_date', data.user_login_failed_metrics.dates_metrics_date)
-      this.$set(this.config.user_login_failed_metrics, 'dates_metrics_total', data.user_login_failed_metrics.dates_metrics_total)
+
+      const userBySource = data.user_by_source
+      if (userBySource.length !== 0) {
+        this.$set(this.pie, 'user_by_source', userBySource)
+      }
+
+      const userLoginRegionDistribution = data.user_login_region_distribution
+      if (userLoginRegionDistribution.length !== 0) {
+        this.$set(this.config, 'user_login_region_distribution', userLoginRegionDistribution)
+      }
     }
   }
 }

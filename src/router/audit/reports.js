@@ -29,7 +29,7 @@ export default [
     component: empty,
     meta: {
       icon: 'assets',
-      title: i18n.t('GroupActivity'),
+      title: i18n.t('AssetActivity'),
       permissions: []
     },
     children: [

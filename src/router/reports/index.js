@@ -2,6 +2,7 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
 import users from './users'
+import assets from './assets'
 
 export default {
   path: '/reports',
@@ -26,6 +27,18 @@ export default {
         permissions: []
       },
       children: users
+    },
+    {
+      path: '/reports/assets',
+      component: empty,
+      redirect: 'assets',
+      name: 'ReportsAssets',
+      meta: {
+        title: i18n.t('ReportsAssets'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: assets
     }
     // {
     //   path: '/reports/assets',

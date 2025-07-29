@@ -15,7 +15,6 @@ export default [
   {
     path: 'change-password',
     component: () => import('@/views/reports/users/ChangePassword.vue'), // Parent router-view
-    // component: () => import('@/views/reports/audits/Dashboard.vue'), // Parent router-view
     name: 'ChangePassword',
     meta: {
       permissions: [],
