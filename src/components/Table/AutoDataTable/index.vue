@@ -60,25 +60,24 @@ export default {
       },
       isDeactivated: false,
       tableColumnsStorage: this.getTableColumnsStorage(),
-      sortable: null
+      sortable: null,
+      inited: false
     }
   },
   watch: {
     config: {
+      immediate: false,
       handler: _.debounce(function(iNew, iOld) {
-        if (this.isDeactivated) {
+        if (this.isDeactivated || !this.inited) {
           return
         }
-        try {
-          if (JSON.stringify(iNew) === JSON.stringify(iOld)) {
-            return
-          }
-        } catch (error) {
-          this.$log.error('JsonStringify Error: ', error)
+        const changed = this.isConfigChanged(iNew, iOld)
+        if (!changed) {
+          return
         }
 
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found, ', this.isDeactivated)
+        this.$log.debug('AutoDataTable Config change found')
       }, 200)
     }
   },
@@ -93,6 +92,34 @@ export default {
     this.isDeactivated = false
   },
   methods: {
+    isConfigChanged(iNew, iOld) {
+      const _iNew = _.cloneDeep(iNew)
+      const _iOld = _.cloneDeep(iOld)
+      delete _iNew.columns
+      delete _iOld.columns
+      const oldMeta = _iNew.columnsMeta
+      const newMeta = _iOld.columnsMeta
+      const metas = [oldMeta, newMeta]
+      for (const meta of metas) {
+        for (const [key, value] of Object.entries(meta)) {
+          if (!key || !value) {
+            continue
+          }
+          if (typeof value === 'object') {
+            delete value['formatter']
+          }
+        }
+      }
+
+      try {
+        if (JSON.stringify(_iNew) === JSON.stringify(_iOld)) {
+          return false
+        }
+      } catch (error) {
+        this.$log.error('JsonStringify Error: ', error)
+      }
+      return true
+    },
     setColumnDraggable() {
       const el = this.$el.querySelector('.el-table__header-wrapper thead tr')
       if (!el) {
@@ -238,6 +265,7 @@ export default {
         if (this.$refs.dataTable) {
           this.$refs.dataTable.getList()
         }
+        this.inited = true
       })
     },
     orderingColumns(columns) {
