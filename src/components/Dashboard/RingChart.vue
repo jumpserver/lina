@@ -33,7 +33,7 @@ export default {
 
       const formatTitle = (text) => {
         if (!text) return ''
-        const maxLength = 23
+        const maxLength = 25
         const lines = []
         for (let i = 0; i < text.length; i += maxLength) {
           lines.push(text.slice(i, i + maxLength))
