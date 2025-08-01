@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      title="用户活跃度分析报告"
+      :title="title"
       :nav="nav"
       :name="name"
       :description="description"
@@ -11,7 +11,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <div class="chart-container-title-text">{{ $t('UserOverview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -23,7 +23,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">登录来源</div>
+            <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
             <div class="chart">
               <echarts
                 :options="LoginSourceOptions"
@@ -49,7 +49,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">登录城市分布</div>
+            <div class="chart-container-title-text">{{ $t('LoginCtyDistribution') }}</div>
             <div class="chart">
               <echarts
                 ref="userActivity"
@@ -62,11 +62,10 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">访问时段分布</div>
+            <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
             <div class="chart">
               <echarts
-                ref="timeDistribution"
-                :options="timeDistributionOptions"
+                :options="VisitTimeOptions"
                 :autoresize="true"
               />
             </div>
@@ -75,10 +74,9 @@
 
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">登录方法统计</div>
+            <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
             <div class="chart">
               <echarts
-                ref="passwordReset"
                 :options="loginMethodOptions"
                 :autoresize="true"
               />
@@ -111,7 +109,8 @@ export default {
   },
   data() {
     return {
-      name: 'UserActivity',
+      title: this.$t('UserLoginReport'),
+      name: 'UserReport',
       description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.',
       days: localStorage.getItem('reportDays') || '7',
       user_stats: {
@@ -148,7 +147,7 @@ export default {
     totalData() {
       return [
         {
-          title: this.$t('UserTotal'),
+          title: this.$t('Total'),
           body: {
             count: this.user_stats.total
           }
@@ -160,9 +159,9 @@ export default {
           }
         },
         {
-          title: this.$t('valid'),
+          title: this.$t('FirstLogin'),
           body: {
-            count: this.user_stats.valid
+            count: this.user_stats.first_login
           }
         }
       ]
@@ -170,9 +169,9 @@ export default {
     otherData() {
       return [
         {
-          title: this.$t('FirstLogin'),
+          title: this.$t('Valid'),
           body: {
-            count: this.user_stats.first_login
+            count: this.user_stats.valid
           }
         },
         {
@@ -404,7 +403,7 @@ export default {
         ]
       }
     },
-    timeDistributionOptions() {
+    VisitTimeOptions() {
       const max = Math.max(...Object.values(this.config.user_login_time_metrics))
       return {
         tooltip: {

@@ -37,7 +37,7 @@ export default {
       component: '',
       charts: [
         {
-          title: '账号统计报表',
+          title: this.$t('AccountStatisticsReport'),
           name: 'AccountStatistics',
           icon: 'fa fa-user-o'
         }

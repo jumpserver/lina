@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      title="用户修改密码分析报告"
+      :title="title"
       :nav="nav"
       :name="name"
       :description="description"
@@ -12,7 +12,7 @@
         <br>
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <div class="chart-container-title-text">{{ $t('ChangePasswordOverview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -21,11 +21,10 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">修改者城市分布</div>
+            <div class="chart-container-title-text">{{ $t('OperatorGeographicDistribution') }}</div>
             <div class="chart">
               <echarts
-                ref="userActivity"
-                :options="userActivityOptions"
+                :options="OperatorGeographicOptions"
                 :autoresize="true"
               />
             </div>
@@ -34,11 +33,10 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">修改趋势</div>
+            <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
             <div class="chart">
               <echarts
-                ref="loginTrend"
-                :options="changeTrendOptions"
+                :options="UserModificationOptions"
                 :autoresize="true"
               />
             </div>
@@ -47,14 +45,14 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">被修改用户排名</div>
+            <div class="chart-container-title-text">{{ $t('ModifyTheTargetUserTopTank') }}</div>
             <RankTable :config="config.change_password_top10_users" />
           </div>
         </div>
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">修改者排名</div>
+            <div class="chart-container-title-text">{{ $t('TopRankOfOperateUsers') }}</div>
             <RankTable :config="config.change_password_top10_change_bys" />
           </div>
         </div>
@@ -86,6 +84,7 @@ export default {
   },
   data() {
     return {
+      title: this.$t('ChangePasswordReport'),
       name: 'ChangePassword',
       description: 'This report provides an analysis of user password change activities.',
       days: localStorage.getItem('reportDays') || '7',
@@ -133,27 +132,27 @@ export default {
     totalData() {
       return [
         {
-          title: this.$t('ChangePasswordNum'),
+          title: this.$t('Total'),
           body: {
             route: { name: `PasswordChangeLog` },
             count: this.total_count_change_password.total
           }
         },
         {
-          title: this.$t('UserNum'),
+          title: this.$t('TargetUser'),
           body: {
             count: this.total_count_change_password.user_total
           }
         },
         {
-          title: this.$t('ChangeByNum'),
+          title: this.$t('Operator'),
           body: {
             count: this.total_count_change_password.change_by_total
           }
         }
       ]
     },
-    changeTrendOptions() {
+    UserModificationOptions() {
       const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = mixColors()
       return {
         title: {
@@ -267,7 +266,7 @@ export default {
       }
     },
 
-    userActivityOptions() {
+    OperatorGeographicOptions() {
       return {
         tooltip: {
           trigger: 'item'

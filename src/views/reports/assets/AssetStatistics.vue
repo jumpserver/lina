@@ -1,37 +1,28 @@
 <template>
   <div>
     <BaseReport
-      title="资产统计报告"
+      :title="title"
       :nav="nav"
       :name="name"
       :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <div class="chart-container">
+        <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <div class="chart-container-title-text">{{ $t('AssetOverview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
           </div>
         </div>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
-            <SummaryCountCard
-              :items="otherData"
-            />
-          </div>
-        </div>
-
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">资产分类</div>
+            <div class="chart-container-title-text">{{ $t('AssetTypeDistribution') }}</div>
             <div class="chart">
               <echarts
-                :options="TypeDistributionOptions"
+                :options="AssetTypeOptions"
                 :autoresize="true"
               />
             </div>
@@ -39,7 +30,7 @@
         </div>
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">本周新增趋势</div>
+            <div class="chart-container-title-text">{{ $t('WeeklyGrowthTrend') }}</div>
             <div class="chart">
               <echarts
                 :options="AddedAssetOptions"
@@ -72,6 +63,7 @@ export default {
   },
   data() {
     return {
+      title: this.$t('AssetStatisticsReport'),
       name: 'AssetStatistics',
       description: '-',
       asset_stats: {
@@ -110,36 +102,32 @@ export default {
           }
         },
         {
-          title: this.$t('Connected'),
+          title: this.$t('Connectable'),
           body: {
             count: this.asset_stats.connected
           }
-        }
-      ]
-    },
-    otherData() {
-      return [
-        {
-          title: this.$t('PlatformCount'),
-          body: {
-            count: this.asset_stats.platform_count
-          }
         },
         {
-          title: this.$t('Zone'),
+          title: this.$t('LinkedDomains'),
           body: {
             count: this.asset_stats.zone
           }
         },
         {
-          title: this.$t('DirectoryServices'),
+          title: this.$t('ConnectedDirectoryServices'),
           body: {
             count: this.asset_stats.directory_services
+          }
+        },
+        {
+          title: this.$t('Platform'),
+          body: {
+            count: this.asset_stats.platform_count
           }
         }
       ]
     },
-    TypeDistributionOptions() {
+    AssetTypeOptions() {
       return {
         tooltip: {
           trigger: 'axis',

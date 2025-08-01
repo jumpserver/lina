@@ -4,12 +4,12 @@ export default [
   {
     path: 'asset-activity',
     component: () => import('@/views/reports/assets/AssetActivity.vue'), // Parent router-view
-    name: 'AssetActivity',
+    name: 'AssetReport',
     meta: {
       permissions: [],
       icon: 'user-o',
       expanded: true,
-      title: i18n.t('AssetActivity')
+      title: i18n.t('AssetReport')
     }
   },
   {

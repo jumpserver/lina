@@ -21,14 +21,14 @@
 </template>
 
 <script>
-import UserActivity from './UserActivity.vue'
+import UserReport from './UserActivity.vue'
 import Page from '@/layout/components/Page'
 import { resolveRoute } from '@/utils/vue/index'
 
 export default {
   name: 'Users',
   components: {
-    UserActivity,
+    UserReport,
     Page
   },
   data() {
@@ -38,7 +38,7 @@ export default {
       charts: [
         {
           title: '用户登录报表',
-          name: 'UserActivity',
+          name: 'UserReport',
           icon: 'fa fa-user-o'
         },
         {

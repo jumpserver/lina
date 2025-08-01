@@ -1,16 +1,16 @@
 <template>
   <div>
     <BaseReport
-      title="资产统计报告"
+      :title="title"
       :nav="nav"
       :name="name"
       :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <div class="chart-container">
+        <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <div class="chart-container-title-text">{{ $t('AccountOverview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -19,15 +19,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
-            <SummaryCountCard
-              :items="otherData"
-            />
-          </div>
-        </div>
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">登录来源</div>
+            <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
             <div class="chart">
               <echarts
                 :options="SourceOptions"
@@ -38,7 +30,7 @@
         </div>
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">可连接性</div>
+            <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
             <div class="chart">
               <echarts
                 :options="ConnectivityOptions"
@@ -49,7 +41,7 @@
         </div>
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">账号改密趋势</div>
+            <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
             <div class="chart">
               <echarts
                 :options="ChangeSecretOptions"
@@ -60,13 +52,13 @@
         </div>
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">资产账号排名</div>
+            <div class="chart-container-title-text">{{ $t('RankByNumberOfAssetAccounts') }}</div>
             <RankTable :config="config.top10_asset_accounts" />
           </div>
         </div>
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">资产账号排名</div>
+            <div class="chart-container-title-text">{{ $t('AccountAndPasswordChangeRank') }}</div>
             <RankTable :config="config.top10_version_accounts" />
           </div>
         </div>
@@ -96,6 +88,7 @@ export default {
   },
   data() {
     return {
+      title: this.$t('AccountStatisticsReport'),
       name: 'AccountStatistics',
       description: '-',
       account_stats: {
@@ -159,15 +152,11 @@ export default {
           }
         },
         {
-          title: this.$t('Connected'),
+          title: this.$t('Connectable'),
           body: {
             count: this.account_stats.connected
           }
-        }
-      ]
-    },
-    otherData() {
-      return [
+        },
         {
           title: this.$t('SuFrom'),
           body: {
@@ -175,13 +164,13 @@ export default {
           }
         },
         {
-          title: this.$t('ChangeSecret'),
+          title: this.$t('ResetSecret'),
           body: {
             count: this.account_stats.date_change_secret
           }
         },
         {
-          title: this.$t('TemplateTotal'),
+          title: this.$t('BaseAccountTemplate'),
           body: {
             count: this.account_stats.template_total
           }

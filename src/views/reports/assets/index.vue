@@ -37,13 +37,13 @@ export default {
       component: '',
       charts: [
         {
-          title: '资产统计报表',
+          title: this.$t('AssetStatisticsReport'),
           name: 'AssetStatistics',
           icon: 'fa fa-user-o'
         },
         {
-          title: '资产活动报表',
-          name: 'AssetActivity',
+          title: this.$t('AssetActivityReport'),
+          name: 'AssetReport',
           icon: 'fa fa-envelope-o'
         }
       ]

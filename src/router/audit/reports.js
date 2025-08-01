@@ -7,7 +7,7 @@ export default [
     name: 'writable',
     component: empty,
     meta: {
-      title: i18n.t('UserActivity'),
+      title: i18n.t('UserReport'),
       icon: 'user-o',
       permissions: []
     },
@@ -17,7 +17,7 @@ export default [
         name: 'UserActivityIndex',
         component: () => import('@/views/reports/users/index.vue'),
         meta: {
-          title: i18n.t('UserActivity'),
+          title: i18n.t('UserReport'),
           permissions: []
         }
       }
@@ -29,7 +29,7 @@ export default [
     component: empty,
     meta: {
       icon: 'assets',
-      title: i18n.t('AssetActivity'),
+      title: i18n.t('AssetReport'),
       permissions: []
     },
     children: [
@@ -39,7 +39,7 @@ export default [
         name: 'AssetActivityIndex',
         component: () => import('@/views/reports/assets/index.vue'),
         meta: {
-          title: i18n.t('AssetActivity'),
+          title: i18n.t('AssetReport'),
           permissions: []
         }
       }
@@ -51,7 +51,7 @@ export default [
     component: empty,
     meta: {
       icon: 'accounts',
-      title: i18n.t('AccountActivity'),
+      title: i18n.t('AccountReport'),
       permissions: []
     },
     children: [
@@ -61,7 +61,7 @@ export default [
         name: 'AccountActivityIndex',
         component: () => import('@/views/reports/accounts/index.vue'),
         meta: {
-          title: i18n.t('AccountActivity'),
+          title: i18n.t('AccountReport'),
           permissions: []
         }
       }

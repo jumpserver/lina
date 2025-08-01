@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseReport
-      title="资产活动报告"
+      :title="title"
       :nav="nav"
       :name="name"
       :description="description"
@@ -21,14 +21,13 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
             <UserAssetActivity :days="days" />
           </div>
         </div>
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">资产登录入口</div>
+            <div class="chart-container-title-text">{{ $t('DistributionOfAssetLoginMethods') }}</div>
             <div class="chart">
               <echarts
                 :options="LoginEntryOptions"
@@ -40,7 +39,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">远程登录协议</div>
+            <div class="chart-container-title-text">{{ $t('RemoteLoginProtocolUsageDistribution') }}</div>
             <div class="chart">
               <echarts
                 :options="LoginProtocolOptions"
@@ -52,7 +51,7 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">登录资产操作系统</div>
+            <div class="chart-container-title-text">{{ $t('OperatingSystemDistributionOfLoginAssets') }}</div>
             <div class="chart">
               <echarts
                 :options="LoginOSOptions"
@@ -64,7 +63,7 @@
 
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">资产登录趋势</div>
+            <div class="chart-container-title-text">{{ $t('AssetLoginTrends') }}</div>
             <div class="chart">
               <echarts
                 ref="loginTrend"
@@ -102,7 +101,8 @@ export default {
   },
   data() {
     return {
-      name: 'AssetActivity',
+      title: this.$t('AssetActivityReport'),
+      name: 'AssetReport',
       description: '-',
       days: localStorage.getItem('reportDays') || '7',
       session_stats: {
@@ -125,19 +125,19 @@ export default {
     totalData() {
       return [
         {
-          title: this.$t('SessionNum'),
+          title: this.$t('Session'),
           body: {
             count: this.session_stats.total
           }
         },
         {
-          title: this.$t('AssetNum'),
+          title: this.$t('Asset'),
           body: {
             count: this.session_stats.asset_total
           }
         },
         {
-          title: this.$t('UserNum'),
+          title: this.$t('User'),
           body: {
             count: this.session_stats.user_total
           }
@@ -323,7 +323,7 @@ export default {
         animationDuration: 500,
         series: [
           {
-            name: this.$t('AssetLoginCount'),
+            name: this.$t('ConnectionCount'),
             type: 'line',
             smooth: true,
             areaStyle: {

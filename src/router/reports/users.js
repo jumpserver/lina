@@ -4,7 +4,7 @@ export default [
   {
     path: 'user-activity',
     component: () => import('@/views/reports/users/UserActivity.vue'), // Parent router-view
-    name: 'UserActivity',
+    name: 'UserReport',
     meta: {
       permissions: [],
       icon: 'user-o',
