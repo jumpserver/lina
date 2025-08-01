@@ -23,10 +23,10 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">远程登录协议</div>
+            <div class="chart-container-title-text">登录来源</div>
             <div class="chart">
               <echarts
-                :options="SourceProtocolOptions"
+                :options="LoginSourceOptions"
                 :autoresize="true"
               />
             </div>
@@ -112,7 +112,6 @@ export default {
   data() {
     return {
       name: 'UserActivity',
-      // 生成随机数据的辅助函数
       description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.',
       days: localStorage.getItem('reportDays') || '7',
       user_stats: {
@@ -190,7 +189,7 @@ export default {
         }
       ]
     },
-    SourceProtocolOptions() {
+    LoginSourceOptions() {
       return {
         tooltip: {
           trigger: 'item'
@@ -387,7 +386,6 @@ export default {
         }))
       }
     },
-
     userActivityOptions() {
       return {
         tooltip: {

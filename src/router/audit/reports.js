@@ -44,5 +44,27 @@ export default [
         }
       }
     ]
+  },
+  {
+    path: 'accounts',
+    name: 'accounts',
+    component: empty,
+    meta: {
+      icon: 'accounts',
+      title: i18n.t('AccountActivity'),
+      permissions: []
+    },
+    children: [
+      {
+        path: 'activity',
+        props: () => ({ nav: false }),
+        name: 'AccountActivityIndex',
+        component: () => import('@/views/reports/accounts/index.vue'),
+        meta: {
+          title: i18n.t('AccountActivity'),
+          permissions: []
+        }
+      }
+    ]
   }
 ]

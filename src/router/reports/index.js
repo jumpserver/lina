@@ -3,6 +3,7 @@ import empty from '@/layout/empty'
 
 import users from './users'
 import assets from './assets'
+import accounts from './accounts'
 
 export default {
   path: '/reports',
@@ -39,18 +40,18 @@ export default {
         permissions: []
       },
       children: assets
+    },
+    {
+      path: '/reports/accounts',
+      component: empty,
+      redirect: 'accounts',
+      name: 'ReportsAccounts',
+      meta: {
+        title: i18n.t('ReportsAccounts'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: accounts
     }
-    // {
-    //   path: '/reports/assets',
-    //   component: empty,
-    //   redirect: '/reports/users/users',
-    //   name: 'ReportsAssets',
-    //   meta: {
-    //     title: i18n.t('ReportsAssets'),
-    //     icon: 'reports',
-    //     permissions: []
-    //   },
-    //   children: users
-    // }
   ]
 }

@@ -37,16 +37,15 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="chart-container full-width">
-        <div class="chart-container-title">
-          <div class="chart-container-title-text">本周新增趋势</div>
-          <div class="chart">
-            <echarts
-              :options="AddedAssetOptions"
-              :autoresize="true"
-            />
+        <div class="chart-container full-width">
+          <div class="chart-container-title">
+            <div class="chart-container-title-text">本周新增趋势</div>
+            <div class="chart">
+              <echarts
+                :options="AddedAssetOptions"
+                :autoresize="true"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -186,7 +185,6 @@ export default {
         legend: {
           left: 'auto',
           icon: 'rect',
-          // 图例标记的图形宽度
           itemWidth: 10,
           itemHeight: 10
         },
