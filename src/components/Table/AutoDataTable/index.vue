@@ -101,13 +101,14 @@ export default {
       const newMeta = _iOld.columnsMeta
       const metas = [oldMeta, newMeta]
       for (const meta of metas) {
+        if (!meta) {
+          continue
+        }
         for (const [key, value] of Object.entries(meta)) {
-          if (!key || !value) {
+          if (!key || !value || typeof value !== 'object') {
             continue
           }
-          if (typeof value === 'object') {
-            delete value['formatter']
-          }
+          delete value['formatter']
         }
       }
 
