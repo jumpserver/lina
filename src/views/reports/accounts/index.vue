@@ -40,6 +40,11 @@ export default {
           title: this.$t('AccountStatisticsReport'),
           name: 'AccountStatistics',
           icon: 'fa fa-user-o'
+        },
+        {
+          title: this.$t('AccountAutomationReport'),
+          name: 'AccountAutomationReport',
+          icon: 'fa fa-user-o'
         }
       ]
     }

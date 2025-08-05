@@ -4,7 +4,6 @@
       :title="title"
       :nav="nav"
       :name="name"
-      :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
@@ -65,7 +64,6 @@ export default {
     return {
       title: this.$t('AssetStatisticsReport'),
       name: 'AssetStatistics',
-      description: '-',
       asset_stats: {
         'total': 0,
         'active': 0,

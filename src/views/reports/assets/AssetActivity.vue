@@ -4,7 +4,6 @@
       :title="title"
       :nav="nav"
       :name="name"
-      :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
@@ -103,7 +102,6 @@ export default {
     return {
       title: this.$t('AssetActivityReport'),
       name: 'AssetReport',
-      description: '-',
       days: localStorage.getItem('reportDays') || '7',
       session_stats: {
         'total': 0,

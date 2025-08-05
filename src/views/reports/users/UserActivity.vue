@@ -4,7 +4,6 @@
       :title="title"
       :nav="nav"
       :name="name"
-      :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
@@ -111,7 +110,6 @@ export default {
     return {
       title: this.$t('UserLoginReport'),
       name: 'UserReport',
-      description: 'This report shows the activities of users in terms of password usage - how many times logged in, password access, reset tasks and other details.',
       days: localStorage.getItem('reportDays') || '7',
       user_stats: {
         total: 0,

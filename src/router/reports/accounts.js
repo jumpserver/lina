@@ -11,5 +11,16 @@ export default [
       icon: 'user-o',
       title: i18n.t('AccountStatistics')
     }
+  },
+  {
+    path: 'account-automation',
+    component: () => import('@/views/reports/accounts/AccountAutomation.vue'), // Parent router-view
+    name: 'AccountAutomationReport',
+    meta: {
+      permissions: [],
+      expanded: true,
+      icon: 'user-o',
+      title: i18n.t('AccountAutomation')
+    }
   }
 ]

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="title-section">
+    <div v-if="isTitle" class="title-section">
       <Title :config="config" />
     </div>
     <div class="metrics-section">
@@ -15,6 +15,12 @@ import Title from '@/components/Dashboard/Title.vue'
 
 export default {
   components: { Title },
+  props: {
+    isTitle: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       config: {

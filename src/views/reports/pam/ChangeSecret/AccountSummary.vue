@@ -1,6 +1,6 @@
 <template>
-  <div class="box">
-    <div class="head">
+  <div :class="{ box: !disableBox }">
+    <div v-if="isTitle" class="head">
       <Title :config="config" />
     </div>
     <LineChart v-if="loading" v-bind="lineChartConfig" />
@@ -20,6 +20,14 @@ export default {
     days: {
       type: [Number, String],
       default: '7'
+    },
+    isTitle: {
+      type: Boolean,
+      default: true
+    },
+    disableBox: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

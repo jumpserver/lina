@@ -22,7 +22,7 @@
             </el-button>
           </span>
         </div>
-        <div class="description">
+        <div v-if="isDescription" class="description">
           {{ description }}
         </div>
       </div>
@@ -35,8 +35,6 @@
 
 <script>
 import Logo from '@/layout/components/NavLeft/Logo'
-// eslint-disable-next-line no-unused-vars
-import * as echarts from 'echarts'
 import RightAction from './RightAction.vue'
 
 export default {
@@ -72,6 +70,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  computed: {
+    isDescription() {
+      return this.description && this.description.trim() !== ''
     }
   },
   methods: {

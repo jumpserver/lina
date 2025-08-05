@@ -4,7 +4,6 @@
       :title="title"
       :nav="nav"
       :name="name"
-      :description="description"
       v-bind="$attrs"
     >
       <div class="charts-grid">
@@ -86,7 +85,6 @@ export default {
     return {
       title: this.$t('ChangePasswordReport'),
       name: 'ChangePassword',
-      description: 'This report provides an analysis of user password change activities.',
       days: localStorage.getItem('reportDays') || '7',
       total_count_change_password: {
         'total': 0,
