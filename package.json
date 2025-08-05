@@ -38,6 +38,7 @@
         "deepmerge": "^4.2.2",
         "dompurify": "^3.1.6",
         "echarts": "4.7.0",
+        "element-ui": "^2.15.14",
         "elementui-lts": "^2.16.0",
         "eslint-plugin-html": "^6.0.0",
         "highlight.js": "^11.9.0",
