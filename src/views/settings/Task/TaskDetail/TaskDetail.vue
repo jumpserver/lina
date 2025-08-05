@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20">
+  <el-row :gutter="20" class="task-detail">
     <el-col :md="20" :sm="24">
       <DetailCard :items="detailCardItems" :title="cardTitle" />
     </el-col>
@@ -43,7 +43,7 @@ export default {
         },
         {
           key: this.$t('LastPublishedTime'),
-          value: this.object.last_published_time
+          value: this.object.date_last_publish
         },
         {
           key: this.$t('Description'),
@@ -55,7 +55,8 @@ export default {
   methods: {}
 }
 </script>
-
 <style lang="less" scoped>
-
+.task-detail /deep/ .item-value span {
+  white-space: normal !important;
+}
 </style>

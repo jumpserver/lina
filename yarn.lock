@@ -4448,19 +4448,15 @@ electron-to-chromium@^1.4.601:
   resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.611.tgz"
   integrity sha512-ZtRpDxrjHapOwxtv+nuth5ByB8clyn8crVynmRNGO3wG3LOp8RTcyZDqwaI6Ng6y8FCK2hVZmJoqwCskKbNMaw==
 
-element-theme-chalk@^2.13.1:
-  version "2.15.14"
-  resolved "https://registry.npmmirror.com/element-theme-chalk/-/element-theme-chalk-2.15.14.tgz"
-  integrity sha512-jgMTD6Qg6UPRDjBzARl42xit7lfCg+gE8x+QaUmmrhWv2TsnFoerhOupn0smxKTfO0Oh9Kh53Q+thXeZO7/0rQ==
-
-element-ui@2.15.14:
-  version "2.15.14"
-  resolved "https://registry.npmmirror.com/element-ui/-/element-ui-2.15.14.tgz"
-  integrity sha512-2v9fHL0ZGINotOlRIAJD5YuVB8V7WKxrE9Qy7dXhRipa035+kF7WuU/z+tEmLVPBcJ0zt8mOu1DKpWcVzBK8IA==
+elementui-lts@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.npmmirror.com/elementui-lts/-/elementui-lts-2.16.0.tgz#2add8f3625ada83d553b7862b75a986f6eaca993"
+  integrity sha512-HFezWcsZTJN4HIGg5WUggte8XEhg2KQ2rR6covLwjY56cMkPkdv2s5Q4ww28dO+RauJC1daldOMp8wXSir7M8w==
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
     deepmerge "^1.2.0"
+    lodash-es "^4.17.21"
     normalize-wheel "^1.0.1"
     resize-observer-polyfill "^1.5.0"
     throttle-debounce "^1.0.1"
@@ -8165,6 +8161,11 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
+lodash-es@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmmirror.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npmmirror.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
@@ -8940,7 +8941,7 @@ moment-parseformat@^4.0.0:
   resolved "https://registry.npmmirror.com/moment-parseformat/-/moment-parseformat-4.0.0.tgz"
   integrity sha512-0V4ICKnI1npglqrMSDK2y8WxOdN79DkMoIexzY3P+jr2wNfbB4J81BgjFfHsj18wBsV7FdKCWyCHcezzH0xlyg==
 
-moment@^2.19.2, moment@^2.29.4:
+moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.npmmirror.com/moment/-/moment-2.29.4.tgz"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
@@ -10572,6 +10573,11 @@ prettier@1.16.3:
   version "2.8.8"
   resolved "https://registry.npmmirror.com/prettier/-/prettier-2.8.8.tgz"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
+
+pretty-bytes@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
+  integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
 
 pretty-error@^2.0.2:
   version "2.1.2"
@@ -13280,13 +13286,6 @@ vue-markdown@^2.2.4:
     markdown-it-sup "^1.0.0"
     markdown-it-task-lists "^2.0.1"
     markdown-it-toc-and-anchor "^4.1.2"
-
-vue-moment@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.npmmirror.com/vue-moment/-/vue-moment-4.1.0.tgz"
-  integrity sha512-Gzisqpg82ItlrUyiD9d0Kfru+JorW2o4mQOH06lEDZNgxci0tv/fua1Hl0bo4DozDV2JK1r52Atn/8QVCu8qQw==
-  dependencies:
-    moment "^2.19.2"
 
 vue-password-strength-meter@^1.7.2:
   version "1.7.2"

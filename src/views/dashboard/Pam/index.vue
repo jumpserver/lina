@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="$hasPerm('rbac.view_console')">
+    <div v-if="$hasPerm('rbac.view_pam')">
       <Announcement />
       <PamReport :nav="false" />
 

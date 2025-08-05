@@ -9,7 +9,7 @@
           :label="i.value"
         >
           {{ i.label }}
-          <el-tooltip :content="i.tip" :open-delay="500" placement="top">
+          <el-tooltip v-if="i.tip" :content="i.tip" :open-delay="500" placement="top">
             <i class="fa fa-question-circle-o" />
           </el-tooltip>
         </el-radio>
@@ -88,7 +88,8 @@ import {
   SameAccount,
   SpecAccount,
   virtualAccount,
-  virtualAccounts
+  virtualAccounts,
+  NoneAccount
 } from '@/views/perms/const'
 import ListTable from '@/components/Table/ListTable'
 import Dialog from '@/components/Dialog'
@@ -187,9 +188,12 @@ export default {
     }
   },
   watch: {
-    realRadioSelected(val) {
-      this.showSpecZone = val === this.SPEC
-      this.showExcludeZone = val === this.EXCLUDE
+    realRadioSelected: {
+      handler(val) {
+        this.showSpecZone = val === this.SPEC
+        this.showExcludeZone = val === this.EXCLUDE
+      },
+      sync: true
     }
   },
   mounted() {
@@ -209,24 +213,22 @@ export default {
     },
     initDefaultChoice() {
       const value = this.value || []
-      if (value.length === 0) {
-        value.push(this.ALL)
-      }
-
       const specAccountsInput = this.getSpecValues(value)
+
       // const excludeAccountsInput = this.getExcludeChoices(value)
       // 先清理 radio
       const isAll = value.includes(this.ALL)
+
       if (isAll) {
         this.realRadioSelected = this.ALL
-      } else if (specAccountsInput.length > 0) {
+      } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
         this.specAccountsInput = specAccountsInput
         // } else if (excludeAccountsInput.length > 0) {
         //   this.realRadioSelected = this.EXCLUDE
         //   this.excludeAccountsInput = excludeAccountsInput
       } else {
-        this.realRadioSelected = this.ALL
+        this.realRadioSelected = NoneAccount
       }
 
       // 清理虚拟账号
@@ -250,7 +252,6 @@ export default {
       }, 100)
     },
     handleVirtualChecked(evt, checked) {
-      // console.log('Vhcek cch')
       this.outputValue()
     },
     handleRadioChanged(value) {
@@ -262,11 +263,14 @@ export default {
     outputValue() {
       // 这是真是的
       let choicesSelected = []
+
       if (this.realRadioSelected === this.ALL) {
         choicesSelected = [this.ALL]
       } else if (this.realRadioSelected === this.SPEC && this.showSpecZone) {
         const templateIds = this.specAccountsTemplate.map(i => `%${i.id}`)
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
+      } else if (this.realRadioSelected === NoneAccount) {
+        choicesSelected = []
       }
       // else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
       //   choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)

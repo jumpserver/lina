@@ -5,6 +5,7 @@
       :detail-drawer="detailDrawer"
       :header-actions="headerActions"
       :table-config="tableConfig"
+      :resource="$t('AccountTemplate')"
     />
     <ViewSecret
       v-if="showViewSecretDialog"

@@ -27,6 +27,7 @@ export const vmware = 'vmware'
 export const fc = 'fc'
 export const scp = 'scp'
 export const apsara_stack = 'apsara_stack'
+export const proxmox = 'proxmox'
 export const lan = 'lan'
 export const smartx = 'smartx'
 
@@ -51,17 +52,8 @@ export const publicHostProviders = [
 export const publicDBProviders = [aliyun]
 
 export const privateCloudProviders = [
-  vmware,
-  qingcloud_private,
-  huaweicloud_private,
-  ctyun_private,
-  openstack,
-  zstack,
-  nutanix,
-  fc,
-  scp,
-  apsara_stack,
-  smartx
+  vmware, qingcloud_private, huaweicloud_private, ctyun_private,
+  openstack, zstack, nutanix, fc, scp, apsara_stack, smartx, proxmox
 ]
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
@@ -221,6 +213,12 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     title: i18n.t('ApsaraStack'),
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint'],
     image: require('@/assets/img/cloud/ali.svg')
+  },
+  [proxmox]: {
+    name: proxmox,
+    title: i18n.t('Proxmox'),
+    attrs: ['username', 'password', 'api_endpoint'],
+    image: require('@/assets/img/cloud/proxmox.svg')
   },
   [lan]: {
     name: lan,

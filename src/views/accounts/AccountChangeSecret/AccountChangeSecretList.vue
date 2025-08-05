@@ -63,7 +63,7 @@ export default {
           executed_amount: {
             formatter: (row) => {
               const can = vm.$hasPerm('accounts.view_changesecretexecution')
-              return <el-link onClick={ () => this.handleExecAmount(row) } disabled={ !can }>{ row.executed_amount }</el-link>
+              return <el-link onClick={() => this.handleExecAmount(row)} disabled={!can}>{row.executed_amount}</el-link>
             }
           },
           actions: {
@@ -101,7 +101,23 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        createRoute: 'AccountChangeSecretCreate'
+        createRoute: 'AccountChangeSecretCreate',
+        extraMoreActions: [
+          {
+            name: 'BatchDisable',
+            title: this.$t('DisableSelected'),
+            icon: 'fa fa-ban',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkDisableCallback(selectedRows, reloadTable)
+          },
+          {
+            name: 'BatchActivate',
+            title: this.$t('ActivateSelected'),
+            icon: 'fa fa-check-circle-o',
+            can: ({ selectedRows }) => selectedRows.length > 0 && this.$hasPerm('accounts.change_changesecretautomation'),
+            callback: ({ selectedRows, reloadTable }) => this.bulkActivateCallback(selectedRows, reloadTable)
+          }
+        ]
       }
     }
   },
@@ -113,6 +129,32 @@ export default {
           tab: 'AccountChangeSecretExecutionList',
           automation_id: row.id
         }
+      })
+    },
+    bulkDisableCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/change-secret-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: false }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('DisableSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
+      })
+    },
+    bulkActivateCallback(selectedRows, reloadTable) {
+      const url = '/api/v1/accounts/change-secret-automations/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: true }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('ActivateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('UpdateErrorMsg') + ' ' + error)
       })
     }
   }

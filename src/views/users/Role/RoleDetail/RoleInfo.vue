@@ -81,6 +81,7 @@ export default {
       nodesDeps: {
         'view_console': [],
         'view_audit': [],
+        'view_pam': [],
         'view_workbench': [
           'authentication.view_connectiontoken', 'authentication.add_connectiontoken',
           'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken'

@@ -27,7 +27,7 @@
         </span>
         <span class="status-item">
           <span>{{ $tc('TimeDelta') }}: </span>
-          <span>{{ executionInfo.timeCost.toFixed(2) }}s</span>
+          <span>{{ executionInfo.timeCost }}s</span>
         </span>
       </div>
       <div v-if="showToolBar" class="actions">

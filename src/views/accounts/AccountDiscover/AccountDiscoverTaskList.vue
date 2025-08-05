@@ -3,7 +3,7 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
-    :resource="$tc('AccountDiscoverTask')"
+    :resource="$tc('DiscoverAccountTask')"
     :table-config="tableConfig"
   />
 </template>
@@ -84,7 +84,9 @@ export default {
                   name: 'execute',
                   type: 'primary',
                   order: 1,
-                  can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
+                  can: ({ row }) => {
+                    return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
+                  },
                   callback: function(data) {
                     this.$axios.post(
                       `/api/v1/accounts/gather-account-executions/`,

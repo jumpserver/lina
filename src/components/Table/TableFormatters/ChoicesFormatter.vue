@@ -24,16 +24,17 @@ const formatterArgsDefault = {
     true: 'text-primary',
     false: 'text-danger'
   },
-  textChoices: {
-    true: i18n.t('Yes'),
-    false: i18n.t('No')
-  },
   getKey({ row, cellValue }) {
     return (cellValue && typeof cellValue === 'object') ? cellValue.value : cellValue
   },
   getText({ row, cellValue }) {
     const key = this.getKey({ row, cellValue })
-    return (cellValue && typeof cellValue === 'object') ? cellValue.label : this.textChoices[key] || cellValue
+    if (cellValue && typeof cellValue === 'object') {
+      return cellValue.label
+    }
+    if (key === true || key === 'true') return i18n.t('Yes')
+    if (key === false || key === 'false') return i18n.t('No')
+    return cellValue
   },
   getIcon({ row, cellValue }) {
     const key = this.getKey({ row, cellValue })

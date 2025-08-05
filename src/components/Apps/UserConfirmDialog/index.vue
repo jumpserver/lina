@@ -82,7 +82,7 @@
             :src="faceCaptureUrl"
             allow="camera"
             sandbox="allow-scripts allow-same-origin"
-            style="width: 100%; height: 800px;border: none;"
+            style="width: 100%; height: 600px;border: none;"
           />
         </el-col>
       </el-row>
@@ -99,7 +99,7 @@
           </el-button>
           <el-button
             v-if="subTypeSelected === 'face'"
-            :disabled="isFaceCaptureVisible"
+            v-show="!isFaceCaptureVisible"
             class="confirm-btn"
             size="mini"
             type="primary"

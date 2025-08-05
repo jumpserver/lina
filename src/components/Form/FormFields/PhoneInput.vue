@@ -46,7 +46,7 @@ export default {
     }
   },
   mounted() {
-    const defaults = { code: localStorage.getItem('prePhoneCode') || '+86', phone: '' }
+    const defaults = { code: this.getDefaultCode(), phone: '' }
     this.rawValue = this.value || defaults
     this.$axios.get('/api/v1/common/countries/').then(res => {
       this.countries = res.map(item => {
@@ -56,6 +56,22 @@ export default {
     this.$emit('input', this.fullPhone)
   },
   methods: {
+    getDefaultCode() {
+      const mapper = {
+        'zh': '+86',
+        'en': '+1',
+        'ja': '+81',
+        'ko': '+82',
+        'fr': '+33',
+        'de': '+49',
+        'es': '+34',
+        'it': '+39',
+        'ru': '+7',
+        'ar': '+966'
+      }
+      const locale = this.$i18n.locale.split('-')[0]
+      return localStorage.getItem('prePhoneCode') || mapper[locale] || '+86'
+    },
     onChange(countryCode) {
       this.rawValue.code = countryCode
       this.onInputChange()

@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericListTable
+    ref="listTable"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+    :resource="$t('DetectTasks')"
+  />
 </template>
 
 <script>

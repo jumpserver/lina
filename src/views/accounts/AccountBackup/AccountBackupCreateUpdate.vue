@@ -33,7 +33,7 @@ export default {
           ]
         ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       initial: {
         is_periodic: false,

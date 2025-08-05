@@ -178,7 +178,18 @@ export default {
         return
       }
       if (currentNode) {
-        currentNode.name = currentNode.meta.data.value
+        // 从节点名称中提取资产数量并保存
+        const nameMatch = currentNode.name.match(/^(.+?)\s*\((\d+)\)$/)
+
+        if (nameMatch) {
+          const pureName = nameMatch[1]
+          const assetsAmount = parseInt(nameMatch[2])
+
+          currentNode.name = pureName
+          currentNode.meta.data['assetsAmount'] = assetsAmount // 保存资产数量，确保重命名时不会丢失
+        } else {
+          currentNode.name = currentNode.meta.data.value
+        }
       }
       this.zTree.editName(currentNode)
     },
@@ -237,13 +248,14 @@ export default {
       if (isCancel) {
         return
       }
+
+      const originalAssetsAmount = treeNode.meta.data['assetsAmount'] || 0
+
       this.$axios.patch(url, { 'value': treeNode.name }).then(res => {
-        let assetsAmount = treeNode.meta.data['assetsAmount']
-        if (!assetsAmount) {
-          assetsAmount = 0
-        }
-        treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
-        treeNode.meta.data = res
+        treeNode.name = treeNode.name + ' (' + originalAssetsAmount + ')'
+        treeNode.meta.data = Object.assign({}, treeNode.meta.data, res)
+        treeNode.meta.data['assetsAmount'] = originalAssetsAmount
+
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$tc('UpdateSuccessMsg'))
       }).finally(() => {

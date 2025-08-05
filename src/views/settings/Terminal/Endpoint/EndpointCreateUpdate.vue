@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       url: '/api/v1/terminal/endpoints/',
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' }},
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' } },
       fields: [
         [this.$t('Basic'), ['name', 'host']],
         [
@@ -30,7 +30,8 @@ export default {
           '',
           [
             'mysql_port', 'mariadb_port', 'postgresql_port',
-            'redis_port', 'sqlserver_port', 'oracle_port_range'
+            'redis_port', 'sqlserver_port', 'oracle_port',
+            'mongodb_port'
           ]
         ],
         [this.$t('Other'), ['is_active', 'comment']]
@@ -38,9 +39,6 @@ export default {
       fieldsMeta: {
         host: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'
-        },
-        oracle_port_range: {
-          disabled: true
         },
         is_active: {
           disabled: this.$route.params.id === '00000000-0000-0000-0000-000000000001'

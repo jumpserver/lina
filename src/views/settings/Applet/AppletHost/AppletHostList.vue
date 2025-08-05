@@ -7,6 +7,7 @@
       ref="table"
       class="applet-host"
       :create-drawer="createDrawer"
+      :resource="$t('AppletHosts')"
       v-bind="$data"
     />
   </div>

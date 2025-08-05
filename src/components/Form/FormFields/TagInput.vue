@@ -100,7 +100,7 @@ export default {
   methods: {
     handleTagClose(tag) {
       this.filterTags.splice(this.filterTags.indexOf(tag), 1)
-      this.handleConfirm()
+      this.$emit('change', this.filterTags)
     },
     handleSelect(item) {
       this.filterValue = item.value

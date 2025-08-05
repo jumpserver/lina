@@ -43,6 +43,8 @@ export default {
       encryptedFields: ['VAULT_HCP_TOKEN'],
       fields: [
         'CHAT_AI_ENABLED',
+        'CHAT_AI_METHOD',
+        'CHAT_AI_EMBED_URL',
         'CHAT_AI_TYPE',
         'DEEPSEEK_BASE_URL',
         'DEEPSEEK_API_KEY',
@@ -54,12 +56,17 @@ export default {
         'GPT_MODEL'
       ],
       fieldsMeta: {
+        CHAT_AI_TYPE: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api'
+          }
+        },
         GPT_BASE_URL: {
           el: {
             autocomplete: 'new-password'
           },
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'gpt'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         GPT_API_KEY: {
@@ -67,17 +74,17 @@ export default {
             autocomplete: 'new-password'
           },
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'gpt'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         GPT_PROXY: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'gpt'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         GPT_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'gpt'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'gpt'
           }
         },
         DEEPSEEK_BASE_URL: {
@@ -85,7 +92,7 @@ export default {
             autocomplete: 'new-password'
           },
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
           }
         },
         DEEPSEEK_API_KEY: {
@@ -93,18 +100,21 @@ export default {
             autocomplete: 'new-password'
           },
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
           }
         },
         DEEPSEEK_PROXY: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
           }
         },
         DEEPSEEK_MODEL: {
           hidden: (formValue) => {
-            return formValue.CHAT_AI_TYPE !== 'deep-seek'
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'deep-seek'
           }
+        },
+        CHAT_AI_EMBED_URL: {
+          hidden: (formValue) => formValue.CHAT_AI_METHOD !== 'embed'
         }
       },
       submitMethod() {

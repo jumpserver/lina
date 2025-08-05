@@ -1,5 +1,6 @@
 <template>
   <DrawerPanel
+    v-if="visible"
     ref="drawer"
     :default-show-panel="!!defaultShowPanel"
     :expanded="expanded"
@@ -47,7 +48,10 @@ import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
 import { ws } from '@/utils/request'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
+import { ObjectLocalStorage } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
+const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
 export default {
   components: {
     DrawerPanel,
@@ -72,23 +76,68 @@ export default {
   },
   data() {
     return {
+      visible: false,
       active: 'chat',
       robotUrl: require('@/assets/img/robot-assistant.png'),
       height: '400px',
       expanded: false,
-      clientOffset: {}
+      clientOffset: {},
+      currentTerminalContent: {}
     }
   },
+  computed: {
+    ...mapGetters([
+      'publicSettings'
+    ])
+  },
   watch: {
+    'publicSettings.CHAT_AI_METHOD': {
+      handler(newVal) {
+        this.visible = newVal === 'api'
+      }
+    }
   },
   mounted() {
-    this.handlePostMessage()
+    this.handleStartChat()
   },
   methods: {
+    handleStartChat() {
+      if (this.publicSettings.CHAT_AI_METHOD === 'api') {
+        this.visible = true
+        const expanded = aiPannelLocalStorage.get('expanded')
+        this.updateExpandedState(expanded)
+        this.handlePostMessage()
+      } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
+        const embedScriptId = 'chat-ai-embed-id'
+        if (document.getElementById(embedScriptId)) {
+          return
+        }
+        const script = document.createElement('script')
+        script.id = embedScriptId
+        script.src = this.publicSettings.CHAT_AI_EMBED_URL
+        script.async = true
+        script.onload = () => {
+          const loadEvent = new Event('load', { bubbles: false, cancelable: false })
+          window.dispatchEvent(loadEvent)
+        }
+        document.body.appendChild(script)
+      }
+    },
     handlePostMessage() {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {
           this.$refs.drawer.show = true
+          this.initWebSocket()
+          return
+        }
+        const msg = event.data
+        switch (msg.name) {
+          case 'current_terminal_content':
+            // {content: '...', terminalId: '',sessionId: '',viewId: '',viewName: ''}
+            this.$log.debug('current_terminal_content', msg)
+            this.currentTerminalContent = msg.data
+            this.$refs.component?.onTerminalContext(msg.data)
+            break
         }
       })
     },
@@ -96,6 +145,11 @@ export default {
       this.$refs.drawer.handleHeaderMoveDown(event)
     },
     handleMouseMoveUp(event) {
+      // Prevent the new chat button from triggering the header move up
+      const newButton = event.target.closest('.new')
+      if (newButton) {
+        return
+      }
       this.$refs.drawer.handleHeaderMoveUp(event)
     },
     initWebSocket() {
@@ -107,12 +161,20 @@ export default {
       this.$refs.drawer.show = false
     },
     expandFull() {
-      this.height = '100%'
-      this.expanded = true
+      this.updateExpandedState(true)
+      this.save_pannel_settings()
     },
     compress() {
-      this.height = '400px'
-      this.expanded = false
+      this.updateExpandedState(false)
+      this.save_pannel_settings()
+    },
+    save_pannel_settings() {
+      aiPannelLocalStorage.set('expanded', this.expanded)
+      console.log('AI panel settings saved:', this.expanded)
+    },
+    updateExpandedState(expanded) {
+      this.expanded = expanded
+      this.height = expanded ? '100%' : '400px'
     },
     onNewChat() {
       this.active = 'chat'

@@ -1,8 +1,9 @@
 <template>
   <el-popover
     :title="title"
-    placement="left-start"
+    placement="left"
     trigger="click"
+    width="300"
     @show="getAsyncItems"
   >
     <div v-if="!loading" class="detail-content">

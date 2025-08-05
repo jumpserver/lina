@@ -133,6 +133,9 @@ export default {
             label: this.$t('Date'),
             sortable: 'custom',
             formatter: (row) => toSafeLocalDateStr(row.date_created)
+          },
+          actions: {
+            has: this.$route.name !== 'AuditTicketList'
           }
         }
       },
@@ -143,14 +146,6 @@ export default {
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
-          default: {
-            state: {
-              key: 'state',
-              label: this.$t('Action'),
-              value: 'pending',
-              valueLabel: this.$t('Open')
-            }
-          },
           exclude: ['id', 'title', 'type', 'applicant'],
           options: [
             {

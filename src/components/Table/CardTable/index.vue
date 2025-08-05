@@ -212,7 +212,7 @@ export default {
       this.$confirm(msg, this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           const deleteFunc = this.tableConfig.onDelete || this.defaultPerformDelete
           await deleteFunc(obj)
@@ -248,6 +248,10 @@ export default {
     display: flex;
     justify-content: left;
     flex-wrap: wrap;
+
+    .el-card .el-card__body div {
+      height: inherit;
+    }
   }
 
   .el-col, div {
@@ -257,7 +261,7 @@ export default {
       min-width: 330px;
       position: relative;
       margin-bottom: 20px;
-      //height: 230px;
+      height: 180px;
       width: 380px;
       padding: 15px;
 

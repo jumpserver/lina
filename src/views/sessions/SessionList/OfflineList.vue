@@ -25,7 +25,8 @@ export default {
           name: 'replay',
           title: this.$t('Replay'),
           type: 'warning',
-          can: ({ row }) => vm.hasPerms(row, 'view'),
+          // TODO 当前版本 magnus 代理的 mongodb 协议的 session 不支持 replay
+          can: ({ row }) => vm.hasPerms(row, 'view') && !(row.protocol === 'mongodb' && row.terminal.type === 'magnus'),
           callback: function({ row, tableData }) {
             // 跳转到luna页面
             const replayUrl = '/luna/replay/' + row.id
@@ -36,7 +37,7 @@ export default {
           name: 'download',
           title: this.$t('Download'),
           type: 'primary',
-          can: ({ row }) => vm.hasPerms(row, 'download'),
+          can: ({ row }) => vm.hasPerms(row, 'download') && !(row.protocol === 'mongodb' && row.terminal.type === 'magnus'),
           callback: function({ row, tableData }) {
             // 跳转下载页面
             download(`/api/v1/terminal/sessions/${row.id}/replay/download/`)
