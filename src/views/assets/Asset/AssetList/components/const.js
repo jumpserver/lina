@@ -9,10 +9,10 @@ import {
 import HostInfoFormatter from '@/components/Table/TableFormatters/HostInfoFormatter.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export function getDefaultConfig(vm) {
-  const onAction = async(row, action) => {
+  const onAction = async (row, action) => {
     await vm.updateOrCloneAsset(row, action.toLowerCase())
   }
   const extraQuery = vm.$route.params?.extraQuery || {}
@@ -44,13 +44,14 @@ export function getDefaultConfig(vm) {
           const ids = selectedRows.map(v => {
             return v.id
           })
-          vm.$axios.post(
-            '/api/v1/assets/assets/tasks/',
-            { action: 'test', assets: ids }).then(res => {
-            openTaskPage(res['task'])
-          }).catch(err => {
-            vm.$message.error(vm.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
-          })
+          vm.$axios
+            .post('/api/v1/assets/assets/tasks/', { action: 'test', assets: ids })
+            .then(res => {
+              openTaskPage(res['task'])
+            })
+            .catch(err => {
+              vm.$message.error(vm.$tc('common.bulkVerifyErrorMsg' + ' ' + err))
+            })
         }
       },
       {
@@ -62,15 +63,18 @@ export function getDefaultConfig(vm) {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },
         callback: function({ selectedRows }) {
-          const ids = selectedRows.map((v) => {
+          const ids = selectedRows.map(v => {
             return { pk: v.id, is_active: false }
           })
-          vm.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-            vm.$message.success(vm.$tc('UpdateSuccessMsg'))
-            vm.$refs.ListTable.reloadTable()
-          }).catch(err => {
-            vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
-          })
+          vm.$axios
+            .patch(`/api/v1/assets/assets/`, ids)
+            .then(res => {
+              vm.$message.success(vm.$tc('UpdateSuccessMsg'))
+              vm.$refs.ListTable.reloadTable()
+            })
+            .catch(err => {
+              vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
+            })
         }
       },
       {
@@ -82,15 +86,18 @@ export function getDefaultConfig(vm) {
           return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
         },
         callback: function({ selectedRows }) {
-          const ids = selectedRows.map((v) => {
+          const ids = selectedRows.map(v => {
             return { pk: v.id, is_active: true }
           })
-          vm.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-            vm.$message.success(vm.$tc('UpdateSuccessMsg'))
-            vm.$refs.ListTable.reloadTable()
-          }).catch(err => {
-            vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
-          })
+          vm.$axios
+            .patch(`/api/v1/assets/assets/`, ids)
+            .then(res => {
+              vm.$message.success(vm.$tc('UpdateSuccessMsg'))
+              vm.$refs.ListTable.reloadTable()
+            })
+            .catch(err => {
+              vm.$message.error(vm.$tc('UpdateErrorMsg' + ' ' + err))
+            })
         }
       },
       {
@@ -98,9 +105,11 @@ export function getDefaultConfig(vm) {
         title: vm.$t('UpdateSelected'),
         icon: 'batch-update',
         can: ({ selectedRows }) => {
-          return selectedRows.length > 0 &&
+          return (
+            selectedRows.length > 0 &&
             !vm.$store.getters.currentOrgIsRoot &&
             vm.$hasPerm('assets.change_asset')
+          )
         },
         callback: ({ selectedRows }) => {
           vm.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -124,8 +133,12 @@ export function getDefaultConfig(vm) {
     columnsShow: {
       min: ['name', 'address', 'actions'],
       default: vm.defaultColumns || [
-        'name', 'address', 'accounts_amount', 'platform',
-        'connectivity', 'actions'
+        'name',
+        'address',
+        'accounts_amount',
+        'platform',
+        'connectivity',
+        'actions'
       ]
     },
     columnsMeta: {
@@ -220,12 +233,11 @@ export function getDefaultConfig(vm) {
                     vm.gatewayCell = row.id
                   }
                 } else {
-                  vm.$axios.post(
-                    `/api/v1/assets/assets/${row.id}/tasks/`,
-                    { action: 'test' }
-                  ).then(res => {
-                    openTaskPage(res['task'])
-                  })
+                  vm.$axios
+                    .post(`/api/v1/assets/assets/${row.id}/tasks/`, { action: 'test' })
+                    .then(res => {
+                      openTaskPage(res['task'])
+                    })
                 }
               }
             },
@@ -261,4 +273,3 @@ export function getDefaultConfig(vm) {
     defaultHeaderActions
   }
 }
-

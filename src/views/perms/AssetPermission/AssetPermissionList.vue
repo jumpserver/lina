@@ -6,6 +6,7 @@
       :table-config="tableConfig"
       :tree-setting="treeSetting"
       :quick-filters="quickFilter"
+      :create-drawer="createDrawer"
     />
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
@@ -30,6 +31,7 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('./AssetPermissionCreateUpdate.vue'),
       helpMsg: this.$t('AssetPermissionHelpMsg'),
       quickFilter: [
         {

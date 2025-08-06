@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { isDarkness } from '@/utils/color'
+import { isDarkness } from '@/utils/common/color'
 
 export default {
   name: 'Label',

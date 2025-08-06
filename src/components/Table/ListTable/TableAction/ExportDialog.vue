@@ -49,7 +49,7 @@
 import Dialog from '@/components/Dialog/index.vue'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
-import { download } from '@/utils/common'
+import { download } from '@/utils/common/index'
 
 export default {
   name: 'ExportDialog',

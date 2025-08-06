@@ -1,8 +1,12 @@
 import { getProfile as apiGetProfile, logout } from '@/api/users'
 import {
-  getCurrentOrgLocal, getPreOrgLocal, getTokenFromCookie, saveCurrentOrgLocal, setPreOrgLocal
-} from '@/utils/auth'
-import orgUtil from '@/utils/org'
+  getCurrentOrgLocal,
+  getPreOrgLocal,
+  getTokenFromCookie,
+  saveCurrentOrgLocal,
+  setPreOrgLocal
+} from '@/utils/jms/auth'
+import orgUtil from '@/utils/jms/org'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
 import store from '@/store'
@@ -33,7 +37,7 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const mutations = {
-  RESET_STATE: (state) => {
+  RESET_STATE: state => {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
@@ -82,7 +86,7 @@ const mutations = {
     saveCurrentOrgLocal(state.username, org)
   },
   SET_MFA_VERIFY(state) {
-    state.MFAVerifyAt = (new Date()).valueOf()
+    state.MFAVerifyAt = new Date().valueOf()
   },
   ADD_WORKBENCH_ORGS(state, org) {
     state.workbenchOrgs.push(org)
@@ -100,21 +104,23 @@ const actions = {
         resolve(state.profile)
         return
       }
-      apiGetProfile().then(response => {
-        if (!response) {
-          reject('Verification failed, please Login again.')
-        }
-        if (typeof response !== 'object') {
-          // 后端 middleware 对 API 做了校验，这里返回可能是 302 重定向, response 为 string 类型
+      apiGetProfile()
+        .then(response => {
+          if (!response) {
+            reject('Verification failed, please Login again.')
+          }
+          if (typeof response !== 'object') {
+            // 后端 middleware 对 API 做了校验，这里返回可能是 302 重定向, response 为 string 类型
+            resolve(response)
+            return
+          }
+          commit('SET_PROFILE', response)
           resolve(response)
-          return
-        }
-        commit('SET_PROFILE', response)
-        resolve(response)
-      }).catch(error => {
-        // debug(error)
-        reject(error)
-      })
+        })
+        .catch(error => {
+          // debug(error)
+          reject(error)
+        })
     })
   },
   addAdminOrg({ commit, state }, org) {
@@ -129,14 +135,16 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        // removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout(state.token)
+        .then(() => {
+          // removeToken() // must remove  token  first
+          resetRouter()
+          commit('RESET_STATE')
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
   setCurrentOrg({ commit }, data) {

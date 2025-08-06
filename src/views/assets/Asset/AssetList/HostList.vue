@@ -13,7 +13,7 @@
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import GatewayDialog from '@/components/Apps/GatewayTestDialog'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   components: {
@@ -38,7 +38,7 @@ export default {
               icon: 'cloud-provider',
               has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
               callback: () => this.$router.push(
-                { name: 'CloudAccountList', query: { category: 'host' }}
+                { name: 'CloudAccountList', query: { category: 'host' } }
               )
             }
           ]

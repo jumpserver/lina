@@ -15,14 +15,14 @@
 
 <script>
 import TreeTable from '@/components/Table/TreeTable/index.vue'
-import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/time'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common/time'
 import { OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import isFalsey from '@/components/Table/DataTable/compenents/el-data-table/utils/is-falsey'
 import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
-import { download } from '@/utils/common'
+import { download } from '@/utils/common/index'
 
 export default {
   name: 'CommandList',
@@ -112,7 +112,7 @@ export default {
         },
         canExportSelected: true,
         exportOptions: {
-          performExport: async(selectRows, exportOption, q, exportTypeOption) => {
+          performExport: async (selectRows, exportOption, q, exportTypeOption) => {
             let url = this.tableConfig.url
             url = (process.env.VUE_APP_ENV === 'production') ? (`${url}`) : (`${process.env.VUE_APP_BASE_API}${url}`)
             const query = { ...q }

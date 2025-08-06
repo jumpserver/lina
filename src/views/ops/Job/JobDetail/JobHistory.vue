@@ -7,7 +7,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   components: {

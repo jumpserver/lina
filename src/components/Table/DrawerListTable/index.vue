@@ -22,8 +22,9 @@
 <script>
 import ListTable from '../ListTable'
 import Drawer from '@/components/Drawer/index.vue'
-import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common'
+import { setUrlParam, toLowerCaseExcludeAbbr, toSentenceCase } from '@/utils/common/index'
 import { mapGetters } from 'vuex'
+import { resolveRoute } from '@/utils/vue/index'
 
 const drawerType = [String, Function]
 
@@ -166,9 +167,9 @@ export default {
       }
       this.drawerComponent = ''
     },
-    getDetailDrawerTitle({ col, row, cellValue, payload = {}}) {
+    getDetailDrawerTitle({ col, row, cellValue, payload = {} }) {
       this.$log.debug('>>> getDetailDrawerTitle: ', col, row, cellValue, payload)
-      const { detailRoute = {}, formatterArgs = {}} = payload
+      const { detailRoute = {}, formatterArgs = {} } = payload
       const getTitle = formatterArgs.getDrawerTitle
       this.$log.debug('>>> getTitle: ', getTitle)
       if (getTitle && typeof getTitle === 'function') {
@@ -177,7 +178,7 @@ export default {
       if (formatterArgs.title) {
         return formatterArgs.title
       }
-      const resolvedRoute = this.resolveRoute(detailRoute)
+      const resolvedRoute = resolveRoute(detailRoute, this.$router)
       let title = cellValue || row.name
       if (formatterArgs.getTitle) {
         title = formatterArgs.getTitle({ col, row, cellValue })
@@ -235,39 +236,14 @@ export default {
       if (action === 'detail' || action === 'update') {
         route.params = { id: '1' }
       }
-      const routes = this.$router.resolve(route)
-      if (!routes) {
-        return
-      }
-      const matched = routes.resolved.matched.filter(item => item.name === name && item.components)
-      if (matched.length === 0) {
-        return
-      }
-
-      if (matched[0] && matched[0].components?.default) {
-        const component = matched[0].components.default
-        return component
-      }
-    },
-    resolveRoute(route) {
-      const routes = this.$router.resolve(route)
-      if (!routes) {
-        return
-      }
-      const matched = routes.resolved.matched.filter(item => item.name === route.name && item.components)
-      if (matched.length === 0) {
-        return
-      }
-      if (matched[0] && matched[0].components?.default) {
-        return matched[0]
-      }
+      return resolveRoute(route, this.$router)
     },
     getDetailComponent({ detailRoute }) {
       if (!detailRoute) {
         return this.detailDrawer
       }
       this.$log.debug('>>> getDetailComponent: ', detailRoute)
-      const route = this.resolveRoute(detailRoute)
+      const route = resolveRoute(detailRoute, this.$router)
       let component = null
       if (route) {
         component = route.components.default
@@ -279,6 +255,7 @@ export default {
     },
     getDrawerComponent(action, payload) {
       this.$log.debug('>>> getDrawerComponent: ', action, payload)
+      // console.log('>>> createDrawer: ', this.createDrawer)
       switch (action) {
         case 'create':
           return this.createDrawer
@@ -293,7 +270,7 @@ export default {
       }
     },
 
-    async showDrawer(action, { row = {}, col = {}, query = {}, cellValue = '', payload = {}} = {}) {
+    async showDrawer(action, { row = {}, col = {}, query = {}, cellValue = '', payload = {} } = {}) {
       try {
         // 1. 先重置状态
         this.drawerVisible = false
@@ -370,7 +347,7 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'detail', row: row, col: col, id: id
       })
-      await this.showDrawer('detail', { row, col, cellValue, payload: { detailRoute, formatterArgs }})
+      await this.showDrawer('detail', { row, col, cellValue, payload: { detailRoute, formatterArgs } })
     },
     async onCreate(meta) {
       if (!meta) {
@@ -380,14 +357,14 @@ export default {
       await this.$store.dispatch('common/setDrawerActionMeta', { action: 'create', ...meta })
       await this.showDrawer('create', meta)
     },
-    async onClone({ row, col, query = {}}) {
+    async onClone({ row, col, query = {} }) {
       this.$route.params.id = ''
       await this.$store.dispatch('common/setDrawerActionMeta', {
         action: 'clone', row: row, col: col, id: row.id
       })
       await this.showDrawer('clone', { query })
     },
-    async onUpdate({ row, col, query = {}}) {
+    async onUpdate({ row, col, query = {} }) {
       this.$route.params.id = row.id
       this.$route.params.action = 'update'
       await this.$store.dispatch('common/setDrawerActionMeta', {

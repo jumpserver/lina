@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { BASE_URL } from '@/utils/common'
+import { BASE_URL } from '@/utils/common/index'
 
 export default {
   name: 'WebTerminal',

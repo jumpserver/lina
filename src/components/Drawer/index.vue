@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getDrawerWidth } from '@/utils/common'
+import { getDrawerWidth } from '@/utils/common/index'
 
 export default {
   props: {

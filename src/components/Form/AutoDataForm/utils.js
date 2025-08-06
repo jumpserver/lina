@@ -4,7 +4,7 @@ import NestedField from '@/components/Form/AutoDataForm/components/NestedField.v
 import rules from '@/components/Form/DataForm/rules'
 import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
-import { assignIfNot, toSentenceCase } from '@/utils/common'
+import { assignIfNot, toSentenceCase } from '@/utils/common/index'
 import TagInput from '@/components/Form/FormFields/TagInput.vue'
 import i18n from '@/i18n/i18n'
 
@@ -177,7 +177,10 @@ export class FormFieldGenerator {
     const systemLang = document.cookie.django_language
     if (helpTextAsPlaceholder !== undefined) {
       helpTextAsPlaceholder = !!helpTextAsPlaceholder
-    } else if (placeholderType.indexOf(field.type) === -1 && placeholderComponent.indexOf(field.component) === -1) {
+    } else if (
+      placeholderType.indexOf(field.type) === -1 &&
+      placeholderComponent.indexOf(field.component) === -1
+    ) {
       helpTextAsPlaceholder = false
     } else if ((helpTextWordLength <= 5 || helpText.length <= 10) && systemLang === 'en') {
       helpTextAsPlaceholder = true

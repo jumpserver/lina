@@ -12,7 +12,7 @@
 <script>
 import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

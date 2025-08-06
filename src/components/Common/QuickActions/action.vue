@@ -26,7 +26,7 @@
 import Switcher from '@/components/Form/FormFields/Switcher.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import UpdateSelect from '@/components/Form/FormFields/UpdateSelect.vue'
-import { toSentenceCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common/index'
 
 class Action {
   constructor() {

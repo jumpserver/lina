@@ -9,7 +9,7 @@
       class="table"
       style="width: 100%"
     >
-      <el-table-column :label="$tc('Ranking')">
+      <el-table-column :label="$tc('Ranking')" width="100">
         <template #header>
           <el-tooltip :content="$t('Ranking')" placement="top" :open-delay="500">
             <span style="cursor: pointer;">{{ $t('Ranking') }}</span>

@@ -5,7 +5,7 @@
 <script>
 import HomeCard from './HomeCard'
 import { mapGetters } from 'vuex'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {

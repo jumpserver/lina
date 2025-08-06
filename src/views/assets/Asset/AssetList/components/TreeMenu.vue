@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import NodeAssetsUpdateDialog from './NodeAssetsUpdateDialog'
 import Dialog from '@/components/Dialog'
 

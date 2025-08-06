@@ -28,7 +28,7 @@
 
 <script>
 import i18n from '@/i18n/i18n'
-import { copy } from '@/utils/common'
+import { copy } from '@/utils/common/index'
 import Dialog from '@/components/Dialog/index'
 
 export default {

@@ -11,7 +11,7 @@
 
 <script>
 import AutoDataForm from '@/components/Form/AutoDataForm/index.vue'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
 
 export default {

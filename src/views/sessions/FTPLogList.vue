@@ -4,7 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { download } from '@/utils/common'
+import { download } from '@/utils/common/index'
 import store from '@/store'
 
 export default {

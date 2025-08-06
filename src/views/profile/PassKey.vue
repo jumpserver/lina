@@ -23,7 +23,7 @@
 import { GenericListPage } from '@/layout/components'
 import { AutoDataForm, Dialog } from '@/components'
 import passkey from '@/utils/passkey'
-import { getErrorResponseMsg } from '@/utils/common'
+import { getErrorResponseMsg } from '@/utils/common/index'
 
 export default {
   components: {

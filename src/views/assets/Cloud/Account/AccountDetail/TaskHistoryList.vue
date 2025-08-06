@@ -5,7 +5,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'TaskHistoryList',

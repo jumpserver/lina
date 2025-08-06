@@ -3,14 +3,14 @@ import router from './router'
 import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
-import { isSameView } from '@/utils/jms'
-import { toSentenceCase } from '@/utils/common'
+import { isSameView } from '@/utils/jms/index'
+import { toSentenceCase } from '@/utils/common/index'
 
 function beforeRouteChange(to, from, next) {
   localStorage.setItem('activeTab', '')
 }
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   // NProgress.start()
   try {
@@ -42,10 +42,9 @@ function setPageTitle() {
   }
 }
 
-router.afterEach(async(to, from) => {
+router.afterEach(async (to, from) => {
   // finish progress bar
   await setPageTitle()
   await generateViewRoutesIfChange({ to, from })
   // NProgress.done()
 })
-

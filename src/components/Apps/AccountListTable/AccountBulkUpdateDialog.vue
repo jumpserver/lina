@@ -11,7 +11,7 @@
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { accountFieldsMeta } from '@/components/Apps/AccountCreateUpdateForm/const'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'AccountBulkUpdateDialog',

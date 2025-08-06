@@ -5,7 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 import { periodicMeta } from '@/components/const'
 
 export default {

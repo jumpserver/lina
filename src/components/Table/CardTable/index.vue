@@ -212,7 +212,7 @@ export default {
       this.$confirm(msg, this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           const deleteFunc = this.tableConfig.onDelete || this.defaultPerformDelete
           await deleteFunc(obj)

@@ -37,7 +37,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import orgUtil from '@/utils/org'
+import orgUtil from '@/utils/jms/org'
 
 export default {
   props: {

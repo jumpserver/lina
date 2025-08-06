@@ -2,10 +2,10 @@
 import store from '@/store'
 import router, { resetRouter } from '@/router'
 import Vue from 'vue'
-import { message } from '@/utils/message'
-import orgUtil from '@/utils/org'
+import { message } from '@/utils/vue/message'
+import orgUtil from '@/utils/jms/org'
 import orgs from '@/api/orgs'
-import { getPropView, isViewHasOrgs } from '@/utils/jms'
+import { getPropView, isViewHasOrgs } from '@/utils/jms/index'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 const autoEnterOrgs = [
@@ -84,8 +84,10 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
     await orgUtil.change2PropOrg({ to, from, next })
   }
   const globalOrgPath = [
-    '/console/perms/login-acls/', '/console/users/roles/',
-    '/console/perms/connect-method-acls/', '/settings/'
+    '/console/perms/login-acls/',
+    '/console/users/roles/',
+    '/console/perms/connect-method-acls/',
+    '/settings/'
   ]
   if (autoEnterOrgs.indexOf(currentOrg.id) !== -1 && currentOrg.autoEnter) {
     const delta = new Date().getTime() - currentOrg.autoEnter
@@ -111,16 +113,22 @@ export async function generatePageRoutes({ to, from, next }) {
     let accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
 
     // Incorrect route, jump to 404
-    accessRoutes = [...accessRoutes, {
-      path: '*',
-      redirect: '/404',
-      hidden: true
-    }]
+    accessRoutes = [
+      ...accessRoutes,
+      {
+        path: '*',
+        redirect: '/404',
+        hidden: true
+      }
+    ]
     // dynamically add accessible routes
-    Vue.$log.debug('All routes:', accessRoutes.reduce((acc, cur) => {
-      acc[cur.name] = cur
-      return acc
-    }, {}))
+    Vue.$log.debug(
+      'All routes:',
+      accessRoutes.reduce((acc, cur) => {
+        acc[cur.name] = cur
+        return acc
+      }, {})
+    )
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
@@ -225,4 +233,3 @@ export async function startup({ to, from, next }) {
   }
   return true
 }
-

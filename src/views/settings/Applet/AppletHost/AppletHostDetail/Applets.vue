@@ -11,7 +11,7 @@
 
 <script type="text/jsx">
 import { DrawerListTable as ListTable, QuickActions } from '@/components'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 

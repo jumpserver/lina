@@ -52,7 +52,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { accountOtherActions, accountQuickFilters, connectivityMeta, isDirectoryServiceAccount } from './const'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import {
   AccountConnectFormatter,
   ActionsFormatter,
@@ -341,7 +341,7 @@ export default {
             can: () => {
               return vm.$hasPerm('accounts.add_account') && !vm.$store.getters.currentOrgIsRoot
             },
-            callback: async() => {
+            callback: async () => {
               await this.getAssetDetail()
               setTimeout(() => {
                 vm.iAsset = this.asset
@@ -478,7 +478,7 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
-      const { query: { asset }} = this.$route
+      const { query: { asset } } = this.$route
       if (asset) {
         this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
       }

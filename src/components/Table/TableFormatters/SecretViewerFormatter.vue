@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { copy, downloadText } from '@/utils/common'
+import { copy, downloadText } from '@/utils/common/index'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
 
 export default {

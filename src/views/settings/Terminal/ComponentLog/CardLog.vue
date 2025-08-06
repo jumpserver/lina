@@ -17,7 +17,7 @@
 
 </template>
 <script>
-import { openWindow } from '@/utils/common'
+import { openWindow } from '@/utils/common/index'
 
 export default {
   name: 'CardLog',

@@ -171,7 +171,7 @@ export default {
         }
         this.$axios.post(
           '/api/v1/accounts/accounts/username-suggestions/',
-          data, { params: { oid: this.oid }}
+          data, { params: { oid: this.oid } }
         ).then(res => {
           if (!res) res = []
           const data = res

@@ -8,7 +8,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { templateFields, templateFieldsMeta } from './const.js'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'GatewayCreateUpdate',

@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export const gcp = 'gcp'
 export const aliyun = 'aliyun'
@@ -32,10 +32,21 @@ export const lan = 'lan'
 export const smartx = 'smartx'
 
 export const publicHostProviders = [
-  aliyun, qcloud, qcloud_lighthouse, huaweicloud,
-  baiducloud, jdcloud, kingsoftcloud, aws_china,
-  aws_international, azure, azure_international,
-  gcp, ucloud, volcengine, smartx
+  aliyun,
+  qcloud,
+  qcloud_lighthouse,
+  huaweicloud,
+  baiducloud,
+  jdcloud,
+  kingsoftcloud,
+  aws_china,
+  aws_international,
+  azure,
+  azure_international,
+  gcp,
+  ucloud,
+  volcengine,
+  smartx
 ]
 
 export const publicDBProviders = [aliyun]
@@ -151,7 +162,14 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [huaweicloud_private]: {
     name: huaweicloud_private,
     title: i18n.t('HuaweiPrivateCloud'),
-    attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint'],
+    attrs: [
+      'sc_username',
+      'sc_password',
+      'domain_name',
+      'oc_username',
+      'oc_password',
+      'api_endpoint'
+    ],
     image: require('@/assets/img/cloud/huawei.svg')
   },
   [openstack]: {
@@ -213,8 +231,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
 
 export function encryptAttrsField(attrs) {
   const encryptedFields = [
-    'access_key_secret', 'password', 'client_secret',
-    'oc_password', 'sc_password'
+    'access_key_secret',
+    'password',
+    'client_secret',
+    'oc_password',
+    'sc_password'
   ]
   for (const item of encryptedFields) {
     const value = attrs[item]

@@ -45,7 +45,7 @@
 
 <script>
 import SummaryCard from '@/components/Cards/SummaryCard/index.vue'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam } from '@/utils/common/index'
 
 export default {
   name: 'QuickFilter',

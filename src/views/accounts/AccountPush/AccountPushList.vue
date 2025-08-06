@@ -10,7 +10,7 @@
 
 <script>
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
 
 export default {

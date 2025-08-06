@@ -11,7 +11,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { STORAGE_TYPE_META_MAP } from '@/views/sessions/const'
 import { UploadSecret } from '@/components/Form/FormFields'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -22,7 +22,7 @@ export default {
     const storageType = this.$route.query.type || 's3'
     const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType] || {}
     return {
-      successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' }},
+      successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' } },
       url: `/api/v1/terminal/replay-storages/`,
       initial: {
         type: storageType,
