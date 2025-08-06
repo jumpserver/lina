@@ -1,6 +1,8 @@
 <template>
   <GenericListTable
     ref="listTable"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
     :header-actions="headerActions"
     :table-config="tableConfig"
     :resource="$t('DetectTasks')"
@@ -21,6 +23,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/check-account-automations/',
         columns: [
