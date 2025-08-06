@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/common/time'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -72,7 +71,7 @@ export default {
   },
   methods: {
     getIntervalDays(date) {
-      const dateExpired = new Date(toSafeLocalDateStr(date))
+      const dateExpired = new Date(date)
       const dateNow = new Date()
       const intervalTime = dateExpired.getTime() - dateNow.getTime()
       return Math.floor(intervalTime / (24 * 3600 * 1000))
