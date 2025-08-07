@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 FROM jumpserver/lina-base:20250805_081024 AS stage-build
-=======
-FROM jumpserver/lina-base:20250805_081024 AS stage-build
->>>>>>> origin/dev
 
 ARG VERSION
 ENV VERSION=$VERSION
