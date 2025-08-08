@@ -29,7 +29,7 @@ export default {
       customActions: {
         name: 'record',
         title: this.$t('Record'),
-        can: this.$hasPerm('accounts.view_changesecretrecord'),
+        can: this.$hasPerm('accounts.view_pushsecretrecord'),
         callback: function({ row }) {
           return this.$router.push({
             name: 'AccountPush',

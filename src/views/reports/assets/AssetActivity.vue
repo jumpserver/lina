@@ -11,7 +11,7 @@
         <br>
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('RealTimeData') }}</div>
+            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -105,8 +105,8 @@ export default {
       days: localStorage.getItem('reportDays') || '7',
       session_stats: {
         'total': 0,
-        'asset_total': 0,
-        'user_total': 0
+        'asset_count': 0,
+        'user_count': 0
       },
       pie: {
         'asset_login_by_type': [{ 'name': this.$t('Nothing'), 'value': 0 }],
@@ -131,13 +131,13 @@ export default {
         {
           title: this.$t('Asset'),
           body: {
-            count: this.session_stats.asset_total
+            count: this.session_stats.asset_count
           }
         },
         {
           title: this.$t('User'),
           body: {
-            count: this.session_stats.user_total
+            count: this.session_stats.user_count
           }
         }
       ]

@@ -21,7 +21,7 @@ export default [
         name: 'AccountSessionList',
         meta: {
           title: i18n.t('AccountSessions'),
-          permissions: []
+          permissions: ['accounts.view_accountsession']
         }
       }
     ]
@@ -30,9 +30,6 @@ export default [
     path: 'activity',
     name: 'AccountActivity',
     component: empty,
-    redirect: {
-      name: 'AccountPushList'
-    },
     meta: {
       app: 'accounts',
       name: 'BaseAccountActivity',
@@ -46,7 +43,7 @@ export default [
         name: 'AccountActivityList',
         meta: {
           title: i18n.t('AccountActivities'),
-          permissions: ['audits.view_operatelog']
+          permissions: ['accounts.view_accountactivity', 'audits.view_operatelog']
         }
       }
     ]
