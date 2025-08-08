@@ -114,7 +114,7 @@ export default {
                   type: 'primary',
                   name: 'execute',
                   can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountautomation')
+                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution')
                   },
                   callback: function({ row }) {
                     this.$axios.post(

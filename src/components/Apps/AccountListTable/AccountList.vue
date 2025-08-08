@@ -362,7 +362,7 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                 ['clickhouse', 'redis', 'website', 'chatgpt'].indexOf(selectedRows[0].asset.type.value) === -1 &&
-                !this.$store.getters.currentOrgIsRoot
+                !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('accounts.verify_account')
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map(v => {

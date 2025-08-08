@@ -31,13 +31,13 @@ export default {
           {
             title: this.$t('ExecutionHistory'),
             name: 'AccountCheckExecution',
-            hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
+            hidden: !this.$hasPerm('accounts.view_checkaccountexecution'),
             component: () => import('./AccountCheckExecutionList.vue')
           },
           {
             title: this.$t('DetectEngines'),
             name: 'AccountCheckEngine',
-            hidden: !this.$hasPerm('accounts.view_checkaccountautomation'),
+            hidden: !this.$hasPerm('accounts.view_checkaccountengine'),
             component: () => import('@/views/accounts/RiskDetect/AccountCheckEngine.vue')
           }
         ]

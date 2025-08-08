@@ -119,10 +119,10 @@ export function getPermedViews() {
   const viewShowMapper = [
     ['console', store.getters.consoleOrgs.length > 0],
     ['audit', store.getters.auditOrgs.length > 0],
+    ['pam', store.getters.pamOrgs.length > 0],
     ['workbench', true],
     ['tickets', hasPermission('tickets.view_ticket')],
-    ['settings', hasPermission('settings.view_setting')],
-    ['pam', store.getters.consoleOrgs.length > 0]
+    ['settings', hasPermission('settings.view_setting')]
   ]
   return viewShowMapper.filter(i => i[1]).map(i => i[0])
 }

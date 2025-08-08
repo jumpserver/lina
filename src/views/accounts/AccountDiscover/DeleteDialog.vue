@@ -113,23 +113,8 @@ export default {
     }
   },
   mounted() {
-    if (this.account.id) {
-      this.getAssetAccount()
-    }
   },
   methods: {
-    getAssetAccount() {
-      const url = '/api/v1/accounts/accounts/'
-      this.$axios.get(url, {
-        params: {
-          username: this.account.username,
-          asset: this.account.asset.id,
-          fields_size: 'mini'
-        }
-      }).then(res => {
-        this.assetAccounts = res
-      })
-    },
     handleConfirm() {
       const url = `/api/v1/accounts/gathered-accounts/${this.account.id}/`
       this.$axios.delete(url, {

@@ -210,7 +210,7 @@ export const accountOtherActions = vm => {
       type: 'primary',
       can: ({ row }) => {
         return (
-          vm.$hasPerm('accounts.add_account') &&
+          vm.$hasPerm('accounts.delete_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
         )
