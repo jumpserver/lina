@@ -1,6 +1,11 @@
 <template>
   <div>
-    <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="listTable"
+      :create-drawer="createDrawer"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </div>
 </template>
 
@@ -16,6 +21,7 @@ export default {
   },
   data() {
     return {
+      createDrawer: () => import('@/views/acls/CommandFilterACL/CommandFilterAcl/CommandFilterAclCreateUpdate.vue'),
       helpMsg: this.$t('CommandFilterACLHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/command-filter-acls/',
