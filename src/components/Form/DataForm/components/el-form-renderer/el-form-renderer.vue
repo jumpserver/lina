@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="elForm" :model="value" class="el-form-renderer" v-bind="$attrs">
+  <el-form ref="elForm" :model="value" class="el-form-renderer" v-bind="$attrs" @submit.native.prevent>
     <template v-for="item in innerContent">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
