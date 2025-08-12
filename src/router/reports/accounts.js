@@ -9,7 +9,7 @@ export default [
       permissions: [],
       expanded: true,
       icon: 'user-o',
-      title: i18n.t('AccountStatistics')
+      title: i18n.t('AccountStatisticsReport')
     }
   },
   {
@@ -20,7 +20,7 @@ export default [
       permissions: [],
       expanded: true,
       icon: 'user-o',
-      title: i18n.t('AccountAutomation')
+      title: i18n.t('AccountAutomationReport')
     }
   }
 ]

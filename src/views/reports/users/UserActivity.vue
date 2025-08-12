@@ -8,27 +8,12 @@
     >
       <div class="charts-grid">
 
-        <div class="chart-container">
+        <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserOverview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
-            <SummaryCountCard
-              :items="otherData"
-            />
-          </div>
-        </div>
-
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
-            <div class="chart">
-              <echarts
-                :options="LoginSourceOptions"
-                :autoresize="true"
-              />
-            </div>
           </div>
         </div>
 
@@ -48,11 +33,10 @@
 
         <div class="chart-container">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('LoginCtyDistribution') }}</div>
+            <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
             <div class="chart">
               <echarts
-                ref="userActivity"
-                :options="userActivityOptions"
+                :options="LoginSourceOptions"
                 :autoresize="true"
               />
             </div>
@@ -136,7 +120,6 @@ export default {
           dates_metrics_date: [],
           dates_metrics_total: {}
         },
-        user_login_region_distribution: [{ 'name': this.$t('Nothing'), 'value': 0 }],
         user_login_time_metrics: {}
       }
     }
@@ -161,11 +144,7 @@ export default {
           body: {
             count: this.user_stats.first_login
           }
-        }
-      ]
-    },
-    otherData() {
-      return [
+        },
         {
           title: this.$t('Valid'),
           body: {
@@ -383,24 +362,6 @@ export default {
         }))
       }
     },
-    userActivityOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          show: false
-        },
-        series: [
-          {
-            name: '登录城市分布',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            data: this.config.user_login_region_distribution
-          }
-        ]
-      }
-    },
     VisitTimeOptions() {
       const max = Math.max(...Object.values(this.config.user_login_time_metrics))
       return {
@@ -464,11 +425,6 @@ export default {
       const userBySource = data.user_by_source
       if (userBySource.length !== 0) {
         this.$set(this.pie, 'user_by_source', userBySource)
-      }
-
-      const userLoginRegionDistribution = data.user_login_region_distribution
-      if (userLoginRegionDistribution.length !== 0) {
-        this.$set(this.config, 'user_login_region_distribution', userLoginRegionDistribution)
       }
     }
   }

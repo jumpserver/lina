@@ -6,7 +6,7 @@
         @command="handleDropdown"
         @visible-change="handleVisibleChange"
       >
-        <el-button class="confirm action" size="mini">
+        <el-button class="confirm action" size="mini" :disabled="!this.$hasPerm('accounts.change_accountrisk')">
           <i class="fa fa-check" />
         </el-button>
         <el-dropdown-menu slot="dropdown">
@@ -24,6 +24,7 @@
         <el-button
           class="ignore action"
           size="mini"
+          :disabled="!this.$hasPerm('accounts.change_accountrisk')"
           @click="handleDropdown('ignore')"
         >
           <svg-icon icon-class="ignore" />

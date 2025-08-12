@@ -6,8 +6,9 @@
           <h5>报表类型</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
             <li v-for="chart in charts" :key="chart.name">
-              <a @click="handleChangeChart(chart)">
-                <i :class="chart.icon" /> {{ chart.title }}
+              <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
+                <i :class="chart.icon" style="margin-right: 6px;" />
+                {{ chart.title }}
               </a>
             </li>
           </ul>
@@ -39,12 +40,12 @@ export default {
         {
           title: '用户登录报表',
           name: 'UserReport',
-          icon: 'fa fa-user-o'
+          icon: 'fa fa-sign-in'
         },
         {
           title: '密码更改报表',
           name: 'ChangePassword',
-          icon: 'fa fa-envelope-o'
+          icon: 'fa fa-key'
         }
       ]
     }

@@ -39,7 +39,8 @@ export default {
           title: this.$t('ManualExecution'),
           attrs: {
             type: 'primary',
-            label: this.$t('Execute')
+            label: this.$t('Execute'),
+            disabled: !this.$hasPerm('accounts.add_backupaccountexecution')
           },
           callbacks: {
             click: function() {

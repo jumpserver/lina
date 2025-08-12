@@ -106,7 +106,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('AccountCheckCreate'),
-          permissions: ['accounts.add_accountrisk']
+          permissions: ['accounts.add_checkaccountautomation']
         }
       },
       {
@@ -116,7 +116,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('AccountCheckUpdate'),
-          permissions: ['accounts.change_accountrisk']
+          permissions: ['accounts.change_checkaccountautomation']
         }
       },
       {
@@ -125,7 +125,7 @@ export default [
         name: 'AccountCheckDetail',
         meta: {
           title: i18n.t('RiskDetectionDetail'),
-          permissions: ['accounts.delete_accountrisk']
+          permissions: ['accounts.view_checkaccountautomation']
         },
         hidden: true
       },

@@ -87,6 +87,7 @@ export default {
           'authentication.expire_connectiontoken', 'authentication.reuse_connectiontoken'
         ],
         'view_setting': ['settings.view_setting'],
+        'accounts.view_accountsession': ['terminal.view_session'],
         'cloud_import': ['assets.view_asset', 'assets.view_platform'],
         'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole', 'users.view_user'],
