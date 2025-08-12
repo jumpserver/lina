@@ -25,7 +25,7 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'AccountCheckDetail',
-            hidden: () => !this.$hasPerm('accounts.view_accountrisk')
+            hidden: () => !this.$hasPerm('accounts.view_checkaccountautomation')
           }
         ]
       }

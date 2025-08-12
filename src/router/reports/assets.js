@@ -9,7 +9,7 @@ export default [
       permissions: [],
       icon: 'user-o',
       expanded: true,
-      title: i18n.t('AssetReport')
+      title: i18n.t('AssetActivityReport')
     }
   },
   {
@@ -20,7 +20,7 @@ export default [
       permissions: [],
       expanded: true,
       icon: 'user-o',
-      title: i18n.t('AssetStatistics')
+      title: i18n.t('AssetStatisticsReport')
     }
   }
 ]

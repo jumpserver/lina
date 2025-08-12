@@ -75,7 +75,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasSearch: false
+        hasSearch: false,
+        hasImport: false
       }
     }
   }

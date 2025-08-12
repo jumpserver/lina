@@ -9,7 +9,7 @@ export default [
       permissions: [],
       icon: 'user-o',
       expanded: true,
-      title: i18n.t('ReportsUsers2')
+      title: i18n.t('UserLoginReport')
     }
   },
   {
@@ -20,7 +20,7 @@ export default [
       permissions: [],
       expanded: true,
       icon: 'user-o',
-      title: i18n.t('ChangePassword')
+      title: i18n.t('UserChangePasswordReport')
     }
   }
 ]

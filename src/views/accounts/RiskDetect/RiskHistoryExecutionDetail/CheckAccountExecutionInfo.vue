@@ -8,7 +8,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 
 export default {
-  name: 'AccountPushExecutionInfo',
+  name: 'CheckAccountExecutionInfo',
   components: {
     AutoDetailCard
   },
@@ -20,26 +20,14 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/accounts/push-account-executions/${this.object.id}`,
+      url: `/api/v1/accounts/check-account-executions/${this.object.id}`,
       detailFields: [
         'id',
         {
           key: this.$t('DisplayName'),
           value: this.object.snapshot.name
         },
-        {
-          key: this.$t('AssetsOfNumber'),
-          value: this.object.snapshot.asset_amount
-        },
-        {
-          key: this.$t('NodeOfNumber'),
-          value: this.object.snapshot.node_amount
-        },
-        'trigger_display', 'date_start', 'date_finished',
-        {
-          key: this.$t('Comment'),
-          value: this.object.snapshot.common
-        }
+        'date_start', 'date_finished', 'duration', 'status'
       ]
     }
   },

@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('ChangePasswordReport'),
+      title: this.$t('UserChangePasswordReport'),
       name: 'ChangePassword',
       days: localStorage.getItem('reportDays') || '7',
       total_count_change_password: {
@@ -101,7 +101,7 @@ export default {
             },
             {
               prop: 'count',
-              label: this.$t('Count')
+              label: this.$t('Total')
             }
           ]
         },
@@ -114,7 +114,7 @@ export default {
             },
             {
               prop: 'count',
-              label: this.$t('Count')
+              label: this.$t('Total')
             }
           ]
         },

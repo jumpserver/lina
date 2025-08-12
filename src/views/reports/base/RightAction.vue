@@ -17,9 +17,6 @@
       <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
         Print
       </el-button>
-      <el-button class="export-btn" type="text" icon="el-icon-setting" @click="openSettings">
-        Settings
-      </el-button>
     </el-button-group>
   </div>
 </template>
