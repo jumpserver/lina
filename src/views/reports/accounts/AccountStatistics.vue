@@ -114,7 +114,7 @@ export default {
             },
             {
               prop: 'account_count',
-              label: this.$t('AccountNumber')
+              label: this.$t('AccountTotal')
             }
           ]
         },
