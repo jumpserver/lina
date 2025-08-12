@@ -123,19 +123,19 @@ export default {
         {
           name: 'delete_remote',
           label: this.$t('DeleteRemoteAccount'),
-          has: this.row.remote_present,
+          has: this.row.remote_present && this.$hasPerm('accounts.remove_account'),
           disabled: this.$store.getters.currentOrgIsRoot
         },
         {
           name: 'add_account',
           label: this.$t('AddAccount'),
-          has: !this.row.present,
+          has: !this.row.present && this.$hasPerm('accounts.add_account'),
           disabled: this.$store.getters.currentOrgIsRoot
         },
         {
           name: 'change_password_add',
           label: this.$t('AddAccountAfterChangingPassword'),
-          has: !this.row.present,
+          has: !this.row.present && this.$hasPerm('accounts.add_pushaccountexecution'),
           disabled: this.$store.getters.currentOrgIsRoot
         }
       ]
