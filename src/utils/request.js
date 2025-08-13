@@ -1,6 +1,6 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
-import { eventBus } from '@/utils/const'
+import { eventBus } from '@/utils/vue/eventbus'
 import { getTokenFromCookie } from '@/utils/jms/auth'
 import { getErrorResponseMsg } from '@/utils/common'
 import { MessageBox } from 'elementui-lts'
@@ -126,6 +126,7 @@ function ifConfirmRequired({ response, error }) {
     const callback = () => resolve()
     const cancel = () => reject()
 
+    console.log('emit')
     eventBus.$emit('showConfirmDialog', { response, callback, cancel })
   })
 }
