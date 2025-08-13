@@ -380,6 +380,8 @@ export default {
       const converted = this.conversionData(rawData)
       if (converted.length > 0) {
         this.$set(this.pie, key, converted)
+      } else {
+        this.$set(this.pie, key, [{ name: this.$t('Nothing'), value: 0 }])
       }
     },
     async getData() {

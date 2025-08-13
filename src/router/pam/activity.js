@@ -34,7 +34,8 @@ export default [
       app: 'accounts',
       name: 'BaseAccountActivity',
       icon: 'activity',
-      resource: 'operate-logs'
+      resource: 'operate-logs',
+      permissions: []
     },
     children: [
       {
