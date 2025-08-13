@@ -18,19 +18,7 @@
           </div>
         </div>
 
-        <div class="chart-container">
-          <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('OperatorGeographicDistribution') }}</div>
-            <div class="chart">
-              <echarts
-                :options="OperatorGeographicOptions"
-                :autoresize="true"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-container">
+        <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
             <div class="chart">
@@ -121,8 +109,7 @@ export default {
         user_change_password_metrics: {
           dates_metrics_date: [],
           dates_metrics_total: [0]
-        },
-        change_password_region_distribution: [{ 'name': this.$t('Nothing'), 'value': 0 }]
+        }
       }
     }
   },
@@ -262,42 +249,6 @@ export default {
           }
         ]
       }
-    },
-
-    OperatorGeographicOptions() {
-      return {
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          top: '5%',
-          left: 'center'
-        },
-        series: [
-          {
-            name: '修改者城市分布',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            itemStyle: {
-              borderRadius: 10,
-              borderColor: '#fff',
-              borderWidth: 2
-            },
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: 40,
-                fontWeight: 'bold'
-              }
-            },
-            data: this.config.change_password_region_distribution
-          }
-        ]
-      }
     }
   },
   watch: {
@@ -322,11 +273,6 @@ export default {
       this.$set(this.config.change_password_top10_change_bys, 'data', data.change_password_top10_change_bys)
       this.$set(this.config.user_change_password_metrics, 'dates_metrics_date', data.user_change_password_metrics.dates_metrics_date)
       this.$set(this.config.user_change_password_metrics, 'dates_metrics_total', data.user_change_password_metrics.dates_metrics_total)
-
-      const changePasswordRegionDistribution = data.change_password_region_distribution
-      if (changePasswordRegionDistribution.length !== 0) {
-        this.$set(this.config, 'change_password_region_distribution', changePasswordRegionDistribution)
-      }
     }
   }
 }

@@ -150,7 +150,8 @@ export default {
         yAxis: {
           type: 'value'
         },
-        series: this.assets_by_type_category.series
+        series: this.assets_by_type_category.series,
+        barCategoryGap: '70%'
       }
     },
     AddedAssetOptions() {

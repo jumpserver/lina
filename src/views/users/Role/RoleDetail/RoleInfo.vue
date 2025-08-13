@@ -118,6 +118,7 @@ export default {
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
         'accounts.view_gatheredaccount': ['assets.view_asset', 'assets.view_node'],
+        'accounts.view_accounttemplate': ['assets.view_account'],
         'accounts.view_account': ['assets.view_node'],
         'accounts.view_accountsecret': ['accounts.view_account'],
         'accounts.view_historyaccount': ['accounts.view_account', 'accounts.view_accountsecret'],

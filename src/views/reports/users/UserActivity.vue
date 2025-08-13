@@ -183,10 +183,6 @@ export default {
               borderColor: '#fff',
               borderWidth: 2
             },
-            label: {
-              show: false,
-              position: 'center'
-            },
             emphasis: {
               label: {
                 show: true,
@@ -278,7 +274,7 @@ export default {
         animationDuration: 500,
         series: [
           {
-            name: '成功',
+            name: this.$t('Success'),
             type: 'line',
             smooth: true,
             areaStyle: {
@@ -307,7 +303,7 @@ export default {
             data: this.config.user_login_log_metrics.dates_metrics_success_total
           },
           {
-            name: '失败',
+            name: this.$t('Failed'),
             type: 'line',
             smooth: true,
             areaStyle: {
@@ -354,6 +350,7 @@ export default {
           type: 'value',
           name: ''
         },
+        barCategoryGap: '70%',
         series: Object.keys(this.config.user_login_method_metrics.dates_metrics_total).map(name => ({
           name,
           stack: 'name',
@@ -425,6 +422,8 @@ export default {
       const userBySource = data.user_by_source
       if (userBySource.length !== 0) {
         this.$set(this.pie, 'user_by_source', userBySource)
+      } else {
+        this.$set(this.pie, 'user_by_source', [{ 'name': this.$t('Nothing'), 'value': 0 }])
       }
     }
   }
