@@ -167,7 +167,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: 40,
+                fontSize: 20,
                 fontWeight: 'bold'
               }
             }
@@ -200,7 +200,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: 40,
+                fontSize: 20,
                 fontWeight: 'bold'
               }
             },
@@ -234,7 +234,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: 40,
+                fontSize: 20,
                 fontWeight: 'bold'
               }
             },

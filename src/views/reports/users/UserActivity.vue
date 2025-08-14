@@ -10,7 +10,7 @@
 
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('UserOverview') }}</div>
+            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -183,10 +183,14 @@ export default {
               borderColor: '#fff',
               borderWidth: 2
             },
+            label: {
+              show: false,
+              position: 'center'
+            },
             emphasis: {
               label: {
                 show: true,
-                fontSize: 40,
+                fontSize: 20,
                 fontWeight: 'bold'
               }
             },

@@ -11,7 +11,7 @@
         <br>
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('ChangePasswordOverview') }}</div>
+            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
@@ -205,7 +205,6 @@ export default {
             axisTick: {
               show: false
             },
-            // 坐标轴线样式
             splitLine: {
               show: true,
               lineStyle: {
