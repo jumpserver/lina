@@ -153,6 +153,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             data: this.pie.asset_login_by_from,
             itemStyle: {
@@ -187,6 +188,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             itemStyle: {
               borderRadius: 10,
@@ -221,6 +223,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             itemStyle: {
               borderRadius: 10,

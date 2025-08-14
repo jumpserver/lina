@@ -71,18 +71,6 @@ export default {
       children: JobRoutes
     },
     {
-      path: '/audit/reports',
-      component: empty,
-      redirect: '',
-      name: 'AuditsReports',
-      meta: {
-        title: i18n.t('Reports'),
-        icon: 'report',
-        permissions: []
-      },
-      children: ReportsRoutes
-    },
-    {
       path: '/audit/tickets',
       component: empty,
       redirect: '',
@@ -93,6 +81,18 @@ export default {
         permissions: ['tickets.view_ticket']
       },
       children: TicketRoutes
+    },
+    {
+      path: '/audit/reports',
+      component: empty,
+      redirect: '',
+      name: 'AuditsReports',
+      meta: {
+        title: i18n.t('Report'),
+        icon: 'report',
+        permissions: []
+      },
+      children: ReportsRoutes
     }
   ]
 }
