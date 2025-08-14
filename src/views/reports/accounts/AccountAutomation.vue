@@ -9,7 +9,7 @@
       <div class="charts-grid">
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">{{ $t('AccountAutomationOverview') }}</div>
+            <div class="chart-container-title-text">{{ $t('Overview') }}</div>
             <SummaryCountCard
               :items="totalData"
             />
