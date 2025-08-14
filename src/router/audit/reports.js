@@ -13,7 +13,7 @@ export default [
     },
     children: [
       {
-        path: 'activity',
+        path: '',
         name: 'UserActivityIndex',
         component: () => import('@/views/reports/users/index.vue'),
         meta: {
@@ -34,7 +34,7 @@ export default [
     },
     children: [
       {
-        path: 'activity',
+        path: '',
         props: () => ({ nav: false }),
         name: 'AssetActivityIndex',
         component: () => import('@/views/reports/assets/index.vue'),
@@ -56,7 +56,7 @@ export default [
     },
     children: [
       {
-        path: 'activity',
+        path: '',
         props: () => ({ nav: false }),
         name: 'AccountActivityIndex',
         component: () => import('@/views/reports/accounts/index.vue'),
