@@ -63,6 +63,7 @@ export default {
           {
             name: this.$t('TaskSummary'),
             type: 'pie',
+            minAngle: 5,
             top: '10%',
             radius: ['45%', '60%'],
             label: {

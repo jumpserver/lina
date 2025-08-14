@@ -187,6 +187,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             itemStyle: {
               borderRadius: 10,
@@ -221,6 +222,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             itemStyle: {
               borderRadius: 10,

@@ -88,6 +88,7 @@ export default {
           {
             name: title,
             type: 'pie',
+            minAngle: 5,
             radius: ['72%', '90%'],
             avoidLabelOverlap: false,
             itemStyle: {

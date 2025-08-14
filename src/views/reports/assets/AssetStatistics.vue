@@ -307,7 +307,7 @@ export default {
         return {
           name: typeLabelMap.get(type),
           type: 'bar',
-          stack: '总量',
+          stack: this.$t('Total'),
           data
         }
       })

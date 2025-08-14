@@ -20,7 +20,7 @@
         <SwitchDate class="switch-date" @change="onChange" />
         <div class="chart-container full-width">
           <div class="chart-container-title">
-            <div class="chart-container-title-text">用户登录趋势</div>
+            <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
             <div class="chart">
               <echarts
                 ref="loginTrend"
@@ -177,6 +177,7 @@ export default {
         series: [
           {
             type: 'pie',
+            minAngle: 5,
             radius: ['40%', '70%'],
             itemStyle: {
               borderRadius: 10,
