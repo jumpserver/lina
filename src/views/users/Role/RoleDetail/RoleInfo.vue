@@ -170,6 +170,7 @@ export default {
         'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
         'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
       },
+      // eslint-disable-next-line spellcheck/spell-checker
       url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
       detailFields: [
         'display_name', 'scope_display', 'builtin', 'created_by',
@@ -186,6 +187,7 @@ export default {
     }
   },
   mounted() {
+    // eslint-disable-next-line spellcheck/spell-checker
     this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
   },
   activated() {
@@ -196,6 +198,7 @@ export default {
   },
   methods: {
     setUpdateBtn() {
+      // eslint-disable-next-line spellcheck/spell-checker
       const permRequired = `rbac.change_${this.object.scope.value}role`
       if (this.$hasPerm(permRequired)) {
         this.isDisabled = false
@@ -291,6 +294,7 @@ export default {
       const checkedNodes = ztree.getCheckedNodes()
       const permNodes = checkedNodes.filter(node => !node.isParent)
       const permIds = permNodes.map(node => node.id)
+      // eslint-disable-next-line spellcheck/spell-checker
       const roleDetailUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/`
       const data = {
         permissions: permIds

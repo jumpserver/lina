@@ -146,6 +146,8 @@ export default {
       }
     },
     handleUrlChange(url) {
+      // 等值保护：URL 未变化则不触发重渲染，避免重复 OPTIONS
+      if (this.iTableConfig?.url === url) return
       this.$set(this.iTableConfig, 'url', url)
       this.$emit('urlChange', url)
       this.forceRerender()

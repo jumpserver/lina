@@ -52,6 +52,8 @@ export default {
       autoConfig: {},
       cleanedColumnsShow: {},
       totalColumns: [],
+      // 用于去重同一 URL 的列元数据请求，避免短时间内重复发起 OPTIONS
+      lastMetaUrl: '',
       popoverColumns: {
         totalColumnsList: [],
         minCols: [],
@@ -68,13 +70,23 @@ export default {
     config: {
       immediate: false,
       handler: _.debounce(function(iNew, iOld) {
-        if (this.isDeactivated || !this.inited) {
+        // 组件处于 deactivated 状态时不处理
+        if (this.isDeactivated) return
+
+        const newUrl = iNew?.url || ''
+        const oldUrl = iOld?.url || ''
+
+        // 允许在 未初始化且 URL 从空 -> 非空 时执行一次初始化
+        // 组件初次创建若 URL 为空不会初始化，后续仅变更 config 会被 inited 短路
+        if (!this.inited && !oldUrl && newUrl) {
+          this.optionUrlMetaAndGenCols()
           return
         }
+
+        // 未初始化且非 空->非空 场景：保持静默，避免误触发
+        if (!this.inited) return
         const changed = this.isConfigChanged(iNew, iOld)
-        if (!changed) {
-          return
-        }
+        if (!changed) return
 
         this.optionUrlMetaAndGenCols()
         this.$log.debug('AutoDataTable Config change found')
@@ -187,18 +199,23 @@ export default {
       this.iConfig = _.cloneDeep(this.config)
     },
     async optionUrlMetaAndGenCols() {
-      if (this.config.url === '') {
-        return
-      }
+      // URL 为空直接跳过，等待上层设置好 URL
+      if (this.config.url === '') return
       const url = (this.config.url.indexOf('?') === -1)
         ? `${this.config.url}?display=1`
         : `${this.config.url}&display=1`
+
+      // 去重：同一 URL 的元数据已获取过，则不再重复请求，减少重复 OPTIONS
+      if (this.lastMetaUrl === url) {
+        return
+      }
 
       /**
        * 原有代码无法正确的同步 storage 的原因是 currentOrder 总是在 totalColumns 之前进行的
        * 这导致在首次加载时，currentOrder总是为空数组，因为此时cleanedColumnsShow.show还未初始化
        */
       try {
+        this.lastMetaUrl = url
         const data = await this.$store.dispatch('common/getUrlMeta', { url: url })
         const method = this.method.toUpperCase()
         this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
