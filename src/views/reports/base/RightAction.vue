@@ -9,13 +9,15 @@
         icon="el-icon-printer"
         @click="exportPdf"
       >
-        Export as PDF
+        {{ $t('ExportAsPDF') }}
+
       </el-button>
       <el-button class="export-btn" type="text" icon="el-icon-message" @click="emailReport">
-        E-Mail this Report
+
+        {{ $t('EMailReport') }}
       </el-button>
       <el-button class="export-btn" type="text" icon="el-icon-printer" @click="printReport">
-        Print
+        {{ $t('Print') }}
       </el-button>
     </el-button-group>
   </div>
@@ -38,24 +40,34 @@ export default {
     }
   },
   methods: {
-    exportPdf() {
+    checkName() {
       if (!this.name) {
         this.$message.error('Please select a chart')
+        return false
+      }
+      return true
+    },
+    exportPdf() {
+      if (!this.checkName()) {
         return
       }
 
       const exportUrl = `/core/reports/export-pdf/?chart=${this.name}`
       download(exportUrl)
-      this.$message.success('Exporting...')
+      this.$message.success(this.$t('Export') + '...')
     },
     emailReport() {
-      console.log('emailReport')
+      if (!this.checkName()) {
+        return
+      }
+      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}`,).then((data) => {
+        this.$message.success(this.$t('EMailReport') + '...')
+      }).catch(error => {
+        this.$message.error(this.$t('Failed') + ': ' + error.message)
+      })
     },
     printReport() {
       window.print()
-    },
-    openSettings() {
-      console.log('openSettings')
     }
   }
 }
@@ -92,12 +104,14 @@ export default {
   .export-btn .el-icon-message {
     margin-right: 4px;
   }
+
   .el-button-group {
     background: transparent;
     box-shadow: none;
   }
+
   .export-btn:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
   }
 }
