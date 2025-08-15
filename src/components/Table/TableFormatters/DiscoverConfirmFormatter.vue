@@ -12,8 +12,12 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button class="ignore action" size="mini">
-          <svg-icon icon-class="ignore" @click="handleRisk('ignore')" />
+        <el-button :disabled="!this.$hasPerm('accounts.change_gatheredaccount')" class="ignore action" size="mini">
+          <svg-icon
+            icon-class="ignore"
+            :style="!this.$hasPerm('accounts.change_gatheredaccount') ? 'pointer-events: none;' : ''"
+            @click="handleRisk('ignore')"
+          />
         </el-button>
       </el-tooltip>
     </span>
@@ -123,20 +127,20 @@ export default {
         {
           name: 'delete_remote',
           label: this.$t('DeleteRemoteAccount'),
-          has: this.row.remote_present && this.$hasPerm('accounts.remove_account'),
-          disabled: this.$store.getters.currentOrgIsRoot
+          has: this.row.remote_present,
+          disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('accounts.remove_account')
         },
         {
           name: 'add_account',
           label: this.$t('AddAccount'),
-          has: !this.row.present && this.$hasPerm('accounts.add_account'),
-          disabled: this.$store.getters.currentOrgIsRoot
+          has: !this.row.present,
+          disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('accounts.add_account')
         },
         {
           name: 'change_password_add',
           label: this.$t('AddAccountAfterChangingPassword'),
-          has: !this.row.present && this.$hasPerm('accounts.add_pushaccountexecution'),
-          disabled: this.$store.getters.currentOrgIsRoot
+          has: !this.row.present,
+          disabled: this.$store.getters.currentOrgIsRoot || !this.$hasPerm('accounts.add_pushaccountexecution')
         }
       ]
       return actions.filter(action => {

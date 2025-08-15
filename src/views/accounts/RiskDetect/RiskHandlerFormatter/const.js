@@ -39,19 +39,25 @@ export const riskActions = [
   {
     name: 'delete_remote',
     label: i18n.t('SyncDeleteSelected'),
-    has: ['long_time_no_login', 'new_found']
+    has: ['long_time_no_login', 'new_found'],
+    disabled: async function() {
+      return !this.$hasPerm('accounts.remove_account')
+    }
   },
   {
     name: 'delete_both',
     label: i18n.t('DeleteBoth'),
-    has: ['long_time_no_login']
+    has: ['long_time_no_login'],
+    disabled: async function() {
+      return !this.$hasPerm('accounts.remove_account') || !this.$hasPerm('accounts.delete_account')
+    }
   },
   {
     name: 'add_account',
     label: i18n.t('AddAccount'),
     has: ['new_found'],
     disabled: async function() {
-      return await checkAccountsExist.call(this)
+      return !this.$hasPerm('accounts.add_account')
     }
   },
   {
@@ -60,6 +66,9 @@ export const riskActions = [
     has: async function() {
       const risks = ['new_found', 'long_time_password', 'password_expired']
       return risks.includes(this.row.risk.value) && !await checkAccountsExist.call(this)
+    },
+    disabled: async function() {
+      return !this.$hasPerm('accounts.add_pushaccountexecution')
     }
   },
   {
@@ -71,6 +80,9 @@ export const riskActions = [
         'leaked_password', 'repeated_password'
       ]
       return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
+    },
+    disabled: async function() {
+      return !this.$hasPerm('accounts.add_changesecretexecution')
     }
   },
   {
@@ -79,6 +91,9 @@ export const riskActions = [
     has: async function() {
       const risks = ['account_deleted']
       return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
+    },
+    disabled: async function() {
+      return !this.$hasPerm('accounts.delete_account')
     }
   },
   // {
@@ -94,21 +109,33 @@ export const riskActions = [
   {
     name: 'review',
     label: i18n.t('Review'),
-    has: ['group_changed', 'sudo_changed', 'authorized_key_changed', 'account_deleted', 'others']
+    has: ['group_changed', 'sudo_changed', 'authorized_key_changed', 'account_deleted', 'others'],
+    disabled: async function() {
+      return !this.$hasPerm('accounts.change_accountrisk')
+    }
   },
   {
     name: 'ignore',
     label: i18n.t('Ignore'),
-    has: false
+    has: false,
+    disabled: async function() {
+      return !this.$hasPerm('accounts.change_accountrisk')
+    }
   },
   {
     name: 'reopen',
     label: i18n.t('Reopen'),
-    has: false
+    has: false,
+    disabled: async function() {
+      return !this.$hasPerm('accounts.change_accountrisk')
+    }
   },
   {
     name: 'close',
     label: i18n.t('Close'),
-    has: false
+    has: false,
+    disabled: async function() {
+      return !this.$hasPerm('accounts.change_accountrisk')
+    }
   }
 ]
