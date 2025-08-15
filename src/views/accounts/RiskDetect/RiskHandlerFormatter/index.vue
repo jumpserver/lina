@@ -6,7 +6,7 @@
         @command="handleDropdown"
         @visible-change="handleVisibleChange"
       >
-        <el-button class="confirm action" size="mini" :disabled="!this.$hasPerm('accounts.change_accountrisk')">
+        <el-button class="confirm action" size="mini">
           <i class="fa fa-check" />
         </el-button>
         <el-dropdown-menu slot="dropdown">
