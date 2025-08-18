@@ -41,7 +41,7 @@ export default {
     return {
       loading: true,
       tableConfig: {
-        url: '',
+        url: '/api/v1/terminal/commands/',
         tableAttrs: {
           rowClassName: ({ row }) => {
             if (row.risk_level === 5) {
