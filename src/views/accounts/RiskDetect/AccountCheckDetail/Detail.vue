@@ -37,7 +37,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('Execute'),
-            disabled: !this.$hasPerm('accounts.add_checkaccountautomation') || !this.object.is_active
+            disabled: !this.$hasPerm('accounts.add_checkaccountexecution') || !this.object.is_active
           },
           callbacks: {
             click: function() {

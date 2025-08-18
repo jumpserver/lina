@@ -232,16 +232,18 @@ export default {
       this.chart = echarts.init(this.$refs.chartRef)
       this.chart.setOption(this.chartOption)
 
-      this.chart.on('click', (params) => {
-        if (params.componentType === 'series') {
-          this.$router.push({
-            name: 'AccountCheckList',
-            query: {
-              payload: params.data.description
-            }
-          })
-        }
-      })
+      if (this.$hasPerm('accounts.view_accountrisk')) {
+        this.chart.on('click', (params) => {
+          if (params.componentType === 'series') {
+            this.$router.push({
+              name: 'AccountCheckList',
+              query: {
+                payload: params.data.description
+              }
+            })
+          }
+        })
+      }
     },
     updateChart() {
       if (this.chart) {
