@@ -26,7 +26,7 @@
         v-for="item in summaryItems"
         :key="item.key"
         class="metric-item"
-        @click="handleClick(item)"
+        @click="!item.disabled && handleClick(item)"
       >
         <span class="metric-label">{{ $tc(item.label) }}</span>
         <span class="metric-value" :class="{'increase': config[item.key] > 0}">
@@ -56,19 +56,23 @@ export default {
       summaryItems: [
         {
           label: this.$t('Privileged'),
-          key: 'privileged'
+          key: 'privileged',
+          disabled: !this.$hasPerm('accounts.view_account')
         },
         {
           label: this.$t('ResetSecret'),
-          key: 'resetSecret'
+          key: 'resetSecret',
+          disabled: !this.$hasPerm('accounts.view_account')
         },
         {
           label: this.$t('Connectable'),
-          key: 'connectable'
+          key: 'connectable',
+          disabled: !this.$hasPerm('accounts.view_account')
         },
         {
           label: this.$t('Active'),
-          key: 'is_active'
+          key: 'is_active',
+          disabled: !this.$hasPerm('accounts.view_account')
         }
       ]
     }
