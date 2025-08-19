@@ -93,6 +93,9 @@ export default {
           },
           on: {
             change: ([event], updateForm) => {
+              if (!event.pk) {
+                return
+              }
               this.queryParam = `playbook=${event.pk}`
               this.$axios.get(`/api/v1/ops/playbooks/${event.pk}/`,
               ).then(data => {
