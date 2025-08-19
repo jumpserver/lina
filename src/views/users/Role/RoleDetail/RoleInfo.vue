@@ -111,6 +111,8 @@ export default {
         'acls.commandfilteracl': ['users.view_user'],
         'assets.view_asset': ['assets.view_platform'],
         'accounts.view_checkaccountexecution': ['accounts.view_checkaccountautomation'],
+        'accounts.add_integrationapplication': ['accounts.view_account'],
+        'accounts.change_integrationapplication': ['accounts.view_account'],
         'accounts.add_checkaccountexecution': ['accounts.view_checkaccountautomation'],
         'accounts.view_changesecretexecution': ['accounts.view_changesecretautomation'],
         'accounts.add_changesecretexecution': ['accounts.view_changesecretautomation'],
