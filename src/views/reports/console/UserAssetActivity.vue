@@ -18,10 +18,8 @@ export default {
   },
   props: {
     days: {
-      type: String,
-      default() {
-        return 7
-      }
+      type: [String, Number],
+      default: 7
     }
   },
   data() {

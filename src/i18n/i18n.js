@@ -40,7 +40,7 @@ i18n.tc = function(key, choice, ...args) {
 }
 
 Vue.prototype.$tc = i18n.tc.bind(i18n)
-Vue.prototype.$tr = (key) => {
+Vue.prototype.$tr = key => {
   return i18n.t('' + key)
 }
 
@@ -53,6 +53,8 @@ export async function fetchTranslationsFromAPI() {
         i18n.mergeLocaleMessage(key, data[key])
       }
     }
+  } catch (error) {
+    alert(error)
   } finally {
     await store.dispatch('app/setI18nLoaded', true)
   }

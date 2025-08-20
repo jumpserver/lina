@@ -289,7 +289,8 @@ module.exports = {
           'var',
           'lang',
           'scoped',
-          'pdf'
+          'pdf',
+          'rbac'
         ],
         skipIfMatch: [
           'http://[^s]*',
