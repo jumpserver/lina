@@ -162,42 +162,7 @@ module.exports = {
         changeOrigin: true
       }
     },
-    after: require('./mock/mock-server.js'),
-    setupMiddlewares(middlewares, devServer) {
-      const server = devServer && devServer.server
-      if (server && server.on) {
-        server.on('clientError', (err, socket) => {
-          // mark err as handled for linter
-          void err
-          try {
-            if (socket && !socket.destroyed) socket.destroy()
-          } catch (e) {
-            /* ignore */ void 0
-          }
-        })
-        server.on('connection', socket => {
-          try {
-            socket.on &&
-              socket.on('error', socketErr => {
-                void socketErr
-              })
-          } catch (e) {
-            /* ignore */ void 0
-          }
-        })
-        server.on('upgrade', (req, socket) => {
-          try {
-            socket.on &&
-              socket.on('error', socketErr => {
-                void socketErr
-              })
-          } catch (e) {
-            /* ignore */ void 0
-          }
-        })
-      }
-      return middlewares
-    }
+    after: require('./mock/mock-server.js')
   },
   css: {},
   configureWebpack: {
@@ -246,7 +211,8 @@ module.exports = {
         options.compilerOptions.preserveWhitespace = true
         options.compilerOptions.directives = {
           html(node, directiveMeta) {
-            ;(node.props || (node.props = [])).push({
+            const props = node.props || (node.props = [])
+            props.push({
               name: 'innerHTML',
               value: `$xss.process(_s(${directiveMeta.value}))`
             })
