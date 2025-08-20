@@ -126,7 +126,6 @@ function ifConfirmRequired({ response, error }) {
     const callback = () => resolve()
     const cancel = () => reject()
 
-    console.log('emit')
     eventBus.$emit('showConfirmDialog', { response, callback, cancel })
   })
 }
