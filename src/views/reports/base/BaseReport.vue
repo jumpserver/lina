@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'no-padding': onlyCharts }">
+  <div :class="{ 'no-padding': onlyCharts, 'nav': nav }">
     <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
@@ -180,6 +180,14 @@ export default {
     }
   }
 
+  .nav {
+    .content {
+      .charts-zone {
+        width: 1046px;
+      }
+    }
+  }
+
   @media print {
     .header {
       display: none;
@@ -192,7 +200,6 @@ export default {
     }
 
     .charts-zone {
-      width: 1046px;
 
       ::v-deep {
         .chart-container{

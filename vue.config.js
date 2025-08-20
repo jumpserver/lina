@@ -16,6 +16,73 @@ const name = '' // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
+function wsProxyOnError(tag) {
+  return function onError(err, req, res) {
+    // Prevent unhandled ECONNRESET from crashing dev server
+    // eslint-disable-next-line no-console
+    console.log(`[devServer][proxy:${tag}] error:`, err && (err.code || err.message || err))
+    try {
+      if (res && !res.headersSent) {
+        res.writeHead(502, { 'Content-Type': 'text/plain' })
+        res.end('WebSocket proxy error')
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }
+}
+
+function wsProxyOnProxyReqWs(tag) {
+  return function onProxyReqWs(proxyReq, req, socket) {
+    // Swallow socket errors to avoid crashing the dev server when backend resets WS
+    try {
+      if (socket && socket.on) {
+        socket.on('error', err => {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[devServer][proxy:${tag}] socket error:`,
+            err && (err.code || err.message || err)
+          )
+        })
+      }
+      if (proxyReq && proxyReq.on) {
+        proxyReq.on('error', err => {
+          // eslint-disable-next-line no-console
+          console.log(
+            `[devServer][proxy:${tag}] proxyReq error:`,
+            err && (err.code || err.message || err)
+          )
+        })
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+}
+
+// Swallow common transient socket errors in dev to prevent crashes
+if (process.env.NODE_ENV === 'development') {
+  process.on('uncaughtException', err => {
+    if (err && (err.code === 'ECONNRESET' || err.code === 'EPIPE')) {
+      // eslint-disable-next-line no-console
+      console.log('[devServer] uncaughtException swallowed:', err.code)
+      return
+    }
+    // Re-throw other errors
+    throw err
+  })
+  process.on('unhandledRejection', reason => {
+    const code = reason && reason.code
+    if (code === 'ECONNRESET' || code === 'EPIPE') {
+      // eslint-disable-next-line no-console
+      console.log('[devServer] unhandledRejection swallowed:', code)
+      return
+    }
+    // eslint-disable-next-line no-console
+    console.log('[devServer] unhandledRejection:', reason)
+  })
+}
+
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   /**
@@ -25,10 +92,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  transpileDependencies: [
-    /\/node_modules\/vue-echarts\//,
-    /\/node_modules\/resize-detector\//
-  ],
+  transpileDependencies: [/\/node_modules\/vue-echarts\//, /\/node_modules\/resize-detector\//],
   publicPath: '/ui/',
   outputDir: 'lina',
   assetsDir: 'assets',
@@ -54,24 +118,33 @@ module.exports = {
         changeOrigin: true
       },
       '/ws/': {
-        target: process.env.VUE_APP_CORE_WS || 'ws://127.0.0.1:8080',
+        // Use HTTP scheme for target even for WS; ws proxying is enabled via ws: true
+        target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true,
-        ws: true
+        ws: true,
+        onError: wsProxyOnError('/ws'),
+        onProxyReqWs: wsProxyOnProxyReqWs('/ws')
       },
       '/koko/': {
         target: process.env.VUE_APP_KOKO_HOST || 'http://127.0.0.1:5000',
         changeOrigin: true,
-        ws: true
+        ws: true,
+        onError: wsProxyOnError('/koko'),
+        onProxyReqWs: wsProxyOnProxyReqWs('/koko')
       },
       '/chen/': {
         target: 'http://127.0.0.1:9523',
         changeOrigin: true,
-        ws: true
+        ws: true,
+        onError: wsProxyOnError('/chen'),
+        onProxyReqWs: wsProxyOnProxyReqWs('/chen')
       },
       '/guacamole/': {
         target: 'http://127.0.0.1:8081',
         changeOrigin: true,
-        ws: true
+        ws: true,
+        onError: wsProxyOnError('/guacamole'),
+        onProxyReqWs: wsProxyOnProxyReqWs('/guacamole')
       },
       '/luna/': {
         target: 'http://127.0.0.1:4200',
@@ -80,14 +153,51 @@ module.exports = {
       '/facelive/': {
         target: 'http://localhost:9999',
         changeOrigin: true,
-        ws: true
+        ws: true,
+        onError: wsProxyOnError('/facelive'),
+        onProxyReqWs: wsProxyOnProxyReqWs('/facelive')
       },
       '^/(core|static|media)/': {
         target: process.env.VUE_APP_CORE_HOST || 'http://127.0.0.1:8080',
         changeOrigin: true
       }
     },
-    after: require('./mock/mock-server.js')
+    after: require('./mock/mock-server.js'),
+    setupMiddlewares(middlewares, devServer) {
+      const server = devServer && devServer.server
+      if (server && server.on) {
+        server.on('clientError', (err, socket) => {
+          // mark err as handled for linter
+          void err
+          try {
+            if (socket && !socket.destroyed) socket.destroy()
+          } catch (e) {
+            /* ignore */ void 0
+          }
+        })
+        server.on('connection', socket => {
+          try {
+            socket.on &&
+              socket.on('error', socketErr => {
+                void socketErr
+              })
+          } catch (e) {
+            /* ignore */ void 0
+          }
+        })
+        server.on('upgrade', (req, socket) => {
+          try {
+            socket.on &&
+              socket.on('error', socketErr => {
+                void socketErr
+              })
+          } catch (e) {
+            /* ignore */ void 0
+          }
+        })
+      }
+      return middlewares
+    }
   },
   css: {},
   configureWebpack: {
@@ -97,8 +207,7 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        elementCss: resolve(
-          'node_modules/elementui-lts/lib/theme-chalk/index.css'),
+        elementCss: resolve('node_modules/elementui-lts/lib/theme-chalk/index.css'),
         elementLocale: resolve('node_modules/elementui-lts/lib/locale/lang/en.js')
       },
       extensions: ['.vue', '.js', '.json']
@@ -137,7 +246,7 @@ module.exports = {
         options.compilerOptions.preserveWhitespace = true
         options.compilerOptions.directives = {
           html(node, directiveMeta) {
-            (node.props || (node.props = [])).push({
+            ;(node.props || (node.props = [])).push({
               name: 'innerHTML',
               value: `$xss.process(_s(${directiveMeta.value}))`
             })
@@ -149,63 +258,55 @@ module.exports = {
 
     config
       // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
-      )
+      .when(process.env.NODE_ENV === 'development', config => config.devtool('cheap-source-map'))
 
-    config
-      .when(process.env.NODE_ENV === 'production', config => {
-        config
-          .plugin('CompressionWebpackPlugin')
-          .use(CompressionWebpackPlugin, [
-            {
-              algorithm: 'gzip',
-              test: productionGzipExtensions, // 处理所有匹配此 {RegExp} 的资源
-              threshold: 10240, // 只处理比这个值大的资源。按字节计算(楼主设置10K以上进行压缩)
-              minRatio: 0.8, // 只有压缩率比这个值小的资源才会被处理
-              cache: false
-            }
-          ])
-      })
-
-    config
-      .when(process.env.NODE_ENV !== 'development',
-        config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [
-              {
-                // `runtime` must same as runtimeChunk name. default is `runtime`
-                inline: /runtime\..*\.js$/
-              }])
-            .end()
-          config
-            .optimization.splitChunks({
-              chunks: 'all',
-              cacheGroups: {
-                libs: {
-                  name: 'chunk-libs',
-                  test: /[\\/]node_modules[\\/]/,
-                  priority: 10,
-                  chunks: 'initial' // only package third parties that are initially dependent
-                },
-                elementUI: {
-                  name: 'chunk-elementUI', // split elementUI into a single package
-                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
-                },
-                commons: {
-                  name: 'chunk-commons',
-                  test: resolve('src/components'), // can customize your rules
-                  minChunks: 3, //  minimum common number
-                  priority: 5,
-                  reuseExistingChunk: true
-                }
-              }
-            })
-          config.optimization.runtimeChunk('single')
+    config.when(process.env.NODE_ENV === 'production', config => {
+      config.plugin('CompressionWebpackPlugin').use(CompressionWebpackPlugin, [
+        {
+          algorithm: 'gzip',
+          test: productionGzipExtensions, // 处理所有匹配此 {RegExp} 的资源
+          threshold: 10240, // 只处理比这个值大的资源。按字节计算(楼主设置10K以上进行压缩)
+          minRatio: 0.8, // 只有压缩率比这个值小的资源才会被处理
+          cache: false
         }
-      )
+      ])
+    })
+
+    config.when(process.env.NODE_ENV !== 'development', config => {
+      config
+        .plugin('ScriptExtHtmlWebpackPlugin')
+        .after('html')
+        .use('script-ext-html-webpack-plugin', [
+          {
+            // `runtime` must same as runtimeChunk name. default is `runtime`
+            inline: /runtime\..*\.js$/
+          }
+        ])
+        .end()
+      config.optimization.splitChunks({
+        chunks: 'all',
+        cacheGroups: {
+          libs: {
+            name: 'chunk-libs',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            chunks: 'initial' // only package third parties that are initially dependent
+          },
+          elementUI: {
+            name: 'chunk-elementUI', // split elementUI into a single package
+            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+          },
+          commons: {
+            name: 'chunk-commons',
+            test: resolve('src/components'), // can customize your rules
+            minChunks: 3, //  minimum common number
+            priority: 5,
+            reuseExistingChunk: true
+          }
+        }
+      })
+      config.optimization.runtimeChunk('single')
+    })
   }
 }
