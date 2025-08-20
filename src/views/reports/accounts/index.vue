@@ -3,7 +3,7 @@
     <el-row :gutter="10">
       <el-col :span="4" style="padding: 10px;">
         <div class="tag-container">
-          <h5>报表类型</h5>
+          <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
             <li v-for="chart in charts" :key="chart.name">
               <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       url: '',
+      title: this.$t('ReportType'),
       component: '',
       charts: [
         {
