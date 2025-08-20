@@ -69,8 +69,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     isDescription() {
@@ -90,8 +89,12 @@ export default {
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
           const options = `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes`
-
-          this.win = window.open(this.url, '_blank', options)
+          let url = this.url
+          if (this.$route.query.days) {
+            const separator = url.includes('?') ? '&' : '?'
+            url = `${url}${separator}days=${this.$route.query.days}`
+          }
+          this.win = window.open(url, '_blank', options)
         }
         // 确保窗口在最前面
         this.win.focus()
@@ -109,178 +112,179 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .echarts {
-    width: 100%;
-    height: 270px;
+.echarts {
+  width: 100%;
+  height: 270px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--banner-bg);
+  padding: 16px;
+  height: 40px;
+}
+
+.title {
+  height: 40px;
+  background-color: white;
+  line-height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  padding: 0 16px;
+
+  .datetime {
+    font-size: 12px;
+    color: #999;
+    margin-left: 16px;
   }
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--banner-bg);
-    padding: 16px;
-    height: 40px;
-  }
+.description {
+  font-size: 14px;
+  color: #333;
+  padding: 16px;
+  background-color: white;
+}
 
-  .title {
-    height: 40px;
-    background-color: white;
-    line-height: 40px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333;
-    padding: 0 16px;
+.content {
+  background-color: #F1F1F1;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
 
-    .datetime {
-      font-size: 12px;
-      color: #999;
+  ::v-deep .export-bar {
+    float: right;
+
+    .export-btn.el-button--text {
+      color: #333;
+      border: none;
+      font-weight: 500;
+      font-size: 13px;
       margin-left: 16px;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
     }
   }
+}
 
-  .description {
-    font-size: 14px;
-    color: #333;
-    padding: 16px;
-    background-color: white;
-  }
-
+.no-padding {
   .content {
-    background-color: #F1F1F1;
-    height: calc(100vh - 40px);
-    overflow-y: auto;
-
-    ::v-deep .export-bar {
-      float: right;
-
-      .export-btn.el-button--text {
-        color: #333;
-        border: none;
-        font-weight: 500;
-        font-size: 13px;
-        margin-left: 16px;
-
-        &:hover {
-          background: rgba(0, 0, 0, 0.1);
-        }
-      }
-    }
-  }
-
-  .no-padding {
-    .content {
-      height: auto;
-      overflow-y: hidden;
-      overflow-x: hidden;
-    }
-
-    .charts-zone {
-      padding: 0;
-    }
-  }
-
-  .nav {
-    .content {
-      .charts-zone {
-        width: 1040px;
-      }
-    }
-  }
-
-  @media print {
-    .header {
-      display: none;
-    }
-
-    .content {
-      overflow-y: hidden;
-      height: auto;
-      background-color: white;
-    }
-
-    .charts-zone {
-
-      ::v-deep {
-        .chart-container {
-          break-inside: avoid;
-          page-break-inside: avoid;
-        }
-        .box-container {
-          display: block !important;
-        }
-      }
-    }
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
 
   .charts-zone {
-    padding: 16px 30px;
-    margin: 0 auto;
-    // width: 100%;
-    // max-width: 1046px; 不能设置，因为 dashboard 中会引用
-    box-sizing: border-box;
-    min-height: 100px; // 添加最小高度确保容器始终存在
+    padding: 0;
+  }
+}
 
-    ::v-deep {
-      .full-width-chart {
-        width: 100%;
-        margin-bottom: 32px;
-        position: relative; // 添加相对定位
-      }
-
-      .chart {
-        height: 260px;
-        position: relative; // 添加相对定位
-      }
-
-      .charts-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .full-width {
-        grid-column: 1 / -1;
-      }
-
-      .chart-container {
-        background-color: white;
-        border-radius: 4px;
-        padding: 16px;
-        // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-        border: 1px solid var(--color-border);
-        transition: all 0.3s ease;
-        max-width: calc(50vw - 30px);
-        min-width: 300px;
-
-        &.full-width {
-          max-width: calc(100vw - 60px);
-        }
-      }
-
-      .chart-container-title {
-        margin-bottom: 16px;
-      }
-
-      .chart-container-title-text {
-        font-size: 14px;
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 8px;
-      }
-
-      // @media (max-width: 767px) {
-      //   .charts-grid {
-      //     grid-template-columns: 1fr;
-      //   }
-      //   .full-width {
-      //     grid-column: 1 / -1;
-      //   }
-      // }
+.nav {
+  .content {
+    .charts-zone {
+      width: 1040px;
     }
   }
+}
+
+@media print {
+  .header {
+    display: none;
+  }
+
+  .content {
+    overflow-y: hidden;
+    height: auto;
+    background-color: white;
+  }
+
+  .charts-zone {
+
+    ::v-deep {
+      .chart-container {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .box-container {
+        display: block !important;
+      }
+    }
+  }
+}
+
+.charts-zone {
+  padding: 16px 30px;
+  margin: 0 auto;
+  // width: 100%;
+  // max-width: 1046px; 不能设置，因为 dashboard 中会引用
+  box-sizing: border-box;
+  min-height: 100px; // 添加最小高度确保容器始终存在
+
+  ::v-deep {
+    .full-width-chart {
+      width: 100%;
+      margin-bottom: 32px;
+      position: relative; // 添加相对定位
+    }
+
+    .chart {
+      height: 260px;
+      position: relative; // 添加相对定位
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .chart-container {
+      background-color: white;
+      border-radius: 4px;
+      padding: 16px;
+      // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--color-border);
+      transition: all 0.3s ease;
+      max-width: calc(50vw - 30px);
+      min-width: 300px;
+
+      &.full-width {
+        max-width: calc(100vw - 60px);
+      }
+    }
+
+    .chart-container-title {
+      margin-bottom: 16px;
+    }
+
+    .chart-container-title-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    // @media (max-width: 767px) {
+    //   .charts-grid {
+    //     grid-template-columns: 1fr;
+    //   }
+    //   .full-width {
+    //     grid-column: 1 / -1;
+    //   }
+    // }
+  }
+}
 
 </style>
 

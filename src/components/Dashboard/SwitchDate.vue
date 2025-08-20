@@ -60,6 +60,8 @@ export default {
   methods: {
     onChange(val) {
       this.$emit('change', val)
+      const query = { ...this.$route.query, days: val }
+      this.$router.replace({ query })
     }
   }
 }

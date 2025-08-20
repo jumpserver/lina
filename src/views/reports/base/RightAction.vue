@@ -47,12 +47,15 @@ export default {
       }
       return true
     },
+    getDaysParam() {
+      return this.$route.query.days || localStorage.getItem('dashboardDays') || '7'
+    },
     exportPdf() {
       if (!this.checkName()) {
         return
       }
-
-      const exportUrl = `/core/reports/export-pdf/?chart=${this.name}`
+      const days = this.getDaysParam()
+      const exportUrl = `/core/reports/export-pdf/?chart=${this.name}&days=${days}`
       download(exportUrl)
       this.$message.success(this.$t('Export') + '...')
     },
@@ -60,7 +63,8 @@ export default {
       if (!this.checkName()) {
         return
       }
-      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}`,).then((data) => {
+      const days = this.getDaysParam()
+      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).then((data) => {
         this.$message.success(this.$t('EMailReport') + '...')
       }).catch(error => {
         this.$message.error(this.$t('Failed') + ': ' + error.message)
