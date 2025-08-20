@@ -206,7 +206,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-          'settings.change_chatai | settings.view_chatprompt | settings.change_virtualapp'
+          'settings.change_chatai | settings.change_virtualapp'
         ]
       }
     },
