@@ -41,7 +41,7 @@ export const riskActions = [
     label: i18n.t('SyncDeleteSelected'),
     has: ['long_time_no_login', 'new_found'],
     disabled: async function() {
-      return !this.$hasPerm('accounts.remove_account')
+      return !this.$hasPerm('accounts.remove_account') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
@@ -49,7 +49,7 @@ export const riskActions = [
     label: i18n.t('DeleteBoth'),
     has: ['long_time_no_login'],
     disabled: async function() {
-      return !this.$hasPerm('accounts.remove_account') || !this.$hasPerm('accounts.delete_account')
+      return !this.$hasPerm('accounts.remove_account') || !this.$hasPerm('accounts.delete_account') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
@@ -57,7 +57,7 @@ export const riskActions = [
     label: i18n.t('AddAccount'),
     has: ['new_found'],
     disabled: async function() {
-      return !this.$hasPerm('accounts.add_account')
+      return !this.$hasPerm('accounts.add_account') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
@@ -68,7 +68,7 @@ export const riskActions = [
       return risks.includes(this.row.risk.value) && !await checkAccountsExist.call(this)
     },
     disabled: async function() {
-      return !this.$hasPerm('accounts.add_pushaccountexecution')
+      return !this.$hasPerm('accounts.add_pushaccountexecution') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
@@ -82,7 +82,7 @@ export const riskActions = [
       return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
     },
     disabled: async function() {
-      return !this.$hasPerm('accounts.add_changesecretexecution')
+      return !this.$hasPerm('accounts.add_changesecretexecution') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
@@ -93,7 +93,7 @@ export const riskActions = [
       return risks.includes(this.row.risk.value) && await checkAccountsExist.call(this)
     },
     disabled: async function() {
-      return !this.$hasPerm('accounts.delete_account')
+      return !this.$hasPerm('accounts.delete_account') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   // {
@@ -111,7 +111,7 @@ export const riskActions = [
     label: i18n.t('Review'),
     has: ['group_changed', 'sudo_changed', 'authorized_key_changed', 'account_deleted', 'others'],
     disabled: async function() {
-      return !this.$hasPerm('accounts.change_accountrisk')
+      return !this.$hasPerm('accounts.change_accountrisk') || !this.$hasPerm('accounts.change_accountrisk')
     }
   },
   {
