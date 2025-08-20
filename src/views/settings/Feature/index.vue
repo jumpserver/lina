@@ -24,26 +24,28 @@ export default {
       submenu: [
         {
           title: this.$t('Announcement'),
-          name: 'Announcement'
+          name: 'Announcement',
+          hidden: !this.$hasPerm('settings.change_announcement')
         },
         {
           title: this.$t('Ticket'),
           name: 'Ticket',
-          hidden: !this.$store.getters.hasValidLicense
+          hidden: !this.$store.getters.hasValidLicense || !this.$hasPerm('settings.change_ticket')
         },
         {
           title: this.$t('JobCenter'),
-          name: 'Ops'
+          name: 'Ops',
+          hidden: !this.$hasPerm('settings.change_ops')
         },
         {
           title: this.$t('AccountStorage'),
           name: 'Vault',
-          hidden: !this.$store.getters.hasValidLicense
+          hidden: !this.$store.getters.hasValidLicense || !this.$hasPerm('settings.change_vault')
         },
         {
           title: this.$t('ChatAI'),
           name: 'Chat',
-          hidden: !this.$hasPerm('settings.change_vault')
+          hidden: !this.$hasPerm('settings.change_chatai')
         },
         {
           title: this.$t('VirtualApps'),
