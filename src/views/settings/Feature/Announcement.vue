@@ -46,7 +46,7 @@ export default {
             }
           }
         },
-        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=announcement',
         hasReset: false,
         submitMethod() {

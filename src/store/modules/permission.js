@@ -84,8 +84,6 @@ function cleanRoute(tmp, parent) {
     tmp.meta = {}
   }
 
-  console.log('tmp', tmp.name)
-
   // 根据层级来标识 类型是 view, app, resource 还是crud
   if (!tmp.meta.level) {
     tmp.meta.level = parent.meta.level + 1

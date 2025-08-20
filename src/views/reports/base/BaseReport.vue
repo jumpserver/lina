@@ -85,7 +85,7 @@ export default {
       try {
         if (!this.win || this.win.closed) {
           // 计算窗口居中位置
-          const width = 1000
+          const width = 1048
           const height = 800
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
@@ -183,7 +183,7 @@ export default {
   .nav {
     .content {
       .charts-zone {
-        width: 1046px;
+        width: 1040px;
       }
     }
   }
@@ -202,7 +202,7 @@ export default {
     .charts-zone {
 
       ::v-deep {
-        .chart-container{
+        .chart-container {
           break-inside: avoid;
           page-break-inside: avoid;
         }
