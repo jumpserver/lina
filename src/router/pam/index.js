@@ -10,18 +10,18 @@ import store from '@/store'
 
 export default {
   path: '/pam/',
-  name: 'pam',
   component: Layout,
+  name: 'pam',
   redirect: '/pam/dashboard',
   meta: {
     title: i18n.t('PAM'),
     icon: 'pam',
+    view: 'pam',
     type: 'view',
     showNavSwitcher: () => {
-      return store.getters.consoleOrgs.length > 0
+      return store.getters.pamOrgs.length > 0
     },
-    permissions: [],
-    view: 'pam'
+    permissions: []
   },
   children: [
     {
@@ -41,7 +41,7 @@ export default {
       meta: {
         title: i18n.t('AccountList'),
         icon: 'accounts',
-        permissions: []
+        permissions: ['accounts.view_account']
       }
     },
     {

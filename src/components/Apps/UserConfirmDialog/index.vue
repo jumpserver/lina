@@ -8,7 +8,7 @@
     :visible.sync="visible"
     class="dialog-content"
     v-bind="$attrs"
-    width="740px"
+    width="600px"
     @confirm="visible = false"
     v-on="$listeners"
   >
@@ -124,7 +124,7 @@
 </template>
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 
 export default {
   name: 'UserConfirmDialog',
@@ -195,7 +195,7 @@ export default {
       this.$log.debug('perform confirm action')
       const confirmType = response.data?.code
       const confirmUrl = '/api/v1/authentication/confirm/'
-      this.$axios.get(confirmUrl, { params: { confirm_type: confirmType }}).then((data) => {
+      this.$axios.get(confirmUrl, { params: { confirm_type: confirmType } }).then((data) => {
         this.confirmTypeRequired = data.confirm_type
 
         if (this.confirmTypeRequired === 'relogin') {

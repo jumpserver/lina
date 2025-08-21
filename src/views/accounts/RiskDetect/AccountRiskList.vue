@@ -147,7 +147,7 @@ export default {
               vm.batchResolveDialog.visible = true
             },
             can: function({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && vm.$hasPerm('accounts.change_accountrisk')
             }
           }
         ]

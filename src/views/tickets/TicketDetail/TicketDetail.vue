@@ -4,8 +4,8 @@
 
 <script>
 import { STATUS_MAP } from '../const'
-import { formatTime, getDateTimeStamp } from '@/utils'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { formatTime, getDateTimeStamp } from '@/utils/common/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 
 export default {

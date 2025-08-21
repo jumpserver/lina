@@ -1,5 +1,6 @@
 <template>
   <DrawerPanel
+    v-if="visible"
     ref="drawer"
     :default-show-panel="!!defaultShowPanel"
     :expanded="expanded"
@@ -45,9 +46,10 @@
 import Sidebar from './components/Sidebar/index.vue'
 import Chat from './components/ChitChat/index.vue'
 import { getInputFocus } from './useChat.js'
-import { ws } from '@/utils/socket'
+import { ws } from '@/utils/request'
 import DrawerPanel from '@/components/Apps/DrawerPanel/index.vue'
 import { ObjectLocalStorage } from '@/utils/common'
+import { mapGetters } from 'vuex'
 
 const aiPannelLocalStorage = new ObjectLocalStorage('ai_panel_settings')
 export default {
@@ -74,6 +76,7 @@ export default {
   },
   data() {
     return {
+      visible: false,
       active: 'chat',
       robotUrl: require('@/assets/img/robot-assistant.png'),
       height: '400px',
@@ -82,14 +85,44 @@ export default {
       currentTerminalContent: {}
     }
   },
+  computed: {
+    ...mapGetters([
+      'publicSettings'
+    ])
+  },
   watch: {
+    'publicSettings.CHAT_AI_METHOD': {
+      handler(newVal) {
+        this.visible = newVal === 'api'
+      }
+    }
   },
   mounted() {
-    const expanded = aiPannelLocalStorage.get('expanded')
-    this.updateExpandedState(expanded)
-    this.handlePostMessage()
+    this.handleStartChat()
   },
   methods: {
+    handleStartChat() {
+      if (this.publicSettings.CHAT_AI_METHOD === 'api') {
+        this.visible = true
+        const expanded = aiPannelLocalStorage.get('expanded')
+        this.updateExpandedState(expanded)
+        this.handlePostMessage()
+      } else if (this.publicSettings.CHAT_AI_METHOD === 'embed') {
+        const embedScriptId = 'chat-ai-embed-id'
+        if (document.getElementById(embedScriptId)) {
+          return
+        }
+        const script = document.createElement('script')
+        script.id = embedScriptId
+        script.src = this.publicSettings.CHAT_AI_EMBED_URL
+        script.async = true
+        script.onload = () => {
+          const loadEvent = new Event('load', { bubbles: false, cancelable: false })
+          window.dispatchEvent(loadEvent)
+        }
+        document.body.appendChild(script)
+      }
+    },
     handlePostMessage() {
       window.addEventListener('message', (event) => {
         if (event.data === 'show-chat-panel') {

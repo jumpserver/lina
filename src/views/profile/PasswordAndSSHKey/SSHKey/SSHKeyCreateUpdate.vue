@@ -8,7 +8,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage/index.vue'
-import { downloadText } from '@/utils/common'
+import { downloadText } from '@/utils/common/index'
 
 export default {
   components: {
@@ -94,7 +94,7 @@ export default {
       return value
     },
     createSuccessHandle() {
-      this.$router.push({ name: 'SSHKeyList', query: { order: '-date_created', updated: new Date().getTime() }})
+      this.$router.push({ name: 'SSHKeyList', query: { order: '-date_created', updated: new Date().getTime() } })
       this.$message.success(this.$tc('CreateSuccessMsg'))
     }
   }

@@ -10,7 +10,7 @@
 
 <script>
 import { ActionsFormatter, ArrayFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
 
 export default {
@@ -71,7 +71,9 @@ export default {
                   order: 1,
                   name: 'execute',
                   type: 'primary',
-                  can: this.$hasPerm('accounts.add_backupaccountexecution'),
+                  can: ({ row }) => {
+                    return this.$hasPerm('accounts.add_backupaccountexecution') && row.is_active
+                  },
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/accounts/account-backup-plan-executions/`,

@@ -20,7 +20,7 @@
 <script>
 import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
-import { getApiPath } from '@/utils/common'
+import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
 import ResourceActivity from '@/components/Apps/ResourceActivity/index.vue'
 import { mapGetters } from 'vuex'
@@ -230,7 +230,7 @@ export default {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         showCancelButton: true,
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           instance.confirmButtonLoading = true
           try {
@@ -256,7 +256,7 @@ export default {
       const id = this.$route.params.id
       let route = this.validActions.updateRoute
       if (typeof route === 'string') {
-        route = { name: route, params: {}}
+        route = { name: route, params: {} }
       }
       route = {
         ...route,

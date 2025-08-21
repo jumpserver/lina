@@ -10,7 +10,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { getRandomColor } from '@/utils/color'
+import { getRandomColor } from '@/utils/common/color'
 
 export default {
   name: 'LabelCreateUpdate',

@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { toSentenceCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common/index'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {

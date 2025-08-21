@@ -39,7 +39,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'

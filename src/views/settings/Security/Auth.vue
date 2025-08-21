@@ -75,6 +75,9 @@ export default {
           VERIFY_CODE_TTL: {
             label: this.$t('ExpirationTimeout')
           },
+          SECURITY_MFA_AUTH_ENABLED_FOR_THIRD_PARTY: {
+            helpText: this.$t('ThirdPartyMfaHelpText')
+          },
           SECURITY_UNCOMMON_USERS_TTL: {
             rules: [
               rules.LengthCheck,

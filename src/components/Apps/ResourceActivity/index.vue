@@ -30,8 +30,8 @@
 <script>
 import IBox from '@/components/Common/IBox/index.vue'
 import DiffDetail from '@/components/Dialog/DiffDetail.vue'
-import { openTaskPage } from '@/utils/jms'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { openTaskPage } from '@/utils/jms/index'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {

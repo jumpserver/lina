@@ -69,7 +69,7 @@
 
 <script>
 import IBox from '@/components/Common/IBox'
-import { IsSupportPauseSessionType } from '@/utils/jms'
+import { IsSupportPauseSessionType } from '@/utils/jms/index'
 
 export default {
   components: { IBox },

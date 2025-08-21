@@ -95,10 +95,10 @@ export default {
                 return this.$hasPerm(`rbac.add_${row.scope?.value}role`)
               },
               onClone: ({ row }) => {
-                this.$refs.ListTable.onClone({ row, query: { scope: row.scope?.value }})
+                this.$refs.ListTable.onClone({ row, query: { scope: row.scope?.value } })
               },
               onUpdate: ({ row }) => {
-                this.$refs.ListTable.onUpdate({ row, query: { scope: row.scope?.value }})
+                this.$refs.ListTable.onUpdate({ row, query: { scope: row.scope?.value } })
               }
             }
           }
@@ -106,7 +106,7 @@ export default {
       },
       headerActions: {
         onCreate: () => {
-          this.$refs.ListTable.onCreate({ query: { scope: vm.scope }})
+          this.$refs.ListTable.onCreate({ query: { scope: vm.scope } })
         },
         searchConfig: {
           exclude: ['scope']
@@ -115,6 +115,8 @@ export default {
         canCreate: () => {
           return this.$hasPerm(`rbac.add_${this.scopeRole}`)
         },
+        hasImport: this.$hasPerm(`rbac.add_${this.scopeRole}`),
+        hasExport: this.$hasPerm(`rbac.change_${this.scopeRole}`),
         importOptions: {
           canImportUpdate: false
         }

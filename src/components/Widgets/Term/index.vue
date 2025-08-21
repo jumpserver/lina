@@ -26,7 +26,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
-import { downloadText } from '@/utils/common'
+import { downloadText } from '@/utils/common/index'
 
 export default {
   name: 'Term',

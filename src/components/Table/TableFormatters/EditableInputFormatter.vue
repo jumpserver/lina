@@ -47,12 +47,10 @@ export default {
     }
   },
   data() {
-    const valueIsString = typeof this.cellValue === 'string'
-    const jsonValue = this.cellValue ? JSON.stringify(this.cellValue) : ''
     return {
       inEditMode: false,
-      value: valueIsString ? this.cellValue || '' : jsonValue,
-      valueIsString: valueIsString,
+      value: '',
+      valueIsString: '',
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
   },
@@ -65,6 +63,16 @@ export default {
         return this.cellValue.map(v => this.getCellValue(v)).join(', ')
       }
       return this.getCellValue(this.cellValue)
+    }
+  },
+  watch: {
+    cellValue: {
+      immediate: true,
+      handler(newVal) {
+        const valueIsString = typeof newVal === 'string'
+        this.value = valueIsString ? newVal || '' : (newVal ? JSON.stringify(newVal) : '')
+        this.valueIsString = valueIsString
+      }
     }
   },
   methods: {

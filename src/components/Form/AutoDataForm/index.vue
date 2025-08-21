@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenerateColumns() {
-      let data = { actions: {}}
+      let data = { actions: {} }
       if (this.url) {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }

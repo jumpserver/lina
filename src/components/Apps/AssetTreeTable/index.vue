@@ -20,7 +20,7 @@
 
 <script>
 import TreeTable from '../../Table/TreeTable/index.vue'
-import { setRouterQuery, setUrlParam } from '@/utils/common'
+import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 import $ from '@/utils/jquery-vendor'
 
 export default {

@@ -9,7 +9,7 @@
 
 <script>
 import BaseFormatter from './base.vue'
-import { loadPlatformIcon } from '@/utils/jms'
+import { loadPlatformIcon } from '@/utils/jms/index'
 
 export default {
   name: 'PlatformFormatter',

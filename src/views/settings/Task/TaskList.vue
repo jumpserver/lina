@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import { ChoicesFormatter, DetailFormatter, SwitchFormatter } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common'
+import { BASE_URL } from '@/utils/common/index'
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {

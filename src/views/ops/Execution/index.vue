@@ -7,7 +7,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
 import detailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 

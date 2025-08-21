@@ -1,6 +1,10 @@
 <template>
   <div>
-    <ListTable ref="listTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="listTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
   </div>
 </template>
 

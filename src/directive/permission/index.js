@@ -1,4 +1,4 @@
-import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms'
+import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms/index'
 import permission from './permission'
 import Vue from 'vue'
 
@@ -33,7 +33,7 @@ const install = function(Vue) {
 }
 
 window['permission'] = permission
-Vue.use(install); // eslint-disable-line
+Vue.use(install) // eslint-disable-line
 
 permission.install = install
 export default permission

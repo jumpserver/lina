@@ -8,7 +8,8 @@
       :form="basicForm"
       :label-position="iLabelPosition"
       class="form-fields"
-      label-width="25%"
+      :label-width="labelWidth"
+      :style="{ '--label-width': labelWidth }"
       v-bind="$attrs"
       v-on="$listeners"
     >
@@ -70,8 +71,20 @@
 
 <script>
 import ElFormRender from './components/el-form-renderer'
-import { randomString } from '@/utils/string'
-import { scrollToError } from '@/utils'
+import { randomString } from '@/utils/common/index'
+
+const scrollToError = (
+  el,
+  scrollOption = {
+    behavior: 'smooth',
+    block: 'center'
+  }
+) => {
+  setTimeout(() => {
+    const isError = el.getElementsByClassName('is-error')
+    isError[0].scrollIntoView(scrollOption)
+  }, 0)
+}
 
 export default {
   components: {
@@ -128,6 +141,10 @@ export default {
     labelPosition: {
       type: String,
       default: ''
+    },
+    labelWidth: {
+      type: String,
+      default: '25%'
     }
   },
   data() {
@@ -263,7 +280,7 @@ export default {
     }
 
     .el-form-item__content {
-      width: 75%;
+      width: calc(100% - var(--label-width));
       line-height: 32px;
 
       // 禁用的输入框
@@ -337,7 +354,7 @@ export default {
 
   ::v-deep .form-buttons {
     margin-top: 30px;
-    margin-left: 25%;
+    margin-left: var(--label-width);
   }
 }
 

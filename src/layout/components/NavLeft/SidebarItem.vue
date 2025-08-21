@@ -58,11 +58,11 @@
 
 <script>
 import path from 'path'
-import { isExternal } from '@/utils/validate'
+import { isExternal } from '@/utils/secure'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
-import { toSentenceCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common/index'
 
 export default {
   name: 'SidebarItem',

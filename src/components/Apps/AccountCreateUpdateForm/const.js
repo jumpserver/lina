@@ -1,5 +1,6 @@
 import { UpdateToken, UploadSecret } from '@/components/Form/FormFields'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import AssetSelect from '@/components/Apps/AssetSelect/index.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 
@@ -15,17 +16,11 @@ export const accountFieldsMeta = (vm) => {
 
   return {
     assets: {
-      component: Select2,
+      component: AssetSelect,
       label: vm.$t('Asset'),
       rules: [Required],
       el: {
-        multiple: true,
-        ajax: {
-          url: '/api/v1/assets/assets/',
-          transformOption: (item) => {
-            return { label: item.name + '(' + item.address + ')', value: item.id }
-          }
-        }
+        multiple: false
       },
       hidden: () => {
         return vm.platform || vm.asset

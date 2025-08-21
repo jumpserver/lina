@@ -22,7 +22,7 @@
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 import GenericListTable from '@/components/Table/DrawerListTable'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { ActionsFormatter, DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 export default {
@@ -105,7 +105,7 @@ export default {
               canUpdate: this.$hasPerm('ops.change_job') && !this.$store.getters.currentOrgIsRoot,
               updateRoute: 'JobUpdate',
               onUpdate: ({ row, col }) => {
-                vm.$refs.ListTable.onUpdate({ row, col, query: { _type: this.type }})
+                vm.$refs.ListTable.onUpdate({ row, col, query: { _type: this.type } })
               },
               hasDelete: true,
               canDelete: this.$hasPerm('ops.delete_job'),
@@ -138,7 +138,7 @@ export default {
       },
       headerActions: {
         onCreate: () => {
-          vm.$refs.ListTable.onCreate({ query: { _type: this.type }})
+          vm.$refs.ListTable.onCreate({ query: { _type: this.type } })
         },
         hasRefresh: true,
         hasExport: false,

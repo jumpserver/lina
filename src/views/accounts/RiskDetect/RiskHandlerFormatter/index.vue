@@ -24,6 +24,7 @@
         <el-button
           class="ignore action"
           size="mini"
+          :disabled="!this.$hasPerm('accounts.change_accountrisk')"
           @click="handleDropdown('ignore')"
         >
           <svg-icon icon-class="ignore" />
@@ -57,7 +58,7 @@
 <script>
 import ProcessingDialog from '@/components/Dialog/ProcessingDialog.vue'
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import { sleep } from '@/utils/time'
+import { sleep } from '@/utils/common/time'
 import ReviewDraw from '@/views/accounts/RiskDetect/RiskHandlerFormatter/ReviewDrawer.vue'
 import { riskActions } from './const'
 
@@ -134,7 +135,7 @@ export default {
     },
     showReview() {
       if (this.selectedRows.length === 0 && !this.row.id) {
-        return this.$message.warning(`请选择需要勾选的数据`)
+        return this.$message.warning(this.$t('PleaseSelectTheDataYouWantToCheck'))
       }
       this.reviewDrawer = true
     },

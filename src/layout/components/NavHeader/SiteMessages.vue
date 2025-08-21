@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 
@@ -140,7 +140,7 @@ export default {
       this.$confirm(this.$tc('OneClickReadMsg'), this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           this.markAsReadAll(msgs)
           done()

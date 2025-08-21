@@ -85,7 +85,7 @@ export default {
         hasTree: true,
         columnsExtra: ['view_account'],
         columnsExclude: ['spec_info'],
-        columns: ['id', 'name', 'address', 'platform', 'view_account', 'actions'],
+        columns: ['id', 'name', 'address', 'comment', 'labels', 'connectivity', 'platform', 'view_account', 'actions'],
         columnsShow: {
           min: ['name', 'address', 'accounts'],
           default: ['name', 'address', 'platform', 'view_account', 'actions']

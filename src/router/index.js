@@ -33,7 +33,8 @@ import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
 import pamViewRoutes from './pam'
-import { getPropView } from '@/utils/jms'
+import reportsViewRoutes from './reports'
+import { getPropView } from '@/utils/jms/index'
 import store from '@/store'
 
 Vue.use(Router)
@@ -63,7 +64,7 @@ export const constantRoutes = [
           icon: 'dashboard',
           title: i18n.t('Overview')
         },
-        beforeEnter: async(to, from, next) => {
+        beforeEnter: async (to, from, next) => {
           const preferView = getPropView()
           if (preferView) {
             await store.dispatch('app/reset')
@@ -96,15 +97,17 @@ export const viewRoutes = [
   workbenchViewRoutes,
   ticketsRoutes,
   settingsRoutes,
-  profileRoutes
+  profileRoutes,
+  reportsViewRoutes
 ]
 
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  base: '/ui/',
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    base: '/ui/',
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 

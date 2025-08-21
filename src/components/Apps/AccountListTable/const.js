@@ -1,5 +1,5 @@
 import { ChoicesFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export const connectivityMeta = {
   formatter: ChoicesFormatter,
@@ -40,7 +40,7 @@ export function isDirectoryServiceAccount(account, vm) {
   return vm.asset && vm.asset.id !== account.asset.id
 }
 
-export const accountOtherActions = (vm) => {
+export const accountOtherActions = vm => {
   return [
     {
       name: 'View',
@@ -62,9 +62,11 @@ export const accountOtherActions = (vm) => {
       name: 'Update',
       title: vm.$t('Edit'),
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.change_account') &&
+        return (
+          vm.$hasPerm('accounts.change_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
+        )
       },
       callback: ({ row }) => {
         vm.isUpdateAccount = true
@@ -85,9 +87,11 @@ export const accountOtherActions = (vm) => {
       name: 'UpdateSecret',
       title: vm.$t('EditSecret'),
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.change_account') &&
+        return (
+          vm.$hasPerm('accounts.change_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
+        )
       },
       callback: ({ row }) => {
         const data = {
@@ -110,9 +114,11 @@ export const accountOtherActions = (vm) => {
         return !vm.asset
       },
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.add_account') &&
+        return (
+          vm.$hasPerm('accounts.add_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
+        )
       },
       callback: ({ row }) => {
         vm.account = {
@@ -138,29 +144,26 @@ export const accountOtherActions = (vm) => {
         row.asset['auto_config'].ansible_enabled &&
         row.asset['auto_config'].ping_enabled,
       callback: ({ row }) => {
-        vm.$axios.post(
-          `/api/v1/accounts/accounts/tasks/`,
-          { action: 'verify', accounts: [row.id] }
-        ).then(res => {
-          openTaskPage(res['task'])
-        })
+        vm.$axios
+          .post(`/api/v1/accounts/accounts/tasks/`, { action: 'verify', accounts: [row.id] })
+          .then(res => {
+            openTaskPage(res['task'])
+          })
       }
     },
     {
       name: 'ClearSecret',
       title: vm.$t('ClearSecret'),
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.change_account') &&
-          !isDirectoryServiceAccount(row, vm)
+        return vm.$hasPerm('accounts.change_account') && !isDirectoryServiceAccount(row, vm)
       },
       type: 'primary',
       callback: ({ row }) => {
-        vm.$axios.patch(
-          `/api/v1/accounts/accounts/clear-secret/`,
-          { account_ids: [row.id] }
-        ).then(() => {
-          vm.$message.success(vm.$tc('ClearSuccessMsg'))
-        })
+        vm.$axios
+          .patch(`/api/v1/accounts/accounts/clear-secret/`, { account_ids: [row.id] })
+          .then(() => {
+            vm.$message.success(vm.$tc('ClearSuccessMsg'))
+          })
       }
     },
     {
@@ -184,9 +187,11 @@ export const accountOtherActions = (vm) => {
       type: 'primary',
       divided: true,
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.add_account') &&
+        return (
+          vm.$hasPerm('accounts.add_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
+        )
       },
       has: () => {
         return !vm.asset
@@ -204,9 +209,11 @@ export const accountOtherActions = (vm) => {
       title: vm.$t('MoveToAsset'),
       type: 'primary',
       can: ({ row }) => {
-        return vm.$hasPerm('accounts.add_account') &&
+        return (
+          vm.$hasPerm('accounts.delete_account') &&
           !vm.$store.getters.currentOrgIsRoot &&
           !isDirectoryServiceAccount(row, vm)
+        )
       },
       has: () => {
         return !vm.asset
@@ -222,7 +229,7 @@ export const accountOtherActions = (vm) => {
   ]
 }
 
-export const accountQuickFilters = (vm) => [
+export const accountQuickFilters = vm => [
   {
     label: vm.$t('Recent (7 days)'),
     options: [

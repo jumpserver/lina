@@ -1,6 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
-import { BASE_URL } from '@/utils/common'
+import { BASE_URL } from '@/utils/common/index'
 import empty from '@/layout/empty'
 import store from '@/store'
 

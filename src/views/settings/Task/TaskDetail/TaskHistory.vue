@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import { DrawerListTable as ListTable } from '@/components'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'TaskHistory',

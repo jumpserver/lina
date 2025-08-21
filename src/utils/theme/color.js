@@ -54,7 +54,7 @@ export function mix(color_1, color_2, weight) {
     return parseInt(h, 16)
   }
 
-  weight = (typeof weight !== 'undefined') ? weight : 50
+  weight = typeof weight !== 'undefined' ? weight : 50
   let color = '#'
 
   for (let i = 0; i <= 5; i += 2) {

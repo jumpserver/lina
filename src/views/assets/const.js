@@ -3,12 +3,12 @@ import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
 import AssetAccounts from '@/views/assets/Asset/AssetCreateUpdate/components/AssetAccounts'
 import rules from '@/components/Form/DataForm/rules'
 import { JSONManyToManySelect, NestedObjectSelect2, Select2 } from '@/components/Form/FormFields'
-import { message } from '@/utils/message'
+import { message } from '@/utils/vue/message'
 
-export const filterSelectValues = (values) => {
+export const filterSelectValues = values => {
   if (!values) return
   const selects = []
-  values.forEach((item) => {
+  values.forEach(item => {
     if (item.hasOwnProperty('pk')) {
       selects.push(item)
     } else {
@@ -27,25 +27,32 @@ export const filterSelectValues = (values) => {
 }
 
 function updatePlatformProtocols(vm, platformType, updateForm, platformChanged = false) {
-  setTimeout(() => vm.init().then(() => {
-    const isCreate = vm.$route.query.action === 'create' && vm?.$route?.query.clone_from === undefined
-    const needModify = isCreate || platformChanged
-    const platformProtocols = vm.platform.protocols
-    if (!needModify) return
-    if (platformType === 'website') {
-      const setting = Array.isArray(platformProtocols) ? platformProtocols[0].setting : platformProtocols.setting
-      updateForm({
-        'autofill': setting.autofill ? setting.autofill : 'basic',
-        'password_selector': setting.password_selector,
-        'script': setting.script,
-        'submit_selector': setting.submit_selector,
-        'username_selector': setting.username_selector
-      })
-    }
-    // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
-    // updateForm({ protocols: [] })
-    vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
-  }), 100)
+  setTimeout(
+    () =>
+      vm.init().then(() => {
+        const isCreate =
+          vm.$route.query.action === 'create' && vm?.$route?.query.clone_from === undefined
+        const needModify = isCreate || platformChanged
+        const platformProtocols = vm.platform.protocols
+        if (!needModify) return
+        if (platformType === 'website') {
+          const setting = Array.isArray(platformProtocols)
+            ? platformProtocols[0].setting
+            : platformProtocols.setting
+          updateForm({
+            autofill: setting.autofill ? setting.autofill : 'basic',
+            password_selector: setting.password_selector,
+            script: setting.script,
+            submit_selector: setting.submit_selector,
+            username_selector: setting.username_selector
+          })
+        }
+        // 这里不能清空，比如 gateway 切换时，protocol 没有变化，就会出现 bug, tapd: 1053282
+        // updateForm({ protocols: [] })
+        vm.iConfig.fieldsMeta.protocols.el.choices = platformProtocols
+      }),
+    100
+  )
 }
 
 export const assetFieldsMeta = (vm, category, type) => {
@@ -80,12 +87,14 @@ export const assetFieldsMeta = (vm, category, type) => {
             pre[cur.name] = cur['secret_types']
             return pre
           }, {})
-          const _secretTypes = value.map(v => v.name).reduce((pre, name) => {
-            if (protocolSecretTypes[name]) {
-              return pre.concat(protocolSecretTypes[name])
-            }
-            return pre
-          }, [])
+          const _secretTypes = value
+            .map(v => v.name)
+            .reduce((pre, name) => {
+              if (protocolSecretTypes[name]) {
+                return pre.concat(protocolSecretTypes[name])
+              }
+              return pre
+            }, [])
           secretTypes.splice(0, secretTypes.length, ..._secretTypes)
         }
       }
@@ -95,7 +104,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: false,
         ajax: {
           url: `/api/v1/assets/platforms/?category=${platformCategory}&type=${platformType}`,
-          transformOption: (item) => {
+          transformOption: item => {
             return { label: item.name, value: item.id }
           }
         }
@@ -144,7 +153,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       el: {
         ajax: {
           url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
+          transformOption: item => {
             return { label: `${item.full_value}`, value: item.id }
           }
         },
@@ -159,7 +168,7 @@ export const assetFieldsMeta = (vm, category, type) => {
         multiple: true,
         url: '/api/v1/labels/labels/',
         ajax: {
-          transformOption: (item) => {
+          transformOption: item => {
             return { label: `${item.name}:${item.value}`, value: `${item.id}` }
           }
         }
@@ -180,21 +189,23 @@ export const assetFieldsMeta = (vm, category, type) => {
   }
 }
 
-export const assetJSONSelectMeta = (vm) => {
+export const assetJSONSelectMeta = vm => {
   const categories = []
   const types = []
   const protocols = []
-  vm.$axios.get('/api/v1/assets/categories/').then((res) => {
+  vm.$axios.get('/api/v1/assets/categories/').then(res => {
     const _types = []
     const _protocols = []
     for (const category of res) {
       categories.push({ value: category.value, label: category.label })
       _types.push(...category.types.map(item => ({ value: item.value, label: item.label })))
       for (const type of category.types) {
-        _protocols.push(...type.constraints.protocols?.map(item => ({
-          value: item.name,
-          label: item.name.toUpperCase()
-        })))
+        _protocols.push(
+          ...type.constraints.protocols?.map(item => ({
+            value: item.name,
+            label: item.name.toUpperCase()
+          }))
+        )
       }
     }
     types.push(..._.uniqBy(_types, 'value'))
@@ -209,7 +220,7 @@ export const assetJSONSelectMeta = (vm) => {
       select2: {
         url: '/api/v1/assets/assets/',
         ajax: {
-          transformOption: (item) => {
+          transformOption: item => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }
@@ -233,7 +244,7 @@ export const assetJSONSelectMeta = (vm) => {
           el: {
             url: '/api/v1/assets/nodes/',
             ajax: {
-              transformOption: (item) => {
+              transformOption: item => {
                 return { label: item.full_value, value: item.id }
               }
             }
@@ -283,7 +294,7 @@ export const assetJSONSelectMeta = (vm) => {
             multiple: true,
             url: '/api/v1/assets/labels/',
             ajax: {
-              transformOption: (item) => {
+              transformOption: item => {
                 return { label: `${item.name}:${item.value}`, value: item.id }
               }
             }
@@ -306,7 +317,7 @@ export function getAssetSelect2Meta() {
       select2: {
         ajax: {
           url: '/api/v1/assets/assets/?fields_size=mini',
-          transformOption: (item) => {
+          transformOption: item => {
             return { label: item.name + '(' + item.address + ')', value: item.id }
           }
         }

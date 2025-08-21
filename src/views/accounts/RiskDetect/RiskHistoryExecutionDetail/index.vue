@@ -8,21 +8,19 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountPushExecutionInfo from './AccountPushExecutionInfo.vue'
-import AccountPushExecutionTaskList from './AccountPushExecutionTaskList.vue'
+import CheckAccountExecutionInfo from './CheckAccountExecutionInfo.vue'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountPushExecutionInfo,
-    AccountPushExecutionTaskList
+    CheckAccountExecutionInfo
   },
   data() {
     return {
       execution: { id: '' },
       config: {
         url: '/api/v1/accounts/check-account-executions',
-        activeMenu: 'AccountPushExecutionInfo',
+        activeMenu: 'CheckAccountExecutionInfo',
         actions: {
           hasUpdate: false,
           hasDelete: false
@@ -30,14 +28,9 @@ export default {
         submenu: [
           {
             title: this.$t('Basic'),
-            name: 'AccountPushExecutionInfo',
-            hidden: () => !this.$hasPerm('accounts.view_pushaccountexecution')
+            name: 'CheckAccountExecutionInfo',
+            hidden: () => !this.$hasPerm('accounts.view_checkaccountexecution')
           }
-          // {
-          //   title: this.$t('TaskList'),
-          //   name: 'AccountPushExecutionTaskList',
-          //   hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
-          // }
         ],
         getTitle: this.getExecutionTitle
 

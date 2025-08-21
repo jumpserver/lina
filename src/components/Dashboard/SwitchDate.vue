@@ -16,11 +16,13 @@
 <script>
 export default {
   props: {
-    days: {
+    name: {
       type: String,
-      default: () => {
-        return localStorage.getItem('dashboardDays') || '7'
-      }
+      default: 'dashboardDays'
+    },
+    days: {
+      type: [String, Number],
+      default: null
     },
     options: {
       type: Array,
@@ -47,8 +49,28 @@ export default {
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
+  created() {
+    let days = this.days
+    if (!days) {
+      days = this.$route.query.days
+    }
+    if (!days) {
+      days = localStorage.getItem(this.name)
+    }
+    if (!days) {
+      days = '7'
+    }
+    if (days && days !== this.select) {
+      this.select = days
+      this.$emit('change', days)
+    }
+  },
+  mounted() {
+    this.$emit('change', this.select)
+  },
   methods: {
     onChange(val) {
+      localStorage.setItem(this.name, val)
       this.$emit('change', val)
     }
   }

@@ -1,0 +1,57 @@
+import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
+
+import users from './users'
+import assets from './assets'
+import accounts from './accounts'
+
+export default {
+  path: '/reports',
+  redirect: '/reports/users',
+  component: empty,
+  meta: {
+    title: i18n.t('Reports'),
+    icon: 'fa-bar-chart-o',
+    view: 'reports',
+    showNavSwitcher: false,
+    permissions: []
+  },
+  children: [
+    {
+      path: '/reports/users',
+      component: empty,
+      redirect: 'users',
+      name: 'ReportsUsers',
+      meta: {
+        title: i18n.t('ReportsUsers'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: users
+    },
+    {
+      path: '/reports/assets',
+      component: empty,
+      redirect: 'assets',
+      name: 'ReportsAssets',
+      meta: {
+        title: i18n.t('ReportsAssets'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: assets
+    },
+    {
+      path: '/reports/accounts',
+      component: empty,
+      redirect: 'accounts',
+      name: 'ReportsAccounts',
+      meta: {
+        title: i18n.t('ReportsAccounts'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: accounts
+    }
+  ]
+}

@@ -24,7 +24,7 @@
 
 <script>
 import Select2 from './Select2.vue'
-import { hasUUID } from '@/utils/common'
+import { hasUUID } from '@/utils/common/index'
 
 export default {
   components: {

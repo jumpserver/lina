@@ -99,9 +99,9 @@ export default {
       totalData: [],
       page: defaultFirstPage,
       extraQuery: {},
-      paginationSize: 6,
+      paginationSize: 12,
       paginationLayout: 'total, sizes, prev, pager, next',
-      paginationSizes: [6, 18, 27],
+      paginationSizes: [12, 24, 36],
       loading: true,
       axiosConfig: {
         raw: 1,
@@ -212,7 +212,7 @@ export default {
       this.$confirm(msg, this.$tc('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           const deleteFunc = this.tableConfig.onDelete || this.defaultPerformDelete
           await deleteFunc(obj)
@@ -261,7 +261,7 @@ export default {
       min-width: 330px;
       position: relative;
       margin-bottom: 20px;
-      //height: 230px;
+      height: 180px;
       width: 380px;
       padding: 15px;
 

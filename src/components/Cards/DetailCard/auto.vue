@@ -12,8 +12,8 @@
 
 <script>
 import DetailCard from './index.vue'
-import { copy } from '@/utils/common'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { copy } from '@/utils/common/index'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 import IBox from '@/components/Common/IBox/index.vue'
 import LabelsDetailFormatter from '../Formatters/LabelsDetailFormatter.vue'
 

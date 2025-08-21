@@ -5,7 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import getChangeSecretFields from '@/views/accounts/AccountBackup/fields'
-import { encryptPassword } from '@/utils/crypto'
+import { encryptPassword } from '@/utils/secure'
 import { periodicMeta } from '@/components/const'
 
 export default {
@@ -33,7 +33,7 @@ export default {
           ]
         ],
         [this.$t('Periodic'), ['is_periodic', 'interval', 'crontab']],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       initial: {
         is_periodic: false,

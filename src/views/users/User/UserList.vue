@@ -26,7 +26,7 @@
 import { createSourceIdCache } from '@/api/common'
 import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { mapGetters } from 'vuex'
-import { getDayFuture } from '@/utils/time'
+import { getDayFuture } from '@/utils/common/time'
 import InviteUsersDialog from './components/InviteUsersDialog'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import store from '@/store'

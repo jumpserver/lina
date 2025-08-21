@@ -6,7 +6,7 @@
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
-import { toM2MJsonParams } from '@/utils/jms'
+import { toM2MJsonParams } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 

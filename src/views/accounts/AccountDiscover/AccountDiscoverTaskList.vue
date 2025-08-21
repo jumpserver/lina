@@ -11,7 +11,7 @@
 <script>
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 
 export default {
   name: 'AccountDiscoverTaskList',
@@ -84,7 +84,9 @@ export default {
                   name: 'execute',
                   type: 'primary',
                   order: 1,
-                  can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
+                  can: ({ row }) => {
+                    return this.$hasPerm('accounts.add_gatheraccountsexecution') && row.is_active
+                  },
                   callback: function(data) {
                     this.$axios.post(
                       `/api/v1/accounts/gather-account-executions/`,

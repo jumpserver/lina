@@ -1,6 +1,8 @@
 <template>
   <GenericListTable
     ref="listTable"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
     :header-actions="headerActions"
     :table-config="tableConfig"
     :resource="$t('DetectTasks')"
@@ -9,7 +11,7 @@
 
 <script>
 import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
+import { openTaskPage } from '@/utils/jms/index'
 import { GenericListTable } from '@/layout/components'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 
@@ -21,6 +23,8 @@ export default {
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/RiskDetect/AccountCheckDetail/index.vue'),
       tableConfig: {
         url: '/api/v1/accounts/check-account-automations/',
         columns: [
@@ -110,7 +114,7 @@ export default {
                   type: 'primary',
                   name: 'execute',
                   can: ({ row }) => {
-                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountautomation')
+                    return row.is_active && vm.$hasPerm('accounts.add_checkaccountexecution')
                   },
                   callback: function({ row }) {
                     this.$axios.post(

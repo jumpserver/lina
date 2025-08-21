@@ -17,7 +17,7 @@
 import ActionsGroup from '@/components/Common/ActionsGroup/index.vue'
 import ImExportDialog from './ImExportDialog.vue'
 import { cleanActions } from './utils'
-import { assignIfNot } from '@/utils/common'
+import { assignIfNot } from '@/utils/common/index'
 
 const defaultTrue = { type: [Boolean, Function, String], default: true }
 

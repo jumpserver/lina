@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { randomString } from '@/utils/string'
+import { randomString } from '@/utils/common/index'
 
 export default {
   props: {

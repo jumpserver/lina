@@ -6,7 +6,7 @@
 
 <script>
 import { DrawerListTable as ListTable } from '@/components'
-import { toM2MJsonParams } from '@/utils/jms'
+import { toM2MJsonParams } from '@/utils/jms/index'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -45,7 +45,7 @@ export default {
               formatter: DetailFormatter,
               formatterArgs: {
                 getRoute: ({ row }) => {
-                  return { name: 'AssetDetail', params: { id: row.id }}
+                  return { name: 'AssetDetail', params: { id: row.id } }
                 }
               }
             },

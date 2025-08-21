@@ -10,7 +10,7 @@
 <script>
 import { cleanActions } from './utils'
 import { createSourceIdCache } from '@/api/common'
-import { getErrorResponseMsg } from '@/utils/common'
+import { getErrorResponseMsg } from '@/utils/common/index'
 
 import i18n from '@/i18n/i18n'
 import DataActions from '@/components/Common/DataActions/index.vue'
@@ -240,7 +240,7 @@ export default {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
         showCancelButton: true,
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
           instance.confirmButtonLoading = true
           try {

@@ -50,8 +50,7 @@
 </template>
 
 <script>
-import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr, formatTime, getDateTimeStamp } from '@/utils/common/time'
 import IBox from '@/components/Common/IBox'
 import { STATE_MAP } from '../const'
 

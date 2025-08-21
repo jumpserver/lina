@@ -27,7 +27,7 @@ import UpdateDialog from './components/UpdateDialog.vue'
 import SyncDialog from './components/SyncDialog.vue'
 import SmallCard from '@/components/Table/InfoCardTable/index.vue'
 import { ACCOUNT_PROVIDER_ATTRS_MAP } from '@/views/assets/Cloud/const'
-import { toSafeLocalDateStr } from '@/utils/time'
+import { toSafeLocalDateStr } from '@/utils/common/time'
 
 export default {
   name: 'CloudAccountList',
@@ -95,7 +95,7 @@ export default {
           moreCreates: {
             loading: false,
             callback: (option) => {
-              vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
+              vm.$router.push({ name: 'AccountCreate', query: { provider: option.name } })
             },
             dropdown: [
               {

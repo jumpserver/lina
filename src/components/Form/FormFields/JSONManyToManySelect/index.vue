@@ -42,9 +42,9 @@ import DataTable from '@/components/Table/DataTable/index.vue'
 import ValueFormatter from './ValueFormatter.vue'
 import AttrFormDialog from './AttrFormDialog.vue'
 import AttrMatchResultDialog from './AttrMatchResultDialog.vue'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam } from '@/utils/common/index'
 import { attrMatchOptions } from '@/components/const'
-import { toM2MJsonParams } from '@/utils/jms'
+import { toM2MJsonParams } from '@/utils/jms/index'
 
 export default {
   name: 'JSONManyToManySelect',
@@ -109,7 +109,7 @@ export default {
         columns: [
           { prop: 'name', label: this.$t('AttrName'), formatter: tableFormatter('name') },
           { prop: 'match', label: this.$t('Match'), formatter: tableFormatter('match') },
-          { prop: 'value', label: this.$t('AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs }},
+          { prop: 'value', label: this.$t('AttrValue'), formatter: ValueFormatter, formatterArgs: { attrs: this.attrs } },
           {
             prop: 'action',
             label: this.$t('Action'),

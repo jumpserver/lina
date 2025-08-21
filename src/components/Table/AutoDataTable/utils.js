@@ -1,4 +1,4 @@
-import { toSentenceCase } from '@/utils/common'
+import { toSentenceCase } from '@/utils/common/index'
 import i18n from '@/i18n/i18n'
 
 import {
@@ -225,11 +225,15 @@ export class TableColumnsGenerator {
           padding = '6px'
           value = '-'
         }
-        return h('span', {
-          'style': {
-            marginLeft: padding
-          }
-        }, [value])
+        return h(
+          'span',
+          {
+            style: {
+              marginLeft: padding
+            }
+          },
+          [value]
+        )
       }
     }
     return col
@@ -281,10 +285,11 @@ export class TableColumnsGenerator {
       }
 
       return (
-        <span>{column.label}
+        <span>
+          {column.label}
           <el-tooltip {...binds}>
-            <div slot='content' v-sanitize={helpTip}/>
-            <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px'/>
+            <div slot='content' v-sanitize={helpTip} />
+            <i class='fa fa-question-circle-o help-tip-icon' style='padding-left: 2px' />
           </el-tooltip>
         </span>
       )
@@ -299,16 +304,13 @@ export class TableColumnsGenerator {
         return col
       }
       if (column.type === 'boolean') {
-        col.filters = [
-          { text: i18n.t('Yes'), value: true },
-          { text: i18n.t('No'), value: false }
-        ]
+        col.filters = [{ text: i18n.t('Yes'), value: true }, { text: i18n.t('No'), value: false }]
         col.sortable = false
         col['column-key'] = col.prop
       }
       if (column.type === 'choice' && column.choices) {
         col.filters = column.choices.map(item => {
-          if (typeof (item.value) === 'boolean') {
+          if (typeof item.value === 'boolean') {
             if (item.value) {
               return { text: item['label'], value: 'True' }
             } else {

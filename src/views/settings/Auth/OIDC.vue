@@ -11,13 +11,14 @@ import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
 import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
-
+import _ from 'lodash'
 export default {
   name: 'OIDC',
   components: {
     BaseAuth
   },
   data() {
+    const vm = this
     return {
       settings: {
         url: '/api/v1/settings/setting/?category=oidc',
@@ -56,22 +57,15 @@ export default {
             hidden: (form) => !form['AUTH_OPENID_KEYCLOAK']
           },
           AUTH_OPENID_PROVIDER_ENDPOINT: {
+            helpTextAsTip: false,
             hidden: (form) => form['AUTH_OPENID_KEYCLOAK'],
             on: {
-              input([value], updateForm) {
-                const fields = {
-                  AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT: 'authorize',
-                  AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT: 'token',
-                  AUTH_OPENID_PROVIDER_JWKS_ENDPOINT: 'jwks',
-                  AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT: 'userinfo',
-                  AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT: 'logout'
+              input: _.debounce(function([value], updateForm) {
+                if (value.endsWith('/')) {
+                  value = value.slice(0, -1)
                 }
-                for (const [k, v] of Object.entries(fields)) {
-                  const data = {}
-                  data[k] = value + v
-                  updateForm(data)
-                }
-              }
+                vm.onProviderEndpointChange(value, updateForm)
+              }, 1000)
             }
           },
           AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT: {
@@ -134,6 +128,61 @@ export default {
           return data
         }
       }
+    }
+  },
+  methods: {
+    async onProviderEndpointChange(value, updateForm) {
+      let data = {}
+      try {
+        data = await this.discovery(value)
+      } catch (err) {
+        data = this.setDefault(value)
+      }
+      updateForm(data)
+    },
+    async discovery(issuer, updateForm) {
+      if (!issuer.startsWith('http')) {
+        throw new Error('Invalid issuer')
+      }
+      const url = `${issuer}/.well-known/openid-configuration`
+      const config = {
+        ignoreSSLVerification: true,
+        disableFlashErrorMsg: true
+      }
+      const configMap = {
+        AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT: 'authorization_endpoint',
+        AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT: 'token_endpoint',
+        AUTH_OPENID_PROVIDER_JWKS_ENDPOINT: 'jwks_uri',
+        AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT: 'userinfo_endpoint',
+        AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT: 'end_session_endpoint'
+      }
+      try {
+        const res = await this.$axios.get(url, config)
+        const data = {}
+        for (const [k, v] of Object.entries(configMap)) {
+          data[k] = res[v]
+        }
+        if (Object.keys(data).length < 5) {
+          throw new Error('Invalid issuer, missing required fields')
+        }
+        return data
+      } catch (err) {
+        throw err
+      }
+    },
+    setDefault(issuer) {
+      const fields = {
+        AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT: 'authorize',
+        AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT: 'token',
+        AUTH_OPENID_PROVIDER_JWKS_ENDPOINT: 'jwks',
+        AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT: 'userinfo',
+        AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT: 'logout'
+      }
+      const data = {}
+      for (const [k, v] of Object.entries(fields)) {
+        data[k] = issuer + '/' + v
+      }
+      return data
     }
   }
 }

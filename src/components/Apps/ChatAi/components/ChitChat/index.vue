@@ -37,7 +37,7 @@
 import ChatInput from './ChatInput.vue'
 import ChatMessage from './ChatMessage.vue'
 import { mapState } from 'vuex'
-import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/socket'
+import { closeWebSocket, createWebSocket, onSend, ws } from '@/utils/request'
 import { getInputFocus, useChat } from '../../useChat.js'
 
 const {

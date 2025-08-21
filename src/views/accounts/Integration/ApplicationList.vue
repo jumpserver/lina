@@ -1,22 +1,28 @@
 <template>
-  <div>
-    <ListTable ref="table" v-bind="$data" />
-  </div>
+  <GenericListTable
+    ref="listTable"
+    :create-drawer="createDrawer"
+    :detail-drawer="detailDrawer"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script type="text/jsx">
-import { DrawerListTable as ListTable } from '@/components'
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   name: 'CloudAccountList',
   components: {
-    ListTable
+    GenericListTable
   },
   data() {
     const vm = this
     return {
+      createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
+      detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
       drawerTitle: '',
       showTableUpdateDrawer: false,
       currentTemplate: null,
