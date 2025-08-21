@@ -12,10 +12,10 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip :content="$tc('Ignore')" :open-delay="400">
-        <el-button :disabled="!this.$hasPerm('accounts.change_gatheredaccount')" class="ignore action" size="mini">
+        <el-button :disabled="!this.$hasPerm('accounts.change_accountrisk')" class="ignore action" size="mini">
           <svg-icon
             icon-class="ignore"
-            :style="!this.$hasPerm('accounts.change_gatheredaccount') ? 'pointer-events: none;' : ''"
+            :style="!this.$hasPerm('accounts.change_accountrisk') ? 'pointer-events: none;' : ''"
             @click="handleRisk('ignore')"
           />
         </el-button>
