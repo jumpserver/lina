@@ -4,6 +4,7 @@ import empty from '@/layout/empty'
 import users from './users'
 import assets from './assets'
 import accounts from './accounts'
+import dashboard from './dashboard'
 
 export default {
   path: '/reports',
@@ -17,6 +18,18 @@ export default {
     permissions: []
   },
   children: [
+    {
+      path: '/reports/dashboard',
+      component: empty,
+      redirect: 'dashboard',
+      name: 'ReportsDashboard',
+      meta: {
+        title: i18n.t('ReportsDashboard'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: dashboard
+    },
     {
       path: '/reports/users',
       component: empty,

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'no-padding': onlyCharts, 'nav': nav }">
+  <div :class="{ 'only-charts': onlyCharts, 'nav': nav }">
     <div v-if="!onlyCharts && nav" class="header nav-bar">
       <div class="nav-bar-logo">
         <Logo />
@@ -15,17 +15,23 @@
             [{{ new Date().toLocaleString() }}]
           </span>
 
-          <span v-if="!nav && url" style="float: right; line-height: 40px;">
+          <!-- <span v-if="!nav && url" class="export-btn">
             <el-button type="text" @click="openNewWindow">
               <i class="fa fa-external-link" style="font-size: 15px;" />
               {{ $t('Export') }}
             </el-button>
-          </span>
+          </span> -->
         </div>
         <div v-if="isDescription" class="description">
           {{ description }}
         </div>
       </div>
+      <span v-if="!nav && url" class="export-btn">
+        <el-button type="text" @click="openNewWindow">
+          <i class="fa fa-external-link" style="font-size: 15px;" />
+          {{ $t('Export') }}
+        </el-button>
+      </span>
       <div class="charts-zone">
         <slot />
       </div>
@@ -123,6 +129,10 @@ export default {
     height: 40px;
   }
 
+  .title-bar {
+    display: inline-block;
+  }
+
   .title {
     height: 40px;
     background-color: white;
@@ -146,7 +156,14 @@ export default {
     background-color: white;
   }
 
+  .export-btn {
+    float: right;
+    line-height: 40px;
+    margin-right: 23px;
+  }
+
   .content {
+    // background-color: white;
     background-color: #F1F1F1;
     height: calc(100vh - 40px);
     overflow-y: auto;
@@ -168,15 +185,25 @@ export default {
     }
   }
 
-  .no-padding {
+  .only-charts {
     .content {
       height: auto;
       overflow-y: hidden;
       overflow-x: hidden;
+
+      .title-bar {
+        margin: 0 30px;
+      }
+
+      .export-btn  {
+        position: absolute;
+        top: 5px;
+        right: 20px;
+      }
     }
 
     .charts-zone {
-      padding: 0;
+      // padding: 0;
     }
   }
 
@@ -185,6 +212,10 @@ export default {
       .charts-zone {
         width: 1040px;
       }
+    }
+
+    .title-bar {
+      width: 100%;
     }
   }
 

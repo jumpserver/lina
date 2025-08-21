@@ -1,5 +1,11 @@
 <template>
-  <BaseReport v-bind="$attrs">
+  <BaseReport
+    :url="url"
+    :nav="nav"
+    :title="$t('AuditsDashboard')"
+    name="AuditsDashboard"
+    v-bind="$attrs"
+  >
     <SwitchDate class="switch-date" @change="onChange" />
     <CardSummary :days="days" />
     <el-row :gutter="16">
@@ -21,6 +27,7 @@ import DataSummary from './components/DataSummary'
 import CardSummary from './components/CardSummary.vue'
 import RightSummary from './components/RightSummary.vue'
 import BaseReport from '../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
 
 export default {
   components: {
@@ -31,9 +38,16 @@ export default {
     RightSummary,
     BaseReport
   },
+  props: {
+    nav: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
-      days: localStorage.getItem('dashboardDays') || '7'
+      days: localStorage.getItem('dashboardDays') || '7',
+      url: getRouteUrl('AuditsReport', this.$router)
     }
   },
   methods: {

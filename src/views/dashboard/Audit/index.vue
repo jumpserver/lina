@@ -2,7 +2,7 @@
   <Page>
     <div v-if="this.$hasPerm('rbac.view_audit')">
       <Announcement />
-      <AuditReport :only-charts="true" />
+      <AuditReport :only-charts="true" :nav="false" />
     </div>
     <Page403 v-else />
   </Page>

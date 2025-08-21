@@ -21,3 +21,16 @@ export function getComponentFromRoute(route, router) {
   }
   return r.components.default
 }
+
+export function getRouteUrl(route, router) {
+  if (typeof route === 'string') {
+    route = { name: route }
+  }
+
+  const r = router.match(route)
+
+  if (!r) {
+    return
+  }
+  return r.path
+}
