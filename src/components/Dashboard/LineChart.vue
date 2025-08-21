@@ -5,10 +5,16 @@
       :options="options"
       :autoresize="true"
       theme="light"
-      class="disabled-when-print"
-      @finished="getDataUrl"
+      :class="{'disabled-when-print': !!dataUrl}"
+      @finished="genSnapshot"
     />
-    <img v-if="dataUrl" :src="dataUrl" class="enabled-when-print" style="display: none;width: 100%;">
+    <img
+      v-if="dataUrl"
+      :src="dataUrl"
+      class="enabled-when-print"
+      style="display: none;width: 100%;"
+      alt="chart snapshot"
+    >
   </div>
 </template>
 
@@ -154,7 +160,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -186,7 +192,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -219,23 +225,58 @@ export default {
   },
   watch: {
     range() {
-      this.getMetricData()
+      this.genSnapshot()
+    },
+    datesMetrics() {
+      this.genSnapshot()
+    },
+    primaryData() {
+      this.genSnapshot()
+    },
+    secondaryData() {
+      this.genSnapshot()
     }
   },
   mounted() {
-    this.getMetricData()
+    this.genSnapshot()
+    this._before = () => this.genSnapshot(true)
+    this._after = () => this.forceResize()
+    window.addEventListener('beforeprint', this._before)
+    window.addEventListener('afterprint', this._after)
+    // 兼容某些浏览器（Safari）触发 print 媒体切换
+    this._mql = window.matchMedia && window.matchMedia('print')
+    if (this._mql) {
+      const handler = e => (e.matches ? this._before() : this._after())
+      this._mql.addEventListener?.('change', handler)
+      this._mql.addListener?.(handler)
+      this._mql._handler = handler
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeprint', this._before)
+    window.removeEventListener('afterprint', this._after)
+    if (this._mql) {
+      this._mql.removeEventListener?.('change', this._mql._handler)
+      this._mql.removeListener?.(this._mql._handler)
+    }
   },
   methods: {
-    getDataUrl() {
-      const instance = this.$refs.echarts.echartsInstance
-      if (instance) {
-        this.dataUrl = instance.getDataURL()
-      }
+    forceResize() {
+      const inst = this.$refs.echarts?.echartsInstance
+      if (inst) inst.resize()
     },
-    getMetricData() {
-      this.getDataUrl()
+    async genSnapshot(force = false) {
+      if (force) this.forceResize()
+      const inst = this.$refs.echarts?.echartsInstance
+      if (!inst) return
+      try {
+        this.dataUrl = inst.getDataURL({ pixelRatio: 2, backgroundColor: '#ffffff' })
+      } catch (e) {
+        this.dataUrl = ''
+      }
     }
   }
+
 }
 </script>
 
@@ -247,13 +288,11 @@ export default {
 
 @media print {
   .disabled-when-print {
-    display: none;
+    display: none !important;
   }
   .enabled-when-print {
-    display: inherit !important;
-  }
-  .print-margin {
-    margin-top: 10px;
+    display: block !important;
+    width: 100% !important;
   }
 }
 </style>
