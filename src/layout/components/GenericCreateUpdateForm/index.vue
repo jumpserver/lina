@@ -454,6 +454,4 @@ export default {
 </script>
 
 <style scoped>
-.ibox ::v-deep .el-card__body {
-}
 </style>
