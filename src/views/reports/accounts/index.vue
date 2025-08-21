@@ -5,7 +5,11 @@
         <div class="tag-container">
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
-            <li v-for="chart in charts" :key="chart.name">
+            <li
+              v-for="chart in charts"
+              :key="chart.name"
+              :class="{ active: selectedChart && selectedChart.name === chart.name }"
+            >
               <a style="display: flex; align-items: center;" @click="handleChangeChart(chart)">
                 <i :class="chart.icon" style="margin-right: 6px;" />
                 {{ chart.title }}
@@ -37,6 +41,7 @@ export default {
       url: '',
       title: this.$t('ReportType'),
       component: '',
+      selectedChart: null,
       charts: [
         {
           title: this.$t('AccountStatisticsReport'),
@@ -56,6 +61,7 @@ export default {
   },
   methods: {
     handleChangeChart(chart) {
+      this.selectedChart = chart
       const route = resolveRoute({ name: chart.name }, this.$router)
       this.component = route.components.default
       const routePath = route.path
@@ -99,5 +105,10 @@ h5 {
     overflow: hidden;
     height: 100%;
   }
+}
+.folder-list li.active {
+  color: var(--color-primary);
+  background-color: var(--menu-hover);
+  border-radius: 4px;
 }
 </style>
