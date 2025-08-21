@@ -23,7 +23,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 ref="loginTrend"
                 :options="loginTrendOptions"
                 :autoresize="true"
@@ -36,7 +36,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('LoginSource') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="LoginSourceOptions"
                 :autoresize="true"
               />
@@ -48,7 +48,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('VisitTimeDistribution') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="VisitTimeOptions"
                 :autoresize="true"
               />
@@ -60,7 +60,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('LoginMethodStatistics') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="loginMethodOptions"
                 :autoresize="true"
               />
@@ -78,12 +78,14 @@ import SwitchDate from '@/components/Dashboard/SwitchDate'
 import * as echarts from 'echarts'
 import { mixColors } from '@/views/reports/const'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
+import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
   components: {
     SummaryCountCard,
     BaseReport,
-    SwitchDate
+    SwitchDate,
+    Echart
   },
   props: {
     nav: {
