@@ -191,6 +191,10 @@ export default {
   }
 }
 
+@page {
+  size: A4 landscape;
+}
+
 @media print {
   .header {
     display: none;
