@@ -6,7 +6,7 @@
     name="AuditsDashboard"
     v-bind="$attrs"
   >
-    <SwitchDate class="switch-date" @change="onChange" />
+    <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
     <el-row :gutter="16">
       <el-col :lg="12" :md="12" :sm="24">
@@ -46,14 +46,14 @@ export default {
   },
   data() {
     return {
-      days: localStorage.getItem('dashboardDays') || '7',
+      name: 'AuditsDashboard',
+      days: localStorage.getItem(this.name) || '7',
       url: getRouteUrl('AuditsReport', this.$router)
     }
   },
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('dashboardDays', val)
     }
   }
 }

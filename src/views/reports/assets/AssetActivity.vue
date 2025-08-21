@@ -7,7 +7,7 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <SwitchDate class="switch-date" @change="onChange" />
+        <SwitchDate class="switch-date" :name="name" @change="onChange" />
         <br>
         <div class="chart-container full-width">
           <div class="chart-container-title">
@@ -102,7 +102,7 @@ export default {
     return {
       title: this.$t('AssetActivityReport'),
       name: 'AssetReport',
-      days: localStorage.getItem('reportDays') || '7',
+      days: localStorage.getItem(this.name) || '7',
       session_stats: {
         'total': 0,
         'asset_count': 0,
@@ -202,7 +202,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: 20,
+                fontSize: 15,
                 fontWeight: 'bold'
               }
             },
@@ -237,7 +237,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: 20,
+                fontSize: 15,
                 fontWeight: 'bold'
               }
             },
@@ -369,7 +369,6 @@ export default {
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('reportDays', val)
     },
     conversionData(data) {
       return data.map(item => {

@@ -104,7 +104,7 @@ export default {
       },
       headerActions: {
         hasRefresh: true,
-        hasImport: this.$hasPerm('accounts.add_accounttemplate'),
+        hasImport: this.$hasPerm('accounts.add_accounttemplate') || this.$hasPerm('accounts.change_accounttemplate'),
         importOptions: {
           canImportCreate: this.$hasPerm('accounts.add_accounttemplate'),
           canImportUpdate: this.$hasPerm('accounts.change_accounttemplate')
