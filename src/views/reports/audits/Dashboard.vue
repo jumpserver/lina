@@ -8,14 +8,10 @@
   >
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
-    <el-row :gutter="16">
-      <el-col :lg="12" :md="12" :sm="24">
-        <DataSummary :days="days" />
-      </el-col>
-      <el-col :lg="12" :md="12" :sm="24">
-        <RightSummary :days="days" />
-      </el-col>
-    </el-row>
+    <div class="charts-grid">
+      <DataSummary class="chart-container full-width" :days="days" />
+      <RightSummary class="chart-container full-width" :days="days" />
+    </div>
     <TrendSummary :days="days" />
   </BaseReport>
 </template>
@@ -58,3 +54,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.chart-container {
+  margin-top: 16px;
+}
+</style>

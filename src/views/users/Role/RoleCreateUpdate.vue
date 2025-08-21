@@ -18,7 +18,7 @@ export default {
       scopeRole: scope + 'role',
       config: {
         url: `/api/v1/rbac/${scope}-roles/`,
-        objectDetailRoute: { name: 'RoleDetail', query: { scope: scope }},
+        objectDetailRoute: { name: 'RoleDetail', query: { scope: scope } },
         initial: {
           scope: scope
         },

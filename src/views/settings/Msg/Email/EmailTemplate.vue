@@ -37,7 +37,7 @@ export default {
           ]
         ]
       ],
-      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
+      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' } },
       fieldsMeta: {
         'EMAIL_CUSTOM_USER_CREATED_BODY': {
           el: {

@@ -58,7 +58,7 @@ export default {
           }
         ],
         getNextRoute: (res, method) => {
-          return { name: 'CloudAccountDetail', params: { id: res.account.id }}
+          return { name: 'CloudAccountDetail', params: { id: res.account.id } }
         }
       }
     }

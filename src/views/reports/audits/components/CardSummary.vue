@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="chart-container full-width">
     <el-row :gutter="16">
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24">
         <SummaryCountCard :config="logConfig" :items="LogItems" />
       </el-col>
-      <el-col :lg="12" :sm="24" class="margin-top-10">
+      <el-col :lg="12" :sm="24">
         <SummaryCountCard :config="sessionConfig" :items="sessionItems" />
       </el-col>
     </el-row>
@@ -124,7 +124,5 @@ export default {
 </script>
 
 <style scoped>
-.margin-top-10 {
-  margin-top: 10px;
-}
+
 </style>

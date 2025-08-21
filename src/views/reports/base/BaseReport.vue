@@ -90,7 +90,7 @@ export default {
       try {
         if (!this.win || this.win.closed) {
           // 计算窗口居中位置
-          const width = 1048
+          const width = 1024
           const height = 800
           const left = (screen.width - width) / 2
           const top = (screen.height - height) / 2
@@ -132,18 +132,18 @@ export default {
   height: 40px;
 }
 
-  .title-bar {
-    display: inline-block;
-  }
+.title-bar {
+  display: inline-block;
+}
 
-  .title {
-    height: 40px;
-    background-color: white;
-    line-height: 40px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #333;
-    padding: 0 16px;
+.title {
+  height: 40px;
+  background-color: white;
+  line-height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  padding: 0 16px;
 
   .datetime {
     font-size: 12px;
@@ -159,17 +159,17 @@ export default {
   background-color: white;
 }
 
-  .export-btn {
-    float: right;
-    line-height: 40px;
-    margin-right: 23px;
-  }
+.export-btn {
+  float: right;
+  line-height: 40px;
+  margin-right: 23px;
+}
 
-  .content {
-    // background-color: white;
-    background-color: #F1F1F1;
-    height: calc(100vh - 40px);
-    overflow-y: auto;
+.content {
+  // background-color: white;
+  background-color: #F1F1F1;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
 
   ::v-deep .export-bar {
     float: right;
@@ -188,39 +188,39 @@ export default {
   }
 }
 
-  .only-charts {
-    .content {
-      height: auto;
-      overflow-y: hidden;
-      overflow-x: hidden;
-
-      .title-bar {
-        margin: 0 30px;
-      }
-
-      .export-btn  {
-        position: absolute;
-        top: 5px;
-        right: 20px;
-      }
-    }
-
-    .charts-zone {
-      // padding: 0;
-    }
-  }
-
-  .nav {
-    .content {
-      .charts-zone {
-        width: 1040px;
-      }
-    }
+.only-charts {
+  .content {
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
 
     .title-bar {
-      width: 100%;
+      margin: 0 30px;
+    }
+
+    .export-btn {
+      position: absolute;
+      top: 5px;
+      right: 20px;
     }
   }
+
+  .charts-zone {
+    padding: 2px 0;
+  }
+}
+
+.nav {
+  .content {
+    .charts-zone {
+      width: 1000px;
+    }
+  }
+
+  .title-bar {
+    width: 100%;
+  }
+}
 
 @page {
   size: A4 landscape;
@@ -296,6 +296,10 @@ export default {
 
       &.full-width {
         max-width: calc(100vw - 60px);
+      }
+
+      &.transport-box {
+        background: transparent;
       }
     }
 

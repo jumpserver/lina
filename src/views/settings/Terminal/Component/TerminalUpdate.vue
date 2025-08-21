@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' }},
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' } },
       url: '/api/v1/terminal/terminals/',
       fields: [
         [this.$t('Info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],

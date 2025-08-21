@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="chart-container transport-box">
     <div class="box">
       <div class="head">
         <Title :config="config" />
       </div>
       <LineChart v-bind="chartConfig" />
     </div>
-    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-10" />
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-20" />
   </div>
 </template>
 
@@ -109,19 +109,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.margin-top-10 {
-  margin-top: 10px;
+.chart-container  {
+  padding: 0 !important;
 }
 
 .box {
-  margin-top: 10px;
-  padding: 20px;
   background: #fff;
+  padding: 30px;
 
   .head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
   }
+
 }
 </style>

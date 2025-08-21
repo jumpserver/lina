@@ -1189,7 +1189,7 @@ export default {
       this.$confirm(this.deleteMessage(data), this.$t('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
 
           instance.confirmButtonLoading = true

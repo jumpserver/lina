@@ -29,7 +29,7 @@ export default {
         ],
         fieldsMeta: {
         },
-        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ops',
         hasReset: false,
         submitMethod() {
