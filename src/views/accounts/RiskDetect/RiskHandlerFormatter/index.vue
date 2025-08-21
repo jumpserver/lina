@@ -135,7 +135,7 @@ export default {
     },
     showReview() {
       if (this.selectedRows.length === 0 && !this.row.id) {
-        return this.$message.warning(`请选择需要勾选的数据`)
+        return this.$message.warning(this.$t('PleaseSelectTheDataYouWantToCheck'))
       }
       this.reviewDrawer = true
     },

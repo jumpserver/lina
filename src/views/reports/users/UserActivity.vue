@@ -381,12 +381,12 @@ export default {
         },
         series: [
           {
-            name: '访问分布',
+            name: this.$t('AccessDistribution'),
             type: 'radar',
             data: [
               {
                 value: Object.values(this.config.user_login_time_metrics),
-                name: '访问量',
+                name: this.$t('Visits'),
                 areaStyle: {
                   opacity: 0.3
                 }
