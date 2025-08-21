@@ -99,9 +99,9 @@ export default {
       totalData: [],
       page: defaultFirstPage,
       extraQuery: {},
-      paginationSize: 6,
+      paginationSize: 8,
       paginationLayout: 'total, sizes, prev, pager, next',
-      paginationSizes: [6, 18, 27],
+      paginationSizes: [8, 12, 16],
       loading: true,
       axiosConfig: {
         raw: 1,
