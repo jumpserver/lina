@@ -48,7 +48,7 @@ export default {
       return true
     },
     getDaysParam() {
-      return this.$route.query.days || localStorage.getItem('dashboardDays') || '7'
+      return this.$route.query.days || localStorage.getItem(this.name) || '7'
     },
     exportPdf() {
       if (!this.checkName()) {
