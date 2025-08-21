@@ -7,7 +7,7 @@
       v-bind="$attrs"
     >
       <div class="charts-grid">
-        <SwitchDate class="switch-date" @change="onChange" />
+        <SwitchDate class="switch-date" :name="name" @change="onChange" />
         <br>
         <div class="chart-container full-width">
           <div class="chart-container-title">
@@ -72,8 +72,8 @@ export default {
   data() {
     return {
       title: this.$t('UserChangePasswordReport'),
-      name: 'ChangePassword',
-      days: localStorage.getItem('reportDays') || '7',
+      name: 'UserChangePasswordReport',
+      days: localStorage.getItem(this.name) || '7',
       total_count_change_password: {
         'total': 0,
         'user_total': 0,
@@ -261,7 +261,6 @@ export default {
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('reportDays', val)
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/user-change-password/?days=${this.days}`)

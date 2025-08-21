@@ -17,7 +17,8 @@
           </div>
         </div>
 
-        <SwitchDate class="switch-date" @change="onChange" />
+        <SwitchDate class="switch-date" :name="name" @change="onChange" />
+
         <div class="chart-container full-width">
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserLoginTrends') }}</div>
@@ -93,8 +94,8 @@ export default {
   data() {
     return {
       title: this.$t('UserLoginReport'),
-      name: 'UserReport',
-      days: localStorage.getItem('reportDays') || '7',
+      name: 'UserLoginReport',
+      days: localStorage.getItem(this.name) || '7',
       user_stats: {
         total: 0,
         not_enabled_mfa: 0,

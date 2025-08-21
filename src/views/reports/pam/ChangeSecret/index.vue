@@ -1,7 +1,7 @@
 <template>
   <BaseReport :only-charts="!nav">
     <div class="switch-date-wrapper">
-      <SwitchDate class="switch-date" @change="onChange" />
+      <SwitchDate class="switch-date" :name="name" @change="onChange" />
     </div>
 
     <el-row>
@@ -49,7 +49,8 @@ export default {
   },
   data() {
     return {
-      days: localStorage.getItem('dashboardDays') || '7'
+      name: 'ChangeSecretDashboard',
+      days: localStorage.getItem(this.name) || '7'
     }
   },
   methods: {
