@@ -6,7 +6,7 @@
       </div>
       <LineChart v-bind="chartConfig" />
     </div>
-    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-20" />
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-10" />
   </div>
 </template>
 

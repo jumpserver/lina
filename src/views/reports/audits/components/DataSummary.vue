@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :cols="12">
+    <el-col :span="12">
       <DataCard :config="logConfig">
         <div class="custom">
           <span>{{ logConfig.total }}</span>
@@ -10,7 +10,7 @@
         </div>
       </DataCard>
     </el-col>
-    <el-col :cols="12">
+    <el-col :span="12">
       <DataCard :config="assetConfig">
         <div class="custom">
           <span>{{ assetConfig.total }}</span>
