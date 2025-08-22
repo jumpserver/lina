@@ -4,6 +4,8 @@
     :url="reportUrl"
     :nav="nav"
     :only-charts="onlyCharts"
+    :charts-padding="0"
+    :disable-charts-padding="true"
     name="ConsoleDashboard"
   >
     <el-row :gutter="16">

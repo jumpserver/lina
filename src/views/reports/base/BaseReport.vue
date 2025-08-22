@@ -32,7 +32,7 @@
           {{ $t('Export') }}
         </el-button>
       </span>
-      <div class="charts-zone">
+      <div class="charts-zone" :class="{ 'charts-zone--no-padding': disableChartsPadding }">
         <slot />
       </div>
     </div>
@@ -72,6 +72,10 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    disableChartsPadding: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -323,6 +327,10 @@ export default {
     //   }
     // }
   }
+}
+
+.charts-zone--no-padding {
+  padding: 0 !important;
 }
 
 </style>

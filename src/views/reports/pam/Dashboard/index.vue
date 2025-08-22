@@ -3,6 +3,7 @@
     :nav="nav"
     :url="reportUrl"
     :title="$t('PamDashboard')"
+    :disable-charts-padding="true"
     name="PamDashboard"
     v-bind="$attrs"
   >

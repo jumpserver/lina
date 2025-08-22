@@ -3,6 +3,7 @@
     :url="url"
     :nav="nav"
     :title="$t('AuditsDashboard')"
+    :disable-charts-padding="true"
     name="AuditsDashboard"
     v-bind="$attrs"
   >

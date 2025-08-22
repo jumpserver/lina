@@ -2,6 +2,7 @@
   <BaseReport
     :nav="nav"
     :title="$t('ChangeSecretDashboard')"
+    :disable-charts-padding="true"
     name="ChangeSecretDashboard"
     :url="reportUrl"
     v-bind="$attrs"
