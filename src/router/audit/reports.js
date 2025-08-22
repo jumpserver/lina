@@ -18,7 +18,7 @@ export default [
         component: () => import('@/views/reports/users/index.vue'),
         meta: {
           title: i18n.t('UserReport'),
-          permissions: []
+          permissions: ['rbac.view_userloginreport | rbac.view_userchangepasswordreport']
         }
       }
     ]
@@ -40,7 +40,7 @@ export default [
         component: () => import('@/views/reports/assets/index.vue'),
         meta: {
           title: i18n.t('AssetReport'),
-          permissions: []
+          permissions: ['rbac.view_assetactivityreport | rbac.view_assetstatisticsreport']
         }
       }
     ]
@@ -62,7 +62,7 @@ export default [
         component: () => import('@/views/reports/accounts/index.vue'),
         meta: {
           title: i18n.t('AccountReport'),
-          permissions: []
+          permissions: ['rbac.view_accountstatisticsreport | rbac.view_accountautomationreport']
         }
       }
     ]
