@@ -22,7 +22,7 @@ export default {
               icon: 'cloud-provider',
               has: () => this.$hasPerm('xpack.view_account') && this.$hasLicense(),
               callback: () => this.$router.push(
-                { name: 'CloudAccountList', query: { category: 'database' }}
+                { name: 'CloudAccountList', query: { category: 'database' } }
               )
             }
           ]

@@ -22,6 +22,7 @@ export default {
     showNavSwitcher: () => {
       return store.getters.consoleOrgs.length > 0
     },
+
     permissions: []
   },
   children: [

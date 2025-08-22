@@ -110,7 +110,7 @@ export default {
             formatterArgs: {
               canClone: () => vm.$hasPerm('assets.add_platform'),
               onClone({ row }) {
-                vm.$refs.genericListTable.onClone({ row, query: { type: row.type.value, category: row.category.value }})
+                vm.$refs.genericListTable.onClone({ row, query: { type: row.type.value, category: row.category.value } })
               },
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
@@ -140,7 +140,7 @@ export default {
         },
         moreCreates: {
           callback: (item) => {
-            this.$refs.genericListTable.onCreate({ query: { type: item.name, category: item.category }})
+            this.$refs.genericListTable.onCreate({ query: { type: item.name, category: item.category } })
           },
           dropdown: []
         }
@@ -167,7 +167,7 @@ export default {
 
     if (platform) {
       this.$nextTick(() => {
-        this.$refs.genericListTable.onDetail({ row: { id: platform, name }})
+        this.$refs.genericListTable.onDetail({ row: { id: platform, name } })
       })
     }
   },

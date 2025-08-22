@@ -38,7 +38,7 @@ export default {
         {
           title: this.$t('OnlineSessions'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' } },
             count: this.counter.total_count_online_sessions,
             disabled: !this.$hasPerm('terminal.view_session')
           }
@@ -46,7 +46,7 @@ export default {
         {
           title: this.$t('CurrentConnectionUsers'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' } },
             count: this.counter.total_count_online_users,
             disabled: !this.$hasPerm('terminal.view_session')
           }

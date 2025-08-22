@@ -4,6 +4,7 @@ import empty from '@/layout/empty'
 import users from './users'
 import assets from './assets'
 import accounts from './accounts'
+import dashboard from './dashboard'
 
 export default {
   path: '/reports',
@@ -18,6 +19,18 @@ export default {
   },
   children: [
     {
+      path: '/reports/dashboard',
+      component: empty,
+      redirect: 'dashboard',
+      name: 'ReportsDashboard',
+      meta: {
+        title: i18n.t('ReportsDashboard'),
+        icon: 'reports',
+        permissions: []
+      },
+      children: dashboard
+    },
+    {
       path: '/reports/users',
       component: empty,
       redirect: 'users',
@@ -25,7 +38,7 @@ export default {
       meta: {
         title: i18n.t('ReportsUsers'),
         icon: 'reports',
-        permissions: []
+        permissions: ['rbac.view_userloginreport | rbac.view_userchangepasswordreport']
       },
       children: users
     },
@@ -37,7 +50,7 @@ export default {
       meta: {
         title: i18n.t('ReportsAssets'),
         icon: 'reports',
-        permissions: []
+        permissions: ['rbac.view_assetactivityreport | rbac.view_assetstatisticsreport']
       },
       children: assets
     },
@@ -49,7 +62,7 @@ export default {
       meta: {
         title: i18n.t('ReportsAccounts'),
         icon: 'reports',
-        permissions: []
+        permissions: ['rbac.view_accountstatisticsreport | rbac.view_accountautomationreport']
       },
       children: accounts
     }

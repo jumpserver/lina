@@ -1,5 +1,12 @@
 <template>
-  <BaseReport :only-charts="!nav">
+  <BaseReport
+    :nav="nav"
+    :title="$t('ChangeSecretDashboard')"
+    :disable-charts-padding="true"
+    name="ChangeSecretDashboard"
+    :url="reportUrl"
+    v-bind="$attrs"
+  >
     <div class="switch-date-wrapper">
       <SwitchDate class="switch-date" :name="name" @change="onChange" />
     </div>
@@ -30,6 +37,7 @@ import SwitchDate from '@/components/Dashboard/SwitchDate'
 import AccountSummary from './AccountSummary.vue'
 import FailedAccountSummary from './FailedAccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
 
 export default {
   name: 'ChangeSecret',
@@ -50,7 +58,8 @@ export default {
   data() {
     return {
       name: 'ChangeSecretDashboard',
-      days: localStorage.getItem(this.name) || '7'
+      days: localStorage.getItem(this.name) || '7',
+      reportUrl: getRouteUrl('ChangeSecretReport', this.$router)
     }
   },
   methods: {

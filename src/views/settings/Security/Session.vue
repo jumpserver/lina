@@ -100,7 +100,7 @@ export default {
             }
           }
         },
-        onSubmit: async(validValues) => {
+        onSubmit: async (validValues) => {
           const url = '/api/v1/settings/setting/?category=security_session'
 
           try {

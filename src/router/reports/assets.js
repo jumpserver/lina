@@ -6,7 +6,7 @@ export default [
     component: () => import('@/views/reports/assets/AssetActivity.vue'), // Parent router-view
     name: 'AssetReport',
     meta: {
-      permissions: [],
+      permissions: ['rbac.view_assetactivityreport'],
       icon: 'user-o',
       expanded: true,
       title: i18n.t('AssetActivityReport')
@@ -17,7 +17,7 @@ export default [
     component: () => import('@/views/reports/assets/AssetStatistics.vue'), // Parent router-view
     name: 'AssetStatistics',
     meta: {
-      permissions: [],
+      permissions: ['rbac.view_assetstatisticsreport'],
       expanded: true,
       icon: 'user-o',
       title: i18n.t('AssetStatisticsReport')
