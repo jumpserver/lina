@@ -58,14 +58,14 @@ export default {
       ]
     }
   },
+  computed: {
+    chartItems() {
+      return this.charts.filter(chart => chart.hidden)
+    }
+  },
   created() {
     if (this.chartItems.length > 0) {
       this.handleChangeChart(this.chartItems[0])
-    }
-  },
-  compute: {
-    chartItems() {
-      return this.charts.filter(chart => !chart.hidden)
     }
   },
   methods: {

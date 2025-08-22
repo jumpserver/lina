@@ -38,7 +38,7 @@ export default {
       meta: {
         title: i18n.t('ReportsUsers'),
         icon: 'reports',
-        permissions: ['rbac.view_userloginreport | rbac.view_userchangepasswordreport']
+        permissions: []
       },
       children: users
     },
@@ -50,7 +50,7 @@ export default {
       meta: {
         title: i18n.t('ReportsAssets'),
         icon: 'reports',
-        permissions: ['rbac.view_assetactivityreport | rbac.view_assetstatisticsreport']
+        permissions: []
       },
       children: assets
     },
@@ -62,7 +62,7 @@ export default {
       meta: {
         title: i18n.t('ReportsAccounts'),
         icon: 'reports',
-        permissions: ['rbac.view_accountstatisticsreport | rbac.view_accountautomationreport']
+        permissions: []
       },
       children: accounts
     }
