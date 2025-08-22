@@ -5,10 +5,8 @@
       :options="options"
       :autoresize="true"
       theme="light"
-      class="disabled-when-print"
       @finished="getDataUrl"
     />
-    <img v-if="dataUrl" :src="dataUrl" class="enabled-when-print" style="display: none;width: 100%;">
   </div>
 </template>
 
@@ -223,7 +221,13 @@ export default {
     }
   },
   mounted() {
-    this.getMetricData()
+    setTimeout(() => {
+      this.getMetricData()
+    }, 1000)
+    const vm = this
+    window.onbeforeprint = function() {
+      vm.$refs.echarts.resize()
+    }
   },
   methods: {
     getDataUrl() {
