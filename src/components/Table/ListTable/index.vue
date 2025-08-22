@@ -104,7 +104,9 @@ export default {
       tablePath: new URL(this.tableConfig.url || '', 'http://127.0.0.1').pathname,
       objStorage: new ObjectLocalStorage('filterExpand'),
       iFilterExpand: null,
-      reloadTable: _.debounce(this._reloadTable, 300)
+      reloadTable: _.debounce(this._reloadTable, 300),
+      searchQuery: {},
+      filterQuery: {}
     }
   },
   computed: {
@@ -298,19 +300,26 @@ export default {
         this.$delete(this.extraQuery, key)
       }
     },
+    getMergedQuery() {
+      return { ...this.searchQuery, ...this.filterQuery }
+    },
     search(attrs) {
       const init = this.updateInitQuery(attrs)
       if (init) {
         return
       }
+      this.searchQuery = attrs
+      const merged = this.getMergedQuery()
       this.$log.debug('ListTable: search table', attrs)
       this.$emit('TagSearch', attrs)
-      this.$refs.dataTable?.$refs.dataTable?.search(attrs, true)
+      this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
     filter(attrs) {
+      this.filterQuery = attrs
+      const merged = this.getMergedQuery()
       this.$emit('TagFilter', attrs)
       this.$log.debug('ListTable: found filter change', attrs)
-      this.search(attrs)
+      this.$refs.dataTable?.$refs.dataTable?.search(merged, true)
     },
     hasActionPerm(action) {
       const permRequired = this.permissions[action]

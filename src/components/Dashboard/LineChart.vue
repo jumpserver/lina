@@ -152,7 +152,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -184,7 +184,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -217,7 +217,16 @@ export default {
   },
   watch: {
     range() {
-      this.getMetricData()
+      this.genSnapshot()
+    },
+    datesMetrics() {
+      this.genSnapshot()
+    },
+    primaryData() {
+      this.genSnapshot()
+    },
+    secondaryData() {
+      this.genSnapshot()
     }
   },
   mounted() {
@@ -230,16 +239,22 @@ export default {
     }
   },
   methods: {
-    getDataUrl() {
-      const instance = this.$refs.echarts.echartsInstance
-      if (instance) {
-        this.dataUrl = instance.getDataURL()
-      }
+    forceResize() {
+      const inst = this.$refs.echarts?.echartsInstance
+      if (inst) inst.resize()
     },
-    getMetricData() {
-      this.getDataUrl()
+    async genSnapshot(force = false) {
+      if (force) this.forceResize()
+      const inst = this.$refs.echarts?.echartsInstance
+      if (!inst) return
+      try {
+        this.dataUrl = inst.getDataURL({ pixelRatio: 2, backgroundColor: '#ffffff' })
+      } catch (e) {
+        this.dataUrl = ''
+      }
     }
   }
+
 }
 </script>
 
