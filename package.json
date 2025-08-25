@@ -28,7 +28,7 @@
         "@fontsource/open-sans": "^5.0.24",
         "@traptitech/markdown-it-katex": "^3.6.0",
         "@ztree/ztree_v3": "3.5.44",
-        "axios": "0.28.0",
+        "axios": "0.30.0",
         "axios-retry": "^3.1.9",
         "caniuse-lite": "^1.0.30001642",
         "cron-parser": "^4.0.0",
