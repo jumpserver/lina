@@ -90,10 +90,20 @@ function ifBadRequest({ response, error }) {
   }
 }
 
+export function logout() {
+  window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${location.pathname}`
+}
+
 export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     const responseErrorMsg = getErrorResponseMsg(error)
     const msg = responseErrorMsg || error.message
+
+    if (response.status === 403 && msg === 'CSRF Failed: CSRF token missing.') {
+      setTimeout(() => {
+        logout()
+      }, 1000)
+    }
     message({
       message: msg,
       type: 'error',
