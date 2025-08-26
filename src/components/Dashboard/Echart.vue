@@ -2,7 +2,7 @@
   <echarts
     :options="iOptions"
     v-bind="$attrs"
-    @rendered="onRendered"
+    @finished="onFinished"
     v-on="$listeners"
   />
 </template>
@@ -11,8 +11,7 @@
 import 'echarts'
 
 export default {
-  components: {
-  },
+  components: {},
   props: {
     options: {
       type: Object,
@@ -41,13 +40,13 @@ export default {
     window.totalCharts++
   },
   methods: {
-    onRendered() {
-      if (!window.renderCharts) {
-        window.renderCharts = 0
+    onFinished() {
+      if (!window.finishedCharts) {
+        window.finishedCharts = 0
       }
-      window.renderCharts++
-      if (window.renderCharts === window.totalCharts) {
-        window.echartsRendered = true
+      window.finishedCharts++
+      if (window.finishedCharts === window.totalCharts) {
+        window.echartsFinished = true
       }
     }
   }
