@@ -165,7 +165,8 @@ export default {
   }
 
   & ::v-deep .el-tag {
-    margin-bottom: 1px;
+    margin-bottom: 2px;
+    margin-top: 2px;
     font-family: sans-serif !important;
     margin-left: 5px;
   }
