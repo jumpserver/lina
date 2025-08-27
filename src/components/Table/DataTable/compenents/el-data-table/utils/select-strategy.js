@@ -79,6 +79,9 @@ class StrategyPersistSelection extends StrategyAbstract {
   onSelect(selection, row) {
     const isChosen = selection.indexOf(row) > -1
     this.toggleRowSelection(row, isChosen)
+    // el-table 原生 selection-change 仅包含当前页。为保证跨页勾选有效，
+    // 在内部策略维护完 selected 后，向外部同步"全量已选"。
+    this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
 
   /**
@@ -149,11 +152,15 @@ class StrategyPersistSelection extends StrategyAbstract {
 
     this.elDataTable.$emit('toggle-row-selection', isSelected, row)
     this.updateElTableSelection()
+    // 切换后同步全量 selection（跨页）
+    this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
 
   clearSelection() {
     this.elDataTable.selected = []
     this.updateElTableSelection()
+    // 清空后也同步给外部，保持外层状态一致
+    this.elDataTable.$emit('selection-change', this.elDataTable.selected)
   }
 
   /**
