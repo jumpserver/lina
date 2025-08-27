@@ -84,7 +84,7 @@ export default {
       nameComponentMap[item.name] = item
     }
     this.$axios.get('/api/v1/assets/categories/').then(categories => {
-      for (const item of categories) {
+      for (const item of categories.results) {
         const name = item.value
         // 如果报错，需要在上面的 submenu 中添加对应的组件
         nameComponentMap[name]['hidden'] = false
