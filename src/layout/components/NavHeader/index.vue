@@ -2,6 +2,9 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
+        <Search />
+      </li>
+      <li class="header-item header-icon">
         <el-tooltip :content="$tc('SiteMessageList')" :open-delay="500" effect="dark">
           <SiteMessages />
         </el-tooltip>
@@ -31,14 +34,18 @@
         <AccountDropdown />
       </li>
     </ul>
-    <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
+    <hamburger
+      :is-active="sidebar.opened"
+      class="hamburger-container is-show-menu"
+      @toggleClick="toggleSideBar"
+    />
     <ul class="navbar-left">
       <li class="left-item">
         <div class="nav-logo">
           <Logo v-if="showLogo" :collapse="false" />
         </div>
       </li>
-      <li v-if="orgsShow" class="left-item" style="margin-left: 20px;">
+      <li v-if="orgsShow" class="left-item" style="margin-left: 20px">
         <Organization :disabled="orgsDisabled" class="organization" />
       </li>
     </ul>
@@ -57,6 +64,7 @@ import Organization from './Organization'
 import SystemSetting from './SystemSetting'
 import Logo from '../NavLeft/Logo'
 import Language from './Language'
+import Search from './Search'
 
 export default {
   components: {
@@ -69,19 +77,26 @@ export default {
     SiteMessages,
     SystemSetting,
     Logo,
-    Language
+    Language,
+    Search
   },
   data() {
     return {}
   },
   computed: {
     ...mapGetters([
-      'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute', 'isMobile'
+      'sidebar',
+      'publicSettings',
+      'currentOrgRoles',
+      'currentViewRoute',
+      'isMobile'
     ]),
     ticketsEnabled() {
-      return this.publicSettings['TICKETS_ENABLED'] &&
-        this.$hasLicense() &&
-        this.$hasPerm('tickets.view_ticket')
+      return (
+        this.publicSettings['TICKETS_ENABLED'] &&
+          this.$hasLicense() &&
+          this.$hasPerm('tickets.view_ticket')
+      )
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
@@ -90,7 +105,7 @@ export default {
       return this.$route.meta?.disableOrgsChange === true
     },
     orgsShow() {
-      return (this.$route.meta?.showOrganization !== false) && this.$hasLicense()
+      return this.$route.meta?.showOrganization !== false && this.$hasLicense()
     }
   },
   methods: {
@@ -101,7 +116,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import "~@/styles/variables.scss";
+  @import '~@/styles/variables.scss';
 
   .navbar {
     position: relative;
@@ -128,7 +143,7 @@ export default {
       background-color: white;
       color: var(--text-primary);
       cursor: pointer;
-      transition: .2s;
+      transition: 0.2s;
       opacity: 0.7;
     }
 
@@ -155,7 +170,7 @@ export default {
           align-items: center;
           padding: 0 0 0 15px !important;
           border-radius: 3px;
-          background-color: rgba(255, 255, 255, .10);
+          background-color: rgba(255, 255, 255, 0.1);
           color: #fff;
           font-weight: 600;
           font-size: 15px;
@@ -170,13 +185,13 @@ export default {
           }
 
           &:hover {
-            background-color: rgba(0, 0, 0, .12) !important;
+            background-color: rgba(0, 0, 0, 0.12) !important;
           }
         }
 
         // 未找到与之对应的
         & ::v-deep .el-submenu__title {
-          font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $headerHeight;
           height: $headerHeight;
@@ -184,7 +199,7 @@ export default {
 
         // 未找到与之对应的
         & ::v-deep .svg-icon {
-          color: #FFF !important;
+          color: #fff !important;
         }
       }
     }
@@ -203,7 +218,7 @@ export default {
 
         & ::v-deep .svg-icon {
           line-height: 40px;
-          color: #FFF !important;
+          color: #fff !important;
           font-size: 15px;
         }
 
@@ -228,7 +243,7 @@ export default {
         }
 
         & ::v-deep i {
-          color: #FFF;
+          color: #fff;
           font-size: 16px;
 
           &.el-icon-arrow-down {
@@ -261,7 +276,7 @@ export default {
 
   @media screen and (max-width: 480px) {
     .active-menu {
-      display: none !important;;
+      display: none !important;
     }
   }
 </style>
