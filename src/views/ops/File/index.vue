@@ -90,12 +90,18 @@
                   {{ $tc('NoFiles') }}
                 </div>
               </el-upload>
-              <el-progress v-if="ShowProgress" :percentage="progressLength" />
-
+              <el-progress
+                v-if="showProgress"
+                :percentage="progressLength"
+              />
+              <div v-if="showProgress" class="status-info">
+                <span class="left">{{ speedText }}</span>
+                <span class="right">{{ loadedSize }} / {{ totalSize }}</span>
+              </div>
             </el-card>
           </div>
           <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
-          <span v-if="executionInfo.status && summary" style="float: right">
+          <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
             <span>
               <span><b>{{ $tc('Status') }}: </b></span>
               <span
@@ -225,7 +231,7 @@ export default {
       },
       iShowTree: true,
       progressLength: 0,
-      ShowProgress: false,
+      showProgress: false,
       upload_interval: null,
       uploadFileList: [],
       SizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
@@ -238,7 +244,10 @@ export default {
         this.$tc('FileTransferBootStepHelpTips1'),
         this.$tc('FileTransferBootStepHelpTips2'),
         this.$tc('FileTransferBootStepHelpTips3')
-      ]
+      ],
+      speedText: '',
+      loadedSize: '',
+      totalSize: ''
     }
   },
   computed: {
@@ -300,8 +309,7 @@ export default {
         if (this.executionInfo.status === 'success') {
           this.$message.success(this.$tc('RunSucceed'))
           clearInterval(this.upload_interval)
-          this.progressLength = 100
-          this.ShowProgress = true
+          this.showProgress = false
         }
       })
     },
@@ -380,6 +388,9 @@ export default {
       this.uploadFileList.splice(this.uploadFileList.indexOf(file), 1)
       this.handleSameFile(this.uploadFileList)
     },
+    formatSpeed(bps) {
+      return `${this.formatFileSize(bps)}/s`
+    },
     execute() {
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
@@ -425,8 +436,10 @@ export default {
       createJob(data).then(res => {
         this.progressLength = 0
         this.executionInfo.timeCost = 0
-        this.ShowProgress = true
+        this.showProgress = true
+        this.speedText = ''
         const form = new FormData()
+        const start = Date.now()
         for (const file of this.uploadFileList) {
           form.append('files', file.raw)
           form.append('job_id', res.id)
@@ -436,22 +449,35 @@ export default {
             clearInterval(this.upload_interval)
             return
           }
-          this.progressLength += 1
         }, 100)
-        JobUploadFile(form).then(res => {
+        JobUploadFile(form, {
+          onUploadProgress: (e) => {
+            if (!e.total) return
+            const percent = Math.floor((e.loaded / e.total) * 100)
+            this.progressLength = Math.min(percent, 100)
+            this.loadedSize = formatFileSize(e.loaded)
+            this.totalSize = formatFileSize(e.total)
+            const elapsedSec = (Date.now() - start) / 1000
+            if (elapsedSec > 0) {
+              const speed = e.loaded / elapsedSec
+              this.speedText = this.formatSpeed(speed)
+            }
+          }
+        }).then(res => {
           this.executionInfo.status = 'running'
           this.currentTaskId = res.task_id
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
           this.setCostTimeInterval()
           this.writeExecutionOutput()
-        }).catch(() => {
+        }).catch((error) => {
+          this.$message.error(this.$tc('Error'), error)
           this.execute_stop()
         })
       })
     },
     execute_stop() {
       this.progressLength = 0
-      this.ShowProgress = false
+      this.showProgress = false
       this.runButton.disabled = false
       clearInterval(this.upload_interval)
       this.runButton.icon = 'fa fa-play'
@@ -567,6 +593,14 @@ export default {
         }
       }
     }
+
+    .el-progress-bar {
+      padding-right: 0;
+    }
+
+    .el-progress__text {
+      display: none;
+    }
   }
 }
 
@@ -579,4 +613,11 @@ export default {
 .output ::v-deep #terminal {
   border: dashed 1px #d9d9d9;
 }
+
+.status-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 </style>
