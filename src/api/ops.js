@@ -61,13 +61,14 @@ export function stopJob(form) {
   })
 }
 
-export function JobUploadFile(form) {
+export function JobUploadFile(form, config = {}) {
   return request({
     url: '/api/v1/ops/jobs/upload/',
     method: 'post',
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 60 * 60 * 1000,
-    data: form
+    data: form,
+    ...config
   })
 }
 

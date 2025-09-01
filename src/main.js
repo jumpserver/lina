@@ -25,6 +25,7 @@ import xss from '@/utils/secure'
 import ElTableTooltipPatch from '@/utils/vue/elTableTooltipPatch.js'
 import VSanitize from 'v-sanitize'
 import moment from 'moment'
+
 moment.locale('zh-cn')
 
 /**
@@ -35,10 +36,11 @@ moment.locale('zh-cn')
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'development') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// 使用 mockXHR 无法使用 axios 中的 onUploadProgress 回调函数
+// if (process.env.NODE_ENV === 'development') {
+//   const { mockXHR } = require('../mock')
+//   mockXHR()
+// }
 
 // set ElementUI lang to EN
 ElementUI.Tooltip.props.openDelay.default = 1000
