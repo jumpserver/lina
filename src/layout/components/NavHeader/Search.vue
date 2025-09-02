@@ -13,6 +13,9 @@
       reserve-keyword
       clearable
     >
+      <template slot="prefix">
+        <i class="el-icon-search" />
+      </template>
       <el-option-group v-for="group in options" :key="group.label" :label="group.label">
         <el-option
           v-for="item in group.options"
@@ -28,9 +31,9 @@
       </el-option-group>
     </el-select>
 
-    <el-link @click="handleShowSearch">
+    <!-- <el-link @click="handleShowSearch">
       <i class="el-icon-search" />
-    </el-link>
+    </el-link> -->
   </span>
 </template>
 
@@ -42,7 +45,7 @@ export default {
   data() {
     return {
       search: '',
-      showSearch: false,
+      showSearch: true,
       loading: false,
       options: []
     }
@@ -124,7 +127,7 @@ export default {
   height: 40px;
 
   .el-select {
-    width: calc(100% - 38px);
+    // width: calc(100% - 38px);
 
     &:hover {
       background: var(--banner-bg);
@@ -137,11 +140,14 @@ export default {
       }
 
       .el-input__inner {
+        &:hover {
+          cursor: initial;
+        }
         background-color: rgba(0, 0, 0, 0.1);
         display: inline-block;
         border-radius: 1px;
         border: none;
-        height: 28px;
+        height: 30px;
         color: #fff;
         font-size: 14px;
         font-weight: 600;
