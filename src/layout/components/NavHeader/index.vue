@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <ul class="navbar-right">
-      <li class="header-item header-icon">
+      <li class="header-item header-icon none-hover">
         <Search />
       </li>
       <li class="header-item header-icon">
@@ -84,18 +84,12 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'publicSettings',
-      'currentOrgRoles',
-      'currentViewRoute',
-      'isMobile'
-    ]),
+    ...mapGetters(['sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute', 'isMobile']),
     ticketsEnabled() {
       return (
         this.publicSettings['TICKETS_ENABLED'] &&
-          this.$hasLicense() &&
-          this.$hasPerm('tickets.view_ticket')
+        this.$hasLicense() &&
+        this.$hasPerm('tickets.view_ticket')
       )
     },
     showLogo() {
@@ -116,167 +110,174 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import '~@/styles/variables.scss';
+@import '~@/styles/variables.scss';
 
-  .navbar {
-    position: relative;
-    overflow: hidden;
-    background-color: var(--banner-bg);
+.navbar {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--banner-bg);
 
-    ul {
-      margin: 0;
-      padding-inline-start: 0;
-    }
+  ul {
+    margin: 0;
+    padding-inline-start: 0;
+  }
 
-    .is-show-menu {
-      display: none;
-    }
+  .is-show-menu {
+    display: none;
+  }
 
-    .hamburger-container {
-      float: left;
-      height: 25px;
-      line-height: 25px;
-      margin: 8px;
-      padding: 1px 8px !important;
-      border-radius: 5px;
-      border-color: $--color-primary;
-      background-color: white;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: 0.2s;
-      opacity: 0.7;
-    }
+  .hamburger-container {
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    margin: 8px;
+    padding: 1px 8px !important;
+    border-radius: 5px;
+    border-color: $--color-primary;
+    background-color: white;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: 0.2s;
+    opacity: 0.7;
+  }
 
-    .navbar-left {
-      float: left;
+  .navbar-left {
+    float: left;
+    display: flex;
+    height: 100%;
+
+    .left-item {
       display: flex;
-      height: 100%;
-
-      .left-item {
-        display: flex;
-        align-items: center;
-        list-style: none;
-
-        .nav-logo {
-          width: 200px;
-
-          &:hover {
-            background: rgba(0, 0, 0, 12%);
-          }
-        }
-
-        .organization {
-          display: flex;
-          align-items: center;
-          padding: 0 0 0 15px !important;
-          border-radius: 3px;
-          background-color: rgba(255, 255, 255, 0.1);
-          color: #fff;
-          font-weight: 600;
-          font-size: 15px;
-          max-width: 250px;
-
-          ::v-deep .el-input__inner {
-            padding-left: 25px;
-          }
-
-          ::v-deep .el-input.is-disabled > input {
-            background: none;
-          }
-
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.12) !important;
-          }
-        }
-
-        // 未找到与之对应的
-        & ::v-deep .el-submenu__title {
-          font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          padding: 0 8px;
-          line-height: $headerHeight;
-          height: $headerHeight;
-        }
-
-        // 未找到与之对应的
-        & ::v-deep .svg-icon {
-          color: #fff !important;
-        }
-      }
-    }
-
-    .navbar-right {
-      display: flex;
-      float: right;
       align-items: center;
-      margin-right: 10px;
+      list-style: none;
 
-      .header-item {
-        display: flex;
-        line-height: $headerHeight;
-        padding-right: 10px;
-        padding-left: 10px;
-
-        & ::v-deep .svg-icon {
-          line-height: 40px;
-          color: #fff !important;
-          font-size: 15px;
-        }
-
-        & ::v-deep .el-badge {
-          vertical-align: top;
-
-          .el-link {
-            vertical-align: baseline;
-          }
-
-          .el-badge__content--primary {
-            background-color: #fff;
-          }
-
-          .el-badge__content {
-            top: 8px;
-            height: 15px;
-            line-height: 15px;
-            border: none;
-            color: var(--color-primary);
-          }
-        }
-
-        & ::v-deep i {
-          color: #fff;
-          font-size: 16px;
-
-          &.el-icon-arrow-down {
-            font-size: 13px;
-          }
-        }
-
-        & ::v-deep i.el-dialog__close.el-icon-close {
-          color: #7c7e7f;
-        }
+      .nav-logo {
+        width: 200px;
 
         &:hover {
           background: rgba(0, 0, 0, 12%);
         }
       }
-    }
-  }
 
-  @media screen and (max-width: 1006px) {
-    .navbar {
-      .is-show-menu {
-        display: block;
+      .organization {
+        display: flex;
+        align-items: center;
+        padding: 0 0 0 15px !important;
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        max-width: 250px;
+
+        ::v-deep .el-input__inner {
+          padding-left: 25px;
+        }
+
+        ::v-deep .el-input.is-disabled > input {
+          background: none;
+        }
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.12) !important;
+        }
       }
 
-      .navbar-left {
-        display: none;
+      // 未找到与之对应的
+      & ::v-deep .el-submenu__title {
+        font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        padding: 0 8px;
+        line-height: $headerHeight;
+        height: $headerHeight;
+      }
+
+      // 未找到与之对应的
+      & ::v-deep .svg-icon {
+        color: #fff !important;
       }
     }
   }
 
-  @media screen and (max-width: 480px) {
-    .active-menu {
-      display: none !important;
+  .navbar-right {
+    display: flex;
+    float: right;
+    align-items: center;
+    margin-right: 10px;
+
+    .header-item {
+      display: flex;
+      line-height: $headerHeight;
+      padding-right: 10px;
+      padding-left: 10px;
+
+      & ::v-deep .svg-icon {
+        line-height: 40px;
+        color: #fff !important;
+        font-size: 15px;
+      }
+
+      & ::v-deep .el-badge {
+        vertical-align: top;
+
+        .el-link {
+          vertical-align: baseline;
+        }
+
+        .el-badge__content--primary {
+          background-color: #fff;
+        }
+
+        .el-badge__content {
+          top: 8px;
+          height: 15px;
+          line-height: 15px;
+          border: none;
+          color: var(--color-primary);
+        }
+      }
+
+      & ::v-deep i {
+        color: #fff;
+        font-size: 16px;
+
+        &.el-icon-arrow-down {
+          font-size: 13px;
+        }
+      }
+
+      & ::v-deep i.el-dialog__close.el-icon-close {
+        color: #7c7e7f;
+      }
+
+      &.none-hover {
+        padding: 0;
+        &:hover {
+          background: none;
+        }
+      }
+
+      &:hover {
+        background: rgba(0, 0, 0, 12%);
+      }
     }
   }
+}
+
+@media screen and (max-width: 1006px) {
+  .navbar {
+    .is-show-menu {
+      display: block;
+    }
+
+    .navbar-left {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .active-menu {
+    display: none !important;
+  }
+}
 </style>
