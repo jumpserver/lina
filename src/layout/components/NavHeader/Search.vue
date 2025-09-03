@@ -81,6 +81,7 @@
 <script>
 import { toTitleCase, ObjectLocalStorage } from '@/utils/common'
 import Icon from '@/components/Widgets/Icon'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Search',
@@ -108,6 +109,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'viewRoutes'
+    ]),
     isEmpty() {
       return !this.search && !this.history.length && !this.routeSuggestions.length
     },
@@ -129,6 +133,7 @@ export default {
     this.loadHistory()
     window.addEventListener('resize', this.repositionPanel)
     window.addEventListener('scroll', this.repositionPanel, true)
+    this.buildRouteSuggestions()
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.onClickOutside)
@@ -239,25 +244,23 @@ export default {
       this.closePanel()
     },
     buildRouteSuggestions() {
+      console.log('Build route suggestions')
       if (this.routes.length > 0) {
         return
       }
-      let allRoutes = []
-      try {
-        allRoutes = (this.$router.getRoutes && this.$router.getRoutes()) || []
-      } catch (e) {
-        allRoutes = []
-      }
+      const allRoutes = this.viewRoutes
+      console.log('All routes: ', allRoutes)
       const flat = []
       const walk = (rs, parentPath = '') => {
         for (const r of rs) {
           const path = r.path?.startsWith('/') ? r.path : `${parentPath}/${r.path || ''}`
 
-          if (r.meta?.showInSearch === true) {
+          console.log('Path: ', path, r)
+          if (r.meta?.showInSearch) {
             flat.push({
               name: r.name,
               path,
-              title: r.meta?.title || r.meta?.menuTitle || r.meta?.label
+              title: r.meta?.title
             })
           }
 
@@ -267,12 +270,10 @@ export default {
         }
       }
       walk(allRoutes)
-      console.log('Flat routes: ', flat)
       this.routes = flat
     },
     filterRouteSuggestions(q) {
-      console.log('All routes: ', this.routes)
-      return this.routes.filter(r => {
+      this.routeSuggestions = this.routes.filter(r => {
         const title = r.title ? r.title.toLowerCase() : ''
         return title.includes(q)
       })
