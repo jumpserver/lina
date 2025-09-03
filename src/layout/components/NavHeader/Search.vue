@@ -97,6 +97,7 @@ export default {
       history: [],
       routeSuggestions: [],
       panelStyle: {},
+      routes: [],
       iconMap: {
         'Account': 'accounts',
         'Asset': 'assets',
@@ -150,7 +151,6 @@ export default {
     onInput() {
       this.openPanel()
       this.debouncedQuery()
-      this.buildRouteSuggestions()
     },
     repositionPanel() {
       if (!this.isOpen) return
@@ -218,13 +218,14 @@ export default {
         return
       }
       this.searchQuery(q)
+      this.filterRouteSuggestions(q)
     }, 250),
     onEnter() {
       // 优先进入第一条远程结果，其次路由建议，其次历史
       const firstRemote = this.options?.[0]?.options?.[0]
       if (firstRemote) return this.handleSearch(firstRemote)
-      // const firstRoute = this.routeSuggestions?.[0]
-      // if (firstRoute) return this.navigateRoute(firstRoute)
+      const firstRoute = this.routeSuggestions?.[0]
+      if (firstRoute) return this.navigateRoute(firstRoute)
       const firstHistory = this.filteredHistory?.[0]
       if (firstHistory) return this.applyHistory(firstHistory)
       this.closePanel()
@@ -238,38 +239,43 @@ export default {
       this.closePanel()
     },
     buildRouteSuggestions() {
-      const q = this.search?.trim().toLowerCase()
-      let routes = []
+      if (this.routes.length > 0) {
+        return
+      }
+      let allRoutes = []
       try {
-        routes =
-          (this.$router.getRoutes && this.$router.getRoutes()) || this.$router.options.routes || []
+        allRoutes = (this.$router.getRoutes && this.$router.getRoutes()) || []
       } catch (e) {
-        routes = []
+        allRoutes = []
       }
       const flat = []
       const walk = (rs, parentPath = '') => {
-        rs.forEach(r => {
+        for (const r of rs) {
           const path = r.path?.startsWith('/') ? r.path : `${parentPath}/${r.path || ''}`
-          if (r.meta?.showInSearch !== true) return
 
-          flat.push({
-            name: r.name,
-            path,
-            title: r.meta?.title || r.meta?.menuTitle || r.meta?.label
-          })
-          if (r.children && r.children.length) walk(r.children, path)
-        })
+          if (r.meta?.showInSearch === true) {
+            flat.push({
+              name: r.name,
+              path,
+              title: r.meta?.title || r.meta?.menuTitle || r.meta?.label
+            })
+          }
+
+          if (r.children && r.children.length) {
+            walk(r.children, path)
+          }
+        }
       }
-      walk(routes)
-      const matched = q
-        ? flat.filter(r => {
-          const title = r.title ? r.title.toLowerCase() : ''
-          const name = r.name ? String(r.name).toLowerCase() : ''
-          const path = r.path ? r.path.toLowerCase() : ''
-          return title.includes(q) || name.includes(q) || path.includes(q)
-        })
-        : flat.slice(0, 8)
-      this.routeSuggestions = matched.slice(0, 8)
+      walk(allRoutes)
+      console.log('Flat routes: ', flat)
+      this.routes = flat
+    },
+    filterRouteSuggestions(q) {
+      console.log('All routes: ', this.routes)
+      return this.routes.filter(r => {
+        const title = r.title ? r.title.toLowerCase() : ''
+        return title.includes(q)
+      })
     },
     navigateRoute(r) {
       if (r.name) this.$router.push({ name: r.name })
