@@ -29,8 +29,8 @@ export default [
       {
         path: ':id',
         component: () => import('@/views/accounts/Account/AccountDetail/index.vue'),
-        name: 'AssetAccountDetail',
-        meta: { title: i18n.t('AssetAccountDetail') },
+        name: 'AccountDetail',
+        meta: { title: i18n.t('AccountDetail') },
         hidden: true
       }
     ]

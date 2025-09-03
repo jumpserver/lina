@@ -1,18 +1,19 @@
 <template>
-  <span ref="root" class="search">
+  <span ref="root" class="search" :class="{ 'is-open': isOpen }">
     <div class="search-input">
-      <i class="el-icon-search prefix" />
-      <input
+      <el-input
         ref="searchInput"
         v-model="search"
         :placeholder="$t('Search')"
-        class="input"
+        class="search-input"
+        prefix-icon="el-icon-search"
+        clearable
         @focus="openPanel"
         @input="onInput"
         @keydown.esc.prevent="closePanel"
         @keydown.enter.prevent="onEnter"
-      >
-      <i v-if="search" class="el-icon-close clear" @click="clearSearch" />
+        @clear="clearSearch"
+      />
     </div>
 
     <transition name="el-zoom-in-top">
@@ -61,7 +62,7 @@
                 class="item"
                 @click="handleSearch(item)"
               >
-                <i class="el-icon-search icon" />
+                <Icon class="icon" :icon="iconMap[item.model]" />
                 <span class="label">{{ item.label }}</span>
                 <span class="sub">{{ item.content }}</span>
               </li>
@@ -69,7 +70,9 @@
           </div>
         </template>
 
-        <div v-if="!loading && isEmpty" class="section empty">{{ $t('NoData') }}</div>
+        <div v-if="!loading && isEmpty" class="section empty">
+          {{ $t('NoData') }}
+        </div>
       </div>
     </transition>
   </span>
@@ -77,9 +80,13 @@
 
 <script>
 import { toTitleCase, ObjectLocalStorage } from '@/utils/common'
+import Icon from '@/components/Widgets/Icon'
 
 export default {
   name: 'Search',
+  components: {
+    Icon
+  },
   data() {
     return {
       search: '',
@@ -89,7 +96,14 @@ export default {
       historyStore: new ObjectLocalStorage('global-search-history'),
       history: [],
       routeSuggestions: [],
-      panelStyle: {}
+      panelStyle: {},
+      iconMap: {
+        'Account': 'accounts',
+        'Asset': 'assets',
+        'User': 'user-o',
+        'UserGroup': 'user-group',
+        'AssetPermission': 'permission'
+      }
     }
   },
   computed: {
@@ -102,6 +116,11 @@ export default {
     filteredHistory() {
       if (!this.search) return this.history
       return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
+    }
+  },
+  watch: {
+    isOpen(val) {
+      this.$emit('search-open', val)
     }
   },
   mounted() {
@@ -137,17 +156,21 @@ export default {
       if (!this.isOpen) return
       const el = this.$refs.searchInput
       if (!el) return
-      const rect = el.getBoundingClientRect()
+
+      // 直接使用 el-input 组件的根元素
+      const rect = el.$el.getBoundingClientRect()
       const minWidth = 360
       const maxWidth = Math.min(window.innerWidth - 20, 720)
       const width = Math.max(minWidth, Math.min(maxWidth, rect.width))
-      let left = rect.left
-      if (left + width > window.innerWidth - 10) {
-        left = Math.max(10, window.innerWidth - 10 - width)
+      // 右对齐：从 input 的右边缘向左展开
+      let left = rect.right - width
+      // 确保不会超出屏幕左边界
+      if (left < 10) {
+        left = 10
       }
       this.panelStyle = {
         position: 'fixed',
-        top: rect.bottom + 6 + 'px',
+        top: rect.bottom + 9 + 'px',
         left: left + 'px',
         width: width + 'px'
       }
@@ -200,15 +223,14 @@ export default {
       // 优先进入第一条远程结果，其次路由建议，其次历史
       const firstRemote = this.options?.[0]?.options?.[0]
       if (firstRemote) return this.handleSearch(firstRemote)
-      const firstRoute = this.routeSuggestions?.[0]
-      if (firstRoute) return this.navigateRoute(firstRoute)
+      // const firstRoute = this.routeSuggestions?.[0]
+      // if (firstRoute) return this.navigateRoute(firstRoute)
       const firstHistory = this.filteredHistory?.[0]
       if (firstHistory) return this.applyHistory(firstHistory)
       this.closePanel()
     },
     handleSearch(item) {
       const route = {}
-      console.log(item)
       route['name'] = toTitleCase(item.model) + 'Detail'
       route['params'] = { id: item.id }
       this.$router.push(route)
@@ -228,7 +250,7 @@ export default {
       const walk = (rs, parentPath = '') => {
         rs.forEach(r => {
           const path = r.path?.startsWith('/') ? r.path : `${parentPath}/${r.path || ''}`
-          if (r.meta?.hidden) return
+          if (r.meta?.showInSearch !== true) return
 
           flat.push({
             name: r.name,
@@ -262,7 +284,11 @@ export default {
     saveHistory(entry) {
       const list = this.historyStore.get('list', []) || []
       const next = [
-        { query: String(entry.query || '').slice(0, 200), type: entry.type, ts: Date.now() },
+        {
+          query: String(entry.query || '').slice(0, 200),
+          type: entry.type,
+          ts: Date.now()
+        },
         ...list.filter(i => i.query !== entry.query)
       ].slice(0, 10)
       this.historyStore.set('list', next)
@@ -279,60 +305,66 @@ export default {
 <style scoped lang="scss">
 .search {
   position: relative;
-  width: 100%;
+  width: 200px; /* 固定宽度，与 input 保持一致 */
   height: 40px;
   padding: 5px 0;
+  min-width: 200px;
+
+  &.is-open {
+    width: calc(100vw - 850px);
+  }
 
   .search-input {
-    display: flex;
-    align-items: center;
     height: 30px;
+    line-height: 30px;
+    // width: 200px; /* 固定宽度，避免布局变化 */
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 1px;
-    padding: 0 6px;
 
-    .prefix {
+    ::v-deep .el-input__inner {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      height: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    ::v-deep .el-input__inner::placeholder {
+      color: #fff;
+      opacity: 0.7;
+    }
+
+    ::v-deep .el-input__prefix {
       color: #fff;
       font-size: 16px;
     }
 
-    .input {
-      flex: 1;
-      outline: none;
-      background: transparent;
-      border: none;
-      height: 28px;
+    ::v-deep .el-input__suffix {
       color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-left: 6px;
-    }
-
-    .clear {
-      color: #fff;
-      cursor: pointer;
-      opacity: 0.7;
     }
   }
 
   .panel {
-    z-index: 4000;
+    position: fixed; /* 确保使用 fixed 定位 */
+    z-index: 9999; /* 提高 z-index 值 */
     background: #fff;
     color: var(--text-primary);
     border-radius: 4px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-height: 60vh;
+    max-height: 80vh;
     min-height: 200px;
     overflow: auto;
-    width: 500px;
+    width: 600px;
     padding: 8px 0;
 
     .section-title {
-      padding: 6px 12px;
-      font-size: 12px;
+      padding: 6px 12px 2px 15px;
+      font-size: 13px;
+      line-height: 2;
       color: #909399;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .list {
@@ -344,8 +376,21 @@ export default {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 4px 16px;
         cursor: pointer;
+
+        .icon {
+          height: 30px;
+          line-height: 30px;
+        }
+
+        ::v-deep {
+          .icon, .svg-icon {
+            color: #000;
+            font-size: 13px;
+            font-weight: 300;
+          }
+        }
 
         &:hover {
           background: #f5f7fa;
@@ -357,18 +402,26 @@ export default {
 
         .label {
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 400;
+          line-height: 30px;
           color: #303133;
+          max-width: 55%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .sub {
           margin-left: auto;
           font-size: 12px;
+          line-height: 30px;
           color: #909399;
           max-width: 50%;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
+          max-width: 40%;
+          float: right;
         }
 
         .go {

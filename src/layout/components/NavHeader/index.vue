@@ -2,7 +2,7 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon none-hover">
-        <Search />
+        <Search @search-open="handleSearchOpen" />
       </li>
       <li class="header-item header-icon">
         <el-tooltip :content="$tc('SiteMessageList')" :open-delay="500" effect="dark">
@@ -81,7 +81,9 @@ export default {
     Search
   },
   data() {
-    return {}
+    return {
+      searchOpen: false
+    }
   },
   computed: {
     ...mapGetters(['sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute', 'isMobile']),
@@ -105,6 +107,9 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    handleSearchOpen(val) {
+      // this.searchOpen = val
     }
   }
 }
@@ -212,7 +217,7 @@ export default {
 
       & ::v-deep .svg-icon {
         line-height: 40px;
-        color: #fff !important;
+        color: #fff;
         font-size: 15px;
       }
 

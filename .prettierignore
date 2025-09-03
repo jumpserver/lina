@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+dist/
+build/
+lina/
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Package files
+*.tgz
+*.tar.gz
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Build outputs
+*.map
+
+# Config files that shouldn't be formatted
+.eslintrc.js
+babel.config.js
+jest.config.js
+vue.config.js
+postcss.config.js
+
+# Theme files
+src/styles/fonts/
+public/fonts/
+lina/fonts/
+
+# Assets
+src/assets/
+public/
+
+# Mock data
+mock/
+
+# Test files
+tests/
+
+# Documentation
+*.md
