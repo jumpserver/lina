@@ -1,64 +1,161 @@
 <template>
-  <span class="search">
-    <el-select
-      v-if="showSearch"
-      ref="searchInput"
-      v-model="search"
-      :loading="loading"
-      :placeholder="$t('Search')"
-      :remote-method="searchQuery"
-      popper-class="global-search-popper"
-      filterable
-      remote
-      reserve-keyword
-      clearable
-    >
-      <template slot="prefix">
-        <i class="el-icon-search" />
-      </template>
-      <el-option-group v-for="group in options" :key="group.label" :label="group.label">
-        <el-option
-          v-for="item in group.options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-          <div class="option-content" @click="handleSearch(item)">
-            <div class="label">{{ item.label }}</div>
-            <div class="content">{{ item.content }}</div>
-          </div>
-        </el-option>
-      </el-option-group>
-    </el-select>
+  <span ref="root" class="search">
+    <div class="search-input">
+      <i class="el-icon-search prefix" />
+      <input
+        ref="searchInput"
+        v-model="search"
+        :placeholder="$t('Search')"
+        class="input"
+        @focus="openPanel"
+        @input="onInput"
+        @keydown.esc.prevent="closePanel"
+        @keydown.enter.prevent="onEnter"
+      >
+      <i v-if="search" class="el-icon-close clear" @click="clearSearch" />
+    </div>
 
-    <!-- <el-link @click="handleShowSearch">
-      <i class="el-icon-search" />
-    </el-link> -->
+    <transition name="el-zoom-in-top">
+      <div v-show="isOpen" class="panel" :style="panelStyle" @mousedown.stop>
+        <div v-if="loading" class="section loading">{{ $t('Loading') }}...</div>
+
+        <template v-if="showHistory">
+          <div class="section-title">{{ $t('History') }}</div>
+          <ul class="list">
+            <li
+              v-for="(item, index) in filteredHistory"
+              :key="'h-' + index"
+              class="item"
+              @click="applyHistory(item)"
+            >
+              <i class="el-icon-time icon" />
+              <span class="label">{{ item.query }}</span>
+              <i class="el-icon-arrow-right go" />
+            </li>
+          </ul>
+        </template>
+
+        <template v-if="routeSuggestions.length">
+          <div class="section-title">{{ $t('Routes') }}</div>
+          <ul class="list">
+            <li
+              v-for="route in routeSuggestions"
+              :key="'r-' + route.name + route.path"
+              class="item"
+              @click="navigateRoute(route)"
+            >
+              <i class="el-icon-location-outline icon" />
+              <span class="label">{{ route.title || route.name || route.path }}</span>
+              <span class="sub">{{ route.path }}</span>
+            </li>
+          </ul>
+        </template>
+
+        <template v-if="options.length">
+          <div v-for="group in options" :key="'g-' + group.label" class="section">
+            <div class="section-title">{{ group.label }}</div>
+            <ul class="list">
+              <li
+                v-for="item in group.options"
+                :key="item.value"
+                class="item"
+                @click="handleSearch(item)"
+              >
+                <i class="el-icon-search icon" />
+                <span class="label">{{ item.label }}</span>
+                <span class="sub">{{ item.content }}</span>
+              </li>
+            </ul>
+          </div>
+        </template>
+
+        <div v-if="!loading && isEmpty" class="section empty">{{ $t('NoData') }}</div>
+      </div>
+    </transition>
   </span>
 </template>
 
 <script>
-import { toTitleCase } from '@/utils/common'
+import { toTitleCase, ObjectLocalStorage } from '@/utils/common'
 
 export default {
   name: 'Search',
   data() {
     return {
       search: '',
-      showSearch: true,
       loading: false,
-      options: []
+      options: [],
+      isOpen: false,
+      historyStore: new ObjectLocalStorage('global-search-history'),
+      history: [],
+      routeSuggestions: [],
+      panelStyle: {}
     }
   },
+  computed: {
+    isEmpty() {
+      return !this.search && !this.history.length && !this.routeSuggestions.length
+    },
+    showHistory() {
+      return this.history.length > 0 && (!this.search || this.filteredHistory.length > 0)
+    },
+    filteredHistory() {
+      if (!this.search) return this.history
+      return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
+    }
+  },
+  mounted() {
+    document.addEventListener('mousedown', this.onClickOutside)
+    this.loadHistory()
+    window.addEventListener('resize', this.repositionPanel)
+    window.addEventListener('scroll', this.repositionPanel, true)
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousedown', this.onClickOutside)
+    window.removeEventListener('resize', this.repositionPanel)
+    window.removeEventListener('scroll', this.repositionPanel, true)
+  },
   methods: {
-    handleShowSearch() {
-      this.showSearch = !this.showSearch
-
-      if (this.showSearch) {
-        this.$nextTick(() => {
-          this.$refs.searchInput.focus()
-        })
+    openPanel() {
+      this.isOpen = true
+      this.buildRouteSuggestions()
+      this.$nextTick(this.repositionPanel)
+    },
+    closePanel() {
+      this.isOpen = false
+    },
+    onClickOutside(e) {
+      const root = this.$refs.root
+      if (root && !root.contains(e.target)) this.closePanel()
+    },
+    onInput() {
+      this.openPanel()
+      this.debouncedQuery()
+      this.buildRouteSuggestions()
+    },
+    repositionPanel() {
+      if (!this.isOpen) return
+      const el = this.$refs.searchInput
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const minWidth = 360
+      const maxWidth = Math.min(window.innerWidth - 20, 720)
+      const width = Math.max(minWidth, Math.min(maxWidth, rect.width))
+      let left = rect.left
+      if (left + width > window.innerWidth - 10) {
+        left = Math.max(10, window.innerWidth - 10 - width)
       }
+      this.panelStyle = {
+        position: 'fixed',
+        top: rect.bottom + 6 + 'px',
+        left: left + 'px',
+        width: width + 'px'
+      }
+    },
+    clearSearch() {
+      this.search = ''
+      this.options = []
+      this.buildRouteSuggestions()
     },
     async searchQuery(query) {
       if (query.length < 2) {
@@ -91,77 +188,200 @@ export default {
       }))
       this.options = options
     },
+    debouncedQuery: _.debounce(function() {
+      const q = this.search?.trim()
+      if (!q) {
+        this.options = []
+        return
+      }
+      this.searchQuery(q)
+    }, 250),
+    onEnter() {
+      // 优先进入第一条远程结果，其次路由建议，其次历史
+      const firstRemote = this.options?.[0]?.options?.[0]
+      if (firstRemote) return this.handleSearch(firstRemote)
+      const firstRoute = this.routeSuggestions?.[0]
+      if (firstRoute) return this.navigateRoute(firstRoute)
+      const firstHistory = this.filteredHistory?.[0]
+      if (firstHistory) return this.applyHistory(firstHistory)
+      this.closePanel()
+    },
     handleSearch(item) {
       const route = {}
       console.log(item)
       route['name'] = toTitleCase(item.model) + 'Detail'
       route['params'] = { id: item.id }
       this.$router.push(route)
+      this.saveHistory({ type: 'remote', query: this.search })
+      this.closePanel()
+    },
+    buildRouteSuggestions() {
+      const q = this.search?.trim().toLowerCase()
+      let routes = []
+      try {
+        routes =
+          (this.$router.getRoutes && this.$router.getRoutes()) || this.$router.options.routes || []
+      } catch (e) {
+        routes = []
+      }
+      const flat = []
+      const walk = (rs, parentPath = '') => {
+        rs.forEach(r => {
+          const path = r.path?.startsWith('/') ? r.path : `${parentPath}/${r.path || ''}`
+          if (r.meta?.hidden) return
+
+          flat.push({
+            name: r.name,
+            path,
+            title: r.meta?.title || r.meta?.menuTitle || r.meta?.label
+          })
+          if (r.children && r.children.length) walk(r.children, path)
+        })
+      }
+      walk(routes)
+      const matched = q
+        ? flat.filter(r => {
+          const title = r.title ? r.title.toLowerCase() : ''
+          const name = r.name ? String(r.name).toLowerCase() : ''
+          const path = r.path ? r.path.toLowerCase() : ''
+          return title.includes(q) || name.includes(q) || path.includes(q)
+        })
+        : flat.slice(0, 8)
+      this.routeSuggestions = matched.slice(0, 8)
+    },
+    navigateRoute(r) {
+      if (r.name) this.$router.push({ name: r.name })
+      else this.$router.push({ path: r.path })
+      this.saveHistory({ type: 'route', query: r.title || r.name || r.path })
+      this.closePanel()
+    },
+    loadHistory() {
+      const list = this.historyStore.get('list', []) || []
+      this.history = Array.isArray(list) ? list : []
+    },
+    saveHistory(entry) {
+      const list = this.historyStore.get('list', []) || []
+      const next = [
+        { query: String(entry.query || '').slice(0, 200), type: entry.type, ts: Date.now() },
+        ...list.filter(i => i.query !== entry.query)
+      ].slice(0, 10)
+      this.historyStore.set('list', next)
+      this.history = next
+    },
+    applyHistory(h) {
+      this.search = h.query
+      this.onInput()
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.global-search-popper {
-  .el-select-dropdown__item {
-    height: 50px;
-
-    .label {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 25px;
-    }
-
-    .content {
-      font-size: 12px;
-      color: gray;
-      font-weight: 300;
-      line-height: 15px;
-    }
-  }
-}
-
 .search {
+  position: relative;
   width: 100%;
   height: 40px;
+  padding: 5px 0;
 
-  .el-select {
-    // width: calc(100% - 38px);
+  .search-input {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 1px;
+    padding: 0 6px;
 
-    &:hover {
-      background: var(--banner-bg);
+    .prefix {
+      color: #fff;
+      font-size: 16px;
     }
 
-    ::v-deep {
-      .el-select__input {
-        color: #fff;
-        margin-left: 10px;
-      }
+    .input {
+      flex: 1;
+      outline: none;
+      background: transparent;
+      border: none;
+      height: 28px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-left: 6px;
+    }
 
-      .el-input__inner {
-        &:hover {
-          cursor: initial;
-        }
-        background-color: rgba(0, 0, 0, 0.1);
-        display: inline-block;
-        border-radius: 1px;
-        border: none;
-        height: 30px;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 1px;
-      }
+    .clear {
+      color: #fff;
+      cursor: pointer;
+      opacity: 0.7;
     }
   }
 
-  .el-link {
-    float: right;
-    padding: 0 9px;
+  .panel {
+    z-index: 4000;
+    background: #fff;
+    color: var(--text-primary);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    max-height: 60vh;
+    min-height: 200px;
+    overflow: auto;
+    width: 500px;
+    padding: 8px 0;
 
-    &:hover {
-      background: rgba(0, 0, 0, 12%);
+    .section-title {
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #909399;
+      font-weight: 600;
+    }
+
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+
+        &:hover {
+          background: #f5f7fa;
+        }
+
+        .icon {
+          color: var(--color-primary);
+        }
+
+        .label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #303133;
+        }
+
+        .sub {
+          margin-left: auto;
+          font-size: 12px;
+          color: #909399;
+          max-width: 50%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+
+        .go {
+          margin-left: auto;
+          color: #c0c4cc;
+        }
+      }
+    }
+
+    .loading,
+    .empty {
+      padding: 12px;
+      color: #909399;
     }
   }
 }

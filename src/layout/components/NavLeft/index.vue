@@ -1,20 +1,19 @@
 <template>
-  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs, 'collapsed': isCollapse}" class="left-side-wrapper">
+  <div
+    :class="{ 'has-logo': showLogo, 'show-orgs': showOrgs, collapsed: isCollapse }"
+    class="left-side-wrapper"
+  >
     <div class="nav-header">
       <div class="active-mobile">
         <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title">
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
-          <el-popover
-            :open-delay="200"
-            placement="right-start"
-            trigger="hover"
-          >
+          <el-popover :open-delay="200" placement="right-start" trigger="hover">
             <span slot="reference" style="width: 100%">
-              <el-tooltip v-show="!isCollapse" :content="isRouteMeta.title" :open-delay="1000" placement="bottom" effect="dark" class="view-title">
+              <!-- <el-tooltip v-show="!isCollapse" :content="isRouteMeta.title" :open-delay="1000" placement="bottom" effect="dark" class="view-title">
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
-              </el-tooltip>
+              </el-tooltip> -->
               <span class="icon-zone">
                 <svg-icon class="icon" icon-class="switch" />
               </span>
@@ -49,10 +48,14 @@
     </div>
     <div class="nav-footer">
       <div class="toggle-bar">
-        <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+        <Hamburger
+          :is-active="sidebar.opened"
+          class="hamburger-container"
+          @toggleClick="toggleSideBar"
+        />
       </div>
     </div>
-    <div :class="{'is-show': viewShown}" class="mobile-menu" @click="viewShown = false">
+    <div :class="{ 'is-show': viewShown }" class="mobile-menu" @click="viewShown = false">
       <ViewSwitcher :mode="'vertical'" />
     </div>
   </div>
@@ -81,10 +84,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentViewRoute',
-      'sidebar'
-    ]),
+    ...mapGetters(['currentViewRoute', 'sidebar']),
     defaultOpensMenu() {
       return []
     },
@@ -127,8 +127,7 @@ export default {
       return this.currentViewRoute.meta || {}
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -143,7 +142,9 @@ export default {
       }, 500)
     },
     setLeastMenuOpen() {
-      const hasOpened = document.querySelector('.el-submenu-sidebar.submenu-item.el-submenu.is-opened')
+      const hasOpened = document.querySelector(
+        '.el-submenu-sidebar.submenu-item.el-submenu.is-opened'
+      )
       if (hasOpened) {
         return
       }
@@ -156,7 +157,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/styles/variables.scss";
+@import '~@/styles/variables.scss';
 
 $mobileHeight: 40px;
 $origin-color: #ffffff;
@@ -235,7 +236,7 @@ $hover-border-color: #d2d2d2;
 
           .view-title {
             width: calc(100% - 10px);
-            display: inline-block
+            display: inline-block;
           }
 
           .icon-zone {
@@ -299,7 +300,7 @@ $hover-border-color: #d2d2d2;
   }
 
   .is-show {
-    display: block !important;;
+    display: block !important;
   }
 
   .mobile-menu {
