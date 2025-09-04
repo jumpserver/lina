@@ -11,9 +11,16 @@
         <span :class="switchViewOtherClasses" class="switch-view active-switch-view">
           <el-popover :open-delay="200" placement="right-start" trigger="hover">
             <span slot="reference" style="width: 100%">
-              <!-- <el-tooltip v-show="!isCollapse" :content="isRouteMeta.title" :open-delay="1000" placement="bottom" effect="dark" class="view-title">
+              <el-tooltip
+                v-show="!isCollapse"
+                :content="isRouteMeta.title"
+                :open-delay="1000"
+                placement="bottom"
+                effect="dark"
+                class="view-title"
+              >
                 <span class="text-overflow">{{ isRouteMeta.title || '' }}</span>
-              </el-tooltip> -->
+              </el-tooltip>
               <span class="icon-zone">
                 <svg-icon class="icon" icon-class="switch" />
               </span>
