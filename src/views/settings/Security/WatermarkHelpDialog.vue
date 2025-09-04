@@ -13,12 +13,14 @@
       <tr>
         <th>{{ $tc('Variable') }}</th>
         <th>{{ $tc('Description') }}</th>
+        <th>{{ $tc('Example') }}</th>
       </tr>
-      <tr v-for="(val, key, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
-          <label class="item-label">{{ key }}</label>
+      <tr v-for="(item, index) in variables" :key="index">
+        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.key)">
+          <label class="item-label">{{ item.key }}</label>
         </td>
-        <td><span>{{ val }}</span></td>
+        <td><span>{{ item.label }}</span></td>
+        <td><span>{{ item.example }}</span></td>
       </tr>
     </table>
   </Dialog>
@@ -38,8 +40,8 @@ export default {
       default: false
     },
     variables: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => []
     }
   },
   data() {

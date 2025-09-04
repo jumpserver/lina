@@ -18,21 +18,21 @@ export default {
     return {
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
-      sessionVariables: {
-        'userId': this.$t('userId'),
-        'name': this.$t('name'),
-        'userName': this.$t('userName'),
-        'currentTime': this.$t('currentTime'),
-        'assetId': this.$t('assetId'),
-        'assetName': this.$t('assetName'),
-        'assetAddress': this.$t('assetAddress')
-      },
-      consoleVariables: {
-        'userId': this.$t('userId'),
-        'name': this.$t('name'),
-        'userName': this.$t('userName'),
-        'currentTime': this.$t('currentTime')
-      },
+      sessionVariables: [
+        { key: 'userId', label: this.$t('userId'), example: '00000000-0000-0000-0000-000000000001' },
+        { key: 'name', label: this.$t('name'), example: '张三' },
+        { key: 'userName', label: this.$t('userName'), example: 'zhangsan' },
+        { key: 'currentTime', label: this.$t('currentTime'), example: '2025-06-01 12:00:00' },
+        { key: 'assetId', label: this.$t('assetId'), example: '00000000-0000-0000-0000-000000000001' },
+        { key: 'assetName', label: this.$t('assetName'), example: '服务器01' },
+        { key: 'assetAddress', label: this.$t('assetAddress'), example: '192.168.1.1' }
+      ],
+      consoleVariables: [
+        { key: 'userId', label: this.$t('userId'), example: '00000000-0000-0000-0000-000000000001' },
+        { key: 'name', label: this.$t('name'), example: '张三' },
+        { key: 'userName', label: this.$t('userName'), example: 'zhangsan' },
+        { key: 'currentTime', label: this.$t('currentTime'), example: '2025-06-01 12:00:00' }
+      ],
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
