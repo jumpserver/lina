@@ -20,10 +20,8 @@
     <!-- 搜索模态框 -->
     <el-dialog
       :visible.sync="isOpen"
-      :show-close="false"
       :close-on-click-modal="true"
       :append-to-body="true"
-      :modal="false"
       custom-class="search-modal"
       width="70%"
       @close="closePanel"
@@ -383,28 +381,31 @@ export default {
 
 <style lang="scss">
 /* 搜索模态框全局样式 */
-  .search-modal {
-    &.el-dialog {
-      position: fixed;
-      top: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-height: calc(100vh - 10px);
-      max-width: calc(100vw - 10px);
-      border-radius: 5px;
-      // box-shadow: 0 0 8px 4px #00000014;
-      box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+.search-modal {
+  &.el-dialog {
+    position: fixed;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: calc(100vh - 10px);
+    max-width: calc(100vw - 10px);
+    border-radius: 5px;
+    // box-shadow: 0 0 8px 4px #00000014;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
 
-      .el-dialog__body {
-        padding: 0;
-      }
-
-      .el-dialog__header {
-        display: none;
-      }
+    .el-dialog__body {
+      padding: 0;
     }
 
+    .el-dialog__header {
+      display: none;
+    }
   }
+}
+
+body .v-modal {
+  opacity: 0.3;
+}
 
 .search-modal-content {
   height: 70vh;
