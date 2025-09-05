@@ -7,10 +7,14 @@
         :placeholder="$t('Search')"
         class="search-input"
         readonly
-        prefix-icon=" el-icon-search"
+        prefix-icon="el-icon-search"
         @keydown.esc.prevent="closePanel"
         @clear="clearSearch"
-      />
+      >
+        <template slot="suffix">
+          <span class="search-shortcut">{{ shortcutText }}</span>
+        </template>
+      </el-input>
     </div>
 
     <!-- 搜索模态框 -->
@@ -146,11 +150,21 @@ export default {
     filteredHistory() {
       if (!this.search) return this.history
       return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
+    },
+    shortcutText() {
+      return this.isMac ? '⌘K' : 'Ctrl+K'
+    },
+    isMac() {
+      return navigator.platform.toUpperCase().indexOf('MAC') >= 0
     }
   },
   mounted() {
     this.loadHistory()
     this.buildRouteSuggestions()
+    this.bindKeyboardShortcut()
+  },
+  beforeDestroy() {
+    this.unbindKeyboardShortcut()
   },
   methods: {
     openPanel() {
@@ -269,6 +283,34 @@ export default {
     applyHistory(h) {
       this.search = h.query
       this.onInput()
+    },
+    bindKeyboardShortcut() {
+      document.addEventListener('keydown', this.handleKeyboardShortcut)
+    },
+    unbindKeyboardShortcut() {
+      document.removeEventListener('keydown', this.handleKeyboardShortcut)
+    },
+    handleKeyboardShortcut(event) {
+      // 检查是否按下了正确的快捷键
+      const isCorrectKey = event.key === 'k' || event.key === 'K'
+      const isCorrectModifier = this.isMac ? event.metaKey : event.ctrlKey
+
+      if (isCorrectKey && isCorrectModifier) {
+        // 阻止默认行为
+        event.preventDefault()
+
+        // 如果当前有输入框聚焦，不触发搜索
+        const activeElement = document.activeElement
+        const isInputFocused = activeElement && (
+          activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.contentEditable === 'true'
+        )
+
+        if (!isInputFocused) {
+          this.openPanel()
+        }
+      }
     }
   }
 }
@@ -289,9 +331,13 @@ export default {
     .search-input {
       height: 30px;
       line-height: 1;
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
       cursor: pointer;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
 
       ::v-deep .el-input__inner {
         height: 30px;
@@ -305,6 +351,31 @@ export default {
       ::v-deep .el-input__inner::placeholder {
         color: #fff;
         opacity: 0.7;
+      }
+
+      ::v-deep .el-input__suffix {
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+
+      .search-shortcut {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 11px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 2px 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        user-select: none;
+        pointer-events: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 18px;
+        line-height: 1;
       }
     }
   }
