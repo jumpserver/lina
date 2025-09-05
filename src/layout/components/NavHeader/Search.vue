@@ -1,87 +1,114 @@
 <template>
-  <span ref="root" class="search" :class="{ 'is-open': isOpen }">
-    <div class="search-input">
+  <span ref="root" class="global-search">
+    <!-- 搜索触发按钮 -->
+    <div class="search-trigger" @click="openPanel">
       <el-input
-        ref="searchInput"
         v-model="search"
         :placeholder="$t('Search')"
         class="search-input"
+        readonly
         prefix-icon="el-icon-search"
-        clearable
-        @focus="openPanel"
-        @input="onInput"
         @keydown.esc.prevent="closePanel"
-        @keydown.enter.prevent="onEnter"
         @clear="clearSearch"
-      />
+      >
+        <template slot="suffix">
+          <span class="search-shortcut">{{ shortcutText }}</span>
+        </template>
+      </el-input>
     </div>
 
-    <transition name="el-zoom-in-top">
-      <div v-show="isOpen" class="panel" :style="panelStyle" @mousedown.stop>
-        <div v-if="loading" class="section loading">{{ $t('Loading') }}...</div>
+    <!-- 搜索模态框 -->
+    <el-dialog
+      :visible.sync="isOpen"
+      :close-on-click-modal="true"
+      :append-to-body="true"
+      custom-class="search-modal"
+      width="70%"
+      @close="closePanel"
+    >
+      <div class="search-modal-content">
+        <!-- 搜索框 -->
+        <div class="search-input-wrapper">
+          <el-input
+            ref="panelSearchInput"
+            v-model="search"
+            :placeholder="$t('Search')"
+            :clearable="true"
+            size="large"
+            prefix-icon="el-icon-search"
+            @input="onInput"
+            @keydown.enter.prevent="onEnter"
+          />
+        </div>
 
-        <template v-if="showHistory">
-          <div class="section-title">{{ $t('History') }}</div>
-          <ul class="list">
-            <li
-              v-for="(item, index) in filteredHistory"
-              :key="'h-' + index"
-              class="item"
-              @click="applyHistory(item)"
-            >
-              <i class="el-icon-time icon" />
-              <span class="label">{{ item.query }}</span>
-              <i class="el-icon-arrow-right go" />
-            </li>
-          </ul>
-        </template>
+        <!-- 搜索结果内容 -->
+        <div class="search-results">
+          <div v-if="loading" class="section loading">{{ $t('Loading') }}...</div>
 
-        <template v-if="routeSuggestions.length">
-          <div class="section-title">{{ $t('Routes') }}</div>
-          <ul class="list">
-            <li
-              v-for="route in routeSuggestions"
-              :key="'r-' + route.name + route.path"
-              class="item"
-              @click="navigateRoute(route)"
-            >
-              <i class="el-icon-location-outline icon" />
-              <span class="label">{{ route.title || route.name || route.path }}</span>
-              <span class="sub">{{ route.path }}</span>
-            </li>
-          </ul>
-        </template>
-
-        <template v-if="options.length">
-          <div v-for="group in options" :key="'g-' + group.label" class="section">
-            <div class="section-title">{{ group.label }}</div>
+          <template v-if="showHistory">
+            <div class="section-title">{{ $t('History') }}</div>
             <ul class="list">
               <li
-                v-for="item in group.options"
-                :key="item.value"
+                v-for="(item, index) in filteredHistory"
+                :key="'h-' + index"
                 class="item"
-                @click="handleSearch(item)"
+                @click="applyHistory(item)"
               >
-                <Icon class="icon" :icon="iconMap[item.model]" />
-                <span class="label">{{ item.label }}</span>
-                <span class="sub">{{ item.content }}</span>
+                <i class="el-icon-time icon" />
+                <span class="label">{{ item.query }}</span>
+                <i class="el-icon-arrow-right go" />
               </li>
             </ul>
-          </div>
-        </template>
+          </template>
 
-        <div v-if="!loading && isEmpty" class="section empty">
-          {{ $t('NoData') }}
+          <template v-if="routeSuggestions.length">
+            <div class="section-title">{{ $t('Routes') }}</div>
+            <ul class="list">
+              <li
+                v-for="route in routeSuggestions"
+                :key="'r-' + route.name + route.path"
+                class="item"
+                @click="navigateRoute(route)"
+              >
+                <i class="el-icon-location-outline icon" />
+                <span class="label">{{ route.title || route.name || route.path }}</span>
+                <span class="sub">{{ route.path }}</span>
+              </li>
+            </ul>
+          </template>
+
+          <template v-if="options.length">
+            <div v-for="group in options" :key="'g-' + group.label" class="section">
+              <div class="section-title">{{ group.label }}</div>
+              <ul class="list">
+                <li
+                  v-for="item in group.options"
+                  :key="item.value"
+                  class="item"
+                  @click="handleSearch(item)"
+                >
+                  <Icon :icon="iconMap[item.model] || 'el-icon-document'" class="icon" />
+                  <span class="label">{{ item.name }}</span>
+                  <span class="sub">{{ item.content }}</span>
+                </li>
+              </ul>
+            </div>
+          </template>
+
+          <div v-if="!loading && isEmpty" class="section empty">
+            {{ $t('NoData') }}
+          </div>
         </div>
       </div>
-    </transition>
+    </el-dialog>
   </span>
 </template>
 
 <script>
-import { toTitleCase, ObjectLocalStorage } from '@/utils/common'
-import Icon from '@/components/Widgets/Icon'
+import { ObjectLocalStorage } from '@/utils/common'
 import { mapGetters } from 'vuex'
+import _ from 'lodash'
+import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
   name: 'Search',
@@ -94,10 +121,8 @@ export default {
       loading: false,
       options: [],
       isOpen: false,
-      historyStore: new ObjectLocalStorage('global-search-history'),
       history: [],
       routeSuggestions: [],
-      panelStyle: {},
       routes: [],
       iconMap: {
         'Account': 'accounts',
@@ -105,7 +130,8 @@ export default {
         'User': 'user-o',
         'UserGroup': 'user-group',
         'AssetPermission': 'permission'
-      }
+      },
+      historyStore: new ObjectLocalStorage('global-search-history')
     }
   },
   computed: {
@@ -113,153 +139,115 @@ export default {
       'viewRoutes'
     ]),
     isEmpty() {
-      return !this.search && !this.history.length && !this.routeSuggestions.length
+      return this.search && !this.routeSuggestions.length && this.options.length === 0
     },
     showHistory() {
-      return this.history.length > 0 && (!this.search || this.filteredHistory.length > 0)
+      return this.history.length > 0 && !this.search && this.filteredHistory.length > 0
     },
     filteredHistory() {
       if (!this.search) return this.history
       return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
-    }
-  },
-  watch: {
-    isOpen(val) {
-      this.$emit('search-open', val)
+    },
+    shortcutText() {
+      return this.isMac ? '⌘K' : 'Ctrl+K'
+    },
+    isMac() {
+      return navigator.platform.toUpperCase().indexOf('MAC') >= 0
     }
   },
   mounted() {
-    document.addEventListener('mousedown', this.onClickOutside)
     this.loadHistory()
-    window.addEventListener('resize', this.repositionPanel)
-    window.addEventListener('scroll', this.repositionPanel, true)
     this.buildRouteSuggestions()
+    this.bindKeyboardShortcut()
   },
   beforeDestroy() {
-    document.removeEventListener('mousedown', this.onClickOutside)
-    window.removeEventListener('resize', this.repositionPanel)
-    window.removeEventListener('scroll', this.repositionPanel, true)
+    this.unbindKeyboardShortcut()
   },
   methods: {
     openPanel() {
       this.isOpen = true
       this.buildRouteSuggestions()
-      this.$nextTick(this.repositionPanel)
+      this.$nextTick(() => {
+        this.$refs.panelSearchInput?.focus()
+      })
     },
     closePanel() {
       this.isOpen = false
     },
-    onClickOutside(e) {
-      const root = this.$refs.root
-      if (root && !root.contains(e.target)) this.closePanel()
-    },
     onInput() {
       this.openPanel()
       this.debouncedQuery()
-    },
-    repositionPanel() {
-      if (!this.isOpen) return
-      const el = this.$refs.searchInput
-      if (!el) return
-
-      // 直接使用 el-input 组件的根元素
-      const rect = el.$el.getBoundingClientRect()
-      const minWidth = 360
-      const maxWidth = Math.min(window.innerWidth - 20, 720)
-      const width = Math.max(minWidth, Math.min(maxWidth, rect.width))
-      // 右对齐：从 input 的右边缘向左展开
-      let left = rect.right - width
-      // 确保不会超出屏幕左边界
-      if (left < 10) {
-        left = 10
-      }
-      this.panelStyle = {
-        position: 'fixed',
-        top: rect.bottom + 9 + 'px',
-        left: left + 'px',
-        width: width + 'px'
-      }
     },
     clearSearch() {
       this.search = ''
       this.options = []
       this.buildRouteSuggestions()
     },
-    async searchQuery(query) {
-      if (query.length < 2) {
-        this.options = []
-        return
+    onEnter() {
+      if (this.options.length > 0) {
+        this.handleSearch(this.options[0].options[0])
       }
-      this.loading = true
-      const url = '/api/v1/search/?q=' + query
-      let options = []
-      let res = []
-
-      try {
-        res = await this.$axios.get(url)
-      } catch (error) {
-        console.error(error)
-        return
-      } finally {
-        this.loading = false
-      }
-
-      options = _.groupBy(res, 'model_label')
-      options = Object.entries(options).map(([key, value]) => ({
-        label: key,
-        options: value.map(item => ({
-          value: item.id,
-          label: item.name,
-          content: item.content?.replaceAll(';', ' '),
-          ...item
-        }))
-      }))
-      this.options = options
     },
     debouncedQuery: _.debounce(function() {
-      const q = this.search?.trim()
+      this.searchQuery(this.search)
+    }, 300),
+    async searchQuery(q) {
       if (!q) {
         this.options = []
         return
       }
-      this.searchQuery(q)
-      this.filterRouteSuggestions(q)
-    }, 250),
-    onEnter() {
-      // 优先进入第一条远程结果，其次路由建议，其次历史
-      const firstRemote = this.options?.[0]?.options?.[0]
-      if (firstRemote) return this.handleSearch(firstRemote)
-      const firstRoute = this.routeSuggestions?.[0]
-      if (firstRoute) return this.navigateRoute(firstRoute)
-      const firstHistory = this.filteredHistory?.[0]
-      if (firstHistory) return this.applyHistory(firstHistory)
-      this.closePanel()
+      this.loading = true
+      const url = '/api/v1/search/?q=' + q
+      try {
+        const res = await this.$axios.get(url)
+        let options = res || []
+        options = _.groupBy(res, 'model_label')
+        this.options = Object.keys(options).map(key => ({
+          label: key,
+          options: options[key]
+        }))
+      } catch (error) {
+        console.error('Search error:', error)
+        this.options = []
+      } finally {
+        this.loading = false
+      }
     },
     handleSearch(item) {
-      const route = {}
-      route['name'] = toTitleCase(item.model) + 'Detail'
-      route['params'] = { id: item.id }
+      const route = {
+        name: item.model + 'Detail',
+        params: { id: item.id }
+      }
       this.$router.push(route)
-      this.saveHistory({ type: 'remote', query: this.search })
       this.closePanel()
     },
+    navigateRoute(route) {
+      this.$router.push(route.path)
+      this.closePanel()
+    },
+    filterRouteSuggestions(q) {
+      if (!q) {
+        this.routeSuggestions = []
+        return
+      }
+      this.routeSuggestions = this.routes.filter(r => {
+        const title = r.title || r.name || r.path
+        return title.toLowerCase().includes(q.toLowerCase()) || r.path.toLowerCase().includes(q.toLowerCase())
+      }).slice(0, 5)
+    },
     buildRouteSuggestions() {
-      console.log('Build route suggestions')
       if (this.routes.length > 0) {
         return
       }
       const allRoutes = this.viewRoutes
-      console.log('All routes: ', allRoutes)
       const flat = []
-      const walk = (rs, parentPath = '') => {
-        for (const r of rs) {
-          const path = r.path?.startsWith('/') ? r.path : `${parentPath}/${r.path || ''}`
-
-          console.log('Path: ', path, r)
-          if (r.meta?.showInSearch) {
+      const walk = (routes, parentPath = '') => {
+        for (const r of routes) {
+          const path = parentPath + r.path
+          if (r.path && r.path !== '/' && !r.hidden) {
             flat.push({
               name: r.name,
-              path,
+              path: path,
               title: r.meta?.title
             })
           }
@@ -272,30 +260,18 @@ export default {
       walk(allRoutes)
       this.routes = flat
     },
-    filterRouteSuggestions(q) {
-      this.routeSuggestions = this.routes.filter(r => {
-        const title = r.title ? r.title.toLowerCase() : ''
-        return title.includes(q)
-      })
-    },
-    navigateRoute(r) {
-      if (r.name) this.$router.push({ name: r.name })
-      else this.$router.push({ path: r.path })
-      this.saveHistory({ type: 'route', query: r.title || r.name || r.path })
-      this.closePanel()
-    },
     loadHistory() {
-      const list = this.historyStore.get('list', []) || []
-      this.history = Array.isArray(list) ? list : []
+      this.history = this.historyStore.get('list') || []
     },
-    saveHistory(entry) {
-      const list = this.historyStore.get('list', []) || []
+    addToHistory(item) {
+      const entry = {
+        query: item.label || item.title || item.name,
+        url: item.url || item.path,
+        timestamp: Date.now()
+      }
+      const list = this.historyStore.get('list') || []
       const next = [
-        {
-          query: String(entry.query || '').slice(0, 200),
-          type: entry.type,
-          ts: Date.now()
-        },
+        entry,
         ...list.filter(i => i.query !== entry.query)
       ].slice(0, 10)
       this.historyStore.set('list', next)
@@ -304,145 +280,267 @@ export default {
     applyHistory(h) {
       this.search = h.query
       this.onInput()
+    },
+    bindKeyboardShortcut() {
+      document.addEventListener('keydown', this.handleKeyboardShortcut)
+    },
+    unbindKeyboardShortcut() {
+      document.removeEventListener('keydown', this.handleKeyboardShortcut)
+    },
+    handleKeyboardShortcut(event) {
+      // 检查是否按下了正确的快捷键
+      const isCorrectKey = event.key === 'k' || event.key === 'K'
+      const isCorrectModifier = this.isMac ? event.metaKey : event.ctrlKey
+
+      if (isCorrectKey && isCorrectModifier) {
+        // 阻止默认行为
+        event.preventDefault()
+
+        // 如果当前有输入框聚焦，不触发搜索
+        const activeElement = document.activeElement
+        const isInputFocused = activeElement && (
+          activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA' ||
+          activeElement.contentEditable === 'true'
+        )
+
+        if (!isInputFocused) {
+          this.openPanel()
+        }
+      }
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-.search {
+<style lang="scss" scoped>
+.global-search {
   position: relative;
-  width: 200px; /* 固定宽度，与 input 保持一致 */
+  width: 200px;
   height: 40px;
   padding: 5px 0;
   min-width: 200px;
 
-  &.is-open {
-    width: calc(100vw - 850px);
-  }
-
-  .search-input {
+  .search-trigger {
     height: 30px;
-    line-height: 30px;
-    // width: 200px; /* 固定宽度，避免布局变化 */
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 1px;
+    line-height: 1;
 
-    ::v-deep .el-input__inner {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 14px;
+    .search-input {
       height: 30px;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
+      line-height: 1;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      cursor: pointer;
 
-    ::v-deep .el-input__inner::placeholder {
-      color: #fff;
-      opacity: 0.7;
-    }
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
 
-    ::v-deep .el-input__prefix {
-      color: #fff;
-      font-size: 16px;
-    }
+      ::v-deep .el-input__inner {
+        height: 30px;
+        line-height: 1;
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+      }
 
-    ::v-deep .el-input__suffix {
-      color: #fff;
-    }
-  }
+      ::v-deep .el-input__inner::placeholder {
+        color: #fff;
+        opacity: 0.7;
+      }
 
-  .panel {
-    position: fixed; /* 确保使用 fixed 定位 */
-    z-index: 9999; /* 提高 z-index 值 */
-    background: #fff;
-    color: var(--text-primary);
-    border-radius: 4px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-height: 80vh;
-    min-height: 200px;
-    overflow: auto;
-    width: 600px;
-    padding: 8px 0;
-
-    .section-title {
-      padding: 6px 12px 2px 15px;
-      font-size: 13px;
-      line-height: 2;
-      color: #909399;
-      font-weight: 500;
-    }
-
-    .list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-
-      .item {
+      ::v-deep .el-input__suffix {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 4px 16px;
-        cursor: pointer;
-
-        .icon {
-          height: 30px;
-          line-height: 30px;
-        }
-
-        ::v-deep {
-          .icon, .svg-icon {
-            color: #000;
-            font-size: 13px;
-            font-weight: 300;
-          }
-        }
-
-        &:hover {
-          background: #f5f7fa;
-        }
-
-        .icon {
-          color: var(--color-primary);
-        }
-
-        .label {
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 30px;
-          color: #303133;
-          max-width: 55%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .sub {
-          margin-left: auto;
-          font-size: 12px;
-          line-height: 30px;
-          color: #909399;
-          max-width: 50%;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          max-width: 40%;
-          float: right;
-        }
-
-        .go {
-          margin-left: auto;
-          color: #c0c4cc;
-        }
+        height: 100%;
       }
-    }
 
-    .loading,
-    .empty {
-      padding: 12px;
-      color: #909399;
+      .search-shortcut {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 11px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 2px 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        user-select: none;
+        pointer-events: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 18px;
+        line-height: 1;
+      }
     }
   }
 }
 </style>
+
+<style lang="scss">
+/* 搜索模态框全局样式 */
+.search-modal {
+  &.el-dialog {
+    position: fixed;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: calc(100vh - 10px);
+    max-width: calc(100vw - 10px);
+    border-radius: 5px;
+    // box-shadow: 0 0 8px 4px #00000014;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+
+    .el-dialog__body {
+      padding: 0;
+    }
+
+    .el-dialog__header {
+      display: none;
+    }
+  }
+}
+
+body .v-modal {
+  opacity: 0.3;
+}
+
+.search-modal-content {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input-wrapper {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+
+  .el-input {
+    .el-input__inner {
+      font-size: 14px;
+      height: 34px;
+      line-height: 34px;
+    }
+  }
+}
+
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* 自定义滚动条 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+}
+
+.section-title {
+  padding: 12px 24px 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #909399;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  // background: #fafbfc;
+  border-top: 1px solid #f0f0f0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 8px 24px;
+    cursor: pointer;
+    border-bottom: 1px solid #f8f9fa;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: transparent;
+      transition: background 0.2s ease;
+    }
+
+    &:hover {
+      background: #f8f9fa;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .icon {
+      // color: var(--color-primary, #409eff);
+      margin-right: 12px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .label {
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 60%;
+    }
+
+    .sub {
+      color: #909399;
+      font-size: 12px;
+      margin-left: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: 40%;
+      text-align: right;
+    }
+
+    .go {
+      color: #c0c4cc;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.loading,
+.empty {
+  padding: 32px 24px;
+  color: #909399;
+  text-align: center;
+  font-size: 14px;
+}
+</style>
+
