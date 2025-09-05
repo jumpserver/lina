@@ -32,6 +32,7 @@
             ref="panelSearchInput"
             v-model="search"
             :placeholder="$t('Search')"
+            :clearable="true"
             size="large"
             prefix-icon="el-icon-search"
             @input="onInput"
@@ -137,19 +138,15 @@ export default {
       'viewRoutes'
     ]),
     isEmpty() {
-      return !this.search && !this.history.length && !this.routeSuggestions.length
+      return this.search && !this.routeSuggestions.length && this.options.length === 0
     },
     showHistory() {
-      return this.history.length > 0 && (!this.search || this.filteredHistory.length > 0)
+      console.log('Search: ', this.search)
+      return this.history.length > 0 && !this.search && this.filteredHistory.length > 0
     },
     filteredHistory() {
       if (!this.search) return this.history
       return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
-    }
-  },
-  watch: {
-    isOpen(val) {
-      this.$emit('search-open', val)
     }
   },
   mounted() {
@@ -384,7 +381,7 @@ export default {
 }
 
 .section-title {
-  padding: 12px 24px 8px;
+  padding: 12px 24px 6px;
   font-size: 12px;
   line-height: 1.5;
   color: #909399;
@@ -392,7 +389,7 @@ export default {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   // background: #fafbfc;
-  border-bottom: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
 }
 
 .list {
@@ -429,9 +426,9 @@ export default {
     }
 
     .icon {
-      color: var(--color-primary, #409eff);
+      // color: var(--color-primary, #409eff);
       margin-right: 12px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
     }
 
