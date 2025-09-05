@@ -9,7 +9,7 @@
 <script>
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import WatermarkHelpDialog from './WatermarkHelpDialog.vue'
+import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 
 export default {
   name: 'SessionSecurity',
