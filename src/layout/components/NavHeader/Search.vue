@@ -1,23 +1,37 @@
 <template>
-  <span ref="root" class="search" :class="{ 'is-open': isOpen }">
-    <div class="search-input">
+  <span ref="root" class="global-search">
+    <!-- 原始搜索框触发器 -->
+    <div class="search-trigger" @click="openPanel">
       <el-input
         ref="searchInput"
         v-model="search"
         :placeholder="$t('Search')"
         class="search-input"
         prefix-icon="el-icon-search"
-        clearable
+        readonly
         @focus="openPanel"
-        @input="onInput"
         @keydown.esc.prevent="closePanel"
-        @keydown.enter.prevent="onEnter"
         @clear="clearSearch"
       />
     </div>
 
-    <transition name="el-zoom-in-top">
-      <div v-show="isOpen" class="panel" :style="panelStyle" @mousedown.stop>
+    <!-- 浮动搜索面板 - 使用 Vue 2 原生方式渲染到 #app 下 -->
+    <div v-if="isOpen" ref="floatingPanel" class="floating-panel" @mousedown.stop>
+      <!-- 面板内的搜索框 -->
+      <div class="panel-search-input">
+        <input
+          ref="panelSearchInput"
+          v-model="search"
+          :placeholder="$t('Search')"
+          class="panel-search-input-field"
+          @input="onInput"
+          @keydown.esc.prevent="closePanel"
+          @keydown.enter.prevent="onEnter"
+        >
+      </div>
+
+      <!-- 搜索结果内容 -->
+      <div class="panel-content">
         <div v-if="loading" class="section loading">{{ $t('Loading') }}...</div>
 
         <template v-if="showHistory">
@@ -62,7 +76,7 @@
                 class="item"
                 @click="handleSearch(item)"
               >
-                <Icon class="icon" :icon="iconMap[item.model]" />
+                <i :class="iconMap[item.model] || 'el-icon-document'" class="icon" />
                 <span class="label">{{ item.label }}</span>
                 <span class="sub">{{ item.content }}</span>
               </li>
@@ -74,19 +88,19 @@
           {{ $t('NoData') }}
         </div>
       </div>
-    </transition>
+    </div>
   </span>
 </template>
 
 <script>
 import { toTitleCase, ObjectLocalStorage } from '@/utils/common'
-import Icon from '@/components/Widgets/Icon'
+// import Icon from '@/components/Widgets/Icon'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Search',
   components: {
-    Icon
+    // Icon
   },
   data() {
     return {
@@ -94,10 +108,8 @@ export default {
       loading: false,
       options: [],
       isOpen: false,
-      historyStore: new ObjectLocalStorage('global-search-history'),
       history: [],
       routeSuggestions: [],
-      panelStyle: {},
       routes: [],
       iconMap: {
         'Account': 'accounts',
@@ -105,7 +117,8 @@ export default {
         'User': 'user-o',
         'UserGroup': 'user-group',
         'AssetPermission': 'permission'
-      }
+      },
+      historyStore: new ObjectLocalStorage('global-search-history')
     }
   },
   computed: {
@@ -126,59 +139,42 @@ export default {
   watch: {
     isOpen(val) {
       this.$emit('search-open', val)
+      if (val) {
+        this.$nextTick(() => {
+          this.movePanelToApp()
+        })
+      }
     }
   },
   mounted() {
     document.addEventListener('mousedown', this.onClickOutside)
     this.loadHistory()
-    window.addEventListener('resize', this.repositionPanel)
-    window.addEventListener('scroll', this.repositionPanel, true)
     this.buildRouteSuggestions()
   },
   beforeDestroy() {
     document.removeEventListener('mousedown', this.onClickOutside)
-    window.removeEventListener('resize', this.repositionPanel)
-    window.removeEventListener('scroll', this.repositionPanel, true)
   },
   methods: {
     openPanel() {
       this.isOpen = true
       this.buildRouteSuggestions()
-      this.$nextTick(this.repositionPanel)
+      this.$nextTick(() => {
+        this.$refs.panelSearchInput?.focus()
+      })
     },
     closePanel() {
       this.isOpen = false
     },
     onClickOutside(e) {
       const root = this.$refs.root
-      if (root && !root.contains(e.target)) this.closePanel()
+      const panel = this.$refs.floatingPanel
+      if (root && !root.contains(e.target) && panel && !panel.contains(e.target)) {
+        this.closePanel()
+      }
     },
     onInput() {
       this.openPanel()
       this.debouncedQuery()
-    },
-    repositionPanel() {
-      if (!this.isOpen) return
-      const el = this.$refs.searchInput
-      if (!el) return
-
-      // 直接使用 el-input 组件的根元素
-      const rect = el.$el.getBoundingClientRect()
-      const minWidth = 360
-      const maxWidth = Math.min(window.innerWidth - 20, 720)
-      const width = Math.max(minWidth, Math.min(maxWidth, rect.width))
-      // 右对齐：从 input 的右边缘向左展开
-      let left = rect.right - width
-      // 确保不会超出屏幕左边界
-      if (left < 10) {
-        left = 10
-      }
-      this.panelStyle = {
-        position: 'fixed',
-        top: rect.bottom + 9 + 'px',
-        left: left + 'px',
-        width: width + 'px'
-      }
     },
     clearSearch() {
       this.search = ''
@@ -249,7 +245,6 @@ export default {
         return
       }
       const allRoutes = this.viewRoutes
-      console.log('All routes: ', allRoutes)
       const flat = []
       const walk = (rs, parentPath = '') => {
         for (const r of rs) {
@@ -304,145 +299,305 @@ export default {
     applyHistory(h) {
       this.search = h.query
       this.onInput()
+    },
+    movePanelToApp() {
+      const panel = this.$refs.floatingPanel
+      if (!panel) return
+
+      const app = document.getElementById('app')
+      if (!app) return
+
+      // 将面板移动到 #app 下
+      app.appendChild(panel)
+
+      // 设置面板样式
+      panel.style.position = 'fixed'
+      panel.style.top = '8px'
+      panel.style.left = '50%'
+      panel.style.transform = 'translateX(-50%)'
+      panel.style.zIndex = '9999'
+      panel.style.width = '600px'
+      panel.style.maxWidth = '90vw'
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-.search {
+<style lang="scss">
+.global-search {
   position: relative;
-  width: 200px; /* 固定宽度，与 input 保持一致 */
+  width: 200px;
   height: 40px;
   padding: 5px 0;
   min-width: 200px;
 
-  &.is-open {
-    width: calc(100vw - 850px);
-  }
+  .search-trigger {
+    .search-input {
+      background-color: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      cursor: pointer;
 
-  .search-input {
-    height: 30px;
-    line-height: 30px;
-    // width: 200px; /* 固定宽度，避免布局变化 */
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 1px;
-
-    ::v-deep .el-input__inner {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      height: 30px;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-
-    ::v-deep .el-input__inner::placeholder {
-      color: #fff;
-      opacity: 0.7;
-    }
-
-    ::v-deep .el-input__prefix {
-      color: #fff;
-      font-size: 16px;
-    }
-
-    ::v-deep .el-input__suffix {
-      color: #fff;
-    }
-  }
-
-  .panel {
-    position: fixed; /* 确保使用 fixed 定位 */
-    z-index: 9999; /* 提高 z-index 值 */
-    background: #fff;
-    color: var(--text-primary);
-    border-radius: 4px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-height: 80vh;
-    min-height: 200px;
-    overflow: auto;
-    width: 600px;
-    padding: 8px 0;
-
-    .section-title {
-      padding: 6px 12px 2px 15px;
-      font-size: 13px;
-      line-height: 2;
-      color: #909399;
-      font-weight: 500;
-    }
-
-    .list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-
-      .item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 4px 16px;
+      ::v-deep .el-input__inner {
+        background: transparent;
+        border: none;
+        color: #fff;
         cursor: pointer;
+      }
 
-        .icon {
-          height: 30px;
-          line-height: 30px;
+      ::v-deep .el-input__inner::placeholder {
+        color: #fff;
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .floating-panel {
+    position: fixed !important;
+    z-index: 99999 !important;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    width: 70%;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .panel-search-input {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+
+      .search-input {
+        background-color: #f8f9fa;
+
+        ::v-deep .el-input__inner {
+          background: transparent;
+          border: none;
+          color: #333;
         }
 
-        ::v-deep {
-          .icon, .svg-icon {
-            color: #000;
-            font-size: 13px;
-            font-weight: 300;
-          }
-        }
-
-        &:hover {
-          background: #f5f7fa;
-        }
-
-        .icon {
-          color: var(--color-primary);
-        }
-
-        .label {
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 30px;
-          color: #303133;
-          max-width: 55%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .sub {
-          margin-left: auto;
-          font-size: 12px;
-          line-height: 30px;
-          color: #909399;
-          max-width: 50%;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          max-width: 40%;
-          float: right;
-        }
-
-        .go {
-          margin-left: auto;
-          color: #c0c4cc;
+        ::v-deep .el-input__inner::placeholder {
+          color: #999;
         }
       }
     }
 
-    .loading,
-    .empty {
-      padding: 12px;
-      color: #909399;
+    .panel-content {
+      max-height: 60vh;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
+  }
+
+  .section-title {
+    padding: 3px 16px;
+    font-size: 12px;
+    line-height: 30px;
+    color: #999;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .item {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+
+      .label {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sub {
+        color: #999;
+        font-size: 12px;
+        margin-left: auto;
+      }
+    }
+  }
+
+  .loading,
+  .empty {
+    padding: 16px;
+    color: #999;
+    text-align: center;
+  }
+
+  .search-panel-enter-active,
+  .search-panel-leave-active {
+    transition: opacity 0.2s;
+  }
+
+  .search-panel-enter,
+  .search-panel-leave-to {
+    opacity: 0;
+  }
+}
+
+/* 浮动搜索面板样式 */
+.floating-panel {
+  position: fixed;
+  z-index: 9999;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 70%;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 80vh;
+  overflow: hidden;
+
+  .panel-search-input {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+
+    .panel-search-input-field {
+      width: 100%;
+      height: 40px;
+      border: none;
+      outline: none;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #333;
+      transition: all 0.2s ease;
+
+      &:focus {
+        background: #fff;
+        box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.3);
+      }
+
+      &::placeholder {
+        color: #999;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .panel-content {
+    max-height: 60vh;
+    overflow-y: auto;
+
+    /* 自定义滚动条 */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  }
+
+  .section-title {
+    padding: 12px 24px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #909399;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #fafbfc;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #f8f9fa;
+
+      .icon {
+        height: 20px;
+        line-height: 20px;
+        flex-shrink: 0;
+        color: #666;
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      &:hover {
+        background: #f8f9fa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .icon {
+        color: var(--color-primary, #409eff);
+      }
+
+      .label {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        color: #303133;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sub {
+        font-size: 12px;
+        line-height: 20px;
+        color: #909399;
+        max-width: 200px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .go {
+        color: #c0c4cc;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .loading,
+  .empty {
+    padding: 32px 24px;
+    color: #909399;
+    text-align: center;
+    font-size: 14px;
   }
 }
 </style>
