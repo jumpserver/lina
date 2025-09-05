@@ -20,7 +20,7 @@ export default [
         path: '',
         name: 'AssetList',
         component: () => import('@/views/assets/Asset/AssetList/index.vue'),
-        meta: { title: i18n.t('AssetList') }
+        meta: { title: i18n.t('AssetList'), showInSearch: true }
       },
       {
         path: ':id',

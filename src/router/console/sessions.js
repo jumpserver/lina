@@ -34,14 +34,12 @@ export default [
   {
     path: `${BASE_URL}/luna/?_=${Date.now()}`,
     name: 'WebTerminal',
-    // component: () => window.open(`/luna/?_=${Date.now()}`),
     meta: { title: i18n.t('WebTerminal') }
     // hidden: true
   },
   {
     path: `${BASE_URL}/koko/elfinder/sftp/?`,
     name: 'FileManagement',
-    // component: () => window.open(`/koko/elfinder/sftp/?`),
     meta: { title: i18n.t('FileManagement') }
   }
 ]
