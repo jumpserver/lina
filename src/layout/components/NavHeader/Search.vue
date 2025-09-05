@@ -141,7 +141,6 @@ export default {
       return this.search && !this.routeSuggestions.length && this.options.length === 0
     },
     showHistory() {
-      console.log('Search: ', this.search)
       return this.history.length > 0 && !this.search && this.filteredHistory.length > 0
     },
     filteredHistory() {
@@ -323,6 +322,8 @@ export default {
       max-height: calc(100vh - 10px);
       max-width: calc(100vw - 10px);
       border-radius: 5px;
+      // box-shadow: 0 0 8px 4px #00000014;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
 
       .el-dialog__body {
         padding: 0;
@@ -349,8 +350,8 @@ export default {
   .el-input {
     .el-input__inner {
       font-size: 14px;
-      height: 36px;
-      line-height: 36px;
+      height: 34px;
+      line-height: 34px;
     }
   }
 }
