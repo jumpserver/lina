@@ -522,7 +522,8 @@ export default {
   min-width: 925px;
 
   ::v-deep .el-card__body {
-    div {
+    > div:first-child {
+      //不要影响到 el-progress
       display: flex;
       position: relative;
 

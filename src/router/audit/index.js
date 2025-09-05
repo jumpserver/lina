@@ -90,7 +90,8 @@ export default {
       meta: {
         title: i18n.t('Report'),
         icon: 'report',
-        permissions: []
+        permissions: [],
+        licenseRequired: true
       },
       children: ReportsRoutes
     }
