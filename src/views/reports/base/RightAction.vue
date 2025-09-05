@@ -56,17 +56,16 @@ export default {
       }
       const days = this.getDaysParam()
       const exportUrl = `/core/reports/export-pdf/?chart=${this.name}&days=${days}`
-      download(exportUrl)
       this.$message.success(this.$t('Export') + '...')
+      download(exportUrl)
     },
     emailReport() {
       if (!this.checkName()) {
         return
       }
       const days = this.getDaysParam()
-      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).then((data) => {
-        this.$message.success(this.$t('EMailReport') + '...')
-      }).catch(error => {
+      this.$message.success(this.$t('EMailReport') + '...')
+      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).catch(error => {
         this.$message.error(this.$t('Failed') + ': ' + error.message)
       })
     },

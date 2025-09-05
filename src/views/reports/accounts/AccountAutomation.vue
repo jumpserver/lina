@@ -211,7 +211,6 @@ export default {
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('reportDays', val)
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)

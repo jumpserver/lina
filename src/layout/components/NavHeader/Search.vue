@@ -22,7 +22,6 @@
       :visible.sync="isOpen"
       :show-close="false"
       :close-on-click-modal="true"
-      :close-on-press-escape="true"
       :append-to-body="true"
       :modal="false"
       custom-class="search-modal"

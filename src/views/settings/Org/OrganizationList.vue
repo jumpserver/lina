@@ -91,7 +91,7 @@ export default {
                   type: 'warning',
                   confirmButtonClass: 'el-button--danger',
                   showCancelButton: true,
-                  beforeClose: async(action, instance, done) => {
+                  beforeClose: async (action, instance, done) => {
                     if (action !== 'confirm') return done()
                     instance.confirmButtonLoading = true
                     try {

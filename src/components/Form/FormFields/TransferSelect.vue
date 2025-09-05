@@ -68,7 +68,7 @@ export default {
       return { label: item.name, value: item.id }
     })
     const url = vm.url || vm.ajax.url
-    const getPageData = async({ pageIndex, pageSize, keyword }) => {
+    const getPageData = async ({ pageIndex, pageSize, keyword }) => {
       const limit = pageSize
       const offset = (pageIndex - 1) * pageSize
       const params = {

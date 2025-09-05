@@ -55,7 +55,7 @@ export default {
   },
   data() {
     const vm = this
-    const getPageData = async({ pageIndex, pageSize, keyword }) => {
+    const getPageData = async ({ pageIndex, pageSize, keyword }) => {
       const limit = pageSize
       const offset = (pageIndex - 1) * pageSize
       const params = {

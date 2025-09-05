@@ -27,7 +27,7 @@ export default {
         fields: ['VIRTUAL_APP_ENABLED'],
         fieldsMeta: {
         },
-        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=virtualapp',
         hasReset: false,
         submitMethod() {

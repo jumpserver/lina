@@ -1,13 +1,20 @@
 <template>
-  <BaseReport v-bind="$attrs">
+  <BaseReport
+    :url="url"
+    :nav="nav"
+    :title="$t('AuditsDashboard')"
+    :disable-charts-padding="true"
+    name="AuditsDashboard"
+    v-bind="$attrs"
+  >
     <SwitchDate class="switch-date" :name="name" @change="onChange" />
     <CardSummary :days="days" />
-    <el-row :gutter="16">
-      <el-col :lg="12" :md="12" :sm="24">
-        <DataSummary :days="days" />
+    <el-row :gutter="10">
+      <el-col :span="12" :md="12">
+        <DataSummary class="chart-container" :days="days" />
       </el-col>
-      <el-col :lg="12" :md="12" :sm="24">
-        <RightSummary :days="days" />
+      <el-col :span="12" :md="12">
+        <RightSummary class="chart-container" :days="days" />
       </el-col>
     </el-row>
     <TrendSummary :days="days" />
@@ -21,6 +28,7 @@ import DataSummary from './components/DataSummary'
 import CardSummary from './components/CardSummary.vue'
 import RightSummary from './components/RightSummary.vue'
 import BaseReport from '../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
 
 export default {
   components: {
@@ -31,10 +39,17 @@ export default {
     RightSummary,
     BaseReport
   },
+  props: {
+    nav: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       name: 'AuditsDashboard',
-      days: localStorage.getItem(this.name) || '7'
+      days: localStorage.getItem(this.name) || '7',
+      url: getRouteUrl('AuditsReport', this.$router)
     }
   },
   methods: {
@@ -44,3 +59,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.chart-container {
+  margin-top: 16px;
+}
+</style>

@@ -5,6 +5,11 @@
       <slot name="no-data" />
     </template>
     <template v-else>
+      <!--
+        过滤 selection 相关事件的透传，避免父组件收到 el-table 原生的“当前页” selection，
+        导致跨页选择（persistSelection）被覆盖，只剩当页数据。
+        选择事件统一走 selectStrategy，在内部维护全量 selected 并向外 emit。
+      -->
       <el-table
         ref="table"
         v-loading="tableLoading"
@@ -12,7 +17,7 @@
         :row-class-name="rowClassName"
         v-bind="tableAttrs"
         @select="selectStrategy.onSelect"
-        v-on="$listeners"
+        v-on="forwardListeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select-all="handleSelectAll($event, canSelect)"
         @sort-change="onSortChange"
@@ -810,6 +815,16 @@ export default {
     selectStrategy() {
       return getSelectStrategy(this)
     },
+    // 过滤会与内部选择策略冲突的事件，避免父组件只拿到当前页 selection
+    forwardListeners() {
+      const listeners = { ...this.$listeners }
+      delete listeners['selection-change']
+      delete listeners['select']
+      delete listeners['select-all']
+      // 外层如需监听 selection 变化，请监听本组件透出的 selection-change，
+      // 该事件来自选择策略，已汇总跨页后的全量 selected
+      return listeners
+    },
     searchLocatedSlotKeys() {
       return getLocatedSlotKeys(this.$slots, 'search:')
     },
@@ -1189,7 +1204,7 @@ export default {
       this.$confirm(this.deleteMessage(data), this.$t('Info'), {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
-        beforeClose: async(action, instance, done) => {
+        beforeClose: async (action, instance, done) => {
           if (action !== 'confirm') return done()
 
           instance.confirmButtonLoading = true

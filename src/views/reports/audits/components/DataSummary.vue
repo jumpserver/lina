@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="16">
-    <el-col :lg="12" :sm="12" class="margin-top-10">
+  <el-row>
+    <el-col :span="12">
       <DataCard :config="logConfig">
         <div class="custom">
           <span>{{ logConfig.total }}</span>
@@ -10,7 +10,7 @@
         </div>
       </DataCard>
     </el-col>
-    <el-col :lg="12" :sm="12" class="margin-top-10">
+    <el-col :span="12">
       <DataCard :config="assetConfig">
         <div class="custom">
           <span>{{ assetConfig.total }}</span>
@@ -115,11 +115,5 @@ export default {
 </script>
 
 <style scoped>
-.left, .right {
-  display: inline-block;
-}
 
-.margin-top-10 {
-  margin-top: 10px;
-}
 </style>

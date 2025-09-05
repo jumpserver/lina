@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       url: '/api/v1/assets/gateways/',
-      updateInitial: async(initial) => {
+      updateInitial: async (initial) => {
         const url = `/api/v1/assets/platforms/?name__startswith=Gateway`
         const platform = await this.$axios.get(url)
         initial.platform = parseInt(platform[0].id)

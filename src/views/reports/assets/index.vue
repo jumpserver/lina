@@ -6,7 +6,7 @@
           <h5>{{ title }}</h5>
           <ul class="folder-list m-b-md" style="padding: 0">
             <li
-              v-for="chart in charts"
+              v-for="chart in chartItems"
               :key="chart.name"
               :class="{ active: selectedChart && selectedChart.name === chart.name }"
             >
@@ -46,18 +46,27 @@ export default {
         {
           title: this.$t('AssetStatisticsReport'),
           name: 'AssetStatistics',
-          icon: 'fa fa-database'
+          icon: 'fa fa-database',
+          hidden: this.$hasPerm('rbac.view_assetstatisticsreport')
         },
         {
           title: this.$t('AssetActivityReport'),
           name: 'AssetReport',
-          icon: 'fa fa-exchange'
+          icon: 'fa fa-exchange',
+          hidden: this.$hasPerm('rbac.view_assetactivityreport')
         }
       ]
     }
   },
+  computed: {
+    chartItems() {
+      return this.charts.filter(chart => chart.hidden)
+    }
+  },
   created() {
-    this.handleChangeChart(this.charts[0])
+    if (this.chartItems.length > 0) {
+      this.handleChangeChart(this.chartItems[0])
+    }
   },
   methods: {
     handleChangeChart(chart) {

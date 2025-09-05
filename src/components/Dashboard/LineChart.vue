@@ -5,10 +5,8 @@
       :options="options"
       :autoresize="true"
       theme="light"
-      class="disabled-when-print"
       @finished="getDataUrl"
     />
-    <img v-if="dataUrl" :src="dataUrl" class="enabled-when-print" style="display: none;width: 100%;">
   </div>
 </template>
 
@@ -154,7 +152,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -186,7 +184,7 @@ export default {
             type: 'line',
             smooth: true,
             areaStyle: {
-            // 区域填充样式
+              // 区域填充样式
               normal: {
                 color: new echarts.graphic.LinearGradient(
                   0,
@@ -219,23 +217,44 @@ export default {
   },
   watch: {
     range() {
-      this.getMetricData()
+      this.genSnapshot()
+    },
+    datesMetrics() {
+      this.genSnapshot()
+    },
+    primaryData() {
+      this.genSnapshot()
+    },
+    secondaryData() {
+      this.genSnapshot()
     }
   },
   mounted() {
-    this.getMetricData()
+    setTimeout(() => {
+      this.getMetricData()
+    }, 1000)
+    const vm = this
+    window.onbeforeprint = function() {
+      vm.$refs.echarts.resize()
+    }
   },
   methods: {
-    getDataUrl() {
-      const instance = this.$refs.echarts.echartsInstance
-      if (instance) {
-        this.dataUrl = instance.getDataURL()
-      }
+    forceResize() {
+      const inst = this.$refs.echarts?.echartsInstance
+      if (inst) inst.resize()
     },
-    getMetricData() {
-      this.getDataUrl()
+    async genSnapshot(force = false) {
+      if (force) this.forceResize()
+      const inst = this.$refs.echarts?.echartsInstance
+      if (!inst) return
+      try {
+        this.dataUrl = inst.getDataURL({ pixelRatio: 2, backgroundColor: '#ffffff' })
+      } catch (e) {
+        this.dataUrl = ''
+      }
     }
   }
+
 }
 </script>
 
@@ -243,17 +262,5 @@ export default {
 .echarts {
   width: 100%;
   height: 272px;
-}
-
-@media print {
-  .disabled-when-print {
-    display: none;
-  }
-  .enabled-when-print {
-    display: inherit !important;
-  }
-  .print-margin {
-    margin-top: 10px;
-  }
 }
 </style>

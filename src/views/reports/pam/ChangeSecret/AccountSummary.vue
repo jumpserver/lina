@@ -9,7 +9,7 @@
 
 <script>
 import Title from '@/components/Dashboard/Title.vue'
-import LineChart from './LineChart.vue'
+import LineChart from '@/components/Dashboard/LineChart.vue'
 
 export default {
   components: {
