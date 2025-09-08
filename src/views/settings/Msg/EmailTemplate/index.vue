@@ -78,7 +78,7 @@ export default {
       successUrl: { name: 'Msg' },
       showHelpDialog: false,
       variables: [],
-      variablesHelpText: '您可以选择一个模板在模板内容中使用 {{ key }} 读取内置变量',
+      variablesHelpText: '您可以选择一个模板在模板内容中使用 {{ key }} 读取内置变量,注意：只支持 {{ }} 语法，其他语法不支持。例如  {% if title %}',
       hasSaveContinue: false,
       performSubmit(validValues) {
         console.log(validValues)
