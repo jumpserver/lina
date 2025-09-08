@@ -1,6 +1,6 @@
 <template>
   <div style="border: 1px solid #ccc; padding: 10px;">
-    <vue-markdown-editor v-model="localValue" height="400px" />
+    <vue-markdown-editor v-model="localValue" :right-toolbar="rightToolbar" height="400px" />
   </div>
 </template>
 <script>
@@ -25,7 +25,8 @@ export default {
   },
   data() {
     return {
-      localValue: this.value
+      localValue: this.value,
+      rightToolbar: 'preview  sync-scroll fullscreen'
     }
   },
   computed: {
@@ -35,7 +36,6 @@ export default {
   },
   watch: {
     value(val) {
-      console.log('==========', val)
       if (val !== this.localValue) {
         this.localValue = val
       }
