@@ -1,11 +1,18 @@
-// 重置message，防止重复点击重复弹出message弹框
 import { Message as elMessage } from 'element-ui'
 import { toSentenceCase } from '@/utils/common/index'
 
 let messageDom = null
+const DEFAULT_Z_INDEX = 20000
+
 const message = options => {
-  // 判断弹窗是否已存在, 若存在则关闭
   if (messageDom) messageDom.close()
+
+  if (typeof options === 'string') {
+    options = { message: options }
+  }
+
+  options.zIndex = options.zIndex || DEFAULT_Z_INDEX
+
   messageDom = elMessage(options)
 }
 
