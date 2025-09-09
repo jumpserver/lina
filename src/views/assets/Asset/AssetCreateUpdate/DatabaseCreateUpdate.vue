@@ -86,6 +86,8 @@ export default {
           component: UploadKey
         }
       }
+
+      fieldsMeta['db_name']['rules'] = []
       if (['mongodb', 'postgresql'].indexOf(platform) !== -1) {
         fieldsMeta['db_name']['rules'] = [rules.Required]
       }
