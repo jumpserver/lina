@@ -17,10 +17,10 @@
       </tr>
       <tr v-for="(item, index) in variables" :key="index">
         <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.key)">
-          <label class="item-label">{{ item.key }}</label>
+          <label class="item-label">{{ item.name }}</label>
         </td>
         <td><span>{{ item.label }}</span></td>
-        <td><span>{{ item.example }}</span></td>
+        <td><span>{{ item.default }}</span></td>
       </tr>
     </table>
   </Dialog>

@@ -61,7 +61,7 @@ export default {
             change: ([event], updateForm) => {
               vm.templates.map(item => {
                 if (item.template_name === event) {
-                  this.variables = item.context_example
+                  this.variables = item.contexts
                   updateForm({
                     EMAIL_TEMPLATE_CONTENT: item.content
                   })
@@ -98,7 +98,7 @@ export default {
       if (data.length > 0) {
         this.templates = data
         this.fieldsMeta.EMAIL_TEMPLATE_NAME.el.options = data.map(item => ({
-          label: item.label,
+          label: item.subject,
           value: item.template_name
         }))
       }

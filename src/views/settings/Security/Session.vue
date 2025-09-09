@@ -19,19 +19,19 @@ export default {
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
       sessionVariables: [
-        { key: 'userId', label: this.$t('userId'), example: '00000000-0000-0000-0000-000000000001' },
-        { key: 'name', label: this.$t('name'), example: '张三' },
-        { key: 'userName', label: this.$t('userName'), example: 'zhangsan' },
-        { key: 'currentTime', label: this.$t('currentTime'), example: '2025-06-01 12:00:00' },
-        { key: 'assetId', label: this.$t('assetId'), example: '00000000-0000-0000-0000-000000000001' },
-        { key: 'assetName', label: this.$t('assetName'), example: '服务器01' },
-        { key: 'assetAddress', label: this.$t('assetAddress'), example: '192.168.1.1' }
+        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'name', label: this.$t('name'), default: '张三' },
+        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
+        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' },
+        { name: 'assetId', label: this.$t('assetId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'assetName', label: this.$t('assetName'), default: '服务器01' },
+        { name: 'assetAddress', label: this.$t('assetAddress'), default: '192.168.1.1' }
       ],
       consoleVariables: [
-        { key: 'userId', label: this.$t('userId'), example: '00000000-0000-0000-0000-000000000001' },
-        { key: 'name', label: this.$t('name'), example: '张三' },
-        { key: 'userName', label: this.$t('userName'), example: 'zhangsan' },
-        { key: 'currentTime', label: this.$t('currentTime'), example: '2025-06-01 12:00:00' }
+        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'name', label: this.$t('name'), default: '张三' },
+        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
+        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' }
       ],
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
