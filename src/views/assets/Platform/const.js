@@ -32,7 +32,10 @@ export const platformFieldsMeta = (vm) => {
         remove_account_enabled: {},
         ping_method: {},
         ping_params: {
-          label: ''
+          label: '',
+          el: {
+            title: vm.$t('setVariable')
+          }
         },
         gather_facts_method: {},
         push_account_method: {},
@@ -55,7 +58,11 @@ export const platformFieldsMeta = (vm) => {
             method: 'change_secret_posix'
           }
         },
-        verify_account_method: {}
+        verify_account_method: {
+          el: {
+            title: vm.$t('setVariable')
+          }
+        }
       }
     },
     category_type: {

@@ -32,7 +32,9 @@
 <script>
 import Dialog from '@/components/Dialog'
 import AutoDataForm from '@/components/Form/AutoDataForm'
+import Select2 from '@/components/Form/FormFields/Select2'
 import { DynamicInput, Switcher } from '@/components/Form/FormFields'
+import DynamicWebParams from '@/views/assets/Platform/components/DynamicWebParams.vue'
 
 export default {
   components: {
@@ -100,6 +102,21 @@ export default {
           commands: {
             helpTextAsTip: false
           }
+        },
+        'website_ping': {
+          steps: {
+            component: DynamicWebParams
+          }
+        },
+        'change_account_website': {
+          steps: {
+            component: DynamicWebParams
+          }
+        },
+        'verify_account_website': {
+          steps: {
+            component: DynamicWebParams
+          }
         }
       }
     }
@@ -149,6 +166,13 @@ export default {
           let component = 'el-input'
           const el = {}
           switch (v?.type) {
+            case 'choice':
+              component = Select2
+              el['multiple'] = false
+              el['clearable'] = false
+              el['value'] = v.default
+              el['options'] = v.choices
+              break
             case 'list':
               component = DynamicInput
               break
