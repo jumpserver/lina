@@ -21,6 +21,7 @@
     <el-dialog
       :visible.sync="isOpen"
       :close-on-click-modal="true"
+      :close-on-press-escape="true"
       :append-to-body="true"
       custom-class="search-modal"
       width="70%"
@@ -46,16 +47,21 @@
           <div v-if="loading" class="section loading">{{ $t('Loading') }}...</div>
 
           <template v-if="showHistory">
-            <div class="section-title">{{ $t('History') }}</div>
+            <div class="section-title">
+              <span>{{ $t('History') }}</span>
+              <el-link class="clear-history-btn" @click="clearHistory">
+                {{ $t('Clear') }}
+              </el-link>
+            </div>
             <ul class="list">
               <li
-                v-for="(item, index) in filteredHistory"
+                v-for="(item, index) in history"
                 :key="'h-' + index"
                 class="item"
                 @click="applyHistory(item)"
               >
                 <i class="el-icon-time icon" />
-                <span class="label">{{ item.query }}</span>
+                <span class="label">{{ item.q }}</span>
                 <i class="el-icon-arrow-right go" />
               </li>
             </ul>
@@ -95,8 +101,22 @@
             </div>
           </template>
 
-          <div v-if="!loading && isEmpty" class="section empty">
+          <div v-if="search && isEmpty" class="section empty">
             {{ $t('NoData') }}
+          </div>
+
+          <div v-if="!search && history.length === 0" class="section placeholder">
+            <div class="placeholder-content">
+              <div class="supported-types">
+                <div class="types-title">{{ $t('SupportedTypes') }}:</div>
+                <div class="types-list">
+                  <span v-for="(icon, type) in iconMap" :key="type" class="type-item">
+                    <Icon :icon="icon" class="type-icon" />
+                    {{ $t(type) }}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -105,9 +125,9 @@
 </template>
 
 <script>
-import { ObjectLocalStorage } from '@/utils/common'
-import { mapGetters } from 'vuex'
 import _ from 'lodash'
+import { mapGetters } from 'vuex'
+import { ObjectLocalStorage } from '@/utils/common'
 import Icon from '@/components/Widgets/Icon/index.vue'
 
 export default {
@@ -131,7 +151,7 @@ export default {
         'UserGroup': 'user-group',
         'AssetPermission': 'permission'
       },
-      historyStore: new ObjectLocalStorage('global-search-history')
+      historyStore: new ObjectLocalStorage('globalSearchHistory')
     }
   },
   computed: {
@@ -139,14 +159,10 @@ export default {
       'viewRoutes'
     ]),
     isEmpty() {
-      return this.search && !this.routeSuggestions.length && this.options.length === 0
+      return !this.routeSuggestions.length && this.options.length === 0
     },
     showHistory() {
-      return this.history.length > 0 && !this.search && this.filteredHistory.length > 0
-    },
-    filteredHistory() {
-      if (!this.search) return this.history
-      return this.history.filter(h => h.query.toLowerCase().includes(this.search.toLowerCase()))
+      return this.history.length > 0 && !this.search
     },
     shortcutText() {
       return this.isMac ? '⌘K' : 'Ctrl+K'
@@ -218,6 +234,7 @@ export default {
         name: item.model + 'Detail',
         params: { id: item.id }
       }
+      this.addToHistory(this.search)
       this.$router.push(route)
       this.closePanel()
     },
@@ -261,25 +278,25 @@ export default {
       this.routes = flat
     },
     loadHistory() {
-      this.history = this.historyStore.get('list') || []
+      this.history = (this.historyStore.get('list') || []).filter(i => i.q)
     },
-    addToHistory(item) {
-      const entry = {
-        query: item.label || item.title || item.name,
-        url: item.url || item.path,
-        timestamp: Date.now()
-      }
+    addToHistory(q) {
+      const entry = { q: q }
       const list = this.historyStore.get('list') || []
       const next = [
         entry,
-        ...list.filter(i => i.query !== entry.query)
+        ...list.filter(i => i.q !== entry.q)
       ].slice(0, 10)
       this.historyStore.set('list', next)
       this.history = next
     },
     applyHistory(h) {
-      this.search = h.query
+      this.search = h.q
       this.onInput()
+    },
+    clearHistory() {
+      this.historyStore.set('list', [])
+      this.history = []
     },
     bindKeyboardShortcut() {
       document.addEventListener('keydown', this.handleKeyboardShortcut)
@@ -416,7 +433,7 @@ body .v-modal {
 .search-input-wrapper {
   padding: 20px;
   border-bottom: 1px solid #f0f0f0;
-  background: #fff;
+  // background: #fff;
 
   .el-input {
     .el-input__inner {
@@ -460,8 +477,30 @@ body .v-modal {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  // background: #fafbfc;
   border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .clear-history-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    color: red;
+
+    &:hover {
+      background: #f5f5f5;
+      color: #f56c6c;
+    }
+
+    .clear-icon {
+      font-size: 14px;
+    color: red;
+    }
+  }
 }
 
 .list {
@@ -541,6 +580,54 @@ body .v-modal {
   color: #909399;
   text-align: center;
   font-size: 14px;
+}
+
+.section.placeholder {
+  padding: 32px 24px;
+
+  .placeholder-content {
+    text-align: center;
+
+    .supported-types {
+      margin-bottom: 24px;
+
+      .types-title {
+        margin-bottom: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .types-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+
+        .type-item {
+          display: flex;
+          align-items: center;
+          padding: 8px 12px;
+          background: #f8f9fa;
+          border-radius: 6px;
+          font-size: 13px;
+          color: #666;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: #e9ecef;
+            color: #333;
+          }
+
+          .type-icon {
+            margin-right: 6px;
+            font-size: 14px;
+            color: #409eff;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
 
