@@ -1,6 +1,6 @@
 <template>
   <div style="border: 1px solid #ccc; padding: 10px;">
-    <vue-markdown-editor v-model="localValue" :right-toolbar="rightToolbar" height="400px" />
+    <vue-markdown-editor v-model="localValue" :right-toolbar="rightToolbar" :left-toolbar="leftToolbar" height="400px" />
   </div>
 </template>
 <script>
@@ -26,7 +26,8 @@ export default {
   data() {
     return {
       localValue: this.value,
-      rightToolbar: 'preview  sync-scroll fullscreen'
+      rightToolbar: 'preview  sync-scroll fullscreen',
+      leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol table hr | link  code '
     }
   },
   computed: {
