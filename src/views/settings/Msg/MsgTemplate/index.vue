@@ -24,7 +24,7 @@ import VariablesHelpTextDialog from '@/components/Apps/VariablesHelpTextDialog'
 import variable from '@/views/ops/Template/components/Variable.vue'
 
 export default {
-  name: 'EmailTemplate',
+  name: 'MsgTemplate',
   components: {
     GenericCreateUpdateForm,
     IBox,

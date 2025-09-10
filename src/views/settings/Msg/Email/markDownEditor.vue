@@ -27,7 +27,7 @@ export default {
     return {
       localValue: this.value,
       rightToolbar: 'preview  sync-scroll fullscreen',
-      leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol table hr | link  code '
+      leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol hr | link  code '
     }
   },
   computed: {
