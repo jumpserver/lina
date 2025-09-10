@@ -1,11 +1,14 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{ $t("Setting") }} </el-button>
+    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{
+      $t("Setting")
+    }}
+    </el-button>
     <Dialog
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('EmailTemplate')"
+      :title="$tc('Msg Template')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
@@ -21,7 +24,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { Dialog } from '@/components'
 
 export default {
-  name: 'EmailTemplate',
+  name: 'MsgTemplate',
   components: {
     GenericCreateUpdateForm,
     Dialog
