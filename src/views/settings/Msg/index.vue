@@ -28,7 +28,7 @@ export default {
         {
           title: this.$t('Msg Template'),
           name: 'MsgTemplate',
-          hidden: !this.$hasPerm('settings.change_email')
+          hidden: !this.$hasPerm('settings.change_email') || !this.$store.getters.hasValidLicense
         },
         {
           title: this.$t('SMS'),
