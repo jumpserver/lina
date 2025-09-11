@@ -33,6 +33,9 @@
     >
       <i :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" class="fa" />
     </span>
+    <span v-if="filterTags.length > 0" class="clear-icon" @click="handleClearAll">
+      <i class="el-icon-circle-close" :title="$t('Clear')" />
+    </span>
   </div>
 </template>
 
@@ -140,6 +143,11 @@ export default {
     },
     handleShowPassword() {
       this.isCheckShowPassword = !this.isCheckShowPassword
+    },
+    handleClearAll() {
+      this.filterTags = []
+      this.$emit('change', this.filterTags)
+      this.$emit('input', this.filterTags)
     }
   }
 }
@@ -161,7 +169,7 @@ export default {
   line-height: 30px;
 
   &:hover {
-    border-color: #C0C4CC;
+    border-color: #c0c4cc;
   }
 
   & ::v-deep .el-tag {
@@ -178,6 +186,7 @@ export default {
 
 .search-input {
   flex: 1;
+  min-width: 150px;
 
   & ::v-deep .el-input__inner {
     max-width: 100%;
@@ -203,6 +212,17 @@ export default {
 
   &:hover {
     color: #999999;
+  }
+}
+
+.clear-icon {
+  display: inherit;
+  padding-right: 6px;
+  cursor: pointer;
+  color: #c0c4cc;
+
+  &:hover {
+    color: #606164;
   }
 }
 </style>

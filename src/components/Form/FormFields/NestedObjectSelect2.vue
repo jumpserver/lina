@@ -19,7 +19,7 @@ export default {
   props: {
     value: {
       type: [Array, String, Number, Boolean, Object],
-      default: () => ([])
+      default: () => []
     },
     multiple: {
       type: Boolean,
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     attrsWithoutValue() {
-      const attrs = Object.assign({}, this.$attrs)
+      const attrs = Object.assign({ clearable: this.clearable }, this.$attrs)
       delete attrs.value
       return attrs
     },
@@ -49,6 +49,13 @@ export default {
       get() {
         const value = this.objectsToValues(this.value)
         return value
+      }
+    },
+    clearable() {
+      if (this.$attrs.clearable === undefined) {
+        return this.multiple
+      } else {
+        return this.$attrs.clearable
       }
     }
   },
@@ -71,8 +78,11 @@ export default {
       value = value.map(v => {
         // uuid v4
         const uuid = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-        return typeof v === 'object' ? v
-          : this.$attrs?.allowCreate && !uuid.test(v) ? { [this.customLabelKeyName]: v } : { pk: v }
+        return typeof v === 'object'
+          ? v
+          : this.$attrs?.allowCreate && !uuid.test(v)
+            ? { [this.customLabelKeyName]: v }
+            : { pk: v }
       })
       if (!this.multiple) {
         value = value[0]
@@ -87,9 +97,13 @@ export default {
       if (!Array.isArray(val)) {
         val = [val]
       }
-      val = val.map((v) => {
+      val = val.map(v => {
         if (v && typeof v === 'object') {
-          return v.pk || v.id || (this.$attrs?.allowCreate ? (v?.[this.customLabelKeyName] + ':' + v?.value) : '')
+          return (
+            v.pk ||
+            v.id ||
+            (this.$attrs?.allowCreate ? v?.[this.customLabelKeyName] + ':' + v?.value : '')
+          )
         } else {
           return v
         }
@@ -103,6 +117,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
