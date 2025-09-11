@@ -5,7 +5,7 @@
       :options="options"
       :autoresize="true"
       theme="light"
-      @finished="getDataUrl"
+      @finished="genSnapshot"
     />
   </div>
 </template>
@@ -230,12 +230,26 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.getMetricData()
-    }, 1000)
-    const vm = this
-    window.onbeforeprint = function() {
-      vm.$refs.echarts.resize()
+    this.genSnapshot()
+    this._before = () => this.genSnapshot(true)
+    this._after = () => this.forceResize()
+    window.addEventListener('beforeprint', this._before)
+    window.addEventListener('afterprint', this._after)
+    // 兼容某些浏览器（Safari）触发 print 媒体切换
+    this._mql = window.matchMedia && window.matchMedia('print')
+    if (this._mql) {
+      const handler = e => (e.matches ? this._before() : this._after())
+      this._mql.addEventListener?.('change', handler)
+      this._mql.addListener?.(handler)
+      this._mql._handler = handler
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeprint', this._before)
+    window.removeEventListener('afterprint', this._after)
+    if (this._mql) {
+      this._mql.removeEventListener?.('change', this._mql._handler)
+      this._mql.removeListener?.(this._mql._handler)
     }
   },
   methods: {
