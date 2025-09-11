@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { Dialog } from '@/components'
+import Dialog from '@/components/Dialog/index.vue'
 import { copy } from '@/utils/common/index'
 
 export default {
