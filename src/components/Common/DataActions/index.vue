@@ -5,7 +5,7 @@
         v-if="action.dropdown"
         v-show="action.dropdown.length > 0"
         :key="action.name"
-        :class="[action.name, {grouped: action.grouped }]"
+        :class="[action.name, { grouped: action.grouped }]"
         :size="action.size"
         :split-button="!!action.split"
         :type="action.type"
@@ -23,7 +23,7 @@
           :class="action.name"
           :size="size"
           class="more-action"
-          v-bind="{...cleanButtonAction(action), icon: ''}"
+          v-bind="{ ...cleanButtonAction(action), icon: '' }"
         >
           <span class="pre-icon">
             <Icon v-if="action.icon" :icon="action.icon" />
@@ -32,13 +32,13 @@
             {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
         </el-button>
-        <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
+        <el-dropdown-menu slot="dropdown" style="overflow: auto; max-height: 60vh">
           <template v-for="option in action.dropdown">
             <div
               v-if="option.group"
-              :key="'group:'+option.name"
+              :key="'group:' + option.name"
               class="dropdown-menu-title"
-              style="width:130px"
+              style="width: 130px"
             >
               {{ option.group }}
             </div>
@@ -54,7 +54,7 @@
                 :command="[option, action]"
                 :title="option.tip"
                 class="dropdown-item"
-                v-bind="{...option, icon: ''}"
+                v-bind="{ ...option, icon: '' }"
               >
                 <span v-if="actionsHasIcon(action.dropdown)" class="pre-icon">
                   <Icon v-if="option.icon" :icon="option.icon" />
@@ -69,10 +69,10 @@
       <el-button
         v-else
         :key="action.name"
-        :class="[action.name, {grouped: action.grouped }]"
+        :class="[action.name, { grouped: action.grouped }]"
         :size="size"
         class="action-item"
-        v-bind="{...cleanButtonAction(action), icon: ''}"
+        v-bind="{ ...cleanButtonAction(action), icon: '' }"
         @click="handleClick(action)"
       >
         <el-tooltip :content="action.tip" :disabled="!action.tip" placement="top">
@@ -228,9 +228,9 @@ export default {
 
 <style lang="scss" scoped>
 $btn-text-color: #ffffff;
-$color-btn-background: #E8F7F4;
-$color-btn-focus-background: #83CBBA;
-$color-divided: #E4E7ED;
+$color-btn-background: #e8f7f4;
+$color-btn-focus-background: #83cbba;
+$color-divided: #e4e7ed;
 $color-drop-menu-title: #909399;
 $color-drop-menu-border: #e4e7ed;
 
@@ -284,6 +284,8 @@ $color-drop-menu-border: #e4e7ed;
 
   .el-button {
     padding: 2px 5px;
+    line-height: 1.3;
+    font-size: 13px;
 
     &:not(.is-plain) {
       color: $btn-text-color;
@@ -319,7 +321,6 @@ $color-drop-menu-border: #e4e7ed;
 // 下拉 options
 .el-dropdown-menu {
   ::v-deep .more-batch-processing {
-
     &:hover {
       background-color: transparent !important;
     }
