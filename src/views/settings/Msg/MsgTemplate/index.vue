@@ -33,6 +33,9 @@ export default {
   data() {
     const vm = this
     return {
+      initial: {
+        EMAIL_TEMPLATE_NAME: localStorage.getItem('selectTemplateName') || ''
+      },
       helpText: this.$t('EmailHelpText'),
       encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
@@ -58,10 +61,11 @@ export default {
             options: []
           },
           on: {
-            change: ([event], updateForm) => {
+            input: ([event], updateForm) => {
               vm.templates.map(item => {
                 if (item.template_name === event) {
                   this.selectTemplateName = item.template_name
+                  localStorage.setItem('selectTemplateName', item.template_name)
                   this.variables = item.contexts
                   this.source = item.source
                   updateForm({
@@ -93,7 +97,7 @@ export default {
         {
           title: this.$t('Reset'),
           type: 'default',
-          hidden: () => this.source === 'original',
+          // hidden: () => this.source === 'original',
           callback: (value, form, btn) => {
             console.log(value, form, btn)
             return this.$axios['post']('/api/v1/notifications/templates/reset/', { template_name: this.selectTemplateName }).then(
