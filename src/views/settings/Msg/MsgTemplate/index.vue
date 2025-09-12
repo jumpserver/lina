@@ -34,7 +34,7 @@ export default {
     const vm = this
     return {
       initial: {
-        EMAIL_TEMPLATE_NAME: localStorage.getItem('selectTemplateName') || ''
+        EMAIL_TEMPLATE_NAME: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
       },
       helpText: this.$t('EmailHelpText'),
       encryptedFields: ['EMAIL_HOST_PASSWORD'],
@@ -62,17 +62,21 @@ export default {
           },
           on: {
             input: ([event], updateForm) => {
-              vm.templates.map(item => {
-                if (item.template_name === event) {
-                  this.selectTemplateName = item.template_name
-                  localStorage.setItem('selectTemplateName', item.template_name)
-                  this.variables = item.contexts
-                  this.source = item.source
-                  updateForm({
-                    EMAIL_TEMPLATE_CONTENT: item.content.trimStart()
-                  })
-                }
-              })
+              setTimeout(() => {
+                vm.templates.map(item => {
+                  if (item.template_name === event) {
+                    this.selectTemplateName = item.template_name
+                    localStorage.setItem('selectTemplateName', item.template_name)
+                    this.variables = item.contexts
+                    this.source = item.source
+                    updateForm({
+                      EMAIL_TEMPLATE_CONTENT: item.content.trimStart()
+                    })
+                  }
+                })
+              },
+              500
+              )
             }
           }
         },
