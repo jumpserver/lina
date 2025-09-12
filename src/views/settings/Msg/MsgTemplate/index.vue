@@ -65,7 +65,7 @@ export default {
                   this.variables = item.contexts
                   this.source = item.source
                   updateForm({
-                    EMAIL_TEMPLATE_CONTENT: item.content
+                    EMAIL_TEMPLATE_CONTENT: item.content.trimStart()
                   })
                 }
               })
