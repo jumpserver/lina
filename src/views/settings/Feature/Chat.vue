@@ -53,7 +53,11 @@ export default {
         'GPT_BASE_URL',
         'GPT_API_KEY',
         'GPT_PROXY',
-        'GPT_MODEL'
+        'GPT_MODEL',
+        'CUSTOM_OPENAI_BASE_URL',
+        'CUSTOM_OPENAI_API_KEY',
+        'CUSTOM_OPENAI_PROXY',
+        'CUSTOM_OPENAI_MODEL'
       ],
       fieldsMeta: {
         CHAT_AI_TYPE: {
@@ -115,6 +119,32 @@ export default {
         },
         CHAT_AI_EMBED_URL: {
           hidden: (formValue) => formValue.CHAT_AI_METHOD !== 'embed'
+        },
+        CUSTOM_OPENAI_BASE_URL: {
+          el: {
+            autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'custom-openai'
+          }
+        },
+        CUSTOM_OPENAI_API_KEY: {
+          el: {
+            autocomplete: 'new-password'
+          },
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'custom-openai'
+          }
+        },
+        CUSTOM_OPENAI_PROXY: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'custom-openai'
+          }
+        },
+        CUSTOM_OPENAI_MODEL: {
+          hidden: (formValue) => {
+            return formValue.CHAT_AI_METHOD !== 'api' || formValue.CHAT_AI_TYPE !== 'custom-openai'
+          }
         }
       },
       submitMethod() {

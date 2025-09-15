@@ -130,9 +130,16 @@ export default {
         : ''
     },
     chatUrl() {
-      return this.publicSettings.CHAT_AI_TYPE === 'gpt'
-        ? require('@/assets/img/chat.png')
-        : require('@/assets/img/deepSeek.png')
+      switch (this.publicSettings.CHAT_AI_TYPE) {
+        case 'gpt':
+          return require('@/assets/img/chat.png')
+        case 'deep-seek':
+          return require('@/assets/img/deepSeek.png')
+        case 'custom-openai':
+          return require('@/assets/img/chat.png') // 使用通用的聊天图标
+        default:
+          return require('@/assets/img/robot-assistant.png')
+      }
     }
   },
   methods: {
