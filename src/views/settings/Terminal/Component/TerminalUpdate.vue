@@ -50,25 +50,20 @@ export default {
   },
   methods: {
     async initialSelect() {
-      try {
-        const commandOptions = await getAllCommandStorage()
-        const replayOptions = await getAllReplayStorage()
-
-        if (commandOptions && commandOptions.results) {
-          commandOptions.results.forEach(item => {
-            this.fieldsMeta.command_storage.options.push({ label: item.name, value: item.name })
-          })
-        }
-        if (replayOptions && replayOptions.results) {
-          replayOptions.results.forEach(item => {
-            if (item.type.value === 'sftp') return
-            this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
-          })
-        }
-      } catch (error) {
-        console.error(error)
-      }
+      const commandOptions = await getAllCommandStorage()
+      commandOptions.forEach(item => {
+        this.fieldsMeta.command_storage.options.push({ label: item.name, value: item.name })
+      })
+      const replayOptions = await getAllReplayStorage()
+      replayOptions.forEach(item => {
+        if (item.type.value === 'sftp') return
+        this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
+      })
     }
   }
 }
 </script>
+
+<style scoped>
+
+</style>
