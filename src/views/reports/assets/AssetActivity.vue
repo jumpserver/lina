@@ -28,7 +28,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('DistributionOfAssetLoginMethods') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="LoginEntryOptions"
                 :autoresize="true"
               />
@@ -40,7 +40,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('RemoteLoginProtocolUsageDistribution') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="LoginProtocolOptions"
                 :autoresize="true"
               />
@@ -52,7 +52,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('OperatingSystemDistributionOfLoginAssets') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="LoginOSOptions"
                 :autoresize="true"
               />
@@ -64,7 +64,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AssetLoginTrends') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 ref="loginTrend"
                 :options="loginTrendOptions"
                 :autoresize="true"
@@ -83,6 +83,7 @@ import BaseReport from '@/views/reports/base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import UserAssetActivity from '@/views/reports/console/UserAssetActivity.vue'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
 
 export default {
@@ -90,7 +91,8 @@ export default {
     UserAssetActivity,
     SummaryCountCard,
     BaseReport,
-    SwitchDate
+    SwitchDate,
+    Echart
   },
   props: {
     nav: {
