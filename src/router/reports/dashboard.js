@@ -28,7 +28,7 @@ export default [
     component: () => import('@/views/reports/audits/Dashboard.vue'), // Parent router-view
     name: 'AuditsReport',
     meta: {
-      permissions: ['rbac.view_audits'],
+      permissions: ['rbac.view_audit'],
       expanded: true,
       icon: 'user-o',
       title: i18n.t('AuditsReport')
