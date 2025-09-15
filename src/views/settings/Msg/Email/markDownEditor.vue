@@ -43,6 +43,7 @@ export default {
     },
     localValue(val) {
       this.$emit('input', val)
+      this.$emit('htmlChange', this.html)
     }
   }
 }

@@ -34,18 +34,17 @@ export default {
     const vm = this
     return {
       initial: {
-        EMAIL_TEMPLATE_NAME: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
+        template_name: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
       },
       helpText: this.$t('EmailHelpText'),
-      encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
         [this.$t('Basic'), [
-          'EMAIL_TEMPLATE_NAME',
-          'EMAIL_TEMPLATE_CONTENT'
+          'template_name',
+          'template_content'
         ]]
       ],
       fieldsMeta: {
-        EMAIL_TEMPLATE_NAME: {
+        template_name: {
           label: this.$t('Name'),
           helpTextFormatter: () => {
             const handleClick = () => {
@@ -70,7 +69,7 @@ export default {
                     this.variables = item.contexts
                     this.source = item.source
                     updateForm({
-                      EMAIL_TEMPLATE_CONTENT: item.content.trimStart()
+                      template_content: item.content.trimStart()
                     })
                   }
                 })
@@ -80,19 +79,26 @@ export default {
             }
           }
         },
-        EMAIL_TEMPLATE_CONTENT: {
-          component: MarkDownEditor
+        template_content: {
+          component: MarkDownEditor,
+          on: {
+            htmlChange: ([html]) => {
+              vm.html = html
+            }
+          }
         }
       },
       templates: [],
       successUrl: { name: 'Msg' },
       showHelpDialog: false,
       variables: [],
+      html: '',
       source: 'original',
       selectTemplateName: '',
       variablesHelpText: '您可以选择一个模板在模板内容中使用 {{ key }} 读取内置变量,注意：只支持 {{ }} 语法，其他语法不支持。例如  {% if title %}',
       hasSaveContinue: false,
       performSubmit(validValues) {
+        validValues['render_html'] = vm.html
         return this.$axios['patch']('/api/v1/notifications/templates/edit/', validValues).then(res => {
           this.$router.push({ name: 'Msg', query: { t: new Date().getTime() } })
         })
@@ -103,7 +109,6 @@ export default {
           type: 'default',
           // hidden: () => this.source === 'original',
           callback: (value, form, btn) => {
-            console.log(value, form, btn)
             return this.$axios['post']('/api/v1/notifications/templates/reset/', { template_name: this.selectTemplateName }).then(
               () => {
                 this.$router.push({ name: 'Msg', query: { t: new Date().getTime() } })
@@ -128,7 +133,7 @@ export default {
       this.$axios.get('/api/v1/notifications/templates/').then(data => {
         if (data.length > 0) {
           this.templates = data
-          this.fieldsMeta.EMAIL_TEMPLATE_NAME.el.options = data.map(item => ({
+          this.fieldsMeta.template_name.el.options = data.map(item => ({
             label: item.subject,
             value: item.template_name
           }))
