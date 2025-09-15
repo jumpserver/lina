@@ -16,7 +16,7 @@
         <th>{{ $tc('Example') }}</th>
       </tr>
       <tr v-for="(item, index) in variables" :key="index">
-        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.key)">
+        <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(item.name)">
           <label class="item-label">{{ item.name }}</label>
         </td>
         <td><span>{{ item.label }}</span></td>
