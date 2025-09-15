@@ -1,6 +1,6 @@
 <template>
   <div>
-    <echarts
+    <Echart
       ref="echarts"
       :options="options"
       :autoresize="true"
@@ -14,9 +14,11 @@
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
 import { mix } from '@/utils/theme/color'
+import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
   name: 'LoginMetric',
+  components: { Echart },
   props: {
     range: {
       type: String,

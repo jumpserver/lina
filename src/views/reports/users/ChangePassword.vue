@@ -22,7 +22,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('UserModificationTrends') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="UserModificationOptions"
                 :autoresize="true"
               />
@@ -55,13 +55,15 @@ import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import { mixColors } from '@/views/reports/const'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
   components: {
     SummaryCountCard,
     RankTable,
     BaseReport,
-    SwitchDate
+    SwitchDate,
+    Echart
   },
   props: {
     nav: {
