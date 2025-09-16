@@ -181,10 +181,10 @@ export default {
               try {
                 const res = await this.$axios.get(this.tableConfig.url)
 
-                if (res && res.results) {
+                if (res) {
                   this.transObject = {
                     ...this.object,
-                    gateways: res.results.map(item => {
+                    gateways: res.map(item => {
                       return {
                         name: item.name,
                         id: item.id
