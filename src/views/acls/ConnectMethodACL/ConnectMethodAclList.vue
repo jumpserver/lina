@@ -17,7 +17,7 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'priority', 'is_active', 'comment', 'actions'
+            'name', 'is_active', 'comment', 'actions'
           ]
         },
         columnsMeta: {

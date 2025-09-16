@@ -18,16 +18,13 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('Basic'), ['name', 'priority']],
+        [this.$t('Basic'), ['name']],
         [this.$t('Users'), ['users']],
         [this.$t('ConnectMethod'), ['connect_methods']],
         [this.$t('Action'), ['action', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        priority: {
-          rules: [rules.Required]
-        },
         assets: assetJSONSelectMeta(this),
         users: userJSONSelectMeta(this, true),
         connect_methods: {
