@@ -19,6 +19,29 @@ export default {
           default: [
             'name', 'priority', 'is_active', 'comment', 'actions'
           ]
+        },
+        columnsMeta: {
+          'connect_methods': {
+            width: '240px',
+            formatter: (row) => {
+              const methods = Array.isArray(row.connect_methods) ? row.connect_methods : []
+              const colors = ['success', 'warning', 'info', 'danger']
+
+              return (
+                <div style='display: flex; flex-wrap: wrap; gap: 4px;'>
+                  {methods.map((item, idx) => (
+                    <el-tag
+                      key={idx}
+                      size='small'
+                      type={colors[idx % colors.length]}
+                    >
+                      {item}
+                    </el-tag>
+                  ))}
+                </div>
+              )
+            }
+          }
         }
       },
       headerActions: {
