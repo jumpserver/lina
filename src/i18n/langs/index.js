@@ -6,6 +6,7 @@ import ptBrLocale from 'elementui-lts/lib/locale/lang/pt-br'
 import esLocale from 'elementui-lts/lib/locale/lang/es'
 import ruLocale from 'elementui-lts/lib/locale/lang/ru-RU'
 import koLocale from 'elementui-lts/lib/locale/lang/ko'
+import viLocale from 'elementui-lts/lib/locale/lang/vi'
 import zh from './zh.json'
 import zhHant from './zh_hant.json'
 import en from './en.json'
@@ -39,6 +40,9 @@ const messages = {
   },
   ko: {
     ...koLocale
+  },
+  vi: {
+    ...viLocale
   }
 }
 
