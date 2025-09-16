@@ -36,7 +36,6 @@ export default {
       initial: {
         template_name: localStorage.getItem('selectTemplateName') || 'terminal/_msg_session_sharing.html'
       },
-      helpText: this.$t('EmailHelpText'),
       fields: [
         [this.$t('Basic'), [
           'template_name',
@@ -95,7 +94,7 @@ export default {
       html: '',
       source: 'original',
       selectTemplateName: '',
-      variablesHelpText: '您可以选择一个模板在模板内容中使用 {{ key }} 读取内置变量,注意：只支持 {{ }} 语法，其他语法不支持。例如  {% if title %}',
+      variablesHelpText: this.$t('TemplateVariablesHelpText'),
       hasSaveContinue: false,
       performSubmit(validValues) {
         validValues['render_html'] = vm.html

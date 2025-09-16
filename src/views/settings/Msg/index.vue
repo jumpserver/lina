@@ -26,7 +26,7 @@ export default {
           hidden: !this.$hasPerm('settings.change_email')
         },
         {
-          title: this.$t('Msg Template'),
+          title: this.$t('MsgTemplate'),
           name: 'MsgTemplate',
           hidden: !this.$hasPerm('settings.change_email') || !this.$store.getters.hasValidLicense
         },
