@@ -96,6 +96,8 @@ export default {
       selectTemplateName: '',
       variablesHelpText: this.$t('TemplateVariablesHelpText'),
       hasSaveContinue: false,
+      onPerformError() {
+      },
       performSubmit(validValues) {
         validValues['render_html'] = vm.html
         return this.$axios['patch']('/api/v1/notifications/templates/edit/', validValues).then(res => {
