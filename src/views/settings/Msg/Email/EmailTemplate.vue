@@ -8,7 +8,7 @@
       v-if="visible"
       :show-cancel="false"
       :show-confirm="false"
-      :title="$tc('Msg Template')"
+      :title="$tc('EmailTemplate')"
       :visible.sync="visible"
       width="70%"
       @confirm="onConfirm()"
