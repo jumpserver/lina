@@ -107,6 +107,10 @@ export default {
           data.secret = data[secretType]
           delete data[secretType]
         }
+
+        if (data.ssh_key_change_strategy === 'add') {
+          data.ssh_key_change_strategy = this.initial.ssh_key_change_strategy
+        }
         return data
       }
     }
