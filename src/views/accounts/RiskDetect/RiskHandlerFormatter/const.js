@@ -9,7 +9,7 @@ async function checkAccountExist(username, asset) {
   }
   const url = `/api/v1/accounts/accounts/?username=${encodeURIComponent(username)}&asset=${asset}`
   const data = await this.$axios.get(url)
-  const results = data?.results
+  const results = data
   const isExist = results.length > 0
   accountExistCache.set(cacheKey, isExist)
   return isExist
