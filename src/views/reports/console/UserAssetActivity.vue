@@ -52,17 +52,20 @@ export default {
   },
   methods: {
     async getMetricData() {
-      const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
-      const data = await this.$axios.get(url)
-      const activeUsers = data?.dates_metrics_total_count_active_users
-      const activeAssets = data?.dates_metrics_total_count_active_assets
-      this.lineChartConfig.datesMetrics = data.dates_metrics_date
-      if (activeUsers.length > 0) {
-        this.lineChartConfig.primaryData = activeUsers
-      }
-      if (activeAssets.length > 0) {
-        this.lineChartConfig.secondaryData = activeAssets
-      }
+      setTimeout(() => {
+        const url = `/api/v1/index/?dates_metrics=1&days=${this.days}`
+        this.$axios.get(url).then(data => {
+          const activeUsers = data?.dates_metrics_total_count_active_users
+          const activeAssets = data?.dates_metrics_total_count_active_assets
+          this.lineChartConfig.datesMetrics = data.dates_metrics_date
+          if (activeUsers.length > 0) {
+            this.lineChartConfig.primaryData = activeUsers
+          }
+          if (activeAssets.length > 0) {
+            this.lineChartConfig.secondaryData = activeAssets
+          }
+        })
+      }, 500)
     }
   }
 }
