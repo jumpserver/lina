@@ -225,24 +225,9 @@ export default {
       default(error, method, vm) {
         const response = error.response
         const data = response.data
-        if (response.status === 400) {
-          for (const key of Object.keys(data)) {
-            let err = ''
-            let errorTips = data[key]
-            if (errorTips instanceof Array) {
-              errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
-              for (const i of errorTips) {
-                if (i instanceof Object) {
-                  err += i?.port?.join(',')
-                } else {
-                  err += i
-                }
-              }
-            } else {
-              err = errorTips
-            }
-            this.$refs.form.setFieldError(key, err)
-          }
+        if (response.status === 400 && data && typeof data === 'object') {
+          // 覆盖式设置错误映射，避免触发表单内容重建
+          this.$refs.form.setErrors(data)
         }
         this.$emit('performError', data)
       }

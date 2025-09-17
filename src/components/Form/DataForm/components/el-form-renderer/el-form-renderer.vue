@@ -6,6 +6,7 @@
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
         :key="item.id"
         :data="item"
+        :server-errors="serverErrors"
         :disabled="disabled || item.disabled"
         :item-value="value[item.id]"
         :options="options[item.id]"
@@ -46,6 +47,10 @@ export default {
     content: {
       type: Array,
       required: true
+    },
+    serverErrors: {
+      type: Object,
+      default: () => ({})
     },
     disabled: {
       type: Boolean,

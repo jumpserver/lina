@@ -6,6 +6,7 @@
     :prop="prop"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
+    :error="errorText"
   >
     <template v-if="data.label" #label>
       <span :title="data.label">
@@ -152,6 +153,10 @@ export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
     data: Object,
+    serverErrors: {
+      type: Object,
+      default: () => ({})
+    },
     prop: {
       type: String,
       default() {
@@ -188,6 +193,11 @@ export default {
     },
     classes() {
       return 'el-form-item-' + this.data.prop + ' ' + (this.data.attrs?.class || '')
+    },
+    errorText() {
+      const fromAttrs = this.data?.attrs?.error
+      const fromServer = this.serverErrors ? this.serverErrors[this.data.prop] : ''
+      return fromAttrs || fromServer || ''
     },
     listeners() {
       const {
