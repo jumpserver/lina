@@ -20,7 +20,7 @@ export default {
       initial: {
         ip_group: ['*']
       },
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' }},
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointRuleList' } },
       fields: [
         [this.$t('Basic'), ['name', 'priority']],
         [this.$t('Endpoint'), ['ip_group', 'endpoint']],

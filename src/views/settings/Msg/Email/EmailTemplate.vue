@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{ $t("Setting") }} </el-button>
+    <el-button size="mini" type="primary" icon="el-icon-setting" @click="visible = !visible"> {{
+      $t("Setting")
+    }}
+    </el-button>
     <Dialog
       v-if="visible"
       :show-cancel="false"
@@ -21,7 +24,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { Dialog } from '@/components'
 
 export default {
-  name: 'EmailTemplate',
+  name: 'MsgTemplate',
   components: {
     GenericCreateUpdateForm,
     Dialog
@@ -37,7 +40,7 @@ export default {
           ]
         ]
       ],
-      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
+      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' } },
       fieldsMeta: {
         'EMAIL_CUSTOM_USER_CREATED_BODY': {
           el: {

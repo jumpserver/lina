@@ -2,7 +2,7 @@
 //@import './transition.scss';
 @import './sidebar.scss';
 @import './menu.scss';
-@import "./fonts.scss";
+@import './fonts.scss';
 @import './fonts/font-awesome.min.css';
 
 ::-webkit-scrollbar {
@@ -24,7 +24,7 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  box-shadow: 8px 10px 20px #C6C6C6 inset;
+  box-shadow: 8px 10px 20px #c6c6c6 inset;
   border-left: 2px solid rgba(0, 0, 0, 0);
 }
 
@@ -38,7 +38,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
   color: var(--color-text-primary);
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
 }
@@ -84,7 +84,7 @@ div:focus {
     visibility: hidden;
     display: block;
     font-size: 0;
-    content: " ";
+    content: ' ';
     clear: both;
     height: 0;
   }
@@ -94,7 +94,8 @@ div:focus {
   background-color: #ffffff;
 }
 
-.small, small {
+.small,
+small {
   font-size: 85%;
 }
 
@@ -102,7 +103,8 @@ div:focus {
   color: $--color-primary;
 }
 
-b, strong {
+b,
+strong {
   font-weight: 700;
 }
 
@@ -114,19 +116,37 @@ p {
   margin: 0 0 10px;
 }
 
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: inherit;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
 }
 
-.h4, .h5, .h6, h4, h5, h6 {
+.h4,
+.h5,
+.h6,
+h4,
+h5,
+h6 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-h3, h4, h5 {
+h3,
+h4,
+h5 {
   margin-top: 5px;
   font-weight: 600;
 }
@@ -135,8 +155,12 @@ h4 {
   font-size: 14px;
 }
 
-button, input, optgroup, select, textarea {
-  font-family: "Open Sans", sans-serif !important;
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: 'Open Sans', sans-serif !important;
 }
 
 // main-container global css
@@ -177,7 +201,7 @@ button, input, optgroup, select, textarea {
   word-break: keep-all;
 }
 
-input[type=file] {
+input[type='file'] {
   font-size: 12px;
   opacity: 80;
 }
@@ -213,7 +237,6 @@ input[type=file] {
   max-height: 60vh;
   overflow: auto;
 }
-
 
 .el-input.is-disabled .el-input__inner {
   color: #737373 !important;
@@ -256,7 +279,7 @@ input[type=file] {
     color: var(--color-text-primary);
 
     a {
-      color: #1c84c6
+      color: #1c84c6;
     }
   }
 
@@ -303,7 +326,7 @@ input[type=file] {
       white-space: nowrap;
 
       &:hover {
-        border-right: 2px solid #EBEEF5;
+        border-right: 2px solid #ebeef5;
       }
     }
 
@@ -314,7 +337,7 @@ input[type=file] {
     }
 
     &:last-child {
-      border-right: 1px solid #EBEEF5 !important;
+      border-right: 1px solid #ebeef5 !important;
 
       .cell {
         border-right: none;
@@ -353,7 +376,7 @@ input[type=file] {
 
       &:last-child {
         padding: 0;
-        border-right: 1px solid #EBEEF5 !important;
+        border-right: 1px solid #ebeef5 !important;
 
         .cell {
           vertical-align: unset;
@@ -391,7 +414,8 @@ input[type=file] {
   font-weight: 400;
 }
 
-.el-drawer.rtl, .drawer-panel {
+.el-drawer.rtl,
+.drawer-panel {
   border-radius: 5px 0 0 5px;
 }
 
@@ -399,13 +423,15 @@ input[type=file] {
   color: #909399 !important;
 }
 
-.el-button.el-button--small, .el-button--small.is-round {
+.el-button.el-button--small,
+.el-button--small.is-round {
   font-weight: 400;
   padding: 8px 12px;
   border-radius: 2px;
 }
 
-.el-button.el-button--mini, .el-button--mini.is-round {
+.el-button.el-button--mini,
+.el-button--mini.is-round {
   font-size: 0.7rem;
   font-weight: 400;
   border-radius: 2px;
@@ -435,18 +461,19 @@ input[type=file] {
   }
 
   .el-input__icon {
-    vertical-align: super
+    vertical-align: super;
   }
 }
 
-.el-form .el-input__inner, .el-dialog__body .el-input__inner {
+.el-form .el-input__inner,
+.el-dialog__body .el-input__inner {
   height: 30px;
   font-size: 13px;
 }
 
 .el-input input::placeholder {
   font-weight: 400 !important;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 13px;
 }
 
@@ -490,19 +517,19 @@ $tooltip-arrow-color: #c2d1e1;
 
 // 使用 SCSS 的嵌套和变量来简化代码
 .el-tooltip__popper.is-light {
-  &[x-placement^=right] .popper__arrow {
+  &[x-placement^='right'] .popper__arrow {
     border-right-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^=left] .popper__arrow {
+  &[x-placement^='left'] .popper__arrow {
     border-left-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^=top] .popper__arrow {
+  &[x-placement^='top'] .popper__arrow {
     border-top-color: $tooltip-arrow-color !important;
   }
 
-  &[x-placement^=bottom] .popper__arrow {
+  &[x-placement^='bottom'] .popper__arrow {
     border-bottom-color: $tooltip-arrow-color !important;
   }
 }
@@ -598,7 +625,6 @@ li.rmenu i.fa {
   }
 }
 
-
 //.link-btn {
 //  span {
 //    color: var(--color-link);
@@ -623,11 +649,11 @@ li.rmenu i.fa {
 }
 
 .el-input-number {
-  .el-input-number__decrease, .el-input-number__increase {
+  .el-input-number__decrease,
+  .el-input-number__increase {
     line-height: 26px;
   }
 }
-
 
 .el-form--label-top.el-form {
   //.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after {
@@ -638,7 +664,6 @@ li.rmenu i.fa {
   .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
   }
 }
-
 
 .el-form-item {
   .CodeMirror {
@@ -705,4 +730,16 @@ div.el-loading-parent--relative {
 
 .el-drawer__header .drawer-title {
   color: var(--color-text-primary);
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.el-message {
+  z-index: 999999 !important;
 }

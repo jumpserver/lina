@@ -16,7 +16,7 @@
       </el-radio-group>
 
       <div v-if="showSpecZone" class="spec-accounts spec-zone">
-        <div class="group-title">{{ $t('SpecAccount') }}</div>
+        <!-- <div class="group-title">{{ $t('SpecAccount') }}</div> -->
         <TagInput
           v-model="specAccountsInput"
           :autocomplete="autocomplete"
@@ -33,10 +33,10 @@
         </span>
       </div>
 
-      <!--      <div v-if="showNotAccounts" class="not-accounts spec-zone">-->
-      <!--        <div class="group-title">{{ $t('ExcludeAccount') }}</div>-->
-      <!--        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />-->
-      <!--      </div>-->
+      <div v-if="showExcludeZone" class="not-accounts spec-zone">
+        <!-- <div class="group-title">{{ $t('ExcludeAccount') }}</div> -->
+        <TagInput v-model="excludeAccountsInput" @change="handleTagChange" />
+      </div>
 
       <div v-if="enableVirtualAccount" class="spec-zone virtual-choices">
         <el-checkbox v-model="virtualChecked" @change="handleVirtualChecked">
@@ -83,7 +83,7 @@ import {
   AllAccount,
   AnonymousAccount,
   ManualAccount,
-  NotAccount,
+  ExcludeAccount,
   realChoices,
   SameAccount,
   SpecAccount,
@@ -139,7 +139,7 @@ export default {
       ALL: AllAccount,
       SPEC: SpecAccount,
       VIRTUAL: virtual,
-      EXCLUDE: NotAccount,
+      EXCLUDE: ExcludeAccount,
       showTemplateDialog: false,
       realRadioSelected: this.ALL,
       realChoices: realChoices,
@@ -215,7 +215,7 @@ export default {
       const value = this.value || []
       const specAccountsInput = this.getSpecValues(value)
 
-      // const excludeAccountsInput = this.getExcludeChoices(value)
+      const excludeAccountsInput = this.getExcludeChoices(value)
       // 先清理 radio
       const isAll = value.includes(this.ALL)
 
@@ -224,9 +224,10 @@ export default {
       } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
         this.specAccountsInput = specAccountsInput
-        // } else if (excludeAccountsInput.length > 0) {
-        //   this.realRadioSelected = this.EXCLUDE
-        //   this.excludeAccountsInput = excludeAccountsInput
+      } else if (excludeAccountsInput.length > 0) {
+        this.realRadioSelected = this.EXCLUDE
+        this.excludeAccountsInput = excludeAccountsInput
+        this.showExcludeZone = true
       } else {
         this.realRadioSelected = NoneAccount
       }
@@ -271,10 +272,9 @@ export default {
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       } else if (this.realRadioSelected === NoneAccount) {
         choicesSelected = []
+      } else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
+        choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)
       }
-      // else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
-      //   choicesSelected = [...this.excludeAccountsInput].map(i => '!' + i)
-      // }
 
       if (this.virtualChecked) {
         choicesSelected = [...choicesSelected, ...this.virtualSelected]
@@ -317,6 +317,7 @@ export default {
 .spec-zone {
   border-bottom: dashed 1px var(--color-border);
   padding-bottom: 10px;
+  padding-top: 5px;
 
   &:last-child {
     border-bottom: none;

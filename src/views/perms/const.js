@@ -154,7 +154,7 @@ export const AssetPermissionListPageSearchConfigOptions = [
 
 export const AllAccount = '@ALL'
 export const SpecAccount = '@SPEC'
-export const NotAccount = '@NOT'
+export const ExcludeAccount = '@NOT'
 export const SameAccount = '@USER'
 export const ManualAccount = '@INPUT'
 export const AnonymousAccount = '@ANON'
@@ -163,7 +163,7 @@ export const NoneAccount = '@NONE'
 export const AccountLabelMapper = {
   [AllAccount]: i18n.t('AllAccounts'),
   [SpecAccount]: i18n.t('SpecAccount'),
-  [NotAccount]: i18n.t('ExcludeAccount'),
+  [ExcludeAccount]: i18n.t('ExcludeAccount'),
   [NoneAccount]: i18n.t('None'),
   [SameAccount]: i18n.t('SameAccount'),
   [ManualAccount]: i18n.t('ManualAccount'),
@@ -188,14 +188,14 @@ export const realChoices = [
     tip: i18n.t('SpecAccountTip')
   },
   {
+    label: AccountLabelMapper[ExcludeAccount],
+    value: ExcludeAccount,
+    tip: i18n.t('ExcludeAccountTip')
+  },
+  {
     label: AccountLabelMapper[NoneAccount],
     value: NoneAccount
   }
-  // {
-  //   label: AccountLabelMapper[NotAccount],
-  //   value: NotAccount,
-  //   tip: i18n.t('NotAccountTip')
-  // }
 ]
 
 export const virtualAccounts = [

@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' }},
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' } },
       url: '/api/v1/terminal/terminals/',
       fields: [
         [this.$t('Info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],
@@ -50,20 +50,25 @@ export default {
   },
   methods: {
     async initialSelect() {
-      const commandOptions = await getAllCommandStorage()
-      commandOptions.forEach(item => {
-        this.fieldsMeta.command_storage.options.push({ label: item.name, value: item.name })
-      })
-      const replayOptions = await getAllReplayStorage()
-      replayOptions.forEach(item => {
-        if (item.type.value === 'sftp') return
-        this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
-      })
+      try {
+        const commandOptions = await getAllCommandStorage()
+        const replayOptions = await getAllReplayStorage()
+
+        if (commandOptions) {
+          commandOptions.forEach(item => {
+            this.fieldsMeta.command_storage.options.push({ label: item.name, value: item.name })
+          })
+        }
+        if (replayOptions) {
+          replayOptions.forEach(item => {
+            if (item.type.value === 'sftp') return
+            this.fieldsMeta.replay_storage.options.push({ label: item.name, value: item.name })
+          })
+        }
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -55,7 +55,7 @@ export default {
           ]
         ]
       ],
-      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
+      successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' } },
       fieldsMeta: {
         SECURITY_VIEW_BLOCKED_IPS: {
           component: BlockedIPs,

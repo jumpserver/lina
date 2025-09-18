@@ -141,7 +141,7 @@ export default {
             align: 'left',
             value: '',
             placeholder: this.$tc('EnterRunUser'),
-            tip: this.$tc('RunasHelpText'),
+            // tip: this.$tc('RunasHelpText'),
             el: {
               autoComplete: true,
               query: (query, cb) => {
@@ -151,7 +151,7 @@ export default {
                   this.$message.warning(`${this.$t('RequiredAssetOrNode')}`)
                   return cb([])
                 }
-
+                cb([]) // 先返回空，避免输入时出现下拉闪烁
                 this.$axios.post('/api/v1/ops/username-hints/', {
                   nodes: nodes,
                   assets: hosts,

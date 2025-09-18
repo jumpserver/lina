@@ -6,7 +6,7 @@
 
     <div class="chart-content">
       <!-- eslint-disable-next-line -->
-      <echarts ref="chartRef" :options="chartOption" :autoresize="true" />
+      <Echart ref="chartRef" :options="chartOption" :autoresize="true"/>
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import Title from '@/components/Dashboard/Title.vue'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
@@ -21,7 +22,7 @@ import 'echarts/lib/component/legend'
 
 export default {
   name: 'MissionSummery',
-  components: { Title },
+  components: { Title, Echart },
   data() {
     return {
       config: {

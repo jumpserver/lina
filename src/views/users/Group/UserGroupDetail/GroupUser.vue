@@ -52,7 +52,7 @@ export default {
               this.$confirm(msg, this.$tc('Info'), {
                 type: 'warning',
                 confirmButtonClass: 'el-button--danger',
-                beforeClose: async(action, instance, done) => {
+                beforeClose: async (action, instance, done) => {
                   if (action !== 'confirm') return done()
                   this.$axios.post(
                     `/api/v1/users/groups/${this.object.id}/add-all-users/`,

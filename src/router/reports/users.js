@@ -6,7 +6,7 @@ export default [
     component: () => import('@/views/reports/users/UserActivity.vue'), // Parent router-view
     name: 'UserReport',
     meta: {
-      permissions: [],
+      permissions: ['rbac.view_userloginreport'],
       icon: 'user-o',
       expanded: true,
       title: i18n.t('UserLoginReport')
@@ -17,7 +17,7 @@ export default [
     component: () => import('@/views/reports/users/ChangePassword.vue'), // Parent router-view
     name: 'ChangePassword',
     meta: {
-      permissions: [],
+      permissions: ['rbac.view_userchangepasswordreport'],
       expanded: true,
       icon: 'user-o',
       title: i18n.t('UserChangePasswordReport')

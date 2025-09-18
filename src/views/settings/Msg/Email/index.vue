@@ -16,8 +16,8 @@
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
-import EmailTemplate from './EmailTemplate.vue'
 import rules from '@/components/Form/DataForm/rules'
+import EmailTemplate from './EmailTemplate.vue'
 
 export default {
   name: 'Email',

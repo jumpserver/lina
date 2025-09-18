@@ -179,7 +179,7 @@ export default {
   computed: {
     // 解构运算符会处理 undefined 的情况
     componentProps: ({ data: { el }, propsInner }) => ({ ...el, ...propsInner }),
-    hasReadonlyContent: ({ data: { type }}) => _includes(['input', 'select'], type),
+    hasReadonlyContent: ({ data: { type } }) => _includes(['input', 'select'], type),
     hiddenStatus: ({ data: { hidden = () => false }, data, value }) => hidden(value, data),
     enableWhenStatus: ({ data: { enableWhen }, value }) => getEnableWhenStatus(enableWhen, value),
     // 是否显示

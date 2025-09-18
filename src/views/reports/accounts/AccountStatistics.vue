@@ -20,7 +20,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountCreationSourceDistribution') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="SourceOptions"
                 :autoresize="true"
               />
@@ -31,7 +31,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountConnectivityStatusDistribution') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="ConnectivityOptions"
                 :autoresize="true"
               />
@@ -42,7 +42,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AccountPasswordChangeTrends') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="ChangeSecretOptions"
                 :autoresize="true"
               />
@@ -70,6 +70,7 @@
 import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
 import RankTable from '@/views/reports/users/components/RankTable.vue'
 
@@ -77,7 +78,8 @@ export default {
   components: {
     RankTable,
     SummaryCountCard,
-    BaseReport
+    BaseReport,
+    Echart
   },
   props: {
     nav: {

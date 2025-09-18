@@ -1,6 +1,6 @@
 <template>
-  <div class="box">
-    <Title :config="config" style="margin-bottom: 16px;" />
+  <div class="chart-container full-width">
+    <Title :config="config" style="margin: 10px 0;" />
     <ColumnChart v-bind="columnChartConfig" />
   </div>
 </template>
@@ -52,9 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box {
-  margin-top: 16px;
-  padding: 20px;
-  background-color: #fff;
+.chart-container {
+  padding-bottom: 20px;
 }
 </style>

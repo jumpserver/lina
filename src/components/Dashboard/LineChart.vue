@@ -1,20 +1,12 @@
 <template>
   <div>
-    <echarts
+    <Echart
       ref="echarts"
       :options="options"
       :autoresize="true"
       theme="light"
-      :class="{'disabled-when-print': !!dataUrl}"
       @finished="genSnapshot"
     />
-    <img
-      v-if="dataUrl"
-      :src="dataUrl"
-      class="enabled-when-print"
-      style="display: none;width: 100%;"
-      alt="chart snapshot"
-    >
   </div>
 </template>
 
@@ -22,9 +14,11 @@
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
 import { mix } from '@/utils/theme/color'
+import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
   name: 'LoginMetric',
+  components: { Echart },
   props: {
     range: {
       type: String,
@@ -284,15 +278,5 @@ export default {
 .echarts {
   width: 100%;
   height: 272px;
-}
-
-@media print {
-  .disabled-when-print {
-    display: none !important;
-  }
-  .enabled-when-print {
-    display: block !important;
-    width: 100% !important;
-  }
 }
 </style>

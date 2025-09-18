@@ -55,7 +55,7 @@
 
         <el-button
           v-for="button in moreButtons"
-          v-show="!button.hidden"
+          v-show="!iHidden(button)"
           :key="button.title"
           :loading="button.loading"
           size="small"
@@ -226,6 +226,9 @@ export default {
     },
     getFormValue() {
       return this.$refs.form.getFormValue()
+    },
+    iHidden(item) {
+      return typeof item.hidden === 'function' ? item.hidden() : item.hidden
     }
   }
 }

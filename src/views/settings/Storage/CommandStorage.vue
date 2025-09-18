@@ -34,7 +34,7 @@ export default {
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
-            this.$refs.ListTable.onCreate({ query: { type: item.name }})
+            this.$refs.ListTable.onCreate({ query: { type: item.name } })
           },
           dropdown: [
             {

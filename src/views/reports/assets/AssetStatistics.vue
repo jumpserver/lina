@@ -20,7 +20,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('AssetTypeDistribution') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="AssetTypeOptions"
                 :autoresize="true"
               />
@@ -31,7 +31,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('WeeklyGrowthTrend') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="AddedAssetOptions"
                 :autoresize="true"
               />
@@ -47,12 +47,14 @@
 import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import { mixColors } from '@/views/reports/const'
 
 export default {
   components: {
     SummaryCountCard,
-    BaseReport
+    BaseReport,
+    Echart
   },
   props: {
     nav: {

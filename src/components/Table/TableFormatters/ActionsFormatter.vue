@@ -23,7 +23,7 @@ const defaultPerformDelete = function({ row, col }) {
 
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  let route = { params: { id: id }}
+  let route = { params: { id: id } }
   const updateRoute = this.colActions.updateRoute
 
   if (typeof updateRoute === 'object') {
@@ -39,7 +39,7 @@ const defaultUpdateCallback = function({ row, col }) {
 
 const defaultViewCallback = function({ row, col }) {
   const id = row.id
-  let route = { params: { id: id }}
+  let route = { params: { id: id } }
   const viewRoute = this.colActions.viewRoute
 
   if (typeof updateRoute === 'object') {
@@ -55,7 +55,7 @@ const defaultViewCallback = function({ row, col }) {
 
 const defaultCloneCallback = function({ row, col }) {
   const id = row.id
-  let route = { query: { clone_from: id }}
+  let route = { query: { clone_from: id } }
   const cloneRoute = this.colActions.cloneRoute
 
   if (typeof cloneRoute === 'object') {
@@ -82,7 +82,7 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
     type: 'warning',
     confirmButtonClass: 'el-button--danger',
     showCancelButton: true,
-    beforeClose: async(action, instance, done) => {
+    beforeClose: async (action, instance, done) => {
       if (action !== 'confirm') return done()
       instance.confirmButtonLoading = true
       try {

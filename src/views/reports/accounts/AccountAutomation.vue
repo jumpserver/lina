@@ -28,7 +28,7 @@
           <div class="chart-container-title">
             <div class="chart-container-title-text">{{ $t('TaskExecutionTrends') }}</div>
             <div class="chart">
-              <echarts
+              <Echart
                 :options="ExecutionMetricsOptions"
                 :autoresize="true"
               />
@@ -52,6 +52,7 @@ import BaseReport from '../base/BaseReport.vue'
 import SummaryCountCard from '@/components/Dashboard/SummaryCountCard.vue'
 import SwitchDate from '@/components/Dashboard/SwitchDate.vue'
 import * as echarts from 'echarts'
+import Echart from '@/components/Dashboard/Echart.vue'
 import AccountSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import RiskSummary from '@/views/reports/pam/Dashboard/RiskSummary.vue'
 
@@ -61,7 +62,8 @@ export default {
     AccountSummary,
     SwitchDate,
     SummaryCountCard,
-    BaseReport
+    BaseReport,
+    Echart
   },
   props: {
     nav: {
@@ -211,7 +213,6 @@ export default {
   methods: {
     onChange(val) {
       this.days = val
-      localStorage.setItem('reportDays', val)
     },
     async getData() {
       const data = await this.$axios.get(`/api/v1/reports/reports/account-automation/?days=${this.days}`)

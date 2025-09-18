@@ -9,7 +9,7 @@
 <script>
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
-import WatermarkHelpDialog from './WatermarkHelpDialog.vue'
+import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 
 export default {
   name: 'SessionSecurity',
@@ -18,21 +18,21 @@ export default {
     return {
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
-      sessionVariables: {
-        'userId': this.$t('userId'),
-        'name': this.$t('name'),
-        'userName': this.$t('userName'),
-        'currentTime': this.$t('currentTime'),
-        'assetId': this.$t('assetId'),
-        'assetName': this.$t('assetName'),
-        'assetAddress': this.$t('assetAddress')
-      },
-      consoleVariables: {
-        'userId': this.$t('userId'),
-        'name': this.$t('name'),
-        'userName': this.$t('userName'),
-        'currentTime': this.$t('currentTime')
-      },
+      sessionVariables: [
+        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'name', label: this.$t('name'), default: '张三' },
+        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
+        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' },
+        { name: 'assetId', label: this.$t('assetId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'assetName', label: this.$t('assetName'), default: '服务器01' },
+        { name: 'assetAddress', label: this.$t('assetAddress'), default: '192.168.1.1' }
+      ],
+      consoleVariables: [
+        { name: 'userId', label: this.$t('userId'), default: '00000000-0000-0000-0000-000000000001' },
+        { name: 'name', label: this.$t('name'), default: '张三' },
+        { name: 'userName', label: this.$t('userName'), default: 'zhangsan' },
+        { name: 'currentTime', label: this.$t('currentTime'), default: '2025-06-01 12:00:00' }
+      ],
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
@@ -100,7 +100,7 @@ export default {
             }
           }
         },
-        onSubmit: async(validValues) => {
+        onSubmit: async (validValues) => {
           const url = '/api/v1/settings/setting/?category=security_session'
 
           try {

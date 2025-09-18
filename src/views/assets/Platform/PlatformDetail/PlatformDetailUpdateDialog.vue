@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       initial: {},
-      successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+      successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
       url: `/api/v1/assets/platforms/`,
       hasReset: false,
       hasDetailInMsg: false,

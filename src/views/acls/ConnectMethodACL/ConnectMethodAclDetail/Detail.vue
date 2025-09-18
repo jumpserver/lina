@@ -34,7 +34,7 @@ export default {
           key: this.$t('Reviewer'),
           value: this.object.reviewers.map(item => item.name).join(', ')
         },
-        'priority', 'date_created', 'created_by', 'comment'
+        'date_created', 'created_by', 'comment'
       ]
     }
   },

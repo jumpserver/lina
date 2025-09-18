@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+
 const accountExistCache = new Map()
 
 async function checkAccountExist(username, asset) {
@@ -8,9 +9,10 @@ async function checkAccountExist(username, asset) {
   }
   const url = `/api/v1/accounts/accounts/?username=${encodeURIComponent(username)}&asset=${asset}`
   const data = await this.$axios.get(url)
-  const result = data.length > 0
-  accountExistCache.set(cacheKey, result)
-  return result
+  const results = data
+  const isExist = results.length > 0
+  accountExistCache.set(cacheKey, isExist)
+  return isExist
 }
 
 async function checkAccountsExist() {

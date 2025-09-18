@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'Index',
+  name: 'Icon',
   props: {
     icon: {
       type: String,

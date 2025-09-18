@@ -9,7 +9,7 @@
 
 <script>
 import Title from '@/components/Dashboard/Title.vue'
-import LineChart from './LineChart.vue'
+import LineChart from '@/components/Dashboard/LineChart.vue'
 
 export default {
   components: {
@@ -60,17 +60,20 @@ export default {
   },
   methods: {
     async getMetricData() {
-      const url = `/api/v1/accounts/change-secret-dashboard/?daily_success_and_failure_metrics=1&days=${this.days}`
-      const data = await this.$axios.get(url)
-      const success = data?.dates_metrics_total_count_success
-      const failed = data?.dates_metrics_total_count_failed
-      this.lineChartConfig.datesMetrics = data?.dates_metrics_date
-      if (success.length > 0) {
-        this.lineChartConfig.primaryData = success
-      }
-      if (failed.length > 0) {
-        this.lineChartConfig.secondaryData = failed
-      }
+      setTimeout(() => {
+        const url = `/api/v1/accounts/change-secret-dashboard/?daily_success_and_failure_metrics=1&days=${this.days}`
+        this.$axios.get(url).then(data => {
+          const success = data?.dates_metrics_total_count_success
+          const failed = data?.dates_metrics_total_count_failed
+          this.lineChartConfig.datesMetrics = data?.dates_metrics_date
+          if (success.length > 0) {
+            this.lineChartConfig.primaryData = success
+          }
+          if (failed.length > 0) {
+            this.lineChartConfig.secondaryData = failed
+          }
+        })
+      }, 500)
     }
   }
 }

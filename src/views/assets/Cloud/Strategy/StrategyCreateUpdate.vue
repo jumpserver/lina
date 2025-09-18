@@ -36,8 +36,8 @@ export default {
           component: ActionInput
         }
       },
-      updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
-      createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' }},
+      updateSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' } },
+      createSuccessNextRoute: { name: 'CloudAccountList', params: { activeMenu: 'StrategyList' } },
       cleanFormValue: (value) => {
         value['category'] = this.$route.query.category || 'host'
         return value

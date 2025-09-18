@@ -1,5 +1,12 @@
 <template>
-  <BaseReport :only-charts="!nav">
+  <BaseReport
+    :nav="nav"
+    :url="reportUrl"
+    :title="$t('PamDashboard')"
+    :disable-charts-padding="true"
+    name="PamDashboard"
+    v-bind="$attrs"
+  >
     <div class="summary-container">
       <el-row :gutter="20">
         <el-col :span="14" :xs="24">
@@ -32,6 +39,7 @@ import AssetProportionSummary from './AssetProportionSummary.vue'
 import MissionSummery from './MissionSummery.vue'
 import AccountSecretSummary from '@/views/reports/pam/ChangeSecret/AccountSummary.vue'
 import BaseReport from '../../base/BaseReport.vue'
+import { getRouteUrl } from '@/utils/vue'
 
 export default {
   name: 'Dashboard',
@@ -51,7 +59,8 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts=1'
+      url: '/api/v1/accounts/pam-dashboard/?total_count_type_to_accounts=1',
+      reportUrl: getRouteUrl('PamReport', this.$router)
     }
   }
 }

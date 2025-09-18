@@ -1,6 +1,6 @@
 <template>
   <div>
-    <echarts
+    <Echart
       ref="echarts"
       :options="options"
       :autoresize="true"
@@ -13,8 +13,10 @@
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
 import { mix } from '@/utils/theme/color'
+import Echart from '@/components/Dashboard/Echart.vue'
 
 export default {
+  components: { Echart },
   props: {
     colors: {
       type: Array,
@@ -35,14 +37,15 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     options() {
       const seriesList = []
       const labels = this.data.map(item => item.label)
-      const total = _.sumBy(this.data, function(i) { return i.total })
+      const total = _.sumBy(this.data, function(i) {
+        return i.total
+      })
       for (let i = 0, len = this.data.length; i < len; i++) {
         const current = this.data[i]
         let num = (current.total / total) * 100
@@ -177,8 +180,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .echarts {
-    width: 100%;
-    height: 72px;
-  }
+.echarts {
+  width: 100%;
+  height: 72px;
+}
 </style>

@@ -9,12 +9,13 @@
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
 import Email from './Email/index.vue'
+import MsgTemplate from '@/views/settings/Msg/MsgTemplate/index.vue'
 import Subscribe from './Subscribe/index.vue'
 import SMS from './SMS/index.vue'
 
 export default {
   name: 'Index',
-  components: { TabPage, Email, Subscribe, SMS },
+  components: { TabPage, Email, MsgTemplate, Subscribe, SMS },
   data() {
     return {
       activeMenu: 'Email',
@@ -23,6 +24,11 @@ export default {
           title: this.$t('Email'),
           name: 'Email',
           hidden: !this.$hasPerm('settings.change_email')
+        },
+        {
+          title: this.$t('MsgTemplate'),
+          name: 'MsgTemplate',
+          hidden: !this.$hasPerm('settings.change_email') || !this.$store.getters.hasValidLicense
         },
         {
           title: this.$t('SMS'),
