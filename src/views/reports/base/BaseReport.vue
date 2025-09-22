@@ -26,7 +26,7 @@
           {{ description }}
         </div>
       </div>
-      <span v-if="!nav && url" class="export-btn">
+      <span v-if="!nav && url && showReportExportBtn" class="export-btn">
         <el-button type="text" @click="openNewWindow">
           <i class="fa fa-external-link" style="font-size: 15px;" />
           {{ $t('Export') }}
@@ -42,6 +42,7 @@
 <script>
 import Logo from '@/layout/components/NavLeft/Logo'
 import RightAction from './RightAction.vue'
+import store from '@/store'
 
 export default {
   components: {
@@ -84,6 +85,9 @@ export default {
   computed: {
     isDescription() {
       return this.description && this.description.trim() !== ''
+    },
+    showReportExportBtn() {
+      return store.getters.hasValidLicense
     }
   },
   methods: {

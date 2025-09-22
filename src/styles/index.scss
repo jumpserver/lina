@@ -739,3 +739,7 @@ div.el-loading-parent--relative {
 .margin-top-20 {
   margin-top: 20px;
 }
+
+.el-message {
+  z-index: 999999 !important;
+}
