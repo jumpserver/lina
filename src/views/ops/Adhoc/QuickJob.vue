@@ -20,38 +20,38 @@
       :assets="classifiedAssets"
       @submit="onConfirmRunAsset"
     />
-    <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
-      <template slot="table">
-        <div class="transition-box" style="width: calc(100% - 17px);">
-          <CodeEditor
-            v-if="ready"
-            :options="cmOptions"
-            :toolbar="toolbar"
-            :value.sync="command"
-            style="margin-bottom: 20px"
+    <div class="job-container">
+      <div class="select-assets">
+        <SelectJobAssetDialog @select="handleSelectAssets" />
+      </div>
+      <div class="transition-box" style="width: calc(100% - 17px);">
+        <CodeEditor
+          v-if="ready"
+          :options="cmOptions"
+          :toolbar="toolbar"
+          :value.sync="command"
+          style="margin-bottom: 20px"
+        />
+        <span v-if="executionInfo.status" style="float: right" />
+        <div class="xterm-container">
+          <QuickJobTerm
+            ref="xterm"
+            :show-tool-bar="true"
+            :select-assets="selectAssets"
+            :xterm-config="xtermConfig"
+            :execution-info="executionInfo"
+            @view-assets="viewConfirmRunAssets"
           />
-          <span v-if="executionInfo.status" style="float: right" />
-          <div class="xterm-container">
-            <QuickJobTerm
-              ref="xterm"
-              :show-tool-bar="true"
-              :select-assets="selectAssets"
-              :xterm-config="xtermConfig"
-              :execution-info="executionInfo"
-              @view-assets="viewConfirmRunAssets"
-            />
-          </div>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
-      </template>
-    </AssetTreeTable>
+        <div style="display: flex;margin-top:10px;justify-content: space-between" />
+      </div>
+    </div>
   </Page>
 </template>
 
 <script>
 import $ from '@/utils/jquery-vendor.js'
 import _isequal from 'lodash.isequal'
-import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
@@ -61,15 +61,16 @@ import VariableHelpDialog from './VariableHelpDialog.vue'
 import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
+import SelectJobAssetDialog from './components/SelectJobAssetDialog.vue'
 
 export default {
   name: 'CommandExecution',
   components: {
+    SelectJobAssetDialog,
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
     SetVariableDialog,
-    AssetTreeTable,
     Page,
     QuickJobTerm,
     CodeEditor,
@@ -328,6 +329,7 @@ export default {
       },
       selectAssets: [],
       selectNodes: [],
+      selectHosts: [],
       lastRequestPayload: null
     }
   },
@@ -356,6 +358,10 @@ export default {
   methods: {
     async initData() {
       this.recoverStatus()
+    },
+    handleSelectAssets(assets) {
+      this.selectHosts = assets
+      console.log(assets)
     },
     recoverStatus() {
       if (this.$route.query.taskId) {
@@ -448,17 +454,19 @@ export default {
     },
 
     getSelectedNodesAndHosts() {
-      const hosts = this.getSelectedNodes().filter((item) => {
-        return item.meta.type !== 'node'
-      }).map(function(node) {
-        return node.id
-      })
-
-      const nodes = this.getSelectedNodes().filter((item) => {
-        return item.meta.type === 'node'
-      }).map(function(node) {
-        return node.meta.data.id
-      })
+      // const hosts = this.getSelectedNodes().filter((item) => {
+      //   return item.meta.type !== 'node'
+      // }).map(function (node) {
+      //   return node.id
+      // })
+      //
+      // const nodes = this.getSelectedNodes().filter((item) => {
+      //   return item.meta.type === 'node'
+      // }).map(function (node) {
+      //   return node.meta.data.id
+      // })
+      const hosts = this.selectHosts
+      const nodes = []
       return { hosts, nodes }
     },
     shouldReRequest(payload) {
@@ -470,8 +478,7 @@ export default {
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
-
-      if (hosts.length === 0 && nodes.length === 0) {
+      if (this.selectHosts.length === 0) {
         this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
@@ -572,6 +579,16 @@ export default {
 
 <style lang="scss" scoped>
 $container-bg-color: #f7f7f7;
+.job-container {
+  display: flex;
+
+  .select-assets {
+    width: 23.6%;
+    background: #fff;
+    color: var(--color-border);
+
+  }
+}
 
 .transition-box {
   display: flex;
