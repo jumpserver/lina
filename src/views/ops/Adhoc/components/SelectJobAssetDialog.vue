@@ -1,22 +1,35 @@
 <template>
   <div class="asset-select">
-    <div class="asset-list">
-      <ul>
-        <li v-for="(item, index) in selectAssetRows" :key="index">
-          <div class="icon-zone">
-            <img :src="getPlatformLogo(item)" alt="icon" class="asset-icon">
-          </div>
-          <span class="asset-name">{{ item.name }}</span>
-        </li>
-      </ul>
-    </div>
-    <el-button
-      class="select-btn"
-      type="primary"
-      @click="handleClick"
-    >
-      请选择资产
-    </el-button>
+    <el-card>
+      <div slot="header" class="clearfix">
+        <span>已选资产</span>
+        <el-button
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="handleClick"
+        >
+          请选择资产
+        </el-button>
+      </div>
+      <div class="asset-list">
+        <el-checkbox-group
+          v-model="selectAssets"
+        >
+          <el-checkbox v-for="(item, index) in selectAssetRows" :key="index" :label="item.name">
+            <div class="icon-zone">
+              <img :src="getPlatformLogo(item)" alt="icon" class="asset-icon">
+            </div>
+            <span :title="item.name" class="asset-name">{{ item.name }}</span>
+          </el-checkbox>
+        </el-checkbox-group>
+        <!--        <ul>-->
+        <!--          <li v-for="(item, index) in selectAssetRows" :key="index">-->
+
+        <!--            <span :title="item.name" class="asset-name">{{ item.name }}</span>-->
+        <!--          </li>-->
+        <!--        </ul>-->
+      </div>
+    </el-card>
 
     <AssetSelectDialog
       v-if="dialogVisible"
@@ -76,7 +89,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      selectAssetRows: []
+      selectAssetRows: [],
+      selectAssets: []
     }
   },
   methods: {
@@ -127,10 +141,56 @@ export default {
 <style lang="scss" scoped>
 .asset-select {
   display: flex;
-  height: 100%;
   flex-direction: column;
+  height: 100%;
+
+  ::v-deep {
+    .el-card {
+      flex: 1;
+    }
+
+    .el-card__body {
+      height: 100%;
+      padding: 10px 16px;
+    }
+
+    .el-checkbox {
+      width: 100%;
+      display: flex;
+      padding: 3px 0;
+      margin-right: 0;
+      align-items: center;
+
+      .el-checkbox__label {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-right: 20px;
+      }
+    }
+  }
 
   .asset-list {
+    margin: auto;
+
+    .icon-zone {
+      width: 1.5em;
+      height: 1.5em;
+
+      .asset-icon {
+        height: 100%;
+        width: 100%;
+        vertical-align: -0.2em;
+        fill: currentColor;
+      }
+    }
+
+    .asset-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     ul {
       list-style: none;
@@ -144,24 +204,6 @@ export default {
         display: flex;
         align-items: center;
         gap: 6px;
-
-        .icon-zone {
-          width: 1.5em;
-          height: 1.5em;
-
-          .asset-icon {
-            height: 100%;
-            width: 100%;
-            vertical-align: -0.2em;
-            fill: currentColor;
-          }
-        }
-
-        .asset-name {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
       }
     }
   }
