@@ -2,7 +2,7 @@
   <div class="asset-select">
     <el-card>
       <div slot="header" class="clearfix">
-        <span>已选资产</span>
+        <span>已选资产({{ selectAssets.length }})</span>
         <el-button
           style="float: right; padding: 3px 0"
           type="text"
@@ -14,20 +14,15 @@
       <div class="asset-list">
         <el-checkbox-group
           v-model="selectAssets"
+          @change="onCheckboxChange"
         >
-          <el-checkbox v-for="(item, index) in selectAssetRows" :key="index" :label="item.name">
+          <el-checkbox v-for="(item) in selectAssetRows" :key="item.id" :label="item.id">
             <div class="icon-zone">
               <img :src="getPlatformLogo(item)" alt="icon" class="asset-icon">
             </div>
             <span :title="item.name" class="asset-name">{{ item.name }}</span>
           </el-checkbox>
         </el-checkbox-group>
-        <!--        <ul>-->
-        <!--          <li v-for="(item, index) in selectAssetRows" :key="index">-->
-
-        <!--            <span :title="item.name" class="asset-name">{{ item.name }}</span>-->
-        <!--          </li>-->
-        <!--        </ul>-->
       </div>
     </el-card>
 
@@ -38,7 +33,7 @@
       :base-url="baseUrl"
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
-      :value="value"
+      :value="selectAssets"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
       @cancel="handleCancel"
@@ -98,14 +93,16 @@ export default {
       this.dialogVisible = true
     },
     handleConfirm(valueSelected, rowsAdd) {
-      console.log(valueSelected, rowsAdd)
       if (valueSelected === undefined) {
         return
       }
       this.$emit('select', valueSelected)
-      this.selectAssetRows = rowsAdd
-      // this.addRowsToSelect(rowsAdd)
-      // this.onInputChange(valueSelected)
+      rowsAdd.forEach(item => {
+        if (!this.selectAssetRows.find(i => i.id === item.id)) {
+          this.selectAssetRows.push(item)
+        }
+      })
+      this.selectAssets = valueSelected
       this.dialogVisible = false
     },
     handleCancel() {
@@ -114,25 +111,9 @@ export default {
     getPlatformLogo(platform) {
       return loadPlatformIcon(platform.name, platform.type.value)
     },
-    onInputChange(val) {
-      this.$emit('change', val)
-    },
-    addToSelect(options, row) {
-      const selectOptionsHas = options.find(item => item.value === row.id)
-      // 如果select2的options中没有，那么可能无法显示正常的值
-      if (selectOptionsHas === undefined) {
-        const option = {
-          label: `${row.name}(${row.address})`,
-          value: row.id
-        }
-        options.push(option)
-      }
-    },
-    addRowsToSelect(rows) {
-      const outSelectOptions = this.$refs.select2.options
-      for (const row of rows) {
-        this.addToSelect(outSelectOptions, row)
-      }
+    onCheckboxChange(value) {
+      this.selectAssets = value
+      this.$emit('change', value)
     }
   }
 }
@@ -142,15 +123,19 @@ export default {
 .asset-select {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  background: #fff;
+  color: var(--color-border);
 
   ::v-deep {
     .el-card {
       flex: 1;
+
     }
 
     .el-card__body {
-      height: 100%;
+      height: calc(100vh - 200px);
+      overflow-y: auto;
+      overflow-x: hidden;
       padding: 10px 16px;
     }
 
@@ -190,21 +175,6 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        padding: 5px 10px;
-        color: var(--color-primary-dark-3);
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
     }
   }
 

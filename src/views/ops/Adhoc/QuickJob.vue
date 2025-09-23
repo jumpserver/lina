@@ -142,7 +142,7 @@ export default {
             align: 'left',
             value: '',
             placeholder: this.$tc('EnterRunUser'),
-            // tip: this.$tc('RunasHelpText'),
+            tip: this.$tc('RunasHelpText'),
             el: {
               autoComplete: true,
               query: (query, cb) => {
@@ -584,9 +584,6 @@ $container-bg-color: #f7f7f7;
 
   .select-assets {
     width: 23.6%;
-    background: #fff;
-    color: var(--color-border);
-
   }
 }
 
