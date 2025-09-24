@@ -9,10 +9,15 @@
     <div v-if="expanded" class="close-sidebar">
       <i class="fa fa-compress" style="font-weight: 200" @click="$emit('compress')" />
     </div>
+    <div class="close-sidebar">
+      <i class="fa fa-arrows-alt" style="font-weight: 200" @click="openWebsite()" />
+    </div>
   </div>
 </template>
 
 <script>
+import { BASE_URL } from '@/utils/common/index'
+
 export default {
   props: {
     active: {
@@ -41,6 +46,16 @@ export default {
     },
     handleExpand() {
       this.$emit('expand-full')
+    },
+    async openWebsite() {
+      let url = `${BASE_URL}/?_=${Date.now()}`
+      if (process.env.NODE_ENV !== 'production') {
+        url = url.replace('9528', '5173')
+      }
+
+      const newUrl = new URL(url)
+      window.open(newUrl.toString(), '_blank')
+      return url
     }
   }
 }
