@@ -12,14 +12,18 @@
           请选择资产
         </el-button>
       </div>
-      <el-button
+      <div
         v-if="selectAssets.length === 0"
-        class="select-asset-button"
-        type="primary"
-        @click="handleClick"
+        class="empty-assets"
+        role="button"
+        tabindex="0"
+        aria-label="Select assets"
+        @click=" handleClick()"
       >
-        请选择资产
-      </el-button>
+        <i class="icon el-icon-plus" />
+        <span class="title">请选择资产</span>
+        <span class="subtitle">点击添加</span>
+      </div>
       <div v-else class="asset-list">
         <div
           v-for="group in groupedAssets"
@@ -57,7 +61,7 @@
                 class="asset-name"
               >{{ item.name }}</span>
               <i
-                class="el-icon-close asset-remove-icon"
+                class="el-icon-minus asset-remove-icon"
                 title="移除"
                 @click.stop="removeAsset(item)"
               />
@@ -176,13 +180,10 @@ export default {
       this.$emit('change', value)
     },
     isPlatformAllSelected(group) {
-      console.log('--------', group.assets.length > 0 && group.assets.every(a => this.selectAssets.includes(a.id)))
       return group.assets.length > 0 && group.assets.every(a => this.selectAssets.includes(a.id))
     },
     isPlatformIndeterminate(group) {
       const selected = group.assets.filter(a => this.selectAssets.includes(a.id)).length
-      console.log('Indeterminate--------', selected > 0 && selected < group.assets.length)
-
       return selected > 0 && selected < group.assets.length
     },
     togglePlatformAll(group, checked) {
@@ -237,15 +238,16 @@ export default {
         font-weight: normal;
         transition: opacity .15s ease;
         margin-left: auto;
-        color: #f56c6c;
+        color: var(--color-danger);
       }
 
       .el-checkbox__label {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 3px;
         padding-right: 20px;
+        padding-left: 3px;
       }
 
       .el-checkbox__label:hover .asset-remove-icon {
@@ -280,6 +282,7 @@ export default {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    color: #a2aabd;
     font-weight: 800;
     font-size: 12px;
   }
@@ -290,7 +293,9 @@ export default {
   }
 
   .platform-group-assets {
-    padding-left: 10px;
+    padding-left: 15px;
+    margin-left: 3px;
+    border-left: 2px solid var(--color-border);
   }
 
   .select-asset-button {
@@ -312,5 +317,60 @@ export default {
 
 .el-dialog__wrapper ::v-deep .el-dialog__body {
   padding: 0 0 0 3px;
+}
+
+.empty-assets {
+  border: 2px dashed #d9d9d9;
+  border-radius: 6px;
+  padding: 56px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background-color .25s, color .2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #909399;
+  height: 100%;
+  background: #fff;
+
+  .icon {
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 14px;
+    color: #c0c4cc;
+    transition: color .2s;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    opacity: .75;
+  }
+}
+
+.empty-assets:hover:not(.is-disabled) {
+  border-color: var(--color-primary);
+  background: #f5f9ff;
+  color: var(--color-primary);
+
+  .icon {
+    color: var(--color-primary);
+  }
+}
+
+.empty-assets.is-disabled {
+  cursor: not-allowed;
+  opacity: .55;
+  background: #fafafa;
+
+  .disabled-tip {
+    color: #c0c4cc;
+  }
 }
 </style>
