@@ -160,7 +160,7 @@ export default {
       if (valueSelected === undefined) {
         return
       }
-      this.$emit('select', valueSelected)
+      this.$emit('change', valueSelected)
       rowsAdd.forEach(item => {
         if (!this.selectAssetRows.find(i => i.id === item.id)) {
           this.selectAssetRows.push(item)

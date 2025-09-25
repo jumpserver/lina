@@ -22,7 +22,7 @@
     />
     <div class="job-container">
       <div class="select-assets">
-        <SelectJobAssetDialog @select="handleSelectAssets" />
+        <SelectJobAssetDialog @change="handleSelectAssets" />
       </div>
       <div class="transition-box" style="width: calc(100% - 17px);">
         <CodeEditor
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import $ from '@/utils/jquery-vendor.js'
 import _isequal from 'lodash.isequal'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
@@ -296,29 +295,6 @@ export default {
         lineWrapping: true,
         mode: 'shell'
       },
-      treeSetting: {
-        treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
-        searchUrl: '/api/v1/perms/users/self/assets/tree/',
-        showRefresh: true,
-        showMenu: false,
-        showSearch: true,
-        notShowBuiltinTree: true,
-        check: {
-          enable: true
-        },
-        view: {
-          dblClickExpand: false,
-          showLine: true
-        },
-        callback: {
-          onCheck: function(_event, treeId, treeNode) {
-            const treeObj = $.fn.zTree.getZTreeObj(treeId)
-            if (treeNode.checked) {
-              treeObj.expandNode(treeNode, true, false, true)
-            }
-          }
-        }
-      },
       iShowTree: true,
       variableFormData: [],
       variableQueryParam: '',
@@ -336,9 +312,6 @@ export default {
   computed: {
     xterm() {
       return this.$refs.xterm.xterm
-    },
-    ztree() {
-      return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     },
     isRunning() {
       return this.executionInfo.status.value === 'running'
@@ -361,7 +334,6 @@ export default {
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets
-      console.log(assets)
     },
     recoverStatus() {
       if (this.$route.query.taskId) {
@@ -454,17 +426,6 @@ export default {
     },
 
     getSelectedNodesAndHosts() {
-      // const hosts = this.getSelectedNodes().filter((item) => {
-      //   return item.meta.type !== 'node'
-      // }).map(function (node) {
-      //   return node.id
-      // })
-      //
-      // const nodes = this.getSelectedNodes().filter((item) => {
-      //   return item.meta.type === 'node'
-      // }).map(function (node) {
-      //   return node.meta.data.id
-      // })
       const hosts = this.selectHosts
       const nodes = []
       return { hosts, nodes }
@@ -622,18 +583,9 @@ $container-bg-color: #f7f7f7;
   border-radius: 2px;
 }
 
-.el-tree {
-  background-color: inherit !important;
-}
-
 .mini {
   margin-right: 5px;
   width: 12px !important;
-}
-
-.auto-data-ztree {
-  overflow: auto;
-  /*border-right: solid 1px red;*/
 }
 
 .vue-codemirror-wrap ::v-deep .CodeMirror {
@@ -642,31 +594,10 @@ $container-bg-color: #f7f7f7;
   border: 1px solid #eee;
 }
 
-.tree-box {
-  margin-right: 2px;
-  border: 1px solid #e0e0e0;
-
-  ::v-deep .ztree {
-    .level0 {
-      .node_name {
-        max-width: 100px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: inline-block;
-      }
-    }
-  }
-}
-
 .output {
   padding-left: 30px;
   background-color: rgb(247 247 247);
   border: solid 1px #f3f3f3;;
 }
 
-.tree-table-content {
-  ::v-deep .left {
-    padding-top: 4px;
-  }
-}
 </style>

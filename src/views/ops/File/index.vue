@@ -10,142 +10,142 @@
         {{ tip }}
       </span>
     </el-alert>
-
-    <AssetTreeTable ref="AssetTreeTable" :tree-setting="treeSetting">
-      <template slot="table">
-        <div class="transition-box" style="width: calc(100% - 17px);">
-          <div class="upload_input">
-            <el-button
-              :disabled="runButton.disabled"
-              :type="runButton.el&&runButton.el.type"
-              size="small"
-              style="display: inline-block; padding: 6px 10px"
-              @click="runButton.callback()"
-            >
-              <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
-            </el-button>
-          </div>
-          <span style="color: red">*</span>
-          <div class="upload_input">{{ $t('Account') }}:</div>
-          <div class="upload_input">
-            <el-autocomplete
-              v-model="runAsInput.value"
-              :fetch-suggestions="runAsInput.el.query"
-              :placeholder="runAsInput.placeholder"
-              size="mini"
-              style="display: inline-block; margin: 0 2px"
-              @change="runAsInput.callback(runAsInput.value)"
-              @select="runAsInput.callback(runAsInput.value)"
-            />
-          </div>
-          <div class="upload_input">{{ $t('UploadDir') }}:</div>
-          <div class="upload_input">
-            <el-input
-              v-if="dstPathInput.type==='input'"
-              v-model="dstPath"
-              :placeholder="dstPathInput.placeholder"
-              size="mini"
-              @change="dstPathInput.callback(dstPathInput.value)"
-            >
-              <template slot="prepend">/tmp/</template>
-            </el-input>
-          </div>
-          <div
-            class="file-uploader"
+    <div class="job-container">
+      <div class="select-assets">
+        <SelectJobAssetDialog @change="handleSelectAssets" />
+      </div>
+      <div class="transition-box" style="width: calc(100% - 17px);">
+        <div class="upload_input">
+          <el-button
+            :disabled="runButton.disabled"
+            :type="runButton.el&&runButton.el.type"
+            size="small"
+            style="display: inline-block; padding: 6px 10px"
+            @click="runButton.callback()"
           >
-            <el-card>
-              <el-upload
-                v-if="ready"
-                ref="upload"
-                :auto-upload="false"
-                :on-change="onFileChange"
-                :value.sync="uploadFileList"
-                action=""
-                drag
-                multiple
-              >
-                <i class="el-icon-upload" />
-                <div class="el-upload__text" style="margin-bottom: 10px;padding: 0 5px 0 5px ">
-                  {{ $t('DragUploadFileInfo') }}
-                </div>
-                <span>
-                  {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
-                </span>
-                <div slot="file" slot-scope="{file}">
-                  <li class="el-upload-list__item is-ready" tabindex="0">
-                    <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
-                      <i class="el-icon-document" />{{ file.name }}
-                      <i style="color: #1ab394;float: right;font-weight:normal">
-                        {{ formatFileSize(file.size) }}
-                        <i class="el-icon-close" @click="removeFile(file)" />
-                      </i>
-                    </a>
-                  </li>
-                </div>
-                <div
-                  v-if="uploadFileList.length === 0"
-                  slot="tip"
-                  class="empty-file-tip"
-                >
-                  {{ $tc('NoFiles') }}
-                </div>
-              </el-upload>
-              <el-progress
-                v-if="showProgress"
-                :percentage="progressLength"
-              />
-              <div v-if="showProgress" class="status-info">
-                <span class="left">{{ speedText }}</span>
-                <span class="right">{{ loadedSize }} / {{ totalSize }}</span>
+            <i :class="runButton.icon" style="margin-right: 4px;" />{{ runButton.name }}
+          </el-button>
+        </div>
+        <span style="color: red">*</span>
+        <div class="upload_input">{{ $t('Account') }}:</div>
+        <div class="upload_input">
+          <el-autocomplete
+            v-model="runAsInput.value"
+            :fetch-suggestions="runAsInput.el.query"
+            :placeholder="runAsInput.placeholder"
+            size="mini"
+            style="display: inline-block; margin: 0 2px"
+            @change="runAsInput.callback(runAsInput.value)"
+            @select="runAsInput.callback(runAsInput.value)"
+          />
+        </div>
+        <div class="upload_input">{{ $t('UploadDir') }}:</div>
+        <div class="upload_input">
+          <el-input
+            v-if="dstPathInput.type==='input'"
+            v-model="dstPath"
+            :placeholder="dstPathInput.placeholder"
+            size="mini"
+            @change="dstPathInput.callback(dstPathInput.value)"
+          >
+            <template slot="prepend">/tmp/</template>
+          </el-input>
+        </div>
+        <div
+          class="file-uploader"
+        >
+          <el-card>
+            <el-upload
+              v-if="ready"
+              ref="upload"
+              :auto-upload="false"
+              :on-change="onFileChange"
+              :value.sync="uploadFileList"
+              action=""
+              drag
+              multiple
+            >
+              <i class="el-icon-upload" />
+              <div class="el-upload__text" style="margin-bottom: 10px;padding: 0 5px 0 5px ">
+                {{ $t('DragUploadFileInfo') }}
               </div>
-            </el-card>
-          </div>
-          <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
-          <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
-            <span>
-              <span><b>{{ $tc('Status') }}: </b></span>
-              <span
-                v-if="executionInfo.status==='timeout'"
-                class="status_warning"
-              >{{ $tc('Timeout') }}</span>
-              <span v-else>
-                <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
-                <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
-                <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
+              <span>
+                {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
               </span>
-            </span>
-            <span>
-              <span><b>{{ $tc('TimeDelta') }}: </b></span>
-              <span>{{ executionInfo.timeCost }}</span>
+              <div slot="file" slot-scope="{file}">
+                <li class="el-upload-list__item is-ready" tabindex="0">
+                  <a :style="sameFileStyle(file)" class="el-upload-list__item-name">
+                    <i class="el-icon-document" />{{ file.name }}
+                    <i style="color: #1ab394;float: right;font-weight:normal">
+                      {{ formatFileSize(file.size) }}
+                      <i class="el-icon-close" @click="removeFile(file)" />
+                    </i>
+                  </a>
+                </li>
+              </div>
+              <div
+                v-if="uploadFileList.length === 0"
+                slot="tip"
+                class="empty-file-tip"
+              >
+                {{ $tc('NoFiles') }}
+              </div>
+            </el-upload>
+            <el-progress
+              v-if="showProgress"
+              :percentage="progressLength"
+            />
+            <div v-if="showProgress" class="status-info">
+              <span class="left">{{ speedText }}</span>
+              <span class="right">{{ loadedSize }} / {{ totalSize }}</span>
+            </div>
+          </el-card>
+        </div>
+        <div style="margin-bottom: 5px;font-weight: bold; display: inline-block">{{ $tc('Output') }}:</div>
+        <span v-if="executionInfo.status && summary && !showProgress" style="float: right">
+          <span>
+            <span><b>{{ $tc('Status') }}: </b></span>
+            <span
+              v-if="executionInfo.status==='timeout'"
+              class="status_warning"
+            >{{ $tc('Timeout') }}</span>
+            <span v-else>
+              <span class="status_success">{{ $tc('Success') + ': ' + summary.success }}</span>
+              <span class="status_warning">{{ $tc('Skip') + ': ' + summary.skip }}</span>
+              <span class="status_danger">{{ $tc('Failed') + ': ' + summary.failed }}</span>
             </span>
           </span>
-          <div class="output">
-            <Term
-              ref="xterm"
-              :show-tool-bar="true"
-              :xterm-config="xtermConfig"
-            />
-            <div style="height: 2px" />
-          </div>
-          <div style="display: flex; margin-top:10px; justify-content: space-between" />
+          <span>
+            <span><b>{{ $tc('TimeDelta') }}: </b></span>
+            <span>{{ executionInfo.timeCost }}</span>
+          </span>
+        </span>
+        <div class="output">
+          <Term
+            ref="xterm"
+            :show-tool-bar="true"
+            :xterm-config="xtermConfig"
+          />
+          <div style="height: 2px" />
         </div>
-      </template>
-    </AssetTreeTable>
+        <div style="display: flex; margin-top:10px; justify-content: space-between" />
+      </div>
+    </div>
   </Page>
 </template>
 
 <script>
-import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
 import { formatFileSize } from '@/utils/common/index'
 import store from '@/store'
+import SelectJobAssetDialog from '@/views/ops/Adhoc/components/SelectJobAssetDialog.vue'
 
 export default {
   name: 'FileTransfer',
   components: {
-    AssetTreeTable,
+    SelectJobAssetDialog,
     Page,
     Term
   },
@@ -248,15 +248,13 @@ export default {
       ],
       speedText: '',
       loadedSize: '',
-      totalSize: ''
+      totalSize: '',
+      selectHosts: []
     }
   },
   computed: {
     xterm() {
       return this.$refs.xterm.xterm
-    },
-    ztree() {
-      return this.$refs.AssetTreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     }
   },
   mounted() {
@@ -338,17 +336,8 @@ export default {
       }, 1000)
     },
     getSelectedNodesAndHosts() {
-      const hosts = this.getSelectedNodes().filter((item) => {
-        return item.meta.type !== 'node'
-      }).map(function(node) {
-        return node.id
-      })
-
-      const nodes = this.getSelectedNodes().filter((item) => {
-        return item.meta.type === 'node'
-      }).map(function(node) {
-        return node.meta.data.id
-      })
+      const hosts = this.selectHosts
+      const nodes = []
       return { hosts, nodes }
     },
     truncateFileName(fullName) {
@@ -482,12 +471,27 @@ export default {
       this.runButton.disabled = false
       clearInterval(this.upload_interval)
       this.runButton.icon = 'fa fa-play'
+    },
+    handleSelectAssets(assets) {
+      this.selectHosts = assets
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.job-container {
+  display: flex;
+
+  .select-assets {
+    width: 23.6%;
+  }
+}
+
+.transition-box {
+  margin-left: 30px;
+}
+
 .mini-button {
   width: 12px;
   float: right;
