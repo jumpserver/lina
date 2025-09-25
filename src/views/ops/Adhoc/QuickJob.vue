@@ -91,7 +91,6 @@ export default {
       showOpenAdhocSaveDialog: false,
       showSetVariableDialog: false,
       showConfirmRunAssetsDialog: false,
-      DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
       chdir: '',
@@ -295,7 +294,6 @@ export default {
         lineWrapping: true,
         mode: 'shell'
       },
-      iShowTree: true,
       variableFormData: [],
       variableQueryParam: '',
       classifiedAssets: {
@@ -410,13 +408,6 @@ export default {
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
-    getSelectedNodes() {
-      return this.ztree.getCheckedNodes().filter(node => {
-        const status = node.getCheckStatus()
-        return node.id !== 'search' && status.half === false
-      })
-    },
-
     setCostTimeInterval() {
       this.toolbar.left.run.icon = 'fa fa-spinner fa-spin'
       this.toolbar.left.run.isVisible = true

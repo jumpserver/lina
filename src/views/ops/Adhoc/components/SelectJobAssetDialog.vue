@@ -98,7 +98,7 @@ export default {
   props: {
     baseUrl: {
       type: String,
-      default: '/api/v1/assets/assets/'
+      default: '/api/v1/perms/users/self/assets/'
     },
     defaultPageSize: {
       type: Number,
@@ -106,7 +106,7 @@ export default {
     },
     baseNodeUrl: {
       type: String,
-      default: '/api/v1/assets/nodes/'
+      default: '/api/v1/perms/users/self/nodes/'
     },
     treeUrlQuery: {
       type: Object,

@@ -70,7 +70,7 @@
                 {{ $t('DragUploadFileInfo') }}
               </div>
               <span>
-                {{ $t('UploadFileLthHelpText', {limit: SizeLimitMb}) }}
+                {{ $t('UploadFileLthHelpText', {limit: sizeLimitMb}) }}
               </span>
               <div slot="file" slot-scope="{file}">
                 <li class="el-upload-list__item is-ready" tabindex="0">
@@ -160,7 +160,6 @@ export default {
         cancel: 0
       },
       xtermConfig: {},
-      DataZTree: 0,
       runas: '',
       dstPath: '',
       runButton: {
@@ -215,27 +214,11 @@ export default {
           this.chdir = val
         }
       },
-      treeSetting: {
-        treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
-        searchUrl: '/api/v1/perms/users/self/assets/tree/',
-        notShowBuiltinTree: true,
-        showRefresh: true,
-        showMenu: false,
-        showSearch: true,
-        check: {
-          enable: true
-        },
-        view: {
-          dblClickExpand: false,
-          showLine: true
-        }
-      },
-      iShowTree: true,
       progressLength: 0,
       showProgress: false,
       upload_interval: null,
       uploadFileList: [],
-      SizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
+      sizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
       summary: {
         'success': 0,
         'failed': 0,
@@ -321,13 +304,6 @@ export default {
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
-    getSelectedNodes() {
-      return this.ztree.getCheckedNodes().filter(node => {
-        const status = node.getCheckStatus()
-        return node.id !== 'search' && status.half === false
-      })
-    },
-
     setCostTimeInterval() {
       this.runButton.icon = 'fa fa-spinner fa-spin'
       this.runButton.disabled = true
@@ -363,7 +339,7 @@ export default {
       return ''
     },
     isFileExceedsLimit(file) {
-      const isGtLimit = file.size / 1024 / 1024 > this.SizeLimitMb
+      const isGtLimit = file.size / 1024 / 1024 > this.sizeLimitMb
       if (isGtLimit) {
         this.$message.error(this.$tc('FileSizeExceedsLimit'))
       }
@@ -503,17 +479,9 @@ export default {
   border-radius: 2px;
 }
 
-.el-tree {
-  background-color: inherit !important;
-}
-
 .mini {
   margin-right: 5px;
   width: 12px !important;
-}
-
-.auto-data-ztree {
-  overflow: auto;
 }
 
 .vue-codemirror-wrap ::v-deep .CodeMirror {
@@ -524,11 +492,6 @@ export default {
 
 .upload_input ::v-deep .el-input-group__prepend {
   padding: 0 10px;
-}
-
-.tree-box {
-  margin-right: 2px;
-  border: 1px solid #e0e0e0;
 }
 
 .status_success {
