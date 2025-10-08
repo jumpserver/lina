@@ -34,7 +34,9 @@ export default [
             name: 'UserLoginACLList',
             component: () => import('@/views/acls/UserLoginACL/UserLoginACLList.vue'),
             meta: {
-              title: i18n.t('UserLoginACLs'), menuTitle: i18n.t('UserLogin'), activeMenu: ''
+              title: i18n.t('UserLoginACLs'),
+              menuTitle: i18n.t('UserLogin'),
+              activeMenu: ''
             }
           },
           {
@@ -74,7 +76,7 @@ export default [
         },
         name: 'CmdACL',
         meta: {
-          title: i18n.t('CommandFilterACLs',),
+          title: i18n.t('CommandFilterACLs'),
           menuTitle: i18n.t('CommandFilter'),
           app: 'acls',
           resource: 'commandfilteracl'
@@ -136,7 +138,11 @@ export default [
             path: '',
             name: 'AssetACLList',
             component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclList.vue'),
-            meta: { title: i18n.t('AssetACLs'), activeMenu: '', menuTitle: i18n.t('AssetConnect') }
+            meta: {
+              title: i18n.t('AssetACLs'),
+              activeMenu: '',
+              menuTitle: i18n.t('AssetConnect')
+            }
           },
           {
             path: 'create',
@@ -158,6 +164,53 @@ export default [
             component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclCreateUpdate.vue'),
             hidden: true,
             meta: { title: i18n.t('AssetACLUpdate'), activeMenu: '' }
+          }
+        ]
+      },
+      {
+        path: 'data-masking-rules',
+        component: empty,
+        redirect: {
+          name: 'DataMaskingRuleList'
+        },
+        name: 'DataMaskingRules',
+        meta: {
+          title: '数据脱敏',
+          licenseRequired: false,
+          app: 'acls',
+          resource: 'datamaskingrule'
+        },
+        children: [
+          {
+            path: '',
+            name: 'DataMaskingRuleList',
+            component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleList.vue'),
+            meta: {
+              title: '脱敏规则',
+              activeMenu: '',
+              menuTitle: '数据脱敏'
+            }
+          },
+          {
+            path: 'create',
+            name: 'DataMaskingRuleCreate',
+            component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: '创建脱敏规则', activeMenu: '' }
+          },
+          {
+            path: ':id',
+            name: 'AssetACLDetail',
+            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclDetail/index'),
+            hidden: true,
+            meta: { title: i18n.t('AssetACLDetail'), activeMenu: '' }
+          },
+          {
+            path: ':id/update',
+            name: 'DataMaskingRuleUpdate',
+            component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleCreateUpdate.vue'),
+            hidden: true,
+            meta: { title: '修改脱敏规则', activeMenu: '' }
           }
         ]
       },
@@ -237,7 +290,11 @@ export default [
             path: '',
             name: 'ConnectMethodACLList',
             component: () => import('@/views/acls/ConnectMethodACL/ConnectMethodAclList.vue'),
-            meta: { title: i18n.t('ConnectMethodACLs'), activeMenu: '', menuTitle: i18n.t('ConnectMethod') }
+            meta: {
+              title: i18n.t('ConnectMethodACLs'),
+              activeMenu: '',
+              menuTitle: i18n.t('ConnectMethod')
+            }
           },
           {
             path: 'create',
