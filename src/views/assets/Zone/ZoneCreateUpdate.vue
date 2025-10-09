@@ -25,10 +25,7 @@ export default {
           component: AssetSelect,
           el: {
             value: [],
-            baseUrl: '/api/v1/assets/assets/?gateway_enabled=true',
-            treeUrlQuery: {
-              gateway_enabled: true
-            },
+            baseUrl: '/api/v1/assets/assets/',
             canSelect: (row) => {
               return !row.platform?.name.startsWith('Gateway')
             }
