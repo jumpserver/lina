@@ -20,7 +20,8 @@ export default {
         hasExport: false,
         hasImport: false,
         hasBulkDelete: false,
-        hasCreate: true
+        hasCreate: true,
+        canCreate: true
       },
       tableConfig: {
         hasSelection: true,
@@ -41,6 +42,12 @@ export default {
           date_created: {
             label: this.$t('DateCreated'),
             formatter: DateFormatter
+          },
+          actions: {
+            formatterArgs: {
+              canUpdate: true,
+              canClone: true
+            }
           }
         }
       }
