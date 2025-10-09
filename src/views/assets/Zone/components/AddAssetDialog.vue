@@ -62,10 +62,7 @@ export default {
             type: 'select2',
             el: {
               value: [],
-              url: '/api/v1/assets/assets/?gateway_enabled=true',
-              treeUrlQuery: {
-                gateway_enabled: true
-              },
+              url: '/api/v1/assets/assets/',
               canSelect: (row) => {
                 return !row.platform?.name.startsWith('Gateway') && this.object.assets.map(item => item.id).indexOf(row.id) === -1
               }
