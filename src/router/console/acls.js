@@ -175,7 +175,7 @@ export default [
         },
         name: 'DataMaskingRules',
         meta: {
-          title: '数据脱敏',
+          title: i18n.t('DataMasking'),
           licenseRequired: false,
           app: 'acls',
           resource: 'datamaskingrule'
@@ -186,9 +186,9 @@ export default [
             name: 'DataMaskingRuleList',
             component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleList.vue'),
             meta: {
-              title: '脱敏规则',
+              title: i18n.t('DataMasking'),
               activeMenu: '',
-              menuTitle: '数据脱敏'
+              menuTitle: i18n.t('DataMasking')
             }
           },
           {
@@ -196,7 +196,7 @@ export default [
             name: 'DataMaskingRuleCreate',
             component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleCreateUpdate.vue'),
             hidden: true,
-            meta: { title: '创建脱敏规则', activeMenu: '' }
+            meta: { title: '', activeMenu: '' }
           },
           {
             path: ':id',
@@ -210,7 +210,7 @@ export default [
             name: 'DataMaskingRuleUpdate',
             component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleCreateUpdate.vue'),
             hidden: true,
-            meta: { title: '修改脱敏规则', activeMenu: '' }
+            meta: { title: '', activeMenu: '' }
           }
         ]
       },
