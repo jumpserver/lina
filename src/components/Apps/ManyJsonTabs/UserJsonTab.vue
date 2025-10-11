@@ -25,6 +25,7 @@ export default {
   },
   data() {
     const [key, value] = toM2MJsonParams(this.object.users)
+    const org_id = this.object.org_id || this.$store.getters.currentOrg.id
     return {
       config: {
         headerActions: {
@@ -33,7 +34,7 @@ export default {
           hasExport: false
         },
         tableConfig: {
-          url: `/api/v1/users/users/?${key}=${value}`,
+          url: `/api/v1/users/users/?${key}=${value}&oid=${org_id}`,
           columns: [
             'name', 'username', 'email', 'groups', 'system_roles',
             'org_roles', 'source', 'is_valid'
