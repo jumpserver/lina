@@ -189,8 +189,7 @@ export const realChoices = [
   },
   {
     label: AccountLabelMapper[ExcludeAccount],
-    value: ExcludeAccount,
-    tip: i18n.t('ExcludeAccountTip')
+    value: ExcludeAccount
   },
   {
     label: AccountLabelMapper[NoneAccount],
