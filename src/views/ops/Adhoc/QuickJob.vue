@@ -108,7 +108,7 @@ export default {
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
-            isVisible: this.$store.getters.currentOrgIsRoot,
+            disabled: this.$store.getters.currentOrgIsRoot,
             el: {
               type: 'primary'
             },

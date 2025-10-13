@@ -14,6 +14,7 @@
               <el-button
                 :type="item.el && item.el.type"
                 class="start-stop-btn"
+                :disabled="item.disabled"
                 size="mini"
                 @click="item.callback()"
               >

@@ -166,6 +166,8 @@ export default {
           this.selectAssetRows.push(item)
         }
       })
+      // 移除已经取消选择的资产
+      this.selectAssetRows = this.selectAssetRows.filter(r => valueSelected.includes(r.id))
       this.selectAssets = valueSelected
       this.dialogVisible = false
     },
