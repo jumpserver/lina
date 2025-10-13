@@ -237,7 +237,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$router.push({ name: 'SSHKeyList', query: { tab: 'SSHKey' } })
+              this.$router.push({ name: 'SSHKeyList', query: { tab: 'SSHKeyList' } })
             }.bind(this)
           }
         }
