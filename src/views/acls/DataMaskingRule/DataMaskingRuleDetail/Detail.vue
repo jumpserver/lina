@@ -23,17 +23,9 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/acls/login-asset-acls/${this.object.id}/`,
+      url: `/api/v1/acls/data-masking-rules/${this.object.id}/`,
       detailFields: [
-        'name',
-        {
-          key: this.$t('Action'),
-          value: this.object.action.label
-        },
-        {
-          key: this.$t('Reviewer'),
-          value: this.object.reviewers.map(item => item.name).join(', ')
-        },
+        'name', 'fields_pattern', 'masking_method', 'mask_pattern',
         'priority', 'date_created', 'created_by', 'comment'
       ]
     }
@@ -42,6 +34,6 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 
 </style>
