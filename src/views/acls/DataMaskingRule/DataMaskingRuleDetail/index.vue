@@ -23,7 +23,7 @@ export default {
     return {
       instance: {},
       config: {
-        url: `/api/v1/acls/login-asset-acls/`,
+        url: `/api/v1/acls/data-masking-rules/`,
         activeMenu: 'Detail',
         submenu: [
           {

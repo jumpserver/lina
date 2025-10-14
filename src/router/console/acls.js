@@ -200,8 +200,8 @@ export default [
           },
           {
             path: ':id',
-            name: 'AssetACLDetail',
-            component: () => import('@/views/acls/AssetLoginACL/AssetLoginAclDetail/index'),
+            name: 'DataMaskingRuleDetail',
+            component: () => import('@/views/acls/DataMaskingRule/DataMaskingRuleDetail/index'),
             hidden: true,
             meta: { title: i18n.t('AssetACLDetail'), activeMenu: '' }
           },
