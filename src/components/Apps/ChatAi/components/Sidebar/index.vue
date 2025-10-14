@@ -9,9 +9,6 @@
     <div v-if="expanded" class="close-sidebar">
       <i class="fa fa-compress" style="font-weight: 200" @click="$emit('compress')" />
     </div>
-    <div class="close-sidebar">
-      <i class="fa fa-arrows-alt" style="font-weight: 200" @click="openWebsite()" />
-    </div>
   </div>
 </template>
 
