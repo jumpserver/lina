@@ -31,7 +31,7 @@ export default {
             id: 'connect-asset',
             display_name: this.$t('AssetACLs'),
             name: 'AssetACLList',
-            comment: this.$t('AssetLoginACLHelpText'),
+            comment: this.$t('DataMaskingRuleHelpHelpText'),
             icon: 'assets',
             edition: 'enterprise',
             tags: ['asset']

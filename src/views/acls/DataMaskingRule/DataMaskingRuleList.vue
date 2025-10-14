@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      helpMsg: this.$t('AssetLoginACLHelpMsg'),
+      helpMsg: this.$t('DataMaskingRuleHelpHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/data-masking-rules/',
         columnsExclude: ['users', 'assets', 'accounts', 'rules'],
