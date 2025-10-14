@@ -141,9 +141,9 @@ export default {
     },
     async handleCommon(cmd, payload) {
       let rows = this.rows
+      this.processing = true
       if (this.rows.length === 0) {
         rows = [this.row]
-        this.processing = true
       }
       if (!payload) {
         payload = {}
