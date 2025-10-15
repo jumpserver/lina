@@ -14,7 +14,7 @@ export default {
       helpMsg: this.$t('DataMaskingRuleHelpHelpMsg'),
       tableConfig: {
         url: '/api/v1/acls/data-masking-rules/',
-        columnsExclude: ['users', 'assets', 'accounts', 'rules'],
+        columnsExclude: ['users', 'assets', 'accounts', 'rules', 'reviewers', 'action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
