@@ -20,7 +20,6 @@ export default {
           [
             this.$t('Basic'),
             [
-              'SECURITY_LOGIN_CAPTCHA_ENABLED',
               'SECURITY_LOGIN_CHALLENGE_ENABLED',
               'SECURITY_UNCOMMON_USERS_TTL',
               'SECURITY_CHECK_DIFFERENT_CITY_LOGIN'
@@ -44,7 +43,6 @@ export default {
               change: ([val], updateForm) => {
                 if (val) {
                   updateForm({ SECURITY_MFA_IN_LOGIN_PAGE: false })
-                  updateForm({ SECURITY_LOGIN_CAPTCHA_ENABLED: false })
                 }
               }
             }
@@ -57,7 +55,6 @@ export default {
               change: ([val], updateForm) => {
                 if (val) {
                   updateForm({ SECURITY_LOGIN_CHALLENGE_ENABLED: false })
-                  updateForm({ SECURITY_LOGIN_CAPTCHA_ENABLED: false })
                 }
               }
             }
