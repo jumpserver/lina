@@ -176,7 +176,7 @@ export default [
         name: 'DataMaskingRules',
         meta: {
           title: i18n.t('DataMasking'),
-          licenseRequired: false,
+          licenseRequired: true,
           app: 'acls',
           resource: 'datamaskingrule'
         },
