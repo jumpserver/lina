@@ -109,11 +109,6 @@ export default {
           },
           connectivity: connectivityMeta,
           comment: { ...this.comment }
-        },
-        tableAttrs: {
-          rowClassName({ row }) {
-            return !row.is_active ? 'row_disabled' : ''
-          }
         }
       },
       headerActions: {

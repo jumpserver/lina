@@ -116,6 +116,7 @@ export default {
   },
   methods: {
     handleConfirm() {
+      this.$message.warning(this.$tc('ProcessingMessage'))
       const url = `/api/v1/accounts/gathered-accounts/${this.account.id}/`
       this.$axios.delete(url, {
         params: {

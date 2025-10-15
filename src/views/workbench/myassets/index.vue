@@ -41,7 +41,6 @@ export default {
               name: 'connect',
               icon: 'fa-desktop',
               type: 'primary',
-              plain: true,
               can: ({ row }) => row.is_active,
               callback: ({ row }) => {
                 const oid = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
