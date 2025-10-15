@@ -42,6 +42,9 @@ export default {
             this.fieldsMeta.accounts.el.assets = ids || []
           }
         },
+        fields_pattern: {
+          helpTip: this.$t('DataMaskingFieldsPatternHelpTip')
+        },
         mask_pattern: {
           hidden: (formValue) => {
             return !['fixed_char'].includes(formValue.masking_method)
