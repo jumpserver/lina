@@ -65,7 +65,13 @@ export default {
       }
       const days = this.getDaysParam()
       this.$message.success(this.$t('EMailReport') + '...')
-      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).catch(error => {
+      this.$axios.post(`/core/reports/send-mail/?chart=${this.name}&days=${days}`,).then((res) => {
+        if (res.error) {
+          this.$message.error(res.error)
+        } else {
+          this.$message.success(res.message)
+        }
+      }).catch(error => {
         this.$message.error(this.$t('Failed') + ': ' + error.message)
       })
     },
