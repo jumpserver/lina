@@ -557,7 +557,7 @@ $container-bg-color: #f7f7f7;
 
       & ::v-deep .xterm {
         height: calc(100% - 8px);
-        overflow-y: auto;
+        overflow-y: hidden;
       }
     }
   }
