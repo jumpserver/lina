@@ -20,38 +20,37 @@
       :assets="classifiedAssets"
       @submit="onConfirmRunAsset"
     />
-    <AssetTreeTable ref="TreeTable" :tree-setting="treeSetting">
-      <template slot="table">
-        <div class="transition-box" style="width: calc(100% - 17px);">
-          <CodeEditor
-            v-if="ready"
-            :options="cmOptions"
-            :toolbar="toolbar"
-            :value.sync="command"
-            style="margin-bottom: 20px"
+    <div class="job-container">
+      <div class="select-assets">
+        <SelectJobAssetDialog @change="handleSelectAssets" />
+      </div>
+      <div class="transition-box" style="width: calc(100% - 17px);">
+        <CodeEditor
+          v-if="ready"
+          :options="cmOptions"
+          :toolbar="toolbar"
+          :value.sync="command"
+          style="margin-bottom: 20px"
+        />
+        <span v-if="executionInfo.status" style="float: right" />
+        <div class="xterm-container">
+          <QuickJobTerm
+            ref="xterm"
+            :show-tool-bar="true"
+            :select-assets="selectAssets"
+            :xterm-config="xtermConfig"
+            :execution-info="executionInfo"
+            @view-assets="viewConfirmRunAssets"
           />
-          <span v-if="executionInfo.status" style="float: right" />
-          <div class="xterm-container">
-            <QuickJobTerm
-              ref="xterm"
-              :show-tool-bar="true"
-              :select-assets="selectAssets"
-              :xterm-config="xtermConfig"
-              :execution-info="executionInfo"
-              @view-assets="viewConfirmRunAssets"
-            />
-          </div>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
-      </template>
-    </AssetTreeTable>
+        <div style="display: flex;margin-top:10px;justify-content: space-between" />
+      </div>
+    </div>
   </Page>
 </template>
 
 <script>
-import $ from '@/utils/jquery-vendor.js'
 import _isequal from 'lodash.isequal'
-import AssetTreeTable from '@/components/Apps/AssetTreeTable'
 import QuickJobTerm from '@/views/ops/Adhoc/components/QuickJobTerm.vue'
 import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
@@ -61,15 +60,16 @@ import VariableHelpDialog from './VariableHelpDialog.vue'
 import ConfirmRunAssetsDialog from './components/ConfirmRunAssetsDialog.vue'
 import SetVariableDialog from '@/views/ops/Template/components/SetVariableDialog.vue'
 import { createJob, getJob, getTaskDetail, stopJob } from '@/api/ops'
+import SelectJobAssetDialog from './components/SelectJobAssetDialog.vue'
 
 export default {
   name: 'CommandExecution',
   components: {
+    SelectJobAssetDialog,
     VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
     SetVariableDialog,
-    AssetTreeTable,
     Page,
     QuickJobTerm,
     CodeEditor,
@@ -91,7 +91,6 @@ export default {
       showOpenAdhocSaveDialog: false,
       showSetVariableDialog: false,
       showConfirmRunAssetsDialog: false,
-      DataZTree: 0,
       runas: '',
       runasPolicy: 'skip',
       chdir: '',
@@ -109,7 +108,7 @@ export default {
             align: 'left',
             icon: 'fa fa-play',
             tip: this.$t('RunCommand'),
-            isVisible: this.$store.getters.currentOrgIsRoot,
+            disabled: this.$store.getters.currentOrgIsRoot,
             el: {
               type: 'primary'
             },
@@ -141,7 +140,7 @@ export default {
             align: 'left',
             value: '',
             placeholder: this.$tc('EnterRunUser'),
-            // tip: this.$tc('RunasHelpText'),
+            tip: this.$tc('RunasHelpText'),
             el: {
               autoComplete: true,
               query: (query, cb) => {
@@ -295,30 +294,6 @@ export default {
         lineWrapping: true,
         mode: 'shell'
       },
-      treeSetting: {
-        treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
-        searchUrl: '/api/v1/perms/users/self/assets/tree/',
-        showRefresh: true,
-        showMenu: false,
-        showSearch: true,
-        notShowBuiltinTree: true,
-        check: {
-          enable: true
-        },
-        view: {
-          dblClickExpand: false,
-          showLine: true
-        },
-        callback: {
-          onCheck: function(_event, treeId, treeNode) {
-            const treeObj = $.fn.zTree.getZTreeObj(treeId)
-            if (treeNode.checked) {
-              treeObj.expandNode(treeNode, true, false, true)
-            }
-          }
-        }
-      },
-      iShowTree: true,
       variableFormData: [],
       variableQueryParam: '',
       classifiedAssets: {
@@ -328,15 +303,13 @@ export default {
       },
       selectAssets: [],
       selectNodes: [],
+      selectHosts: [],
       lastRequestPayload: null
     }
   },
   computed: {
     xterm() {
       return this.$refs.xterm.xterm
-    },
-    ztree() {
-      return this.$refs.TreeTable.$refs.TreeList.$refs.AutoDataZTree.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree
     },
     isRunning() {
       return this.executionInfo.status.value === 'running'
@@ -356,6 +329,9 @@ export default {
   methods: {
     async initData() {
       this.recoverStatus()
+    },
+    handleSelectAssets(assets) {
+      this.selectHosts = assets
     },
     recoverStatus() {
       if (this.$route.query.taskId) {
@@ -432,13 +408,6 @@ export default {
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
-    getSelectedNodes() {
-      return this.ztree.getCheckedNodes().filter(node => {
-        const status = node.getCheckStatus()
-        return node.id !== 'search' && status.half === false
-      })
-    },
-
     setCostTimeInterval() {
       this.toolbar.left.run.icon = 'fa fa-spinner fa-spin'
       this.toolbar.left.run.isVisible = true
@@ -448,17 +417,8 @@ export default {
     },
 
     getSelectedNodesAndHosts() {
-      const hosts = this.getSelectedNodes().filter((item) => {
-        return item.meta.type !== 'node'
-      }).map(function(node) {
-        return node.id
-      })
-
-      const nodes = this.getSelectedNodes().filter((item) => {
-        return item.meta.type === 'node'
-      }).map(function(node) {
-        return node.meta.data.id
-      })
+      const hosts = this.selectHosts
+      const nodes = []
       return { hosts, nodes }
     },
     shouldReRequest(payload) {
@@ -470,8 +430,7 @@ export default {
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
-
-      if (hosts.length === 0 && nodes.length === 0) {
+      if (this.selectHosts.length === 0) {
         this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
@@ -572,6 +531,13 @@ export default {
 
 <style lang="scss" scoped>
 $container-bg-color: #f7f7f7;
+.job-container {
+  display: flex;
+
+  .select-assets {
+    width: 23.6%;
+  }
+}
 
 .transition-box {
   display: flex;
@@ -591,7 +557,7 @@ $container-bg-color: #f7f7f7;
 
       & ::v-deep .xterm {
         height: calc(100% - 8px);
-        overflow-y: auto;
+        overflow-y: hidden;
       }
     }
   }
@@ -608,18 +574,9 @@ $container-bg-color: #f7f7f7;
   border-radius: 2px;
 }
 
-.el-tree {
-  background-color: inherit !important;
-}
-
 .mini {
   margin-right: 5px;
   width: 12px !important;
-}
-
-.auto-data-ztree {
-  overflow: auto;
-  /*border-right: solid 1px red;*/
 }
 
 .vue-codemirror-wrap ::v-deep .CodeMirror {
@@ -628,31 +585,10 @@ $container-bg-color: #f7f7f7;
   border: 1px solid #eee;
 }
 
-.tree-box {
-  margin-right: 2px;
-  border: 1px solid #e0e0e0;
-
-  ::v-deep .ztree {
-    .level0 {
-      .node_name {
-        max-width: 100px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        display: inline-block;
-      }
-    }
-  }
-}
-
 .output {
   padding-left: 30px;
   background-color: rgb(247 247 247);
   border: solid 1px #f3f3f3;;
 }
 
-.tree-table-content {
-  ::v-deep .left {
-    padding-top: 4px;
-  }
-}
 </style>

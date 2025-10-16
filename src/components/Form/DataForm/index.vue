@@ -11,6 +11,7 @@
       :label-width="labelWidth"
       :style="{ '--label-width': labelWidth }"
       v-bind="$attrs"
+      :server-errors="serverErrors"
       v-on="$listeners"
     >
       <!-- slot 透传 -->
@@ -120,6 +121,10 @@ export default {
     hasSaveContinue: {
       type: Boolean,
       default: true
+    },
+    serverErrors: {
+      type: Object,
+      default: () => ({})
     },
     fields: {
       type: Array,

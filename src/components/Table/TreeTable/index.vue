@@ -8,7 +8,7 @@
         class="left"
       >
         <span v-if="component === 'AutoDataZTree'" class="title">
-          {{ $t('AssetTree') }}
+          {{ title }}
         </span>
         <component
           :is="component"
@@ -111,6 +111,13 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    title: {
+      // eslint-disable-next-line vue/require-prop-type-constructor
+      type: String,
+      default() {
+        return this.$t('AssetTree')
+      }
     }
   },
   data() {

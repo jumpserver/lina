@@ -25,6 +25,7 @@ export default {
   },
   data() {
     const [key, value] = toM2MJsonParams(this.object.assets)
+    const org_id = this.object.org_id || this.$store.getters.currentOrg.id
     return {
       config: {
         headerActions: {
@@ -33,7 +34,7 @@ export default {
           hasExport: false
         },
         tableConfig: {
-          url: `/api/v1/assets/assets/?${key}=${value}`,
+          url: `/api/v1/assets/assets/?${key}=${value}&oid=${org_id}`,
           columns: ['name', 'address', 'platform', 'type', 'is_active'],
           columnsShow: {
             min: ['name', 'address'],

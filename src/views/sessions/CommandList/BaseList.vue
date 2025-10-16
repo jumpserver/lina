@@ -2,6 +2,7 @@
   <TreeTable
     ref="CommandTreeTable"
     v-loading="loading"
+    :title="title"
     :header-actions="headerActions"
     :table-config="tableConfig"
     :tree-setting="treeSetting"
@@ -39,6 +40,7 @@ export default {
     const dateFrom = getDaysAgo(7).toISOString()
     const dateTo = this.$moment(getDayEnd()).add(1, 'day').toISOString()
     return {
+      title: this.$t('CommandStorage'),
       loading: true,
       tableConfig: {
         url: '/api/v1/terminal/commands/',
