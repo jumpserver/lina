@@ -5,7 +5,7 @@
         <div v-if="item.has !== false" :key="item.key" :class="item.class " :label="item.key" class="el-form-item">
           <span slot="label" class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
           <span class="item-value el-form-item__content">
-            <template
+            <component
               :is="item.component"
               v-if="item.component"
               v-bind="{...item}"
