@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-alert type="success">
-      <span v-sanitize="$t('AppletHostSelectHelpMessage')" />
+      <span v-html="$t('AppletHostSelectHelpMessage')" />
     </el-alert>
     <DrawerListTable
       ref="table"
