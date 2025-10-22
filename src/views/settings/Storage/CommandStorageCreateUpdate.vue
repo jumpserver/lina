@@ -66,7 +66,7 @@ export default {
       },
       getUrl() {
         const params = this.$route.params
-        let url = `/api/v1/terminal/command-storages/`
+        let url = '/api/v1/terminal/command-storages/'
         if (params.id) {
           url = `${url}${params.id}/`
         }
