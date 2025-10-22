@@ -18,14 +18,14 @@ export function toggleLockSession(data) {
 
 export function getAllCommandStorage() {
   return request({
-    url: `/api/v1/terminal/command-storages/`,
+    url: '/api/v1/terminal/command-storages/',
     method: 'get'
   })
 }
 
 export function getAllReplayStorage() {
   return request({
-    url: `/api/v1/terminal/replay-storages/`,
+    url: '/api/v1/terminal/replay-storages/',
     method: 'get'
   })
 }

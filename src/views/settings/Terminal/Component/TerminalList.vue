@@ -53,7 +53,7 @@ export default {
               component: Select2,
               el: {
                 ajax: {
-                  url: `/api/v1/terminal/command-storages/`
+                  url: '/api/v1/terminal/command-storages/'
                 },
                 multiple: false
               }
@@ -63,7 +63,7 @@ export default {
               component: Select2,
               el: {
                 ajax: {
-                  url: `/api/v1/terminal/replay-storages/?type_not=sftp`
+                  url: '/api/v1/terminal/replay-storages/?type_not=sftp'
                 },
                 multiple: false
               }
@@ -140,7 +140,8 @@ export default {
               }
               const stat = row.stat
               return `${stat['cpu_load']} / ${stat['memory_used']}% / ${stat['disk_used']}%`
-            }
+            },
+            helpTip: 'CPU / Memory / Disk'
           },
           load: {
             filterable: 'custom',
@@ -152,7 +153,8 @@ export default {
                 high: 'fa fa-exclamation-triangle text-info',
                 normal: 'fa fa-check text-primary'
               }
-            }
+            },
+            helpTip: 'CPU / Memory / Disk'
           },
           remote_addr: {
             sortable: 'custom'
