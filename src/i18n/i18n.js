@@ -54,7 +54,7 @@ export async function fetchTranslationsFromAPI() {
       }
     }
   } catch (error) {
-    alert(error)
+    console.log(error)
   } finally {
     await store.dispatch('app/setI18nLoaded', true)
   }
