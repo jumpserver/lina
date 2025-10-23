@@ -82,7 +82,7 @@ export default {
             [this.$tc('Platform'), 'platform'],
             [this.$tc('Node'), 'node'],
             [this.$tc('Protocol'), 'protocols'],
-            [this.$tc('Region'), 'region_id']
+            [this.$tc('Region'), 'region_name']
           ],
           data: []
         },
@@ -126,7 +126,7 @@ export default {
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         if (data.action === 'sync_region') {
-          this.addRegion(data.region_id)
+          this.addRegion(data.id, data.name)
         } else if (data.action === 'import') {
           data['@status'] = 'pending'
           this.$refs.importTable.addTableItem(data)
@@ -142,10 +142,10 @@ export default {
         }
       }
     },
-    addRegion(region) {
-      if (!this.alreadySync.includes(region)) {
-        this.alreadySync.push(region)
-        this.tip = `${this.$t('SyncRegion')}: ${this.alreadySync.at(-1)}`
+    addRegion(regionId, regionName) {
+      if (!this.alreadySync.includes(regionId)) {
+        this.alreadySync.push(regionId)
+        this.tip = `${this.$t('SyncRegion')}: ${regionName}`
       }
     },
     showResult() {
