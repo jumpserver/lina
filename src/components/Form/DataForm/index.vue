@@ -244,6 +244,10 @@ export default {
   margin-right: 80px;
   margin-bottom: 20px;
 
+  .el-form {
+    margin-right: 0;
+  }
+
   ::v-deep .el-input-group__prepend {
     border-radius: 0;
   }
