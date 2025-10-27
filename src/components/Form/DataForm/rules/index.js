@@ -120,15 +120,14 @@ export default {
   MatchExcludeParenthesis
 }
 /**
- * @description 表单唯一性校验（精简版）。
+ * @description 表单唯一性校验
  *
  * @param {Object} options
- * @param {string} options.url 列表查询地址
- * @param {string} options.param 查询参数名
- * @param {string} [options.label] 字段中文名
- * @param {string} [options.fieldName] 字段名
- * @param {function(): (string|number)} [options.getIgnoreId] 返回更新场景下的当前对象 id
- * @returns {{validator: function(Object, any, function): Promise<void>, trigger: string[]}}
+ * @param {string} 列表查询地址
+ * @param {string} 查询参数名
+ * @param {string} 字段中文名
+ * @param {string} 字段名
+ * @param {function(): (string|number)} 返回更新场景下的当前对象 id
  */
 export function UniqueCheck(options = {}) {
   const { url, param, label, fieldName, getIgnoreId } = options
@@ -174,10 +173,7 @@ export function UniqueCheck(options = {}) {
 
         if (duplicated) {
           const _label = label || fieldName || ''
-
-          // TODO 翻译
-          const msg = `该${_label}已存在`
-
+          const msg = `${_label}${i18n.t('Existing')}`
           callback(new Error(msg))
         } else {
           callback()
