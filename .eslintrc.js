@@ -294,7 +294,8 @@ module.exports = {
         ],
         skipIfMatch: [
           'http://[^s]*',
-          '^[-\\w]+/[-\\w\\.]+$' // For import paths
+          '^[-\\w]+/[-\\w\\.]+$',
+          String.raw`^\/api\/[a-z0-9\/._-]+$`,
         ],
         minLength: 3
       }

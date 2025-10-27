@@ -107,8 +107,8 @@ export default {
         const formatterArgs = value?.formatterArgs
         // console.log('>>> name: ', key)
         // console.log('>>> formatter: ', formatter)
-        const detailFormaters = ['AmountFormatter', 'DetailFormatter']
-        if (formatter && detailFormaters.includes(formatter.name) && formatterArgs.drawer !== false) {
+        const detailFormatters = ['AmountFormatter', 'DetailFormatter']
+        if (formatter && detailFormatters.includes(formatter.name) && formatterArgs.drawer !== false) {
           formatterArgs.onClick = this.onDetail
         }
       }
