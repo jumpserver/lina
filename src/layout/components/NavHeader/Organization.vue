@@ -4,6 +4,7 @@
     :placeholder="$tc('Select')"
     :value="currentOrgId"
     class="org-select"
+    :style="{ width: selectWidth }"
     filterable
     popper-class="switch-org"
     @change="changeOrg"
@@ -54,7 +55,8 @@ export default {
   },
   data() {
     return {
-      orgOption: []
+      orgOption: [],
+      selectWidth: 'auto'
     }
   },
   computed: {
@@ -107,7 +109,55 @@ export default {
       return currentOrgId
     }
   },
+  watch: {
+    currentOrg: {
+      handler() {
+        this.updateWidth()
+      },
+      deep: true
+    }
+  },
+  mounted() {
+    this.updateWidth()
+  },
   methods: {
+    updateWidth() {
+      this.$nextTick(() => {
+        // 创建临时元素来测量文本宽度
+        const tempSpan = document.createElement('span')
+        tempSpan.style.visibility = 'hidden'
+        tempSpan.style.position = 'absolute'
+        tempSpan.style.whiteSpace = 'nowrap'
+        tempSpan.style.fontSize = '14px'
+        tempSpan.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+        tempSpan.style.fontWeight = 'normal'
+        tempSpan.style.letterSpacing = 'normal'
+
+        // 获取当前组织名称
+        const orgName = this.currentOrg.name || this.$tc('Select')
+        tempSpan.textContent = orgName
+        document.body.appendChild(tempSpan)
+
+        // 测量文本宽度
+        const textWidth = tempSpan.offsetWidth
+
+        // 固定空间：左侧图标 + padding + 右侧箭头
+        const iconWidth = 15 // 左侧图标
+        const paddingWidth = 35 // 左右 padding
+        const arrowWidth = 20 // 右侧箭头
+        const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
+
+        // 设置合理的边界
+        const minWidth = 100
+        const maxWidth = 400
+        const finalWidth = Math.max(minWidth, Math.min(maxWidth, totalWidth))
+
+        this.selectWidth = finalWidth + 'px'
+
+        // 清理临时元素
+        document.body.removeChild(tempSpan)
+      })
+    },
     changeOrg(orgId) {
       const org = this.usingOrgs.find(item => item.id === orgId)
 
@@ -121,6 +171,7 @@ export default {
         default:
           orgUtil.changeOrg(org, true, this)
       }
+      this.updateWidth()
     }
   }
 }

@@ -337,6 +337,7 @@ export default {
   height: 40px;
   padding: 5px 0;
   min-width: 200px;
+  margin-right: 5px;
 
   .search-trigger {
     height: 30px;
@@ -345,32 +346,39 @@ export default {
     .search-input {
       height: 30px;
       line-height: 1;
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(5, 5, 5, 0.1);
       border-radius: 4px;
       cursor: pointer;
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.2);
       }
 
-      ::v-deep .el-input__inner {
-        height: 30px;
-        line-height: 1;
-        background: transparent;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-      }
+      ::v-deep {
+        .el-input__inner {
+          height: 30px;
+          line-height: 1;
+          background: transparent;
+          border: none;
+          color: #fff;
+          cursor: pointer;
 
-      ::v-deep .el-input__inner::placeholder {
-        color: #fff;
-        opacity: 0.7;
-      }
+          &::placeholder {
+            color: #fff;
+            opacity: 0.7;
+          }
+        }
 
-      ::v-deep .el-input__suffix {
-        display: flex;
-        align-items: center;
-        height: 100%;
+        .el-input__prefix .el-input__icon{
+          font-size: 15px;
+          line-height: 32px;
+        }
+
+        .el-input__suffix {
+          display: flex;
+          align-items: center;
+          height: 100%;
+        }
       }
 
       .search-shortcut {
@@ -407,8 +415,7 @@ export default {
     max-height: calc(100vh - 10px);
     max-width: calc(100vw - 10px);
     border-radius: 5px;
-    // box-shadow: 0 0 8px 4px #00000014;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+    box-shadow: 0 0 8px 4px #00000014;
 
     .el-dialog__body {
       padding: 0;

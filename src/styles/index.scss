@@ -242,6 +242,10 @@ input[type='file'] {
   color: #737373 !important;
 }
 
+.el-select-dropdown.switch-org {
+  width: 220px;
+}
+
 @media screen and (max-width: 992px) {
   .el-select-dropdown.switch-org {
     left: 0 !important;

@@ -167,16 +167,16 @@ export default {
       .organization {
         display: flex;
         align-items: center;
-        padding: 0 0 0 15px !important;
+        padding: 0 0 0 15px ;
         border-radius: 3px;
-        background-color: rgba(255, 255, 255, 0.1);
+        // background-color: rgba(5, 5, 5, 0.1);
         color: #fff;
         font-weight: 600;
         font-size: 15px;
         max-width: 250px;
 
         ::v-deep .el-input__inner {
-          padding-left: 25px;
+          padding-left: 20px;
         }
 
         ::v-deep .el-input.is-disabled > input {
@@ -184,7 +184,7 @@ export default {
         }
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.12) !important;
+          background-color: rgba(0, 0, 0, 0.2);
         }
       }
 
