@@ -122,6 +122,8 @@ export default {
       const currentIdGetter = () => {
         return this.$route?.params?.id || this.form?.id || this.iForm?.id
       }
+
+      // 移除 url 后拼接的参数
       const defaultListUrl = (() => {
         try {
           const u = new URL(this.url, location.origin)
@@ -131,6 +133,7 @@ export default {
           return (this.url || '').replace(/\/(\d+|[0-9a-fA-F-]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})\/?($|\?)/, '/$2')
         }
       })()
+
       fields.forEach(field => {
         const conf = field?.uniqueCheck
 

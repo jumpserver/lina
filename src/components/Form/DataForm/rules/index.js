@@ -164,6 +164,8 @@ export function UniqueCheck(options = {}) {
           const curId = getIgnoreId()
           if (curId) {
             const ids = extractIds(res)
+
+            // 查询结果只包含自身,因此不被视为重复
             if (ids.length >= 1 && ids.every(id => id === curId)) {
               duplicated = false
             }
@@ -172,6 +174,8 @@ export function UniqueCheck(options = {}) {
 
         if (duplicated) {
           const _label = label || fieldName || ''
+
+          // TODO 翻译
           const msg = `该${_label}已存在`
 
           callback(new Error(msg))
