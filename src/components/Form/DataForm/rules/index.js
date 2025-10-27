@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+import request from '@/utils/request'
 
 export const Required = {
   required: true, message: i18n.t('FieldRequiredError'), trigger: 'blur'
@@ -117,4 +118,70 @@ export default {
   specialEmojiCheck,
   matchAlphanumericUnderscore,
   MatchExcludeParenthesis
+}
+/**
+ * @description 表单唯一性校验（精简版）。
+ *
+ * @param {Object} options
+ * @param {string} options.url 列表查询地址
+ * @param {string} options.param 查询参数名
+ * @param {string} [options.label] 字段中文名
+ * @param {string} [options.fieldName] 字段名
+ * @param {function(): (string|number)} [options.getIgnoreId] 返回更新场景下的当前对象 id
+ * @returns {{validator: function(Object, any, function): Promise<void>, trigger: string[]}}
+ */
+export function UniqueCheck(options = {}) {
+  const { url, param, label, fieldName, getIgnoreId } = options
+
+  function existsInResponse(res) {
+    if (Array.isArray(res)) return res.length > 0
+    if (res && typeof res === 'object') {
+      if (typeof res.count === 'number') return res.count > 0
+      if (Array.isArray(res.results)) return res.results.length > 0
+    }
+    return !!res
+  }
+
+  function extractIds(res) {
+    if (Array.isArray(res)) return res.map(i => i?.id).filter(Boolean)
+    if (res && Array.isArray(res.results)) return res.results.map(i => i?.id).filter(Boolean)
+    return []
+  }
+
+  return {
+    async validator(rule, value, callback) {
+      try {
+        let v = value
+
+        if (typeof v === 'string') v = v.trim()
+        if (v === '' || v === undefined || v === null) return callback()
+        if (!url || !param) return callback()
+
+        const res = await request.get(url, { params: { [param]: v } })
+        let duplicated = existsInResponse(res)
+
+        if (duplicated && typeof getIgnoreId === 'function') {
+          const curId = getIgnoreId()
+          if (curId) {
+            const ids = extractIds(res)
+            if (ids.length >= 1 && ids.every(id => id === curId)) {
+              duplicated = false
+            }
+          }
+        }
+
+        if (duplicated) {
+          const _label = label || fieldName || ''
+          const msg = `该${_label}已存在`
+
+          callback(new Error(msg))
+        } else {
+          callback()
+        }
+      } catch (e) {
+        callback()
+      }
+    },
+    trigger: ['blur']
+  }
 }
