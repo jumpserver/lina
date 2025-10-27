@@ -136,15 +136,14 @@ export default {
         // 获取当前组织名称
         const orgName = this.currentOrg.name || this.$tc('Select')
         tempSpan.textContent = orgName
-
         document.body.appendChild(tempSpan)
 
         // 测量文本宽度
         const textWidth = tempSpan.offsetWidth
 
         // 固定空间：左侧图标 + padding + 右侧箭头
-        const iconWidth = 20 // 左侧图标
-        const paddingWidth = 40 // 左右 padding
+        const iconWidth = 15 // 左侧图标
+        const paddingWidth = 35 // 左右 padding
         const arrowWidth = 20 // 右侧箭头
         const totalWidth = textWidth + iconWidth + paddingWidth + arrowWidth
 
