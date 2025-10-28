@@ -21,6 +21,9 @@ export default {
           [this.$t('Other'), ['comment']]
         ],
         fieldsMeta: {
+          name: {
+            uniqueCheck: true
+          },
           users: {
             el: {
               url: '/api/v1/users/users/?fields_size=mini&order=name',
