@@ -55,6 +55,12 @@
           class="file-uploader"
         >
           <el-card>
+            <div class="file-uploader-header">
+              <span>{{ $t('selectFiles', {number: uploadFileList.length}) }}</span>
+              <el-tooltip v-if="uploadFileList.length > 0" :content="$t('ClearSelection')" placement="top">
+                <i class="el-icon-delete" @click="clearAllFiles" />
+              </el-tooltip>
+            </div>
             <el-upload
               v-if="ready"
               ref="upload"
@@ -450,6 +456,10 @@ export default {
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets
+    },
+    clearAllFiles() {
+      this.$refs.upload.clearFiles()
+      this.uploadFileList = []
     }
   }
 }
@@ -515,8 +525,15 @@ export default {
   margin: 10px 0;
   min-width: 925px;
 
+  .file-uploader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+
   ::v-deep .el-card__body {
-    > div:first-child {
+    > div:nth-child(2) {
       //不要影响到 el-progress
       display: flex;
       position: relative;
