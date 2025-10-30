@@ -20,7 +20,8 @@
           placement="right"
           popper-class="help-tips"
         >
-          <div slot="content" v-sanitize="data.helpTip" class="help-tip-content" /> <!-- Noncompliant -->
+          <div slot="content" v-sanitize="data.helpTip" class="help-tip-content" />
+          <!-- Noncompliant -->
           <i class="fa fa-question-circle-o help-tip-icon" />
         </el-tooltip>
       </span>
@@ -28,11 +29,7 @@
     <template v-if="readonly && hasReadonlyContent">
       <div
         v-if="data.type === 'input'"
-        :style="
-          componentProps.type === 'textarea'
-            ? {padding: '10px 0', lineHeight: 1.5}
-            : ''
-        "
+        :style="componentProps.type === 'textarea' ? { padding: '10px 0', lineHeight: 1.5 } : ''"
       >
         {{ itemValue }}
       </div>
@@ -51,11 +48,7 @@
       v-on="listeners"
     >
       <template v-for="opt in options">
-        <el-option
-          v-if="data.type === 'select'"
-          :key="opt.label"
-          v-bind="opt"
-        />
+        <el-option v-if="data.type === 'select'" :key="opt.label" v-bind="opt" />
         <el-checkbox-button
           v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
           :key="opt.value"
@@ -112,10 +105,10 @@
 <script>
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
-import _get from 'lodash.get'
-import _includes from 'lodash.includes'
-import _topairs from 'lodash.topairs'
-import _frompairs from 'lodash.frompairs'
+import _get from 'lodash/get'
+import _includes from 'lodash/includes'
+import _topairs from 'lodash/toPairs'
+import _frompairs from 'lodash/fromPairs'
 
 function validator(data) {
   if (!data) {
@@ -175,7 +168,8 @@ export default {
   data() {
     return {
       propsInner: {},
-      isBlurTrigger: this.data.rules &&
+      isBlurTrigger:
+        this.data.rules &&
         this.data.rules.some(rule => {
           return rule.required && rule.trigger === 'blur'
         })
@@ -214,10 +208,7 @@ export default {
       } = this
       return {
         ..._frompairs(
-          _topairs(on).map(([eName, handler]) => [
-            eName,
-            (...args) => handler(args, updateForm)
-          ]),
+          _topairs(on).map(([eName, handler]) => [eName, (...args) => handler(args, updateForm)])
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
@@ -242,9 +233,7 @@ export default {
 
     multipleValue: ({ data, itemValue, options = [] }) => {
       const multipleSelectValue =
-        _get(data, 'el.multiple') && Array.isArray(itemValue)
-          ? itemValue
-          : [itemValue]
+        _get(data, 'el.multiple') && Array.isArray(itemValue) ? itemValue : [itemValue]
       return multipleSelectValue
         .map(val => (options.find(op => op.value === val) || {}).label)
         .join()
@@ -264,8 +253,7 @@ export default {
           if (v.url === oldV.url || v.request === oldV.request) return
         }
         const isOptionsCase =
-          ['select', 'checkbox-group', 'radio-group'].indexOf(this.data.type) >
-          -1
+          ['select', 'checkbox-group', 'radio-group'].indexOf(this.data.type) > -1
         const {
           url,
           request = () => this.$axios.get(url).then(resp => resp.data),
@@ -333,7 +321,7 @@ export default {
   }
 }
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .help-tips {
   opacity: 0.8;
   line-height: 2;
@@ -342,7 +330,7 @@ export default {
 
 .help-block {
   ::v-deep .el-alert__icon {
-    font-size: 16px
+    font-size: 16px;
   }
 
   &.checkbox {

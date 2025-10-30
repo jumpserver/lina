@@ -28,27 +28,18 @@
           <template v-if="hasSelect">
             <el-data-table-column
               key="selection-key"
-              v-bind="{align: columnsAlign, ...columns[0]}"
+              v-bind="{ align: columnsAlign, ...columns[0] }"
             />
 
-            <el-data-table-column
-              key="tree-ctrl"
-              v-bind="{align: columnsAlign, ...columns[1]}"
-            >
+            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[1] }">
               <template slot-scope="scope">
-                <span
-                  v-for="space in scope.row._level"
-                  :key="space"
-                  class="ms-tree-space"
-                />
+                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
                 <span
                   v-if="iconShow(scope.$index, scope.row)"
                   class="tree-ctrl"
                   @click="toggleExpanded(scope.$index)"
                 >
-                  <i
-                    :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`"
-                  />
+                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
                 </span>
                 {{ scope.row[columns[1].prop] }}
               </template>
@@ -57,23 +48,16 @@
             <el-data-table-column
               v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
               :key="col.prop"
-              v-bind="{align: columnsAlign, ...col}"
+              v-bind="{ align: columnsAlign, ...col }"
             />
           </template>
 
           <!--无选择-->
           <template v-else>
             <!--展开这列, 丢失 el-data-table-column属性-->
-            <el-data-table-column
-              key="tree-ctrl"
-              v-bind="{align: columnsAlign, ...columns[0]}"
-            >
+            <el-data-table-column key="tree-ctrl" v-bind="{ align: columnsAlign, ...columns[0] }">
               <template slot-scope="scope">
-                <span
-                  v-for="space in scope.row._level"
-                  :key="space"
-                  class="ms-tree-space"
-                />
+                <span v-for="space in scope.row._level" :key="space" class="ms-tree-space" />
 
                 <span
                   v-if="iconShow(scope.$index, scope.row)"
@@ -89,14 +73,19 @@
             <el-data-table-column
               v-for="col in columns.filter((c, i) => i !== 0)"
               :key="col.prop"
-              v-bind="{align: columnsAlign, ...col}"
+              v-bind="{ align: columnsAlign, ...col }"
             />
           </template>
         </template>
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" :align="selectionAlign" :selectable="canSelect" type="selection" />
+          <el-data-table-column
+            v-if="hasSelection"
+            :align="selectionAlign"
+            :selectable="canSelect"
+            type="selection"
+          />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -105,14 +94,14 @@
             :filters="col.filters || null"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :title="col.label"
-            v-bind="{align: columnsAlign, ...col}"
+            v-bind="{ align: columnsAlign, ...col }"
           >
             <template #header>
               <span :title="col.label">{{ col.label }}</span>
             </template>
             <template
               v-if="col.formatter && typeof col.formatter !== 'function'"
-              v-slot:default="{row, column, $index}"
+              v-slot:default="{ row, column, $index }"
             >
               <div
                 :is="col.formatter"
@@ -166,9 +155,9 @@
 </template>
 
 <script>
-import _get from 'lodash.get'
-import _values from 'lodash.values'
-import _isEmpty from 'lodash.isempty'
+import _get from 'lodash/get'
+import _values from 'lodash/values'
+import _isEmpty from 'lodash/isEmpty'
 import SelfLoadingButton from './components/self-loading-button.vue'
 import TheDialog, { dialogModes } from './components/the-dialog.vue'
 import ElDataTableColumn from './components/el-data-table-column'
@@ -280,8 +269,7 @@ export default {
      */
     beforeSearch: {
       type: Function,
-      default() {
-      }
+      default() {}
     },
     /**
      * 单选, 适用场景: 不可以批量删除
@@ -446,8 +434,7 @@ export default {
      */
     onEdit: {
       type: Function,
-      default(row) {
-      }
+      default(row) {}
     },
     /**
      * 点击删除按钮时的方法, 当默认删除方法不满足需求时使用, 需要返回promise
@@ -456,9 +443,7 @@ export default {
     onDelete: {
       type: Function,
       default(data) {
-        const ids = Array.isArray(data)
-          ? data.map(v => v[this.id]).join(',')
-          : data[this.id]
+        const ids = Array.isArray(data) ? data.map(v => v[this.id]).join(',') : data[this.id]
         return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
       }
     },
@@ -712,8 +697,8 @@ export default {
       }
     },
     /*
-    * 设置默认对齐方式
-    */
+     * 设置默认对齐方式
+     */
     defaultAlign: {
       type: String,
       default: 'center'
@@ -728,8 +713,7 @@ export default {
     },
     extraPaginationAttrs: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     },
     hasSelection: {
       type: Boolean,
@@ -912,9 +896,7 @@ export default {
       }
       Object.assign(query, this._extraQuery)
       Object.assign(query, this.innerQuery)
-      query[this.pageSizeKey] = this.hasPagination
-        ? this.size
-        : this.noPaginationSize
+      query[this.pageSizeKey] = this.hasPagination ? this.size : this.noPaginationSize
 
       // 根据偏移值计算接口正确的页数
       const pageOffset = this.firstPage - defaultFirstPage
@@ -996,9 +978,7 @@ export default {
         formValue = this.$refs.searchForm.getFormValue()
         Object.assign(query, formValue)
       }
-      const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') +
-        queryUtil.stringify(query, '=', '&')
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(query, '=', '&')
 
       // 请求开始
       this.tableLoading = loading
@@ -1018,10 +998,7 @@ export default {
 
           // 不分页
           if (!this.hasPagination) {
-            data =
-              _get(resp, this.dataPath) ||
-              _get(resp, noPaginationDataPath) ||
-              []
+            data = _get(resp, this.dataPath) || _get(resp, noPaginationDataPath) || []
             this.total = data.length
           } else {
             data = _get(resp, this.dataPath) || []
@@ -1240,11 +1217,7 @@ export default {
       }
       const remain = this.data.length - deleteCount
       const lastPage = Math.ceil(this.total / this.size)
-      if (
-        remain === 0 &&
-        this.page === lastPage &&
-        this.page > defaultFirstPage
-      ) {
+      if (remain === 0 && this.page === lastPage && this.page > defaultFirstPage) {
         this.page--
       }
     },
@@ -1272,20 +1245,14 @@ export default {
         tmp.push(record)
 
         if (record[this.treeChildKey] && record[this.treeChildKey].length > 0) {
-          const children = this.tree2Array(
-            record[this.treeChildKey],
-            expandAll,
-            record,
-            _level
-          )
+          const children = this.tree2Array(record[this.treeChildKey], expandAll, record, _level)
           tmp = tmp.concat(children)
         }
       })
       return tmp
     },
     rowClassName(...args) {
-      let rcn =
-        this.tableAttrs.rowClassName || this.tableAttrs['row-class-name'] || ''
+      let rcn = this.tableAttrs.rowClassName || this.tableAttrs['row-class-name'] || ''
       if (typeof rcn === 'function') rcn = rcn(...args)
       if (this.isTree) rcn += ' ' + this.showRow(...args)
       return rcn

@@ -1,5 +1,5 @@
 /* eslint-disable no-sequences */
-import _kebabcase from 'lodash.kebabcase'
+import _ from 'lodash'
 /**
  * content 的每一项会浅拷贝一层
  * 只可以在 item 层新增修改属性，如 item.a = b
@@ -13,7 +13,7 @@ export default function transformContent(content) {
       removeDollarInKey(item)
       extractRulesFromComponent(item)
       // 有些旧写法是 checkboxGroup & radioGroup
-      item.type = _kebabcase(item.type)
+      item.type = _.kebabCase(item.type)
     }
 
     return item
@@ -34,8 +34,5 @@ export function extractRulesFromComponent(item) {
   if (!component || typeof component === 'string') return
 
   const { rules = [] } = component
-  item.rules = [
-    ...(item.rules || []),
-    ...(typeof rules === 'function' ? rules(item) : rules)
-  ]
+  item.rules = [...(item.rules || []), ...(typeof rules === 'function' ? rules(item) : rules)]
 }

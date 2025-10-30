@@ -13,17 +13,12 @@
     v-on="$listeners"
   >
     <div v-if="confirmTypeRequired === 'relogin'">
-      <el-row :gutter="24" style="margin: 0 auto;">
+      <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
-          <el-alert
-            :title="$tc('ReLoginTitle')"
-            center
-            style="margin-bottom: 20px;"
-            type="error"
-          />
+          <el-alert :title="$tc('ReLoginTitle')" center style="margin-bottom: 20px" type="error" />
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 0 auto;">
+      <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24">
           <el-button class="confirm-btn" size="mini" type="primary" @click="logout">
             {{ this.$t('ReLogin') }}
@@ -32,11 +27,11 @@
       </el-row>
     </div>
     <div v-else>
-      <el-row :gutter="24" style="margin: 0 auto;">
+      <el-row :gutter="24" style="margin: 0 auto">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
             v-model="subTypeSelected"
-            style="width: 100%; margin-bottom: 20px;"
+            style="width: 100%; margin-bottom: 20px"
             @change="handleSubTypeChange"
           >
             <el-option
@@ -49,19 +44,22 @@
           </el-select>
         </el-col>
       </el-row>
-      <el-row v-if="!noCodeMFA.includes(subTypeSelected)" :gutter="24" style="margin: 0 auto;">
-        <el-col :md="24" :sm="24" style="display: flex; align-items: center; ">
+      <el-row v-if="!noCodeMFA.includes(subTypeSelected)" :gutter="24" style="margin: 0 auto">
+        <el-col :md="24" :sm="24" style="display: flex; align-items: center">
           <el-input
             v-model="secretValue"
             :placeholder="inputPlaceholder"
             :show-password="showPassword"
             @keyup.enter.native="handleConfirm"
           />
-          <span v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'" style="margin: -1px 0 0 20px;">
+          <span
+            v-if="subTypeSelected === 'sms' || subTypeSelected === 'email'"
+            style="margin: -1px 0 0 20px"
+          >
             <el-button
               :disabled="smsBtnDisabled"
               size="mini"
-              style="line-height: 14px; float: right;"
+              style="line-height: 14px; float: right"
               type="primary"
               @click="sendCode"
             >
@@ -72,21 +70,17 @@
       </el-row>
       <el-row>
         <el-col>
+          <iframe v-if="passkeyVisible" :src="passkeyUrl" style="display: none" />
           <iframe
-            v-if="passkeyVisible"
-            :src="passkeyUrl"
-            style="display: none"
-          />
-          <iframe
-            v-if="isFaceCaptureVisible && subTypeSelected ==='face' && faceCaptureUrl"
+            v-if="isFaceCaptureVisible && subTypeSelected === 'face' && faceCaptureUrl"
             :src="faceCaptureUrl"
             allow="camera"
             sandbox="allow-scripts allow-same-origin"
-            style="width: 100%; height: 600px;border: none;"
+            style="width: 100%; height: 600px; border: none"
           />
         </el-col>
       </el-row>
-      <el-row :gutter="24" style="margin: 20px auto 10px;">
+      <el-row :gutter="24" style="margin: 20px auto 10px">
         <el-col :md="24" :sm="24">
           <el-button
             v-if="!noCodeMFA.includes(subTypeSelected)"
@@ -195,55 +189,65 @@ export default {
       this.$log.debug('perform confirm action')
       const confirmType = response.data?.code
       const confirmUrl = '/api/v1/authentication/confirm/'
-      this.$axios.get(confirmUrl, { params: { confirm_type: confirmType } }).then((data) => {
-        this.confirmTypeRequired = data.confirm_type
+      this.$axios
+        .get(confirmUrl, { params: { confirm_type: confirmType } })
+        .then(data => {
+          this.confirmTypeRequired = data.confirm_type
 
-        if (this.confirmTypeRequired === 'relogin') {
-          this.$axios.post(confirmUrl, { 'confirm_type': 'relogin', 'secret_key': 'x' }).then(() => {
-            this.callback()
-            this.visible = false
-          }).catch(() => {
-            this.title = this.$t('NeedReLogin')
-            this.visible = true
-          })
-          return
-        }
-        this.subTypeChoices = data.content
-        const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
-        this.subTypeSelected = defaultSubType.name
-        this.inputPlaceholder = defaultSubType.placeholder
-        this.visible = true
-      }).catch((err) => {
-        const data = err.response?.data
-        const msg = data?.error || data?.detail || data?.msg || this.$t('GetConfirmTypeFailed')
-        this.$message.error(msg)
-        this.cancel(err)
-      }).finally(() => {
-        this.processing = false
-      })
+          if (this.confirmTypeRequired === 'relogin') {
+            this.$axios
+              .post(confirmUrl, { confirm_type: 'relogin', secret_key: 'x' })
+              .then(() => {
+                this.callback()
+                this.visible = false
+              })
+              .catch(() => {
+                this.title = this.$t('NeedReLogin')
+                this.visible = true
+              })
+            return
+          }
+          this.subTypeChoices = data.content
+          const defaultSubType = this.subTypeChoices.filter(item => !item.disabled)[0]
+          this.subTypeSelected = defaultSubType.name
+          this.inputPlaceholder = defaultSubType.placeholder
+          this.visible = true
+        })
+        .catch(err => {
+          const data = err.response?.data
+          const msg = data?.error || data?.detail || data?.msg || this.$t('GetConfirmTypeFailed')
+          this.$message.error(msg)
+          this.cancel(err)
+        })
+        .finally(() => {
+          this.processing = false
+        })
     }, 500),
     logout() {
       window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
     },
     sendCode() {
-      this.$axios.post(`/api/v1/authentication/mfa/select/`, { type: this.subTypeSelected }).then(res => {
-        this.$message.success(this.$tc('VerificationCodeSent'))
-        let time = 60
-        this.smsBtnDisabled = true
+      this.$axios
+        .post(`/api/v1/authentication/mfa/select/`, { type: this.subTypeSelected })
+        .then(res => {
+          this.$message.success(this.$tc('VerificationCodeSent'))
+          let time = 60
+          this.smsBtnDisabled = true
 
-        const interval = setInterval(() => {
-          time -= 1
-          this.smsBtnText = `${this.$t('Pending')}: ${time}`
+          const interval = setInterval(() => {
+            time -= 1
+            this.smsBtnText = `${this.$t('Pending')}: ${time}`
 
-          if (time <= 0) {
-            clearInterval(interval)
-            this.smsBtnText = this.$t('SendVerificationCode')
-            this.smsBtnDisabled = false
-          }
-        }, 1000)
-      }).catch(() => {
-        this.$message.error(this.$tc('FailedToSendVerificationCode'))
-      })
+            if (time <= 0) {
+              clearInterval(interval)
+              this.smsBtnText = this.$t('SendVerificationCode')
+              this.smsBtnDisabled = false
+            }
+          }, 1000)
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('FailedToSendVerificationCode'))
+        })
     },
     handlePasskeyVerify() {
       this.passkeyVisible = true
@@ -267,23 +271,26 @@ export default {
     },
     startFaceCapture() {
       const url = '/api/v1/authentication/face/context/'
-      this.$axios.post(url).then(data => {
-        const token = data['token']
-        this.faceCaptureUrl = '/facelive/capture?token=' + token
-        this.isFaceCaptureVisible = true
+      this.$axios
+        .post(url)
+        .then(data => {
+          const token = data['token']
+          this.faceCaptureUrl = '/facelive/capture?token=' + token
+          this.isFaceCaptureVisible = true
 
-        const timer = setInterval(() => {
-          this.$axios.get(url + `?token=${token}`).then(data => {
-            if (data['is_finished']) {
-              clearInterval(timer)
-              this.isFaceCaptureVisible = false
-              this.handleConfirm()
-            }
-          })
-        }, 1000)
-      }).catch(() => {
-        this.$message.error(this.$tc('FailedToStartFaceCapture'))
-      })
+          const timer = setInterval(() => {
+            this.$axios.get(url + `?token=${token}`).then(data => {
+              if (data['is_finished']) {
+                clearInterval(timer)
+                this.isFaceCaptureVisible = false
+                this.handleConfirm()
+              }
+            })
+          }, 1000)
+        })
+        .catch(() => {
+          this.$message.error(this.$tc('FailedToStartFaceCapture'))
+        })
     },
     handleFaceCapture() {
       this.startFaceCapture()
@@ -306,16 +313,22 @@ export default {
       const data = {
         confirm_type: this.confirmTypeRequired,
         mfa_type: this.confirmTypeRequired === 'mfa' ? this.subTypeSelected : '',
-        secret_key: this.confirmTypeRequired === 'password' ? encryptPassword(this.secretValue) : this.secretValue
+        secret_key:
+          this.confirmTypeRequired === 'password'
+            ? encryptPassword(this.secretValue)
+            : this.secretValue
       }
 
-      this.$axios.post(`/api/v1/authentication/confirm/`, data).then(() => {
-        this.onSuccess()
-      }).catch((err) => {
-        this.$message.error(err.message || this.$tc('ConfirmFailed'))
-        this.faceCaptureUrl = null
-        this.isFaceCaptureVisible = false
-      })
+      this.$axios
+        .post(`/api/v1/authentication/confirm/`, data)
+        .then(() => {
+          this.onSuccess()
+        })
+        .catch(err => {
+          this.$message.error(err.message || this.$tc('ConfirmFailed'))
+          this.faceCaptureUrl = null
+          this.isFaceCaptureVisible = false
+        })
     }
   }
 }

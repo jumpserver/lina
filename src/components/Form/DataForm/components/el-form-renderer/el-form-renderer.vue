@@ -1,5 +1,11 @@
 <template>
-  <el-form ref="elForm" :model="value" class="el-form-renderer" v-bind="$attrs" @submit.native.prevent>
+  <el-form
+    ref="elForm"
+    :model="value"
+    class="el-form-renderer"
+    v-bind="$attrs"
+    @submit.native.prevent
+  >
     <template v-for="item in innerContent">
       <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
@@ -20,13 +26,19 @@
   </el-form>
 </template>
 <script>
-import _set from 'lodash.set'
-import _isequal from 'lodash.isequal'
-import _clonedeep from 'lodash.clonedeep'
+import _set from 'lodash/set'
+import _isequal from 'lodash/isEqual'
+import _clonedeep from 'lodash/cloneDeep'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
 import transformContent from './util/transform-content'
-import { collect, correctValue, mergeValue, transformInputValue, transformOutputValue } from './util/utils'
+import {
+  collect,
+  correctValue,
+  mergeValue,
+  transformInputValue,
+  transformOutputValue
+} from './util/utils'
 
 const GROUP = 'group'
 

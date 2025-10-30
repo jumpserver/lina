@@ -1,5 +1,5 @@
-import _get from 'lodash.get'
-import _has from 'lodash.has'
+import _get from 'lodash/get'
+import _has from 'lodash/has'
 
 /**
  * 处理 enableWhen
@@ -20,7 +20,5 @@ export default function getEnableWhenStatus(enableWhen, value) {
     })
   }
 
-  return Array.isArray(enableWhen)
-    ? enableWhen.some(handleCondition)
-    : handleCondition(enableWhen)
+  return Array.isArray(enableWhen) ? enableWhen.some(handleCondition) : handleCondition(enableWhen)
 }
