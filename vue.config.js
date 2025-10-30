@@ -172,8 +172,8 @@ module.exports = {
     resolve: {
       alias: {
         '@': resolve('src'),
-        elementCss: resolve('node_modules/elementui-lts/lib/theme-chalk/index.css'),
-        elementLocale: resolve('node_modules/elementui-lts/lib/locale/lang/en.js')
+        elementCss: resolve('node_modules/element-ui/lib/theme-chalk/index.css'),
+        elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js')
       },
       extensions: ['.vue', '.js', '.json']
     }
