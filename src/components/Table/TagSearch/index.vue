@@ -88,7 +88,7 @@ export default {
     },
     filterMaps() {
       const data = {}
-      const keyword = 'q'
+      const keyword = 'search'
       for (let key in this.filterTags) {
         const value = this.filterTags[key]['value']
         if (key === '') {
