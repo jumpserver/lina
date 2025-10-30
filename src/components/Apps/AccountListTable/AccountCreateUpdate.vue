@@ -93,8 +93,8 @@ export default {
         iVisible = true
         data = formValue
         url = `/api/v1/accounts/accounts/bulk/`
-        if (data.assets.length === 0) {
-          this.$message.error(this.$tc('PleaseSelectAsset'))
+        if ((!data.assets || data.assets.length === 0) && (!data.nodes || data.nodes.length === 0)) {
+          this.$message.error(this.$tc('PleaseSelectAssetOrNode'))
           return
         }
       }

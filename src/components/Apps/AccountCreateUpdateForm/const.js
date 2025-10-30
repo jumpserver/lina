@@ -15,10 +15,25 @@ export const accountFieldsMeta = (vm) => {
   }
 
   return {
+    nodes: {
+      component: Select2,
+      label: vm.$t('Node'),
+      el: {
+        value: [],
+        ajax: {
+          url: '/api/v1/assets/nodes/',
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
+          }
+        }
+      },
+      hidden: () => {
+        return !vm.addTemplate
+      }
+    },
     assets: {
       component: AssetSelect,
       label: vm.$t('Asset'),
-      rules: [Required],
       el: {
         multiple: false
       },
@@ -33,7 +48,7 @@ export const accountFieldsMeta = (vm) => {
         get disabled() {
           return vm.isDisabled
         },
-        multiple: false,
+        multiple: vm.addTemplate,
         ajax: {
           url: '/api/v1/accounts/account-templates/',
           transformOption: (item) => {

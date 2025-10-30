@@ -50,6 +50,10 @@ export default {
             label: this.$t('Asset')
           },
           {
+            prop: 'account',
+            label: this.$t('Account')
+          },
+          {
             prop: 'state',
             label: this.$t('Status'),
             width: '200px',
